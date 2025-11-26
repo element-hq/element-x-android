@@ -43,6 +43,7 @@ class DefaultLoginEntryPointTest {
         }
         val callback = object : LoginEntryPoint.Callback {
             override fun navigateToBugReport() = lambdaError()
+            override fun onDone() = lambdaError()
         }
         val params = LoginEntryPoint.Params(
             accountProvider = "ac",

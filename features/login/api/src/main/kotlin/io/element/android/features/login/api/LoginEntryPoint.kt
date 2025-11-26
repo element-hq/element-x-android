@@ -21,6 +21,7 @@ interface LoginEntryPoint : FeatureEntryPoint {
 
     interface Callback : Plugin {
         fun navigateToBugReport()
+        fun onDone()
     }
 
     fun createNode(

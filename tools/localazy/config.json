@@ -198,6 +198,7 @@
         "screen_room_details_.*",
         "screen\\.room_details\\..*",
         "screen_room_member_list_.*",
+        "screen\\.room_member_list\\..*",
         "screen_room_notification_settings_.*",
         "screen_notification_settings_edit_failed_updating_default_mode",
         "screen_polls_history_title",
@@ -373,7 +374,8 @@
         "screen_room_change_.*",
         "screen_room_roles_.*",
         "screen\\.room_roles_and_permissions\\..*",
-        "screen_room_member_list.*"
+        "screen_room_member_list.*",
+        "screen\\.room_member_list\\..*"
       ]
     }
   ]

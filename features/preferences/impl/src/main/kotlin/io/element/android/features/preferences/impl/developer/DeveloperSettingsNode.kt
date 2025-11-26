@@ -31,6 +31,7 @@ class DeveloperSettingsNode(
 ) : Node(buildContext, plugins = plugins) {
     interface Callback : Plugin {
         fun navigateToPushHistory()
+        fun onDone()
     }
 
     private val callback: Callback = callback()
@@ -49,7 +50,7 @@ class DeveloperSettingsNode(
             modifier = modifier,
             onOpenShowkase = ::openShowkase,
             onPushHistoryClick = callback::navigateToPushHistory,
-            onBackClick = ::navigateUp
+            onBackClick = callback::onDone,
         )
     }
 }

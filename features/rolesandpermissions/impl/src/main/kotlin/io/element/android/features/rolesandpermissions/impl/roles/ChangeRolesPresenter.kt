@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
@@ -43,6 +44,8 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -76,7 +79,23 @@ class ChangeRolesPresenter(
         }
         val saveState: MutableState<AsyncAction<Boolean>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val usersWithRole = produceState<ImmutableList<MatrixUser>>(initialValue = persistentListOf()) {
-            room.usersWithRole(role).map { members -> members.map { it.toMatrixUser() } }
+            // If the role is admin, we need to include the owners as well since they implicitly have admin role
+            val owners = if (role == RoomMember.Role.Admin) {
+                combine(
+                    room.usersWithRole(RoomMember.Role.Owner(isCreator = true)),
+                    room.usersWithRole(RoomMember.Role.Owner(isCreator = false)),
+                ) { creators, superAdmins ->
+                    creators + superAdmins
+                }
+            } else {
+                emptyFlow()
+            }
+            combine(
+                owners,
+                room.usersWithRole(role),
+            ) { owners, users ->
+                owners + users
+            }.map { members -> members.map { it.toMatrixUser() } }
                 .onEach { users ->
                     val previous = value
                     value = users.toImmutableList()
@@ -104,7 +123,11 @@ class ChangeRolesPresenter(
             }
         }
 
-        val hasPendingChanges = usersWithRole.value != selectedUsers.value
+        val hasPendingChanges by remember {
+            derivedStateOf {
+                usersWithRole.value.toSet() != selectedUsers.value.toSet()
+            }
+        }
 
         val roomInfo by room.roomInfoFlow.collectAsState()
         fun canChangeMemberRole(userId: UserId): Boolean {
@@ -134,16 +157,20 @@ class ChangeRolesPresenter(
                 is ChangeRolesEvent.Save -> {
                     val currentUserIsAdmin = roomInfo.roleOf(room.sessionId) == RoomMember.Role.Admin
                     val isModifyingAdmins = role == RoomMember.Role.Admin
-                    val hasChanges = selectedUsers != usersWithRole
                     val isConfirming = saveState.value.isConfirming()
                     val modifyingOwners = role is RoomMember.Role.Owner
-
-                    val needsConfirmation = (modifyingOwners || currentUserIsAdmin && isModifyingAdmins) && hasChanges && !isConfirming
-
+                    val confirmationValue = if (hasPendingChanges && !isConfirming) {
+                        when {
+                            modifyingOwners -> ConfirmingModifyingOwners
+                            currentUserIsAdmin && isModifyingAdmins -> ConfirmingModifyingAdmins
+                            else -> null
+                        }
+                    } else {
+                        null
+                    }
                     when {
-                        needsConfirmation -> {
-                            // Confirm modifying users
-                            saveState.value = AsyncAction.ConfirmingNoParams
+                        confirmationValue != null -> {
+                            saveState.value = confirmationValue
                         }
                         !saveState.value.isLoading() -> {
                             roomCoroutineScope.save(usersWithRole.value, selectedUsers, saveState)

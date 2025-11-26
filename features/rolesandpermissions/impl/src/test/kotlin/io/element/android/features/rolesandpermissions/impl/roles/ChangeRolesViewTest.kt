@@ -50,7 +50,6 @@ class ChangeRolesViewTest {
                 ),
             )
         }.exceptionOrNull()
-
         assertThat(exception).isNotNull()
     }
 
@@ -63,9 +62,7 @@ class ChangeRolesViewTest {
                 eventSink = eventsRecorder,
             ),
         )
-
         rule.pressBackKey()
-
         eventsRecorder.assertSingle(ChangeRolesEvent.ToggleSearchActive)
     }
 
@@ -78,9 +75,7 @@ class ChangeRolesViewTest {
                 eventSink = eventsRecorder,
             ),
         )
-
         rule.pressBackKey()
-
         eventsRecorder.assertList(listOf(ChangeRolesEvent.QueryChanged(""), ChangeRolesEvent.Exit))
     }
 
@@ -93,9 +88,7 @@ class ChangeRolesViewTest {
                 eventSink = eventsRecorder,
             ),
         )
-
         rule.pressBack()
-
         eventsRecorder.assertList(listOf(ChangeRolesEvent.QueryChanged(""), ChangeRolesEvent.Exit))
     }
 
@@ -108,9 +101,7 @@ class ChangeRolesViewTest {
                 eventSink = eventsRecorder,
             ),
         )
-
         rule.clickOn(CommonStrings.action_save)
-
         eventsRecorder.assertList(listOf(ChangeRolesEvent.QueryChanged(""), ChangeRolesEvent.Save))
     }
 
@@ -123,9 +114,7 @@ class ChangeRolesViewTest {
                 eventSink = eventsRecorder,
             ),
         )
-
         rule.clickOn(CommonStrings.action_save)
-
         eventsRecorder.assertList(listOf(ChangeRolesEvent.QueryChanged("")))
     }
 
@@ -139,9 +128,7 @@ class ChangeRolesViewTest {
                 eventSink = eventsRecorder,
             ),
         )
-
         rule.clickOn(CommonStrings.action_ok)
-
         eventsRecorder.assertSingle(ChangeRolesEvent.Exit)
     }
 
@@ -155,26 +142,22 @@ class ChangeRolesViewTest {
                 eventSink = eventsRecorder,
             ),
         )
-
         rule.clickOn(CommonStrings.action_cancel)
-
         eventsRecorder.assertSingle(ChangeRolesEvent.CloseDialog)
     }
 
     @Test
-    fun `save confirmation dialog - submit saves the changes`() {
+    fun `save admins confirmation dialog - submit saves the changes`() {
         val eventsRecorder = EventsRecorder<ChangeRolesEvent>()
         rule.setChangeRolesContent(
             state = aChangeRolesState(
                 role = RoomMember.Role.Admin,
                 isSearchActive = true,
-                savingState = AsyncAction.ConfirmingNoParams,
+                savingState = ConfirmingModifyingAdmins,
                 eventSink = eventsRecorder,
             ),
         )
-
         rule.clickOn(CommonStrings.action_ok)
-
         eventsRecorder.assertSingle(ChangeRolesEvent.Save)
     }
 
@@ -185,30 +168,41 @@ class ChangeRolesViewTest {
             state = aChangeRolesState(
                 role = RoomMember.Role.Owner(isCreator = false),
                 isSearchActive = true,
-                savingState = AsyncAction.ConfirmingNoParams,
+                savingState = ConfirmingModifyingOwners,
                 eventSink = eventsRecorder,
             ),
         )
-
         rule.clickOn(CommonStrings.action_continue)
-
         eventsRecorder.assertSingle(ChangeRolesEvent.Save)
     }
 
     @Test
-    fun `save confirmation dialog - cancel removes the dialog`() {
+    fun `save admins confirmation dialog - cancel removes the dialog`() {
         val eventsRecorder = EventsRecorder<ChangeRolesEvent>()
         rule.setChangeRolesContent(
             state = aChangeRolesState(
                 role = RoomMember.Role.Admin,
                 isSearchActive = true,
-                savingState = AsyncAction.ConfirmingNoParams,
+                savingState = ConfirmingModifyingAdmins,
                 eventSink = eventsRecorder,
             ),
         )
-
         rule.clickOn(CommonStrings.action_cancel)
+        eventsRecorder.assertSingle(ChangeRolesEvent.CloseDialog)
+    }
 
+    @Test
+    fun `save owners confirmation dialog - cancel removes the dialog`() {
+        val eventsRecorder = EventsRecorder<ChangeRolesEvent>()
+        rule.setChangeRolesContent(
+            state = aChangeRolesState(
+                role = RoomMember.Role.Owner(isCreator = false),
+                isSearchActive = true,
+                savingState = ConfirmingModifyingOwners,
+                eventSink = eventsRecorder,
+            ),
+        )
+        rule.clickOn(CommonStrings.action_cancel)
         eventsRecorder.assertSingle(ChangeRolesEvent.CloseDialog)
     }
 
@@ -222,9 +216,7 @@ class ChangeRolesViewTest {
                 eventSink = eventsRecorder,
             ),
         )
-
         rule.clickOn(CommonStrings.action_ok)
-
         eventsRecorder.assertSingle(ChangeRolesEvent.CloseDialog)
     }
 

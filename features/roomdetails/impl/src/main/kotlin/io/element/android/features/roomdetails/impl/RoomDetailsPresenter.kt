@@ -205,6 +205,7 @@ class RoomDetailsPresenter(
             canReportRoom = canReportRoom,
             isTombstoned = roomInfo.successorRoom != null,
             showDebugInfo = isDeveloperModeEnabled,
+            roomVersion = roomInfo.roomVersion,
             eventSink = ::handleEvent,
         )
     }

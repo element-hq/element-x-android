@@ -64,8 +64,6 @@ interface EncryptionService {
      */
     suspend fun startIdentityReset(): Result<IdentityResetHandle?>
 
-    suspend fun isUserVerified(userId: UserId): Result<Boolean>
-
     /**
      * Remember this identity, ensuring it does not result in a pin violation.
      */
@@ -82,8 +80,10 @@ interface EncryptionService {
 
     /**
      * Get the identity state of a user, if known.
+     * @param userId the user id to get the identity for.
+     * @param fallbackToServer whether to fallback to fetching the identity from the server if not known locally. Defaults to true.
      */
-    suspend fun getUserIdentity(userId: UserId): Result<IdentityState?>
+    suspend fun getUserIdentity(userId: UserId, fallbackToServer: Boolean = true): Result<IdentityState?>
 }
 
 /**

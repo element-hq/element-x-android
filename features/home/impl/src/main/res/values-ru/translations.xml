@@ -44,7 +44,7 @@
   <string name="screen_roomlist_filter_rooms_empty_state_title">"Вас пока нет ни в одной комнате"</string>
   <string name="screen_roomlist_filter_unreads">"Непрочитанные"</string>
   <string name="screen_roomlist_filter_unreads_empty_state_title">"Поздравляем!
-У вас нет непрочитанных сообщений!"</string>
+Все сообщения прочитаны!"</string>
   <string name="screen_roomlist_knock_event_sent_description">"Запрос на присоединение отправлен"</string>
   <string name="screen_roomlist_main_space_title">"Все чаты"</string>
   <string name="screen_roomlist_mark_as_read">"Пометить как прочитанное"</string>

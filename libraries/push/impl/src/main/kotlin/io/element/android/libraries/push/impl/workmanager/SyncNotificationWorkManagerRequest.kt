@@ -29,30 +29,29 @@ class SyncNotificationWorkManagerRequest(
     private val workerDataConverter: WorkerDataConverter,
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
 ) : WorkManagerRequest {
-    override fun build(): Result<WorkRequest> {
+    override fun build(): Result<List<WorkRequest>> {
         if (notificationEventRequests.isEmpty()) {
             return Result.failure(InvalidParameterException("notificationEventRequests cannot be empty"))
         }
-        val data = workerDataConverter.serialize(notificationEventRequests).getOrElse {
-            return Result.failure(it)
-        }
         Timber.d("Scheduling ${notificationEventRequests.size} notification requests with WorkManager for $sessionId")
-        return Result.success(
-            OneTimeWorkRequestBuilder<FetchNotificationsWorker>()
-                .setInputData(data)
-                .apply {
-                    // Expedited workers aren't needed on Android 12 or lower:
-                    // They force displaying a foreground sync notification for no good reason, since they sync almost immediately anyway
-                    // See https://developer.android.com/develop/background-work/background-tasks/persistent/getting-started/define-work#backwards-compat
-                    if (buildVersionSdkIntProvider.isAtLeast(Build.VERSION_CODES.TIRAMISU)) {
-                        setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+        return workerDataConverter.serialize(notificationEventRequests).map { dataList ->
+            dataList.map { data ->
+                OneTimeWorkRequestBuilder<FetchNotificationsWorker>()
+                    .setInputData(data)
+                    .apply {
+                        // Expedited workers aren't needed on Android 12 or lower:
+                        // They force displaying a foreground sync notification for no good reason, since they sync almost immediately anyway
+                        // See https://developer.android.com/develop/background-work/background-tasks/persistent/getting-started/define-work#backwards-compat
+                        if (buildVersionSdkIntProvider.isAtLeast(Build.VERSION_CODES.TIRAMISU)) {
+                            setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+                        }
                     }
-                }
-                .setTraceTag(workManagerTag(sessionId, WorkManagerRequestType.NOTIFICATION_SYNC))
-                // TODO investigate using this instead of the resolver queue
-                // .setInputMerger()
-                .build()
-        )
+                    .setTraceTag(workManagerTag(sessionId, WorkManagerRequestType.NOTIFICATION_SYNC))
+                    // TODO investigate using this instead of the resolver queue
+                    // .setInputMerger()
+                    .build()
+            }
+        }
     }
 
     @Serializable

@@ -17,6 +17,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -27,22 +28,32 @@ class EditUserProfileNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     presenterFactory: EditUserProfilePresenter.Factory,
-) : Node(buildContext, plugins = plugins) {
+) : Node(buildContext, plugins = plugins),
+    EditUserProfileNavigator {
     data class Inputs(
         val matrixUser: MatrixUser
     ) : NodeInputs
 
+    interface Callback : Plugin {
+        fun onDone()
+    }
+
     val matrixUser = inputs<Inputs>().matrixUser
-    val presenter = presenterFactory.create(matrixUser)
+    val callback: Callback = callback()
+    val presenter = presenterFactory.create(
+        matrixUser = matrixUser,
+        navigator = this,
+    )
 
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
         EditUserProfileView(
             state = state,
-            onBackClick = ::navigateUp,
-            onEditProfileSuccess = ::navigateUp,
+            onEditProfileSuccess = ::close,
             modifier = modifier
         )
     }
+
+    override fun close() = callback.onDone()
 }

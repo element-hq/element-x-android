@@ -4,12 +4,14 @@
   <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"加入黑名單"</string>
   <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"即使收到邀請，他們仍然無法加入聊天室。"</string>
   <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"您確定要將此成員加入黑名單？"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description">"即使被邀請，他們也無法再次加入此空間，但他們仍將保留其在任何聊天室或子空間的成員資格。"</string>
   <string name="screen_bottom_sheet_manage_room_member_banning_user">"正在將 %1$s 加入黑名單"</string>
   <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"移除"</string>
   <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"如果收到邀請，他們能再次加入聊天室。"</string>
   <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"您真的想要移除此成員嗎？"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description">"若受邀，他們將可以再次加入此空間，並保留所有聊天室與子空間的成員資格。"</string>
   <string name="screen_bottom_sheet_manage_room_member_member_user_info">"查看個人檔案"</string>
-  <string name="screen_bottom_sheet_manage_room_member_remove">"踢出聊天室"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"移除使用者"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"移除成員並禁止未來再度加入？"</string>
   <string name="screen_bottom_sheet_manage_room_member_removing_user">"正在踢出 %1$s…"</string>
   <string name="screen_bottom_sheet_manage_room_member_unban">"從聊天室解除封鎖"</string>

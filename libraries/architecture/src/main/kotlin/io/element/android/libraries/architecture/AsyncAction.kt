@@ -155,16 +155,16 @@ inline fun <T> MutableState<AsyncAction<T>>.runUpdatingStateNoSuccess(
  * @param resultBlock a suspending function that returns a [Result].
  * @return the [Result] returned by [resultBlock].
  */
-@OptIn(ExperimentalContracts::class)
 @Suppress("REDUNDANT_INLINE_SUSPEND_FUNCTION_TYPE")
 suspend inline fun <T> runUpdatingState(
     state: MutableState<AsyncAction<T>>,
     errorTransform: (Throwable) -> Throwable = { it },
     resultBlock: suspend () -> Result<T>,
 ): Result<T> {
-    contract {
-        callsInPlace(resultBlock, InvocationKind.EXACTLY_ONCE)
-    }
+    // Restore when the issue with contracts and AGP 8.13.x is fixed
+//    contract {
+//        callsInPlace(resultBlock, InvocationKind.EXACTLY_ONCE)
+//    }
     state.value = AsyncAction.Loading
     return try {
         resultBlock()

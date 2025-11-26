@@ -58,8 +58,9 @@ class DefaultShareIntentHandler(
         onPlainText: suspend (String) -> Boolean,
     ): Boolean {
         val type = intent.resolveType(context) ?: return false
+        val uris = getIncomingUris(intent, type)
         return when {
-            type == MimeTypes.PlainText -> handlePlainText(intent, onPlainText)
+            uris.isEmpty() && type == MimeTypes.PlainText -> handlePlainText(intent, onPlainText)
             type.isMimeTypeImage() ||
                 type.isMimeTypeVideo() ||
                 type.isMimeTypeAudio() ||
@@ -67,7 +68,6 @@ class DefaultShareIntentHandler(
                 type.isMimeTypeFile() ||
                 type.isMimeTypeText() ||
                 type.isMimeTypeAny() -> {
-                val uris = getIncomingUris(intent, type)
                 val result = onUris(uris)
                 revokeUriPermissions(uris.map { it.uri })
                 result

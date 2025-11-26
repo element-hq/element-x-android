@@ -366,7 +366,7 @@ Grund: %1$s."</string>
   <string name="common_voice_message">"Sprachnachricht"</string>
   <string name="common_waiting">"Warten…"</string>
   <string name="common_waiting_for_decryption_key">"Warte auf diese Nachricht"</string>
-  <string name="common_you">"Sie"</string>
+  <string name="common_you">"Du"</string>
   <string name="crypto_identity_change_pin_violation">"%1$s\'s Identität has sich geändert. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"%1$s\'s %2$s Identität hat sich geändert. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>

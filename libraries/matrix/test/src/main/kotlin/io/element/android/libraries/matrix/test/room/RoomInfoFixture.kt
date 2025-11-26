@@ -53,7 +53,7 @@ fun aRoomInfo(
     notificationCount: Long = 0,
     userDefinedNotificationMode: RoomNotificationMode? = null,
     hasRoomCall: Boolean = false,
-    roomPowerLevels: RoomPowerLevels = RoomPowerLevels(
+    roomPowerLevels: RoomPowerLevels? = RoomPowerLevels(
         values = defaultRoomPowerLevelValues(),
         users = persistentMapOf(),
     ),

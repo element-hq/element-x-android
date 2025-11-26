@@ -11,7 +11,7 @@ jobs:
     # Skip in forks
     if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Use JDK 21
         uses: actions/setup-java@v5
         with:
@@ -36,7 +36,7 @@ jobs:
           ./tools/localazy/importSupportedLocalesFromLocalazy.py
           ./tools/test/generateAllScreenshots.py
       - name: Create Pull Request for Strings
-        uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7.0.8
+        uses: peter-evans/create-pull-request@84ae59a2cdc2258d6fa0732dd66352dddae2a412 # v7.0.9
         with:
           token: ${{ secrets.DANGER_GITHUB_API_TOKEN }}
           commit-message: Sync Strings from Localazy

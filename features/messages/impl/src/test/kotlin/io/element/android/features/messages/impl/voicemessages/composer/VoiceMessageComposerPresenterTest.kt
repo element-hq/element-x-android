@@ -408,7 +408,7 @@ class VoiceMessageComposerPresenterTest {
             val finalState = awaitItem()
             assertThat(finalState.voiceMessageState).isEqualTo(aPreviewState(isSending = true))
             sendVoiceMessageResult.assertions().isNeverCalled()
-            assertThat(analyticsService.trackedErrors).hasSize(0)
+            assertThat(analyticsService.trackedErrors).isEmpty()
             voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 0)
 
             testPauseAndDestroy(finalState)

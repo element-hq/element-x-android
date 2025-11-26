@@ -129,12 +129,12 @@ android {
             )
             signingConfig = signingConfigs.getByName("debug")
 
-            postprocessing {
-                isRemoveUnusedCode = true
-                isObfuscate = false
-                isOptimizeCode = true
-                isRemoveUnusedResources = true
-                proguardFiles("proguard-rules.pro")
+            optimization {
+                enable = true
+                keepRules {
+                    files.add(File(projectDir, "proguard-rules.pro"))
+                    files.add(getDefaultProguardFile("proguard-android-optimize.txt"))
+                }
             }
         }
 
@@ -151,10 +151,6 @@ android {
             )
             matchingFallbacks += listOf("release")
             signingConfig = signingConfigs.getByName("nightly")
-
-            postprocessing {
-                initWith(release.postprocessing)
-            }
 
             firebaseAppDistribution {
                 artifactType = "APK"
@@ -341,7 +337,7 @@ fun Project.configureLicensesTasks(reportingExtension: ReportingExtension) {
                     it.toString()
                 }
             }
-            val artifactsFile = reportingExtension.file("licensee/android$capitalizedVariantName/artifacts.json")
+            val artifactsFile = reportingExtension.baseDirectory.file("licensee/android$capitalizedVariantName/artifacts.json")
 
             val copyArtifactsTask =
                 project.tasks.register<AssetCopyTask>("copy${capitalizedVariantName}LicenseeReportToAssets") {

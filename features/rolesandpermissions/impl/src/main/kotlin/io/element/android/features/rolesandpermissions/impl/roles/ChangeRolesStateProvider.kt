@@ -46,18 +46,14 @@ class ChangeRolesStateProvider : PreviewParameterProvider<ChangeRolesState> {
                 selectedUsers = aMatrixUserList().take(1).toImmutableList(),
             ),
             aChangeRolesStateWithSelectedUsers().copy(savingState = AsyncAction.ConfirmingCancellation),
-            aChangeRolesStateWithSelectedUsers().copy(savingState = AsyncAction.ConfirmingNoParams),
+            aChangeRolesStateWithSelectedUsers().copy(savingState = ConfirmingModifyingAdmins),
             aChangeRolesStateWithSelectedUsers().copy(savingState = AsyncAction.Loading),
             aChangeRolesStateWithSelectedUsers().copy(savingState = AsyncAction.Success(true)),
             aChangeRolesStateWithSelectedUsers().copy(savingState = AsyncAction.Failure(Exception("boom"))),
-            aChangeRolesStateWithOwners(
-                role = RoomMember.Role.Admin,
-                // Do not include the owners in the selectedUsers (the presenter will not do it), the View will add them
-                selectedUsers = listOf(
-                    aMatrixUser(id = "@carol:server.org", displayName = "Carol"),
-                )
-            ),
+            aChangeRolesStateWithOwners(role = RoomMember.Role.Admin),
             aChangeRolesStateWithOwners(role = RoomMember.Role.Owner(isCreator = false)),
+            aChangeRolesStateWithOwners(role = RoomMember.Role.Owner(isCreator = false))
+                .copy(savingState = ConfirmingModifyingOwners),
         )
 }
 

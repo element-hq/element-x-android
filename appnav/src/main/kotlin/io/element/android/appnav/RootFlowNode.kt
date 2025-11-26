@@ -243,6 +243,10 @@ class RootFlowNode(
                     override fun navigateToBugReport() {
                         backstack.push(NavTarget.BugReport)
                     }
+
+                    override fun onDone() {
+                        backstack.pop()
+                    }
                 }
                 val params = NotLoggedInFlowNode.Params(
                     loginParams = navTarget.params,

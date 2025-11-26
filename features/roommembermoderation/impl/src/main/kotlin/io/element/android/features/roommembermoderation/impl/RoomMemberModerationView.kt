@@ -232,32 +232,34 @@ private fun RoomMemberActionsBottomSheet(
                 avatarData = user.getAvatarData(size = AvatarSize.RoomListManageUser),
                 avatarType = AvatarType.User,
                 modifier = Modifier
-                        .padding(bottom = 28.dp)
-                        .align(Alignment.CenterHorizontally)
+                    .padding(bottom = 24.dp)
+                    .align(Alignment.CenterHorizontally)
             )
-            user.displayName?.let {
-                Text(
-                    text = it,
-                    style = ElementTheme.typography.fontHeadingLgBold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                            .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
-                            .fillMaxWidth()
-                )
-            }
+            val bestName = user.getBestName()
             Text(
-                text = user.userId.value,
-                style = ElementTheme.typography.fontBodyLgRegular,
-                color = ElementTheme.colors.textSecondary,
+                text = bestName,
+                style = ElementTheme.typography.fontHeadingLgBold,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
+                    .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+                    .fillMaxWidth()
+            )
+            // Show user ID only if it's different from the display name
+            if (bestName != user.userId.value) {
+                Text(
+                    text = user.userId.value,
+                    style = ElementTheme.typography.fontBodyMdRegular,
+                    color = ElementTheme.colors.textSecondary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth()
-            )
+                )
+            }
             Spacer(modifier = Modifier.height(32.dp))
 
             for (actionState in actions) {
@@ -330,8 +332,8 @@ internal fun RoomMemberModerationViewPreview(@PreviewParameter(InternalRoomMembe
     ElementPreview {
         Box(
             modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(min = 64.dp)
+                .fillMaxWidth()
+                .heightIn(min = 64.dp)
         ) {
             RoomMemberModerationView(
                 state = state,

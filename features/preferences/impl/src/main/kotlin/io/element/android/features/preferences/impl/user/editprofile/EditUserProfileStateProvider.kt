@@ -11,27 +11,36 @@ package io.element.android.features.preferences.impl.user.editprofile
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.ui.media.AvatarAction
+import io.element.android.libraries.permissions.api.PermissionsState
 import io.element.android.libraries.permissions.api.aPermissionsState
-import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 
 open class EditUserProfileStateProvider : PreviewParameterProvider<EditUserProfileState> {
     override val values: Sequence<EditUserProfileState>
         get() = sequenceOf(
             aEditUserProfileState(),
             aEditUserProfileState(userAvatarUrl = "example://uri"),
-            // Add other states here
+            aEditUserProfileState(saveAction = AsyncAction.ConfirmingCancellation),
         )
 }
 
 fun aEditUserProfileState(
+    userId: UserId = UserId("@john.doe:matrix.org"),
+    displayName: String = "John Doe",
     userAvatarUrl: String? = null,
+    avatarActions: List<AvatarAction> = emptyList(),
+    saveButtonEnabled: Boolean = true,
+    saveAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    cameraPermissionState: PermissionsState = aPermissionsState(showDialog = false),
+    eventSink: (EditUserProfileEvents) -> Unit = {},
 ) = EditUserProfileState(
-    userId = UserId("@john.doe:matrix.org"),
-    displayName = "John Doe",
+    userId = userId,
+    displayName = displayName,
     userAvatarUrl = userAvatarUrl,
-    avatarActions = persistentListOf(),
-    saveAction = AsyncAction.Uninitialized,
-    saveButtonEnabled = true,
-    cameraPermissionState = aPermissionsState(showDialog = false),
-    eventSink = {}
+    avatarActions = avatarActions.toImmutableList(),
+    saveButtonEnabled = saveButtonEnabled,
+    saveAction = saveAction,
+    cameraPermissionState = cameraPermissionState,
+    eventSink = eventSink,
 )

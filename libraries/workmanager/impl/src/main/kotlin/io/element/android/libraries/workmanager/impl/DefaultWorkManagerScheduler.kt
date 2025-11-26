@@ -28,8 +28,8 @@ class DefaultWorkManagerScheduler(
 
     override fun submit(workManagerRequest: WorkManagerRequest) {
         workManagerRequest.build().fold(
-            onSuccess = {
-                workManager.enqueue(it)
+            onSuccess = { workRequests ->
+                workManager.enqueue(workRequests)
             },
             onFailure = {
                 Timber.e(it, "Failed to build WorkManager request $workManagerRequest")

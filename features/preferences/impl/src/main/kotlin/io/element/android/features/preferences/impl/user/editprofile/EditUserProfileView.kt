@@ -8,6 +8,7 @@
 
 package io.element.android.features.preferences.impl.user.editprofile
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -30,11 +31,13 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.preferences.impl.R
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.async.AsyncActionViewDefaults
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.dialogs.SaveChangesDialog
 import io.element.android.libraries.designsystem.modifiers.clearFocusOnTap
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -52,7 +55,6 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun EditUserProfileView(
     state: EditUserProfileState,
-    onBackClick: () -> Unit,
     onEditProfileSuccess: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -64,12 +66,21 @@ fun EditUserProfileView(
         isAvatarActionsSheetVisible.value = true
     }
 
+    fun onBackClick() {
+        focusManager.clearFocus()
+        state.eventSink(EditUserProfileEvents.Exit)
+    }
+
+    BackHandler(
+        enabled = true,
+        ::onBackClick,
+    )
     Scaffold(
         modifier = modifier.clearFocusOnTap(focusManager),
         topBar = {
             TopAppBar(
                 titleStr = stringResource(R.string.screen_edit_profile_title),
-                navigationIcon = { BackButton(onClick = onBackClick) },
+                navigationIcon = { BackButton(::onBackClick) },
                 actions = {
                     TextButton(
                         text = stringResource(CommonStrings.action_save),
@@ -132,10 +143,20 @@ fun EditUserProfileView(
                     progressText = stringResource(R.string.screen_edit_profile_updating_details),
                 )
             },
+            confirmationDialog = { confirming ->
+                when (confirming) {
+                    is AsyncAction.ConfirmingCancellation -> {
+                        SaveChangesDialog(
+                            onSubmitClick = { state.eventSink(EditUserProfileEvents.Exit) },
+                            onDismiss = { state.eventSink(EditUserProfileEvents.CloseDialog) }
+                        )
+                    }
+                }
+            },
             onSuccess = { onEditProfileSuccess() },
             errorTitle = { stringResource(R.string.screen_edit_profile_error_title) },
             errorMessage = { stringResource(R.string.screen_edit_profile_error) },
-            onErrorDismiss = { state.eventSink(EditUserProfileEvents.CancelSaveChanges) },
+            onErrorDismiss = { state.eventSink(EditUserProfileEvents.CloseDialog) },
         )
     }
     PermissionsView(
@@ -148,7 +169,6 @@ fun EditUserProfileView(
 internal fun EditUserProfileViewPreview(@PreviewParameter(EditUserProfileStateProvider::class) state: EditUserProfileState) =
     ElementPreview {
         EditUserProfileView(
-            onBackClick = {},
             onEditProfileSuccess = {},
             state = state,
         )

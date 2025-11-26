@@ -146,6 +146,7 @@ fun aRoomDetailsState(
     canReportRoom = canReportRoom,
     isTombstoned = isTombstoned,
     showDebugInfo = showDebugInfo,
+    roomVersion = "12",
     eventSink = eventSink,
 )
 

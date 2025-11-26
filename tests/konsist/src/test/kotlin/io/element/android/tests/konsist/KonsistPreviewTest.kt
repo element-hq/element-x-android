@@ -117,7 +117,6 @@ class KonsistPreviewTest {
         "ProgressDialogWithContentPreview",
         "ProgressDialogWithTextAndContentPreview",
         "ReadReceiptBottomSheetPreview",
-        "RoomMemberListViewBannedPreview",
         "SasEmojisPreview",
         "SecureBackupSetupViewChangePreview",
         "SelectedUserCannotRemovePreview",

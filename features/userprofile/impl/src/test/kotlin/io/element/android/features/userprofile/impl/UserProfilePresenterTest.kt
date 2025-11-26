@@ -386,14 +386,12 @@ class UserProfilePresenterTest {
     }
 
     private fun createFakeMatrixClient(
-        isUserVerified: Boolean = true,
         userIdentityState: IdentityState? = null,
         ignoreUserResult: (UserId) -> Result<Unit> = { Result.success(Unit) },
         unIgnoreUserResult: (UserId) -> Result<Unit> = { Result.success(Unit) },
         ignoredUsersFlow: StateFlow<ImmutableList<UserId>> = MutableStateFlow(persistentListOf())
     ) = FakeMatrixClient(
         encryptionService = FakeEncryptionService(
-            isUserVerifiedResult = { Result.success(isUserVerified) },
             getUserIdentityResult = { Result.success(userIdentityState) }
         ),
         ignoreUserResult = ignoreUserResult,

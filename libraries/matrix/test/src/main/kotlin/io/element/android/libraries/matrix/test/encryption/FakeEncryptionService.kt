@@ -26,7 +26,6 @@ import kotlinx.coroutines.flow.flowOf
 class FakeEncryptionService(
     var startIdentityResetLambda: () -> Result<IdentityResetHandle?> = { lambdaError() },
     private val pinUserIdentityResult: (UserId) -> Result<Unit> = { lambdaError() },
-    private val isUserVerifiedResult: (UserId) -> Result<Boolean> = { lambdaError() },
     private val withdrawVerificationResult: (UserId) -> Result<Unit> = { lambdaError() },
     private val getUserIdentityResult: (UserId) -> Result<IdentityState?> = { lambdaError() },
     private val enableRecoveryLambda: (Boolean) -> Result<Unit> = { lambdaError() },
@@ -139,11 +138,7 @@ class FakeEncryptionService(
         return withdrawVerificationResult(userId)
     }
 
-    override suspend fun isUserVerified(userId: UserId): Result<Boolean> = simulateLongTask {
-        isUserVerifiedResult(userId)
-    }
-
-    override suspend fun getUserIdentity(userId: UserId): Result<IdentityState?> = simulateLongTask {
+    override suspend fun getUserIdentity(userId: UserId, fallbackToServer: Boolean): Result<IdentityState?> = simulateLongTask {
         return getUserIdentityResult(userId)
     }
 

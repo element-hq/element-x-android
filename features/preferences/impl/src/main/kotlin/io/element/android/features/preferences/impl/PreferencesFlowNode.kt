@@ -186,11 +186,20 @@ class PreferencesFlowNode(
                     override fun navigateToPushHistory() {
                         backstack.push(NavTarget.PushHistory)
                     }
+
+                    override fun onDone() {
+                        backstack.pop()
+                    }
                 }
                 createNode<DeveloperSettingsNode>(buildContext, listOf(developerSettingsCallback))
             }
             NavTarget.Labs -> {
-                createNode<LabsNode>(buildContext)
+                val callback = object : LabsNode.Callback {
+                    override fun onDone() {
+                        backstack.pop()
+                    }
+                }
+                createNode<LabsNode>(buildContext, listOf(callback))
             }
             NavTarget.About -> {
                 val callback = object : AboutNode.Callback {
@@ -267,7 +276,12 @@ class PreferencesFlowNode(
             }
             is NavTarget.UserProfile -> {
                 val inputs = EditUserProfileNode.Inputs(navTarget.matrixUser)
-                createNode<EditUserProfileNode>(buildContext, listOf(inputs))
+                val callback = object : EditUserProfileNode.Callback {
+                    override fun onDone() {
+                        backstack.pop()
+                    }
+                }
+                createNode<EditUserProfileNode>(buildContext, listOf(inputs, callback))
             }
             NavTarget.LockScreenSettings -> {
                 lockScreenEntryPoint.createNode(

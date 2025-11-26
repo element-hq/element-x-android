@@ -71,6 +71,8 @@
   <string name="screen_room_details_topic_title">"Teema"</string>
   <string name="screen_room_details_updating_room">"Uuendame jututuba…"</string>
   <string name="screen_room_member_list_banned_empty">"Suhtluskeeluga kasutajaid pole"</string>
+  <string name="screen_room_member_list_empty_search_subtitle">"Palun kontrolli otsingusõna korrektsust ja proovi siis uuesti"</string>
+  <string name="screen_room_member_list_empty_search_title">"Otsingul „%1$s“ pole tulemusi"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d osaleja"</item>
     <item quantity="other">"%1$d osalejat"</item>
@@ -79,12 +81,12 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Ainult eemalda kasutaja"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Eemalda suhtluskeeld"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"Kutse olemasolul saab ta nüüd jututoaga uuesti liituda"</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"Eemalda kasutaja suhtluskeeld"</string>
+  <string name="screen_room_member_list_manage_member_unban_title">"Eemalda suhtluskeeld jututoas"</string>
   <string name="screen_room_member_list_mode_banned">"Suhtluskeeluga kasutajad"</string>
   <string name="screen_room_member_list_mode_members">"Liikmed"</string>
-  <string name="screen_room_member_list_pending_header_title">"Ootel"</string>
-  <string name="screen_room_member_list_role_administrator">"Peakasutaja"</string>
-  <string name="screen_room_member_list_role_moderator">"Moderaator"</string>
+  <string name="screen_room_member_list_pending_status">"Ootel"</string>
+  <string name="screen_room_member_list_role_administrator">"Peakasutajad"</string>
+  <string name="screen_room_member_list_role_moderator">"Moderaatorid"</string>
   <string name="screen_room_member_list_role_owner">"Omanik"</string>
   <string name="screen_room_member_list_room_members_header_title">"Jututoas osalejad"</string>
   <string name="screen_room_member_list_unbanning_user">"Eemaldame suhtluskeelu kasutajalt %1$s"</string>
@@ -118,8 +120,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Rollid"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Jututoa üksikasjad"</string>
   <string name="screen_room_roles_and_permissions_title">"Rollid ja õigused"</string>
-  <string name="screen_security_and_privacy_add_room_address_action">"Lisa jututoa aadress"</string>
-  <string name="screen_security_and_privacy_ask_to_join_option_description">"Kõik võivad paluda jututoaga liitumist, kuid peakasutaja peab sellega nõustuma."</string>
+  <string name="screen_security_and_privacy_add_room_address_action">"Lisa aadress"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_description">"Kõik võivad paluda jututoaga liitumist."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_title">"Küsi võimalust liitumiseks"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Jah, lülita krüptimine sisse"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Kui jututoa krüptimine on kord sisse lülitatud, siis seda välja lülitada ei saa. Sõnumite ajalugu on nähtav vaid jututoa liikmetele alates kutse saamise või liitumise hetkest.
@@ -130,15 +132,14 @@ Me ei soovita krüptimise kasutamist selliste avalike jututubade puhul, millega 
   <string name="screen_security_and_privacy_encryption_section_header">"Krüptimine"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Võta läbiv krüptimine kasutusele"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Kõik võivad jututoaga liituda"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Avalik"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Kõik"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Liituda saab vaid kutse olemasolul"</string>
-  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Privaatne"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Vaid kutsega"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Ligipääs"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_description">"Kogukondade tugi veel puudub"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Kogukonna liikmed"</string>
-  <string name="screen_security_and_privacy_room_address_description">"Et jututuba oleks nähtav avalikus kataloogis, peab tal olema aadress."</string>
-  <string name="screen_security_and_privacy_room_address_section_footer">"Selleks, et jututuba oleks nähtav jututubade kataloogis, vajab ta aadressi."</string>
-  <string name="screen_security_and_privacy_room_address_section_header">"Avaldatud aadress"</string>
+  <string name="screen_security_and_privacy_room_address_section_footer">"Selleks, et jututuba oleks nähtav jututubade avalikus kataloogis, vajab ta aadressi."</string>
+  <string name="screen_security_and_privacy_room_address_section_header">"Aadress"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Võimalda leida seda jututuba avalikust kataloogist otsides „%1$s“"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_description">"Luba leitavus avaliku kataloogi otsingust."</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Nähtav avalikus kataloogis"</string>
@@ -149,8 +150,6 @@ Me ei soovita krüptimise kasutamist selliste avalike jututubade puhul, millega 
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Jututoa aadressid annavad võimaluse neid leida ning saada neile ligi. Samuti võimaldab see jututuba teistele huvilistele jagada.
 Lisaks võid sa jututoa avaldada oma koduserveri avalikus jututubade kataloogis."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Jututoa avaldamine"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"Jututoa aadressid annavad võimaluse neid leida ning saada neile ligi. Samuti võimaldab see jututuba teistele huvilistele jagada.
-Lisaks on aadress vajalik, et jututuba oleks %1$s serveri avalikus jututubade kataloogis nähtav."</string>
-  <string name="screen_security_and_privacy_room_visibility_section_header">"Jututoa nähtavus"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_header">"Nähtavus"</string>
   <string name="screen_security_and_privacy_title">"Turvalisus ja privaatsus"</string>
 </resources>

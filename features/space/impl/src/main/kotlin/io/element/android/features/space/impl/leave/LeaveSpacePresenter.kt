@@ -88,7 +88,7 @@ class LeaveSpacePresenter(
         }
         LaunchedEffect(selectedRoomIds, leaveSpaceRooms) {
             selectableSpaceRooms = leaveSpaceRooms.map {
-                it?.others.orEmpty().map { room ->
+                it.others.map { room ->
                     SelectableSpaceRoom(
                         spaceRoom = room.spaceRoom,
                         isLastAdmin = room.isLastAdmin,

@@ -57,6 +57,7 @@ class NotLoggedInFlowNode(
 
     interface Callback : Plugin {
         fun navigateToBugReport()
+        fun onDone()
     }
 
     private val callback: Callback = callback()
@@ -82,6 +83,10 @@ class NotLoggedInFlowNode(
                 val callback = object : LoginEntryPoint.Callback {
                     override fun navigateToBugReport() {
                         callback.navigateToBugReport()
+                    }
+
+                    override fun onDone() {
+                        callback.onDone()
                     }
                 }
                 loginEntryPoint.createNode(

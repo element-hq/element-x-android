@@ -167,6 +167,10 @@ class LoginFlowNode(
                     override fun navigateToLoginPassword() {
                         backstack.push(NavTarget.LoginPassword)
                     }
+
+                    override fun onDone() {
+                        callback.onDone()
+                    }
                 }
                 val params = inputs<Params>()
                 val inputs = OnBoardingNode.Params(
