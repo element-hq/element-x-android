@@ -38,6 +38,7 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.ThreadId
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.ui.room.LoadingRoomState
 import io.element.android.libraries.matrix.ui.room.LoadingRoomStateFlowFactory
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -63,11 +64,12 @@ class JoinedRoomFlowNode(
     ) {
     data class Inputs(
         val roomId: RoomId,
+        val joinedRoom: JoinedRoom?,
         val initialElement: RoomNavigationTarget,
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
-    private val loadingRoomStateStateFlow = loadingRoomStateFlowFactory.create(lifecycleScope, inputs.roomId)
+    private val loadingRoomStateStateFlow = loadingRoomStateFlowFactory.create(lifecycleScope, inputs.roomId, inputs.joinedRoom)
 
     sealed interface NavTarget : Parcelable {
         @Parcelize

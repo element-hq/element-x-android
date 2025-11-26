@@ -65,6 +65,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -261,6 +262,7 @@ class TimelinePresenter(
                 items
             }
                 .onEach(redactedVoiceMessageManager::onEachMatrixTimelineItem)
+                .flowOn(dispatchers.computation)
                 .launchIn(this)
         }
 

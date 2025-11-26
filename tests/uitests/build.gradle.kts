@@ -20,6 +20,11 @@ android {
     namespace = "ui"
 }
 
+tasks.withType(Test::class.java) {
+    // Don't fail the test run if there are no tests, this can happen if we run them with screenshot test disabled
+    failOnNoDiscoveredTests = false
+}
+
 dependencies {
     // Paparazzi 1.3.2 workaround (see https://github.com/cashapp/paparazzi/blob/master/CHANGELOG.md#132---2024-01-13)
     constraints.add("testImplementation", "com.google.guava:guava") {

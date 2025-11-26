@@ -47,9 +47,11 @@ import io.element.android.libraries.architecture.appyx.launchMolecule
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.deeplink.api.usecase.InviteFriendsUseCase
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.services.analytics.api.AnalyticsService
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -71,6 +73,7 @@ class HomeFlowNode(
     private val declineInviteAndBlockUserEntryPoint: DeclineInviteAndBlockEntryPoint,
     private val changeRoomMemberRolesEntryPoint: ChangeRoomMemberRolesEntryPoint,
     private val leaveRoomRenderer: LeaveRoomRenderer,
+    @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
 ) : BaseFlowNode<HomeFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
@@ -146,13 +149,22 @@ class HomeFlowNode(
         stateFlow.value.roomListState.eventSink(RoomListEvents.LeaveRoom(roomId, needsConfirmation = false))
     }
 
+    private fun navigateToRoom(
+        roomId: RoomId,
+    ) {
+        sessionCoroutineScope.launch {
+            val joinedRoom = matrixClient.getJoinedRoom(roomId)
+            callback.navigateToRoom(roomId, joinedRoom)
+        }
+    }
+
     private fun rootNode(buildContext: BuildContext): Node {
         return node(buildContext) { modifier ->
             val state by stateFlow.collectAsState()
             val activity = requireNotNull(LocalActivity.current)
             HomeView(
                 homeState = state,
-                onRoomClick = callback::navigateToRoom,
+                onRoomClick = ::navigateToRoom,
                 onSettingsClick = callback::navigateToSettings,
                 onStartChatClick = callback::navigateToCreateRoom,
                 onSetUpRecoveryClick = callback::navigateToSetUpRecovery,
@@ -165,7 +177,7 @@ class HomeFlowNode(
                 acceptDeclineInviteView = {
                     acceptDeclineInviteView.Render(
                         state = state.roomListState.acceptDeclineInviteState,
-                        onAcceptInviteSuccess = callback::navigateToRoom,
+                        onAcceptInviteSuccess = ::navigateToRoom,
                         onDeclineInviteSuccess = { },
                         modifier = Modifier
                     )
