@@ -8,7 +8,6 @@
 package io.element.android.features.messages.impl.crypto.historyvisible
 
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.messages.impl.MessagesView
 import io.element.android.features.messages.impl.aMessagesState
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
