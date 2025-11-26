@@ -11,9 +11,6 @@ package io.element.android.libraries.architecture
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import io.element.android.libraries.core.extensions.runCatchingExceptions
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
 
 /**
  * Sealed type that allows to model an asynchronous operation.
@@ -134,16 +131,16 @@ suspend inline fun <T> MutableState<AsyncData<T>>.runUpdatingState(
  * @param resultBlock a suspending function that returns a [Result].
  * @return the [Result] returned by [resultBlock].
  */
-@OptIn(ExperimentalContracts::class)
 @Suppress("REDUNDANT_INLINE_SUSPEND_FUNCTION_TYPE")
 suspend inline fun <T> runUpdatingState(
     state: MutableState<AsyncData<T>>,
     errorTransform: (Throwable) -> Throwable = { it },
     resultBlock: suspend () -> Result<T>,
 ): Result<T> {
-    contract {
-        callsInPlace(resultBlock, InvocationKind.EXACTLY_ONCE)
-    }
+    // Restore when the issue with contracts and AGP 8.13.x is fixed
+//    contract {
+//        callsInPlace(resultBlock, InvocationKind.EXACTLY_ONCE)
+//    }
     val prevData = state.value.dataOrNull()
     state.value = AsyncData.Loading(prevData = prevData)
     return resultBlock().fold(
