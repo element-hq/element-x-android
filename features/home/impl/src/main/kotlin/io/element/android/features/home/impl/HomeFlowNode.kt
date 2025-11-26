@@ -14,6 +14,8 @@ import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.coroutineScope
@@ -45,18 +47,25 @@ import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.appyx.launchMolecule
 import io.element.android.libraries.architecture.callback
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.deeplink.api.usecase.InviteFriendsUseCase
+import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.utils.DelayedVisibility
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
+import kotlin.coroutines.cancellation.CancellationException
+import kotlin.time.Duration.Companion.milliseconds
 
 @ContributesNode(SessionScope::class)
 @AssistedInject
@@ -149,19 +158,47 @@ class HomeFlowNode(
         stateFlow.value.roomListState.eventSink(RoomListEvents.LeaveRoom(roomId, needsConfirmation = false))
     }
 
-    private fun navigateToRoom(
-        roomId: RoomId,
-    ) {
-        sessionCoroutineScope.launch {
-            val joinedRoom = matrixClient.getJoinedRoom(roomId)
-            callback.navigateToRoom(roomId, joinedRoom)
-        }
-    }
-
     private fun rootNode(buildContext: BuildContext): Node {
         return node(buildContext) { modifier ->
             val state by stateFlow.collectAsState()
             val activity = requireNotNull(LocalActivity.current)
+
+            val loadingJoinedRoomJob = remember { mutableStateOf<Job?>(null) }
+            if (loadingJoinedRoomJob.value != null) {
+                DelayedVisibility(duration = 400.milliseconds) {
+                    ProgressDialog(
+                        onDismissRequest = {
+                            loadingJoinedRoomJob.value?.cancel()
+                            loadingJoinedRoomJob.value = null
+                        }
+                    )
+                }
+            }
+
+            fun navigateToRoom(
+                roomId: RoomId,
+            ) {
+                loadingJoinedRoomJob.value = sessionCoroutineScope.launch {
+                    runCatchingExceptions {
+                        withContext(Dispatchers.Default) {
+                            matrixClient.getJoinedRoom(roomId)
+                        }
+                    }.fold(
+                        onSuccess = { joinedRoom ->
+                            loadingJoinedRoomJob.value = null
+                            callback.navigateToRoom(roomId, joinedRoom)
+                        },
+                        onFailure = {
+                            loadingJoinedRoomJob.value = null
+                            // If the operation wasn't cancelled, navigate without the room
+                            if (it !is CancellationException) {
+                                callback.navigateToRoom(roomId, null)
+                            }
+                        }
+                    )
+                }
+            }
+
             HomeView(
                 homeState = state,
                 onRoomClick = ::navigateToRoom,
