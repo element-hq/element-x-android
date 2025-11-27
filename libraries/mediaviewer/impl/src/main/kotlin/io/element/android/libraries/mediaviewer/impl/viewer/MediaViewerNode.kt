@@ -138,6 +138,9 @@ class MediaViewerNode(
 
     @Composable
     override fun View(modifier: Modifier) {
+        val context = LocalContext.current
+        val (isMinimized, setMinimized) = remember { mutableStateOf(false) }
+
         val colors by remember {
             enterpriseService.semanticColorsFlow(sessionId = sessionId)
         }.collectAsState(SemanticColorsLightDark.default)
