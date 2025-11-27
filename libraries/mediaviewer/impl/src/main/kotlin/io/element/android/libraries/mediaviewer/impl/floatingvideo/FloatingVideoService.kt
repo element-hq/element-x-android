@@ -55,8 +55,6 @@ class FloatingVideoService : Service(), LifecycleOwner, SavedStateRegistryOwner 
 
     companion object {
         const val ACTION_START_FLOATING = "START_FLOATING"
-        const val ACTION_STOP_FLOATING = "STOP_FLOATING"
-        const val ACTION_UPDATE_POSITION = "UPDATE_POSITION"
         const val EXTRA_VIDEO_ID = "video_id"
         const val EXTRA_POSITION = "position"
 
@@ -64,7 +62,7 @@ class FloatingVideoService : Service(), LifecycleOwner, SavedStateRegistryOwner 
 
         @SuppressLint("ObsoleteSdkInt")
         fun startFloating(
-            context: Context, videoData: MediaViewerPageData.MediaViewerData, position: Long = 0L
+            context: Context, videoId: String, position: Long = 0L
         ) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M && !Settings.canDrawOverlays(context)) {
 
@@ -76,13 +74,9 @@ class FloatingVideoService : Service(), LifecycleOwner, SavedStateRegistryOwner 
                 return
             }
 
-
-            // Store the video data in repository via DI
-            val videoId = context.bindings<FloatingVideoServiceBindings>().videoDataRepository().storeVideoData(videoData)
-
             val intent = Intent(context, FloatingVideoService::class.java).apply {
                 action = ACTION_START_FLOATING
-                putExtra(EXTRA_VIDEO_ID, videoId)  // Pass only the ID, not the whole object
+                putExtra(EXTRA_VIDEO_ID, videoId)
                 putExtra(EXTRA_POSITION, position)
             }
             context.startService(intent)
@@ -135,21 +129,6 @@ class FloatingVideoService : Service(), LifecycleOwner, SavedStateRegistryOwner 
                         createFloatingView()
                     }
                 }
-            }
-
-            ACTION_STOP_FLOATING -> {
-                // Clean up stored data
-                currentVideoId?.let { videoId ->
-                    videoDataRepository.removeVideoData(videoId)
-                }
-                removeFloatingView()
-                stopSelf()
-            }
-
-            ACTION_UPDATE_POSITION -> {
-                val position = intent.getLongExtra(EXTRA_POSITION, 0L)
-                currentPosition = position
-                videoView?.seekTo(position.toInt())
             }
         }
         return START_STICKY
