@@ -24,7 +24,6 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
-import io.element.android.appnav.analytics.AnalyticsColdStartWatcher
 import io.element.android.features.login.api.LoginEntryPoint
 import io.element.android.features.login.api.LoginParams
 import io.element.android.libraries.architecture.BackstackView
@@ -35,6 +34,7 @@ import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.designsystem.utils.ForceOrientationInMobileDevices
 import io.element.android.libraries.designsystem.utils.ScreenOrientation
 import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
+import io.element.android.services.analytics.api.watchers.AnalyticsColdStartWatcher
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(AppScope::class)

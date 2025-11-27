@@ -5,15 +5,18 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.appnav.analytics
+package io.element.android.services.analytics.impl.watchers
 
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.core.coroutine.withPreviousValue
+import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
-import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.ResumeAppUntilNewRoomsReceived
+import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
 import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.api.watchers.AnalyticsRoomListStateWatcher
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancel
@@ -24,35 +27,31 @@ import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
-/**
- * This component is used to check how long it takes for the room list to be up to date after opening the app while it's on a 'warm' state:
- * the app was previously running and we just returned to it.
- */
-@Inject
-class AnalyticsRoomListStateWatcher(
+@ContributesBinding(SessionScope::class)
+class DefaultAnalyticsRoomListStateWatcher(
     private val appNavigationStateService: AppNavigationStateService,
     private val roomListService: RoomListService,
     private val analyticsService: AnalyticsService,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
-) {
+) : AnalyticsRoomListStateWatcher {
     private var currentCoroutineScope: CoroutineScope? = null
     private val isWarmState = AtomicBoolean(false)
 
-    fun start() {
+    override fun start() {
         if (currentCoroutineScope != null) {
             Timber.w("Can't start RoomListStateWatcher, it's already running.")
             return
         }
 
-        val coroutineScope = CoroutineScope(sessionCoroutineScope.coroutineContext + dispatchers.computation)
+        val coroutineScope = sessionCoroutineScope.childScope(dispatchers.computation, "AnalyticsRoomListStateWatcher")
         appNavigationStateService.appNavigationState
             .map { it.isInForeground }
             .distinctUntilChanged()
             .withPreviousValue()
             .onEach { (wasInForeground, isInForeground) ->
                 if (isInForeground && roomListService.state.value != RoomListService.State.Running) {
-                    analyticsService.startLongRunningTransaction(ResumeAppUntilNewRoomsReceived)
+                    analyticsService.startLongRunningTransaction(AnalyticsLongRunningTransaction.ResumeAppUntilNewRoomsReceived)
                 }
 
                 if (wasInForeground == false && isInForeground) {
@@ -64,7 +63,7 @@ class AnalyticsRoomListStateWatcher(
         roomListService.state
             .onEach { state ->
                 if (state == RoomListService.State.Running && isWarmState.get()) {
-                    analyticsService.removeLongRunningTransaction(ResumeAppUntilNewRoomsReceived)?.finish()
+                    analyticsService.removeLongRunningTransaction(AnalyticsLongRunningTransaction.ResumeAppUntilNewRoomsReceived)?.finish()
                 }
             }
             .launchIn(coroutineScope)
@@ -72,7 +71,7 @@ class AnalyticsRoomListStateWatcher(
         currentCoroutineScope = coroutineScope
     }
 
-    fun stop() {
+    override fun stop() {
         currentCoroutineScope?.cancel()
         currentCoroutineScope = null
     }

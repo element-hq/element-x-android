@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.appnav.analytics
+package io.element.android.services.analytics.impl.watchers
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.ColdStartUntilCachedRoomList
