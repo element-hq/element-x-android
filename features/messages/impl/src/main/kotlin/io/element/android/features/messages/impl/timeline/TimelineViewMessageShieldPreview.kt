@@ -8,6 +8,7 @@
 
 package io.element.android.features.messages.impl.timeline
 
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import io.element.android.features.messages.impl.timeline.components.aCriticalShield
@@ -50,6 +51,7 @@ internal fun TimelineViewMessageShieldPreview() = ElementPreview {
             onMoreReactionsClick = {},
             onReadReceiptClick = {},
             onJoinCallClick = {},
+            lazyListState = rememberLazyListState(),
             forceJumpToBottomVisibility = true,
         )
     }

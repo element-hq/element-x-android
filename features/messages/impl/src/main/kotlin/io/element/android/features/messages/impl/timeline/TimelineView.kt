@@ -101,8 +101,8 @@ fun TimelineView(
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
     onJoinCallClick: () -> Unit,
+    lazyListState: LazyListState,
     modifier: Modifier = Modifier,
-    lazyListState: LazyListState = rememberLazyListState(),
     forceJumpToBottomVisibility: Boolean = false,
     nestedScrollConnection: NestedScrollConnection = rememberNestedScrollInteropConnection(),
 ) {
@@ -389,6 +389,7 @@ internal fun TimelineViewPreview(
 ) = ElementPreview {
     val timelineItems = aTimelineItemList(content)
     val timelineEvents = timelineItems.filterIsInstance<TimelineItem.Event>()
+    val lazyListState = rememberLazyListState()
     val lastEventIdFromMe = timelineEvents.firstOrNull { it.isMine }?.eventId
     val lastEventIdFromOther = timelineEvents.firstOrNull { !it.isMine }?.eventId
     CompositionLocalProvider(
@@ -413,6 +414,7 @@ internal fun TimelineViewPreview(
             onMoreReactionsClick = {},
             onReadReceiptClick = {},
             onJoinCallClick = {},
+            lazyListState = lazyListState,
             forceJumpToBottomVisibility = true,
         )
     }

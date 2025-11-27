@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -220,7 +221,7 @@ fun MessagesView(
                                 state = state.timelineState,
                                 modifier = Modifier.fillMaxSize(),
                                 onThreadClick = { eventId ->
-                                    state.timelineState.eventSink(TimelineEvents.FocusOnEvent(eventId))
+                                    state.eventSink(MessagesEvents.OpenThread(eventId))
                                 }
                             )
                         } else {
@@ -432,8 +433,10 @@ private fun MessagesViewContent(
             val scrollBehavior = PinnedMessagesBannerViewDefaults.rememberScrollBehavior(
                 pinnedMessagesCount = (state.pinnedMessagesBannerState as? PinnedMessagesBannerState.Visible)?.pinnedMessagesCount() ?: 0,
             )
+            val timelineLazyListState = rememberLazyListState()
             TimelineView(
                 state = state.timelineState,
+                lazyListState = timelineLazyListState,
                 timelineProtectionState = state.timelineProtectionState,
                 onUserDataClick = onUserDataClick,
                 onLinkClick = { link -> onLinkClick(link, false) },

@@ -26,6 +26,7 @@ data class TimelineState(
     val timelineItems: ImmutableList<TimelineItem>,
     val timelineRoomInfo: TimelineRoomInfo,
     val timelineMode: Timeline.Mode,
+    val paginationState: PaginationState,
     val renderReadReceipts: Boolean,
     val newEventState: NewEventState,
     val isLive: Boolean,
@@ -43,6 +44,12 @@ data class TimelineState(
     fun isLastOutgoingMessage(uniqueId: UniqueId): Boolean {
         return isLive && lastTimelineEvent != null && lastTimelineEvent.isMine && lastTimelineEvent.id == uniqueId
     }
+
+    data class PaginationState(
+        val isPaginating: Boolean,
+        val hasMoreToLoad: Boolean,
+        val hasReachedEnd: Boolean,
+    )
 }
 
 @Immutable

@@ -83,6 +83,7 @@ import io.element.android.libraries.matrix.api.room.powerlevels.canPinUnpin
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOther
 import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOwn
 import io.element.android.libraries.matrix.api.room.powerlevels.canSendMessage
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.matrix.ui.model.getAvatarData
@@ -268,6 +269,9 @@ class MessagesPresenter(
                         navigator.close()
                         markingAsReadAndExiting.set(false)
                     }
+                }
+                is MessagesEvents.OpenThread -> {
+                    navigator.navigateToThread(event.eventId.toThreadId(), null)
                 }
                 MessagesEvents.ToggleThreadList -> {
                     isThreadListSelected = !isThreadListSelected

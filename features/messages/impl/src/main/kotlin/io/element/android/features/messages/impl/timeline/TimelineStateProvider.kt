@@ -48,6 +48,7 @@ import kotlin.random.Random
 fun aTimelineState(
     timelineItems: ImmutableList<TimelineItem> = persistentListOf(),
     timelineMode: Timeline.Mode = Timeline.Mode.Live,
+    paginationState: TimelineState.PaginationState = aPaginationState(),
     renderReadReceipts: Boolean = false,
     timelineRoomInfo: TimelineRoomInfo = aTimelineRoomInfo(),
     focusedEventIndex: Int = -1,
@@ -66,6 +67,7 @@ fun aTimelineState(
     return TimelineState(
         timelineItems = timelineItems,
         timelineMode = timelineMode,
+        paginationState = paginationState,
         timelineRoomInfo = timelineRoomInfo,
         renderReadReceipts = renderReadReceipts,
         newEventState = NewEventState.None,
@@ -77,6 +79,16 @@ fun aTimelineState(
         eventSink = eventSink,
     )
 }
+
+fun aPaginationState(
+    isPaginating: Boolean = false,
+    hasMoreToLoad: Boolean = true,
+    hasReachedEnd: Boolean = false,
+) = TimelineState.PaginationState(
+    isPaginating = isPaginating,
+    hasMoreToLoad = hasMoreToLoad,
+    hasReachedEnd = hasReachedEnd,
+)
 
 internal fun aTimelineItemList(content: TimelineItemEventContent): ImmutableList<TimelineItem> {
     return persistentListOf(

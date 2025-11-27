@@ -60,7 +60,9 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -110,7 +112,19 @@ class TimelinePresenter(
     override fun present(): TimelineState {
         val localScope = rememberCoroutineScope()
 
-        val timelineMode = remember { timelineController.mainTimelineMode() }
+        val timelineMode by remember {
+            timelineController.activeTimelineFlow().map { it.mode }
+        }.collectAsState(initial = timelineController.mainTimelineMode())
+
+        val paginationStatus by remember {
+            timelineController.activeTimelineFlow().flatMapLatest { it.backwardPaginationStatus }
+        }.collectAsState(initial = Timeline.PaginationStatus(isPaginating = false, hasMoreToLoad = true))
+
+        val paginationState = TimelineState.PaginationState(
+            isPaginating = paginationStatus.isPaginating,
+            hasMoreToLoad = paginationStatus.hasMoreToLoad,
+            hasReachedEnd = !paginationStatus.hasMoreToLoad,
+        )
 
         val lastReadReceiptId = rememberSaveable { mutableStateOf<EventId?>(null) }
 
@@ -282,6 +296,7 @@ class TimelinePresenter(
         return TimelineState(
             timelineItems = timelineItems,
             timelineMode = timelineMode,
+            paginationState = paginationState,
             timelineRoomInfo = timelineRoomInfo,
             renderReadReceipts = renderReadReceipts,
             newEventState = newEventState.value,
