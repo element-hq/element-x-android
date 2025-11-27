@@ -9,6 +9,7 @@
 package io.element.android.libraries.push.impl.notifications.factories
 
 import android.content.Intent
+import android.os.Bundle
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -16,5 +17,11 @@ import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.push.impl.intent.IntentProvider
 
 class FakeIntentProvider : IntentProvider {
-    override fun getViewRoomIntent(sessionId: SessionId, roomId: RoomId?, threadId: ThreadId?, eventId: EventId?) = Intent(Intent.ACTION_VIEW)
+    override fun getViewRoomIntent(
+        sessionId: SessionId,
+        roomId: RoomId?,
+        threadId: ThreadId?,
+        eventId: EventId?,
+        extras: Bundle?,
+    ) = Intent(Intent.ACTION_VIEW)
 }

@@ -9,6 +9,7 @@
 package io.element.android.libraries.push.impl.intent
 
 import android.content.Intent
+import android.os.Bundle
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -23,5 +24,6 @@ interface IntentProvider {
         roomId: RoomId?,
         threadId: ThreadId?,
         eventId: EventId?,
+        extras: Bundle? = null,
     ): Intent
 }

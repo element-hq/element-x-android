@@ -29,7 +29,6 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.annotations.ContributesNode
-import io.element.android.appnav.analytics.AnalyticsColdStartWatcher
 import io.element.android.appnav.di.MatrixSessionCache
 import io.element.android.appnav.intent.IntentResolver
 import io.element.android.appnav.intent.ResolvedIntent
@@ -66,6 +65,7 @@ import io.element.android.libraries.ui.common.nodes.emptyNode
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.api.watchers.AnalyticsColdStartWatcher
+import io.element.android.services.appnavstate.api.ROOM_OPENED_FROM_NOTIFICATION
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -318,7 +318,8 @@ class RootFlowNode(
         val resolvedIntent = intentResolver.resolve(intent) ?: return
         when (resolvedIntent) {
             is ResolvedIntent.Navigation -> {
-                if (intent.getBooleanExtra("from_notification", false) && resolvedIntent.deeplinkData is DeeplinkData.Room) {
+                val openingRoomFromNotification = intent.getBooleanExtra(ROOM_OPENED_FROM_NOTIFICATION, false)
+                if (openingRoomFromNotification && resolvedIntent.deeplinkData is DeeplinkData.Room) {
                     analyticsService.startLongRunningTransaction(AnalyticsLongRunningTransaction.NotificationTapOpensTimeline)
                 }
                 navigateTo(resolvedIntent.deeplinkData)
