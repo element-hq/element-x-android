@@ -43,6 +43,7 @@ import io.element.android.features.logout.api.direct.DirectLogoutView
 import io.element.android.features.reportroom.api.ReportRoomEntryPoint
 import io.element.android.features.rolesandpermissions.api.ChangeRoomMemberRolesEntryPoint
 import io.element.android.features.rolesandpermissions.api.ChangeRoomMemberRolesListType
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.appyx.launchMolecule
@@ -59,10 +60,13 @@ import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -162,13 +166,13 @@ class HomeFlowNode(
             val state by stateFlow.collectAsState()
             val activity = requireNotNull(LocalActivity.current)
 
-            val loadingJoinedRoomJob = remember { mutableStateOf<Job?>(null) }
-            if (loadingJoinedRoomJob.value != null) {
+            val loadingJoinedRoomJob = remember { mutableStateOf<AsyncData<Job>>(AsyncData.Uninitialized) }
+            if (loadingJoinedRoomJob.value.isLoading()) {
                 DelayedVisibility(duration = 400.milliseconds) {
                     ProgressDialog(
                         onDismissRequest = {
-                            loadingJoinedRoomJob.value?.cancel()
-                            loadingJoinedRoomJob.value = null
+                            loadingJoinedRoomJob.value.dataOrNull()?.cancel()
+                            loadingJoinedRoomJob.value = AsyncData.Uninitialized
                         }
                     )
                 }
@@ -177,23 +181,37 @@ class HomeFlowNode(
             fun navigateToRoom(
                 roomId: RoomId,
             ) {
-                loadingJoinedRoomJob.value = sessionCoroutineScope.launch {
+                if (!loadingJoinedRoomJob.value.isUninitialized()) {
+                    Timber.w("Already loading a room, ignoring navigateToRoom for $roomId")
+                    return
+                }
+
+                val job = sessionCoroutineScope.launch {
                     runCatchingExceptions {
                         matrixClient.getJoinedRoom(roomId)
                     }.fold(
                         onSuccess = { joinedRoom ->
-                            loadingJoinedRoomJob.value = null
-                            callback.navigateToRoom(roomId, joinedRoom)
+                            if (isActive) {
+                                callback.navigateToRoom(roomId, joinedRoom)
+                                loadingJoinedRoomJob.value = AsyncData.Success(loadingJoinedRoomJob.value.dataOrNull()!!)
+                                // Wait a bit before resetting the state to avoid allowing to open several rooms
+                                delay(200.milliseconds)
+                                loadingJoinedRoomJob.value = AsyncData.Uninitialized
+                            }
                         },
                         onFailure = {
-                            loadingJoinedRoomJob.value = null
                             // If the operation wasn't cancelled, navigate without the room
                             if (it !is CancellationException) {
                                 callback.navigateToRoom(roomId, null)
                             }
+                            loadingJoinedRoomJob.value = AsyncData.Failure(it, loadingJoinedRoomJob.value.dataOrNull()!!)
+                            // Wait a bit before resetting the state to avoid allowing to open several rooms
+                            delay(200.milliseconds)
+                            loadingJoinedRoomJob.value = AsyncData.Uninitialized
                         }
                     )
                 }
+                loadingJoinedRoomJob.value = AsyncData.Loading(job)
             }
 
             HomeView(
