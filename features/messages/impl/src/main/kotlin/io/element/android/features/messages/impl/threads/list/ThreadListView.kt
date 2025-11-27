@@ -81,6 +81,13 @@ fun ThreadListView(
         }
         return
     }
+
+    LaunchedEffect(threadItems.size, state.paginationState.hasReachedEnd, state.paginationState.isPaginating) {
+        if (threadItems.size < 10 && !state.paginationState.hasReachedEnd && !state.paginationState.isPaginating) {
+            state.eventSink(TimelineEvents.LoadMore(Timeline.PaginationDirection.BACKWARDS))
+        }
+    }
+
     LazyColumn(
         state = lazyListState,
         modifier = modifier.fillMaxSize(),
