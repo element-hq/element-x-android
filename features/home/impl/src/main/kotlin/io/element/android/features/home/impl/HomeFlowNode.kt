@@ -57,7 +57,6 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.launch
@@ -180,9 +179,7 @@ class HomeFlowNode(
             ) {
                 loadingJoinedRoomJob.value = sessionCoroutineScope.launch {
                     runCatchingExceptions {
-                        withContext(Dispatchers.Default) {
-                            matrixClient.getJoinedRoom(roomId)
-                        }
+                        matrixClient.getJoinedRoom(roomId)
                     }.fold(
                         onSuccess = { joinedRoom ->
                             loadingJoinedRoomJob.value = null
