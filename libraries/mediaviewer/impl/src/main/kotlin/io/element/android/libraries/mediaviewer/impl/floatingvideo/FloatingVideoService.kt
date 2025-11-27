@@ -31,11 +31,12 @@ import androidx.savedstate.SavedStateRegistry
 import androidx.savedstate.SavedStateRegistryController
 import androidx.savedstate.SavedStateRegistryOwner
 import androidx.savedstate.setViewTreeSavedStateRegistryOwner
-import androidx.core.net.toUri
+import io.element.android.libraries.androidutils.system.openSystemOverlaySettings
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.ui.FloatingVideoOverlay
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.getScreenHeight
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.bindings
+import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.dpToPx
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.getUri
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.maximizeWindowHelper
 import io.element.android.libraries.mediaviewer.impl.floatingvideo.util.minimizeWindowHelper
@@ -59,6 +60,8 @@ class FloatingVideoService : Service(), LifecycleOwner, SavedStateRegistryOwner 
         const val EXTRA_VIDEO_ID = "video_id"
         const val EXTRA_POSITION = "position"
 
+        private const val INITIAL_FLOATING_WINDOW_OFFSET_Y = 300
+
         @SuppressLint("ObsoleteSdkInt")
         fun startFloating(
             context: Context, videoData: MediaViewerPageData.MediaViewerData, position: Long = 0L
@@ -69,13 +72,7 @@ class FloatingVideoService : Service(), LifecycleOwner, SavedStateRegistryOwner 
                 Toast.makeText(context, "To show the floating video, please allow 'Display over other apps' permission.", Toast.LENGTH_LONG).show()
 
                 // Request overlay permission
-                val intent = Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION).apply {
-                    data = "package:${context.packageName}".toUri()
-                    addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                }
-
-
-                context.startActivity(intent)
+                context.openSystemOverlaySettings()
                 return
             }
 
@@ -160,7 +157,6 @@ class FloatingVideoService : Service(), LifecycleOwner, SavedStateRegistryOwner 
 
     private fun createFloatingView() {
         removeFloatingView()
-        windowManager = getSystemService(WINDOW_SERVICE) as WindowManager
 
         windowLayoutParams = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             WindowManager.LayoutParams(
@@ -183,7 +179,7 @@ class FloatingVideoService : Service(), LifecycleOwner, SavedStateRegistryOwner 
 
         windowLayoutParams.gravity = Gravity.TOP or Gravity.START
         windowLayoutParams.x = 0
-        windowLayoutParams.y = windowManager.getScreenHeight() - dpToPx(300)
+        windowLayoutParams.y = windowManager.getScreenHeight() - dpToPx(INITIAL_FLOATING_WINDOW_OFFSET_Y)
 
         val composeView = ComposeView(this).apply {
             setViewTreeLifecycleOwner(this@FloatingVideoService)
@@ -248,10 +244,6 @@ class FloatingVideoService : Service(), LifecycleOwner, SavedStateRegistryOwner 
     override fun onDestroy() {
         super.onDestroy()
         onVideoComplete()
-    }
-
-    private  fun dpToPx(dp: Int): Int {
-        return (dp * resources.displayMetrics.density).toInt()
     }
 
     private fun onVideoComplete() {

@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.mediaviewer.impl.floatingvideo.util
 
+import android.content.Context
 import android.graphics.Point
 import android.os.Build
 import android.util.DisplayMetrics
@@ -143,4 +144,8 @@ private fun calculateDimensions(
     }
     val height = (width / aspectRatio).toInt()
     return Point(width, height)
+}
+
+fun Context.dpToPx(dp: Int): Int {
+    return (dp * resources.displayMetrics.density).toInt()
 }
