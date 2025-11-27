@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -130,6 +131,7 @@ fun MessagesView(
     HideKeyboardWhenDisposed()
 
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
+    val timelineLazyListState = rememberLazyListState()
 
     // This is needed because the composer is inside an AndroidView that can't be affected by the FocusManager in Compose
     val localView = LocalView.current
@@ -227,6 +229,7 @@ fun MessagesView(
                         } else {
                             MessagesViewContent(
                                 state = state,
+                                timelineLazyListState = timelineLazyListState,
                                 onContentClick = ::onContentClick,
                                 onMessageLongClick = ::onMessageLongClick,
                                 onUserDataClick = {
@@ -382,6 +385,7 @@ private fun ReinviteDialog(state: MessagesState) {
 @Composable
 private fun MessagesViewContent(
     state: MessagesState,
+    timelineLazyListState: LazyListState,
     onContentClick: (TimelineItem.Event) -> Unit,
     onUserDataClick: (MatrixUser) -> Unit,
     onLinkClick: (Link, Boolean) -> Unit,
@@ -433,7 +437,6 @@ private fun MessagesViewContent(
             val scrollBehavior = PinnedMessagesBannerViewDefaults.rememberScrollBehavior(
                 pinnedMessagesCount = (state.pinnedMessagesBannerState as? PinnedMessagesBannerState.Visible)?.pinnedMessagesCount() ?: 0,
             )
-            val timelineLazyListState = rememberLazyListState()
             TimelineView(
                 state = state.timelineState,
                 lazyListState = timelineLazyListState,
