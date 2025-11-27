@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright 2025 New Vector Ltd.
+  ~
+  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+  ~ Please see LICENSE files in the repository root for full details.
+  -->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="io.element.android.libraries.mediaviewer.impl">
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
+    <application>
+        <service
+            android:name=".floatingvideo.FloatingVideoService"
+            android:enabled="true"
+            android:exported="false" />
+    </application>
+</manifest>

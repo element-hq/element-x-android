@@ -8,11 +8,16 @@
 
 package io.element.android.libraries.mediaviewer.impl.viewer
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -27,6 +32,7 @@ import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -36,6 +42,8 @@ import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.mediaviewer.impl.datasource.FocusedTimelineMediaGalleryDataSourceFactory
 import io.element.android.libraries.mediaviewer.impl.datasource.TimelineMediaGalleryDataSource
+import io.element.android.libraries.mediaviewer.impl.floatingvideo.FloatingVideoService
+import io.element.android.libraries.mediaviewer.impl.floatingvideo.VideoDataRepository
 import io.element.android.libraries.mediaviewer.impl.model.hasEvent
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 
@@ -52,6 +60,7 @@ class MediaViewerNode(
     coroutineDispatchers: CoroutineDispatchers,
     systemClock: SystemClock,
     pagerKeysHandler: PagerKeysHandler,
+    private val videoDataRepository: VideoDataRepository,
     private val textFileViewer: TextFileViewer,
     private val audioFocus: AudioFocus,
     private val sessionId: SessionId,
@@ -129,6 +138,9 @@ class MediaViewerNode(
 
     @Composable
     override fun View(modifier: Modifier) {
+        val context = LocalContext.current
+        val (isMinimized, setMinimized) = remember { mutableStateOf(false) }
+
         val colors by remember {
             enterpriseService.semanticColorsFlow(sessionId = sessionId)
         }.collectAsState(SemanticColorsLightDark.default)
@@ -136,13 +148,26 @@ class MediaViewerNode(
             colors = colors,
         ) {
             val state = presenter.present()
-            MediaViewerView(
-                state = state,
-                textFileViewer = textFileViewer,
-                modifier = modifier,
-                audioFocus = audioFocus,
-                onBackClick = callback::onDone,
-            )
+            val data = state.listData
+                .getOrNull(state.currentIndex) as? MediaViewerPageData.MediaViewerData
+
+            LaunchedEffect(isMinimized, data) {
+                if ( data != null && isMinimized && data.mediaInfo.mimeType.isMimeTypeVideo() ) {
+                    val videoId = videoDataRepository.storeVideoData(data)
+                    FloatingVideoService.startFloating(context, videoId, 0L)
+                }
+            }
+
+            Box(modifier = modifier.fillMaxSize()) {
+                MediaViewerView(
+                    state = state,
+                    textFileViewer = textFileViewer,
+                    modifier = modifier,
+                    audioFocus = audioFocus,
+                    onBackClick = callback::onDone,
+                    setMinimize = setMinimized
+                )
+            }
         }
     }
 }
