@@ -23,13 +23,13 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
 
 // https://www.figma.com/file/Ni6Ii8YKtmXCKYNE90cC67/Timeline-(new)?type=design&node-id=917-80169&mode=design&t=A0CJCBbMqR8NOwUQ-0
 @Composable
 fun SenderName(
     senderId: UserId,
-    senderProfile: ProfileTimelineDetails,
+    senderProfile: ProfileDetails,
     senderNameMode: SenderNameMode,
     modifier: Modifier = Modifier,
 ) {
@@ -39,12 +39,12 @@ fun SenderName(
         verticalAlignment = Alignment.CenterVertically,
     ) {
         when (senderProfile) {
-            is ProfileTimelineDetails.Error,
-            ProfileTimelineDetails.Pending,
-            ProfileTimelineDetails.Unavailable -> {
+            is ProfileDetails.Error,
+            ProfileDetails.Pending,
+            ProfileDetails.Unavailable -> {
                 MainText(text = senderId.value, mode = senderNameMode)
             }
-            is ProfileTimelineDetails.Ready -> {
+            is ProfileDetails.Ready -> {
                 val displayName = senderProfile.displayName
                 if (displayName.isNullOrEmpty()) {
                     MainText(text = senderId.value, mode = senderNameMode)
@@ -121,7 +121,7 @@ internal fun SenderNamePreview(
 ) = ElementPreview {
     SenderName(
         senderId = senderNameData.userId,
-        senderProfile = senderNameData.profileTimelineDetails,
+        senderProfile = senderNameData.profileDetails,
         senderNameMode = senderNameData.senderNameMode,
     )
 }

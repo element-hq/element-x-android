@@ -13,7 +13,7 @@ import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
-import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
 
 sealed interface EventThreadInfo {
     data class ThreadRoot(val summary: ThreadSummary) : EventThreadInfo
@@ -29,6 +29,6 @@ data class EmbeddedEventInfo(
     val eventOrTransactionId: EventOrTransactionId,
     val content: EventContent,
     val senderId: UserId,
-    val senderProfile: ProfileTimelineDetails,
+    val senderProfile: ProfileDetails,
     val timestamp: Long,
 )

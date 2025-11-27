@@ -277,7 +277,7 @@ private fun MessagePreviewAndIndicatorRow(
         val messagePreview = if (room.isTombstoned) {
             stringResource(R.string.screen_roomlist_tombstoned_room_description)
         } else {
-            room.lastMessage.orEmpty()
+            room.latestEvent.orEmpty()
         }
         val annotatedMessagePreview = messagePreview as? AnnotatedString ?: AnnotatedString(text = messagePreview.toString())
         Text(

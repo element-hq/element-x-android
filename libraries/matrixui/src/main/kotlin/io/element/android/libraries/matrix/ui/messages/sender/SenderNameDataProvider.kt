@@ -11,11 +11,11 @@ package io.element.android.libraries.matrix.ui.messages.sender
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
 
 data class SenderNameData(
     val userId: UserId,
-    val profileTimelineDetails: ProfileTimelineDetails,
+    val profileDetails: ProfileDetails,
     val senderNameMode: SenderNameMode,
 )
 
@@ -38,7 +38,7 @@ open class SenderNameDataProvider : PreviewParameterProvider<SenderNameData> {
                     SenderNameData(
                         senderNameMode = senderNameMode,
                         userId = UserId("@alice:${senderNameMode.javaClass.simpleName.lowercase()}"),
-                        profileTimelineDetails = ProfileTimelineDetails.Unavailable,
+                        profileDetails = ProfileDetails.Unavailable,
                     ),
                 )
             }
@@ -49,7 +49,7 @@ private fun aSenderNameData(
     displayNameAmbiguous: Boolean = false,
 ) = SenderNameData(
     userId = UserId("@alice:${senderNameMode.javaClass.simpleName.lowercase()}"),
-    profileTimelineDetails = ProfileTimelineDetails.Ready(
+    profileDetails = ProfileDetails.Ready(
         displayName = "Alice ${senderNameMode.javaClass.simpleName}",
         displayNameAmbiguous = displayNameAmbiguous,
         avatarUrl = null

@@ -192,6 +192,6 @@ class RoomSummaryListProcessorTest {
         summaries,
         FakeFfiRoomListService(),
         coroutineContext = StandardTestDispatcher(testScheduler),
-        roomSummaryDetailsFactory = RoomSummaryFactory(),
+        roomSummaryFactory = RoomSummaryFactory(),
     )
 }

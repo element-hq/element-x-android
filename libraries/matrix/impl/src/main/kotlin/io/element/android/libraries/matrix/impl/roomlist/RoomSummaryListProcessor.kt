@@ -24,7 +24,7 @@ class RoomSummaryListProcessor(
     private val roomSummaries: MutableSharedFlow<List<RoomSummary>>,
     private val roomListService: RoomListServiceInterface,
     private val coroutineContext: CoroutineContext,
-    private val roomSummaryDetailsFactory: RoomSummaryFactory = RoomSummaryFactory(),
+    private val roomSummaryFactory: RoomSummaryFactory,
 ) {
     private val mutex = Mutex()
 
@@ -103,7 +103,7 @@ class RoomSummaryListProcessor(
     }
 
     private suspend fun buildSummaryForRoomListEntry(entry: Room): RoomSummary {
-        return entry.use { roomSummaryDetailsFactory.create(room = it) }
+        return entry.use { roomSummaryFactory.create(room = it) }
     }
 
     private suspend fun buildRoomSummaryForIdentifier(identifier: String): RoomSummary? {

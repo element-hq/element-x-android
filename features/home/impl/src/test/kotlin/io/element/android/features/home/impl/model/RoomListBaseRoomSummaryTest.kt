@@ -96,7 +96,7 @@ internal fun createRoomListRoomSummary(
     numberOfUnreadNotifications = numberOfUnreadNotifications,
     isMarkedUnread = isMarkedUnread,
     timestamp = timestamp,
-    lastMessage = "",
+    latestEvent = "",
     avatarData = AvatarData(id = A_ROOM_ID.value, name = A_ROOM_NAME, size = AvatarSize.RoomListItem),
     displayType = displayType,
     userDefinedNotificationMode = userDefinedNotificationMode,

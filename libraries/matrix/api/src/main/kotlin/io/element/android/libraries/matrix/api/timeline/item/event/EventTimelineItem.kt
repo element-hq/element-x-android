@@ -27,7 +27,7 @@ data class EventTimelineItem(
     val reactions: ImmutableList<EventReaction>,
     val receipts: ImmutableList<Receipt>,
     val sender: UserId,
-    val senderProfile: ProfileTimelineDetails,
+    val senderProfile: ProfileDetails,
     val timestamp: Long,
     val content: EventContent,
     val origin: TimelineItemEventOrigin?,

@@ -18,23 +18,23 @@ private val aUserId = UserId(A_USER_ID)
 class ProfileTimelineDetailsTest {
     @Test
     fun `getDisambiguatedDisplayName of Unavailable should be equal to userId`() {
-        assertThat(ProfileTimelineDetails.Unavailable.getDisambiguatedDisplayName(aUserId)).isEqualTo(A_USER_ID)
+        assertThat(ProfileDetails.Unavailable.getDisambiguatedDisplayName(aUserId)).isEqualTo(A_USER_ID)
     }
 
     @Test
     fun `getDisambiguatedDisplayName of Error should be equal to userId`() {
-        assertThat(ProfileTimelineDetails.Error("An error").getDisambiguatedDisplayName(aUserId)).isEqualTo(A_USER_ID)
+        assertThat(ProfileDetails.Error("An error").getDisambiguatedDisplayName(aUserId)).isEqualTo(A_USER_ID)
     }
 
     @Test
     fun `getDisambiguatedDisplayName of Pending should be equal to userId`() {
-        assertThat(ProfileTimelineDetails.Pending.getDisambiguatedDisplayName(aUserId)).isEqualTo(A_USER_ID)
+        assertThat(ProfileDetails.Pending.getDisambiguatedDisplayName(aUserId)).isEqualTo(A_USER_ID)
     }
 
     @Test
     fun `getDisambiguatedDisplayName of Ready without display name should be equal to userId`() {
         assertThat(
-            ProfileTimelineDetails.Ready(
+            ProfileDetails.Ready(
                 displayName = null,
                 displayNameAmbiguous = false,
                 avatarUrl = null,
@@ -45,7 +45,7 @@ class ProfileTimelineDetailsTest {
     @Test
     fun `getDisambiguatedDisplayName of Ready with display name should be equal to display name`() {
         assertThat(
-            ProfileTimelineDetails.Ready(
+            ProfileDetails.Ready(
                 displayName = "Alice",
                 displayNameAmbiguous = false,
                 avatarUrl = null,
@@ -56,7 +56,7 @@ class ProfileTimelineDetailsTest {
     @Test
     fun `getDisambiguatedDisplayName of Ready with display name and ambiguous should be equal to display name with user id`() {
         assertThat(
-            ProfileTimelineDetails.Ready(
+            ProfileDetails.Ready(
                 displayName = "Alice",
                 displayNameAmbiguous = true,
                 avatarUrl = null,

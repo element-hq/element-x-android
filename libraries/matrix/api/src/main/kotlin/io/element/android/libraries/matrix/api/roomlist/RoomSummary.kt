@@ -9,13 +9,16 @@
 package io.element.android.libraries.matrix.api.roomlist
 
 import io.element.android.libraries.matrix.api.room.RoomInfo
-import io.element.android.libraries.matrix.api.room.message.RoomMessage
 
 data class RoomSummary(
     val info: RoomInfo,
-    val lastMessage: RoomMessage?,
+    val latestEvent: LatestEventValue,
 ) {
     val roomId = info.id
-    val lastMessageTimestamp = lastMessage?.originServerTs
+    val latestEventTimestamp = when (latestEvent) {
+        is LatestEventValue.None -> null
+        is LatestEventValue.Local -> latestEvent.timestamp
+        is LatestEventValue.Remote -> latestEvent.timestamp
+    }
     val isOneToOne get() = info.activeMembersCount == 2L
 }

@@ -8,13 +8,13 @@
 
 package io.element.android.libraries.eventformatter.test
 
-import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
-import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
+import io.element.android.libraries.eventformatter.api.RoomLatestEventFormatter
+import io.element.android.libraries.matrix.api.roomlist.LatestEventValue
 
-class FakeRoomLastMessageFormatter : RoomLastMessageFormatter {
+class FakeRoomLatestEventFormatter : RoomLatestEventFormatter {
     private var result: CharSequence? = null
 
-    override fun format(event: EventTimelineItem, isDmRoom: Boolean): CharSequence? {
+    override fun format(latestEvent: LatestEventValue, isDmRoom: Boolean): CharSequence? {
         return result
     }
 

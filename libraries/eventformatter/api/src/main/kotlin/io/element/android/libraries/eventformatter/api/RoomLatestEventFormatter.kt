@@ -8,8 +8,8 @@
 
 package io.element.android.libraries.eventformatter.api
 
-import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
+import io.element.android.libraries.matrix.api.roomlist.LatestEventValue
 
-fun interface RoomLastMessageFormatter {
-    fun format(event: EventTimelineItem, isDmRoom: Boolean): CharSequence?
+fun interface RoomLatestEventFormatter {
+    fun format(latestEvent: LatestEventValue, isDmRoom: Boolean): CharSequence?
 }

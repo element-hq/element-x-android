@@ -66,7 +66,11 @@ internal fun RoomListInterface.entriesFlow(
                 trySendBlocking(roomEntriesUpdate)
             }
         }
-        val result = entriesWithDynamicAdapters(pageSize.toUInt(), listener)
+        val result = entriesWithDynamicAdaptersWith(
+            pageSize = pageSize.toUInt(),
+            enableLatestEventSorter = true,
+            listener = listener,
+        )
         val controller = result.controller()
         controller.setFilter(initialFilterKind)
         roomListDynamicEvents.onEach { controllerEvents ->

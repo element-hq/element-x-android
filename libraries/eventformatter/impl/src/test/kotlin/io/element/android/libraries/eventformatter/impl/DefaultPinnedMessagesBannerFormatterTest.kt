@@ -44,7 +44,7 @@ import io.element.android.libraries.matrix.test.media.aMediaSource
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.timeline.aPollContent
 import io.element.android.libraries.matrix.test.timeline.aProfileChangeMessageContent
-import io.element.android.libraries.matrix.test.timeline.aProfileTimelineDetails
+import io.element.android.libraries.matrix.test.timeline.aProfileDetails
 import io.element.android.libraries.matrix.test.timeline.aStickerContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.libraries.matrix.test.timeline.item.event.aRoomMembershipContent
@@ -778,7 +778,7 @@ class DefaultPinnedMessagesBannerFormatterTest {
         content: EventContent,
     ): EventTimelineItem {
         val sender = if (sentByYou) A_USER_ID else someoneElseId
-        val profile = aProfileTimelineDetails(senderDisplayName)
+        val profile = aProfileDetails(senderDisplayName)
         return anEventTimelineItem(
             content = content,
             senderProfile = profile,

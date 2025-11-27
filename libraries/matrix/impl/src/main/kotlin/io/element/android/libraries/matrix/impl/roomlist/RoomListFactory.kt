@@ -40,7 +40,7 @@ internal class RoomListFactory(
     private val sessionCoroutineScope: CoroutineScope,
     private val analyticsService: AnalyticsService,
 ) {
-    private val roomSummaryDetailsFactory: RoomSummaryFactory = RoomSummaryFactory()
+    private val roomSummaryFactory: RoomSummaryFactory = RoomSummaryFactory()
 
     /**
      * Creates a room list that can be used to load more rooms and filter them dynamically.
@@ -55,7 +55,7 @@ internal class RoomListFactory(
         val loadingStateFlow: MutableStateFlow<RoomList.LoadingState> = MutableStateFlow(RoomList.LoadingState.NotLoaded)
         val filteredSummariesFlow = MutableSharedFlow<List<RoomSummary>>(replay = 1, extraBufferCapacity = 1)
         val summariesFlow = MutableSharedFlow<List<RoomSummary>>(replay = 1, extraBufferCapacity = 1)
-        val processor = RoomSummaryListProcessor(summariesFlow, innerRoomListService, coroutineContext, roomSummaryDetailsFactory)
+        val processor = RoomSummaryListProcessor(summariesFlow, innerRoomListService, coroutineContext, roomSummaryFactory)
         // Makes sure we don't miss any events
         val dynamicEvents = MutableSharedFlow<RoomListDynamicEvents>(replay = 100)
         val currentFilter = MutableStateFlow(initialFilter)

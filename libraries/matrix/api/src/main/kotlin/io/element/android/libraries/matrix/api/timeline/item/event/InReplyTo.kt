@@ -25,7 +25,7 @@ sealed interface InReplyTo {
         val eventId: EventId,
         val content: EventContent,
         val senderId: UserId,
-        val senderProfile: ProfileTimelineDetails,
+        val senderProfile: ProfileDetails,
     ) : InReplyTo
 
     /**

@@ -15,7 +15,7 @@ import io.element.android.libraries.core.extensions.orEmpty
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
+import io.element.android.libraries.eventformatter.api.RoomLatestEventFormatter
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
@@ -26,7 +26,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Inject
 class RoomListRoomSummaryFactory(
     private val dateFormatter: DateFormatter,
-    private val roomLastMessageFormatter: RoomLastMessageFormatter,
+    private val roomLatestEventFormatter: RoomLatestEventFormatter,
 ) {
     fun create(roomSummary: RoomSummary): RoomListRoomSummary {
         val roomInfo = roomSummary.info
@@ -40,13 +40,11 @@ class RoomListRoomSummaryFactory(
             numberOfUnreadNotifications = roomInfo.numUnreadNotifications,
             isMarkedUnread = roomInfo.isMarkedUnread,
             timestamp = dateFormatter.format(
-                timestamp = roomSummary.lastMessageTimestamp,
+                timestamp = roomSummary.latestEventTimestamp,
                 mode = DateFormatterMode.TimeOrDate,
                 useRelative = true,
             ),
-            lastMessage = roomSummary.lastMessage?.let { message ->
-                roomLastMessageFormatter.format(message.event, roomInfo.isDm)
-            }.orEmpty(),
+            latestEvent = roomLatestEventFormatter.format(roomSummary.latestEvent, roomInfo.isDm).orEmpty(),
             avatarData = avatarData,
             userDefinedNotificationMode = roomInfo.userDefinedNotificationMode,
             hasRoomCall = roomInfo.hasRoomCall,

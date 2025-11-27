@@ -10,13 +10,15 @@ package io.element.android.libraries.eventformatter.impl
 
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
+import io.element.android.libraries.eventformatter.api.RoomLatestEventFormatter
 import io.element.android.libraries.eventformatter.impl.mode.RenderingMode
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
+import io.element.android.libraries.matrix.api.roomlist.LatestEventValue
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.CallNotifyContent
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
-import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
+import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
@@ -45,22 +47,46 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 
 @ContributesBinding(SessionScope::class)
-class DefaultRoomLastMessageFormatter(
+class DefaultRoomLatestEventFormatter(
     private val sp: StringProvider,
     private val roomMembershipContentFormatter: RoomMembershipContentFormatter,
     private val profileChangeContentFormatter: ProfileChangeContentFormatter,
     private val stateContentFormatter: StateContentFormatter,
-    private val permalinkParser: PermalinkParser
-) : RoomLastMessageFormatter {
+    private val permalinkParser: PermalinkParser,
+) : RoomLatestEventFormatter {
     companion object {
         // Max characters to display in the last message. This works around https://github.com/element-hq/element-x-android/issues/2105
         private const val MAX_SAFE_LENGTH = 500
     }
 
-    override fun format(event: EventTimelineItem, isDmRoom: Boolean): CharSequence? {
-        val isOutgoing = event.isOwn
-        val senderDisambiguatedDisplayName = event.senderProfile.getDisambiguatedDisplayName(event.sender)
-        return when (val content = event.content) {
+    override fun format(latestEvent: LatestEventValue, isDmRoom: Boolean): CharSequence? {
+        return when (latestEvent) {
+            LatestEventValue.None -> null
+            is LatestEventValue.Local -> formatContent(
+                content = latestEvent.content,
+                isDmRoom = isDmRoom,
+                isOutgoing = true,
+                senderId = latestEvent.senderId,
+                senderDisambiguatedDisplayName = latestEvent.senderProfile.getDisambiguatedDisplayName(latestEvent.senderId)
+            )
+            is LatestEventValue.Remote -> formatContent(
+                content = latestEvent.content,
+                isDmRoom = isDmRoom,
+                isOutgoing = latestEvent.isOwn,
+                senderId = latestEvent.senderId,
+                senderDisambiguatedDisplayName = latestEvent.senderProfile.getDisambiguatedDisplayName(latestEvent.senderId)
+            )
+        }
+    }
+
+    private fun formatContent(
+        content: EventContent,
+        isDmRoom: Boolean,
+        isOutgoing: Boolean,
+        senderId: UserId,
+        senderDisambiguatedDisplayName: String
+    ): CharSequence? {
+        return when (content) {
             is MessageContent -> content.process(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             RedactedContent -> {
                 val message = sp.getString(CommonStrings.common_message_removed)
@@ -78,7 +104,7 @@ class DefaultRoomLastMessageFormatter(
                 roomMembershipContentFormatter.format(content, senderDisambiguatedDisplayName, isOutgoing)
             }
             is ProfileChangeContent -> {
-                profileChangeContentFormatter.format(content, event.sender, senderDisambiguatedDisplayName, isOutgoing)
+                profileChangeContentFormatter.format(content, senderId, senderDisambiguatedDisplayName, isOutgoing)
             }
             is StateContent -> {
                 stateContentFormatter.format(content, senderDisambiguatedDisplayName, isOutgoing, RenderingMode.RoomList)

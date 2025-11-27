@@ -35,8 +35,8 @@ import io.element.android.features.rageshake.test.logs.FakeAnnouncementService
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
-import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
-import io.element.android.libraries.eventformatter.test.FakeRoomLastMessageFormatter
+import io.element.android.libraries.eventformatter.api.RoomLatestEventFormatter
+import io.element.android.libraries.eventformatter.test.FakeRoomLatestEventFormatter
 import io.element.android.libraries.fullscreenintent.api.aFullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -638,7 +638,7 @@ class RoomListPresenterTest {
         client: MatrixClient = FakeMatrixClient(),
         leaveRoomState: LeaveRoomState = aLeaveRoomState(),
         dateFormatter: DateFormatter = FakeDateFormatter(),
-        roomLastMessageFormatter: RoomLastMessageFormatter = FakeRoomLastMessageFormatter(),
+        roomLatestEventFormatter: RoomLatestEventFormatter = FakeRoomLatestEventFormatter(),
         sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
         analyticsService: AnalyticsService = FakeAnalyticsService(),
         filtersPresenter: Presenter<RoomListFiltersState> = Presenter { aRoomListFiltersState() },
@@ -655,7 +655,7 @@ class RoomListPresenterTest {
             roomListService = client.roomListService,
             roomListRoomSummaryFactory = aRoomListRoomSummaryFactory(
                 dateFormatter = dateFormatter,
-                roomLastMessageFormatter = roomLastMessageFormatter,
+                roomLatestEventFormatter = roomLatestEventFormatter,
             ),
             coroutineDispatchers = testCoroutineDispatchers(),
             notificationSettingsService = client.notificationSettingsService,

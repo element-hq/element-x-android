@@ -25,7 +25,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.LegacyCallInv
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
-import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
@@ -63,7 +63,7 @@ class TimelineItemContentFactory(
         eventId: EventId?,
         isEditable: Boolean,
         sender: UserId,
-        senderProfile: ProfileTimelineDetails,
+        senderProfile: ProfileDetails,
     ): TimelineItemEventContent {
         val isOutgoing = sessionId == sender
         return when (itemContent) {

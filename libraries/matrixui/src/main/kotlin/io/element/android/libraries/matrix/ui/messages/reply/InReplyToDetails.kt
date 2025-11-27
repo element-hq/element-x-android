@@ -15,7 +15,7 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
-import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.ui.messages.toPlainText
@@ -25,7 +25,7 @@ sealed interface InReplyToDetails {
     data class Ready(
         val eventId: EventId,
         val senderId: UserId,
-        val senderProfile: ProfileTimelineDetails,
+        val senderProfile: ProfileDetails,
         val eventContent: EventContent?,
         val textContent: String?,
     ) : InReplyToDetails

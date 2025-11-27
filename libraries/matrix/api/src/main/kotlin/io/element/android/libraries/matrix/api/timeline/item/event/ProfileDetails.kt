@@ -12,20 +12,20 @@ import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.core.UserId
 
 @Immutable
-sealed interface ProfileTimelineDetails {
-    data object Unavailable : ProfileTimelineDetails
+sealed interface ProfileDetails {
+    data object Unavailable : ProfileDetails
 
-    data object Pending : ProfileTimelineDetails
+    data object Pending : ProfileDetails
 
     data class Ready(
         val displayName: String?,
         val displayNameAmbiguous: Boolean,
         val avatarUrl: String?
-    ) : ProfileTimelineDetails
+    ) : ProfileDetails
 
     data class Error(
         val message: String
-    ) : ProfileTimelineDetails
+    ) : ProfileDetails
 }
 
 /**
@@ -34,9 +34,9 @@ sealed interface ProfileTimelineDetails {
  * If the display name is ambiguous, the user ID is appended in parentheses.
  * Otherwise, the display name is returned.
  */
-fun ProfileTimelineDetails.getDisambiguatedDisplayName(userId: UserId): String {
+fun ProfileDetails.getDisambiguatedDisplayName(userId: UserId): String {
     return when (this) {
-        is ProfileTimelineDetails.Ready -> when {
+        is ProfileDetails.Ready -> when {
             displayName == null -> userId.value
             displayNameAmbiguous -> "$displayName ($userId)"
             else -> displayName
@@ -45,16 +45,16 @@ fun ProfileTimelineDetails.getDisambiguatedDisplayName(userId: UserId): String {
     }
 }
 
-fun ProfileTimelineDetails.getDisplayName(): String? {
+fun ProfileDetails.getDisplayName(): String? {
     return when (this) {
-        is ProfileTimelineDetails.Ready -> displayName
+        is ProfileDetails.Ready -> displayName
         else -> null
     }
 }
 
-fun ProfileTimelineDetails.getAvatarUrl(): String? {
+fun ProfileDetails.getAvatarUrl(): String? {
     return when (this) {
-        is ProfileTimelineDetails.Ready -> avatarUrl
+        is ProfileDetails.Ready -> avatarUrl
         else -> null
     }
 }

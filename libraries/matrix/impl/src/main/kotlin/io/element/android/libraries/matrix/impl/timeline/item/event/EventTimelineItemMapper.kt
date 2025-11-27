@@ -17,7 +17,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
-import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
 import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
@@ -64,12 +64,12 @@ class EventTimelineItemMapper(
     }
 }
 
-fun RustProfileDetails.map(): ProfileTimelineDetails {
+fun RustProfileDetails.map(): ProfileDetails {
     return when (this) {
-        RustProfileDetails.Pending -> ProfileTimelineDetails.Pending
-        RustProfileDetails.Unavailable -> ProfileTimelineDetails.Unavailable
-        is RustProfileDetails.Error -> ProfileTimelineDetails.Error(message)
-        is RustProfileDetails.Ready -> ProfileTimelineDetails.Ready(
+        RustProfileDetails.Pending -> ProfileDetails.Pending
+        RustProfileDetails.Unavailable -> ProfileDetails.Unavailable
+        is RustProfileDetails.Error -> ProfileDetails.Error(message)
+        is RustProfileDetails.Ready -> ProfileDetails.Ready(
             displayName = displayName,
             displayNameAmbiguous = displayNameAmbiguous,
             avatarUrl = avatarUrl

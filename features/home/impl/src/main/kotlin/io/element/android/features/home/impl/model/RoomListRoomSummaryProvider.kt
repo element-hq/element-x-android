@@ -171,7 +171,7 @@ internal fun aRoomListRoomSummary(
     numberOfUnreadNotifications = numberOfUnreadNotifications,
     isMarkedUnread = isMarkedUnread,
     timestamp = timestamp,
-    lastMessage = lastMessage,
+    latestEvent = lastMessage,
     avatarData = avatarData,
     userDefinedNotificationMode = notificationMode,
     hasRoomCall = hasRoomCall,
