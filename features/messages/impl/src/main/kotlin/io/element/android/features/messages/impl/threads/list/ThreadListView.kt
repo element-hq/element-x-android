@@ -61,8 +61,13 @@ fun ThreadListView(
     onThreadClick: (EventId) -> Unit,
 ) {
     val lazyListState = rememberLazyListState()
+    val threadItems = remember(state.timelineItems) {
+        state.timelineItems
+            .filterIsInstance<TimelineItem.Event>()
+            .filter { it.threadInfo is TimelineItemThreadInfo.ThreadRoot }
+    }
 
-    if (state.timelineItems.isEmpty() && !state.paginationState.isPaginating && state.paginationState.hasReachedEnd) {
+    if (threadItems.isEmpty() && !state.paginationState.isPaginating && state.paginationState.hasReachedEnd) {
         Column(
             modifier = modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
@@ -76,15 +81,12 @@ fun ThreadListView(
         }
         return
     }
-
     LazyColumn(
         state = lazyListState,
         modifier = modifier.fillMaxSize(),
     ) {
         items(
-            items = state.timelineItems
-                .filterIsInstance<TimelineItem.Event>()
-                .filter { it.threadInfo is TimelineItemThreadInfo.ThreadRoot },
+            items = threadItems,
             key = { it.id }
         ) { timelineItem ->
             ThreadListRow(
@@ -106,19 +108,34 @@ fun ThreadListView(
         }
     }
 
-    val shouldPaginate by remember {
+    val shouldPaginateBackwards by remember {
         derivedStateOf {
             val lastVisibleItemIndex = lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -1
             !state.paginationState.isPaginating &&
                 !state.paginationState.hasReachedEnd &&
                 lastVisibleItemIndex != -1 &&
-                lastVisibleItemIndex >= state.timelineItems.size - 5
+                lastVisibleItemIndex >= threadItems.size - 10
         }
     }
 
-    LaunchedEffect(shouldPaginate) {
-        if (shouldPaginate) {
+    val shouldPaginateForwards by remember {
+        derivedStateOf {
+            val firstVisibleItemIndex = lazyListState.layoutInfo.visibleItemsInfo.firstOrNull()?.index ?: -1
+            !state.paginationState.isPaginating &&
+                !state.paginationState.hasReachedEnd &&
+                firstVisibleItemIndex == 0
+        }
+    }
+
+    LaunchedEffect(shouldPaginateBackwards) {
+        if (shouldPaginateBackwards) {
             state.eventSink(TimelineEvents.LoadMore(Timeline.PaginationDirection.BACKWARDS))
+        }
+    }
+
+    LaunchedEffect(shouldPaginateForwards) {
+        if (shouldPaginateForwards) {
+            state.eventSink(TimelineEvents.LoadMore(Timeline.PaginationDirection.FORWARDS))
         }
     }
 }

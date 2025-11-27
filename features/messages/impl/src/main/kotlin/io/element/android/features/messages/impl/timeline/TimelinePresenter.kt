@@ -158,12 +158,17 @@ class TimelinePresenter(
         fun handleEvent(event: TimelineEvents) {
             when (event) {
                 is TimelineEvents.LoadMore -> {
-                    if (event.direction == Timeline.PaginationDirection.FORWARDS && timelineMode is Timeline.Mode.Thread) {
-                        // Do not paginate forwards in thread mode, as it's not supported
-                        return
-                    }
-                    localScope.launch {
-                        timelineController.paginate(direction = event.direction)
+                    if (timelineMode is Timeline.Mode.Thread) {
+                        // In thread mode, we only paginate backwards
+                        if (event.direction == Timeline.PaginationDirection.BACKWARDS) {
+                            localScope.launch {
+                                timelineController.paginate(direction = event.direction)
+                            }
+                        }
+                    } else {
+                        localScope.launch {
+                            timelineController.paginate(direction = event.direction)
+                        }
                     }
                 }
                 is TimelineEvents.OnScrollFinished -> {
@@ -180,6 +185,10 @@ class TimelinePresenter(
                         )
                     } else {
                         newEventState.value = NewEventState.None
+                        // When in a thread, automatically paginate when reaching the end of the list
+                        if (timelineMode is Timeline.Mode.AllThreads && event.firstIndex == 0 && paginationState.canPaginate) {
+                            handleEvent(TimelineEvents.LoadMore(Timeline.PaginationDirection.BACKWARDS))
+                        }
                     }
                 }
                 is TimelineEvents.SelectPollAnswer -> sessionCoroutineScope.launch {
@@ -452,3 +461,5 @@ private fun calculateServerNamesForRoom(room: JoinedRoom): List<String> {
         }
         .take(3)
 }
+private val TimelineState.PaginationState.canPaginate: Boolean
+    get() = !isPaginating && hasMoreToLoad

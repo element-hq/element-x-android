@@ -76,8 +76,6 @@ import java.io.File
 import org.matrix.rustcomponents.sdk.EventOrTransactionId as RustEventOrTransactionId
 import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 
-private const val PAGINATION_SIZE = 50
-
 class RustTimeline(
     private val inner: InnerTimeline,
     override val mode: Timeline.Mode,
@@ -183,14 +181,14 @@ class RustTimeline(
     }
 
     // Use NonCancellable to avoid breaking the timeline when the coroutine is cancelled.
-    override suspend fun paginate(direction: Timeline.PaginationDirection): Result<Boolean> = withContext(NonCancellable) {
+    override suspend fun paginate(direction: Timeline.PaginationDirection, batchSize: Long): Result<Boolean> = withContext(NonCancellable) {
         withContext(dispatcher) {
             runCatchingExceptions {
                 if (!canPaginate(direction)) throw TimelineException.CannotPaginate
                 updatePaginationStatus(direction) { it.copy(isPaginating = true) }
                 when (direction) {
-                    Timeline.PaginationDirection.BACKWARDS -> inner.paginateBackwards(PAGINATION_SIZE.toUShort())
-                    Timeline.PaginationDirection.FORWARDS -> inner.paginateForwards(PAGINATION_SIZE.toUShort())
+                    Timeline.PaginationDirection.BACKWARDS -> inner.paginateBackwards(batchSize.toUShort())
+                    Timeline.PaginationDirection.FORWARDS -> inner.paginateForwards(batchSize.toUShort())
                 }
             }.onFailure { error ->
                 if (error is TimelineException.CannotPaginate) {

@@ -111,16 +111,17 @@ class TimelineController(
     suspend fun focusOnThreads() {
         if (threadsTimelineFlow.value.isPresent) return
         val timeline = room.createTimeline(CreateTimelineParams.AllThreads).getOrThrow()
-        threadsTimelineFlow.value = Optional.of(timeline)
         // Load first page
-        timeline.paginate(Timeline.PaginationDirection.BACKWARDS)
+        timeline.paginate(Timeline.PaginationDirection.BACKWARDS, batchSize = 10)
+        threadsTimelineFlow.value = Optional.of(timeline)
         // Also close detached timeline if any
-        detachedTimelineFlow.getAndUpdate { current ->
-            if (current.isPresent) {
-                current.get().close()
-            }
-            Optional.empty()
-        }
+        closeDetachedTimeline()
+//        detachedTimelineFlow.getAndUpdate { current ->
+//            if (current.isPresent) {
+//                current.get().close()
+//            }
+//            Optional.empty()
+//        }
     }
 
     private fun closeDetachedTimeline() {
@@ -154,10 +155,10 @@ class TimelineController(
     }
 
     suspend fun paginate(direction: Timeline.PaginationDirection): Result<Boolean> {
-        return currentTimelineFlow.value.paginate(direction)
+        return currentTimelineFlow.value.paginate(direction, batchSize = 10)
             .onSuccess { hasReachedEnd ->
                 if (direction == Timeline.PaginationDirection.FORWARDS && hasReachedEnd) {
-                    focusOnLive()
+                    focusOnThreads()
                 }
             }
     }

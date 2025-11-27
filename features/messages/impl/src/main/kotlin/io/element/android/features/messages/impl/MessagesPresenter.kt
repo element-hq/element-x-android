@@ -198,16 +198,6 @@ class MessagesPresenter(
             }
         }
 
-        LaunchedEffect(isThreadListSelected, timelineState.timelineItems, timelineState.paginationState) {
-            if (isThreadListSelected &&
-                timelineState.timelineItems.isEmpty() &&
-                !timelineState.paginationState.isPaginating &&
-                !timelineState.paginationState.hasReachedEnd
-            ) {
-                timelineController.paginate(Timeline.PaginationDirection.BACKWARDS)
-            }
-        }
-
         val inviteProgress = remember { mutableStateOf<AsyncData<Unit>>(AsyncData.Uninitialized) }
         var showReinvitePrompt by remember { mutableStateOf(false) }
         val composerHasFocus by remember { derivedStateOf { composerState.textEditorState.hasFocus() } }
@@ -288,11 +278,14 @@ class MessagesPresenter(
                     localCoroutineScope.launch {
                         if (isThreadListSelected) {
                             timelineController.focusOnThreads()
-                            // Initial paginate
-                            timelineController.paginate(Timeline.PaginationDirection.BACKWARDS)
-                        } else {
                             timelineController.focusOnLive()
+                        } else {
                         }
+                    }
+                }
+                MessagesEvents.OnScrolledToBottom -> {
+                    if (isThreadListSelected) {
+                        timelineState.eventSink(TimelineEvents.LoadMore(Timeline.PaginationDirection.FORWARDS))
                     }
                 }
             }

@@ -23,6 +23,7 @@ sealed interface MessagesEvents {
     data object Dismiss : MessagesEvents
     data object MarkAsFullyReadAndExit : MessagesEvents
     data object ToggleThreadList : MessagesEvents
+    data object OnScrolledToBottom : MessagesEvents
 }
 
 enum class InviteDialogAction {

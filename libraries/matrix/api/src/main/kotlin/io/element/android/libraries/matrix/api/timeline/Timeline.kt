@@ -59,7 +59,7 @@ interface Timeline : AutoCloseable {
     val onSyncedEventReceived: Flow<Unit>
     suspend fun sendReadReceipt(eventId: EventId, receiptType: ReceiptType): Result<Unit>
     suspend fun markAsRead(receiptType: ReceiptType): Result<Unit>
-    suspend fun paginate(direction: PaginationDirection): Result<Boolean>
+    suspend fun paginate(direction: PaginationDirection, batchSize: Long = 10): Result<Boolean>
 
     val backwardPaginationStatus: StateFlow<PaginationStatus>
     val forwardPaginationStatus: StateFlow<PaginationStatus>
