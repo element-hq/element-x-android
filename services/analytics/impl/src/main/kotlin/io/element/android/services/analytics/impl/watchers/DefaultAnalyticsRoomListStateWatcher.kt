@@ -16,6 +16,7 @@ import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
 import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.api.finishLongRunningTransaction
 import io.element.android.services.analytics.api.watchers.AnalyticsRoomListStateWatcher
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
@@ -63,7 +64,7 @@ class DefaultAnalyticsRoomListStateWatcher(
         roomListService.state
             .onEach { state ->
                 if (state == RoomListService.State.Running && isWarmState.get()) {
-                    analyticsService.removeLongRunningTransaction(AnalyticsLongRunningTransaction.ResumeAppUntilNewRoomsReceived)?.finish()
+                    analyticsService.finishLongRunningTransaction(AnalyticsLongRunningTransaction.ResumeAppUntilNewRoomsReceived)
                 }
             }
             .launchIn(coroutineScope)

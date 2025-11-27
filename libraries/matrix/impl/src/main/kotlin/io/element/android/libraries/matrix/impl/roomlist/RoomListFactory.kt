@@ -14,6 +14,7 @@ import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
 import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.api.finishLongRunningTransaction
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -73,7 +74,7 @@ internal class RoomListFactory(
                     initialFilterKind = RoomListEntriesDynamicFilterKind.All(ROOM_LIST_RUST_FILTERS),
                 ).onEach { update ->
                     if (!firstRoomsTransaction.isFinished()) {
-                        analyticsService.removeLongRunningTransaction(AnalyticsLongRunningTransaction.FirstRoomsDisplayed)?.finish()
+                        analyticsService.finishLongRunningTransaction(AnalyticsLongRunningTransaction.FirstRoomsDisplayed)
                         firstRoomsTransaction.finish()
                     }
                     processor.postUpdate(update)

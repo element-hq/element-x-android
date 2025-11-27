@@ -13,6 +13,8 @@ import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
 import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.api.cancelLongRunningTransaction
+import io.element.android.services.analytics.api.finishLongRunningTransaction
 import io.element.android.services.analytics.api.watchers.AnalyticsColdStartWatcher
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.catch
@@ -47,7 +49,7 @@ class DefaultAnalyticsColdStartWatcher(
 
     override fun whenLoggingIn() {
         if (isColdStart.getAndSet(false)) {
-            analyticsService.removeLongRunningTransaction(AnalyticsLongRunningTransaction.ColdStartUntilCachedRoomList)
+            analyticsService.cancelLongRunningTransaction(AnalyticsLongRunningTransaction.ColdStartUntilCachedRoomList)
             Timber.d("Canceled cold start check: user is logging in")
         }
     }
@@ -55,7 +57,7 @@ class DefaultAnalyticsColdStartWatcher(
     override fun onRoomListVisible() {
         if (isColdStart.getAndSet(false)) {
             Timber.d("Room list is visible, finishing cold start check")
-            analyticsService.removeLongRunningTransaction(AnalyticsLongRunningTransaction.ColdStartUntilCachedRoomList)?.finish()
+            analyticsService.finishLongRunningTransaction(AnalyticsLongRunningTransaction.ColdStartUntilCachedRoomList)
         }
     }
 }

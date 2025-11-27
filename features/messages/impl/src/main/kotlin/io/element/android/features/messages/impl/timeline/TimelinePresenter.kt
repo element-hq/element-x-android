@@ -59,6 +59,7 @@ import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.NotificationTapOpensTimeline
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.OpenRoom
 import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.api.finishLongRunningTransaction
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
@@ -239,9 +240,9 @@ class TimelinePresenter(
                     timelineItems = newTimelineItems
 
                     analyticsService.run {
-                        removeLongRunningTransaction(DisplayFirstTimelineItems)?.finish()
-                        removeLongRunningTransaction(OpenRoom)?.finish()
-                        removeLongRunningTransaction(NotificationTapOpensTimeline)?.finish()
+                        finishLongRunningTransaction(DisplayFirstTimelineItems)
+                        finishLongRunningTransaction(OpenRoom)
+                        finishLongRunningTransaction(NotificationTapOpensTimeline)
                     }
                 }
                 .launchIn(this)

@@ -49,6 +49,7 @@ import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.LoadMessagesUi
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.OpenRoom
 import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.api.finishLongRunningTransaction
 import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
@@ -107,7 +108,7 @@ class JoinedRoomLoadedFlowNode(
                 trackVisitedRoom()
             },
             onResume = {
-                analyticsService.removeLongRunningTransaction(LoadJoinedRoomFlow)?.finish()
+                analyticsService.finishLongRunningTransaction(LoadJoinedRoomFlow)
                 sessionCoroutineScope.launch {
                     inputs.room.subscribeToSync()
                 }

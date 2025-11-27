@@ -89,3 +89,24 @@ inline fun <T> AnalyticsService.recordTransaction(
         transaction.finish()
     }
 }
+
+/**
+ * Cancels a long running transaction. It behaves the same as [AnalyticsService.removeLongRunningTransaction],
+ * but it doesn't return the transaction so we can't finish it later.
+ */
+fun AnalyticsService.cancelLongRunningTransaction(
+    longRunningTransaction: AnalyticsLongRunningTransaction
+) = removeLongRunningTransaction(longRunningTransaction)
+
+/**
+ * Finishes a long running transaction if it exists. Optionally performs an [action] with the transaction before finishing it.
+ */
+fun AnalyticsService.finishLongRunningTransaction(
+    longRunningTransaction: AnalyticsLongRunningTransaction,
+    action: (AnalyticsTransaction) -> Unit = {},
+) {
+    removeLongRunningTransaction(longRunningTransaction)?.let {
+        action(it)
+        it.finish()
+    }
+}
