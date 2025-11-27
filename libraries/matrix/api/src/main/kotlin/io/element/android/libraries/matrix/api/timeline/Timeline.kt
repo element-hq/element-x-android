@@ -51,6 +51,7 @@ interface Timeline : AutoCloseable {
         data object PinnedEvents : Mode
         data object Media : Mode
         data class Thread(val threadRootId: ThreadId) : Mode
+        data object AllThreads : Mode
     }
 
     val mode: Mode

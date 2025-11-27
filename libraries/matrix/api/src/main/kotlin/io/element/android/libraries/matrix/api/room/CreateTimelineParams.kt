@@ -17,4 +17,5 @@ sealed interface CreateTimelineParams {
     data class MediaOnlyFocused(val focusedEventId: EventId) : CreateTimelineParams
     data object PinnedOnly : CreateTimelineParams
     data class Threaded(val threadRootEventId: ThreadId) : CreateTimelineParams
+    data object AllThreads : CreateTimelineParams
 }

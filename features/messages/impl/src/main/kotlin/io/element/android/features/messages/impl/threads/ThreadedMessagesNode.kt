@@ -97,7 +97,13 @@ class ThreadedMessagesNode(
     private val callback: Callback = callback()
 
     // TODO use a loading state node to preload this instead of using `runBlocking`
-    private val threadedTimeline = runBlocking { room.createTimeline(CreateTimelineParams.Threaded(threadRootEventId = inputs.threadRootEventId)).getOrThrow() }
+    private val threadedTimeline = runBlocking {
+        room.createTimeline(
+            CreateTimelineParams.Threaded(
+                threadRootEventId = inputs.threadRootEventId,
+            )
+        ).getOrThrow()
+    }
     private val timelineController = TimelineController(room, threadedTimeline)
     private val presenter = presenterFactory.create(
         navigator = this,
@@ -123,7 +129,7 @@ class ThreadedMessagesNode(
         fun navigateToCreatePoll()
         fun navigateToEditPoll(eventId: EventId)
         fun navigateToRoomCall(roomId: RoomId)
-        fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?)
+        fun navigateToThread(threadRootEventId: ThreadId, focusedEventId: EventId?)
     }
 
     override fun onBuilt() {
@@ -218,8 +224,8 @@ class ThreadedMessagesNode(
         callback.handlePermalinkClick(permalinkData)
     }
 
-    override fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?) {
-        callback.navigateToThread(threadRootId, focusedEventId)
+    override fun navigateToThread(threadRootEventId: ThreadId, focusedEventId: EventId?) {
+        callback.navigateToThread(threadRootEventId, focusedEventId)
     }
 
     override fun close() = navigateUp()

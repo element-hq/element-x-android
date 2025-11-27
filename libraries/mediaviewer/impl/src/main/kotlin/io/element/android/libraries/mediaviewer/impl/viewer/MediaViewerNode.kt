@@ -35,6 +35,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.mediaviewer.impl.datasource.FocusedTimelineMediaGalleryDataSourceFactory
+import io.element.android.libraries.mediaviewer.impl.datasource.MediaGalleryDataSource
 import io.element.android.libraries.mediaviewer.impl.datasource.TimelineMediaGalleryDataSource
 import io.element.android.libraries.mediaviewer.impl.model.hasEvent
 import io.element.android.services.toolbox.api.systemclock.SystemClock
@@ -109,6 +110,7 @@ class MediaViewerNode(
                     )
                 }
                 Timeline.Mode.Media -> timelineMediaGalleryDataSource
+                else -> {}
             }
         }
     }
@@ -119,7 +121,7 @@ class MediaViewerNode(
         dataSource = MediaViewerDataSource(
             mode = inputs.mode,
             dispatcher = coroutineDispatchers.computation,
-            galleryDataSource = mediaGallerySource,
+            galleryDataSource = mediaGallerySource as MediaGalleryDataSource,
             mediaLoader = mediaLoader,
             localMediaFactory = localMediaFactory,
             systemClock = systemClock,

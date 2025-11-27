@@ -51,24 +51,25 @@ import io.element.android.libraries.matrix.impl.widget.generateWidgetWebViewUrl
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.DateDividerMode
 import org.matrix.rustcomponents.sdk.IdentityStatusChangeListener
 import org.matrix.rustcomponents.sdk.KnockRequestsListener
 import org.matrix.rustcomponents.sdk.RoomMessageEventMessageType
+import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.TimelineConfiguration
+import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineFilter
 import org.matrix.rustcomponents.sdk.TimelineFocus
+import org.matrix.rustcomponents.sdk.TimelineListener
 import org.matrix.rustcomponents.sdk.TypingNotificationsListener
 import org.matrix.rustcomponents.sdk.UserPowerLevelUpdate
 import org.matrix.rustcomponents.sdk.WidgetCapabilities
@@ -139,24 +140,26 @@ class JoinedRustRoom(
 
     override val liveTimeline = liveInnerTimeline.map(mode = Timeline.Mode.Live)
 
-    override val syncUpdateFlow = flow {
-        var counter = 0L
-        liveTimeline.onSyncedEventReceived.collect {
-            emit(++counter)
+    override val syncUpdateFlow = MutableStateFlow(0L)
+
+    private val timelineListener = object : TimelineListener {
+        override fun onUpdate(diff: List<TimelineDiff>) {
+            syncUpdateFlow.value++
         }
-    }.stateIn(
-        scope = roomCoroutineScope,
-        started = WhileSubscribed(),
-        initialValue = 0L,
-    )
+    }
+    private var timelineListenerTaskHandle: TaskHandle? = null
 
     init {
+        roomCoroutineScope.launch {
+            baseRoom.subscribeToSync()
+            timelineListenerTaskHandle = liveInnerTimeline.addListener(timelineListener)
+        }
         subscribeToRoomMembersChange()
     }
 
     private fun subscribeToRoomMembersChange() {
         val powerLevelChanges = roomInfoFlow.map { it.roomPowerLevels }.distinctUntilChanged()
-        val membershipChanges = liveTimeline.membershipChangeEventReceived.onStart { emit(Unit) }
+        val membershipChanges = syncUpdateFlow.onStart { emit(0L) }
         combine(membershipChanges, powerLevelChanges) { _, _ -> }
             // Skip initial one
             .drop(1)
@@ -172,7 +175,7 @@ class JoinedRustRoom(
         createTimelineParams: CreateTimelineParams,
     ): Result<Timeline> = withContext(roomDispatcher) {
         val hideThreadedEvents = featureFlagService.isFeatureEnabled(FeatureFlags.Threads)
-        val focus = when (createTimelineParams) {
+        val focus: TimelineFocus = when (createTimelineParams) {
             is CreateTimelineParams.PinnedOnly -> TimelineFocus.PinnedEvents(
                 maxEventsToLoad = 100u,
                 maxConcurrentRequests = 10u,
@@ -192,6 +195,7 @@ class JoinedRustRoom(
             is CreateTimelineParams.Threaded -> TimelineFocus.Thread(
                 rootEventId = createTimelineParams.threadRootEventId.value,
             )
+            is CreateTimelineParams.AllThreads -> TimelineFocus.Live(hideThreadedEvents = false)
         }
 
         val filter = when (createTimelineParams) {
@@ -206,7 +210,8 @@ class JoinedRustRoom(
             )
             is CreateTimelineParams.Focused,
             CreateTimelineParams.PinnedOnly,
-            is CreateTimelineParams.Threaded -> TimelineFilter.All
+            is CreateTimelineParams.Threaded,
+            CreateTimelineParams.AllThreads -> TimelineFilter.All
         }
 
         val internalIdPrefix = when (createTimelineParams) {
@@ -215,6 +220,7 @@ class JoinedRustRoom(
             is CreateTimelineParams.MediaOnly -> "MediaGallery_"
             is CreateTimelineParams.MediaOnlyFocused -> "MediaGallery_${createTimelineParams.focusedEventId}"
             is CreateTimelineParams.Threaded -> "Thread_${createTimelineParams.threadRootEventId}"
+            CreateTimelineParams.AllThreads -> "AllThreads"
         }
 
         // Note that for TimelineFilter.MediaOnlyFocused, the date separator will be filtered out,
@@ -224,7 +230,8 @@ class JoinedRustRoom(
             is CreateTimelineParams.MediaOnlyFocused -> DateDividerMode.MONTHLY
             is CreateTimelineParams.Focused,
             CreateTimelineParams.PinnedOnly,
-            is CreateTimelineParams.Threaded -> DateDividerMode.DAILY
+            is CreateTimelineParams.Threaded,
+            CreateTimelineParams.AllThreads -> DateDividerMode.DAILY
         }
 
         // Track read receipts only for focused timeline for performance optimization
@@ -247,6 +254,7 @@ class JoinedRustRoom(
                     is CreateTimelineParams.MediaOnlyFocused -> Timeline.Mode.FocusedOnEvent(createTimelineParams.focusedEventId)
                     CreateTimelineParams.PinnedOnly -> Timeline.Mode.PinnedEvents
                     is CreateTimelineParams.Threaded -> Timeline.Mode.Thread(createTimelineParams.threadRootEventId)
+                    CreateTimelineParams.AllThreads -> Timeline.Mode.AllThreads
                 }
                 innerTimeline.map(mode = mode)
             }
@@ -256,7 +264,8 @@ class JoinedRustRoom(
                 is CreateTimelineParams.MediaOnlyFocused,
                 is CreateTimelineParams.Threaded -> it.toFocusEventException()
                 CreateTimelineParams.MediaOnly,
-                CreateTimelineParams.PinnedOnly -> it
+                CreateTimelineParams.PinnedOnly,
+                CreateTimelineParams.AllThreads -> it
             }
         }.onFailure {
             if (it is CancellationException) {
@@ -487,6 +496,7 @@ class JoinedRustRoom(
 
     override fun destroy() {
         baseRoom.destroy()
+        timelineListenerTaskHandle?.cancel()
         liveInnerTimeline.destroy()
         Timber.d("Room $roomId destroyed")
     }

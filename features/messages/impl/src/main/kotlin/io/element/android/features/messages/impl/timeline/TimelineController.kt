@@ -52,6 +52,7 @@ class TimelineController(
 
     private val liveTimelineFlow = flowOf(liveTimeline)
     private val detachedTimelineFlow = MutableStateFlow<Optional<Timeline>>(Optional.empty())
+    private val threadsTimelineFlow = MutableStateFlow<Optional<Timeline>>(Optional.empty())
 
     @OptIn(ExperimentalCoroutinesApi::class)
     fun timelineItems(): Flow<List<MatrixTimelineItem>> {
@@ -59,7 +60,9 @@ class TimelineController(
     }
 
     fun isLive(): Flow<Boolean> {
-        return detachedTimelineFlow.map { !it.isPresent }
+        return combine(detachedTimelineFlow, threadsTimelineFlow) { detached, threads ->
+            !detached.isPresent && !threads.isPresent
+        }
     }
 
     fun mainTimelineMode(): Timeline.Mode = liveTimeline.mode
@@ -102,6 +105,22 @@ class TimelineController(
      */
     fun focusOnLive() {
         closeDetachedTimeline()
+        closeThreadsTimeline()
+    }
+
+    suspend fun focusOnThreads() {
+        if (threadsTimelineFlow.value.isPresent) return
+        val timeline = room.createTimeline(CreateTimelineParams.AllThreads).getOrThrow()
+        threadsTimelineFlow.value = Optional.of(timeline)
+        // Load first page
+        timeline.paginate(Timeline.PaginationDirection.BACKWARDS)
+        // Also close detached timeline if any
+        detachedTimelineFlow.getAndUpdate { current ->
+            if (current.isPresent) {
+                current.get().close()
+            }
+            Optional.empty()
+        }
     }
 
     private fun closeDetachedTimeline() {
@@ -116,9 +135,22 @@ class TimelineController(
         }
     }
 
+    private fun closeThreadsTimeline() {
+        threadsTimelineFlow.getAndUpdate {
+            when {
+                it.isPresent -> {
+                    it.get().close()
+                    Optional.empty()
+                }
+                else -> Optional.empty()
+            }
+        }
+    }
+
     override fun close() {
         coroutineScope.cancel()
         closeDetachedTimeline()
+        closeThreadsTimeline()
     }
 
     suspend fun paginate(direction: Timeline.PaginationDirection): Result<Boolean> {
@@ -130,8 +162,12 @@ class TimelineController(
             }
     }
 
-    private val currentTimelineFlow = combine(liveTimelineFlow, detachedTimelineFlow) { live, detached ->
-        detached.orElse(live)
+    private val currentTimelineFlow = combine(liveTimelineFlow, detachedTimelineFlow, threadsTimelineFlow) { live, detached, threads ->
+        when {
+            threads.isPresent -> threads.get()
+            detached.isPresent -> detached.get()
+            else -> live
+        }
     }.stateIn(coroutineScope, SharingStarted.Eagerly, room.liveTimeline)
 
     override fun activeTimelineFlow(): StateFlow<Timeline> {
