@@ -59,6 +59,7 @@ import io.element.android.features.messages.impl.messagecomposer.suggestions.Sug
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerView
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerViewDefaults
+import io.element.android.features.messages.impl.threads.list.ThreadListView
 import io.element.android.features.messages.impl.timeline.FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS
 import io.element.android.features.messages.impl.timeline.TimelineEvents
 import io.element.android.features.messages.impl.timeline.TimelineView
@@ -200,6 +201,8 @@ fun MessagesView(
                             heroes = state.heroes,
                             roomCallState = state.roomCallState,
                             dmUserIdentityState = state.dmUserVerificationState,
+                            isThreadListSelected = state.isThreadListSelected,
+                            onToggleThreadListClick = { state.eventSink(MessagesEvents.ToggleThreadList) },
                             onBackClick = { hidingKeyboard { onBackClick() } },
                             onRoomDetailsClick = { hidingKeyboard { onRoomDetailsClick() } },
                             onJoinCallClick = onJoinCallClick,
@@ -212,39 +215,49 @@ fun MessagesView(
                             .padding(padding)
                             .consumeWindowInsets(padding)
                     ) {
-                        MessagesViewContent(
-                            state = state,
-                            onContentClick = ::onContentClick,
-                            onMessageLongClick = ::onMessageLongClick,
-                            onUserDataClick = {
-                                hidingKeyboard {
-                                    state.eventSink(MessagesEvents.OnUserClicked(it))
+                        if (state.isThreadListSelected) {
+                            ThreadListView(
+                                state = state.timelineState,
+                                modifier = Modifier.fillMaxSize(),
+                                onThreadClick = { eventId ->
+                                    state.timelineState.eventSink(TimelineEvents.FocusOnEvent(eventId))
                                 }
-                            },
-                            onLinkClick = { link, customTab ->
-                                if (customTab) {
-                                    onLinkClick(link.url, true)
-                                    // Do not check those links, they are internal link only
-                                } else {
-                                    state.linkState.eventSink(LinkEvents.OnLinkClick(link))
-                                }
-                            },
-                            onReactionClick = ::onEmojiReactionClick,
-                            onReactionLongClick = ::onEmojiReactionLongClick,
-                            onMoreReactionsClick = ::onMoreReactionsClick,
-                            onReadReceiptClick = { event ->
-                                state.readReceiptBottomSheetState.eventSink(ReadReceiptBottomSheetEvents.EventSelected(event))
-                            },
-                            onSendLocationClick = onSendLocationClick,
-                            onCreatePollClick = onCreatePollClick,
-                            onSwipeToReply = { targetEvent ->
-                                state.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Reply, targetEvent))
-                            },
-                            forceJumpToBottomVisibility = forceJumpToBottomVisibility,
-                            onJoinCallClick = onJoinCallClick,
-                            onViewAllPinnedMessagesClick = onViewAllPinnedMessagesClick,
-                            knockRequestsBannerView = knockRequestsBannerView,
-                        )
+                            )
+                        } else {
+                            MessagesViewContent(
+                                state = state,
+                                onContentClick = ::onContentClick,
+                                onMessageLongClick = ::onMessageLongClick,
+                                onUserDataClick = {
+                                    hidingKeyboard {
+                                        state.eventSink(MessagesEvents.OnUserClicked(it))
+                                    }
+                                },
+                                onLinkClick = { link, customTab ->
+                                    if (customTab) {
+                                        onLinkClick(link.url, true)
+                                        // Do not check those links, they are internal link only
+                                    } else {
+                                        state.linkState.eventSink(LinkEvents.OnLinkClick(link))
+                                    }
+                                },
+                                onReactionClick = ::onEmojiReactionClick,
+                                onReactionLongClick = ::onEmojiReactionLongClick,
+                                onMoreReactionsClick = ::onMoreReactionsClick,
+                                onReadReceiptClick = { event ->
+                                    state.readReceiptBottomSheetState.eventSink(ReadReceiptBottomSheetEvents.EventSelected(event))
+                                },
+                                onSendLocationClick = onSendLocationClick,
+                                onCreatePollClick = onCreatePollClick,
+                                onSwipeToReply = { targetEvent ->
+                                    state.eventSink(MessagesEvents.HandleAction(TimelineItemAction.Reply, targetEvent))
+                                },
+                                forceJumpToBottomVisibility = forceJumpToBottomVisibility,
+                                onJoinCallClick = onJoinCallClick,
+                                onViewAllPinnedMessagesClick = onViewAllPinnedMessagesClick,
+                                knockRequestsBannerView = knockRequestsBannerView,
+                            )
+                        }
 
                         SuggestionsPickerView(
                             modifier = Modifier
@@ -271,16 +284,18 @@ fun MessagesView(
             )
         },
         bottomSheetContent = {
-            MessagesViewComposerBottomSheetContents(
-                state = state,
-                onLinkClick = { url, customTab -> onLinkClick(url, customTab) },
-                onRoomSuccessorClick = { roomId ->
-                    state.timelineState.eventSink(TimelineEvents.NavigateToPredecessorOrSuccessorRoom(roomId = roomId))
-                },
-            )
+            if (!state.isThreadListSelected) {
+                MessagesViewComposerBottomSheetContents(
+                    state = state,
+                    onLinkClick = { url, customTab -> onLinkClick(url, customTab) },
+                    onRoomSuccessorClick = { roomId ->
+                        state.timelineState.eventSink(TimelineEvents.NavigateToPredecessorOrSuccessorRoom(roomId = roomId))
+                    },
+                )
+            }
         },
         sheetDragHandle = @Composable { toggleAction ->
-            if (state.composerState.showTextFormatting) {
+            if (state.composerState.showTextFormatting && !state.isThreadListSelected) {
                 val expandA11yLabel = stringResource(CommonStrings.a11y_expand_message_text_field)
                 val collapseA11yLabel = stringResource(CommonStrings.a11y_collapse_message_text_field)
                 BottomSheetDragHandle(
@@ -306,7 +321,7 @@ fun MessagesView(
                 }
             }
         },
-        isSwipeGestureEnabled = state.composerState.showTextFormatting,
+        isSwipeGestureEnabled = state.composerState.showTextFormatting && !state.isThreadListSelected,
         state = expandableState,
         sheetShape = if (state.composerState.showTextFormatting || state.composerState.suggestions.isNotEmpty()) {
             MaterialTheme.shapes.large

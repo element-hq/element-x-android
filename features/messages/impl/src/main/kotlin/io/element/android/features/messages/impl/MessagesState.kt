@@ -49,6 +49,7 @@ data class MessagesState(
     val inviteProgress: AsyncData<Unit>,
     val showReinvitePrompt: Boolean,
     val enableTextFormatting: Boolean,
+    val isThreadListSelected: Boolean,
     val roomCallState: RoomCallState,
     val appName: String,
     val pinnedMessagesBannerState: PinnedMessagesBannerState,

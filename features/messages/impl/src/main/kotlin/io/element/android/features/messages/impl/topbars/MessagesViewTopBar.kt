@@ -44,6 +44,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconToggleButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
@@ -63,6 +64,8 @@ internal fun MessagesViewTopBar(
     heroes: ImmutableList<AvatarData>,
     roomCallState: RoomCallState,
     dmUserIdentityState: IdentityState?,
+    isThreadListSelected: Boolean,
+    onToggleThreadListClick: () -> Unit,
     onRoomDetailsClick: () -> Unit,
     onJoinCallClick: () -> Unit,
     onBackClick: () -> Unit,
@@ -116,6 +119,15 @@ internal fun MessagesViewTopBar(
                 onJoinCallClick = onJoinCallClick,
             )
             Spacer(Modifier.width(8.dp))
+            IconToggleButton(
+                checked = isThreadListSelected,
+                onCheckedChange = { onToggleThreadListClick() }
+            ) {
+                Icon(
+                    imageVector = if (isThreadListSelected) CompoundIcons.ThreadsSolid() else CompoundIcons.Threads(),
+                    contentDescription = stringResource(CommonStrings.common_thread),
+                )
+            }
         },
         windowInsets = WindowInsets(0.dp)
     )
@@ -176,6 +188,8 @@ internal fun MessagesViewTopBarPreview() = ElementPreview {
         heroes = heroes,
         roomCallState = roomCallState,
         dmUserIdentityState = dmUserIdentityState,
+        isThreadListSelected = false,
+        onToggleThreadListClick = {},
         onRoomDetailsClick = {},
         onJoinCallClick = {},
         onBackClick = {},

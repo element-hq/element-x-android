@@ -32,8 +32,8 @@ Compared to the previous-generation [Element Classic](https://github.com/element
 
 ## WHAT IS NEW
 
-- Adding mentioned section on top.
-- 
+- Adding mentioned section on top of home page.
+- Adding Thread listing per room.
 
 ## Screenshots
 

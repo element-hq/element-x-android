@@ -179,6 +179,11 @@ class MessagesPresenter(
         var hasDismissedInviteDialog by rememberSaveable {
             mutableStateOf(false)
         }
+
+        var isThreadListSelected by rememberSaveable {
+            mutableStateOf(false)
+        }
+
         LaunchedEffect(Unit) {
             // Remove the unread flag on entering but don't send read receipts
             // as those will be handled by the timeline.
@@ -264,6 +269,9 @@ class MessagesPresenter(
                         markingAsReadAndExiting.set(false)
                     }
                 }
+                MessagesEvents.ToggleThreadList -> {
+                    isThreadListSelected = !isThreadListSelected
+                }
             }
         }
 
@@ -287,6 +295,7 @@ class MessagesPresenter(
             inviteProgress = inviteProgress.value,
             showReinvitePrompt = showReinvitePrompt,
             enableTextFormatting = MessageComposerConfig.ENABLE_RICH_TEXT_EDITING,
+            isThreadListSelected = isThreadListSelected,
             roomCallState = roomCallState,
             appName = buildMeta.applicationName,
             pinnedMessagesBannerState = pinnedMessagesBannerState,
