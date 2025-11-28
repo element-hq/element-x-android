@@ -27,7 +27,6 @@ import io.element.android.features.rolesandpermissions.impl.RoomMemberListDataSo
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.di.annotations.RoomCoroutineScope
 import io.element.android.libraries.matrix.api.core.UserId
@@ -55,7 +54,7 @@ import kotlinx.coroutines.launch
 class ChangeRolesPresenter(
     @Assisted private val role: RoomMember.Role,
     private val room: JoinedRoom,
-    private val dispatchers: CoroutineDispatchers,
+    private val dataSource: RoomMemberListDataSource,
     private val analyticsService: AnalyticsService,
     @RoomCoroutineScope private val roomCoroutineScope: CoroutineScope,
 ) : Presenter<ChangeRolesState> {
@@ -68,7 +67,6 @@ class ChangeRolesPresenter(
 
     @Composable
     override fun present(): ChangeRolesState {
-        val dataSource = remember { RoomMemberListDataSource(room, dispatchers) }
         var query by rememberSaveable { mutableStateOf<String?>(null) }
         var searchActive by rememberSaveable { mutableStateOf(false) }
         var searchResults by remember {

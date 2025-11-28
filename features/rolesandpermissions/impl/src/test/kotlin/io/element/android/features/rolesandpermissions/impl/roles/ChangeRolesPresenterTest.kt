@@ -10,6 +10,7 @@ package io.element.android.features.rolesandpermissions.impl.roles
 
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.RoomModeration
+import io.element.android.features.rolesandpermissions.impl.RoomMemberListDataSource
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
@@ -576,7 +577,7 @@ internal fun TestScope.createChangeRolesPresenter(
     return ChangeRolesPresenter(
         role = role,
         room = room,
-        dispatchers = dispatchers,
+        dataSource = RoomMemberListDataSource(room, dispatchers),
         analyticsService = analyticsService,
         roomCoroutineScope = this,
     )
