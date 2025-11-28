@@ -194,6 +194,8 @@ interface MatrixClient {
      * Use [Timeline.markAsRead] instead when possible.
      */
     suspend fun markRoomAsFullyRead(roomId: RoomId, eventId: EventId): Result<Unit>
+
+    suspend fun vacuumStores(): Result<Unit>
 }
 
 /**

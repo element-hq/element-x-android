@@ -726,6 +726,12 @@ class RustMatrixClient(
         }
     }
 
+    override suspend fun vacuumStores(): Result<Unit> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerClient.optimizeStores()
+        }
+    }
+
     private suspend fun getCacheSize(
         includeCryptoDb: Boolean = false,
     ): Long = withContext(sessionDispatcher) {

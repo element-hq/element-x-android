@@ -148,6 +148,14 @@ fun DeveloperSettingsView(
         PreferenceCategory(title = "Cache") {
             ListItem(
                 headlineContent = {
+                    Text("Vacuum stores")
+                },
+                onClick = {
+                    state.eventSink(DeveloperSettingsEvents.VacuumStores)
+                }
+            )
+            ListItem(
+                headlineContent = {
                     Text("Clear cache")
                 },
                 trailingContent = if (state.cacheSize.isLoading() || state.clearCacheAction.isLoading()) {
