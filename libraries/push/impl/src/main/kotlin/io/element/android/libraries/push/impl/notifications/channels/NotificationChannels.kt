@@ -106,11 +106,11 @@ class DefaultNotificationChannels(
             }
         }
 
-        // Default notification importance: shows everywhere, makes noise, but does not visually intrude.
+        // High notification importance: shows everywhere, makes noise and peeks.
         notificationManager.createNotificationChannel(
             NotificationChannelCompat.Builder(
                 NOISY_NOTIFICATION_CHANNEL_ID,
-                NotificationManagerCompat.IMPORTANCE_DEFAULT
+                NotificationManagerCompat.IMPORTANCE_HIGH
             )
                 .setSound(
                     Uri.Builder()
