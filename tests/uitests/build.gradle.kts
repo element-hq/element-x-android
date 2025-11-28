@@ -20,7 +20,7 @@ android {
     namespace = "ui"
 }
 
-tasks.withType(Test::class.java) {
+tasks.withType(Test::class) {
     // Don't fail the test run if there are no tests, this can happen if we run them with screenshot test disabled
     failOnNoDiscoveredTests = false
 }
