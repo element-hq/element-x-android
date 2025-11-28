@@ -34,6 +34,8 @@ Compared to the previous-generation [Element Classic](https://github.com/element
 
 - Adding mentioned section on top of home page.
 - Adding Thread listing per room.
+- set notification to high importance (instead of default)
+- SYNC with main repo: Nov 26, 2025
 
 ## Screenshots
 
