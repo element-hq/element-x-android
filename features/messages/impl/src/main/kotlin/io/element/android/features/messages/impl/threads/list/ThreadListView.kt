@@ -57,6 +57,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.getDisplayNam
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import org.intellij.lang.annotations.JdkConstants
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -196,15 +197,10 @@ fun ThreadListRow(
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
                     modifier = Modifier.fillMaxWidth()
-                        .border(1.dp, MaterialTheme.colorScheme.outlineVariant)
                         .padding(horizontal = 8.dp, vertical = 4.dp)
                 ) {
-                    Row(
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
                         Icon(
                             imageVector = Icons.Default.ChatBubbleOutline,
                             contentDescription = null,
@@ -212,11 +208,10 @@ fun ThreadListRow(
                             modifier = Modifier.size(16.dp)
                         )
                         Text(
-                            text = "${threadInfo.summary.numberOfReplies}",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Spacer(modifier = Modifier.height(4.dp))
+                                text = "${threadInfo.summary.numberOfReplies}",
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
                         threadInfo.summary.latestEvent.dataOrNull()?.let {
                             val avatarData = AvatarData(
                                 id = it.senderId.value,
@@ -229,24 +224,28 @@ fun ThreadListRow(
                                 avatarType = AvatarType.User,
                             )
                         }
-                        Text(
-                            text = threadInfo.latestEventText.orEmpty(),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant,
-                            maxLines = 1,
-                            modifier = Modifier.width(192.dp),
-                            overflow = TextOverflow.Ellipsis,
-                        )
-                    }
-                    Row() {
-                        threadInfo.summary.latestEvent.dataOrNull()?.let {
+                        Spacer(modifier = Modifier.height(8.dp))
+                        Column() {
                             Text(
-                                text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(it.timestamp)),
+                                text = threadInfo.latestEventText.orEmpty(),
                                 style = MaterialTheme.typography.bodySmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                maxLines = 1,
+                                overflow = TextOverflow.Ellipsis,
                             )
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.End
+                            ) {
+                                threadInfo.summary.latestEvent.dataOrNull()?.let {
+                                    Text(
+                                        text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(it.timestamp)),
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                                    )
+                                }
+                            }
                         }
-                    }
                 }
             }
         }

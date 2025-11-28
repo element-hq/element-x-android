@@ -416,11 +416,13 @@ class FakeTimeline(
         return markAsReadResult(receiptType)
     }
 
+    override suspend fun paginate(direction: Timeline.PaginationDirection, batchSize: Long): Result<Boolean> {
+        return paginateLambda(direction)
+    }
+
     var paginateLambda: (direction: Timeline.PaginationDirection) -> Result<Boolean> = {
         Result.success(false)
     }
-
-    override suspend fun paginate(direction: Timeline.PaginationDirection): Result<Boolean> = paginateLambda(direction)
 
     var loadReplyDetailsLambda: (eventId: EventId) -> InReplyTo = {
         InReplyTo.NotLoaded(it)
