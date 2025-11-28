@@ -8,6 +8,7 @@
 
 package io.element.android.features.messages.impl.threads.list
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -53,6 +54,13 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisplayName
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
+import kotlin.time.ExperimentalTime
 
 @Composable
 fun ThreadListView(
@@ -121,16 +129,7 @@ fun ThreadListView(
             !state.paginationState.isPaginating &&
                 !state.paginationState.hasReachedEnd &&
                 lastVisibleItemIndex != -1 &&
-                lastVisibleItemIndex >= threadItems.size - 10
-        }
-    }
-
-    val shouldPaginateForwards by remember {
-        derivedStateOf {
-            val firstVisibleItemIndex = lazyListState.layoutInfo.visibleItemsInfo.firstOrNull()?.index ?: -1
-            !state.paginationState.isPaginating &&
-                !state.paginationState.hasReachedEnd &&
-                firstVisibleItemIndex == 0
+                lastVisibleItemIndex >= threadItems.size - 1
         }
     }
 
@@ -139,25 +138,33 @@ fun ThreadListView(
             state.eventSink(TimelineEvents.LoadMore(Timeline.PaginationDirection.BACKWARDS))
         }
     }
-
-    LaunchedEffect(shouldPaginateForwards) {
-        if (shouldPaginateForwards) {
-            state.eventSink(TimelineEvents.LoadMore(Timeline.PaginationDirection.FORWARDS))
-        }
-    }
 }
 
+@OptIn(ExperimentalTime::class)
 @Composable
 fun ThreadListRow(
     event: TimelineItem.Event,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val sentTime = remember(event.sentTimeMillis) {
+        val instant = Instant.fromEpochMilliseconds(event.sentTimeMillis)
+        val localDateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
+        val now = kotlin.time.Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault())
+        val date = Date(event.sentTimeMillis)
+        if (localDateTime.date == now.date) {
+            SimpleDateFormat("HH:mm", Locale.getDefault()).format(date)
+        } else {
+            SimpleDateFormat("dd/MM\nHH:mm", Locale.getDefault()).format(date)
+        }
+    }
+
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .border(1.dp, MaterialTheme.colorScheme.outlineVariant)
             .clickable(onClick = onClick)
-            .padding(horizontal = 16.dp, vertical = 12.dp),
+            .padding(horizontal = 8.dp, vertical = 8.dp),
     ) {
         // Col 1: Avatar
         Avatar(
@@ -189,48 +196,66 @@ fun ThreadListRow(
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    modifier = Modifier.fillMaxWidth()
+                        .border(1.dp, MaterialTheme.colorScheme.outlineVariant)
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.ChatBubbleOutline,
-                        contentDescription = null,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.size(16.dp)
-                    )
-                    Text(
-                        text = "${threadInfo.summary.numberOfReplies}",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    threadInfo.summary.latestEvent.dataOrNull()?.let {
-                        val avatarData = AvatarData(
-                            id = it.senderId.value,
-                            name = it.senderProfile.getDisplayName(),
-                            url = it.senderProfile.getAvatarUrl(),
-                            size = AvatarSize.TimelineThreadLatestEventSender,
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(4.dp)
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.ChatBubbleOutline,
+                            contentDescription = null,
+                            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+                            modifier = Modifier.size(16.dp)
                         )
-                        Avatar(
-                            avatarData = avatarData,
-                            avatarType = AvatarType.User,
+                        Text(
+                            text = "${threadInfo.summary.numberOfReplies}",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        threadInfo.summary.latestEvent.dataOrNull()?.let {
+                            val avatarData = AvatarData(
+                                id = it.senderId.value,
+                                name = it.senderProfile.getDisplayName(),
+                                url = it.senderProfile.getAvatarUrl(),
+                                size = AvatarSize.TimelineThreadLatestEventSender,
+                            )
+                            Avatar(
+                                avatarData = avatarData,
+                                avatarType = AvatarType.User,
+                            )
+                        }
+                        Text(
+                            text = threadInfo.latestEventText.orEmpty(),
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            maxLines = 1,
+                            modifier = Modifier.width(192.dp),
+                            overflow = TextOverflow.Ellipsis,
                         )
                     }
-                    Text(
-                        text = threadInfo.latestEventText.orEmpty(),
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                    )
+                    Row() {
+                        threadInfo.summary.latestEvent.dataOrNull()?.let {
+                            Text(
+                                text = SimpleDateFormat("HH:mm", Locale.getDefault()).format(Date(it.timestamp)),
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
                 }
             }
         }
-        Spacer(Modifier.width(12.dp))
 
-        // Col 3: Date
         Text(
-            text = event.sentTime,
+            text = sentTime,
             style = MaterialTheme.typography.bodySmall,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
+
     }
 }
