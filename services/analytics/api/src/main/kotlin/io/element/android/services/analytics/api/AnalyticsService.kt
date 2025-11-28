@@ -73,6 +73,7 @@ interface AnalyticsService : AnalyticsTracker, ErrorTracker {
      */
     fun removeLongRunningTransaction(longRunningTransaction: AnalyticsLongRunningTransaction): AnalyticsTransaction?
 
+    /** Enter a span inside the Rust SDK tracing system. If a [parentTraceId] is provided, the SDK trace will be added as a child of that trace. */
     fun enterSdkSpan(name: String?, parentTraceId: String?): AnalyticsSdkSpan
 }
 
