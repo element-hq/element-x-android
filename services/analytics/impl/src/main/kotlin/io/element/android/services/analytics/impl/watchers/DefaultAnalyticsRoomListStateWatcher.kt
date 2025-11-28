@@ -20,7 +20,7 @@ import io.element.android.services.analytics.api.finishLongRunningTransaction
 import io.element.android.services.analytics.api.watchers.AnalyticsRoomListStateWatcher
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.cancel
+import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -33,19 +33,19 @@ class DefaultAnalyticsRoomListStateWatcher(
     private val appNavigationStateService: AppNavigationStateService,
     private val roomListService: RoomListService,
     private val analyticsService: AnalyticsService,
-    @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
-    private val dispatchers: CoroutineDispatchers,
+    @SessionCoroutineScope sessionCoroutineScope: CoroutineScope,
+    dispatchers: CoroutineDispatchers,
 ) : AnalyticsRoomListStateWatcher {
-    private var currentCoroutineScope: CoroutineScope? = null
+    private val coroutineScope: CoroutineScope = sessionCoroutineScope.childScope(dispatchers.computation, "AnalyticsRoomListStateWatcher")
+    private val isStarted = AtomicBoolean(false)
     private val isWarmState = AtomicBoolean(false)
 
     override fun start() {
-        if (currentCoroutineScope != null) {
+        if (isStarted.getAndSet(true)) {
             Timber.w("Can't start RoomListStateWatcher, it's already running.")
             return
         }
 
-        val coroutineScope = sessionCoroutineScope.childScope(dispatchers.computation, "AnalyticsRoomListStateWatcher")
         appNavigationStateService.appNavigationState
             .map { it.isInForeground }
             .distinctUntilChanged()
@@ -68,12 +68,11 @@ class DefaultAnalyticsRoomListStateWatcher(
                 }
             }
             .launchIn(coroutineScope)
-
-        currentCoroutineScope = coroutineScope
     }
 
     override fun stop() {
-        currentCoroutineScope?.cancel()
-        currentCoroutineScope = null
+        if (isStarted.getAndSet(false)) {
+            coroutineScope.coroutineContext.cancelChildren()
+        }
     }
 }
