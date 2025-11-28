@@ -206,6 +206,9 @@ class TimelinePresenter(
                     focusOnEvent(event.eventId, focusRequestState)
                 }.start()
                 is TimelineEvents.OnFocusEventRender -> {
+                    // If there was a pending 'notification tap opens timeline' transaction, finish it now we're focused in the required event
+                    analyticsService.finishLongRunningTransaction(NotificationTapOpensTimeline)
+
                     focusRequestState.value = focusRequestState.value.onFocusEventRender()
                 }
                 is TimelineEvents.ClearFocusRequestState -> {
@@ -242,7 +245,6 @@ class TimelinePresenter(
                     analyticsService.run {
                         finishLongRunningTransaction(DisplayFirstTimelineItems)
                         finishLongRunningTransaction(OpenRoom)
-                        finishLongRunningTransaction(NotificationTapOpensTimeline)
                     }
                 }
                 .launchIn(this)
