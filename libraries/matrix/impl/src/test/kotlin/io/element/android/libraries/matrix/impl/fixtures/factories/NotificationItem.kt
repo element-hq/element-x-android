@@ -64,6 +64,7 @@ fun aRustNotificationRoomInfo(
     isEncrypted: Boolean? = true,
     isDirect: Boolean = false,
     joinRule: JoinRule? = null,
+    isSpace: Boolean = false,
 ) = NotificationRoomInfo(
     displayName = displayName,
     avatarUrl = avatarUrl,
@@ -73,6 +74,7 @@ fun aRustNotificationRoomInfo(
     isEncrypted = isEncrypted,
     isDirect = isDirect,
     joinRule = joinRule,
+    isSpace = isSpace,
 )
 
 fun aRustNotificationEventTimeline(
