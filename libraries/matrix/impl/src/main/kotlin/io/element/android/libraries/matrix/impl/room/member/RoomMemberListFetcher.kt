@@ -14,7 +14,6 @@ import io.element.android.libraries.matrix.api.room.roomMembers
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
-import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.ensureActive
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -26,6 +25,7 @@ import org.matrix.rustcomponents.sdk.RoomMembersIterator
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import kotlin.coroutines.cancellation.CancellationException
+import kotlin.coroutines.coroutineContext
 
 /**
  * This class fetches the room members for a given room in a 'paginated' way, and taking into account previous cached values.
@@ -118,7 +118,7 @@ internal class RoomMemberListFetcher(
                 while (true) {
                     // Loading the whole membersIterator as a stop-gap measure.
                     // We should probably implement some sort of paging in the future.
-                    currentCoroutineContext().ensureActive()
+                    coroutineContext.ensureActive()
                     val chunk = iterator.nextChunk(pageSize.toUInt())
                     // Load next chunk. If null (no more items), exit the loop
                     val members = chunk?.map(RoomMemberMapper::map) ?: break
