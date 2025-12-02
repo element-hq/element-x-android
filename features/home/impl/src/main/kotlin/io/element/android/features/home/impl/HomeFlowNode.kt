@@ -62,6 +62,7 @@ import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
+import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
@@ -193,18 +194,18 @@ class HomeFlowNode(
                         onSuccess = { joinedRoom ->
                             if (isActive) {
                                 callback.navigateToRoom(roomId, joinedRoom)
-                                loadingJoinedRoomJob.value = AsyncData.Success(loadingJoinedRoomJob.value.dataOrNull()!!)
+                                loadingJoinedRoomJob.value = AsyncData.Success(coroutineContext.job)
                                 // Wait a bit before resetting the state to avoid allowing to open several rooms
                                 delay(200.milliseconds)
                                 loadingJoinedRoomJob.value = AsyncData.Uninitialized
                             }
                         },
                         onFailure = {
-                            // If the operation wasn't cancelled, navigate without the room
+                            // If the operation wasn't cancelled, navigate without the room, using the room id
                             if (it !is CancellationException) {
                                 callback.navigateToRoom(roomId, null)
                             }
-                            loadingJoinedRoomJob.value = AsyncData.Failure(it, loadingJoinedRoomJob.value.dataOrNull()!!)
+                            loadingJoinedRoomJob.value = AsyncData.Failure(error = it, prevData = coroutineContext.job)
                             // Wait a bit before resetting the state to avoid allowing to open several rooms
                             delay(200.milliseconds)
                             loadingJoinedRoomJob.value = AsyncData.Uninitialized
