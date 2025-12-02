@@ -41,6 +41,7 @@ import org.matrix.rustcomponents.sdk.TimelineConfiguration
 import org.matrix.rustcomponents.sdk.TimelineFilter
 import org.matrix.rustcomponents.sdk.TimelineFocus
 import timber.log.Timber
+import uniffi.matrix_sdk_ui.TimelineReadReceiptTracking
 import java.util.concurrent.atomic.AtomicBoolean
 import org.matrix.rustcomponents.sdk.RoomListService as InnerRoomListService
 
@@ -133,7 +134,7 @@ class RustRoomFactory(
                                 filter = eventFilters?.let(TimelineFilter::EventTypeFilter) ?: TimelineFilter.All,
                                 internalIdPrefix = "live",
                                 dateDividerMode = DateDividerMode.DAILY,
-                                trackReadReceipts = true,
+                                trackReadReceipts = TimelineReadReceiptTracking.ALL_EVENTS,
                                 reportUtds = true,
                             )
                         )
