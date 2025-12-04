@@ -18,6 +18,7 @@ import com.lemonappdev.konsist.api.ext.list.withNameContaining
 import com.lemonappdev.konsist.api.ext.list.withNameEndingWith
 import com.lemonappdev.konsist.api.ext.list.withPackage
 import com.lemonappdev.konsist.api.ext.list.withoutName
+import com.lemonappdev.konsist.api.ext.list.withoutNameEndingWith
 import com.lemonappdev.konsist.api.ext.list.withoutNameStartingWith
 import com.lemonappdev.konsist.api.verify.assertEmpty
 import com.lemonappdev.konsist.api.verify.assertTrue
@@ -175,6 +176,8 @@ class KonsistClassNameTest {
                 "Rust",
                 "SharedPreferences",
             )
+            // Exclude presenters too
+            .withoutNameEndingWith("Presenter")
             .assertEmpty()
     }
 }

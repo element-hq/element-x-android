@@ -225,7 +225,7 @@ class OnboardingViewTest {
         ensureCalledOnceWithParam(oidcDetails) { callback ->
             rule.setOnboardingView(
                 state = anOnBoardingState(
-                    loginMode = AsyncData.Success(LoginMode.Oidc(oidcDetails)),
+                    loginMode = AsyncData.Success(LoginMode.Oidc(oidcDetails = oidcDetails, isAccountCreation = false)),
                     eventSink = eventSink,
                 ),
                 onOidcDetails = callback,

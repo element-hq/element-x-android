@@ -10,17 +10,21 @@ package io.element.android.features.login.impl
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.api.LoginEntryPoint
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
+import io.element.android.features.login.impl.di.AuthGraph
+import io.element.android.libraries.architecture.AssistedNodeFactory
 import io.element.android.libraries.oidc.test.customtab.FakeOidcActionFlow
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.node.TestParentNode
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import kotlin.reflect.KClass
 
 class DefaultLoginEntryPointTest {
     @get:Rule
@@ -39,6 +43,11 @@ class DefaultLoginEntryPointTest {
                 accountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
                 oidcActionFlow = FakeOidcActionFlow(),
                 appCoroutineScope = backgroundScope,
+                authGraphFactory = { object : AuthGraph {
+                    override fun nodeFactories(): Map<KClass<out Node>, AssistedNodeFactory<*>> {
+                        return emptyMap()
+                    }
+                } }
             )
         }
         val callback = object : LoginEntryPoint.Callback {
