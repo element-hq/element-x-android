@@ -99,7 +99,7 @@ class DefaultNotifiableEventResolver(
     ): ResolvePushEventsResult {
         Timber.d("Queueing notifications: $notificationEventRequests")
         val client = matrixClientProvider.getOrRestore(sessionId).getOrElse {
-            return Result.failure(IllegalStateException("Couldn't get or restore client for session $sessionId"))
+            return Result.failure(it)
         }
         val ids = notificationEventRequests.groupBy { it.roomId }
             .mapValues { (_, requests) ->
