@@ -8,23 +8,45 @@
 
 package io.element.android.libraries.workmanager.impl
 
-import android.content.Context
 import androidx.work.WorkManager
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.di.annotations.ApplicationContext
+import io.element.android.libraries.core.coroutine.withPreviousValue
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.workmanager.api.WorkManagerRequest
 import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.WorkManagerScheduler
 import io.element.android.libraries.workmanager.api.workManagerTag
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import timber.log.Timber
 
 @ContributesBinding(AppScope::class)
 class DefaultWorkManagerScheduler(
-    @ApplicationContext private val context: Context,
+    lazyWorkManager: Lazy<WorkManager>,
+    @AppCoroutineScope private val appCoroutineScope: CoroutineScope,
+    sessionStore: SessionStore,
 ) : WorkManagerScheduler {
-    private val workManager by lazy { WorkManager.getInstance(context) }
+    private val workManager by lazyWorkManager
+
+    init {
+        // Observe session removals to cancel associated work automatically
+        sessionStore.sessionsFlow()
+            .map { sessions -> sessions.map { SessionId(it.userId) } }
+            .withPreviousValue()
+            .map { (prev, new) -> prev.orEmpty() - new.toSet() }
+            .onEach { removedSessions ->
+                for (sessionId in removedSessions) {
+                    Timber.d("Session removed for userId: $sessionId, cancelling associated workmanager requests")
+                    cancel(sessionId)
+                }
+            }
+            .launchIn(appCoroutineScope)
+    }
 
     override fun submit(workManagerRequest: WorkManagerRequest) {
         workManagerRequest.build().fold(
