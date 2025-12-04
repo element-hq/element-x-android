@@ -29,6 +29,7 @@ import io.element.android.annotations.ContributesNode
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.login.api.LoginEntryPoint
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
+import io.element.android.features.login.impl.di.AuthGraph
 import io.element.android.features.login.impl.qrcode.QrCodeLoginFlowNode
 import io.element.android.features.login.impl.screens.changeaccountprovider.ChangeAccountProviderNode
 import io.element.android.features.login.impl.screens.chooseaccountprovider.ChooseAccountProviderNode
@@ -44,6 +45,7 @@ import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
+import io.element.android.libraries.di.DependencyInjectionGraphOwner
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.oidc.api.OidcAction
@@ -62,6 +64,7 @@ class LoginFlowNode(
     private val oidcActionFlow: OidcActionFlow,
     @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,
+    private val authGraphFactory: AuthGraph.Factory,
 ) : BaseFlowNode<LoginFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.OnBoarding,
@@ -69,11 +72,14 @@ class LoginFlowNode(
     ),
     buildContext = buildContext,
     plugins = plugins,
-) {
+), DependencyInjectionGraphOwner {
     data class Params(
         val accountProvider: String?,
         val loginHint: String?,
     ) : NodeInputs
+
+    override val graph: Any get() = currentAuthGraph
+    private var currentAuthGraph = authGraphFactory.createAuthGraph()
 
     private val callback: LoginEntryPoint.Callback = callback()
     private var activity: Activity? = null
@@ -133,12 +139,14 @@ class LoginFlowNode(
             NavTarget.OnBoarding -> {
                 val callback = object : OnBoardingNode.Callback {
                     override fun navigateToSignUpFlow() {
+                        resetAuthGraph()
                         backstack.push(
                             NavTarget.ConfirmAccountProvider(isAccountCreation = true)
                         )
                     }
 
                     override fun navigateToSignInFlow(mustChooseAccountProvider: Boolean) {
+                        resetAuthGraph()
                         backstack.push(
                             if (mustChooseAccountProvider) {
                                 NavTarget.ChooseAccountProvider
@@ -149,6 +157,7 @@ class LoginFlowNode(
                     }
 
                     override fun navigateToQrCode() {
+                        resetAuthGraph()
                         backstack.push(NavTarget.QrCode)
                     }
 
@@ -157,14 +166,17 @@ class LoginFlowNode(
                     }
 
                     override fun navigateToOidc(oidcDetails: OidcDetails) {
+                        resetAuthGraph()
                         navigateToMas(oidcDetails)
                     }
 
                     override fun navigateToCreateAccount(url: String) {
+                        resetAuthGraph()
                         backstack.push(NavTarget.CreateAccount(url))
                     }
 
                     override fun navigateToLoginPassword() {
+                        resetAuthGraph()
                         backstack.push(NavTarget.LoginPassword)
                     }
 
@@ -283,5 +295,9 @@ class LoginFlowNode(
             }
         }
         BackstackView()
+    }
+
+    private fun resetAuthGraph() {
+        currentAuthGraph = authGraphFactory.createAuthGraph()
     }
 }
