@@ -14,6 +14,8 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
 import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.SingleIn
+import io.element.android.features.login.impl.di.AuthScope
 import io.element.android.features.login.impl.error.ChangeServerError
 import io.element.android.features.login.impl.screens.chooseaccountprovider.ChooseAccountProviderPresenter
 import io.element.android.features.login.impl.screens.confirmaccountprovider.ConfirmAccountProviderPresenter
@@ -33,6 +35,7 @@ import io.element.android.libraries.oidc.api.OidcActionFlow
  * It's a helper to avoid code duplication. It is used by [OnBoardingPresenter], [ConfirmAccountProviderPresenter]
  * and [ChooseAccountProviderPresenter].
  */
+@SingleIn(AuthScope::class)
 @Inject
 class LoginHelper(
     private val oidcActionFlow: OidcActionFlow,

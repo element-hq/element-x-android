@@ -13,12 +13,12 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
+import io.element.android.features.login.impl.di.AuthScope
 
-@ContributesNode(AppScope::class)
+@ContributesNode(AuthScope::class)
 @AssistedInject
 class LoginPasswordNode(
     @Assisted buildContext: BuildContext,

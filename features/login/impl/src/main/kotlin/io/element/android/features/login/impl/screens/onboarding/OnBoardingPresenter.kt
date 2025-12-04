@@ -20,11 +20,13 @@ import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.appconfig.OnBoardingConfig
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.api.canConnectToAnyHomeserver
 import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
+import io.element.android.features.login.impl.di.AuthScope
 import io.element.android.features.login.impl.login.LoginHelper
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.libraries.architecture.Presenter
@@ -45,9 +47,10 @@ class OnBoardingPresenter(
     private val sessionStore: SessionStore,
     private val accountProviderDataSource: AccountProviderDataSource,
 ) : Presenter<OnBoardingState> {
+    @ContributesBinding(AuthScope::class)
     @AssistedFactory
-    interface Factory {
-        fun create(
+    fun interface Factory : OnBoardingPresenterFactory {
+        override fun create(
             params: OnBoardingNode.Params,
         ): OnBoardingPresenter
     }
@@ -135,4 +138,8 @@ class OnBoardingPresenter(
             eventSink = ::handleEvent,
         )
     }
+}
+
+interface OnBoardingPresenterFactory {
+    fun create(params: OnBoardingNode.Params): OnBoardingPresenter
 }

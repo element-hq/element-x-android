@@ -15,8 +15,11 @@ import androidx.compose.runtime.rememberCoroutineScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
+import io.element.android.features.login.impl.di.AuthScope
 import io.element.android.features.login.impl.login.LoginHelper
+import io.element.android.features.login.impl.screens.confirmaccountprovider.ConfirmAccountProviderPresenter.Params
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.coroutines.launch
 
@@ -31,8 +34,9 @@ class ConfirmAccountProviderPresenter(
     )
 
     @AssistedFactory
-    interface Factory {
-        fun create(params: Params): ConfirmAccountProviderPresenter
+    @ContributesBinding(AuthScope::class)
+    fun interface Factory : ConfirmAccountProviderPresenterFactory {
+        override fun create(params: Params): ConfirmAccountProviderPresenter
     }
 
     @Composable
@@ -62,4 +66,8 @@ class ConfirmAccountProviderPresenter(
             eventSink = ::handleEvent,
         )
     }
+}
+
+interface ConfirmAccountProviderPresenterFactory {
+    fun create(params: Params): ConfirmAccountProviderPresenter
 }
