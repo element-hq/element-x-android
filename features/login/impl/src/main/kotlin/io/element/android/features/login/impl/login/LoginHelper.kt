@@ -44,6 +44,9 @@ class LoginHelper(
 ) {
     private val loginModeState: MutableState<AsyncData<LoginMode>> = mutableStateOf(AsyncData.Uninitialized)
 
+    // To remember if the current flow is account creation or login
+    private var isAccountCreation: Boolean = false
+
     @Composable
     fun collectLoginMode(): State<AsyncData<LoginMode>> {
         LaunchedEffect(Unit) {
@@ -65,13 +68,17 @@ class LoginHelper(
         homeserverUrl: String,
         loginHint: String?,
     ) {
+        this.isAccountCreation = isAccountCreation
+
+        loginModeState.value = AsyncData.Loading()
         suspend {
             authenticationService.setHomeserver(homeserverUrl).map { matrixHomeServerDetails ->
                 if (matrixHomeServerDetails.supportsOidcLogin) {
                     // Retrieve the details right now
                     val oidcPrompt = if (isAccountCreation) OidcPrompt.Create else OidcPrompt.Login
                     LoginMode.Oidc(
-                        authenticationService.getOidcUrl(prompt = oidcPrompt, loginHint = loginHint).getOrThrow()
+                        authenticationService.getOidcUrl(prompt = oidcPrompt, loginHint = loginHint).getOrThrow(),
+                        isAccountCreation,
                     )
                 } else if (isAccountCreation) {
                     val url = webClientUrlForAuthenticationRetriever.retrieve(homeserverUrl)
@@ -83,11 +90,11 @@ class LoginHelper(
                 }
             }.getOrThrow()
         }.runCatchingUpdatingState(
-            state = loginModeState,
-            errorTransform = {
-                when (it) {
-                    is AccountCreationNotSupported -> it
-                    else -> ChangeServerError.from(it)
+            loginModeState,
+            errorTransform = { exception ->
+                when (exception) {
+                    is AccountCreationNotSupported -> exception
+                    else -> ChangeServerError.from(exception)
                 }
             }
         )
@@ -111,12 +118,13 @@ class LoginHelper(
                     }
             }
             is OidcAction.Success -> {
-                authenticationService.loginWithOidc(oidcAction.url)
+                authenticationService.loginWithOidc(callbackUrl = oidcAction.url, isAccountCreation = this.isAccountCreation)
                     .onFailure { failure ->
                         loginModeState.value = AsyncData.Failure(failure)
                     }
             }
         }
+        isAccountCreation = false
         oidcActionFlow.reset()
     }
 }

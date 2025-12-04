@@ -74,12 +74,6 @@ class CreateAccountPresenter(
         }.flatMap { externalSession ->
             authenticationService.importCreatedSession(externalSession)
         }.onSuccess { sessionId ->
-            tryOrNull {
-                // Wait until the session is verified
-                val client = clientProvider.getOrRestore(sessionId).getOrThrow()
-                val sessionVerificationService = client.sessionVerificationService
-                withTimeout(10.seconds) { sessionVerificationService.sessionVerifiedStatus.first { it.isVerified() } }
-            }
             loggedInState.value = AsyncAction.Success(sessionId)
         }.onFailure { failure ->
             loggedInState.value = AsyncAction.Failure(failure)

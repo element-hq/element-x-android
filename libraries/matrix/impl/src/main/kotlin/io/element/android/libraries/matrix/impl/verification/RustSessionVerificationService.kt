@@ -69,7 +69,7 @@ class RustSessionVerificationService(
     // Listen for changes in verification status and update accordingly
     private val verificationStateListenerTaskHandle = encryptionService.verificationStateListener(object : VerificationStateListener {
         override fun onUpdate(status: VerificationState) {
-            Timber.d("New verification state: $status")
+            Timber.w("New verification state: $status")
             _sessionVerifiedStatus.value = status.map()
         }
     })
@@ -254,8 +254,9 @@ class RustSessionVerificationService(
 
     private fun updateVerificationStatus() {
         runCatchingExceptions {
-            _sessionVerifiedStatus.value = encryptionService.verificationState().map()
-            Timber.d("New verification status: ${_sessionVerifiedStatus.value}")
+            val verificationState = encryptionService.verificationState()
+            _sessionVerifiedStatus.value = verificationState.map()
+            Timber.w("New verification status: ${_sessionVerifiedStatus.value}")
         }
     }
 }

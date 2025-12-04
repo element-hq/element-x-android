@@ -77,7 +77,7 @@ class FakeMatrixAuthenticationService(
         return oidcCancelError?.let { Result.failure(it) } ?: Result.success(Unit)
     }
 
-    override suspend fun loginWithOidc(callbackUrl: String): Result<SessionId> = simulateLongTask {
+    override suspend fun loginWithOidc(callbackUrl: String, isAccountCreation: Boolean): Result<SessionId> = simulateLongTask {
         loginError?.let { Result.failure(it) } ?: run {
             onAuthenticationListener?.invoke(matrixClient ?: FakeMatrixClient())
             Result.success(A_USER_ID)

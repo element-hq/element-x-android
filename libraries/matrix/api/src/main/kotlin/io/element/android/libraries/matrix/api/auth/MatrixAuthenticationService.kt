@@ -55,7 +55,7 @@ interface MatrixAuthenticationService {
     /**
      * Attempt to login using the [callbackUrl] provided by the Oidc page.
      */
-    suspend fun loginWithOidc(callbackUrl: String): Result<SessionId>
+    suspend fun loginWithOidc(callbackUrl: String, isAccountCreation: Boolean): Result<SessionId>
 
     suspend fun loginWithQrCode(qrCodeData: MatrixQrCodeLoginData, progress: (QrCodeLoginStep) -> Unit): Result<SessionId>
 

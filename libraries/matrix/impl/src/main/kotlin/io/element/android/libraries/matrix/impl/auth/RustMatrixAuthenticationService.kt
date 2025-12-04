@@ -25,6 +25,7 @@ import io.element.android.libraries.matrix.api.auth.external.ExternalSession
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.impl.ClientBuilderSlidingSync
 import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
 import io.element.android.libraries.matrix.impl.auth.qrlogin.QrErrorMapper
@@ -38,7 +39,10 @@ import io.element.android.libraries.matrix.impl.paths.SessionPathsFactory
 import io.element.android.libraries.sessionstorage.api.LoginType
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.flow.filterIsInstance
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.HumanQrLoginException
@@ -48,6 +52,8 @@ import org.matrix.rustcomponents.sdk.QrLoginProgress
 import org.matrix.rustcomponents.sdk.QrLoginProgressListener
 import timber.log.Timber
 import uniffi.matrix_sdk.OAuthAuthorizationData
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
@@ -160,7 +166,7 @@ class RustMatrixAuthenticationService(
     override suspend fun importCreatedSession(externalSession: ExternalSession): Result<SessionId> =
         withContext(coroutineDispatchers.io) {
             runCatchingExceptions {
-                currentClient ?: error("You need to call `setHomeserver()` first")
+                val client = currentClient ?: error("You need to call `setHomeserver()` first")
                 val currentSessionPaths = sessionPaths ?: error("You need to call `setHomeserver()` first")
                 val sessionData = externalSession.toSessionData(
                     isTokenValid = true,
@@ -168,7 +174,15 @@ class RustMatrixAuthenticationService(
                     passphrase = pendingPassphrase,
                     sessionPaths = currentSessionPaths,
                 )
-                clear()
+
+                val matrixClient = rustMatrixClientFactory.create(client)
+                matrixClient.waitForSessionVerification()
+
+                newMatrixClientObservers.forEach { it.invoke(matrixClient) }
+
+                // Clean up the strong reference held here since it's no longer necessary
+                currentClient = null
+
                 sessionStore.addSession(sessionData)
                 SessionId(sessionData.userId)
             }
@@ -218,16 +232,13 @@ class RustMatrixAuthenticationService(
     /**
      * callbackUrl should be the uriRedirect from OidcClientMetadata (with all the parameters).
      */
-    override suspend fun loginWithOidc(callbackUrl: String): Result<SessionId> {
+    override suspend fun loginWithOidc(callbackUrl: String, isAccountCreation: Boolean): Result<SessionId> {
         return withContext(coroutineDispatchers.io) {
             runCatchingExceptions {
                 val client = currentClient ?: error("You need to call `setHomeserver()` first")
                 val currentSessionPaths = sessionPaths ?: error("You need to call `setHomeserver()` first")
-                client.loginWithOidcCallback(callbackUrl)
 
-                // Free the pending data since we won't use it to abort the flow anymore
-                pendingOAuthAuthorizationData?.close()
-                pendingOAuthAuthorizationData = null
+                client.loginWithOidcCallback(callbackUrl)
 
                 // Ensure that the user is not already logged in with the same account
                 ensureNotAlreadyLoggedIn(client)
@@ -238,6 +249,14 @@ class RustMatrixAuthenticationService(
                     sessionPaths = currentSessionPaths,
                 )
                 val matrixClient = rustMatrixClientFactory.create(client)
+                if (isAccountCreation) {
+                    matrixClient.waitForSessionVerification()
+                }
+
+                // Free the pending data since we won't use it to abort the flow anymore
+                pendingOAuthAuthorizationData?.close()
+                pendingOAuthAuthorizationData = null
+
                 newMatrixClientObservers.forEach { it.invoke(matrixClient) }
                 sessionStore.addSession(sessionData)
 
@@ -356,4 +375,13 @@ class RustMatrixAuthenticationService(
         currentClient?.close()
         currentClient = null
     }
+}
+
+private suspend fun MatrixClient.waitForSessionVerification(timeout: Duration = 10.seconds) {
+    withTimeoutOrNull(timeout) {
+        // Session verification depends on the sync service to receive updates so we start a temporary sync here
+        syncService.startSync()
+        sessionVerificationService.sessionVerifiedStatus.filterIsInstance<SessionVerifiedStatus.Verified>().first()
+        syncService.stopSync()
+    } ?: Timber.w("Timeout waiting for session verification state after account creation")
 }
