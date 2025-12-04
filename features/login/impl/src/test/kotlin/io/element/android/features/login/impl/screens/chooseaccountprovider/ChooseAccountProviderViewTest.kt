@@ -73,7 +73,7 @@ class ChooseAccountProviderViewTest {
         val eventSink = EventsRecorder<ChooseAccountProviderEvents>()
         rule.setChooseAccountProviderView(
             state = aChooseAccountProviderState(
-                loginMode = AsyncData.Failure(AN_EXCEPTION),
+                authenticationMode = AsyncData.Failure(AN_EXCEPTION),
                 eventSink = eventSink,
             ),
         )

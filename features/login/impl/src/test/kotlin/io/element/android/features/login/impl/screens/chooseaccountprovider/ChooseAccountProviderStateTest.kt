@@ -10,7 +10,7 @@ package io.element.android.features.login.impl.screens.chooseaccountprovider
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.login.impl.accountprovider.anAccountProvider
-import io.element.android.features.login.impl.login.LoginMode
+import io.element.android.features.login.impl.login.AuthenticationMode
 import io.element.android.libraries.architecture.AsyncData
 import org.junit.Test
 
@@ -35,7 +35,7 @@ class ChooseAccountProviderStateTest {
     fun `submitEnabled returns false when there is a selectedAccountProvider but there is an error`() {
         val sut = aChooseAccountProviderState(
             selectedAccountProvider = anAccountProvider(),
-            loginMode = AsyncData.Failure(Throwable("Error")),
+            authenticationMode = AsyncData.Failure(Throwable("Error")),
         )
         assertThat(sut.submitEnabled).isFalse()
     }
@@ -44,7 +44,7 @@ class ChooseAccountProviderStateTest {
     fun `submitEnabled returns false when there is a selectedAccountProvider but the result is successful`() {
         val sut = aChooseAccountProviderState(
             selectedAccountProvider = anAccountProvider(),
-            loginMode = AsyncData.Success(LoginMode.PasswordLogin),
+            authenticationMode = AsyncData.Success(AuthenticationMode.PasswordLogin),
         )
         assertThat(sut.submitEnabled).isFalse()
     }

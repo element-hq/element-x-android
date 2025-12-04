@@ -18,7 +18,7 @@ import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.di.AuthScope
-import io.element.android.features.login.impl.login.LoginHelper
+import io.element.android.features.login.impl.login.AuthenticationHelper
 import io.element.android.features.login.impl.screens.confirmaccountprovider.ConfirmAccountProviderPresenter.Params
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.coroutines.launch
@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 class ConfirmAccountProviderPresenter(
     @Assisted private val params: Params,
     private val accountProviderDataSource: AccountProviderDataSource,
-    private val loginHelper: LoginHelper,
+    private val authenticationHelper: AuthenticationHelper,
 ) : Presenter<ConfirmAccountProviderState> {
     data class Params(
         val isAccountCreation: Boolean,
@@ -44,25 +44,25 @@ class ConfirmAccountProviderPresenter(
         val accountProvider by accountProviderDataSource.flow.collectAsState()
         val localCoroutineScope = rememberCoroutineScope()
 
-        val loginMode by loginHelper.collectLoginMode()
+        val loginMode by authenticationHelper.collectAuthenticationMode()
 
         fun handleEvent(event: ConfirmAccountProviderEvents) {
             when (event) {
                 ConfirmAccountProviderEvents.Continue -> localCoroutineScope.launch {
-                    loginHelper.submit(
+                    authenticationHelper.submit(
                         isAccountCreation = params.isAccountCreation,
                         homeserverUrl = accountProvider.url,
                         loginHint = null,
                     )
                 }
-                ConfirmAccountProviderEvents.ClearError -> loginHelper.clearError()
+                ConfirmAccountProviderEvents.ClearError -> authenticationHelper.clearError()
             }
         }
 
         return ConfirmAccountProviderState(
             accountProvider = accountProvider,
             isAccountCreation = params.isAccountCreation,
-            loginMode = loginMode,
+            authenticationMode = loginMode,
             eventSink = ::handleEvent,
         )
     }

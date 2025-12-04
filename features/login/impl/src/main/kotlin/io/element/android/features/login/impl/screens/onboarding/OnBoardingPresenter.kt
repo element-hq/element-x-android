@@ -27,7 +27,7 @@ import io.element.android.features.enterprise.api.canConnectToAnyHomeserver
 import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.di.AuthScope
-import io.element.android.features.login.impl.login.LoginHelper
+import io.element.android.features.login.impl.login.AuthenticationHelper
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
@@ -42,7 +42,7 @@ class OnBoardingPresenter(
     private val enterpriseService: EnterpriseService,
     private val defaultAccountProviderAccessControl: DefaultAccountProviderAccessControl,
     private val rageshakeFeatureAvailability: RageshakeFeatureAvailability,
-    private val loginHelper: LoginHelper,
+    private val authenticationHelper: AuthenticationHelper,
     private val onBoardingLogoResIdProvider: OnBoardingLogoResIdProvider,
     private val sessionStore: SessionStore,
     private val accountProviderDataSource: AccountProviderDataSource,
@@ -100,20 +100,20 @@ class OnBoardingPresenter(
             value = sessionStore.numberOfSessions() > 0
         }
 
-        val loginMode by loginHelper.collectLoginMode()
+        val loginMode by authenticationHelper.collectAuthenticationMode()
 
         fun handleEvent(event: OnBoardingEvents) {
             when (event) {
                 is OnBoardingEvents.OnSignIn -> localCoroutineScope.launch {
                     // Ensure that the current account provider is set
                     accountProviderDataSource.setUrl(event.defaultAccountProvider)
-                    loginHelper.submit(
+                    authenticationHelper.submit(
                         isAccountCreation = false,
                         homeserverUrl = event.defaultAccountProvider,
                         loginHint = params.loginHint?.takeIf { forcedAccountProvider == null },
                     )
                 }
-                OnBoardingEvents.ClearError -> loginHelper.clearError()
+                OnBoardingEvents.ClearError -> authenticationHelper.clearError()
                 OnBoardingEvents.OnVersionClick -> {
                     if (canReportBug) {
                         if (multipleTapToUnlock.unlock(localCoroutineScope)) {
@@ -132,7 +132,7 @@ class OnBoardingPresenter(
             canLoginWithQrCode = canLoginWithQrCode,
             canCreateAccount = defaultAccountProvider == null && canConnectToAnyHomeserver && OnBoardingConfig.CAN_CREATE_ACCOUNT,
             canReportBug = canReportBug && showReportBug,
-            loginMode = loginMode,
+            authenticationMode = loginMode,
             version = buildMeta.versionName,
             onBoardingLogoResId = onBoardingLogoResId,
             eventSink = ::handleEvent,

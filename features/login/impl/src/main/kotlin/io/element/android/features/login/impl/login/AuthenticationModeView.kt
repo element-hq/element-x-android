@@ -28,8 +28,8 @@ import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
-fun LoginModeView(
-    loginMode: AsyncData<LoginMode>,
+fun AuthenticationModeView(
+    authenticationMode: AsyncData<AuthenticationMode>,
     onClearError: () -> Unit,
     onLearnMoreClick: () -> Unit,
     onOidcDetails: (OidcDetails) -> Unit,
@@ -37,9 +37,9 @@ fun LoginModeView(
     onCreateAccountContinue: (url: String) -> Unit
 ) {
     val context = LocalContext.current
-    when (loginMode) {
+    when (authenticationMode) {
         is AsyncData.Failure -> {
-            when (val error = loginMode.error) {
+            when (val error = authenticationMode.error) {
                 is ChangeServerError -> {
                     when (error) {
                         ChangeServerError.InvalidServer ->
@@ -117,10 +117,10 @@ fun LoginModeView(
         }
         is AsyncData.Loading -> Unit // The Continue button shows the loading state
         is AsyncData.Success -> {
-            when (val loginModeData = loginMode.data) {
-                is LoginMode.Oidc -> onOidcDetails(loginModeData.oidcDetails)
-                LoginMode.PasswordLogin -> onNeedLoginPassword()
-                is LoginMode.AccountCreation -> onCreateAccountContinue(loginModeData.url)
+            when (val loginModeData = authenticationMode.data) {
+                is AuthenticationMode.Oidc -> onOidcDetails(loginModeData.oidcDetails)
+                AuthenticationMode.PasswordLogin -> onNeedLoginPassword()
+                is AuthenticationMode.AccountCreation -> onCreateAccountContinue(loginModeData.url)
             }
             // Also clear the data, to let the next screen be able to go back
             onClearError()
@@ -131,10 +131,10 @@ fun LoginModeView(
 
 @PreviewsDayNight
 @Composable
-internal fun LoginModeViewPreview(@PreviewParameter(LoginModeViewErrorProvider::class) error: Throwable) {
+internal fun AuthenticationModeViewPreview(@PreviewParameter(LoginModeViewErrorProvider::class) error: Throwable) {
     ElementPreview {
-        LoginModeView(
-            loginMode = AsyncData.Failure(error),
+        AuthenticationModeView(
+            authenticationMode = AsyncData.Failure(error),
             onClearError = {},
             onLearnMoreClick = {},
             onOidcDetails = {},

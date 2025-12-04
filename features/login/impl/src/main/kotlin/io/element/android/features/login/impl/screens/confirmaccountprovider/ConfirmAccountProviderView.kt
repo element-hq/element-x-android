@@ -20,7 +20,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.login.impl.R
-import io.element.android.features.login.impl.login.LoginModeView
+import io.element.android.features.login.impl.login.AuthenticationModeView
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
@@ -45,9 +45,9 @@ fun ConfirmAccountProviderView(
     onChange: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val isLoading by remember(state.loginMode) {
+    val isLoading by remember(state.authenticationMode) {
         derivedStateOf {
-            state.loginMode is AsyncData.Loading
+            state.authenticationMode is AsyncData.Loading
         }
     }
     val eventSink = state.eventSink
@@ -97,8 +97,8 @@ fun ConfirmAccountProviderView(
             }
         }
     ) {
-        LoginModeView(
-            loginMode = state.loginMode,
+        AuthenticationModeView(
+            authenticationMode = state.authenticationMode,
             onClearError = {
                 eventSink(ConfirmAccountProviderEvents.ClearError)
             },

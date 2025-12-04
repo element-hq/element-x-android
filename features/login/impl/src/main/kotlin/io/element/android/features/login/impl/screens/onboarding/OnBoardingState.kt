@@ -9,7 +9,7 @@
 package io.element.android.features.login.impl.screens.onboarding
 
 import androidx.annotation.DrawableRes
-import io.element.android.features.login.impl.login.LoginMode
+import io.element.android.features.login.impl.login.AuthenticationMode
 import io.element.android.libraries.architecture.AsyncData
 
 data class OnBoardingState(
@@ -23,9 +23,9 @@ data class OnBoardingState(
     val version: String,
     @DrawableRes
     val onBoardingLogoResId: Int?,
-    val loginMode: AsyncData<LoginMode>,
+    val authenticationMode: AsyncData<AuthenticationMode>,
     val eventSink: (OnBoardingEvents) -> Unit,
 ) {
     val submitEnabled: Boolean
-        get() = defaultAccountProvider != null && (loginMode is AsyncData.Uninitialized || loginMode is AsyncData.Loading)
+        get() = defaultAccountProvider != null && (authenticationMode is AsyncData.Uninitialized || authenticationMode is AsyncData.Loading)
 }

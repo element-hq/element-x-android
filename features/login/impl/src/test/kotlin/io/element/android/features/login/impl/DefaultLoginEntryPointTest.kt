@@ -43,11 +43,13 @@ class DefaultLoginEntryPointTest {
                 accountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
                 oidcActionFlow = FakeOidcActionFlow(),
                 appCoroutineScope = backgroundScope,
-                authGraphFactory = { object : AuthGraph {
+                authGraphFactory = {
+                    object : AuthGraph {
                     override fun nodeFactories(): Map<KClass<out Node>, AssistedNodeFactory<*>> {
                         return emptyMap()
                     }
-                } }
+                }
+                }
             )
         }
         val callback = object : LoginEntryPoint.Callback {

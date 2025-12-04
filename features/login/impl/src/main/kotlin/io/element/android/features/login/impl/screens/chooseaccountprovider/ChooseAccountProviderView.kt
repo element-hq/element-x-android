@@ -33,7 +33,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.accountprovider.AccountProviderView
-import io.element.android.features.login.impl.login.LoginModeView
+import io.element.android.features.login.impl.login.AuthenticationModeView
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.BigIcon
@@ -56,9 +56,9 @@ fun ChooseAccountProviderView(
     onCreateAccountContinue: (url: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val isLoading by remember(state.loginMode) {
+    val isLoading by remember(state.authenticationMode) {
         derivedStateOf {
-            state.loginMode is AsyncData.Loading
+            state.authenticationMode is AsyncData.Loading
         }
     }
 
@@ -123,8 +123,8 @@ fun ChooseAccountProviderView(
                 )
                 Spacer(modifier = Modifier.height(48.dp))
             }
-            LoginModeView(
-                loginMode = state.loginMode,
+            AuthenticationModeView(
+                authenticationMode = state.authenticationMode,
                 onClearError = {
                     state.eventSink(ChooseAccountProviderEvents.ClearError)
                 },

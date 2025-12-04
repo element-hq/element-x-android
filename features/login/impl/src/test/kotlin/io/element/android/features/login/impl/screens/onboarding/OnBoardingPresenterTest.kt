@@ -15,7 +15,7 @@ import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
-import io.element.android.features.login.impl.login.LoginHelper
+import io.element.android.features.login.impl.login.AuthenticationHelper
 import io.element.android.features.login.impl.web.FakeWebClientUrlForAuthenticationRetriever
 import io.element.android.features.login.impl.web.WebClientUrlForAuthenticationRetriever
 import io.element.android.features.wellknown.test.FakeWellknownRetriever
@@ -233,7 +233,7 @@ class OnBoardingPresenterTest {
             enterpriseService = FakeEnterpriseService(
                 isAllowedToConnectToHomeserverResult = { true },
             ),
-            loginHelper = createLoginHelper(
+            authenticationHelper = createLoginHelper(
                 authenticationService = authenticationService,
             ),
             accountProviderDataSource = accountProviderDataSource,
@@ -249,12 +249,12 @@ class OnBoardingPresenterTest {
                 assertThat(accountProviderDataSource.flow.first().url).isEqualTo(A_HOMESERVER_URL_2)
                 // Check an error was returned
                 val submittedState = awaitItem()
-                assertThat(submittedState.loginMode).isInstanceOf(AsyncData.Failure::class.java)
+                assertThat(submittedState.authenticationMode).isInstanceOf(AsyncData.Failure::class.java)
 
                 // Assert the error is then cleared
                 submittedState.eventSink(OnBoardingEvents.ClearError)
                 val clearedState = awaitItem()
-                assertThat(clearedState.loginMode).isEqualTo(AsyncData.Uninitialized)
+                assertThat(clearedState.authenticationMode).isEqualTo(AsyncData.Uninitialized)
             }
         }
     }
@@ -266,7 +266,7 @@ private fun createPresenter(
     enterpriseService: EnterpriseService = FakeEnterpriseService(),
     wellknownRetriever: WellknownRetriever = FakeWellknownRetriever(),
     rageshakeFeatureAvailability: () -> Flow<Boolean> = { flowOf(true) },
-    loginHelper: LoginHelper = createLoginHelper(),
+    authenticationHelper: AuthenticationHelper = createLoginHelper(),
     onBoardingLogoResIdProvider: OnBoardingLogoResIdProvider = OnBoardingLogoResIdProvider { null },
     sessionStore: SessionStore = InMemorySessionStore(),
     accountProviderDataSource: AccountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
@@ -279,7 +279,7 @@ private fun createPresenter(
         wellknownRetriever = wellknownRetriever,
     ),
     rageshakeFeatureAvailability = rageshakeFeatureAvailability,
-    loginHelper = loginHelper,
+    authenticationHelper = authenticationHelper,
     onBoardingLogoResIdProvider = onBoardingLogoResIdProvider,
     sessionStore = sessionStore,
     accountProviderDataSource = accountProviderDataSource,
@@ -289,7 +289,7 @@ fun createLoginHelper(
     oidcActionFlow: OidcActionFlow = FakeOidcActionFlow(),
     authenticationService: MatrixAuthenticationService = FakeMatrixAuthenticationService(),
     webClientUrlForAuthenticationRetriever: WebClientUrlForAuthenticationRetriever = FakeWebClientUrlForAuthenticationRetriever(),
-): LoginHelper = LoginHelper(
+): AuthenticationHelper = AuthenticationHelper(
     oidcActionFlow = oidcActionFlow,
     authenticationService = authenticationService,
     webClientUrlForAuthenticationRetriever = webClientUrlForAuthenticationRetriever,

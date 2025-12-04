@@ -11,7 +11,7 @@ package io.element.android.features.login.impl.screens.chooseaccountprovider
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.accountprovider.anAccountProvider
-import io.element.android.features.login.impl.login.LoginMode
+import io.element.android.features.login.impl.login.AuthenticationMode
 import io.element.android.libraries.architecture.AsyncData
 import kotlinx.collections.immutable.toImmutableList
 
@@ -58,7 +58,7 @@ open class ChooseAccountProviderStateProvider : PreviewParameterProvider<ChooseA
                     server3,
                 ),
                 selectedAccountProvider = server2,
-                loginMode = AsyncData.Loading(),
+                authenticationMode = AsyncData.Loading(),
             ),
             // Add other state here
         )
@@ -69,11 +69,11 @@ fun aChooseAccountProviderState(
         anAccountProvider()
     ),
     selectedAccountProvider: AccountProvider? = null,
-    loginMode: AsyncData<LoginMode> = AsyncData.Uninitialized,
+    authenticationMode: AsyncData<AuthenticationMode> = AsyncData.Uninitialized,
     eventSink: (ChooseAccountProviderEvents) -> Unit = {},
 ) = ChooseAccountProviderState(
     accountProviders = accountProviders.toImmutableList(),
     selectedAccountProvider = selectedAccountProvider,
-    loginMode = loginMode,
+    authenticationMode = authenticationMode,
     eventSink = eventSink,
 )

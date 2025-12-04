@@ -30,25 +30,25 @@ import io.element.android.libraries.oidc.api.OidcAction
 import io.element.android.libraries.oidc.api.OidcActionFlow
 
 /**
- * This class is responsible for managing the login flow, including handling OIDC actions and
+ * This class is responsible for managing the login and account creation flows, including handling OIDC actions and
  * submitting login requests.
  * It's a helper to avoid code duplication. It is used by [OnBoardingPresenter], [ConfirmAccountProviderPresenter]
  * and [ChooseAccountProviderPresenter].
  */
 @SingleIn(AuthScope::class)
 @Inject
-class LoginHelper(
+class AuthenticationHelper(
     private val oidcActionFlow: OidcActionFlow,
     private val authenticationService: MatrixAuthenticationService,
     private val webClientUrlForAuthenticationRetriever: WebClientUrlForAuthenticationRetriever,
 ) {
-    private val loginModeState: MutableState<AsyncData<LoginMode>> = mutableStateOf(AsyncData.Uninitialized)
+    private val authenticationModeState: MutableState<AsyncData<AuthenticationMode>> = mutableStateOf(AsyncData.Uninitialized)
 
     // To remember if the current flow is account creation or login
     private var isAccountCreation: Boolean = false
 
     @Composable
-    fun collectLoginMode(): State<AsyncData<LoginMode>> {
+    fun collectAuthenticationMode(): State<AsyncData<AuthenticationMode>> {
         LaunchedEffect(Unit) {
             oidcActionFlow.collect { oidcAction ->
                 if (oidcAction != null) {
@@ -56,11 +56,11 @@ class LoginHelper(
                 }
             }
         }
-        return loginModeState
+        return authenticationModeState
     }
 
     fun clearError() {
-        loginModeState.value = AsyncData.Uninitialized
+        authenticationModeState.value = AsyncData.Uninitialized
     }
 
     suspend fun submit(
@@ -70,27 +70,27 @@ class LoginHelper(
     ) {
         this.isAccountCreation = isAccountCreation
 
-        loginModeState.value = AsyncData.Loading()
+        authenticationModeState.value = AsyncData.Loading()
         suspend {
             authenticationService.setHomeserver(homeserverUrl).map { matrixHomeServerDetails ->
                 if (matrixHomeServerDetails.supportsOidcLogin) {
                     // Retrieve the details right now
                     val oidcPrompt = if (isAccountCreation) OidcPrompt.Create else OidcPrompt.Login
-                    LoginMode.Oidc(
+                    AuthenticationMode.Oidc(
                         authenticationService.getOidcUrl(prompt = oidcPrompt, loginHint = loginHint).getOrThrow(),
                         isAccountCreation,
                     )
                 } else if (isAccountCreation) {
                     val url = webClientUrlForAuthenticationRetriever.retrieve(homeserverUrl)
-                    LoginMode.AccountCreation(url)
+                    AuthenticationMode.AccountCreation(url)
                 } else if (matrixHomeServerDetails.supportsPasswordLogin) {
-                    LoginMode.PasswordLogin
+                    AuthenticationMode.PasswordLogin
                 } else {
                     error("Unsupported login flow")
                 }
             }.getOrThrow()
         }.runCatchingUpdatingState(
-            loginModeState,
+            authenticationModeState,
             errorTransform = { exception ->
                 when (exception) {
                     is AccountCreationNotSupported -> exception
@@ -101,26 +101,26 @@ class LoginHelper(
     }
 
     private suspend fun onOidcAction(oidcAction: OidcAction) {
-        if (oidcAction is OidcAction.GoBack && oidcAction.toUnblock && loginModeState.value !is AsyncData.Loading) {
+        if (oidcAction is OidcAction.GoBack && oidcAction.toUnblock && authenticationModeState.value !is AsyncData.Loading) {
             // Ignore GoBack action if the current state is not Loading. This GoBack action is coming from LoginFlowNode.
             // This can happen if there is an error, for instance attempt to login again on the same account.
             return
         }
-        loginModeState.value = AsyncData.Loading()
+        authenticationModeState.value = AsyncData.Loading()
         when (oidcAction) {
             is OidcAction.GoBack -> {
                 authenticationService.cancelOidcLogin()
                     .onSuccess {
-                        loginModeState.value = AsyncData.Uninitialized
+                        authenticationModeState.value = AsyncData.Uninitialized
                     }
                     .onFailure { failure ->
-                        loginModeState.value = AsyncData.Failure(failure)
+                        authenticationModeState.value = AsyncData.Failure(failure)
                     }
             }
             is OidcAction.Success -> {
                 authenticationService.loginWithOidc(callbackUrl = oidcAction.url, isAccountCreation = this.isAccountCreation)
                     .onFailure { failure ->
-                        loginModeState.value = AsyncData.Failure(failure)
+                        authenticationModeState.value = AsyncData.Failure(failure)
                     }
             }
         }

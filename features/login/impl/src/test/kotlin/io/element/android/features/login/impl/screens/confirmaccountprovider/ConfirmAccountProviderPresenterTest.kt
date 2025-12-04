@@ -12,7 +12,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
-import io.element.android.features.login.impl.login.LoginMode
+import io.element.android.features.login.impl.login.AuthenticationMode
 import io.element.android.features.login.impl.screens.createaccount.AccountCreationNotSupported
 import io.element.android.features.login.impl.screens.onboarding.createLoginHelper
 import io.element.android.features.login.impl.web.FakeWebClientUrlForAuthenticationRetriever
@@ -43,7 +43,7 @@ class ConfirmAccountProviderPresenterTest {
             assertThat(initialState.isAccountCreation).isFalse()
             assertThat(initialState.submitEnabled).isTrue()
             assertThat(initialState.accountProvider.url).isEqualTo(AuthenticationConfig.MATRIX_ORG_URL)
-            assertThat(initialState.loginMode).isEqualTo(AsyncData.Uninitialized)
+            assertThat(initialState.authenticationMode).isEqualTo(AsyncData.Uninitialized)
         }
     }
 
@@ -62,11 +62,11 @@ class ConfirmAccountProviderPresenterTest {
             initialState.eventSink.invoke(ConfirmAccountProviderEvents.Continue)
             val loadingState = awaitItem()
             assertThat(loadingState.submitEnabled).isTrue()
-            assertThat(loadingState.loginMode).isInstanceOf(AsyncData.Loading::class.java)
+            assertThat(loadingState.authenticationMode).isInstanceOf(AsyncData.Loading::class.java)
             val successState = awaitItem()
             assertThat(successState.submitEnabled).isFalse()
-            assertThat(successState.loginMode).isInstanceOf(AsyncData.Success::class.java)
-            assertThat(successState.loginMode.dataOrNull()).isEqualTo(LoginMode.PasswordLogin)
+            assertThat(successState.authenticationMode).isInstanceOf(AsyncData.Success::class.java)
+            assertThat(successState.authenticationMode.dataOrNull()).isEqualTo(AuthenticationMode.PasswordLogin)
         }
     }
 
@@ -85,11 +85,11 @@ class ConfirmAccountProviderPresenterTest {
             initialState.eventSink.invoke(ConfirmAccountProviderEvents.Continue)
             val loadingState = awaitItem()
             assertThat(loadingState.submitEnabled).isTrue()
-            assertThat(loadingState.loginMode).isInstanceOf(AsyncData.Loading::class.java)
+            assertThat(loadingState.authenticationMode).isInstanceOf(AsyncData.Loading::class.java)
             val successState = awaitItem()
             assertThat(successState.submitEnabled).isFalse()
-            assertThat(successState.loginMode).isInstanceOf(AsyncData.Success::class.java)
-            assertThat(successState.loginMode.dataOrNull()).isInstanceOf(LoginMode.Oidc::class.java)
+            assertThat(successState.authenticationMode).isInstanceOf(AsyncData.Success::class.java)
+            assertThat(successState.authenticationMode.dataOrNull()).isInstanceOf(AuthenticationMode.Oidc::class.java)
         }
     }
 
@@ -110,15 +110,15 @@ class ConfirmAccountProviderPresenterTest {
             initialState.eventSink.invoke(ConfirmAccountProviderEvents.Continue)
             val loadingState = awaitItem()
             assertThat(loadingState.submitEnabled).isTrue()
-            assertThat(loadingState.loginMode).isInstanceOf(AsyncData.Loading::class.java)
+            assertThat(loadingState.authenticationMode).isInstanceOf(AsyncData.Loading::class.java)
             val successState = awaitItem()
             assertThat(successState.submitEnabled).isFalse()
-            assertThat(successState.loginMode).isInstanceOf(AsyncData.Success::class.java)
-            assertThat(successState.loginMode.dataOrNull()).isInstanceOf(LoginMode.Oidc::class.java)
+            assertThat(successState.authenticationMode).isInstanceOf(AsyncData.Success::class.java)
+            assertThat(successState.authenticationMode.dataOrNull()).isInstanceOf(AuthenticationMode.Oidc::class.java)
             authenticationService.givenOidcCancelError(AN_EXCEPTION)
             defaultOidcActionFlow.post(OidcAction.GoBack())
             val cancelFailureState = awaitItem()
-            assertThat(cancelFailureState.loginMode).isInstanceOf(AsyncData.Failure::class.java)
+            assertThat(cancelFailureState.authenticationMode).isInstanceOf(AsyncData.Failure::class.java)
         }
     }
 
@@ -139,14 +139,14 @@ class ConfirmAccountProviderPresenterTest {
             initialState.eventSink.invoke(ConfirmAccountProviderEvents.Continue)
             val loadingState = awaitItem()
             assertThat(loadingState.submitEnabled).isTrue()
-            assertThat(loadingState.loginMode).isInstanceOf(AsyncData.Loading::class.java)
+            assertThat(loadingState.authenticationMode).isInstanceOf(AsyncData.Loading::class.java)
             val successState = awaitItem()
             assertThat(successState.submitEnabled).isFalse()
-            assertThat(successState.loginMode).isInstanceOf(AsyncData.Success::class.java)
-            assertThat(successState.loginMode.dataOrNull()).isInstanceOf(LoginMode.Oidc::class.java)
+            assertThat(successState.authenticationMode).isInstanceOf(AsyncData.Success::class.java)
+            assertThat(successState.authenticationMode.dataOrNull()).isInstanceOf(AuthenticationMode.Oidc::class.java)
             defaultOidcActionFlow.post(OidcAction.GoBack())
             val cancelFinalState = awaitItem()
-            assertThat(cancelFinalState.loginMode).isInstanceOf(AsyncData.Uninitialized::class.java)
+            assertThat(cancelFinalState.authenticationMode).isInstanceOf(AsyncData.Uninitialized::class.java)
         }
     }
 
@@ -167,10 +167,10 @@ class ConfirmAccountProviderPresenterTest {
             initialState.eventSink.invoke(ConfirmAccountProviderEvents.Continue)
             val loadingState = awaitItem()
             assertThat(loadingState.submitEnabled).isTrue()
-            assertThat(loadingState.loginMode).isInstanceOf(AsyncData.Loading::class.java)
+            assertThat(loadingState.authenticationMode).isInstanceOf(AsyncData.Loading::class.java)
             defaultOidcActionFlow.post(OidcAction.GoBack(toUnblock = true))
             val cancelFinalState = awaitItem()
-            assertThat(cancelFinalState.loginMode).isInstanceOf(AsyncData.Uninitialized::class.java)
+            assertThat(cancelFinalState.authenticationMode).isInstanceOf(AsyncData.Uninitialized::class.java)
         }
     }
 
@@ -191,17 +191,17 @@ class ConfirmAccountProviderPresenterTest {
             initialState.eventSink.invoke(ConfirmAccountProviderEvents.Continue)
             val loadingState = awaitItem()
             assertThat(loadingState.submitEnabled).isTrue()
-            assertThat(loadingState.loginMode).isInstanceOf(AsyncData.Loading::class.java)
+            assertThat(loadingState.authenticationMode).isInstanceOf(AsyncData.Loading::class.java)
             val successState = awaitItem()
             assertThat(successState.submitEnabled).isFalse()
-            assertThat(successState.loginMode).isInstanceOf(AsyncData.Success::class.java)
-            assertThat(successState.loginMode.dataOrNull()).isInstanceOf(LoginMode.Oidc::class.java)
+            assertThat(successState.authenticationMode).isInstanceOf(AsyncData.Success::class.java)
+            assertThat(successState.authenticationMode.dataOrNull()).isInstanceOf(AuthenticationMode.Oidc::class.java)
             authenticationService.givenLoginError(AN_EXCEPTION)
             defaultOidcActionFlow.post(OidcAction.Success("aUrl"))
             val cancelLoadingState = awaitItem()
-            assertThat(cancelLoadingState.loginMode).isInstanceOf(AsyncData.Loading::class.java)
+            assertThat(cancelLoadingState.authenticationMode).isInstanceOf(AsyncData.Loading::class.java)
             val cancelFailureState = awaitItem()
-            assertThat(cancelFailureState.loginMode).isInstanceOf(AsyncData.Failure::class.java)
+            assertThat(cancelFailureState.authenticationMode).isInstanceOf(AsyncData.Failure::class.java)
         }
     }
 
@@ -222,14 +222,14 @@ class ConfirmAccountProviderPresenterTest {
             initialState.eventSink.invoke(ConfirmAccountProviderEvents.Continue)
             val loadingState = awaitItem()
             assertThat(loadingState.submitEnabled).isTrue()
-            assertThat(loadingState.loginMode).isInstanceOf(AsyncData.Loading::class.java)
+            assertThat(loadingState.authenticationMode).isInstanceOf(AsyncData.Loading::class.java)
             val successState = awaitItem()
             assertThat(successState.submitEnabled).isFalse()
-            assertThat(successState.loginMode).isInstanceOf(AsyncData.Success::class.java)
-            assertThat(successState.loginMode.dataOrNull()).isInstanceOf(LoginMode.Oidc::class.java)
+            assertThat(successState.authenticationMode).isInstanceOf(AsyncData.Success::class.java)
+            assertThat(successState.authenticationMode.dataOrNull()).isInstanceOf(AuthenticationMode.Oidc::class.java)
             defaultOidcActionFlow.post(OidcAction.Success("aUrl"))
             val successSuccessState = awaitItem()
-            assertThat(successSuccessState.loginMode).isInstanceOf(AsyncData.Loading::class.java)
+            assertThat(successSuccessState.authenticationMode).isInstanceOf(AsyncData.Loading::class.java)
         }
     }
 
@@ -249,7 +249,7 @@ class ConfirmAccountProviderPresenterTest {
             skipItems(1) // Loading
             val failureState = awaitItem()
             assertThat(failureState.submitEnabled).isFalse()
-            assertThat(failureState.loginMode).isInstanceOf(AsyncData.Failure::class.java)
+            assertThat(failureState.authenticationMode).isInstanceOf(AsyncData.Failure::class.java)
         }
     }
 
@@ -273,12 +273,12 @@ class ConfirmAccountProviderPresenterTest {
 
             // Check an error was returned
             val submittedState = awaitItem()
-            assertThat(submittedState.loginMode).isInstanceOf(AsyncData.Failure::class.java)
+            assertThat(submittedState.authenticationMode).isInstanceOf(AsyncData.Failure::class.java)
 
             // Assert the error is then cleared
             submittedState.eventSink(ConfirmAccountProviderEvents.ClearError)
             val clearedState = awaitItem()
-            assertThat(clearedState.loginMode).isEqualTo(AsyncData.Uninitialized)
+            assertThat(clearedState.authenticationMode).isEqualTo(AsyncData.Uninitialized)
         }
     }
 
@@ -302,11 +302,11 @@ class ConfirmAccountProviderPresenterTest {
             skipItems(1) // Loading
             // Check an error was returned
             val submittedState = awaitItem()
-            assertThat(submittedState.loginMode.errorOrNull()).isInstanceOf(AccountCreationNotSupported::class.java)
+            assertThat(submittedState.authenticationMode.errorOrNull()).isInstanceOf(AccountCreationNotSupported::class.java)
             // Assert the error is then cleared
             submittedState.eventSink(ConfirmAccountProviderEvents.ClearError)
             val clearedState = awaitItem()
-            assertThat(clearedState.loginMode).isEqualTo(AsyncData.Uninitialized)
+            assertThat(clearedState.authenticationMode).isEqualTo(AsyncData.Uninitialized)
         }
     }
 
@@ -326,8 +326,8 @@ class ConfirmAccountProviderPresenterTest {
             initialState.eventSink(ConfirmAccountProviderEvents.Continue)
             skipItems(1) // Loading
             val submittedState = awaitItem()
-            assertThat(submittedState.loginMode).isInstanceOf(AsyncData.Success::class.java)
-            assertThat(submittedState.loginMode.dataOrNull()).isInstanceOf(LoginMode.Oidc::class.java)
+            assertThat(submittedState.authenticationMode).isInstanceOf(AsyncData.Success::class.java)
+            assertThat(submittedState.authenticationMode.dataOrNull()).isInstanceOf(AuthenticationMode.Oidc::class.java)
         }
     }
 
@@ -349,8 +349,8 @@ class ConfirmAccountProviderPresenterTest {
             initialState.eventSink(ConfirmAccountProviderEvents.Continue)
             skipItems(1) // Loading
             val submittedState = awaitItem()
-            assertThat(submittedState.loginMode).isInstanceOf(AsyncData.Success::class.java)
-            assertThat(submittedState.loginMode.dataOrNull()).isInstanceOf(LoginMode.Oidc::class.java)
+            assertThat(submittedState.authenticationMode).isInstanceOf(AsyncData.Success::class.java)
+            assertThat(submittedState.authenticationMode.dataOrNull()).isInstanceOf(AuthenticationMode.Oidc::class.java)
         }
     }
 
@@ -372,7 +372,7 @@ class ConfirmAccountProviderPresenterTest {
             initialState.eventSink(ConfirmAccountProviderEvents.Continue)
             skipItems(1) // Loading
             val submittedState = awaitItem()
-            assertThat(submittedState.loginMode.dataOrNull()).isEqualTo(LoginMode.AccountCreation(aUrl))
+            assertThat(submittedState.authenticationMode.dataOrNull()).isEqualTo(AuthenticationMode.AccountCreation(aUrl))
         }
     }
 
@@ -385,7 +385,7 @@ class ConfirmAccountProviderPresenterTest {
     ) = ConfirmAccountProviderPresenter(
         params = params,
         accountProviderDataSource = accountProviderDataSource,
-        loginHelper = createLoginHelper(
+        authenticationHelper = createLoginHelper(
             authenticationService = matrixAuthenticationService,
             oidcActionFlow = defaultOidcActionFlow,
             webClientUrlForAuthenticationRetriever = webClientUrlForAuthenticationRetriever,

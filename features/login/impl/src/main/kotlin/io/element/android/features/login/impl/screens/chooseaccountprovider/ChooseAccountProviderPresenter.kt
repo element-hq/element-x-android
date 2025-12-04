@@ -19,7 +19,7 @@ import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.login.impl.accountprovider.AccountProvider
 import io.element.android.features.login.impl.di.AuthScope
-import io.element.android.features.login.impl.login.LoginHelper
+import io.element.android.features.login.impl.login.AuthenticationHelper
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.uri.ensureProtocol
@@ -29,12 +29,12 @@ import kotlinx.coroutines.launch
 @ContributesBinding(AuthScope::class)
 class ChooseAccountProviderPresenter(
     private val enterpriseService: EnterpriseService,
-    private val loginHelper: LoginHelper,
+    private val authenticationHelper: AuthenticationHelper,
 ) : Presenter<ChooseAccountProviderState> {
     @Composable
     override fun present(): ChooseAccountProviderState {
         val localCoroutineScope = rememberCoroutineScope()
-        val loginMode by loginHelper.collectLoginMode()
+        val loginMode by authenticationHelper.collectAuthenticationMode()
 
         var selectedAccountProvider: AccountProvider? by remember { mutableStateOf(null) }
 
@@ -42,7 +42,7 @@ class ChooseAccountProviderPresenter(
             when (event) {
                 ChooseAccountProviderEvents.Continue -> localCoroutineScope.launch {
                     selectedAccountProvider?.let {
-                        loginHelper.submit(
+                        authenticationHelper.submit(
                             isAccountCreation = false,
                             homeserverUrl = it.url,
                             loginHint = null,
@@ -55,7 +55,7 @@ class ChooseAccountProviderPresenter(
                         selectedAccountProvider = event.accountProvider
                     }
                 }
-                ChooseAccountProviderEvents.ClearError -> loginHelper.clearError()
+                ChooseAccountProviderEvents.ClearError -> authenticationHelper.clearError()
             }
         }
 
@@ -77,7 +77,7 @@ class ChooseAccountProviderPresenter(
         return ChooseAccountProviderState(
             accountProviders = staticAccountProviderList,
             selectedAccountProvider = selectedAccountProvider,
-            loginMode = loginMode,
+            authenticationMode = loginMode,
             eventSink = ::handleEvent,
         )
     }

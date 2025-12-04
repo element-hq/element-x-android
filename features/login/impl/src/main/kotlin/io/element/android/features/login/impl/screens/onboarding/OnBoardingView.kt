@@ -34,7 +34,7 @@ import androidx.compose.ui.unit.sp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.login.impl.R
-import io.element.android.features.login.impl.login.LoginModeView
+import io.element.android.features.login.impl.login.AuthenticationModeView
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.atoms.ElementLogoAtom
 import io.element.android.libraries.designsystem.atomic.atoms.ElementLogoAtomSize
@@ -73,8 +73,8 @@ fun OnBoardingView(
     modifier: Modifier = Modifier,
 ) {
     val loginView = @Composable {
-        LoginModeView(
-            loginMode = state.loginMode,
+        AuthenticationModeView(
+            authenticationMode = state.authenticationMode,
             onClearError = {
                 state.eventSink(OnBoardingEvents.ClearError)
             },
@@ -227,9 +227,9 @@ private fun OnBoardingButtons(
     onCreateAccount: () -> Unit,
     onReportProblem: () -> Unit,
 ) {
-    val isLoading by remember(state.loginMode) {
+    val isLoading by remember(state.authenticationMode) {
         derivedStateOf {
-            state.loginMode is AsyncData.Loading
+            state.authenticationMode is AsyncData.Loading
         }
     }
 

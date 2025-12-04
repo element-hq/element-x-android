@@ -15,7 +15,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.login.impl.R
-import io.element.android.features.login.impl.login.LoginMode
+import io.element.android.features.login.impl.login.AuthenticationMode
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
@@ -165,7 +165,7 @@ class OnboardingViewTest {
         rule.setOnboardingView(
             state = anOnBoardingState(
                 defaultAccountProvider = "element.io",
-                loginMode = AsyncData.Failure(AN_EXCEPTION),
+                authenticationMode = AsyncData.Failure(AN_EXCEPTION),
                 eventSink = eventSink,
             ),
         )
@@ -209,7 +209,7 @@ class OnboardingViewTest {
         ensureCalledOnce { callback ->
             rule.setOnboardingView(
                 state = anOnBoardingState(
-                    loginMode = AsyncData.Success(LoginMode.PasswordLogin),
+                    authenticationMode = AsyncData.Success(AuthenticationMode.PasswordLogin),
                     eventSink = eventSink,
                 ),
                 onNeedLoginPassword = callback,
@@ -225,7 +225,7 @@ class OnboardingViewTest {
         ensureCalledOnceWithParam(oidcDetails) { callback ->
             rule.setOnboardingView(
                 state = anOnBoardingState(
-                    loginMode = AsyncData.Success(LoginMode.Oidc(oidcDetails = oidcDetails, isAccountCreation = false)),
+                    authenticationMode = AsyncData.Success(AuthenticationMode.Oidc(oidcDetails = oidcDetails, isAccountCreation = false)),
                     eventSink = eventSink,
                 ),
                 onOidcDetails = callback,
@@ -241,7 +241,7 @@ class OnboardingViewTest {
         ensureCalledOnceWithParam(oidcDetails.url) { callback ->
             rule.setOnboardingView(
                 state = anOnBoardingState(
-                    loginMode = AsyncData.Success(LoginMode.AccountCreation("aUrl")),
+                    authenticationMode = AsyncData.Success(AuthenticationMode.AccountCreation("aUrl")),
                     eventSink = eventSink,
                 ),
                 onCreateAccountContinue = callback,
