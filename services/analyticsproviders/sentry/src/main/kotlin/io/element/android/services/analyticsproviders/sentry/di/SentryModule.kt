@@ -18,6 +18,5 @@ import io.element.android.services.analyticsproviders.sentry.SentryConfig
 @ContributesTo(AppScope::class)
 object SentryModule {
     @Provides
-    @SentrySdkDsn
-    fun provideSentrySdkDsn(): String? = SentryConfig.SDK_DSN
+    fun provideSentrySdkDsn(): SentrySdkDsn? = SentrySdkDsn(SentryConfig.SDK_DSN)
 }

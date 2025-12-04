@@ -7,21 +7,5 @@
 
 package io.element.android.libraries.di.annotations
 
-import dev.zacsweers.metro.Qualifier
-
-/**
- * Qualifies the Sentry SDK DSN in the DI graph.
- */
-@Retention(AnnotationRetention.RUNTIME)
-@MustBeDocumented
-@Qualifier
-@Target(
-    AnnotationTarget.CLASS,
-    AnnotationTarget.FIELD,
-    AnnotationTarget.FUNCTION,
-    AnnotationTarget.PROPERTY,
-    AnnotationTarget.PROPERTY_GETTER,
-    AnnotationTarget.VALUE_PARAMETER,
-    AnnotationTarget.TYPE,
-)
-annotation class SentrySdkDsn
+@JvmInline
+value class SentrySdkDsn(val value: String)

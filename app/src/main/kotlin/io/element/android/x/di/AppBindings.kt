@@ -50,6 +50,5 @@ interface AppBindings {
 
     fun buildMeta(): BuildMeta
 
-    @SentrySdkDsn
-    fun sentrySdkDsn(): String?
+    fun sentrySdkDsn(): SentrySdkDsn?
 }
