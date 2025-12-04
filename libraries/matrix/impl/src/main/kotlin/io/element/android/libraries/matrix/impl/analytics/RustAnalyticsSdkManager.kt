@@ -9,12 +9,17 @@ package io.element.android.libraries.matrix.impl.analytics
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.services.analytics.api.AnalyticsSdkManager
 import io.element.android.services.analytics.api.AnalyticsSdkSpan
-import io.element.android.services.analytics.api.AnalyticsSdkSpanFactory
+import org.matrix.rustcomponents.sdk.enableSentryLogging
 
 @ContributesBinding(AppScope::class)
-class DefaultAnalyticsSdkFactory : AnalyticsSdkSpanFactory {
-    override fun create(name: String, parentTraceId: String?): AnalyticsSdkSpan {
+class RustAnalyticsSdkManager : AnalyticsSdkManager {
+    override fun enableSdkAnalytics(enabled: Boolean) {
+        enableSentryLogging(enabled)
+    }
+
+    override fun startSpan(name: String, parentTraceId: String?): AnalyticsSdkSpan {
         return RustAnalyticsSdkSpan(name = name, parentTraceId = parentTraceId)
     }
 

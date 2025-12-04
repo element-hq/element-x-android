@@ -20,8 +20,8 @@ import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.sessionstorage.api.observer.SessionListener
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
+import io.element.android.services.analytics.api.AnalyticsSdkManager
 import io.element.android.services.analytics.api.AnalyticsSdkSpan
-import io.element.android.services.analytics.api.AnalyticsSdkSpanFactory
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.api.NoopAnalyticsSdkSpan
 import io.element.android.services.analytics.api.NoopAnalyticsTransaction
@@ -42,11 +42,9 @@ import java.util.concurrent.atomic.AtomicBoolean
 class DefaultAnalyticsService(
     private val analyticsProviders: Set<@JvmSuppressWildcards AnalyticsProvider>,
     private val analyticsStore: AnalyticsStore,
-//    private val lateInitUserPropertiesFactory: LateInitUserPropertiesFactory,
-    @AppCoroutineScope
-    private val coroutineScope: CoroutineScope,
+    @AppCoroutineScope private val coroutineScope: CoroutineScope,
     private val sessionObserver: SessionObserver,
-    private val analyticsSdkSpanFactory: AnalyticsSdkSpanFactory,
+    private val analyticsSdkManager: AnalyticsSdkManager,
 ) : AnalyticsService, SessionListener {
     private val pendingLongRunningTransactions = ConcurrentHashMap<AnalyticsLongRunningTransaction, AnalyticsTransaction>()
 
@@ -72,6 +70,7 @@ class DefaultAnalyticsService(
     override suspend fun setUserConsent(userConsent: Boolean) {
         Timber.tag(analyticsTag.value).d("setUserConsent($userConsent)")
         analyticsStore.setUserConsent(userConsent)
+        analyticsSdkManager.enableSdkAnalytics(enabled = userConsent)
     }
 
     override suspend fun setDidAskUserConsent() {
@@ -88,6 +87,7 @@ class DefaultAnalyticsService(
         // Delete the store when the last session is deleted
         if (wasLastSession) {
             analyticsStore.reset()
+            analyticsSdkManager.enableSdkAnalytics(false)
         }
     }
 
@@ -179,9 +179,9 @@ class DefaultAnalyticsService(
     override fun enterSdkSpan(name: String?, parentTraceId: String?): AnalyticsSdkSpan {
         return if (userConsent.get()) {
              if (name != null) {
-                analyticsSdkSpanFactory.create(name, parentTraceId)
+                analyticsSdkManager.startSpan(name, parentTraceId)
             } else {
-                analyticsSdkSpanFactory.bridge(parentTraceId)
+                analyticsSdkManager.bridge(parentTraceId)
             }.apply { enter() }
         } else {
             NoopAnalyticsSdkSpan
