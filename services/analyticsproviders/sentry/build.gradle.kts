@@ -35,7 +35,7 @@ android {
         buildConfigFieldStr(
             name = "SDK_SENTRY_DSN",
             value = if (isEnterpriseBuild) {
-                BuildTimeConfig.SERVICES_SENTRY_SDK_DSN
+                BuildTimeConfig.SERVICES_SENTRY_DSN_RUST
             } else {
                 System.getenv("ELEMENT_SDK_SENTRY_DSN")
                     ?: readLocalProperty("services.analyticsproviders.sdk.sentry.dsn")
