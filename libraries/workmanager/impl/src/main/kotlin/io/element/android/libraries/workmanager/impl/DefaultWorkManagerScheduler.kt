@@ -11,6 +11,7 @@ package io.element.android.libraries.workmanager.impl
 import androidx.work.WorkManager
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.sessionstorage.api.observer.SessionListener
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
@@ -21,6 +22,7 @@ import io.element.android.libraries.workmanager.api.workManagerTag
 import timber.log.Timber
 
 @ContributesBinding(AppScope::class)
+@SingleIn(AppScope::class)
 class DefaultWorkManagerScheduler(
     lazyWorkManager: Lazy<WorkManager>,
     sessionObserver: SessionObserver,
