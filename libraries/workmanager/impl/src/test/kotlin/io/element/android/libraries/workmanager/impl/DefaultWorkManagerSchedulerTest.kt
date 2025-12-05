@@ -9,10 +9,8 @@ package io.element.android.libraries.workmanager.impl
 
 import androidx.work.WorkManager
 import androidx.work.WorkRequest
-import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
-import io.element.android.libraries.sessionstorage.test.aSessionData
+import io.element.android.libraries.sessionstorage.test.observer.FakeSessionObserver
 import io.element.android.libraries.workmanager.api.WorkManagerRequest
 import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.workManagerTag
@@ -30,40 +28,31 @@ class DefaultWorkManagerSchedulerTest {
     @Test
     fun `starts observing sessions on init to remove work for logged out sessions`() = runTest {
         val sessionId = "@session1:matrix.org"
-        val sessionStore = InMemorySessionStore(initialList = listOf(aSessionData(sessionId = sessionId)))
+        val sessionObserver = FakeSessionObserver()
 
         val workManager = spyk<WorkManager>()
 
         DefaultWorkManagerScheduler(
             lazyWorkManager = lazy { workManager },
-            appCoroutineScope = backgroundScope,
-            sessionStore = sessionStore,
+            sessionObserver = sessionObserver,
         )
 
-        // We have a single initial session
-        assertThat(sessionStore.numberOfSessions()).isEqualTo(1)
-
-        runCurrent()
-
         // We remove the session
-        sessionStore.removeSession(sessionId)
+        sessionObserver.onSessionDeleted(sessionId)
 
         runCurrent()
 
         // The session is now gone and work associated with the session is cancelled
-        assertThat(sessionStore.numberOfSessions()).isEqualTo(0)
         verify { workManager.cancelAllWorkByTag("notifications-$sessionId") }
     }
 
     @Test
     fun `submit builds the request and enqueues it`() = runTest {
-        val sessionStore = InMemorySessionStore()
         val workManager = spyk<WorkManager>()
 
         val scheduler = DefaultWorkManagerScheduler(
             lazyWorkManager = lazy { workManager },
-            appCoroutineScope = backgroundScope,
-            sessionStore = sessionStore,
+            sessionObserver = FakeSessionObserver(),
         )
 
         scheduler.submit(FakeWorkManagerRequest())
@@ -73,13 +62,11 @@ class DefaultWorkManagerSchedulerTest {
 
     @Test
     fun `submit won't do anything if building the work request fails`() = runTest {
-        val sessionStore = InMemorySessionStore()
         val workManager = spyk<WorkManager>()
 
         val scheduler = DefaultWorkManagerScheduler(
             lazyWorkManager = lazy { workManager },
-            appCoroutineScope = backgroundScope,
-            sessionStore = sessionStore,
+            sessionObserver = FakeSessionObserver(),
         )
 
         scheduler.submit(FakeWorkManagerRequest(result = Result.failure(IllegalStateException("Test error"))))
@@ -89,13 +76,11 @@ class DefaultWorkManagerSchedulerTest {
 
     @Test
     fun `cancel will cancel all pending work for a session id`() = runTest {
-        val sessionStore = InMemorySessionStore()
         val workManager = spyk<WorkManager>()
 
         val scheduler = DefaultWorkManagerScheduler(
             lazyWorkManager = lazy { workManager },
-            appCoroutineScope = backgroundScope,
-            sessionStore = sessionStore,
+            sessionObserver = FakeSessionObserver(),
         )
 
         val sessionId = SessionId("@alice:matrix.org")
