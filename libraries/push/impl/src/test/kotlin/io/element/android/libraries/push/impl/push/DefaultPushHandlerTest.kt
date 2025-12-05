@@ -47,7 +47,7 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableEven
 import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEvent
 import io.element.android.libraries.push.impl.test.DefaultTestPush
 import io.element.android.libraries.push.impl.troubleshoot.DiagnosticPushHandler
-import io.element.android.libraries.push.impl.workmanager.WorkerDataConverter
+import io.element.android.libraries.push.impl.workmanager.SyncNotificationsWorkerDataConverter
 import io.element.android.libraries.pushproviders.api.PushData
 import io.element.android.libraries.pushstore.api.UserPushStore
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
@@ -718,7 +718,7 @@ class DefaultPushHandlerTest {
                 appCoroutineScope = backgroundScope,
                 workManagerScheduler = workManagerScheduler,
                 featureFlagService = featureFlagService,
-                workerDataConverter = WorkerDataConverter(DefaultJsonProvider()),
+                workerDataConverter = SyncNotificationsWorkerDataConverter(DefaultJsonProvider()),
                 buildVersionSdkIntProvider = FakeBuildVersionSdkIntProvider(33),
             ),
             appCoroutineScope = backgroundScope,

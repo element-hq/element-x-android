@@ -12,7 +12,7 @@ import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.matrix.api.MatrixClient
 import timber.log.Timber
 
-interface VacuumStoresUseCase {
+fun interface VacuumStoresUseCase {
     suspend operator fun invoke()
 }
 
@@ -21,7 +21,7 @@ class DefaultVacuumStoresUseCase(
     private val matrixClient: MatrixClient,
 ) : VacuumStoresUseCase {
     override suspend fun invoke() {
-        matrixClient.vacuumStores()
+        matrixClient.performDatabaseVacuum()
             .onFailure { Timber.e(it, "Failed to vacuum stores") }
     }
 }

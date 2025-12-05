@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.impl.util.anonymizedTokens
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
+import io.element.android.libraries.workmanager.api.WorkManagerScheduler
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
@@ -63,6 +64,7 @@ class RustMatrixClientFactory(
     private val timelineEventTypeFilterFactory: TimelineEventTypeFilterFactory,
     private val clientBuilderProvider: ClientBuilderProvider,
     private val sqliteStoreBuilderProvider: SqliteStoreBuilderProvider,
+    private val workManagerScheduler: WorkManagerScheduler,
 ) {
     private val sessionDelegate = RustClientSessionDelegate(sessionStore, appCoroutineScope, coroutineDispatchers)
 
@@ -116,6 +118,7 @@ class RustMatrixClientFactory(
             timelineEventTypeFilterFactory = timelineEventTypeFilterFactory,
             featureFlagService = featureFlagService,
             analyticsService = analyticsService,
+            workManagerScheduler = workManagerScheduler,
         ).also {
             Timber.tag(it.toString()).d("Creating Client with access token '$anonymizedAccessToken' and refresh token '$anonymizedRefreshToken'")
         }

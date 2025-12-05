@@ -11,6 +11,7 @@ package io.element.android.libraries.workmanager.impl
 import androidx.work.WorkManager
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.libraries.core.bool.orFalse
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.sessionstorage.api.observer.SessionListener
@@ -49,6 +50,10 @@ class DefaultWorkManagerScheduler(
                 Timber.e(it, "Failed to build WorkManager request $workManagerRequest")
             }
         )
+    }
+
+    override fun hasPendingWork(sessionId: SessionId, requestType: WorkManagerRequestType): Boolean {
+        return workManager.getWorkInfosByTag(workManagerTag(sessionId, requestType)).get()?.isNotEmpty().orFalse()
     }
 
     override fun cancel(sessionId: SessionId) {

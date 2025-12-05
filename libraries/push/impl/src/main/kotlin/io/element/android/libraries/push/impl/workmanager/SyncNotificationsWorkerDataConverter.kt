@@ -21,7 +21,7 @@ import io.element.android.libraries.push.api.push.NotificationEventRequest
 import timber.log.Timber
 
 @Inject
-class WorkerDataConverter(
+class SyncNotificationsWorkerDataConverter(
     private val json: JsonProvider,
 ) {
     fun serialize(notificationEventRequests: List<NotificationEventRequest>): Result<List<Data>> {

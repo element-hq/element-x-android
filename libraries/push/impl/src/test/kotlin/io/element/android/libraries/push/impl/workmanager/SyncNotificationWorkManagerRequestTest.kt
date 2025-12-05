@@ -78,7 +78,7 @@ class SyncNotificationWorkManagerRequestTest {
         val request = createSyncNotificationWorkManagerRequest(
             sessionId = A_SESSION_ID,
             notificationEventRequests = listOf(aNotificationEventRequest()),
-            workerDataConverter = WorkerDataConverter({ error("error during serialization") })
+            workerDataConverter = SyncNotificationsWorkerDataConverter({ error("error during serialization") })
         )
         val result = request.build()
         assertThat(result.isFailure).isTrue()
@@ -88,7 +88,7 @@ class SyncNotificationWorkManagerRequestTest {
 private fun createSyncNotificationWorkManagerRequest(
     sessionId: SessionId,
     notificationEventRequests: List<NotificationEventRequest>,
-    workerDataConverter: WorkerDataConverter = WorkerDataConverter(DefaultJsonProvider()),
+    workerDataConverter: SyncNotificationsWorkerDataConverter = SyncNotificationsWorkerDataConverter(DefaultJsonProvider()),
     sdkVersion: Int = 33,
 ) = SyncNotificationWorkManagerRequest(
     sessionId = sessionId,

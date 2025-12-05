@@ -17,6 +17,7 @@ import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.preferences.impl.developer.tracing.LogLevelItem
 import io.element.android.features.preferences.impl.tasks.FakeClearCacheUseCase
 import io.element.android.features.preferences.impl.tasks.FakeComputeCacheSizeUseCase
+import io.element.android.features.preferences.impl.tasks.VacuumStoresUseCase
 import io.element.android.features.rageshake.api.preferences.aRageshakePreferencesState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
@@ -212,6 +213,23 @@ class DeveloperSettingsPresenterTest {
         }
     }
 
+    @Test
+    fun `present - VacuumStores action invokes the VacuumStoresUseCase`() = runTest {
+        var vacuumCalled = false
+        val presenter = createDeveloperSettingsPresenter(
+            vacuumStoresUseCase = VacuumStoresUseCase {
+                vacuumCalled = true
+            }
+        )
+        presenter.test {
+            val state = awaitItem()
+            assertThat(vacuumCalled).isFalse()
+            state.eventSink(DeveloperSettingsEvents.VacuumStores)
+            skipItems(1)
+            assertThat(vacuumCalled).isTrue()
+        }
+    }
+
     private fun createDeveloperSettingsPresenter(
         sessionId: SessionId = A_SESSION_ID,
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(
@@ -230,6 +248,7 @@ class DeveloperSettingsPresenterTest {
         preferencesStore: InMemoryAppPreferencesStore = InMemoryAppPreferencesStore(),
         buildMeta: BuildMeta = aBuildMeta(),
         enterpriseService: EnterpriseService = FakeEnterpriseService(),
+        vacuumStoresUseCase: VacuumStoresUseCase = VacuumStoresUseCase {},
     ): DeveloperSettingsPresenter {
         return DeveloperSettingsPresenter(
             sessionId = sessionId,
@@ -240,6 +259,7 @@ class DeveloperSettingsPresenterTest {
             appPreferencesStore = preferencesStore,
             buildMeta = buildMeta,
             enterpriseService = enterpriseService,
+            vacuumStoresUseCase = vacuumStoresUseCase,
         )
     }
 }

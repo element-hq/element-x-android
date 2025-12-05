@@ -26,7 +26,7 @@ import java.security.InvalidParameterException
 class SyncNotificationWorkManagerRequest(
     private val sessionId: SessionId,
     private val notificationEventRequests: List<NotificationEventRequest>,
-    private val workerDataConverter: WorkerDataConverter,
+    private val workerDataConverter: SyncNotificationsWorkerDataConverter,
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
 ) : WorkManagerRequest {
     override fun build(): Result<List<WorkRequest>> {

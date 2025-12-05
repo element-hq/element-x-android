@@ -104,6 +104,7 @@ class FakeMatrixClient(
     private val getRecentEmojisLambda: () -> Result<List<String>> = { Result.success(emptyList()) },
     private val addRecentEmojiLambda: (String) -> Result<Unit> = { Result.success(Unit) },
     private val markRoomAsFullyReadResult: (RoomId, EventId) -> Result<Unit> = { _, _ -> lambdaError() },
+    private val performDatabaseVacuumLambda: () -> Result<Unit> = { lambdaError() },
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
         private set
@@ -350,5 +351,9 @@ class FakeMatrixClient(
 
     override suspend fun markRoomAsFullyRead(roomId: RoomId, eventId: EventId): Result<Unit> {
         return markRoomAsFullyReadResult(roomId, eventId)
+    }
+
+    override suspend fun performDatabaseVacuum(): Result<Unit> {
+        return performDatabaseVacuumLambda()
     }
 }

@@ -57,10 +57,10 @@ class WorkerDataConverterTest {
                 providerInfo = "info$it",
             )
         }
-        val sut = WorkerDataConverter(DefaultJsonProvider())
+        val sut = SyncNotificationsWorkerDataConverter(DefaultJsonProvider())
         val serialized = sut.serialize(data)
         assertThat(serialized.getOrNull()?.size).isGreaterThan(1)
-        assertThat(serialized.getOrNull()?.size).isEqualTo(100 / WorkerDataConverter.CHUNK_SIZE)
+        assertThat(serialized.getOrNull()?.size).isEqualTo(100 / SyncNotificationsWorkerDataConverter.CHUNK_SIZE)
         // All the items are present
         val deserialized = serialized.getOrNull()?.flatMap { sut.deserialize(it)!! }
         assertThat(deserialized).containsExactlyElementsIn(data)
@@ -76,10 +76,10 @@ class WorkerDataConverterTest {
                 providerInfo = "info$it",
             )
         }
-        val sut = WorkerDataConverter(DefaultJsonProvider())
+        val sut = SyncNotificationsWorkerDataConverter(DefaultJsonProvider())
         val serialized = sut.serialize(data)
         assertThat(serialized.getOrNull()?.size).isGreaterThan(1)
-        assertThat(serialized.getOrNull()?.size).isEqualTo(100 / WorkerDataConverter.CHUNK_SIZE + 1)
+        assertThat(serialized.getOrNull()?.size).isEqualTo(100 / SyncNotificationsWorkerDataConverter.CHUNK_SIZE + 1)
         // All the items are present
         val deserialized = serialized.getOrNull()?.flatMap { sut.deserialize(it)!! }
         assertThat(deserialized).containsExactlyElementsIn(data)
@@ -112,7 +112,7 @@ class WorkerDataConverterTest {
             )
         }
         val data = (data1 + data2 + data3).shuffled()
-        val sut = WorkerDataConverter(DefaultJsonProvider())
+        val sut = SyncNotificationsWorkerDataConverter(DefaultJsonProvider())
         val serialized = sut.serialize(data)
         assertThat(serialized.getOrNull()?.size).isEqualTo(2)
         // All the items are present
@@ -133,7 +133,7 @@ class WorkerDataConverterTest {
     }
 
     private fun testIdentity(data: List<NotificationEventRequest>) {
-        val sut = WorkerDataConverter(DefaultJsonProvider())
+        val sut = SyncNotificationsWorkerDataConverter(DefaultJsonProvider())
         val serialized = sut.serialize(data).getOrThrow()
         val result = sut.deserialize(serialized.first())
         assertThat(result).isEqualTo(data)

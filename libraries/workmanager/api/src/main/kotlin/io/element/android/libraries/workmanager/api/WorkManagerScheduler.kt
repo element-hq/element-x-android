@@ -12,16 +12,19 @@ import io.element.android.libraries.matrix.api.core.SessionId
 
 interface WorkManagerScheduler {
     fun submit(workManagerRequest: WorkManagerRequest)
+    fun hasPendingWork(sessionId: SessionId, requestType: WorkManagerRequestType): Boolean
     fun cancel(sessionId: SessionId)
 }
 
 fun workManagerTag(sessionId: SessionId, requestType: WorkManagerRequestType): String {
     val prefix = when (requestType) {
         WorkManagerRequestType.NOTIFICATION_SYNC -> "notifications"
+        WorkManagerRequestType.DB_VACUUM -> "db_vacuum"
     }
     return "$prefix-$sessionId"
 }
 
 enum class WorkManagerRequestType {
     NOTIFICATION_SYNC,
+    DB_VACUUM,
 }

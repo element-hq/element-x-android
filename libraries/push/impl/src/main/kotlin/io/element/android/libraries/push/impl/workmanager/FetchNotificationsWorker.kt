@@ -49,7 +49,7 @@ class FetchNotificationsWorker(
     private val workManagerScheduler: WorkManagerScheduler,
     private val syncOnNotifiableEvent: SyncOnNotifiableEvent,
     private val coroutineDispatchers: CoroutineDispatchers,
-    private val workerDataConverter: WorkerDataConverter,
+    private val workerDataConverter: SyncNotificationsWorkerDataConverter,
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
 ) : CoroutineWorker(context, workerParams) {
     override suspend fun doWork(): Result = withContext(coroutineDispatchers.io) {

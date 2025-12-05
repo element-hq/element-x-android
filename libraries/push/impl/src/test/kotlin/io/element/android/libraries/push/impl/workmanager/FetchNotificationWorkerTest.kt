@@ -177,7 +177,7 @@ class FetchNotificationWorkerTest {
         workManagerScheduler = workManagerScheduler,
         syncOnNotifiableEvent = syncOnNotifiableEvent,
         coroutineDispatchers = testCoroutineDispatchers(),
-        workerDataConverter = WorkerDataConverter(DefaultJsonProvider()),
+        workerDataConverter = SyncNotificationsWorkerDataConverter(DefaultJsonProvider()),
         buildVersionSdkIntProvider = FakeBuildVersionSdkIntProvider(33),
     )
 
