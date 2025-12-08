@@ -1,4 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <string name="crypto_history_visible">Messages you send will be shared with new members invited to this room. %1$s</string>
-</resources>
