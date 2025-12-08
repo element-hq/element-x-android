@@ -3,5 +3,8 @@
   <string name="leave_conversation_alert_subtitle">"Bu suhbatni tark etmoqchi ekanligingizga ishonchingiz komilmi? Bu suhbat hammaga ochiq emas va siz taklifsiz qayta qo‘shila olmaysiz."</string>
   <string name="leave_room_alert_empty_subtitle">"Bu xonani tark etmoqchi ekanligingizga ishonchingiz komilmi? Siz bu yerda yagona odamsiz. Agar siz tark etsangiz, kelajakda hech kim qo\'shila olmaydi, jumladan siz ham."</string>
   <string name="leave_room_alert_private_subtitle">"Bu xonani tark etmoqchi ekanligingizga ishonchingiz komilmi? Bu xona ochiq emas va siz taklifsiz qayta qo‘shila olmaysiz."</string>
+  <string name="leave_room_alert_select_new_owner_action">"Egalarni tanlang"</string>
+  <string name="leave_room_alert_select_new_owner_subtitle">"Siz bu xonaning yagona egasisiz. Xonadan chiqishdan oldin egalikni boshqaga topshirishingiz kerak."</string>
+  <string name="leave_room_alert_select_new_owner_title">"Egalikni topshirish"</string>
   <string name="leave_room_alert_subtitle">"Xonani tark etmoqchi ekanligingizga ishonchingiz komilmi?"</string>
 </resources>

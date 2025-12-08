@@ -13,7 +13,9 @@ import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
 import im.vector.app.features.analytics.plan.SuperProperties
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
+import io.element.android.services.analytics.api.AnalyticsSdkSpan
 import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.api.NoopAnalyticsSdkSpan
 import io.element.android.services.analytics.api.NoopAnalyticsTransaction
 import io.element.android.services.analyticsproviders.api.AnalyticsProvider
 import io.element.android.services.analyticsproviders.api.AnalyticsTransaction
@@ -31,6 +33,7 @@ class FakeAnalyticsService(
     val screenEvents = mutableListOf<VectorAnalyticsScreen>()
     val trackedErrors = mutableListOf<Throwable>()
     val capturedUserProperties = mutableListOf<UserProperties>()
+    val longRunningTransactions = mutableMapOf<AnalyticsLongRunningTransaction, AnalyticsTransaction>()
 
     override fun getAvailableAnalyticsProviders(): Set<AnalyticsProvider> = emptySet()
 
@@ -70,6 +73,21 @@ class FakeAnalyticsService(
     }
 
     override fun startTransaction(name: String, operation: String?): AnalyticsTransaction = NoopAnalyticsTransaction
-    override fun startLongRunningTransaction(longRunningTransaction: AnalyticsLongRunningTransaction) {}
-    override fun stopLongRunningTransaction(longRunningTransaction: AnalyticsLongRunningTransaction) {}
+    override fun startLongRunningTransaction(
+        longRunningTransaction: AnalyticsLongRunningTransaction,
+        parentTransaction: AnalyticsTransaction?
+    ): AnalyticsTransaction {
+        longRunningTransactions[longRunningTransaction] = NoopAnalyticsTransaction
+        return NoopAnalyticsTransaction
+    }
+
+    override fun getLongRunningTransaction(longRunningTransaction: AnalyticsLongRunningTransaction): AnalyticsTransaction? {
+        return longRunningTransactions[longRunningTransaction]
+    }
+
+    override fun removeLongRunningTransaction(longRunningTransaction: AnalyticsLongRunningTransaction): AnalyticsTransaction? {
+        return longRunningTransactions.remove(longRunningTransaction)
+    }
+
+    override fun enterSdkSpan(name: String?, parentTraceId: String?): AnalyticsSdkSpan = NoopAnalyticsSdkSpan
 }

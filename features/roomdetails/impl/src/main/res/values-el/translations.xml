@@ -121,8 +121,8 @@
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Τα άτομα μπορούν να συμμετάσχουν μόνο εάν έχουν προσκληθεί"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Μόνο πρόσκληση"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Πρόσβαση στην αίθουσα"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Οι χώροι δεν υποστηρίζονται προς το παρόν"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Μέλη χώρου"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Οι χώροι δεν υποστηρίζονται προς το παρόν"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Θα χρειαστείτε μια διεύθυνση αίθουσας για να την κάνετε ορατή στον κατάλογο."</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Επιστρέψτε την εύρεση αυτής της αίθουσας με αναζήτηση στον κατάλογο %1$s δημοσίων αιθουσών"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Ορατή στον κατάλογο δημόσιων αιθουσών"</string>

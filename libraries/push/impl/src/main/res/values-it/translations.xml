@@ -13,6 +13,7 @@
     <item quantity="one">"%d notifica"</item>
     <item quantity="other">"%d notifiche"</item>
   </plurals>
+  <string name="notification_error_unified_push_unregistered_android">"Non è stato possibile registrare il distributore di notifiche UnifiedPush, quindi non riceverai più notifiche. Controlla le impostazioni delle notifiche dell\'app e lo stato del distributore push."</string>
   <string name="notification_fallback_content">"Hai nuovi messaggi."</string>
   <string name="notification_incoming_call">"📹 Chiamata in arrivo"</string>
   <string name="notification_inline_reply_failed">"** Invio fallito - si prega di aprire la stanza"</string>
@@ -38,6 +39,7 @@
   <string name="notification_sender_me">"Io"</string>
   <string name="notification_sender_mention_reply">"%1$s ti ha menzionato o risposto"</string>
   <string name="notification_test_push_notification_content">"Stai visualizzando la notifica! Cliccami!"</string>
+  <string name="notification_thread_in_room">"Discussione in %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
@@ -54,9 +56,20 @@
   <string name="push_distributor_background_sync_android">"Sincronizzazione in background"</string>
   <string name="push_distributor_firebase_android">"Servizi Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Google Play Services non trovato. Le notifiche non funzioneranno bene."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_description">"Controllo degli utenti bloccati"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_quick_fix">"Visualizza gli utenti bloccati"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_result_none">"Nessun utente è bloccato."</string>
+  <plurals name="troubleshoot_notifications_test_blocked_users_result_some">
+    <item quantity="one">"Hai bloccato%1$d utente. Non riceverai notifiche da questo utente."</item>
+    <item quantity="other">"Hai bloccato%1$d utenti. Non riceverai notifiche da questi utenti."</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_blocked_users_title">"Utenti bloccati"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Ottieni il nome del fornitore attuale."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Nessun provider push selezionato."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found">"Fornitore push attuale: %1$s e attuale distributore: %2$s Ma il distributore %3$s non viene trovato. Forse l\'applicazione è stata disinstallata?"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_no_distributor">"Fornitore push attuale:%1$s , ma non è stato configurato alcun distributore."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Provider push attuale: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success_with_distributor">"Fornitore push attuale: %1$s (%2$s )"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Provider push attuale"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Assicurati che l\'applicazione abbia almeno un fornitore push."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Nessun provider push trovato."</string>

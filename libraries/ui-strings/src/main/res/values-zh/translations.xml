@@ -93,6 +93,8 @@
   <string name="action_forgot_password">"忘记密码？"</string>
   <string name="action_forward">"转发"</string>
   <string name="action_go_back">"返回"</string>
+  <string name="action_go_to_roles_and_permissions">"前往角色与权限"</string>
+  <string name="action_go_to_settings">"前往设置"</string>
   <string name="action_ignore">"忽略"</string>
   <string name="action_invite">"邀请"</string>
   <string name="action_invite_friends">"邀请朋友"</string>
@@ -177,6 +179,7 @@
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"您已被注销当前会话"</string>
   <string name="common_appearance">"外观"</string>
   <string name="common_audio">"音频"</string>
+  <string name="common_beta">"测试版"</string>
   <string name="common_blocked_users">"已屏蔽用户"</string>
   <string name="common_bubbles">"气泡"</string>
   <string name="common_call_started">"通话已开始"</string>
@@ -307,7 +310,9 @@
   <string name="common_server_unreachable">"无法访问服务器"</string>
   <string name="common_server_url">"服务器 URL"</string>
   <string name="common_settings">"设置"</string>
+  <string name="common_share_space">"共享空间"</string>
   <string name="common_shared_location">"共享位置"</string>
+  <string name="common_shared_space">"共享空间"</string>
   <string name="common_signing_out">"正在登出"</string>
   <string name="common_something_went_wrong">"发生了一些错误"</string>
   <string name="common_something_went_wrong_message">"我们遇到了一个问题。请重试。"</string>
@@ -375,6 +380,7 @@
   <string name="dialog_title_error">"错误"</string>
   <string name="dialog_title_success">"成功"</string>
   <string name="dialog_title_warning">"警告"</string>
+  <string name="dialog_unsaved_changes_description">"您有未保存的更改。"</string>
   <string name="dialog_unsaved_changes_description_android">"更改尚未保存，确定要返回吗？"</string>
   <string name="dialog_unsaved_changes_title">"保存更改？"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"允许的最大文件大小为：%1$s"</string>
@@ -451,7 +457,9 @@
   <string name="screen_share_this_location_action">"分享这个位置"</string>
   <string name="screen_space_list_description">"您创建或加入的空间。"</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_parent_space">"%1$s空间"</string>
   <string name="screen_space_list_title">"空间"</string>
+  <string name="screen_space_menu_action_members">"查看成员"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"消息未发送，因为%1$s的已验证身份已被重置。"</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"消息未发送，因为%1$s尚未验证所有设备。"</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"消息未发送，因为您有尚未验证的设备。"</string>

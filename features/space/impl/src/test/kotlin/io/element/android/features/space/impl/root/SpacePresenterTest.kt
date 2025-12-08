@@ -19,6 +19,8 @@ import io.element.android.features.invite.api.toInviteData
 import io.element.android.features.invite.test.InMemorySeenInvitesStore
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
@@ -62,8 +64,19 @@ class SpacePresenterTest {
             assertThat(state.joinActions).isEmpty()
             assertThat(state.acceptDeclineInviteState).isEqualTo(anAcceptDeclineInviteState())
             assertThat(state.topicViewerState).isEqualTo(TopicViewerState.Hidden)
+            assertThat(state.canAccessSpaceSettings).isFalse()
             advanceUntilIdle()
             paginateResult.assertions().isCalledOnce()
+        }
+    }
+
+    @Test
+    fun `present - canAccessSpaceSettings when space settings ff is enabled`() = runTest {
+        val presenter = createSpacePresenter(spaceSettingsEnabled = true)
+        presenter.test {
+            skipItems(1)
+            val state = awaitItem()
+            assertThat(state.canAccessSpaceSettings).isTrue()
         }
     }
 
@@ -328,6 +341,7 @@ class SpacePresenterTest {
             lambda = { _, _, _ -> Result.success(Unit) },
         ),
         acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState> = Presenter { anAcceptDeclineInviteState() },
+        spaceSettingsEnabled: Boolean = false,
     ): SpacePresenter {
         return SpacePresenter(
             client = client,
@@ -336,6 +350,11 @@ class SpacePresenterTest {
             joinRoom = joinRoom,
             acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
             sessionCoroutineScope = backgroundScope,
+            featureFlagService = FakeFeatureFlagService(
+                initialState = mapOf(
+                    FeatureFlags.SpaceSettings.key to spaceSettingsEnabled,
+                )
+            ),
         )
     }
 }

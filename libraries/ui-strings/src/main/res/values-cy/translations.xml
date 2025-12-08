@@ -414,6 +414,7 @@ Ydych chi\'n siŵr eich bod am barhau?"</string>
   <string name="dialog_title_error">"Gwall"</string>
   <string name="dialog_title_success">"Llwyddiant"</string>
   <string name="dialog_title_warning">"Rhybudd"</string>
+  <string name="dialog_unsaved_changes_description">"Mae gennych newidiadau heb eu cadw."</string>
   <string name="dialog_unsaved_changes_description_android">"Dyw eich newidiadau heb gael eu cadw. Ydych chi\'n siŵr eich bod am fynd nôl?"</string>
   <string name="dialog_unsaved_changes_title">"Cadw\'r newidiadau?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Y maint ffeil mwyaf sy\'n cael ei ganiatáu yw: %1$s"</string>

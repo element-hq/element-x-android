@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_room_details_edit_room_title">"编辑聊天室"</string>
+  <string name="screen_room_details_edition_error">"出现未知错误，无法更改信息。"</string>
+  <string name="screen_room_details_edition_error_title">"无法更新聊天室"</string>
+  <string name="screen_room_details_updating_room">"正在更新聊天室……"</string>
+</resources>

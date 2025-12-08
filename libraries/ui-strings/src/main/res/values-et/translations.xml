@@ -234,6 +234,7 @@ Põhjus: %1$s."</string>
   <string name="common_light">"Hele"</string>
   <string name="common_line_copied_to_clipboard">"Rida on kopeeritud lõikelauale"</string>
   <string name="common_link_copied_to_clipboard">"Link on kopeeritud lõikelauale"</string>
+  <string name="common_link_new_device">"Seo uus seade"</string>
   <string name="common_loading">"Laadime…"</string>
   <string name="common_loading_more">"Laadime veel…"</string>
   <plurals name="common_many_members">
@@ -246,10 +247,12 @@ Põhjus: %1$s."</string>
   </plurals>
   <string name="common_message">"Sõnum"</string>
   <string name="common_message_actions">"Tegevused sõnumiga"</string>
+  <string name="common_message_failed_to_send">"Sõnumi saatmine ei õnnestunud"</string>
   <string name="common_message_layout">"Sõnumi paigutus"</string>
   <string name="common_message_removed">"Sõnum on eemaldatud"</string>
   <string name="common_modern">"Kaasaegne"</string>
   <string name="common_mute">"Summutatud"</string>
+  <string name="common_name">"Nimi"</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Otsingul pole tulemusi"</string>
   <string name="common_no_room_name">"Jututoal puudub nimi"</string>
@@ -324,6 +327,7 @@ Põhjus: %1$s."</string>
   <string name="common_something_went_wrong">"Midagi läks valesti"</string>
   <string name="common_something_went_wrong_message">"Tekkis viga. Palun proovi uuesti."</string>
   <string name="common_space">"Kogukond"</string>
+  <string name="common_space_topic_placeholder">"Mida selles kogukonnas tehakse?"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d kogukond"</item>
     <item quantity="other">"%1$d kogukonda"</item>
@@ -388,6 +392,7 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="dialog_title_error">"Viga"</string>
   <string name="dialog_title_success">"Õnnestus"</string>
   <string name="dialog_title_warning">"Hoiatus"</string>
+  <string name="dialog_unsaved_changes_description">"Sul on salvestamata muudatusi"</string>
   <string name="dialog_unsaved_changes_description_android">"Sinu tehtud muudatused pole veel salvestatud. Kas sa oled kindel, et soovid minna tagasi?"</string>
   <string name="dialog_unsaved_changes_title">"Kas salvestame muudatused?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Suurim lubatud failisuurus on: %1$s"</string>
@@ -427,6 +432,11 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="screen_create_poll_options_section_title">"Valikud"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Kustuta: %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Seadistused"</string>
+  <string name="screen_link_new_device_desktop_computer">"Lauaarvuti"</string>
+  <string name="screen_link_new_device_mobile_device">"Nutiseade"</string>
+  <string name="screen_manage_authorized_spaces_title">"Halda kogukondi"</string>
+  <string name="screen_manage_authorized_spaces_unknown_space">"(Tundmatu kogukond)"</string>
+  <string name="screen_manage_authorized_spaces_your_spaces_section_title">"Sinu kogukonnad"</string>
   <string name="screen_media_picker_error_failed_selection">"Meediafaili valimine ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Siia lisamiseks vajuta sõnumil ja vali „%1$s“."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Et olulisi sõnumeid oleks lihtsam leida, tõsta nad esile"</string>

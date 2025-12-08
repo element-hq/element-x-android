@@ -396,6 +396,7 @@
   <string name="dialog_title_error">"Ошибка"</string>
   <string name="dialog_title_success">"Успешно"</string>
   <string name="dialog_title_warning">"Предупреждение"</string>
+  <string name="dialog_unsaved_changes_description">"У вас есть несохраненные изменения."</string>
   <string name="dialog_unsaved_changes_description_android">"Изменения не сохранены. Вы действительно хотите вернуться?"</string>
   <string name="dialog_unsaved_changes_title">"Сохранить изменения?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Максимально допустимый размер файла: %1$s"</string>

@@ -29,15 +29,13 @@ import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
-import org.junit.Ignore
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.NotificationClient
 import org.matrix.rustcomponents.sdk.NotificationStatus
 import org.matrix.rustcomponents.sdk.TimelineEventType
 
 class RustNotificationServiceTest {
-    @Ignore("JNA direct mapping has broken unit tests with FFI fakes")
-    @Test
+        @Test
     fun test() = runTest {
         val notificationClient = FakeFfiNotificationClient(
             notificationItemResult = mapOf(AN_EVENT_ID.value to aRustBatchNotificationResult()),
@@ -58,8 +56,7 @@ class RustNotificationServiceTest {
         )
     }
 
-    @Ignore("JNA direct mapping has broken unit tests with FFI fakes")
-    @Test
+        @Test
     fun `test mapping invalid item only drops that item`() = runTest {
         val error = IllegalStateException("This event type is not supported")
         val faultyEvent = object : FakeFfiTimelineEvent() {
@@ -86,8 +83,7 @@ class RustNotificationServiceTest {
         assertThat(successfulResult?.isSuccess).isTrue()
     }
 
-    @Ignore("JNA direct mapping has broken unit tests with FFI fakes")
-    @Test
+        @Test
     fun `test unable to resolve event`() = runTest {
         val notificationClient = FakeFfiNotificationClient(
             notificationItemResult = emptyMap(),
@@ -99,8 +95,7 @@ class RustNotificationServiceTest {
         assertThat(exception).isInstanceOf(NotificationResolverException::class.java)
     }
 
-    @Ignore("JNA direct mapping has broken unit tests with FFI fakes")
-    @Test
+        @Test
     fun `close should invoke the close method of the service`() = runTest {
         val closeResult = lambdaRecorder<Unit> { }
         val notificationClient = FakeFfiNotificationClient(

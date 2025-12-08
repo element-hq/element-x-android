@@ -55,11 +55,17 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import io.element.android.libraries.matrix.ui.room.canSendMessageAsState
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
+import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.DisplayFirstTimelineItems
+import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.NotificationTapOpensTimeline
+import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.OpenRoom
+import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.api.finishLongRunningTransaction
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -86,6 +92,7 @@ class TimelinePresenter(
     private val typingNotificationPresenter: Presenter<TypingNotificationState>,
     private val roomCallStatePresenter: Presenter<RoomCallState>,
     private val featureFlagService: FeatureFlagService,
+    private val analyticsService: AnalyticsService,
 ) : Presenter<TimelineState> {
     private val tag = "TimelinePresenter"
     @AssistedFactory
@@ -108,6 +115,11 @@ class TimelinePresenter(
 
     @Composable
     override fun present(): TimelineState {
+        LaunchedEffect(Unit) {
+            val parent = analyticsService.getLongRunningTransaction(OpenRoom)
+            analyticsService.startLongRunningTransaction(DisplayFirstTimelineItems, parent)
+        }
+
         val localScope = rememberCoroutineScope()
 
         val timelineMode = remember { timelineController.mainTimelineMode() }
@@ -195,6 +207,9 @@ class TimelinePresenter(
                     focusOnEvent(event.eventId, focusRequestState)
                 }.start()
                 is TimelineEvents.OnFocusEventRender -> {
+                    // If there was a pending 'notification tap opens timeline' transaction, finish it now we're focused in the required event
+                    analyticsService.finishLongRunningTransaction(NotificationTapOpensTimeline)
+
                     focusRequestState.value = focusRequestState.value.onFocusEventRender()
                 }
                 is TimelineEvents.ClearFocusRequestState -> {
@@ -227,17 +242,27 @@ class TimelinePresenter(
                 .onEach { newTimelineItems ->
                     timelineItemIndexer.process(newTimelineItems)
                     timelineItems = newTimelineItems
+
+                    analyticsService.run {
+                        finishLongRunningTransaction(DisplayFirstTimelineItems)
+                        finishLongRunningTransaction(OpenRoom)
+                    }
                 }
                 .launchIn(this)
 
             combine(timelineController.timelineItems(), room.membersStateFlow) { items, membersState ->
+                val parent = analyticsService.getLongRunningTransaction(DisplayFirstTimelineItems)
+                val transaction = parent?.startChild("timelineItemsFactory.replaceWith", "Processing timeline items")
+                transaction?.setData("items", items.count())
                 timelineItemsFactory.replaceWith(
                     timelineItems = items,
                     roomMembers = membersState.roomMembers().orEmpty()
                 )
+                transaction?.finish()
                 items
             }
                 .onEach(redactedVoiceMessageManager::onEachMatrixTimelineItem)
+                .flowOn(dispatchers.computation)
                 .launchIn(this)
         }
 

@@ -13,9 +13,17 @@
   <string name="screen_change_account_provider_other">"Boshqa"</string>
   <string name="screen_change_account_provider_subtitle">"Shaxsiy serveringiz yoki ishchi hisob qaydnomangiz kabi boshqa hisob provayderidan foydalaning."</string>
   <string name="screen_change_account_provider_title">"Hisob provayderini o\'zgartiring"</string>
+  <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
+  <string name="screen_change_server_error_element_pro_required_message">"%1$s da Element Pro ilovasi talab qilinadi. Iltimos, do‘kondan yuklab oling."</string>
+  <string name="screen_change_server_error_element_pro_required_title">"Element Pro talab qilinadi"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Bu uy serveriga kira olmadik. Iltimos, uy serverining URL manzilini to\'ri kiritganingizni tekshiring. Agar URL toʻgʻri boʻlsa, qoʻshimcha yordam olish uchun uy serveri administratoriga murojaat qiling."</string>
   <string name="screen_change_server_error_invalid_well_known">".well-known faylidagi muammo tufayli server mavjud emas: %1$s"</string>
+  <string name="screen_change_server_error_no_sliding_sync_message">"Tanlangan hisob provayderi siljitish sinxronizatsiyasini qo‘llab-quvvatlamaydi. %1$s ishlatish uchun serverni yangilash zarur."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver">"%1$s uchun %2$s bilan ulanishga ruxsat berilmagan."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_content">"Bu ilova quyidagilarga ruxsat berish uchun sozlangan: %1$s ."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_title">"Hisob provayderi %1$s ga ruxsat berilmagan."</string>
   <string name="screen_change_server_form_header">"Uy serverining URL manzili"</string>
+  <string name="screen_change_server_form_notice">"Domen manzilini kiriting."</string>
   <string name="screen_change_server_subtitle">"Serveringizning manzili nima?"</string>
   <string name="screen_change_server_title">"Serveringizni tanlang"</string>
   <string name="screen_create_account_title">"Hisob yaratish"</string>
@@ -28,6 +36,7 @@
   <string name="screen_login_subtitle">"Matrix xavfsiz, markazlashmagan aloqa uchun ochiq tarmoqdir."</string>
   <string name="screen_login_title">"Qaytib kelganingizdan xursandmiz!"</string>
   <string name="screen_login_title_with_homeserver">"Kirish%1$s"</string>
+  <string name="screen_onboarding_app_version">"%1$s versiya"</string>
   <string name="screen_onboarding_sign_in_manually">"Qo\'lda tizimga kiring"</string>
   <string name="screen_onboarding_sign_in_to">"Kirish%1$s"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"QR kod bilan tizimga kiring"</string>
@@ -83,5 +92,6 @@ Oddiy usulda kiring yoki boshqa qurilma bilan QR kodni skanerlang."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix xavfsiz, markazlashmagan aloqa uchun ochiq tarmoqdir."</string>
   <string name="screen_server_confirmation_message_register">"Bu sizning suhbatlaringiz yashaydigan joy - xuddi siz elektron pochta xabarlaringizni saqlash uchun elektron pochta provayderidan foydalanganingiz kabi."</string>
   <string name="screen_server_confirmation_title_login">"Siz tizimga kirmoqchisiz%1$s"</string>
+  <string name="screen_server_confirmation_title_picker_mode">"Hisob provayderini tanlang"</string>
   <string name="screen_server_confirmation_title_register">"Hisob yaratmoqchisiz%1$s"</string>
 </resources>

@@ -387,6 +387,7 @@ Möchtest du wirklich fortfahren?"</string>
   <string name="dialog_title_error">"Fehler"</string>
   <string name="dialog_title_success">"Erfolg"</string>
   <string name="dialog_title_warning">"Warnung"</string>
+  <string name="dialog_unsaved_changes_description">"Du hast nicht gespeicherte Änderungen."</string>
   <string name="dialog_unsaved_changes_description_android">"Deine Änderungen wurden nicht gespeichert. Bist du sicher, dass du zurückgehen willst?"</string>
   <string name="dialog_unsaved_changes_title">"Änderungen speichern?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Die maximal erlaubte Dateigröße ist: %1$s"</string>

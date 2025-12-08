@@ -265,6 +265,7 @@
   <string name="dialog_title_error">"خرابی"</string>
   <string name="dialog_title_success">"کامیابی"</string>
   <string name="dialog_title_warning">"انتباہ"</string>
+  <string name="dialog_unsaved_changes_description">"آپکے پاس غیر محفوظ تبدیلیاں ہیں"</string>
   <string name="dialog_unsaved_changes_description_android">"آپ کی تبدیلیاں محفوظ نہیں کی گئیں۔ کیا آپ کو یقین ہے کہ آپ واپس جانا چاہتے ہیں؟"</string>
   <string name="dialog_unsaved_changes_title">"تبدیلیاں محفوظ کریں؟"</string>
   <string name="error_account_creation_not_possible">"‏Matrix Authentication Service اور اکاؤنٹ بنانے میں معاونت کے لیے آپ کے ہوم سرور کو اپ گریڈ کرنے کی ضرورت ہے۔"</string>

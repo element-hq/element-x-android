@@ -2,4 +2,10 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_space_announcement_item1">"查看您创建或加入的空间"</string>
   <string name="screen_space_announcement_item2">"接受或拒绝空间邀请"</string>
+  <string name="screen_space_announcement_item3">"发现您可以加入空间的所有房间"</string>
+  <string name="screen_space_announcement_item4">"加入公共空间"</string>
+  <string name="screen_space_announcement_item5">"离开你加入的所有空间"</string>
+  <string name="screen_space_announcement_notice">"筛选、创建及管理空间功能即将上线。"</string>
+  <string name="screen_space_announcement_subtitle">"欢迎使用 Spaces 测试版！使用首个版本，您可以："</string>
+  <string name="screen_space_announcement_title">"Spaces 简介"</string>
 </resources>

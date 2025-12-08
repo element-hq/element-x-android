@@ -32,7 +32,7 @@ class SpaceSettingsNode(
     interface Callback : Plugin {
         fun closeSettings()
 
-        fun navigateToSpaceInfo()
+        fun navigateToEditDetails()
         fun navigateToSpaceMembers()
         fun navigateToRolesAndPermissions()
         fun navigateToSecurityAndPrivacy()
@@ -48,7 +48,7 @@ class SpaceSettingsNode(
         SpaceSettingsView(
             state = state,
             modifier = modifier,
-            onSpaceInfoClick = callback::navigateToSpaceInfo,
+            onSpaceInfoClick = callback::navigateToEditDetails,
             onBackClick = callback::closeSettings,
             onMembersClick = callback::navigateToSpaceMembers,
             onRolesAndPermissionsClick = callback::navigateToRolesAndPermissions,

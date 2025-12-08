@@ -69,6 +69,10 @@
   <string name="screen_room_details_topic_title">"موضوع"</string>
   <string name="screen_room_details_updating_room">"به‌روز کردن اتاق…"</string>
   <string name="screen_room_member_list_banned_empty">"هیچ کاربر محرومی در این اتاق نیست."</string>
+  <plurals name="screen_room_member_list_header_title">
+    <item quantity="one">"%1$d نفر"</item>
+    <item quantity="other">"%1$d نفر"</item>
+  </plurals>
   <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"برداشت و تحریم عضو"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"تنها برداشتن عضو"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"رفع انسداد"</string>
@@ -120,8 +124,8 @@
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"افراد فقط در صورت دعوت می‌توانند بپیوندند"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"فقط دعوتی"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"دسترسی اتاق"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_description">"در حال حاضر فضاها پشتیبانی نمی‌شوند"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"اعضای فضا"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"در حال حاضر فضاها پشتیبانی نمی‌شوند"</string>
   <string name="screen_security_and_privacy_room_address_section_header">"نشانی اتاق"</string>
   <string name="screen_security_and_privacy_room_history_anyone_option_title">"هرکسی"</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"انتشار اتاق"</string>

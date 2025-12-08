@@ -112,7 +112,7 @@ fun EventDebugInfoView(
 private fun prettyJSON(maybeJSON: String): String {
     return try {
         JSONObject(maybeJSON).toString(2)
-    } catch (e: JSONException) {
+    } catch (_: JSONException) {
         // Prefer not pretty-printing over crashing if the data is not actually JSON
         maybeJSON
     }

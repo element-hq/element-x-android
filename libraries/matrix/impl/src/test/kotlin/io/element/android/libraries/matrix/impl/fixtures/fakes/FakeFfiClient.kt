@@ -33,6 +33,7 @@ import org.matrix.rustcomponents.sdk.SyncServiceBuilder
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.UnableToDecryptDelegate
 import org.matrix.rustcomponents.sdk.UserProfile
+import uniffi.matrix_sdk_base.MediaRetentionPolicy
 
 class FakeFfiClient(
     private val userId: String = A_USER_ID.value,
@@ -87,6 +88,8 @@ class FakeFfiClient(
     override suspend fun homeserverLoginDetails(): HomeserverLoginDetails {
         return homeserverLoginDetailsResult()
     }
+
+    override suspend fun setMediaRetentionPolicy(policy: MediaRetentionPolicy) {}
 
     override fun close() = closeResult()
 }

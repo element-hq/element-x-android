@@ -18,9 +18,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.rolesandpermissions.impl.R
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
+import io.element.android.libraries.designsystem.components.dialogs.SaveChangesDialog
 import io.element.android.libraries.designsystem.components.preferences.PreferenceDropdown
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -91,24 +92,19 @@ fun ChangeRoomPermissionsView(
 
     AsyncActionView(
         async = state.saveAction,
-        onSuccess = { onComplete(true) },
-        onErrorDismiss = { state.eventSink(ChangeRoomPermissionsEvent.ResetPendingActions) }
-    )
-
-    AsyncActionView(
-        async = state.confirmExitAction,
-        onSuccess = { onComplete(false) },
-        confirmationDialog = {
-            ConfirmationDialog(
-                title = stringResource(R.string.screen_room_change_role_unsaved_changes_title),
-                content = stringResource(R.string.screen_room_change_role_unsaved_changes_description),
-                submitText = stringResource(CommonStrings.action_save),
-                cancelText = stringResource(CommonStrings.action_discard),
-                onSubmitClick = { state.eventSink(ChangeRoomPermissionsEvent.Save) },
-                onDismiss = { state.eventSink(ChangeRoomPermissionsEvent.Exit) }
-            )
+        onSuccess = { onComplete(it) },
+        confirmationDialog = { confirming ->
+            when (confirming) {
+                is AsyncAction.ConfirmingCancellation -> {
+                    SaveChangesDialog(
+                        onSaveClick = { state.eventSink(ChangeRoomPermissionsEvent.Save) },
+                        onDiscardClick = { state.eventSink(ChangeRoomPermissionsEvent.Exit) },
+                        onDismiss = { state.eventSink(ChangeRoomPermissionsEvent.ResetPendingActions) },
+                    )
+                }
+            }
         },
-        onErrorDismiss = {},
+        onErrorDismiss = { state.eventSink(ChangeRoomPermissionsEvent.ResetPendingActions) }
     )
 }
 

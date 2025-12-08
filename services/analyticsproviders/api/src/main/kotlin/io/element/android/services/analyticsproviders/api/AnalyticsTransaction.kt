@@ -11,6 +11,7 @@ interface AnalyticsTransaction {
     fun startChild(operation: String, description: String? = null): AnalyticsTransaction
     fun setData(key: String, value: Any)
     fun isFinished(): Boolean
+    fun traceId(): String?
     fun finish()
 }
 

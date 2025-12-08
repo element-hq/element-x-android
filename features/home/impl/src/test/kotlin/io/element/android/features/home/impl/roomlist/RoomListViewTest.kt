@@ -170,7 +170,7 @@ class RoomListViewTest {
             // Remove automatic initial events
             eventsRecorder.clear()
 
-            rule.onNodeWithText(room0.latestEvent!!.toString()).performClick()
+            rule.onNodeWithText(room0.latestEvent.content().toString()).performClick()
         }
 
         eventsRecorder.assertEmpty()
@@ -192,7 +192,7 @@ class RoomListViewTest {
             )
             // Remove automatic initial events
             eventsRecorder.clear()
-            rule.onNodeWithText(room0.latestEvent!!.toString())
+            rule.onNodeWithText(room0.latestEvent.content().toString())
                 .performClick()
                 .performClick()
         }
@@ -214,7 +214,7 @@ class RoomListViewTest {
         // Remove automatic initial events
         eventsRecorder.clear()
 
-        rule.onNodeWithText(room0.latestEvent!!.toString()).performTouchInput { longClick() }
+        rule.onNodeWithText(room0.latestEvent.content().toString()).performTouchInput { longClick() }
         eventsRecorder.assertSingle(RoomListEvents.ShowContextMenu(room0))
     }
 

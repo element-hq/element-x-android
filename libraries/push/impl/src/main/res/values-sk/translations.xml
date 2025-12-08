@@ -15,6 +15,7 @@
     <item quantity="few">"%d oznámenia"</item>
     <item quantity="other">"%d oznámení"</item>
   </plurals>
+  <string name="notification_error_unified_push_unregistered_android">"Distribútora oznámení UnifiedPush sa nepodarilo zaregistrovať, takže už nebudete dostávať oznámenia. Skontrolujte nastavenia oznámení v aplikácii a stav distribútora push oznámení."</string>
   <string name="notification_fallback_content">"Máte nové správy."</string>
   <string name="notification_incoming_call">"📹 Prichádzajúci hovor"</string>
   <string name="notification_inline_reply_failed">"** Nepodarilo sa odoslať - prosím otvorte miestnosť"</string>

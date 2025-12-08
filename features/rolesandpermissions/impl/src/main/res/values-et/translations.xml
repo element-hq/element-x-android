@@ -47,6 +47,10 @@
   <string name="screen_room_member_list_manage_member_unban_title">"Eemalda suhtluskeeld jututoas"</string>
   <string name="screen_room_member_list_mode_banned">"Suhtluskeeluga kasutajad"</string>
   <string name="screen_room_member_list_mode_members">"Liikmed"</string>
+  <plurals name="screen_room_member_list_pending_header_title">
+    <item quantity="one">"%1$d saatis kutse"</item>
+    <item quantity="other">"%1$d saatis kutse"</item>
+  </plurals>
   <string name="screen_room_member_list_pending_status">"Ootel"</string>
   <string name="screen_room_member_list_role_administrator">"Peakasutajad"</string>
   <string name="screen_room_member_list_role_moderator">"Moderaatorid"</string>

@@ -53,6 +53,7 @@ class NotificationMapper(
                     roomDisplayName = item.roomInfo.displayName,
                     isDirect = item.roomInfo.isDirect,
                     isDm = isDm,
+                    isSpace = item.roomInfo.isSpace,
                     isEncrypted = item.roomInfo.isEncrypted.orFalse(),
                     isNoisy = item.isNoisy.orFalse(),
                     timestamp = timestamp,

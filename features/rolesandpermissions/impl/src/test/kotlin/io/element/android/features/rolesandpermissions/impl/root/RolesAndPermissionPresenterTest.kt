@@ -8,16 +8,17 @@
 
 package io.element.android.features.rolesandpermissions.impl.root
 
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.RoomModeration
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.RoomMembersState
+import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
+import io.element.android.libraries.matrix.test.room.aRoomMemberList
 import io.element.android.services.analytics.test.FakeAnalyticsService
+import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -30,12 +31,10 @@ class RolesAndPermissionPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val presenter = createRolesAndPermissionsPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             with(awaitItem()) {
-                assertThat(adminCount).isEqualTo(0)
-                assertThat(moderatorCount).isEqualTo(0)
+                assertThat(adminCount).isNull()
+                assertThat(moderatorCount).isNull()
                 assertThat(changeOwnRoleAction).isEqualTo(AsyncAction.Uninitialized)
             }
         }
@@ -44,12 +43,9 @@ class RolesAndPermissionPresenterTest {
     @Test
     fun `present - ChangeOwnRole presents a confirmation dialog`() = runTest {
         val presenter = createRolesAndPermissionsPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             initialState.eventSink(RolesAndPermissionsEvents.ChangeOwnRole)
-
             assertThat(awaitItem().changeOwnRoleAction).isEqualTo(AsyncAction.ConfirmingNoParams)
         }
     }
@@ -60,12 +56,11 @@ class RolesAndPermissionPresenterTest {
         val presenter = createRolesAndPermissionsPresenter(
             dispatchers = testCoroutineDispatchers(),
             room = FakeJoinedRoom(
+                baseRoom = FakeBaseRoom(updateMembersResult = {}),
                 updateUserRoleResult = { Result.success(Unit) }
             ),
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             initialState.eventSink(RolesAndPermissionsEvents.DemoteSelfTo(RoomMember.Role.Moderator))
 
@@ -81,12 +76,11 @@ class RolesAndPermissionPresenterTest {
     @Test
     fun `present - DemoteSelfTo can handle failures and clean them`() = runTest(StandardTestDispatcher()) {
         val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(updateMembersResult = {}),
             updateUserRoleResult = { Result.failure(Exception("Failed to update role")) }
         )
         val presenter = createRolesAndPermissionsPresenter(room = room, dispatchers = testCoroutineDispatchers())
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             initialState.eventSink(RolesAndPermissionsEvents.DemoteSelfTo(RoomMember.Role.Moderator))
 
@@ -104,9 +98,7 @@ class RolesAndPermissionPresenterTest {
     @Test
     fun `present - CancelPendingAction dismisses confirmation dialog too`() = runTest {
         val presenter = createRolesAndPermissionsPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             initialState.eventSink(RolesAndPermissionsEvents.ChangeOwnRole)
             awaitItem().eventSink(RolesAndPermissionsEvents.CancelPendingAction)
@@ -121,12 +113,11 @@ class RolesAndPermissionPresenterTest {
         val presenter = createRolesAndPermissionsPresenter(
             analyticsService = analyticsService,
             room = FakeJoinedRoom(
+                baseRoom = FakeBaseRoom(updateMembersResult = {}),
                 resetPowerLevelsResult = { Result.success(Unit) }
             )
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             initialState.eventSink(RolesAndPermissionsEvents.ResetPermissions)
             // Confirmation
@@ -141,9 +132,7 @@ class RolesAndPermissionPresenterTest {
     @Test
     fun `present - ResetPermissions confirmation can be cancelled`() = runTest {
         val presenter = createRolesAndPermissionsPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             initialState.eventSink(RolesAndPermissionsEvents.ResetPermissions)
             awaitItem().eventSink(RolesAndPermissionsEvents.CancelPendingAction)
@@ -152,8 +141,26 @@ class RolesAndPermissionPresenterTest {
         }
     }
 
+    @Test
+    fun `present - admins and moderator counts are updated when members changes`() = runTest {
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(updateMembersResult = {}),
+        )
+        val presenter = createRolesAndPermissionsPresenter(room = room)
+        presenter.test {
+            val initialState = awaitItem()
+            assertThat(initialState.adminCount).isNull()
+            assertThat(initialState.moderatorCount).isNull()
+            room.givenRoomMembersState(state = RoomMembersState.Ready(aRoomMemberList()))
+            skipItems(1)
+            val finalState = awaitItem()
+            assertThat(finalState.adminCount).isEqualTo(1)
+            assertThat(finalState.moderatorCount).isEqualTo(1)
+        }
+    }
+
     private fun TestScope.createRolesAndPermissionsPresenter(
-        room: FakeJoinedRoom = FakeJoinedRoom(),
+        room: FakeJoinedRoom = FakeJoinedRoom(baseRoom = FakeBaseRoom(updateMembersResult = {})),
         dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService()
     ): RolesAndPermissionsPresenter {

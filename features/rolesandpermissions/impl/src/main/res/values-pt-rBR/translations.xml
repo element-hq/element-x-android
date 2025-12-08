@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_room_change_permissions_administrators">"Somente administradores"</string>
+  <string name="screen_room_change_permissions_administrators">"Administradores"</string>
   <string name="screen_room_change_permissions_ban_people">"Banir pessoas"</string>
   <string name="screen_room_change_permissions_delete_messages">"Remover mensagens"</string>
-  <string name="screen_room_change_permissions_invite_people">"Convide pessoas e aceite solicitações de entrada"</string>
+  <string name="screen_room_change_permissions_everyone">"Membro"</string>
+  <string name="screen_room_change_permissions_invite_people">"Convidar pessoas"</string>
+  <string name="screen_room_change_permissions_member_moderation">"Gerenciar membros"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Mensagens e conteúdo"</string>
-  <string name="screen_room_change_permissions_moderators">"Administradores e moderadores"</string>
-  <string name="screen_room_change_permissions_remove_people">"Remover pessoas e recusar solicitações de entrada"</string>
+  <string name="screen_room_change_permissions_moderators">"Moderador"</string>
+  <string name="screen_room_change_permissions_remove_people">"Remover pessoas"</string>
   <string name="screen_room_change_permissions_room_avatar">"Alterar avatar da sala"</string>
-  <string name="screen_room_change_permissions_room_details">"Editar sala"</string>
+  <string name="screen_room_change_permissions_room_details">"Editar detalhes"</string>
   <string name="screen_room_change_permissions_room_name">"Alterar nome da sala"</string>
   <string name="screen_room_change_permissions_room_topic">"Alterar tópico da sala"</string>
   <string name="screen_room_change_permissions_send_messages">"Enviar mensagens"</string>
@@ -31,7 +33,13 @@
   <string name="screen_room_change_role_section_users">"Membros"</string>
   <string name="screen_room_change_role_unsaved_changes_description">"Você tem alterações não salvas."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Salvar alterações?"</string>
-  <string name="screen_room_member_list_banned_empty">"Não há usuários banidos nesta sala."</string>
+  <string name="screen_room_member_list_banned_empty">"Não há usuários banidos."</string>
+  <plurals name="screen_room_member_list_banned_header_title">
+    <item quantity="one">"%1$d banido"</item>
+    <item quantity="other">"%1$d banidos"</item>
+  </plurals>
+  <string name="screen_room_member_list_empty_search_subtitle">"Confira a ortografia ou tente uma nova busca"</string>
+  <string name="screen_room_member_list_empty_search_title">"Nenhum resultado para “%1$s”"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d pessoa"</item>
     <item quantity="other">"%1$d pessoas"</item>
@@ -43,8 +51,13 @@
   <string name="screen_room_member_list_manage_member_unban_title">"Desbanir da sala"</string>
   <string name="screen_room_member_list_mode_banned">"Banidos"</string>
   <string name="screen_room_member_list_mode_members">"Membros"</string>
-  <string name="screen_room_member_list_role_administrator">"Somente administradores"</string>
-  <string name="screen_room_member_list_role_moderator">"Administradores e moderadores"</string>
+  <plurals name="screen_room_member_list_pending_header_title">
+    <item quantity="one">"%1$d convidado"</item>
+    <item quantity="other">"%1$d convidados"</item>
+  </plurals>
+  <string name="screen_room_member_list_pending_status">"Pendente"</string>
+  <string name="screen_room_member_list_role_administrator">"Administradores"</string>
+  <string name="screen_room_member_list_role_moderator">"Moderador"</string>
   <string name="screen_room_member_list_role_owner">"Proprietário"</string>
   <string name="screen_room_member_list_room_members_header_title">"Membros da sala"</string>
   <string name="screen_room_member_list_unbanning_user">"Desbanindo %1$s"</string>
@@ -57,10 +70,12 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"Mensagens e conteúdo"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderadores"</string>
   <string name="screen_room_roles_and_permissions_owners">"Proprietários"</string>
+  <string name="screen_room_roles_and_permissions_permissions_header">"Permissões"</string>
   <string name="screen_room_roles_and_permissions_reset">"Redefinir permissões"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Depois de redefinir as permissões, você perderá as configurações atuais."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Redefinir permissões?"</string>
   <string name="screen_room_roles_and_permissions_roles_header">"Cargos"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Detalhes da sala"</string>
+  <string name="screen_room_roles_and_permissions_space_details">"Detalhes do espaço"</string>
   <string name="screen_room_roles_and_permissions_title">"Cargos e permissões"</string>
 </resources>

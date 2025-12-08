@@ -90,8 +90,8 @@
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Хората могат да се присъединят само ако са поканени"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Само с покана"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Достъп до стаята"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Пространствата в момента не се поддържат"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Членове на пространството"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Пространствата в момента не се поддържат"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Видима в директорията на обществените стаи"</string>
   <string name="screen_security_and_privacy_room_history_anyone_option_title">"Всеки"</string>
   <string name="screen_security_and_privacy_room_history_section_header">"Кой може да чете историята"</string>

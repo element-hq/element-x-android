@@ -68,7 +68,7 @@
   <string name="screen_room_details_title">"聊天室信息"</string>
   <string name="screen_room_details_topic_title">"主题"</string>
   <string name="screen_room_details_updating_room">"正在更新聊天室……"</string>
-  <string name="screen_room_member_list_banned_empty">"此聊天室里没有被封禁的用户。"</string>
+  <string name="screen_room_member_list_banned_empty">"没有被封禁的用户。"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="other">"%1$d 人"</item>
   </plurals>
@@ -129,8 +129,8 @@
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"只有受邀者才能加入"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"仅限邀请"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"房间访问权限"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_description">"目前不支持空间"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"空间成员"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"目前不支持空间"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"你需要房间地址才能使其在目录中可见。"</string>
   <string name="screen_security_and_privacy_room_address_section_header">"房间地址"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"允许通过搜索 %1$s 的公共房间目录来发现此房间"</string>

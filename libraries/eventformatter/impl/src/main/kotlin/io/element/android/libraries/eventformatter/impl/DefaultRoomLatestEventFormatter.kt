@@ -59,25 +59,27 @@ class DefaultRoomLatestEventFormatter(
         private const val MAX_SAFE_LENGTH = 500
     }
 
-    override fun format(latestEvent: LatestEventValue, isDmRoom: Boolean): CharSequence? {
-        return when (latestEvent) {
-            LatestEventValue.None -> null
-            is LatestEventValue.Local -> formatContent(
-                content = latestEvent.content,
-                isDmRoom = isDmRoom,
-                isOutgoing = true,
-                senderId = latestEvent.senderId,
-                senderDisambiguatedDisplayName = latestEvent.senderProfile.getDisambiguatedDisplayName(latestEvent.senderId)
-            )
-            is LatestEventValue.Remote -> formatContent(
-                content = latestEvent.content,
-                isDmRoom = isDmRoom,
-                isOutgoing = latestEvent.isOwn,
-                senderId = latestEvent.senderId,
-                senderDisambiguatedDisplayName = latestEvent.senderProfile.getDisambiguatedDisplayName(latestEvent.senderId)
-            )
-        }
-    }
+    override fun format(
+        latestEvent: LatestEventValue.Local,
+        isDmRoom: Boolean,
+    ): CharSequence? = formatContent(
+        content = latestEvent.content,
+        isDmRoom = isDmRoom,
+        isOutgoing = true,
+        senderId = latestEvent.senderId,
+        senderDisambiguatedDisplayName = latestEvent.senderProfile.getDisambiguatedDisplayName(latestEvent.senderId)
+    )
+
+    override fun format(
+        latestEvent: LatestEventValue.Remote,
+        isDmRoom: Boolean,
+    ): CharSequence? = formatContent(
+        content = latestEvent.content,
+        isDmRoom = isDmRoom,
+        isOutgoing = latestEvent.isOwn,
+        senderId = latestEvent.senderId,
+        senderDisambiguatedDisplayName = latestEvent.senderProfile.getDisambiguatedDisplayName(latestEvent.senderId)
+    )
 
     private fun formatContent(
         content: EventContent,

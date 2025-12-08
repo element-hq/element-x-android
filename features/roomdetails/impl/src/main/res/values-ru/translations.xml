@@ -137,8 +137,8 @@
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Присоединиться могут только приглашенные люди."</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Только по приглашению"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Доступ"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Пространства в настоящее время не поддерживаются."</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Участники пространства"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Пространства в настоящее время не поддерживаются."</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Вам понадобится адрес комнаты, чтобы сделать ее видимой в каталоге."</string>
   <string name="screen_security_and_privacy_room_address_section_header">"Адрес"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Опубликовать %1$s в каталоге публичных комнат"</string>

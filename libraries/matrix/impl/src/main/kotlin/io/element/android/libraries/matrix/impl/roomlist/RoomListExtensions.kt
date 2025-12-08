@@ -48,7 +48,7 @@ fun RoomListInterface.loadingStateFlow(): Flow<RoomListLoadingState> =
         try {
             send(result.state)
         } catch (exception: Exception) {
-            Timber.d("loadingStateFlow() initialState failed.")
+            Timber.d(exception, "loadingStateFlow() initialState failed.")
         }
         result.stateStream
     }.catch {

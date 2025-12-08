@@ -385,6 +385,7 @@ Er du sikker på at du vil fortsette?"</string>
   <string name="dialog_title_error">"Feil"</string>
   <string name="dialog_title_success">"Suksess"</string>
   <string name="dialog_title_warning">"Advarsel"</string>
+  <string name="dialog_unsaved_changes_description">"Du har endringer som ikke er lagret."</string>
   <string name="dialog_unsaved_changes_description_android">"Endringene dine er ikke lagret. Er du sikker på at du vil gå tilbake?"</string>
   <string name="dialog_unsaved_changes_title">"Lagre endringer?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Maksimal tillatt filstørrelse er: %1$s"</string>

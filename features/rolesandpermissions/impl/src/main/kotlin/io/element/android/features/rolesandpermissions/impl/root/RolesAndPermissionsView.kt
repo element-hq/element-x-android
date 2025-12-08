@@ -63,13 +63,17 @@ fun RolesAndPermissionsView(
         ListItem(
             headlineContent = { Text(adminsTitle) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Admin())),
-            trailingContent = ListItemContent.Text("${state.adminCount}"),
+            trailingContent = state.adminCount?.let { adminCount ->
+                ListItemContent.Text("$adminCount")
+            },
             onClick = { rolesAndPermissionsNavigator.openAdminList() },
         )
         ListItem(
             headlineContent = { Text(stringResource(R.string.screen_room_roles_and_permissions_moderators)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ChatProblem())),
-            trailingContent = ListItemContent.Text("${state.moderatorCount}"),
+            trailingContent = state.moderatorCount?.let { moderationCount ->
+                ListItemContent.Text("$moderationCount")
+            },
             onClick = { rolesAndPermissionsNavigator.openModeratorList() },
         )
         if (state.canDemoteSelf) {

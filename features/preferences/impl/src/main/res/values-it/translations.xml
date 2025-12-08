@@ -10,6 +10,7 @@
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL non valido, assicurati di includere il protocollo (http/https) e l\'indirizzo corretto."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Nascondi gli avatar nelle richieste di invito alle stanze"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Nascondi le anteprime dei media nelle conversazioni"</string>
+  <string name="screen_advanced_settings_labs">"Labs"</string>
   <string name="screen_advanced_settings_media_compression_description">"Carica foto e video più velocemente e riduci l\'utilizzo dei dati"</string>
   <string name="screen_advanced_settings_media_compression_title">"Ottimizza la qualità dei contenuti multimediali"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderazione e Sicurezza"</string>
@@ -43,6 +44,11 @@
   <string name="screen_edit_profile_error_title">"Impossibile aggiornare il profilo"</string>
   <string name="screen_edit_profile_title">"Modifica profilo"</string>
   <string name="screen_edit_profile_updating_details">"Aggiornamento del profilo…"</string>
+  <string name="screen_labs_enable_threads">"Abilita le risposte alle discussioni"</string>
+  <string name="screen_labs_enable_threads_description">"L\'app si riavvierà per applicare questa modifica."</string>
+  <string name="screen_labs_header_description">"Prova le nostre ultime idee in fase di sviluppo. Queste funzionalità non sono definitive; potrebbero essere instabili e soggette a modifiche."</string>
+  <string name="screen_labs_header_title">"Hai voglia di sperimentare?"</string>
+  <string name="screen_labs_title">"Labs"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Impostazioni aggiuntive"</string>
   <string name="screen_notification_settings_calls_label">"Chiamate audio e video"</string>
   <string name="screen_notification_settings_configuration_mismatch">"Mancata corrispondenza di configurazione"</string>

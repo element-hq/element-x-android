@@ -14,6 +14,7 @@ import io.element.android.libraries.voicerecorder.api.VoiceRecorder
 import io.element.android.libraries.voicerecorder.api.VoiceRecorderState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.yield
 import java.io.File
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
@@ -49,6 +50,7 @@ class FakeVoiceRecorder(
         timeSource += recordingDuration
         for (i in 1..levels.size) {
             _state.emit(VoiceRecorderState.Recording(startedAt.elapsedNow(), levels.take(i)))
+            yield()
         }
     }
 

@@ -210,6 +210,15 @@
       ]
     },
     {
+      "name" : ":features:roomdetailsedit:impl",
+      "includeRegex" : [
+        "screen_room_details_edit_room_title",
+        "screen_room_details_edition_error",
+        "screen_room_details_edition_error_title",
+        "screen_room_details_updating_room"
+      ]
+    },
+    {
       "name" : ":features:space:impl",
       "includeRegex" : [
         "screen\\.leave_space\\..*",
@@ -376,6 +385,13 @@
         "screen\\.room_roles_and_permissions\\..*",
         "screen_room_member_list.*",
         "screen\\.room_member_list\\..*"
+      ]
+    },
+    {
+      "name" : ":features:securityandprivacy:impl",
+      "includeRegex" : [
+        "screen\\.edit_room_address\\..*",
+        "screen\\.security_and_privacy\\..*"
       ]
     }
   ]

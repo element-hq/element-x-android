@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_join_room_ban_by_message">"你被 %1$s 从此房间封禁。"</string>
-  <string name="screen_join_room_ban_message">"你已被此房间封禁"</string>
+  <string name="screen_join_room_ban_by_message">"您已被禁止访问%1$s。"</string>
+  <string name="screen_join_room_ban_message">"你已被禁止访问"</string>
   <string name="screen_join_room_ban_reason">"理由：%1$s。"</string>
   <string name="screen_join_room_cancel_knock_action">"取消请求"</string>
   <string name="screen_join_room_cancel_knock_alert_confirmation">"是的，取消"</string>
@@ -11,10 +11,10 @@
   <string name="screen_join_room_decline_and_block_alert_message">"您确定要拒绝加入此房间的邀请吗？这也将阻止%1$s 与您联系或邀请您加入房间。"</string>
   <string name="screen_join_room_decline_and_block_alert_title">"拒绝邀请并屏蔽"</string>
   <string name="screen_join_room_decline_and_block_button_title">"拒绝并屏蔽"</string>
-  <string name="screen_join_room_fail_message">"加入房间失败。"</string>
-  <string name="screen_join_room_fail_reason">"要么此房间仅限受邀者，要么可能在空间层级有加入限制。"</string>
-  <string name="screen_join_room_forget_action">"忘记这个房间"</string>
-  <string name="screen_join_room_invite_required_message">"你需要邀请才能加入这个房间"</string>
+  <string name="screen_join_room_fail_message">"加入失败"</string>
+  <string name="screen_join_room_fail_reason">"您需要被邀请加入，否则可能会受到访问限制。"</string>
+  <string name="screen_join_room_forget_action">"忘记"</string>
+  <string name="screen_join_room_invite_required_message">"您需要邀请才能加入"</string>
   <string name="screen_join_room_invited_by">"受邀于"</string>
   <string name="screen_join_room_join_action">"加入"</string>
   <string name="screen_join_room_join_restricted_message">"您可能需要受到邀请或成为某个空间的成员才能加入。"</string>

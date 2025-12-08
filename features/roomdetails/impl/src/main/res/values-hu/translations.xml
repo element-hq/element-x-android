@@ -134,8 +134,8 @@ Nem javasoljuk a titkosítás engedélyezését az olyan szobákban, amelyeket b
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Csak a meghívott emberek léphetnek be."</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Csak meghívásos"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Hozzáférés"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_description">"A terek jelenleg nem támogatottak"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"A tér tagjai"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"A terek jelenleg nem támogatottak"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Szüksége lesz egy szobacímre, hogy láthatóvá tegye a szobakatalógusban."</string>
   <string name="screen_security_and_privacy_room_address_section_header">"Cím"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"A szoba megtalálhatóvá tétele a(z) %1$s nyilvános szobakatalógusában való kereséssel."</string>

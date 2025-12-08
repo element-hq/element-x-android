@@ -14,7 +14,11 @@ import io.element.android.libraries.matrix.api.roomlist.LatestEventValue
 class FakeRoomLatestEventFormatter : RoomLatestEventFormatter {
     private var result: CharSequence? = null
 
-    override fun format(latestEvent: LatestEventValue, isDmRoom: Boolean): CharSequence? {
+    override fun format(latestEvent: LatestEventValue.Local, isDmRoom: Boolean): CharSequence? {
+        return result
+    }
+
+    override fun format(latestEvent: LatestEventValue.Remote, isDmRoom: Boolean): CharSequence? {
         return result
     }
 

@@ -272,6 +272,7 @@
   <string name="dialog_title_error">"Памылка"</string>
   <string name="dialog_title_success">"Поспех"</string>
   <string name="dialog_title_warning">"Папярэджанне"</string>
+  <string name="dialog_unsaved_changes_description">"У вас ёсць незахаваныя змены."</string>
   <string name="dialog_unsaved_changes_description_android">"Вашы змены не былі захаваны. Вы ўпэўнены, што хочаце вярнуцца?"</string>
   <string name="dialog_unsaved_changes_title">"Захаваць змены?"</string>
   <string name="error_account_creation_not_possible">"Ваш хатні сервер неабходна абнавіць для падтрымкі Matrix Authentication Service і стварэння ўліковага запісу."</string>

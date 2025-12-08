@@ -34,6 +34,7 @@
   <string name="notification_sender_me">"我"</string>
   <string name="notification_sender_mention_reply">"%1$s提及或回复"</string>
   <string name="notification_test_push_notification_content">"您正在查看通知！点击我！"</string>
+  <string name="notification_thread_in_room">"线程 %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s：%2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
@@ -48,12 +49,19 @@
   <string name="push_distributor_background_sync_android">"后台同步"</string>
   <string name="push_distributor_firebase_android">"谷歌服务"</string>
   <string name="push_no_valid_google_play_services_apk_android">"找不到有效的 Google Play 服务。通知可能无法正常工作。"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_description">"检查被阻止的用户"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_quick_fix">"查看被屏蔽的用户"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_result_none">"没有用户被阻止。"</string>
   <plurals name="troubleshoot_notifications_test_blocked_users_result_some">
     <item quantity="other">"您已屏蔽 %1$d 位用户。您将不再收到这些用户的推送通知。"</item>
   </plurals>
+  <string name="troubleshoot_notifications_test_blocked_users_title">"已屏蔽用户"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"获取当前推送提供者的名称。"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"未选择任何推送提供者。"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found">"当前推送提供商：%1$s和当前分销商：%2$s . 但经销商%3$s未找到。应用程序可能已被卸载？"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_no_distributor">"当前推送提供商：%1$s ，但尚未配置分销商。"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"当前推送提供者：%1$s。"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success_with_distributor">"当前推送提供商：%1$s （%2$s ）"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_title">"当前推送提供者"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"确保应用程序至少有一个推送提供者。"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"未找到推送提供者。"</string>

@@ -96,10 +96,7 @@ class LeaveRoomPresenter(
         } else {
             val hasPrivilegedCreatorRole = roomInfoFlow.value.privilegedCreatorRole
             if (!hasPrivilegedCreatorRole) return false
-
-            val creators = usersWithRole(RoomMember.Role.Owner(isCreator = true)).first()
-            val superAdmins = usersWithRole(RoomMember.Role.Owner(isCreator = false)).first()
-            val owners = creators + superAdmins
+            val owners = usersWithRole { role -> role is RoomMember.Role.Owner }.first()
             return owners.size == 1 && owners.first().userId == sessionId
         }
     }

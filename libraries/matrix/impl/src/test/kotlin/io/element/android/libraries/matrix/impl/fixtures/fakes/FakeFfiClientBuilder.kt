@@ -44,5 +44,6 @@ class FakeFfiClientBuilder(
     override fun enableShareHistoryOnInvite(enableShareHistoryOnInvite: Boolean): ClientBuilder = this
     override fun threadsEnabled(enabled: Boolean, threadSubscriptions: Boolean): ClientBuilder = this
     override fun sqliteStore(config: SqliteStoreBuilder): ClientBuilder = this
+    override fun inMemoryStore(): ClientBuilder = this
     override suspend fun build() = buildResult()
 }

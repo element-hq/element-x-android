@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.impl.paths.SessionPaths
 import io.element.android.libraries.matrix.impl.paths.getSessionPaths
 import io.element.android.libraries.matrix.impl.proxy.ProxyProvider
 import io.element.android.libraries.matrix.impl.room.TimelineEventTypeFilterFactory
+import io.element.android.libraries.matrix.impl.storage.SqliteStoreBuilderProvider
 import io.element.android.libraries.matrix.impl.util.anonymizedTokens
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionData
@@ -36,7 +37,6 @@ import org.matrix.rustcomponents.sdk.RequestConfig
 import org.matrix.rustcomponents.sdk.Session
 import org.matrix.rustcomponents.sdk.SlidingSyncVersion
 import org.matrix.rustcomponents.sdk.SlidingSyncVersionBuilder
-import org.matrix.rustcomponents.sdk.SqliteStoreBuilder
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import uniffi.matrix_sdk_base.MediaRetentionPolicy
@@ -62,6 +62,7 @@ class RustMatrixClientFactory(
     private val featureFlagService: FeatureFlagService,
     private val timelineEventTypeFilterFactory: TimelineEventTypeFilterFactory,
     private val clientBuilderProvider: ClientBuilderProvider,
+    private val sqliteStoreBuilderProvider: SqliteStoreBuilderProvider,
 ) {
     private val sessionDelegate = RustClientSessionDelegate(sessionStore, appCoroutineScope, coroutineDispatchers)
 
@@ -126,12 +127,11 @@ class RustMatrixClientFactory(
         slidingSyncType: ClientBuilderSlidingSync,
     ): ClientBuilder {
         return clientBuilderProvider.provide()
-            .sqliteStore(
-                SqliteStoreBuilder(
-                    dataPath = sessionPaths.fileDirectory.absolutePath,
-                    cachePath = sessionPaths.cacheDirectory.absolutePath,
-                ).passphrase(passphrase)
-            )
+            .run {
+                sqliteStoreBuilderProvider.provide(sessionPaths)
+                    .passphrase(passphrase)
+                    .setupClientBuilder(this)
+            }
             .setSessionDelegate(sessionDelegate)
             .userAgent(userAgentProvider.provide())
             .addRootCertificates(userCertificatesProvider.provides())

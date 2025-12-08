@@ -395,6 +395,7 @@ Sunteți sigur că doriți să continuați?"</string>
   <string name="dialog_title_error">"Eroare"</string>
   <string name="dialog_title_success">"Succes"</string>
   <string name="dialog_title_warning">"Avertisment"</string>
+  <string name="dialog_unsaved_changes_description">"Aveți modificări nesalvate."</string>
   <string name="dialog_unsaved_changes_description_android">"Modificările dumneavoastră nu au fost salvate. Sunteți sigur că doriți să vă întoarceți?"</string>
   <string name="dialog_unsaved_changes_title">"Salvați modificările?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Dimensiunea maximă permisă pentru fișiere este: %1$s"</string>

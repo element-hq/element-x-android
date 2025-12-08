@@ -130,8 +130,8 @@ Não recomendamos ativar a cifragem em salas que qualquer pessoa possa encontrar
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Só é possível entrar tendo um convite"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Apenas por convite"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Acesso à sala"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Os espaços ainda não estão implementados"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Membros do espaço"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Os espaços ainda não estão implementados"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"É necessário um endereço para tornar a sala visível no diretório."</string>
   <string name="screen_security_and_privacy_room_address_section_header">"Endereço da sala"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Permite que esta sala seja encontrada através do diretório público do %1$s."</string>

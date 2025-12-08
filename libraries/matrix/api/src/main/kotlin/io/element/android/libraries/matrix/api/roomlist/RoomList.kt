@@ -65,7 +65,7 @@ suspend fun RoomList.awaitLoaded(timeout: Duration = Duration.INFINITE) {
                 it is RoomList.LoadingState.Loaded
             }
         }
-    } catch (timeoutException: TimeoutCancellationException) {
+    } catch (_: TimeoutCancellationException) {
         Timber.d("awaitAllRoomsAreLoaded: no response after $timeout")
     }
 }

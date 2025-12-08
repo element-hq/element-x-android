@@ -88,7 +88,7 @@ class FullScreenIntentPermissionsPresenter(
                     "package:${buildMeta.applicationId}".toUri()
                 )
                 externalIntentLauncher.launch(intent)
-            } catch (e: ActivityNotFoundException) {
+            } catch (_: ActivityNotFoundException) {
                 val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
                     .putExtra(Settings.EXTRA_APP_PACKAGE, buildMeta.applicationId)
                 externalIntentLauncher.launch(intent)

@@ -40,7 +40,7 @@ class SharedPreferencesFirebaseStore(
             if (k == PREFS_KEY_FCM_TOKEN) {
                 try {
                     flow.value = getFcmToken()
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                     flow.value = null
                 }
             }

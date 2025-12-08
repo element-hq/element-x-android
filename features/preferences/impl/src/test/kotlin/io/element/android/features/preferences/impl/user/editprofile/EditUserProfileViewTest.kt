@@ -34,45 +34,45 @@ class EditUserProfileViewTest {
 
     @Test
     fun `clicking on back emits the expected event`() {
-        val eventsRecorder = EventsRecorder<EditUserProfileEvents>()
+        val eventsRecorder = EventsRecorder<EditUserProfileEvent>()
         rule.setEditUserProfileView(
             aEditUserProfileState(
                 eventSink = eventsRecorder,
             ),
         )
         rule.pressBack()
-        eventsRecorder.assertSingle(EditUserProfileEvents.Exit)
+        eventsRecorder.assertSingle(EditUserProfileEvent.Exit)
     }
 
     @Test
-    fun `clicking on cancel exit emits the expected event`() {
-        val eventsRecorder = EventsRecorder<EditUserProfileEvents>()
+    fun `clicking on save from the exit confirmation dialog emits the expected event`() {
+        val eventsRecorder = EventsRecorder<EditUserProfileEvent>()
         rule.setEditUserProfileView(
             aEditUserProfileState(
                 saveAction = AsyncAction.ConfirmingCancellation,
                 eventSink = eventsRecorder,
             ),
         )
-        rule.clickOn(CommonStrings.action_cancel)
-        eventsRecorder.assertSingle(EditUserProfileEvents.CloseDialog)
+        rule.clickOn(CommonStrings.action_save, inDialog = true)
+        eventsRecorder.assertSingle(EditUserProfileEvent.Save)
     }
 
     @Test
-    fun `clicking on OK exit emits the expected event`() {
-        val eventsRecorder = EventsRecorder<EditUserProfileEvents>()
+    fun `clicking on discard exit emits the expected event`() {
+        val eventsRecorder = EventsRecorder<EditUserProfileEvent>()
         rule.setEditUserProfileView(
             aEditUserProfileState(
                 saveAction = AsyncAction.ConfirmingCancellation,
                 eventSink = eventsRecorder,
             ),
         )
-        rule.clickOn(CommonStrings.action_ok)
-        eventsRecorder.assertSingle(EditUserProfileEvents.Exit)
+        rule.clickOn(CommonStrings.action_discard)
+        eventsRecorder.assertSingle(EditUserProfileEvent.Exit)
     }
 
     @Test
     fun `clicking on save emits the expected event`() {
-        val eventsRecorder = EventsRecorder<EditUserProfileEvents>()
+        val eventsRecorder = EventsRecorder<EditUserProfileEvent>()
         rule.setEditUserProfileView(
             aEditUserProfileState(
                 saveButtonEnabled = true,
@@ -81,12 +81,12 @@ class EditUserProfileViewTest {
             ),
         )
         rule.clickOn(CommonStrings.action_save)
-        eventsRecorder.assertSingle(EditUserProfileEvents.Save)
+        eventsRecorder.assertSingle(EditUserProfileEvent.Save)
     }
 
     @Test
     fun `clicking on avatar opens the bottom sheet dialog`() {
-        val eventsRecorder = EventsRecorder<EditUserProfileEvents>()
+        val eventsRecorder = EventsRecorder<EditUserProfileEvent>()
         val actions = listOf(
             AvatarAction.TakePhoto,
             AvatarAction.ChoosePhoto,
@@ -110,7 +110,7 @@ class EditUserProfileViewTest {
 
     @Test
     fun `success invokes the expected callback`() {
-        val eventsRecorder = EventsRecorder<EditUserProfileEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<EditUserProfileEvent>(expectEvents = false)
         ensureCalledOnce { callback ->
             rule.setEditUserProfileView(
                 aEditUserProfileState(

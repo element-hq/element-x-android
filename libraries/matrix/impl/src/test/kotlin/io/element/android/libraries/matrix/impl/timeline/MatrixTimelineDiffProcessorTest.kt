@@ -21,7 +21,6 @@ import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
-import org.junit.Ignore
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.TimelineDiff
 
@@ -31,8 +30,7 @@ class MatrixTimelineDiffProcessorTest {
     private val anEvent = MatrixTimelineItem.Event(A_UNIQUE_ID, anEventTimelineItem())
     private val anEvent2 = MatrixTimelineItem.Event(A_UNIQUE_ID_2, anEventTimelineItem())
 
-    @Ignore("JNA direct mapping has broken unit tests with FFI fakes")
-    @Test
+        @Test
     fun `Append adds new entries at the end of the list`() = runTest {
         timelineItems.value = listOf(anEvent)
         val processor = createMatrixTimelineDiffProcessor(timelineItems)
@@ -44,8 +42,7 @@ class MatrixTimelineDiffProcessorTest {
         )
     }
 
-    @Ignore("JNA direct mapping has broken unit tests with FFI fakes")
-    @Test
+        @Test
     fun `PushBack adds a new entry at the end of the list`() = runTest {
         timelineItems.value = listOf(anEvent)
         val processor = createMatrixTimelineDiffProcessor(timelineItems)
@@ -57,8 +54,7 @@ class MatrixTimelineDiffProcessorTest {
         )
     }
 
-    @Ignore("JNA direct mapping has broken unit tests with FFI fakes")
-    @Test
+        @Test
     fun `PushFront inserts a new entry at the start of the list`() = runTest {
         timelineItems.value = listOf(anEvent)
         val processor = createMatrixTimelineDiffProcessor(timelineItems)
@@ -70,8 +66,7 @@ class MatrixTimelineDiffProcessorTest {
         )
     }
 
-    @Ignore("JNA direct mapping has broken unit tests with FFI fakes")
-    @Test
+        @Test
     fun `Set replaces an entry at some index`() = runTest {
         timelineItems.value = listOf(anEvent, anEvent2)
         val processor = createMatrixTimelineDiffProcessor(timelineItems)
@@ -83,8 +78,7 @@ class MatrixTimelineDiffProcessorTest {
         )
     }
 
-    @Ignore("JNA direct mapping has broken unit tests with FFI fakes")
-    @Test
+        @Test
     fun `Insert inserts a new entry at the provided index`() = runTest {
         timelineItems.value = listOf(anEvent, anEvent2)
         val processor = createMatrixTimelineDiffProcessor(timelineItems)
@@ -97,8 +91,7 @@ class MatrixTimelineDiffProcessorTest {
         )
     }
 
-    @Ignore("JNA direct mapping has broken unit tests with FFI fakes")
-    @Test
+        @Test
     fun `Remove removes an entry at some index`() = runTest {
         timelineItems.value = listOf(anEvent, MatrixTimelineItem.Other, anEvent2)
         val processor = createMatrixTimelineDiffProcessor(timelineItems)
@@ -110,8 +103,7 @@ class MatrixTimelineDiffProcessorTest {
         )
     }
 
-    @Ignore("JNA direct mapping has broken unit tests with FFI fakes")
-    @Test
+        @Test
     fun `PopBack removes an entry at the end of the list`() = runTest {
         timelineItems.value = listOf(anEvent, anEvent2)
         val processor = createMatrixTimelineDiffProcessor(timelineItems)
@@ -122,8 +114,7 @@ class MatrixTimelineDiffProcessorTest {
         )
     }
 
-    @Ignore("JNA direct mapping has broken unit tests with FFI fakes")
-    @Test
+        @Test
     fun `PopFront removes an entry at the start of the list`() = runTest {
         timelineItems.value = listOf(anEvent, anEvent2)
         val processor = createMatrixTimelineDiffProcessor(timelineItems)
@@ -134,8 +125,7 @@ class MatrixTimelineDiffProcessorTest {
         )
     }
 
-    @Ignore("JNA direct mapping has broken unit tests with FFI fakes")
-    @Test
+        @Test
     fun `Clear removes all the entries`() = runTest {
         timelineItems.value = listOf(anEvent, anEvent2)
         val processor = createMatrixTimelineDiffProcessor(timelineItems)
@@ -143,8 +133,7 @@ class MatrixTimelineDiffProcessorTest {
         assertThat(timelineItems.value).isEmpty()
     }
 
-    @Ignore("JNA direct mapping has broken unit tests with FFI fakes")
-    @Test
+        @Test
     fun `Truncate removes all entries after the provided length`() = runTest {
         timelineItems.value = listOf(anEvent, MatrixTimelineItem.Other, anEvent2)
         val processor = createMatrixTimelineDiffProcessor(timelineItems)
@@ -155,8 +144,7 @@ class MatrixTimelineDiffProcessorTest {
         )
     }
 
-    @Ignore("JNA direct mapping has broken unit tests with FFI fakes")
-    @Test
+        @Test
     fun `Reset removes all entries and add the provided ones`() = runTest {
         timelineItems.value = listOf(anEvent, MatrixTimelineItem.Other, anEvent2)
         val processor = createMatrixTimelineDiffProcessor(timelineItems)

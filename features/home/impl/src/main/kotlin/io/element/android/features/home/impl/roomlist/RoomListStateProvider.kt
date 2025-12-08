@@ -11,6 +11,7 @@ package io.element.android.features.home.impl.roomlist
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.home.impl.filters.RoomListFiltersState
 import io.element.android.features.home.impl.filters.aRoomListFiltersState
+import io.element.android.features.home.impl.model.LatestEvent
 import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.features.home.impl.model.RoomSummaryDisplayType
 import io.element.android.features.home.impl.model.aRoomListRoomSummary
@@ -88,7 +89,7 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
             name = "Room",
             numberOfUnreadMessages = 1,
             timestamp = "14:18",
-            lastMessage = "A very very very very long message which suites on two lines",
+            latestEvent = LatestEvent.Synced("A very very very very long message which suites on two lines"),
             avatarData = AvatarData("!id", "R", size = AvatarSize.RoomListItem),
             id = "!roomId:domain",
         ),
@@ -96,7 +97,7 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
             name = "Room#2",
             numberOfUnreadMessages = 0,
             timestamp = "14:16",
-            lastMessage = "A short message",
+            latestEvent = LatestEvent.Synced("A short message"),
             avatarData = AvatarData("!id", "Z", size = AvatarSize.RoomListItem),
             id = "!roomId2:domain",
         ),
@@ -119,7 +120,7 @@ internal fun generateRoomListRoomSummaryList(
             name = "Room#$index",
             numberOfUnreadMessages = 0,
             timestamp = "14:16",
-            lastMessage = "A message",
+            latestEvent = LatestEvent.Synced("A message"),
             avatarData = AvatarData("!id$index", "${(65 + index % 26).toChar()}", size = AvatarSize.RoomListItem),
             id = "!roomId$index:domain",
         )

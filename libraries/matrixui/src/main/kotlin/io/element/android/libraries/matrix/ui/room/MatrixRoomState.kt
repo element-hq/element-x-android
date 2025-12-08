@@ -111,21 +111,3 @@ fun BaseRoom.isOwnUserAdmin(): Boolean {
     val role = roomInfo.roleOf(sessionId)
     return role == RoomMember.Role.Admin || role is RoomMember.Role.Owner
 }
-
-@Composable
-fun BaseRoom.rawName(): String? {
-    val roomInfo by roomInfoFlow.collectAsState()
-    return roomInfo.rawName
-}
-
-@Composable
-fun BaseRoom.topic(): String? {
-    val roomInfo by roomInfoFlow.collectAsState()
-    return roomInfo.topic
-}
-
-@Composable
-fun BaseRoom.avatarUrl(): String? {
-    val roomInfo by roomInfoFlow.collectAsState()
-    return roomInfo.avatarUrl
-}

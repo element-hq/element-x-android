@@ -69,7 +69,7 @@
   <string name="screen_room_details_share_room_title">"Share room"</string>
   <string name="screen_room_details_title">"Room info"</string>
   <string name="screen_room_details_topic_title">"Topic"</string>
-  <string name="screen_room_details_updating_room">"Updating room…"</string>
+  <string name="screen_room_details_updating_room">"Updating details…"</string>
   <string name="screen_room_member_list_banned_empty">"There are no banned users."</string>
   <plurals name="screen_room_member_list_banned_header_title">
     <item quantity="one">"%1$d Banned"</item>
@@ -129,8 +129,10 @@
   <string name="screen_room_roles_and_permissions_room_details">"Room details"</string>
   <string name="screen_room_roles_and_permissions_title">"Roles &amp; permissions"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Add address"</string>
+  <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Anyone in authorized spaces can join, but everyone else must request access."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Everyone must request access."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_title">"Ask to join"</string>
+  <string name="screen_security_and_privacy_ask_to_join_single_space_members_option_description">"Anyone in %1$s can join, but everyone else must request access."</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Yes, enable encryption"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Once enabled, encryption for a room cannot be disabled, Message history will only be visible for room members since they were invited or since they joined the room.
 No one besides the room members will be able to read messages. This may prevent bots and bridges to work correctly.
@@ -141,11 +143,15 @@ We do not recommend enabling encryption for rooms that anyone can find and join.
   <string name="screen_security_and_privacy_encryption_toggle_title">"Enable end-to-end encryption"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Anyone can join."</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Anyone"</string>
+  <string name="screen_security_and_privacy_room_access_footer">"Choose which spaces’ members can join this room without an invitation.  %1$s"</string>
+  <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Manage spaces"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Only invited people can join."</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Invite only"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Access"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Spaces are not currently supported"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_multiple_parents_description">"Anyone in authorized spaces can join."</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_single_parent_description">"Anyone in %1$s can join."</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Space members"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Spaces are not currently supported"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"You’ll need an address in order to make it visible in the public directory."</string>
   <string name="screen_security_and_privacy_room_address_section_header">"Address"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Allow for this room to be found by searching %1$s public room directory"</string>

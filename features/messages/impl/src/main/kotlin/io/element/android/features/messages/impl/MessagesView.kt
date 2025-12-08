@@ -29,10 +29,15 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -44,7 +49,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerEvents
+import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerEvent
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
@@ -83,6 +88,7 @@ import io.element.android.libraries.designsystem.components.rememberExpandableBo
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toAnnotatedString
+import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.BottomSheetDragHandle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -121,7 +127,7 @@ fun MessagesView(
     knockRequestsBannerView: @Composable () -> Unit,
 ) {
     OnLifecycleEvent { _, event ->
-        state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvents.LifecycleEvent(event))
+        state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvent.LifecycleEvent(event))
     }
 
     KeepScreenOn(state.voiceMessageComposerState.keepScreenOn)
@@ -129,6 +135,8 @@ fun MessagesView(
     HideKeyboardWhenDisposed()
 
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
+
+    var maxComposerHeightPx by remember { mutableIntStateOf(120) }
 
     // This is needed because the composer is inside an AndroidView that can't be affected by the FocusManager in Compose
     val localView = LocalView.current
@@ -180,7 +188,13 @@ fun MessagesView(
         modifier = modifier
             .fillMaxSize()
             .imePadding()
-            .systemBarsPadding(),
+            .systemBarsPadding()
+            .onSizeChanged { size ->
+                // Let the composer takes at max half of the available height.
+                // The value will be different if the soft keyboard is displayed
+                // or not.
+                maxComposerHeightPx = (size.height * 0.5f).toInt()
+            },
         content = {
             Scaffold(
                 contentWindowInsets = WindowInsets.statusBars,
@@ -314,7 +328,7 @@ fun MessagesView(
         } else {
             RectangleShape
         },
-        maxBottomSheetContentHeight = 360.dp,
+        maxBottomSheetContentHeight = maxComposerHeightPx.toDp(),
     )
 
     ActionListView(
@@ -400,17 +414,17 @@ private fun MessagesViewContent(
         if (state.voiceMessageComposerState.showPermissionRationaleDialog) {
             VoiceMessagePermissionRationaleDialog(
                 onContinue = {
-                    state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvents.AcceptPermissionRationale)
+                    state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvent.AcceptPermissionRationale)
                 },
                 onDismiss = {
-                    state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvents.DismissPermissionsRationale)
+                    state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvent.DismissPermissionsRationale)
                 },
                 appName = state.appName
             )
         }
         if (state.voiceMessageComposerState.showSendFailureDialog) {
             VoiceMessageSendingFailedDialog(
-                onDismiss = { state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvents.DismissSendFailureDialog) },
+                onDismiss = { state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvent.DismissSendFailureDialog) },
             )
         }
 

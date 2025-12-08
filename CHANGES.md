@@ -1,3 +1,58 @@
+Changes in Element X v25.12.0
+=============================
+
+<!-- Release notes generated using configuration in .github/release.yml at v25.12.0 -->
+
+## What's Changed
+### ✨ Features
+* Room list: enable latest event sorter. by @bmarty in https://github.com/element-hq/element-x-android/pull/5825
+* Add room list indicators about last message by @bmarty in https://github.com/element-hq/element-x-android/pull/5824
+### 🙌 Improvements
+* Change : improve room and space member list by @ganfra in https://github.com/element-hq/element-x-android/pull/5806
+* Change : security and privacy rework by @ganfra in https://github.com/element-hq/element-x-android/pull/5816
+### 🐛 Bugfixes
+* Ensure confirmation dialog is displayed when an admin add other admin to a room by @bmarty in https://github.com/element-hq/element-x-android/pull/5786
+* Edit user profile cancel confirmation by @bmarty in https://github.com/element-hq/element-x-android/pull/5788
+* Fix editing owner by @bmarty in https://github.com/element-hq/element-x-android/pull/5807
+* Uris should take precedence in plain text intents by @jmartinesp in https://github.com/element-hq/element-x-android/pull/5785
+* Fix long voice recording by @bmarty in https://github.com/element-hq/element-x-android/pull/5821
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/5792
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/5830
+### 🧱 Build
+* Use regex to check forbidden terms by @jmartinesp in https://github.com/element-hq/element-x-android/pull/5784
+* Update Gradle Wrapper from 8.14.3 to 9.2.1 by @ElementBot in https://github.com/element-hq/element-x-android/pull/5751
+### Dependency upgrades
+* fix(deps): update dependency androidx.sqlite:sqlite-ktx to v2.6.2 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5769
+* fix(deps): update datastore to v1.2.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5789
+* chore(deps): update peter-evans/create-pull-request action to v7.0.9 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5793
+* fix(deps): update dependency io.nlopez.compose.rules:detekt to v0.4.28 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5795
+* fix(deps): update metro to v0.7.7 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5771
+* chore(deps): update plugin sonarqube to v7.1.0.6387 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5783
+* fix(deps): update dependency io.github.sergio-sastre.composablepreviewscanner:android to v0.7.2 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5799
+* fix(deps): update dependency org.matrix.rustcomponents:sdk-android to v25.11.24 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5796
+* fix(deps): update dependency io.sentry:sentry-android to v8.27.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5803
+* fix(deps): update dependency io.element.android:emojibase-bindings to v1.5.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5801
+* fix(deps): update roborazzi to v1.52.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5804
+* fix(deps): update dependency org.maplibre.gl:android-sdk to v12.2.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5814
+* chore(deps): update actions/checkout action to v6 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5805
+* fix(deps): update dependency com.google.testparameterinjector:test-parameter-injector to v1.20 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5800
+* fix(deps): update android.gradle.plugin to v8.13.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5260
+* fix(deps): update dependency org.matrix.rustcomponents:sdk-android to v25.11.26 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5818
+* fix(deps): update dependencyanalysis to v3.5.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5819
+* fix(deps): update dependency com.posthog:posthog-android to v3.27.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5834
+* fix(deps): update dependency io.element.android:element-call-embedded to v0.16.3 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/5839
+* Upgrade the Rust SDK to `v25.12.2` by @jmartinesp in https://github.com/element-hq/element-x-android/pull/5838
+### Others
+* misc : use newLatestEvent api from sdk by @ganfra in https://github.com/element-hq/element-x-android/pull/5809
+* Inject RoomMemberListDataSource in the presenter constructor. by @bmarty in https://github.com/element-hq/element-x-android/pull/5822
+* Add more performance checks by @jmartinesp in https://github.com/element-hq/element-x-android/pull/5767
+* Load `JoinedRoom` in home screen, pass it to the room flow by @jmartinesp in https://github.com/element-hq/element-x-android/pull/5817
+* Revert "fix(deps): update dependency com.posthog:posthog-android to v3.27.0" by @jmartinesp in https://github.com/element-hq/element-x-android/pull/5836
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v25.11.3...v25.12.0
+
 Changes in Element X v25.11.3
 =============================
 

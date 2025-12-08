@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_room_change_permissions_administrators">"Vain ylläpitäjät"</string>
+  <string name="screen_room_change_permissions_administrators">"Ylläpitäjä"</string>
   <string name="screen_room_change_permissions_ban_people">"Porttikieltojen antaminen"</string>
   <string name="screen_room_change_permissions_delete_messages">"Viestien poistaminen"</string>
+  <string name="screen_room_change_permissions_everyone">"Jäsen"</string>
   <string name="screen_room_change_permissions_invite_people">"Ihmisten kutsuminen ja liittymispyyntöjen hyväksyminen"</string>
+  <string name="screen_room_change_permissions_member_moderation">"Jäsenien hallinta"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Viestit ja sisältö"</string>
-  <string name="screen_room_change_permissions_moderators">"Ylläpitäjät ja valvojat"</string>
+  <string name="screen_room_change_permissions_moderators">"Valvoja"</string>
   <string name="screen_room_change_permissions_remove_people">"Henkilöiden poistaminen ja liittymispyyntöjen hylkääminen"</string>
   <string name="screen_room_change_permissions_room_avatar">"Huoneen avatarin vaihtaminen"</string>
-  <string name="screen_room_change_permissions_room_details">"Muokkaa huonetta"</string>
+  <string name="screen_room_change_permissions_room_details">"Muokkaa tietoja"</string>
   <string name="screen_room_change_permissions_room_name">"Huoneen nimen vaihtaminen"</string>
   <string name="screen_room_change_permissions_room_topic">"Huoneen aiheen vaihtaminen"</string>
   <string name="screen_room_change_permissions_send_messages">"Viestien lähettäminen"</string>
@@ -31,7 +33,7 @@
   <string name="screen_room_change_role_section_users">"Jäsenet"</string>
   <string name="screen_room_change_role_unsaved_changes_description">"Sinulla on tallentamattomia muutoksia"</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Tallennetaanko muutokset?"</string>
-  <string name="screen_room_member_list_banned_empty">"Tässä huoneessa ei ole porttikieltoja"</string>
+  <string name="screen_room_member_list_banned_empty">"Porttikiellettyjä käyttäjiä ei ole."</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d henkilö"</item>
     <item quantity="other">"%1$d henkilöä"</item>
@@ -43,8 +45,8 @@
   <string name="screen_room_member_list_manage_member_unban_title">"Poista porttikielto huoneesta"</string>
   <string name="screen_room_member_list_mode_banned">"Porttikiellot"</string>
   <string name="screen_room_member_list_mode_members">"Jäsenet"</string>
-  <string name="screen_room_member_list_role_administrator">"Vain ylläpitäjät"</string>
-  <string name="screen_room_member_list_role_moderator">"Ylläpitäjät ja valvojat"</string>
+  <string name="screen_room_member_list_role_administrator">"Ylläpitäjä"</string>
+  <string name="screen_room_member_list_role_moderator">"Valvoja"</string>
   <string name="screen_room_member_list_role_owner">"Omistaja"</string>
   <string name="screen_room_member_list_room_members_header_title">"Huoneen jäsenet"</string>
   <string name="screen_room_member_list_unbanning_user">"Poistetaan käyttäjän %1$s porttikieltoa"</string>
@@ -57,10 +59,12 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"Viestit ja sisältö"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Valvojat"</string>
   <string name="screen_room_roles_and_permissions_owners">"Omistajat"</string>
+  <string name="screen_room_roles_and_permissions_permissions_header">"Oikeudet"</string>
   <string name="screen_room_roles_and_permissions_reset">"Nollaa oikeudet"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Kun nollaat käyttöoikeudet, menetät nykyiset asetukset."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Nollataanko oikeudet?"</string>
   <string name="screen_room_roles_and_permissions_roles_header">"Roolit"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Huoneen tiedot"</string>
+  <string name="screen_room_roles_and_permissions_space_details">"Tilan tiedot"</string>
   <string name="screen_room_roles_and_permissions_title">"Roolit ja oikeudet"</string>
 </resources>

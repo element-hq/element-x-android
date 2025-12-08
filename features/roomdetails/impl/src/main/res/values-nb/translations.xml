@@ -130,8 +130,8 @@ Vi anbefaler ikke å aktivere kryptering for rom som hvem som helst kan finne og
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Folk kan bare bli med hvis de er invitert"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Kun for inviterte"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Tilgang til rom"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Områder støttes ikke for øyeblikket"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Medlemmer av område"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Områder støttes ikke for øyeblikket"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Du trenger en adresse til rommet for å gjøre det synlig i katalogen."</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Tillat at dette rommet blir funnet ved å søke %1$s offentlig romkatalog"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Synlig i offentlig romkatalog"</string>

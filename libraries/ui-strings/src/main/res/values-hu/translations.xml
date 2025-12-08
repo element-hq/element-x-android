@@ -387,6 +387,7 @@ Biztos, hogy folytatja?"</string>
   <string name="dialog_title_error">"Hiba"</string>
   <string name="dialog_title_success">"Sikeres"</string>
   <string name="dialog_title_warning">"Figyelmeztetés"</string>
+  <string name="dialog_unsaved_changes_description">"Mentetlen módosításai vannak."</string>
   <string name="dialog_unsaved_changes_description_android">"A módosítások nem lettek mentve. Biztos, hogy visszalép?"</string>
   <string name="dialog_unsaved_changes_title">"Menti a módosításokat?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"A legnagyobb megengedett fájlméret: %1$s"</string>

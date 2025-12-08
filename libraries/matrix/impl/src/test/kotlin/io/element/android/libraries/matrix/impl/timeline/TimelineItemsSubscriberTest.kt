@@ -20,7 +20,6 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
-import org.junit.Ignore
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.Timeline
 import org.matrix.rustcomponents.sdk.TimelineDiff
@@ -28,8 +27,7 @@ import uniffi.matrix_sdk_ui.EventItemOrigin
 
 @OptIn(ExperimentalCoroutinesApi::class)
 class TimelineItemsSubscriberTest {
-    @Ignore("JNA direct mapping has broken unit tests with FFI fakes")
-    @Test
+        @Test
     fun `when timeline emits an empty list of items, the flow must emits an empty list`() = runTest {
         val timelineItems: MutableSharedFlow<List<MatrixTimelineItem>> =
             MutableSharedFlow(replay = 1, extraBufferCapacity = Int.MAX_VALUE)
@@ -52,8 +50,7 @@ class TimelineItemsSubscriberTest {
         }
     }
 
-    @Ignore("JNA direct mapping has broken unit tests with FFI fakes")
-    @Test
+        @Test
     fun `when timeline emits a non empty list of items, the flow must emits a non empty list`() = runTest {
         val timelineItems: MutableSharedFlow<List<MatrixTimelineItem>> =
             MutableSharedFlow(replay = 1, extraBufferCapacity = Int.MAX_VALUE)
@@ -76,8 +73,7 @@ class TimelineItemsSubscriberTest {
         }
     }
 
-    @Ignore("JNA direct mapping has broken unit tests with FFI fakes")
-    @Test
+        @Test
     fun `when timeline emits an item with SYNC origin`() = runTest {
         val timelineItems: MutableSharedFlow<List<MatrixTimelineItem>> =
             MutableSharedFlow(replay = 1, extraBufferCapacity = Int.MAX_VALUE)
@@ -108,8 +104,7 @@ class TimelineItemsSubscriberTest {
         }
     }
 
-    @Ignore("JNA direct mapping has broken unit tests with FFI fakes")
-    @Test
+        @Test
     fun `multiple subscriptions does not have side effect`() = runTest {
         val timelineItemsSubscriber = createTimelineItemsSubscriber()
         timelineItemsSubscriber.subscribeIfNeeded()

@@ -88,6 +88,7 @@ fun SpaceView(
         topBar = {
             SpaceViewTopBar(
                 currentSpace = state.currentSpace,
+                canAccessSpaceSettings = state.canAccessSpaceSettings,
                 onBackClick = onBackClick,
                 onLeaveSpaceClick = onLeaveSpaceClick,
                 onShareSpace = onShareSpace,
@@ -255,6 +256,7 @@ private fun LoadingMoreIndicator(
 @Composable
 private fun SpaceViewTopBar(
     currentSpace: SpaceRoom?,
+    canAccessSpaceSettings: Boolean,
     onBackClick: () -> Unit,
     onLeaveSpaceClick: () -> Unit,
     onDetailsClick: () -> Unit,
@@ -275,8 +277,7 @@ private fun SpaceViewTopBar(
                     avatarData = currentSpace.getAvatarData(AvatarSize.TimelineRoom),
                     modifier = Modifier
                         .clip(roundedCornerShape)
-                        // TODO enable when screen ready for space
-                        .clickable(enabled = false, onClick = onDetailsClick)
+                        .clickable(enabled = canAccessSpaceSettings, onClick = onDetailsClick)
                 )
             }
         },

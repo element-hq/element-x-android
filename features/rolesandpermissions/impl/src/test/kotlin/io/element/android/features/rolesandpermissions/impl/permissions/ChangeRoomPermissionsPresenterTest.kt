@@ -39,7 +39,6 @@ class ChangeRoomPermissionsPresenterTest {
                 assertThat(this.itemsBySection).isNotEmpty()
                 assertThat(this.hasChanges).isFalse()
                 assertThat(this.saveAction).isEqualTo(AsyncAction.Uninitialized)
-                assertThat(this.confirmExitAction).isEqualTo(AsyncAction.Uninitialized)
             }
 
             // Updated state, permissions loaded
@@ -162,7 +161,7 @@ class ChangeRoomPermissionsPresenterTest {
             assertThat(awaitItem().hasChanges).isFalse()
             awaitItem().run {
                 assertThat(currentPermissions?.roomName).isEqualTo(Moderator.powerLevel)
-                assertThat(saveAction).isEqualTo(AsyncAction.Success(Unit))
+                assertThat(saveAction).isEqualTo(AsyncAction.Success(true))
             }
             assertThat(analyticsService.capturedEvents).containsExactlyElementsIn(
                 listOf(
@@ -243,10 +242,10 @@ class ChangeRoomPermissionsPresenterTest {
             assertThat(awaitItem().hasChanges).isTrue()
 
             state.eventSink(ChangeRoomPermissionsEvent.Exit)
-            assertThat(awaitItem().confirmExitAction).isEqualTo(AsyncAction.ConfirmingNoParams)
+            assertThat(awaitItem().saveAction).isEqualTo(AsyncAction.ConfirmingCancellation)
 
             state.eventSink(ChangeRoomPermissionsEvent.Exit)
-            assertThat(awaitItem().confirmExitAction).isEqualTo(AsyncAction.Success(Unit))
+            assertThat(awaitItem().saveAction).isEqualTo(AsyncAction.Success(false))
         }
     }
 
@@ -260,7 +259,7 @@ class ChangeRoomPermissionsPresenterTest {
 
             state.eventSink(ChangeRoomPermissionsEvent.Exit)
 
-            assertThat(awaitItem().confirmExitAction).isEqualTo(AsyncAction.Success(Unit))
+            assertThat(awaitItem().saveAction).isEqualTo(AsyncAction.Success(false))
         }
     }
 

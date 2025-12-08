@@ -18,7 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerEvents
+import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerEvent
 import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerState
 import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerStateProvider
 import io.element.android.features.messages.api.timeline.voicemessages.composer.aVoiceMessageComposerState
@@ -78,19 +78,19 @@ internal fun MessageComposerView(
     }
 
     val onVoiceRecorderEvent = { press: VoiceMessageRecorderEvent ->
-        voiceMessageState.eventSink(VoiceMessageComposerEvents.RecorderEvent(press))
+        voiceMessageState.eventSink(VoiceMessageComposerEvent.RecorderEvent(press))
     }
 
     val onSendVoiceMessage = {
-        voiceMessageState.eventSink(VoiceMessageComposerEvents.SendVoiceMessage)
+        voiceMessageState.eventSink(VoiceMessageComposerEvent.SendVoiceMessage)
     }
 
     val onDeleteVoiceMessage = {
-        voiceMessageState.eventSink(VoiceMessageComposerEvents.DeleteVoiceMessage)
+        voiceMessageState.eventSink(VoiceMessageComposerEvent.DeleteVoiceMessage)
     }
 
     val onVoicePlayerEvent = { event: VoiceMessagePlayerEvent ->
-        voiceMessageState.eventSink(VoiceMessageComposerEvents.PlayerEvent(event))
+        voiceMessageState.eventSink(VoiceMessageComposerEvent.PlayerEvent(event))
     }
 
     TextComposer(

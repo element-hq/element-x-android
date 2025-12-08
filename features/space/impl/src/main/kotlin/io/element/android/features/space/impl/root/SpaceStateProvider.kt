@@ -53,6 +53,7 @@ fun aSpaceState(
     hasMoreToLoad: Boolean = true,
     acceptDeclineInviteState: AcceptDeclineInviteState = anAcceptDeclineInviteState(),
     topicViewerState: TopicViewerState = TopicViewerState.Hidden,
+    canAccessSpaceSettings: Boolean = true,
     eventSink: (SpaceEvents) -> Unit = { },
 ) = SpaceState(
     currentSpace = parentSpace,
@@ -63,6 +64,7 @@ fun aSpaceState(
     joinActions = joinActions.toImmutableMap(),
     acceptDeclineInviteState = acceptDeclineInviteState,
     topicViewerState = topicViewerState,
+    canAccessSpaceSettings = canAccessSpaceSettings,
     eventSink = eventSink,
 )
 

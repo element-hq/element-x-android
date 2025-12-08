@@ -29,7 +29,7 @@ data class RoomListRoomSummary(
     val numberOfUnreadNotifications: Long,
     val isMarkedUnread: Boolean,
     val timestamp: String?,
-    val latestEvent: CharSequence?,
+    val latestEvent: LatestEvent,
     val avatarData: AvatarData,
     val userDefinedNotificationMode: RoomNotificationMode?,
     val hasRoomCall: Boolean,

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_room_details_edit_room_title">"방 편집"</string>
+  <string name="screen_room_details_edition_error">"알 수 없는 오류가 발생하여 정보를 변경할 수 없습니다."</string>
+  <string name="screen_room_details_edition_error_title">"방을 업데이트할 수 없습니다."</string>
+  <string name="screen_room_details_updating_room">"방 업데이트 중…"</string>
+</resources>

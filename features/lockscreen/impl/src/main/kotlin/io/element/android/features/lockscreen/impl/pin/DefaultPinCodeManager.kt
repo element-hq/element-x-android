@@ -71,7 +71,7 @@ class DefaultPinCodeManager(
                     lockScreenStore.onWrongPin()
                 }
             }
-        } catch (failure: Throwable) {
+        } catch (_: Throwable) {
             false
         }
     }

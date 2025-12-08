@@ -34,7 +34,7 @@ class RoomSyncSubscriber(
                     }
                     subscribedRoomIds.add(roomId)
                 } catch (exception: Exception) {
-                    Timber.e("Failed to subscribe to room $roomId")
+                    Timber.e(exception, "Failed to subscribe to room $roomId")
                 }
             }
         }

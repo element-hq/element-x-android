@@ -31,7 +31,7 @@
   <string name="screen_room_change_role_section_users">"成员"</string>
   <string name="screen_room_change_role_unsaved_changes_description">"您有未保存的更改。"</string>
   <string name="screen_room_change_role_unsaved_changes_title">"保存更改？"</string>
-  <string name="screen_room_member_list_banned_empty">"此聊天室里没有被封禁的用户。"</string>
+  <string name="screen_room_member_list_banned_empty">"没有被封禁的用户。"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="other">"%1$d 人"</item>
   </plurals>
@@ -61,5 +61,6 @@
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"重置权限？"</string>
   <string name="screen_room_roles_and_permissions_roles_header">"角色"</string>
   <string name="screen_room_roles_and_permissions_room_details">"聊天室详情"</string>
+  <string name="screen_room_roles_and_permissions_space_details">"空间详情"</string>
   <string name="screen_room_roles_and_permissions_title">"角色与权限"</string>
 </resources>

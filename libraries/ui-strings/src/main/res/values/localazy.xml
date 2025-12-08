@@ -234,6 +234,7 @@ Reason: %1$s."</string>
   <string name="common_light">"Light"</string>
   <string name="common_line_copied_to_clipboard">"Line copied to clipboard"</string>
   <string name="common_link_copied_to_clipboard">"Link copied to clipboard"</string>
+  <string name="common_link_new_device">"Link new device"</string>
   <string name="common_loading">"Loading…"</string>
   <string name="common_loading_more">"Loading more…"</string>
   <plurals name="common_many_members">
@@ -246,10 +247,12 @@ Reason: %1$s."</string>
   </plurals>
   <string name="common_message">"Message"</string>
   <string name="common_message_actions">"Message actions"</string>
+  <string name="common_message_failed_to_send">"Message failed to send"</string>
   <string name="common_message_layout">"Message layout"</string>
   <string name="common_message_removed">"Message removed"</string>
   <string name="common_modern">"Modern"</string>
   <string name="common_mute">"Mute"</string>
+  <string name="common_name">"Name"</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"No results"</string>
   <string name="common_no_room_name">"No room name"</string>
@@ -324,6 +327,7 @@ Reason: %1$s."</string>
   <string name="common_something_went_wrong">"Something went wrong"</string>
   <string name="common_something_went_wrong_message">"We encountered an issue. Please try again."</string>
   <string name="common_space">"Space"</string>
+  <string name="common_space_topic_placeholder">"What is this space about?"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d Space"</item>
     <item quantity="other">"%1$d Spaces"</item>
@@ -389,6 +393,7 @@ Are you sure you want to continue?"</string>
   <string name="dialog_title_error">"Error"</string>
   <string name="dialog_title_success">"Success"</string>
   <string name="dialog_title_warning">"Warning"</string>
+  <string name="dialog_unsaved_changes_description">"You have unsaved changes."</string>
   <string name="dialog_unsaved_changes_description_android">"Your changes have not been saved. Are you sure you want to go back?"</string>
   <string name="dialog_unsaved_changes_title">"Save changes?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"The max file size allowed is: %1$s"</string>
@@ -428,6 +433,14 @@ Are you sure you want to continue?"</string>
   <string name="screen_create_poll_options_section_title">"Options"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Remove %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Settings"</string>
+  <string name="screen_link_new_device_desktop_computer">"Desktop computer"</string>
+  <string name="screen_link_new_device_mobile_device">"Mobile device"</string>
+  <string name="screen_link_new_device_title">"What type of device do you want to link?"</string>
+  <string name="screen_manage_authorized_spaces_header">"Spaces where members can join the room without an invitation."</string>
+  <string name="screen_manage_authorized_spaces_title">"Manage spaces"</string>
+  <string name="screen_manage_authorized_spaces_unknown_space">"(Unknown space)"</string>
+  <string name="screen_manage_authorized_spaces_unknown_spaces_section_title">"Other spaces you’re not a member of"</string>
+  <string name="screen_manage_authorized_spaces_your_spaces_section_title">"Your spaces"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Press on a message and choose “%1$s” to include here."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Pin important messages so that they can be easily discovered"</string>

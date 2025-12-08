@@ -25,12 +25,14 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
                 aRoomListRoomSummary(displayType = RoomSummaryDisplayType.PLACEHOLDER),
                 aRoomListRoomSummary(),
                 aRoomListRoomSummary(name = null),
-                aRoomListRoomSummary(lastMessage = null),
+                aRoomListRoomSummary(latestEvent = LatestEvent.None),
                 aRoomListRoomSummary(
                     name = "A very long room name that should be truncated",
-                    lastMessage = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt" +
-                        " ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea com" +
-                        "modo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.",
+                    latestEvent = LatestEvent.Synced(
+                        "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt" +
+                            " ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea com" +
+                            "modo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur."
+                    ),
                     timestamp = "yesterday",
                     numberOfUnreadMessages = 1,
                 ),
@@ -44,7 +46,7 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
                     listOf(
                         aRoomListRoomSummary(
                             name = roomNotificationMode.name,
-                            lastMessage = "No activity" + if (hasCall) ", call" else "",
+                            latestEvent = LatestEvent.Synced("No activity" + if (hasCall) ", call" else ""),
                             notificationMode = roomNotificationMode,
                             numberOfUnreadMessages = 0,
                             numberOfUnreadMentions = 0,
@@ -52,7 +54,7 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
                         ),
                         aRoomListRoomSummary(
                             name = roomNotificationMode.name,
-                            lastMessage = "New messages" + if (hasCall) ", call" else "",
+                            latestEvent = LatestEvent.Synced("New messages" + if (hasCall) ", call" else ""),
                             notificationMode = roomNotificationMode,
                             numberOfUnreadMessages = 1,
                             numberOfUnreadMentions = 0,
@@ -60,7 +62,7 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
                         ),
                         aRoomListRoomSummary(
                             name = roomNotificationMode.name,
-                            lastMessage = "New messages, mentions" + if (hasCall) ", call" else "",
+                            latestEvent = LatestEvent.Synced("New messages, mentions" + if (hasCall) ", call" else ""),
                             notificationMode = roomNotificationMode,
                             numberOfUnreadMessages = 1,
                             numberOfUnreadMentions = 1,
@@ -68,7 +70,7 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
                         ),
                         aRoomListRoomSummary(
                             name = roomNotificationMode.name,
-                            lastMessage = "New mentions" + if (hasCall) ", call" else "",
+                            latestEvent = LatestEvent.Synced("New mentions" + if (hasCall) ", call" else ""),
                             notificationMode = roomNotificationMode,
                             numberOfUnreadMessages = 0,
                             numberOfUnreadMentions = 1,
@@ -127,6 +129,10 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
                     isTombstoned = true,
                 )
             ),
+            listOf(
+                aRoomListRoomSummary(latestEvent = LatestEvent.Sending("A sending message")),
+                aRoomListRoomSummary(latestEvent = LatestEvent.Error),
+            )
         ).flatten()
 }
 
@@ -148,8 +154,8 @@ internal fun aRoomListRoomSummary(
     numberOfUnreadMentions: Long = 0,
     numberOfUnreadNotifications: Long = 0,
     isMarkedUnread: Boolean = false,
-    lastMessage: String? = "Last message",
-    timestamp: String? = lastMessage?.let { "88:88" },
+    latestEvent: LatestEvent = LatestEvent.Synced("Last message"),
+    timestamp: String? = latestEvent.takeIf { it !is LatestEvent.None }?.let { "88:88" },
     notificationMode: RoomNotificationMode? = null,
     hasRoomCall: Boolean = false,
     avatarData: AvatarData = AvatarData(id, name, size = AvatarSize.RoomListItem),
@@ -171,7 +177,7 @@ internal fun aRoomListRoomSummary(
     numberOfUnreadNotifications = numberOfUnreadNotifications,
     isMarkedUnread = isMarkedUnread,
     timestamp = timestamp,
-    latestEvent = lastMessage,
+    latestEvent = latestEvent,
     avatarData = avatarData,
     userDefinedNotificationMode = notificationMode,
     hasRoomCall = hasRoomCall,

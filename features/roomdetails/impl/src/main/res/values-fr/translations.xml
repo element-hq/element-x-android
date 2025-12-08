@@ -71,9 +71,15 @@
   <string name="screen_room_details_topic_title">"Sujet"</string>
   <string name="screen_room_details_updating_room">"Mise à jour du salon…"</string>
   <string name="screen_room_member_list_banned_empty">"Il n’y a pas d’utilisateur banni."</string>
+  <plurals name="screen_room_member_list_banned_header_title">
+    <item quantity="one">"%1$d Banni(e)"</item>
+    <item quantity="other">"%1$d Banni(e)s"</item>
+  </plurals>
+  <string name="screen_room_member_list_empty_search_subtitle">"Vérifiez la saisie ou effectuez une nouvelle recherche"</string>
+  <string name="screen_room_member_list_empty_search_title">"Aucun résultat pour «%1$s»"</string>
   <plurals name="screen_room_member_list_header_title">
-    <item quantity="one">"%1$d personne"</item>
-    <item quantity="other">"%1$d personnes"</item>
+    <item quantity="one">"%1$d Personne"</item>
+    <item quantity="other">"%1$d Personnes"</item>
   </plurals>
   <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Bannir du salon"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Retirer le membre uniquement"</string>
@@ -82,6 +88,11 @@
   <string name="screen_room_member_list_manage_member_unban_title">"Débannir du salon"</string>
   <string name="screen_room_member_list_mode_banned">"Bannis"</string>
   <string name="screen_room_member_list_mode_members">"Membres"</string>
+  <plurals name="screen_room_member_list_pending_header_title">
+    <item quantity="one">"%1$d Invité(e)"</item>
+    <item quantity="other">"%1$d Invité(e)s"</item>
+  </plurals>
+  <string name="screen_room_member_list_pending_status">"En attente"</string>
   <string name="screen_room_member_list_role_administrator">"Administrateurs"</string>
   <string name="screen_room_member_list_role_moderator">"Modérateurs"</string>
   <string name="screen_room_member_list_role_owner">"Propriétaire"</string>
@@ -130,11 +141,15 @@ Nous ne recommandons pas d’activer le chiffrement pour les salons que tout le 
   <string name="screen_security_and_privacy_encryption_toggle_title">"Activer le chiffrement de bout en bout"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Tout le monde peut rejoindre."</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Tout le monde"</string>
+  <string name="screen_security_and_privacy_room_access_footer">"Choisissez les espaces dont les membres peuvent rejoindre ce salon sans invitation. %1$s"</string>
+  <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Gérer les espaces"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Seules les personnes invitées peuvent rejoindre."</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Sur invitation uniquement"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Accès"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Les Espaces ne sont pas encore supportés"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_multiple_parents_description">"Toute personne se trouvant dans un espace autorisé peut joindre le salon."</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_single_parent_description">"Toute personne de l’espace %1$s peut joindre le salon."</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Membres de l’espace"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Les Espaces ne sont pas encore supportés"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Vous aurez besoin d’une adresse pour le rendre visible dans l’annuaire public."</string>
   <string name="screen_security_and_privacy_room_address_section_header">"Adresse"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Autoriser le salon à apparaître dans les résultats de recherche dans le répertoire %1$s des salons publics"</string>
@@ -147,6 +162,7 @@ Nous ne recommandons pas d’activer le chiffrement pour les salons que tout le 
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Les adresses de salon sont un moyen de trouver et d’accéder aux salons. Cela vous permet également de partager facilement votre salon avec d’autres personnes.
 Vous pouvez choisir de publier votre salon dans l’annuaire des salons publics de votre serveur d’accueil."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Publication du salon"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_footer">"Les adresses permettent de trouver et d’accéder aux salons et aux espaces. Elles facilitent également leur partage avec d’autres personnes."</string>
   <string name="screen_security_and_privacy_room_visibility_section_header">"Visibilité"</string>
   <string name="screen_security_and_privacy_title">"Sécurité &amp; confidentialité"</string>
 </resources>

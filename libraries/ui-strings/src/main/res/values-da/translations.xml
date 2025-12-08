@@ -387,6 +387,7 @@ Er du sikker på, at du vil fortsætte?"</string>
   <string name="dialog_title_error">"Fejl"</string>
   <string name="dialog_title_success">"Succes"</string>
   <string name="dialog_title_warning">"Advarsel"</string>
+  <string name="dialog_unsaved_changes_description">"Du har ændringer, der ikke er gemt."</string>
   <string name="dialog_unsaved_changes_description_android">"Dine ændringer er ikke blevet gemt. Er du sikker på, at du vil gå tilbage?"</string>
   <string name="dialog_unsaved_changes_title">"Gem ændringer?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Den maksimalt tilladte filstørrelse er: %1$s"</string>

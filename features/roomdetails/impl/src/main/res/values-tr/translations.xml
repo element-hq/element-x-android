@@ -120,8 +120,8 @@ Herkesin bulabileceği ve katılabileceği odalar için şifrelemenin etkinleşt
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"İnsanlar yalnızca davet edildiklerinde katılabilirler"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Yalnızca davet"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Oda Erişimi"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Alanlar şu anda desteklenmiyor"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Alan üyeleri"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Alanlar şu anda desteklenmiyor"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Dizinde görünür hale getirmek için bir oda adresine ihtiyacınız olacak."</string>
   <string name="screen_security_and_privacy_room_address_section_header">"Oda adresi"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Bu odanın %1$s genel oda dizininde arama yapılarak bulunmasına izin verin"</string>

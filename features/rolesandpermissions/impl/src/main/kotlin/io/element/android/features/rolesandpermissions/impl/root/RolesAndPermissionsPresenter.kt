@@ -22,12 +22,10 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
-import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.room.activeRoomMembers
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
+import io.element.android.libraries.matrix.api.room.powerlevels.userCountWithRole
 import io.element.android.libraries.matrix.ui.model.roleOf
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
@@ -43,32 +41,14 @@ class RolesAndPermissionsPresenter(
     override fun present(): RolesAndPermissionsState {
         val coroutineScope = rememberCoroutineScope()
         val roomInfo by room.roomInfoFlow.collectAsState()
-        val roomMembers by room.membersStateFlow.collectAsState()
-        // Get the list of active room members (joined or invited), in order to filter members present in the power
-        // level state Event.
-        val activeRoomMemberIds by remember {
-            derivedStateOf {
-                roomMembers.activeRoomMembers().map { it.userId }
-            }
-        }
         val moderatorCount by remember {
-            derivedStateOf {
-                roomInfo.userCountWithRole(activeRoomMemberIds, RoomMember.Role.Moderator)
-            }
-        }
+            room.userCountWithRole { role -> role is RoomMember.Role.Moderator }
+        }.collectAsState(null)
+
         val adminCount by remember {
-            derivedStateOf {
-                val admins = roomInfo.userCountWithRole(activeRoomMemberIds, RoomMember.Role.Admin)
-                val ownersCount = if (roomInfo.privilegedCreatorRole) {
-                    val superAdmins = roomInfo.userCountWithRole(activeRoomMemberIds, RoomMember.Role.Owner(isCreator = false))
-                    val creators = roomInfo.userCountWithRole(activeRoomMemberIds, RoomMember.Role.Owner(isCreator = true))
-                    superAdmins + creators
-                } else {
-                    0
-                }
-                admins + ownersCount
-            }
-        }
+            room.userCountWithRole { role -> role is RoomMember.Role.Admin || role is RoomMember.Role.Owner }
+        }.collectAsState(null)
+
         val canDemoteSelf = remember { derivedStateOf { roomInfo.roleOf(room.sessionId) !is RoomMember.Role.Owner } }
         val changeOwnRoleAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
         val resetPermissionsAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
@@ -121,9 +101,5 @@ class RolesAndPermissionsPresenter(
             analyticsService.capture(RoomModeration(RoomModeration.Action.ResetPermissions))
             room.resetPowerLevels()
         }
-    }
-
-    private fun RoomInfo.userCountWithRole(userIds: List<UserId>, role: RoomMember.Role): Int {
-        return usersWithRole(role).filter { it in userIds }.size
     }
 }

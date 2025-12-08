@@ -13,17 +13,19 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.home.api.HomeEntryPoint
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.node.TestParentNode
+import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class DefaultHomeEntryPointTest {
     @Test
-    fun `test node builder`() {
+    fun `test node builder`() = runTest {
         val entryPoint = DefaultHomeEntryPoint()
         val parentNode = TestParentNode.create { buildContext, plugins ->
             HomeFlowNode(
@@ -39,10 +41,11 @@ class DefaultHomeEntryPointTest {
                 declineInviteAndBlockUserEntryPoint = { _, _, _ -> lambdaError() },
                 changeRoomMemberRolesEntryPoint = { _, _, _, _ -> lambdaError() },
                 leaveRoomRenderer = { _, _, _ -> lambdaError() },
+                sessionCoroutineScope = backgroundScope,
             )
         }
         val callback = object : HomeEntryPoint.Callback {
-            override fun navigateToRoom(roomId: RoomId) = lambdaError()
+            override fun navigateToRoom(roomId: RoomId, joinedRoom: JoinedRoom?) = lambdaError()
             override fun navigateToCreateRoom() = lambdaError()
             override fun navigateToSettings() = lambdaError()
             override fun navigateToSetUpRecovery() = lambdaError()

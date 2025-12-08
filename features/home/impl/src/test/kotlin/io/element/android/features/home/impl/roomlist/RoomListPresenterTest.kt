@@ -70,6 +70,7 @@ import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.push.test.notifications.FakeNotificationCleaner
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
+import io.element.android.services.analytics.test.watchers.FakeAnalyticsColdStartWatcher
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
@@ -673,5 +674,6 @@ class RoomListPresenterTest {
         appPreferencesStore = appPreferencesStore,
         seenInvitesStore = seenInvitesStore,
         announcementService = announcementService,
+        coldStartWatcher = FakeAnalyticsColdStartWatcher(),
     )
 }

@@ -3,6 +3,10 @@
   <string name="a11y_add_reaction">"افزودن واکنش: %1$s"</string>
   <string name="a11y_avatar">"چهرک"</string>
   <string name="a11y_delete">"حذف"</string>
+  <plurals name="a11y_digits_entered">
+    <item quantity="one">"%1$d رقم وارد شده"</item>
+    <item quantity="other">"%1$d رقم وارد شده"</item>
+  </plurals>
   <string name="a11y_edit_avatar">"ویرایش چهرک"</string>
   <string name="a11y_edit_room_address_hint">"نشانی کامل %1$s خواهد بود"</string>
   <string name="a11y_encryption_details">"جزییات رمزنگاری"</string>
@@ -26,6 +30,10 @@
   <string name="a11y_react_with">"واکنش با %1$s"</string>
   <string name="a11y_react_with_other_emojis">"واکنش با شکلک‌های دیگر"</string>
   <string name="a11y_read_receipts_multiple">"خوانده به دست %1$s و %2$s"</string>
+  <plurals name="a11y_read_receipts_multiple_with_others">
+    <item quantity="one">"خوانده شده توسط%1$s و%2$d نفر دیگر"</item>
+    <item quantity="other">"خوانده شده توسط%1$s و%2$d نفر دیگر"</item>
+  </plurals>
   <string name="a11y_read_receipts_single">"خوانده به دست %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"زدن برای نمایش همه"</string>
   <string name="a11y_remove_reaction">"برداشتن واکنش با %1$s"</string>
@@ -112,7 +120,7 @@
   <string name="action_quote">"نقل قول"</string>
   <string name="action_react">"واکنش"</string>
   <string name="action_reject">"رد کردن"</string>
-  <string name="action_remove">"برداشتن"</string>
+  <string name="action_remove">"حذف"</string>
   <string name="action_remove_caption">"برداشتن عنوان"</string>
   <string name="action_remove_message">"برداشتن پیام‌ها"</string>
   <string name="action_reply">"پاسخ"</string>
@@ -216,6 +224,10 @@
   <string name="common_link_copied_to_clipboard">"پیوند در تخته‌گیره رونوشت شد"</string>
   <string name="common_loading">"بار کردن…"</string>
   <string name="common_loading_more">"بار کردن بیش‌تر…"</string>
+  <plurals name="common_member_count">
+    <item quantity="one">"%1$d عضو"</item>
+    <item quantity="other">"%1$d عضو"</item>
+  </plurals>
   <string name="common_message">"پیام"</string>
   <string name="common_message_actions">"کنش‌های پیام"</string>
   <string name="common_message_layout">"جینش پیام"</string>
@@ -241,6 +253,10 @@
   <string name="common_poll_summary">"نظرسنجی: %1$s"</string>
   <string name="common_poll_total_votes">"مجموع آرا: %1$s"</string>
   <string name="common_poll_undisclosed_text">"نتیجه‌ها پس از پایان نظرسنجی نشان داده خواهند شد"</string>
+  <plurals name="common_poll_votes_count">
+    <item quantity="one">"%d رأی"</item>
+    <item quantity="other">"%d رأی"</item>
+  </plurals>
   <string name="common_preparing">"آماده سازی…"</string>
   <string name="common_privacy_policy">"سیاست محرمانگی"</string>
   <string name="common_private_room">"اتاق خصوصی"</string>
@@ -329,6 +345,7 @@
   <string name="dialog_title_error">"خطا"</string>
   <string name="dialog_title_success">"موفّقیت"</string>
   <string name="dialog_title_warning">"هشدار"</string>
+  <string name="dialog_unsaved_changes_description">"تغییراتی ذخیره نشده دارید."</string>
   <string name="dialog_unsaved_changes_description_android">"تغییراتتان ذخیره نشده‌اند. مطمئنید که می‌خواهید برگردید؟"</string>
   <string name="dialog_unsaved_changes_title">"ذخیرهٔ تغییرات؟"</string>
   <string name="emoji_picker_search_placeholder">"حست‌وجوی شکلک‌ها"</string>

@@ -42,6 +42,10 @@
   <string name="screen_room_timeline_reactions_show_more">"نمایش بیش‌تر"</string>
   <string name="screen_room_timeline_reactions_show_reactions_summary">"نمایش خلاصهٔ واکنش‌ها"</string>
   <string name="screen_room_timeline_read_marker_title">"جدید"</string>
+  <plurals name="screen_room_timeline_state_changes">
+    <item quantity="one">"%1$dتغییر اتاق"</item>
+    <item quantity="other">"%1$dتغییر اتاق"</item>
+  </plurals>
   <string name="screen_room_timeline_tombstoned_room_action">"پرش به اتاق جدید"</string>
   <string name="screen_room_timeline_tombstoned_room_message">"این اتاق جایگزین شده و دیگر فعّال نیست"</string>
   <string name="screen_room_timeline_upgraded_room_action">"دیدن پیام‌های قدیمی"</string>

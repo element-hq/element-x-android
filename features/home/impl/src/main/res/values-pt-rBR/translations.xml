@@ -3,6 +3,8 @@
   <string name="banner_battery_optimization_content_android">"Desative a otimização de bateria para este app, para que tenha certeza que todas as notificações sejam recebidas."</string>
   <string name="banner_battery_optimization_submit_android">"Desativar otimização"</string>
   <string name="banner_battery_optimization_title_android">"As notificações não chegam?"</string>
+  <string name="banner_new_sound_message">"O seu ping de notificação foi atualizado—mais suave, mais rápido, e menos disruptivo."</string>
+  <string name="banner_new_sound_title">"Recarregamos seus sons"</string>
   <string name="banner_set_up_recovery_content">"Recupere sua identidade criptográfica e o histórico de mensagens com uma chave de recuperação caso você perda todos os dispositivos existentes."</string>
   <string name="banner_set_up_recovery_submit">"Configurar a recuperação"</string>
   <string name="banner_set_up_recovery_title">"Configure a recuperação para proteger sua conta"</string>
@@ -33,6 +35,7 @@ Por enquanto, você pode desmarcar os filtros para ver suas outras conversas"</s
   <string name="screen_roomlist_filter_invites">"Convites"</string>
   <string name="screen_roomlist_filter_invites_empty_state_title">"Você não tem nenhum convite pendente."</string>
   <string name="screen_roomlist_filter_low_priority">"Baixa prioridade"</string>
+  <string name="screen_roomlist_filter_low_priority_empty_state_title">"Você ainda não tem nenhuma conversa de baixa prioridade"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Você pode desmarcar filtros para ver suas outras conversas"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Você não tem conversas para esta seleção"</string>
   <string name="screen_roomlist_filter_people">"Pessoas"</string>

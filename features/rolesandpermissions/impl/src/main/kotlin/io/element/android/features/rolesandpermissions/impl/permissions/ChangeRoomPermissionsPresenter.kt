@@ -73,8 +73,7 @@ class ChangeRoomPermissionsPresenter(
 
     private var initialPermissions by mutableStateOf<RoomPowerLevelsValues?>(null)
     private var currentPermissions by mutableStateOf<RoomPowerLevelsValues?>(null)
-    private var saveAction by mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
-    private var confirmExitAction by mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
+    private var saveAction by mutableStateOf<AsyncAction<Boolean>>(AsyncAction.Uninitialized)
 
     @Composable
     override fun present(): ChangeRoomPermissionsState {
@@ -109,15 +108,14 @@ class ChangeRoomPermissionsPresenter(
                 }
                 is ChangeRoomPermissionsEvent.Save -> coroutineScope.save()
                 is ChangeRoomPermissionsEvent.Exit -> {
-                    confirmExitAction = if (!hasChanges || confirmExitAction.isConfirming()) {
-                        AsyncAction.Success(Unit)
+                    saveAction = if (!hasChanges || saveAction == AsyncAction.ConfirmingCancellation) {
+                        AsyncAction.Success(false)
                     } else {
-                        AsyncAction.ConfirmingNoParams
+                        AsyncAction.ConfirmingCancellation
                     }
                 }
                 is ChangeRoomPermissionsEvent.ResetPendingActions -> {
                     saveAction = AsyncAction.Uninitialized
-                    confirmExitAction = AsyncAction.Uninitialized
                 }
             }
         }
@@ -126,7 +124,6 @@ class ChangeRoomPermissionsPresenter(
             itemsBySection = itemsBySection,
             hasChanges = hasChanges,
             saveAction = saveAction,
-            confirmExitAction = confirmExitAction,
             eventSink = ::handleEvent,
         )
     }
@@ -147,7 +144,7 @@ class ChangeRoomPermissionsPresenter(
             .onSuccess {
                 analyticsService.trackPermissionChangeAnalytics(initialPermissions, updatedRoomPowerLevels)
                 initialPermissions = currentPermissions
-                saveAction = AsyncAction.Success(Unit)
+                saveAction = AsyncAction.Success(true)
             }
             .onFailure {
                 saveAction = AsyncAction.Failure(it)

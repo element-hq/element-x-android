@@ -14,7 +14,7 @@ fun String.isValidUrl(): Boolean {
     return try {
         URI(this).toURL()
         true
-    } catch (t: Throwable) {
+    } catch (_: Throwable) {
         false
     }
 }

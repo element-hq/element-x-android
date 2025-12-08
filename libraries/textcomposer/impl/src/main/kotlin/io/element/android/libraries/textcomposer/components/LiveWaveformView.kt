@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -51,27 +50,23 @@ fun LiveWaveformView(
     linePadding: Dp = 2.dp,
 ) {
     var canvasSize by remember { mutableStateOf(DpSize(0.dp, 0.dp)) }
-
     var parentWidth by remember { mutableIntStateOf(0) }
-
-    val waveformWidth by remember(levels, lineWidth, linePadding) {
-        derivedStateOf {
-            levels.size * (lineWidth.value + linePadding.value)
-        }
+    val waveformWidth = remember(levels.size, lineWidth, linePadding) {
+        levels.size * (lineWidth.value + linePadding.value)
     }
 
     Box(
         contentAlignment = Alignment.CenterEnd,
         modifier = modifier
-                .fillMaxWidth()
-                .height(waveFormHeight)
-                .onSizeChanged { parentWidth = it.width }
+            .fillMaxWidth()
+            .height(waveFormHeight)
+            .onSizeChanged { parentWidth = it.width }
     ) {
         Canvas(
             modifier = Modifier
-                    .width(Dp(waveformWidth))
-                    .graphicsLayer(alpha = DEFAULT_GRAPHICS_LAYER_ALPHA)
-                    .then(modifier)
+                .width(Dp(waveformWidth))
+                .graphicsLayer(alpha = DEFAULT_GRAPHICS_LAYER_ALPHA)
+                .then(modifier)
         ) {
             val width = min(waveformWidth, parentWidth.toFloat())
             canvasSize = DpSize(width.dp, size.height.toDp())

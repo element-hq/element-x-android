@@ -336,6 +336,7 @@ Ziur jarraitu nahi duzula?"</string>
   <string name="dialog_title_error">"Errorea"</string>
   <string name="dialog_title_success">"Arrakasta"</string>
   <string name="dialog_title_warning">"Abisua"</string>
+  <string name="dialog_unsaved_changes_description">"Gorde gabeko aldaketak dituzu."</string>
   <string name="dialog_unsaved_changes_description_android">"Zure aldaketak ez dira gorde. Ziur itzuli nahi duzula?"</string>
   <string name="dialog_unsaved_changes_title">"Aldaketak gorde?"</string>
   <string name="dialog_video_quality_selector_title">"Hautatu bideoaren igoera-kalitatea"</string>

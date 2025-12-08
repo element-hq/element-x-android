@@ -35,6 +35,7 @@ ktlint_standard_class-signature = disabled
 ktlint_standard_when-entry-bracing = disabled
 ktlint_standard_blank-line-between-when-conditions = disabled
 ktlint_standard_mixed-condition-operators = disabled
+ktlint_standard_no-unused-imports = enabled
 
 [*.java]
 ij_java_align_consecutive_assignments = false

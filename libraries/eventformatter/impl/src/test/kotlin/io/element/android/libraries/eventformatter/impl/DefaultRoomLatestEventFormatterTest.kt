@@ -929,7 +929,7 @@ class DefaultRoomLatestEventFormatterTest {
         sentByYou: Boolean,
         senderDisplayName: String?,
         content: EventContent,
-    ): LatestEventValue {
+    ): LatestEventValue.Remote {
         val sender = if (sentByYou) A_USER_ID else someoneElseId
         val profile = aProfileDetails(senderDisplayName)
         return aRemoteLatestEvent(

@@ -14,6 +14,7 @@ Você pode mudar isso a qualquer momento nas configurações da sala."</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Qualquer pessoa pode pedir para entrar na sala, mas um administrador ou moderador terá de aceitar a solicitação"</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Pedir para entrar"</string>
   <string name="screen_create_room_room_address_section_footer">"Para que esta sala fique visível no diretório público de salas, você precisará de um endereço de sala."</string>
+  <string name="screen_create_room_room_address_section_title">"Endereço da sala"</string>
   <string name="screen_create_room_room_name_label">"Nome da sala"</string>
   <string name="screen_create_room_room_visibility_section_title">"Visibilidade da sala"</string>
   <string name="screen_create_room_title">"Criar uma sala"</string>

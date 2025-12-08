@@ -129,8 +129,8 @@
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Люди можуть приєднатися, лише якщо їх запросили"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Лише запрошені"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Доступ до кімнати"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Простори наразі не підтримуються"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Учасники простору"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Простори наразі не підтримуються"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Вам знадобиться адреса кімнати, щоб зробити її видимою в каталозі."</string>
   <string name="screen_security_and_privacy_room_address_section_header">"Адреса кімнати"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Дозвольте, щоб цю кімнату можна було знайти за допомогою пошуку в каталозі загальнодоступних кімнат %1$s "</string>

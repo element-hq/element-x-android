@@ -99,6 +99,6 @@ fun RoomMember.getBestName(): String {
 
 fun RoomMember.toMatrixUser() = MatrixUser(
     userId = userId,
-    displayName = displayName,
-    avatarUrl = avatarUrl,
+    displayName = displayName.takeUnless { membership == RoomMembershipState.BAN },
+    avatarUrl = avatarUrl.takeUnless { membership == RoomMembershipState.BAN },
 )

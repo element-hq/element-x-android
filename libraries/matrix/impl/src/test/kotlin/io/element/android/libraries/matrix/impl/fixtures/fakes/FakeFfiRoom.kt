@@ -13,6 +13,7 @@ import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomInfo
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.tests.testutils.lambda.lambdaError
 import org.matrix.rustcomponents.sdk.EventTimelineItem
+import org.matrix.rustcomponents.sdk.LatestEventValue
 import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.Room
 import org.matrix.rustcomponents.sdk.RoomInfo
@@ -25,6 +26,7 @@ class FakeFfiRoom(
     private val getMembersNoSync: () -> RoomMembersIterator = { lambdaError() },
     private val leaveLambda: () -> Unit = { lambdaError() },
     private val latestEventLambda: () -> EventTimelineItem? = { lambdaError() },
+    private val newLatestEventLambda: () -> LatestEventValue = { lambdaError() },
     private val suggestedRoleForUserLambda: (String) -> RoomMemberRole = { lambdaError() },
     private val roomInfo: RoomInfo = aRustRoomInfo(id = roomId.value),
 ) : Room(NoHandle) {
@@ -54,6 +56,10 @@ class FakeFfiRoom(
 
     override suspend fun suggestedRoleForUser(userId: String): RoomMemberRole {
         return suggestedRoleForUserLambda(userId)
+    }
+
+    override suspend fun newLatestEvent(): LatestEventValue {
+        return newLatestEventLambda()
     }
 
     override fun close() {

@@ -18,7 +18,6 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
-import io.element.android.tests.testutils.clickOnFirst
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBack
 import io.element.android.tests.testutils.pressBackKey
@@ -76,7 +75,7 @@ class ChangeRoomPermissionsViewTest {
         rule.setChangeRoomPermissionsRule(
             state = aChangeRoomPermissionsState(
                 hasChanges = true,
-                confirmExitAction = AsyncAction.ConfirmingNoParams,
+                saveAction = AsyncAction.ConfirmingCancellation,
                 eventSink = recorder,
             ),
         )
@@ -90,11 +89,11 @@ class ChangeRoomPermissionsViewTest {
         rule.setChangeRoomPermissionsRule(
             state = aChangeRoomPermissionsState(
                 hasChanges = true,
-                confirmExitAction = AsyncAction.ConfirmingNoParams,
+                saveAction = AsyncAction.ConfirmingCancellation,
                 eventSink = recorder,
             ),
         )
-        rule.clickOnFirst(CommonStrings.action_save)
+        rule.clickOn(CommonStrings.action_save, inDialog = true)
         recorder.assertSingle(ChangeRoomPermissionsEvent.Save)
     }
 
@@ -136,9 +135,23 @@ class ChangeRoomPermissionsViewTest {
             rule.setChangeRoomPermissionsRule(
                 state = aChangeRoomPermissionsState(
                     hasChanges = true,
-                    saveAction = AsyncAction.Success(Unit),
+                    saveAction = AsyncAction.Success(true),
                 ),
-                onComplete = callback
+                onComplete = callback,
+            )
+            rule.clickOn(CommonStrings.action_save)
+        }
+    }
+
+    @Test
+    fun `a cancellation exits the screen`() {
+        ensureCalledOnceWithParam(false) { callback ->
+            rule.setChangeRoomPermissionsRule(
+                state = aChangeRoomPermissionsState(
+                    hasChanges = true,
+                    saveAction = AsyncAction.Success(false),
+                ),
+                onComplete = callback,
             )
             rule.clickOn(CommonStrings.action_save)
         }

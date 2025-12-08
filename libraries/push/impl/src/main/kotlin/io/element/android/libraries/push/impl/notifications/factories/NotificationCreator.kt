@@ -15,6 +15,7 @@ import androidx.annotation.ColorInt
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationCompat.MessagingStyle
 import androidx.core.app.Person
+import androidx.core.os.bundleOf
 import coil3.ImageLoader
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
@@ -44,6 +45,7 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableMess
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.shortcut.createShortcutId
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.services.appnavstate.api.ROOM_OPENED_FROM_NOTIFICATION
 import io.element.android.services.toolbox.api.strings.StringProvider
 
 interface NotificationCreator {
@@ -138,7 +140,12 @@ class DefaultNotificationCreator(
         val eventId = events.firstOrNull()?.eventId
         val openIntent = when {
             threadId != null -> pendingIntentFactory.createOpenThreadPendingIntent(roomInfo.sessionId, roomInfo.roomId, eventId, threadId)
-            else -> pendingIntentFactory.createOpenRoomPendingIntent(roomInfo.sessionId, roomInfo.roomId, eventId)
+            else -> pendingIntentFactory.createOpenRoomPendingIntent(
+                sessionId = roomInfo.sessionId,
+                roomId = roomInfo.roomId,
+                eventId = eventId,
+                extras = bundleOf(ROOM_OPENED_FROM_NOTIFICATION to true),
+            )
         }
         val containsMissedCall = events.any { it.type == EventType.RTC_NOTIFICATION }
         val channelId = if (containsMissedCall) {
@@ -233,7 +240,11 @@ class DefaultNotificationCreator(
             .addAction(rejectInvitationActionFactory.create(inviteNotifiableEvent))
             .addAction(acceptInvitationActionFactory.create(inviteNotifiableEvent))
             // Build the pending intent for when the notification is clicked
-            .setContentIntent(pendingIntentFactory.createOpenRoomPendingIntent(inviteNotifiableEvent.sessionId, inviteNotifiableEvent.roomId, null))
+            .setContentIntent(pendingIntentFactory.createOpenRoomPendingIntent(
+                sessionId = inviteNotifiableEvent.sessionId,
+                roomId = inviteNotifiableEvent.roomId,
+                eventId = null,
+            ))
             .apply {
                 if (inviteNotifiableEvent.noisy) {
                     // Compat
@@ -265,7 +276,12 @@ class DefaultNotificationCreator(
             .setGroupAlertBehavior(NotificationCompat.GROUP_ALERT_ALL)
             .configureWith(notificationAccountParams)
             .setAutoCancel(true)
-            .setContentIntent(pendingIntentFactory.createOpenRoomPendingIntent(simpleNotifiableEvent.sessionId, simpleNotifiableEvent.roomId, null))
+            .setContentIntent(pendingIntentFactory.createOpenRoomPendingIntent(
+                sessionId = simpleNotifiableEvent.sessionId,
+                roomId = simpleNotifiableEvent.roomId,
+                eventId = null,
+                extras = bundleOf(ROOM_OPENED_FROM_NOTIFICATION to true),
+            ))
             .apply {
                 if (simpleNotifiableEvent.noisy) {
                     // Compat

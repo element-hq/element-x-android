@@ -30,6 +30,7 @@ data class NotificationData(
     val roomDisplayName: String?,
     val isDirect: Boolean,
     val isDm: Boolean,
+    val isSpace: Boolean,
     val isEncrypted: Boolean,
     val isNoisy: Boolean,
     val timestamp: Long,

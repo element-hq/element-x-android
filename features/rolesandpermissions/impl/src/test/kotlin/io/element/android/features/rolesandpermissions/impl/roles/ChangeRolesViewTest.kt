@@ -119,7 +119,7 @@ class ChangeRolesViewTest {
     }
 
     @Test
-    fun `exit confirmation dialog - submit exits the screen`() {
+    fun `exit confirmation dialog - discard exits the screen`() {
         val eventsRecorder = EventsRecorder<ChangeRolesEvent>()
         rule.setChangeRolesContent(
             state = aChangeRolesState(
@@ -128,12 +128,12 @@ class ChangeRolesViewTest {
                 eventSink = eventsRecorder,
             ),
         )
-        rule.clickOn(CommonStrings.action_ok)
+        rule.clickOn(CommonStrings.action_discard)
         eventsRecorder.assertSingle(ChangeRolesEvent.Exit)
     }
 
     @Test
-    fun `exit confirmation dialog - cancel removes the dialog`() {
+    fun `exit confirmation dialog - save emits the save event`() {
         val eventsRecorder = EventsRecorder<ChangeRolesEvent>()
         rule.setChangeRolesContent(
             state = aChangeRolesState(
@@ -142,8 +142,8 @@ class ChangeRolesViewTest {
                 eventSink = eventsRecorder,
             ),
         )
-        rule.clickOn(CommonStrings.action_cancel)
-        eventsRecorder.assertSingle(ChangeRolesEvent.CloseDialog)
+        rule.clickOn(CommonStrings.action_save)
+        eventsRecorder.assertSingle(ChangeRolesEvent.Save)
     }
 
     @Test

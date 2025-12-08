@@ -6,6 +6,7 @@
   <string name="banner_set_up_recovery_content">"بازگردانی تاریخچهٔ پیام‌ها و هویت رمزنگاشته‌تان با کلید بازیابی در صورت از دست دادن همهٔ افزاره‌های موجودتان."</string>
   <string name="banner_set_up_recovery_submit">"برپایی بازیابی"</string>
   <string name="banner_set_up_recovery_title">"برپایی بازیابی"</string>
+  <string name="confirm_recovery_key_banner_message">"کلید بازیابی خود را تأیید کنید تا دسترسی به حافظه کلیدها و تاریخچه پیام‌هایتان حفظ شود ."</string>
   <string name="confirm_recovery_key_banner_primary_button_title">"ورود کلید بازیابیتان"</string>
   <string name="confirm_recovery_key_banner_title">"ذخیره‌ساز کلیدتان از هم‌گام بودن در آمده"</string>
   <string name="full_screen_intent_banner_title">"بهبود تجریهٔ تماستان"</string>

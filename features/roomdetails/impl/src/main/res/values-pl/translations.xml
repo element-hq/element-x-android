@@ -131,8 +131,8 @@ Odradzamy włączanie szyfrowania dla pokoi, które każdy może znaleźć i do 
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Tylko osoby z zaproszeniem mogą dołączyć"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Tylko zaproszenie"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Dostęp do pokoju"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Przestrzenie nie są obecnie wspierane"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Członkowie przestrzeni"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Przestrzenie nie są obecnie wspierane"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Aby pokój był widoczny w katalogu, potrzebny jest adres pokoju."</string>
   <string name="screen_security_and_privacy_room_address_section_header">"Adres pokoju"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Zezwól na znalezienie tego pokoju wyszukując %1$s w katalogu pokoi publicznych"</string>

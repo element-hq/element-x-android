@@ -39,7 +39,6 @@ import com.bumble.appyx.navmodel.backstack.operation.replace
 import com.bumble.appyx.navmodel.backstack.operation.singleTop
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
-import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.annotations.ContributesNode
 import io.element.android.appnav.loggedin.LoggedInNode
 import io.element.android.appnav.loggedin.MediaPreviewConfigMigration
@@ -84,6 +83,7 @@ import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.verification.SessionVerificationServiceListener
 import io.element.android.libraries.matrix.api.verification.VerificationRequest
@@ -92,6 +92,7 @@ import io.element.android.libraries.push.api.notifications.conversations.Notific
 import io.element.android.libraries.ui.common.nodes.emptyNode
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
 import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.api.watchers.AnalyticsRoomListStateWatcher
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
@@ -108,6 +109,7 @@ import java.util.UUID
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toKotlinDuration
+import im.vector.app.features.analytics.plan.JoinedRoom as JoinedRoomAnalyticsEvent
 
 @ContributesNode(SessionScope::class)
 @AssistedInject
@@ -139,6 +141,7 @@ class LoggedInFlowNode(
     private val buildMeta: BuildMeta,
     snackbarDispatcher: SnackbarDispatcher,
     private val analyticsService: AnalyticsService,
+    private val analyticsRoomListStateWatcher: AnalyticsRoomListStateWatcher,
 ) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Placeholder,
@@ -202,6 +205,7 @@ class LoggedInFlowNode(
         }
         lifecycle.subscribe(
             onCreate = {
+                analyticsRoomListStateWatcher.start()
                 appNavigationStateService.onNavigateToSession(id, matrixClient.sessionId)
                 // TODO We do not support Space yet, so directly navigate to main space
                 appNavigationStateService.onNavigateToSpace(id, MAIN_SPACE)
@@ -238,6 +242,7 @@ class LoggedInFlowNode(
                 appNavigationStateService.onLeavingSession(id)
                 loggedInFlowProcessor.stopObserving()
                 matrixClient.sessionVerificationService.setListener(null)
+                analyticsRoomListStateWatcher.stop()
             }
         )
         setupSendingQueue()
@@ -261,7 +266,7 @@ class LoggedInFlowNode(
         data class Room(
             val roomIdOrAlias: RoomIdOrAlias,
             val serverNames: List<String> = emptyList(),
-            val trigger: JoinedRoom.Trigger? = null,
+            val trigger: JoinedRoomAnalyticsEvent.Trigger? = null,
             val roomDescription: RoomDescription? = null,
             val initialElement: RoomNavigationTarget = RoomNavigationTarget.Root(),
             val targetId: UUID = UUID.randomUUID(),
@@ -311,8 +316,13 @@ class LoggedInFlowNode(
             }
             NavTarget.Home -> {
                 val callback = object : HomeEntryPoint.Callback {
-                    override fun navigateToRoom(roomId: RoomId) {
-                        backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias()))
+                    override fun navigateToRoom(roomId: RoomId, joinedRoom: JoinedRoom?) {
+                        backstack.push(
+                            NavTarget.Room(
+                                roomIdOrAlias = roomId.toRoomIdOrAlias(),
+                                initialElement = RoomNavigationTarget.Root(joinedRoom = joinedRoom)
+                            )
+                        )
                     }
 
                     override fun navigateToSettings() {
@@ -361,7 +371,7 @@ class LoggedInFlowNode(
                                 val target = NavTarget.Room(
                                     roomIdOrAlias = data.roomIdOrAlias,
                                     serverNames = data.viaParameters,
-                                    trigger = JoinedRoom.Trigger.Timeline,
+                                    trigger = JoinedRoomAnalyticsEvent.Trigger.Timeline,
                                     initialElement = RoomNavigationTarget.Root(data.eventId),
                                 )
                                 if (pushToBackstack) {
@@ -475,7 +485,7 @@ class LoggedInFlowNode(
                                 NavTarget.Room(
                                     roomIdOrAlias = roomDescription.roomId.toRoomIdOrAlias(),
                                     roomDescription = roomDescription,
-                                    trigger = JoinedRoom.Trigger.RoomDirectory,
+                                    trigger = JoinedRoomAnalyticsEvent.Trigger.RoomDirectory,
                                 )
                             )
                         }
@@ -515,7 +525,7 @@ class LoggedInFlowNode(
     suspend fun attachRoom(
         roomIdOrAlias: RoomIdOrAlias,
         serverNames: List<String> = emptyList(),
-        trigger: JoinedRoom.Trigger? = null,
+        trigger: JoinedRoomAnalyticsEvent.Trigger? = null,
         eventId: EventId? = null,
         clearBackstack: Boolean,
     ): RoomFlowNode {

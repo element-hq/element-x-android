@@ -8,20 +8,25 @@
 
 package io.element.android.libraries.matrix.ui.components
 
-import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.CompositingStrategy
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -52,23 +57,42 @@ fun EditableAvatarView(
     onAvatarClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
+    val a11yAvatar = stringResource(CommonStrings.a11y_avatar)
+    val editIconRadius = 15.dp
+    val parentHeight = avatarSize.dp
+    val parentWidth = avatarSize.dp + editIconRadius / 2f
+    Box(
+        modifier = modifier
+            .wrapContentSize()
+            .size(height = parentHeight, width = parentWidth)
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                onClickLabel = stringResource(CommonStrings.a11y_edit_avatar),
+                onClick = onAvatarClick,
+                indication = ripple(bounded = false),
+            )
+            .testTag(TestTags.editAvatar)
+            .clearAndSetSemantics {
+                contentDescription = a11yAvatar
+            },
     ) {
-        val a11yAvatar = stringResource(CommonStrings.a11y_avatar)
         Box(
             modifier = Modifier
-                .clickable(
-                    interactionSource = remember { MutableInteractionSource() },
-                    onClickLabel = stringResource(CommonStrings.a11y_edit_avatar),
-                    onClick = onAvatarClick,
-                    indication = ripple(bounded = false),
-                )
-                .testTag(TestTags.editAvatar)
-                .clearAndSetSemantics {
-                    contentDescription = a11yAvatar
-                },
+                .graphicsLayer {
+                    compositingStrategy = CompositingStrategy.Offscreen
+                }
+                .drawWithContent {
+                    drawContent()
+                    drawCircle(
+                        color = Color.Black,
+                        center = Offset(
+                            x = parentWidth.toPx() - editIconRadius.toPx(),
+                            y = size.height - editIconRadius.toPx(),
+                        ),
+                        radius = (editIconRadius + 4.dp).toPx(),
+                        blendMode = BlendMode.Clear,
+                    )
+                }
         ) {
             when {
                 avatarUrl == null || avatarUrl.startsWith("mxc://") -> {
@@ -90,23 +114,17 @@ fun EditableAvatarView(
                     )
                 }
             }
-
-            Box(
-                modifier = Modifier
-                    .align(Alignment.BottomEnd)
-                    .clip(CircleShape)
-                    .background(ElementTheme.colors.iconPrimary)
-                    .size(24.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                Icon(
-                    modifier = Modifier.size(16.dp),
-                    imageVector = CompoundIcons.EditSolid(),
-                    contentDescription = null,
-                    tint = ElementTheme.colors.iconOnSolidPrimary,
-                )
-            }
         }
+        Icon(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .size(editIconRadius * 2)
+                .border(1.dp, ElementTheme.colors.borderInteractiveSecondary, CircleShape)
+                .padding(6.dp),
+            imageVector = CompoundIcons.Edit(),
+            contentDescription = null,
+            tint = ElementTheme.colors.iconPrimary,
+        )
     }
 }
 
@@ -119,9 +137,9 @@ internal fun EditableAvatarViewPreview(
 ) {
     EditableAvatarView(
         matrixId = "id",
-        displayName = "A room",
+        displayName = "Room",
         avatarUrl = uri,
-        avatarSize = AvatarSize.EditRoomDetails,
+        avatarSize = AvatarSize.RoomDetailsHeader,
         avatarType = AvatarType.User,
         onAvatarClick = {},
     )

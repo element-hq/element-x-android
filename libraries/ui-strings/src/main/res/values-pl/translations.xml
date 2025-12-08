@@ -395,6 +395,7 @@ Czy na pewno chcesz kontynuować?"</string>
   <string name="dialog_title_error">"Błąd"</string>
   <string name="dialog_title_success">"Sukces"</string>
   <string name="dialog_title_warning">"Ostrzeżenie"</string>
+  <string name="dialog_unsaved_changes_description">"Masz niezapisane zmiany."</string>
   <string name="dialog_unsaved_changes_description_android">"Zmiany nie zostały zapisane. Czy na pewno chcesz wrócić?"</string>
   <string name="dialog_unsaved_changes_title">"Zapisać zmiany?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Maksymalny dozwolony rozmiar pliku to: %1$s"</string>

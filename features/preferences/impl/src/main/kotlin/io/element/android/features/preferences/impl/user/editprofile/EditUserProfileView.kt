@@ -68,7 +68,7 @@ fun EditUserProfileView(
 
     fun onBackClick() {
         focusManager.clearFocus()
-        state.eventSink(EditUserProfileEvents.Exit)
+        state.eventSink(EditUserProfileEvent.Exit)
     }
 
     BackHandler(
@@ -87,7 +87,7 @@ fun EditUserProfileView(
                         enabled = state.saveButtonEnabled,
                         onClick = {
                             focusManager.clearFocus()
-                            state.eventSink(EditUserProfileEvents.Save)
+                            state.eventSink(EditUserProfileEvent.Save)
                         },
                     )
                 }
@@ -125,7 +125,7 @@ fun EditUserProfileView(
                 value = state.displayName,
                 placeholder = stringResource(CommonStrings.common_room_name_placeholder),
                 singleLine = true,
-                onValueChange = { state.eventSink(EditUserProfileEvents.UpdateDisplayName(it)) },
+                onValueChange = { state.eventSink(EditUserProfileEvent.UpdateDisplayName(it)) },
             )
         }
 
@@ -133,7 +133,7 @@ fun EditUserProfileView(
             actions = state.avatarActions,
             isVisible = isAvatarActionsSheetVisible.value,
             onDismiss = { isAvatarActionsSheetVisible.value = false },
-            onSelectAction = { state.eventSink(EditUserProfileEvents.HandleAvatarAction(it)) }
+            onSelectAction = { state.eventSink(EditUserProfileEvent.HandleAvatarAction(it)) }
         )
 
         AsyncActionView(
@@ -147,8 +147,9 @@ fun EditUserProfileView(
                 when (confirming) {
                     is AsyncAction.ConfirmingCancellation -> {
                         SaveChangesDialog(
-                            onSubmitClick = { state.eventSink(EditUserProfileEvents.Exit) },
-                            onDismiss = { state.eventSink(EditUserProfileEvents.CloseDialog) }
+                            onSaveClick = { state.eventSink(EditUserProfileEvent.Save) },
+                            onDiscardClick = { state.eventSink(EditUserProfileEvent.Exit) },
+                            onDismiss = { state.eventSink(EditUserProfileEvent.CloseDialog) },
                         )
                     }
                 }
@@ -156,7 +157,7 @@ fun EditUserProfileView(
             onSuccess = { onEditProfileSuccess() },
             errorTitle = { stringResource(R.string.screen_edit_profile_error_title) },
             errorMessage = { stringResource(R.string.screen_edit_profile_error) },
-            onErrorDismiss = { state.eventSink(EditUserProfileEvents.CloseDialog) },
+            onErrorDismiss = { state.eventSink(EditUserProfileEvent.CloseDialog) },
         )
     }
     PermissionsView(

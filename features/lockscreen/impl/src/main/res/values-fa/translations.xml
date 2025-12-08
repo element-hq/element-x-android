@@ -24,6 +24,14 @@
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"پین‌ها مطابق نیستند"</string>
   <string name="screen_app_lock_signout_alert_message">"برای ادامه باید دوباره وارد شده و پینی جدید ایجاد کنید"</string>
   <string name="screen_app_lock_signout_alert_title">"دارید خارج می‌شوید"</string>
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="one">"شما %1$d تلاش برای باز کردن قفل دارید"</item>
+    <item quantity="other">"شما %1$d تلاش برای باز کردن قفل دارید"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="one">"پین اشتباه است. شما %1$d شانس دیگر دارید"</item>
+    <item quantity="other">"پین اشتباه است. شما %1$d شانس دیگر دارید"</item>
+  </plurals>
   <string name="screen_app_lock_use_biometric_android">"استفاده از زیست‌سنجی"</string>
   <string name="screen_app_lock_use_pin_android">"استفاده از پین"</string>
   <string name="screen_signout_in_progress_dialog_content">"خارج شدن…"</string>

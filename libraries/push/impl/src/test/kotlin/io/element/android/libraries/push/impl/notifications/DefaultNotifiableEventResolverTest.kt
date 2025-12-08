@@ -38,6 +38,7 @@ import io.element.android.libraries.matrix.test.A_REDACTION_REASON
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.A_SPACE_NAME
 import io.element.android.libraries.matrix.test.A_TIMESTAMP
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_NAME_2
@@ -464,6 +465,45 @@ class DefaultNotifiableEventResolverTest {
                 noisy = false,
                 title = null,
                 description = "Bob invited you to join the room",
+                type = null,
+                timestamp = A_TIMESTAMP,
+                soundName = null,
+                isRedacted = false,
+                isUpdated = false,
+            )
+        )
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
+    }
+
+    @Test
+    fun `resolve invite space`() = runTest {
+        val sut = createDefaultNotifiableEventResolver(
+            notificationResult = Result.success(
+                mapOf(
+                    AN_EVENT_ID to Result.success(aNotificationData(
+                        content = NotificationContent.Invite(
+                            senderId = A_USER_ID_2,
+                        ),
+                        roomDisplayName = A_SPACE_NAME,
+                        isDirect = false,
+                        isSpace = true,
+                    ))
+                )
+            )
+        )
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
+        val expectedResult = ResolvedPushEvent.Event(
+            InviteNotifiableEvent(
+                sessionId = A_SESSION_ID,
+                roomId = A_ROOM_ID,
+                eventId = AN_EVENT_ID,
+                editedEventId = null,
+                canBeReplaced = true,
+                roomName = A_SPACE_NAME,
+                noisy = false,
+                title = null,
+                description = "Bob invited you to join the space",
                 type = null,
                 timestamp = A_TIMESTAMP,
                 soundName = null,

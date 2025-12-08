@@ -121,8 +121,8 @@ No recomendamos habilitar el cifrado para las salas que cualquiera pueda encontr
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Las personas solo pueden unirse si están invitadas"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Solo por invitación"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Acceso a la sala"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_description">"No se admiten los espacios por el momento."</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Miembros del espacio"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"No se admiten los espacios por el momento."</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Necesitarás una dirección de sala para que sea visible en el directorio."</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Permite encontrar esta sala buscando en el directorio de salas públicas de %1$s"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Visible en el directorio de salas públicas"</string>

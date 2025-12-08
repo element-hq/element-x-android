@@ -17,16 +17,22 @@ import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun SaveChangesDialog(
-    onSubmitClick: () -> Unit,
+    onSaveClick: () -> Unit,
+    onDiscardClick: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
     title: String = stringResource(CommonStrings.dialog_unsaved_changes_title),
-    content: String = stringResource(CommonStrings.dialog_unsaved_changes_description_android),
+    content: String = stringResource(CommonStrings.dialog_unsaved_changes_description),
+    submitText: String = stringResource(CommonStrings.action_save),
+    cancelText: String = stringResource(CommonStrings.action_discard),
 ) = ConfirmationDialog(
     modifier = modifier,
     title = title,
     content = content,
-    onSubmitClick = onSubmitClick,
+    submitText = submitText,
+    cancelText = cancelText,
+    onSubmitClick = onSaveClick,
+    onCancelClick = onDiscardClick,
     onDismiss = onDismiss,
 )
 
@@ -34,7 +40,8 @@ fun SaveChangesDialog(
 @Composable
 internal fun SaveChangesDialogPreview() = ElementPreview {
     SaveChangesDialog(
-        onSubmitClick = {},
+        onSaveClick = {},
+        onDiscardClick = {},
         onDismiss = {}
     )
 }

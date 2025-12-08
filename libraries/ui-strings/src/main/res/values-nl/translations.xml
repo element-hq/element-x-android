@@ -300,6 +300,7 @@ Reden: %1$s."</string>
   <string name="dialog_title_error">"Fout"</string>
   <string name="dialog_title_success">"Geslaagd"</string>
   <string name="dialog_title_warning">"Waarschuwing"</string>
+  <string name="dialog_unsaved_changes_description">"Je hebt niet-opgeslagen wijzigingen"</string>
   <string name="dialog_unsaved_changes_description_android">"Je wijzigingen zijn niet opgeslagen. Weet je zeker dat je terug wilt gaan?"</string>
   <string name="dialog_unsaved_changes_title">"Wijzigingen opslaan?"</string>
   <string name="error_account_creation_not_possible">"Je homeserver moet worden geüpgraded om de Matrix Authentication Service en het aanmaken van accounts te ondersteunen."</string>

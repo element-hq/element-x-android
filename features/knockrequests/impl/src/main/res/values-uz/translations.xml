@@ -1,5 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Ha, hammasini qabul qiling"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"Barcha qo‘shilish so‘rovlarini qabul qilishga ishonchingiz komilmi?"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"Barcha so‘rovlarni qabul qilish"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Hammasini qabul qiling"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_description">"Biz barcha so‘rovlarni qabul qila olmadik. Qayta urinib koʻrmoqchimisiz?"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_title">"Barcha so‘rovlar qabul qilinmadi"</string>
+  <string name="screen_knock_requests_list_accept_all_loading_title">"Qo‘shilish so‘rovi qabul qilinmoqda"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_description">"Biz bu so‘rovni qabul qila olmadik. Yana bir bor urinib ko‘rishni xohlaysizmi?"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_title">"So‘rovni qabul qilib bo‘lmadi"</string>
+  <string name="screen_knock_requests_list_accept_loading_title">"Qo‘shilish so‘rovi qabul qilinmoqda"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Ha, rad eting va taqiqlang"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Siz %1$sʼni rad etib, taqiqlashni xohlayotganingizga ishonchingiz komilmi? Bu foydalanuvchi ushbu xonaga qayta kirish uchun ruxsat so‘ray olmaydi."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"Rad etish va kirishni taqiqlash"</string>
+  <string name="screen_knock_requests_list_ban_loading_title">"Kirishni rad etish va taqiqlash"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Ha, rad etish"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"%1$sning bu xonaga qo‘shilish so‘rovini rad etasizmi?"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"Kirishni rad etish"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Rad etish va taqiqlash"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_description">"Biz bu iltimosni rad etolmasdik. Yana bir bor urinib ko‘rishni xohlaysizmi?"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_title">"So‘rovni rad etib bo‘lmadi"</string>
+  <string name="screen_knock_requests_list_decline_loading_title">"Qo‘shilish so‘rovi rad etilayapti"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Kimdir xonaga qo‘shilishni so‘raganda, uning iltimosini shu yerda ko‘rishingiz mumkin."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"Qo‘shilish so‘rovi kutilmayapti"</string>
+  <string name="screen_knock_requests_list_initial_loading_title">"Qo‘shilish uchun so‘rovlar yuklanmoqda…"</string>
+  <string name="screen_knock_requests_list_title">"Qo‘shilish uchun so‘rovlar"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s + %2$d kishi bu xonaga qo‘shilmoqchi"</item>
+    <item quantity="other">"%1$s + %2$d kishi bu xonaga qo‘shilmoqchi"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Hammasini ko\'rish"</string>
   <string name="screen_room_single_knock_request_accept_button_title">"Qabul qiling"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s bu xonaga qo‘shilmoqchi"</string>
   <string name="screen_room_single_knock_request_view_button_title">"Ko\'rish"</string>
 </resources>

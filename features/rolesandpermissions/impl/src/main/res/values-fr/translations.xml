@@ -34,9 +34,15 @@
   <string name="screen_room_change_role_unsaved_changes_description">"Vous avez des modifications non-enregistrées."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Enregistrer les changements ?"</string>
   <string name="screen_room_member_list_banned_empty">"Il n’y a pas d’utilisateur banni."</string>
+  <plurals name="screen_room_member_list_banned_header_title">
+    <item quantity="one">"%1$d Banni(e)"</item>
+    <item quantity="other">"%1$d Banni(e)s"</item>
+  </plurals>
+  <string name="screen_room_member_list_empty_search_subtitle">"Vérifiez la saisie ou effectuez une nouvelle recherche"</string>
+  <string name="screen_room_member_list_empty_search_title">"Aucun résultat pour «%1$s»"</string>
   <plurals name="screen_room_member_list_header_title">
-    <item quantity="one">"%1$d personne"</item>
-    <item quantity="other">"%1$d personnes"</item>
+    <item quantity="one">"%1$d Personne"</item>
+    <item quantity="other">"%1$d Personnes"</item>
   </plurals>
   <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Bannir du salon"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Retirer le membre uniquement"</string>
@@ -45,6 +51,11 @@
   <string name="screen_room_member_list_manage_member_unban_title">"Débannir du salon"</string>
   <string name="screen_room_member_list_mode_banned">"Bannis"</string>
   <string name="screen_room_member_list_mode_members">"Membres"</string>
+  <plurals name="screen_room_member_list_pending_header_title">
+    <item quantity="one">"%1$d Invité(e)"</item>
+    <item quantity="other">"%1$d Invité(e)s"</item>
+  </plurals>
+  <string name="screen_room_member_list_pending_status">"En attente"</string>
   <string name="screen_room_member_list_role_administrator">"Administrateurs"</string>
   <string name="screen_room_member_list_role_moderator">"Modérateurs"</string>
   <string name="screen_room_member_list_role_owner">"Propriétaire"</string>

@@ -23,8 +23,7 @@ data class ChangeRoomPermissionsState(
     val currentPermissions: RoomPowerLevelsValues?,
     val itemsBySection: ImmutableMap<RoomPermissionsSection, ImmutableList<RoomPermissionType>>,
     val hasChanges: Boolean,
-    val saveAction: AsyncAction<Unit>,
-    val confirmExitAction: AsyncAction<Unit>,
+    val saveAction: AsyncAction<Boolean>,
     val eventSink: (ChangeRoomPermissionsEvent) -> Unit,
 ) {
     fun selectedRoleForType(type: RoomPermissionType): SelectableRole? {

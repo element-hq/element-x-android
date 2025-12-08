@@ -136,8 +136,8 @@ Nid ydym yn argymell galluogi amgryptio ar gyfer ystafelloedd y gall unrhyw un d
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Dim ond os cawn nhw wahoddiad gall pobl ymuno"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Gwahoddiad yn unig"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Mynediad ystafell"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Nid yw gofodau\'n cael eu cefnogi ar hyn o bryd"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Aelodau gofod"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Nid yw gofodau\'n cael eu cefnogi ar hyn o bryd"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Bydd angen cyfeiriad ystafell arnoch i\'w wneud yn weladwy yn y cyfeiriadur."</string>
   <string name="screen_security_and_privacy_room_address_section_header">"Cyfeiriad yr ystafell"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Caniatáu i\'r ystafell hon gael ei chanfod trwy chwilio cyfeiriadur ystafelloedd cyhoeddus %1$s"</string>

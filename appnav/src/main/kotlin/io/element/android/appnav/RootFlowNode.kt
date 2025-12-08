@@ -62,6 +62,10 @@ import io.element.android.libraries.oidc.api.OidcActionFlow
 import io.element.android.libraries.sessionstorage.api.LoggedInState
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.ui.common.nodes.emptyNode
+import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
+import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.api.watchers.AnalyticsColdStartWatcher
+import io.element.android.services.appnavstate.api.ROOM_OPENED_FROM_NOTIFICATION
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -86,6 +90,8 @@ class RootFlowNode(
     private val oidcActionFlow: OidcActionFlow,
     private val featureFlagService: FeatureFlagService,
     private val announcementService: AnnouncementService,
+    private val analyticsService: AnalyticsService,
+    private val analyticsColdStartWatcher: AnalyticsColdStartWatcher,
 ) : BaseFlowNode<RootFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.SplashScreen,
@@ -95,6 +101,7 @@ class RootFlowNode(
     plugins = plugins
 ) {
     override fun onBuilt() {
+        analyticsColdStartWatcher.start()
         matrixSessionCache.restoreWithSavedState(buildContext.savedStateMap)
         super.onBuilt()
         observeNavState()
@@ -310,7 +317,13 @@ class RootFlowNode(
     suspend fun handleIntent(intent: Intent) {
         val resolvedIntent = intentResolver.resolve(intent) ?: return
         when (resolvedIntent) {
-            is ResolvedIntent.Navigation -> navigateTo(resolvedIntent.deeplinkData)
+            is ResolvedIntent.Navigation -> {
+                val openingRoomFromNotification = intent.getBooleanExtra(ROOM_OPENED_FROM_NOTIFICATION, false)
+                if (openingRoomFromNotification && resolvedIntent.deeplinkData is DeeplinkData.Room) {
+                    analyticsService.startLongRunningTransaction(AnalyticsLongRunningTransaction.NotificationTapOpensTimeline)
+                }
+                navigateTo(resolvedIntent.deeplinkData)
+            }
             is ResolvedIntent.Login -> onLoginLink(resolvedIntent.params)
             is ResolvedIntent.Oidc -> onOidcAction(resolvedIntent.oidcAction)
             is ResolvedIntent.Permalink -> navigateTo(resolvedIntent.permalinkData)

@@ -26,6 +26,7 @@ data class SpaceState(
     val joinActions: ImmutableMap<RoomId, AsyncAction<Unit>>,
     val acceptDeclineInviteState: AcceptDeclineInviteState,
     val topicViewerState: TopicViewerState,
+    val canAccessSpaceSettings: Boolean,
     val eventSink: (SpaceEvents) -> Unit
 ) {
     fun isJoining(spaceId: RoomId): Boolean = joinActions[spaceId] == AsyncAction.Loading

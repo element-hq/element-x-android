@@ -34,6 +34,7 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
+import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.appnavstate.impl.DefaultActiveRoomsHolder
 import io.element.android.services.appnavstate.test.FakeAppNavigationStateService
@@ -123,6 +124,7 @@ class JoinedRoomLoadedFlowNodeTest {
         roomGraphFactory = FakeRoomGraphFactory(),
         matrixClient = matrixClient,
         activeRoomsHolder = activeRoomsHolder,
+        analyticsService = FakeAnalyticsService(),
     )
 
     @Test

@@ -62,20 +62,21 @@ fun CreatePollView(
 ) {
     val coroutineScope = rememberCoroutineScope()
 
-    val navBack = { state.eventSink(CreatePollEvents.ConfirmNavBack) }
+    val navBack = { state.eventSink(CreatePollEvent.ConfirmNavBack) }
     BackHandler(onBack = navBack)
     if (state.showBackConfirmation) {
         SaveChangesDialog(
-            onSubmitClick = { state.eventSink(CreatePollEvents.NavBack) },
-            onDismiss = { state.eventSink(CreatePollEvents.HideConfirmation) }
+            onSaveClick = { state.eventSink(CreatePollEvent.Save) },
+            onDiscardClick = { state.eventSink(CreatePollEvent.NavBack) },
+            onDismiss = { state.eventSink(CreatePollEvent.HideConfirmation) },
         )
     }
     if (state.showDeleteConfirmation) {
         ConfirmationDialog(
             title = stringResource(id = R.string.screen_edit_poll_delete_confirmation_title),
             content = stringResource(id = R.string.screen_edit_poll_delete_confirmation),
-            onSubmitClick = { state.eventSink(CreatePollEvents.Delete(confirmed = true)) },
-            onDismiss = { state.eventSink(CreatePollEvents.HideConfirmation) }
+            onSubmitClick = { state.eventSink(CreatePollEvent.Delete(confirmed = true)) },
+            onDismiss = { state.eventSink(CreatePollEvent.HideConfirmation) }
         )
     }
     val questionFocusRequester = remember { FocusRequester() }
@@ -90,7 +91,7 @@ fun CreatePollView(
                 mode = state.mode,
                 saveEnabled = state.canSave,
                 onBackClick = navBack,
-                onSaveClick = { state.eventSink(CreatePollEvents.Save) }
+                onSaveClick = { state.eventSink(CreatePollEvent.Save) }
             )
         },
     ) { paddingValues ->
@@ -111,7 +112,7 @@ fun CreatePollView(
                                 label = stringResource(id = R.string.screen_create_poll_question_desc),
                                 value = state.question,
                                 onValueChange = {
-                                    state.eventSink(CreatePollEvents.SetQuestion(it))
+                                    state.eventSink(CreatePollEvent.SetQuestion(it))
                                 },
                                 modifier = Modifier
                                     .focusRequester(questionFocusRequester)
@@ -130,7 +131,7 @@ fun CreatePollView(
                         TextField(
                             value = answer.text,
                             onValueChange = {
-                                state.eventSink(CreatePollEvents.SetAnswer(index, it))
+                                state.eventSink(CreatePollEvent.SetAnswer(index, it))
                             },
                             modifier = Modifier
                                 .then(if (isLastItem) Modifier.focusRequester(answerFocusRequester) else Modifier)
@@ -144,7 +145,7 @@ fun CreatePollView(
                             imageVector = CompoundIcons.Delete(),
                             contentDescription = stringResource(R.string.screen_create_poll_delete_option_a11y, answer.text),
                             modifier = Modifier.clickable(answer.canDelete) {
-                                state.eventSink(CreatePollEvents.RemoveAnswer(index))
+                                state.eventSink(CreatePollEvent.RemoveAnswer(index))
                             },
                         )
                     },
@@ -160,7 +161,7 @@ fun CreatePollView(
                         ),
                         style = ListItemStyle.Primary,
                         onClick = {
-                            state.eventSink(CreatePollEvents.AddAnswer)
+                            state.eventSink(CreatePollEvent.AddAnswer)
                             coroutineScope.launch(Dispatchers.Main) {
                                 lazyListState.animateScrollToItem(state.answers.size + 1)
                                 answerFocusRequester.requestFocus()
@@ -180,7 +181,7 @@ fun CreatePollView(
                         ),
                         onClick = {
                             state.eventSink(
-                                CreatePollEvents.SetPollKind(
+                                CreatePollEvent.SetPollKind(
                                     if (state.pollKind == PollKind.Disclosed) PollKind.Undisclosed else PollKind.Disclosed
                                 )
                             )
@@ -190,7 +191,7 @@ fun CreatePollView(
                         ListItem(
                             headlineContent = { Text(text = stringResource(id = CommonStrings.action_delete_poll)) },
                             style = ListItemStyle.Destructive,
-                            onClick = { state.eventSink(CreatePollEvents.Delete(confirmed = false)) },
+                            onClick = { state.eventSink(CreatePollEvent.Delete(confirmed = false)) },
                         )
                     }
                 }

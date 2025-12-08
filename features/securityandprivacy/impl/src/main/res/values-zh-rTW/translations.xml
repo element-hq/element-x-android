@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_edit_room_address_room_address_section_footer">"您需要地址才能在公開目錄中顯示。"</string>
+  <string name="screen_edit_room_address_title">"編輯地址"</string>
+  <string name="screen_security_and_privacy_add_room_address_action">"新增地址"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_description">"所有人都必須申請存取權。"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"要求加入"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"是的，啟用加密"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_description">"啟用後就無法停用聊天室的加密，只有受邀的聊天室成員或加入聊天室後才能看到訊息歷史紀錄。
+除了聊天室成員以外，任何人都不能讀取訊息。這可能會讓機器人與橋接無法正常運作。
+我們不建議對任何人都可以找到並加入的聊天室啟用加密。"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_title">"啟用加密？"</string>
+  <string name="screen_security_and_privacy_encryption_section_footer">"一旦啟用就無法停用加密。"</string>
+  <string name="screen_security_and_privacy_encryption_section_header">"加密"</string>
+  <string name="screen_security_and_privacy_encryption_toggle_title">"啟用端到端加密"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"任何人都可以加入。"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"任何人"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"僅受邀者才能加入。"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"僅限邀請"</string>
+  <string name="screen_security_and_privacy_room_access_section_header">"存取權"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_title">"空間成員"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"目前不支援空間"</string>
+  <string name="screen_security_and_privacy_room_address_section_footer">"您需要地址才能在公開目錄中顯示。"</string>
+  <string name="screen_security_and_privacy_room_address_section_header">"地址"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"允許透過搜尋 %1$s 公開聊天室目錄找到此聊天室"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_toggle_description">"允許其他人透過公開目錄找到。"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"在公開目錄中可見"</string>
+  <string name="screen_security_and_privacy_room_history_anyone_option_title">"任何人"</string>
+  <string name="screen_security_and_privacy_room_history_section_header">"誰可以讀取歷史紀錄"</string>
+  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"僅在成員被邀請後"</string>
+  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"選取此選項後僅限成員"</string>
+  <string name="screen_security_and_privacy_room_publishing_section_footer">"聊天室地址是尋找與存取聊天室的方法。也確保您可以輕鬆與其他人分享聊天室。
+您可以選擇在家伺服器公開聊天室目錄中發佈您的聊天室。"</string>
+  <string name="screen_security_and_privacy_room_publishing_section_header">"聊天室發佈"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_header">"能見度"</string>
+  <string name="screen_security_and_privacy_title">"安全與隱私"</string>
+</resources>

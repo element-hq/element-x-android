@@ -250,6 +250,7 @@ Dôvod: %1$s."</string>
   </plurals>
   <string name="common_message">"Správa"</string>
   <string name="common_message_actions">"Akcie správy"</string>
+  <string name="common_message_failed_to_send">"Správu sa nepodarilo odoslať"</string>
   <string name="common_message_layout">"Štýl správ"</string>
   <string name="common_message_removed">"Správa odstránená"</string>
   <string name="common_modern">"Moderné"</string>
@@ -376,6 +377,7 @@ Dôvod: %1$s."</string>
   <string name="common_waiting">"Čaká sa…"</string>
   <string name="common_waiting_for_decryption_key">"Čaká sa na dešifrovací kľúč"</string>
   <string name="common_you">"Vy"</string>
+  <string name="crypto_history_visible">"Správy, ktoré odošlete, budú zdieľané s novými členmi pozvanými do tejto miestnosti. %1$s"</string>
   <string name="crypto_identity_change_pin_violation">"Totožnosť používateľa %1$s sa obnovila.%2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Totožnosť používateľa %1$s %2$s bola obnovená. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
@@ -396,6 +398,7 @@ Naozaj chcete pokračovať?"</string>
   <string name="dialog_title_error">"Chyba"</string>
   <string name="dialog_title_success">"Úspech"</string>
   <string name="dialog_title_warning">"Upozornenie"</string>
+  <string name="dialog_unsaved_changes_description">"Máte neuložené zmeny."</string>
   <string name="dialog_unsaved_changes_description_android">"Vaše zmeny neboli uložené. Naozaj sa chcete vrátiť?"</string>
   <string name="dialog_unsaved_changes_title">"Uložiť zmeny?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Maximálna povolená veľkosť súboru je: %1$s"</string>
@@ -435,6 +438,11 @@ Naozaj chcete pokračovať?"</string>
   <string name="screen_create_poll_options_section_title">"Možnosti"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Odstrániť %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Nastavenia"</string>
+  <string name="screen_manage_authorized_spaces_header">"Priestory, kde sa členovia môžu pripojiť k miestnosti bez pozvania."</string>
+  <string name="screen_manage_authorized_spaces_title">"Spravovať priestory"</string>
+  <string name="screen_manage_authorized_spaces_unknown_space">"(Neznámy priestor)"</string>
+  <string name="screen_manage_authorized_spaces_unknown_spaces_section_title">"Iné priestory, ktorých nie ste členom"</string>
+  <string name="screen_manage_authorized_spaces_your_spaces_section_title">"Vaše priestory"</string>
   <string name="screen_media_picker_error_failed_selection">"Nepodarilo sa vybrať médium, skúste to prosím znova."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Stlačte správu a vyberte možnosť „%1$s“, ktorú chcete zahrnúť sem."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Pripnite dôležité správy, aby sa dali ľahko nájsť"</string>
@@ -454,6 +462,10 @@ Naozaj chcete pokračovať?"</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Vaša správa nebola odoslaná, pretože %1$s neoveril/a všetky zariadenia."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Jedno alebo viac vašich zariadení nie je overených. Správu môžete odoslať aj tak, alebo môžete zatiaľ zrušiť a skúsiť to znova neskôr po overení všetkých svojich zariadení."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Vaša správa nebola odoslaná, pretože ste neoverili jedno alebo viac svojich zariadení"</string>
+  <string name="screen_room_change_permissions_change_settings">"Zmeniť nastavenia"</string>
+  <string name="screen_room_change_permissions_manage_space">"Spravovať priestor"</string>
+  <string name="screen_room_change_permissions_manage_space_rooms">"Spravovať miestnosti"</string>
+  <string name="screen_room_change_permissions_title">"Povolenia"</string>
   <string name="screen_room_change_role_administrators_or_owners_title">"Upraviť správcov alebo vlastníkov"</string>
   <string name="screen_room_error_failed_processing_media">"Nepodarilo sa spracovať médiá na odoslanie, skúste to prosím znova."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nepodarilo sa získať údaje o používateľovi"</string>

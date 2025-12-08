@@ -3,6 +3,8 @@
   <string name="banner_battery_optimization_content_android">"请关闭本应用的电池优化设置，确保不错过任何消息通知。"</string>
   <string name="banner_battery_optimization_submit_android">"禁用优化"</string>
   <string name="banner_battery_optimization_title_android">"通知未送达？"</string>
+  <string name="banner_new_sound_message">"您的通知提示音已升级 - 更清晰、更快速、干扰更少。"</string>
+  <string name="banner_new_sound_title">"我们已更新您的声音"</string>
   <string name="banner_set_up_recovery_content">"生成新的恢复密钥，该密钥可用于在您无法访问设备时恢复加密的消息历史记录。"</string>
   <string name="banner_set_up_recovery_submit">"设置恢复"</string>
   <string name="banner_set_up_recovery_title">"设置恢复"</string>

@@ -369,6 +369,7 @@ Anledning:%1$s."</string>
   <string name="dialog_title_error">"Fel"</string>
   <string name="dialog_title_success">"Lyckades"</string>
   <string name="dialog_title_warning">"Varning"</string>
+  <string name="dialog_unsaved_changes_description">"Du har osparade ändringar."</string>
   <string name="dialog_unsaved_changes_description_android">"Dina ändringar har inte sparats. Är du säker på att du vill gå tillbaka?"</string>
   <string name="dialog_unsaved_changes_title">"Spara ändringar?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Den maximala tillåtna filstorleken är: %1$s"</string>

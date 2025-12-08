@@ -20,7 +20,7 @@ data class CreatePollState(
     val pollKind: PollKind,
     val showBackConfirmation: Boolean,
     val showDeleteConfirmation: Boolean,
-    val eventSink: (CreatePollEvents) -> Unit,
+    val eventSink: (CreatePollEvent) -> Unit,
 ) {
     enum class Mode {
         New,

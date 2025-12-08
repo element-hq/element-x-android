@@ -8,10 +8,14 @@
 
 package io.element.android.libraries.matrix.api.exception
 
-sealed class ClientException(message: String, val details: String?) : Exception(message) {
-    class Generic(message: String, details: String?) : ClientException(message, details)
-    class MatrixApi(val kind: ErrorKind, val code: String, message: String, details: String?) : ClientException(message, details)
-    class Other(message: String) : ClientException(message, null)
+sealed class ClientException(message: String, val details: String?, cause: Throwable? = null) : Exception(message, cause) {
+    class Generic(message: String, details: String?, cause: Throwable? = null) : ClientException(message, details, cause)
+    class MatrixApi(val kind: ErrorKind, val code: String, message: String, details: String?, cause: Throwable? = null) : ClientException(
+        message = message,
+        details = details,
+        cause = cause
+    )
+    class Other(message: String, cause: Throwable? = null) : ClientException(message, null, cause)
 }
 
 fun ClientException.isNetworkError(): Boolean {

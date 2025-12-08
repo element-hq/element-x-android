@@ -332,6 +332,7 @@ Apakah Anda yakin ingin melanjutkan?"</string>
   <string name="dialog_title_error">"Eror"</string>
   <string name="dialog_title_success">"Berhasil"</string>
   <string name="dialog_title_warning">"Peringatan"</string>
+  <string name="dialog_unsaved_changes_description">"Anda memiliki perubahan yang belum disimpan."</string>
   <string name="dialog_unsaved_changes_description_android">"Perubahan Anda belum disimpan. Apakah Anda yakin ingin kembali?"</string>
   <string name="dialog_unsaved_changes_title">"Simpan perubahan?"</string>
   <string name="error_account_creation_not_possible">"Homeserver Anda perlu ditingkatkan untuk mendukung Matrix Authentication Service dan pembuatan akun."</string>

@@ -56,7 +56,7 @@ class PushLoopbackTest(
         }
         val testPushResult = try {
             pushService.testPush(sessionId)
-        } catch (pusherRejected: PushGatewayFailure.PusherRejected) {
+        } catch (_: PushGatewayFailure.PusherRejected) {
             val hasQuickFix = pushService.getCurrentPushProvider(sessionId)?.canRotateToken() == true
             delegate.updateState(
                 description = stringProvider.getString(R.string.troubleshoot_notifications_test_push_loop_back_failure_1),

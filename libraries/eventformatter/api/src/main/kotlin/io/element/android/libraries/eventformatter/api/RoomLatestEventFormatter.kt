@@ -10,6 +10,7 @@ package io.element.android.libraries.eventformatter.api
 
 import io.element.android.libraries.matrix.api.roomlist.LatestEventValue
 
-fun interface RoomLatestEventFormatter {
-    fun format(latestEvent: LatestEventValue, isDmRoom: Boolean): CharSequence?
+interface RoomLatestEventFormatter {
+    fun format(latestEvent: LatestEventValue.Local, isDmRoom: Boolean): CharSequence?
+    fun format(latestEvent: LatestEventValue.Remote, isDmRoom: Boolean): CharSequence?
 }

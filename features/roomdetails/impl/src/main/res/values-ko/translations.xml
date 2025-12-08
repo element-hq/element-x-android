@@ -127,8 +127,8 @@
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"초대받은 사용자만 가입할 수 있습니다."</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"초대 전용"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"방 액세스"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_description">"스페이스는 현재 지원되지 않습니다"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"스페이스 멤버들"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"스페이스는 현재 지원되지 않습니다"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"디렉토리에 표시하려면 방 주소가 필요합니다."</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"%1$s 공개 방 디렉토리에서 이 방을 검색할 수 있도록 허용합니다"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"공개 룸 디렉토리에 표시됨"</string>

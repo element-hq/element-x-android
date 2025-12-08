@@ -62,7 +62,7 @@ class RustWidgetDriver(
     override suspend fun send(message: String) {
         try {
             driverAndHandle.handle.send(message)
-        } catch (e: IllegalStateException) {
+        } catch (_: IllegalStateException) {
             // The handle is closed, ignore
         }
     }

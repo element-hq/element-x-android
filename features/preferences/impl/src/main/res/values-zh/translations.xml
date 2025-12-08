@@ -44,6 +44,10 @@
   <string name="screen_edit_profile_error_title">"无法更新个人资料"</string>
   <string name="screen_edit_profile_title">"编辑个人资料"</string>
   <string name="screen_edit_profile_updating_details">"更新个人资料……"</string>
+  <string name="screen_labs_enable_threads">"启用主题回复"</string>
+  <string name="screen_labs_enable_threads_description">"应用将重启以应用此更改。"</string>
+  <string name="screen_labs_header_description">"尝试我们最新的开发理念。这些功能尚未最终确定，可能不稳定，也可能会发生变化。"</string>
+  <string name="screen_labs_header_title">"想尝试新功能？"</string>
   <string name="screen_labs_title">"实验室"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"更多设置"</string>
   <string name="screen_notification_settings_calls_label">"音视频通话"</string>

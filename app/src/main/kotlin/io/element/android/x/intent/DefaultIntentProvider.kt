@@ -10,6 +10,7 @@ package io.element.android.x.intent
 
 import android.content.Context
 import android.content.Intent
+import android.os.Bundle
 import androidx.core.net.toUri
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
@@ -32,10 +33,12 @@ class DefaultIntentProvider(
         roomId: RoomId?,
         threadId: ThreadId?,
         eventId: EventId?,
+        extras: Bundle?,
     ): Intent {
         return Intent(context, MainActivity::class.java).apply {
             action = Intent.ACTION_VIEW
             data = deepLinkCreator.create(sessionId, roomId, threadId, eventId).toUri()
+            extras?.let(::putExtras)
         }
     }
 }

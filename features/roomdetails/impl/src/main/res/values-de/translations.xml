@@ -130,8 +130,8 @@ Wir empfehlen keine Verschlüsselung für Chats zu aktivieren, die jeder finden 
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Personen können nur beitreten, wenn sie eingeladen werden."</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Nur auf Einladung"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Chat Zugang"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Spaces werden zur Zeit nicht unterstützt."</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Spacemitglieder"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Spaces werden zur Zeit nicht unterstützt."</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Du benötigst eine Chat-Adresse, um den Chat im Verzeichnis sichtbar zu machen."</string>
   <string name="screen_security_and_privacy_room_address_section_header">"Chatroomadresse"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Erlaube das Auffinden dieses Chats durch Suche im öffentlichen Verzeichnis von %1$s"</string>

@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_room_change_permissions_administrators">"Iba správcovia"</string>
+  <string name="screen_room_change_permissions_administrators">"Správca"</string>
   <string name="screen_room_change_permissions_ban_people">"Zakázať ľudí"</string>
   <string name="screen_room_change_permissions_delete_messages">"Odstrániť správy"</string>
-  <string name="screen_room_change_permissions_invite_people">"Pozvite ľudí a prijmite žiadosti o pripojenie"</string>
+  <string name="screen_room_change_permissions_everyone">"Člen"</string>
+  <string name="screen_room_change_permissions_invite_people">"Pozvať ľudí"</string>
+  <string name="screen_room_change_permissions_member_moderation">"Spravovať členov"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Správy a obsah"</string>
-  <string name="screen_room_change_permissions_moderators">"Správcovia a moderátori"</string>
-  <string name="screen_room_change_permissions_remove_people">"Odstrániť ľudí a odmietnuť žiadosti o pripojenie"</string>
+  <string name="screen_room_change_permissions_moderators">"Moderátor"</string>
+  <string name="screen_room_change_permissions_remove_people">"Odstrániť ľudí"</string>
   <string name="screen_room_change_permissions_room_avatar">"Zmeniť obrázok miestnosti"</string>
-  <string name="screen_room_change_permissions_room_details">"Upraviť miestnosť"</string>
+  <string name="screen_room_change_permissions_room_details">"Upraviť podrobnosti"</string>
   <string name="screen_room_change_permissions_room_name">"Zmeniť názov miestnosti"</string>
   <string name="screen_room_change_permissions_room_topic">"Zmeniť tému miestnosti"</string>
   <string name="screen_room_change_permissions_send_messages">"Odoslať správy"</string>
@@ -32,6 +34,13 @@
   <string name="screen_room_change_role_unsaved_changes_description">"Máte neuložené zmeny."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Uložiť zmeny?"</string>
   <string name="screen_room_member_list_banned_empty">"Neexistujú žiadni zablokovaní používatelia."</string>
+  <plurals name="screen_room_member_list_banned_header_title">
+    <item quantity="one">"%1$d zakázaný"</item>
+    <item quantity="few">"%1$d zakázaní"</item>
+    <item quantity="other">"%1$d zakázaných"</item>
+  </plurals>
+  <string name="screen_room_member_list_empty_search_subtitle">"Skontrolujte preklepy alebo skúste nové vyhľadávanie"</string>
+  <string name="screen_room_member_list_empty_search_title">"Žiadne výsledky pre „%1$s“"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d osoba"</item>
     <item quantity="few">"%1$d osoby"</item>
@@ -44,8 +53,14 @@
   <string name="screen_room_member_list_manage_member_unban_title">"Zrušiť zákaz prístupu do miestnosti"</string>
   <string name="screen_room_member_list_mode_banned">"Zakázaní"</string>
   <string name="screen_room_member_list_mode_members">"Členovia"</string>
-  <string name="screen_room_member_list_role_administrator">"Iba správcovia"</string>
-  <string name="screen_room_member_list_role_moderator">"Správcovia a moderátori"</string>
+  <plurals name="screen_room_member_list_pending_header_title">
+    <item quantity="one">"%1$d pozvaný"</item>
+    <item quantity="few">"%1$d pozvaní"</item>
+    <item quantity="other">"%1$d pozvaných"</item>
+  </plurals>
+  <string name="screen_room_member_list_pending_status">"Čaká na schválenie"</string>
+  <string name="screen_room_member_list_role_administrator">"Správca"</string>
+  <string name="screen_room_member_list_role_moderator">"Moderátor"</string>
   <string name="screen_room_member_list_role_owner">"Vlastník"</string>
   <string name="screen_room_member_list_room_members_header_title">"Členovia miestnosti"</string>
   <string name="screen_room_member_list_unbanning_user">"Zrušenie zákazu %1$s"</string>
@@ -58,6 +73,7 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"Správy a obsah"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderátori"</string>
   <string name="screen_room_roles_and_permissions_owners">"Vlastníci"</string>
+  <string name="screen_room_roles_and_permissions_permissions_header">"Povolenia"</string>
   <string name="screen_room_roles_and_permissions_reset">"Obnoviť povolenia"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Po obnovení oprávnení prídete o aktuálne nastavenia."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Obnoviť oprávnenia?"</string>
