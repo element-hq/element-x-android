@@ -10,11 +10,17 @@ package io.element.android.libraries.matrix.impl.workmanager
 import android.content.Context
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import dev.zacsweers.metro.ContributesIntoMap
+import dev.zacsweers.metro.binding
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.workmanager.api.di.MetroWorkerFactory
+import io.element.android.libraries.workmanager.api.di.WorkerKey
 import timber.log.Timber
 
 @AssistedInject
@@ -43,4 +49,9 @@ class VacuumDatabaseWorker(
                 }
             )
     }
+
+    @ContributesIntoMap(AppScope::class, binding = binding<MetroWorkerFactory.WorkerInstanceFactory<*>>())
+    @WorkerKey(VacuumDatabaseWorker::class)
+    @AssistedFactory
+    interface Factory : MetroWorkerFactory.WorkerInstanceFactory<VacuumDatabaseWorker>
 }
