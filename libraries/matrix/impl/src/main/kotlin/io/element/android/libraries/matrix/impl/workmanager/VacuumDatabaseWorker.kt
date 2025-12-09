@@ -15,6 +15,7 @@ import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.SessionId
+import timber.log.Timber
 
 @AssistedInject
 class VacuumDatabaseWorker(
@@ -27,12 +28,19 @@ class VacuumDatabaseWorker(
     }
 
     override suspend fun doWork(): Result {
+        Timber.d("Starting database vacuuming...")
         val sessionId = inputData.getString(SESSION_ID_PARAM)?.let(::SessionId) ?: return Result.failure()
         val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return Result.failure()
         return client.performDatabaseVacuum()
             .fold(
-                onSuccess = { Result.success() },
-                onFailure = { Result.failure() }
+                onSuccess = {
+                    Timber.d("Database vacuuming finished successfully")
+                    Result.success()
+                },
+                onFailure = {
+                    Timber.e(it, "Database vacuuming failed")
+                    Result.failure()
+                }
             )
     }
 }
