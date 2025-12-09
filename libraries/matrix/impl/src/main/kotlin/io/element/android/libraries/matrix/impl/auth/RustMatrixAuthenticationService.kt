@@ -379,6 +379,7 @@ class RustMatrixAuthenticationService(
 
 private suspend fun MatrixClient.waitForSessionVerification(timeout: Duration = 10.seconds) {
     withTimeoutOrNull(timeout) {
+        Timber.d("Starting sync and waiting up to $timeout for the verification state to be verified")
         // Session verification depends on the sync service to receive updates so we start a temporary sync here
         syncService.startSync()
         sessionVerificationService.sessionVerifiedStatus.filterIsInstance<SessionVerifiedStatus.Verified>().first()
