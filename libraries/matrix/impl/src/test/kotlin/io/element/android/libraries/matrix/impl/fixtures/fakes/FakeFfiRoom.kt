@@ -12,7 +12,6 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.impl.fixtures.factories.aRustRoomInfo
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.tests.testutils.lambda.lambdaError
-import org.matrix.rustcomponents.sdk.EventTimelineItem
 import org.matrix.rustcomponents.sdk.LatestEventValue
 import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.Room
@@ -25,8 +24,7 @@ class FakeFfiRoom(
     private val getMembers: () -> RoomMembersIterator = { lambdaError() },
     private val getMembersNoSync: () -> RoomMembersIterator = { lambdaError() },
     private val leaveLambda: () -> Unit = { lambdaError() },
-    private val latestEventLambda: () -> EventTimelineItem? = { lambdaError() },
-    private val newLatestEventLambda: () -> LatestEventValue = { lambdaError() },
+    private val latestEventLambda: () -> LatestEventValue = { lambdaError() },
     private val suggestedRoleForUserLambda: (String) -> RoomMemberRole = { lambdaError() },
     private val roomInfo: RoomInfo = aRustRoomInfo(id = roomId.value),
 ) : Room(NoHandle) {
@@ -50,16 +48,12 @@ class FakeFfiRoom(
         return roomInfo
     }
 
-    override suspend fun latestEvent(): EventTimelineItem? {
+    override suspend fun latestEvent(): LatestEventValue {
         return latestEventLambda()
     }
 
     override suspend fun suggestedRoleForUser(userId: String): RoomMemberRole {
         return suggestedRoleForUserLambda(userId)
-    }
-
-    override suspend fun newLatestEvent(): LatestEventValue {
-        return newLatestEventLambda()
     }
 
     override fun close() {

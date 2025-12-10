@@ -174,8 +174,7 @@ class RoomSummaryListProcessorTest {
 
     private fun aRustRoom(roomId: RoomId = A_ROOM_ID) = FakeFfiRoom(
         roomId = roomId,
-        latestEventLambda = { null },
-        newLatestEventLambda = { LatestEventValue.None }
+        latestEventLambda = { LatestEventValue.None }
     )
 
     private fun TestScope.createProcessor() = RoomSummaryListProcessor(
