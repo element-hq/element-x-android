@@ -21,6 +21,8 @@ import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.workmanager.api.di.MetroWorkerFactory
 import io.element.android.libraries.workmanager.api.di.WorkerKey
+import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.api.recordTransaction
 import timber.log.Timber
 
 @AssistedInject
@@ -28,6 +30,7 @@ class VacuumDatabaseWorker(
     @Assisted workerParams: WorkerParameters,
     @ApplicationContext private val context: Context,
     private val matrixClientProvider: MatrixClientProvider,
+    private val analyticsService: AnalyticsService,
 ) : CoroutineWorker(context, workerParams) {
     companion object {
         const val SESSION_ID_PARAM = "session_id"
@@ -37,17 +40,20 @@ class VacuumDatabaseWorker(
         Timber.d("Starting database vacuuming...")
         val sessionId = inputData.getString(SESSION_ID_PARAM)?.let(::SessionId) ?: return Result.failure()
         val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return Result.failure()
-        return client.performDatabaseVacuum()
-            .fold(
-                onSuccess = {
-                    Timber.d("Database vacuuming finished successfully")
-                    Result.success()
-                },
-                onFailure = {
-                    Timber.e(it, "Database vacuuming failed")
-                    Result.failure()
-                }
-            )
+        return analyticsService.recordTransaction("Vacuuming DBs", "vacuuming") { transaction ->
+            client.performDatabaseVacuum()
+                .fold(
+                    onSuccess = {
+                        Timber.d("Database vacuuming finished successfully")
+                        Result.success()
+                    },
+                    onFailure = { error ->
+                        transaction.attachError(error)
+                        Timber.e(error, "Database vacuuming failed")
+                        Result.failure()
+                    }
+                )
+        }
     }
 
     @ContributesIntoMap(AppScope::class, binding = binding<MetroWorkerFactory.WorkerInstanceFactory<*>>())

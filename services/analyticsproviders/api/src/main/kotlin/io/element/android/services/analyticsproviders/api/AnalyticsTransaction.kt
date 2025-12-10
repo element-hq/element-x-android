@@ -12,6 +12,7 @@ interface AnalyticsTransaction {
     fun setData(key: String, value: Any)
     fun isFinished(): Boolean
     fun traceId(): String?
+    fun attachError(throwable: Throwable)
     fun finish()
 }
 

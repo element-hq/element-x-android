@@ -23,6 +23,9 @@ class SentryAnalyticsTransaction private constructor(span: ISpan) : AnalyticsTra
     override fun setData(key: String, value: Any) = inner.setData(key, value)
     override fun traceId(): String? = inner.toSentryTrace().value
     override fun isFinished(): Boolean = inner.isFinished
+    override fun attachError(throwable: Throwable) {
+        inner.throwable = throwable
+    }
     override fun finish() {
         val name = if (inner is ITransaction) inner.name else inner.operation
         Timber.d("Finishing transaction: $name")

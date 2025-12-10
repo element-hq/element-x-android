@@ -14,5 +14,6 @@ object NoopAnalyticsTransaction : AnalyticsTransaction {
     override fun setData(key: String, value: Any) {}
     override fun isFinished(): Boolean = true
     override fun traceId(): String? = null
+    override fun attachError(throwable: Throwable) {}
     override fun finish() {}
 }
