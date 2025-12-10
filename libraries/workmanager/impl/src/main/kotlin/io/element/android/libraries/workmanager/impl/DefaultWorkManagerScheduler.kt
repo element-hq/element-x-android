@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.workmanager.impl
 
+import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
@@ -53,8 +54,14 @@ class DefaultWorkManagerScheduler(
 
     override fun hasPendingWork(sessionId: SessionId, requestType: WorkManagerRequestType): Boolean {
         val workInfos = workManager.getWorkInfosByTag(workManagerTag(sessionId, requestType)).get().orEmpty()
-        // It has pending work if it's periodic or it isn't but it's not finished
-        return workInfos.any { it.periodicityInfo != null || !it.state.isFinished }
+        return workInfos.any { info ->
+            val isPeriodic = info.periodicityInfo != null
+            val isCancelled = info.state == WorkInfo.State.CANCELLED
+            // It has pending work if:
+            // - It's not periodic and is not finished.
+            // - It's periodic and is not cancelled - since it'll be run again in a next iteration otherwise
+            !isPeriodic && !info.state.isFinished || isPeriodic && !isCancelled
+        }
     }
 
     override fun cancel(sessionId: SessionId) {
