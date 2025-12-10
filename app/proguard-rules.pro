@@ -69,4 +69,4 @@
 -keep class org.matrix.rustcomponents.sdk.** { *;}
 -keep class uniffi.** { *;}
 -keep class io.element.android.x.di.** { *; }
--keepnames class io.element.android.x.**
+-keepnames class io.element.android.**
