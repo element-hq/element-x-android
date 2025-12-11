@@ -22,12 +22,12 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.mediaupload.api.MaxUploadSizeProvider
+import io.element.android.libraries.mediaupload.test.FakeMediaOptimizationConfigProvider
 import io.element.android.libraries.mediaviewer.api.aVideoMediaInfo
 import io.element.android.libraries.mediaviewer.api.anImageMediaInfo
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.test.viewer.aLocalMedia
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
-import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -233,16 +233,16 @@ class DefaultMediaOptimizationSelectorPresenterTest {
     private fun createDefaultMediaOptimizationSelectorPresenter(
         localMedia: LocalMedia = aLocalMedia(mockMediaUrl, aVideoMediaInfo()),
         maxUploadSizeProvider: MaxUploadSizeProvider = MaxUploadSizeProvider { Result.success(1_000L) },
-        sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.SelectableMediaQuality.key to true)),
         mediaExtractorFactory: FakeVideoMetadataExtractorFactory = FakeVideoMetadataExtractorFactory(),
+        mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
     ): DefaultMediaOptimizationSelectorPresenter {
         return DefaultMediaOptimizationSelectorPresenter(
             localMedia = localMedia,
             maxUploadSizeProvider = maxUploadSizeProvider,
-            sessionPreferencesStore = sessionPreferencesStore,
             featureFlagService = featureFlagService,
             mediaExtractorFactory = mediaExtractorFactory,
+            mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
         )
     }
 }

@@ -44,6 +44,7 @@ import io.element.android.libraries.mediaupload.api.MediaPreProcessor
 import io.element.android.libraries.mediaupload.api.MediaSenderFactory
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.impl.DefaultMediaSender
+import io.element.android.libraries.mediaupload.test.FakeMediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.mediaviewer.api.aVideoMediaInfo
 import io.element.android.libraries.mediaviewer.api.anApkMediaInfo
@@ -598,6 +599,7 @@ class AttachmentsPreviewPresenterTest {
                 )
             }
         ),
+        mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
     ): AttachmentsPreviewPresenter {
         return AttachmentsPreviewPresenter(
             attachment = aMediaAttachment(localMedia),
@@ -619,6 +621,7 @@ class AttachmentsPreviewPresenterTest {
             mediaOptimizationSelectorPresenterFactory = mediaOptimizationSelectorPresenterFactory,
             timelineMode = timelineMode,
             inReplyToEventId = null,
+            mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
         )
     }
 

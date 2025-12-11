@@ -37,6 +37,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfig
+import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.api.MediaSenderFactory
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.api.allFiles
@@ -62,6 +63,7 @@ class AttachmentsPreviewPresenter(
     private val mediaOptimizationSelectorPresenterFactory: MediaOptimizationSelectorPresenter.Factory,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
+    private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
 ) : Presenter<AttachmentsPreviewState> {
     @AssistedFactory
     interface Factory {
@@ -107,13 +109,9 @@ class AttachmentsPreviewPresenter(
             // to prepare it for sending. This is done to avoid blocking the UI thread when the
             // user clicks on the send button.
             if (mediaOptimizationSelectorState.displayMediaSelectorViews == false) {
-                val mediaOptimizationConfig = MediaOptimizationConfig(
-                    compressImages = mediaOptimizationSelectorState.isImageOptimizationEnabled == true,
-                    videoCompressionPreset = mediaOptimizationSelectorState.selectedVideoPreset ?: VideoCompressionPreset.STANDARD,
-                )
                 preprocessMediaJob = preProcessAttachment(
                     attachment = attachment,
-                    mediaOptimizationConfig = mediaOptimizationConfig,
+                    mediaOptimizationConfig = mediaOptimizationConfigProvider.get(),
                     displayProgress = false,
                     sendActionState = sendActionState,
                 )
