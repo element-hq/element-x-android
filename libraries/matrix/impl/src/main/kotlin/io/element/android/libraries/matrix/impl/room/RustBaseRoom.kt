@@ -85,7 +85,9 @@ class RustBaseRoom(
     }.stateIn(roomCoroutineScope, started = SharingStarted.Lazily, initialValue = initialRoomInfo)
 
     override fun predecessorRoom(): PredecessorRoom? {
-        return innerRoom.predecessorRoom()?.map()
+        return runCatchingExceptions { innerRoom.predecessorRoom()?.map() }
+            .onFailure { Timber.e(it, "Could not get predecessor room") }
+            .getOrNull()
     }
 
     override suspend fun subscribeToSync() = roomSyncSubscriber.subscribe(roomId)
