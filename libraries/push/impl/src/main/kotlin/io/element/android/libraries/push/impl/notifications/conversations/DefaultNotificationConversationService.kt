@@ -91,12 +91,13 @@ class DefaultNotificationConversationService(
 
         val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return
         val imageLoader = imageLoaderHolder.get(client)
+        val label = roomName.takeIf { it.isNotBlank() } ?: roomId.value
 
         val defaultShortcutIconSize = ShortcutManagerCompat.getIconMaxWidth(context)
         val icon = bitmapLoader.getRoomBitmap(
             avatarData = AvatarData(
                 id = roomId.value,
-                name = roomName,
+                name = label,
                 url = roomAvatarUrl,
                 size = AvatarSize.RoomDetailsHeader,
             ),
@@ -105,7 +106,7 @@ class DefaultNotificationConversationService(
         )?.let(IconCompat::createWithBitmap)
 
         val shortcutInfo = ShortcutInfoCompat.Builder(context, createShortcutId(sessionId, roomId))
-            .setShortLabel(roomName)
+            .setShortLabel(label)
             .setIcon(icon)
             .setIntent(intentProvider.getViewRoomIntent(sessionId, roomId, threadId = null, eventId = null))
             .setCategories(categories)
