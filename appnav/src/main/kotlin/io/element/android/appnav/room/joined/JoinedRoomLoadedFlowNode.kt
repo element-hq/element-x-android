@@ -8,7 +8,9 @@
 
 package io.element.android.appnav.room.joined
 
+import android.app.Activity
 import android.os.Parcelable
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
@@ -96,6 +98,9 @@ class JoinedRoomLoadedFlowNode(
     private val callback: Callback = callback()
     override val graph = roomGraphFactory.create(inputs.room)
 
+    // This is an ugly hack to check activity recreation
+    private var currentActivity: Activity? = null
+
     init {
         lifecycle.subscribe(
             onCreate = {
@@ -115,8 +120,12 @@ class JoinedRoomLoadedFlowNode(
             },
             onDestroy = {
                 Timber.v("OnDestroy")
-                activeRoomsHolder.removeRoom(inputs.room.sessionId, inputs.room.roomId)
-                inputs.room.destroy()
+                // If we're just going through an activity recreation there's no need to destroy the Room object
+                // Destroying it would actually cause an issue where its methods can no longer be called
+                if (currentActivity?.isChangingConfigurations != true) {
+                    activeRoomsHolder.removeRoom(inputs.room.sessionId, inputs.room.roomId)
+                    inputs.room.destroy()
+                }
                 appNavigationStateService.onLeavingRoom(id)
             }
         )
@@ -289,6 +298,8 @@ class JoinedRoomLoadedFlowNode(
 
     @Composable
     override fun View(modifier: Modifier) {
+        currentActivity = LocalActivity.current
+
         BackstackView()
     }
 }
