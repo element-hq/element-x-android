@@ -13,6 +13,7 @@
     <item quantity="one">"%d notificare"</item>
     <item quantity="other">"%d notificări"</item>
   </plurals>
+  <string name="notification_error_unified_push_unregistered_android">"Distribuitorul de notificări UnifiedPush nu a putut fi înregistrat, așadar nu veți mai primi notificări. Verificați setările de notificări ale aplicației și starea distribuitorului push."</string>
   <string name="notification_fallback_content">"Aveți mesaje noi"</string>
   <string name="notification_incoming_call">"Apel primit"</string>
   <string name="notification_inline_reply_failed">"** Trimiterea eșuată - vă rugăm să deschideți camera"</string>
@@ -37,7 +38,10 @@
   <string name="notification_room_invite_body_with_sender">"%1$s v-a invitat să vă alăturați camerei"</string>
   <string name="notification_sender_me">"Eu"</string>
   <string name="notification_sender_mention_reply">"%1$s v-a menționat sau răspuns"</string>
+  <string name="notification_space_invite_body">"V-a invitat să vă alăturați spațiului"</string>
+  <string name="notification_space_invite_body_with_sender">"%1$s v-a invitat să vă alăturați spațiului"</string>
   <string name="notification_test_push_notification_content">"Vizualizați o notificare! Faceți clic pe mine!"</string>
+  <string name="notification_thread_in_room">"Fir în: %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">

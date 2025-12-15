@@ -14,6 +14,7 @@ Du kan ændre dette når som helst i rummets indstillinger."</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Alle kan bede om at deltage i rummet, men en administrator eller en moderator skal acceptere anmodningen"</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Spørg om at deltage"</string>
   <string name="screen_create_room_room_address_section_footer">"Hvis dette rum skal være synligt i det offentlige register, skal du bruge en rum-adresse."</string>
+  <string name="screen_create_room_room_address_section_title">"Rummets adresse"</string>
   <string name="screen_create_room_room_name_label">"Navn på rum"</string>
   <string name="screen_create_room_room_visibility_section_title">"Rummets synlighed"</string>
   <string name="screen_create_room_title">"Opret et rum"</string>

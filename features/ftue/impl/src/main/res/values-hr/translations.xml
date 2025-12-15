@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"Ne možete potvrditi?"</string>
+  <string name="screen_identity_confirmation_create_new_recovery_key">"Izradi novi ključ za oporavak"</string>
+  <string name="screen_identity_confirmation_subtitle">"Potvrdite ovaj uređaj kako biste postavili sigurnu razmjenu poruka."</string>
+  <string name="screen_identity_confirmation_title">"Potvrdite svoj identitet"</string>
+  <string name="screen_identity_confirmation_use_another_device">"Upotrijebite drugi uređaj"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"Upotrijebi ključ za oporavak"</string>
+  <string name="screen_identity_confirmed_subtitle">"Sada možete sigurno čitati ili slati poruke, a svatko s kim razgovarate također može vjerovati ovom uređaju."</string>
+  <string name="screen_identity_confirmed_title">"Uređaj je potvrđen"</string>
+  <string name="screen_identity_use_another_device">"Upotrijebite drugi uređaj"</string>
+  <string name="screen_identity_waiting_on_other_device">"Čekanje na drugi uređaj…"</string>
+  <string name="screen_notification_optin_subtitle">"Postavke možete promijeniti poslije."</string>
+  <string name="screen_notification_optin_title">"Omogućite obavijesti i nikada ne propustite poruku"</string>
+  <string name="screen_session_verification_enter_recovery_key">"Unesi ključ za oporavak"</string>
+</resources>

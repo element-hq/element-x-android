@@ -129,7 +129,7 @@
   <string name="screen_room_roles_and_permissions_room_details">"Room details"</string>
   <string name="screen_room_roles_and_permissions_title">"Roles &amp; permissions"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Add address"</string>
-  <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Anyone in authorized spaces can join, but everyone else must request access."</string>
+  <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Anyone in authorised spaces can join, but everyone else must request access."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Everyone must request access."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_title">"Ask to join"</string>
   <string name="screen_security_and_privacy_ask_to_join_single_space_members_option_description">"Anyone in %1$s can join, but everyone else must request access."</string>
@@ -148,7 +148,7 @@ We do not recommend enabling encryption for rooms that anyone can find and join.
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Only invited people can join."</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Invite only"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Access"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_multiple_parents_description">"Anyone in authorized spaces can join."</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_multiple_parents_description">"Anyone in authorised spaces can join."</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_single_parent_description">"Anyone in %1$s can join."</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Space members"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Spaces are not currently supported"</string>

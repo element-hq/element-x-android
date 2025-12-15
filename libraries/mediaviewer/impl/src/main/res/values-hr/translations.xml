@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"Ova će se datoteka ukloniti iz sobe i članovi joj neće moći pristupiti."</string>
+  <string name="screen_media_browser_delete_confirmation_title">"Želite li izbrisati datoteku?"</string>
+  <string name="screen_media_browser_download_error_message">"Provjerite internetsku vezu i pokušajte ponovno."</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"Ovdje će se prikazati dokumenti, audiodatoteke i glasovne poruke prenesene u ovu sobu."</string>
+  <string name="screen_media_browser_files_empty_state_title">"Još nema prenesenih datoteka"</string>
+  <string name="screen_media_browser_list_loading_files">"Učitavanje datoteka…"</string>
+  <string name="screen_media_browser_list_loading_media">"Učitavanje medija…"</string>
+  <string name="screen_media_browser_list_mode_files">"Datoteke"</string>
+  <string name="screen_media_browser_list_mode_media">"Mediji"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"Ovdje će se prikazati slike i videozapisi preneseni u ovu sobu."</string>
+  <string name="screen_media_browser_media_empty_state_title">"Još nijedan medij nije prenesen"</string>
+  <string name="screen_media_browser_title">"Mediji i datoteke"</string>
+  <string name="screen_media_details_file_format">"Oblik datoteke"</string>
+  <string name="screen_media_details_filename">"Naziv datoteke"</string>
+  <string name="screen_media_details_no_more_files_to_show">"Nema više datoteka za prikaz"</string>
+  <string name="screen_media_details_no_more_media_to_show">"Nema više medijskih sadržaja za prikaz"</string>
+  <string name="screen_media_details_uploaded_by">"Prenio/la"</string>
+  <string name="screen_media_details_uploaded_on">"Preneseno na"</string>
+</resources>

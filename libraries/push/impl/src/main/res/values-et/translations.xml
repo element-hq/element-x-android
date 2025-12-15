@@ -38,6 +38,8 @@
   <string name="notification_room_invite_body_with_sender">"%1$s saatis sulle kutse jututoaga liitumiseks"</string>
   <string name="notification_sender_me">"Mina"</string>
   <string name="notification_sender_mention_reply">"%1$s mainis või vastas"</string>
+  <string name="notification_space_invite_body">"Kutsus sind liituma kogukonnaga"</string>
+  <string name="notification_space_invite_body_with_sender">"%1$s kutsus sind liituma kogukonnaga"</string>
   <string name="notification_test_push_notification_content">"See ongi teavitus! Klõpsi mind!"</string>
   <string name="notification_thread_in_room">"Jutulõng „%1$s“ jututoas"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>

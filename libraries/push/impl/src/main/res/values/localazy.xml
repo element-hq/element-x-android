@@ -55,7 +55,7 @@
     <item quantity="one">"%d room"</item>
     <item quantity="other">"%d rooms"</item>
   </plurals>
-  <string name="push_distributor_background_sync_android">"Background synchronization"</string>
+  <string name="push_distributor_background_sync_android">"Background synchronisation"</string>
   <string name="push_distributor_firebase_android">"Google Services"</string>
   <string name="push_no_valid_google_play_services_apk_android">"No valid Google Play Services found. Notifications may not work properly."</string>
   <string name="troubleshoot_notifications_test_blocked_users_description">"Checking blocked users"</string>

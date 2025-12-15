@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_deactivate_account_confirmation_dialog_content">"Potvrdite da želite deaktivirati svoj račun. Ova se radnja ne može poništiti."</string>
+  <string name="screen_deactivate_account_delete_all_messages">"Izbriši sve moje poruke"</string>
+  <string name="screen_deactivate_account_delete_all_messages_notice">"Upozorenje: budući korisnici mogu vidjeti nepotpune razgovore."</string>
+  <string name="screen_deactivate_account_description">"Deaktiviranje vašeg računa je %1$s, to će:"</string>
+  <string name="screen_deactivate_account_description_bold_part">"nepovratno"</string>
+  <string name="screen_deactivate_account_list_item_1">"%1$s vaš račun (ne možete se ponovno prijaviti i vaš ID se ne može ponovno upotrijebiti)."</string>
+  <string name="screen_deactivate_account_list_item_1_bold_part">"Trajno onemogući"</string>
+  <string name="screen_deactivate_account_list_item_2">"Ukloniti vas iz svih soba za razgovore."</string>
+  <string name="screen_deactivate_account_list_item_3">"Izbrisati podatke o vašem računu s našeg poslužitelja identiteta."</string>
+  <string name="screen_deactivate_account_list_item_4">"Vaše će poruke i dalje biti vidljive registriranim korisnicima, ali neće biti dostupne novim ili neregistriranim korisnicima ako ih odlučite izbrisati."</string>
+  <string name="screen_deactivate_account_title">"Deaktiviraj račun"</string>
+</resources>

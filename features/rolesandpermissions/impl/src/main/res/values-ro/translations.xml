@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_room_change_permissions_administrators">"Doar administratori"</string>
+  <string name="screen_room_change_permissions_administrators">"Administrator"</string>
   <string name="screen_room_change_permissions_ban_people">"Interziceți persoane"</string>
   <string name="screen_room_change_permissions_delete_messages">"Ștergeți mesajele"</string>
-  <string name="screen_room_change_permissions_invite_people">"Invitați persoane și acceptați cereri de alaturare"</string>
+  <string name="screen_room_change_permissions_everyone">"Membru"</string>
+  <string name="screen_room_change_permissions_invite_people">"Invitați persoane"</string>
+  <string name="screen_room_change_permissions_member_moderation">"Gestionați membrii"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Mesaje și conținut"</string>
-  <string name="screen_room_change_permissions_moderators">"Administratori și moderatori"</string>
-  <string name="screen_room_change_permissions_remove_people">"Îndepărtați persoane și refuzați cereri de alăturare"</string>
+  <string name="screen_room_change_permissions_moderators">"Moderator"</string>
+  <string name="screen_room_change_permissions_remove_people">"Îndepărtați persoane"</string>
   <string name="screen_room_change_permissions_room_avatar">"Schimbați avatarul camerei"</string>
-  <string name="screen_room_change_permissions_room_details">"Editați camera"</string>
+  <string name="screen_room_change_permissions_room_details">"Editați detaliile"</string>
   <string name="screen_room_change_permissions_room_name">"Schimbă numele camerei"</string>
   <string name="screen_room_change_permissions_room_topic">"Schimbați subiectul camerei"</string>
   <string name="screen_room_change_permissions_send_messages">"Trimiteți mesaje"</string>
@@ -31,9 +33,17 @@
   <string name="screen_room_change_role_section_users">"Membri"</string>
   <string name="screen_room_change_role_unsaved_changes_description">"Aveți modificări nesalvate."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Salvați modificările?"</string>
-  <string name="screen_room_member_list_banned_empty">"Nu există utilizatori interziși în această cameră."</string>
+  <string name="screen_room_member_list_banned_empty">"Nu există utilizatori interziși."</string>
+  <plurals name="screen_room_member_list_banned_header_title">
+    <item quantity="one">"%1$d Interzis"</item>
+    <item quantity="few">"%1$d Interziși"</item>
+    <item quantity="other">"%1$d Interziși"</item>
+  </plurals>
+  <string name="screen_room_member_list_empty_search_subtitle">"Verificați ortografia sau încercați o căutare nouă"</string>
+  <string name="screen_room_member_list_empty_search_title">"Niciun rezultat pentru “%1$s”"</string>
   <plurals name="screen_room_member_list_header_title">
-    <item quantity="one">"o persoană"</item>
+    <item quantity="one">"%1$d persoană"</item>
+    <item quantity="few">"%1$d persoane"</item>
     <item quantity="other">"%1$d persoane"</item>
   </plurals>
   <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Îndepărtați și interziceți membrul"</string>
@@ -43,8 +53,14 @@
   <string name="screen_room_member_list_manage_member_unban_title">"Revocati excluderea din camera"</string>
   <string name="screen_room_member_list_mode_banned">"Excluși"</string>
   <string name="screen_room_member_list_mode_members">"Membri"</string>
-  <string name="screen_room_member_list_role_administrator">"Doar administratori"</string>
-  <string name="screen_room_member_list_role_moderator">"Administratori și moderatori"</string>
+  <plurals name="screen_room_member_list_pending_header_title">
+    <item quantity="one">"%1$d Invitat"</item>
+    <item quantity="few">"%1$d Invitați"</item>
+    <item quantity="other">"%1$d Invitați"</item>
+  </plurals>
+  <string name="screen_room_member_list_pending_status">"În așteptare"</string>
+  <string name="screen_room_member_list_role_administrator">"Administrator"</string>
+  <string name="screen_room_member_list_role_moderator">"Moderator"</string>
   <string name="screen_room_member_list_role_owner">"Proprietar"</string>
   <string name="screen_room_member_list_room_members_header_title">"Membrii camerei"</string>
   <string name="screen_room_member_list_unbanning_user">"Se anulează interzicerea lui %1$s"</string>
@@ -57,10 +73,12 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"Mesaje și conținut"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderatori"</string>
   <string name="screen_room_roles_and_permissions_owners">"Proprietari"</string>
+  <string name="screen_room_roles_and_permissions_permissions_header">"Permisiuni"</string>
   <string name="screen_room_roles_and_permissions_reset">"Resetați permisiunile"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"După ce resetați permisiunile, veți pierde setările curente."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Resetați permisiunile?"</string>
   <string name="screen_room_roles_and_permissions_roles_header">"Roluri"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Detaliile camerei"</string>
+  <string name="screen_room_roles_and_permissions_space_details">"Detalii spațiu"</string>
   <string name="screen_room_roles_and_permissions_title">"Roluri și permisiuni"</string>
 </resources>

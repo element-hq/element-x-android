@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signout_confirmation_dialog_content">"Jeste li sigurni da se želite odjaviti?"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"Odjava"</string>
+  <string name="screen_signout_confirmation_dialog_title">"Odjava"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Odjavljivanje…"</string>
+  <string name="screen_signout_key_backup_disabled_subtitle">"Odjavit ćete se iz svoje posljednje sesije. Ako se sada odjavite, nećete moći pristupiti svojim šifriranim porukama."</string>
+  <string name="screen_signout_key_backup_disabled_title">"Isključili ste sigurnosno kopiranje"</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"Vaši su se ključevi još uvijek sigurnosno kopirali kada ste se isključili iz mreže. Ponovno se povežite kako bi se vaši ključevi mogli sigurnosno kopirati prije nego što se odjavite."</string>
+  <string name="screen_signout_key_backup_offline_title">"Vaši se ključevi još uvijek sigurnosno kopiraju"</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"Pričekajte da se to dovrši prije nego što se odjavite."</string>
+  <string name="screen_signout_key_backup_ongoing_title">"Vaši se ključevi još uvijek sigurnosno kopiraju"</string>
+  <string name="screen_signout_preference_item">"Odjava"</string>
+  <string name="screen_signout_recovery_disabled_subtitle">"Odjavit ćete se iz svoje posljednje sesije. Ako se sada odjavite, nećete moći pristupiti svojim šifriranim porukama."</string>
+  <string name="screen_signout_recovery_disabled_title">"Oporavak nije postavljen"</string>
+  <string name="screen_signout_save_recovery_key_subtitle">"Odjavit ćete se iz svoje posljednje sesije. Ako se sada odjavite, možda nećete moći pristupiti svojim šifriranim porukama."</string>
+  <string name="screen_signout_save_recovery_key_title">"Jeste li spremili svoj ključ za oporavak?"</string>
+</resources>

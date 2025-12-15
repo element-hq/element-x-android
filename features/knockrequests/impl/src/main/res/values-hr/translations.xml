@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Da, prihvati sve"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_description">"Jeste li sigurni da želite prihvatiti sve zahtjeve za pridruživanje?"</string>
+  <string name="screen_knock_requests_list_accept_all_alert_title">"Prihvati sve zahtjeve"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Prihvati sve"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_description">"Nismo mogli prihvatiti sve zahtjeve. Želite li pokušati ponovno?"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_title">"Prihvaćanje svih zahtjeva nije uspjelo"</string>
+  <string name="screen_knock_requests_list_accept_all_loading_title">"Prihvaćanje svih zahtjeva za pridruživanje"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_description">"Nismo mogli prihvatiti ovaj zahtjev. Želite li pokušati ponovno?"</string>
+  <string name="screen_knock_requests_list_accept_failed_alert_title">"Prihvaćanje zahtjeva nije uspjelo"</string>
+  <string name="screen_knock_requests_list_accept_loading_title">"Prihvaća se zahtjev za pridruživanje"</string>
+  <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Da, odbij i zabrani"</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Jeste li sigurni da želite odbiti i zabraniti korisnika %1$s? Taj korisnik neće moći ponovno zatražiti pristup ovoj sobi."</string>
+  <string name="screen_knock_requests_list_ban_alert_title">"Odbij i zabrani pristup"</string>
+  <string name="screen_knock_requests_list_ban_loading_title">"Odbijanje i zabrana pristupa"</string>
+  <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Da, odbij"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"Jeste li sigurni da želite odbiti zahtjev korisnika %1$s za pridruživanje ovoj sobi?"</string>
+  <string name="screen_knock_requests_list_decline_alert_title">"Odbij pristup"</string>
+  <string name="screen_knock_requests_list_decline_and_ban_action_title">"Odbij i zabrani"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_description">"Nismo mogli odbiti ovaj zahtjev. Želite li pokušati ponovno?"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_title">"Odbijanje zahtjeva nije uspjelo"</string>
+  <string name="screen_knock_requests_list_decline_loading_title">"Odbijanje zahtjeva za pridruživanje"</string>
+  <string name="screen_knock_requests_list_empty_state_description">"Kada netko zatraži pridruživanje sobi, ovdje ćete moći vidjeti njihov zahtjev."</string>
+  <string name="screen_knock_requests_list_empty_state_title">"Nema zahtjeva za pridruživanje koji su na čekanju"</string>
+  <string name="screen_knock_requests_list_initial_loading_title">"Učitavanje zahtjeva za pridruživanje…"</string>
+  <string name="screen_knock_requests_list_title">"Zahtjevi za pridruživanje"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="one">"%1$s i još %2$d želi se pridružiti ovoj sobi"</item>
+    <item quantity="few">"%1$s i još %2$d želi se pridružiti ovoj sobi"</item>
+    <item quantity="other">"%1$s i još %2$d želi se pridružiti ovoj sobi"</item>
+  </plurals>
+  <string name="screen_room_multiple_knock_requests_view_all_button_title">"Prikaži sve"</string>
+  <string name="screen_room_single_knock_request_accept_button_title">"Prihvati"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s želi se pridružiti ovoj sobi"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Prikaz"</string>
+</resources>

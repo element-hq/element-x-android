@@ -34,6 +34,8 @@
   <string name="screen_room_change_role_unsaved_changes_description">"Mentetlen módosításai vannak."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Menti a módosításokat?"</string>
   <string name="screen_room_member_list_banned_empty">"Ebben a szobában nincsenek kitiltott felhasználók."</string>
+  <string name="screen_room_member_list_empty_search_subtitle">"Ellenőrizze a helyesírást, vagy próbáljon meg egy új keresést"</string>
+  <string name="screen_room_member_list_empty_search_title">"Nincs találat a következőre: „%1$s\""</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d személy"</item>
     <item quantity="other">"%1$d személy"</item>

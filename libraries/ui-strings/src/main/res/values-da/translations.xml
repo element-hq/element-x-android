@@ -445,6 +445,10 @@ Er du sikker på, at du vil fortsætte?"</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Din besked blev ikke sendt, fordi %1$s ikke har bekræftet alle enheder"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"En eller flere af dine enheder er ikke verificeret. Du kan sende beskeden alligevel, eller du kan annullere for nu og prøve igen senere, når du har verificeret alle dine enheder."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Din besked blev ikke sendt, fordi du ikke har verificeret en eller flere af dine enheder"</string>
+  <string name="screen_room_change_permissions_change_settings">"Skift indstillinger"</string>
+  <string name="screen_room_change_permissions_manage_space">"Administrér gruppe"</string>
+  <string name="screen_room_change_permissions_manage_space_rooms">"Administrer rum"</string>
+  <string name="screen_room_change_permissions_title">"Tilladelser"</string>
   <string name="screen_room_change_role_administrators_or_owners_title">"Rediger administratorer eller ejere"</string>
   <string name="screen_room_error_failed_processing_media">"Det lykkedes ikke at behandle medier til upload. Prøv venligst igen."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Kunne ikke hente brugeroplysninger"</string>

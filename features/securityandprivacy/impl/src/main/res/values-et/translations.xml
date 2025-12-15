@@ -3,8 +3,10 @@
   <string name="screen_edit_room_address_room_address_section_footer">"Selleks, et jututuba oleks nähtav jututubade avalikus kataloogis, vajab ta aadressi."</string>
   <string name="screen_edit_room_address_title">"Muuda aadressi"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Lisa aadress"</string>
+  <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Liituda saavad kõik volitatud kogukondade liikmed, kuid kõik teised peavad küsima võimalust ligipääsuks."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Kõik võivad paluda jututoaga liitumist."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_title">"Küsi võimalust liitumiseks"</string>
+  <string name="screen_security_and_privacy_ask_to_join_single_space_members_option_description">"Liituda saavad kõik „%1$s“ kogukonna liikmed, kuid kõik teised peavad küsima võimalust ligipääsuks."</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Jah, lülita krüptimine sisse"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Kui jututoa krüptimine on kord sisse lülitatud, siis seda välja lülitada ei saa. Sõnumite ajalugu on nähtav vaid jututoa liikmetele alates kutse saamise või liitumise hetkest.
 Keegi teine peale jututoa liikmete ei saa sõnumeid lugeda. See võib takistada suhtlusrobotite ja/või võrgusildade toimimist.
@@ -15,10 +17,13 @@ Me ei soovita krüptimise kasutamist selliste avalike jututubade puhul, millega 
   <string name="screen_security_and_privacy_encryption_toggle_title">"Võta läbiv krüptimine kasutusele"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Kõik võivad jututoaga liituda"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Kõik"</string>
+  <string name="screen_security_and_privacy_room_access_footer">"Vali kogukonnad, mille liikmed saavad selle jututoaga liituda ilma kutseta. %1$s"</string>
   <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Halda kogukondi"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Liituda saab vaid kutse olemasolul"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Vaid kutsega"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Ligipääs"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_multiple_parents_description">"Liituda saavad kõik volitatud kogukondade liikmed."</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_single_parent_description">"Liituda võivad kõik „%1$s“ liikmed."</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Kogukonna liikmed"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Kogukondade tugi veel puudub"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Selleks, et jututuba oleks nähtav jututubade avalikus kataloogis, vajab ta aadressi."</string>
@@ -33,6 +38,7 @@ Me ei soovita krüptimise kasutamist selliste avalike jututubade puhul, millega 
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Jututoa aadressid annavad võimaluse neid leida ning saada neile ligi. Samuti võimaldab see jututuba teistele huvilistele jagada.
 Lisaks võid sa jututoa avaldada oma koduserveri avalikus jututubade kataloogis."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Jututoa avaldamine"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_footer">"Aadressid on mugav viis jututubade ja kogukondade leidmiseks ning tagab mugava võimaluse nende jagamiseks."</string>
   <string name="screen_security_and_privacy_room_visibility_section_header">"Nähtavus"</string>
   <string name="screen_security_and_privacy_title">"Turvalisus ja privaatsus"</string>
 </resources>
