@@ -14,10 +14,13 @@ import com.bumble.appyx.core.state.SavedStateMap
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
+import io.element.android.libraries.androidutils.hash.hash
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analyticsproviders.api.AnalyticsUserData
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -36,6 +39,7 @@ private const val SAVE_INSTANCE_KEY = "io.element.android.x.di.MatrixClientsHold
 class MatrixSessionCache(
     private val authenticationService: MatrixAuthenticationService,
     private val syncOrchestratorFactory: SyncOrchestrator.Factory,
+    private val analyticsService: AnalyticsService,
 ) : MatrixClientProvider {
     private val sessionIdsToMatrixSession = ConcurrentHashMap<SessionId, InMemoryMatrixSession>()
     private val restoreMutex = Mutex()
@@ -100,6 +104,11 @@ class MatrixSessionCache(
         Timber.d("Restore matrix session: $sessionId")
         return authenticationService.restoreSession(sessionId)
             .onSuccess { matrixClient ->
+                // Add the current homeserver (hashed) to the extra info
+                // This may not play well with multiple sessions, but it should work for now
+                analyticsService.addUserData(AnalyticsUserData.HOMESERVER, matrixClient.userIdServerName().hash())
+
+                // Add the new client to the in-memory cache
                 onNewMatrixClient(matrixClient)
             }
             .onFailure {
