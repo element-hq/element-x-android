@@ -35,6 +35,11 @@ interface AnalyticsTracker {
      * Super properties are added to any tracked event automatically.
      */
     fun updateSuperProperties(updatedProperties: SuperProperties)
+
+    /**
+     * Adds user data that will be sent with every event.
+     */
+    fun addUserData(key: String, value: String) {}
 }
 
 fun AnalyticsTracker.captureInteraction(name: Interaction.Name, type: Interaction.InteractionType? = null) {

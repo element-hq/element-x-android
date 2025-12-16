@@ -86,6 +86,10 @@ class SentryAnalyticsProvider(
     override fun updateSuperProperties(updatedProperties: SuperProperties) {
     }
 
+    override fun addUserData(key: String, value: String) {
+        Sentry.setExtra(key, value)
+    }
+
     override fun trackError(throwable: Throwable) {
         Sentry.captureException(throwable)
     }
