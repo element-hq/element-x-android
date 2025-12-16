@@ -15,6 +15,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.featureflag.ui.model.aFeatureUiModelList
 import io.element.android.libraries.matrix.api.tracing.TraceLogPack
+import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
 
 open class DeveloperSettingsStateProvider : PreviewParameterProvider<DeveloperSettingsState> {
@@ -47,6 +48,7 @@ fun aDeveloperSettingsState(
     features = aFeatureUiModelList(),
     rageshakeState = aRageshakePreferencesState(),
     cacheSize = AsyncData.Success("1.2 MB"),
+    databaseSizes = AsyncData.Success(persistentMapOf("state_store" to "1.2MB")),
     clearCacheAction = clearCacheAction,
     customElementCallBaseUrlState = customElementCallBaseUrlState,
     tracingLogLevel = AsyncData.Success(LogLevelItem.INFO),

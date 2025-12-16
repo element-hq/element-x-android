@@ -31,21 +31,26 @@ import io.element.android.features.preferences.impl.tasks.ClearCacheUseCase
 import io.element.android.features.preferences.impl.tasks.ComputeCacheSizeUseCase
 import io.element.android.features.preferences.impl.tasks.VacuumStoresUseCase
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesState
+import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
+import io.element.android.libraries.core.data.ByteUnit
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
+import io.element.android.libraries.matrix.api.analytics.GetDatabaseSizesUseCase
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
@@ -63,6 +68,8 @@ class DeveloperSettingsPresenter(
     private val buildMeta: BuildMeta,
     private val enterpriseService: EnterpriseService,
     private val vacuumStoresUseCase: VacuumStoresUseCase,
+    private val databaseSizesUseCase: GetDatabaseSizesUseCase,
+    private val fileSizeFormatter: FileSizeFormatter,
 ) : Presenter<DeveloperSettingsState> {
     @Composable
     override fun present(): DeveloperSettingsState {
@@ -72,6 +79,9 @@ class DeveloperSettingsPresenter(
         }
         val cacheSize = remember {
             mutableStateOf<AsyncData<String>>(AsyncData.Uninitialized)
+        }
+        val databaseSizes = remember {
+            mutableStateOf<AsyncData<ImmutableMap<String, String>>>(AsyncData.Uninitialized)
         }
         val clearCacheAction = remember {
             mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
@@ -96,6 +106,7 @@ class DeveloperSettingsPresenter(
         }
 
         LaunchedEffect(Unit) {
+            computeDatabaseSizes(databaseSizes)
             featureFlagService.getAvailableFeatures()
                 .run {
                     // Never display room directory search in release builds for Play Store
@@ -162,6 +173,7 @@ class DeveloperSettingsPresenter(
         return DeveloperSettingsState(
             features = featureUiModels,
             cacheSize = cacheSize.value,
+            databaseSizes = databaseSizes.value,
             clearCacheAction = clearCacheAction.value,
             rageshakeState = rageshakeState,
             customElementCallBaseUrlState = CustomElementCallBaseUrlState(
@@ -212,6 +224,27 @@ class DeveloperSettingsPresenter(
         suspend {
             computeCacheSizeUseCase()
         }.runCatchingUpdatingState(cacheSize)
+    }
+
+    private fun CoroutineScope.computeDatabaseSizes(databaseSizes: MutableState<AsyncData<ImmutableMap<String, String>>>) = launch {
+        suspend {
+            databaseSizesUseCase(sessionId).getOrThrow().let { sizes ->
+                buildMap {
+                    sizes.stateStore?.let { stateStoreSize ->
+                        put("State store", fileSizeFormatter.format(stateStoreSize.into(ByteUnit.BYTES), useShortFormat = true))
+                    }
+                    sizes.eventCacheStore?.let { eventCacheStoreSize ->
+                        put("Event cache store", fileSizeFormatter.format(eventCacheStoreSize.into(ByteUnit.BYTES), useShortFormat = true))
+                    }
+                    sizes.mediaStore?.let { mediaStoreSize ->
+                        put("Media store", fileSizeFormatter.format(mediaStoreSize.into(ByteUnit.BYTES), useShortFormat = true))
+                    }
+                    sizes.cryptoStore?.let { cryptoStoreSize ->
+                        put("Crypto store", fileSizeFormatter.format(cryptoStoreSize.into(ByteUnit.BYTES), useShortFormat = true))
+                    }
+                }
+            }.toImmutableMap()
+        }.runCatchingUpdatingState(databaseSizes)
     }
 
     private fun CoroutineScope.clearCache(clearCacheAction: MutableState<AsyncAction<Unit>>) = launch {

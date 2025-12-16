@@ -15,10 +15,12 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
 import io.element.android.libraries.matrix.api.tracing.TraceLogPack
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableMap
 
 data class DeveloperSettingsState(
     val features: ImmutableList<FeatureUiModel>,
     val cacheSize: AsyncData<String>,
+    val databaseSizes: AsyncData<ImmutableMap<String, String>>,
     val rageshakeState: RageshakePreferencesState,
     val clearCacheAction: AsyncAction<Unit>,
     val customElementCallBaseUrlState: CustomElementCallBaseUrlState,

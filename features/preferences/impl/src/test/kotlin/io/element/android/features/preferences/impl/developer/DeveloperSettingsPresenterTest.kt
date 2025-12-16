@@ -19,6 +19,7 @@ import io.element.android.features.preferences.impl.tasks.FakeClearCacheUseCase
 import io.element.android.features.preferences.impl.tasks.FakeComputeCacheSizeUseCase
 import io.element.android.features.preferences.impl.tasks.VacuumStoresUseCase
 import io.element.android.features.rageshake.api.preferences.aRageshakePreferencesState
+import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.meta.BuildMeta
@@ -27,6 +28,7 @@ import io.element.android.libraries.featureflag.api.Feature
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeature
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.matrix.api.analytics.GetDatabaseSizesUseCase
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.core.aBuildMeta
@@ -249,6 +251,7 @@ class DeveloperSettingsPresenterTest {
         buildMeta: BuildMeta = aBuildMeta(),
         enterpriseService: EnterpriseService = FakeEnterpriseService(),
         vacuumStoresUseCase: VacuumStoresUseCase = VacuumStoresUseCase {},
+        datbaseSizesUseCase: GetDatabaseSizesUseCase = GetDatabaseSizesUseCase { Result.success(emptyMap()) },
     ): DeveloperSettingsPresenter {
         return DeveloperSettingsPresenter(
             sessionId = sessionId,
@@ -260,6 +263,8 @@ class DeveloperSettingsPresenterTest {
             buildMeta = buildMeta,
             enterpriseService = enterpriseService,
             vacuumStoresUseCase = vacuumStoresUseCase,
+            databaseSizesUseCase = datbaseSizesUseCase,
+            fileSizeFormatter = FakeFileSizeFormatter(),
         )
     }
 }

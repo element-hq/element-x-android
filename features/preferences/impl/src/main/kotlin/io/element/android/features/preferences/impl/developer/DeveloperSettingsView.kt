@@ -9,6 +9,7 @@
 package io.element.android.features.preferences.impl.developer
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.progressSemantics
@@ -146,6 +147,25 @@ fun DeveloperSettingsView(
         }
         val cache = state.cacheSize
         PreferenceCategory(title = "Cache") {
+            ListItem(
+                headlineContent = { Text("Database sizes") },
+                supportingContent = {
+                    if (state.databaseSizes.isLoading()) {
+                        Text("Computing...")
+                    } else {
+                        val dbSizes = state.databaseSizes.dataOrNull()
+                        if (dbSizes != null && dbSizes.isNotEmpty()) {
+                            Column {
+                                for ((dbName, size) in dbSizes) {
+                                    Text("$dbName: $size")
+                                }
+                            }
+                        } else {
+                            Text("Unknown")
+                        }
+                    }
+                }
+            )
             ListItem(
                 headlineContent = {
                     Text("Vacuum stores")
