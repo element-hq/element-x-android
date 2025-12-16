@@ -106,7 +106,7 @@ class MatrixSessionCache(
             .onSuccess { matrixClient ->
                 // Add the current homeserver (hashed) to the extra info
                 // This may not play well with multiple sessions, but it should work for now
-                analyticsService.addUserData(AnalyticsUserData.HOMESERVER, matrixClient.userIdServerName().hash())
+                analyticsService.addIndexableData(AnalyticsUserData.HOMESERVER, matrixClient.userIdServerName().hash())
 
                 // Add the new client to the in-memory cache
                 onNewMatrixClient(matrixClient)

@@ -11,7 +11,8 @@ import io.element.android.services.analyticsproviders.api.AnalyticsTransaction
 
 object NoopAnalyticsTransaction : AnalyticsTransaction {
     override fun startChild(operation: String, description: String?): AnalyticsTransaction = NoopAnalyticsTransaction
-    override fun setData(key: String, value: Any) {}
+    override fun putExtraData(key: String, value: String) {}
+    override fun putIndexableData(key: String, value: String) {}
     override fun isFinished(): Boolean = true
     override fun traceId(): String? = null
     override fun attachError(throwable: Throwable) {}

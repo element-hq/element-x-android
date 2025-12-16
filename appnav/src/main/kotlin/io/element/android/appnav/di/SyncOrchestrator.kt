@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.api.recordTransaction
+import io.element.android.services.analyticsproviders.api.AnalyticsUserData
 import io.element.android.services.appnavstate.api.AppForegroundStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
@@ -77,7 +78,7 @@ class SyncOrchestrator(
 
                 // Wait until the sync service is not idle, either it will be running or in error/offline state
                 val firstState = syncService.syncState.first { it != SyncState.Idle }
-                transaction.setData("first_sync_state", firstState.name)
+                transaction.putIndexableData(AnalyticsUserData.FIRST_SYNC_STATE, firstState.name)
             }
 
             observeStates()

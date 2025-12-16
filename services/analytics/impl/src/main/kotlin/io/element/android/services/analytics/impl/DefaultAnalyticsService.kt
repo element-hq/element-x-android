@@ -149,9 +149,15 @@ class DefaultAnalyticsService(
         }
     }
 
-    override fun addUserData(key: String, value: String) {
+    override fun addExtraData(key: String, value: String) {
         if (userConsent.get()) {
-            analyticsProviders.onEach { it.addUserData(key, value) }
+            analyticsProviders.onEach { it.addExtraData(key, value) }
+        }
+    }
+
+    override fun addIndexableData(key: String, value: String) {
+        if (userConsent.get()) {
+            analyticsProviders.onEach { it.addIndexableData(key, value) }
         }
     }
 

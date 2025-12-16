@@ -37,9 +37,16 @@ interface AnalyticsTracker {
     fun updateSuperProperties(updatedProperties: SuperProperties)
 
     /**
-     * Adds user data that will be sent with every event.
+     * Adds extra data that will be sent with every event.
      */
-    fun addUserData(key: String, value: String) {}
+    fun addExtraData(key: String, value: String) {}
+
+    /**
+     * Similar to [addExtraData], adds data that will be indexed in the analytics portal.
+     *
+     * **Do not add numerical values using this, use [addExtraData] instead.**
+     */
+    fun addIndexableData(key: String, value: String) {}
 }
 
 fun AnalyticsTracker.captureInteraction(name: Interaction.Name, type: Interaction.InteractionType? = null) {

@@ -14,4 +14,7 @@ object AnalyticsUserData {
     const val EVENT_CACHE_SIZE = "event_cache_size"
     const val CRYPTO_STORE_SIZE = "crypto_store_size"
     const val MEDIA_STORE_SIZE = "media_store_size"
+
+    const val FIRST_SYNC_STATE = "first_sync_state"
+    const val TIMELINE_ITEM_COUNT = "timeline_item_count"
 }

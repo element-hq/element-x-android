@@ -20,7 +20,9 @@ class SentryAnalyticsTransaction private constructor(span: ISpan) : AnalyticsTra
     override fun startChild(operation: String, description: String?): AnalyticsTransaction = SentryAnalyticsTransaction(
         inner.startChild(operation, description)
     )
-    override fun setData(key: String, value: Any) = inner.setData(key, value)
+
+    override fun putIndexableData(key: String, value: String) = inner.setTag(key, value)
+    override fun putExtraData(key: String, value: String) = inner.setData(key, value)
     override fun traceId(): String? = inner.toSentryTrace().value
     override fun isFinished(): Boolean = inner.isFinished
     override fun attachError(throwable: Throwable) {

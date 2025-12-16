@@ -60,6 +60,7 @@ import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.OpenRoom
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.api.finishLongRunningTransaction
+import io.element.android.services.analyticsproviders.api.AnalyticsUserData
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.CoroutineScope
@@ -249,7 +250,7 @@ class TimelinePresenter(
             combine(timelineController.timelineItems(), room.membersStateFlow) { items, membersState ->
                 val parent = analyticsService.getLongRunningTransaction(DisplayFirstTimelineItems)
                 val transaction = parent?.startChild("timelineItemsFactory.replaceWith", "Processing timeline items")
-                transaction?.setData("items", items.count())
+                transaction?.putExtraData(AnalyticsUserData.TIMELINE_ITEM_COUNT, items.count().toString())
                 timelineItemsFactory.replaceWith(
                     timelineItems = items,
                     roomMembers = membersState.roomMembers().orEmpty()
