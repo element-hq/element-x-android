@@ -12,11 +12,13 @@ import io.element.android.libraries.androidutils.file.getSizeOfFiles
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
+import io.element.android.libraries.core.data.bytes
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.analytics.SdkStoreSizes
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -564,6 +566,17 @@ class RustMatrixClient(
 
     override suspend fun getCacheSize(): Long {
         return getCacheSize(includeCryptoDb = false)
+    }
+
+    override suspend fun getDatabaseSizes(): Result<SdkStoreSizes> = runCatchingExceptions {
+        innerClient.getStoreSizes().run {
+            SdkStoreSizes(
+                stateStore = stateStore?.bytes,
+                eventCacheStore = eventCacheStore?.bytes,
+                mediaStore = mediaStore?.bytes,
+                cryptoStore = cryptoStore?.bytes,
+            )
+        }
     }
 
     override suspend fun clearCache() {

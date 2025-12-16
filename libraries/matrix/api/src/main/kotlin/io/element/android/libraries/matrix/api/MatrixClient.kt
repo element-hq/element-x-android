@@ -9,6 +9,7 @@
 package io.element.android.libraries.matrix.api
 
 import io.element.android.libraries.core.data.tryOrNull
+import io.element.android.libraries.matrix.api.analytics.SdkStoreSizes
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.MatrixPatterns
@@ -81,6 +82,7 @@ interface MatrixClient {
     suspend fun joinRoomByIdOrAlias(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>): Result<RoomInfo?>
     suspend fun knockRoom(roomIdOrAlias: RoomIdOrAlias, message: String, serverNames: List<String>): Result<RoomInfo?>
     suspend fun getCacheSize(): Long
+    suspend fun getDatabaseSizes(): Result<SdkStoreSizes>
 
     /**
      * Will close the client and delete the cache data.

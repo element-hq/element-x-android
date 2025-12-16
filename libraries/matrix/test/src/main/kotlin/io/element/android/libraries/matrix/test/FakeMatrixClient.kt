@@ -9,6 +9,7 @@
 package io.element.android.libraries.matrix.test
 
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.analytics.SdkStoreSizes
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -105,6 +106,7 @@ class FakeMatrixClient(
     private val addRecentEmojiLambda: (String) -> Result<Unit> = { Result.success(Unit) },
     private val markRoomAsFullyReadResult: (RoomId, EventId) -> Result<Unit> = { _, _ -> lambdaError() },
     private val performDatabaseVacuumLambda: () -> Result<Unit> = { lambdaError() },
+    private val getDatabaseSizesLambda: () -> Result<SdkStoreSizes> = { lambdaError() },
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
         private set
@@ -182,6 +184,10 @@ class FakeMatrixClient(
 
     override suspend fun getCacheSize(): Long {
         return 0
+    }
+
+    override suspend fun getDatabaseSizes(): Result<SdkStoreSizes> {
+        return getDatabaseSizesLambda()
     }
 
     override suspend fun clearCache() = simulateLongTask {
