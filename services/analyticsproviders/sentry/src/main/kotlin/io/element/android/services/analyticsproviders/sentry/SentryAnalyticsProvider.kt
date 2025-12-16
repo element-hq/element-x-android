@@ -55,8 +55,13 @@ class SentryAnalyticsProvider(
 
         SentryAndroid.init(context) { options ->
             options.dsn = dsn
-            options.beforeSend = SentryOptions.BeforeSendCallback { event, _ -> event }
             options.beforeSendTransaction = SentryOptions.BeforeSendTransactionCallback { transaction, _ ->
+                // Ensure we'll never upload any session ids
+                val possibleSessionIds = transaction.extras?.filter { (it.value as? String)?.startsWith("@") == true }.orEmpty()
+                for (invalidExtra in possibleSessionIds) {
+                    transaction.extras?.remove(invalidExtra.key)
+                }
+
                 val sessionId = appNavigationStateService.appNavigationState.value.navigationState.currentSessionId()
                 if (sessionId != null) {
                     // This runs in a separate thread, so although using `runBlocking` is not great, at least it shouldn't freeze the app
