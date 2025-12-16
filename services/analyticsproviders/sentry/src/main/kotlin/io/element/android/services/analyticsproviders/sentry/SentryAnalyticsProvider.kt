@@ -16,16 +16,22 @@ import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
 import im.vector.app.features.analytics.plan.SuperProperties
 import im.vector.app.features.analytics.plan.UserProperties
+import io.element.android.libraries.core.data.ByteUnit
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.di.annotations.ApplicationContext
+import io.element.android.libraries.matrix.api.analytics.GetDatabaseSizesUseCase
 import io.element.android.services.analyticsproviders.api.AnalyticsProvider
 import io.element.android.services.analyticsproviders.api.AnalyticsTransaction
+import io.element.android.services.analyticsproviders.api.AnalyticsUserData
 import io.element.android.services.analyticsproviders.sentry.log.analyticsTag
+import io.element.android.services.appnavstate.api.AppNavigationStateService
+import io.element.android.services.appnavstate.api.currentSessionId
 import io.sentry.Breadcrumb
 import io.sentry.Sentry
 import io.sentry.SentryOptions
 import io.sentry.android.core.SentryAndroid
+import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 
 @ContributesIntoSet(AppScope::class)
@@ -33,6 +39,8 @@ import timber.log.Timber
 class SentryAnalyticsProvider(
     @ApplicationContext private val context: Context,
     private val buildMeta: BuildMeta,
+    private val getDatabaseSizesUseCase: GetDatabaseSizesUseCase,
+    private val appNavigationStateService: AppNavigationStateService,
 ) : AnalyticsProvider {
     override val name = SentryConfig.NAME
 
@@ -48,6 +56,20 @@ class SentryAnalyticsProvider(
         SentryAndroid.init(context) { options ->
             options.dsn = dsn
             options.beforeSend = SentryOptions.BeforeSendCallback { event, _ -> event }
+            options.beforeSendTransaction = SentryOptions.BeforeSendTransactionCallback { transaction, _ ->
+                val sessionId = appNavigationStateService.appNavigationState.value.navigationState.currentSessionId()
+                if (sessionId != null) {
+                    // This runs in a separate thread, so although using `runBlocking` is not great, at least it shouldn't freeze the app
+                    // Also, the method is fairly quick, so the blocking shouldn't take longer than a few ms
+                    val databaseSizes = runBlocking { getDatabaseSizesUseCase(sessionId) }.getOrNull()
+
+                    databaseSizes?.stateStore?.let { transaction.setExtra(AnalyticsUserData.STATE_STORE_SIZE, it.into(ByteUnit.MB)) }
+                    databaseSizes?.eventCacheStore?.let { transaction.setExtra(AnalyticsUserData.EVENT_CACHE_SIZE, it.into(ByteUnit.MB)) }
+                    databaseSizes?.mediaStore?.let { transaction.setExtra(AnalyticsUserData.MEDIA_STORE_SIZE, it.into(ByteUnit.MB)) }
+                    databaseSizes?.cryptoStore?.let { transaction.setExtra(AnalyticsUserData.CRYPTO_STORE_SIZE, it.into(ByteUnit.MB)) }
+                }
+                transaction
+            }
             options.tracesSampleRate = 1.0
             options.isEnableUserInteractionTracing = true
             options.environment = buildMeta.buildType.toSentryEnv()

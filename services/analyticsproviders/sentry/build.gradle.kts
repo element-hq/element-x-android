@@ -51,5 +51,7 @@ dependencies {
     implementation(libs.sentry)
     implementation(projects.libraries.core)
     implementation(projects.libraries.di)
+    implementation(projects.libraries.matrix.api)
     implementation(projects.services.analyticsproviders.api)
+    implementation(projects.services.appnavstate.api)
 }

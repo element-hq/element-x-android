@@ -24,6 +24,7 @@ kotlin {
 
 dependencies {
     implementation(libs.coroutines.core)
+    implementation(libs.coroutines.test)
     testImplementation(libs.test.junit)
     testImplementation(libs.test.truth)
 }
