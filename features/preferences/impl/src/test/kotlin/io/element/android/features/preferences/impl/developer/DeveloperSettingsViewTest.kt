@@ -113,7 +113,7 @@ class DeveloperSettingsViewTest {
         eventsRecorder.assertSingle(DeveloperSettingsEvents.SetTracingLogLevel(LogLevelItem.DEBUG))
     }
 
-    @Config(qualifiers = "h2000dp")
+    @Config(qualifiers = "h2200dp")
     @Test
     fun `clicking on clear cache emits the expected event`() {
         val eventsRecorder = EventsRecorder<DeveloperSettingsEvents>()
