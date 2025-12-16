@@ -29,6 +29,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeature
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.analytics.GetDatabaseSizesUseCase
+import io.element.android.libraries.matrix.api.analytics.SdkStoreSizes
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.core.aBuildMeta
@@ -251,7 +252,7 @@ class DeveloperSettingsPresenterTest {
         buildMeta: BuildMeta = aBuildMeta(),
         enterpriseService: EnterpriseService = FakeEnterpriseService(),
         vacuumStoresUseCase: VacuumStoresUseCase = VacuumStoresUseCase {},
-        datbaseSizesUseCase: GetDatabaseSizesUseCase = GetDatabaseSizesUseCase { Result.success(emptyMap()) },
+        databaseSizesUseCase: GetDatabaseSizesUseCase = GetDatabaseSizesUseCase { Result.success(SdkStoreSizes(null, null, null, null)) },
     ): DeveloperSettingsPresenter {
         return DeveloperSettingsPresenter(
             sessionId = sessionId,
@@ -263,7 +264,7 @@ class DeveloperSettingsPresenterTest {
             buildMeta = buildMeta,
             enterpriseService = enterpriseService,
             vacuumStoresUseCase = vacuumStoresUseCase,
-            databaseSizesUseCase = datbaseSizesUseCase,
+            databaseSizesUseCase = databaseSizesUseCase,
             fileSizeFormatter = FakeFileSizeFormatter(),
         )
     }
