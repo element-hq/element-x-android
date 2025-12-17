@@ -22,6 +22,7 @@ import io.element.android.features.rageshake.api.preferences.aRageshakePreferenc
 import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.core.data.megaBytes
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.featureflag.api.Feature
@@ -38,6 +39,7 @@ import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
+import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -59,7 +61,12 @@ class DeveloperSettingsPresenterTest {
             )
         }
         val presenter = createDeveloperSettingsPresenter(
-            featureFlagService = FakeFeatureFlagService(getAvailableFeaturesResult = getAvailableFeaturesResult)
+            featureFlagService = FakeFeatureFlagService(getAvailableFeaturesResult = getAvailableFeaturesResult),
+            databaseSizesUseCase = GetDatabaseSizesUseCase {
+                Result.success(
+                    SdkStoreSizes(stateStore = 10.megaBytes, eventCacheStore = 10.megaBytes, mediaStore = 10.megaBytes, cryptoStore = 10.megaBytes)
+                )
+            }
         )
         presenter.test {
             awaitItem().also { state ->
@@ -82,6 +89,14 @@ class DeveloperSettingsPresenterTest {
             }
             awaitItem().also { state ->
                 assertThat(state.cacheSize).isInstanceOf(AsyncData.Success::class.java)
+                assertThat(state.databaseSizes.dataOrNull()).isEqualTo(
+                    persistentMapOf(
+                        "State store" to "10485760 Bytes",
+                        "Event cache store" to "10485760 Bytes",
+                        "Media store" to "10485760 Bytes",
+                        "Crypto store" to "10485760 Bytes"
+                    )
+                )
             }
             getAvailableFeaturesResult.assertions().isCalledOnce()
                 .with(value(false), value(false))
