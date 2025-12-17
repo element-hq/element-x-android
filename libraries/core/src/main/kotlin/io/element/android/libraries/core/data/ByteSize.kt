@@ -19,6 +19,23 @@ class ByteSize internal constructor(val value: Long, val unit: ByteUnit) {
         if (unit == dest) return value
         return value shl unit.bitShift shr dest.bitShift
     }
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is ByteSize) return false
+
+        return value == other.value && unit == other.unit
+    }
+
+    override fun hashCode(): Int {
+        var result = value.hashCode()
+        result = 31 * result + unit.hashCode()
+        return result
+    }
+
+    override fun toString(): String {
+        return "$value $unit"
+    }
 }
 
 val Number.gigaBytes get() = ByteSize(toLong(), ByteUnit.GB)

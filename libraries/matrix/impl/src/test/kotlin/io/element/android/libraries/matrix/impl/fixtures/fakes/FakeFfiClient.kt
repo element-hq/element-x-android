@@ -28,6 +28,7 @@ import org.matrix.rustcomponents.sdk.RoomDirectorySearch
 import org.matrix.rustcomponents.sdk.Session
 import org.matrix.rustcomponents.sdk.SessionVerificationController
 import org.matrix.rustcomponents.sdk.SpaceService
+import org.matrix.rustcomponents.sdk.StoreSizes
 import org.matrix.rustcomponents.sdk.SyncService
 import org.matrix.rustcomponents.sdk.SyncServiceBuilder
 import org.matrix.rustcomponents.sdk.TaskHandle
@@ -46,6 +47,7 @@ class FakeFfiClient(
     private val withUtdHook: (UnableToDecryptDelegate) -> Unit = { lambdaError() },
     private val getProfileResult: (String) -> UserProfile = { UserProfile(userId = userId, displayName = null, avatarUrl = null) },
     private val homeserverLoginDetailsResult: () -> HomeserverLoginDetails = { lambdaError() },
+    private val getStoreSizesResult: () -> StoreSizes = { lambdaError() },
     private val closeResult: () -> Unit = {},
 ) : Client(NoHandle) {
     override fun userId(): String = userId
@@ -90,6 +92,10 @@ class FakeFfiClient(
     }
 
     override suspend fun setMediaRetentionPolicy(policy: MediaRetentionPolicy) {}
+
+    override suspend fun getStoreSizes(): StoreSizes {
+        return getStoreSizesResult()
+    }
 
     override fun close() = closeResult()
 }
