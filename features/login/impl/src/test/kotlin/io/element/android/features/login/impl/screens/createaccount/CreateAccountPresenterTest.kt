@@ -17,7 +17,6 @@ import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatu
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
-import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
@@ -81,13 +80,11 @@ class CreateAccountPresenterTest {
         val lambda = lambdaRecorder<String, ExternalSession> { _ -> anExternalSession() }
         val sessionVerificationService = FakeSessionVerificationService()
         val client = FakeMatrixClient(sessionVerificationService = sessionVerificationService)
-        val clientProvider = FakeMatrixClientProvider(getClient = { Result.success(client) })
         val presenter = createPresenter(
             authenticationService = FakeMatrixAuthenticationService(
                 importCreatedSessionLambda = { Result.success(A_SESSION_ID) }
             ),
             messageParser = FakeMessageParser(lambda),
-            clientProvider = clientProvider,
         )
         presenter.test {
             val initialState = awaitItem()
@@ -120,12 +117,10 @@ class CreateAccountPresenterTest {
         authenticationService: MatrixAuthenticationService = FakeMatrixAuthenticationService(),
         messageParser: MessageParser = FakeMessageParser(),
         buildMeta: BuildMeta = aBuildMeta(),
-        clientProvider: FakeMatrixClientProvider = FakeMatrixClientProvider(),
     ) = CreateAccountPresenter(
         url = url,
         authenticationService = authenticationService,
         messageParser = messageParser,
         buildMeta = buildMeta,
-        clientProvider = clientProvider,
     )
 }

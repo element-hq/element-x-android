@@ -25,6 +25,7 @@ import io.element.android.libraries.matrix.api.auth.external.ExternalSession
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.impl.ClientBuilderSlidingSync
 import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
 import io.element.android.libraries.matrix.impl.auth.qrlogin.QrErrorMapper
@@ -38,7 +39,9 @@ import io.element.android.libraries.matrix.impl.paths.SessionPathsFactory
 import io.element.android.libraries.sessionstorage.api.LoginType
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeoutOrNull
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.HumanQrLoginException
@@ -48,6 +51,7 @@ import org.matrix.rustcomponents.sdk.QrLoginProgress
 import org.matrix.rustcomponents.sdk.QrLoginProgressListener
 import timber.log.Timber
 import uniffi.matrix_sdk.OAuthAuthorizationData
+import kotlin.time.Duration.Companion.seconds
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
@@ -160,7 +164,7 @@ class RustMatrixAuthenticationService(
     override suspend fun importCreatedSession(externalSession: ExternalSession): Result<SessionId> =
         withContext(coroutineDispatchers.io) {
             runCatchingExceptions {
-                currentClient ?: error("You need to call `setHomeserver()` first")
+                val client = currentClient ?: error("You need to call `setHomeserver()` first")
                 val currentSessionPaths = sessionPaths ?: error("You need to call `setHomeserver()` first")
                 val sessionData = externalSession.toSessionData(
                     isTokenValid = true,
@@ -168,8 +172,15 @@ class RustMatrixAuthenticationService(
                     passphrase = pendingPassphrase,
                     sessionPaths = currentSessionPaths,
                 )
-                clear()
+                val matrixClient = rustMatrixClientFactory.create(client)
+                matrixClient.waitForKnownVerificationState()
+
+                newMatrixClientObservers.forEach { it.invoke(matrixClient) }
                 sessionStore.addSession(sessionData)
+
+                // Clean up the strong reference held here since it's no longer necessary
+                currentClient = null
+
                 SessionId(sessionData.userId)
             }
         }
@@ -238,6 +249,8 @@ class RustMatrixAuthenticationService(
                     sessionPaths = currentSessionPaths,
                 )
                 val matrixClient = rustMatrixClientFactory.create(client)
+                matrixClient.waitForKnownVerificationState()
+
                 newMatrixClientObservers.forEach { it.invoke(matrixClient) }
                 sessionStore.addSession(sessionData)
 
@@ -355,5 +368,13 @@ class RustMatrixAuthenticationService(
     private fun clear() {
         currentClient?.close()
         currentClient = null
+    }
+
+    private suspend fun MatrixClient.waitForKnownVerificationState() {
+        withTimeoutOrNull(10.seconds) {
+            Timber.d("Waiting for a known verification status...")
+            val status = sessionVerificationService.sessionVerifiedStatus.first { it != SessionVerifiedStatus.Unknown }
+            Timber.d("Finished waiting for a known verification status: $status")
+        } ?: Timber.w("Timed out waiting for a known verification status")
     }
 }
