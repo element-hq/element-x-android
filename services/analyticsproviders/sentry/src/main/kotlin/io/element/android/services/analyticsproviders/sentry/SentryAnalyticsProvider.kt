@@ -9,6 +9,7 @@
 package io.element.android.services.analyticsproviders.sentry
 
 import android.content.Context
+import androidx.annotation.VisibleForTesting
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.Inject
@@ -31,6 +32,7 @@ import io.sentry.Breadcrumb
 import io.sentry.Sentry
 import io.sentry.SentryOptions
 import io.sentry.android.core.SentryAndroid
+import io.sentry.protocol.SentryTransaction
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 
@@ -56,24 +58,7 @@ class SentryAnalyticsProvider(
         SentryAndroid.init(context) { options ->
             options.dsn = dsn
             options.beforeSendTransaction = SentryOptions.BeforeSendTransactionCallback { transaction, _ ->
-                // Ensure we'll never upload any session ids
-                val possibleSessionIds = transaction.extras?.filter { (it.value as? String)?.startsWith("@") == true }.orEmpty()
-                for (invalidExtra in possibleSessionIds) {
-                    transaction.extras?.remove(invalidExtra.key)
-                }
-
-                val sessionId = appNavigationStateService.appNavigationState.value.navigationState.currentSessionId()
-                if (sessionId != null) {
-                    // This runs in a separate thread, so although using `runBlocking` is not great, at least it shouldn't freeze the app
-                    // Also, the method is fairly quick, so the blocking shouldn't take longer than a few ms
-                    val databaseSizes = runBlocking { getDatabaseSizesUseCase(sessionId) }.getOrNull()
-
-                    databaseSizes?.stateStore?.let { transaction.setExtra(AnalyticsUserData.STATE_STORE_SIZE, it.into(ByteUnit.MB)) }
-                    databaseSizes?.eventCacheStore?.let { transaction.setExtra(AnalyticsUserData.EVENT_CACHE_SIZE, it.into(ByteUnit.MB)) }
-                    databaseSizes?.mediaStore?.let { transaction.setExtra(AnalyticsUserData.MEDIA_STORE_SIZE, it.into(ByteUnit.MB)) }
-                    databaseSizes?.cryptoStore?.let { transaction.setExtra(AnalyticsUserData.CRYPTO_STORE_SIZE, it.into(ByteUnit.MB)) }
-                }
-                transaction
+                prepareTransactionBeforeSend(transaction)
             }
             options.tracesSampleRate = 1.0
             options.isEnableUserInteractionTracing = true
@@ -127,6 +112,28 @@ class SentryAnalyticsProvider(
 
     override fun startTransaction(name: String, operation: String?): AnalyticsTransaction? {
         return SentryAnalyticsTransaction(name, operation)
+    }
+
+    @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
+    internal fun prepareTransactionBeforeSend(transaction: SentryTransaction): SentryTransaction {
+        // Ensure we'll never upload any session ids
+        val possibleSessionIds = transaction.extras?.filter { (it.value as? String)?.startsWith("@") == true }.orEmpty()
+        for (invalidExtra in possibleSessionIds) {
+            transaction.removeExtra(invalidExtra.key)
+        }
+
+        val sessionId = appNavigationStateService.appNavigationState.value.navigationState.currentSessionId()
+        if (sessionId != null) {
+            // This runs in a separate thread, so although using `runBlocking` is not great, at least it shouldn't freeze the app
+            // Also, the method is fairly quick, so the blocking shouldn't take longer than a few ms
+            val databaseSizes = runBlocking { getDatabaseSizesUseCase(sessionId) }.getOrNull()
+
+            databaseSizes?.stateStore?.let { transaction.setExtra(AnalyticsUserData.STATE_STORE_SIZE, it.into(ByteUnit.MB)) }
+            databaseSizes?.eventCacheStore?.let { transaction.setExtra(AnalyticsUserData.EVENT_CACHE_SIZE, it.into(ByteUnit.MB)) }
+            databaseSizes?.mediaStore?.let { transaction.setExtra(AnalyticsUserData.MEDIA_STORE_SIZE, it.into(ByteUnit.MB)) }
+            databaseSizes?.cryptoStore?.let { transaction.setExtra(AnalyticsUserData.CRYPTO_STORE_SIZE, it.into(ByteUnit.MB)) }
+        }
+        return transaction
     }
 }
 
