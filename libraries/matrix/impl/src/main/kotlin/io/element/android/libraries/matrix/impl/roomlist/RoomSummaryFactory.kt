@@ -29,15 +29,14 @@ class RoomSummaryFactory(
             when (event) {
                 is RustLatestEventValue.None -> LatestEventValue.None
                 is RustLatestEventValue.Local -> when (event.state) {
-                    LatestEventValueLocalState.IS_SENDING, LatestEventValueLocalState.CANNOT_BE_SENT -> {
-                        LatestEventValue.Local(
-                            timestamp = event.timestamp.toLong(),
-                            content = contentMapper.map(event.content),
-                            isSending = event.state == LatestEventValueLocalState.IS_SENDING,
-                            senderId = UserId(event.sender),
-                            senderProfile = event.profile.map(),
-                        )
-                    }
+                    LatestEventValueLocalState.IS_SENDING,
+                    LatestEventValueLocalState.CANNOT_BE_SENT -> LatestEventValue.Local(
+                        timestamp = event.timestamp.toLong(),
+                        content = contentMapper.map(event.content),
+                        isSending = event.state == LatestEventValueLocalState.IS_SENDING,
+                        senderId = UserId(event.sender),
+                        senderProfile = event.profile.map(),
+                    )
                     // This is the same as a remote event, we just haven't received the local -> remote update yet
                     LatestEventValueLocalState.HAS_BEEN_SENT -> LatestEventValue.Remote(
                         timestamp = event.timestamp.toLong(),
