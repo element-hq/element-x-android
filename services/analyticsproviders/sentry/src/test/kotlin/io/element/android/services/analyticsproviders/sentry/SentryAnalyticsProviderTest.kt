@@ -157,11 +157,13 @@ class SentryAnalyticsProviderTest {
             val transaction = SentryTransaction(Sentry.startTransaction("foo", "bar") as SentryTracer)
             // Add a user id value
             transaction.setExtra("user", "@some:user")
+            transaction.setTag("user", "@some:user")
 
             val result = prepareTransactionBeforeSend(transaction)
 
             // The user id value should have been removed
             assertThat(result.getExtra("user")).isNull()
+            assertThat(result.getTag("user")).isNull()
 
             // The DB sizes should be included
             assertThat(result.getExtra(AnalyticsUserData.STATE_STORE_SIZE)).isEqualTo(10)
@@ -172,7 +174,7 @@ class SentryAnalyticsProviderTest {
     }
 
     @Test
-    fun `prepareTransactionBeforeSend removes unwanted data and doesn't add anything if no session id is provided`() {
+    fun `prepareTransactionBeforeSend doesn't add DB info if no session id is provided`() {
         createSentryAnalyticsProvider(
             getDatabaseSizesUseCase = GetDatabaseSizesUseCase {
                 Result.success(
@@ -186,21 +188,14 @@ class SentryAnalyticsProviderTest {
             init()
 
             val transaction = SentryTransaction(Sentry.startTransaction("foo", "bar") as SentryTracer)
-            // Add a user id value
-            transaction.setExtra("user", "@some:user")
-
             val result = prepareTransactionBeforeSend(transaction)
-
-            // The user id value should have been removed
-            assertThat(result.getExtra("user")).isNull()
-
             // The DB sizes are missing since there was no session id to query them
-            assertThat(result.extras).isEmpty()
+            assertThat(result.extras).isNull()
         }
     }
 
     @Test
-    fun `prepareTransactionBeforeSend removes unwanted data and doesn't add anything if no store sizes are available`() {
+    fun `prepareTransactionBeforeSend doesn't add DB info if no store sizes are available`() {
         createSentryAnalyticsProvider(
             getDatabaseSizesUseCase = GetDatabaseSizesUseCase {
                 Result.success(
@@ -214,16 +209,10 @@ class SentryAnalyticsProviderTest {
             init()
 
             val transaction = SentryTransaction(Sentry.startTransaction("foo", "bar") as SentryTracer)
-            // Add a user id value
-            transaction.setExtra("user", "@some:user")
-
             val result = prepareTransactionBeforeSend(transaction)
 
-            // The user id value should have been removed
-            assertThat(result.getExtra("user")).isNull()
-
             // The DB sizes are missing since there was no session id to query them
-            assertThat(result.extras).isEmpty()
+            assertThat(result.extras).isNull()
         }
     }
 

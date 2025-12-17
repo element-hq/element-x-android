@@ -124,7 +124,7 @@ class SentryAnalyticsProvider(
             transaction.removeExtra(invalidExtra.key)
         }
         val invalidTags = transaction.tags?.filter { it.value.startsWith("@") }.orEmpty()
-        for (invalidTag in invalidExtras) {
+        for (invalidTag in invalidTags) {
             transaction.removeTag(invalidTag.key)
         }
 
