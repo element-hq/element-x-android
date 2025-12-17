@@ -21,6 +21,7 @@ import io.element.android.libraries.core.data.ByteUnit
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.di.annotations.ApplicationContext
+import io.element.android.libraries.di.identifiers.SentryDsn
 import io.element.android.libraries.matrix.api.analytics.GetDatabaseSizesUseCase
 import io.element.android.services.analyticsproviders.api.AnalyticsProvider
 import io.element.android.services.analyticsproviders.api.AnalyticsTransaction
@@ -40,6 +41,7 @@ import timber.log.Timber
 @Inject
 class SentryAnalyticsProvider(
     @ApplicationContext private val context: Context,
+    private val sentryDsn: SentryDsn?,
     private val buildMeta: BuildMeta,
     private val getDatabaseSizesUseCase: GetDatabaseSizesUseCase,
     private val appNavigationStateService: AppNavigationStateService,
@@ -50,7 +52,7 @@ class SentryAnalyticsProvider(
         Timber.tag(analyticsTag.value).d("Initializing Sentry")
         if (Sentry.isEnabled()) return
 
-        val dsn = SentryConfig.DSN.ifBlank {
+        val dsn = sentryDsn?.value ?: run {
             Timber.w("No Sentry DSN provided, Sentry will not be initialized")
             return
         }

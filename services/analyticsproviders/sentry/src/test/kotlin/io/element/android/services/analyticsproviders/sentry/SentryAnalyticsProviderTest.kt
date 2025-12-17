@@ -16,6 +16,7 @@ import im.vector.app.features.analytics.plan.SuperProperties
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.libraries.core.data.megaBytes
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.di.identifiers.SentryDsn
 import io.element.android.libraries.matrix.api.analytics.GetDatabaseSizesUseCase
 import io.element.android.libraries.matrix.api.analytics.SdkStoreSizes
 import io.element.android.libraries.matrix.test.A_SESSION_ID
@@ -161,11 +162,13 @@ class SentryAnalyticsProviderTest {
     }
 
     private fun createSentryAnalyticsProvider(
+        sentryDsn: SentryDsn? = SentryDsn("https://1234@sentry.com/a"),
         buildMeta: BuildMeta = aBuildMeta(),
         getDatabaseSizesUseCase: GetDatabaseSizesUseCase = GetDatabaseSizesUseCase { Result.success(SdkStoreSizes(null, null, null, null)) },
         appNavigationStateService: FakeAppNavigationStateService = FakeAppNavigationStateService(),
     ) = SentryAnalyticsProvider(
         context = InstrumentationRegistry.getInstrumentation().targetContext,
+        sentryDsn = sentryDsn,
         buildMeta = buildMeta,
         getDatabaseSizesUseCase = getDatabaseSizesUseCase,
         appNavigationStateService = appNavigationStateService,

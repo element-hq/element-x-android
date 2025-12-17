@@ -5,7 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.di.annotations
+package io.element.android.libraries.di.identifiers
 
 @JvmInline
-value class SentrySdkDsn(val value: String)
+value class SentryDsn(val value: String)

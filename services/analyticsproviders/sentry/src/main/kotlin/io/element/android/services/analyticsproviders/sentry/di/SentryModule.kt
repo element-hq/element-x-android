@@ -11,12 +11,16 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
 import dev.zacsweers.metro.Provides
-import io.element.android.libraries.di.annotations.SentrySdkDsn
+import io.element.android.libraries.di.identifiers.SentryDsn
+import io.element.android.libraries.di.identifiers.SentrySdkDsn
 import io.element.android.services.analyticsproviders.sentry.SentryConfig
 
 @BindingContainer
 @ContributesTo(AppScope::class)
 object SentryModule {
     @Provides
-    fun provideSentrySdkDsn(): SentrySdkDsn? = SentrySdkDsn(SentryConfig.SDK_DSN)
+    fun provideSentryDsn(): SentryDsn? = SentryConfig.DSN.takeIf { it.isNotBlank() }?.let(::SentryDsn)
+
+    @Provides
+    fun provideSentrySdkDsn(): SentrySdkDsn? = SentryConfig.SDK_DSN.takeIf { it.isNotBlank() }?.let(::SentrySdkDsn)
 }
