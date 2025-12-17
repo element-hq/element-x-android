@@ -16,7 +16,6 @@ import io.element.android.libraries.matrix.api.auth.external.ExternalSession
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_SESSION_ID
-import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
@@ -79,7 +78,6 @@ class CreateAccountPresenterTest {
     fun `present - receiving a message able to be parsed change the state to success`() = runTest {
         val lambda = lambdaRecorder<String, ExternalSession> { _ -> anExternalSession() }
         val sessionVerificationService = FakeSessionVerificationService()
-        val client = FakeMatrixClient(sessionVerificationService = sessionVerificationService)
         val presenter = createPresenter(
             authenticationService = FakeMatrixAuthenticationService(
                 importCreatedSessionLambda = { Result.success(A_SESSION_ID) }
