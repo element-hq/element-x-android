@@ -118,10 +118,14 @@ class SentryAnalyticsProvider(
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
     internal fun prepareTransactionBeforeSend(transaction: SentryTransaction): SentryTransaction {
-        // Ensure we'll never upload any session ids
-        val possibleSessionIds = transaction.extras?.filter { (it.value as? String)?.startsWith("@") == true }.orEmpty()
-        for (invalidExtra in possibleSessionIds) {
+        // Ensure we'll never upload any session ids in extras or tags
+        val invalidExtras = transaction.extras?.filter { (it.value as? String)?.startsWith("@") == true }.orEmpty()
+        for (invalidExtra in invalidExtras) {
             transaction.removeExtra(invalidExtra.key)
+        }
+        val invalidTags = transaction.tags?.filter { it.value.startsWith("@") }.orEmpty()
+        for (invalidTag in invalidExtras) {
+            transaction.removeTag(invalidTag.key)
         }
 
         val sessionId = appNavigationStateService.appNavigationState.value.navigationState.currentSessionId()
