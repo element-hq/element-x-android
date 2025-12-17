@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -21,10 +22,10 @@ class UserProfileNodeHelper(
     private val userId: UserId,
 ) {
     interface Callback : NodeInputs {
-        fun openAvatarPreview(username: String, avatarUrl: String)
-        fun onStartDM(roomId: RoomId)
-        fun onStartCall(dmRoomId: RoomId)
-        fun onVerifyUser(userId: UserId)
+        fun navigateToAvatarPreview(username: String, avatarUrl: String)
+        fun navigateToRoom(roomId: RoomId)
+        fun startCall(dmRoomId: RoomId)
+        fun startVerifyUserFlow(userId: UserId)
     }
 
     fun onShareUser(

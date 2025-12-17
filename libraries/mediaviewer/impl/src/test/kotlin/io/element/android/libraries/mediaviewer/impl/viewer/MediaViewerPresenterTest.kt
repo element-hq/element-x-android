@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -26,6 +27,7 @@ import io.element.android.libraries.matrix.test.media.FakeMatrixMediaLoader
 import io.element.android.libraries.matrix.test.media.aMediaSource
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
+import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.api.anApkMediaInfo
@@ -82,7 +84,9 @@ class MediaViewerPresenterTest {
             localMediaFactory = localMediaFactory,
             room = FakeJoinedRoom(
                 baseRoom = FakeBaseRoom(
-                    canRedactOwnResult = { Result.success(true) },
+                    roomPermissions = FakeRoomPermissions(
+                        canRedactOwn = true
+                    ),
                 )
             )
         )
@@ -103,7 +107,9 @@ class MediaViewerPresenterTest {
             canShowInfo = false,
             room = FakeJoinedRoom(
                 baseRoom = FakeBaseRoom(
-                    canRedactOwnResult = { Result.success(true) },
+                    roomPermissions = FakeRoomPermissions(
+                        canRedactOwn = true
+                    ),
                 )
             )
         )
@@ -124,7 +130,9 @@ class MediaViewerPresenterTest {
             eventId = AN_EVENT_ID,
             room = FakeJoinedRoom(
                 baseRoom = FakeBaseRoom(
-                    canRedactOwnResult = { Result.success(true) },
+                    roomPermissions = FakeRoomPermissions(
+                        canRedactOwn = true
+                    ),
                 )
             )
         )
@@ -146,7 +154,9 @@ class MediaViewerPresenterTest {
             room = FakeJoinedRoom(
                 baseRoom = FakeBaseRoom(
                     sessionId = A_SESSION_ID_2,
-                    canRedactOtherResult = { Result.success(false) },
+                    roomPermissions = FakeRoomPermissions(
+                        canRedactOther = false
+                    ),
                 )
             )
         )
@@ -235,7 +245,9 @@ class MediaViewerPresenterTest {
             mediaGalleryDataSource = mediaGalleryDataSource,
             room = FakeJoinedRoom(
                 baseRoom = FakeBaseRoom(
-                    canRedactOwnResult = { Result.success(true) },
+                    roomPermissions = FakeRoomPermissions(
+                        canRedactOwn = true
+                    ),
                 )
             )
         )
@@ -459,7 +471,11 @@ class MediaViewerPresenterTest {
             localMediaFactory = localMediaFactory,
             room = FakeJoinedRoom(
                 liveTimeline = timeline,
-                baseRoom = FakeBaseRoom(canRedactOwnResult = { Result.success(true) }),
+                baseRoom = FakeBaseRoom(
+                    roomPermissions = FakeRoomPermissions(
+                        canRedactOwn = true
+                    ),
+                ),
             ),
             mediaGalleryDataSource = mediaGalleryDataSource,
             mediaViewerNavigator = FakeMediaViewerNavigator(
@@ -759,7 +775,7 @@ class MediaViewerPresenterTest {
     }
 
     @Test
-    fun `present - view in timeline hide the bottom sheet and invokes the navigator`() = runTest {
+    fun `present - view in timeline hides the bottom sheet and invokes the navigator`() = runTest {
         val onViewInTimelineClickLambda = lambdaRecorder<EventId, Unit> { }
         val navigator = FakeMediaViewerNavigator(
             onViewInTimelineClickLambda = onViewInTimelineClickLambda,
@@ -768,7 +784,11 @@ class MediaViewerPresenterTest {
             localMediaFactory = localMediaFactory,
             mediaViewerNavigator = navigator,
             room = FakeJoinedRoom(
-                baseRoom = FakeBaseRoom(canRedactOwnResult = { Result.success(true) }),
+                baseRoom = FakeBaseRoom(
+                    roomPermissions = FakeRoomPermissions(
+                        canRedactOwn = true
+                    ),
+                ),
             )
         )
         presenter.test {
@@ -780,6 +800,67 @@ class MediaViewerPresenterTest {
             val finalState = awaitItem()
             assertThat(finalState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
             onViewInTimelineClickLambda.assertions().isCalledOnce().with(value(AN_EVENT_ID))
+        }
+    }
+
+    @Test
+    fun `present - forward hides the bottom sheet and invokes the navigator`() = runTest {
+        val onForwardClickLambda = lambdaRecorder<EventId, Boolean, Unit> { _, _ -> }
+        val navigator = FakeMediaViewerNavigator(
+            onForwardClickLambda = onForwardClickLambda,
+        )
+        val presenter = createMediaViewerPresenter(
+            localMediaFactory = localMediaFactory,
+            mediaViewerNavigator = navigator,
+            room = FakeJoinedRoom(
+                baseRoom = FakeBaseRoom(
+                    roomPermissions = FakeRoomPermissions(
+                        canRedactOwn = true
+                    ),
+                ),
+            ),
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(MediaViewerEvents.OpenInfo(aMediaViewerPageData()))
+            val withBottomSheetState = awaitItem()
+            assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.MediaDetailsBottomSheetState::class.java)
+            initialState.eventSink(MediaViewerEvents.Forward(AN_EVENT_ID))
+            val finalState = awaitItem()
+            assertThat(finalState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
+            onForwardClickLambda.assertions().isCalledOnce()
+                .with(value(AN_EVENT_ID), value(false))
+        }
+    }
+
+    @Test
+    fun `present - forward from pinned events hides the bottom sheet and invokes the navigator`() = runTest {
+        val onForwardClickLambda = lambdaRecorder<EventId, Boolean, Unit> { _, _ -> }
+        val navigator = FakeMediaViewerNavigator(
+            onForwardClickLambda = onForwardClickLambda,
+        )
+        val presenter = createMediaViewerPresenter(
+            mode = MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios(timelineMode = Timeline.Mode.PinnedEvents),
+            localMediaFactory = localMediaFactory,
+            mediaViewerNavigator = navigator,
+            room = FakeJoinedRoom(
+                baseRoom = FakeBaseRoom(
+                    roomPermissions = FakeRoomPermissions(
+                        canRedactOwn = true
+                    ),
+                ),
+            ),
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(MediaViewerEvents.OpenInfo(aMediaViewerPageData()))
+            val withBottomSheetState = awaitItem()
+            assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.MediaDetailsBottomSheetState::class.java)
+            initialState.eventSink(MediaViewerEvents.Forward(AN_EVENT_ID))
+            val finalState = awaitItem()
+            assertThat(finalState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
+            onForwardClickLambda.assertions().isCalledOnce()
+                .with(value(AN_EVENT_ID), value(true))
         }
     }
 

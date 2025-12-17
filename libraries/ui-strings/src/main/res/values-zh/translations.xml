@@ -78,6 +78,7 @@
   <string name="action_decline">"拒绝"</string>
   <string name="action_decline_and_block">"拒绝并屏蔽"</string>
   <string name="action_delete_poll">"删除投票"</string>
+  <string name="action_deselect_all">"取消全选"</string>
   <string name="action_disable">"禁用"</string>
   <string name="action_discard">"丢弃"</string>
   <string name="action_dismiss">"关闭"</string>
@@ -92,6 +93,8 @@
   <string name="action_forgot_password">"忘记密码？"</string>
   <string name="action_forward">"转发"</string>
   <string name="action_go_back">"返回"</string>
+  <string name="action_go_to_roles_and_permissions">"前往角色与权限"</string>
+  <string name="action_go_to_settings">"前往设置"</string>
   <string name="action_ignore">"忽略"</string>
   <string name="action_invite">"邀请"</string>
   <string name="action_invite_friends">"邀请朋友"</string>
@@ -103,10 +106,12 @@
   <string name="action_leave">"离开"</string>
   <string name="action_leave_conversation">"离开聊天"</string>
   <string name="action_leave_room">"离开聊天室"</string>
+  <string name="action_leave_space">"离开空间"</string>
   <string name="action_load_more">"载入更多"</string>
   <string name="action_manage_account">"管理账户"</string>
   <string name="action_manage_devices">"管理设备"</string>
   <string name="action_message">"发送消息给"</string>
+  <string name="action_minimize">"最小化"</string>
   <string name="action_next">"下一步"</string>
   <string name="action_no">"否"</string>
   <string name="action_not_now">"以后再说"</string>
@@ -135,6 +140,7 @@
   <string name="action_retry_decryption">"重试解密"</string>
   <string name="action_save">"保存"</string>
   <string name="action_search">"搜索"</string>
+  <string name="action_select_all">"全选"</string>
   <string name="action_send">"发送"</string>
   <string name="action_send_edited_message">"发送编辑后的消息"</string>
   <string name="action_send_message">"发送消息"</string>
@@ -173,6 +179,7 @@
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"您已被注销当前会话"</string>
   <string name="common_appearance">"外观"</string>
   <string name="common_audio">"音频"</string>
+  <string name="common_beta">"测试版"</string>
   <string name="common_blocked_users">"已屏蔽用户"</string>
   <string name="common_bubbles">"气泡"</string>
   <string name="common_call_started">"通话已开始"</string>
@@ -182,6 +189,7 @@
   <string name="common_creating_room">"正在创建聊天室…"</string>
   <string name="common_current_user_canceled_knock">"请求已取消"</string>
   <string name="common_current_user_left_room">"离开聊天室"</string>
+  <string name="common_current_user_left_space">"离开空间"</string>
   <string name="common_current_user_rejected_invite">"邀请已拒绝"</string>
   <string name="common_dark">"深色"</string>
   <string name="common_decryption_error">"解密错误"</string>
@@ -220,6 +228,7 @@
   <string name="common_install_apk_android">"安装 APK"</string>
   <string name="common_invite_unknown_profile">"找不到此 Matrix ID，因此可能无法收到邀请。"</string>
   <string name="common_leaving_room">"正在离开聊天室"</string>
+  <string name="common_leaving_space">"正在离开空间"</string>
   <string name="common_light">"浅色"</string>
   <string name="common_line_copied_to_clipboard">"链接已复制到剪贴板"</string>
   <string name="common_link_copied_to_clipboard">"链接已复制到剪贴板"</string>
@@ -240,6 +249,7 @@
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"没有结果"</string>
   <string name="common_no_room_name">"无聊天室名"</string>
+  <string name="common_no_space_name">"未命名空间"</string>
   <string name="common_not_encrypted">"未加密"</string>
   <string name="common_offline">"离线"</string>
   <string name="common_open_source_licenses">"开源许可证"</string>
@@ -297,9 +307,12 @@
   <string name="common_sent">"已发送"</string>
   <string name="common_sentence_delimiter">"。 "</string>
   <string name="common_server_not_supported">"服务器不支持"</string>
+  <string name="common_server_unreachable">"无法访问服务器"</string>
   <string name="common_server_url">"服务器 URL"</string>
   <string name="common_settings">"设置"</string>
+  <string name="common_share_space">"共享空间"</string>
   <string name="common_shared_location">"共享位置"</string>
+  <string name="common_shared_space">"共享空间"</string>
   <string name="common_signing_out">"正在登出"</string>
   <string name="common_something_went_wrong">"发生了一些错误"</string>
   <string name="common_something_went_wrong_message">"我们遇到了一个问题。请重试。"</string>
@@ -367,6 +380,7 @@
   <string name="dialog_title_error">"错误"</string>
   <string name="dialog_title_success">"成功"</string>
   <string name="dialog_title_warning">"警告"</string>
+  <string name="dialog_unsaved_changes_description">"您有未保存的更改。"</string>
   <string name="dialog_unsaved_changes_description_android">"更改尚未保存，确定要返回吗？"</string>
   <string name="dialog_unsaved_changes_title">"保存更改？"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"允许的最大文件大小为：%1$s"</string>
@@ -443,7 +457,9 @@
   <string name="screen_share_this_location_action">"分享这个位置"</string>
   <string name="screen_space_list_description">"您创建或加入的空间。"</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_parent_space">"%1$s空间"</string>
   <string name="screen_space_list_title">"空间"</string>
+  <string name="screen_space_menu_action_members">"查看成员"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"消息未发送，因为%1$s的已验证身份已被重置。"</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"消息未发送，因为%1$s尚未验证所有设备。"</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"消息未发送，因为您有尚未验证的设备。"</string>
@@ -452,7 +468,7 @@
   <string name="test_language_identifier">"zh-Hans"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"历史消息在此设备上不可用"</string>
   <string name="timeline_decryption_failure_historical_event_unverified_device">"您需要验证此设备才能访问历史消息"</string>
-  <string name="timeline_decryption_failure_historical_event_user_not_joined">"您无权访问此消息"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"无权访问此消息"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"无法解密消息"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"此消息已被阻止，因为您未验证您的设备，或者发件人需要验证您的身份。"</string>
 </resources>

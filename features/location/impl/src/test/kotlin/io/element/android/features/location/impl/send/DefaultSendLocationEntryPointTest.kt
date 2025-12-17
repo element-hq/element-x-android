@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -47,8 +48,11 @@ class DefaultSendLocationEntryPointTest {
             )
         }
         val timelineMode = Timeline.Mode.Live
-        val result = entryPoint.builder(timelineMode)
-            .build(parentNode, BuildContext.root(null))
+        val result = entryPoint.createNode(
+            parentNode = parentNode,
+            buildContext = BuildContext.root(null),
+            timelineMode = timelineMode,
+        )
         assertThat(result).isInstanceOf(SendLocationNode::class.java)
         assertThat(result.plugins).contains(SendLocationNode.Inputs(timelineMode))
     }

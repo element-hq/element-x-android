@@ -2,9 +2,10 @@ import extension.setupDependencyInjection
 import extension.testCommonDependencies
 
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -39,6 +40,9 @@ dependencies {
     implementation(projects.libraries.featureflag.api)
     implementation(projects.features.invite.api)
     implementation(projects.libraries.previewutils)
+    implementation(projects.features.securityandprivacy.api)
+    implementation(projects.features.rolesandpermissions.api)
+    implementation(projects.features.roomdetailsedit.api)
     api(projects.features.space.api)
 
     testCommonDependencies(libs, true)

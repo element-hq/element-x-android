@@ -1,21 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_edit_room_address_room_address_section_footer">"Budete potrebovať adresu miestnosti, aby bola viditeľná v adresári."</string>
-  <string name="screen_edit_room_address_title">"Adresa miestnosti"</string>
+  <string name="screen_edit_room_address_room_address_section_footer">"Budete potrebovať adresu, aby sa zobrazovala vo verejnom adresári."</string>
+  <string name="screen_edit_room_address_title">"Upraviť adresu"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Pri aktualizácii nastavenia oznámenia došlo k chybe."</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Váš domovský server nepodporuje túto možnosť v šifrovaných miestnostiach, v niektorých miestnostiach nemusíte dostať upozornenie."</string>
   <string name="screen_polls_history_title">"Ankety"</string>
-  <string name="screen_room_change_permissions_administrators">"Iba správcovia"</string>
+  <string name="screen_room_change_permissions_administrators">"Správca"</string>
   <string name="screen_room_change_permissions_ban_people">"Zakázať ľudí"</string>
   <string name="screen_room_change_permissions_delete_messages">"Odstrániť správy"</string>
-  <string name="screen_room_change_permissions_everyone">"Všetci"</string>
-  <string name="screen_room_change_permissions_invite_people">"Pozvite ľudí a prijmite žiadosti o pripojenie"</string>
-  <string name="screen_room_change_permissions_member_moderation">"Moderovanie členov"</string>
+  <string name="screen_room_change_permissions_everyone">"Člen"</string>
+  <string name="screen_room_change_permissions_invite_people">"Pozvať ľudí"</string>
+  <string name="screen_room_change_permissions_member_moderation">"Spravovať členov"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Správy a obsah"</string>
-  <string name="screen_room_change_permissions_moderators">"Správcovia a moderátori"</string>
-  <string name="screen_room_change_permissions_remove_people">"Odstrániť ľudí a odmietnuť žiadosti o pripojenie"</string>
+  <string name="screen_room_change_permissions_moderators">"Moderátor"</string>
+  <string name="screen_room_change_permissions_remove_people">"Odstrániť ľudí"</string>
   <string name="screen_room_change_permissions_room_avatar">"Zmeniť obrázok miestnosti"</string>
-  <string name="screen_room_change_permissions_room_details">"Podrobnosti o miestnosti"</string>
+  <string name="screen_room_change_permissions_room_details">"Upraviť podrobnosti"</string>
   <string name="screen_room_change_permissions_room_name">"Zmeniť názov miestnosti"</string>
   <string name="screen_room_change_permissions_room_topic">"Zmeniť tému miestnosti"</string>
   <string name="screen_room_change_permissions_send_messages">"Odoslať správy"</string>
@@ -42,7 +42,7 @@
   <string name="screen_room_details_badge_encrypted">"Zašifrované"</string>
   <string name="screen_room_details_badge_not_encrypted">"Nešifrované"</string>
   <string name="screen_room_details_badge_public">"Verejná miestnosť"</string>
-  <string name="screen_room_details_edit_room_title">"Upraviť miestnosť"</string>
+  <string name="screen_room_details_edit_room_title">"Upraviť podrobnosti"</string>
   <string name="screen_room_details_edition_error">"Vyskytla sa neznáma chyba a informácie nebolo možné zmeniť."</string>
   <string name="screen_room_details_edition_error_title">"Nepodarilo sa aktualizovať miestnosť"</string>
   <string name="screen_room_details_encryption_enabled_subtitle">"Správy sú zabezpečené zámkami. Jedine vy a príjemcovia máte jedinečné kľúče na ich odomknutie."</string>
@@ -50,6 +50,8 @@
   <string name="screen_room_details_error_loading_notification_settings">"Pri načítaní nastavení oznámení došlo k chybe."</string>
   <string name="screen_room_details_error_muting">"Nepodarilo sa stlmiť túto miestnosť, skúste to prosím znova."</string>
   <string name="screen_room_details_error_unmuting">"Nepodarilo sa zrušiť stlmenie tejto miestnosti, skúste to prosím znova."</string>
+  <string name="screen_room_details_invite_people_dont_close">"Nezatvárajte aplikáciu, kým sa neukončí pozývanie."</string>
+  <string name="screen_room_details_invite_people_preparing">"Príprava pozvánok…"</string>
   <string name="screen_room_details_invite_people_title">"Pozvať ľudí"</string>
   <string name="screen_room_details_leave_conversation_title">"Opustiť konverzáciu"</string>
   <string name="screen_room_details_leave_room_title">"Opustiť miestnosť"</string>
@@ -68,7 +70,14 @@
   <string name="screen_room_details_title">"Informácie o miestnosti"</string>
   <string name="screen_room_details_topic_title">"Téma"</string>
   <string name="screen_room_details_updating_room">"Aktualizácia miestnosti…"</string>
-  <string name="screen_room_member_list_banned_empty">"V tejto miestnosti nie sú žiadni zakázaní používatelia."</string>
+  <string name="screen_room_member_list_banned_empty">"Neexistujú žiadni zablokovaní používatelia."</string>
+  <plurals name="screen_room_member_list_banned_header_title">
+    <item quantity="one">"%1$d zakázaný"</item>
+    <item quantity="few">"%1$d zakázaní"</item>
+    <item quantity="other">"%1$d zakázaných"</item>
+  </plurals>
+  <string name="screen_room_member_list_empty_search_subtitle">"Skontrolujte preklepy alebo skúste nové vyhľadávanie"</string>
+  <string name="screen_room_member_list_empty_search_title">"Žiadne výsledky pre „%1$s“"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d osoba"</item>
     <item quantity="few">"%1$d osoby"</item>
@@ -78,11 +87,16 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Iba odstrániť člena"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Zrušiť zákaz"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"V prípade pozvania sa budú môcť znova pripojiť k tejto miestnosti."</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"Zrušiť zákaz používateľa"</string>
+  <string name="screen_room_member_list_manage_member_unban_title">"Zrušiť zákaz prístupu do miestnosti"</string>
   <string name="screen_room_member_list_mode_banned">"Zakázaní"</string>
   <string name="screen_room_member_list_mode_members">"Členovia"</string>
-  <string name="screen_room_member_list_pending_header_title">"Čaká sa"</string>
-  <string name="screen_room_member_list_role_administrator">"Administrátor"</string>
+  <plurals name="screen_room_member_list_pending_header_title">
+    <item quantity="one">"%1$d pozvaný"</item>
+    <item quantity="few">"%1$d pozvaní"</item>
+    <item quantity="other">"%1$d pozvaných"</item>
+  </plurals>
+  <string name="screen_room_member_list_pending_status">"Čaká na schválenie"</string>
+  <string name="screen_room_member_list_role_administrator">"Správca"</string>
   <string name="screen_room_member_list_role_moderator">"Moderátor"</string>
   <string name="screen_room_member_list_role_owner">"Vlastník"</string>
   <string name="screen_room_member_list_room_members_header_title">"Členovia miestnosti"</string>
@@ -110,15 +124,15 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"Správy a obsah"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderátori"</string>
   <string name="screen_room_roles_and_permissions_owners">"Vlastníci"</string>
-  <string name="screen_room_roles_and_permissions_permissions_header">"Oprávnenia"</string>
+  <string name="screen_room_roles_and_permissions_permissions_header">"Povolenia"</string>
   <string name="screen_room_roles_and_permissions_reset">"Obnoviť povolenia"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Po obnovení oprávnení prídete o aktuálne nastavenia."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Obnoviť oprávnenia?"</string>
   <string name="screen_room_roles_and_permissions_roles_header">"Roly"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Podrobnosti o miestnosti"</string>
   <string name="screen_room_roles_and_permissions_title">"Roly a povolenia"</string>
-  <string name="screen_security_and_privacy_add_room_address_action">"Pridať adresu miestnosti"</string>
-  <string name="screen_security_and_privacy_ask_to_join_option_description">"Ktokoľvek môže požiadať o pripojenie do miestnosti, ale správca alebo moderátor bude musieť žiadosť prijať."</string>
+  <string name="screen_security_and_privacy_add_room_address_action">"Pridať adresu"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_description">"Všetci musia požiadať o prístup."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_title">"Požiadať o pripojenie"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Áno, povoliť šifrovanie"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Po aktivácii nie je možné zakázať šifrovanie pre miestnosť. História správ bude viditeľná len pre členov miestnosti, odkedy boli pozvaní alebo keď vstúpili do miestnosti. 
@@ -128,17 +142,22 @@ To môže brániť správnemu fungovaniu robotov a premostení. Neodporúčame p
   <string name="screen_security_and_privacy_encryption_section_footer">"Po zapnutí už šifrovanie nie je možné vypnúť."</string>
   <string name="screen_security_and_privacy_encryption_section_header">"Šifrovanie"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Povoliť end-to-end šifrovanie"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Ktokoľvek môže nájsť a pripojiť sa"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Pripojiť sa môže ktokoľvek."</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Ktokoľvek"</string>
-  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Ľudia sa môžu pripojiť len vtedy, ak sú pozvaní"</string>
+  <string name="screen_security_and_privacy_room_access_footer">"Vyberte, ktorých členovia priestorov sa môžu pripojiť k tejto miestnosti bez pozvánky.  %1$s"</string>
+  <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Spravovať priestory"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Pripojiť sa môžu iba pozvaní ľudia."</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Iba na pozvánku"</string>
-  <string name="screen_security_and_privacy_room_access_section_header">"Prístup do miestnosti"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Priestory momentálne nie sú podporované"</string>
+  <string name="screen_security_and_privacy_room_access_section_header">"Prístup"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_multiple_parents_description">"Ktokoľvek v povolených priestoroch sa môže pripojiť."</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_single_parent_description">"Ktokoľvek v %1$s sa môže pripojiť."</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Členovia priestoru"</string>
-  <string name="screen_security_and_privacy_room_address_section_footer">"Budete potrebovať adresu miestnosti, aby bola viditeľná v adresári miestností."</string>
-  <string name="screen_security_and_privacy_room_address_section_header">"Adresa miestnosti"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Priestory momentálne nie sú podporované"</string>
+  <string name="screen_security_and_privacy_room_address_section_footer">"Budete potrebovať adresu, aby sa zobrazovala vo verejnom adresári."</string>
+  <string name="screen_security_and_privacy_room_address_section_header">"Adresa"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Umožniť vyhľadanie tejto miestnosti v adresári verejných miestností %1$s"</string>
-  <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Viditeľné v adresári verejných miestností"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_toggle_description">"Umožniť nájdenie vyhľadávaním vo verejnom adresári."</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Viditeľné vo verejnom adresári"</string>
   <string name="screen_security_and_privacy_room_history_anyone_option_title">"Ktokoľvek"</string>
   <string name="screen_security_and_privacy_room_history_section_header">"Kto môže čítať históriu"</string>
   <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Len pre členov, odkedy boli pozvaní"</string>
@@ -146,8 +165,7 @@ To môže brániť správnemu fungovaniu robotov a premostení. Neodporúčame p
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Adresy miestností predstavujú spôsoby, ako nájsť a získať prístup k miestnostiam. To tiež zaisťuje, že môžete jednoducho zdieľať svoju miestnosť s ostatnými. 
 Môžete sa rozhodnúť zverejniť svoju miestnosť v adresári verejných miestností vášho domovského servera."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Zverejnenie miestnosti"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"Adresy miestností predstavujú spôsoby, ako nájsť a získať prístup k miestnostiam. Toto tiež zaisťuje, že môžete jednoducho zdieľať svoju miestnosť s ostatnými. 
-Adresa je tiež potrebná, aby bola miestnosť viditeľná v adresári verejných miestností %1$s."</string>
-  <string name="screen_security_and_privacy_room_visibility_section_header">"Viditeľnosť miestnosti"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_footer">"Adresy sú spôsob, ako nájsť a získať prístup do miestností a priestorov. To tiež zabezpečuje, že ich môžete jednoducho zdieľať s ostatnými."</string>
+  <string name="screen_security_and_privacy_room_visibility_section_header">"Viditeľnosť"</string>
   <string name="screen_security_and_privacy_title">"Bezpečnosť a súkromie"</string>
 </resources>

@@ -80,6 +80,7 @@
   <string name="action_decline">"Decline"</string>
   <string name="action_decline_and_block">"Decline and block"</string>
   <string name="action_delete_poll">"Delete Poll"</string>
+  <string name="action_deselect_all">"Deselect all"</string>
   <string name="action_disable">"Disable"</string>
   <string name="action_discard">"Discard"</string>
   <string name="action_dismiss">"Dismiss"</string>
@@ -94,6 +95,7 @@
   <string name="action_forgot_password">"Forgot password?"</string>
   <string name="action_forward">"Forward"</string>
   <string name="action_go_back">"Go back"</string>
+  <string name="action_go_to_roles_and_permissions">"Go to roles &amp; permissions"</string>
   <string name="action_go_to_settings">"Go to settings"</string>
   <string name="action_ignore">"Ignore"</string>
   <string name="action_invite">"Invite"</string>
@@ -140,6 +142,7 @@
   <string name="action_retry_decryption">"Retry decryption"</string>
   <string name="action_save">"Save"</string>
   <string name="action_search">"Search"</string>
+  <string name="action_select_all">"Select all"</string>
   <string name="action_send">"Send"</string>
   <string name="action_send_edited_message">"Send edited message"</string>
   <string name="action_send_message">"Send message"</string>
@@ -153,6 +156,7 @@
   <string name="action_skip">"Skip"</string>
   <string name="action_start">"Start"</string>
   <string name="action_start_chat">"Start chat"</string>
+  <string name="action_start_over">"Start over"</string>
   <string name="action_start_verification">"Start verification"</string>
   <string name="action_static_map_load">"Tap to load map"</string>
   <string name="action_take_photo">"Take photo"</string>
@@ -193,7 +197,6 @@
   <string name="common_dark">"Dark"</string>
   <string name="common_decryption_error">"Decryption error"</string>
   <string name="common_description">"Description"</string>
-  <string name="common_deselect_all">"Deselect all"</string>
   <string name="common_developer_options">"Developer options"</string>
   <string name="common_device_id">"Device ID"</string>
   <string name="common_direct_chat">"Direct chat"</string>
@@ -232,6 +235,7 @@ Reason: %1$s."</string>
   <string name="common_light">"Light"</string>
   <string name="common_line_copied_to_clipboard">"Line copied to clipboard"</string>
   <string name="common_link_copied_to_clipboard">"Link copied to clipboard"</string>
+  <string name="common_link_new_device">"Link new device"</string>
   <string name="common_loading">"Loading…"</string>
   <string name="common_loading_more">"Loading more…"</string>
   <plurals name="common_many_members">
@@ -244,10 +248,12 @@ Reason: %1$s."</string>
   </plurals>
   <string name="common_message">"Message"</string>
   <string name="common_message_actions">"Message actions"</string>
+  <string name="common_message_failed_to_send">"Message failed to send"</string>
   <string name="common_message_layout">"Message layout"</string>
   <string name="common_message_removed">"Message removed"</string>
   <string name="common_modern">"Modern"</string>
   <string name="common_mute">"Mute"</string>
+  <string name="common_name">"Name"</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"No results"</string>
   <string name="common_no_room_name">"No room name"</string>
@@ -306,7 +312,6 @@ Reason: %1$s."</string>
   <string name="common_security">"Security"</string>
   <string name="common_seen_by">"Seen by"</string>
   <string name="common_select_account">"Select an account"</string>
-  <string name="common_select_all">"Select all"</string>
   <string name="common_send_to">"Send to"</string>
   <string name="common_sending">"Sending…"</string>
   <string name="common_sending_failed">"Sending failed"</string>
@@ -323,6 +328,7 @@ Reason: %1$s."</string>
   <string name="common_something_went_wrong">"Something went wrong"</string>
   <string name="common_something_went_wrong_message">"We encountered an issue. Please try again."</string>
   <string name="common_space">"Space"</string>
+  <string name="common_space_topic_placeholder">"What is this space about?"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d Space"</item>
     <item quantity="other">"%1$d Spaces"</item>
@@ -367,6 +373,7 @@ Reason: %1$s."</string>
   <string name="common_waiting">"Waiting…"</string>
   <string name="common_waiting_for_decryption_key">"Waiting for this message"</string>
   <string name="common_you">"You"</string>
+  <string name="crypto_history_visible">"This room has been configured so that new members can read history. %1$s"</string>
   <string name="crypto_identity_change_pin_violation">"%1$s\'s identity was reset. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"%1$s’s %2$s identity was reset. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
@@ -387,6 +394,7 @@ Are you sure you want to continue?"</string>
   <string name="dialog_title_error">"Error"</string>
   <string name="dialog_title_success">"Success"</string>
   <string name="dialog_title_warning">"Warning"</string>
+  <string name="dialog_unsaved_changes_description">"You have unsaved changes."</string>
   <string name="dialog_unsaved_changes_description_android">"Your changes have not been saved. Are you sure you want to go back?"</string>
   <string name="dialog_unsaved_changes_title">"Save changes?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"The max file size allowed is: %1$s"</string>
@@ -426,6 +434,37 @@ Are you sure you want to continue?"</string>
   <string name="screen_create_poll_options_section_title">"Options"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Remove %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Settings"</string>
+  <string name="screen_link_new_device_desktop_scanning_title">"Scan the QR code"</string>
+  <string name="screen_link_new_device_desktop_step1">"Open %1$s on a laptop or desktop computer"</string>
+  <string name="screen_link_new_device_desktop_step3">"Scan the QR code with this device"</string>
+  <string name="screen_link_new_device_desktop_submit">"Ready to scan"</string>
+  <string name="screen_link_new_device_desktop_title">"Open %1$s on a desktop computer to get the QR code"</string>
+  <string name="screen_link_new_device_enter_number_error_numbers_do_not_match">"The numbers don’t match"</string>
+  <string name="screen_link_new_device_enter_number_notice">"Enter 2-digit code"</string>
+  <string name="screen_link_new_device_enter_number_subtitle">"This will verify that the connection to your other device is secure."</string>
+  <string name="screen_link_new_device_enter_number_title">"Enter the number shown on your other device"</string>
+  <string name="screen_link_new_device_error_app_not_supported_subtitle">"Your account provider does not support %1$s."</string>
+  <string name="screen_link_new_device_error_app_not_supported_title">"%1$s not supported"</string>
+  <string name="screen_link_new_device_error_not_supported_subtitle">"Your account provider doesn’t support signing into a new device with a QR code."</string>
+  <string name="screen_link_new_device_error_not_supported_title">"QR code not supported"</string>
+  <string name="screen_link_new_device_error_request_cancelled_subtitle">"The sign in was cancelled on the other device."</string>
+  <string name="screen_link_new_device_error_request_cancelled_title">"Sign in request cancelled"</string>
+  <string name="screen_link_new_device_error_request_timeout_subtitle">"Sign in expired. Please try again."</string>
+  <string name="screen_link_new_device_error_request_timeout_title">"The sign in was not completed in time"</string>
+  <string name="screen_link_new_device_mobile_step1">"Open %1$s on the other device"</string>
+  <string name="screen_link_new_device_mobile_step2">"Select %1$s"</string>
+  <string name="screen_link_new_device_mobile_step2_action">"“Sign in with QR code”"</string>
+  <string name="screen_link_new_device_mobile_step3">"Scan the QR code shown here with the other device"</string>
+  <string name="screen_link_new_device_mobile_title">"Open %1$s on the other device"</string>
+  <string name="screen_link_new_device_root_desktop_computer">"Desktop computer"</string>
+  <string name="screen_link_new_device_root_loading_qr_code">"Loading QR code…"</string>
+  <string name="screen_link_new_device_root_mobile_device">"Mobile device"</string>
+  <string name="screen_link_new_device_root_title">"What type of device do you want to link?"</string>
+  <string name="screen_manage_authorized_spaces_header">"Spaces where members can join the room without an invitation."</string>
+  <string name="screen_manage_authorized_spaces_title">"Manage spaces"</string>
+  <string name="screen_manage_authorized_spaces_unknown_space">"(Unknown space)"</string>
+  <string name="screen_manage_authorized_spaces_unknown_spaces_section_title">"Other spaces you’re not a member of"</string>
+  <string name="screen_manage_authorized_spaces_your_spaces_section_title">"Your spaces"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Press on a message and choose “%1$s” to include here."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Pin important messages so that they can be easily discovered"</string>
@@ -466,6 +505,7 @@ Are you sure you want to continue?"</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_parent_space">"%1$s space"</string>
   <string name="screen_space_list_title">"Spaces"</string>
+  <string name="screen_space_menu_action_members">"View members"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Message not sent because %1$s’s verified identity was reset."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Message not sent because %1$s has not verified all devices."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Message not sent because you have not verified one or more of your devices."</string>

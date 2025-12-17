@@ -15,7 +15,7 @@
   <string name="screen_join_room_fail_reason">"이 방은 초대 전용이거나 스페이스 수준에서 액세스 제한이 있을 수 있습니다."</string>
   <string name="screen_join_room_forget_action">"이 방 지우기"</string>
   <string name="screen_join_room_invite_required_message">"이 방에 참여하려면 초대장이 필요합니다."</string>
-  <string name="screen_join_room_join_action">"방에 참여하기"</string>
+  <string name="screen_join_room_join_action">"참가하기"</string>
   <string name="screen_join_room_join_restricted_message">"참여하려면 초대 또는 스페이스의 회원이어야 할 수 있습니다."</string>
   <string name="screen_join_room_knock_action">"가입 요청 보내기"</string>
   <string name="screen_join_room_knock_message_characters_count">"%2$d의 %1$d 문자가 허용됨"</string>

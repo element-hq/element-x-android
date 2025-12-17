@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -9,7 +10,6 @@ package io.element.android.features.messages.impl.utils.messagesummary
 
 import android.content.Context
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
@@ -33,7 +33,6 @@ import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @ContributesBinding(RoomScope::class)
-@Inject
 class DefaultMessageSummaryFormatter(
     @ApplicationContext private val context: Context,
 ) : MessageSummaryFormatter {

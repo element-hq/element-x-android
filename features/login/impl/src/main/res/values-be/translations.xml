@@ -30,6 +30,7 @@
   <string name="screen_login_title">"Сардэчна запрашаем!"</string>
   <string name="screen_login_title_with_homeserver">"Увайсці ў %1$s"</string>
   <string name="screen_onboarding_sign_in_manually">"Увайсці ўручную"</string>
+  <string name="screen_onboarding_sign_in_to">"Увайсці ў %1$s"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"Увайсці з QR-кодам"</string>
   <string name="screen_onboarding_sign_up">"Стварыць уліковы запіс"</string>
   <string name="screen_onboarding_welcome_message">"Сардэчна запрашаем у самы хуткі %1$s. Перавага ў хуткасці і прастаце."</string>

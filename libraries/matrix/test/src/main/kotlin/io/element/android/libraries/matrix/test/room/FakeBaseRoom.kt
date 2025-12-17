@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -14,18 +15,18 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.BaseRoom
-import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembersState
-import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
+import io.element.android.libraries.matrix.api.room.powerlevels.RoomPermissions
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsValues
 import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.coroutines.CoroutineScope
@@ -39,6 +40,7 @@ class FakeBaseRoom(
     override val sessionId: SessionId = A_SESSION_ID,
     override val roomId: RoomId = A_ROOM_ID,
     initialRoomInfo: RoomInfo = aRoomInfo(),
+    private val roomPermissions: RoomPermissions = FakeRoomPermissions(),
     override val roomCoroutineScope: CoroutineScope = TestScope(),
     private var roomPermalinkResult: () -> Result<String> = { lambdaError() },
     private var eventPermalinkResult: (EventId) -> Result<String> = { lambdaError() },
@@ -47,16 +49,6 @@ class FakeBaseRoom(
     private val userRoleResult: () -> Result<RoomMember.Role> = { lambdaError() },
     private val getUpdatedMemberResult: (UserId) -> Result<RoomMember> = { lambdaError() },
     private val joinRoomResult: () -> Result<Unit> = { lambdaError() },
-    private val canInviteResult: (UserId) -> Result<Boolean> = { lambdaError() },
-    private val canKickResult: (UserId) -> Result<Boolean> = { lambdaError() },
-    private val canBanResult: (UserId) -> Result<Boolean> = { lambdaError() },
-    private val canRedactOwnResult: (UserId) -> Result<Boolean> = { lambdaError() },
-    private val canRedactOtherResult: (UserId) -> Result<Boolean> = { lambdaError() },
-    private val canSendStateResult: (UserId, StateEventType) -> Result<Boolean> = { _, _ -> lambdaError() },
-    private val canUserSendMessageResult: (UserId, MessageEventType) -> Result<Boolean> = { _, _ -> lambdaError() },
-    private val canUserTriggerRoomNotificationResult: (UserId) -> Result<Boolean> = { lambdaError() },
-    private val canUserJoinCallResult: (UserId) -> Result<Boolean> = { lambdaError() },
-    private val canUserPinUnpinResult: (UserId) -> Result<Boolean> = { lambdaError() },
     private val setIsFavoriteResult: (Boolean) -> Result<Unit> = { lambdaError() },
     private val markAsReadResult: (ReceiptType) -> Result<Unit> = { Result.success(Unit) },
     private val powerLevelsResult: () -> Result<RoomPowerLevelsValues> = { lambdaError() },
@@ -128,6 +120,10 @@ class FakeBaseRoom(
         return userRoleResult()
     }
 
+    override suspend fun roomPermissions(): Result<RoomPermissions> {
+        return Result.success(roomPermissions)
+    }
+
     override suspend fun getPermalink(): Result<String> {
         return roomPermalinkResult()
     }
@@ -150,46 +146,6 @@ class FakeBaseRoom(
 
     override suspend fun forget(): Result<Unit> {
         return forgetResult()
-    }
-
-    override suspend fun canUserBan(userId: UserId): Result<Boolean> {
-        return canBanResult(userId)
-    }
-
-    override suspend fun canUserKick(userId: UserId): Result<Boolean> {
-        return canKickResult(userId)
-    }
-
-    override suspend fun canUserInvite(userId: UserId): Result<Boolean> {
-        return canInviteResult(userId)
-    }
-
-    override suspend fun canUserRedactOwn(userId: UserId): Result<Boolean> {
-        return canRedactOwnResult(userId)
-    }
-
-    override suspend fun canUserRedactOther(userId: UserId): Result<Boolean> {
-        return canRedactOtherResult(userId)
-    }
-
-    override suspend fun canUserSendState(userId: UserId, type: StateEventType): Result<Boolean> {
-        return canSendStateResult(userId, type)
-    }
-
-    override suspend fun canUserSendMessage(userId: UserId, type: MessageEventType): Result<Boolean> {
-        return canUserSendMessageResult(userId, type)
-    }
-
-    override suspend fun canUserTriggerRoomNotification(userId: UserId): Result<Boolean> {
-        return canUserTriggerRoomNotificationResult(userId)
-    }
-
-    override suspend fun canUserJoinCall(userId: UserId): Result<Boolean> {
-        return canUserJoinCallResult(userId)
-    }
-
-    override suspend fun canUserPinUnpin(userId: UserId): Result<Boolean> {
-        return canUserPinUnpinResult(userId)
     }
 
     override suspend fun setIsFavorite(isFavorite: Boolean): Result<Unit> {
@@ -255,9 +211,11 @@ fun defaultRoomPowerLevelValues() = RoomPowerLevelsValues(
     ban = 50,
     invite = 0,
     kick = 50,
-    sendEvents = 0,
+    eventsDefault = 0,
+    stateDefault = 50,
     redactEvents = 50,
-    roomName = 100,
-    roomAvatar = 100,
-    roomTopic = 100
+    roomName = 50,
+    roomAvatar = 50,
+    roomTopic = 50,
+    spaceChild = 50,
 )

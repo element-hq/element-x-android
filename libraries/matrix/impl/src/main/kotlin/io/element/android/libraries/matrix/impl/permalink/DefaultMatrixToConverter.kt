@@ -1,7 +1,8 @@
 /*
- * Copyright 2022-2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2022-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -11,7 +12,6 @@ import android.net.Uri
 import androidx.core.net.toUri
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.appconfig.MatrixConfiguration
 import io.element.android.libraries.core.extensions.replacePrefix
 import io.element.android.libraries.matrix.api.permalink.MatrixToConverter
@@ -20,7 +20,6 @@ import io.element.android.libraries.matrix.api.permalink.MatrixToConverter
  * Mapping of an input URI to a matrix.to compliant URI.
  */
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultMatrixToConverter : MatrixToConverter {
     /**
      * Try to convert a URL from an element web instance or from a client permalink to a matrix.to url.

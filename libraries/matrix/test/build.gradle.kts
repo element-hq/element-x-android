@@ -1,7 +1,8 @@
 /*
- * Copyright 2022-2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2022-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -18,6 +19,7 @@ dependencies {
     api(projects.libraries.matrix.api)
     api(libs.coroutines.core)
     implementation(libs.coroutines.test)
+    implementation(projects.libraries.matrix.impl)
     implementation(projects.services.analytics.api)
     implementation(projects.tests.testutils)
     implementation(libs.kotlinx.collections.immutable)

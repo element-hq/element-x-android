@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -13,12 +14,12 @@ import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.annotations.ContributesNode
 import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.RoomScope
 import io.element.android.services.analytics.api.AnalyticsService
@@ -34,17 +35,16 @@ class RoomNotificationSettingsNode(
     data class RoomNotificationSettingInput(
         val showUserDefinedSettingStyle: Boolean
     ) : NodeInputs
-    interface Callback : Plugin {
-        fun openGlobalNotificationSettings()
-    }
-    private val inputs = inputs<RoomNotificationSettingInput>()
-    private val callbacks = plugins<Callback>()
 
-    private fun openGlobalNotificationSettings() {
-        callbacks.forEach { it.openGlobalNotificationSettings() }
+    interface Callback : Plugin {
+        fun navigateToGlobalNotificationSettings()
     }
+
+    private val callback: Callback = callback()
+    private val inputs = inputs<RoomNotificationSettingInput>()
 
     private val presenter = presenterFactory.create(inputs.showUserDefinedSettingStyle)
+
     init {
         lifecycle.subscribe(
             onResume = {
@@ -59,8 +59,8 @@ class RoomNotificationSettingsNode(
         RoomNotificationSettingsView(
             state = state,
             modifier = modifier,
-            onShowGlobalNotifications = this::openGlobalNotificationSettings,
-            onBackClick = this::navigateUp,
+            onShowGlobalNotifications = callback::navigateToGlobalNotificationSettings,
+            onBackClick = ::navigateUp,
         )
     }
 }

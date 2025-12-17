@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -18,7 +19,6 @@ import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
@@ -26,6 +26,7 @@ import io.element.android.annotations.ContributesNode
 import io.element.android.features.leaveroom.api.LeaveRoomRenderer
 import io.element.android.libraries.androidutils.system.startSharePlainTextIntent
 import io.element.android.libraries.architecture.appyx.launchMolecule
+import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.BaseRoom
@@ -46,24 +47,24 @@ class RoomDetailsNode(
     private val leaveRoomRenderer: LeaveRoomRenderer,
 ) : Node(buildContext, plugins = plugins) {
     interface Callback : Plugin {
-        fun openRoomMemberList()
-        fun openInviteMembers()
-        fun editRoomDetails()
-        fun openRoomNotificationSettings()
-        fun openAvatarPreview(name: String, url: String)
-        fun openPollHistory()
-        fun openMediaGallery()
-        fun openAdminSettings()
-        fun openPinnedMessagesList()
-        fun openKnockRequestsList()
-        fun openSecurityAndPrivacy()
-        fun openDmUserProfile(userId: UserId)
-        fun onJoinCall()
-        fun openReportRoom()
-        fun onSelectNewOwnersWhenLeaving()
+        fun navigateToRoomMemberList()
+        fun navigateToInviteMembers()
+        fun navigateToRoomDetailsEdit()
+        fun navigateToRoomNotificationSettings()
+        fun navigateToAvatarPreview(name: String, url: String)
+        fun navigateToPollHistory()
+        fun navigateToMediaGallery()
+        fun navigateToAdminSettings()
+        fun navigateToPinnedMessagesList()
+        fun navigateToKnockRequestsList()
+        fun navigateToSecurityAndPrivacy()
+        fun navigateToRoomMemberDetails(userId: UserId)
+        fun navigateToRoomCall()
+        fun navigateToReportRoom()
+        fun navigateToSelectNewOwnersWhenLeaving()
     }
 
-    private val callback = plugins<Callback>().first()
+    private val callback: Callback = callback()
 
     init {
         lifecycle.subscribe(
@@ -71,30 +72,6 @@ class RoomDetailsNode(
                 analyticsService.screen(MobileScreen(screenName = MobileScreen.ScreenName.RoomDetails))
             }
         )
-    }
-
-    private fun openRoomMemberList() {
-        callback.openRoomMemberList()
-    }
-
-    private fun openRoomNotificationSettings() {
-        callback.openRoomNotificationSettings()
-    }
-
-    private fun invitePeople() {
-        callback.openInviteMembers()
-    }
-
-    private fun openPollHistory() {
-        callback.openPollHistory()
-    }
-
-    private fun openMediaGallery() {
-        callback.openMediaGallery()
-    }
-
-    private fun onJoinCall() {
-        callback.onJoinCall()
     }
 
     private fun CoroutineScope.onShareRoom(context: Context) = launch {
@@ -110,42 +87,6 @@ class RoomDetailsNode(
             .onFailure {
                 Timber.e(it)
             }
-    }
-
-    private fun onEditRoomDetails() {
-        callback.editRoomDetails()
-    }
-
-    private fun openAvatarPreview(name: String, url: String) {
-        callback.openAvatarPreview(name, url)
-    }
-
-    private fun openAdminSettings() {
-        callback.openAdminSettings()
-    }
-
-    private fun openPinnedMessages() {
-        callback.openPinnedMessagesList()
-    }
-
-    private fun openKnockRequestsLists() {
-        callback.openKnockRequestsList()
-    }
-
-    private fun openSecurityAndPrivacy() {
-        callback.openSecurityAndPrivacy()
-    }
-
-    private fun onProfileClick(userId: UserId) {
-        callback.openDmUserProfile(userId)
-    }
-
-    private fun onReportRoomClick() {
-        callback.openReportRoom()
-    }
-
-    private fun onSelectNewOwnersWhenLeaving() {
-        return callback.onSelectNewOwnersWhenLeaving()
     }
 
     private val stateFlow = launchMolecule { presenter.present() }
@@ -165,34 +106,38 @@ class RoomDetailsNode(
 
         fun onActionClick(action: RoomDetailsAction) {
             when (action) {
-                RoomDetailsAction.Edit -> onEditRoomDetails()
-                RoomDetailsAction.AddTopic -> onEditRoomDetails()
+                RoomDetailsAction.Edit -> {
+                    callback.navigateToRoomDetailsEdit()
+                }
+                RoomDetailsAction.AddTopic -> {
+                    callback.navigateToRoomDetailsEdit()
+                }
             }
         }
 
         RoomDetailsView(
             state = state,
             modifier = modifier,
-            goBack = this::navigateUp,
+            goBack = ::navigateUp,
             onActionClick = ::onActionClick,
             onShareRoom = ::onShareRoom,
-            openRoomMemberList = ::openRoomMemberList,
-            openRoomNotificationSettings = ::openRoomNotificationSettings,
-            invitePeople = ::invitePeople,
-            openAvatarPreview = ::openAvatarPreview,
-            openPollHistory = ::openPollHistory,
-            openMediaGallery = ::openMediaGallery,
-            openAdminSettings = this::openAdminSettings,
-            onJoinCallClick = ::onJoinCall,
-            onPinnedMessagesClick = ::openPinnedMessages,
-            onKnockRequestsClick = ::openKnockRequestsLists,
-            onSecurityAndPrivacyClick = ::openSecurityAndPrivacy,
-            onProfileClick = ::onProfileClick,
-            onReportRoomClick = ::onReportRoomClick,
+            openRoomMemberList = callback::navigateToRoomMemberList,
+            openRoomNotificationSettings = callback::navigateToRoomNotificationSettings,
+            invitePeople = callback::navigateToInviteMembers,
+            openAvatarPreview = callback::navigateToAvatarPreview,
+            openPollHistory = callback::navigateToPollHistory,
+            openMediaGallery = callback::navigateToMediaGallery,
+            openAdminSettings = callback::navigateToAdminSettings,
+            onJoinCallClick = callback::navigateToRoomCall,
+            onPinnedMessagesClick = callback::navigateToPinnedMessagesList,
+            onKnockRequestsClick = callback::navigateToKnockRequestsList,
+            onSecurityAndPrivacyClick = callback::navigateToSecurityAndPrivacy,
+            onProfileClick = callback::navigateToRoomMemberDetails,
+            onReportRoomClick = callback::navigateToReportRoom,
             leaveRoomView = {
                 leaveRoomRenderer.Render(
                     state = state.leaveRoomState,
-                    onSelectNewOwners = { onSelectNewOwnersWhenLeaving() },
+                    onSelectNewOwners = { callback.navigateToSelectNewOwnersWhenLeaving() },
                     modifier = Modifier
                 )
             }

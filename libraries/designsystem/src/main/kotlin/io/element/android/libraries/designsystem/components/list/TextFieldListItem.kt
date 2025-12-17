@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -25,7 +26,8 @@ fun TextFieldListItem(
     onTextChange: (String) -> Unit,
     modifier: Modifier = Modifier,
     error: String? = null,
-    maxLines: Int = 1,
+    minLines: Int = 1,
+    maxLines: Int = minLines,
     label: String? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -52,7 +54,8 @@ fun TextFieldListItem(
     onTextChange: (TextFieldValue) -> Unit,
     modifier: Modifier = Modifier,
     error: String? = null,
-    maxLines: Int = 1,
+    minLines: Int = 1,
+    maxLines: Int = minLines,
     label: String? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     keyboardActions: KeyboardActions = KeyboardActions.Default,
@@ -67,6 +70,7 @@ fun TextFieldListItem(
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
         maxLines = maxLines,
+        minLines = minLines,
         singleLine = maxLines == 1,
         modifier = modifier,
     )

@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -10,6 +11,7 @@ package io.element.android.features.space.impl.leave
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 data class LeaveSpaceState(
     val spaceName: String?,
@@ -18,10 +20,15 @@ data class LeaveSpaceState(
     val leaveSpaceAction: AsyncAction<Unit>,
     val eventSink: (LeaveSpaceEvents) -> Unit,
 ) {
-    private val rooms = selectableSpaceRooms.dataOrNull().orEmpty()
-    private val partition = rooms.partition { it.isLastAdmin }
-    private val lastAdminRooms = partition.first
-    private val selectableRooms = partition.second
+    private val rooms = selectableSpaceRooms.dataOrNull().orEmpty().toImmutableList()
+    private val lastAdminRooms: ImmutableList<SelectableSpaceRoom>
+    private val selectableRooms: ImmutableList<SelectableSpaceRoom>
+
+    init {
+        val partition = rooms.partition { it.isLastAdmin }
+        lastAdminRooms = partition.first.toImmutableList()
+        selectableRooms = partition.second.toImmutableList()
+    }
 
     /**
      * True if we should show the quick action to select/deselect all rooms.

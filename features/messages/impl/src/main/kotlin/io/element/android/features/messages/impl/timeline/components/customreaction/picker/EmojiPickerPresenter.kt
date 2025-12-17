@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -90,7 +91,7 @@ class EmojiPickerPresenter(
         }
 
         val isInPreview = LocalInspectionMode.current
-        fun handleEvents(event: EmojiPickerEvents) {
+        fun handleEvent(event: EmojiPickerEvents) {
             when (event) {
                 // For some reason, in preview mode the SearchBar emits this event with an `isActive = true` value automatically
                 is EmojiPickerEvents.ToggleSearchActive -> if (!isInPreview) {
@@ -106,7 +107,7 @@ class EmojiPickerPresenter(
             searchQuery = searchQuery,
             isSearchActive = isSearchActive,
             searchResults = emojiResults,
-            eventSink = ::handleEvents,
+            eventSink = ::handleEvent,
         )
     }
 }

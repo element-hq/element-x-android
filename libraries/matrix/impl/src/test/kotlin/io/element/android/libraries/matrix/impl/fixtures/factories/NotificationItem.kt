@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -11,6 +12,7 @@ import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiTimelineEvent
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_USER_NAME
+import org.matrix.rustcomponents.sdk.Action
 import org.matrix.rustcomponents.sdk.JoinRule
 import org.matrix.rustcomponents.sdk.NotificationEvent
 import org.matrix.rustcomponents.sdk.NotificationItem
@@ -26,6 +28,7 @@ fun aRustNotificationItem(
     isNoisy: Boolean? = false,
     hasMention: Boolean? = false,
     threadId: ThreadId? = null,
+    actions: List<Action>? = null,
 ) = NotificationItem(
     event = event,
     senderInfo = senderInfo,
@@ -33,6 +36,7 @@ fun aRustNotificationItem(
     isNoisy = isNoisy,
     hasMention = hasMention,
     threadId = threadId?.value,
+    actions = actions,
 )
 
 fun aRustBatchNotificationResult(
@@ -60,6 +64,7 @@ fun aRustNotificationRoomInfo(
     isEncrypted: Boolean? = true,
     isDirect: Boolean = false,
     joinRule: JoinRule? = null,
+    isSpace: Boolean = false,
 ) = NotificationRoomInfo(
     displayName = displayName,
     avatarUrl = avatarUrl,
@@ -69,6 +74,7 @@ fun aRustNotificationRoomInfo(
     isEncrypted = isEncrypted,
     isDirect = isDirect,
     joinRule = joinRule,
+    isSpace = isSpace,
 )
 
 fun aRustNotificationEventTimeline(

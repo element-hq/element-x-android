@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -52,7 +53,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.androidutils.ui.showKeyboard
-import io.element.android.libraries.designsystem.components.media.createFakeWaveform
+import io.element.android.libraries.designsystem.components.media.WaveFormSamples
 import io.element.android.libraries.designsystem.preview.DAY_MODE_NAME
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.NIGHT_MODE_NAME
@@ -139,8 +140,8 @@ fun TextComposer(
     }
 
     val layoutModifier = modifier
-            .fillMaxSize()
-            .height(IntrinsicSize.Min)
+        .fillMaxSize()
+        .height(IntrinsicSize.Min)
 
     val composerOptionsButton: @Composable () -> Unit = remember(composerMode) {
         @Composable {
@@ -177,18 +178,18 @@ fun TextComposer(
                 @Composable {
                     TextInputBox(
                         modifier = Modifier
-                                .clickable(
-                                        interactionSource = remember { MutableInteractionSource() },
-                                        indication = null,
-                                ) {
-                                    coroutineScope.launch {
-                                        state.requestFocus()
-                                        view.showKeyboard()
-                                    }
+                            .clickable(
+                                interactionSource = remember { MutableInteractionSource() },
+                                indication = null,
+                            ) {
+                                coroutineScope.launch {
+                                    state.requestFocus()
+                                    view.showKeyboard()
                                 }
-                                .semantics {
-                                    hideFromAccessibility()
-                                },
+                            }
+                            .semantics {
+                                hideFromAccessibility()
+                            },
                         composerMode = composerMode,
                         onResetComposerMode = onResetComposerMode,
                         isTextEmpty = state.richTextEditorState.messageHtml.isEmpty(),
@@ -198,8 +199,8 @@ fun TextComposer(
                             placeholder = placeholder,
                             registerStateUpdates = true,
                             modifier = Modifier
-                                    .padding(top = 6.dp, bottom = 6.dp)
-                                    .fillMaxWidth(),
+                                .padding(top = 6.dp, bottom = 6.dp)
+                                .fillMaxWidth(),
                             style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.richTextEditorState.hasFocus),
                             resolveMentionDisplay = resolveMentionDisplay,
                             resolveRoomMentionDisplay = resolveAtRoomMentionDisplay,
@@ -298,7 +299,10 @@ fun TextComposer(
                     onSeek = onSeekVoiceMessage,
                 )
             is VoiceMessageState.Recording ->
-                VoiceMessageRecording(voiceMessageState.levels, voiceMessageState.duration)
+                VoiceMessageRecording(
+                    levels = voiceMessageState.levels,
+                    duration = voiceMessageState.duration,
+                )
             VoiceMessageState.Idle -> {}
         }
     }
@@ -419,8 +423,8 @@ private fun StandardLayout(
                 if (voiceMessageState is VoiceMessageState.Preview || voiceMessageState is VoiceMessageState.Recording) {
                     Box(
                         modifier = Modifier
-                                .padding(bottom = 5.dp, top = 5.dp, end = 3.dp, start = 3.dp)
-                                .size(48.dp),
+                            .padding(bottom = 5.dp, top = 5.dp, end = 3.dp, start = 3.dp)
+                            .size(48.dp),
                         contentAlignment = Alignment.Center,
                     ) {
                         voiceDeleteButton()
@@ -430,8 +434,8 @@ private fun StandardLayout(
                 }
                 Box(
                     modifier = Modifier
-                            .padding(bottom = 8.dp, top = 8.dp)
-                            .weight(1f)
+                        .padding(bottom = 8.dp, top = 8.dp)
+                        .weight(1f)
                 ) {
                     voiceRecording()
                 }
@@ -444,17 +448,17 @@ private fun StandardLayout(
                 }
                 Box(
                     modifier = Modifier
-                            .padding(bottom = 8.dp, top = 8.dp)
-                            .weight(1f)
+                        .padding(bottom = 8.dp, top = 8.dp)
+                        .weight(1f)
                 ) {
                     textInput()
                 }
             }
             Box(
                 Modifier
-                        .padding(bottom = 5.dp, top = 5.dp, end = 6.dp, start = 6.dp)
-                        .size(48.dp)
-                        .clearAndSetSemantics(endButtonA11y),
+                    .padding(bottom = 5.dp, top = 5.dp, end = 6.dp, start = 6.dp)
+                    .size(48.dp)
+                    .clearAndSetSemantics(endButtonA11y),
                 contentAlignment = Alignment.Center,
             ) {
                 endButton()
@@ -505,8 +509,8 @@ private fun TextFormattingLayout(
         }
         Box(
             modifier = Modifier
-                    .weight(1f)
-                    .padding(horizontal = 12.dp)
+                .weight(1f)
+                .padding(horizontal = 12.dp)
         ) {
             textInput()
         }
@@ -525,11 +529,11 @@ private fun TextFormattingLayout(
             }
             Box(
                 modifier = Modifier
-                        .padding(
-                                start = 14.dp,
-                                end = 6.dp,
-                        )
-                        .clearAndSetSemantics(endButtonA11y)
+                    .padding(
+                        start = 14.dp,
+                        end = 6.dp,
+                    )
+                    .clearAndSetSemantics(endButtonA11y)
             ) {
                 sendButton()
             }
@@ -551,12 +555,12 @@ private fun TextInputBox(
 
     Column(
         modifier = Modifier
-                .clip(roundedCorners)
-                .border(0.5.dp, borderColor, roundedCorners)
-                .background(color = bgColor)
-                .requiredHeightIn(min = 42.dp)
-                .fillMaxSize()
-                .then(modifier),
+            .clip(roundedCorners)
+            .border(0.5.dp, borderColor, roundedCorners)
+            .background(color = bgColor)
+            .requiredHeightIn(min = 42.dp)
+            .fillMaxSize()
+            .then(modifier),
     ) {
         if (composerMode is MessageComposerMode.Special) {
             ComposerModeView(
@@ -566,8 +570,8 @@ private fun TextInputBox(
         }
         Box(
             modifier = Modifier
-                    .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 12.dp)
-                    .then(Modifier.testTag(TestTags.textEditor)),
+                .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 12.dp)
+                .then(Modifier.testTag(TestTags.textEditor)),
             contentAlignment = Alignment.CenterStart,
         ) {
             textInput()
@@ -575,9 +579,9 @@ private fun TextInputBox(
                 var showBottomSheet by remember { mutableStateOf(false) }
                 Icon(
                     modifier = Modifier
-                            .clickable { showBottomSheet = true }
-                            .padding(horizontal = 8.dp, vertical = 4.dp)
-                            .align(Alignment.CenterEnd),
+                        .clickable { showBottomSheet = true }
+                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                        .align(Alignment.CenterEnd),
                     imageVector = CompoundIcons.InfoSolid(),
                     tint = ElementTheme.colors.iconCriticalPrimary,
                     contentDescription = null,
@@ -808,30 +812,33 @@ internal fun TextComposerCaptionPreview() = ElementPreview {
 internal fun TextComposerVoicePreview() = ElementPreview {
     PreviewColumn(
         items = persistentListOf(
-            VoiceMessageState.Recording(61.seconds, createFakeWaveform()),
+            VoiceMessageState.Recording(
+                duration = 61.seconds,
+                levels = WaveFormSamples.realisticWaveForm,
+            ),
             VoiceMessageState.Preview(
                 isSending = false,
                 isPlaying = false,
                 showCursor = false,
-                waveform = createFakeWaveform(),
+                waveform = WaveFormSamples.realisticWaveForm,
                 time = 0.seconds,
-                playbackProgress = 0.0f
+                playbackProgress = 0.0f,
             ),
             VoiceMessageState.Preview(
                 isSending = false,
                 isPlaying = true,
                 showCursor = true,
-                waveform = createFakeWaveform(),
+                waveform = WaveFormSamples.realisticWaveForm,
                 time = 3.seconds,
-                playbackProgress = 0.2f
+                playbackProgress = 0.2f,
             ),
             VoiceMessageState.Preview(
                 isSending = true,
                 isPlaying = false,
                 showCursor = false,
-                waveform = createFakeWaveform(),
+                waveform = WaveFormSamples.realisticWaveForm,
                 time = 61.seconds,
-                playbackProgress = 0.0f
+                playbackProgress = 0.0f,
             ),
         )
     ) { voiceMessageState ->
@@ -848,12 +855,15 @@ internal fun TextComposerVoicePreview() = ElementPreview {
 internal fun TextComposerVoiceNotEncryptedPreview() = ElementPreview {
     PreviewColumn(
         items = persistentListOf(
-            VoiceMessageState.Recording(61.seconds, createFakeWaveform()),
+            VoiceMessageState.Recording(
+                duration = 61.seconds,
+                levels = WaveFormSamples.realisticWaveForm,
+            ),
             VoiceMessageState.Preview(
                 isSending = false,
                 isPlaying = false,
                 showCursor = false,
-                waveform = createFakeWaveform(),
+                waveform = WaveFormSamples.realisticWaveForm,
                 time = 0.seconds,
                 playbackProgress = 0.0f
             ),
@@ -861,7 +871,7 @@ internal fun TextComposerVoiceNotEncryptedPreview() = ElementPreview {
                 isSending = false,
                 isPlaying = true,
                 showCursor = true,
-                waveform = createFakeWaveform(),
+                waveform = WaveFormSamples.realisticWaveForm,
                 time = 3.seconds,
                 playbackProgress = 0.2f
             ),
@@ -869,7 +879,7 @@ internal fun TextComposerVoiceNotEncryptedPreview() = ElementPreview {
                 isSending = true,
                 isPlaying = false,
                 showCursor = false,
-                waveform = createFakeWaveform(),
+                waveform = WaveFormSamples.realisticWaveForm,
                 time = 61.seconds,
                 playbackProgress = 0.0f
             ),

@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -16,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
+import io.element.android.compound.colors.SemanticColorsLightDark
 
 /**
  * Can be used to force a composable in dark theme.
@@ -23,6 +25,7 @@ import androidx.compose.ui.graphics.toArgb
  */
 @Composable
 fun ForcedDarkElementTheme(
+    colors: SemanticColorsLightDark,
     lightStatusBar: Boolean = false,
     content: @Composable () -> Unit,
 ) {
@@ -47,5 +50,11 @@ fun ForcedDarkElementTheme(
             )
         }
     }
-    ElementTheme(darkTheme = true, lightStatusBar = lightStatusBar, content = content)
+    ElementTheme(
+        darkTheme = true,
+        compoundLight = colors.light,
+        compoundDark = colors.dark,
+        lightStatusBar = lightStatusBar,
+        content = content,
+    )
 }

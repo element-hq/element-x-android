@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -47,7 +48,7 @@ fun RoomListInterface.loadingStateFlow(): Flow<RoomListLoadingState> =
         try {
             send(result.state)
         } catch (exception: Exception) {
-            Timber.d("loadingStateFlow() initialState failed.")
+            Timber.d(exception, "loadingStateFlow() initialState failed.")
         }
         result.stateStream
     }.catch {
@@ -65,7 +66,11 @@ internal fun RoomListInterface.entriesFlow(
                 trySendBlocking(roomEntriesUpdate)
             }
         }
-        val result = entriesWithDynamicAdapters(pageSize.toUInt(), listener)
+        val result = entriesWithDynamicAdaptersWith(
+            pageSize = pageSize.toUInt(),
+            enableLatestEventSorter = true,
+            listener = listener,
+        )
         val controller = result.controller()
         controller.setFilter(initialFilterKind)
         roomListDynamicEvents.onEach { controllerEvents ->

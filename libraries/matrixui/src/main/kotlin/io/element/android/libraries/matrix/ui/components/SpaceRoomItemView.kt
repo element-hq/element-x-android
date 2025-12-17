@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -10,6 +11,7 @@ package io.element.android.libraries.matrix.ui.components
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.IntrinsicSize
@@ -29,7 +31,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -54,7 +55,12 @@ import io.element.android.libraries.matrix.ui.model.icon
 import io.element.android.libraries.matrix.ui.model.label
 import io.element.android.libraries.ui.strings.CommonPlurals
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
+/**
+ * Figma reference: https://www.figma.com/design/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?node-id=3643-2079&m=dev
+ */
 @Composable
 fun SpaceRoomItemView(
     spaceRoom: SpaceRoom,
@@ -66,41 +72,58 @@ fun SpaceRoomItemView(
     trailingAction: @Composable (() -> Unit)? = null,
     bottomAction: @Composable (() -> Unit)? = null,
 ) {
-    SpaceRoomItemScaffold(
-        modifier = modifier,
-        avatarData = spaceRoom.getAvatarData(AvatarSize.SpaceListItem),
-        isSpace = spaceRoom.isSpace,
-        hideAvatars = hideAvatars,
-        onClick = onClick,
-        onLongClick = onLongClick,
-        trailingAction = trailingAction,
+    val clickModifier = Modifier
+        .combinedClickable(
+            onClick = onClick,
+            onLongClick = onLongClick,
+            onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
+            indication = ripple(),
+            interactionSource = remember { MutableInteractionSource() }
+        )
+        .onKeyboardContextMenuAction { onLongClick }
+    Column(
+        modifier = modifier
+            .then(clickModifier)
+            .padding(horizontal = 16.dp, vertical = 12.dp),
     ) {
-        NameAndIndicatorRow(
+        SpaceRoomItemScaffold(
+            avatarData = spaceRoom.getAvatarData(AvatarSize.SpaceListItem),
             isSpace = spaceRoom.isSpace,
-            name = spaceRoom.name,
-            showIndicator = showUnreadIndicator
-        )
-        Spacer(modifier = Modifier.height(1.dp))
-        SubtitleRow(
-            visibilityIcon = spaceRoom.visibilityIcon(),
-            subtitle = spaceRoom.subtitle()
-        )
-        Spacer(modifier = Modifier.height(1.dp))
-        val info = spaceRoom.info()
-        if (info.isNotBlank()) {
-            Text(
-                modifier = Modifier.weight(1f),
-                style = ElementTheme.typography.fontBodyMdRegular,
-                text = info,
-                fontStyle = FontStyle.Italic.takeIf { spaceRoom.name == null },
-                color = ElementTheme.colors.textSecondary,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
+            hideAvatars = hideAvatars,
+            heroes = spaceRoom.heroes
+                .map { hero -> hero.getAvatarData(AvatarSize.SpaceListItem) }
+                .toImmutableList(),
+            trailingAction = trailingAction,
+        ) {
+            NameAndIndicatorRow(
+                name = spaceRoom.displayName,
+                showIndicator = showUnreadIndicator
             )
+            Spacer(modifier = Modifier.height(1.dp))
+            SubtitleRow(
+                visibilityIcon = spaceRoom.visibilityIcon(),
+                subtitle = spaceRoom.subtitle()
+            )
+            Spacer(modifier = Modifier.height(1.dp))
+            val info = spaceRoom.info()
+            if (info.isNotBlank()) {
+                Text(
+                    modifier = Modifier.weight(1f),
+                    style = ElementTheme.typography.fontBodyMdRegular,
+                    text = info,
+                    color = ElementTheme.colors.textSecondary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
         }
         if (bottomAction != null) {
             Spacer(modifier = Modifier.height(12.dp))
-            bottomAction()
+            // Match the padding of the text content (avatar + spacer)
+            Box(modifier = Modifier.padding(start = AvatarSize.SpaceListItem.dp + 16.dp)) {
+                bottomAction()
+            }
+            Spacer(modifier = Modifier.height(4.dp))
         }
     }
 }
@@ -118,8 +141,8 @@ private fun SubtitleRow(
         if (visibilityIcon != null) {
             Icon(
                 modifier = Modifier
-                        .size(16.dp)
-                        .padding(end = 4.dp),
+                    .size(16.dp)
+                    .padding(end = 4.dp),
                 imageVector = visibilityIcon,
                 contentDescription = null,
                 tint = ElementTheme.colors.iconTertiary,
@@ -138,8 +161,7 @@ private fun SubtitleRow(
 
 @Composable
 private fun NameAndIndicatorRow(
-    isSpace: Boolean,
-    name: String?,
+    name: String,
     showIndicator: Boolean,
     modifier: Modifier = Modifier,
 ) {
@@ -151,8 +173,7 @@ private fun NameAndIndicatorRow(
         Text(
             modifier = Modifier.weight(1f),
             style = ElementTheme.typography.fontBodyLgMedium,
-            text = name ?: stringResource(id = if (isSpace) CommonStrings.common_no_space_name else CommonStrings.common_no_room_name),
-            fontStyle = FontStyle.Italic.takeIf { name == null },
+            text = name,
             color = ElementTheme.colors.textPrimary,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
@@ -169,32 +190,21 @@ private fun NameAndIndicatorRow(
 private fun SpaceRoomItemScaffold(
     avatarData: AvatarData,
     isSpace: Boolean,
-    onClick: () -> Unit,
-    onLongClick: () -> Unit,
+    heroes: ImmutableList<AvatarData>,
     hideAvatars: Boolean,
     modifier: Modifier = Modifier,
     trailingAction: @Composable (() -> Unit)? = null,
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    val clickModifier = Modifier
-            .combinedClickable(
-                    onClick = onClick,
-                    onLongClick = onLongClick,
-                    onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
-                    indication = ripple(),
-                    interactionSource = remember { MutableInteractionSource() }
-            )
-            .onKeyboardContextMenuAction { onLongClick }
     Row(
         modifier = modifier
-                .fillMaxWidth()
-                .then(clickModifier)
-                .padding(horizontal = 16.dp, vertical = 8.dp)
-                .height(IntrinsicSize.Min),
+            .fillMaxWidth()
+            .height(IntrinsicSize.Min),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
         Avatar(
             avatarData = avatarData,
-            avatarType = if (isSpace) AvatarType.Space() else AvatarType.Room(),
+            avatarType = if (isSpace) AvatarType.Space() else AvatarType.Room(heroes = heroes),
             hideImage = hideAvatars,
         )
         Spacer(modifier = Modifier.width(16.dp))
@@ -248,7 +258,6 @@ internal fun SpaceRoomItemViewPreview(@PreviewParameter(SpaceRoomProvider::class
         hideAvatars = false,
         onClick = {},
         onLongClick = {},
-        modifier = Modifier.fillMaxWidth(),
         bottomAction = if (spaceRoom.state == CurrentUserMembership.INVITED) {
             { InviteButtonsRowMolecule({}, {}) }
         } else {

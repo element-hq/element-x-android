@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -12,6 +13,7 @@ import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
@@ -38,11 +40,11 @@ class NotificationMapper(
                     isDirect = item.roomInfo.isDirect,
                     activeMembersCount = item.roomInfo.joinedMembersCount.toInt(),
                 )
+                val timestamp = item.timestamp() ?: clock.epochMillis()
                 NotificationData(
                     sessionId = sessionId,
                     eventId = eventId,
-                    // FIXME once the `NotificationItem` in the SDK returns the thread id
-                    threadId = null,
+                    threadId = item.threadId?.let(::ThreadId),
                     roomId = roomId,
                     senderAvatarUrl = item.senderInfo.avatarUrl,
                     senderDisplayName = item.senderInfo.displayName,
@@ -51,10 +53,11 @@ class NotificationMapper(
                     roomDisplayName = item.roomInfo.displayName,
                     isDirect = item.roomInfo.isDirect,
                     isDm = isDm,
+                    isSpace = item.roomInfo.isSpace,
                     isEncrypted = item.roomInfo.isEncrypted.orFalse(),
                     isNoisy = item.isNoisy.orFalse(),
-                    timestamp = item.timestamp() ?: clock.epochMillis(),
-                    content = item.event.use { notificationContentMapper.map(it) }.getOrThrow(),
+                    timestamp = timestamp,
+                    content = notificationContentMapper.map(item.event).getOrThrow(),
                     hasMention = item.hasMention.orFalse(),
                 )
             }

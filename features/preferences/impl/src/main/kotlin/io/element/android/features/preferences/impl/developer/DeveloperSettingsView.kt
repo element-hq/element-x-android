@@ -1,17 +1,20 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.preferences.impl.developer
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
@@ -21,6 +24,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.preferences.impl.R
 import io.element.android.features.preferences.impl.developer.tracing.LogLevelItem
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesView
+import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferenceDropdown
@@ -36,8 +40,11 @@ import io.element.android.libraries.featureflag.ui.FeatureListView
 import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
 import io.element.android.libraries.matrix.api.tracing.TraceLogPack
 import io.element.android.libraries.ui.strings.CommonStrings
-import kotlinx.collections.immutable.toPersistentList
+import io.mhssn.colorpicker.ColorPickerDialog
+import io.mhssn.colorpicker.ColorPickerType
+import kotlinx.collections.immutable.toImmutableList
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun DeveloperSettingsView(
     state: DeveloperSettingsState,
@@ -46,15 +53,25 @@ fun DeveloperSettingsView(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    if (state.showLoader) {
+        ProgressDialog()
+    }
+    BackHandler(
+        enabled = !state.showLoader,
+        onBack = onBackClick,
+    )
     PreferencePage(
         modifier = modifier,
-        onBackClick = onBackClick,
+        onBackClick = {
+            if (!state.showLoader) {
+                onBackClick()
+            }
+        },
         title = stringResource(id = CommonStrings.common_developer_options)
     ) {
         // Note: this is OK to hardcode strings in this debug screen.
         PreferenceCategory(
             title = "Feature flags",
-            showTopDivider = true,
         ) {
             FeatureListContent(state)
         }
@@ -66,7 +83,7 @@ fun DeveloperSettingsView(
                 title = "Tracing log level",
                 supportingText = "Requires app reboot",
                 selectedOption = state.tracingLogLevel.dataOrNull(),
-                options = LogLevelItem.entries.toPersistentList(),
+                options = LogLevelItem.entries.toImmutableList(),
                 onSelectOption = { logLevel ->
                     state.eventSink(DeveloperSettingsEvents.SetTracingLogLevel(logLevel))
                 }
@@ -99,7 +116,27 @@ fun DeveloperSettingsView(
         RageshakePreferencesView(
             state = state.rageshakeState,
         )
-        PreferenceCategory(title = "Crash", showTopDivider = false) {
+        if (state.isEnterpriseBuild) {
+            PreferenceCategory(title = "Theme") {
+                ListItem(
+                    headlineContent = {
+                        Text("Change brand color")
+                    },
+                    onClick = {
+                        state.eventSink(DeveloperSettingsEvents.SetShowColorPicker(true))
+                    }
+                )
+                ListItem(
+                    headlineContent = {
+                        Text("Reset brand color")
+                    },
+                    onClick = {
+                        state.eventSink(DeveloperSettingsEvents.ChangeBrandColor(null))
+                    }
+                )
+            }
+        }
+        PreferenceCategory(title = "Crash") {
             ListItem(
                 headlineContent = {
                     Text("Crash the app 💥")
@@ -108,7 +145,15 @@ fun DeveloperSettingsView(
             )
         }
         val cache = state.cacheSize
-        PreferenceCategory(title = "Cache", showTopDivider = false) {
+        PreferenceCategory(title = "Cache") {
+            ListItem(
+                headlineContent = {
+                    Text("Vacuum stores")
+                },
+                onClick = {
+                    state.eventSink(DeveloperSettingsEvents.VacuumStores)
+                }
+            )
             ListItem(
                 headlineContent = {
                     Text("Clear cache")
@@ -133,13 +178,25 @@ fun DeveloperSettingsView(
             )
         }
     }
+    ColorPickerDialog(
+        show = state.showColorPicker,
+        type = ColorPickerType.Classic(
+            showAlphaBar = false,
+        ),
+        onDismissRequest = {
+            state.eventSink(DeveloperSettingsEvents.SetShowColorPicker(false))
+        },
+        onPickedColor = {
+            state.eventSink(DeveloperSettingsEvents.ChangeBrandColor(it))
+        },
+    )
 }
 
 @Composable
 private fun ElementCallCategory(
     state: DeveloperSettingsState,
 ) {
-    PreferenceCategory(title = "Element Call", showTopDivider = true) {
+    PreferenceCategory(title = "Element Call") {
         val callUrlState = state.customElementCallBaseUrlState
 
         val supportingText = if (callUrlState.baseUrl.isNullOrEmpty()) {
@@ -189,7 +246,9 @@ private fun FeatureListContent(
 
 @PreviewsDayNight
 @Composable
-internal fun DeveloperSettingsViewPreview(@PreviewParameter(DeveloperSettingsStateProvider::class) state: DeveloperSettingsState) = ElementPreview {
+internal fun DeveloperSettingsViewPreview(
+    @PreviewParameter(DeveloperSettingsStateProvider::class) state: DeveloperSettingsState
+) = ElementPreview {
     DeveloperSettingsView(
         state = state,
         onOpenShowkase = {},

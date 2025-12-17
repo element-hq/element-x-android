@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -31,6 +32,7 @@ interface NotificationSettingsService {
     suspend fun setCallEnabled(enabled: Boolean): Result<Unit>
     suspend fun isInviteForMeEnabled(): Result<Boolean>
     suspend fun setInviteForMeEnabled(enabled: Boolean): Result<Unit>
-    suspend fun getRoomsWithUserDefinedRules(): Result<List<String>>
+    suspend fun getRoomsWithUserDefinedRules(): Result<List<RoomId>>
     suspend fun canHomeServerPushEncryptedEventsToDevice(): Result<Boolean>
+    suspend fun getRawPushRules(): Result<String?>
 }

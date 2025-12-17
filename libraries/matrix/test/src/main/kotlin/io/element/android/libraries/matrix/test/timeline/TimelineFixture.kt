@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -26,7 +27,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
-import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
 import io.element.android.libraries.matrix.api.timeline.item.event.SendHandleProvider
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
@@ -52,7 +53,7 @@ fun anEventTimelineItem(
     reactions: ImmutableList<EventReaction> = persistentListOf(),
     receipts: ImmutableList<Receipt> = persistentListOf(),
     sender: UserId = A_USER_ID,
-    senderProfile: ProfileTimelineDetails = aProfileTimelineDetails(),
+    senderProfile: ProfileDetails = aProfileDetails(),
     timestamp: Long = 0L,
     content: EventContent = aProfileChangeMessageContent(),
     debugInfoProvider: TimelineItemDebugInfoProvider = TimelineItemDebugInfoProvider { aTimelineItemDebugInfo() },
@@ -78,11 +79,11 @@ fun anEventTimelineItem(
     sendHandleProvider = sendHandleProvider,
 )
 
-fun aProfileTimelineDetails(
+fun aProfileDetails(
     displayName: String? = A_USER_NAME,
     displayNameAmbiguous: Boolean = false,
     avatarUrl: String? = null
-): ProfileTimelineDetails = ProfileTimelineDetails.Ready(
+): ProfileDetails = ProfileDetails.Ready(
     displayName = displayName,
     displayNameAmbiguous = displayNameAmbiguous,
     avatarUrl = avatarUrl,

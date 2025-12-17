@@ -1,14 +1,13 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.messages.impl.timeline
 
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
 import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
@@ -34,6 +33,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.asEventId
+import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
@@ -54,16 +54,19 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomMember
+import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
+import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.assert
+import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
@@ -95,9 +98,7 @@ class TimelinePresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val presenter = createTimelinePresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.timelineItems).isEmpty()
             assertThat(initialState.isLive).isTrue()
@@ -116,9 +117,7 @@ class TimelinePresenterTest {
             this.paginateLambda = paginateLambda
         }
         val presenter = createTimelinePresenter(timeline = timeline)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             initialState.eventSink.invoke(TimelineEvents.LoadMore(Timeline.PaginationDirection.BACKWARDS))
             initialState.eventSink.invoke(TimelineEvents.LoadMore(Timeline.PaginationDirection.FORWARDS))
@@ -151,20 +150,19 @@ class TimelinePresenterTest {
         isSendPublicReadReceiptsEnabled: Boolean,
         expectedReceiptType: ReceiptType,
     ) = runTest(StandardTestDispatcher()) {
+        val markAsReadResult = lambdaRecorder<ReceiptType, Result<Unit>> { Result.success(Unit) }
+        val sendReadReceiptLambda = lambdaRecorder<EventId, ReceiptType, Result<Unit>> { _, _ -> Result.success(Unit) }
         val timeline = FakeTimeline(
             timelineItems = flowOf(
                 listOf(
                     MatrixTimelineItem.Event(A_UNIQUE_ID, anEventTimelineItem())
                 )
-            )
+            ),
+            markAsReadResult = markAsReadResult,
+            sendReadReceiptLambda = sendReadReceiptLambda,
         )
-        val markAsReadResult = lambdaRecorder<ReceiptType, Result<Unit>> { Result.success(Unit) }
         val room = FakeJoinedRoom(
             liveTimeline = timeline,
-            baseRoom = FakeBaseRoom(
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
-                markAsReadResult = markAsReadResult,
-            )
         )
         val sessionPreferencesStore = InMemorySessionPreferencesStore(isSendPublicReadReceiptsEnabled = isSendPublicReadReceiptsEnabled)
         val presenter = createTimelinePresenter(
@@ -172,9 +170,7 @@ class TimelinePresenterTest {
             room = room,
             sessionPreferencesStore = sessionPreferencesStore,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(0))
             runCurrent()
@@ -183,25 +179,6 @@ class TimelinePresenterTest {
                 .with(value(expectedReceiptType))
             cancelAndIgnoreRemainingEvents()
         }
-    }
-
-    @Test
-    fun `present - once presenter is disposed, room is marked as fully read`() = runTest {
-        val invokeResult = lambdaRecorder<RoomId, Unit> { }
-        val presenter = createTimelinePresenter(
-            room = FakeJoinedRoom(
-                baseRoom = FakeBaseRoom(
-                    canUserSendMessageResult = { _, _ -> Result.success(true) },
-                )
-            ),
-            markAsFullyRead = FakeMarkAsFullyRead(
-                invokeResult = invokeResult,
-            )
-        )
-        presenter.test {
-            awaitFirstItem()
-        }
-        invokeResult.assertions().isCalledOnce().with(value(A_ROOM_ID))
     }
 
     @Test
@@ -226,9 +203,7 @@ class TimelinePresenterTest {
             this.sendReadReceiptLambda = sendReadReceiptsLambda
         }
         val presenter = createTimelinePresenter(timeline)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(1)
             awaitItem().run {
                 eventSink.invoke(TimelineEvents.OnScrollFinished(1))
@@ -258,18 +233,16 @@ class TimelinePresenterTest {
                         )
                     )
                 )
-            )
-        ).apply {
-            this.sendReadReceiptLambda = sendReadReceiptsLambda
-        }
+            ),
+            markAsReadResult = { Result.success(Unit) },
+            sendReadReceiptLambda = sendReadReceiptsLambda,
+        )
         val sessionPreferencesStore = InMemorySessionPreferencesStore(isSendPublicReadReceiptsEnabled = false)
         val presenter = createTimelinePresenter(
             timeline = timeline,
             sessionPreferencesStore = sessionPreferencesStore,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(1)
             awaitItem().run {
                 eventSink.invoke(TimelineEvents.OnScrollFinished(0))
@@ -305,9 +278,7 @@ class TimelinePresenterTest {
             this.sendReadReceiptLambda = sendReadReceiptsLambda
         }
         val presenter = createTimelinePresenter(timeline)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(1)
             awaitItem().run {
                 eventSink.invoke(TimelineEvents.OnScrollFinished(1))
@@ -335,9 +306,7 @@ class TimelinePresenterTest {
             this.sendReadReceiptLambda = sendReadReceiptsLambda
         }
         val presenter = createTimelinePresenter(timeline)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(1)
             val initialState = awaitFirstItem()
             initialState.eventSink.invoke(TimelineEvents.OnScrollFinished(1))
@@ -349,11 +318,12 @@ class TimelinePresenterTest {
     @Test
     fun `present - covers newEventState scenarios`() = runTest {
         val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
-        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val timeline = FakeTimeline(
+            timelineItems = timelineItems,
+            markAsReadResult = { Result.success(Unit) },
+        )
         val presenter = createTimelinePresenter(timeline)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.newEventState).isEqualTo(NewEventState.None)
             assertThat(initialState.timelineItems.size).isEqualTo(0)
@@ -402,9 +372,7 @@ class TimelinePresenterTest {
             timelineItems = timelineItems,
         )
         val presenter = createTimelinePresenter(timeline)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.newEventState).isEqualTo(NewEventState.None)
             assertThat(initialState.timelineItems.size).isEqualTo(0)
@@ -458,9 +426,7 @@ class TimelinePresenterTest {
         val presenter = createTimelinePresenter(
             sendPollResponseAction = sendPollResponseAction,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink.invoke(TimelineEvents.SelectPollAnswer(AN_EVENT_ID, "anAnswerId"))
         }
@@ -474,9 +440,7 @@ class TimelinePresenterTest {
         val presenter = createTimelinePresenter(
             endPollAction = endPollAction,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink.invoke(TimelineEvents.EndPoll(AN_EVENT_ID))
         }
@@ -493,9 +457,7 @@ class TimelinePresenterTest {
         val presenter = createTimelinePresenter(
             messagesNavigator = navigator,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             awaitFirstItem().eventSink(TimelineEvents.EditPoll(AN_EVENT_ID))
             onEditPollClickLambda.assertions().isCalledOnce().with(value(AN_EVENT_ID))
         }
@@ -512,9 +474,7 @@ class TimelinePresenterTest {
             ),
             redactedVoiceMessageManager = redactedVoiceMessageManager,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             assertThat(redactedVoiceMessageManager.invocations.size).isEqualTo(0)
             skipItems(2)
             assertThat(redactedVoiceMessageManager.invocations.size).isEqualTo(1)
@@ -540,16 +500,14 @@ class TimelinePresenterTest {
             liveTimeline = liveTimeline,
             createTimelineResult = { Result.success(detachedTimeline) },
             baseRoom = FakeBaseRoom(
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
+                roomPermissions = roomPermissions(),
                 threadRootIdForEventResult = { _ -> Result.success(null) },
             ),
         )
         val presenter = createTimelinePresenter(
             room = room,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink.invoke(TimelineEvents.FocusOnEvent(AN_EVENT_ID))
             awaitItem().also { state ->
@@ -577,9 +535,7 @@ class TimelinePresenterTest {
 
     @Test
     fun `present - focus on known event retrieves the event from cache`() = runTest {
-        val timelineItemIndexer = TimelineItemIndexer().apply {
-            process(listOf(aMessageEvent(eventId = AN_EVENT_ID)))
-        }
+        val timelineItemIndexer = TimelineItemIndexer()
         val presenter = createTimelinePresenter(
             room = FakeJoinedRoom(
                 liveTimeline = FakeTimeline(
@@ -592,15 +548,25 @@ class TimelinePresenterTest {
                         )
                     )
                 ),
-                baseRoom = FakeBaseRoom(canUserSendMessageResult = { _, _ -> Result.success(true) }),
+                baseRoom = FakeBaseRoom(
+                    roomPermissions = roomPermissions(),
+                    threadRootIdForEventResult = { Result.success(null) },
+                ),
             ),
             timelineItemIndexer = timelineItemIndexer,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
+
+            advanceUntilIdle()
+
+            // Pre-populate the indexer after the first items have been retrieved
+            timelineItemIndexer.process(listOf(aMessageEvent(eventId = AN_EVENT_ID)))
+
             initialState.eventSink.invoke(TimelineEvents.FocusOnEvent(AN_EVENT_ID))
+
+            advanceUntilIdle()
+
             awaitItem().also { state ->
                 assertThat(state.focusedEventId).isEqualTo(AN_EVENT_ID)
                 assertThat(state.focusRequestState).isEqualTo(FocusRequestState.Requested(AN_EVENT_ID, Duration.ZERO))
@@ -621,14 +587,12 @@ class TimelinePresenterTest {
                 ),
                 createTimelineResult = { Result.failure(RuntimeException("An error")) },
                 baseRoom = FakeBaseRoom(
-                    canUserSendMessageResult = { _, _ -> Result.success(true) },
+                    roomPermissions = roomPermissions(),
                     threadRootIdForEventResult = { _ -> Result.success(null) },
                 ),
             )
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink(TimelineEvents.FocusOnEvent(AN_EVENT_ID))
             awaitItem().also { state ->
@@ -670,7 +634,7 @@ class TimelinePresenterTest {
             liveTimeline = liveTimeline,
             createTimelineResult = { Result.success(detachedTimeline) },
             baseRoom = FakeBaseRoom(
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
+                roomPermissions = roomPermissions(),
                 threadRootIdForEventResult = { _ -> Result.success(threadId) },
             ),
         )
@@ -681,9 +645,7 @@ class TimelinePresenterTest {
             timeline = liveTimeline,
             messagesNavigator = navigator,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink.invoke(TimelineEvents.FocusOnEvent(AN_EVENT_ID))
 
@@ -731,7 +693,7 @@ class TimelinePresenterTest {
             liveTimeline = liveTimeline,
             createTimelineResult = { Result.success(detachedTimeline) },
             baseRoom = FakeBaseRoom(
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
+                roomPermissions = roomPermissions(),
                 threadRootIdForEventResult = { _ -> Result.success(threadId) },
             ),
         )
@@ -742,9 +704,7 @@ class TimelinePresenterTest {
             timeline = liveTimeline,
             messagesNavigator = navigator,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink.invoke(TimelineEvents.FocusOnEvent(AN_EVENT_ID))
 
@@ -787,7 +747,7 @@ class TimelinePresenterTest {
             liveTimeline = liveTimeline,
             createTimelineResult = { Result.success(detachedTimeline) },
             baseRoom = FakeBaseRoom(
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
+                roomPermissions = roomPermissions(),
                 // Use a different thread id
                 threadRootIdForEventResult = { _ -> Result.success(A_THREAD_ID_2) },
             ),
@@ -799,9 +759,7 @@ class TimelinePresenterTest {
             timeline = liveTimeline,
             messagesNavigator = navigator,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink.invoke(TimelineEvents.FocusOnEvent(AN_EVENT_ID))
 
@@ -848,7 +806,7 @@ class TimelinePresenterTest {
             liveTimeline = liveTimeline,
             createTimelineResult = { Result.success(detachedTimeline) },
             baseRoom = FakeBaseRoom(
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
+                roomPermissions = roomPermissions(),
                 // The event is in the main timeline, not in a thread
                 threadRootIdForEventResult = { _ -> Result.success(null) },
             ),
@@ -860,9 +818,7 @@ class TimelinePresenterTest {
             timeline = liveTimeline,
             messagesNavigator = navigator,
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             initialState.eventSink.invoke(TimelineEvents.FocusOnEvent(AN_EVENT_ID))
 
@@ -893,9 +849,7 @@ class TimelinePresenterTest {
     fun `present - show shield hide shield`() = runTest {
         val presenter = createTimelinePresenter()
         val shield = aCriticalShield()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.messageShield).isNull()
             initialState.eventSink(TimelineEvents.ShowShieldDialog(shield))
@@ -931,7 +885,9 @@ class TimelinePresenterTest {
         )
         val room = FakeJoinedRoom(
             liveTimeline = timeline,
-            baseRoom = FakeBaseRoom(canUserSendMessageResult = { _, _ -> Result.success(true) }),
+            baseRoom = FakeBaseRoom(
+                roomPermissions = roomPermissions(),
+            ),
         ).apply {
             givenRoomMembersState(RoomMembersState.Unknown)
         }
@@ -939,9 +895,7 @@ class TimelinePresenterTest {
         val avatarUrl = "https://domain.com/avatar.jpg"
 
         val presenter = createTimelinePresenter(timeline, room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = consumeItemsUntilPredicate(30.seconds) { it.timelineItems.isNotEmpty() }.last()
             val event = initialState.timelineItems.first() as TimelineItem.Event
             assertThat(event.senderAvatar.url).isNull()
@@ -965,15 +919,13 @@ class TimelinePresenterTest {
 
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
+                roomPermissions = roomPermissions(),
                 predecessorRoomResult = { predecessorRoom }
             ),
         )
 
         val presenter = createTimelinePresenter(room = room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.timelineRoomInfo.predecessorRoom).isNotNull()
             assertThat(initialState.timelineRoomInfo.predecessorRoom?.roomId).isEqualTo(predecessorRoomId)
@@ -984,14 +936,12 @@ class TimelinePresenterTest {
     fun `present - timeline room info no predecessor`() = runTest {
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
+                roomPermissions = roomPermissions(),
                 predecessorRoomResult = { null }
             ),
         )
         val presenter = createTimelinePresenter(room = room)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.timelineRoomInfo.predecessorRoom).isNull()
         }
@@ -1001,7 +951,7 @@ class TimelinePresenterTest {
     fun `present - timeline event navigate to room`() = runTest {
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                canUserSendMessageResult = { _, _ -> Result.success(true) },
+                roomPermissions = roomPermissions(),
             ),
         )
         val onNavigateToRoomLambda = lambdaRecorder<RoomId, EventId?, List<String>, Unit> { _, _, _ -> }
@@ -1027,11 +977,32 @@ class TimelinePresenterTest {
         return awaitItem()
     }
 
+    private fun roomPermissions(
+        canRedactOther: Boolean = false,
+        canRedactOwn: Boolean = true,
+        canSendMessage: Boolean = true,
+        canSendReaction: Boolean = true,
+        canPinUnpin: Boolean = false,
+    ) = FakeRoomPermissions(
+        canSendMessage = { type ->
+            when (type) {
+                MessageEventType.RoomMessage -> canSendMessage
+                MessageEventType.Reaction -> canSendReaction
+                else -> lambdaError()
+            }
+        },
+        canRedactOther = canRedactOther,
+        canRedactOwn = canRedactOwn,
+        canPinUnpin = canPinUnpin,
+    )
+
     private fun TestScope.createTimelinePresenter(
         timeline: Timeline = FakeTimeline(),
         room: FakeJoinedRoom = FakeJoinedRoom(
             liveTimeline = timeline,
-            baseRoom = FakeBaseRoom(canUserSendMessageResult = { _, _ -> Result.success(true) }),
+            baseRoom = FakeBaseRoom(
+                roomPermissions = roomPermissions(),
+            ),
         ),
         redactedVoiceMessageManager: RedactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
         messagesNavigator: FakeMessagesNavigator = FakeMessagesNavigator(),
@@ -1039,7 +1010,6 @@ class TimelinePresenterTest {
         sendPollResponseAction: SendPollResponseAction = FakeSendPollResponseAction(),
         sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
         timelineItemIndexer: TimelineItemIndexer = TimelineItemIndexer(),
-        markAsFullyRead: MarkAsFullyRead = FakeMarkAsFullyRead(),
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
     ): TimelinePresenter {
         return TimelinePresenter(
@@ -1057,8 +1027,8 @@ class TimelinePresenterTest {
             resolveVerifiedUserSendFailurePresenter = { aResolveVerifiedUserSendFailureState() },
             typingNotificationPresenter = { aTypingNotificationState() },
             roomCallStatePresenter = { aStandByCallState() },
-            markAsFullyRead = markAsFullyRead,
             featureFlagService = featureFlagService,
+            analyticsService = FakeAnalyticsService(),
         )
     }
 }

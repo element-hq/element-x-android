@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -18,6 +19,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
@@ -60,6 +62,7 @@ import kotlinx.collections.immutable.ImmutableList
 fun RoomListContentView(
     contentState: RoomListContentState,
     filtersState: RoomListFiltersState,
+    lazyListState: LazyListState,
     hideInvitesAvatars: Boolean,
     eventSink: (RoomListEvents) -> Unit,
     onSetUpRecoveryClick: () -> Unit,
@@ -97,6 +100,7 @@ fun RoomListContentView(
                 onSetUpRecoveryClick = onSetUpRecoveryClick,
                 onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
                 onRoomClick = onRoomClick,
+                lazyListState = lazyListState,
                 contentPadding = contentPadding,
             )
         }
@@ -176,6 +180,7 @@ private fun RoomsView(
     onConfirmRecoveryKeyClick: () -> Unit,
     onRoomClick: (RoomListRoomSummary) -> Unit,
     contentPadding: PaddingValues,
+    lazyListState: LazyListState,
     modifier: Modifier = Modifier,
 ) {
     if (state.summaries.isEmpty() && filtersState.hasAnyFilterSelected) {
@@ -192,6 +197,7 @@ private fun RoomsView(
             onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
             onRoomClick = onRoomClick,
             contentPadding = contentPadding,
+            lazyListState = lazyListState,
             modifier = modifier.fillMaxSize(),
         )
     }
@@ -206,9 +212,9 @@ private fun RoomsViewList(
     onConfirmRecoveryKeyClick: () -> Unit,
     onRoomClick: (RoomListRoomSummary) -> Unit,
     contentPadding: PaddingValues,
+    lazyListState: LazyListState,
     modifier: Modifier = Modifier,
 ) {
-    val lazyListState = rememberLazyListState()
     val visibleRange by remember {
         derivedStateOf {
             val layoutInfo = lazyListState.layoutInfo
@@ -343,6 +349,7 @@ internal fun RoomListContentViewPreview(@PreviewParameter(RoomListContentStatePr
         onConfirmRecoveryKeyClick = {},
         onRoomClick = {},
         onCreateRoomClick = {},
+        lazyListState = rememberLazyListState(),
         contentPadding = PaddingValues(0.dp),
     )
 }

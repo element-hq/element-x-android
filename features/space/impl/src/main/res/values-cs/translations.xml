@@ -7,5 +7,11 @@
     <item quantity="other">"Opustit %1$d místností a prostor"</item>
   </plurals>
   <string name="screen_leave_space_subtitle">"Tím budete také odstraněni ze všech místností v tomto prostoru."</string>
+  <string name="screen_leave_space_subtitle_last_admin">"Než budete moci odejít, musíte pro tento prostor přiřadit jiného správce."</string>
+  <string name="screen_leave_space_subtitle_only_last_admin">"Z následujících místností nebudete odstraněni, protože jste jediným administrátorem:"</string>
   <string name="screen_leave_space_title">"Opustit %1$s?"</string>
+  <string name="screen_leave_space_title_last_admin">"Jste jediným administrátorem pro %1$s"</string>
+  <string name="screen_space_settings_leave_space">"Opustit prostor"</string>
+  <string name="screen_space_settings_roles_and_permissions">"Role a oprávnění"</string>
+  <string name="screen_space_settings_security_and_privacy">"Zabezpečení a soukromí"</string>
 </resources>

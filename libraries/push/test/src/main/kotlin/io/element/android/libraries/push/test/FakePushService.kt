@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -9,6 +10,7 @@ package io.element.android.libraries.push.test
 
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.push.api.history.PushHistoryItem
 import io.element.android.libraries.pushproviders.api.Distributor
@@ -19,19 +21,21 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class FakePushService(
-    private val testPushBlock: suspend () -> Boolean = { true },
+    private val testPushBlock: suspend (SessionId) -> Boolean = { true },
     private val availablePushProviders: List<PushProvider> = emptyList(),
-    private val registerWithLambda: suspend (MatrixClient, PushProvider, Distributor) -> Result<Unit> = { _, _, _ ->
+    private val registerWithLambda: (MatrixClient, PushProvider, Distributor) -> Result<Unit> = { _, _, _ ->
         Result.success(Unit)
     },
-    private val currentPushProvider: () -> PushProvider? = { availablePushProviders.firstOrNull() },
+    private val currentPushProvider: (SessionId) -> PushProvider? = { availablePushProviders.firstOrNull() },
     private val selectPushProviderLambda: suspend (SessionId, PushProvider) -> Unit = { _, _ -> lambdaError() },
     private val setIgnoreRegistrationErrorLambda: (SessionId, Boolean) -> Unit = { _, _ -> lambdaError() },
     private val resetPushHistoryResult: () -> Unit = { lambdaError() },
     private val resetBatteryOptimizationStateResult: () -> Unit = { lambdaError() },
+    private val onServiceUnregisteredResult: (UserId) -> Unit = { lambdaError() },
+    private val ensurePusherIsRegisteredResult: () -> Result<Unit> = { lambdaError() },
 ) : PushService {
-    override suspend fun getCurrentPushProvider(): PushProvider? {
-        return registeredPushProvider ?: currentPushProvider()
+    override suspend fun getCurrentPushProvider(sessionId: SessionId): PushProvider? {
+        return registeredPushProvider ?: currentPushProvider(sessionId)
     }
 
     override fun getAvailablePushProviders(): List<PushProvider> {
@@ -53,6 +57,10 @@ class FakePushService(
             }
     }
 
+    override suspend fun ensurePusherIsRegistered(matrixClient: MatrixClient): Result<Unit> {
+        return ensurePusherIsRegisteredResult()
+    }
+
     override suspend fun selectPushProvider(sessionId: SessionId, pushProvider: PushProvider) {
         selectPushProviderLambda(sessionId, pushProvider)
     }
@@ -68,8 +76,8 @@ class FakePushService(
         setIgnoreRegistrationErrorLambda(sessionId, ignore)
     }
 
-    override suspend fun testPush(): Boolean = simulateLongTask {
-        testPushBlock()
+    override suspend fun testPush(sessionId: SessionId): Boolean = simulateLongTask {
+        testPushBlock(sessionId)
     }
 
     private val pushHistoryItemsFlow = MutableStateFlow<List<PushHistoryItem>>(emptyList())
@@ -96,5 +104,9 @@ class FakePushService(
 
     override suspend fun resetBatteryOptimizationState() {
         resetBatteryOptimizationStateResult()
+    }
+
+    override suspend fun onServiceUnregistered(userId: UserId) {
+        onServiceUnregisteredResult(userId)
     }
 }

@@ -11,13 +11,14 @@
   <string name="screen_identity_use_another_device">"Defnyddiwch ddyfais arall"</string>
   <string name="screen_identity_waiting_on_other_device">"Yn aros ar ddyfais arall…"</string>
   <string name="screen_session_verification_cancelled_subtitle">"Mae rhywbeth i weld o\'i le. Naill ai daeth y cais i ben neu cafodd y cais ei wrthod."</string>
-  <string name="screen_session_verification_compare_emojis_subtitle">"Cadarnhewch fod yr emojis isod yn cyd-fynd â\'r rhai sy\'n cael eu dangos ar eich sesiwn arall."</string>
+  <string name="screen_session_verification_compare_emojis_subtitle">"Cadarnhewch fod yr emojis isod yn cyd-fynd â\'r rhai sy\'n cael eu dangos ar eich dyfais arall."</string>
   <string name="screen_session_verification_compare_emojis_title">"Cymharwch emojis"</string>
   <string name="screen_session_verification_compare_emojis_user_subtitle">"Cadarnhewch fod yr emojis isod yn cyd-fynd â\'r rhai sy\'n cael eu dangos ar ddyfais y defnyddiwr arall."</string>
   <string name="screen_session_verification_compare_numbers_subtitle">"Cadarnhewch fod y rhifau isod yn cyfateb i\'r rhai sy\'n cael eu dangos ar eich sesiwn arall."</string>
   <string name="screen_session_verification_compare_numbers_title">"Cymharwch rifau"</string>
-  <string name="screen_session_verification_complete_subtitle">"Mae eich sesiwn newydd bellach wedi\'i dilysu. Mae ganddo fynediad i\'ch negeseuon wedi\'u hamgryptio, a bydd defnyddwyr eraill yn ei ystyried yn rhai y mae modd ymddiried ynddyn nhw."</string>
+  <string name="screen_session_verification_complete_subtitle">"Nawr gallwch chi ddarllen neu anfon negeseuon yn ddiogel ar eich dyfais arall."</string>
   <string name="screen_session_verification_complete_user_subtitle">"Nawr gallwch ymddiried yn hunaniaeth y defnyddiwr hwn wrth anfon neu dderbyn negeseuon."</string>
+  <string name="screen_session_verification_device_verified">"Dyfais wedi\'i dilysu"</string>
   <string name="screen_session_verification_enter_recovery_key">"Rhowch eich allwedd adfer"</string>
   <string name="screen_session_verification_failed_subtitle">"Naill ai daeth y cais i ben, gwrthodwyd y cais, neu roedd diffyg cyfatebiaeth dilysu."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Profwch mai chi sydd yno i gael mynediad at eich hanes negeseuon wedi\'u hamgryptio."</string>
@@ -44,7 +45,7 @@
   <string name="screen_session_verification_user_responder_subtitle">"Er mwyn diogelwch ychwanegol, mae defnyddiwr arall eisiau gwirio pwy ydych chi. Bydd set o emojis yn cael eu dangos i chi eu cymharu."</string>
   <string name="screen_session_verification_waiting_another_device_subtitle">"Dylech weld llamlen ar y ddyfais arall. Dechreuwch y dilysiad o\'r fan honno nawr."</string>
   <string name="screen_session_verification_waiting_another_device_title">"Cychwyn dilysu ar y ddyfais arall"</string>
-  <string name="screen_session_verification_waiting_other_device_title">"Yn aros am eich dyfais arall"</string>
+  <string name="screen_session_verification_waiting_other_device_title">"Cychwyn dilysu ar y ddyfais arall"</string>
   <string name="screen_session_verification_waiting_other_user_title">"Yn aros am y defnyddiwr arall"</string>
   <string name="screen_session_verification_waiting_subtitle">"Unwaith y byddwch wedi\'ch derbyn, byddwch yn gallu parhau â\'r dilysu."</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Derbyniwch y cais i gychwyn y broses ddilysu yn eich sesiwn arall i barhau."</string>

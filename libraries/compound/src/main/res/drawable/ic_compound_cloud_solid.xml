@@ -4,7 +4,7 @@
     android:autoMirrored="true"
     android:viewportWidth="24"
     android:viewportHeight="24">
-    <path
-        android:fillColor="#FF000000"
-        android:pathData="M7 20a5 5 0 0 1-0.98-9.9A5.5 5.5 0 0 1 15.75 7H16a4 4 0 0 1 3.94 4.72A4.5 4.5 0 0 1 18 19.97V20z"/>
+  <path
+      android:pathData="M7,20a5,5 0,0 1,-0.985 -9.903,5.5 5.5,0 0,1 9.734,-3.09Q15.874,7.002 16,7a4,4 0,0 1,3.936 4.716A4.5,4.5 0,0 1,18 19.973V20z"
+      android:fillColor="#FF000000"/>
 </vector>

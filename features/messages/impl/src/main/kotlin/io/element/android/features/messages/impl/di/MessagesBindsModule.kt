@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -10,6 +11,8 @@ package io.element.android.features.messages.impl.di
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.ContributesTo
+import io.element.android.features.messages.impl.crypto.historyvisible.HistoryVisibleState
+import io.element.android.features.messages.impl.crypto.historyvisible.HistoryVisibleStatePresenter
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeState
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeStatePresenter
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailurePresenter
@@ -60,4 +63,7 @@ interface MessagesBindsModule {
 
     @Binds
     fun bindIdentityChangeStatePresenter(presenter: IdentityChangeStatePresenter): Presenter<IdentityChangeState>
+
+    @Binds
+    fun bindHistoryVisibleStatePresenter(presenter: HistoryVisibleStatePresenter): Presenter<HistoryVisibleState>
 }

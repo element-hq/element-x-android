@@ -16,8 +16,9 @@
   <string name="screen_session_verification_compare_emojis_user_subtitle">"Vahvista, että alla olevat hymiöt vastaavat toisen käyttäjän laitteessa näkyviä hymiöitä."</string>
   <string name="screen_session_verification_compare_numbers_subtitle">"Varmista, että alla olevat numerot vastaavat toisessa istunnossa näkyviä numeroita."</string>
   <string name="screen_session_verification_compare_numbers_title">"Vertaa numeroita"</string>
-  <string name="screen_session_verification_complete_subtitle">"Uusi kirjautumisesi on nyt vahvistettu. Sillä on pääsy salattuihin viesteihisi, ja muut käyttäjät näkevät sen luotettuna."</string>
+  <string name="screen_session_verification_complete_subtitle">"Nyt voit lukea tai lähettää viestejä turvallisesti toisella laitteellasi."</string>
   <string name="screen_session_verification_complete_user_subtitle">"Nyt voit luottaa tämän käyttäjän identiteettiin, kun lähetät tai vastaanotat viestejä."</string>
+  <string name="screen_session_verification_device_verified">"Laite vahvistettu"</string>
   <string name="screen_session_verification_enter_recovery_key">"Syötä palautusavain"</string>
   <string name="screen_session_verification_failed_subtitle">"Joko pyyntö aikakatkaistiin, pyyntö hylättiin tai vahvistus ei täsmännyt."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Vahvista, että se olet sinä, jotta näet aiemmat salatut viestisi."</string>
@@ -44,7 +45,7 @@
   <string name="screen_session_verification_user_responder_subtitle">"Toinen käyttäjä haluaa vahvistaa identiteettisi turvallisuuden lisäämiseksi. Sinulle näytetään joukko emojeja vertailtavaksi."</string>
   <string name="screen_session_verification_waiting_another_device_subtitle">"Sinun pitäisi nähdä ponnahdusikkuna toisessa laitteessa. Aloita vahvistus nyt sieltä."</string>
   <string name="screen_session_verification_waiting_another_device_title">"Aloita vahvistus toisella laitteella"</string>
-  <string name="screen_session_verification_waiting_other_device_title">"Odotetaan toista laitetta"</string>
+  <string name="screen_session_verification_waiting_other_device_title">"Aloita vahvistus toisella laitteella"</string>
   <string name="screen_session_verification_waiting_other_user_title">"Odotetaan toista käyttäjää"</string>
   <string name="screen_session_verification_waiting_subtitle">"Kun pyyntö on hyväksytty, voit jatkaa vahvistusta."</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Hyväksy vahvistuspyyntö toisella laitteella jatkaaksesi."</string>

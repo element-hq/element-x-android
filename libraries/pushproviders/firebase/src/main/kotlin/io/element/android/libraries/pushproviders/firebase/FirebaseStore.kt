@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -11,7 +12,6 @@ import android.content.SharedPreferences
 import androidx.core.content.edit
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.onCompletion
@@ -27,7 +27,6 @@ interface FirebaseStore {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class SharedPreferencesFirebaseStore(
     private val sharedPreferences: SharedPreferences,
 ) : FirebaseStore {
@@ -41,7 +40,7 @@ class SharedPreferencesFirebaseStore(
             if (k == PREFS_KEY_FCM_TOKEN) {
                 try {
                     flow.value = getFcmToken()
-                } catch (e: Exception) {
+                } catch (_: Exception) {
                     flow.value = null
                 }
             }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_space_announcement_item1">"دیدن فضاهایی که ساخته یا پیوسته‌اید"</string>
+  <string name="screen_space_announcement_item2">"پذیرش یا رد دعوت‌ها به فضاها"</string>
+  <string name="screen_space_announcement_item3">"کشف تمامی اتاق‌هایی که می‌توانید در فضاهایتان بپیوندید"</string>
+  <string name="screen_space_announcement_item4">"پیوستن به فضاهای عمومی"</string>
+  <string name="screen_space_announcement_item5">"ترک هر فضایی که پیوسته‌اید"</string>
+  <string name="screen_space_announcement_notice">"پالایش، ایجاد و مدیریت کردن فضاها به زودی."</string>
+  <string name="screen_space_announcement_subtitle">"به نگارش آزمایشی فضاها خوش آمدید! در این نگارش می‌توانید:"</string>
+  <string name="screen_space_announcement_title">"معرّفی فضاها"</string>
+</resources>

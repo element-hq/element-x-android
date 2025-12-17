@@ -16,6 +16,7 @@
   <string name="screen_session_verification_compare_numbers_subtitle">"Bevestig dat de onderstaande cijfers overeenkomen met de cijfers die worden weergegeven in je andere sessie."</string>
   <string name="screen_session_verification_compare_numbers_title">"Vergelijk getallen"</string>
   <string name="screen_session_verification_complete_subtitle">"Je nieuwe sessie is nu geverifieerd. Het heeft toegang tot je versleutelde berichten en andere gebruikers zullen het als vertrouwd beschouwen."</string>
+  <string name="screen_session_verification_device_verified">"Apparaat geverifieerd"</string>
   <string name="screen_session_verification_enter_recovery_key">"Voer herstelsleutel in"</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Bewijs dat jij het bent om toegang te krijgen tot je versleutelde berichtgeschiedenis."</string>
   <string name="screen_session_verification_open_existing_session_title">"Open een bestaande sessie"</string>
@@ -27,6 +28,7 @@
   <string name="screen_session_verification_request_details_timestamp">"Ingelogd"</string>
   <string name="screen_session_verification_request_footer">"Ga alleen verder als je deze verificatie hebt gestart."</string>
   <string name="screen_session_verification_request_subtitle">"Verifieer het andere apparaat om je berichtengeschiedenis veilig te houden."</string>
+  <string name="screen_session_verification_request_success_subtitle">"Je nieuwe sessie is nu geverifieerd. Het heeft toegang tot je versleutelde berichten en andere gebruikers zullen het als vertrouwd beschouwen."</string>
   <string name="screen_session_verification_request_success_title">"Apparaat geverifieerd"</string>
   <string name="screen_session_verification_request_title">"Verificatieverzocht"</string>
   <string name="screen_session_verification_they_dont_match">"Ze komen niet overeen"</string>

@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -44,99 +45,96 @@ import kotlin.coroutines.suspendCoroutine
 @Composable
 fun QrCodeCameraView(
     onScanQrCode: (ByteArray) -> Unit,
-    renderPreview: Boolean,
+    isScanning: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    if (LocalInspectionMode.current) {
-        Box(
-            modifier = modifier
-                .background(color = ElementTheme.colors.bgSubtlePrimary),
-            contentAlignment = Alignment.Center,
-        ) {
-            Text("CameraView")
-        }
-    } else {
-        val coroutineScope = rememberCoroutineScope()
-        val localContext = LocalContext.current
-        val lifecycleOwner = LocalLifecycleOwner.current
-        var cameraProvider by remember { mutableStateOf<ProcessCameraProvider?>(null) }
-        val previewUseCase = remember { Preview.Builder().build() }
-        var lastFrame by remember { mutableStateOf<Bitmap?>(null) }
-        val imageAnalysis = remember {
-            ImageAnalysis.Builder()
-                .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
-                .build()
-        }
+    val coroutineScope = rememberCoroutineScope()
+    val localContext = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    var cameraProvider by remember { mutableStateOf<ProcessCameraProvider?>(null) }
+    val previewUseCase = remember { Preview.Builder().build() }
+    var lastFrame by remember { mutableStateOf<Bitmap?>(null) }
+    val imageAnalysis = remember {
+        ImageAnalysis.Builder()
+            .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+            .build()
+    }
 
-        LaunchedEffect(Unit) {
-            cameraProvider = localContext.getCameraProvider()
-        }
+    LaunchedEffect(Unit) {
+        cameraProvider = localContext.getCameraProvider()
+    }
 
-        suspend fun startQRCodeAnalysis(cameraProvider: ProcessCameraProvider, previewView: PreviewView, attempt: Int = 1) {
-            lastFrame = null
-            val cameraSelector = CameraSelector.Builder()
-                .requireLensFacing(CameraSelector.LENS_FACING_BACK)
-                .build()
-            imageAnalysis.setAnalyzer(
-                ContextCompat.getMainExecutor(previewView.context),
-                QRCodeAnalyzer { result ->
-                    result?.let {
-                        Timber.d("QR code scanned!")
-                        onScanQrCode(it)
-                    }
-                }
+    suspend fun startQRCodeAnalysis(cameraProvider: ProcessCameraProvider, attempt: Int = 1) {
+        lastFrame = null
+        val cameraSelector = CameraSelector.Builder()
+            .requireLensFacing(CameraSelector.LENS_FACING_BACK)
+            .build()
+        imageAnalysis.setAnalyzer(
+            ContextCompat.getMainExecutor(localContext),
+            QRCodeAnalyzer(onScanQrCode)
+        )
+        try {
+            // Make sure we unbind all use cases before binding them again
+            cameraProvider.unbindAll()
+
+            cameraProvider.bindToLifecycle(
+                lifecycleOwner,
+                cameraSelector,
+                previewUseCase,
+                imageAnalysis,
             )
-            try {
-                // Make sure we unbind all use cases before binding them again
-                cameraProvider.unbindAll()
-
-                cameraProvider.bindToLifecycle(
-                    lifecycleOwner,
-                    cameraSelector,
-                    previewUseCase,
-                    imageAnalysis
-                )
-                lastFrame = null
-            } catch (e: Exception) {
-                val maxAttempts = 3
-                if (attempt > maxAttempts) {
-                    Timber.e(e, "Use case binding failed after $maxAttempts attempts. Giving up.")
-                } else {
-                    Timber.e(e, "Use case binding failed (attempt #$attempt). Retrying after a delay...")
-                    delay(100)
-                    startQRCodeAnalysis(cameraProvider, previewView, attempt + 1)
-                }
+            lastFrame = null
+        } catch (e: Exception) {
+            val maxAttempts = 3
+            if (attempt > maxAttempts) {
+                Timber.e(e, "Use case binding failed after $maxAttempts attempts. Giving up.")
+            } else {
+                Timber.e(e, "Use case binding failed (attempt #$attempt). Retrying after a delay...")
+                delay(100)
+                startQRCodeAnalysis(cameraProvider, attempt + 1)
             }
         }
+    }
 
-        fun stopQRCodeAnalysis(previewView: PreviewView) {
-            // Stop analyzer
-            imageAnalysis.clearAnalyzer()
+    fun stopQRCodeAnalysis(previewView: PreviewView) {
+        // Stop analyzer
+        imageAnalysis.clearAnalyzer()
 
-            // Save last frame to display it as the 'frozen' preview
-            if (lastFrame == null) {
-                lastFrame = previewView.bitmap
-                Timber.d("Saving last frame for frozen preview.")
-            }
-
-            // Unbind preview use case
-            cameraProvider?.unbindAll()
+        // Save last frame to display it as the 'frozen' preview
+        if (lastFrame == null) {
+            lastFrame = previewView.bitmap
+            Timber.d("Saving last frame for frozen preview.")
         }
 
-        Box(modifier.clipToBounds()) {
+        // Unbind preview use case
+        cameraProvider?.unbindAll()
+    }
+
+    Box(modifier.clipToBounds()) {
+        if (LocalInspectionMode.current) {
+            Box(
+                modifier = modifier
+                    .background(color = ElementTheme.colors.bgSubtlePrimary),
+                contentAlignment = Alignment.Center,
+            ) {
+                Text("CameraView")
+            }
+        } else {
             AndroidView(
                 factory = { context ->
                     val previewView = PreviewView(context)
-                    previewUseCase.setSurfaceProvider(previewView.surfaceProvider)
+                    previewUseCase.surfaceProvider = previewView.surfaceProvider
                     previewView.previewStreamState.observe(lifecycleOwner) { state ->
                         previewView.alpha = if (state == PreviewView.StreamState.STREAMING) 1f else 0f
                     }
                     previewView
                 },
                 update = { previewView ->
-                    if (renderPreview) {
+                    if (isScanning) {
                         cameraProvider?.let { provider ->
-                            coroutineScope.launch { startQRCodeAnalysis(provider, previewView) }
+                            coroutineScope.launch {
+                                startQRCodeAnalysis(provider)
+                            }
                         }
                     } else {
                         stopQRCodeAnalysis(previewView)
@@ -147,19 +145,21 @@ fun QrCodeCameraView(
                     cameraProvider = null
                 },
             )
-            lastFrame?.let {
-                Image(bitmap = it.asImageBitmap(), contentDescription = null)
-            }
+        }
+        lastFrame?.let {
+            Image(bitmap = it.asImageBitmap(), contentDescription = null)
         }
     }
 }
 
-@Suppress("BlockingMethodInNonBlockingContext")
 private suspend fun Context.getCameraProvider(): ProcessCameraProvider =
     suspendCoroutine { continuation ->
         ProcessCameraProvider.getInstance(this).also { cameraProvider ->
-            cameraProvider.addListener({
-                continuation.resume(cameraProvider.get())
-            }, ContextCompat.getMainExecutor(this))
+            cameraProvider.addListener(
+                {
+                    continuation.resume(cameraProvider.get())
+                },
+                ContextCompat.getMainExecutor(this),
+            )
         }
     }

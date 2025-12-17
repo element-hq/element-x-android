@@ -39,10 +39,15 @@
   <string name="screen_room_timeline_no_permission_to_post">"Нямате разрешение да публикувате в тази стая"</string>
   <string name="screen_room_timeline_reactions_show_less">"Показване на по-малко"</string>
   <string name="screen_room_timeline_reactions_show_more">"Показване на повече"</string>
+  <string name="screen_room_timeline_read_marker_title">"Нови"</string>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d промяна в стаята"</item>
     <item quantity="other">"%1$d промени в стаята"</item>
   </plurals>
+  <string name="screen_room_timeline_tombstoned_room_action">"Преминаване към новата стая"</string>
+  <string name="screen_room_timeline_tombstoned_room_message">"Тази стая е заменена и вече не е активна"</string>
+  <string name="screen_room_timeline_upgraded_room_action">"Преглед на старите съобщения"</string>
+  <string name="screen_room_timeline_upgraded_room_message">"Тази стая е продължение на друга стая"</string>
   <plurals name="screen_room_typing_many_members">
     <item quantity="one">"%1$s, %2$s и %3$d друг"</item>
     <item quantity="other">"%1$s, %2$s и %3$d други"</item>

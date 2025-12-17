@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -37,12 +38,11 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
+import io.element.android.libraries.designsystem.colors.gradientSubtleColors
 import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
-import io.element.android.libraries.designsystem.modifiers.subtleColorStops
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toPx
-import io.element.android.libraries.designsystem.theme.LocalBuildMeta
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -220,19 +220,14 @@ internal fun TimelineItemRow(
 @Composable
 private fun Modifier.focusedEvent(
     focusedEventOffset: Dp,
-    isEnterpriseBuild: Boolean = LocalBuildMeta.current.isEnterpriseBuild,
 ): Modifier {
-    val highlightedLineColor = if (isEnterpriseBuild) {
-        ElementTheme.colors.textActionAccent
-    } else {
-        ElementTheme.colors.borderAccentSubtle
-    }
-    val gradientColors = subtleColorStops(isEnterpriseBuild)
+    val highlightedLineColor = ElementTheme.colors.borderAccentSubtle
+    val gradientColors = gradientSubtleColors()
     val verticalOffset = focusedEventOffset.toPx()
     val verticalRatio = 0.7f
     return drawWithCache {
         val brush = Brush.verticalGradient(
-            colorStops = gradientColors,
+            colors = gradientColors,
             endY = size.height * verticalRatio,
         )
         onDrawBehind {
@@ -259,20 +254,5 @@ internal fun FocusedEventPreview() = ElementPreview {
             .fillMaxWidth()
             .height(160.dp)
             .focusedEvent(0.dp),
-    )
-}
-
-@PreviewsDayNight
-@Composable
-internal fun FocusedEventEnterprisePreview() = ElementPreview {
-    Box(
-        modifier = Modifier
-            .padding(16.dp)
-            .fillMaxWidth()
-            .height(160.dp)
-            .focusedEvent(
-                focusedEventOffset = 0.dp,
-                isEnterpriseBuild = true,
-            ),
     )
 }

@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -17,7 +18,7 @@ import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.Encryption
 import org.matrix.rustcomponents.sdk.HomeserverLoginDetails
 import org.matrix.rustcomponents.sdk.IgnoredUsersListener
-import org.matrix.rustcomponents.sdk.NoPointer
+import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.NotificationClient
 import org.matrix.rustcomponents.sdk.NotificationProcessSetup
 import org.matrix.rustcomponents.sdk.NotificationSettings
@@ -32,6 +33,7 @@ import org.matrix.rustcomponents.sdk.SyncServiceBuilder
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.UnableToDecryptDelegate
 import org.matrix.rustcomponents.sdk.UserProfile
+import uniffi.matrix_sdk_base.MediaRetentionPolicy
 
 class FakeFfiClient(
     private val userId: String = A_USER_ID.value,
@@ -45,7 +47,7 @@ class FakeFfiClient(
     private val getProfileResult: (String) -> UserProfile = { UserProfile(userId = userId, displayName = null, avatarUrl = null) },
     private val homeserverLoginDetailsResult: () -> HomeserverLoginDetails = { lambdaError() },
     private val closeResult: () -> Unit = {},
-) : Client(NoPointer) {
+) : Client(NoHandle) {
     override fun userId(): String = userId
     override fun deviceId(): String = deviceId
     override suspend fun notificationClient(processSetup: NotificationProcessSetup) = notificationClient
@@ -86,6 +88,8 @@ class FakeFfiClient(
     override suspend fun homeserverLoginDetails(): HomeserverLoginDetails {
         return homeserverLoginDetailsResult()
     }
+
+    override suspend fun setMediaRetentionPolicy(policy: MediaRetentionPolicy) {}
 
     override fun close() = closeResult()
 }

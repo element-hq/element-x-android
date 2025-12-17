@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -49,6 +50,7 @@ fun MediaDetailsBottomSheet(
     state: MediaBottomSheetState.MediaDetailsBottomSheetState,
     onViewInTimeline: (EventId) -> Unit,
     onShare: (EventId) -> Unit,
+    onForward: (EventId) -> Unit,
     onDownload: (EventId) -> Unit,
     onDelete: (EventId) -> Unit,
     onDismiss: () -> Unit,
@@ -100,6 +102,14 @@ fun MediaDetailsBottomSheet(
                         style = ListItemStyle.Primary,
                         onClick = {
                             onShare(state.eventId)
+                        }
+                    )
+                    ListItem(
+                        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Forward())),
+                        headlineContent = { Text(stringResource(CommonStrings.action_forward)) },
+                        style = ListItemStyle.Primary,
+                        onClick = {
+                            onForward(state.eventId)
                         }
                     )
                     ListItem(
@@ -216,6 +226,7 @@ internal fun MediaDetailsBottomSheetPreview() = ElementPreview {
         state = aMediaDetailsBottomSheetState(),
         onViewInTimeline = {},
         onShare = {},
+        onForward = {},
         onDownload = {},
         onDelete = {},
         onDismiss = {},

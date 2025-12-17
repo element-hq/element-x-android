@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -42,7 +43,7 @@ class RustBaseRoomDirectoryListTest {
             )
             val initialItem = awaitItem()
             assertThat(initialItem).isEqualTo(
-                RoomDirectoryList.State(
+                RoomDirectoryList.SearchResult(
                     hasMoreToLoad = true,
                     items = listOf(mapper.map(aRustRoomDescription()))
                 )
@@ -57,7 +58,7 @@ class RustBaseRoomDirectoryListTest {
             )
             val nextItem = awaitItem()
             assertThat(nextItem).isEqualTo(
-                RoomDirectoryList.State(
+                RoomDirectoryList.SearchResult(
                     hasMoreToLoad = false,
                     items = listOf(
                         mapper.map(aRustRoomDescription()),
@@ -66,7 +67,7 @@ class RustBaseRoomDirectoryListTest {
             )
             val finalItem = awaitItem()
             assertThat(finalItem).isEqualTo(
-                RoomDirectoryList.State(
+                RoomDirectoryList.SearchResult(
                     hasMoreToLoad = false,
                     items = listOf(
                         mapper.map(aRustRoomDescription()),

@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -62,12 +63,12 @@ class RoomMemberDetailsNode(
             userProfileNodeHelper.onShareUser(context, permalinkBuilder)
         }
 
-        fun onStartDM(roomId: RoomId) {
-            callback.onStartDM(roomId)
+        fun navigateToRoom(roomId: RoomId) {
+            callback.navigateToRoom(roomId)
         }
 
         fun onStartCall(roomId: RoomId) {
-            callback.onStartCall(roomId)
+            callback.startCall(roomId)
         }
 
         val state = presenter.present()
@@ -77,10 +78,10 @@ class RoomMemberDetailsNode(
             modifier = modifier,
             goBack = this::navigateUp,
             onShareUser = ::onShareUser,
-            onOpenDm = ::onStartDM,
+            onOpenDm = ::navigateToRoom,
             onStartCall = ::onStartCall,
-            openAvatarPreview = callback::openAvatarPreview,
-            onVerifyClick = callback::onVerifyUser,
+            openAvatarPreview = callback::navigateToAvatarPreview,
+            onVerifyClick = callback::startVerifyUserFlow,
         )
     }
 }

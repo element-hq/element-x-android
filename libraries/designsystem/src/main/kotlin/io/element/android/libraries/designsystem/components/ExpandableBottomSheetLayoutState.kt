@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -10,7 +11,6 @@ package io.element.android.libraries.designsystem.components
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -31,20 +31,11 @@ fun rememberExpandableBottomSheetLayoutState(): ExpandableBottomSheetLayoutState
 @Stable
 class ExpandableBottomSheetLayoutState {
     internal var internalPosition: Position by mutableStateOf(Position.COLLAPSED)
-    internal var internalDraggingPercentage: Float by mutableFloatStateOf(
-        if (internalPosition == Position.EXPANDED) 1f else 0f
-    )
 
     /**
      * The current position of the bottom sheet layout.
      */
     val position get() = internalPosition
-
-    /**
-     * The percentage of the bottom sheet layout that is currently being dragged.
-     * This value ranges from `0f` for [Position.COLLAPSED] to `1f` for [Position.EXPANDED].
-     */
-    val draggingPercentage = internalDraggingPercentage
 
     /**
      * The position of the bottom sheet layout.

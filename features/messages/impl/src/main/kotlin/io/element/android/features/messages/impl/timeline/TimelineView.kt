@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -122,6 +123,7 @@ fun TimelineView(
     }
 
     val context = LocalContext.current
+    val toastMessage = stringResource(CommonStrings.common_copied_to_clipboard)
     val view = LocalView.current
     // Disable reverse layout when TalkBack is enabled to avoid incorrect ordering issues seen in the current Compose UI version
     val useReverseLayout = !isTalkbackActive()
@@ -135,8 +137,8 @@ fun TimelineView(
             HapticFeedbackConstants.LONG_PRESS
         )
         context.copyToClipboard(
-            link.url,
-            context.getString(CommonStrings.common_copied_to_clipboard)
+            text = link.url,
+            toastMessage = toastMessage,
         )
     }
 

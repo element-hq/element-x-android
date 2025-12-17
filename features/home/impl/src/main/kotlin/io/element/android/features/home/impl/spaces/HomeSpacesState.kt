@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -9,11 +10,12 @@ package io.element.android.features.home.impl.spaces
 
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableSet
 
 data class HomeSpacesState(
     val space: CurrentSpace,
-    val spaceRooms: List<SpaceRoom>,
+    val spaceRooms: ImmutableList<SpaceRoom>,
     val seenSpaceInvites: ImmutableSet<RoomId>,
     val hideInvitesAvatar: Boolean,
     val eventSink: (HomeSpacesEvents) -> Unit,

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_space_announcement_item1">"Pregledajte prostore koje ste stvorili ili kojima ste se pridružili"</string>
+  <string name="screen_space_announcement_item2">"Prihvatite ili odbijte pozivnice za prostore"</string>
+  <string name="screen_space_announcement_item3">"Otkrijte sve sobe kojima se možete pridružiti u svojim prostorima"</string>
+  <string name="screen_space_announcement_item4">"Pridružite se javnim prostorima"</string>
+  <string name="screen_space_announcement_item5">"Napustite sve prostore kojima ste se pridružili"</string>
+  <string name="screen_space_announcement_notice">"Uskoro stiže filtriranje i stvaranje prostora te upravljanje njima."</string>
+  <string name="screen_space_announcement_subtitle">"Dobrodošli u beta inačicu prostora! S ovom prvom inačicom možete:"</string>
+  <string name="screen_space_announcement_title">"Predstavljamo prostore"</string>
+</resources>

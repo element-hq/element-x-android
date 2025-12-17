@@ -14,5 +14,7 @@
   <string name="screen_bug_report_include_screenshot">"Wyślij zrzut ekranu"</string>
   <string name="screen_bug_report_logs_description">"Logi zostaną dołączone do Twojej wiadomości, aby upewnić się, że wszystko działa poprawnie. Aby wysłać wiadomość bez logów, wyłącz to ustawienie."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s uległ awarii podczas ostatniego użycia. Czy chcesz przesłać nam raport o awarii?"</string>
+  <string name="screen_bug_report_send_notification_settings_description">"Jeśli posiadasz problemy z powiadomieniami, przesłanie nam swoich ustawień pomoże nam ustalić przyczynę usterki."</string>
+  <string name="screen_bug_report_send_notification_settings_title">"Ustawienia powiadomień"</string>
   <string name="screen_bug_report_view_logs">"Wyświetl logi"</string>
 </resources>

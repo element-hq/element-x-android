@@ -1,12 +1,14 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -43,6 +45,7 @@ fun SpaceHeaderView(
     numberOfMembers: Int,
     modifier: Modifier = Modifier,
     topicMaxLines: Int = Int.MAX_VALUE,
+    onTopicClick: ((String) -> Unit)? = null,
 ) {
     RoomPreviewOrganism(
         modifier = modifier.padding(24.dp),
@@ -68,7 +71,16 @@ fun SpaceHeaderView(
         description = if (topic.isNullOrBlank()) {
             null
         } else {
-            { RoomPreviewDescriptionAtom(description = topic, maxLines = topicMaxLines) }
+            {
+                RoomPreviewDescriptionAtom(
+                    description = topic,
+                    maxLines = topicMaxLines,
+                    modifier = Modifier.clickable(
+                        enabled = onTopicClick != null,
+                        onClick = { onTopicClick?.invoke(topic) }
+                    )
+                )
+            }
         },
         memberCount = {
             SpaceMembersView(

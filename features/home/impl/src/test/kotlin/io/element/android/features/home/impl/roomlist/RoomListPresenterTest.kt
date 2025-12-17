@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -12,6 +13,8 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Interaction
+import io.element.android.features.announcement.api.Announcement
+import io.element.android.features.announcement.api.AnnouncementService
 import io.element.android.features.home.impl.FakeDateTimeObserver
 import io.element.android.features.home.impl.datasource.RoomListDataSource
 import io.element.android.features.home.impl.datasource.aRoomListRoomSummaryFactory
@@ -28,11 +31,12 @@ import io.element.android.features.invite.api.acceptdecline.anAcceptDeclineInvit
 import io.element.android.features.invite.test.InMemorySeenInvitesStore
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
+import io.element.android.features.rageshake.test.logs.FakeAnnouncementService
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
-import io.element.android.libraries.eventformatter.api.RoomLastMessageFormatter
-import io.element.android.libraries.eventformatter.test.FakeRoomLastMessageFormatter
+import io.element.android.libraries.eventformatter.api.RoomLatestEventFormatter
+import io.element.android.libraries.eventformatter.test.FakeRoomLatestEventFormatter
 import io.element.android.libraries.fullscreenintent.api.aFullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -66,6 +70,7 @@ import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.push.test.notifications.FakeNotificationCleaner
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
+import io.element.android.services.analytics.test.watchers.FakeAnalyticsColdStartWatcher
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
@@ -606,23 +611,27 @@ class RoomListPresenterTest {
         )
         roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
         roomListService.postAllRooms(listOf(roomSummary))
-        val store = InMemoryAppPreferencesStore()
+        val onAnnouncementDismissedResult = lambdaRecorder<Announcement, Unit> { }
+        val announcementService = FakeAnnouncementService(
+            onAnnouncementDismissedResult = onAnnouncementDismissedResult,
+        )
         val presenter = createRoomListPresenter(
             client = matrixClient,
-            appPreferencesStore = store,
+            announcementService = announcementService,
         )
         presenter.test {
-            assertThat(store.showNewNotificationSoundBanner().first()).isFalse()
+            assertThat(announcementService.announcementsToShowFlow().first()).isEmpty()
             skipItems(1)
             val state = awaitItem()
             assertThat(state.contentAsRooms().showNewNotificationSoundBanner).isFalse()
-            store.setShowNewNotificationSoundBanner(true)
-            assertThat(store.showNewNotificationSoundBanner().first()).isTrue()
+            announcementService.emitAnnouncementsToShow(listOf(Announcement.NewNotificationSound))
             assertThat(awaitItem().contentAsRooms().showNewNotificationSoundBanner).isTrue()
             state.eventSink(RoomListEvents.DismissNewNotificationSoundBanner)
+            onAnnouncementDismissedResult.assertions().isCalledOnce()
+                .with(value(Announcement.NewNotificationSound))
+            // Simulate service updating the value
+            announcementService.emitAnnouncementsToShow(emptyList())
             assertThat(awaitItem().contentAsRooms().showNewNotificationSoundBanner).isFalse()
-            // Ensure store has been updated
-            assertThat(store.showNewNotificationSoundBanner().first()).isFalse()
         }
     }
 
@@ -630,7 +639,7 @@ class RoomListPresenterTest {
         client: MatrixClient = FakeMatrixClient(),
         leaveRoomState: LeaveRoomState = aLeaveRoomState(),
         dateFormatter: DateFormatter = FakeDateFormatter(),
-        roomLastMessageFormatter: RoomLastMessageFormatter = FakeRoomLastMessageFormatter(),
+        roomLatestEventFormatter: RoomLatestEventFormatter = FakeRoomLatestEventFormatter(),
         sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
         analyticsService: AnalyticsService = FakeAnalyticsService(),
         filtersPresenter: Presenter<RoomListFiltersState> = Presenter { aRoomListFiltersState() },
@@ -639,6 +648,7 @@ class RoomListPresenterTest {
         notificationCleaner: NotificationCleaner = FakeNotificationCleaner(),
         appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
         seenInvitesStore: SeenInvitesStore = InMemorySeenInvitesStore(),
+        announcementService: AnnouncementService = FakeAnnouncementService(),
     ) = RoomListPresenter(
         client = client,
         leaveRoomPresenter = { leaveRoomState },
@@ -646,7 +656,7 @@ class RoomListPresenterTest {
             roomListService = client.roomListService,
             roomListRoomSummaryFactory = aRoomListRoomSummaryFactory(
                 dateFormatter = dateFormatter,
-                roomLastMessageFormatter = roomLastMessageFormatter,
+                roomLatestEventFormatter = roomLatestEventFormatter,
             ),
             coroutineDispatchers = testCoroutineDispatchers(),
             notificationSettingsService = client.notificationSettingsService,
@@ -663,5 +673,7 @@ class RoomListPresenterTest {
         notificationCleaner = notificationCleaner,
         appPreferencesStore = appPreferencesStore,
         seenInvitesStore = seenInvitesStore,
+        announcementService = announcementService,
+        coldStartWatcher = FakeAnalyticsColdStartWatcher(),
     )
 }

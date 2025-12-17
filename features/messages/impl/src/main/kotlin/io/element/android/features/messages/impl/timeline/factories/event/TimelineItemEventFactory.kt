@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -21,7 +22,6 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItemReac
 import io.element.android.features.messages.impl.timeline.model.TimelineItemReadReceipts
 import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
 import io.element.android.features.messages.impl.utils.messagesummary.MessageSummaryFormatter
-import io.element.android.libraries.architecture.map
 import io.element.android.libraries.core.bool.orTrue
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
@@ -37,7 +37,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.getDisambigua
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import java.util.Date
 
 @AssistedInject
 class TimelineItemEventFactory(
@@ -146,10 +145,9 @@ class TimelineItemEventFactory(
                 senders = reaction.senders
                     .sortedByDescending { it.timestamp }
                     .map {
-                        val date = Date(it.timestamp)
                         AggregatedReactionSender(
                             senderId = it.senderId,
-                            timestamp = date,
+                            timestamp = it.timestamp,
                             sentTime = dateFormatter.format(
                                 it.timestamp,
                                 DateFormatterMode.TimeOrDate,

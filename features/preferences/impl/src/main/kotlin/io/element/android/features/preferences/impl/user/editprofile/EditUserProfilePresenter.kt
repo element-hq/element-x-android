@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -34,7 +35,7 @@ import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
-import io.element.android.libraries.permissions.api.PermissionsEvents
+import io.element.android.libraries.permissions.api.PermissionsEvent
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -44,6 +45,7 @@ import timber.log.Timber
 @AssistedInject
 class EditUserProfilePresenter(
     @Assisted private val matrixUser: MatrixUser,
+    @Assisted private val navigator: EditUserProfileNavigator,
     private val matrixClient: MatrixClient,
     private val mediaPickerProvider: PickerProvider,
     private val mediaPreProcessor: MediaPreProcessor,
@@ -56,27 +58,30 @@ class EditUserProfilePresenter(
 
     @AssistedFactory
     interface Factory {
-        fun create(matrixUser: MatrixUser): EditUserProfilePresenter
+        fun create(
+            matrixUser: MatrixUser,
+            navigator: EditUserProfileNavigator,
+        ): EditUserProfilePresenter
     }
 
     @Composable
     override fun present(): EditUserProfileState {
         val cameraPermissionState = cameraPermissionPresenter.present()
-        var userAvatarUri by rememberSaveable { mutableStateOf(matrixUser.avatarUrl?.toUri()) }
+        var userAvatarUri by rememberSaveable { mutableStateOf(matrixUser.avatarUrl) }
         var userDisplayName by rememberSaveable { mutableStateOf(matrixUser.displayName) }
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker(
             onResult = { uri ->
                 if (uri != null) {
-                    temporaryUriDeleter.delete(userAvatarUri)
-                    userAvatarUri = uri
+                    temporaryUriDeleter.delete(userAvatarUri?.toUri())
+                    userAvatarUri = uri.toString()
                 }
             }
         )
         val galleryImagePicker = mediaPickerProvider.registerGalleryImagePicker(
             onResult = { uri ->
                 if (uri != null) {
-                    temporaryUriDeleter.delete(userAvatarUri)
-                    userAvatarUri = uri
+                    temporaryUriDeleter.delete(userAvatarUri?.toUri())
+                    userAvatarUri = uri.toString()
                 }
             }
         )
@@ -100,34 +105,60 @@ class EditUserProfilePresenter(
 
         val saveAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val localCoroutineScope = rememberCoroutineScope()
-        fun handleEvents(event: EditUserProfileEvents) {
+
+        val canSave = remember(userDisplayName, userAvatarUri) {
+            val hasProfileChanged = hasDisplayNameChanged(userDisplayName, matrixUser) ||
+                hasAvatarUrlChanged(userAvatarUri, matrixUser)
+            !userDisplayName.isNullOrBlank() && hasProfileChanged
+        }
+
+        fun handleEvent(event: EditUserProfileEvent) {
             when (event) {
-                is EditUserProfileEvents.Save -> localCoroutineScope.saveChanges(userDisplayName, userAvatarUri, matrixUser, saveAction)
-                is EditUserProfileEvents.HandleAvatarAction -> {
+                is EditUserProfileEvent.Save -> localCoroutineScope.saveChanges(
+                    name = userDisplayName,
+                    avatarUri = userAvatarUri?.toUri(),
+                    currentUser = matrixUser,
+                    action = saveAction,
+                )
+                is EditUserProfileEvent.HandleAvatarAction -> {
                     when (event.action) {
                         AvatarAction.ChoosePhoto -> galleryImagePicker.launch()
                         AvatarAction.TakePhoto -> if (cameraPermissionState.permissionGranted) {
                             cameraPhotoPicker.launch()
                         } else {
                             pendingPermissionRequest = true
-                            cameraPermissionState.eventSink(PermissionsEvents.RequestPermissions)
+                            cameraPermissionState.eventSink(PermissionsEvent.RequestPermissions)
                         }
                         AvatarAction.Remove -> {
-                            temporaryUriDeleter.delete(userAvatarUri)
+                            temporaryUriDeleter.delete(userAvatarUri?.toUri())
                             userAvatarUri = null
                         }
                     }
                 }
-
-                is EditUserProfileEvents.UpdateDisplayName -> userDisplayName = event.name
-                EditUserProfileEvents.CancelSaveChanges -> saveAction.value = AsyncAction.Uninitialized
+                is EditUserProfileEvent.UpdateDisplayName -> userDisplayName = event.name
+                EditUserProfileEvent.Exit -> {
+                    when (saveAction.value) {
+                        is AsyncAction.Confirming -> {
+                            // Close the dialog right now
+                            saveAction.value = AsyncAction.Uninitialized
+                            navigator.close()
+                        }
+                        AsyncAction.Loading -> Unit
+                        is AsyncAction.Failure,
+                        is AsyncAction.Success -> {
+                            // Should not happen
+                        }
+                        AsyncAction.Uninitialized -> {
+                            if (canSave) {
+                                saveAction.value = AsyncAction.ConfirmingCancellation
+                            } else {
+                                navigator.close()
+                            }
+                        }
+                    }
+                }
+                EditUserProfileEvent.CloseDialog -> saveAction.value = AsyncAction.Uninitialized
             }
-        }
-
-        val canSave = remember(userDisplayName, userAvatarUri) {
-            val hasProfileChanged = hasDisplayNameChanged(userDisplayName, matrixUser) ||
-                hasAvatarUrlChanged(userAvatarUri, matrixUser)
-            !userDisplayName.isNullOrBlank() && hasProfileChanged
         }
 
         return EditUserProfileState(
@@ -138,16 +169,15 @@ class EditUserProfilePresenter(
             saveButtonEnabled = canSave && saveAction.value !is AsyncAction.Loading,
             saveAction = saveAction.value,
             cameraPermissionState = cameraPermissionState,
-            eventSink = { handleEvents(it) },
+            eventSink = ::handleEvent,
         )
     }
 
     private fun hasDisplayNameChanged(name: String?, currentUser: MatrixUser) =
         name?.trim() != currentUser.displayName?.trim()
 
-    private fun hasAvatarUrlChanged(avatarUri: Uri?, currentUser: MatrixUser) =
-        // Need to call `toUri()?.toString()` to make the test pass (we mockk Uri)
-        avatarUri?.toString()?.trim() != currentUser.avatarUrl?.toUri()?.toString()?.trim()
+    private fun hasAvatarUrlChanged(avatarUri: String?, currentUser: MatrixUser) =
+        avatarUri?.trim() != currentUser.avatarUrl?.trim()
 
     private fun CoroutineScope.saveChanges(
         name: String?,

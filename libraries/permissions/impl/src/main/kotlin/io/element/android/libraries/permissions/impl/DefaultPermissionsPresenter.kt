@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -27,7 +28,7 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.log.logger.LoggerTag
-import io.element.android.libraries.permissions.api.PermissionsEvents
+import io.element.android.libraries.permissions.api.PermissionsEvent
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.api.PermissionsState
 import io.element.android.libraries.permissions.api.PermissionsStore
@@ -99,20 +100,20 @@ class DefaultPermissionsPresenter(
 
         val showDialog = rememberSaveable { mutableStateOf(false) }
 
-        fun handleEvents(event: PermissionsEvents) {
+        fun handleEvent(event: PermissionsEvent) {
             when (event) {
-                PermissionsEvents.CloseDialog -> {
+                PermissionsEvent.CloseDialog -> {
                     showDialog.value = false
                 }
-                PermissionsEvents.RequestPermissions -> {
+                PermissionsEvent.RequestPermissions -> {
                     if (permissionState.status !is PermissionStatus.Granted && isAlreadyDenied) {
                         showDialog.value = true
                     } else {
                         permissionState.launchPermissionRequest()
                     }
                 }
-                PermissionsEvents.OpenSystemSettingAndCloseDialog -> {
-                    permissionActions.openSettings()
+                PermissionsEvent.OpenSystemSettingAndCloseDialog -> {
+                    permissionActions.openSettings(permission)
                     showDialog.value = false
                 }
             }
@@ -125,7 +126,7 @@ class DefaultPermissionsPresenter(
             showDialog = showDialog.value,
             permissionAlreadyAsked = isAlreadyAsked,
             permissionAlreadyDenied = isAlreadyDenied,
-            eventSink = { handleEvents(it) }
+            eventSink = ::handleEvent,
         )
     }
 

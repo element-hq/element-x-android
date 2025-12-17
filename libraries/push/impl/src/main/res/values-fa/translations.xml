@@ -54,6 +54,7 @@
   <string name="push_distributor_background_sync_android">"همگام سازی پس‌زمینه"</string>
   <string name="push_distributor_firebase_android">"خدمات گوگل"</string>
   <string name="push_no_valid_google_play_services_apk_android">"خدمت پلی گوگل معتبری پیدا نشد. ممکن است آگاهی‌ها به درستی کار نکنند."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_title">"کاربران مسدود"</string>
   <string name="troubleshoot_notifications_test_display_notification_success">"روی آگاهی کلیک شد!"</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"خطا: فرستنده درخواست را رد کرد."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"خطا: %1$s."</string>

@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -33,13 +34,14 @@ fun anAggregatedReaction(
     val timeFormatter = DateFormat.getTimeInstance(DateFormat.SHORT, java.util.Locale.US).apply {
         timeZone = TimeZone.getTimeZone("UTC")
     }
-    val date = Date(1_689_061_264L)
+    val timestamp = 1_689_061_264L
+    val date = Date(timestamp)
     val senders = buildList {
         repeat(count) { index ->
             add(
                 AggregatedReactionSender(
                     senderId = if (isHighlighted && index == 0) userId else UserId("@user$index:server.org"),
-                    timestamp = date,
+                    timestamp = timestamp,
                     sentTime = timeFormatter.format(date),
                 )
             )

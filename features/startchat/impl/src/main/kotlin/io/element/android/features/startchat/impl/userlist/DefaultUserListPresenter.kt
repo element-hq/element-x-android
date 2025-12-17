@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -75,6 +76,15 @@ class DefaultUserListPresenter(
             }.launchIn(this)
         }
 
+        fun handleEvent(event: UserListEvents) {
+            when (event) {
+                is UserListEvents.OnSearchActiveChanged -> isSearchActive = event.active
+                is UserListEvents.UpdateSearchQuery -> searchQuery = event.query
+                is UserListEvents.AddToSelection -> userListDataStore.selectUser(event.matrixUser)
+                is UserListEvents.RemoveFromSelection -> userListDataStore.removeUserFromSelection(event.matrixUser)
+            }
+        }
+
         return UserListState(
             searchQuery = searchQuery,
             searchResults = searchResults,
@@ -83,14 +93,7 @@ class DefaultUserListPresenter(
             showSearchLoader = showSearchLoader,
             selectionMode = args.selectionMode,
             recentDirectRooms = recentDirectRooms.toImmutableList(),
-            eventSink = { event ->
-                when (event) {
-                    is UserListEvents.OnSearchActiveChanged -> isSearchActive = event.active
-                    is UserListEvents.UpdateSearchQuery -> searchQuery = event.query
-                    is UserListEvents.AddToSelection -> userListDataStore.selectUser(event.matrixUser)
-                    is UserListEvents.RemoveFromSelection -> userListDataStore.removeUserFromSelection(event.matrixUser)
-                }
-            },
+            eventSink = ::handleEvent,
         )
     }
 }

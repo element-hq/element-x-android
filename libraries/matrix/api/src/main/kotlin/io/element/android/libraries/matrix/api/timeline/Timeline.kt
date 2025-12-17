@@ -1,13 +1,15 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.api.timeline
 
 import android.os.Parcelable
+import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.ThreadId
@@ -42,6 +44,7 @@ interface Timeline : AutoCloseable {
     }
 
     @Parcelize
+    @Immutable
     sealed interface Mode : Parcelable {
         data object Live : Mode
         data class FocusedOnEvent(val eventId: EventId) : Mode
@@ -52,7 +55,9 @@ interface Timeline : AutoCloseable {
 
     val mode: Mode
     val membershipChangeEventReceived: Flow<Unit>
+    val onSyncedEventReceived: Flow<Unit>
     suspend fun sendReadReceipt(eventId: EventId, receiptType: ReceiptType): Result<Unit>
+    suspend fun markAsRead(receiptType: ReceiptType): Result<Unit>
     suspend fun paginate(direction: PaginationDirection): Result<Boolean>
 
     val backwardPaginationStatus: StateFlow<PaginationStatus>
@@ -225,4 +230,9 @@ interface Timeline : AutoCloseable {
      * pinned
      */
     suspend fun unpinEvent(eventId: EventId): Result<Boolean>
+
+    /**
+     * Get the latest event id of the timeline.
+     */
+    suspend fun getLatestEventId(): Result<EventId?>
 }

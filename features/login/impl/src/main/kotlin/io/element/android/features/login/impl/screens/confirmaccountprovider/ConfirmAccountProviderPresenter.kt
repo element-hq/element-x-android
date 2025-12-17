@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -17,6 +18,7 @@ import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.login.LoginHelper
 import io.element.android.libraries.architecture.Presenter
+import kotlinx.coroutines.launch
 
 @AssistedInject
 class ConfirmAccountProviderPresenter(
@@ -40,11 +42,10 @@ class ConfirmAccountProviderPresenter(
 
         val loginMode by loginHelper.collectLoginMode()
 
-        fun handleEvents(event: ConfirmAccountProviderEvents) {
+        fun handleEvent(event: ConfirmAccountProviderEvents) {
             when (event) {
-                ConfirmAccountProviderEvents.Continue -> {
+                ConfirmAccountProviderEvents.Continue -> localCoroutineScope.launch {
                     loginHelper.submit(
-                        coroutineScope = localCoroutineScope,
                         isAccountCreation = params.isAccountCreation,
                         homeserverUrl = accountProvider.url,
                         loginHint = null,
@@ -58,7 +59,7 @@ class ConfirmAccountProviderPresenter(
             accountProvider = accountProvider,
             isAccountCreation = params.isAccountCreation,
             loginMode = loginMode,
-            eventSink = ::handleEvents
+            eventSink = ::handleEvent,
         )
     }
 }

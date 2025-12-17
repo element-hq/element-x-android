@@ -54,6 +54,14 @@
     <item quantity="many">"Ymatebodd %1$d aelod gyda %2$s"</item>
     <item quantity="other">"Ymatebodd %1$d aelod gyda %2$s"</item>
   </plurals>
+  <plurals name="screen_room_timeline_reaction_including_you_a11y">
+    <item quantity="zero">"Fe wnaethoch chi a%1$d aelod ymateb gyda%2$s"</item>
+    <item quantity="one">"Fe wnaethoch chi a%1$d aelod ymateb gyda%2$s"</item>
+    <item quantity="two">"Fe wnaethoch chi a%1$d aelod ymateb gyda%2$s"</item>
+    <item quantity="few">"Fe wnaethoch chi a%1$d aelod ymateb gyda%2$s"</item>
+    <item quantity="many">"Fe wnaethoch chi a%1$d aelod ymateb gyda%2$s"</item>
+    <item quantity="other">"Fe wnaethoch chi a%1$d aelod ymateb gyda%2$s"</item>
+  </plurals>
   <string name="screen_room_timeline_reaction_you_a11y">"Rydych chi wedi ymateb gyda %1$s"</string>
   <string name="screen_room_timeline_reactions_show_less">"Dangos llai"</string>
   <string name="screen_room_timeline_reactions_show_more">"Dangos rhagor"</string>

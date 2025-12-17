@@ -11,7 +11,7 @@
   <string name="screen_knock_requests_list_accept_failed_alert_title">"Не удалось принять запрос"</string>
   <string name="screen_knock_requests_list_accept_loading_title">"Принятие заявки на присоединение"</string>
   <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Да, отклонить и запретить"</string>
-  <string name="screen_knock_requests_list_ban_alert_description">"Вы уверен, что хочешь отклонить и запретить %1$s? Этот пользователь больше не сможет запросить доступ к этой комнате."</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Вы уверены, что хотите отклонить и запретить %1$s? Этот пользователь больше не сможет запросить доступ к этой комнате."</string>
   <string name="screen_knock_requests_list_ban_alert_title">"Отклонить и запретить доступ"</string>
   <string name="screen_knock_requests_list_ban_loading_title">"Отклонение и запрет доступа"</string>
   <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Да, отклонить"</string>

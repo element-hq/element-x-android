@@ -10,6 +10,7 @@
   <string name="screen_session_verification_positive_button_initial">"Aš pasiruošęs"</string>
   <string name="screen_session_verification_positive_button_verifying_ongoing">"Laukiama atitikimo…"</string>
   <string name="screen_session_verification_request_accepted_subtitle">"Palyginkite unikalius jaustukus, įsitikindami, kad jie rodomi ta pačia tvarka."</string>
+  <string name="screen_session_verification_request_success_subtitle">"Jūsų nauja sesija dabar patvirtinta. Ji turi prieigą prie jūsų užšifruotų pranešimų, o kiti vartotojai matys ją kaip patikimą."</string>
   <string name="screen_session_verification_they_dont_match">"Jie nesutampa"</string>
   <string name="screen_session_verification_they_match">"Jie sutampa"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Kitoje sesijoje priimkite prašymą pradėti tikrinimo procesą, kad galėtumėte tęsti."</string>

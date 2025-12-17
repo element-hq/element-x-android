@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -10,9 +11,6 @@ package io.element.android.libraries.architecture
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import io.element.android.libraries.core.extensions.runCatchingExceptions
-import kotlin.contracts.ExperimentalContracts
-import kotlin.contracts.InvocationKind
-import kotlin.contracts.contract
 
 /**
  * Sealed type that allows to model an asynchronous operation.
@@ -133,16 +131,16 @@ suspend inline fun <T> MutableState<AsyncData<T>>.runUpdatingState(
  * @param resultBlock a suspending function that returns a [Result].
  * @return the [Result] returned by [resultBlock].
  */
-@OptIn(ExperimentalContracts::class)
 @Suppress("REDUNDANT_INLINE_SUSPEND_FUNCTION_TYPE")
 suspend inline fun <T> runUpdatingState(
     state: MutableState<AsyncData<T>>,
     errorTransform: (Throwable) -> Throwable = { it },
     resultBlock: suspend () -> Result<T>,
 ): Result<T> {
-    contract {
-        callsInPlace(resultBlock, InvocationKind.EXACTLY_ONCE)
-    }
+    // Restore when the issue with contracts and AGP 8.13.x is fixed
+//    contract {
+//        callsInPlace(resultBlock, InvocationKind.EXACTLY_ONCE)
+//    }
     val prevData = state.value.dataOrNull()
     state.value = AsyncData.Loading(prevData = prevData)
     return resultBlock().fold(
@@ -162,14 +160,14 @@ suspend inline fun <T> runUpdatingState(
 }
 
 inline fun <T, R> AsyncData<T>.map(
-    transform: (T?) -> R,
+    transform: (T) -> R,
 ): AsyncData<R> {
     return when (this) {
         is AsyncData.Failure -> AsyncData.Failure(
             error = error,
-            prevData = transform(prevData)
+            prevData = prevData?.let { transform(prevData) }
         )
-        is AsyncData.Loading -> AsyncData.Loading(transform(prevData))
+        is AsyncData.Loading -> AsyncData.Loading(prevData?.let { transform(prevData) })
         is AsyncData.Success -> AsyncData.Success(transform(data))
         AsyncData.Uninitialized -> AsyncData.Uninitialized
     }

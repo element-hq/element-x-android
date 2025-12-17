@@ -2,9 +2,10 @@ import extension.setupDependencyInjection
 import extension.testCommonDependencies
 
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 plugins {
@@ -23,6 +24,7 @@ dependencies {
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.core)
     implementation(projects.libraries.matrix.api)
+    implementation(projects.libraries.push.api)
     implementation(projects.libraries.uiStrings)
     api(projects.libraries.troubleshoot.api)
 
@@ -30,7 +32,6 @@ dependencies {
     implementation(projects.libraries.pushproviders.api)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.core)
-    implementation(projects.services.appnavstate.api)
     implementation(projects.services.toolbox.api)
 
     implementation(projects.libraries.network)
@@ -53,5 +54,4 @@ dependencies {
     testImplementation(projects.libraries.pushstore.test)
     testImplementation(projects.libraries.troubleshoot.test)
     testImplementation(projects.services.toolbox.test)
-    testImplementation(projects.services.appnavstate.test)
 }

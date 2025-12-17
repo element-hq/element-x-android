@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -34,9 +35,11 @@ class DefaultSignedOutEntryPointTest {
             )
         }
         val params = SignedOutEntryPoint.Params(A_SESSION_ID)
-        val result = entryPoint.nodeBuilder(parentNode, BuildContext.root(null))
-            .params(params)
-            .build()
+        val result = entryPoint.createNode(
+            parentNode = parentNode,
+            buildContext = BuildContext.root(null),
+            params = params,
+        )
         assertThat(result).isInstanceOf(SignedOutNode::class.java)
         assertThat(result.plugins).contains(SignedOutNode.Inputs(params.sessionId))
     }

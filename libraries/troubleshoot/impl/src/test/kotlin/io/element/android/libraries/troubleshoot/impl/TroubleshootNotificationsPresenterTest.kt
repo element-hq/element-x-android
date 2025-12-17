@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -9,6 +10,7 @@ package io.element.android.libraries.troubleshoot.impl
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.push.test.FakeGetCurrentPushProvider
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootNavigator
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTest
@@ -170,6 +172,7 @@ private fun createTroubleshootTestSuite(
     currentPushProvider: String? = null,
 ): TroubleshootTestSuite {
     return TroubleshootTestSuite(
+        sessionId = A_SESSION_ID,
         notificationTroubleshootTests = tests,
         getCurrentPushProvider = FakeGetCurrentPushProvider(currentPushProvider),
         analyticsService = FakeAnalyticsService(),
@@ -178,7 +181,7 @@ private fun createTroubleshootTestSuite(
 
 internal fun createTroubleshootNotificationsPresenter(
     navigator: NotificationTroubleshootNavigator = object : NotificationTroubleshootNavigator {
-        override fun openIgnoredUsers() = lambdaError()
+        override fun navigateToBlockedUsers() = lambdaError()
     },
     troubleshootTestSuite: TroubleshootTestSuite = createTroubleshootTestSuite(),
 ): TroubleshootNotificationsPresenter {

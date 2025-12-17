@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -12,7 +13,6 @@ import org.matrix.rustcomponents.sdk.ClientBuildException
 import org.matrix.rustcomponents.sdk.OidcException
 
 fun Throwable.mapAuthenticationException(): AuthenticationException {
-    val message = this.message ?: "Unknown error"
     return when (this) {
         is AuthenticationException -> this
         is ClientBuildException -> when (this) {
@@ -20,7 +20,7 @@ fun Throwable.mapAuthenticationException(): AuthenticationException {
             is ClientBuildException.InvalidServerName -> AuthenticationException.InvalidServerName(message)
             is ClientBuildException.SlidingSyncVersion -> AuthenticationException.SlidingSyncVersion(message)
             is ClientBuildException.Sdk -> AuthenticationException.Generic(message)
-            is ClientBuildException.ServerUnreachable -> AuthenticationException.Generic(message)
+            is ClientBuildException.ServerUnreachable -> AuthenticationException.ServerUnreachable(message)
             is ClientBuildException.SlidingSync -> AuthenticationException.Generic(message)
             is ClientBuildException.WellKnownDeserializationException -> AuthenticationException.Generic(message)
             is ClientBuildException.WellKnownLookupFailed -> AuthenticationException.Generic(message)

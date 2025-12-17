@@ -1,27 +1,26 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.preferences.impl
 
-import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bumble.appyx.core.modality.BuildContext
-import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.deactivation.api.AccountDeactivationEntryPoint
-import io.element.android.features.licenses.api.OpenSourceLicensesEntryPoint
-import io.element.android.features.lockscreen.api.LockScreenEntryPoint
-import io.element.android.features.logout.api.LogoutEntryPoint
+import io.element.android.features.deactivation.test.FakeAccountDeactivationEntryPoint
+import io.element.android.features.licenses.test.FakeOpenSourceLicensesEntryPoint
+import io.element.android.features.lockscreen.test.FakeLockScreenEntryPoint
+import io.element.android.features.logout.test.FakeLogoutEntryPoint
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.troubleshoot.api.NotificationTroubleShootEntryPoint
-import io.element.android.libraries.troubleshoot.api.PushHistoryEntryPoint
+import io.element.android.libraries.troubleshoot.test.FakeNotificationTroubleShootEntryPoint
+import io.element.android.libraries.troubleshoot.test.FakePushHistoryEntryPoint
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.node.TestParentNode
 import org.junit.Rule
@@ -41,41 +40,30 @@ class DefaultPreferencesEntryPointTest {
             PreferencesFlowNode(
                 buildContext = buildContext,
                 plugins = plugins,
-                lockScreenEntryPoint = object : LockScreenEntryPoint {
-                    override fun nodeBuilder(parentNode: Node, buildContext: BuildContext, navTarget: LockScreenEntryPoint.Target) = lambdaError()
-                    override fun pinUnlockIntent(context: Context) = lambdaError()
-                },
-                notificationTroubleShootEntryPoint = object : NotificationTroubleShootEntryPoint {
-                    override fun nodeBuilder(parentNode: Node, buildContext: BuildContext) = lambdaError()
-                },
-                pushHistoryEntryPoint = object : PushHistoryEntryPoint {
-                    override fun nodeBuilder(parentNode: Node, buildContext: BuildContext) = lambdaError()
-                },
-                logoutEntryPoint = object : LogoutEntryPoint {
-                    override fun nodeBuilder(parentNode: Node, buildContext: BuildContext) = lambdaError()
-                },
-                openSourceLicensesEntryPoint = object : OpenSourceLicensesEntryPoint {
-                    override fun createNode(parentNode: Node, buildContext: BuildContext) = lambdaError()
-                },
-                accountDeactivationEntryPoint = object : AccountDeactivationEntryPoint {
-                    override fun createNode(parentNode: Node, buildContext: BuildContext) = lambdaError()
-                },
+                lockScreenEntryPoint = FakeLockScreenEntryPoint(),
+                notificationTroubleShootEntryPoint = FakeNotificationTroubleShootEntryPoint(),
+                pushHistoryEntryPoint = FakePushHistoryEntryPoint(),
+                logoutEntryPoint = FakeLogoutEntryPoint(),
+                openSourceLicensesEntryPoint = FakeOpenSourceLicensesEntryPoint(),
+                accountDeactivationEntryPoint = FakeAccountDeactivationEntryPoint(),
             )
         }
         val callback = object : PreferencesEntryPoint.Callback {
-            override fun onAddAccount() = lambdaError()
-            override fun onOpenBugReport() = lambdaError()
-            override fun onSecureBackupClick() = lambdaError()
-            override fun onOpenRoomNotificationSettings(roomId: RoomId) = lambdaError()
-            override fun navigateTo(roomId: RoomId, eventId: EventId) = lambdaError()
+            override fun navigateToAddAccount() = lambdaError()
+            override fun navigateToBugReport() = lambdaError()
+            override fun navigateToSecureBackup() = lambdaError()
+            override fun navigateToRoomNotificationSettings(roomId: RoomId) = lambdaError()
+            override fun navigateToEvent(roomId: RoomId, eventId: EventId) = lambdaError()
         }
         val params = PreferencesEntryPoint.Params(
             initialElement = PreferencesEntryPoint.InitialTarget.NotificationSettings,
         )
-        val result = entryPoint.nodeBuilder(parentNode, BuildContext.root(null))
-            .params(params)
-            .callback(callback)
-            .build()
+        val result = entryPoint.createNode(
+            parentNode = parentNode,
+            buildContext = BuildContext.root(null),
+            params = params,
+            callback = callback,
+        )
         assertThat(result).isInstanceOf(PreferencesFlowNode::class.java)
         assertThat(result.plugins).contains(params)
         assertThat(result.plugins).contains(callback)

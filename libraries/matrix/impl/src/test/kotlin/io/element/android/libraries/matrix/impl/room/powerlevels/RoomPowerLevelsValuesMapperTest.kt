@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -28,6 +29,7 @@ class RoomPowerLevelsValuesMapperTest {
                     roomName = 8,
                     roomAvatar = 9,
                     roomTopic = 10,
+                    spaceChild = 11,
                 )
             )
         ).isEqualTo(
@@ -35,11 +37,13 @@ class RoomPowerLevelsValuesMapperTest {
                 ban = 1,
                 invite = 2,
                 kick = 3,
-                sendEvents = 5,
                 redactEvents = 4,
+                eventsDefault = 5,
+                stateDefault = 6,
                 roomName = 8,
                 roomAvatar = 9,
                 roomTopic = 10,
+                spaceChild = 11,
             )
         )
     }

@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -13,7 +14,6 @@ import android.os.PowerManager
 import androidx.core.content.getSystemService
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -23,7 +23,6 @@ import io.element.android.libraries.push.impl.db.PushHistory
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultPushHistoryService(
     private val pushDatabase: PushDatabase,
     private val systemClock: SystemClock,

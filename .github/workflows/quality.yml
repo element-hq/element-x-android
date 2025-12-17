@@ -17,7 +17,7 @@ jobs:
     name: Search for forbidden patterns
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Add SSH private keys for submodule repositories
         uses: webfactory/ssh-agent@a6f90b1f127823b31d4d4a8d96047790581349bd # v0.9.1
         if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
@@ -33,11 +33,11 @@ jobs:
     name: Search for invalid screenshot files
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Set up Python 3.12
         uses: actions/setup-python@v6
         with:
-          python-version: 3.13
+          python-version: 3.14
       - name: Search for invalid screenshot files
         run: ./tools/test/checkInvalidScreenshots.py
 
@@ -45,7 +45,7 @@ jobs:
     name: Search for invalid dependencies
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Use JDK 21
         uses: actions/setup-java@v5
         with:
@@ -58,7 +58,7 @@ jobs:
       - name: Set up Python 3.12
         uses: actions/setup-python@v6
         with:
-          python-version: 3.13
+          python-version: 3.14
       - name: Search for invalid dependencies
         run: ./tools/dependencies/checkDependencies.py
 
@@ -71,7 +71,7 @@ jobs:
       group: ${{ github.ref == 'refs/heads/main' && format('check-konsist-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('check-konsist-develop-{0}', github.sha) || format('check-konsist-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           # Ensure we are building the branch and not the branch after being merged on develop
           # https://github.com/actions/checkout/issues/881
@@ -97,11 +97,44 @@ jobs:
         run: ./gradlew :tests:konsist:testDebugUnitTest $CI_GRADLE_ARG_PROPERTIES --no-daemon
       - name: Upload reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: konsist-report
           path: |
             **/build/reports/**/*.*
+
+  compose:
+    name: Compose tests
+    runs-on: ubuntu-latest
+    # Allow all jobs on main and develop. Just one per PR.
+    concurrency:
+      group: ${{ github.ref == 'refs/heads/main' && format('check-compose-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('check-compose-develop-{0}', github.sha) || format('check-compose-{0}', github.ref) }}
+      cancel-in-progress: true
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          # Ensure we are building the branch and not the branch after being merged on develop
+          # https://github.com/actions/checkout/issues/881
+          ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
+      - name: Add SSH private keys for submodule repositories
+        uses: webfactory/ssh-agent@a6f90b1f127823b31d4d4a8d96047790581349bd # v0.9.1
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
+        with:
+          ssh-private-key: ${{ secrets.ELEMENT_ENTERPRISE_DEPLOY_KEY }}
+      - name: Clone submodules
+        if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
+        run: git submodule update --init --recursive
+      - name: Use JDK 21
+        uses: actions/setup-java@v5
+        with:
+          distribution: 'temurin' # See 'Supported distributions' for available options
+          java-version: '21'
+      - name: Configure gradle
+        uses: gradle/actions/setup-gradle@v5
+        with:
+          cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
+      - name: Run compose tests
+        run: ./tools/compose/check_stability.sh
 
   lint:
     name: Android lint check
@@ -111,7 +144,7 @@ jobs:
       group: ${{ github.ref == 'refs/heads/main' && format('check-lint-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('check-lint-develop-{0}', github.sha) || format('check-lint-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           # Ensure we are building the branch and not the branch after being merged on develop
           # https://github.com/actions/checkout/issues/881
@@ -141,7 +174,7 @@ jobs:
         run: ./gradlew :app:lintGplayDebug :app:lintFdroidDebug lintDebug $CI_GRADLE_ARG_PROPERTIES --continue
       - name: Upload reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: linting-report
           path: |
@@ -155,7 +188,7 @@ jobs:
       group: ${{ github.ref == 'refs/heads/main' && format('check-detekt-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('check-detekt-develop-{0}', github.sha) || format('check-detekt-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           # Ensure we are building the branch and not the branch after being merged on develop
           # https://github.com/actions/checkout/issues/881
@@ -181,7 +214,7 @@ jobs:
         run: ./gradlew detekt $CI_GRADLE_ARG_PROPERTIES --no-daemon
       - name: Upload reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: detekt-report
           path: |
@@ -195,7 +228,7 @@ jobs:
       group: ${{ github.ref == 'refs/heads/main' && format('check-ktlint-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('check-ktlint-develop-{0}', github.sha) || format('check-ktlint-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           # Ensure we are building the branch and not the branch after being merged on develop
           # https://github.com/actions/checkout/issues/881
@@ -221,7 +254,7 @@ jobs:
         run: ./gradlew ktlintCheck $CI_GRADLE_ARG_PROPERTIES
       - name: Upload reports
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ktlint-report
           path: |
@@ -235,7 +268,7 @@ jobs:
       group: ${{ github.ref == 'refs/heads/main' && format('check-knit-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('check-knit-develop-{0}', github.sha) || format('check-knit-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           # Ensure we are building the branch and not the branch after being merged on develop
           # https://github.com/actions/checkout/issues/881
@@ -266,7 +299,7 @@ jobs:
     name: Check shell scripts
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Run shellcheck
         uses: ludeeus/action-shellcheck@2.0.0
         with:
@@ -278,13 +311,13 @@ jobs:
     needs: [konsist, lint, ktlint, detekt]
     if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           # Ensure we are building the branch and not the branch after being merged on develop
           # https://github.com/actions/checkout/issues/881
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
       - name: Download reports from previous jobs
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
       - name: Prepare Danger
         if: always()
         run: |
@@ -293,7 +326,7 @@ jobs:
           yarn add danger-plugin-lint-report --dev
       - name: Danger lint
         if: always()
-        uses: danger/danger-js@bdccecb77e0144055fbaea9224f10cf8b1229b68 # 13.0.4
+        uses: danger/danger-js@67ed2c1f42fd2fc198cc3c14b43c8f83351f4fe9 # 13.0.5
         with:
           args: "--dangerfile ./tools/danger/dangerfile-lint.js"
         env:

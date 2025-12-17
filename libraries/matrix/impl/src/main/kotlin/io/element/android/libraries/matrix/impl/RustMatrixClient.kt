@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -17,6 +18,7 @@ import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.DeviceId
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
@@ -73,11 +75,15 @@ import io.element.android.libraries.matrix.impl.util.SessionPathsProvider
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
+import io.element.android.libraries.matrix.impl.workmanager.PerformDatabaseVacuumWorkManagerRequest
 import io.element.android.libraries.sessionstorage.api.SessionStore
+import io.element.android.libraries.workmanager.api.WorkManagerRequestType
+import io.element.android.libraries.workmanager.api.WorkManagerScheduler
+import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.TimeoutCancellationException
 import kotlinx.coroutines.cancel
@@ -129,6 +135,8 @@ class RustMatrixClient(
     clock: SystemClock,
     timelineEventTypeFilterFactory: TimelineEventTypeFilterFactory,
     private val featureFlagService: FeatureFlagService,
+    private val analyticsService: AnalyticsService,
+    private val workManagerScheduler: WorkManagerScheduler,
 ) : MatrixClient {
     override val sessionId: UserId = UserId(innerClient.userId())
     override val deviceId: DeviceId = DeviceId(innerClient.deviceId())
@@ -176,6 +184,7 @@ class RustMatrixClient(
         roomListFactory = RoomListFactory(
             innerRoomListService = innerRoomListService,
             sessionCoroutineScope = sessionCoroutineScope,
+            analyticsService = analyticsService,
         ),
         roomSyncSubscriber = roomSyncSubscriber,
     )
@@ -210,6 +219,7 @@ class RustMatrixClient(
         roomMembershipObserver = roomMembershipObserver,
         roomInfoMapper = roomInfoMapper,
         featureFlagService = featureFlagService,
+        analyticsService = analyticsService,
     )
 
     override val matrixMediaLoader: MatrixMediaLoader = RustMediaLoader(
@@ -238,11 +248,11 @@ class RustMatrixClient(
 
     override val ignoredUsersFlow = mxCallbackFlow<ImmutableList<UserId>> {
         // Fetch the initial value manually, the SDK won't return it automatically
-        channel.trySend(innerClient.ignoredUsers().map(::UserId).toPersistentList())
+        channel.trySend(innerClient.ignoredUsers().map(::UserId).toImmutableList())
 
         innerClient.subscribeToIgnoredUsers(object : IgnoredUsersListener {
             override fun call(ignoredUserIds: List<String>) {
-                channel.trySend(ignoredUserIds.map(::UserId).toPersistentList())
+                channel.trySend(ignoredUserIds.map(::UserId).toImmutableList())
             }
         })
     }
@@ -270,6 +280,9 @@ class RustMatrixClient(
             // Force a refresh of the profile
             getUserProfile()
         }
+
+        // Schedule regular database vacuuming to ensure DB performance remains optimal
+        scheduleDatabaseVacuum()
     }
 
     override fun userIdServerName(): String {
@@ -286,7 +299,7 @@ class RustMatrixClient(
     override suspend fun getUrl(url: String): Result<ByteArray> = withContext(sessionDispatcher) {
         runCatchingExceptions {
             innerClient.getUrl(url)
-        }
+        }.mapFailure { it.mapClientException() }
     }
 
     override suspend fun getRoom(roomId: RoomId): BaseRoom? = withContext(sessionDispatcher) {
@@ -713,6 +726,20 @@ class RustMatrixClient(
         }
     }
 
+    override suspend fun markRoomAsFullyRead(roomId: RoomId, eventId: EventId): Result<Unit> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            val room = innerClient.getRoom(roomId.value) ?: error("Could not fetch associated room")
+            room.markAsFullyReadUnchecked(eventId.value)
+        }
+    }
+
+    override suspend fun performDatabaseVacuum(): Result<Unit> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            Timber.d("Performing database vacuuming for session $sessionId...")
+            innerClient.optimizeStores()
+        }
+    }
+
     private suspend fun getCacheSize(
         includeCryptoDb: Boolean = false,
     ): Long = withContext(sessionDispatcher) {
@@ -736,6 +763,15 @@ class RustMatrixClient(
     private suspend fun deleteSessionDirectory() = withContext(sessionDispatcher) {
         // Delete all the files for this session
         sessionPathsProvider.provides(sessionId)?.deleteRecursively()
+    }
+
+    private fun scheduleDatabaseVacuum() {
+        // If there's already a periodic work request, do not schedule another one
+        if (workManagerScheduler.hasPendingWork(sessionId, WorkManagerRequestType.DB_VACUUM)) return
+
+        Timber.i("Scheduling periodic database vacuuming for session $sessionId")
+        val request = PerformDatabaseVacuumWorkManagerRequest(sessionId)
+        workManagerScheduler.submit(request)
     }
 }
 

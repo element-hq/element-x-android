@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -40,7 +41,6 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.colors.gradientActionColors
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.LocalBuildMeta
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.lowHorizontalPaddingValue
@@ -63,15 +63,7 @@ fun SuperButton(
             ButtonSize.Small -> PaddingValues(horizontal = 16.dp, vertical = 5.dp)
         }
     }
-    val colors = if (LocalBuildMeta.current.isEnterpriseBuild) {
-        listOf(
-            ElementTheme.colors.textActionAccent,
-            ElementTheme.colors.textActionAccent,
-        )
-    } else {
-        gradientActionColors()
-    }
-
+    val colors = gradientActionColors()
     val shaderBrush = remember(colors) {
         object : ShaderBrush() {
             override fun createShader(size: Size): Shader {

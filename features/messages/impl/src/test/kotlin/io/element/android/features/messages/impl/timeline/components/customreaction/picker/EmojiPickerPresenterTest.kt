@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -26,7 +27,7 @@ import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toPersistentMap
+import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -92,7 +93,7 @@ class EmojiPickerPresenterTest {
         categories: ImmutableList<Pair<EmojibaseCategory, ImmutableList<Emoji>>> = persistentListOf(emojiCategory()),
         recentEmojis: ImmutableList<String> = persistentListOf(),
     ) = EmojiPickerPresenter(
-        emojibaseStore = EmojibaseStore(categories.toMap().toPersistentMap()),
+        emojibaseStore = EmojibaseStore(categories.toMap().toImmutableMap()),
         recentEmojis = recentEmojis,
         coroutineDispatchers = testCoroutineDispatchers(),
     )

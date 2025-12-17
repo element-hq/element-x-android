@@ -4,10 +4,10 @@
   <string name="screen_join_room_cancel_knock_action">"Utzi eskaera bertan behera"</string>
   <string name="screen_join_room_cancel_knock_alert_confirmation">"Bai, utzi bertan behera"</string>
   <string name="screen_join_room_decline_and_block_alert_title">"Eman gonbidapenari ezetza eta blokeatu"</string>
-  <string name="screen_join_room_decline_and_block_button_title">"Eman ezetza eta blokeatu"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Baztertu eta blokeatu"</string>
   <string name="screen_join_room_fail_message">"Gelara sartzeak huts egin du."</string>
   <string name="screen_join_room_forget_action">"Ahaztu gela hau"</string>
-  <string name="screen_join_room_join_action">"Sartu gelan"</string>
+  <string name="screen_join_room_join_action">"Elkartu"</string>
   <string name="screen_join_room_knock_action">"Bidali batzeko eskaera"</string>
   <string name="screen_join_room_knock_message_description">"Mezua (aukerakoa)"</string>
   <string name="screen_join_room_knock_sent_title">"Sartzeko eskaera bidali da"</string>

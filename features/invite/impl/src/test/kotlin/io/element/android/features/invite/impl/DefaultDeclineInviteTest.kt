@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -34,14 +35,14 @@ class DefaultDeclineInviteTest {
     private val notificationCleaner =
         FakeNotificationCleaner(clearMembershipNotificationForRoomLambda = clearMembershipNotificationForRoomLambda)
 
-    private val successLeaveRoomLambda = lambdaRecorder<Result<Unit>> { -> Result.success(Unit) }
+    private val successLeaveRoomLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
     private val successIgnoreUserLambda =
         lambdaRecorder<UserId, Result<Unit>> { _ -> Result.success(Unit) }
     private val successReportRoomLambda =
         lambdaRecorder<String?, Result<Unit>> { _ -> Result.success(Unit) }
 
     private val failureLeaveRoomLambda =
-        lambdaRecorder<Result<Unit>> { -> Result.failure(Exception("Leave room error")) }
+        lambdaRecorder<Result<Unit>> { Result.failure(Exception("Leave room error")) }
     private val failureIgnoreUserLambda =
         lambdaRecorder<UserId, Result<Unit>> { _ -> Result.failure(Exception("Ignore user error")) }
     private val failureReportRoomLambda =

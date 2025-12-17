@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -17,7 +18,7 @@ import io.element.android.libraries.architecture.overlay.operation.show
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 
 interface StartChatNavigator : Plugin {
-    fun onOpenRoom(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>)
+    fun onRoomCreated(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>)
     fun onCreateNewRoom()
     fun onShowJoinRoomByAddress()
     fun onDismissJoinRoomByAddress()
@@ -30,7 +31,8 @@ class DefaultStartChatNavigator(
     private val openRoom: (RoomIdOrAlias, List<String>) -> Unit,
     private val openRoomDirectory: () -> Unit,
 ) : StartChatNavigator {
-    override fun onOpenRoom(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>) = openRoom(roomIdOrAlias, serverNames)
+    override fun onRoomCreated(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>) =
+        openRoom(roomIdOrAlias, serverNames)
 
     override fun onOpenRoomDirectory() = openRoomDirectory()
 

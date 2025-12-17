@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bug_report_attach_screenshot">"Priloži snimku zaslona"</string>
+  <string name="screen_bug_report_contact_me">"Možete mi se obratiti ako imate bilo kakvih dodatnih pitanja."</string>
+  <string name="screen_bug_report_contact_me_title">"Javi mi se"</string>
+  <string name="screen_bug_report_edit_screenshot">"Uredi snimku zaslona"</string>
+  <string name="screen_bug_report_editor_description">"Opišite problem. Što ste napravili? Što ste očekivali da će se dogoditi? Što se zapravo dogodilo. Molimo vas da što detaljnije opišete problem."</string>
+  <string name="screen_bug_report_editor_placeholder">"Opišite problem…"</string>
+  <string name="screen_bug_report_editor_supporting">"Ako je moguće, molimo vas da opis bude na engleskom jeziku."</string>
+  <string name="screen_bug_report_error_description_too_short">"Opis je prekratak; navedite više pojedinosti o tome što se dogodilo. Hvala!"</string>
+  <string name="screen_bug_report_include_crash_logs">"Pošalji zapisnike o padu aplikacije"</string>
+  <string name="screen_bug_report_include_logs">"Dopusti zapisnike"</string>
+  <string name="screen_bug_report_include_logs_error">"Vaši su zapisnici preopširni pa ih nije moguće uključiti u ovo izvješće. Molimo vas da nam ih pošaljete na drugi način."</string>
+  <string name="screen_bug_report_include_screenshot">"Pošalji snimku zaslona"</string>
+  <string name="screen_bug_report_logs_description">"Zapisnici će biti uključeni u vašu poruku kako bismo bili sigurni da sve ispravno funkcionira. Kako biste poslali poruku bez zapisnika, isključite ovu postavku."</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"%1$s neočekivano je prestao s radom prilikom posljednjeg korištenja. Želite li s nama podijeliti izvješće o padu?"</string>
+  <string name="screen_bug_report_send_notification_settings_description">"Ako imate problema s obavijestima, prijenos pravila za slanje obavijesti može nam pomoći da utvrdimo uzrok. Imajte na umu da ta pravila mogu sadržavati privatne podatke, kao što su vaše ime za prikaz ili ključne riječi za koje želite primati obavijesti."</string>
+  <string name="screen_bug_report_send_notification_settings_title">"Postavke slanja obavijesti"</string>
+  <string name="screen_bug_report_view_logs">"Prikaz zapisnika"</string>
+</resources>

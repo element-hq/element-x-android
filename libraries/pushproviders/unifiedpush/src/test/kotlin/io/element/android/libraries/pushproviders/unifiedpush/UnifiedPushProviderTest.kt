@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -16,9 +17,9 @@ import io.element.android.libraries.matrix.test.A_SECRET
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.pushproviders.api.Distributor
-import io.element.android.libraries.pushproviders.test.aCurrentUserPushConfig
-import io.element.android.libraries.pushproviders.unifiedpush.troubleshoot.FakeUnifiedPushCurrentUserPushConfigProvider
+import io.element.android.libraries.pushproviders.test.aSessionPushConfig
 import io.element.android.libraries.pushproviders.unifiedpush.troubleshoot.FakeUnifiedPushDistributorProvider
+import io.element.android.libraries.pushproviders.unifiedpush.troubleshoot.FakeUnifiedPushSessionPushConfigProvider
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.libraries.pushstore.test.userpushstore.clientsecret.FakePushClientSecret
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -117,7 +118,7 @@ class UnifiedPushProviderTest {
     fun `unregister ok`() = runTest {
         val matrixClient = FakeMatrixClient()
         val getSecretForUserResultLambda = lambdaRecorder<SessionId, String> { A_SECRET }
-        val unregisterLambda = lambdaRecorder<MatrixClient, String, Result<Unit>> { _, _ -> Result.success(Unit) }
+        val unregisterLambda = lambdaRecorder<MatrixClient, String, Boolean, Result<Unit>> { _, _, _ -> Result.success(Unit) }
         val unifiedPushProvider = createUnifiedPushProvider(
             pushClientSecret = FakePushClientSecret(
                 getSecretForUserResult = getSecretForUserResultLambda,
@@ -133,14 +134,14 @@ class UnifiedPushProviderTest {
             .with(value(A_SESSION_ID))
         unregisterLambda.assertions()
             .isCalledOnce()
-            .with(value(matrixClient), value(A_SECRET))
+            .with(value(matrixClient), value(A_SECRET), value(true))
     }
 
     @Test
     fun `unregister ko`() = runTest {
         val matrixClient = FakeMatrixClient()
         val getSecretForUserResultLambda = lambdaRecorder<SessionId, String> { A_SECRET }
-        val unregisterLambda = lambdaRecorder<MatrixClient, String, Result<Unit>> { _, _ -> Result.failure(AN_EXCEPTION) }
+        val unregisterLambda = lambdaRecorder<MatrixClient, String, Boolean, Result<Unit>> { _, _, _ -> Result.failure(AN_EXCEPTION) }
         val unifiedPushProvider = createUnifiedPushProvider(
             pushClientSecret = FakePushClientSecret(
                 getSecretForUserResult = getSecretForUserResultLambda,
@@ -156,7 +157,7 @@ class UnifiedPushProviderTest {
             .with(value(A_SESSION_ID))
         unregisterLambda.assertions()
             .isCalledOnce()
-            .with(value(matrixClient), value(A_SECRET))
+            .with(value(matrixClient), value(A_SECRET), value(true))
     }
 
     @Test
@@ -211,13 +212,13 @@ class UnifiedPushProviderTest {
 
     @Test
     fun `getCurrentUserPushConfig invokes the provider methods`() = runTest {
-        val currentUserPushConfig = aCurrentUserPushConfig()
+        val currentUserPushConfig = aSessionPushConfig()
         val unifiedPushProvider = createUnifiedPushProvider(
-            unifiedPushCurrentUserPushConfigProvider = FakeUnifiedPushCurrentUserPushConfigProvider(
-                currentUserPushConfig = { currentUserPushConfig }
+            unifiedPushSessionPushConfigProvider = FakeUnifiedPushSessionPushConfigProvider(
+                config = { currentUserPushConfig }
             )
         )
-        val result = unifiedPushProvider.getCurrentUserPushConfig()
+        val result = unifiedPushProvider.getPushConfig(A_SESSION_ID)
         assertThat(result).isEqualTo(currentUserPushConfig)
     }
 
@@ -229,7 +230,7 @@ class UnifiedPushProviderTest {
 
     @Test
     fun `onSessionDeleted should do the cleanup`() = runTest {
-        val cleanupLambda = lambdaRecorder<String, Unit> { }
+        val cleanupLambda = lambdaRecorder<String, Boolean, Unit> { _, _ -> }
         val unifiedPushProvider = createUnifiedPushProvider(
             pushClientSecret = FakePushClientSecret(
                 getSecretForUserResult = { A_SECRET }
@@ -239,7 +240,7 @@ class UnifiedPushProviderTest {
             ),
         )
         unifiedPushProvider.onSessionDeleted(A_SESSION_ID)
-        cleanupLambda.assertions().isCalledOnce().with(value(A_SECRET))
+        cleanupLambda.assertions().isCalledOnce().with(value(A_SECRET), value(true))
     }
 
     private fun createUnifiedPushProvider(
@@ -248,7 +249,7 @@ class UnifiedPushProviderTest {
         unRegisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase = FakeUnregisterUnifiedPushUseCase(),
         pushClientSecret: PushClientSecret = FakePushClientSecret(),
         unifiedPushStore: UnifiedPushStore = FakeUnifiedPushStore(),
-        unifiedPushCurrentUserPushConfigProvider: UnifiedPushCurrentUserPushConfigProvider = FakeUnifiedPushCurrentUserPushConfigProvider(),
+        unifiedPushSessionPushConfigProvider: UnifiedPushSessionPushConfigProvider = FakeUnifiedPushSessionPushConfigProvider(),
     ): UnifiedPushProvider {
         return UnifiedPushProvider(
             unifiedPushDistributorProvider = unifiedPushDistributorProvider,
@@ -256,7 +257,7 @@ class UnifiedPushProviderTest {
             unRegisterUnifiedPushUseCase = unRegisterUnifiedPushUseCase,
             pushClientSecret = pushClientSecret,
             unifiedPushStore = unifiedPushStore,
-            unifiedPushCurrentUserPushConfigProvider = unifiedPushCurrentUserPushConfigProvider,
+            unifiedPushSessionPushConfigProvider = unifiedPushSessionPushConfigProvider,
         )
     }
 }

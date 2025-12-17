@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -11,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.SideEffect
 import androidx.compose.ui.Modifier
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.roommembermoderation.api.ModerationAction
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationRenderer
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
@@ -20,7 +20,6 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import timber.log.Timber
 
 @ContributesBinding(RoomScope::class)
-@Inject
 class DefaultRoomMemberModerationRenderer : RoomMemberModerationRenderer {
     @Composable
     override fun Render(

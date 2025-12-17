@@ -1,3 +1,8 @@
+# Copyright (c) 2025 Element Creations Ltd.
+#
+# SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+# Please see LICENSE files in the repository root for full details.
+
 # Default rules: https://github.com/detekt/detekt/blob/main/detekt-core/src/main/resources/default-detekt-config.yml
 
 style:
@@ -145,7 +150,7 @@ exceptions:
   TooGenericExceptionCaught:
     active: false
   SwallowedException:
-    active: false
+    active: true
   ThrowingExceptionsWithoutMessageOrCause:
     active: true
   TooGenericExceptionThrown:
@@ -219,27 +224,12 @@ comments:
 Compose:
   CompositionLocalAllowlist:
     active: true
-    # You can optionally define a list of CompositionLocals that are allowed here
-    allowedCompositionLocals:
-      - LocalCompoundColors
-      - LocalSnackbarDispatcher
-      - LocalCameraPositionState
-      - LocalMediaItemPresenterFactories
-      - LocalTimelineItemPresenterFactories
-      - LocalRoomMemberProfilesCache
-      - LocalMentionSpanUpdater
-      - LocalAnalyticsService
-      - LocalBuildMeta
-      - LocalUiTestMode
-      - LocalSdkIntVersionProvider
   CompositionLocalNaming:
     active: true
   ContentEmitterReturningValues:
     active: true
     # You can optionally add your own composables here
     # contentEmitters: MyComposable,MyOtherComposable
-  ModifierComposable:
-    active: true
   ModifierMissing:
     active: true
   ModifierReused:
@@ -262,8 +252,6 @@ Compose:
     active: true
   PreviewPublic:
     active: true
-    # You can optionally disable that only previews with @PreviewParameter are flagged
-    previewPublicOnlyIfParams: false
   RememberMissing:
     active: true
   UnstableCollections:

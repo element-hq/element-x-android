@@ -16,6 +16,7 @@
   <string name="screen_session_verification_compare_numbers_subtitle">"تصدیق کریں کہ نیچے دیے گئے اعداد آپکے دوسرے جلسے میں دکھائے گئے اعداد سے مماثل ہیں۔"</string>
   <string name="screen_session_verification_compare_numbers_title">"اعداد کا موازنہ کریں"</string>
   <string name="screen_session_verification_complete_subtitle">"آپ کا نیا جلسہ اب توثیق شدہ ہے۔ اسے آپ کے مرموزکردہ پیغامات تک رسائی حاصل ہے، اور دوسرے صارفین اسے بھروسہ مند کے طور پر دیکھیں گے۔"</string>
+  <string name="screen_session_verification_device_verified">"آلہ توثیق شدہ"</string>
   <string name="screen_session_verification_enter_recovery_key">"بازیابی کلید درج کریں"</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"اپنی مرموزکردہ پیغام کی سرگزشت تک رسائی حاصل کرنے کے لیے ثابت کریں کہ یہ آپ ہی ہیں۔"</string>
   <string name="screen_session_verification_open_existing_session_title">"ایک موجودہ جلسہ کھولیں"</string>
@@ -24,6 +25,7 @@
   <string name="screen_session_verification_positive_button_verifying_ongoing">"ملانے کا انتظار"</string>
   <string name="screen_session_verification_ready_subtitle">"رموز تعبیری کے منفرد مجموعہ کا موازنہ کریں۔"</string>
   <string name="screen_session_verification_request_accepted_subtitle">"منفرد ایموجی کا موازنہ کریں، یقینی بناتے ہوئے کہ وہ ایک ہی ترتیب میں دکھائی دیں۔"</string>
+  <string name="screen_session_verification_request_success_subtitle">"آپ کا نیا جلسہ اب توثیق شدہ ہے۔ اسے آپ کے مرموزکردہ پیغامات تک رسائی حاصل ہے، اور دوسرے صارفین اسے بھروسہ مند کے طور پر دیکھیں گے۔"</string>
   <string name="screen_session_verification_request_success_title">"آلہ توثیق شدہ"</string>
   <string name="screen_session_verification_they_dont_match">"وہ مماثل نہیں ہیں"</string>
   <string name="screen_session_verification_they_match">"وہ مماثل ہیں"</string>

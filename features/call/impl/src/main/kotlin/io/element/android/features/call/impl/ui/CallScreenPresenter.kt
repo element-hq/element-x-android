@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -64,6 +65,7 @@ class CallScreenPresenter(
     private val appForegroundStateService: AppForegroundStateService,
     @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,
+    private val widgetMessageSerializer: WidgetMessageSerializer,
 ) : Presenter<CallScreenState> {
     @AssistedFactory
     interface Factory {
@@ -160,7 +162,7 @@ class CallScreenPresenter(
             }
         }
 
-        fun handleEvents(event: CallScreenEvents) {
+        fun handleEvent(event: CallScreenEvents) {
             when (event) {
                 is CallScreenEvents.Hangup -> {
                     val widgetId = callWidgetDriver.value?.id
@@ -200,7 +202,7 @@ class CallScreenPresenter(
             userAgent = userAgent,
             isCallActive = isWidgetLoaded,
             isInWidgetMode = isInWidgetMode,
-            eventSink = { handleEvents(it) },
+            eventSink = ::handleEvent,
         )
     }
 
@@ -258,7 +260,7 @@ class CallScreenPresenter(
     }
 
     private fun parseMessage(message: String): WidgetMessage? {
-        return WidgetMessageSerializer.deserialize(message).getOrNull()
+        return widgetMessageSerializer.deserialize(message).getOrNull()
     }
 
     private fun sendHangupMessage(widgetId: String, messageInterceptor: WidgetMessageInterceptor) {
@@ -269,7 +271,7 @@ class CallScreenPresenter(
             action = WidgetMessage.Action.HangUp,
             data = null,
         )
-        messageInterceptor.sendMessage(WidgetMessageSerializer.serialize(message))
+        messageInterceptor.sendMessage(widgetMessageSerializer.serialize(message))
     }
 
     private fun CoroutineScope.close(widgetDriver: MatrixWidgetDriver?, navigator: CallScreenNavigator) = launch(dispatchers.io) {

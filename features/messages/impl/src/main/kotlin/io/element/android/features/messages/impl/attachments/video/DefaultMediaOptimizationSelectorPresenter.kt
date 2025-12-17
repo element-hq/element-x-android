@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -24,13 +25,12 @@ import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.mediaupload.api.MaxUploadSizeProvider
+import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.api.compressorHelper
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
-import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toPersistentList
-import kotlinx.coroutines.flow.first
+import kotlinx.collections.immutable.toImmutableList
 import timber.log.Timber
 import kotlin.math.roundToLong
 
@@ -38,8 +38,8 @@ import kotlin.math.roundToLong
 class DefaultMediaOptimizationSelectorPresenter(
     @Assisted private val localMedia: LocalMedia,
     private val maxUploadSizeProvider: MaxUploadSizeProvider,
-    private val sessionPreferencesStore: SessionPreferencesStore,
     private val featureFlagService: FeatureFlagService,
+    private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
     mediaExtractorFactory: VideoMetadataExtractor.Factory,
 ) : MediaOptimizationSelectorPresenter {
     @ContributesBinding(SessionScope::class)
@@ -111,7 +111,7 @@ class DefaultMediaOptimizationSelectorPresenter(
                         canUpload = calculatedSize <= (maxUploadSize as AsyncData.Success).data
                     )
                 }
-                .toPersistentList()
+                .toImmutableList()
                 .also { sizes ->
                     Timber.d(sizes.joinToString("\n") { "Calculated size for ${it.preset}: ${it.sizeInBytes} MB. Max upload size: $maxUploadSize" })
                 }
@@ -123,11 +123,12 @@ class DefaultMediaOptimizationSelectorPresenter(
         var selectedVideoOptimizationPreset by remember { mutableStateOf<AsyncData<VideoCompressionPreset>>(AsyncData.Loading()) }
 
         LaunchedEffect(videoSizeEstimations.dataOrNull()) {
-            selectedImageOptimization = AsyncData.Success(sessionPreferencesStore.doesOptimizeImages().first())
+            val mediaOptimizationConfig = mediaOptimizationConfigProvider.get()
+            selectedImageOptimization = AsyncData.Success(mediaOptimizationConfig.compressImages)
             // Find the best video preset based on the default preset and the video size estimations
             // Since the estimation for the current preset may be way too large to upload, we check the ones that provide lower file sizes
             selectedVideoOptimizationPreset = findBestVideoPreset(
-                defaultVideoPreset = sessionPreferencesStore.getVideoCompressionPreset().first(),
+                defaultVideoPreset = mediaOptimizationConfig.videoCompressionPreset,
                 videoSizeEstimations = videoSizeEstimations,
             )
         }
@@ -172,7 +173,7 @@ class DefaultMediaOptimizationSelectorPresenter(
             selectedVideoPreset = selectedVideoOptimizationPreset.dataOrNull(),
             displayMediaSelectorViews = displayMediaSelectorViews,
             displayVideoPresetSelectorDialog = displayVideoPresetSelectorDialog,
-            eventSink = { handleEvent(it) },
+            eventSink = ::handleEvent,
         )
     }
 

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2025 Element Creations Ltd.
   ~ Copyright 2022 New Vector Ltd.
   ~
-  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
   ~ Please see LICENSE files in the repository root for full details.
   -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
@@ -34,10 +35,17 @@
         <provider
             android:name="androidx.startup.InitializationProvider"
             android:authorities="${applicationId}.androidx-startup"
-            android:exported="false">
+            android:exported="false"
+            tools:node="merge">
             <meta-data
                 android:name='androidx.lifecycle.ProcessLifecycleInitializer'
                 android:value='androidx.startup' />
+
+            <!-- Remove to use Application workManagerConfiguration -->
+            <meta-data
+                android:name="androidx.work.WorkManagerInitializer"
+                android:value="androidx.startup"
+                tools:node="remove" />
         </provider>
 
         <!--
@@ -175,7 +183,6 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_providers" />
         </provider>
-
     </application>
 
 </manifest>

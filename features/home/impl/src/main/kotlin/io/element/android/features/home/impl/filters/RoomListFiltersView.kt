@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -19,6 +20,7 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
@@ -34,6 +36,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -48,6 +51,9 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 
+/**
+ * Ref: https://www.figma.com/design/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?node-id=2191-606
+ */
 @Composable
 fun RoomListFiltersView(
     state: RoomListFiltersState,
@@ -143,9 +149,12 @@ private fun RoomListClearFiltersButton(
             .clip(CircleShape)
             .background(ElementTheme.colors.bgActionPrimaryRest)
             .clickable(onClick = onClick)
+            .padding(4.dp)
     ) {
         Icon(
-            modifier = Modifier.align(Alignment.Center),
+            modifier = Modifier
+                .align(Alignment.Center)
+                .size(16.dp),
             imageVector = CompoundIcons.Close(),
             tint = ElementTheme.colors.iconOnSolidPrimary,
             contentDescription = stringResource(id = R.string.screen_roomlist_clear_filters),
@@ -170,21 +179,34 @@ private fun RoomListFilterView(
         animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
         label = "chip text colour",
     )
+    val borderColour = animateColorAsState(
+        targetValue = if (selected) Color.Transparent else ElementTheme.colors.borderInteractiveSecondary,
+        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+        label = "chip border colour",
+    )
 
     FilterChip(
         selected = selected,
         onClick = { onClick(roomListFilter) },
-        modifier = modifier.height(36.dp),
+        modifier = modifier.height(32.dp),
         shape = CircleShape,
         colors = FilterChipDefaults.filterChipColors(
             containerColor = background.value,
             selectedContainerColor = background.value,
             labelColor = textColour.value,
-            selectedLabelColor = textColour.value
+            selectedLabelColor = textColour.value,
         ),
         label = {
-            Text(text = stringResource(id = roomListFilter.stringResource))
-        }
+            Text(
+                text = stringResource(id = roomListFilter.stringResource),
+                style = ElementTheme.typography.fontBodyMdRegular,
+            )
+        },
+        border = FilterChipDefaults.filterChipBorder(
+            enabled = true,
+            selected = selected,
+            borderColor = borderColour.value,
+        ),
     )
 }
 
@@ -192,6 +214,7 @@ private fun RoomListFilterView(
 @Composable
 internal fun RoomListFiltersViewPreview(@PreviewParameter(RoomListFiltersStateProvider::class) state: RoomListFiltersState) = ElementPreview {
     RoomListFiltersView(
+        modifier = Modifier.padding(vertical = 4.dp),
         state = state,
     )
 }

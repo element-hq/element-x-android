@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_bottom_sheet_manage_room_member_ban">"Zabrani korisnika"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Zabrani"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Neće se moći ponovno pridružiti ako budu pozvani."</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Jeste li sigurni da želite zabraniti pristup ovom članu?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description">"Neće se moći ponovno pridružiti ovom prostoru ako budu pozvani, ali će i dalje zadržati članstvo u svim sobama ili podprostorima."</string>
+  <string name="screen_bottom_sheet_manage_room_member_banning_user">"Zabranjuje se pristup korisniku %1$s"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"Ukloni"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"Moći će se ponovno pridružiti ovoj sobi ako budu pozvani."</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"Jeste li sigurni da želite ukloniti ovog člana?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description">"Moći će se ponovno pridružiti ovom prostoru ako budu pozvani, a i dalje će zadržati članstvo u svim sobama ili podprostorima."</string>
+  <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Prikaži profil"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Ukloni korisnika"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Želite li ukloniti člana i zabraniti mu da se ubuduće pridruži?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_removing_user">"Uklanjanje člana %1$s…"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban">"Poništi zabranu pristupa korisniku"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_action">"Poništi zabranu"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_description">"Mogli bi se ponovno pridružiti ako budu pozvani"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_title">"Jeste li sigurni da želite poništiti zabranu pristupa ovom članu?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unbanning_user">"Uklanja se zabrana korisniku %1$s"</string>
+</resources>

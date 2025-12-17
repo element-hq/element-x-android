@@ -13,6 +13,7 @@
   <string name="full_screen_intent_banner_message">"Muhim qoʻngʻiroqlarni oʻtkazib yubormasligingiz uchun telefoningiz qulflangan holatida toʻliq ekranli bildirishnomalarni ko‘rsatishga ruxsat beradigan qilib sozlamalaringizni oʻzgartiring."</string>
   <string name="full_screen_intent_banner_title">"Qoʻngʻiroq tajribangizni yaxshilang"</string>
   <string name="screen_home_tab_chats">"Suhbatlar"</string>
+  <string name="screen_home_tab_spaces">"Bo‘shliqlar"</string>
   <string name="screen_invites_decline_chat_message">"Haqiqatan ham qo\'shilish taklifini rad qilmoqchimisiz%1$s ?"</string>
   <string name="screen_invites_decline_chat_title">"Taklifni rad etish"</string>
   <string name="screen_invites_decline_direct_chat_message">"Haqiqatan ham bu shaxsiy chatni rad qilmoqchimisiz%1$s ?"</string>
@@ -22,6 +23,7 @@
   <string name="screen_migration_message">"Bu bir martalik jarayon, kutganingiz uchun rahmat."</string>
   <string name="screen_migration_title">"Hisobingiz sozlanmoqda."</string>
   <string name="screen_roomlist_a11y_create_message">"Yangi suhbat yoki xona yarating"</string>
+  <string name="screen_roomlist_clear_filters">"Filtrlarni tozalash"</string>
   <string name="screen_roomlist_empty_message">"Kimgadir xabar yuborishdan boshlang."</string>
   <string name="screen_roomlist_empty_title">"Hozircha chatlar yo‘q."</string>
   <string name="screen_roomlist_filter_favourites">"Sevimlilar"</string>
@@ -31,6 +33,7 @@ Hozircha, boshqa suhbatlaringizni ko‘rish uchun filtrlarni bekor qilishingiz m
   <string name="screen_roomlist_filter_invites">"Takliflar"</string>
   <string name="screen_roomlist_filter_invites_empty_state_title">"Sizda hech qanday kutilayotgan takliflar yoʻq."</string>
   <string name="screen_roomlist_filter_low_priority">"Past darajali"</string>
+  <string name="screen_roomlist_filter_low_priority_empty_state_title">"Sizda hali past ustuvor chatlar yoʻq"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"Boshqa suhbatlaringizni koʻrish uchun filtrlarni bekor qilishingiz mumkin"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"Sizda bu tanlov uchun chatlar yo‘q"</string>
   <string name="screen_roomlist_filter_people">"Odamlar"</string>
@@ -44,6 +47,7 @@ Sizda oʻqilmagan xabarlar yoʻq!"</string>
   <string name="screen_roomlist_main_space_title">"Suhbatlar"</string>
   <string name="screen_roomlist_mark_as_read">"Oʻqilgan deb belgilash"</string>
   <string name="screen_roomlist_mark_as_unread">"Oʻqilmagan deb belgilash"</string>
+  <string name="screen_roomlist_tombstoned_room_description">"Bu xona yangilandi"</string>
   <string name="session_verification_banner_message">"Siz yangi qurilmadan foydalanayotganga o‘xshaysiz. Shifrlangan xabarlaringizga kirish uchun boshqa qurilma bilan tasdiqlang."</string>
   <string name="session_verification_banner_title">"Siz ekanligingizni tasdiqlang"</string>
 </resources>

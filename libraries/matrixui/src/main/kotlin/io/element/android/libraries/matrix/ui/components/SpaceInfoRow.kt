@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -107,7 +108,7 @@ internal fun SpaceInfoRowPreview() = ElementPreview {
         SpaceInfoRow(
             leftText = "Element space",
             rightText = numberOfRooms(16),
-            iconVector = CompoundIcons.Workspace(),
+            iconVector = CompoundIcons.Space(),
         )
         SpaceInfoRow(
             visibility = SpaceRoomVisibility.Private,

@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -27,10 +28,16 @@ import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -42,16 +49,17 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerEvents
+import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerEvent
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
+import io.element.android.features.messages.impl.crypto.historyvisible.HistoryVisibleStateView
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeStateView
 import io.element.android.features.messages.impl.link.LinkEvents
 import io.element.android.features.messages.impl.link.LinkView
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsBottomSheet
 import io.element.android.features.messages.impl.messagecomposer.DisabledComposerView
-import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvents
+import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvent
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerView
 import io.element.android.features.messages.impl.messagecomposer.suggestions.SuggestionsPickerView
 import io.element.android.features.messages.impl.pinned.banner.PinnedMessagesBannerState
@@ -71,7 +79,6 @@ import io.element.android.features.messages.impl.topbars.MessagesViewTopBar
 import io.element.android.features.messages.impl.topbars.ThreadTopBar
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessagePermissionRationaleDialog
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageSendingFailedDialog
-import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorView
 import io.element.android.libraries.androidutils.ui.hideKeyboard
 import io.element.android.libraries.designsystem.atomic.molecules.ComposerAlertMolecule
 import io.element.android.libraries.designsystem.components.ExpandableBottomSheetLayout
@@ -81,6 +88,7 @@ import io.element.android.libraries.designsystem.components.rememberExpandableBo
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toAnnotatedString
+import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.BottomSheetDragHandle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -119,7 +127,7 @@ fun MessagesView(
     knockRequestsBannerView: @Composable () -> Unit,
 ) {
     OnLifecycleEvent { _, event ->
-        state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvents.LifecycleEvent(event))
+        state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvent.LifecycleEvent(event))
     }
 
     KeepScreenOn(state.voiceMessageComposerState.keepScreenOn)
@@ -127,6 +135,8 @@ fun MessagesView(
     HideKeyboardWhenDisposed()
 
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
+
+    var maxComposerHeightPx by remember { mutableIntStateOf(120) }
 
     // This is needed because the composer is inside an AndroidView that can't be affected by the FocusManager in Compose
     val localView = LocalView.current
@@ -178,34 +188,37 @@ fun MessagesView(
         modifier = modifier
             .fillMaxSize()
             .imePadding()
-            .systemBarsPadding(),
+            .systemBarsPadding()
+            .onSizeChanged { size ->
+                // Let the composer takes at max half of the available height.
+                // The value will be different if the soft keyboard is displayed
+                // or not.
+                maxComposerHeightPx = (size.height * 0.5f).toInt()
+            },
         content = {
             Scaffold(
                 contentWindowInsets = WindowInsets.statusBars,
                 topBar = {
-                    Column {
-                        ConnectivityIndicatorView(isOnline = state.hasNetworkConnection)
-                        if (state.timelineState.timelineMode is Timeline.Mode.Thread) {
-                            ThreadTopBar(
-                                roomName = state.roomName,
-                                roomAvatarData = state.roomAvatar,
-                                heroes = state.heroes,
-                                isTombstoned = state.isTombstoned,
-                                onBackClick = onBackClick,
-                            )
-                        } else {
-                            MessagesViewTopBar(
-                                roomName = state.roomName,
-                                roomAvatar = state.roomAvatar,
-                                isTombstoned = state.isTombstoned,
-                                heroes = state.heroes,
-                                roomCallState = state.roomCallState,
-                                dmUserIdentityState = state.dmUserVerificationState,
-                                onBackClick = { hidingKeyboard { onBackClick() } },
-                                onRoomDetailsClick = { hidingKeyboard { onRoomDetailsClick() } },
-                                onJoinCallClick = onJoinCallClick,
-                            )
-                        }
+                    if (state.timelineState.timelineMode is Timeline.Mode.Thread) {
+                        ThreadTopBar(
+                            roomName = state.roomName,
+                            roomAvatarData = state.roomAvatar,
+                            heroes = state.heroes,
+                            isTombstoned = state.isTombstoned,
+                            onBackClick = onBackClick,
+                        )
+                    } else {
+                        MessagesViewTopBar(
+                            roomName = state.roomName,
+                            roomAvatar = state.roomAvatar,
+                            isTombstoned = state.isTombstoned,
+                            heroes = state.heroes,
+                            roomCallState = state.roomCallState,
+                            dmUserIdentityState = state.dmUserVerificationState,
+                            onBackClick = { hidingKeyboard { onBackClick() } },
+                            onRoomDetailsClick = { hidingKeyboard { onRoomDetailsClick() } },
+                            onJoinCallClick = onJoinCallClick,
+                        )
                     }
                 },
                 content = { padding ->
@@ -259,7 +272,7 @@ fun MessagesView(
                             roomAvatarData = state.roomAvatar,
                             suggestions = state.composerState.suggestions,
                             onSelectSuggestion = {
-                                state.composerState.eventSink(MessageComposerEvents.InsertSuggestion(it))
+                                state.composerState.eventSink(MessageComposerEvent.InsertSuggestion(it))
                             }
                         )
                     }
@@ -281,14 +294,13 @@ fun MessagesView(
                 },
             )
         },
-        sheetDragHandle = if (state.composerState.showTextFormatting) {
-            @Composable { toggleAction ->
+        sheetDragHandle = @Composable { toggleAction ->
+            if (state.composerState.showTextFormatting) {
                 val expandA11yLabel = stringResource(CommonStrings.a11y_expand_message_text_field)
                 val collapseA11yLabel = stringResource(CommonStrings.a11y_collapse_message_text_field)
                 BottomSheetDragHandle(
                     modifier = Modifier.semantics {
                         role = Role.Button
-
                         // Accessibility action to toggle the bottom sheet state
                         val label = when (expandableState.position) {
                             ExpandableBottomSheetLayoutState.Position.COLLAPSED, ExpandableBottomSheetLayoutState.Position.DRAGGING -> expandA11yLabel
@@ -300,9 +312,14 @@ fun MessagesView(
                         }
                     }
                 )
+            } else {
+                LaunchedEffect(Unit) {
+                    // Ensure that the bottom sheet is collapsed
+                    if (expandableState.position == ExpandableBottomSheetLayoutState.Position.EXPANDED) {
+                        toggleAction()
+                    }
+                }
             }
-        } else {
-            @Composable {}
         },
         isSwipeGestureEnabled = state.composerState.showTextFormatting,
         state = expandableState,
@@ -311,7 +328,7 @@ fun MessagesView(
         } else {
             RectangleShape
         },
-        maxBottomSheetContentHeight = 360.dp,
+        maxBottomSheetContentHeight = maxComposerHeightPx.toDp(),
     )
 
     ActionListView(
@@ -397,17 +414,17 @@ private fun MessagesViewContent(
         if (state.voiceMessageComposerState.showPermissionRationaleDialog) {
             VoiceMessagePermissionRationaleDialog(
                 onContinue = {
-                    state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvents.AcceptPermissionRationale)
+                    state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvent.AcceptPermissionRationale)
                 },
                 onDismiss = {
-                    state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvents.DismissPermissionsRationale)
+                    state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvent.DismissPermissionsRationale)
                 },
                 appName = state.appName
             )
         }
         if (state.voiceMessageComposerState.showSendFailureDialog) {
             VoiceMessageSendingFailedDialog(
-                onDismiss = { state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvents.DismissSendFailureDialog) },
+                onDismiss = { state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvent.DismissSendFailureDialog) },
             )
         }
 
@@ -470,10 +487,17 @@ private fun MessagesViewComposerBottomSheetContents(
                 // Do not show the identity change if user is composing a Rich message or is seeing suggestion(s).
                 if (state.composerState.suggestions.isEmpty() &&
                     state.composerState.textEditorState is TextEditorState.Markdown) {
-                    IdentityChangeStateView(
-                        state = state.identityChangeState,
-                        onLinkClick = onLinkClick,
-                    )
+                    if (state.identityChangeState.roomMemberIdentityStateChanges.isNotEmpty()) {
+                        IdentityChangeStateView(
+                            state = state.identityChangeState,
+                            onLinkClick = onLinkClick,
+                        )
+                    } else {
+                        HistoryVisibleStateView(
+                            state = state.historyVisibleState,
+                            onLinkClick = onLinkClick,
+                        )
+                    }
                 }
                 val verificationViolation = state.identityChangeState.roomMemberIdentityStateChanges.firstOrNull {
                     it.identityState == IdentityState.VerificationViolation
@@ -526,7 +550,6 @@ private fun SuccessorRoomBanner(
         content = stringResource(R.string.screen_room_timeline_tombstoned_room_message).toAnnotatedString(),
         onSubmitClick = { onRoomSuccessorClick(roomSuccessor.roomId) },
         modifier = modifier,
-        isCritical = false,
         submitText = stringResource(R.string.screen_room_timeline_tombstoned_room_action)
     )
 }

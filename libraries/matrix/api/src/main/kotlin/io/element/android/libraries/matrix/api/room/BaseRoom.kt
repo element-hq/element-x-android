@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -13,10 +14,12 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
+import io.element.android.libraries.matrix.api.room.powerlevels.RoomPermissions
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsValues
 import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
@@ -98,6 +101,11 @@ interface BaseRoom : Closeable {
     suspend fun userRole(userId: UserId): Result<RoomMember.Role>
 
     /**
+     * Gets the permissions of the room.
+     */
+    suspend fun roomPermissions(): Result<RoomPermissions>
+
+    /**
      * Gets the display name of the user with the provided [userId] in the room.
      */
     suspend fun userDisplayName(userId: UserId): Result<String?>
@@ -123,63 +131,16 @@ interface BaseRoom : Closeable {
     suspend fun forget(): Result<Unit>
 
     /**
-     * Returns `true` if the user with the provided [userId] can invite other users to the room.
-     */
-    suspend fun canUserInvite(userId: UserId): Result<Boolean>
-
-    /**
-     * Returns `true` if the user with the provided [userId] can kick other users from the room.
-     */
-    suspend fun canUserKick(userId: UserId): Result<Boolean>
-
-    /**
-     * Returns `true` if the user with the provided [userId] can ban other users from the room.
-     */
-    suspend fun canUserBan(userId: UserId): Result<Boolean>
-
-    /**
-     * Returns `true` if the user with the provided [userId] can redact their own messages.
-     */
-    suspend fun canUserRedactOwn(userId: UserId): Result<Boolean>
-
-    /**
-     * Returns `true` if the user with the provided [userId] can redact messages from other users.
-     */
-    suspend fun canUserRedactOther(userId: UserId): Result<Boolean>
-
-    /**
-     * Returns `true` if the user with the provided [userId] can send state events.
-     */
-    suspend fun canUserSendState(userId: UserId, type: StateEventType): Result<Boolean>
-
-    /**
-     * Returns `true` if the user with the provided [userId] can send messages.
-     */
-    suspend fun canUserSendMessage(userId: UserId, type: MessageEventType): Result<Boolean>
-
-    /**
-     * Returns `true` if the user with the provided [userId] can trigger an `@room` notification.
-     */
-    suspend fun canUserTriggerRoomNotification(userId: UserId): Result<Boolean>
-
-    /**
-     * Returns `true` if the user with the provided [userId] can pin or unpin messages.
-     */
-    suspend fun canUserPinUnpin(userId: UserId): Result<Boolean>
-
-    /**
-     * Returns `true` if the user with the provided [userId] can join or starts calls.
-     */
-    suspend fun canUserJoinCall(userId: UserId): Result<Boolean> =
-        canUserSendState(userId, StateEventType.CALL_MEMBER)
-
-    /**
      * Sets the room as favorite or not, based on the [isFavorite] parameter.
      */
     suspend fun setIsFavorite(isFavorite: Boolean): Result<Unit>
 
     /**
      * Mark the room as read by trying to attach an unthreaded read receipt to the latest room event.
+     *
+     * Note this will instantiate a new timeline, which is an expensive operation.
+     * Prefer using [Timeline.markAsRead] instead when possible.
+     *
      * @param receiptType The type of receipt to send.
      */
     suspend fun markAsRead(receiptType: ReceiptType): Result<Unit>

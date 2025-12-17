@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -16,6 +17,7 @@ import androidx.core.app.RemoteInput
 import dev.zacsweers.metro.Inject
 import io.element.android.appconfig.NotificationConfig
 import io.element.android.libraries.androidutils.uri.createIgnoredUri
+import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -45,7 +47,7 @@ class QuickReplyActionFactory(
             .build()
 
         return NotificationCompat.Action.Builder(
-            R.drawable.vector_notification_quick_reply,
+            CompoundDrawables.ic_compound_reply,
             stringProvider.getString(R.string.notification_room_action_quick_reply),
             replyPendingIntent
         )

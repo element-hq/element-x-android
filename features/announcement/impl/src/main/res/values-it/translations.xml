@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_space_announcement_item1">"Visualizza gli spazi che hai creato o a cui partecipi"</string>
+  <string name="screen_space_announcement_item2">"Accetta o rifiuta gli inviti agli spazi"</string>
+  <string name="screen_space_announcement_item3">"Scopri tutte le stanze a cui puoi partecipare nei tuoi spazi"</string>
+  <string name="screen_space_announcement_item4">"Unisciti agli spazi pubblici"</string>
+  <string name="screen_space_announcement_item5">"Lascia tutti gli spazi a cui ti sei unito"</string>
+  <string name="screen_space_announcement_notice">"A breve saranno disponibili le funzionalità di filtraggio, creazione e gestione degli spazi."</string>
+  <string name="screen_space_announcement_subtitle">"Benvenuti alla versione beta degli Spazi! Con questa prima versione potrete:"</string>
+  <string name="screen_space_announcement_title">"Ti presentiamo gli Spazi"</string>
+</resources>

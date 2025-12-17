@@ -10,4 +10,7 @@
   <string name="screen_leave_space_subtitle_only_last_admin">"You will not be removed from the following room(s) because you\'re the only administrator:"</string>
   <string name="screen_leave_space_title">"Leave %1$s?"</string>
   <string name="screen_leave_space_title_last_admin">"You are the only admin for %1$s"</string>
+  <string name="screen_space_settings_leave_space">"Leave space"</string>
+  <string name="screen_space_settings_roles_and_permissions">"Roles &amp; permissions"</string>
+  <string name="screen_space_settings_security_and_privacy">"Security &amp; privacy"</string>
 </resources>

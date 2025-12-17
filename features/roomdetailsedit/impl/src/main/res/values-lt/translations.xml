@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_room_details_edit_room_title">"Redaguoti kambarį"</string>
+  <string name="screen_room_details_edition_error">"Įvyko nežinoma klaida ir informacijos pakeisti nepavyko."</string>
+  <string name="screen_room_details_edition_error_title">"Nepavyko atnaujinti kambario"</string>
+  <string name="screen_room_details_updating_room">"Atnaujinamas kambarys…"</string>
+</resources>

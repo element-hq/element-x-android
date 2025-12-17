@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -18,11 +19,13 @@ object RoomPowerLevelsValuesMapper {
             ban = values.ban,
             invite = values.invite,
             kick = values.kick,
-            sendEvents = values.eventsDefault,
+            eventsDefault = values.eventsDefault,
+            stateDefault = values.stateDefault,
             redactEvents = values.redact,
             roomName = values.roomName,
             roomAvatar = values.roomAvatar,
             roomTopic = values.roomTopic,
+            spaceChild = values.spaceChild,
         )
     }
 }

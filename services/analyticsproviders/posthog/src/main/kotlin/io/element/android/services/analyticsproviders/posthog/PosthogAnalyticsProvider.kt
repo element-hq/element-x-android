@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -16,6 +17,7 @@ import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
 import im.vector.app.features.analytics.plan.SuperProperties
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.services.analyticsproviders.api.AnalyticsProvider
+import io.element.android.services.analyticsproviders.api.AnalyticsTransaction
 import io.element.android.services.analyticsproviders.posthog.log.analyticsTag
 import timber.log.Timber
 
@@ -121,6 +123,8 @@ class PosthogAnalyticsProvider(
         }
         return withSuperProperties.takeIf { it.isEmpty().not() }
     }
+
+    override fun startTransaction(name: String, operation: String?): AnalyticsTransaction? = null
 }
 
 private fun Map<String, Any?>.keepOnlyNonNullValues(): Map<String, Any> {

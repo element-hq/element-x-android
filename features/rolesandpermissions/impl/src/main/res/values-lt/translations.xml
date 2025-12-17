@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_room_change_permissions_room_details">"Redaguoti kambarį"</string>
+  <plurals name="screen_room_member_list_header_title">
+    <item quantity="one">"%1$d asmuo"</item>
+    <item quantity="few">"%1$d asmenys"</item>
+    <item quantity="other">"%1$d asmenų"</item>
+  </plurals>
+  <string name="screen_room_member_list_room_members_header_title">"Kambario nariai"</string>
+</resources>

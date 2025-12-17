@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -9,6 +10,7 @@ package io.element.android.libraries.push.impl.notifications
 
 import android.content.Context
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.exception.NotificationResolverException
 import io.element.android.libraries.matrix.api.media.MediaSource
@@ -36,6 +38,7 @@ import io.element.android.libraries.matrix.test.A_REDACTION_REASON
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.A_SPACE_NAME
 import io.element.android.libraries.matrix.test.A_TIMESTAMP
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.A_USER_NAME_2
@@ -44,6 +47,7 @@ import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.notification.FakeNotificationService
 import io.element.android.libraries.matrix.test.notification.aNotificationData
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
+import io.element.android.libraries.push.api.push.NotificationEventRequest
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationMediaRepo
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.FallbackNotifiableEvent
@@ -472,6 +476,45 @@ class DefaultNotifiableEventResolverTest {
     }
 
     @Test
+    fun `resolve invite space`() = runTest {
+        val sut = createDefaultNotifiableEventResolver(
+            notificationResult = Result.success(
+                mapOf(
+                    AN_EVENT_ID to Result.success(aNotificationData(
+                        content = NotificationContent.Invite(
+                            senderId = A_USER_ID_2,
+                        ),
+                        roomDisplayName = A_SPACE_NAME,
+                        isDirect = false,
+                        isSpace = true,
+                    ))
+                )
+            )
+        )
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
+        val expectedResult = ResolvedPushEvent.Event(
+            InviteNotifiableEvent(
+                sessionId = A_SESSION_ID,
+                roomId = A_ROOM_ID,
+                eventId = AN_EVENT_ID,
+                editedEventId = null,
+                canBeReplaced = true,
+                roomName = A_SPACE_NAME,
+                noisy = false,
+                title = null,
+                description = "Bob invited you to join the space",
+                type = null,
+                timestamp = A_TIMESTAMP,
+                soundName = null,
+                isRedacted = false,
+                isUpdated = false,
+            )
+        )
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
+    }
+
+    @Test
     fun `resolve invite direct`() = runTest {
         val sut = createDefaultNotifiableEventResolver(
             notificationResult = Result.success(
@@ -853,7 +896,8 @@ class DefaultNotifiableEventResolverTest {
             fallbackNotificationFactory = FallbackNotificationFactory(
                 clock = FakeSystemClock(),
                 stringProvider = FakeStringProvider(defaultResult = "You have new messages.")
-            )
+            ),
+            featureFlagService = FakeFeatureFlagService(),
         )
     }
 }

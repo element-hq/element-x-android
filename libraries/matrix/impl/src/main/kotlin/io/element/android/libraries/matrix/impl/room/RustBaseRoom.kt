@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -17,13 +18,12 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.BaseRoom
-import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
-import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
+import io.element.android.libraries.matrix.api.room.powerlevels.RoomPermissions
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsValues
 import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
@@ -32,6 +32,7 @@ import io.element.android.libraries.matrix.impl.room.draft.into
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
 import io.element.android.libraries.matrix.impl.room.powerlevels.RoomPowerLevelsValuesMapper
+import io.element.android.libraries.matrix.impl.room.powerlevels.RustRoomPermissions
 import io.element.android.libraries.matrix.impl.room.tombstone.map
 import io.element.android.libraries.matrix.impl.roomdirectory.map
 import io.element.android.libraries.matrix.impl.timeline.toRustReceiptType
@@ -84,7 +85,9 @@ class RustBaseRoom(
     }.stateIn(roomCoroutineScope, started = SharingStarted.Lazily, initialValue = initialRoomInfo)
 
     override fun predecessorRoom(): PredecessorRoom? {
-        return innerRoom.predecessorRoom()?.map()
+        return runCatchingExceptions { innerRoom.predecessorRoom()?.map() }
+            .onFailure { Timber.e(it, "Could not get predecessor room") }
+            .getOrNull()
     }
 
     override suspend fun subscribeToSync() = roomSyncSubscriber.subscribe(roomId)
@@ -177,57 +180,9 @@ class RustBaseRoom(
         }
     }
 
-    override suspend fun canUserInvite(userId: UserId): Result<Boolean> = withContext(roomDispatcher) {
+    override suspend fun roomPermissions(): Result<RoomPermissions> = withContext(roomDispatcher) {
         runCatchingExceptions {
-            innerRoom.getPowerLevels().use { it.canUserInvite(userId.value) }
-        }
-    }
-
-    override suspend fun canUserKick(userId: UserId): Result<Boolean> = withContext(roomDispatcher) {
-        runCatchingExceptions {
-            innerRoom.getPowerLevels().use { it.canUserKick(userId.value) }
-        }
-    }
-
-    override suspend fun canUserBan(userId: UserId): Result<Boolean> = withContext(roomDispatcher) {
-        runCatchingExceptions {
-            innerRoom.getPowerLevels().use { it.canUserBan(userId.value) }
-        }
-    }
-
-    override suspend fun canUserRedactOwn(userId: UserId): Result<Boolean> = withContext(roomDispatcher) {
-        runCatchingExceptions {
-            innerRoom.getPowerLevels().use { it.canUserRedactOwn(userId.value) }
-        }
-    }
-
-    override suspend fun canUserRedactOther(userId: UserId): Result<Boolean> = withContext(roomDispatcher) {
-        runCatchingExceptions {
-            innerRoom.getPowerLevels().use { it.canUserRedactOther(userId.value) }
-        }
-    }
-
-    override suspend fun canUserSendState(userId: UserId, type: StateEventType): Result<Boolean> = withContext(roomDispatcher) {
-        runCatchingExceptions {
-            innerRoom.getPowerLevels().use { it.canUserSendState(userId.value, type.map()) }
-        }
-    }
-
-    override suspend fun canUserSendMessage(userId: UserId, type: MessageEventType): Result<Boolean> = withContext(roomDispatcher) {
-        runCatchingExceptions {
-            innerRoom.getPowerLevels().use { it.canUserSendMessage(userId.value, type.map()) }
-        }
-    }
-
-    override suspend fun canUserTriggerRoomNotification(userId: UserId): Result<Boolean> = withContext(roomDispatcher) {
-        runCatchingExceptions {
-            innerRoom.getPowerLevels().use { it.canUserTriggerRoomNotification(userId.value) }
-        }
-    }
-
-    override suspend fun canUserPinUnpin(userId: UserId): Result<Boolean> = withContext(roomDispatcher) {
-        runCatchingExceptions {
-            innerRoom.getPowerLevels().use { it.canUserPinUnpin(userId.value) }
+            RustRoomPermissions(innerRoom.getPowerLevels())
         }
     }
 

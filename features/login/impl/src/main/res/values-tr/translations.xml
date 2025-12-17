@@ -30,6 +30,7 @@
   <string name="screen_login_title">"Tekrar hoş geldiniz!"</string>
   <string name="screen_login_title_with_homeserver">"%1$s adresinde oturum aç"</string>
   <string name="screen_onboarding_sign_in_manually">"Manuel olarak oturum aç"</string>
+  <string name="screen_onboarding_sign_in_to">"%1$s adresinde oturum aç"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"QR kodu ile giriş yap"</string>
   <string name="screen_onboarding_sign_up">"Hesap oluştur"</string>
   <string name="screen_onboarding_welcome_message">"Şimdiye kadarki en hızlı %1$s hoş geldiniz. Hız ve basitlik için güçlendirildi."</string>

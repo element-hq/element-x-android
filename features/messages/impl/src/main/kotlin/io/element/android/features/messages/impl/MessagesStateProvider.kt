@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -13,7 +14,10 @@ import io.element.android.features.messages.api.timeline.voicemessages.composer.
 import io.element.android.features.messages.api.timeline.voicemessages.composer.aVoiceMessagePreviewState
 import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.anActionListState
+import io.element.android.features.messages.impl.crypto.historyvisible.HistoryVisibleState
+import io.element.android.features.messages.impl.crypto.historyvisible.aHistoryVisibleState
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeState
+import io.element.android.features.messages.impl.crypto.identity.aRoomMemberIdentityStateChange
 import io.element.android.features.messages.impl.crypto.identity.anIdentityChangeState
 import io.element.android.features.messages.impl.link.LinkState
 import io.element.android.features.messages.impl.link.aLinkState
@@ -37,6 +41,7 @@ import io.element.android.features.messages.impl.timeline.protection.aTimelinePr
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationPermissions
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -47,6 +52,7 @@ import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
+import io.element.android.libraries.textcomposer.model.aTextEditorStateMarkdown
 import io.element.android.libraries.textcomposer.model.aTextEditorStateRich
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -56,7 +62,6 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
     override val values: Sequence<MessagesState>
         get() = sequenceOf(
             aMessagesState(),
-            aMessagesState(hasNetworkConnection = false),
             aMessagesState(composerState = aMessageComposerState(showAttachmentSourcePicker = true)),
             aMessagesState(userEventPermissions = aUserEventPermissions(canSendMessage = false)),
             aMessagesState(showReinvitePrompt = true),
@@ -83,6 +88,19 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
                     timelineItems = aTimelineItemList(aTimelineItemTextContent()),
                 )
             ),
+            aMessagesState(
+                composerState = aMessageComposerState(textEditorState = aTextEditorStateMarkdown()),
+                identityChangeState = anIdentityChangeState(listOf(aRoomMemberIdentityStateChange()))
+            ),
+            aMessagesState(
+                composerState = aMessageComposerState(textEditorState = aTextEditorStateMarkdown()),
+                historyVisibleState = aHistoryVisibleState(showAlert = true)
+            ),
+            aMessagesState(
+                composerState = aMessageComposerState(textEditorState = aTextEditorStateMarkdown()),
+                identityChangeState = anIdentityChangeState(listOf(aRoomMemberIdentityStateChange())),
+                historyVisibleState = aHistoryVisibleState(showAlert = true)
+            )
         )
 }
 
@@ -103,12 +121,12 @@ fun aMessagesState(
     ),
     timelineProtectionState: TimelineProtectionState = aTimelineProtectionState(),
     identityChangeState: IdentityChangeState = anIdentityChangeState(),
+    historyVisibleState: HistoryVisibleState = aHistoryVisibleState(),
     linkState: LinkState = aLinkState(),
     readReceiptBottomSheetState: ReadReceiptBottomSheetState = aReadReceiptBottomSheetState(),
     actionListState: ActionListState = anActionListState(),
     customReactionState: CustomReactionState = aCustomReactionState(),
     reactionSummaryState: ReactionSummaryState = aReactionSummaryState(),
-    hasNetworkConnection: Boolean = true,
     showReinvitePrompt: Boolean = false,
     roomCallState: RoomCallState = aStandByCallState(),
     pinnedMessagesBannerState: PinnedMessagesBannerState = aLoadedPinnedMessagesBannerState(),
@@ -126,13 +144,13 @@ fun aMessagesState(
     voiceMessageComposerState = voiceMessageComposerState,
     timelineProtectionState = timelineProtectionState,
     identityChangeState = identityChangeState,
+    historyVisibleState = historyVisibleState,
     linkState = linkState,
     timelineState = timelineState,
     readReceiptBottomSheetState = readReceiptBottomSheetState,
     actionListState = actionListState,
     customReactionState = customReactionState,
     reactionSummaryState = reactionSummaryState,
-    hasNetworkConnection = hasNetworkConnection,
     snackbarMessage = null,
     inviteProgress = AsyncData.Uninitialized,
     showReinvitePrompt = showReinvitePrompt,
@@ -147,11 +165,9 @@ fun aMessagesState(
 )
 
 fun aRoomMemberModerationState(
-    canKick: Boolean = false,
-    canBan: Boolean = false,
+    permissions: RoomMemberModerationPermissions = RoomMemberModerationPermissions.DEFAULT,
 ) = object : RoomMemberModerationState {
-    override val canKick: Boolean = canKick
-    override val canBan: Boolean = canBan
+    override val permissions: RoomMemberModerationPermissions = permissions
     override val eventSink: (RoomMemberModerationEvents) -> Unit = {}
 }
 

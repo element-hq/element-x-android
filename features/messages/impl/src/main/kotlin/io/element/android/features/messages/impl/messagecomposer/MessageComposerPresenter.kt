@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -54,15 +55,16 @@ import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
 import io.element.android.libraries.matrix.api.room.getDirectRoomMember
 import io.element.android.libraries.matrix.api.room.isDm
+import io.element.android.libraries.matrix.api.room.powerlevels.use
 import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.map
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
-import io.element.android.libraries.mediaupload.api.MediaSender
+import io.element.android.libraries.mediaupload.api.MediaSenderFactory
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
-import io.element.android.libraries.permissions.api.PermissionsEvents
+import io.element.android.libraries.permissions.api.PermissionsEvent
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
@@ -79,7 +81,7 @@ import io.element.android.services.analyticsproviders.api.trackers.captureIntera
 import io.element.android.wysiwyg.compose.RichTextEditorState
 import io.element.android.wysiwyg.display.TextDisplay
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
@@ -97,6 +99,7 @@ import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 import io.element.android.libraries.core.mimetype.MimeTypes.Any as AnyMimeTypes
 
+@Suppress("LargeClass")
 @AssistedInject
 class MessageComposerPresenter(
     @Assisted private val navigator: MessagesNavigator,
@@ -106,7 +109,7 @@ class MessageComposerPresenter(
     private val mediaPickerProvider: PickerProvider,
     private val sessionPreferencesStore: SessionPreferencesStore,
     private val localMediaFactory: LocalMediaFactory,
-    private val mediaSenderFactory: MediaSender.Factory,
+    mediaSenderFactory: MediaSenderFactory,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val analyticsService: AnalyticsService,
     private val locationService: LocationService,
@@ -131,7 +134,7 @@ class MessageComposerPresenter(
     private val mediaSender = mediaSenderFactory.create(timelineMode = timelineController.mainTimelineMode())
 
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)
-    private var pendingEvent: MessageComposerEvents? = null
+    private var pendingEvent: MessageComposerEvent? = null
     private val suggestionSearchTrigger = MutableStateFlow<Suggestion?>(null)
 
     // Used to disable some UI related elements in tests
@@ -185,8 +188,8 @@ class MessageComposerPresenter(
         LaunchedEffect(cameraPermissionState.permissionGranted) {
             if (cameraPermissionState.permissionGranted) {
                 when (pendingEvent) {
-                    is MessageComposerEvents.PickAttachmentSource.PhotoFromCamera -> cameraPhotoPicker.launch()
-                    is MessageComposerEvents.PickAttachmentSource.VideoFromCamera -> cameraVideoPicker.launch()
+                    is MessageComposerEvent.PickAttachmentSource.PhotoFromCamera -> cameraPhotoPicker.launch()
+                    is MessageComposerEvent.PickAttachmentSource.VideoFromCamera -> cameraVideoPicker.launch()
                     else -> Unit
                 }
                 pendingEvent = null
@@ -227,10 +230,10 @@ class MessageComposerPresenter(
             }
         }
 
-        fun handleEvents(event: MessageComposerEvents) {
+        fun handleEvent(event: MessageComposerEvent) {
             when (event) {
-                MessageComposerEvents.ToggleFullScreenState -> isFullScreen.value = !isFullScreen.value
-                MessageComposerEvents.CloseSpecialMode -> {
+                MessageComposerEvent.ToggleFullScreenState -> isFullScreen.value = !isFullScreen.value
+                MessageComposerEvent.CloseSpecialMode -> {
                     if (messageComposerContext.composerMode.isEditing) {
                         localCoroutineScope.launch {
                             resetComposer(markdownTextEditorState, richTextEditorState, fromEdit = true)
@@ -239,13 +242,13 @@ class MessageComposerPresenter(
                         messageComposerContext.composerMode = MessageComposerMode.Normal
                     }
                 }
-                is MessageComposerEvents.SendMessage -> {
+                is MessageComposerEvent.SendMessage -> {
                     sessionCoroutineScope.sendMessage(
                         markdownTextEditorState = markdownTextEditorState,
                         richTextEditorState = richTextEditorState,
                     )
                 }
-                is MessageComposerEvents.SendUri -> {
+                is MessageComposerEvent.SendUri -> {
                     val inReplyToEventId = (messageComposerContext.composerMode as? MessageComposerMode.Reply)?.eventId
                     sessionCoroutineScope.sendAttachment(
                         attachment = Attachment.Media(
@@ -262,65 +265,65 @@ class MessageComposerPresenter(
                     // Reset composer since the attachment has been sent
                     messageComposerContext.composerMode = MessageComposerMode.Normal
                 }
-                is MessageComposerEvents.SetMode -> {
+                is MessageComposerEvent.SetMode -> {
                     localCoroutineScope.setMode(event.composerMode, markdownTextEditorState, richTextEditorState)
                 }
-                MessageComposerEvents.AddAttachment -> localCoroutineScope.launch {
+                MessageComposerEvent.AddAttachment -> localCoroutineScope.launch {
                     showAttachmentSourcePicker = true
                 }
-                MessageComposerEvents.DismissAttachmentMenu -> showAttachmentSourcePicker = false
-                MessageComposerEvents.PickAttachmentSource.FromGallery -> localCoroutineScope.launch {
+                MessageComposerEvent.DismissAttachmentMenu -> showAttachmentSourcePicker = false
+                MessageComposerEvent.PickAttachmentSource.FromGallery -> localCoroutineScope.launch {
                     showAttachmentSourcePicker = false
                     galleryMediaPicker.launch()
                 }
-                MessageComposerEvents.PickAttachmentSource.FromFiles -> localCoroutineScope.launch {
+                MessageComposerEvent.PickAttachmentSource.FromFiles -> localCoroutineScope.launch {
                     showAttachmentSourcePicker = false
                     filesPicker.launch()
                 }
-                MessageComposerEvents.PickAttachmentSource.PhotoFromCamera -> localCoroutineScope.launch {
+                MessageComposerEvent.PickAttachmentSource.PhotoFromCamera -> localCoroutineScope.launch {
                     showAttachmentSourcePicker = false
                     if (cameraPermissionState.permissionGranted) {
                         cameraPhotoPicker.launch()
                     } else {
                         pendingEvent = event
-                        cameraPermissionState.eventSink(PermissionsEvents.RequestPermissions)
+                        cameraPermissionState.eventSink(PermissionsEvent.RequestPermissions)
                     }
                 }
-                MessageComposerEvents.PickAttachmentSource.VideoFromCamera -> localCoroutineScope.launch {
+                MessageComposerEvent.PickAttachmentSource.VideoFromCamera -> localCoroutineScope.launch {
                     showAttachmentSourcePicker = false
                     if (cameraPermissionState.permissionGranted) {
                         cameraVideoPicker.launch()
                     } else {
                         pendingEvent = event
-                        cameraPermissionState.eventSink(PermissionsEvents.RequestPermissions)
+                        cameraPermissionState.eventSink(PermissionsEvent.RequestPermissions)
                     }
                 }
-                MessageComposerEvents.PickAttachmentSource.Location -> {
+                MessageComposerEvent.PickAttachmentSource.Location -> {
                     showAttachmentSourcePicker = false
                     // Navigation to the location picker screen is done at the view layer
                 }
-                MessageComposerEvents.PickAttachmentSource.Poll -> {
+                MessageComposerEvent.PickAttachmentSource.Poll -> {
                     showAttachmentSourcePicker = false
                     // Navigation to the create poll screen is done at the view layer
                 }
-                is MessageComposerEvents.ToggleTextFormatting -> {
+                is MessageComposerEvent.ToggleTextFormatting -> {
                     showAttachmentSourcePicker = false
                     localCoroutineScope.toggleTextFormatting(event.enabled, markdownTextEditorState, richTextEditorState)
                 }
-                is MessageComposerEvents.Error -> {
+                is MessageComposerEvent.Error -> {
                     analyticsService.trackError(event.error)
                 }
-                is MessageComposerEvents.TypingNotice -> {
+                is MessageComposerEvent.TypingNotice -> {
                     if (sendTypingNotifications) {
                         localCoroutineScope.launch {
                             room.typingNotice(event.isTyping)
                         }
                     }
                 }
-                is MessageComposerEvents.SuggestionReceived -> {
+                is MessageComposerEvent.SuggestionReceived -> {
                     suggestionSearchTrigger.value = event.suggestion
                 }
-                is MessageComposerEvents.InsertSuggestion -> {
+                is MessageComposerEvent.InsertSuggestion -> {
                     localCoroutineScope.launch {
                         if (showTextFormatting) {
                             when (val suggestion = event.resolvedSuggestion) {
@@ -347,7 +350,7 @@ class MessageComposerPresenter(
                         }
                     }
                 }
-                MessageComposerEvents.SaveDraft -> {
+                MessageComposerEvent.SaveDraft -> {
                     val draft = createDraftFromState(markdownTextEditorState, richTextEditorState)
                     sessionCoroutineScope.updateDraft(draft, isVolatile = false)
                 }
@@ -379,10 +382,10 @@ class MessageComposerPresenter(
             showAttachmentSourcePicker = showAttachmentSourcePicker,
             showTextFormatting = showTextFormatting,
             canShareLocation = canShareLocation.value,
-            suggestions = suggestions.toPersistentList(),
+            suggestions = suggestions.toImmutableList(),
             resolveMentionDisplay = resolveMentionDisplay,
             resolveAtRoomMentionDisplay = resolveAtRoomMentionDisplay,
-            eventSink = { handleEvents(it) },
+            eventSink = ::handleEvent,
         )
     }
 
@@ -395,7 +398,9 @@ class MessageComposerPresenter(
             val currentUserId = room.sessionId
 
             suspend fun canSendRoomMention(): Boolean {
-                val userCanSendAtRoom = room.canUserTriggerRoomNotification(currentUserId).getOrDefault(false)
+                val userCanSendAtRoom = room.roomPermissions().use(false) { perms ->
+                    perms.canOwnUserTriggerRoomNotification()
+                }
                 return !room.isDm() && userCanSendAtRoom
             }
 
@@ -528,7 +533,7 @@ class MessageComposerPresenter(
         )
         val mediaAttachment = Attachment.Media(localMedia)
         val inReplyToEventId = (messageComposerContext.composerMode as? MessageComposerMode.Reply)?.eventId
-        navigator.onPreviewAttachment(persistentListOf(mediaAttachment), inReplyToEventId)
+        navigator.navigateToPreviewAttachments(persistentListOf(mediaAttachment), inReplyToEventId)
 
         // Reset composer since the attachment will be sent in a separate flow
         messageComposerContext.composerMode = MessageComposerMode.Normal

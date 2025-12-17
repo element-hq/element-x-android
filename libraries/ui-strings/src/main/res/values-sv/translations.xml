@@ -361,7 +361,7 @@ Anledning:%1$s."</string>
   <string name="dialog_confirm_link_title">"Dubbelkolla den här länken"</string>
   <string name="dialog_default_video_quality_selector_subtitle">"Välj standardkvalitet för videor du laddar upp."</string>
   <string name="dialog_default_video_quality_selector_title">"Videouppladdningskvalitet"</string>
-  <string name="dialog_file_too_large_to_upload_subtitle">"Maximal tillåten filstorlek är: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"Den maximala tillåtna filstorleken är: %1$s"</string>
   <string name="dialog_file_too_large_to_upload_title">"Filen är för stor för att laddas upp."</string>
   <string name="dialog_room_reported">"Rum anmält"</string>
   <string name="dialog_room_reported_and_left">"Anmälde och lämnade rummet"</string>
@@ -369,6 +369,7 @@ Anledning:%1$s."</string>
   <string name="dialog_title_error">"Fel"</string>
   <string name="dialog_title_success">"Lyckades"</string>
   <string name="dialog_title_warning">"Varning"</string>
+  <string name="dialog_unsaved_changes_description">"Du har osparade ändringar."</string>
   <string name="dialog_unsaved_changes_description_android">"Dina ändringar har inte sparats. Är du säker på att du vill gå tillbaka?"</string>
   <string name="dialog_unsaved_changes_title">"Spara ändringar?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Den maximala tillåtna filstorleken är: %1$s"</string>

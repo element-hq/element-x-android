@@ -1,14 +1,15 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.appconfig
 
-import android.graphics.Color
 import androidx.annotation.ColorInt
+import androidx.core.graphics.toColorInt
 
 object NotificationConfig {
     /**
@@ -27,5 +28,5 @@ object NotificationConfig {
     const val SHOW_QUICK_REPLY_ACTION = true
 
     @ColorInt
-    val NOTIFICATION_ACCENT_COLOR: Int = Color.parseColor("#FF0DBD8B")
+    val NOTIFICATION_ACCENT_COLOR: Int = "#FF0DBD8B".toColorInt()
 }

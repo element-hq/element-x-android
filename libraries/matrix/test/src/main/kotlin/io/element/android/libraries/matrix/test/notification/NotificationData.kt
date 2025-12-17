@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -20,6 +21,7 @@ import io.element.android.libraries.matrix.test.A_USER_NAME_2
 fun aNotificationData(
     content: NotificationContent = NotificationContent.MessageLike.RoomEncrypted,
     isDirect: Boolean = false,
+    isSpace: Boolean = false,
     hasMention: Boolean = false,
     threadId: ThreadId? = null,
     timestamp: Long = A_TIMESTAMP,
@@ -39,6 +41,7 @@ fun aNotificationData(
         roomDisplayName = roomDisplayName,
         isDirect = isDirect,
         isDm = false,
+        isSpace = isSpace,
         isEncrypted = false,
         isNoisy = false,
         timestamp = timestamp,

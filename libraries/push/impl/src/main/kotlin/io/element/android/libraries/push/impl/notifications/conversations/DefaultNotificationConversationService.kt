@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -9,14 +10,12 @@ package io.element.android.libraries.push.impl.notifications.conversations
 
 import android.content.Context
 import android.content.pm.ShortcutInfo
-import android.content.res.Configuration
 import android.os.Build
 import androidx.core.content.pm.ShortcutInfoCompat
 import androidx.core.content.pm.ShortcutManagerCompat
 import androidx.core.graphics.drawable.IconCompat
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.libraries.core.coroutine.withPreviousValue
@@ -29,7 +28,6 @@ import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
-import io.element.android.libraries.matrix.ui.media.InitialsAvatarBitmapGenerator
 import io.element.android.libraries.push.api.notifications.NotificationBitmapLoader
 import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
 import io.element.android.libraries.push.impl.intent.IntentProvider
@@ -46,7 +44,6 @@ import timber.log.Timber
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultNotificationConversationService(
     @ApplicationContext private val context: Context,
     private val intentProvider: IntentProvider,
@@ -61,9 +58,7 @@ class DefaultNotificationConversationService(
 
     init {
         sessionObserver.addListener(object : SessionListener {
-            override suspend fun onSessionCreated(userId: String) = Unit
-
-            override suspend fun onSessionDeleted(userId: String) {
+            override suspend fun onSessionDeleted(userId: String, wasLastSession: Boolean) {
                 onSessionLogOut(SessionId(userId))
             }
         })
@@ -98,20 +93,21 @@ class DefaultNotificationConversationService(
         val imageLoader = imageLoaderHolder.get(client)
 
         val defaultShortcutIconSize = ShortcutManagerCompat.getIconMaxWidth(context)
-        val useDarkTheme = context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
         val icon = bitmapLoader.getRoomBitmap(
-            path = roomAvatarUrl,
+            avatarData = AvatarData(
+                id = roomId.value,
+                name = roomName,
+                url = roomAvatarUrl,
+                size = AvatarSize.RoomDetailsHeader,
+            ),
             imageLoader = imageLoader,
             targetSize = defaultShortcutIconSize.toLong()
         )?.let(IconCompat::createWithBitmap)
-            ?: InitialsAvatarBitmapGenerator(useDarkTheme = useDarkTheme)
-                .generateBitmap(defaultShortcutIconSize, AvatarData(id = roomId.value, name = roomName, size = AvatarSize.RoomDetailsHeader))
-                ?.let(IconCompat::createWithAdaptiveBitmap)
 
         val shortcutInfo = ShortcutInfoCompat.Builder(context, createShortcutId(sessionId, roomId))
             .setShortLabel(roomName)
             .setIcon(icon)
-            .setIntent(intentProvider.getViewRoomIntent(sessionId, roomId, threadId = null))
+            .setIntent(intentProvider.getViewRoomIntent(sessionId, roomId, threadId = null, eventId = null))
             .setCategories(categories)
             .setLongLived(true)
             .let {

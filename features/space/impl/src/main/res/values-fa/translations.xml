@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_leave_space_last_admin_info">"‏%1$s (مدیر)"</string>
+  <string name="screen_leave_space_subtitle_last_admin">"پیش از ترک باید مدیری دیگر به این فضا تخصیص دهید."</string>
+  <string name="screen_leave_space_subtitle_only_last_admin">"از اتاق(های) زیر برداشته نخواهید شد؛ چرا که تنها مدیر هستید:"</string>
+  <string name="screen_leave_space_title">"ترک %1$s؟"</string>
+  <string name="screen_leave_space_title_last_admin">"تنها مدیر %1$s هستید"</string>
+  <string name="screen_space_settings_leave_space">"ترک فضا"</string>
+  <string name="screen_space_settings_roles_and_permissions">"نقش‌ها و اجازه‌ها"</string>
+  <string name="screen_space_settings_security_and_privacy">"امنیت و محرمانگی"</string>
+</resources>

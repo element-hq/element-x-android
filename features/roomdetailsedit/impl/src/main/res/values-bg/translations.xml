@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_room_details_edit_room_title">"Редактиране на стаята"</string>
+  <string name="screen_room_details_edition_error">"Възникна неизвестна грешка и информацията не можа да бъде променена."</string>
+  <string name="screen_room_details_edition_error_title">"Не може да се обнови стаята"</string>
+  <string name="screen_room_details_updating_room">"Обновяване на стаята…"</string>
+</resources>

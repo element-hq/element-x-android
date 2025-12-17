@@ -2,9 +2,10 @@ import extension.setupDependencyInjection
 import extension.testCommonDependencies
 
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -44,6 +45,9 @@ dependencies {
 
     testCommonDependencies(libs, true)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.libraries.mediaviewer.test)
+    testImplementation(projects.features.call.test)
+    testImplementation(projects.features.verifysession.test)
     testImplementation(projects.features.startchat.test)
     testImplementation(projects.features.enterprise.test)
 }

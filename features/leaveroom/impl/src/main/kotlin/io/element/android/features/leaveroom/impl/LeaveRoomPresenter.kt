@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -95,10 +96,7 @@ class LeaveRoomPresenter(
         } else {
             val hasPrivilegedCreatorRole = roomInfoFlow.value.privilegedCreatorRole
             if (!hasPrivilegedCreatorRole) return false
-
-            val creators = usersWithRole(RoomMember.Role.Owner(isCreator = true)).first()
-            val superAdmins = usersWithRole(RoomMember.Role.Owner(isCreator = false)).first()
-            val owners = creators + superAdmins
+            val owners = usersWithRole { role -> role is RoomMember.Role.Owner }.first()
             return owners.size == 1 && owners.first().userId == sessionId
         }
     }

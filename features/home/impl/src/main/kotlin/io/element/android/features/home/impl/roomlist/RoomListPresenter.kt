@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -24,6 +25,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.Interaction
+import io.element.android.features.announcement.api.Announcement
+import io.element.android.features.announcement.api.AnnouncementService
 import io.element.android.features.home.impl.datasource.RoomListDataSource
 import io.element.android.features.home.impl.filters.RoomListFiltersState
 import io.element.android.features.home.impl.search.RoomListSearchEvents
@@ -48,9 +51,10 @@ import io.element.android.libraries.preferences.api.store.SessionPreferencesStor
 import io.element.android.libraries.push.api.battery.BatteryOptimizationState
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.api.watchers.AnalyticsColdStartWatcher
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
-import kotlinx.collections.immutable.toPersistentList
-import kotlinx.collections.immutable.toPersistentSet
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -82,6 +86,8 @@ class RoomListPresenter(
     private val notificationCleaner: NotificationCleaner,
     private val appPreferencesStore: AppPreferencesStore,
     private val seenInvitesStore: SeenInvitesStore,
+    private val announcementService: AnnouncementService,
+    private val coldStartWatcher: AnalyticsColdStartWatcher,
 ) : Presenter<RoomListState> {
     private val encryptionService = client.encryptionService
 
@@ -98,7 +104,11 @@ class RoomListPresenter(
         }
 
         var securityBannerDismissed by rememberSaveable { mutableStateOf(false) }
-        val showNewNotificationSoundBanner by appPreferencesStore.showNewNotificationSoundBanner().collectAsState(false)
+        val showNewNotificationSoundBanner by remember {
+            announcementService.announcementsToShowFlow().map { announcements ->
+                announcements.contains(Announcement.NewNotificationSound)
+            }
+        }.collectAsState(false)
 
         // Avatar indicator
         val hideInvitesAvatar by client.rememberHideInvitesAvatar()
@@ -106,7 +116,7 @@ class RoomListPresenter(
         val contextMenu = remember { mutableStateOf<RoomListState.ContextMenu>(RoomListState.ContextMenu.Hidden) }
         val declineInviteMenu = remember { mutableStateOf<RoomListState.DeclineInviteMenu>(RoomListState.DeclineInviteMenu.Hidden) }
 
-        fun handleEvents(event: RoomListEvents) {
+        fun handleEvent(event: RoomListEvents) {
             when (event) {
                 is RoomListEvents.UpdateVisibleRange -> coroutineScope.launch {
                     updateVisibleRange(event.range)
@@ -114,7 +124,7 @@ class RoomListPresenter(
                 RoomListEvents.DismissRequestVerificationPrompt -> securityBannerDismissed = true
                 RoomListEvents.DismissBanner -> securityBannerDismissed = true
                 RoomListEvents.DismissNewNotificationSoundBanner -> coroutineScope.launch {
-                    appPreferencesStore.setShowNewNotificationSoundBanner(false)
+                    announcementService.onAnnouncementDismissed(Announcement.NewNotificationSound)
                 }
                 RoomListEvents.ToggleSearchResults -> searchState.eventSink(RoomListSearchEvents.ToggleSearchVisibility)
                 is RoomListEvents.ShowContextMenu -> {
@@ -162,7 +172,7 @@ class RoomListPresenter(
             acceptDeclineInviteState = acceptDeclineInviteState,
             hideInvitesAvatars = hideInvitesAvatar,
             canReportRoom = canReportRoom,
-            eventSink = ::handleEvents,
+            eventSink = ::handleEvent,
         )
     }
 
@@ -228,13 +238,15 @@ class RoomListPresenter(
             )
             showSkeleton -> RoomListContentState.Skeleton(count = 16)
             else -> {
+                coldStartWatcher.onRoomListVisible()
+
                 RoomListContentState.Rooms(
                     securityBannerState = securityBannerState,
                     showNewNotificationSoundBanner = showNewNotificationSoundBanner,
                     fullScreenIntentPermissionsState = fullScreenIntentPermissionsPresenter.present(),
                     batteryOptimizationState = batteryOptimizationPresenter.present(),
-                    summaries = roomSummaries.dataOrNull().orEmpty().toPersistentList(),
-                    seenRoomInvites = seenRoomInvites.toPersistentSet(),
+                    summaries = roomSummaries.dataOrNull().orEmpty().toImmutableList(),
+                    seenRoomInvites = seenRoomInvites.toImmutableSet(),
                 )
             }
         }

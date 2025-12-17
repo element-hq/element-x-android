@@ -1,7 +1,8 @@
 /*
- * Copyright 2022-2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2022-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -12,7 +13,6 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import kotlinx.coroutines.flow.Flow
@@ -23,7 +23,6 @@ private val appHasCrashedKey = booleanPreferencesKey("appHasCrashed")
 private val crashDataKey = stringPreferencesKey("crashData")
 
 @ContributesBinding(AppScope::class)
-@Inject
 class PreferencesCrashDataStore(
     preferenceDataStoreFactory: PreferenceDataStoreFactory,
 ) : CrashDataStore {

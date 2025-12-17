@@ -64,6 +64,7 @@
   <string name="troubleshoot_notifications_test_blocked_users_title">"Blokkerte brukere"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Få navnet på den nåværende tilbyderen."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Ingen push-leverandører er valgt."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found">"Nåværende push-leverandør: %1$s og nåværende distributør: %2$s. Men distributøren %3$s blir ikke funnet. Kanskje er applikasjonen  avinstallert?"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure_no_distributor">"Nåværende push-leverandør: %1$s, men ingen distributører er konfigurert."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Gjeldende push-leverandør: %1$s."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success_with_distributor">"Nåværende push-leverandør: %1$s (%2$s)"</string>

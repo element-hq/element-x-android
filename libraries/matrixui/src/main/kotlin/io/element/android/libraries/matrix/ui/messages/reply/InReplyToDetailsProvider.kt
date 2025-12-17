@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -23,7 +24,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MessageConten
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
-import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
@@ -160,7 +161,7 @@ fun aProfileTimelineDetailsReady(
     displayName: String? = "Sender",
     displayNameAmbiguous: Boolean = false,
     avatarUrl: String? = null,
-) = ProfileTimelineDetails.Ready(
+) = ProfileDetails.Ready(
     displayName = displayName,
     displayNameAmbiguous = displayNameAmbiguous,
     avatarUrl = avatarUrl,

@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -43,7 +44,7 @@ class ReportRoomPresenter(
 
         val coroutineScope = rememberCoroutineScope()
 
-        fun handleEvents(event: ReportRoomEvents) {
+        fun handleEvent(event: ReportRoomEvents) {
             when (event) {
                 ReportRoomEvents.Report -> coroutineScope.reportRoom(reason, leaveRoom, reportAction)
                 ReportRoomEvents.ToggleLeaveRoom -> {
@@ -61,7 +62,7 @@ class ReportRoomPresenter(
             reason = reason,
             leaveRoom = leaveRoom,
             reportAction = reportAction.value,
-            eventSink = ::handleEvents
+            eventSink = ::handleEvent,
         )
     }
 

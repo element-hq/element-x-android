@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -38,7 +39,7 @@ class ChangeServerPresenter(
             mutableStateOf(AsyncData.Uninitialized)
         }
 
-        fun handleEvents(event: ChangeServerEvents) {
+        fun handleEvent(event: ChangeServerEvents) {
             when (event) {
                 is ChangeServerEvents.ChangeServer -> localCoroutineScope.changeServer(event.accountProvider, changeServerAction)
                 ChangeServerEvents.ClearError -> changeServerAction.value = AsyncData.Uninitialized
@@ -47,7 +48,7 @@ class ChangeServerPresenter(
 
         return ChangeServerState(
             changeServerAction = changeServerAction.value,
-            eventSink = ::handleEvents
+            eventSink = ::handleEvent,
         )
     }
 
@@ -60,11 +61,12 @@ class ChangeServerPresenter(
                 title = data.title,
                 accountProviderUrl = data.url,
             )
-            authenticationService.setHomeserver(data.url).map {
-                authenticationService.getHomeserverDetails().value!!
-                // Valid, remember user choice
-                accountProviderDataSource.userSelection(data)
-            }.getOrThrow()
+            val details = authenticationService.setHomeserver(data.url).getOrThrow()
+            if (!details.isSupported) {
+                throw ChangeServerError.UnsupportedServer
+            }
+            // Homeserver is valid, remember user choice
+            accountProviderDataSource.setAccountProvider(data)
         }.runCatchingUpdatingState(changeServerAction, errorTransform = ChangeServerError::from)
     }
 }

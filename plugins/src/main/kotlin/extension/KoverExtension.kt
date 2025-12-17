@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -158,7 +159,6 @@ fun Project.setupKover() {
                         "io.element.android.libraries.designsystem.swipe.SwipeableActionsState",
                         "io.element.android.libraries.designsystem.theme.components.bottomsheet.CustomSheetState",
                         "io.element.android.libraries.maplibre.compose.CameraPositionState",
-                        "io.element.android.libraries.maplibre.compose.SaveableCameraPositionState",
                         "io.element.android.libraries.maplibre.compose.SymbolState",
                         "io.element.android.libraries.matrix.api.room.RoomMembershipState",
                         "io.element.android.libraries.matrix.api.room.RoomMembersState",

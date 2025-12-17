@@ -1,16 +1,14 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.impl.room
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.RoomAlias
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
@@ -34,7 +32,6 @@ import io.element.android.libraries.matrix.test.room.defaultRoomPowerLevelValues
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toPersistentList
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.Membership
 import uniffi.matrix_sdk_base.EncryptionState
@@ -113,15 +110,15 @@ class RoomInfoMapperTest {
                 notificationCount = 11L,
                 userDefinedNotificationMode = RoomNotificationMode.MUTE,
                 hasRoomCall = true,
-                activeRoomCallParticipants = listOf(A_USER_ID_3).toImmutableList(),
-                heroes = listOf(
+                activeRoomCallParticipants = persistentListOf(A_USER_ID_3),
+                heroes = persistentListOf(
                     MatrixUser(
                         userId = A_USER_ID,
                         displayName = "displayName",
                         avatarUrl = "avatarUrl",
                     )
-                ).toImmutableList(),
-                pinnedEventIds = listOf(AN_EVENT_ID).toPersistentList(),
+                ),
+                pinnedEventIds = persistentListOf(AN_EVENT_ID),
                 creators = persistentListOf(A_USER_ID),
                 isMarkedUnread = false,
                 numUnreadMessages = 12L,
@@ -191,7 +188,7 @@ class RoomInfoMapperTest {
                 successorRoom = null,
                 isFavorite = true,
                 canonicalAlias = null,
-                alternativeAliases = emptyList<RoomAlias>().toPersistentList(),
+                alternativeAliases = persistentListOf(),
                 currentUserMembership = CurrentUserMembership.INVITED,
                 inviter = null,
                 activeMembersCount = 2L,
@@ -205,9 +202,9 @@ class RoomInfoMapperTest {
                 notificationCount = 11L,
                 userDefinedNotificationMode = null,
                 hasRoomCall = false,
-                activeRoomCallParticipants = emptyList<UserId>().toImmutableList(),
-                heroes = emptyList<MatrixUser>().toImmutableList(),
-                pinnedEventIds = emptyList<EventId>().toPersistentList(),
+                activeRoomCallParticipants = persistentListOf(),
+                heroes = persistentListOf(),
+                pinnedEventIds = persistentListOf(),
                 creators = persistentListOf(),
                 isMarkedUnread = true,
                 numUnreadMessages = 12L,

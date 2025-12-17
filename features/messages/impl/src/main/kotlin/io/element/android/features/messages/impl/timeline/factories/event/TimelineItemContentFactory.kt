@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -24,7 +25,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.LegacyCallInv
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
-import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
@@ -62,7 +63,7 @@ class TimelineItemContentFactory(
         eventId: EventId?,
         isEditable: Boolean,
         sender: UserId,
-        senderProfile: ProfileTimelineDetails,
+        senderProfile: ProfileDetails,
     ): TimelineItemEventContent {
         val isOutgoing = sessionId == sender
         return when (itemContent) {

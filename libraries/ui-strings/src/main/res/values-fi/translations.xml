@@ -80,6 +80,7 @@
   <string name="action_decline">"Hylkää"</string>
   <string name="action_decline_and_block">"Hylkää ja estä"</string>
   <string name="action_delete_poll">"Poista kysely"</string>
+  <string name="action_deselect_all">"Poista kaikki valinnat"</string>
   <string name="action_disable">"Poista käytöstä"</string>
   <string name="action_discard">"Hylkää"</string>
   <string name="action_dismiss">"Sulje"</string>
@@ -94,9 +95,11 @@
   <string name="action_forgot_password">"Unohditko salasanan?"</string>
   <string name="action_forward">"Välitä"</string>
   <string name="action_go_back">"Takaisin"</string>
+  <string name="action_go_to_roles_and_permissions">"Siirry rooleihin ja oikeuksiin"</string>
+  <string name="action_go_to_settings">"Siirry asetuksiin"</string>
   <string name="action_ignore">"Ohita"</string>
   <string name="action_invite">"Kutsu"</string>
-  <string name="action_invite_friends">"Kutsu ihmisiä"</string>
+  <string name="action_invite_friends">"Kutsu henkilöitä"</string>
   <string name="action_invite_friends_to_app">"Kutsu ihmisiä %1$s -sovellukseen"</string>
   <string name="action_invite_people_to_app">"Kutsu ihmisiä %1$s -sovellukseen"</string>
   <string name="action_invites_list">"Kutsut"</string>
@@ -110,6 +113,7 @@
   <string name="action_manage_account">"Hallitse tiliä"</string>
   <string name="action_manage_devices">"Hallitse laitteita"</string>
   <string name="action_message">"Lähetä viesti"</string>
+  <string name="action_minimize">"Pienennä"</string>
   <string name="action_next">"Seuraava"</string>
   <string name="action_no">"Ei"</string>
   <string name="action_not_now">"Ei nyt"</string>
@@ -138,6 +142,7 @@
   <string name="action_retry_decryption">"Yritä salauksen purkamista uudelleen"</string>
   <string name="action_save">"Tallenna"</string>
   <string name="action_search">"Hae"</string>
+  <string name="action_select_all">"Valitse kaikki"</string>
   <string name="action_send">"Lähetä"</string>
   <string name="action_send_edited_message">"Lähetä muokattu viesti"</string>
   <string name="action_send_message">"Lähetä viesti"</string>
@@ -176,6 +181,7 @@
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Sinut kirjattiin ulos istunnosta"</string>
   <string name="common_appearance">"Ulkoasu"</string>
   <string name="common_audio">"Ääni"</string>
+  <string name="common_beta">"Beeta"</string>
   <string name="common_blocked_users">"Estetyt käyttäjät"</string>
   <string name="common_bubbles">"Kuplat"</string>
   <string name="common_call_started">"Puhelu alkoi"</string>
@@ -224,6 +230,7 @@ Syy: %1$s."</string>
   <string name="common_install_apk_android">"Asenna APK"</string>
   <string name="common_invite_unknown_profile">"Tätä Matrix-tunnusta ei löytynyt, joten kutsu ei välttämättä mene perille."</string>
   <string name="common_leaving_room">"Poistutaan huoneesta"</string>
+  <string name="common_leaving_space">"Poistutaan tilasta"</string>
   <string name="common_light">"Vaalea"</string>
   <string name="common_line_copied_to_clipboard">"Rivi kopioitu leikepöydälle"</string>
   <string name="common_link_copied_to_clipboard">"Linkki kopioitu leikepöydälle"</string>
@@ -246,6 +253,7 @@ Syy: %1$s."</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Ei tuloksia"</string>
   <string name="common_no_room_name">"Nimetön huone"</string>
+  <string name="common_no_space_name">"Nimetön tila"</string>
   <string name="common_not_encrypted">"Ei salattu"</string>
   <string name="common_offline">"Ei yhteyttä"</string>
   <string name="common_open_source_licenses">"Avoimen lähdekoodin lisenssit"</string>
@@ -311,6 +319,7 @@ Syy: %1$s."</string>
   <string name="common_settings">"Asetukset"</string>
   <string name="common_share_space">"Jaa tila"</string>
   <string name="common_shared_location">"Jaettu sijainti"</string>
+  <string name="common_shared_space">"Jaettu tila"</string>
   <string name="common_signing_out">"Kirjaudutaan ulos"</string>
   <string name="common_something_went_wrong">"Jokin meni pieleen"</string>
   <string name="common_something_went_wrong_message">"Kohtasimme ongelman. Yritä uudelleen."</string>
@@ -370,7 +379,7 @@ Syy: %1$s."</string>
 Haluatko varmasti jatkaa?"</string>
   <string name="dialog_confirm_link_title">"Tarkista tämä linkki"</string>
   <string name="dialog_default_video_quality_selector_subtitle">"Valitse lähettämäsi videoiden oletuslaatu."</string>
-  <string name="dialog_default_video_quality_selector_title">"Videoiden lähetyslaatu"</string>
+  <string name="dialog_default_video_quality_selector_title">"Videon lähetyslaatu"</string>
   <string name="dialog_file_too_large_to_upload_subtitle">"Suurin sallittu tiedostokoko on: %1$s"</string>
   <string name="dialog_file_too_large_to_upload_title">"Tiedostokoko on liian suuri lähetettäväksi"</string>
   <string name="dialog_room_reported">"Huone ilmoitettu"</string>
@@ -379,6 +388,7 @@ Haluatko varmasti jatkaa?"</string>
   <string name="dialog_title_error">"Virhe"</string>
   <string name="dialog_title_success">"Onnistui"</string>
   <string name="dialog_title_warning">"Varoitus"</string>
+  <string name="dialog_unsaved_changes_description">"Sinulla on tallentamattomia muutoksia"</string>
   <string name="dialog_unsaved_changes_description_android">"Muutoksiasi ei ole tallennettu. Haluatko varmasti palata takaisin?"</string>
   <string name="dialog_unsaved_changes_title">"Tallennetaanko muutokset?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Suurin sallittu tiedostokoko on: %1$s"</string>
@@ -456,7 +466,9 @@ Haluatko varmasti jatkaa?"</string>
   <string name="screen_share_this_location_action">"Jaa tämä sijainti"</string>
   <string name="screen_space_list_description">"Luomasi tai liittymäsi tilat."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_parent_space">"%1$s tila"</string>
   <string name="screen_space_list_title">"Tilat"</string>
+  <string name="screen_space_menu_action_members">"Näytä jäsenet"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Viestiä ei lähetetty, koska käyttäjän %1$s vahvistettu identiteetti nollattiin."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Viestiä ei lähetetty, koska %1$s ei ole vahvistanut kaikkia laitteitaan."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Viestiä ei lähetetty, koska et ole vahvistanut yhtä tai useampaa laitettasi."</string>

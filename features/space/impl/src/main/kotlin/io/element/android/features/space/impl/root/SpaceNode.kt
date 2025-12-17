@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -22,6 +23,7 @@ import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteV
 import io.element.android.features.space.impl.di.SpaceFlowScope
 import io.element.android.libraries.androidutils.R
 import io.element.android.libraries.androidutils.system.startSharePlainTextIntent
+import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.spaces.SpaceRoomList
@@ -40,11 +42,13 @@ class SpaceNode(
     private val acceptDeclineInviteView: AcceptDeclineInviteView,
 ) : Node(buildContext, plugins = plugins) {
     interface Callback : Plugin {
-        fun onOpenRoom(roomId: RoomId, viaParameters: List<String>)
-        fun onLeaveSpace()
+        fun navigateToRoom(roomId: RoomId, viaParameters: List<String>)
+        fun navigateToSpaceSettings()
+        fun navigateToRoomMemberList()
+        fun startLeaveSpaceFlow()
     }
 
-    private val callback = plugins.filterIsInstance<Callback>().single()
+    private val callback: Callback = callback()
 
     private fun onShareRoom(context: Context) = lifecycleScope.launch {
         matrixClient.getRoom(spaceRoomList.roomId)?.use { room ->
@@ -71,19 +75,25 @@ class SpaceNode(
             state = state,
             onBackClick = ::navigateUp,
             onLeaveSpaceClick = {
-                callback.onLeaveSpace()
+                callback.startLeaveSpaceFlow()
             },
             onRoomClick = { spaceRoom ->
-                callback.onOpenRoom(spaceRoom.roomId, spaceRoom.via)
+                callback.navigateToRoom(spaceRoom.roomId, spaceRoom.via)
+            },
+            onDetailsClick = {
+                callback.navigateToSpaceSettings()
             },
             onShareSpace = {
                 onShareRoom(context)
+            },
+            onViewMembersClick = {
+                callback.navigateToRoomMemberList()
             },
             acceptDeclineInviteView = {
                 acceptDeclineInviteView.Render(
                     state = state.acceptDeclineInviteState,
                     onAcceptInviteSuccess = { roomId ->
-                        callback.onOpenRoom(roomId, emptyList())
+                        callback.navigateToRoom(roomId, emptyList())
                     },
                     onDeclineInviteSuccess = { roomId ->
                         // No action needed

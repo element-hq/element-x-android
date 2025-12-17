@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_room_change_permissions_room_details">"Redaguoti kambarį"</string>
   <string name="screen_room_details_add_topic_title">"Pridėti temą"</string>
   <string name="screen_room_details_edit_room_title">"Redaguoti kambarį"</string>
   <string name="screen_room_details_edition_error">"Įvyko nežinoma klaida ir informacijos pakeisti nepavyko."</string>
@@ -19,6 +20,5 @@
     <item quantity="few">"%1$d asmenys"</item>
     <item quantity="other">"%1$d asmenų"</item>
   </plurals>
-  <string name="screen_room_member_list_pending_header_title">"Laukiama"</string>
   <string name="screen_room_member_list_room_members_header_title">"Kambario nariai"</string>
 </resources>

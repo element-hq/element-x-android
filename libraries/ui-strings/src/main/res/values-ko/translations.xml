@@ -364,6 +364,7 @@
   <string name="dialog_title_error">"오류"</string>
   <string name="dialog_title_success">"성공"</string>
   <string name="dialog_title_warning">"경고"</string>
+  <string name="dialog_unsaved_changes_description">"저장되지 않은 변경 사항이 있습니다."</string>
   <string name="dialog_unsaved_changes_description_android">"변경 내용이 저장되지 않았습니다. 정말로 돌아가시겠습니까?"</string>
   <string name="dialog_unsaved_changes_title">"변경 사항을 저장하시겠습니까?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"허용되는 최대 파일 크기: %1$s
@@ -448,7 +449,7 @@
   <string name="test_language_identifier">"ko"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"이 장치에서는 과거 메시지를 사용할 수 없습니다."</string>
   <string name="timeline_decryption_failure_historical_event_unverified_device">"이전 메시지에 액세스하려면 이 장치를 확인해야 합니다."</string>
-  <string name="timeline_decryption_failure_historical_event_user_not_joined">"이 메시지에 액세스할 수 없습니다."</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"이 메시지에 액세스할 수 없습니다"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"메시지를 해독할 수 없습니다."</string>
   <string name="timeline_decryption_failure_withheld_unverified">"이 메시지는 귀하가 기기를 확인하지 않았거나 발신자가 귀하의 신원을 확인해야 하기 때문에 차단되었습니다."</string>
 </resources>

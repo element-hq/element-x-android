@@ -6,14 +6,12 @@
   <string name="screen_room_change_permissions_administrators">"Толькі адміністратары"</string>
   <string name="screen_room_change_permissions_ban_people">"Заблакіраваць людзей"</string>
   <string name="screen_room_change_permissions_delete_messages">"Выдаліць паведамленні"</string>
-  <string name="screen_room_change_permissions_everyone">"Усе"</string>
   <string name="screen_room_change_permissions_invite_people">"Запрашайце людзей і прымайце запыты на далучэнне"</string>
-  <string name="screen_room_change_permissions_member_moderation">"Мадэрацыя ўдзельнікаў"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Паведамленні і змест"</string>
   <string name="screen_room_change_permissions_moderators">"Адміністратары і мадэратары"</string>
   <string name="screen_room_change_permissions_remove_people">"Выдаляйце людзей і адхіляйце запыты на далучэнне"</string>
   <string name="screen_room_change_permissions_room_avatar">"Змяніць аватар пакоя"</string>
-  <string name="screen_room_change_permissions_room_details">"Дэталі пакоя"</string>
+  <string name="screen_room_change_permissions_room_details">"Рэдагаваць пакой"</string>
   <string name="screen_room_change_permissions_room_name">"Змяніць назву пакоя"</string>
   <string name="screen_room_change_permissions_room_topic">"Змяніць тэму пакоя"</string>
   <string name="screen_room_change_permissions_send_messages">"Адправіць паведамленні"</string>
@@ -51,6 +49,7 @@
   <string name="screen_room_details_notification_mode_default">"Стандартныя"</string>
   <string name="screen_room_details_notification_title">"Апавяшчэнні"</string>
   <string name="screen_room_details_pinned_events_row_title">"Замацаваныя паведамленні"</string>
+  <string name="screen_room_details_profile_row_title">"Профіль"</string>
   <string name="screen_room_details_roles_and_permissions">"Ролі і дазволы"</string>
   <string name="screen_room_details_room_name_label">"Назва пакоя"</string>
   <string name="screen_room_details_security_title">"Бяспека"</string>
@@ -68,12 +67,10 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Толькі выдаліць удзельніка"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Разблакіраваць"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"Яны змогуць зноў далучыцца да гэтага пакоя, калі іх запросяць."</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"Разблакіраваць удзельніка"</string>
   <string name="screen_room_member_list_mode_banned">"Заблакіраваныя"</string>
   <string name="screen_room_member_list_mode_members">"Удзельнікі"</string>
-  <string name="screen_room_member_list_pending_header_title">"У чаканні"</string>
-  <string name="screen_room_member_list_role_administrator">"Адміністратар"</string>
-  <string name="screen_room_member_list_role_moderator">"Мадэратар"</string>
+  <string name="screen_room_member_list_role_administrator">"Толькі адміністратары"</string>
+  <string name="screen_room_member_list_role_moderator">"Адміністратары і мадэратары"</string>
   <string name="screen_room_member_list_room_members_header_title">"Удзельнікі пакоя"</string>
   <string name="screen_room_member_list_unbanning_user">"Разблакіроўка %1$s"</string>
   <string name="screen_room_notification_settings_allow_custom">"Дазволіць уласную наладу"</string>
@@ -97,7 +94,6 @@
   <string name="screen_room_roles_and_permissions_member_moderation">"Мадэрацыя ўдзельнікаў"</string>
   <string name="screen_room_roles_and_permissions_messages_and_content">"Паведамленні і змест"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Мадэратары"</string>
-  <string name="screen_room_roles_and_permissions_permissions_header">"Дазволы"</string>
   <string name="screen_room_roles_and_permissions_reset">"Скінуць дазволы"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Пасля скіду дазволаў вы страціце бягучыя налады."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Скінуць дазволы?"</string>

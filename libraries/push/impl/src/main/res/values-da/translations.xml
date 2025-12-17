@@ -13,6 +13,7 @@
     <item quantity="one">"%d notifikation"</item>
     <item quantity="other">"%d notifikationer"</item>
   </plurals>
+  <string name="notification_error_unified_push_unregistered_android">"UnifiedPush-push notification-distributøren kunne ikke registreres, så du vil ikke længere modtage notifikationer. Kontrollér appens notifikationsindstillinger og push-distributørens status."</string>
   <string name="notification_fallback_content">"Du har nye beskeder."</string>
   <string name="notification_incoming_call">"📹 Indgående opkald"</string>
   <string name="notification_inline_reply_failed">"** Kunne ikke sende - åbn venligst rummet"</string>
@@ -38,6 +39,7 @@
   <string name="notification_sender_me">"Mig"</string>
   <string name="notification_sender_mention_reply">"%1$s nævnt eller besvaret"</string>
   <string name="notification_test_push_notification_content">"Du ser notifikationen! Klik på mig!"</string>
+  <string name="notification_thread_in_room">"Tråd i %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">

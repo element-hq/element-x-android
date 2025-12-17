@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -16,6 +17,7 @@ import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
+import io.element.android.libraries.matrix.test.A_ROOM_ID_3
 import io.element.android.libraries.matrix.test.A_SPACE_ID
 import io.element.android.libraries.matrix.test.A_SPACE_NAME
 import io.element.android.libraries.matrix.test.spaces.FakeLeaveSpaceHandle
@@ -29,7 +31,7 @@ import org.junit.Test
 class LeaveSpacePresenterTest {
     private val aSpace = aSpaceRoom(
         roomId = A_SPACE_ID,
-        rawName = A_SPACE_NAME,
+        displayName = A_SPACE_NAME,
     )
 
     @Test
@@ -60,7 +62,7 @@ class LeaveSpacePresenterTest {
             val state = awaitItem()
             assertThat(state.selectableSpaceRooms.isLoading()).isTrue()
             assertThat(state.leaveSpaceAction).isEqualTo(AsyncAction.Uninitialized)
-            skipItems(3)
+            skipItems(2)
             val stateError = awaitItem()
             assertThat(stateError.selectableSpaceRooms.isFailure()).isTrue()
             // Retry
@@ -82,12 +84,56 @@ class LeaveSpacePresenterTest {
         presenter.test {
             val state = awaitItem()
             assertThat(state.spaceName).isNull()
-            skipItems(3)
+            skipItems(2)
             val finalState = awaitItem()
             assertThat(finalState.spaceName).isEqualTo(A_SPACE_NAME)
             assertThat(finalState.isLastAdmin).isTrue()
             // The current state is not in the sub room list
             assertThat(finalState.selectableSpaceRooms.dataOrNull()!!).isEmpty()
+        }
+    }
+
+    @Test
+    fun `present - direct rooms are filtered out`() = runTest {
+        val leaveResult = lambdaRecorder<List<RoomId>, Result<Unit>> { Result.success(Unit) }
+        val presenter = createLeaveSpacePresenter(
+            leaveSpaceHandle = FakeLeaveSpaceHandle(
+                roomsResult = {
+                    Result.success(
+                        listOf(
+                            aLeaveSpaceRoom(spaceRoom = aSpace),
+                            aLeaveSpaceRoom(
+                                spaceRoom = aSpaceRoom(roomId = A_ROOM_ID, isDirect = false)
+                            ),
+                            aLeaveSpaceRoom(
+                                spaceRoom = aSpaceRoom(roomId = A_ROOM_ID_2, isDirect = true)
+                            ),
+                            aLeaveSpaceRoom(
+                                spaceRoom = aSpaceRoom(roomId = A_ROOM_ID_3, isDirect = null)
+                            ),
+                        )
+                    )
+                },
+                leaveResult = leaveResult,
+            )
+        )
+        presenter.test {
+            val state = awaitItem()
+            assertThat(state.spaceName).isNull()
+            skipItems(2)
+            val finalState = awaitItem()
+            // The current state is not in the sub room list
+            assertThat(finalState.selectableSpaceRooms.dataOrNull()!!.map { it.spaceRoom.roomId }).containsExactly(A_ROOM_ID, A_ROOM_ID_3)
+            assertThat(finalState.selectedRoomsCount).isEqualTo(2)
+            // Leaving the space will not include the DM
+            finalState.eventSink(LeaveSpaceEvents.LeaveSpace)
+            val stateLeaving = awaitItem()
+            assertThat(stateLeaving.leaveSpaceAction).isEqualTo(AsyncAction.Loading)
+            val stateLeft = awaitItem()
+            assertThat(stateLeft.leaveSpaceAction.isSuccess()).isTrue()
+            leaveResult.assertions().isCalledOnce().with(
+                value(listOf(A_ROOM_ID, A_ROOM_ID_3))
+            )
         }
     }
 
@@ -108,7 +154,7 @@ class LeaveSpacePresenterTest {
             )
         )
         presenter.test {
-            skipItems(4)
+            skipItems(3)
             val state = awaitItem()
             assertThat(state.spaceName).isNull()
             assertThat(state.isLastAdmin).isFalse()
@@ -172,7 +218,7 @@ class LeaveSpacePresenterTest {
             )
         )
         presenter.test {
-            skipItems(4)
+            skipItems(3)
             val state = awaitItem()
             state.eventSink(LeaveSpaceEvents.LeaveSpace)
             val stateLeaving = awaitItem()
@@ -198,7 +244,7 @@ class LeaveSpacePresenterTest {
 private fun aLeaveSpaceRoom(
     spaceRoom: SpaceRoom = aSpaceRoom(
         roomId = A_SPACE_ID,
-        rawName = A_SPACE_NAME,
+        displayName = A_SPACE_NAME,
     ),
     isLastAdmin: Boolean = false,
 ) = LeaveSpaceRoom(

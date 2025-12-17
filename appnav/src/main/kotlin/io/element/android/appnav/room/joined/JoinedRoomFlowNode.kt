@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -34,8 +35,10 @@ import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.sync.SyncService
+import io.element.android.libraries.matrix.api.core.ThreadId
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.ui.room.LoadingRoomState
 import io.element.android.libraries.matrix.ui.room.LoadingRoomStateFlowFactory
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -50,7 +53,6 @@ class JoinedRoomFlowNode(
     @Assisted val buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     loadingRoomStateFlowFactory: LoadingRoomStateFlowFactory,
-    private val syncService: SyncService,
 ) :
     BaseFlowNode<JoinedRoomFlowNode.NavTarget>(
         backstack = BackStack(
@@ -62,11 +64,12 @@ class JoinedRoomFlowNode(
     ) {
     data class Inputs(
         val roomId: RoomId,
+        val joinedRoom: JoinedRoom?,
         val initialElement: RoomNavigationTarget,
     ) : NodeInputs
 
     private val inputs: Inputs = inputs()
-    private val loadingRoomStateStateFlow = loadingRoomStateFlowFactory.create(lifecycleScope, inputs.roomId)
+    private val loadingRoomStateStateFlow = loadingRoomStateFlowFactory.create(lifecycleScope, inputs.roomId, inputs.joinedRoom)
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
@@ -116,13 +119,16 @@ class JoinedRoomFlowNode(
 
     private fun loadingNode(buildContext: BuildContext, onBackClick: () -> Unit) = node(buildContext) { modifier ->
         val loadingRoomState by loadingRoomStateStateFlow.collectAsState()
-        val isOnline by syncService.isOnline.collectAsState()
         LoadingRoomNodeView(
             state = loadingRoomState,
-            hasNetworkConnection = isOnline,
-            modifier = modifier,
-            onBackClick = onBackClick
+            onBackClick = onBackClick,
+            modifier = modifier
         )
+    }
+
+    suspend fun attachThread(threadId: ThreadId, focusedEventId: EventId?) {
+        waitForChildAttached<JoinedRoomLoadedFlowNode>()
+            .attachThread(threadId, focusedEventId)
     }
 
     @Composable

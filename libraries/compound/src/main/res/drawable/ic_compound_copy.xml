@@ -4,10 +4,10 @@
     android:autoMirrored="true"
     android:viewportWidth="24"
     android:viewportHeight="24">
-    <path
-        android:fillColor="#FF000000"
-        android:pathData="M14 5H5v9h1a1 1 0 1 1 0 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1a1 1 0 1 1-2 0z"/>
-    <path
-        android:fillColor="#FF000000"
-        android:pathData="M8 10a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-9a2 2 0 0 1-2-2z m2 0v9h9v-9z"/>
+  <path
+      android:pathData="M14,5H5v9h1a1,1 0,1 1,0 2H5a2,2 0,0 1,-2 -2V5a2,2 0,0 1,2 -2h9a2,2 0,0 1,2 2v1a1,1 0,1 1,-2 0z"
+      android:fillColor="#FF000000"/>
+  <path
+      android:pathData="M8,10a2,2 0,0 1,2 -2h9a2,2 0,0 1,2 2v9a2,2 0,0 1,-2 2h-9a2,2 0,0 1,-2 -2zM10,10v9h9v-9z"
+      android:fillColor="#FF000000"/>
 </vector>

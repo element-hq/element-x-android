@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -13,7 +14,6 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
@@ -29,6 +29,7 @@ import io.element.android.features.securebackup.impl.setup.SecureBackupSetupNode
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.appyx.canPop
+import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
 import kotlinx.parcelize.Parcelize
@@ -71,25 +72,25 @@ class SecureBackupFlowNode(
         data object ResetIdentity : NavTarget
     }
 
-    private val callbacks = plugins<SecureBackupEntryPoint.Callback>()
+    private val callback: SecureBackupEntryPoint.Callback = callback()
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.Root -> {
                 val callback = object : SecureBackupRootNode.Callback {
-                    override fun onSetupClick() {
+                    override fun navigateToSetup() {
                         backstack.push(NavTarget.Setup)
                     }
 
-                    override fun onChangeClick() {
+                    override fun navigateToChange() {
                         backstack.push(NavTarget.Change)
                     }
 
-                    override fun onDisableClick() {
+                    override fun navigateToDisable() {
                         backstack.push(NavTarget.Disable)
                     }
 
-                    override fun onConfirmRecoveryKeyClick() {
+                    override fun navigateToEnterRecoveryKey() {
                         backstack.push(NavTarget.EnterRecoveryKey)
                     }
                 }
@@ -116,7 +117,7 @@ class SecureBackupFlowNode(
                         if (backstack.canPop()) {
                             backstack.pop()
                         } else {
-                            callbacks.forEach { it.onDone() }
+                            callback.onDone()
                         }
                     }
                 }
@@ -125,7 +126,7 @@ class SecureBackupFlowNode(
             is NavTarget.ResetIdentity -> {
                 val callback = object : ResetIdentityFlowNode.Callback {
                     override fun onDone() {
-                        callbacks.forEach { it.onDone() }
+                        callback.onDone()
                     }
                 }
                 createNode<ResetIdentityFlowNode>(buildContext, listOf(callback))

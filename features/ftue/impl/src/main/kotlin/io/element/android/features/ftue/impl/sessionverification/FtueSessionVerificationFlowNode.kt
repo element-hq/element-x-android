@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -15,7 +16,6 @@ import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import com.bumble.appyx.navmodel.backstack.operation.pop
@@ -29,6 +29,7 @@ import io.element.android.features.securebackup.api.SecureBackupEntryPoint
 import io.element.android.features.verifysession.api.OutgoingVerificationEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
+import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.designsystem.utils.OpenUrlInTabView
 import io.element.android.libraries.di.SessionScope
@@ -69,6 +70,8 @@ class FtueSessionVerificationFlowNode(
         fun onDone()
     }
 
+    private val callback: Callback = callback()
+
     private val secureBackupEntryPointCallback = object : SecureBackupEntryPoint.Callback {
         override fun onDone() {
             lifecycleScope.launch {
@@ -82,62 +85,67 @@ class FtueSessionVerificationFlowNode(
         return when (navTarget) {
             is NavTarget.Root -> {
                 val callback = object : ChooseSelfVerificationModeNode.Callback {
-                    override fun onUseAnotherDevice() {
+                    override fun navigateToUseAnotherDevice() {
                         backstack.push(NavTarget.UseAnotherDevice)
                     }
 
-                    override fun onUseRecoveryKey() {
+                    override fun navigateToUseRecoveryKey() {
                         backstack.push(NavTarget.EnterRecoveryKey)
                     }
 
-                    override fun onResetKey() {
+                    override fun navigateToResetKey() {
                         backstack.push(NavTarget.ResetIdentity)
                     }
 
-                    override fun onLearnMoreAboutEncryption() {
+                    override fun navigateToLearnMoreAboutEncryption() {
                         learnMoreUrl.value = LearnMoreConfig.DEVICE_VERIFICATION_URL
                     }
                 }
-
                 createNode<ChooseSelfVerificationModeNode>(buildContext, plugins = listOf(callback))
             }
             is NavTarget.UseAnotherDevice -> {
-                outgoingVerificationEntryPoint.nodeBuilder(this, buildContext)
-                    .params(OutgoingVerificationEntryPoint.Params(
+                outgoingVerificationEntryPoint.createNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    params = OutgoingVerificationEntryPoint.Params(
                         showDeviceVerifiedScreen = true,
                         verificationRequest = VerificationRequest.Outgoing.CurrentSession,
-                    ))
-                    .callback(object : OutgoingVerificationEntryPoint.Callback {
+                    ),
+                    callback = object : OutgoingVerificationEntryPoint.Callback {
                         override fun onDone() {
-                            plugins<Callback>().forEach { it.onDone() }
+                            callback.onDone()
                         }
 
                         override fun onBack() {
                             backstack.pop()
                         }
 
-                        override fun onLearnMoreAboutEncryption() {
+                        override fun navigateToLearnMoreAboutEncryption() {
                             // Note that this callback is never called. The "Learn more" link is not displayed
                             // for the self session interactive verification.
                         }
-                    })
-                    .build()
+                    }
+                )
             }
             is NavTarget.EnterRecoveryKey -> {
-                secureBackupEntryPoint.nodeBuilder(this, buildContext)
-                    .params(SecureBackupEntryPoint.Params(SecureBackupEntryPoint.InitialTarget.EnterRecoveryKey))
-                    .callback(secureBackupEntryPointCallback)
-                    .build()
+                secureBackupEntryPoint.createNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    params = SecureBackupEntryPoint.Params(SecureBackupEntryPoint.InitialTarget.EnterRecoveryKey),
+                    callback = secureBackupEntryPointCallback
+                )
             }
             is NavTarget.ResetIdentity -> {
-                secureBackupEntryPoint.nodeBuilder(this, buildContext)
-                    .params(SecureBackupEntryPoint.Params(SecureBackupEntryPoint.InitialTarget.ResetIdentity))
-                    .callback(object : SecureBackupEntryPoint.Callback {
+                secureBackupEntryPoint.createNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    params = SecureBackupEntryPoint.Params(SecureBackupEntryPoint.InitialTarget.ResetIdentity),
+                    callback = object : SecureBackupEntryPoint.Callback {
                         override fun onDone() {
-                            plugins<Callback>().forEach { it.onDone() }
+                            callback.onDone()
                         }
-                    })
-                    .build()
+                    },
+                )
             }
         }
     }

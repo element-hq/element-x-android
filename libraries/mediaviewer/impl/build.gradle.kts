@@ -2,9 +2,10 @@ import extension.setupDependencyInjection
 import extension.testCommonDependencies
 
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 plugins {
@@ -32,6 +33,7 @@ dependencies {
     implementation(libs.vanniktech.blurhash)
     implementation(libs.telephoto.flick)
 
+    implementation(projects.features.enterprise.api)
     implementation(projects.features.viewfolder.api)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
@@ -42,7 +44,7 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.matrix.api)
-    implementation(projects.libraries.matrixui)
+    implementation(projects.libraries.matrixmedia.api)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.voiceplayer.api)
     implementation(projects.services.toolbox.api)
@@ -54,10 +56,12 @@ dependencies {
     implementation(projects.libraries.matrix.api)
 
     testCommonDependencies(libs, true)
+    testImplementation(projects.features.enterprise.test)
     testImplementation(projects.libraries.audio.test)
     testImplementation(projects.libraries.dateformatter.test)
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.libraries.matrixui)
     testImplementation(projects.libraries.mediaviewer.test)
     testImplementation(projects.services.toolbox.test)
     testImplementation(libs.coroutines.core)

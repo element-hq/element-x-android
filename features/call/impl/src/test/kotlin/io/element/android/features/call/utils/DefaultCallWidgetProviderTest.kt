@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -22,6 +23,7 @@ import io.element.android.libraries.matrix.test.widget.FakeMatrixWidgetDriver
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.services.appnavstate.api.ActiveRoomsHolder
+import io.element.android.services.appnavstate.impl.DefaultActiveRoomsHolder
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -85,7 +87,7 @@ class DefaultCallWidgetProviderTest {
             // No room from the client
             givenGetRoomResult(A_ROOM_ID, null)
         }
-        val activeRoomsHolder = ActiveRoomsHolder().apply {
+        val activeRoomsHolder = DefaultActiveRoomsHolder().apply {
             // A current active room with the same room id
             addRoom(
                 FakeJoinedRoom(
@@ -129,7 +131,7 @@ class DefaultCallWidgetProviderTest {
         matrixClientProvider: MatrixClientProvider = FakeMatrixClientProvider(),
         appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
         callWidgetSettingsProvider: CallWidgetSettingsProvider = FakeCallWidgetSettingsProvider(),
-        activeRoomsHolder: ActiveRoomsHolder = ActiveRoomsHolder(),
+        activeRoomsHolder: ActiveRoomsHolder = DefaultActiveRoomsHolder(),
     ) = DefaultCallWidgetProvider(
         matrixClientsProvider = matrixClientProvider,
         appPreferencesStore = appPreferencesStore,

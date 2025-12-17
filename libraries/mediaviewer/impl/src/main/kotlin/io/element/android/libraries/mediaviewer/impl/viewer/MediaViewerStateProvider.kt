@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -11,7 +12,7 @@ import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.designsystem.components.media.aWaveForm
+import io.element.android.libraries.designsystem.components.media.WaveFormSamples
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -26,7 +27,7 @@ import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.details.aMediaDeleteConfirmationState
 import io.element.android.libraries.mediaviewer.impl.details.aMediaDetailsBottomSheetState
-import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toImmutableList
 
 open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState> {
     override val values: Sequence<MediaViewerState>
@@ -138,7 +139,7 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
                 mediaBottomSheetState = aMediaDeleteConfirmationState(),
             ),
             anAudioMediaInfo(
-                waveForm = aWaveForm(),
+                waveForm = WaveFormSamples.realisticWaveForm,
             ).let {
                 aMediaViewerState(
                     listOf(
@@ -204,7 +205,7 @@ fun aMediaViewerState(
     eventSink: (MediaViewerEvents) -> Unit = {},
 ) = MediaViewerState(
     initiallySelectedEventId = EventId("\$a:b"),
-    listData = listData.toPersistentList(),
+    listData = listData.toImmutableList(),
     currentIndex = currentIndex,
     snackbarMessage = null,
     canShowInfo = canShowInfo,

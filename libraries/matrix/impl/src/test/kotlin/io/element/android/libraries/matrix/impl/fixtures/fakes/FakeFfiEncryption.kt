@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -11,13 +12,13 @@ import io.element.android.tests.testutils.simulateLongTask
 import org.matrix.rustcomponents.sdk.BackupState
 import org.matrix.rustcomponents.sdk.BackupStateListener
 import org.matrix.rustcomponents.sdk.Encryption
-import org.matrix.rustcomponents.sdk.NoPointer
+import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.RecoveryState
 import org.matrix.rustcomponents.sdk.RecoveryStateListener
 import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.VerificationStateListener
 
-class FakeFfiEncryption : Encryption(NoPointer) {
+class FakeFfiEncryption : Encryption(NoHandle) {
     override fun verificationStateListener(listener: VerificationStateListener): TaskHandle {
         return FakeFfiTaskHandle()
     }

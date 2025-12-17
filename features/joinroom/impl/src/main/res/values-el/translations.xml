@@ -15,7 +15,7 @@
   <string name="screen_join_room_fail_reason">"Αυτή η αίθουσα είναι είτε μόνο για προσκεκλημένους είτε ενδέχεται να υπάρχουν περιορισμοί πρόσβασης σε επίπεδο χώρου."</string>
   <string name="screen_join_room_forget_action">"Ξεχάστε αυτή την αίθουσα"</string>
   <string name="screen_join_room_invite_required_message">"Χρειάζεστε πρόσκληση για να συμμετάσχετε σε αυτή την αίθουσα"</string>
-  <string name="screen_join_room_join_action">"Συμμετοχή στην αίθουσα"</string>
+  <string name="screen_join_room_join_action">"Συμμετοχή"</string>
   <string name="screen_join_room_join_restricted_message">"Ενδέχεται να χρειαστεί να προσκληθείτε ή να είστε μέλος ενός χώρου για να συμμετάσχετε."</string>
   <string name="screen_join_room_knock_action">"Χτύπα για συμμετοχή"</string>
   <string name="screen_join_room_knock_message_description">"Μήνυμα (προαιρετικό)"</string>

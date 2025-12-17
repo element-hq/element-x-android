@@ -1,7 +1,8 @@
 /*
- * Copyright 2022-2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2022-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -128,12 +129,12 @@ android {
             )
             signingConfig = signingConfigs.getByName("debug")
 
-            postprocessing {
-                isRemoveUnusedCode = true
-                isObfuscate = false
-                isOptimizeCode = true
-                isRemoveUnusedResources = true
-                proguardFiles("proguard-rules.pro")
+            optimization {
+                enable = true
+                keepRules {
+                    files.add(File(projectDir, "proguard-rules.pro"))
+                    files.add(getDefaultProguardFile("proguard-android-optimize.txt"))
+                }
             }
         }
 
@@ -150,10 +151,6 @@ android {
             )
             matchingFallbacks += listOf("release")
             signingConfig = signingConfigs.getByName("nightly")
-
-            postprocessing {
-                initWith(release.postprocessing)
-            }
 
             firebaseAppDistribution {
                 artifactType = "APK"
@@ -195,6 +192,16 @@ android {
             dimension = "store"
             buildConfigFieldStr("SHORT_FLAVOR_DESCRIPTION", "F")
             buildConfigFieldStr("FLAVOR_DESCRIPTION", "FDroid")
+        }
+    }
+
+    packaging {
+        resources.pickFirsts += setOf(
+            "META-INF/versions/9/OSGI-INF/MANIFEST.MF",
+        )
+
+        jniLibs {
+            useLegacyPackaging = project.findProperty("useLegacyPackaging")?.toString()?.toBoolean()
         }
     }
 }
@@ -318,6 +325,7 @@ licensee {
     allowUrl("https://jsoup.org/license")
     allowUrl("https://asm.ow2.io/license.html")
     allowUrl("https://www.gnu.org/licenses/agpl-3.0.txt")
+    allowUrl("https://github.com/mhssn95/compose-color-picker/blob/main/LICENSE")
     ignoreDependencies("com.github.matrix-org", "matrix-analytics-events")
     // Ignore dependency that are not third-party licenses to us.
     ignoreDependencies(groupId = "io.element.android")
@@ -333,7 +341,7 @@ fun Project.configureLicensesTasks(reportingExtension: ReportingExtension) {
                     it.toString()
                 }
             }
-            val artifactsFile = reportingExtension.file("licensee/android$capitalizedVariantName/artifacts.json")
+            val artifactsFile = reportingExtension.baseDirectory.file("licensee/android$capitalizedVariantName/artifacts.json")
 
             val copyArtifactsTask =
                 project.tasks.register<AssetCopyTask>("copy${capitalizedVariantName}LicenseeReportToAssets") {

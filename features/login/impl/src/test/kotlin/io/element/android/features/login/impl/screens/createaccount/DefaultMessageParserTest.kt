@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -11,6 +12,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
+import io.element.android.libraries.androidutils.json.DefaultJsonProvider
 import io.element.android.libraries.matrix.api.auth.external.ExternalSession
 import kotlinx.serialization.SerializationException
 import org.junit.Assert.assertThrows
@@ -68,7 +70,8 @@ class DefaultMessageParserTest {
 
     private fun createDefaultMessageParser(): DefaultMessageParser {
         return DefaultMessageParser(
-            AccountProviderDataSource(FakeEnterpriseService())
+            accountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
+            json = DefaultJsonProvider(),
         )
     }
 }
@@ -81,5 +84,4 @@ internal fun anExternalSession(
     accessToken = "access_token",
     deviceId = "device_id",
     refreshToken = null,
-    slidingSyncProxy = null
 )

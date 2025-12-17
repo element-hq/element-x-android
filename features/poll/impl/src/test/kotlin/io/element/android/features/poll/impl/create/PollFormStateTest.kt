@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -10,7 +11,7 @@ package io.element.android.features.poll.impl.create
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.poll.impl.PollConstants
 import io.element.android.libraries.matrix.api.poll.PollKind
-import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toImmutableList
 import org.junit.Test
 
 class PollFormStateTest {
@@ -47,7 +48,7 @@ class PollFormStateTest {
         val state = PollFormState.Empty
         val newState = state.withAnswerChanged(1, "New answer")
         assertThat(newState).isEqualTo(PollFormState.Empty.copy(
-            answers = listOf("", "New answer").toPersistentList()
+            answers = listOf("", "New answer").toImmutableList()
         ))
     }
 
@@ -58,7 +59,7 @@ class PollFormStateTest {
         val state = PollFormState.Empty
         val newState = state.withAnswerChanged(1, tooLongAnswer)
         assertThat(newState).isEqualTo(PollFormState.Empty.copy(
-            answers = listOf("", truncatedAnswer).toPersistentList()
+            answers = listOf("", truncatedAnswer).toImmutableList()
         ))
     }
 
@@ -101,7 +102,7 @@ class PollFormStateTest {
 
     @Test
     fun `is valid is false when not enough answers`() {
-        val state = aValidPollFormState().copy(answers = listOf("").toPersistentList())
+        val state = aValidPollFormState().copy(answers = listOf("").toImmutableList())
         assertThat(state.isValid).isFalse()
     }
 
@@ -127,10 +128,10 @@ class PollFormStateTest {
 private fun aValidPollFormState(): PollFormState {
     return PollFormState.Empty.copy(
         question = "question",
-        answers = listOf("answer1", "answer2").toPersistentList(),
+        answers = listOf("answer1", "answer2").toImmutableList(),
         isDisclosed = true,
     )
 }
 
 private fun PollFormState.withBlankAnswers(numAnswers: Int): PollFormState =
-    copy(answers = List(numAnswers) { "" }.toPersistentList())
+    copy(answers = List(numAnswers) { "" }.toImmutableList())

@@ -13,6 +13,7 @@
     <item quantity="one">"%d notification"</item>
     <item quantity="other">"%d notifications"</item>
   </plurals>
+  <string name="notification_error_unified_push_unregistered_android">"Le distributeur de notifications UnifiedPush n’a pas pu être enregistré, vous ne recevrez donc plus de notifications. Veuillez vérifier les paramètres de notification de l’application et l’état du distributeur."</string>
   <string name="notification_fallback_content">"Vous avez de nouveau(x) message(s)."</string>
   <string name="notification_incoming_call">"📹 Appel entrant"</string>
   <string name="notification_inline_reply_failed">"** Échec de l’envoi - veuillez ouvrir le salon"</string>
@@ -38,6 +39,7 @@
   <string name="notification_sender_me">"Moi"</string>
   <string name="notification_sender_mention_reply">"%1$s mentionné ou en réponse"</string>
   <string name="notification_test_push_notification_content">"Vous êtes en train de voir la notification ! Cliquez-moi !"</string>
+  <string name="notification_thread_in_room">"Discussion dans %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s : %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s : %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">

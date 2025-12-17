@@ -80,6 +80,7 @@
   <string name="action_decline">"Keeldu"</string>
   <string name="action_decline_and_block">"Keeldu ja blokeeri"</string>
   <string name="action_delete_poll">"Kustuta küsitlus"</string>
+  <string name="action_deselect_all">"Eemalda kõik valikud"</string>
   <string name="action_disable">"Lülita välja"</string>
   <string name="action_discard">"Loobu"</string>
   <string name="action_dismiss">"Lõpeta"</string>
@@ -94,6 +95,8 @@
   <string name="action_forgot_password">"Kas unustasid salasõna?"</string>
   <string name="action_forward">"Edasta"</string>
   <string name="action_go_back">"Tagasi eelmisesse vaatesse"</string>
+  <string name="action_go_to_roles_and_permissions">"Ava „Rollid ja õigused“"</string>
+  <string name="action_go_to_settings">"Ava seadistused"</string>
   <string name="action_ignore">"Eira"</string>
   <string name="action_invite">"Kutsu"</string>
   <string name="action_invite_friends">"Kutsu osalejaid"</string>
@@ -139,6 +142,7 @@
   <string name="action_retry_decryption">"Proovi dekrüptimist uuesti"</string>
   <string name="action_save">"Salvesta"</string>
   <string name="action_search">"Otsi"</string>
+  <string name="action_select_all">"Vali kõik"</string>
   <string name="action_send">"Saada"</string>
   <string name="action_send_edited_message">"Saada muudetud sõnum"</string>
   <string name="action_send_message">"Saada sõnum"</string>
@@ -152,6 +156,7 @@
   <string name="action_skip">"Jäta vahele"</string>
   <string name="action_start">"Alusta"</string>
   <string name="action_start_chat">"Alusta vestlust"</string>
+  <string name="action_start_over">"Alusta uuesti"</string>
   <string name="action_start_verification">"Alusta verifitseerimist"</string>
   <string name="action_static_map_load">"Kaardi laadimiseks klõpsa"</string>
   <string name="action_take_photo">"Tee pilt"</string>
@@ -177,6 +182,7 @@
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Sa olid sessioonist väljaloginud"</string>
   <string name="common_appearance">"Välimus"</string>
   <string name="common_audio">"Heli"</string>
+  <string name="common_beta">"Beetaversioon"</string>
   <string name="common_blocked_users">"Blokeeritud kasutajad"</string>
   <string name="common_bubbles">"Mullid"</string>
   <string name="common_call_started">"Kõne algas"</string>
@@ -191,7 +197,6 @@
   <string name="common_dark">"Tume"</string>
   <string name="common_decryption_error">"Dekrüptimisviga"</string>
   <string name="common_description">"Kirjeldus"</string>
-  <string name="common_deselect_all">"Eemalda kõik valikud"</string>
   <string name="common_developer_options">"Arendaja valikud"</string>
   <string name="common_device_id">"Seadme tunnus"</string>
   <string name="common_direct_chat">"Otsevestlus"</string>
@@ -226,9 +231,11 @@ Põhjus: %1$s."</string>
   <string name="common_install_apk_android">"Paigalda APK-failist"</string>
   <string name="common_invite_unknown_profile">"Sellist Matrix\'i kasutajatunnust ei õnnestu leida, seega sõnumit ilmselt keegi kätte ei saa."</string>
   <string name="common_leaving_room">"Oled lahkumas jututoast"</string>
+  <string name="common_leaving_space">"Oled lahkumas kogukonnast"</string>
   <string name="common_light">"Hele"</string>
   <string name="common_line_copied_to_clipboard">"Rida on kopeeritud lõikelauale"</string>
   <string name="common_link_copied_to_clipboard">"Link on kopeeritud lõikelauale"</string>
+  <string name="common_link_new_device">"Seo uus seade"</string>
   <string name="common_loading">"Laadime…"</string>
   <string name="common_loading_more">"Laadime veel…"</string>
   <plurals name="common_many_members">
@@ -241,10 +248,12 @@ Põhjus: %1$s."</string>
   </plurals>
   <string name="common_message">"Sõnum"</string>
   <string name="common_message_actions">"Tegevused sõnumiga"</string>
+  <string name="common_message_failed_to_send">"Sõnumi saatmine ei õnnestunud"</string>
   <string name="common_message_layout">"Sõnumi paigutus"</string>
   <string name="common_message_removed">"Sõnum on eemaldatud"</string>
   <string name="common_modern">"Kaasaegne"</string>
   <string name="common_mute">"Summutatud"</string>
+  <string name="common_name">"Nimi"</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Otsingul pole tulemusi"</string>
   <string name="common_no_room_name">"Jututoal puudub nimi"</string>
@@ -303,7 +312,6 @@ Põhjus: %1$s."</string>
   <string name="common_security">"Turvalisus"</string>
   <string name="common_seen_by">"Seda nägi(d)"</string>
   <string name="common_select_account">"Vali kasutajakonto"</string>
-  <string name="common_select_all">"Vali kõik"</string>
   <string name="common_send_to">"Saada kasutajale"</string>
   <string name="common_sending">"Saadame…"</string>
   <string name="common_sending_failed">"Saatmine ei õnnestunud"</string>
@@ -315,10 +323,12 @@ Põhjus: %1$s."</string>
   <string name="common_settings">"Seadistused"</string>
   <string name="common_share_space">"Jaga kogukonda"</string>
   <string name="common_shared_location">"Jagatud asukoht"</string>
+  <string name="common_shared_space">"Jagatud kogukond"</string>
   <string name="common_signing_out">"Logime välja"</string>
   <string name="common_something_went_wrong">"Midagi läks valesti"</string>
   <string name="common_something_went_wrong_message">"Tekkis viga. Palun proovi uuesti."</string>
   <string name="common_space">"Kogukond"</string>
+  <string name="common_space_topic_placeholder">"Mida selles kogukonnas tehakse?"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d kogukond"</item>
     <item quantity="other">"%1$d kogukonda"</item>
@@ -363,6 +373,7 @@ Põhjus: %1$s."</string>
   <string name="common_waiting">"Ootame…"</string>
   <string name="common_waiting_for_decryption_key">"Ootame selle sõnumi dekrüptimisvõtit"</string>
   <string name="common_you">"Sina"</string>
+  <string name="crypto_history_visible">"See jututuba on seadistatud sedaviisi, et ka uued liikmed saavad lugeda varasemat ajalugu. %1$s"</string>
   <string name="crypto_identity_change_pin_violation">"Kasutaja %1$s võrguidentiteet on lähtestatud. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Kasutaja %1$s %2$s võrguidentiteet on lähtestatud. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
@@ -374,7 +385,7 @@ Põhjus: %1$s."</string>
 Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="dialog_confirm_link_title">"Palun kontrolli seda linki mõttega"</string>
   <string name="dialog_default_video_quality_selector_subtitle">"Vali üleslaaditavate videote kvaliteeditase"</string>
-  <string name="dialog_default_video_quality_selector_title">"Videote kvaliteeditase"</string>
+  <string name="dialog_default_video_quality_selector_title">"Üleslaaditavate videote kvaliteet"</string>
   <string name="dialog_file_too_large_to_upload_subtitle">"Suurim lubatud failisuurus on: %1$s"</string>
   <string name="dialog_file_too_large_to_upload_title">"See fail on üleslaadimiseks liiga suur"</string>
   <string name="dialog_room_reported">"Teatasid jututoast"</string>
@@ -383,6 +394,7 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="dialog_title_error">"Viga"</string>
   <string name="dialog_title_success">"Õnnestus"</string>
   <string name="dialog_title_warning">"Hoiatus"</string>
+  <string name="dialog_unsaved_changes_description">"Sul on salvestamata muudatusi"</string>
   <string name="dialog_unsaved_changes_description_android">"Sinu tehtud muudatused pole veel salvestatud. Kas sa oled kindel, et soovid minna tagasi?"</string>
   <string name="dialog_unsaved_changes_title">"Kas salvestame muudatused?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Suurim lubatud failisuurus on: %1$s"</string>
@@ -422,6 +434,37 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="screen_create_poll_options_section_title">"Valikud"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Kustuta: %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Seadistused"</string>
+  <string name="screen_link_new_device_desktop_scanning_title">"Skaneeri QR-koodi"</string>
+  <string name="screen_link_new_device_desktop_step1">"Ava %1$s kas oma süle- või lauaarvutis"</string>
+  <string name="screen_link_new_device_desktop_step3">"Skaneeri QR-koodi selle seadmega"</string>
+  <string name="screen_link_new_device_desktop_submit">"Skaneerimiseks valmis"</string>
+  <string name="screen_link_new_device_desktop_title">"QR-koodi laadimiseks ava %1$s süle- või lauaarvutis"</string>
+  <string name="screen_link_new_device_enter_number_error_numbers_do_not_match">"Numbrid ei klapi"</string>
+  <string name="screen_link_new_device_enter_number_notice">"Sisesta kahekohaline kood"</string>
+  <string name="screen_link_new_device_enter_number_subtitle">"Sellega verifitseerime, et ühendus sinu teise seadmega on turvaline."</string>
+  <string name="screen_link_new_device_enter_number_title">"Sisesta teises seadmes kuvatud number"</string>
+  <string name="screen_link_new_device_error_app_not_supported_subtitle">"Sinu teenusepakkuja ei toeta rakendust %1$s."</string>
+  <string name="screen_link_new_device_error_app_not_supported_title">"%1$s pole toetatud"</string>
+  <string name="screen_link_new_device_error_not_supported_subtitle">"Sinu kasutajakonto teenusepakkuja ei toeta võimalust logida sisse QR-koodi abil."</string>
+  <string name="screen_link_new_device_error_not_supported_title">"QR-kood pole toetatud"</string>
+  <string name="screen_link_new_device_error_request_cancelled_subtitle">"Sisselogimine katkestati teises seadmes."</string>
+  <string name="screen_link_new_device_error_request_cancelled_title">"Sisselogimispäring on tühistatud"</string>
+  <string name="screen_link_new_device_error_request_timeout_subtitle">"Sisselogimine aegus. Palun proovi uuesti."</string>
+  <string name="screen_link_new_device_error_request_timeout_title">"Sisselogimine jäi etteantud aja jooksul tegemata"</string>
+  <string name="screen_link_new_device_mobile_step1">"Ava %1$s teises seadmes"</string>
+  <string name="screen_link_new_device_mobile_step2">"Vali %1$s"</string>
+  <string name="screen_link_new_device_mobile_step2_action">"„Logi sisse QR-koodiga“"</string>
+  <string name="screen_link_new_device_mobile_step3">"Skaneeri siin näidatud QR-koodi teise seadmega"</string>
+  <string name="screen_link_new_device_mobile_title">"Ava %1$s teises seadmes"</string>
+  <string name="screen_link_new_device_root_desktop_computer">"Lauaarvuti"</string>
+  <string name="screen_link_new_device_root_loading_qr_code">"Laadin QR-koodi…"</string>
+  <string name="screen_link_new_device_root_mobile_device">"Nutiseade"</string>
+  <string name="screen_link_new_device_root_title">"Mis tüüpi seadet soovid siduda?"</string>
+  <string name="screen_manage_authorized_spaces_header">"Kogukonnad, milles on võimalik jututoaga liituda ilma kutseta."</string>
+  <string name="screen_manage_authorized_spaces_title">"Halda kogukondi"</string>
+  <string name="screen_manage_authorized_spaces_unknown_space">"(Tundmatu kogukond)"</string>
+  <string name="screen_manage_authorized_spaces_unknown_spaces_section_title">"Muud kogukonnad, mille liige sa ei ole"</string>
+  <string name="screen_manage_authorized_spaces_your_spaces_section_title">"Sinu kogukonnad"</string>
   <string name="screen_media_picker_error_failed_selection">"Meediafaili valimine ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Siia lisamiseks vajuta sõnumil ja vali „%1$s“."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Et olulisi sõnumeid oleks lihtsam leida, tõsta nad esile"</string>
@@ -462,6 +505,7 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_parent_space">"Kogukond: %1$s"</string>
   <string name="screen_space_list_title">"Kogukonnad"</string>
+  <string name="screen_space_menu_action_members">"Vaata liikmeid"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Sõnum on saatmata, kuna kasutaja %1$s verifitseeritud identiteet on lähtestatud."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Sõnum on saatmata, kuna %1$s pole verifitseerinud kõiki oma seadmeid."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Kuna sa pole üks või enamgi oma seadet verifitseerinud, siis sinu sõnum on saatmata."</string>
@@ -470,7 +514,7 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="test_language_identifier">"et"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"Vanu sõnumeid ei saa selles seadmes näha"</string>
   <string name="timeline_decryption_failure_historical_event_unverified_device">"Ligipääsuks vanadele sõnumitele pead selle seadme verifitseerima"</string>
-  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Sul puudub ligipääs sellele sõnumile"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Sul pole ligipääsu antud sõnumile"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Sõnumi dekrüptimine ei õnnestu"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Kuna seade on verifitseerimata või saatja pole sind verifitseerinud, siis sõnumi näitamine on blokeeritud."</string>
 </resources>

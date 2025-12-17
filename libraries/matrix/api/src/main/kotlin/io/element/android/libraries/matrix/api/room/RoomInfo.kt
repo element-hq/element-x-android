@@ -1,13 +1,13 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.api.room
 
-import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -19,7 +19,6 @@ import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 
-@Immutable
 data class RoomInfo(
     val id: RoomId,
     /** The room's name from the room state event if received from sync, or one that's been computed otherwise. */
@@ -80,15 +79,4 @@ data class RoomInfo(
 ) {
     val aliases: List<RoomAlias>
         get() = listOfNotNull(canonicalAlias) + alternativeAliases
-
-    /**
-     * Returns the list of users with the given [role] in this room.
-     */
-    fun usersWithRole(role: RoomMember.Role): List<UserId> {
-        return if (role is RoomMember.Role.Owner && role.isCreator) {
-            this.creators
-        } else {
-            this.roomPowerLevels?.usersWithRole(role).orEmpty().toList()
-        }
-    }
 }

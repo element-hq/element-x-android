@@ -1,0 +1,43 @@
+-- Migrate DB from version 10
+-- Remove field slidingSyncProxy
+
+-- Equivalent to (DROP not supported by sqldelight):
+-- ALTER TABLE SessionData DROP slidingSyncProxy;
+
+CREATE TABLE SessionData_bak (
+    userId TEXT NOT NULL PRIMARY KEY,
+    deviceId TEXT NOT NULL,
+    accessToken TEXT NOT NULL,
+    refreshToken TEXT,
+    homeserverUrl TEXT NOT NULL,
+    loginTimestamp INTEGER,
+    oidcData TEXT,
+    isTokenValid INTEGER NOT NULL DEFAULT 1,
+    loginType TEXT,
+    passphrase TEXT,
+    sessionPath TEXT NOT NULL DEFAULT "",
+    cachePath TEXT NOT NULL DEFAULT "",
+    position INTEGER NOT NULL DEFAULT 0,
+    lastUsageIndex INTEGER NOT NULL DEFAULT 0,
+    userDisplayName TEXT,
+    userAvatarUrl TEXT
+);
+INSERT INTO SessionData_bak SELECT
+    userId,
+    deviceId,
+    accessToken,
+    refreshToken,
+    homeserverUrl,
+    loginTimestamp,
+    oidcData,
+    isTokenValid,
+    loginType,
+    passphrase,
+    sessionPath,
+    cachePath,
+    position,
+    lastUsageIndex,
+    userDisplayName,
+    userAvatarUrl FROM SessionData;
+DROP TABLE SessionData;
+ALTER TABLE SessionData_bak RENAME TO SessionData;

@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_create_room_action_create_room">"Создать новую комнату"</string>
   <string name="screen_room_directory_search_title">"Каталог комнат"</string>
-  <string name="screen_start_chat_error_starting_chat">"Произошла ошибка при запуске чата"</string>
+  <string name="screen_start_chat_error_starting_chat">"Произошла ошибка при попытке начать чат"</string>
   <string name="screen_start_chat_join_room_by_address_action">"Присоединиться к комнате по адресу"</string>
   <string name="screen_start_chat_join_room_by_address_invalid_address">"Недействительный адрес"</string>
   <string name="screen_start_chat_join_room_by_address_placeholder">"Ввести…"</string>

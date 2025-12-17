@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -15,22 +16,19 @@ import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.matrix.api.core.RoomId
 
 interface SpaceEntryPoint : FeatureEntryPoint {
-    fun nodeBuilder(
+    fun createNode(
         parentNode: Node,
         buildContext: BuildContext,
-    ): NodeBuilder
-
-    interface NodeBuilder {
-        fun inputs(inputs: Inputs): NodeBuilder
-        fun callback(callback: Callback): NodeBuilder
-        fun build(): Node
-    }
+        inputs: Inputs,
+        callback: Callback
+    ): Node
 
     data class Inputs(
         val roomId: RoomId
     ) : NodeInputs
 
     interface Callback : Plugin {
-        fun onOpenRoom(roomId: RoomId, viaParameters: List<String>)
+        fun navigateToRoom(roomId: RoomId, viaParameters: List<String>)
+        fun navigateToRoomMemberList()
     }
 }

@@ -15,7 +15,7 @@
   <string name="screen_join_room_fail_reason">"Detta rum är antingen endast för inbjudna eller så kan det finnas begränsningar för åtkomst på utrymmesnivå."</string>
   <string name="screen_join_room_forget_action">"Glöm det här rummet"</string>
   <string name="screen_join_room_invite_required_message">"Du behöver en inbjudan för att gå med i detta rum"</string>
-  <string name="screen_join_room_join_action">"Gå med i rummet"</string>
+  <string name="screen_join_room_join_action">"Gå med"</string>
   <string name="screen_join_room_join_restricted_message">"Du kan behöva bli inbjuden eller vara medlem i ett utrymme för att gå med."</string>
   <string name="screen_join_room_knock_action">"Knacka för att gå med"</string>
   <string name="screen_join_room_knock_message_characters_count">"Tillåtna tecken %1$d av %2$d"</string>

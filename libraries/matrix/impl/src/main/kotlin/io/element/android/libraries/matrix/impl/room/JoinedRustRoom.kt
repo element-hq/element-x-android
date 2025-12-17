@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -50,13 +51,16 @@ import io.element.android.libraries.matrix.impl.widget.generateWidgetWebViewUrl
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted.Companion.WhileSubscribed
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.DateDividerMode
 import org.matrix.rustcomponents.sdk.IdentityStatusChangeListener
@@ -73,6 +77,7 @@ import org.matrix.rustcomponents.sdk.getElementCallRequiredPermissions
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import uniffi.matrix_sdk.RoomPowerLevelChanges
+import uniffi.matrix_sdk_ui.TimelineReadReceiptTracking
 import kotlin.coroutines.cancellation.CancellationException
 import org.matrix.rustcomponents.sdk.IdentityStatusChange as RustIdentityStateChange
 import org.matrix.rustcomponents.sdk.KnockRequest as InnerKnockRequest
@@ -90,8 +95,6 @@ class JoinedRustRoom(
     // Create a dispatcher for all room methods...
     private val roomDispatcher = coroutineDispatchers.io.limitedParallelism(32)
     private val innerRoom = baseRoom.innerRoom
-
-    override val syncUpdateFlow = MutableStateFlow(0L)
 
     override val roomTypingMembersFlow: Flow<List<UserId>> = mxCallbackFlow {
         val initial = emptyList<UserId>()
@@ -135,11 +138,24 @@ class JoinedRustRoom(
 
     override val roomNotificationSettingsStateFlow = MutableStateFlow<RoomNotificationSettingsState>(RoomNotificationSettingsState.Unknown)
 
-    override val liveTimeline = liveInnerTimeline.map(mode = Timeline.Mode.Live) {
-        syncUpdateFlow.value = systemClock.epochMillis()
-    }
+    override val liveTimeline = liveInnerTimeline.map(mode = Timeline.Mode.Live)
+
+    override val syncUpdateFlow = flow {
+        var counter = 0L
+        liveTimeline.onSyncedEventReceived.collect {
+            emit(++counter)
+        }
+    }.stateIn(
+        scope = roomCoroutineScope,
+        started = WhileSubscribed(),
+        initialValue = 0L,
+    )
 
     init {
+        subscribeToRoomMembersChange()
+    }
+
+    private fun subscribeToRoomMembersChange() {
         val powerLevelChanges = roomInfoFlow.map { it.roomPowerLevels }.distinctUntilChanged()
         val membershipChanges = liveTimeline.membershipChangeEventReceived.onStart { emit(Unit) }
         combine(membershipChanges, powerLevelChanges) { _, _ -> }
@@ -222,7 +238,7 @@ class JoinedRustRoom(
                     filter = filter,
                     internalIdPrefix = internalIdPrefix,
                     dateDividerMode = dateDividerMode,
-                    trackReadReceipts = trackReadReceipts,
+                    trackReadReceipts = if (trackReadReceipts) TimelineReadReceiptTracking.ALL_EVENTS else TimelineReadReceiptTracking.DISABLED,
                     reportUtds = true,
                 )
             ).let { innerTimeline ->
@@ -381,10 +397,12 @@ class JoinedRustRoom(
                 invite = roomPowerLevelsValues.invite,
                 kick = roomPowerLevelsValues.kick,
                 redact = roomPowerLevelsValues.redactEvents,
-                eventsDefault = roomPowerLevelsValues.sendEvents,
+                stateDefault = roomPowerLevelsValues.stateDefault,
+                eventsDefault = roomPowerLevelsValues.eventsDefault,
                 roomName = roomPowerLevelsValues.roomName,
                 roomAvatar = roomPowerLevelsValues.roomAvatar,
                 roomTopic = roomPowerLevelsValues.roomTopic,
+                spaceChild = roomPowerLevelsValues.spaceChild,
             )
             innerRoom.applyPowerLevelChanges(changes)
         }
@@ -473,11 +491,11 @@ class JoinedRustRoom(
     override fun destroy() {
         baseRoom.destroy()
         liveInnerTimeline.destroy()
+        Timber.d("Room $roomId destroyed")
     }
 
     private fun InnerTimeline.map(
         mode: Timeline.Mode,
-        onNewSyncedEvent: () -> Unit = {},
     ): Timeline {
         val timelineCoroutineScope = roomCoroutineScope.childScope(coroutineDispatchers.main, "TimelineScope-$roomId-$this")
         return RustTimeline(
@@ -488,7 +506,6 @@ class JoinedRustRoom(
             coroutineScope = timelineCoroutineScope,
             dispatcher = roomDispatcher,
             roomContentForwarder = roomContentForwarder,
-            onNewSyncedEvent = onNewSyncedEvent,
         )
     }
 }

@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -13,7 +14,6 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.replace
 import dev.zacsweers.metro.Assisted
@@ -24,6 +24,7 @@ import io.element.android.features.createroom.impl.addpeople.AddPeopleNode
 import io.element.android.features.createroom.impl.configureroom.ConfigureRoomNode
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
+import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -42,9 +43,7 @@ class CreateRoomFlowNode(
     buildContext = buildContext,
     plugins = plugins
 ) {
-    private fun onRoomCreated(roomId: RoomId) {
-        plugins<CreateRoomEntryPoint.Callback>().forEach { it.onRoomCreated(roomId) }
-    }
+    private val callback: CreateRoomEntryPoint.Callback = callback()
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
@@ -60,7 +59,7 @@ class CreateRoomFlowNode(
                 val inputs = AddPeopleNode.Inputs(navTarget.roomId)
                 val callback: AddPeopleNode.Callback = object : AddPeopleNode.Callback {
                     override fun onFinish() {
-                        onRoomCreated(navTarget.roomId)
+                        callback.onRoomCreated(navTarget.roomId)
                     }
                 }
                 createNode<AddPeopleNode>(buildContext, plugins = listOf(inputs, callback))

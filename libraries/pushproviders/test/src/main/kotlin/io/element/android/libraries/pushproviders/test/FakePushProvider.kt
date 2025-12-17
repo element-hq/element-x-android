@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -9,7 +10,7 @@ package io.element.android.libraries.pushproviders.test
 
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
+import io.element.android.libraries.pushproviders.api.Config
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
 import io.element.android.tests.testutils.lambda.lambdaError
@@ -21,7 +22,7 @@ class FakePushProvider(
     private val distributors: List<Distributor> = listOf(Distributor("aDistributorValue", "aDistributorName")),
     private val currentDistributorValue: () -> String? = { lambdaError() },
     private val currentDistributor: () -> Distributor? = { distributors.firstOrNull() },
-    private val currentUserPushConfig: CurrentUserPushConfig? = null,
+    private val config: Config? = null,
     private val registerWithResult: (MatrixClient, Distributor) -> Result<Unit> = { _, _ -> lambdaError() },
     private val unregisterWithResult: (MatrixClient) -> Result<Unit> = { lambdaError() },
     private val onSessionDeletedLambda: (SessionId) -> Unit = { lambdaError() },
@@ -50,8 +51,8 @@ class FakePushProvider(
         onSessionDeletedLambda(sessionId)
     }
 
-    override suspend fun getCurrentUserPushConfig(): CurrentUserPushConfig? {
-        return currentUserPushConfig
+    override suspend fun getPushConfig(sessionId: SessionId): Config? {
+        return config
     }
 
     override fun canRotateToken(): Boolean {

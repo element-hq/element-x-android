@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -28,6 +29,7 @@ sealed interface SuggestionType {
     data object Mention : SuggestionType
     data object Command : SuggestionType
     data object Room : SuggestionType
+    data object Emoji : SuggestionType
     data class Custom(val pattern: String) : SuggestionType
 
     companion object {
@@ -36,6 +38,7 @@ sealed interface SuggestionType {
                 PatternKey.At -> Mention
                 PatternKey.Slash -> Command
                 PatternKey.Hash -> Room
+                PatternKey.Colon -> Emoji
                 is PatternKey.Custom -> Custom(key.v1)
             }
         }

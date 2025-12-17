@@ -33,5 +33,5 @@
   <string name="screen_room_multiple_knock_requests_view_all_button_title">"Переглянути все"</string>
   <string name="screen_room_single_knock_request_accept_button_title">"Прийняти"</string>
   <string name="screen_room_single_knock_request_title">"%1$s хоче приєднатися до цієї кімнати"</string>
-  <string name="screen_room_single_knock_request_view_button_title">"Перегляд"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Переглянути"</string>
 </resources>

@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -10,7 +11,7 @@ package io.element.android.libraries.mediaviewer.impl.viewer
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.designsystem.components.media.createFakeWaveform
+import io.element.android.libraries.designsystem.components.media.WaveFormSamples
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
@@ -128,7 +129,7 @@ class SingleMediaGalleryDataSourceTest {
     fun `createFrom should create a SingleMediaGalleryDataSource with a voice item`() {
         testFactory(
             mediaInfo = aVoiceMediaInfo(
-                waveForm = createFakeWaveform(),
+                waveForm = WaveFormSamples.longRealisticWaveForm,
                 duration = "12:34",
             ),
             expectedResult = { params ->

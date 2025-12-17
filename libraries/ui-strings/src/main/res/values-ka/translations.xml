@@ -236,6 +236,7 @@
   <string name="dialog_title_error">"შეცდომა"</string>
   <string name="dialog_title_success">"წარმატება"</string>
   <string name="dialog_title_warning">"გაფრთხილება"</string>
+  <string name="dialog_unsaved_changes_description">"თქვენ გაქვთ შეუნახავი ცვლილებები"</string>
   <string name="dialog_unsaved_changes_description_android">"თქვენი ცვლილებები არაა შენახული. დარწმუნებული ხართ დაბრუნებაში?"</string>
   <string name="dialog_unsaved_changes_title">"შენახვა?"</string>
   <string name="error_failed_creating_the_permalink">"მუდმივი ბმულის შექმნა ვერ მოხერხდა"</string>

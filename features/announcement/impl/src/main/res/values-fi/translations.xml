@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_space_announcement_item1">"Nähdä luomasi tai liittymäsi tilat"</string>
+  <string name="screen_space_announcement_item2">"Hyväksyä tai hylätä kutsuja tiloihin"</string>
+  <string name="screen_space_announcement_item3">"Löytää kaikki huoneet, joihin voit liittyä tiloissasi"</string>
+  <string name="screen_space_announcement_item4">"Liittyä julkisiin tiloihin"</string>
+  <string name="screen_space_announcement_item5">"Poistua mistä tahansa tilasta, johon olet liittynyt"</string>
+  <string name="screen_space_announcement_notice">"Tilojen suodatus, luominen ja hallinta on tulossa pian."</string>
+  <string name="screen_space_announcement_subtitle">"Tervetuloa tilojen beetaversioon! Tämän ensimmäisen version avulla voit:"</string>
+  <string name="screen_space_announcement_title">"Esittelyssä tilat"</string>
+</resources>

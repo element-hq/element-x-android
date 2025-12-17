@@ -2,9 +2,10 @@ import extension.setupDependencyInjection
 import extension.testCommonDependencies
 
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2023, 2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 plugins {
@@ -49,11 +50,15 @@ dependencies {
     implementation(projects.libraries.network)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixui)
+    implementation(projects.libraries.matrixmedia.api)
+    implementation(projects.features.networkmonitor.api)
     implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.sessionStorage.api)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.troubleshoot.api)
+    implementation(projects.libraries.workmanager.api)
     implementation(projects.features.call.api)
+    implementation(projects.features.enterprise.api)
     implementation(projects.features.lockscreen.api)
     implementation(projects.libraries.featureflag.api)
     api(projects.libraries.pushproviders.api)
@@ -67,14 +72,19 @@ dependencies {
     testCommonDependencies(libs)
     testImplementation(libs.coil.test)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.libraries.matrixmedia.test)
     testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.libraries.sessionStorage.test)
     testImplementation(projects.libraries.push.test)
     testImplementation(projects.libraries.pushproviders.test)
     testImplementation(projects.libraries.pushstore.test)
     testImplementation(projects.libraries.troubleshoot.test)
+    testImplementation(projects.libraries.workmanager.test)
     testImplementation(projects.features.call.test)
+    testImplementation(projects.features.enterprise.test)
     testImplementation(projects.features.lockscreen.test)
+    testImplementation(projects.features.networkmonitor.test)
+    testImplementation(projects.services.appnavstate.impl)
     testImplementation(projects.services.appnavstate.test)
     testImplementation(projects.services.toolbox.impl)
     testImplementation(projects.services.toolbox.test)

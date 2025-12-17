@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -13,10 +14,10 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
+import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.mediaviewer.impl.gallery.di.LocalMediaItemPresenterFactories
@@ -38,26 +39,19 @@ class MediaGalleryNode(
 
     interface Callback : Plugin {
         fun onBackClick()
-        fun onItemClick(item: MediaItem.Event)
-        fun onViewInTimeline(eventId: EventId)
+        fun showItem(item: MediaItem.Event)
+        fun viewInTimeline(eventId: EventId)
+        fun forward(eventId: EventId)
     }
 
-    private fun onBackClick() {
-        plugins<Callback>().forEach {
-            it.onBackClick()
-        }
-    }
+    private val callback: Callback = callback()
 
     override fun onViewInTimelineClick(eventId: EventId) {
-        plugins<Callback>().forEach {
-            it.onViewInTimeline(eventId)
-        }
+        callback.viewInTimeline(eventId)
     }
 
-    private fun onItemClick(item: MediaItem.Event) {
-        plugins<Callback>().forEach {
-            it.onItemClick(item)
-        }
+    override fun onForwardClick(eventId: EventId) {
+        callback.forward(eventId)
     }
 
     @Composable
@@ -68,8 +62,8 @@ class MediaGalleryNode(
             val state = presenter.present()
             MediaGalleryView(
                 state = state,
-                onBackClick = ::onBackClick,
-                onItemClick = ::onItemClick,
+                onBackClick = callback::onBackClick,
+                onItemClick = callback::showItem,
                 modifier = modifier,
             )
         }

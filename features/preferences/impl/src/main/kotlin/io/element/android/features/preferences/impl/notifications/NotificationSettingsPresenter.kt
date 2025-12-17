@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -24,6 +25,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingStateNoSuccess
 import io.element.android.libraries.core.extensions.runCatchingExceptions
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
@@ -50,6 +52,8 @@ class NotificationSettingsPresenter(
     private val pushService: PushService,
     private val systemNotificationsEnabledProvider: SystemNotificationsEnabledProvider,
     private val fullScreenIntentPermissionsPresenter: Presenter<FullScreenIntentPermissionsState>,
+    @SessionCoroutineScope
+    private val sessionCoroutineScope: CoroutineScope,
 ) : Presenter<NotificationSettingsState> {
     @Composable
     override fun present(): NotificationSettingsState {
@@ -94,7 +98,7 @@ class NotificationSettingsPresenter(
         var refreshPushProvider by remember { mutableIntStateOf(0) }
 
         LaunchedEffect(refreshPushProvider) {
-            val p = pushService.getCurrentPushProvider()
+            val p = pushService.getCurrentPushProvider(matrixClient.sessionId)
             val distributor = p?.getCurrentDistributor(matrixClient.sessionId)
             currentDistributor = if (distributor != null) {
                 AsyncData.Success(distributor)
@@ -129,7 +133,7 @@ class NotificationSettingsPresenter(
                 )
         }
 
-        fun handleEvents(event: NotificationSettingsEvents) {
+        fun handleEvent(event: NotificationSettingsEvents) {
             when (event) {
                 is NotificationSettingsEvents.SetAtRoomNotificationsEnabled -> {
                     localCoroutineScope.setAtRoomNotificationsEnabled(event.enabled, changeNotificationSettingAction)
@@ -140,7 +144,7 @@ class NotificationSettingsPresenter(
                 is NotificationSettingsEvents.SetInviteForMeNotificationsEnabled -> {
                     localCoroutineScope.setInviteForMeNotificationsEnabled(event.enabled, changeNotificationSettingAction)
                 }
-                is NotificationSettingsEvents.SetNotificationsEnabled -> localCoroutineScope.setNotificationsEnabled(userPushStore, event.enabled)
+                is NotificationSettingsEvents.SetNotificationsEnabled -> sessionCoroutineScope.setNotificationsEnabled(userPushStore, event.enabled)
                 NotificationSettingsEvents.ClearConfigurationMismatchError -> {
                     matrixSettings.value = NotificationSettingsState.MatrixSettings.Invalid(fixFailed = false)
                 }
@@ -167,7 +171,7 @@ class NotificationSettingsPresenter(
             availablePushDistributors = availableDistributors,
             showChangePushProviderDialog = showChangePushProviderDialog,
             fullScreenIntentPermissionsState = key(refreshFullScreenIntentSettings) { fullScreenIntentPermissionsPresenter.present() },
-            eventSink = ::handleEvents
+            eventSink = ::handleEvent,
         )
     }
 
@@ -261,5 +265,10 @@ class NotificationSettingsPresenter(
 
     private fun CoroutineScope.setNotificationsEnabled(userPushStore: UserPushStore, enabled: Boolean) = launch {
         userPushStore.setNotificationEnabledForDevice(enabled)
+        if (enabled) {
+            pushService.ensurePusherIsRegistered(matrixClient)
+        } else {
+            pushService.getCurrentPushProvider(matrixClient.sessionId)?.unregister(matrixClient)
+        }
     }
 }

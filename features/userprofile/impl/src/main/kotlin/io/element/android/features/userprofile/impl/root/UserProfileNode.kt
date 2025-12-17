@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -63,7 +64,7 @@ class UserProfileNode(
         }
 
         fun onStartDM(roomId: RoomId) {
-            callback.onStartDM(roomId)
+            callback.navigateToRoom(roomId)
         }
 
         val state = presenter.present()
@@ -74,9 +75,9 @@ class UserProfileNode(
             goBack = this::navigateUp,
             onShareUser = ::onShareUser,
             onOpenDm = ::onStartDM,
-            onStartCall = callback::onStartCall,
-            openAvatarPreview = callback::openAvatarPreview,
-            onVerifyClick = callback::onVerifyUser,
+            onStartCall = callback::startCall,
+            openAvatarPreview = callback::navigateToAvatarPreview,
+            onVerifyClick = callback::startVerifyUserFlow,
         )
     }
 }

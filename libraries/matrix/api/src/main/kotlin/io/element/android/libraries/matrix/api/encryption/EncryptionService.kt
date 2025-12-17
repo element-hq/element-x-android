@@ -1,12 +1,14 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.api.encryption
 
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import kotlinx.coroutines.flow.Flow
@@ -17,7 +19,7 @@ interface EncryptionService {
     val recoveryStateStateFlow: StateFlow<RecoveryState>
     val enableRecoveryProgressStateFlow: StateFlow<EnableRecoveryProgress>
     val isLastDevice: StateFlow<Boolean>
-    val hasDevicesToVerifyAgainst: StateFlow<Boolean>
+    val hasDevicesToVerifyAgainst: StateFlow<AsyncData<Boolean>>
 
     suspend fun enableBackups(): Result<Unit>
 
@@ -62,8 +64,6 @@ interface EncryptionService {
      */
     suspend fun startIdentityReset(): Result<IdentityResetHandle?>
 
-    suspend fun isUserVerified(userId: UserId): Result<Boolean>
-
     /**
      * Remember this identity, ensuring it does not result in a pin violation.
      */
@@ -80,8 +80,10 @@ interface EncryptionService {
 
     /**
      * Get the identity state of a user, if known.
+     * @param userId the user id to get the identity for.
+     * @param fallbackToServer whether to fallback to fetching the identity from the server if not known locally. Defaults to true.
      */
-    suspend fun getUserIdentity(userId: UserId): Result<IdentityState?>
+    suspend fun getUserIdentity(userId: UserId, fallbackToServer: Boolean = true): Result<IdentityState?>
 }
 
 /**

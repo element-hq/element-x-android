@@ -33,7 +33,7 @@
   <string name="screen_session_verification_request_failure_title">"A verificação falhou"</string>
   <string name="screen_session_verification_request_footer">"Continua apenas se tiveres iniciado esta verificação."</string>
   <string name="screen_session_verification_request_subtitle">"Verifique o outro dispositivo para manter o histórico de mensagens seguro."</string>
-  <string name="screen_session_verification_request_success_subtitle">"Agora podes ler ou enviar mensagens de forma segura no teu outro dispositivo."</string>
+  <string name="screen_session_verification_request_success_subtitle">"Agora já podes ler ou enviar mensagens com segurança a partir do teu outro dispositivo."</string>
   <string name="screen_session_verification_request_success_title">"Dispositivo verificado"</string>
   <string name="screen_session_verification_request_title">"Verificação solicitada"</string>
   <string name="screen_session_verification_they_dont_match">"Não correspondem"</string>
@@ -45,7 +45,7 @@
   <string name="screen_session_verification_user_responder_subtitle">"Para maior segurança, outro utilizador quer verificar a tua identidade. Ser-te-á mostrado um conjunto de emojis para comparares."</string>
   <string name="screen_session_verification_waiting_another_device_subtitle">"Deves ver uma notificação no outro dispositivo. Inicia a verificação a partir daí."</string>
   <string name="screen_session_verification_waiting_another_device_title">"Inicia a verificação no outro dispositivo"</string>
-  <string name="screen_session_verification_waiting_other_device_title">"Inicia a verificação no teu outro dispositivo"</string>
+  <string name="screen_session_verification_waiting_other_device_title">"Inicia a verificação no outro dispositivo"</string>
   <string name="screen_session_verification_waiting_other_user_title">"A espera do outro utilizador"</string>
   <string name="screen_session_verification_waiting_subtitle">"Uma vez aceite, poderás continuar com a verificação."</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Para continuar, aceita o pedido de verificação na tua outra sessão."</string>

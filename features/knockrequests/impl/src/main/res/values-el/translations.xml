@@ -32,5 +32,4 @@
   <string name="screen_room_multiple_knock_requests_view_all_button_title">"Προβολή όλων"</string>
   <string name="screen_room_single_knock_request_accept_button_title">"Αποδοχή"</string>
   <string name="screen_room_single_knock_request_title">"%1$s θέλει να συμμετάσχει σε αυτή την αίθουσα"</string>
-  <string name="screen_room_single_knock_request_view_button_title">"Προβολή"</string>
 </resources>

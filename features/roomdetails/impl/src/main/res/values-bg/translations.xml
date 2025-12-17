@@ -5,13 +5,11 @@
   <string name="screen_polls_history_title">"Анкети"</string>
   <string name="screen_room_change_permissions_administrators">"Само администратори"</string>
   <string name="screen_room_change_permissions_delete_messages">"Премахване на съобщения"</string>
-  <string name="screen_room_change_permissions_everyone">"Всеки"</string>
   <string name="screen_room_change_permissions_invite_people">"Поканване на хора и приемане на заявки за присъединяване"</string>
-  <string name="screen_room_change_permissions_member_moderation">"Модериране на членове"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Съобщения и съдържание"</string>
   <string name="screen_room_change_permissions_moderators">"Администратори и модератори"</string>
   <string name="screen_room_change_permissions_remove_people">"Премахване на хора и отхвърляне на заявки за присъединяване"</string>
-  <string name="screen_room_change_permissions_room_details">"Подробности за стаята"</string>
+  <string name="screen_room_change_permissions_room_details">"Редактиране на стаята"</string>
   <string name="screen_room_change_permissions_room_name">"Промяна на името на стаята"</string>
   <string name="screen_room_change_permissions_room_topic">"Промяна на темата на стаята"</string>
   <string name="screen_room_change_permissions_send_messages">"Изпращане на съобщения"</string>
@@ -56,8 +54,8 @@
     <item quantity="other">"%1$d души"</item>
   </plurals>
   <string name="screen_room_member_list_mode_members">"Членове"</string>
-  <string name="screen_room_member_list_role_administrator">"Администратор"</string>
-  <string name="screen_room_member_list_role_moderator">"Модератор"</string>
+  <string name="screen_room_member_list_role_administrator">"Само администратори"</string>
+  <string name="screen_room_member_list_role_moderator">"Администратори и модератори"</string>
   <string name="screen_room_member_list_room_members_header_title">"Членове на стаята"</string>
   <string name="screen_room_notification_settings_allow_custom">"Разрешаване на персонализирана настройка"</string>
   <string name="screen_room_notification_settings_allow_custom_footnote">"Включването на това ще замени вашата настройка по подразбиране"</string>
@@ -77,7 +75,6 @@
   <string name="screen_room_roles_and_permissions_member_moderation">"Модериране на членове"</string>
   <string name="screen_room_roles_and_permissions_messages_and_content">"Съобщения и съдържание"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Модератори"</string>
-  <string name="screen_room_roles_and_permissions_permissions_header">"Разрешения"</string>
   <string name="screen_room_roles_and_permissions_reset">"Нулиране на разрешенията"</string>
   <string name="screen_room_roles_and_permissions_roles_header">"Роли"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Подробности за стаята"</string>
@@ -93,14 +90,12 @@
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Хората могат да се присъединят само ако са поканени"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Само с покана"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Достъп до стаята"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Пространствата в момента не се поддържат"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Членове на пространството"</string>
-  <string name="screen_security_and_privacy_room_address_section_footer">"Ще ви е необходим адрес на стаята, за да я направите видима в директорията на стаите."</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Пространствата в момента не се поддържат"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Видима в директорията на обществените стаи"</string>
   <string name="screen_security_and_privacy_room_history_anyone_option_title">"Всеки"</string>
   <string name="screen_security_and_privacy_room_history_section_header">"Кой може да чете историята"</string>
   <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Само за членове откакто са поканени"</string>
   <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Само за членове от избирането на тази опция"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_header">"Видимост на стаята"</string>
   <string name="screen_security_and_privacy_title">"Защита и поверителност"</string>
 </resources>

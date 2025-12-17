@@ -15,6 +15,7 @@
     <item quantity="few">"%d oznámení"</item>
     <item quantity="other">"%d oznámení"</item>
   </plurals>
+  <string name="notification_error_unified_push_unregistered_android">"Distributor oznámení UnifiedPush se nepodařilo zaregistrovat, takže již nebudete dostávat oznámení. Zkontrolujte nastavení oznámení v aplikaci a stav distributora push oznámění."</string>
   <string name="notification_fallback_content">"Oznámení"</string>
   <string name="notification_incoming_call">"📹 Příchozí hovor"</string>
   <string name="notification_inline_reply_failed">"** Nepodařilo se odeslat - otevřete prosím místnost"</string>
@@ -42,6 +43,7 @@
   <string name="notification_sender_me">"Já"</string>
   <string name="notification_sender_mention_reply">"%1$s zmínil(a) nebo odpověděl(a)"</string>
   <string name="notification_test_push_notification_content">"Prohlížíte si oznámení! Klikněte na mě!"</string>
+  <string name="notification_thread_in_room">"Vlákno v %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
@@ -71,7 +73,10 @@
   <string name="troubleshoot_notifications_test_blocked_users_title">"Blokovaní uživatelé"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Získat název aktuálního poskytovatele."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Nebyli vybráni žádní push poskytovatelé."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found">"Aktuální poskytovatel push oznámení: %1$s a současný distributor: %2$s. Ale distributor %3$s nebyl nalezen. Možná byla aplikace odinstalována?"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_no_distributor">"Aktuální poskytovatel push oznámení: %1$s , ale nebyli nakonfigurováni žádní distributoři."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Aktuální push poskytovatel: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success_with_distributor">"Aktuální poskytovatel push oznámení: %1$s (%2$s)"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Aktuální push poskytovatel"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Ujistěte se, že aplikace má alespoň jednoho push poskytovatele."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Nebyli nalezeni žádní push poskytovatelé."</string>

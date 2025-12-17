@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -15,16 +16,18 @@ import org.junit.Test
 class KonsistLicenseTest {
     private val publicLicense = """
         /\*
-        (?:.*\n)* \* Copyright 20\d\d((, |-)20\d\d)? New Vector Ltd.
+        (?:.*\n)* \* Copyright \(c\) 20\d\d((, |-)20\d\d)? Element Creations Ltd\.
         (?:.*\n)* \*
-         \* SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
-         \* Please see LICENSE files in the repository root for full details.
+         \* SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial\.
+         \* Please see LICENSE files in the repository root for full details\.
          \*/
         """.trimIndent().toRegex()
 
     private val enterpriseLicense = """
         /\*
-         \* © 20\d\d New Vector Limited, Element Software SARL, Element Software Inc\.,
+         \* © 20\d\d((, |-)20\d\d)? Element Creations Ltd\.
+        (?:.*\n)* \*
+         \* Element Creations Ltd, Element Software SARL, Element Software Inc\.,
          \* and Element Software GmbH \(the "Element Group"\) only make this file available
          \* under a proprietary license model\.
          \*
@@ -80,7 +83,7 @@ class KonsistLicenseTest {
                     it.name.startsWith("Template ").not()
             }
             .assertTrue {
-                it.text.count("New Vector") == 1
+                it.text.count("Element Creations Ltd.") == 1
             }
     }
 }

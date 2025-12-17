@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -15,7 +16,7 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
@@ -69,7 +70,7 @@ class TimelineMediaItemsFactory(
                 newTimelineItemStates.add(cacheItem)
             }
         }
-        _timelineItems.emit(newTimelineItemStates.toPersistentList())
+        _timelineItems.emit(newTimelineItemStates.toImmutableList())
     }
 
     private fun buildAndCacheItem(

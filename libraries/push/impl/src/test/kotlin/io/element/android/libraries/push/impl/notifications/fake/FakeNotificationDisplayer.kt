@@ -1,7 +1,8 @@
 /*
- * Copyright 2021-2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2021-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -19,17 +20,18 @@ import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 
 class FakeNotificationDisplayer(
-    var showNotificationMessageResult: LambdaThreeParamsRecorder<String?, Int, Notification, Boolean> = lambdaRecorder { _, _, _ -> true },
-    var cancelNotificationMessageResult: LambdaTwoParamsRecorder<String?, Int, Unit> = lambdaRecorder { _, _ -> },
+    var showNotificationResult: LambdaThreeParamsRecorder<String?, Int, Notification, Boolean> = lambdaRecorder { _, _, _ -> true },
+    var cancelNotificationResult: LambdaTwoParamsRecorder<String?, Int, Unit> = lambdaRecorder { _, _ -> },
     var displayDiagnosticNotificationResult: LambdaOneParamRecorder<Notification, Boolean> = lambdaRecorder { _ -> true },
     var dismissDiagnosticNotificationResult: LambdaNoParamRecorder<Unit> = lambdaRecorder { -> },
+    var displayUnregistrationNotificationResult: LambdaOneParamRecorder<Notification, Boolean> = lambdaRecorder { _ -> true },
 ) : NotificationDisplayer {
-    override fun showNotificationMessage(tag: String?, id: Int, notification: Notification): Boolean {
-        return showNotificationMessageResult(tag, id, notification)
+    override fun showNotification(tag: String?, id: Int, notification: Notification): Boolean {
+        return showNotificationResult(tag, id, notification)
     }
 
-    override fun cancelNotificationMessage(tag: String?, id: Int) {
-        return cancelNotificationMessageResult(tag, id)
+    override fun cancelNotification(tag: String?, id: Int) {
+        return cancelNotificationResult(tag, id)
     }
 
     override fun displayDiagnosticNotification(notification: Notification): Boolean {
@@ -40,8 +42,12 @@ class FakeNotificationDisplayer(
         return dismissDiagnosticNotificationResult()
     }
 
+    override fun displayUnregistrationNotification(notification: Notification): Boolean {
+        return displayUnregistrationNotificationResult(notification)
+    }
+
     fun verifySummaryCancelled(times: Int = 1) {
-        cancelNotificationMessageResult.assertions().isCalledExactly(times).withSequence(
+        cancelNotificationResult.assertions().isCalledExactly(times).withSequence(
             listOf(value(null), value(NotificationIdProvider.getSummaryNotificationId(A_SESSION_ID)))
         )
     }

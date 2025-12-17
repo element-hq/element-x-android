@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -18,9 +19,12 @@ import io.element.android.features.invite.api.toInviteData
 import io.element.android.features.invite.test.InMemorySeenInvitesStore
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
+import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.join.JoinRoom
 import io.element.android.libraries.matrix.api.spaces.SpaceRoomList
@@ -28,7 +32,9 @@ import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.join.FakeJoinRoom
+import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
 import io.element.android.libraries.matrix.test.spaces.FakeSpaceRoomList
 import io.element.android.libraries.previewutils.room.aSpaceRoom
 import io.element.android.tests.testutils.EventsRecorder
@@ -60,8 +66,37 @@ class SpacePresenterTest {
             assertThat(state.hasMoreToLoad).isTrue()
             assertThat(state.joinActions).isEmpty()
             assertThat(state.acceptDeclineInviteState).isEqualTo(anAcceptDeclineInviteState())
+            assertThat(state.topicViewerState).isEqualTo(TopicViewerState.Hidden)
+            assertThat(state.canAccessSpaceSettings).isFalse()
             advanceUntilIdle()
             paginateResult.assertions().isCalledOnce()
+        }
+    }
+
+    @Test
+    fun `present - canAccessSpaceSettings false when space settings ff is enabled but no permissions`() = runTest {
+        val presenter = createSpacePresenter(spaceSettingsEnabled = true)
+        presenter.test {
+            val state = awaitItem()
+            assertThat(state.canAccessSpaceSettings).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - canAccessSpaceSettings true when space settings ff is enabled and has permissions`() = runTest {
+        val room = FakeBaseRoom(
+            roomPermissions = FakeRoomPermissions(
+                canSendState = { true }
+            )
+        )
+        val presenter = createSpacePresenter(
+            room = room,
+            spaceSettingsEnabled = true,
+        )
+        presenter.test {
+            skipItems(1)
+            val state = awaitItem()
+            assertThat(state.canAccessSpaceSettings).isTrue()
         }
     }
 
@@ -237,6 +272,24 @@ class SpacePresenterTest {
     }
 
     @Test
+    fun `present - topic viewer state`() = runTest {
+        val paginateResult = lambdaRecorder<Result<Unit>> {
+            Result.success(Unit)
+        }
+        val spaceRoomList = FakeSpaceRoomList(paginateResult = paginateResult)
+        val presenter = createSpacePresenter(spaceRoomList = spaceRoomList)
+        presenter.test {
+            val state = awaitItem()
+            assertThat(state.topicViewerState).isEqualTo(TopicViewerState.Hidden)
+            advanceUntilIdle()
+            state.eventSink(SpaceEvents.ShowTopicViewer("topic"))
+            assertThat(awaitItem().topicViewerState).isEqualTo(TopicViewerState.Shown("topic"))
+            state.eventSink(SpaceEvents.HideTopicViewer)
+            assertThat(awaitItem().topicViewerState).isEqualTo(TopicViewerState.Hidden)
+        }
+    }
+
+    @Test
     fun `present - accept invite is transmitted to acceptDeclineInviteState`() {
         `invite action is transmitted to acceptDeclineInviteState`(
             acceptInvite = true,
@@ -302,20 +355,30 @@ class SpacePresenterTest {
 
     private fun TestScope.createSpacePresenter(
         client: MatrixClient = FakeMatrixClient(),
-        spaceRoomList: SpaceRoomList = FakeSpaceRoomList(),
+        room: BaseRoom = FakeBaseRoom(),
+        spaceRoomList: SpaceRoomList = FakeSpaceRoomList(
+            paginateResult = { Result.success(Unit) }
+        ),
         seenInvitesStore: SeenInvitesStore = InMemorySeenInvitesStore(),
         joinRoom: JoinRoom = FakeJoinRoom(
             lambda = { _, _, _ -> Result.success(Unit) },
         ),
         acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState> = Presenter { anAcceptDeclineInviteState() },
+        spaceSettingsEnabled: Boolean = false,
     ): SpacePresenter {
         return SpacePresenter(
             client = client,
+            room = room,
             spaceRoomList = spaceRoomList,
             seenInvitesStore = seenInvitesStore,
             joinRoom = joinRoom,
             acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
             sessionCoroutineScope = backgroundScope,
+            featureFlagService = FakeFeatureFlagService(
+                initialState = mapOf(
+                    FeatureFlags.SpaceSettings.key to spaceSettingsEnabled,
+                )
+            ),
         )
     }
 }

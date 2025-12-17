@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -11,10 +12,12 @@ import android.net.Uri
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bumble.appyx.core.modality.BuildContext
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.media.FakeMatrixMediaLoader
 import io.element.android.libraries.mediaplayer.test.FakeAudioFocus
 import io.element.android.libraries.mediaviewer.api.MediaInfo
@@ -63,17 +66,22 @@ class DefaultMediaViewerEntryPointTest {
                 pagerKeysHandler = PagerKeysHandler(),
                 textFileViewer = { _, _ -> lambdaError() },
                 audioFocus = FakeAudioFocus(),
+                sessionId = A_SESSION_ID,
+                enterpriseService = FakeEnterpriseService(),
             )
         }
         val callback = object : MediaViewerEntryPoint.Callback {
             override fun onDone() = lambdaError()
-            override fun onViewInTimeline(eventId: EventId) = lambdaError()
+            override fun viewInTimeline(eventId: EventId) = lambdaError()
+            override fun forwardEvent(eventId: EventId, fromPinnedEvents: Boolean) = lambdaError()
         }
         val params = createMediaViewerEntryPointParams()
-        val result = entryPoint.nodeBuilder(parentNode, BuildContext.root(null))
-            .params(params)
-            .callback(callback)
-            .build()
+        val result = entryPoint.createNode(
+            parentNode = parentNode,
+            buildContext = BuildContext.root(null),
+            params = params,
+            callback = callback,
+        )
         assertThat(result).isInstanceOf(MediaViewerNode::class.java)
         assertThat(result.plugins).contains(params)
         assertThat(result.plugins).contains(callback)
@@ -104,19 +112,25 @@ class DefaultMediaViewerEntryPointTest {
                 pagerKeysHandler = PagerKeysHandler(),
                 textFileViewer = { _, _ -> lambdaError() },
                 audioFocus = FakeAudioFocus(),
+                sessionId = A_SESSION_ID,
+                enterpriseService = FakeEnterpriseService(),
             )
         }
         val callback = object : MediaViewerEntryPoint.Callback {
             override fun onDone() = lambdaError()
-            override fun onViewInTimeline(eventId: EventId) = lambdaError()
+            override fun viewInTimeline(eventId: EventId) = lambdaError()
+            override fun forwardEvent(eventId: EventId, fromPinnedEvents: Boolean) = lambdaError()
         }
-        val result = entryPoint.nodeBuilder(parentNode, BuildContext.root(null))
-            .avatar(
-                filename = "fn",
-                avatarUrl = "avatarUrl",
-            )
-            .callback(callback)
-            .build()
+        val params = entryPoint.createParamsForAvatar(
+            filename = "fn",
+            avatarUrl = "avatarUrl",
+        )
+        val result = entryPoint.createNode(
+            parentNode = parentNode,
+            buildContext = BuildContext.root(null),
+            params = params,
+            callback = callback,
+        )
         assertThat(result).isInstanceOf(MediaViewerNode::class.java)
         assertThat(result.plugins).contains(
             MediaViewerEntryPoint.Params(

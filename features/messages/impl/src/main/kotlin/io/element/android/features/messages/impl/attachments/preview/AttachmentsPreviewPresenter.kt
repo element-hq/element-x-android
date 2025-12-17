@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -36,7 +37,8 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfig
-import io.element.android.libraries.mediaupload.api.MediaSender
+import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
+import io.element.android.libraries.mediaupload.api.MediaSenderFactory
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
 import io.element.android.libraries.mediaupload.api.allFiles
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
@@ -55,12 +57,13 @@ class AttachmentsPreviewPresenter(
     @Assisted private val onDoneListener: OnDoneListener,
     @Assisted private val timelineMode: Timeline.Mode,
     @Assisted private val inReplyToEventId: EventId?,
-    mediaSenderFactory: MediaSender.Factory,
+    mediaSenderFactory: MediaSenderFactory,
     private val permalinkBuilder: PermalinkBuilder,
     private val temporaryUriDeleter: TemporaryUriDeleter,
     private val mediaOptimizationSelectorPresenterFactory: MediaOptimizationSelectorPresenter.Factory,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
+    private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
 ) : Presenter<AttachmentsPreviewState> {
     @AssistedFactory
     interface Factory {
@@ -106,13 +109,9 @@ class AttachmentsPreviewPresenter(
             // to prepare it for sending. This is done to avoid blocking the UI thread when the
             // user clicks on the send button.
             if (mediaOptimizationSelectorState.displayMediaSelectorViews == false) {
-                val mediaOptimizationConfig = MediaOptimizationConfig(
-                    compressImages = mediaOptimizationSelectorState.isImageOptimizationEnabled == true,
-                    videoCompressionPreset = mediaOptimizationSelectorState.selectedVideoPreset ?: VideoCompressionPreset.STANDARD,
-                )
                 preprocessMediaJob = preProcessAttachment(
                     attachment = attachment,
-                    mediaOptimizationConfig = mediaOptimizationConfig,
+                    mediaOptimizationConfig = mediaOptimizationConfigProvider.get(),
                     displayProgress = false,
                     sendActionState = sendActionState,
                 )
@@ -141,8 +140,8 @@ class AttachmentsPreviewPresenter(
             }
         }
 
-        fun handleEvents(attachmentsPreviewEvents: AttachmentsPreviewEvents) {
-            when (attachmentsPreviewEvents) {
+        fun handleEvent(event: AttachmentsPreviewEvents) {
+            when (event) {
                 is AttachmentsPreviewEvents.SendAttachment -> {
                     ongoingSendAttachmentJob.value = coroutineScope.launch {
                         // If the media optimization selector is displayed, we need to wait for the user to select the options
@@ -230,7 +229,7 @@ class AttachmentsPreviewPresenter(
             textEditorState = textEditorState,
             mediaOptimizationSelectorState = mediaOptimizationSelectorState,
             displayFileTooLargeError = displayFileTooLargeError,
-            eventSink = ::handleEvents
+            eventSink = ::handleEvent,
         )
     }
 

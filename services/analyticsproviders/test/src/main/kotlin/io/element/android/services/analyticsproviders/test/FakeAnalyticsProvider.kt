@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -12,6 +13,7 @@ import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
 import im.vector.app.features.analytics.plan.SuperProperties
 import im.vector.app.features.analytics.plan.UserProperties
 import io.element.android.services.analyticsproviders.api.AnalyticsProvider
+import io.element.android.services.analyticsproviders.api.AnalyticsTransaction
 import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeAnalyticsProvider(
@@ -31,4 +33,5 @@ class FakeAnalyticsProvider(
     override fun updateUserProperties(userProperties: UserProperties) = updateUserPropertiesLambda(userProperties)
     override fun trackError(throwable: Throwable) = trackErrorLambda(throwable)
     override fun updateSuperProperties(updatedProperties: SuperProperties) = updateSuperPropertiesLambda(updatedProperties)
+    override fun startTransaction(name: String, operation: String?): AnalyticsTransaction? = null
 }

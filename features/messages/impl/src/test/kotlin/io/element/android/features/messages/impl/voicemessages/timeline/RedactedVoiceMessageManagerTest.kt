@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -14,7 +15,7 @@ import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
-import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
@@ -85,7 +86,7 @@ fun aRedactedMatrixTimeline(eventId: EventId) = listOf<MatrixTimelineItem>(
             reactions = persistentListOf(),
             receipts = persistentListOf(),
             sender = A_USER_ID,
-            senderProfile = ProfileTimelineDetails.Unavailable,
+            senderProfile = ProfileDetails.Unavailable,
             timestamp = 9442,
             content = RedactedContent,
             origin = null,

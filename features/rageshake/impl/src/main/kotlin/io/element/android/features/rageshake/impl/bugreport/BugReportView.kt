@@ -1,12 +1,14 @@
 /*
- * Copyright 2022-2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2022-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.rageshake.impl.bugreport
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -40,7 +43,6 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.modifiers.onTabOrEnterKeyFocusNext
 import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -142,6 +144,13 @@ fun BugReportView(
                     }
                 }
             }
+            PreferenceSwitch(
+                isChecked = state.formState.sendPushRules,
+                onCheckedChange = { eventSink(BugReportEvents.SetSendPushRules(it)) },
+                enabled = isFormEnabled,
+                title = stringResource(R.string.screen_bug_report_send_notification_settings_title),
+                subtitle = stringResource(R.string.screen_bug_report_send_notification_settings_description),
+            )
             // Submit
             PreferenceRow {
                 Button(
@@ -174,9 +183,20 @@ fun BugReportView(
     }
 }
 
-@PreviewsDayNight
+@Preview(heightDp = 1000)
 @Composable
-internal fun BugReportViewPreview(@PreviewParameter(BugReportStateProvider::class) state: BugReportState) = ElementPreview {
+internal fun BugReportViewDayPreview(@PreviewParameter(BugReportStateProvider::class) state: BugReportState) = ElementPreview {
+    BugReportView(
+        state = state,
+        onSuccess = {},
+        onBackClick = {},
+        onViewLogs = {},
+    )
+}
+
+@Preview(heightDp = 1000, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+internal fun BugReportViewNightPreview(@PreviewParameter(BugReportStateProvider::class) state: BugReportState) = ElementPreview {
     BugReportView(
         state = state,
         onSuccess = {},

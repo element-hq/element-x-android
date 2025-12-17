@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -61,7 +62,7 @@ class PushHistoryPresenter(
         var resetAction: AsyncAction<Unit> by remember { mutableStateOf(AsyncAction.Uninitialized) }
         var showNotSameAccountError by remember { mutableStateOf(false) }
 
-        fun handleEvents(event: PushHistoryEvents) {
+        fun handleEvent(event: PushHistoryEvents) {
             when (event) {
                 is PushHistoryEvents.SetShowOnlyErrors -> {
                     showOnlyErrors = event.showOnlyErrors
@@ -97,7 +98,7 @@ class PushHistoryPresenter(
             showOnlyErrors = showOnlyErrors,
             resetAction = resetAction,
             showNotSameAccountError = showNotSameAccountError,
-            eventSink = ::handleEvents
+            eventSink = ::handleEvent,
         )
     }
 }

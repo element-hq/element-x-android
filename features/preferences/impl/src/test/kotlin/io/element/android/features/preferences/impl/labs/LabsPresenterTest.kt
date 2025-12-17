@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -15,13 +16,15 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeature
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
+import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class LabsPresenterTest {
     @Test
-    fun `present - ensures only unfinished features in labs are displayed`() = runTest {
+    fun `present - ensures features are displayed in the correct order`() = runTest {
         val availableFeatures = listOf(
             FakeFeature(
                 key = "feature_1",
@@ -30,24 +33,23 @@ class LabsPresenterTest {
             ),
             FakeFeature(
                 key = "feature_2",
-                title = "Feature 2",
-                isInLabs = false,
-            ),
-            FakeFeature(
-                key = "feature_3",
                 title = "Feature 3",
                 isInLabs = true,
-                isFinished = true,
             )
         )
+        val getAvailableFeaturesResult = lambdaRecorder<Boolean, Boolean, List<Feature>> { _, _ ->
+            availableFeatures
+        }
         createLabsPresenter(
-            availableFeatures = availableFeatures,
+            getAvailableFeaturesResult = getAvailableFeaturesResult,
         ).test {
+            skipItems(1)
             val receivedFeatures = awaitItem().features
-            assertThat(receivedFeatures).hasSize(1)
-            assertThat(receivedFeatures.first().key).isEqualTo(availableFeatures.first().key)
-
-            cancelAndIgnoreRemainingEvents()
+            assertThat(receivedFeatures).hasSize(2)
+            assertThat(receivedFeatures[0].key).isEqualTo(availableFeatures[0].key)
+            assertThat(receivedFeatures[1].key).isEqualTo(availableFeatures[1].key)
+            getAvailableFeaturesResult.assertions().isCalledOnce()
+                .with(value(false), value(true))
         }
     }
 
@@ -61,19 +63,15 @@ class LabsPresenterTest {
             ),
         )
         createLabsPresenter(
-            availableFeatures = availableFeatures,
+            getAvailableFeaturesResult = { _, _ -> availableFeatures },
         ).test {
+            skipItems(1)
             val initialItem = awaitItem()
             val feature = initialItem.features.first()
             assertThat(feature.isEnabled).isFalse()
-
-            // Wait until the data finished loading
-            skipItems(1)
-
             // Toggle the feature, should be true now
             initialItem.eventSink(LabsEvents.ToggleFeature(feature))
             assertThat(awaitItem().features.first().isEnabled).isTrue()
-
             // Toggle the feature, should be false now
             initialItem.eventSink(LabsEvents.ToggleFeature(feature))
             assertThat(awaitItem().features.first().isEnabled).isFalse()
@@ -92,21 +90,17 @@ class LabsPresenterTest {
 
         val clearCacheUseCase = FakeClearCacheUseCase()
         createLabsPresenter(
-            availableFeatures = availableFeatures,
+            getAvailableFeaturesResult = { _, _ -> availableFeatures },
             clearCacheUseCase = clearCacheUseCase,
         ).test {
+            skipItems(1)
             val initialItem = awaitItem()
             val feature = initialItem.features.first()
             assertThat(feature.isEnabled).isFalse()
             assertThat(initialItem.isApplyingChanges).isFalse()
-
-            // Wait until the data finished loading
-            skipItems(1)
-
             // Toggle the feature
             initialItem.eventSink(LabsEvents.ToggleFeature(feature))
             assertThat(awaitItem().features.first().isEnabled).isTrue()
-
             // The clear cache use case should have been called
             assertThat(awaitItem().isApplyingChanges).isTrue()
             assertThat(clearCacheUseCase.executeHasBeenCalled).isTrue()
@@ -114,12 +108,12 @@ class LabsPresenterTest {
     }
 
     private fun createLabsPresenter(
-        availableFeatures: List<Feature> = emptyList(),
+        getAvailableFeaturesResult: (Boolean, Boolean) -> List<Feature> = { _, _ -> emptyList() },
         clearCacheUseCase: ClearCacheUseCase = FakeClearCacheUseCase(),
     ): LabsPresenter {
         return LabsPresenter(
             stringProvider = FakeStringProvider(),
-            featureFlagService = FakeFeatureFlagService(providedAvailableFeatures = availableFeatures),
+            featureFlagService = FakeFeatureFlagService(getAvailableFeaturesResult = getAvailableFeaturesResult),
             clearCacheUseCase = clearCacheUseCase,
         )
     }

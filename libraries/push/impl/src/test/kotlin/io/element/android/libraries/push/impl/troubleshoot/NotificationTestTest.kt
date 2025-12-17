@@ -1,13 +1,16 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.push.impl.troubleshoot
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.enterprise.test.FakeEnterpriseService
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationCreator
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationDisplayer
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
@@ -64,10 +67,12 @@ class NotificationTestTest {
 
     private fun createNotificationTest(): NotificationTest {
         return NotificationTest(
+            sessionId = A_SESSION_ID,
             notificationCreator = notificationCreator,
             notificationDisplayer = fakeNotificationDisplayer,
             notificationClickHandler = notificationClickHandler,
             stringProvider = FakeStringProvider(),
+            enterpriseService = FakeEnterpriseService(),
         )
     }
 }

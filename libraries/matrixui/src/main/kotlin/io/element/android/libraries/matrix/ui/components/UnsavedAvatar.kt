@@ -1,13 +1,13 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.ui.components
 
-import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -43,7 +43,7 @@ import io.element.android.libraries.designsystem.theme.temporaryColorBgSpecial
  */
 @Composable
 fun UnsavedAvatar(
-    avatarUri: Uri?,
+    avatarUri: String?,
     avatarSize: AvatarSize,
     avatarType: AvatarType,
     modifier: Modifier = Modifier,
@@ -86,8 +86,8 @@ internal fun UnsavedAvatarPreview() = ElementPreview {
         horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         UnsavedAvatar(null, AvatarSize.EditRoomDetails, AvatarType.User)
-        UnsavedAvatar(Uri.EMPTY, AvatarSize.EditRoomDetails, AvatarType.User)
+        UnsavedAvatar("", AvatarSize.EditRoomDetails, AvatarType.User)
         UnsavedAvatar(null, AvatarSize.EditRoomDetails, AvatarType.Space())
-        UnsavedAvatar(Uri.EMPTY, AvatarSize.EditRoomDetails, AvatarType.Space())
+        UnsavedAvatar("", AvatarSize.EditRoomDetails, AvatarType.Space())
     }
 }

@@ -307,6 +307,7 @@ Devam etmek istediğinizden emin misiniz?"</string>
   <string name="dialog_title_error">"Hata"</string>
   <string name="dialog_title_success">"Başarılı"</string>
   <string name="dialog_title_warning">"Uyarı"</string>
+  <string name="dialog_unsaved_changes_description">"Kaydedilmemiş değişiklikleriniz var."</string>
   <string name="dialog_unsaved_changes_description_android">"Değişiklikleriniz kaydedilmedi. Geri dönmek istediğinden emin misin?"</string>
   <string name="dialog_unsaved_changes_title">"Değişiklikleri Kaydet?"</string>
   <string name="error_account_creation_not_possible">"Ana sunucunuzun Matrix Authentication Service ve hesap oluşturmayı destekleyecek şekilde güncellenmesi gerekiyor."</string>

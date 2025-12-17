@@ -1,3 +1,8 @@
+# Copyright (c) 2025 Element Creations Ltd.
+#
+# SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+# Please see LICENSE files in the repository root for full details.
+
 # Built application files
 *.apk
 *.ap_
@@ -50,6 +55,7 @@ captures/
 .idea/deviceManager.xml
 .idea/gradle.xml
 .idea/jarRepositories.xml
+.idea/markdown.xml
 .idea/misc.xml
 .idea/modules.xml
 # Comment next line if keeping position of elements in Navigation Editor is relevant for you

@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -33,6 +34,7 @@ import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.libraries.push.api.PushService
+import io.element.android.libraries.push.api.PusherRegistrationFailure
 import io.element.android.libraries.push.test.FakePushService
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
@@ -41,7 +43,6 @@ import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
-import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -114,7 +115,9 @@ class LoggedInPresenterTest {
                 encryptionService = encryptionService,
             ),
             syncService = FakeSyncService(initialSyncState = SyncState.Running),
-            pushService = FakePushService(),
+            pushService = FakePushService(
+                ensurePusherIsRegisteredResult = { Result.success(Unit) },
+            ),
             sessionVerificationService = verificationService,
             analyticsService = analyticsService,
             encryptionService = encryptionService,
@@ -138,10 +141,10 @@ class LoggedInPresenterTest {
 
     @Test
     fun `present - ensure default pusher is not registered if session is not verified`() = runTest {
-        val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
+        val lambda = lambdaRecorder<Result<Unit>> {
             Result.success(Unit)
         }
-        val pushService = createFakePushService(registerWithLambda = lambda)
+        val pushService = createFakePushService(ensurePusherIsRegisteredResult = lambda)
         val verificationService = FakeSessionVerificationService(
             initialSessionVerifiedStatus = SessionVerifiedStatus.NotVerified
         )
@@ -152,21 +155,18 @@ class LoggedInPresenterTest {
             val finalState = awaitFirstItem()
             assertThat(finalState.pusherRegistrationState.errorOrNull())
                 .isInstanceOf(PusherRegistrationFailure.AccountNotVerified::class.java)
-            lambda.assertions()
-                .isNeverCalled()
+            lambda.assertions().isNeverCalled()
         }
     }
 
     @Test
     fun `present - ensure default pusher is registered with default provider`() = runTest {
-        val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
-            Result.success(Unit)
-        }
+        val lambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
         val sessionVerificationService = FakeSessionVerificationService(
             initialSessionVerifiedStatus = SessionVerifiedStatus.Verified
         )
         val pushService = createFakePushService(
-            registerWithLambda = lambda,
+            ensurePusherIsRegisteredResult = lambda,
         )
         createLoggedInPresenter(
             pushService = pushService,
@@ -179,27 +179,17 @@ class LoggedInPresenterTest {
             assertThat(finalState.pusherRegistrationState.isSuccess()).isTrue()
             lambda.assertions()
                 .isCalledOnce()
-                .with(
-                    // MatrixClient
-                    any(),
-                    // PushProvider with highest priority (lower index)
-                    value(pushService.getAvailablePushProviders()[0]),
-                    // First distributor
-                    value(pushService.getAvailablePushProviders()[0].getDistributors()[0]),
-                )
         }
     }
 
     @Test
     fun `present - ensure default pusher is registered with default provider - fail to register`() = runTest {
-        val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
-            Result.failure(AN_EXCEPTION)
-        }
+        val lambda = lambdaRecorder<Result<Unit>> { Result.failure(AN_EXCEPTION) }
         val sessionVerificationService = FakeSessionVerificationService(
             initialSessionVerifiedStatus = SessionVerifiedStatus.Verified
         )
         val pushService = createFakePushService(
-            registerWithLambda = lambda,
+            ensurePusherIsRegisteredResult = lambda,
         )
         createLoggedInPresenter(
             pushService = pushService,
@@ -212,158 +202,36 @@ class LoggedInPresenterTest {
             assertThat(finalState.pusherRegistrationState.isFailure()).isTrue()
             lambda.assertions()
                 .isCalledOnce()
-                .with(
-                    // MatrixClient
-                    any(),
-                    // PushProvider with highest priority (lower index)
-                    value(pushService.getAvailablePushProviders()[0]),
-                    // First distributor
-                    value(pushService.getAvailablePushProviders()[0].getDistributors()[0]),
-                )
+            // Reset the error and do not show again
+            finalState.eventSink(LoggedInEvents.CloseErrorDialog(doNotShowAgain = false))
+            val lastState = awaitItem()
+            assertThat(lastState.pusherRegistrationState.isUninitialized()).isTrue()
+            assertThat(lastState.ignoreRegistrationError).isFalse()
         }
     }
 
     @Test
-    fun `present - ensure current provider is registered with current distributor`() = runTest {
-        val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
-            Result.success(Unit)
-        }
-        val sessionVerificationService = FakeSessionVerificationService(
-            initialSessionVerifiedStatus = SessionVerifiedStatus.Verified
-        )
-        val distributor = Distributor("aDistributorValue1", "aDistributorName1")
-        val pushProvider = FakePushProvider(
-            index = 0,
-            name = "aFakePushProvider0",
-            distributors = listOf(
-                Distributor("aDistributorValue0", "aDistributorName0"),
-                distributor,
-            ),
-            currentDistributor = { distributor },
-        )
-        val pushService = createFakePushService(
-            pushProvider1 = pushProvider,
-            currentPushProvider = { pushProvider },
-            registerWithLambda = lambda,
-        )
-        createLoggedInPresenter(
-            pushService = pushService,
-            sessionVerificationService = sessionVerificationService,
-            matrixClient = FakeMatrixClient(
-                accountManagementUrlResult = { Result.success(null) },
-            ),
-        ).test {
-            val finalState = awaitFirstItem()
-            assertThat(finalState.pusherRegistrationState.isSuccess()).isTrue()
-            lambda.assertions()
-                .isCalledOnce()
-                .with(
-                    // MatrixClient
-                    any(),
-                    // Current push provider
-                    value(pushProvider),
-                    // Current distributor
-                    value(distributor),
-                )
-        }
-    }
-
-    @Test
-    fun `present - if current push provider does not have current distributor, the first one is used`() = runTest {
-        val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
-            Result.success(Unit)
-        }
-        val sessionVerificationService = FakeSessionVerificationService(
-            initialSessionVerifiedStatus = SessionVerifiedStatus.Verified
-        )
-        val pushProvider = FakePushProvider(
-            index = 0,
-            name = "aFakePushProvider0",
-            distributors = listOf(
-                Distributor("aDistributorValue0", "aDistributorName0"),
-                Distributor("aDistributorValue1", "aDistributorName1"),
-            ),
-            currentDistributor = { null },
-        )
-        val pushService = createFakePushService(
-            pushProvider0 = pushProvider,
-            currentPushProvider = { pushProvider },
-            registerWithLambda = lambda,
-        )
-        createLoggedInPresenter(
-            pushService = pushService,
-            sessionVerificationService = sessionVerificationService,
-            matrixClient = FakeMatrixClient(
-                accountManagementUrlResult = { Result.success(null) },
-            ),
-        ).test {
-            val finalState = awaitFirstItem()
-            assertThat(finalState.pusherRegistrationState.isSuccess()).isTrue()
-            lambda.assertions()
-                .isCalledOnce()
-                .with(
-                    // MatrixClient
-                    any(),
-                    // PushProvider with highest priority (lower index)
-                    value(pushService.getAvailablePushProviders()[0]),
-                    // First distributor
-                    value(pushService.getAvailablePushProviders()[0].getDistributors()[0]),
-                )
-        }
-    }
-
-    @Test
-    fun `present - if current push provider does not have distributors, nothing happen`() = runTest {
-        val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
-            Result.success(Unit)
-        }
-        val sessionVerificationService = FakeSessionVerificationService(
-            initialSessionVerifiedStatus = SessionVerifiedStatus.Verified
-        )
-        val pushProvider = FakePushProvider(
-            index = 0,
-            name = "aFakePushProvider0",
-            distributors = emptyList(),
-        )
-        val pushService = createFakePushService(
-            pushProvider0 = pushProvider,
-            currentPushProvider = { pushProvider },
-            registerWithLambda = lambda,
-        )
-        createLoggedInPresenter(
-            pushService = pushService,
-            sessionVerificationService = sessionVerificationService,
-        ).test {
-            val finalState = awaitFirstItem()
-            assertThat(finalState.pusherRegistrationState.errorOrNull())
-                .isInstanceOf(PusherRegistrationFailure.NoDistributorsAvailable::class.java)
-            lambda.assertions()
-                .isNeverCalled()
-        }
-    }
-
-    @Test
-    fun `present - case no push provider available provider`() = runTest {
-        val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
-            Result.success(Unit)
-        }
-        val sessionVerificationService = FakeSessionVerificationService(SessionVerifiedStatus.Verified)
+    fun `present - ensure default pusher is registered with default provider - fail to register - do not show again`() = runTest {
+        val lambda = lambdaRecorder<Result<Unit>> { Result.failure(AN_EXCEPTION) }
         val setIgnoreRegistrationErrorLambda = lambdaRecorder<SessionId, Boolean, Unit> { _, _ -> }
+        val sessionVerificationService = FakeSessionVerificationService(
+            initialSessionVerifiedStatus = SessionVerifiedStatus.Verified
+        )
         val pushService = createFakePushService(
-            pushProvider0 = null,
-            pushProvider1 = null,
-            registerWithLambda = lambda,
+            ensurePusherIsRegisteredResult = lambda,
             setIgnoreRegistrationErrorLambda = setIgnoreRegistrationErrorLambda,
         )
         createLoggedInPresenter(
             pushService = pushService,
             sessionVerificationService = sessionVerificationService,
+            matrixClient = FakeMatrixClient(
+                accountManagementUrlResult = { Result.success(null) },
+            ),
         ).test {
             val finalState = awaitFirstItem()
-            assertThat(finalState.pusherRegistrationState.errorOrNull())
-                .isInstanceOf(PusherRegistrationFailure.NoProvidersAvailable::class.java)
+            assertThat(finalState.pusherRegistrationState.isFailure()).isTrue()
             lambda.assertions()
-                .isNeverCalled()
+                .isCalledOnce()
             // Reset the error and do not show again
             finalState.eventSink(LoggedInEvents.CloseErrorDialog(doNotShowAgain = true))
             skipItems(1)
@@ -381,95 +249,6 @@ class LoggedInPresenterTest {
         }
     }
 
-    @Test
-    fun `present - case one push provider but no distributor available`() = runTest {
-        val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
-            Result.success(Unit)
-        }
-        val selectPushProviderLambda = lambdaRecorder<SessionId, PushProvider, Unit> { _, _ -> }
-        val sessionVerificationService = FakeSessionVerificationService(
-            initialSessionVerifiedStatus = SessionVerifiedStatus.Verified
-        )
-        val pushProvider = FakePushProvider(
-            index = 0,
-            name = "aFakePushProvider",
-            distributors = emptyList(),
-        )
-        val pushService = createFakePushService(
-            pushProvider0 = pushProvider,
-            pushProvider1 = null,
-            registerWithLambda = lambda,
-            selectPushProviderLambda = selectPushProviderLambda,
-        )
-        createLoggedInPresenter(
-            pushService = pushService,
-            sessionVerificationService = sessionVerificationService,
-        ).test {
-            val finalState = awaitFirstItem()
-            assertThat(finalState.pusherRegistrationState.errorOrNull())
-                .isInstanceOf(PusherRegistrationFailure.NoDistributorsAvailable::class.java)
-            lambda.assertions()
-                .isNeverCalled()
-            selectPushProviderLambda.assertions()
-                .isCalledOnce()
-                .with(
-                    // SessionId
-                    value(A_SESSION_ID),
-                    // PushProvider
-                    value(pushProvider),
-                )
-            // Reset the error
-            finalState.eventSink(LoggedInEvents.CloseErrorDialog(doNotShowAgain = false))
-            val lastState = awaitItem()
-            assertThat(lastState.pusherRegistrationState.isUninitialized()).isTrue()
-        }
-    }
-
-    @Test
-    fun `present - case two push providers but first one does not have distributor - second one will be used`() = runTest {
-        val lambda = lambdaRecorder<MatrixClient, PushProvider, Distributor, Result<Unit>> { _, _, _ ->
-            Result.success(Unit)
-        }
-        val sessionVerificationService = FakeSessionVerificationService(
-            initialSessionVerifiedStatus = SessionVerifiedStatus.Verified
-        )
-        val pushProvider0 = FakePushProvider(
-            index = 0,
-            name = "aFakePushProvider0",
-            distributors = emptyList(),
-        )
-        val distributor = Distributor("aDistributorValue1", "aDistributorName1")
-        val pushProvider1 = FakePushProvider(
-            index = 1,
-            name = "aFakePushProvider1",
-            distributors = listOf(distributor),
-        )
-        val pushService = createFakePushService(
-            pushProvider0 = pushProvider0,
-            pushProvider1 = pushProvider1,
-            registerWithLambda = lambda,
-        )
-        createLoggedInPresenter(
-            pushService = pushService,
-            sessionVerificationService = sessionVerificationService,
-            matrixClient = FakeMatrixClient(
-                accountManagementUrlResult = { Result.success(null) },
-            ),
-        ).test {
-            val finalState = awaitFirstItem()
-            assertThat(finalState.pusherRegistrationState.isSuccess()).isTrue()
-            lambda.assertions().isCalledOnce()
-                .with(
-                    // MatrixClient
-                    any(),
-                    // PushProvider with the distributor
-                    value(pushProvider1),
-                    // First distributor of second push provider
-                    value(distributor),
-                )
-        }
-    }
-
     private fun createFakePushService(
         pushProvider0: PushProvider? = FakePushProvider(
             index = 0,
@@ -483,16 +262,16 @@ class LoggedInPresenterTest {
             distributors = listOf(Distributor("aDistributorValue1", "aDistributorName1")),
             currentDistributor = { null },
         ),
-        registerWithLambda: (MatrixClient, PushProvider, Distributor) -> Result<Unit> = { _, _, _ ->
+        ensurePusherIsRegisteredResult: () -> Result<Unit> = {
             Result.success(Unit)
         },
         selectPushProviderLambda: (SessionId, PushProvider) -> Unit = { _, _ -> lambdaError() },
-        currentPushProvider: () -> PushProvider? = { null },
+        currentPushProvider: (SessionId) -> PushProvider? = { null },
         setIgnoreRegistrationErrorLambda: (SessionId, Boolean) -> Unit = { _, _ -> lambdaError() },
     ): PushService {
         return FakePushService(
             availablePushProviders = listOfNotNull(pushProvider0, pushProvider1),
-            registerWithLambda = registerWithLambda,
+            ensurePusherIsRegisteredResult = ensurePusherIsRegisteredResult,
             currentPushProvider = currentPushProvider,
             selectPushProviderLambda = selectPushProviderLambda,
             setIgnoreRegistrationErrorLambda = setIgnoreRegistrationErrorLambda,

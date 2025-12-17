@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -14,7 +15,6 @@ import android.text.style.URLSpan
 import android.util.Patterns
 import androidx.core.text.getSpans
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.MatrixPatternType
 import io.element.android.libraries.matrix.api.core.MatrixPatterns
@@ -33,7 +33,6 @@ interface TextPillificationHelper {
 }
 
 @ContributesBinding(RoomScope::class)
-@Inject
 class DefaultTextPillificationHelper(
     private val mentionSpanProvider: MentionSpanProvider,
     private val permalinkParser: PermalinkParser,

@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -31,16 +32,18 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
-import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOther
-import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOwn
+import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.impl.R
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.local.LocalMediaActions
+import io.element.android.libraries.mediaviewer.impl.model.MediaPermissions
+import io.element.android.libraries.mediaviewer.impl.model.mediaPermissions
 import io.element.android.libraries.ui.strings.CommonStrings
-import kotlinx.collections.immutable.PersistentList
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filter
@@ -79,6 +82,9 @@ class MediaViewerPresenter(
         NoMoreItemsBackwardSnackBarDisplayer(currentIndex, data)
         NoMoreItemsForwardSnackBarDisplayer(currentIndex, data)
 
+        val permissions by room.permissionsAsState(MediaPermissions.DEFAULT) { perms ->
+            perms.mediaPermissions()
+        }
         var mediaBottomSheetState by remember { mutableStateOf<MediaBottomSheetState>(MediaBottomSheetState.Hidden) }
 
         DisposableEffect(Unit) {
@@ -89,7 +95,7 @@ class MediaViewerPresenter(
         }
         localMediaActions.Configure()
 
-        fun handleEvents(event: MediaViewerEvents) {
+        fun handleEvent(event: MediaViewerEvents) {
             when (event) {
                 is MediaViewerEvents.LoadMedia -> {
                     coroutineScope.downloadMedia(data = event.data)
@@ -117,13 +123,20 @@ class MediaViewerPresenter(
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
                     navigator.onViewInTimelineClick(event.eventId)
                 }
+                is MediaViewerEvents.Forward -> {
+                    mediaBottomSheetState = MediaBottomSheetState.Hidden
+                    navigator.onForwardClick(
+                        eventId = event.eventId,
+                        fromPinnedEvents = inputs.mode.getTimelineMode() == Timeline.Mode.PinnedEvents,
+                    )
+                }
                 is MediaViewerEvents.OpenInfo -> coroutineScope.launch {
                     mediaBottomSheetState = MediaBottomSheetState.MediaDetailsBottomSheetState(
                         eventId = event.data.eventId,
                         canDelete = when (event.data.mediaInfo.senderId) {
                             null -> false
-                            room.sessionId -> room.canRedactOwn().getOrElse { false } && event.data.eventId != null
-                            else -> room.canRedactOther().getOrElse { false } && event.data.eventId != null
+                            room.sessionId -> permissions.canRedactOwn && event.data.eventId != null
+                            else -> permissions.canRedactOther && event.data.eventId != null
                         },
                         mediaInfo = event.data.mediaInfo,
                         thumbnailSource = event.data.thumbnailSource,
@@ -155,14 +168,14 @@ class MediaViewerPresenter(
             snackbarMessage = snackbarMessage,
             canShowInfo = inputs.canShowInfo,
             mediaBottomSheetState = mediaBottomSheetState,
-            eventSink = ::handleEvents
+            eventSink = ::handleEvent,
         )
     }
 
     @Composable
     private fun NoMoreItemsBackwardSnackBarDisplayer(
         currentIndex: IntState,
-        data: State<PersistentList<MediaViewerPageData>>,
+        data: State<ImmutableList<MediaViewerPageData>>,
     ) {
         val isRenderingLoadingBackward by remember {
             derivedStateOf {
@@ -186,7 +199,7 @@ class MediaViewerPresenter(
     @Composable
     private fun NoMoreItemsForwardSnackBarDisplayer(
         currentIndex: IntState,
-        data: State<PersistentList<MediaViewerPageData>>,
+        data: State<ImmutableList<MediaViewerPageData>>,
     ) {
         val isRenderingLoadingForward by remember {
             derivedStateOf {

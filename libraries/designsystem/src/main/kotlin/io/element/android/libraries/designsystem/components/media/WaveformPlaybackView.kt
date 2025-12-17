@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -39,7 +40,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toImmutableList
 import kotlin.math.roundToInt
 
 private const val DEFAULT_GRAPHICS_LAYER_ALPHA: Float = 0.99F
@@ -49,7 +50,7 @@ private const val DEFAULT_GRAPHICS_LAYER_ALPHA: Float = 0.99F
  *
  * @param playbackProgress The current playback progress, between 0 and 1.
  * @param showCursor Whether to show the cursor or not.
- * @param waveform The waveform to display. Use [createFakeWaveform] to generate a fake waveform.
+ * @param waveform The waveform to display.
  * @param onSeek Callback when the user seeks the waveform. Called with a value between 0 and 1.
  * @param modifier The modifier to be applied to the view.
  * @param seekEnabled Whether the user can seek the waveform or not.
@@ -187,14 +188,14 @@ internal fun WaveformPlaybackViewPreview() = ElementPreview {
             showCursor = false,
             playbackProgress = 0.5f,
             onSeek = {},
-            waveform = aWaveForm().toPersistentList(),
+            waveform = WaveFormSamples.realisticWaveForm,
         )
         WaveformPlaybackView(
             modifier = Modifier.height(34.dp),
             showCursor = true,
             playbackProgress = 0.5f,
             onSeek = {},
-            waveform = List(1024) { it / 1024f }.toPersistentList(),
+            waveform = WaveFormSamples.allRangeWaveForm,
         )
     }
 }
@@ -215,47 +216,5 @@ private fun ImmutableList<Float>.normalisedData(maxSamplesCount: Int): Immutable
         this
     }
 
-    return result.toPersistentList()
-}
-
-fun aWaveForm(): List<Float> {
-    return listOf(
-        0.000f,
-        0.000f,
-        0.000f,
-        0.003f,
-        0.354f,
-        0.353f,
-        0.365f,
-        0.790f,
-        0.787f,
-        0.167f,
-        0.333f,
-        0.975f,
-        0.000f,
-        0.102f,
-        0.003f,
-        0.531f,
-        0.584f,
-        0.317f,
-        0.140f,
-        0.475f,
-        0.496f,
-        0.561f,
-        0.042f,
-        0.263f,
-        0.169f,
-        0.829f,
-        0.349f,
-        0.010f,
-        0.000f,
-        0.000f,
-        1.000f,
-        0.334f,
-        0.321f,
-        0.011f,
-        0.000f,
-        0.000f,
-        0.003f,
-    )
+    return result.toImmutableList()
 }

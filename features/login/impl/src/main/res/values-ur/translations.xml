@@ -30,6 +30,7 @@
   <string name="screen_login_title">"واپس خوش آمدید!"</string>
   <string name="screen_login_title_with_homeserver">"%1$s میں داخل ہوں"</string>
   <string name="screen_onboarding_sign_in_manually">"دستی طور پر داخل ہوں"</string>
+  <string name="screen_onboarding_sign_in_to">"%1$s میں داخل ہوں"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"کیو آر (QR) رمز کیساتھ داخل ہوں"</string>
   <string name="screen_onboarding_sign_up">"کھاتہ تخلیق کریں"</string>
   <string name="screen_onboarding_welcome_message">"اب تک کی تیز ترین %1$s میں خوش آمدید۔ رفتار اور سادگی کے لئے مشحون"</string>

@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -9,7 +10,6 @@ package io.element.android.libraries.matrix.impl.auth
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.mapFailure
@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 import io.element.android.libraries.matrix.api.auth.OidcPrompt
+import io.element.android.libraries.matrix.api.auth.SessionRestorationException
 import io.element.android.libraries.matrix.api.auth.external.ExternalSession
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
@@ -37,8 +38,6 @@ import io.element.android.libraries.matrix.impl.paths.SessionPathsFactory
 import io.element.android.libraries.sessionstorage.api.LoginType
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.CancellationException
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientBuilder
@@ -52,7 +51,6 @@ import uniffi.matrix_sdk.OAuthAuthorizationData
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-@Inject
 class RustMatrixAuthenticationService(
     private val sessionPathsFactory: SessionPathsFactory,
     private val coroutineDispatchers: CoroutineDispatchers,
@@ -69,7 +67,6 @@ class RustMatrixAuthenticationService(
     // Ideally it would be possible to get the sessionPath from the Client to avoid doing this.
     private var sessionPaths: SessionPaths? = null
     private var currentClient: Client? = null
-    private var currentHomeserver = MutableStateFlow<MatrixHomeServerDetails?>(null)
 
     private val newMatrixClientObservers = mutableListOf<(MatrixClient) -> Unit>()
     override fun listenToNewMatrixClients(lambda: (MatrixClient) -> Unit) {
@@ -95,10 +92,10 @@ class RustMatrixAuthenticationService(
                     }
                     rustMatrixClientFactory.create(sessionData)
                 } else {
-                    error("Token is not valid")
+                    throw SessionRestorationException.InvalidToken()
                 }
             } else {
-                error("No session to restore with id $sessionId")
+                throw SessionRestorationException.MissingSession(sessionId)
             }
         }.mapFailure { failure ->
             failure.mapClientException()
@@ -113,9 +110,7 @@ class RustMatrixAuthenticationService(
         return passphrase
     }
 
-    override fun getHomeserverDetails(): StateFlow<MatrixHomeServerDetails?> = currentHomeserver
-
-    override suspend fun setHomeserver(homeserver: String): Result<Unit> =
+    override suspend fun setHomeserver(homeserver: String): Result<MatrixHomeServerDetails> =
         withContext(coroutineDispatchers.io) {
             val emptySessionPath = rotateSessionPath()
             runCatchingExceptions {
@@ -124,8 +119,7 @@ class RustMatrixAuthenticationService(
                 }
 
                 currentClient = client
-                val homeServerDetails = client.homeserverLoginDetails().map()
-                currentHomeserver.value = homeServerDetails.copy(url = homeserver)
+                client.homeserverLoginDetails().map()
             }.onFailure {
                 clear()
             }.mapFailure { failure ->
@@ -287,14 +281,16 @@ class RustMatrixAuthenticationService(
             runCatchingExceptions {
                 val client = makeQrCodeLoginClient(
                     sessionPaths = emptySessionPaths,
-                    passphrase = pendingPassphrase,
                     qrCodeData = sdkQrCodeLoginData,
                 )
-                client.loginWithQrCode(
-                    qrCodeData = qrCodeData.rustQrCodeData,
+                client.newLoginWithQrCodeHandler(
                     oidcConfiguration = oidcConfiguration,
-                    progressListener = progressListener,
-                )
+                ).use {
+                    it.scan(
+                        qrCodeData = qrCodeData.rustQrCodeData,
+                        progressListener = progressListener,
+                    )
+                }
                 // Ensure that the user is not already logged in with the same account
                 ensureNotAlreadyLoggedIn(client)
                 val sessionData = client.session()
@@ -343,7 +339,6 @@ class RustMatrixAuthenticationService(
 
     private suspend fun makeQrCodeLoginClient(
         sessionPaths: SessionPaths,
-        passphrase: String?,
         qrCodeData: QrCodeData,
     ): Client {
         Timber.d("Creating client for QR Code login with simplified sliding sync")
@@ -353,7 +348,6 @@ class RustMatrixAuthenticationService(
                 passphrase = pendingPassphrase,
                 slidingSyncType = ClientBuilderSlidingSync.Discovered,
             )
-            .sessionPassphrase(passphrase)
             .serverNameOrHomeserverUrl(qrCodeData.serverName()!!)
             .build()
     }

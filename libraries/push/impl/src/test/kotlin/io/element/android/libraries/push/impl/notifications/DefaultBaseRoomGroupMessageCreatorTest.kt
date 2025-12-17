@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -18,11 +19,13 @@ import io.element.android.libraries.matrix.test.A_TIMESTAMP
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.matrix.ui.media.AVATAR_THUMBNAIL_SIZE_IN_PIXEL
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
+import io.element.android.libraries.matrix.ui.media.test.FakeImageLoader
+import io.element.android.libraries.matrix.ui.media.test.FakeInitialsAvatarBitmapGenerator
 import io.element.android.libraries.push.impl.notifications.factories.MARK_AS_READ_ACTION_TITLE
 import io.element.android.libraries.push.impl.notifications.factories.QUICK_REPLY_ACTION_TITLE
+import io.element.android.libraries.push.impl.notifications.factories.aNotificationAccountParams
 import io.element.android.libraries.push.impl.notifications.factories.createNotificationCreator
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
-import io.element.android.libraries.push.test.notifications.FakeImageLoader
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import io.element.android.services.toolbox.impl.strings.AndroidStringProvider
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
@@ -43,21 +46,22 @@ class DefaultBaseRoomGroupMessageCreatorTest {
         val sut = createRoomGroupMessageCreator()
         val fakeImageLoader = FakeImageLoader()
         val result = sut.createRoomMessage(
-            currentUser = aMatrixUser(),
+            notificationAccountParams = aNotificationAccountParams(),
             events = listOf(
                 aNotifiableMessageEvent(timestamp = A_TIMESTAMP).copy(
                     imageUriString = "aUri",
                 )
             ),
             roomId = A_ROOM_ID,
-            imageLoader = fakeImageLoader.getImageLoader(),
+            imageLoader = fakeImageLoader,
             existingNotification = null,
+            threadId = null,
         )
         assertThat(result.number).isEqualTo(1)
         @Suppress("DEPRECATION")
         assertThat(result.priority).isEqualTo(NotificationCompat.PRIORITY_LOW)
         assertThat(result.`when`).isEqualTo(A_TIMESTAMP)
-        assertThat(fakeImageLoader.getCoilRequests().size).isEqualTo(0)
+        assertThat(fakeImageLoader.getExecutedRequestsData()).isEmpty()
     }
 
     @Test
@@ -65,19 +69,20 @@ class DefaultBaseRoomGroupMessageCreatorTest {
         val sut = createRoomGroupMessageCreator()
         val fakeImageLoader = FakeImageLoader()
         val result = sut.createRoomMessage(
-            currentUser = aMatrixUser(),
+            notificationAccountParams = aNotificationAccountParams(),
             events = listOf(
                 aNotifiableMessageEvent(timestamp = A_TIMESTAMP).copy(
                     noisy = true,
                 )
             ),
             roomId = A_ROOM_ID,
-            imageLoader = fakeImageLoader.getImageLoader(),
+            imageLoader = fakeImageLoader,
             existingNotification = null,
+            threadId = null,
         )
         @Suppress("DEPRECATION")
         assertThat(result.priority).isEqualTo(NotificationCompat.PRIORITY_DEFAULT)
-        assertThat(fakeImageLoader.getCoilRequests().size).isEqualTo(0)
+        assertThat(fakeImageLoader.getExecutedRequestsData()).isEmpty()
     }
 
     @Test
@@ -125,9 +130,11 @@ class DefaultBaseRoomGroupMessageCreatorTest {
             sdkIntProvider = FakeBuildVersionSdkIntProvider(api)
         )
         val result = sut.createRoomMessage(
-            currentUser = aMatrixUser(
-                // Some user avatar
-                avatarUrl = A_USER_AVATAR_1,
+            notificationAccountParams = aNotificationAccountParams(
+                user = aMatrixUser(
+                    // Some user avatar
+                    avatarUrl = A_USER_AVATAR_1,
+                )
             ),
             events = listOf(
                 aNotifiableMessageEvent(timestamp = A_TIMESTAMP).copy(
@@ -136,11 +143,12 @@ class DefaultBaseRoomGroupMessageCreatorTest {
                 )
             ),
             roomId = A_ROOM_ID,
-            imageLoader = fakeImageLoader.getImageLoader(),
+            imageLoader = fakeImageLoader,
             existingNotification = null,
+            threadId = null,
         )
         assertThat(result.number).isEqualTo(1)
-        assertThat(fakeImageLoader.getCoilRequests()).containsExactlyElementsIn(expectedCoilRequests)
+        assertThat(fakeImageLoader.getExecutedRequestsData()).containsExactlyElementsIn(expectedCoilRequests)
     }
 
     @Test
@@ -148,14 +156,15 @@ class DefaultBaseRoomGroupMessageCreatorTest {
         val sut = createRoomGroupMessageCreator()
         val fakeImageLoader = FakeImageLoader()
         val result = sut.createRoomMessage(
-            currentUser = aMatrixUser(),
+            notificationAccountParams = aNotificationAccountParams(),
             events = listOf(
                 aNotifiableMessageEvent(timestamp = A_TIMESTAMP),
                 aNotifiableMessageEvent(timestamp = A_TIMESTAMP + 10),
             ),
             roomId = A_ROOM_ID,
-            imageLoader = fakeImageLoader.getImageLoader(),
+            imageLoader = fakeImageLoader,
             existingNotification = null,
+            threadId = null,
         )
         assertThat(result.number).isEqualTo(2)
         assertThat(result.`when`).isEqualTo(A_TIMESTAMP + 10)
@@ -166,7 +175,7 @@ class DefaultBaseRoomGroupMessageCreatorTest {
                 QUICK_REPLY_ACTION_TITLE.takeIf { NotificationConfig.SHOW_QUICK_REPLY_ACTION },
             )
         )
-        assertThat(fakeImageLoader.getCoilRequests().size).isEqualTo(0)
+        assertThat(fakeImageLoader.getExecutedRequestsData()).isEmpty()
     }
 
     @Test
@@ -174,7 +183,7 @@ class DefaultBaseRoomGroupMessageCreatorTest {
         val sut = createRoomGroupMessageCreator()
         val fakeImageLoader = FakeImageLoader()
         val result = sut.createRoomMessage(
-            currentUser = aMatrixUser(),
+            notificationAccountParams = aNotificationAccountParams(),
             events = listOf(
                 aNotifiableMessageEvent(timestamp = A_TIMESTAMP).copy(
                     outGoingMessage = true,
@@ -182,8 +191,9 @@ class DefaultBaseRoomGroupMessageCreatorTest {
                 ),
             ),
             roomId = A_ROOM_ID,
-            imageLoader = fakeImageLoader.getImageLoader(),
+            imageLoader = fakeImageLoader,
             existingNotification = null,
+            threadId = null,
         )
         val actionTitles = result.actions?.map { it.title }
         assertThat(actionTitles).isEqualTo(
@@ -191,7 +201,7 @@ class DefaultBaseRoomGroupMessageCreatorTest {
                 MARK_AS_READ_ACTION_TITLE.takeIf { NotificationConfig.SHOW_MARK_AS_READ_ACTION }
             )
         )
-        assertThat(fakeImageLoader.getCoilRequests().size).isEqualTo(0)
+        assertThat(fakeImageLoader.getExecutedRequestsData()).isEmpty()
     }
 
     @Test
@@ -199,19 +209,20 @@ class DefaultBaseRoomGroupMessageCreatorTest {
         val sut = createRoomGroupMessageCreator()
         val fakeImageLoader = FakeImageLoader()
         val result = sut.createRoomMessage(
-            currentUser = aMatrixUser(),
+            notificationAccountParams = aNotificationAccountParams(),
             events = listOf(
                 aNotifiableMessageEvent(timestamp = A_TIMESTAMP).copy(
                     roomIsDm = true,
                 ),
             ),
             roomId = A_ROOM_ID,
-            imageLoader = fakeImageLoader.getImageLoader(),
+            imageLoader = fakeImageLoader,
             existingNotification = null,
+            threadId = null,
         )
         assertThat(result.number).isEqualTo(1)
         assertThat(result.`when`).isEqualTo(A_TIMESTAMP)
-        assertThat(fakeImageLoader.getCoilRequests().size).isEqualTo(0)
+        assertThat(fakeImageLoader.getExecutedRequestsData()).isEmpty()
     }
 }
 
@@ -222,6 +233,7 @@ fun createRoomGroupMessageCreator(
     val bitmapLoader = DefaultNotificationBitmapLoader(
         context = RuntimeEnvironment.getApplication(),
         sdkIntProvider = sdkIntProvider,
+        initialsAvatarBitmapGenerator = FakeInitialsAvatarBitmapGenerator(),
     )
     return DefaultRoomGroupMessageCreator(
         notificationCreator = createNotificationCreator(bitmapLoader = bitmapLoader),

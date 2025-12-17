@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_leave_space_last_admin_info">"%1$s (administrator)"</string>
+  <plurals name="screen_leave_space_submit">
+    <item quantity="one">"Napusti %1$d sobu i prostor"</item>
+    <item quantity="few">"Napusti %1$d sobe i prostor"</item>
+    <item quantity="other">"Napusti %1$d soba i prostor"</item>
+  </plurals>
+  <string name="screen_leave_space_subtitle">"Odaberite sobe koje želite napustiti, a za koje niste jedini administrator:"</string>
+  <string name="screen_leave_space_subtitle_last_admin">"Morate dodijeliti drugog administratora za ovaj prostor prije nego što ga napustite."</string>
+  <string name="screen_leave_space_subtitle_only_last_admin">"Nećete biti uklonjeni iz sljedećih soba jer ste jedini administrator:"</string>
+  <string name="screen_leave_space_title">"Želite li napustiti %1$s?"</string>
+  <string name="screen_leave_space_title_last_admin">"Vi ste jedini administrator za %1$s"</string>
+  <string name="screen_space_settings_leave_space">"Napusti prostor"</string>
+  <string name="screen_space_settings_roles_and_permissions">"Uloge i dopuštenja"</string>
+  <string name="screen_space_settings_security_and_privacy">"Sigurnost i privatnost"</string>
+</resources>

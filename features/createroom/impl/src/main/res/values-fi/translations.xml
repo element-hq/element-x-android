@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_create_room_action_create_room">"Uusi huone"</string>
-  <string name="screen_create_room_add_people_title">"Kutsu ihmisiä"</string>
+  <string name="screen_create_room_add_people_title">"Kutsu henkilöitä"</string>
   <string name="screen_create_room_error_creating_room">"Huoneen luomisessa tapahtui virhe"</string>
   <string name="screen_create_room_private_option_description">"Vain kutsutut henkilöt pääsevät tähän huoneeseen. Kaikki viestit ovat päästä päähän salattuja."</string>
   <string name="screen_create_room_private_option_title">"Yksityinen huone"</string>

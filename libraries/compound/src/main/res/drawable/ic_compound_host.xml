@@ -4,11 +4,11 @@
     android:autoMirrored="true"
     android:viewportWidth="24"
     android:viewportHeight="24">
-    <path
-        android:fillColor="#FF000000"
-        android:pathData="M16.71 6.71A0.97 0.97 0 0 1 16 7a0.97 0.97 0 0 1-0.71-0.29A0.97 0.97 0 0 1 15 6q0-0.42 0.29-0.71A0.97 0.97 0 0 1 16 5q0.42 0 0.71 0.29T17 6t-0.29 0.71"/>
-    <path
-        android:fillColor="#FF000000"
-        android:fillType="evenOdd"
-        android:pathData="M6 2a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2z m12 2H6v4h12zM6 12v-2h12v2z m0 2v2h12v-2z m0 6v-2h12v2z"/>
+  <path
+      android:pathData="M16.713,6.713A0.97,0.97 0,0 1,16 7a0.97,0.97 0,0 1,-0.713 -0.287A0.97,0.97 0,0 1,15 6q0,-0.424 0.287,-0.713A0.97,0.97 0,0 1,16 5q0.424,0 0.712,0.287Q17,5.576 17,6t-0.288,0.713"
+      android:fillColor="#FF000000"/>
+  <path
+      android:pathData="M6,2a2,2 0,0 0,-2 2v16a2,2 0,0 0,2 2h12a2,2 0,0 0,2 -2L20,4a2,2 0,0 0,-2 -2zM18,4L6,4v4h12zM6,12v-2h12v2zM6,14v2h12v-2zM6,20v-2h12v2z"
+      android:fillColor="#FF000000"
+      android:fillType="evenOdd"/>
 </vector>

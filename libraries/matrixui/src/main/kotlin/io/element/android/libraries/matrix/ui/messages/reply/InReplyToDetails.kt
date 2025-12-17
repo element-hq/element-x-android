@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -14,7 +15,7 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
-import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.ui.messages.toPlainText
@@ -24,7 +25,7 @@ sealed interface InReplyToDetails {
     data class Ready(
         val eventId: EventId,
         val senderId: UserId,
-        val senderProfile: ProfileTimelineDetails,
+        val senderProfile: ProfileDetails,
         val eventContent: EventContent?,
         val textContent: String?,
     ) : InReplyToDetails

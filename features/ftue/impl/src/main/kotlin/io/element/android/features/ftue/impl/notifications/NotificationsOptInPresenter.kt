@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -18,7 +19,7 @@ import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.permissions.api.PermissionStateProvider
-import io.element.android.libraries.permissions.api.PermissionsEvents
+import io.element.android.libraries.permissions.api.PermissionsEvent
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.noop.NoopPermissionsPresenter
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
@@ -51,13 +52,13 @@ class NotificationsOptInPresenter(
     override fun present(): NotificationsOptInState {
         val notificationsPermissionsState = postNotificationPermissionsPresenter.present()
 
-        fun handleEvents(event: NotificationsOptInEvents) {
+        fun handleEvent(event: NotificationsOptInEvents) {
             when (event) {
                 NotificationsOptInEvents.ContinueClicked -> {
                     if (notificationsPermissionsState.permissionGranted) {
                         callback.onNotificationsOptInFinished()
                     } else {
-                        notificationsPermissionsState.eventSink(PermissionsEvents.RequestPermissions)
+                        notificationsPermissionsState.eventSink(PermissionsEvent.RequestPermissions)
                     }
                 }
                 NotificationsOptInEvents.NotNowClicked -> {
@@ -78,7 +79,7 @@ class NotificationsOptInPresenter(
 
         return NotificationsOptInState(
             notificationsPermissionState = notificationsPermissionsState,
-            eventSink = ::handleEvents
+            eventSink = ::handleEvent,
         )
     }
 

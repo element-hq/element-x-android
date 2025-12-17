@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -41,7 +42,6 @@ import io.element.android.libraries.matrix.ui.messages.reply.aProfileTimelineDet
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toPersistentList
 import java.util.UUID
 import kotlin.random.Random
 
@@ -197,7 +197,7 @@ fun aTimelineItemReactions(
                     )
                 )
             }
-        }.toPersistentList()
+        }.toImmutableList()
     )
 }
 
@@ -260,7 +260,7 @@ internal fun aTimelineRoomInfo(
     userHasPermissionToSendMessage = userHasPermissionToSendMessage,
     userHasPermissionToSendReaction = true,
     roomCallState = aStandByCallState(),
-    pinnedEventIds = pinnedEventIds,
+    pinnedEventIds = pinnedEventIds.toImmutableList(),
     typingNotificationState = typingNotificationState,
     predecessorRoom = predecessorRoom,
 )

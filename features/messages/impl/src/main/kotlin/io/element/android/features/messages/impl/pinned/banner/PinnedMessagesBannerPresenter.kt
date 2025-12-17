@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -18,7 +19,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
-import io.element.android.features.messages.impl.pinned.PinnedEventsTimelineProvider
+import io.element.android.features.messages.impl.pinned.DefaultPinnedEventsTimelineProvider
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.room.BaseRoom
@@ -35,7 +36,7 @@ import kotlinx.coroutines.flow.onEach
 class PinnedMessagesBannerPresenter(
     private val room: BaseRoom,
     private val itemFactory: PinnedMessagesBannerItemFactory,
-    private val pinnedEventsTimelineProvider: PinnedEventsTimelineProvider,
+    private val pinnedEventsTimelineProvider: DefaultPinnedEventsTimelineProvider,
 ) : Presenter<PinnedMessagesBannerState> {
     private val pinnedItems = mutableStateOf<AsyncData<ImmutableList<PinnedMessagesBannerItem>>>(AsyncData.Uninitialized)
 
@@ -70,7 +71,7 @@ class PinnedMessagesBannerPresenter(
             expectedPinnedMessagesCount = expectedPinnedMessagesCount,
             pinnedItems = pinnedItems.value,
             currentPinnedMessageIndex = currentPinnedMessageIndex,
-            eventSink = ::handleEvent
+            eventSink = ::handleEvent,
         )
     }
 

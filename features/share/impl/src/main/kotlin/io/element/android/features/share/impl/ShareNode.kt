@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -23,6 +24,7 @@ import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.share.api.ShareEntryPoint
 import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -52,7 +54,7 @@ class ShareNode(
 
     private val inputs = inputs<Inputs>()
     private val presenter = presenterFactory.create(inputs.intent)
-    private val callbacks = plugins.filterIsInstance<ShareEntryPoint.Callback>()
+    private val callback: ShareEntryPoint.Callback = callback()
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         val callback = object : RoomSelectEntryPoint.Callback {
@@ -61,14 +63,16 @@ class ShareNode(
             }
 
             override fun onCancel() {
-                navigateUp()
+                callback.onDone(emptyList())
             }
         }
 
-        return roomSelectEntryPoint.nodeBuilder(this, buildContext)
-            .callback(callback)
-            .params(RoomSelectEntryPoint.Params(mode = RoomSelectMode.Share))
-            .build()
+        return roomSelectEntryPoint.createNode(
+            parentNode = this,
+            buildContext = buildContext,
+            params = RoomSelectEntryPoint.Params(mode = RoomSelectMode.Share),
+            callback = callback,
+        )
     }
 
     @Composable
@@ -82,12 +86,8 @@ class ShareNode(
             val state = presenter.present()
             ShareView(
                 state = state,
-                onShareSuccess = ::onShareSuccess,
+                onShareSuccess = callback::onDone,
             )
         }
-    }
-
-    private fun onShareSuccess(roomIds: List<RoomId>) {
-        callbacks.forEach { it.onDone(roomIds) }
     }
 }

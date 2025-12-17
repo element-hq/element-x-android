@@ -39,7 +39,7 @@
   <string name="screen_login_title_with_homeserver">"%1$s 에 로그인합니다"</string>
   <string name="screen_onboarding_app_version">"버전 %1$s"</string>
   <string name="screen_onboarding_sign_in_manually">"수동으로 로그인"</string>
-  <string name="screen_onboarding_sign_in_to">"%1$s 에 로그인하세요."</string>
+  <string name="screen_onboarding_sign_in_to">"%1$s 에 로그인합니다"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"QR 코드로 로그인"</string>
   <string name="screen_onboarding_sign_up">"계정 만들기"</string>
   <string name="screen_onboarding_welcome_message">"%1$s 에 오신 것을 환영합니다. 속도와 단순성을 극대화한 가장 빠른 버전입니다."</string>

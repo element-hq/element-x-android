@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -47,7 +48,7 @@ class BatteryOptimizationPresenter(
             onPauseOrDispose {}
         }
 
-        fun handleEvents(event: BatteryOptimizationEvents) {
+        fun handleEvent(event: BatteryOptimizationEvents) {
             when (event) {
                 BatteryOptimizationEvents.Dismiss -> coroutineScope.launch {
                     mutableBatteryOptimizationStore.onOptimizationBannerDismissed()
@@ -66,7 +67,7 @@ class BatteryOptimizationPresenter(
 
         return BatteryOptimizationState(
             shouldDisplayBanner = localShouldDisplayBanner && storeShouldDisplayBanner && !isSystemIgnoringBatteryOptimizations,
-            eventSink = ::handleEvents,
+            eventSink = ::handleEvent,
         )
     }
 }

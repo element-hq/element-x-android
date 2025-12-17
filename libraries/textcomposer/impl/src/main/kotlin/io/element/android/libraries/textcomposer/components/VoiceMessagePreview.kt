@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -29,8 +30,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.designsystem.components.media.WaveFormSamples
 import io.element.android.libraries.designsystem.components.media.WaveformPlaybackView
-import io.element.android.libraries.designsystem.components.media.createFakeWaveform
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -138,14 +139,18 @@ private fun PlayerButton(
 private fun PauseIcon() = Icon(
     imageVector = CompoundIcons.PauseSolid(),
     contentDescription = stringResource(id = CommonStrings.a11y_pause),
-    modifier = Modifier.size(20.dp).padding(2.dp),
+    modifier = Modifier
+        .size(20.dp)
+        .padding(2.dp),
 )
 
 @Composable
 private fun PlayIcon() = Icon(
     imageVector = CompoundIcons.PlaySolid(),
     contentDescription = stringResource(id = CommonStrings.a11y_play),
-    modifier = Modifier.size(20.dp).padding(2.dp),
+    modifier = Modifier
+        .size(20.dp)
+        .padding(2.dp),
 )
 
 @PreviewsDayNight
@@ -160,7 +165,7 @@ internal fun VoiceMessagePreviewPreview() = ElementPreview {
             time = 2.seconds,
             playbackProgress = 0.2f,
             showCursor = true,
-            waveform = createFakeWaveform()
+            waveform = WaveFormSamples.longRealisticWaveForm,
         )
         AVoiceMessagePreview(
             isInteractive = true,
@@ -168,7 +173,7 @@ internal fun VoiceMessagePreviewPreview() = ElementPreview {
             time = 0.seconds,
             playbackProgress = 0.0f,
             showCursor = true,
-            waveform = createFakeWaveform()
+            waveform = WaveFormSamples.longRealisticWaveForm,
         )
         AVoiceMessagePreview(
             isInteractive = false,
@@ -176,7 +181,7 @@ internal fun VoiceMessagePreviewPreview() = ElementPreview {
             time = 789.seconds,
             playbackProgress = 0.0f,
             showCursor = false,
-            waveform = createFakeWaveform()
+            waveform = WaveFormSamples.longRealisticWaveForm,
         )
     }
 }

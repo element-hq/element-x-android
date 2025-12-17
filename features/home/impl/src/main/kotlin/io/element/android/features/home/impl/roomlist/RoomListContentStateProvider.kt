@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -16,7 +17,7 @@ import io.element.android.libraries.push.api.battery.BatteryOptimizationState
 import io.element.android.libraries.push.api.battery.aBatteryOptimizationState
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toPersistentSet
+import kotlinx.collections.immutable.toImmutableSet
 
 open class RoomListContentStateProvider : PreviewParameterProvider<RoomListContentState> {
     override val values: Sequence<RoomListContentState>
@@ -45,7 +46,7 @@ internal fun aRoomsContentState(
     fullScreenIntentPermissionsState = fullScreenIntentPermissionsState,
     batteryOptimizationState = batteryOptimizationState,
     summaries = summaries,
-    seenRoomInvites = seenRoomInvites.toPersistentSet(),
+    seenRoomInvites = seenRoomInvites.toImmutableSet(),
 )
 
 internal fun aSkeletonContentState() = RoomListContentState.Skeleton(16)

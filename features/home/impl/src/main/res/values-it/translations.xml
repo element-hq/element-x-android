@@ -3,6 +3,8 @@
   <string name="banner_battery_optimization_content_android">"Disabilita l\'ottimizzazione della batteria per questa app, per assicurarti che tutte le notifiche vengano ricevute."</string>
   <string name="banner_battery_optimization_submit_android">"Disabilita l\'ottimizzazione"</string>
   <string name="banner_battery_optimization_title_android">"Le notifiche non arrivano?"</string>
+  <string name="banner_new_sound_message">"Il ping delle notifiche è stato aggiornato: ora è più chiaro, più rapido e meno fastidioso."</string>
+  <string name="banner_new_sound_title">"Abbiamo rinnovato i tuoi suoni"</string>
   <string name="banner_set_up_recovery_content">"Recupera la tua identità crittografica e la cronologia dei messaggi con una chiave di recupero se hai perso tutti i tuoi dispositivi."</string>
   <string name="banner_set_up_recovery_submit">"Configura il recupero"</string>
   <string name="banner_set_up_recovery_title">"Configura il ripristino"</string>

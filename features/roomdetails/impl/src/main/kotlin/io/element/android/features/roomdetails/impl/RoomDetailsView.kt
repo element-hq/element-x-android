@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -89,7 +90,6 @@ import io.element.android.services.analytics.compose.LocalAnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toPersistentList
 
 @Composable
 fun RoomDetailsView(
@@ -264,6 +264,7 @@ fun RoomDetailsView(
             if (state.showDebugInfo) {
                 DebugInfoSection(
                     roomId = state.roomId,
+                    roomVersion = state.roomVersion,
                 )
             }
         }
@@ -400,7 +401,7 @@ private fun RoomHeaderSection(
             avatarType = AvatarType.Room(
                 heroes = heroes.map { user ->
                     user.getAvatarData(size = AvatarSize.RoomDetailsHeader)
-                }.toPersistentList(),
+                }.toImmutableList(),
                 isTombstoned = isTombstoned,
             ),
             contentDescription = avatarUrl?.let { stringResource(CommonStrings.a11y_room_avatar) },
@@ -714,9 +715,13 @@ private fun OtherActionsSection(
 }
 
 @Composable
-private fun DebugInfoSection(roomId: RoomId) {
+private fun DebugInfoSection(
+    roomId: RoomId,
+    roomVersion: String?,
+) {
     val context = LocalContext.current
     PreferenceCategory(showTopDivider = true) {
+        val toastMessage = stringResource(CommonStrings.common_copied_to_clipboard)
         ListItem(
             headlineContent = {
                 Text("Internal room ID")
@@ -732,10 +737,23 @@ private fun DebugInfoSection(roomId: RoomId) {
             trailingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Copy())),
             onClick = {
                 context.copyToClipboard(
-                    roomId.value,
-                    context.getString(CommonStrings.common_copied_to_clipboard)
+                    text = roomId.value,
+                    toastMessage = toastMessage,
                 )
             },
+        )
+        ListItem(
+            headlineContent = {
+                Text("Room version")
+            },
+            supportingContent = {
+                Text(
+                    text = roomVersion ?: "Unknown",
+                    style = ElementTheme.typography.fontBodySmRegular,
+                    color = ElementTheme.colors.textSecondary,
+                )
+            },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Info())),
         )
     }
 }

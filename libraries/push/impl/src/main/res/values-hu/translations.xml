@@ -13,6 +13,7 @@
     <item quantity="one">"%d értesítés"</item>
     <item quantity="other">"%d értesítés"</item>
   </plurals>
+  <string name="notification_error_unified_push_unregistered_android">"A UnifiedPush leküldéses értesítési terjesztő nem regisztrálható, ezért többé nem fog értesítéseket kapni. Ellenőrizze az alkalmazás értesítési beállításait és a leküldés értesítési terjesztő állapotát."</string>
   <string name="notification_fallback_content">"Értesítés"</string>
   <string name="notification_incoming_call">"📹 Bejövő hívás"</string>
   <string name="notification_inline_reply_failed">"** Nem sikerült elküldeni – nyissa meg a szobát"</string>
@@ -38,6 +39,7 @@
   <string name="notification_sender_me">"Én"</string>
   <string name="notification_sender_mention_reply">"%1$s megemlítette vagy válaszolt"</string>
   <string name="notification_test_push_notification_content">"Az értesítést nézi! Kattintson ide!"</string>
+  <string name="notification_thread_in_room">"Üzenetszál itt: %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
@@ -64,7 +66,10 @@
   <string name="troubleshoot_notifications_test_blocked_users_title">"Letiltott felhasználók"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"A jelenlegi szolgáltató nevének lekérdezése."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Nincs kiválasztva leküldéses értesítési szolgáltató."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found">"Jelenlegi leküldéses értesítések szolgáltatója: %1$s és jelenlegi terjesztő: %2$s. De a terjesztő %3$s nem található. Lehet, hogy az alkalmazást eltávolították?"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_no_distributor">"Jelenlegi leküldéses értesítések szolgáltatója: %1$s, de még nem konfiguráltak forgalmazókat."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Jelenlegi leküldéses értesítési szolgáltató: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success_with_distributor">"Jelenlegi leküldéses értesítések szolgáltatója: %1$s (%2$s)"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Jelenlegi leküldéses értesítési szolgáltató"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Győződjön meg arról, hogy az alkalmazás legalább egy leküldéses értesítési szolgáltatóval rendelkezik."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Nem található leküldéses értesítési szolgáltató."</string>

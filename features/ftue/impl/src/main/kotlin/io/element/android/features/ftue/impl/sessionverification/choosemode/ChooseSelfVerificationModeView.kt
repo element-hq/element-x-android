@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -23,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.ftue.impl.R
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.atomic.pages.HeaderFooterPage
@@ -50,7 +52,6 @@ fun ChooseSelfVerificationModeView(
     BackHandler {
         activity?.finish()
     }
-
     HeaderFooterPage(
         modifier = modifier,
         topBar = {
@@ -73,29 +74,12 @@ fun ChooseSelfVerificationModeView(
             )
         },
         footer = {
-            ButtonColumnMolecule(
-                modifier = Modifier.padding(bottom = 16.dp)
-            ) {
-                if (state.canUseAnotherDevice) {
-                    Button(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(R.string.screen_identity_use_another_device),
-                        onClick = onUseAnotherDevice,
-                    )
-                }
-                if (state.canEnterRecoveryKey) {
-                    Button(
-                        modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(R.string.screen_session_verification_enter_recovery_key),
-                        onClick = onUseRecoveryKey,
-                    )
-                }
-                OutlinedButton(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = stringResource(R.string.screen_identity_confirmation_cannot_confirm),
-                    onClick = onResetKey,
-                )
-            }
+            ChooseSelfVerificationModeButtons(
+                state = state,
+                onUseAnotherDevice = onUseAnotherDevice,
+                onUseRecoveryKey = onUseRecoveryKey,
+                onResetKey = onResetKey,
+            )
         }
     ) {
         Row(
@@ -109,6 +93,53 @@ fun ChooseSelfVerificationModeView(
                 text = stringResource(CommonStrings.action_learn_more),
                 style = ElementTheme.typography.fontBodyLgMedium
             )
+        }
+    }
+}
+
+@Composable
+private fun ChooseSelfVerificationModeButtons(
+    state: ChooseSelfVerificationModeState,
+    onUseAnotherDevice: () -> Unit,
+    onUseRecoveryKey: () -> Unit,
+    onResetKey: () -> Unit,
+) {
+    ButtonColumnMolecule(
+        modifier = Modifier.padding(bottom = 16.dp)
+    ) {
+        when (state.buttonsState) {
+            AsyncData.Uninitialized,
+            is AsyncData.Failure,
+            is AsyncData.Loading -> {
+                Button(
+                    modifier = Modifier.fillMaxWidth(),
+                    enabled = false,
+                    showProgress = true,
+                    text = stringResource(CommonStrings.common_loading),
+                    onClick = {},
+                )
+            }
+            is AsyncData.Success -> {
+                if (state.buttonsState.data.canUseAnotherDevice) {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(R.string.screen_identity_use_another_device),
+                        onClick = onUseAnotherDevice,
+                    )
+                }
+                if (state.buttonsState.data.canEnterRecoveryKey) {
+                    Button(
+                        modifier = Modifier.fillMaxWidth(),
+                        text = stringResource(R.string.screen_session_verification_enter_recovery_key),
+                        onClick = onUseRecoveryKey,
+                    )
+                }
+                OutlinedButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    text = stringResource(R.string.screen_identity_confirmation_cannot_confirm),
+                    onClick = onResetKey,
+                )
+            }
         }
     }
 }

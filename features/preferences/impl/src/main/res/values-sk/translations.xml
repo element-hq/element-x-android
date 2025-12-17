@@ -10,6 +10,7 @@
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Neplatná adresa URL, uistite sa, že ste uviedli protokol (http/https) a správnu adresu."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Skrytie profilové obrázky v žiadostiach o pozvánku do miestnosti"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Skryť ukážky médií na časovej osi"</string>
+  <string name="screen_advanced_settings_labs">"Laboratóriá"</string>
   <string name="screen_advanced_settings_media_compression_description">"Nahrávajte fotografie a videá rýchlejšie a znížte spotrebu dát"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimalizovať kvalitu médií"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderovanie a bezpečnosť"</string>
@@ -43,6 +44,11 @@
   <string name="screen_edit_profile_error_title">"Nepodarilo sa aktualizovať profil"</string>
   <string name="screen_edit_profile_title">"Upraviť profil"</string>
   <string name="screen_edit_profile_updating_details">"Aktualizácia profilu…"</string>
+  <string name="screen_labs_enable_threads">"Povoliť odpovede vo vlákne"</string>
+  <string name="screen_labs_enable_threads_description">"Aplikácia sa reštartuje, aby sa táto zmena prejavila."</string>
+  <string name="screen_labs_header_description">"Vyskúšajte naše najnovšie nápady vo vývoji. Tieto funkcie nie sú finalizované; môžu byť nestabilné a môžu sa zmeniť."</string>
+  <string name="screen_labs_header_title">"Máte chuť experimentovať?"</string>
+  <string name="screen_labs_title">"Laboratóriá"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Ďalšie nastavenia"</string>
   <string name="screen_notification_settings_calls_label">"Audio a video hovory"</string>
   <string name="screen_notification_settings_configuration_mismatch">"Nezhoda konfigurácie"</string>

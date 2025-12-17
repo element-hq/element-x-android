@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -16,9 +17,8 @@ import im.vector.app.features.analytics.plan.MobileScreen
 import im.vector.app.features.analytics.plan.PollEnd
 import im.vector.app.features.analytics.plan.SuperProperties
 import im.vector.app.features.analytics.plan.UserProperties
-import io.element.android.libraries.sessionstorage.api.SessionStore
+import io.element.android.libraries.matrix.test.analytics.FakeAnalyticsSdkManager
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
-import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.observer.NoOpSessionObserver
 import io.element.android.services.analytics.impl.store.AnalyticsStore
 import io.element.android.services.analytics.impl.store.FakeAnalyticsStore
@@ -33,6 +33,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
@@ -127,17 +128,20 @@ class DefaultAnalyticsServiceTest {
     }
 
     @Test
-    fun `setUserConsent is sent to the store`() = runTest {
+    fun `setUserConsent is sent to the store and the SDK`() = runTest {
+        val sdkAnalyticsEnabledLambda = lambdaRecorder<Boolean, Unit> {}
         val store = FakeAnalyticsStore()
         val sut = createDefaultAnalyticsService(
             coroutineScope = backgroundScope,
             analyticsStore = store,
+            sdkAnalyticsManager = FakeAnalyticsSdkManager(sdkAnalyticsEnabledLambda),
         )
         assertThat(store.userConsentFlow.first()).isFalse()
         assertThat(sut.userConsentFlow.first()).isFalse()
         sut.setUserConsent(true)
         assertThat(store.userConsentFlow.first()).isTrue()
         assertThat(sut.userConsentFlow.first()).isTrue()
+        sdkAnalyticsEnabledLambda.assertions().isCalledOnce().with(value(true))
     }
 
     @Test
@@ -170,6 +174,23 @@ class DefaultAnalyticsServiceTest {
 
     @Test
     fun `when the last session is deleted, the store is reset`() = runTest {
+        val resetLambda = lambdaRecorder<Unit> {}
+        val sdkAnalyticsEnabledLambda = lambdaRecorder<Boolean, Unit> {}
+        val store = FakeAnalyticsStore(
+            resetLambda = resetLambda,
+        )
+        val sut = createDefaultAnalyticsService(
+            coroutineScope = backgroundScope,
+            analyticsStore = store,
+            sdkAnalyticsManager = FakeAnalyticsSdkManager(sdkAnalyticsEnabledLambda),
+        )
+        sut.onSessionDeleted("userId", true)
+        resetLambda.assertions().isCalledOnce()
+        sdkAnalyticsEnabledLambda.assertions().isCalledOnce().with(value(false))
+    }
+
+    @Test
+    fun `when a session is deleted, the store is not reset if it was not the last session`() = runTest {
         val resetLambda = lambdaRecorder<Unit> { }
         val store = FakeAnalyticsStore(
             resetLambda = resetLambda,
@@ -178,8 +199,8 @@ class DefaultAnalyticsServiceTest {
             coroutineScope = backgroundScope,
             analyticsStore = store,
         )
-        sut.onSessionDeleted("userId")
-        resetLambda.assertions().isCalledOnce()
+        sut.onSessionDeleted("userId", false)
+        resetLambda.assertions().isNeverCalled()
     }
 
     @Test
@@ -221,7 +242,6 @@ class DefaultAnalyticsServiceTest {
     fun `when consent is provided, updateUserProperties is sent to the provider`() = runTest {
         val updateUserPropertiesLambda = lambdaRecorder<UserProperties, Unit> { _ -> }
         val sut = createDefaultAnalyticsService(
-            coroutineScope = backgroundScope,
             analyticsProviders = setOf(
                 FakeAnalyticsProvider(
                     initLambda = { },
@@ -238,7 +258,6 @@ class DefaultAnalyticsServiceTest {
     fun `when super properties are updated, updateSuperProperties is sent to the provider`() = runTest {
         val updateSuperPropertiesLambda = lambdaRecorder<SuperProperties, Unit> { _ -> }
         val sut = createDefaultAnalyticsService(
-            coroutineScope = backgroundScope,
             analyticsProviders = setOf(
                 FakeAnalyticsProvider(
                     initLambda = { },
@@ -251,8 +270,15 @@ class DefaultAnalyticsServiceTest {
         updateSuperPropertiesLambda.assertions().isCalledOnce().with(value(aSuperProperty))
     }
 
-    private suspend fun createDefaultAnalyticsService(
-        coroutineScope: CoroutineScope,
+    @Test
+    fun `startSdkSpan returns a span from the AnalyticsSdkManager`() = runTest {
+        val sut = createDefaultAnalyticsService()
+        val span = sut.enterSdkSpan("spanName", "parentTraceId")
+        assertThat(span).isNotNull()
+    }
+
+    private suspend fun TestScope.createDefaultAnalyticsService(
+        coroutineScope: CoroutineScope = backgroundScope,
         analyticsProviders: Set<@JvmSuppressWildcards AnalyticsProvider> = setOf(
             FakeAnalyticsProvider(
                 stopLambda = { },
@@ -260,13 +286,13 @@ class DefaultAnalyticsServiceTest {
         ),
         analyticsStore: AnalyticsStore = FakeAnalyticsStore(),
         sessionObserver: SessionObserver = NoOpSessionObserver(),
-        sessionStore: SessionStore = InMemorySessionStore(),
+        sdkAnalyticsManager: FakeAnalyticsSdkManager = FakeAnalyticsSdkManager(enableSdkAnalyticsLambda = {}),
     ) = DefaultAnalyticsService(
         analyticsProviders = analyticsProviders,
         analyticsStore = analyticsStore,
         coroutineScope = coroutineScope,
         sessionObserver = sessionObserver,
-        sessionStore = sessionStore,
+        analyticsSdkManager = sdkAnalyticsManager,
     ).also {
         // Wait for the service to be ready
         delay(1)

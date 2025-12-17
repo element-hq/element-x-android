@@ -1,14 +1,14 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.call.impl.ui
 
 import android.annotation.SuppressLint
-import android.util.Log
 import android.view.ViewGroup
 import android.webkit.ConsoleMessage
 import android.webkit.JavascriptInterface
@@ -60,6 +60,7 @@ interface CallScreenNavigator {
 internal fun CallScreenView(
     state: CallScreenState,
     pipState: PictureInPictureState,
+    onConsoleMessage: (ConsoleMessage) -> Unit,
     requestPermissions: (Array<String>, RequestPermissionCallback) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -108,6 +109,7 @@ internal fun CallScreenView(
                     val callback: RequestPermissionCallback = { request.grant(it) }
                     requestPermissions(androidPermissions.toTypedArray(), callback)
                 },
+                onConsoleMessage = onConsoleMessage,
                 onCreateWebView = { webView ->
                     webView.addBackHandler(onBackPressed = ::handleBack)
                     val interceptor = WebViewWidgetMessageInterceptor(
@@ -174,6 +176,7 @@ private fun CallWebView(
     url: AsyncData<String>,
     userAgent: String,
     onPermissionsRequest: (PermissionRequest) -> Unit,
+    onConsoleMessage: (ConsoleMessage) -> Unit,
     onCreateWebView: (WebView) -> Unit,
     onDestroyWebView: (WebView) -> Unit,
     modifier: Modifier = Modifier,
@@ -188,7 +191,11 @@ private fun CallWebView(
             factory = { context ->
                 WebView(context).apply {
                     onCreateWebView(this)
-                    setup(userAgent, onPermissionsRequest)
+                    setup(
+                        userAgent = userAgent,
+                        onPermissionsRequested = onPermissionsRequest,
+                        onConsoleMessage = onConsoleMessage,
+                    )
                 }
             },
             update = { webView ->
@@ -208,6 +215,7 @@ private fun CallWebView(
 private fun WebView.setup(
     userAgent: String,
     onPermissionsRequested: (PermissionRequest) -> Unit,
+    onConsoleMessage: (ConsoleMessage) -> Unit,
 ) {
     layoutParams = ViewGroup.LayoutParams(
         ViewGroup.LayoutParams.MATCH_PARENT,
@@ -232,35 +240,7 @@ private fun WebView.setup(
         }
 
         override fun onConsoleMessage(consoleMessage: ConsoleMessage): Boolean {
-            val priority = when (consoleMessage.messageLevel()) {
-                ConsoleMessage.MessageLevel.ERROR -> Log.ERROR
-                ConsoleMessage.MessageLevel.WARNING -> Log.WARN
-                else -> Log.DEBUG
-            }
-
-            val message = buildString {
-                append(consoleMessage.sourceId())
-                append(":")
-                append(consoleMessage.lineNumber())
-                append(" ")
-                append(consoleMessage.message())
-            }
-
-            if (message.contains("password=")) {
-                // Avoid logging any messages that contain "password" to prevent leaking sensitive information
-                return true
-            }
-
-            Timber.tag("WebView").log(
-                priority = priority,
-                message = buildString {
-                    append(consoleMessage.sourceId())
-                    append(":")
-                    append(consoleMessage.lineNumber())
-                    append(" ")
-                    append(consoleMessage.message())
-                },
-            )
+            onConsoleMessage(consoleMessage)
             return true
         }
     }
@@ -286,6 +266,7 @@ internal fun CallScreenViewPreview(
         state = state,
         pipState = aPictureInPictureState(),
         requestPermissions = { _, _ -> },
+        onConsoleMessage = {},
     )
 }
 

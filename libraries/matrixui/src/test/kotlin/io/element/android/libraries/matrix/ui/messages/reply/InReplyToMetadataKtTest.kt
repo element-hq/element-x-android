@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -28,7 +29,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
-import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.RedactedContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerContent
@@ -41,7 +42,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.media.aMediaSource
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
 import io.element.android.libraries.matrix.test.timeline.aPollContent
-import io.element.android.libraries.matrix.test.timeline.aProfileTimelineDetails
+import io.element.android.libraries.matrix.test.timeline.aProfileDetails
 import io.element.android.libraries.matrix.test.timeline.item.event.aRoomMembershipContent
 import io.element.android.libraries.matrix.ui.components.A_BLUR_HASH
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
@@ -509,7 +510,7 @@ class InReplyToMetadataKtTest {
     fun `state content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
             anInReplyToDetailsReady(
-                eventContent = StateContent("", OtherState.RoomJoinRules)
+                eventContent = StateContent("", OtherState.RoomJoinRules(null))
             ).metadata(hideImage = false)
         }.test {
             awaitItem().let {
@@ -548,7 +549,7 @@ class InReplyToMetadataKtTest {
 private fun anInReplyToDetailsReady(
     eventId: EventId = AN_EVENT_ID,
     senderId: UserId = A_USER_ID,
-    senderProfile: ProfileTimelineDetails = aProfileTimelineDetails(),
+    senderProfile: ProfileDetails = aProfileDetails(),
     eventContent: EventContent? = aMessageContent(),
     textContent: String? = "textContent",
 ) = InReplyToDetails.Ready(

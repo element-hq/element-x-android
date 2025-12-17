@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -9,6 +10,8 @@ package io.element.android.libraries.matrix.impl
 
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.data.ByteUnit
+import io.element.android.libraries.core.data.megaBytes
 import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -19,10 +22,12 @@ import io.element.android.libraries.matrix.impl.paths.SessionPaths
 import io.element.android.libraries.matrix.impl.paths.getSessionPaths
 import io.element.android.libraries.matrix.impl.proxy.ProxyProvider
 import io.element.android.libraries.matrix.impl.room.TimelineEventTypeFilterFactory
+import io.element.android.libraries.matrix.impl.storage.SqliteStoreBuilderProvider
 import io.element.android.libraries.matrix.impl.util.anonymizedTokens
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
+import io.element.android.libraries.workmanager.api.WorkManagerScheduler
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
@@ -35,10 +40,13 @@ import org.matrix.rustcomponents.sdk.SlidingSyncVersion
 import org.matrix.rustcomponents.sdk.SlidingSyncVersionBuilder
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
+import uniffi.matrix_sdk_base.MediaRetentionPolicy
 import uniffi.matrix_sdk_crypto.CollectStrategy
 import uniffi.matrix_sdk_crypto.DecryptionSettings
 import uniffi.matrix_sdk_crypto.TrustRequirement
 import java.io.File
+import kotlin.time.Duration.Companion.days
+import kotlin.time.toJavaDuration
 
 @Inject
 class RustMatrixClientFactory(
@@ -55,6 +63,8 @@ class RustMatrixClientFactory(
     private val featureFlagService: FeatureFlagService,
     private val timelineEventTypeFilterFactory: TimelineEventTypeFilterFactory,
     private val clientBuilderProvider: ClientBuilderProvider,
+    private val sqliteStoreBuilderProvider: SqliteStoreBuilderProvider,
+    private val workManagerScheduler: WorkManagerScheduler,
 ) {
     private val sessionDelegate = RustClientSessionDelegate(sessionStore, appCoroutineScope, coroutineDispatchers)
 
@@ -67,6 +77,19 @@ class RustMatrixClientFactory(
             .homeserverUrl(sessionData.homeserverUrl)
             .username(sessionData.userId)
             .use { it.build() }
+
+        client.setMediaRetentionPolicy(
+            MediaRetentionPolicy(
+                // Make this 500MB instead of 400MB
+                maxCacheSize = 500.megaBytes.to(ByteUnit.BYTES).toULong(),
+                // This is the default value, but let's make it explicit
+                maxFileSize = 20.megaBytes.to(ByteUnit.BYTES).toULong(),
+                // Use 30 days instead of 60
+                lastAccessExpiry = 30.days.toJavaDuration(),
+                // This is the default value, but let's make it explicit
+                cleanupFrequency = 1.days.toJavaDuration(),
+            )
+        )
 
         client.restoreSession(sessionData.toSession())
 
@@ -94,6 +117,8 @@ class RustMatrixClientFactory(
             clock = clock,
             timelineEventTypeFilterFactory = timelineEventTypeFilterFactory,
             featureFlagService = featureFlagService,
+            analyticsService = analyticsService,
+            workManagerScheduler = workManagerScheduler,
         ).also {
             Timber.tag(it.toString()).d("Creating Client with access token '$anonymizedAccessToken' and refresh token '$anonymizedRefreshToken'")
         }
@@ -105,12 +130,12 @@ class RustMatrixClientFactory(
         slidingSyncType: ClientBuilderSlidingSync,
     ): ClientBuilder {
         return clientBuilderProvider.provide()
-            .sessionPaths(
-                dataPath = sessionPaths.fileDirectory.absolutePath,
-                cachePath = sessionPaths.cacheDirectory.absolutePath,
-            )
+            .run {
+                sqliteStoreBuilderProvider.provide(sessionPaths)
+                    .passphrase(passphrase)
+                    .setupClientBuilder(this)
+            }
             .setSessionDelegate(sessionDelegate)
-            .sessionPassphrase(passphrase)
             .userAgent(userAgentProvider.provide())
             .addRootCertificates(userCertificatesProvider.provides())
             .autoEnableBackups(true)

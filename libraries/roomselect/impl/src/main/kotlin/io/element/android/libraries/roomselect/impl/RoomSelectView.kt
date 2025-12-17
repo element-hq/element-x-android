@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -24,6 +25,10 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -53,7 +58,7 @@ import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.roomselect.api.RoomSelectMode
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toImmutableList
 
 @Suppress("MultipleEmitters") // False positive
 @OptIn(ExperimentalMaterial3Api::class)
@@ -80,15 +85,20 @@ fun RoomSelectView(
         )
     }
 
+    var canHandleBack by remember { mutableStateOf(true) }
     fun onBackButton(state: RoomSelectState) {
         if (state.isSearchActive) {
             state.eventSink(RoomSelectEvents.ToggleSearchActive)
-        } else {
+        } else if (canHandleBack) {
+            canHandleBack = false
             onDismiss()
         }
     }
 
-    BackHandler(onBack = { onBackButton(state) })
+    BackHandler(
+        enabled = canHandleBack,
+        onBack = { onBackButton(state) }
+    )
 
     Scaffold(
         modifier = modifier,
@@ -99,7 +109,10 @@ fun RoomSelectView(
                     RoomSelectMode.Share -> stringResource(CommonStrings.common_send_to)
                 },
                 navigationIcon = {
-                    BackButton(onClick = { onBackButton(state) })
+                    BackButton(
+                        enabled = canHandleBack,
+                        onClick = { onBackButton(state) }
+                    )
                 },
                 actions = {
                     TextButton(
@@ -214,7 +227,7 @@ private fun RoomSummaryView(
             avatarType = AvatarType.Room(
                 heroes = roomInfo.heroes.map { user ->
                     user.getAvatarData(size = AvatarSize.RoomSelectRoomListItem)
-                }.toPersistentList(),
+                }.toImmutableList(),
                 isTombstoned = roomInfo.isTombstoned,
             ),
         )

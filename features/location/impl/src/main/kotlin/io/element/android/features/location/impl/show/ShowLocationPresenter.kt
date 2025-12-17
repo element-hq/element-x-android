@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -56,7 +57,7 @@ class ShowLocationPresenter(
             }
         }
 
-        fun handleEvents(event: ShowLocationEvents) {
+        fun handleEvent(event: ShowLocationEvents) {
             when (event) {
                 ShowLocationEvents.Share -> locationActions.share(location, description)
                 is ShowLocationEvents.TrackMyLocation -> {
@@ -86,7 +87,7 @@ class ShowLocationPresenter(
             hasLocationPermission = permissionsState.isAnyGranted,
             isTrackMyLocation = isTrackMyLocation,
             appName = appName,
-            eventSink = ::handleEvents,
+            eventSink = ::handleEvent,
         )
     }
 }

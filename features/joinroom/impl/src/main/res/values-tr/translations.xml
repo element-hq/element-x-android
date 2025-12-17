@@ -10,12 +10,11 @@
   <string name="screen_join_room_decline_and_block_alert_confirmation">"Evet, reddet ve engelle"</string>
   <string name="screen_join_room_decline_and_block_alert_message">"Bu odaya katılma davetini reddetmek istediğinizden emin misiniz? Bu aynı zamanda %1$s sizinle iletişim kurmasını veya sizi odalara davet etmesini de engeller."</string>
   <string name="screen_join_room_decline_and_block_alert_title">"Daveti reddet ve engelle"</string>
-  <string name="screen_join_room_decline_and_block_button_title">"Reddet ve engelle"</string>
   <string name="screen_join_room_fail_message">"Odaya katılım başarısız oldu."</string>
   <string name="screen_join_room_fail_reason">"Bu odaya yalnızca davetle girilebilir veya alan düzeyinde erişim kısıtlamaları olabilir."</string>
   <string name="screen_join_room_forget_action">"Bu odayı unut"</string>
   <string name="screen_join_room_invite_required_message">"Bu odaya katılmak için bir davete ihtiyacınız var"</string>
-  <string name="screen_join_room_join_action">"Odaya katıl"</string>
+  <string name="screen_join_room_join_action">"Katıl"</string>
   <string name="screen_join_room_join_restricted_message">"Katılmak için davet edilmeniz veya bir alana üye olmanız gerekebilir."</string>
   <string name="screen_join_room_knock_action">"Katılma isteği gönder"</string>
   <string name="screen_join_room_knock_message_description">"Mesaj (isteğe bağlı)"</string>

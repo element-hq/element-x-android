@@ -1,19 +1,21 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.pushproviders.unifiedpush.troubleshoot
 
-import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.pushproviders.unifiedpush.UnifiedPushApiFactory
 import io.element.android.libraries.pushproviders.unifiedpush.UnifiedPushConfig
-import io.element.android.libraries.pushproviders.unifiedpush.UnifiedPushCurrentUserPushConfigProvider
+import io.element.android.libraries.pushproviders.unifiedpush.UnifiedPushSessionPushConfigProvider
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTest
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestDelegate
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTestState
@@ -22,12 +24,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 
-@ContributesIntoSet(AppScope::class)
+@ContributesIntoSet(SessionScope::class)
 @Inject
 class UnifiedPushMatrixGatewayTest(
+    private val sessionId: SessionId,
     private val unifiedPushApiFactory: UnifiedPushApiFactory,
     private val coroutineDispatchers: CoroutineDispatchers,
-    private val unifiedPushCurrentUserPushConfigProvider: UnifiedPushCurrentUserPushConfigProvider,
+    private val unifiedPushSessionPushConfigProvider: UnifiedPushSessionPushConfigProvider,
 ) : NotificationTroubleshootTest {
     override val order = 450
     private val delegate = NotificationTroubleshootTestDelegate(
@@ -44,7 +47,7 @@ class UnifiedPushMatrixGatewayTest(
 
     override suspend fun run(coroutineScope: CoroutineScope) {
         delegate.start()
-        val config = unifiedPushCurrentUserPushConfigProvider.provide()
+        val config = unifiedPushSessionPushConfigProvider.provide(sessionId)
         if (config == null) {
             delegate.updateState(
                 description = "No current push provider",

@@ -13,6 +13,7 @@
     <item quantity="one">"%d teavitus"</item>
     <item quantity="other">"%d teavitust"</item>
   </plurals>
+  <string name="notification_error_unified_push_unregistered_android">"UnifiedPushi levitajas registreerimine ei õnnestunud ja seega sa ei saa enam teavitusi. Palun kontrolli selle rakenduse teavituste seadistusi ja tõuketeenuste levitaja olekut."</string>
   <string name="notification_fallback_content">"Sulle on uusi sõnumeid."</string>
   <string name="notification_incoming_call">"📹 Sissetulev kõne"</string>
   <string name="notification_inline_reply_failed">"** Saatmine ei õnnestunud - palun ava jututoa täisvaade"</string>
@@ -37,7 +38,10 @@
   <string name="notification_room_invite_body_with_sender">"%1$s saatis sulle kutse jututoaga liitumiseks"</string>
   <string name="notification_sender_me">"Mina"</string>
   <string name="notification_sender_mention_reply">"%1$s mainis või vastas"</string>
+  <string name="notification_space_invite_body">"Kutsus sind liituma kogukonnaga"</string>
+  <string name="notification_space_invite_body_with_sender">"%1$s kutsus sind liituma kogukonnaga"</string>
   <string name="notification_test_push_notification_content">"See ongi teavitus! Klõpsi mind!"</string>
+  <string name="notification_thread_in_room">"Jutulõng „%1$s“ jututoas"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">

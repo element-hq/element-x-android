@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -9,6 +10,7 @@ package io.element.android.libraries.push.api
 
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.push.api.history.PushHistoryItem
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
@@ -18,7 +20,7 @@ interface PushService {
     /**
      * Return the current push provider, or null if none.
      */
-    suspend fun getCurrentPushProvider(): PushProvider?
+    suspend fun getCurrentPushProvider(sessionId: SessionId): PushProvider?
 
     /**
      * Return the list of push providers, available at compile time, sorted by index.
@@ -37,6 +39,15 @@ interface PushService {
     ): Result<Unit>
 
     /**
+     * Ensure that the pusher with the current push provider and distributor is registered.
+     * If there is no current config, the default push provider with the default distributor will be used.
+     * Error can be [PusherRegistrationFailure].
+     */
+    suspend fun ensurePusherIsRegistered(
+        matrixClient: MatrixClient,
+    ): Result<Unit>
+
+    /**
      * Store the given push provider as the current one, but do not register.
      * To be used when there is no distributor available.
      */
@@ -51,7 +62,7 @@ interface PushService {
     /**
      * Return false in case of early error.
      */
-    suspend fun testPush(): Boolean
+    suspend fun testPush(sessionId: SessionId): Boolean
 
     /**
      * Get a flow of total number of received Push.
@@ -72,4 +83,9 @@ interface PushService {
      * Reset the battery optimization state.
      */
     suspend fun resetBatteryOptimizationState()
+
+    /**
+     * Notify the user that the service is un-registered.
+     */
+    suspend fun onServiceUnregistered(userId: UserId)
 }

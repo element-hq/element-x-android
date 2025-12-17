@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -14,6 +15,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
 import io.element.android.libraries.mediaupload.api.MediaSender
+import io.element.android.libraries.mediaupload.impl.DefaultMediaSender
 import io.element.android.libraries.mediaupload.test.FakeMediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
@@ -23,7 +25,7 @@ import kotlinx.coroutines.CoroutineScope
 
 class FakeDefaultVoiceMessageComposerPresenterFactory(
     private val sessionCoroutineScope: CoroutineScope,
-    private val mediaSender: MediaSender = MediaSender(
+    private val mediaSender: MediaSender = DefaultMediaSender(
         preProcessor = FakeMediaPreProcessor(),
         room = FakeJoinedRoom(),
         timelineMode = Timeline.Mode.Live,
@@ -36,11 +38,7 @@ class FakeDefaultVoiceMessageComposerPresenterFactory(
             timelineMode = timelineMode,
             voiceRecorder = FakeVoiceRecorder(),
             analyticsService = FakeAnalyticsService(),
-            mediaSenderFactory = object : MediaSender.Factory {
-                override fun create(timelineMode: Timeline.Mode): MediaSender {
-                    return mediaSender
-                }
-            },
+            mediaSenderFactory = { mediaSender },
             player = VoiceMessageComposerPlayer(
                 mediaPlayer = FakeMediaPlayer(),
                 sessionCoroutineScope = sessionCoroutineScope,

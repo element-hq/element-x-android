@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -16,10 +17,10 @@ import org.matrix.rustcomponents.sdk.OidcException
 
 class AuthenticationExceptionMappingTest {
     @Test
-    fun `mapping an exception with no message returns 'Unknown error' message`() {
+    fun `mapping an exception with no message returns null message`() {
         val exception = Exception()
         val mappedException = exception.mapAuthenticationException()
-        assertThat(mappedException.message).isEqualTo("Unknown error")
+        assertThat(mappedException.message).isNull()
     }
 
     @Test
@@ -46,7 +47,7 @@ class AuthenticationExceptionMappingTest {
         assertThat(ClientBuildException.Sdk("SDK issue").mapAuthenticationException())
             .isException<AuthenticationException.Generic>("SDK issue")
         assertThat(ClientBuildException.ServerUnreachable("Server unreachable").mapAuthenticationException())
-            .isException<AuthenticationException.Generic>("Server unreachable")
+            .isException<AuthenticationException.ServerUnreachable>("Server unreachable")
         assertThat(ClientBuildException.SlidingSync("Sliding Sync").mapAuthenticationException())
             .isException<AuthenticationException.Generic>("Sliding Sync")
         assertThat(ClientBuildException.WellKnownDeserializationException("WellKnown Deserialization").mapAuthenticationException())

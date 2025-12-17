@@ -78,6 +78,7 @@
   <string name="action_decline">"拒絕"</string>
   <string name="action_decline_and_block">"拒絕並封鎖"</string>
   <string name="action_delete_poll">"刪除投票"</string>
+  <string name="action_deselect_all">"取消全選"</string>
   <string name="action_disable">"停用"</string>
   <string name="action_discard">"捨棄"</string>
   <string name="action_dismiss">"關閉"</string>
@@ -92,6 +93,8 @@
   <string name="action_forgot_password">"忘記密碼？"</string>
   <string name="action_forward">"轉寄"</string>
   <string name="action_go_back">"返回"</string>
+  <string name="action_go_to_roles_and_permissions">"前往角色與權限"</string>
+  <string name="action_go_to_settings">"前往設定"</string>
   <string name="action_ignore">"忽略"</string>
   <string name="action_invite">"邀請"</string>
   <string name="action_invite_friends">"邀請夥伴"</string>
@@ -108,6 +111,7 @@
   <string name="action_manage_account">"管理帳號"</string>
   <string name="action_manage_devices">"管理裝置"</string>
   <string name="action_message">"聊天"</string>
+  <string name="action_minimize">"最小化"</string>
   <string name="action_next">"下一步"</string>
   <string name="action_no">"否"</string>
   <string name="action_not_now">"以後再說"</string>
@@ -136,6 +140,7 @@
   <string name="action_retry_decryption">"再次嘗試解密"</string>
   <string name="action_save">"儲存"</string>
   <string name="action_search">"搜尋"</string>
+  <string name="action_select_all">"選取全部"</string>
   <string name="action_send">"傳送"</string>
   <string name="action_send_edited_message">"傳送已編輯的訊息"</string>
   <string name="action_send_message">"傳送訊息"</string>
@@ -174,6 +179,7 @@
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"您已登出工作階段"</string>
   <string name="common_appearance">"外觀"</string>
   <string name="common_audio">"音訊"</string>
+  <string name="common_beta">"測試版"</string>
   <string name="common_blocked_users">"封鎖的使用者"</string>
   <string name="common_bubbles">"泡泡"</string>
   <string name="common_call_started">"開始通話"</string>
@@ -222,6 +228,7 @@
   <string name="common_install_apk_android">"安裝 APK"</string>
   <string name="common_invite_unknown_profile">"找不到此 Matrix ID，因此可能沒有人會收到邀請。"</string>
   <string name="common_leaving_room">"正在離開聊天室"</string>
+  <string name="common_leaving_space">"離開空間"</string>
   <string name="common_light">"淺色"</string>
   <string name="common_line_copied_to_clipboard">"行已複製到剪貼簿"</string>
   <string name="common_link_copied_to_clipboard">"連結已複製到剪貼簿"</string>
@@ -242,6 +249,7 @@
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"查無結果"</string>
   <string name="common_no_room_name">"無聊天室名稱"</string>
+  <string name="common_no_space_name">"沒有空間名稱"</string>
   <string name="common_not_encrypted">"未加密"</string>
   <string name="common_offline">"離線"</string>
   <string name="common_open_source_licenses">"開放原始碼授權條款"</string>
@@ -302,7 +310,9 @@
   <string name="common_server_unreachable">"無法連線至伺服器"</string>
   <string name="common_server_url">"伺服器 URL"</string>
   <string name="common_settings">"設定"</string>
+  <string name="common_share_space">"分享空間"</string>
   <string name="common_shared_location">"位置分享"</string>
+  <string name="common_shared_space">"共享空間"</string>
   <string name="common_signing_out">"正在登出"</string>
   <string name="common_something_went_wrong">"有錯誤發生"</string>
   <string name="common_something_went_wrong_message">"我們了遇到了問題。請再試一次。"</string>
@@ -362,7 +372,7 @@
   <string name="dialog_confirm_link_title">"仔細檢查此連結"</string>
   <string name="dialog_default_video_quality_selector_subtitle">"選取您上傳的視訊預設品質。"</string>
   <string name="dialog_default_video_quality_selector_title">"視訊上傳品質"</string>
-  <string name="dialog_file_too_large_to_upload_subtitle">"允許的最大檔案大小為：%1$s"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"最大允許的檔案大小為：%1$s"</string>
   <string name="dialog_file_too_large_to_upload_title">"檔案太大，無法上傳"</string>
   <string name="dialog_room_reported">"聊天室已回報"</string>
   <string name="dialog_room_reported_and_left">"回報並離開聊天室"</string>
@@ -370,6 +380,7 @@
   <string name="dialog_title_error">"錯誤"</string>
   <string name="dialog_title_success">"成功"</string>
   <string name="dialog_title_warning">"警告"</string>
+  <string name="dialog_unsaved_changes_description">"您有尚未儲存的變更"</string>
   <string name="dialog_unsaved_changes_description_android">"變更尚未儲存，您確定要返回嗎？"</string>
   <string name="dialog_unsaved_changes_title">"是否儲存變更？"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"最大允許的檔案大小為：%1$s"</string>
@@ -446,7 +457,9 @@
   <string name="screen_share_this_location_action">"分享這個位置"</string>
   <string name="screen_space_list_description">"您建立或加入的空間"</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_parent_space">"%1$s 空間"</string>
   <string name="screen_space_list_title">"空間"</string>
+  <string name="screen_space_menu_action_members">"檢視成員"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"因為 %1$s 的驗證身份已重設，因此未傳送訊息。"</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"訊息未傳送，因為 %1$s 尚未驗證所有裝置。"</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"因為您尚未驗證一個或多個裝置，因此未傳送訊息"</string>
@@ -455,7 +468,7 @@
   <string name="test_language_identifier">"zh-tw"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"歷史訊息在此裝置上無法讀取"</string>
   <string name="timeline_decryption_failure_historical_event_unverified_device">"您必須驗證此裝置才能存取歷史訊息"</string>
-  <string name="timeline_decryption_failure_historical_event_user_not_joined">"您無權檢視此訊息"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"您無法存取此則訊息"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"無法解密訊息"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"此訊息被封鎖是因為您沒有驗證您的裝置，或是因為傳送者需要驗證您的身份而被封鎖。"</string>
 </resources>

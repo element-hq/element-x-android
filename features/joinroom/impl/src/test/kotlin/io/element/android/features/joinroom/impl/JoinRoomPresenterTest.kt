@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -1193,46 +1194,8 @@ class JoinRoomPresenterTest {
             skipItems(1)
             awaitItem().also { state ->
                 assertThat(state.contentState).isEqualTo(
-                    ContentState.Failure(error = AN_EXCEPTION)
+                    ContentState.UnknownRoom
                 )
-                state.eventSink(JoinRoomEvents.RetryFetchingContent)
-            }
-            skipItems(1)
-            awaitItem().also { state ->
-                assertThat(state.contentState).isEqualTo(ContentState.Loading)
-            }
-            awaitItem().also { state ->
-                assertThat(state.contentState).isEqualTo(
-                    ContentState.Failure(error = AN_EXCEPTION)
-                )
-            }
-        }
-    }
-
-    @Test
-    fun `present - when room is not known RoomPreview is loaded with error - dismiss`() = runTest {
-        val client = FakeMatrixClient(
-            getNotJoinedRoomResult = { _, _ ->
-                Result.failure(AN_EXCEPTION)
-            },
-            spaceService = FakeSpaceService(
-                spaceRoomListResult = { FakeSpaceRoomList() },
-            ),
-        )
-        val presenter = createJoinRoomPresenter(
-            matrixClient = client
-        )
-        presenter.test {
-            skipItems(1)
-            awaitItem().also { state ->
-                assertThat(state.contentState).isEqualTo(
-                    ContentState.Failure(error = AN_EXCEPTION)
-                )
-                state.eventSink(JoinRoomEvents.DismissErrorAndHideContent)
-            }
-            skipItems(1)
-            awaitItem().also { state ->
-                assertThat(state.contentState).isEqualTo(ContentState.Dismissing)
             }
         }
     }

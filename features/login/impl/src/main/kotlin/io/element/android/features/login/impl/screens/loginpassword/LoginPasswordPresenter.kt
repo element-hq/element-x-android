@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -41,7 +42,7 @@ class LoginPasswordPresenter(
         }
         val accountProvider by accountProviderDataSource.flow.collectAsState()
 
-        fun handleEvents(event: LoginPasswordEvents) {
+        fun handleEvent(event: LoginPasswordEvents) {
             when (event) {
                 is LoginPasswordEvents.SetLogin -> updateFormState(formState) {
                     copy(login = event.login)
@@ -60,7 +61,7 @@ class LoginPasswordPresenter(
             accountProvider = accountProvider,
             formState = formState.value,
             loginAction = loginAction.value,
-            eventSink = ::handleEvents
+            eventSink = ::handleEvent,
         )
     }
 

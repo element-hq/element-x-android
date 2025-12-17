@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_space_settings_leave_space">"Напускане на пространството"</string>
+  <string name="screen_space_settings_roles_and_permissions">"Роли и разрешения"</string>
+  <string name="screen_space_settings_security_and_privacy">"Защита и поверителност"</string>
+</resources>

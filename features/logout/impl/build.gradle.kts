@@ -2,9 +2,10 @@ import extension.setupDependencyInjection
 import extension.testCommonDependencies
 
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2022-2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -34,10 +35,12 @@ dependencies {
     implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.dateformatter.api)
+    implementation(projects.libraries.workmanager.api)
     api(projects.features.logout.api)
 
     testCommonDependencies(libs, true)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.sessionStorage.test)
+    testImplementation(projects.libraries.workmanager.test)
 }

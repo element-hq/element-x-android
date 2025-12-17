@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -16,8 +17,10 @@ import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.ui.safety.rememberHideInvitesAvatar
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentSetOf
-import kotlinx.collections.immutable.toPersistentSet
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.flow.map
 
 @Inject
@@ -28,12 +31,15 @@ class HomeSpacesPresenter(
     @Composable
     override fun present(): HomeSpacesState {
         val hideInvitesAvatar by client.rememberHideInvitesAvatar()
-        val spaceRooms by client.spaceService.spaceRoomsFlow.collectAsState(emptyList())
+        val spaceRooms by remember {
+            client.spaceService.spaceRoomsFlow.map { it.toImmutableList() }
+        }.collectAsState(persistentListOf())
+
         val seenSpaceInvites by remember {
-            seenInvitesStore.seenRoomIds().map { it.toPersistentSet() }
+            seenInvitesStore.seenRoomIds().map { it.toImmutableSet() }
         }.collectAsState(persistentSetOf())
 
-        fun handleEvents(event: HomeSpacesEvents) {
+        fun handleEvent(event: HomeSpacesEvents) {
             // when (event) { }
         }
 
@@ -42,7 +48,7 @@ class HomeSpacesPresenter(
             spaceRooms = spaceRooms,
             seenSpaceInvites = seenSpaceInvites,
             hideInvitesAvatar = hideInvitesAvatar,
-            eventSink = ::handleEvents,
+            eventSink = ::handleEvent,
         )
     }
 }

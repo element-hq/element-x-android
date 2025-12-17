@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -16,8 +17,8 @@ import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.loadAllIncrementally
 import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
 import io.element.android.libraries.matrix.ui.model.toSelectRoomInfo
-import kotlinx.collections.immutable.PersistentList
-import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
@@ -40,13 +41,13 @@ class RoomSelectSearchDataSource(
         source = RoomList.Source.All,
     )
 
-    val roomInfoList: Flow<PersistentList<SelectRoomInfo>> = roomList.filteredSummaries
+    val roomInfoList: Flow<ImmutableList<SelectRoomInfo>> = roomList.filteredSummaries
         .map { roomSummaries ->
             roomSummaries
                 .filter { it.info.currentUserMembership == CurrentUserMembership.JOINED }
                 .distinctBy { it.roomId } // This should be removed once we're sure no duplicate Rooms can be received
                 .map { roomSummary -> roomSummary.toSelectRoomInfo() }
-                .toPersistentList()
+                .toImmutableList()
         }
         .flowOn(coroutineDispatchers.computation)
 

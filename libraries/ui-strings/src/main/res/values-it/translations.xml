@@ -42,7 +42,7 @@
   <string name="a11y_remove_reaction_with">"Rimuovere la reazione con %1$s"</string>
   <string name="a11y_room_avatar">"Avatar della stanza"</string>
   <string name="a11y_send_files">"Invia file"</string>
-  <string name="a11y_session_verification_time_limited_action_required">"Azione a tempo limitato richiesta"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Azione richiesta a tempo limitato, hai un minuto per la verifica"</string>
   <string name="a11y_show_password">"Mostra password"</string>
   <string name="a11y_start_call">"Avvia una chiamata"</string>
   <string name="a11y_tombstoned_room">"Stanza obsoleta"</string>
@@ -80,6 +80,7 @@
   <string name="action_decline">"Rifiuta"</string>
   <string name="action_decline_and_block">"Rifiuta e blocca"</string>
   <string name="action_delete_poll">"Elimina sondaggio"</string>
+  <string name="action_deselect_all">"Deseleziona tutti"</string>
   <string name="action_disable">"Disabilita"</string>
   <string name="action_discard">"Annulla"</string>
   <string name="action_dismiss">"Chiudi"</string>
@@ -94,6 +95,8 @@
   <string name="action_forgot_password">"Password dimenticata?"</string>
   <string name="action_forward">"Inoltra"</string>
   <string name="action_go_back">"Indietro"</string>
+  <string name="action_go_to_roles_and_permissions">"Vai a ruoli &amp; autorizzazioni"</string>
+  <string name="action_go_to_settings">"Vai alle impostazioni"</string>
   <string name="action_ignore">"Ignora"</string>
   <string name="action_invite">"Invita"</string>
   <string name="action_invite_friends">"Invita persone"</string>
@@ -105,10 +108,12 @@
   <string name="action_leave">"Esci"</string>
   <string name="action_leave_conversation">"Abbandona la conversazione"</string>
   <string name="action_leave_room">"Esci dalla stanza"</string>
+  <string name="action_leave_space">"Esci dallo spazio"</string>
   <string name="action_load_more">"Carica altro"</string>
   <string name="action_manage_account">"Gestisci account"</string>
   <string name="action_manage_devices">"Gestisci dispositivi"</string>
   <string name="action_message">"Invia messaggio"</string>
+  <string name="action_minimize">"Riduci"</string>
   <string name="action_next">"Avanti"</string>
   <string name="action_no">"No"</string>
   <string name="action_not_now">"Non ora"</string>
@@ -137,6 +142,7 @@
   <string name="action_retry_decryption">"Riprova la decrittazione"</string>
   <string name="action_save">"Salva"</string>
   <string name="action_search">"Ricerca"</string>
+  <string name="action_select_all">"Seleziona tutti"</string>
   <string name="action_send">"Invia"</string>
   <string name="action_send_edited_message">"Invia messaggio modificato"</string>
   <string name="action_send_message">"Invia messaggio"</string>
@@ -165,6 +171,8 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"Aggiornamento disponibile"</string>
   <string name="common_about">"Informazioni"</string>
   <string name="common_acceptable_use_policy">"Regole sull\'utilizzo consentito"</string>
+  <string name="common_add_account">"Aggiungi un account"</string>
+  <string name="common_add_another_account">"Aggiungi un altro account"</string>
   <string name="common_adding_caption">"Aggiunta didascalia"</string>
   <string name="common_advanced_settings">"Impostazioni avanzate"</string>
   <string name="common_an_image">"un\'immagine"</string>
@@ -173,6 +181,7 @@
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Sei stato disconnesso dalla sessione"</string>
   <string name="common_appearance">"Aspetto"</string>
   <string name="common_audio">"Audio"</string>
+  <string name="common_beta">"Beta"</string>
   <string name="common_blocked_users">"Utenti bloccati"</string>
   <string name="common_bubbles">"Fumetti"</string>
   <string name="common_call_started">"Chiamata avviata"</string>
@@ -182,9 +191,11 @@
   <string name="common_creating_room">"Creazione stanza…"</string>
   <string name="common_current_user_canceled_knock">"Richiesta annullata"</string>
   <string name="common_current_user_left_room">"Hai lasciato la stanza"</string>
+  <string name="common_current_user_left_space">"Hai lasciato lo spazio"</string>
   <string name="common_current_user_rejected_invite">"Invito rifiutato"</string>
   <string name="common_dark">"Scuro"</string>
   <string name="common_decryption_error">"Errore di decrittazione"</string>
+  <string name="common_description">"Descrizione"</string>
   <string name="common_developer_options">"Opzioni sviluppatore"</string>
   <string name="common_device_id">"ID dispositivo"</string>
   <string name="common_direct_chat">"Conversazione diretta"</string>
@@ -219,6 +230,7 @@ Motivo:. %1$s"</string>
   <string name="common_install_apk_android">"Installa APK"</string>
   <string name="common_invite_unknown_profile">"Questo ID Matrix non può essere trovato, quindi l\'invito potrebbe non essere ricevuto."</string>
   <string name="common_leaving_room">"Lascio la stanza"</string>
+  <string name="common_leaving_space">"Uscendo dallo spazio"</string>
   <string name="common_light">"Chiaro"</string>
   <string name="common_line_copied_to_clipboard">"Riga copiata negli appunti"</string>
   <string name="common_link_copied_to_clipboard">"Collegamento copiato negli appunti"</string>
@@ -241,6 +253,7 @@ Motivo:. %1$s"</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Nessun risultato"</string>
   <string name="common_no_room_name">"Nessun nome della stanza"</string>
+  <string name="common_no_space_name">"Spazio senza nome"</string>
   <string name="common_not_encrypted">"Non cifrato"</string>
   <string name="common_offline">"Non in linea"</string>
   <string name="common_open_source_licenses">"Licenze open source"</string>
@@ -294,15 +307,19 @@ Motivo:. %1$s"</string>
   <string name="common_search_results">"Risultati di ricerca"</string>
   <string name="common_security">"Sicurezza"</string>
   <string name="common_seen_by">"Visto da"</string>
+  <string name="common_select_account">"Seleziona un account"</string>
   <string name="common_send_to">"Invia a"</string>
   <string name="common_sending">"Invio in corso…"</string>
   <string name="common_sending_failed">"Invio fallito"</string>
   <string name="common_sent">"Inviato"</string>
   <string name="common_sentence_delimiter">"."</string>
   <string name="common_server_not_supported">"Server non supportato"</string>
+  <string name="common_server_unreachable">"Server non raggiungibile"</string>
   <string name="common_server_url">"URL del server"</string>
   <string name="common_settings">"Impostazioni"</string>
+  <string name="common_share_space">"Condividi lo spazio"</string>
   <string name="common_shared_location">"Posizione condivisa"</string>
+  <string name="common_shared_space">"Spazio condiviso"</string>
   <string name="common_signing_out">"Disconnessione"</string>
   <string name="common_something_went_wrong">"Qualcosa è andato storto"</string>
   <string name="common_something_went_wrong_message">"Abbiamo riscontrato un problema. Per favore riprova."</string>
@@ -371,11 +388,14 @@ Sei sicuro di voler continuare?"</string>
   <string name="dialog_title_error">"Errore"</string>
   <string name="dialog_title_success">"Operazione riuscita"</string>
   <string name="dialog_title_warning">"Attenzione"</string>
+  <string name="dialog_unsaved_changes_description">"Hai delle modifiche non salvate."</string>
   <string name="dialog_unsaved_changes_description_android">"Le modifiche non sono state salvate. Vuoi davvero tornare indietro?"</string>
   <string name="dialog_unsaved_changes_title">"Salvare le modifiche?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"La dimensione massima consentita per il file è: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Seleziona la qualità del video che vuoi caricare."</string>
   <string name="dialog_video_quality_selector_title">"Seleziona la qualità di caricamento del video"</string>
+  <string name="emoji_picker_search_placeholder">"Cerca emoji"</string>
+  <string name="error_account_already_logged_in">"Hai già effettuato l\'accesso su questo dispositivo come %1$s ."</string>
   <string name="error_account_creation_not_possible">"Il tuo homeserver deve essere aggiornato per supportare il Matrix Authentication Service e la creazione di account."</string>
   <string name="error_failed_creating_the_permalink">"Impossibile creare il collegamento permanente"</string>
   <string name="error_failed_loading_map">"%1$s non è riuscito a caricare la mappa. Riprova più tardi."</string>
@@ -446,7 +466,9 @@ Sei sicuro di voler continuare?"</string>
   <string name="screen_share_this_location_action">"Condividi questa posizione"</string>
   <string name="screen_space_list_description">"Spazi che hai creato o a cui hai aderito."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_parent_space">"%1$s spazio"</string>
   <string name="screen_space_list_title">"Spazi"</string>
+  <string name="screen_space_menu_action_members">"Visualizza membri"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Messaggio non inviato perché l\'identità verificata di %1$s è stata reimpostata."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Messaggio non inviato perché %1$s non ha verificato tutti i dispositivi."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Messaggio non inviato perché non hai verificato uno o più dispositivi."</string>

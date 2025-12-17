@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -27,6 +28,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
+import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -35,9 +37,11 @@ import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
+import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.any
+import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
@@ -88,15 +92,7 @@ class UserProfilePresenterTest {
     @Test
     fun `present - canCall is false when canUserJoinCall returns false`() {
         testCanCall(
-            canUserJoinCallResult = Result.success(false),
-            expectedResult = false,
-        )
-    }
-
-    @Test
-    fun `present - canCall is false when canUserJoinCall fails`() {
-        testCanCall(
-            canUserJoinCallResult = Result.failure(AN_EXCEPTION),
+            canUserJoinCall = false,
             expectedResult = false,
         )
     }
@@ -127,7 +123,7 @@ class UserProfilePresenterTest {
 
     private fun testCanCall(
         isElementCallAvailable: Boolean = true,
-        canUserJoinCallResult: Result<Boolean> = Result.success(true),
+        canUserJoinCall: Boolean = true,
         dmRoom: RoomId? = A_ROOM_ID,
         canFindRoom: Boolean = true,
         expectedResult: Boolean,
@@ -135,7 +131,14 @@ class UserProfilePresenterTest {
         checkThatRoomIsDestroyed: Boolean = false,
     ) = runTest {
         val room = FakeBaseRoom(
-            canUserJoinCallResult = { canUserJoinCallResult },
+            roomPermissions = FakeRoomPermissions(
+                canSendState = { type ->
+                    when (type) {
+                        StateEventType.CALL_MEMBER -> canUserJoinCall
+                        else -> lambdaError()
+                    }
+                }
+            ),
         )
         val client = createFakeMatrixClient().apply {
             if (canFindRoom) {
@@ -385,14 +388,12 @@ class UserProfilePresenterTest {
     }
 
     private fun createFakeMatrixClient(
-        isUserVerified: Boolean = true,
         userIdentityState: IdentityState? = null,
         ignoreUserResult: (UserId) -> Result<Unit> = { Result.success(Unit) },
         unIgnoreUserResult: (UserId) -> Result<Unit> = { Result.success(Unit) },
         ignoredUsersFlow: StateFlow<ImmutableList<UserId>> = MutableStateFlow(persistentListOf())
     ) = FakeMatrixClient(
         encryptionService = FakeEncryptionService(
-            isUserVerifiedResult = { Result.success(isUserVerified) },
             getUserIdentityResult = { Result.success(userIdentityState) }
         ),
         ignoreUserResult = ignoreUserResult,

@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -39,7 +40,7 @@ class AcceptDeclineInvitePresenter(
         val declinedAction: MutableState<AsyncAction<RoomId>> =
             remember { mutableStateOf(AsyncAction.Uninitialized) }
 
-        fun handleEvents(event: AcceptDeclineInviteEvents) {
+        fun handleEvent(event: AcceptDeclineInviteEvents) {
             when (event) {
                 is AcceptDeclineInviteEvents.AcceptInvite -> {
                     localCoroutineScope.acceptInvite(event.invite.roomId, acceptedAction)
@@ -70,7 +71,7 @@ class AcceptDeclineInvitePresenter(
         return AcceptDeclineInviteState(
             acceptAction = acceptedAction.value,
             declineAction = declinedAction.value,
-            eventSink = ::handleEvents
+            eventSink = ::handleEvent,
         )
     }
 

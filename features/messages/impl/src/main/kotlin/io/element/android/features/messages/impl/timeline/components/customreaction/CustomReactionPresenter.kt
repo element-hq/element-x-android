@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -17,10 +18,10 @@ import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.matrix.api.recentemojis.GetRecentEmojis
+import io.element.android.libraries.recentemojis.api.EmojibaseProvider
+import io.element.android.libraries.recentemojis.api.GetRecentEmojis
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.launch
 
@@ -41,7 +42,7 @@ class CustomReactionPresenter(
         fun handleShowCustomReactionSheet(event: TimelineItem.Event) {
             target.value = CustomReactionState.Target.Loading(event)
             localCoroutineScope.launch {
-                recentEmojis = getRecentEmojis().getOrNull().orEmpty().toImmutableList()
+                recentEmojis = getRecentEmojis().getOrNull() ?: persistentListOf()
                 target.value = CustomReactionState.Target.Success(
                     event = event,
                     emojibaseStore = emojibaseProvider.emojibaseStore
@@ -53,7 +54,7 @@ class CustomReactionPresenter(
             target.value = CustomReactionState.Target.None
         }
 
-        fun handleEvents(event: CustomReactionEvents) {
+        fun handleEvent(event: CustomReactionEvents) {
             when (event) {
                 is CustomReactionEvents.ShowCustomReactionSheet -> handleShowCustomReactionSheet(event.event)
                 is CustomReactionEvents.DismissCustomReactionSheet -> handleDismissCustomReactionSheet()
@@ -71,7 +72,7 @@ class CustomReactionPresenter(
             target = target.value,
             selectedEmoji = selectedEmoji,
             recentEmojis = recentEmojis,
-            eventSink = { handleEvents(it) }
+            eventSink = ::handleEvent,
         )
     }
 }

@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -20,9 +21,9 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
+import io.element.android.libraries.matrix.ui.media.test.FakeImageLoaderHolder
 import io.element.android.libraries.push.impl.notifications.factories.FakeIntentProvider
 import io.element.android.libraries.push.impl.notifications.shortcut.createShortcutId
-import io.element.android.libraries.push.test.notifications.FakeImageLoaderHolder
 import io.element.android.libraries.push.test.notifications.push.FakeNotificationBitmapLoader
 import io.element.android.libraries.sessionstorage.test.observer.FakeSessionObserver
 import kotlinx.coroutines.ExperimentalCoroutinesApi

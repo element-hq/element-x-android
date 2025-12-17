@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -39,7 +40,6 @@ import io.element.android.libraries.designsystem.components.async.rememberAsyncI
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
-import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.TextFieldDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -92,12 +92,13 @@ private fun RoomMemberAsyncActions(
                 TextFieldDialog(
                     title = stringResource(R.string.screen_bottom_sheet_manage_room_member_kick_member_confirmation_title),
                     submitText = stringResource(R.string.screen_bottom_sheet_manage_room_member_kick_member_confirmation_action),
+                    destructiveSubmit = true,
+                    minLines = 2,
                     onSubmit = { reason ->
                         state.eventSink(InternalRoomMemberModerationEvents.DoKickUser(reason = reason))
                     },
                     onDismissRequest = { state.eventSink(InternalRoomMemberModerationEvents.Reset) },
                     placeholder = stringResource(id = CommonStrings.common_reason),
-                    label = stringResource(id = CommonStrings.common_reason),
                     content = stringResource(R.string.screen_bottom_sheet_manage_room_member_kick_member_confirmation_description),
                     value = "",
                 )
@@ -131,12 +132,13 @@ private fun RoomMemberAsyncActions(
                 TextFieldDialog(
                     title = stringResource(R.string.screen_bottom_sheet_manage_room_member_ban_member_confirmation_title),
                     submitText = stringResource(R.string.screen_bottom_sheet_manage_room_member_ban_member_confirmation_action),
+                    destructiveSubmit = true,
+                    minLines = 2,
                     onSubmit = { reason ->
                         state.eventSink(InternalRoomMemberModerationEvents.DoBanUser(reason = reason))
                     },
                     onDismissRequest = { state.eventSink(InternalRoomMemberModerationEvents.Reset) },
                     placeholder = stringResource(id = CommonStrings.common_reason),
-                    label = stringResource(id = CommonStrings.common_reason),
                     content = stringResource(R.string.screen_bottom_sheet_manage_room_member_ban_member_confirmation_description),
                     value = "",
                 )
@@ -166,18 +168,22 @@ private fun RoomMemberAsyncActions(
         }
         when (val action = state.unbanUserAsyncAction) {
             is AsyncAction.Confirming -> {
-                ConfirmationDialog(
+                TextFieldDialog(
                     title = stringResource(R.string.screen_bottom_sheet_manage_room_member_unban_member_confirmation_title),
-                    content = stringResource(R.string.screen_bottom_sheet_manage_room_member_unban_member_confirmation_description),
                     submitText = stringResource(R.string.screen_bottom_sheet_manage_room_member_unban_member_confirmation_action),
-                    onSubmitClick = {
+                    destructiveSubmit = true,
+                    minLines = 2,
+                    onSubmit = { reason ->
                         val userDisplayName = selectedUser?.getBestName().orEmpty()
                         asyncIndicatorState.enqueue {
                             AsyncIndicator.Loading(text = stringResource(R.string.screen_bottom_sheet_manage_room_member_unbanning_user, userDisplayName))
                         }
-                        state.eventSink(InternalRoomMemberModerationEvents.DoUnbanUser)
+                        state.eventSink(InternalRoomMemberModerationEvents.DoUnbanUser(reason = reason))
                     },
-                    onDismiss = { state.eventSink(InternalRoomMemberModerationEvents.Reset) },
+                    onDismissRequest = { state.eventSink(InternalRoomMemberModerationEvents.Reset) },
+                    placeholder = stringResource(id = CommonStrings.common_reason),
+                    content = stringResource(R.string.screen_bottom_sheet_manage_room_member_unban_member_confirmation_description),
+                    value = "",
                 )
             }
             is AsyncAction.Failure -> {
@@ -226,32 +232,34 @@ private fun RoomMemberActionsBottomSheet(
                 avatarData = user.getAvatarData(size = AvatarSize.RoomListManageUser),
                 avatarType = AvatarType.User,
                 modifier = Modifier
-                        .padding(bottom = 28.dp)
-                        .align(Alignment.CenterHorizontally)
+                    .padding(bottom = 24.dp)
+                    .align(Alignment.CenterHorizontally)
             )
-            user.displayName?.let {
-                Text(
-                    text = it,
-                    style = ElementTheme.typography.fontHeadingLgBold,
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
-                    textAlign = TextAlign.Center,
-                    modifier = Modifier
-                            .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
-                            .fillMaxWidth()
-                )
-            }
+            val bestName = user.getBestName()
             Text(
-                text = user.userId.value,
-                style = ElementTheme.typography.fontBodyLgRegular,
-                color = ElementTheme.colors.textSecondary,
+                text = bestName,
+                style = ElementTheme.typography.fontHeadingLgBold,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 textAlign = TextAlign.Center,
                 modifier = Modifier
+                    .padding(start = 16.dp, end = 16.dp, bottom = 8.dp)
+                    .fillMaxWidth()
+            )
+            // Show user ID only if it's different from the display name
+            if (bestName != user.userId.value) {
+                Text(
+                    text = user.userId.value,
+                    style = ElementTheme.typography.fontBodyMdRegular,
+                    color = ElementTheme.colors.textSecondary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
                         .padding(horizontal = 16.dp)
                         .fillMaxWidth()
-            )
+                )
+            }
             Spacer(modifier = Modifier.height(32.dp))
 
             for (actionState in actions) {
@@ -324,8 +332,8 @@ internal fun RoomMemberModerationViewPreview(@PreviewParameter(InternalRoomMembe
     ElementPreview {
         Box(
             modifier = Modifier
-                    .fillMaxWidth()
-                    .heightIn(min = 64.dp)
+                .fillMaxWidth()
+                .heightIn(min = 64.dp)
         ) {
             RoomMemberModerationView(
                 state = state,

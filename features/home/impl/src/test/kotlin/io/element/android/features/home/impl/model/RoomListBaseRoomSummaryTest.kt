@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -13,7 +14,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
-import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toImmutableList
 import org.junit.Test
 
 class RoomListBaseRoomSummaryTest {
@@ -95,7 +96,7 @@ internal fun createRoomListRoomSummary(
     numberOfUnreadNotifications = numberOfUnreadNotifications,
     isMarkedUnread = isMarkedUnread,
     timestamp = timestamp,
-    lastMessage = "",
+    latestEvent = LatestEvent.Synced(""),
     avatarData = AvatarData(id = A_ROOM_ID.value, name = A_ROOM_NAME, size = AvatarSize.RoomListItem),
     displayType = displayType,
     userDefinedNotificationMode = userDefinedNotificationMode,
@@ -105,7 +106,7 @@ internal fun createRoomListRoomSummary(
     canonicalAlias = null,
     inviteSender = null,
     isDm = false,
-    heroes = heroes.toPersistentList(),
+    heroes = heroes.toImmutableList(),
     isTombstoned = isTombstoned,
     isSpace = isSpace
 )

@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -22,6 +23,7 @@ import io.element.android.libraries.pushproviders.api.PushData
 import io.element.android.libraries.pushproviders.api.PushHandler
 import io.element.android.libraries.pushproviders.unifiedpush.registration.EndpointRegistrationHandler
 import io.element.android.libraries.pushproviders.unifiedpush.registration.RegistrationResult
+import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -50,10 +52,17 @@ class VectorUnifiedPushMessagingReceiverTest {
     }
 
     @Test
-    fun `onUnregistered does nothing`() = runTest {
+    fun `onUnregistered invokes the removedGatewayHandler`() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().context
-        val vectorUnifiedPushMessagingReceiver = createVectorUnifiedPushMessagingReceiver()
+        val handleResult = lambdaRecorder<String, Result<Unit>> {
+            Result.success(Unit)
+        }
+        val vectorUnifiedPushMessagingReceiver = createVectorUnifiedPushMessagingReceiver(
+            removedGatewayHandler = UnifiedPushRemovedGatewayHandler { handleResult(it) },
+        )
         vectorUnifiedPushMessagingReceiver.onUnregistered(context, A_SECRET)
+        advanceUntilIdle()
+        handleResult.assertions().isCalledOnce().with(value(A_SECRET))
     }
 
     @Test
@@ -191,21 +200,24 @@ class VectorUnifiedPushMessagingReceiverTest {
     }
 
     private fun TestScope.createVectorUnifiedPushMessagingReceiver(
+        unifiedPushParser: UnifiedPushParser = createUnifiedPushParser(),
         pushHandler: PushHandler = FakePushHandler(),
         unifiedPushStore: UnifiedPushStore = FakeUnifiedPushStore(),
         unifiedPushGatewayResolver: UnifiedPushGatewayResolver = FakeUnifiedPushGatewayResolver(),
         unifiedPushGatewayUrlResolver: UnifiedPushGatewayUrlResolver = FakeUnifiedPushGatewayUrlResolver(),
         unifiedPushNewGatewayHandler: UnifiedPushNewGatewayHandler = FakeUnifiedPushNewGatewayHandler(),
         endpointRegistrationHandler: EndpointRegistrationHandler = EndpointRegistrationHandler(),
+        removedGatewayHandler: UnifiedPushRemovedGatewayHandler = UnifiedPushRemovedGatewayHandler { lambdaError() },
     ): VectorUnifiedPushMessagingReceiver {
         return VectorUnifiedPushMessagingReceiver().apply {
-            this.pushParser = UnifiedPushParser()
+            this.pushParser = unifiedPushParser
             this.pushHandler = pushHandler
             this.guardServiceStarter = NoopGuardServiceStarter()
             this.unifiedPushStore = unifiedPushStore
             this.unifiedPushGatewayResolver = unifiedPushGatewayResolver
             this.unifiedPushGatewayUrlResolver = unifiedPushGatewayUrlResolver
             this.newGatewayHandler = unifiedPushNewGatewayHandler
+            this.removedGatewayHandler = removedGatewayHandler
             this.endpointRegistrationHandler = endpointRegistrationHandler
             this.coroutineScope = this@createVectorUnifiedPushMessagingReceiver
         }
@@ -223,7 +235,9 @@ private fun aPushMessage(
 private fun aPushEndpoint(
     url: String = "anEndpoint",
     pubKeySet: PublicKeySet? = null,
+    temporary: Boolean = false,
 ) = PushEndpoint(
     url = url,
     pubKeySet = pubKeySet,
+    temporary = temporary,
 )

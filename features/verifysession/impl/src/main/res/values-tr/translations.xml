@@ -18,6 +18,7 @@
   <string name="screen_session_verification_compare_numbers_title">"Sayıları karşılaştır"</string>
   <string name="screen_session_verification_complete_subtitle">"Yeni oturumunuz artık doğrulandı. Şifrelenmiş mesajlarınıza erişebilir ve diğer kullanıcılar oturumu güvenilir olarak görecektir."</string>
   <string name="screen_session_verification_complete_user_subtitle">"Artık mesaj gönderirken veya alırken bu kullanıcının kimliğine güvenebilirsiniz."</string>
+  <string name="screen_session_verification_device_verified">"Cihaz doğrulandı"</string>
   <string name="screen_session_verification_enter_recovery_key">"Kurtarma anahtarını girin"</string>
   <string name="screen_session_verification_failed_subtitle">"İstek zaman aşımına uğradı, istek reddedildi veya bir doğrulama uyuşmazlığı vardı."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Şifrelenmiş mesaj geçmişinize erişmek için siz olduğunuzu kanıtlayın."</string>
@@ -32,7 +33,7 @@
   <string name="screen_session_verification_request_failure_title">"Doğrulama başarısız"</string>
   <string name="screen_session_verification_request_footer">"Yalnızca bu doğrulamayı siz başlattıysanız devam edin."</string>
   <string name="screen_session_verification_request_subtitle">"Mesaj geçmişinizi güvende tutmak için diğer cihazı doğrulayın."</string>
-  <string name="screen_session_verification_request_success_subtitle">"Artık diğer cihazınızda güvenli bir şekilde mesaj okuyabilir veya gönderebilirsiniz."</string>
+  <string name="screen_session_verification_request_success_subtitle">"Yeni oturumunuz artık doğrulandı. Şifrelenmiş mesajlarınıza erişebilir ve diğer kullanıcılar oturumu güvenilir olarak görecektir."</string>
   <string name="screen_session_verification_request_success_title">"Cihaz doğrulandı"</string>
   <string name="screen_session_verification_request_title">"Doğrulama talep edildi"</string>
   <string name="screen_session_verification_they_dont_match">"Eşleşmiyorlar"</string>
@@ -44,7 +45,7 @@
   <string name="screen_session_verification_user_responder_subtitle">"Ekstra güvenlik için, başka bir kullanıcı kimliğinizi doğrulamak istiyor. Karşılaştırmanız için size bir dizi emoji gösterilecektir."</string>
   <string name="screen_session_verification_waiting_another_device_subtitle">"Diğer cihazda bir açılır pencere görmelisiniz. Doğrulamayı şimdi oradan başlatın."</string>
   <string name="screen_session_verification_waiting_another_device_title">"Diğer cihazda doğrulamayı başlat"</string>
-  <string name="screen_session_verification_waiting_other_device_title">"Diğer cihaz bekleniyor"</string>
+  <string name="screen_session_verification_waiting_other_device_title">"Diğer cihazda doğrulamayı başlat"</string>
   <string name="screen_session_verification_waiting_other_user_title">"Diğer kullanıcı bekleniyor"</string>
   <string name="screen_session_verification_waiting_subtitle">"Kabul edildikten sonra doğrulama işlemine devam edebileceksiniz."</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Devam etmek için diğer oturumunuzda doğrulama işlemini başlatma isteğini kabul edin."</string>

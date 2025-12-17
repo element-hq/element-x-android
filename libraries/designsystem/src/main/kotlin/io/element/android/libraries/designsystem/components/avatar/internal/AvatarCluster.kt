@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -27,7 +28,7 @@ import io.element.android.libraries.designsystem.components.avatar.avatarShape
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toImmutableList
 import java.util.Collections
 import kotlin.math.PI
 import kotlin.math.cos
@@ -134,7 +135,7 @@ internal fun AvatarClusterPreview() = ElementThemedPreview {
             ) {
                 for (ngOfAvatars in 1..5) {
                     AvatarCluster(
-                        avatars = List(ngOfAvatars) { anAvatarData(it) }.toPersistentList(),
+                        avatars = List(ngOfAvatars) { anAvatarData(it) }.toImmutableList(),
                         avatarType = avatarType,
                     )
                 }

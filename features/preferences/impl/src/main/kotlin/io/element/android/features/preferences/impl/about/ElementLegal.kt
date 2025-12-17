@@ -1,7 +1,8 @@
 /*
- * Copyright 2021-2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2021-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -10,6 +11,8 @@ package io.element.android.features.preferences.impl.about
 import androidx.annotation.StringRes
 import io.element.android.features.preferences.impl.BuildConfig
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 
 private const val COPYRIGHT_URL = BuildConfig.URL_COPYRIGHT
 private const val USE_POLICY_URL = BuildConfig.URL_ACCEPTABLE_USE
@@ -24,8 +27,8 @@ sealed class ElementLegal(
     data object PrivacyPolicy : ElementLegal(CommonStrings.common_privacy_policy, PRIVACY_URL)
 }
 
-fun getAllLegals(): List<ElementLegal> {
-    return listOf(
+fun getAllLegals(): ImmutableList<ElementLegal> {
+    return persistentListOf(
         ElementLegal.Copyright,
         ElementLegal.AcceptableUsePolicy,
         ElementLegal.PrivacyPolicy,

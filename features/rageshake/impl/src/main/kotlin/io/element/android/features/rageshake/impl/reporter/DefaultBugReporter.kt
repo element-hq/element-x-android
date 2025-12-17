@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -13,7 +14,6 @@ import androidx.core.net.toFile
 import androidx.core.net.toUri
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.Provider
 import dev.zacsweers.metro.SingleIn
 import io.element.android.appconfig.RageshakeConfig
@@ -28,22 +28,29 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.mimetype.MimeTypes
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.SdkMetadata
-import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.tracing.TracingService
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionStore
+import io.element.android.libraries.sessionstorage.api.sessionIdFlow
 import kotlinx.coroutines.CancellationException
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.Response
 import org.json.JSONException
 import org.json.JSONObject
@@ -63,9 +70,10 @@ import java.util.Locale
  */
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultBugReporter(
     @ApplicationContext private val context: Context,
+    @AppCoroutineScope
+    private val appCoroutineScope: CoroutineScope,
     private val screenshotHolder: ScreenshotHolder,
     private val crashDataStore: CrashDataStore,
     private val coroutineDispatchers: CoroutineDispatchers,
@@ -77,7 +85,6 @@ class DefaultBugReporter(
     private val sdkMetadata: SdkMetadata,
     private val matrixClientProvider: MatrixClientProvider,
     private val tracingService: TracingService,
-    matrixAuthenticationService: MatrixAuthenticationService,
 ) : BugReporter {
     companion object {
         // filenames
@@ -88,8 +95,6 @@ class DefaultBugReporter(
     private val logcatCommandDebug = arrayOf("logcat", "-d", "-v", "threadtime", "*:*")
     private var currentTracingLogLevel: String? = null
 
-    private val logCatErrFile: File
-        get() = File(logDirectory(), LOG_CAT_FILENAME)
     private val baseLogDirectory = File(context.cacheDir, LOG_DIRECTORY_NAME)
     private var currentLogDirectory: File = baseLogDirectory
 
@@ -97,13 +102,18 @@ class DefaultBugReporter(
         if (buildMeta.isEnterpriseBuild) {
             val logSubfolder = runBlocking {
                 sessionStore.getLatestSession()
-            }?.userId?.substringAfter(":")
+            }?.userId?.let(::UserId)?.domainName
             setCurrentLogDirectory(logSubfolder)
-            matrixAuthenticationService.listenToNewMatrixClients {
-                // When a new Matrix client is created, we update the tracing configuration to write
-                // the files in a dedicated subfolders.
-                setLogDirectorySubfolder(it.userIdServerName())
-            }
+            sessionStore.sessionIdFlow()
+                .map {
+                    it?.let(::UserId)?.domainName
+                }
+                .distinctUntilChanged()
+                .onEach { logSubfolder ->
+                    setCurrentLogDirectory(logSubfolder)
+                    tracingService.updateWriteToFilesConfiguration(createWriteToFilesConfiguration())
+                }
+                .launchIn(appCoroutineScope)
         }
     }
 
@@ -113,6 +123,7 @@ class DefaultBugReporter(
         withScreenshot: Boolean,
         problemDescription: String,
         canContact: Boolean,
+        sendPushRules: Boolean,
         listener: BugReporterListener,
     ) {
         val url = bugReporterUrlProvider.provide().first()
@@ -147,12 +158,17 @@ class DefaultBugReporter(
                 }
                 if (withCrashLogs || withDevicesLogs) {
                     saveLogCat()
-                    val gzippedLogcat = compressFile(logCatErrFile)
-                    if (gzippedLogcat != null) {
-                        gzippedFiles.add(0, gzippedLogcat)
-                    }
+                        ?.let { logCatFile ->
+                            compressFile(logCatFile).also {
+                                logCatFile.safeDelete()
+                            }
+                        }
+                        ?.let { gzippedLogcat ->
+                            gzippedFiles.add(0, gzippedLogcat)
+                        }
                 }
                 val sessionData = sessionStore.getLatestSession()
+                val numberOfAccounts = sessionStore.numberOfSessions()
                 val deviceId = sessionData?.deviceId ?: "undefined"
                 val userId = sessionData?.userId?.let { UserId(it) }
                 // build the multi part request
@@ -161,6 +177,7 @@ class DefaultBugReporter(
                     .addFormDataPart("app", RageshakeConfig.BUG_REPORT_APP_NAME)
                     .addFormDataPart("user_agent", userAgentProvider.provide())
                     .addFormDataPart("user_id", userId?.toString() ?: "undefined")
+                    .addFormDataPart("number_of_accounts", numberOfAccounts.toString())
                     .addFormDataPart("can_contact", canContact.toString())
                     .addFormDataPart("device_id", deviceId)
                     .addFormDataPart("device", Build.MODEL.trim())
@@ -180,6 +197,16 @@ class DefaultBugReporter(
                         val edKey = client.encryptionService.deviceEd25519()
                         if (curveKey != null && edKey != null) {
                             builder.addFormDataPart("device_keys", "curve25519:$curveKey, ed25519:$edKey")
+                        }
+
+                        if (sendPushRules) {
+                            client.notificationSettingsService.getRawPushRules().getOrNull()?.let { pushRules ->
+                                builder.addFormDataPart(
+                                    name = "file",
+                                    filename = "push_rules.json",
+                                    body = pushRules.toByteArray().toRequestBody(MimeTypes.Json.toMediaTypeOrNull())
+                                )
+                            }
                         }
                     }
                 }
@@ -321,13 +348,6 @@ class DefaultBugReporter(
         }
     }
 
-    override fun setLogDirectorySubfolder(subfolderName: String?) {
-        if (buildMeta.isEnterpriseBuild) {
-            setCurrentLogDirectory(subfolderName)
-            tracingService.updateWriteToFilesConfiguration(createWriteToFilesConfiguration())
-        }
-    }
-
     private fun setCurrentLogDirectory(subfolderName: String?) {
         currentLogDirectory = if (subfolderName == null) {
             baseLogDirectory
@@ -369,7 +389,8 @@ class DefaultBugReporter(
             onException = { Timber.e(it, "## getLogFiles() failed") }
         ) {
             val logDirectory = logDirectory()
-            logDirectory.listFiles()?.toList()
+            logDirectory.listFiles()
+                ?.filter { it.isFile && !it.name.endsWith(LOG_CAT_FILENAME) }
         }.orEmpty()
     }
 
@@ -382,19 +403,19 @@ class DefaultBugReporter(
      *
      * @return the file if the operation succeeds
      */
-    override fun saveLogCat() {
-        val file = logCatErrFile
+    override fun saveLogCat(): File? {
+        val file = File(baseLogDirectory, LOG_CAT_FILENAME)
         if (file.exists()) {
             file.safeDelete()
         }
-        try {
+        return try {
             file.writer().use {
-                getLogCatError(it)
+                getLogCatContent(it)
             }
-        } catch (error: OutOfMemoryError) {
-            Timber.e(error, "## saveLogCat() : fail to write logcat OOM")
+            file
         } catch (e: Exception) {
             Timber.e(e, "## saveLogCat() : fail to write logcat")
+            null
         }
     }
 
@@ -403,15 +424,10 @@ class DefaultBugReporter(
      *
      * @param streamWriter the stream writer
      */
-    private fun getLogCatError(streamWriter: OutputStreamWriter) {
-        val logcatProcess: Process
-
-        try {
-            logcatProcess = Runtime.getRuntime().exec(logcatCommandDebug)
-        } catch (e1: IOException) {
-            return
-        }
-
+    private fun getLogCatContent(streamWriter: OutputStreamWriter) {
+        val logcatProcess = tryOrNull {
+            Runtime.getRuntime().exec(logcatCommandDebug)
+        } ?: return
         try {
             val separator = System.lineSeparator()
             logcatProcess.inputStream
@@ -422,7 +438,7 @@ class DefaultBugReporter(
                     streamWriter.append(separator)
                 }
         } catch (e: IOException) {
-            Timber.e(e, "getLog fails")
+            Timber.e(e, "getLogCatContent fails")
         }
     }
 }

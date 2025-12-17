@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -19,7 +20,8 @@ fun aRustSpaceRoom(
     roomId: RoomId = A_ROOM_ID,
     isDirect: Boolean = false,
     canonicalAlias: String? = null,
-    name: String? = null,
+    rawName: String? = null,
+    displayName: String = "",
     topic: String? = null,
     avatarUrl: String? = null,
     roomType: RoomType = RoomType.Space,
@@ -34,7 +36,8 @@ fun aRustSpaceRoom(
     roomId = roomId.value,
     isDirect = isDirect,
     canonicalAlias = canonicalAlias,
-    name = name,
+    rawName = rawName,
+    displayName = displayName,
     topic = topic,
     avatarUrl = avatarUrl,
     roomType = roomType,

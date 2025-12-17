@@ -1,7 +1,8 @@
 /*
- * Copyright 2022-2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2022-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -29,14 +30,16 @@ data class BugReportFormState(
     val description: String,
     val sendLogs: Boolean,
     val canContact: Boolean,
-    val sendScreenshot: Boolean
+    val sendScreenshot: Boolean,
+    val sendPushRules: Boolean,
 ) : Parcelable {
     companion object {
         val Default = BugReportFormState(
             description = "",
             sendLogs = true,
             canContact = false,
-            sendScreenshot = false
+            sendScreenshot = false,
+            sendPushRules = false,
         )
     }
 }

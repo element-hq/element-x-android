@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -80,7 +81,7 @@ private fun SpaceAnnouncementHeader(
         showBetaLabel = true,
         subTitle = stringResource(id = R.string.screen_space_announcement_subtitle),
         iconStyle = BigIcon.Style.Default(
-            vectorIcon = CompoundIcons.WorkspaceSolid(),
+            vectorIcon = CompoundIcons.SpaceSolid(),
             usePrimaryTint = true,
         ),
     )

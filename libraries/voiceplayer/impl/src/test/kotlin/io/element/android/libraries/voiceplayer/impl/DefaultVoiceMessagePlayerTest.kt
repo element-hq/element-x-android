@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -114,7 +115,8 @@ class DefaultVoiceMessagePlayerTest {
             assertThat(player1.prepare().isSuccess).isTrue()
             matchReadyState(1_000L)
             player1.play()
-            awaitItem().let { // it plays until the end.
+            awaitItem().let {
+                // it plays until the end.
                 assertThat(it.isReady).isFalse()
                 assertThat(it.isPlaying).isFalse()
                 assertThat(it.isEnded).isTrue()
@@ -127,14 +129,16 @@ class DefaultVoiceMessagePlayerTest {
         player2.state.test {
             matchInitialState()
             assertThat(player2.prepare().isSuccess).isTrue()
-            awaitItem().let { // Additional spurious state due to MediaPlayer owner change.
+            awaitItem().let {
+                // Additional spurious state due to MediaPlayer owner change.
                 assertThat(it.isReady).isFalse()
                 assertThat(it.isPlaying).isFalse()
                 assertThat(it.isEnded).isTrue()
                 assertThat(it.currentPosition).isEqualTo(1000)
                 assertThat(it.duration).isEqualTo(1000)
             }
-            awaitItem().let { // Additional spurious state due to MediaPlayer owner change.
+            awaitItem().let {
+                // Additional spurious state due to MediaPlayer owner change.
                 assertThat(it.isReady).isFalse()
                 assertThat(it.isPlaying).isFalse()
                 assertThat(it.isEnded).isFalse()
@@ -143,7 +147,8 @@ class DefaultVoiceMessagePlayerTest {
             }
             matchReadyState(1_000L)
             player2.play()
-            awaitItem().let { // it plays until the end.
+            awaitItem().let {
+                // it plays until the end.
                 assertThat(it.isReady).isFalse()
                 assertThat(it.isPlaying).isFalse()
                 assertThat(it.isEnded).isTrue()
@@ -154,7 +159,8 @@ class DefaultVoiceMessagePlayerTest {
 
         // Play player1 again.
         player1.state.test {
-            awaitItem().let { // Last previous state/
+            awaitItem().let {
+                // Last previous state/
                 assertThat(it.isReady).isFalse()
                 assertThat(it.isPlaying).isFalse()
                 assertThat(it.isEnded).isTrue()
@@ -162,7 +168,8 @@ class DefaultVoiceMessagePlayerTest {
                 assertThat(it.duration).isEqualTo(1000)
             }
             assertThat(player1.prepare().isSuccess).isTrue()
-            awaitItem().let { // Additional spurious state due to MediaPlayer owner change.
+            awaitItem().let {
+                // Additional spurious state due to MediaPlayer owner change.
                 assertThat(it.isReady).isFalse()
                 assertThat(it.isPlaying).isFalse()
                 assertThat(it.isEnded).isFalse()
@@ -171,7 +178,8 @@ class DefaultVoiceMessagePlayerTest {
             }
             matchReadyState(1_000L)
             player1.play()
-            awaitItem().let { // it played again until the end.
+            awaitItem().let {
+                // it played again until the end.
                 assertThat(it.isReady).isFalse()
                 assertThat(it.isPlaying).isFalse()
                 assertThat(it.isEnded).isTrue()
@@ -189,7 +197,8 @@ class DefaultVoiceMessagePlayerTest {
             assertThat(player.prepare().isSuccess).isTrue()
             matchReadyState()
             player.play()
-            skipItems(1) // skip play state
+            // skip play state
+            skipItems(1)
             player.pause()
             awaitItem().let {
                 assertThat(it.isPlaying).isFalse()
@@ -206,9 +215,11 @@ class DefaultVoiceMessagePlayerTest {
             assertThat(player.prepare().isSuccess).isTrue()
             matchReadyState()
             player.play()
-            skipItems(1) // skip play state
+            // skip play state
+            skipItems(1)
             player.pause()
-            skipItems(1) // skip pause state
+            // skip pause state
+            skipItems(1)
             player.play()
             awaitItem().let {
                 assertThat(it.isPlaying).isTrue()

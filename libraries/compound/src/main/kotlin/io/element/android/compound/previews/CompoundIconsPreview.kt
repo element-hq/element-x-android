@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2025 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -41,13 +42,13 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
-@Preview(widthDp = 730, heightDp = 1800)
+@Preview(widthDp = 730, heightDp = 1920)
 @Composable
 internal fun IconsCompoundPreviewLight() = ElementTheme {
     IconsCompoundPreview()
 }
 
-@Preview(widthDp = 730, heightDp = 1800)
+@Preview(widthDp = 730, heightDp = 1920)
 @Composable
 internal fun IconsCompoundPreviewRtl() = ElementTheme {
     CompositionLocalProvider(
@@ -59,7 +60,7 @@ internal fun IconsCompoundPreviewRtl() = ElementTheme {
     }
 }
 
-@Preview(widthDp = 730, heightDp = 1800)
+@Preview(widthDp = 730, heightDp = 1920)
 @Composable
 internal fun IconsCompoundPreviewDark() = ElementTheme(darkTheme = true) {
     IconsCompoundPreview()

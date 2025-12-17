@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -25,8 +26,6 @@ import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.OidcPrompt
 import io.element.android.libraries.oidc.api.OidcAction
 import io.element.android.libraries.oidc.api.OidcActionFlow
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
 /**
  * This class is responsible for managing the login flow, including handling OIDC actions and
@@ -58,15 +57,13 @@ class LoginHelper(
         loginModeState.value = AsyncData.Uninitialized
     }
 
-    fun submit(
-        coroutineScope: CoroutineScope,
+    suspend fun submit(
         isAccountCreation: Boolean,
         homeserverUrl: String,
         loginHint: String?,
-    ) = coroutineScope.launch {
+    ) {
         suspend {
-            authenticationService.setHomeserver(homeserverUrl).map {
-                val matrixHomeServerDetails = authenticationService.getHomeserverDetails().value!!
+            authenticationService.setHomeserver(homeserverUrl).map { matrixHomeServerDetails ->
                 if (matrixHomeServerDetails.supportsOidcLogin) {
                     // Retrieve the details right now
                     val oidcPrompt = if (isAccountCreation) OidcPrompt.Create else OidcPrompt.Login

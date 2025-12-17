@@ -80,6 +80,7 @@
   <string name="action_decline">"Refuser"</string>
   <string name="action_decline_and_block">"Refuser et bloquer"</string>
   <string name="action_delete_poll">"Supprimer le sondage"</string>
+  <string name="action_deselect_all">"Tout désélectionner"</string>
   <string name="action_disable">"Désactiver"</string>
   <string name="action_discard">"Annuler"</string>
   <string name="action_dismiss">"Ignorer"</string>
@@ -94,6 +95,7 @@
   <string name="action_forgot_password">"Mot de passe oublié ?"</string>
   <string name="action_forward">"Transférer"</string>
   <string name="action_go_back">"Retour"</string>
+  <string name="action_go_to_roles_and_permissions">"Accédez à l’écran « Rôles et autorisations »."</string>
   <string name="action_go_to_settings">"Ouvrir les paramètres"</string>
   <string name="action_ignore">"Ignorer"</string>
   <string name="action_invite">"Inviter"</string>
@@ -140,6 +142,7 @@
   <string name="action_retry_decryption">"Réessayer le déchiffrement"</string>
   <string name="action_save">"Enregistrer"</string>
   <string name="action_search">"Rechercher"</string>
+  <string name="action_select_all">"Tout sélectionner"</string>
   <string name="action_send">"Envoyer"</string>
   <string name="action_send_edited_message">"Envoyer les modifications"</string>
   <string name="action_send_message">"Envoyer un message"</string>
@@ -193,7 +196,6 @@
   <string name="common_dark">"Sombre"</string>
   <string name="common_decryption_error">"Erreur de déchiffrement"</string>
   <string name="common_description">"Description"</string>
-  <string name="common_deselect_all">"Tout désélectionner"</string>
   <string name="common_developer_options">"Options pour les développeurs"</string>
   <string name="common_device_id">"Identifiant de session"</string>
   <string name="common_direct_chat">"Discussion à deux"</string>
@@ -244,6 +246,7 @@ Raison : %1$s."</string>
   </plurals>
   <string name="common_message">"Message"</string>
   <string name="common_message_actions">"Actions sur le message"</string>
+  <string name="common_message_failed_to_send">"Échec de l’envoi du message"</string>
   <string name="common_message_layout">"Mode d’affichage des messages"</string>
   <string name="common_message_removed">"Message supprimé"</string>
   <string name="common_modern">"Moderne"</string>
@@ -306,7 +309,6 @@ Raison : %1$s."</string>
   <string name="common_security">"Sécurité"</string>
   <string name="common_seen_by">"Vu par"</string>
   <string name="common_select_account">"Choisir un compte"</string>
-  <string name="common_select_all">"Tout sélectionner"</string>
   <string name="common_send_to">"Envoyer vers"</string>
   <string name="common_sending">"Envoi en cours…"</string>
   <string name="common_sending_failed">"Échec de l’envoi"</string>
@@ -318,6 +320,7 @@ Raison : %1$s."</string>
   <string name="common_settings">"Paramètres"</string>
   <string name="common_share_space">"Partager l’espace"</string>
   <string name="common_shared_location">"Position partagée"</string>
+  <string name="common_shared_space">"Espace partagé"</string>
   <string name="common_signing_out">"Déconnexion"</string>
   <string name="common_something_went_wrong">"Une erreur s’est produite"</string>
   <string name="common_something_went_wrong_message">"Nous avons rencontré un problème. Veuillez réessayer."</string>
@@ -366,6 +369,7 @@ Raison : %1$s."</string>
   <string name="common_waiting">"En attente…"</string>
   <string name="common_waiting_for_decryption_key">"En attente de la clé de déchiffrement"</string>
   <string name="common_you">"Vous"</string>
+  <string name="crypto_history_visible">"Les messages que vous enverrez seront partagés avec les nouveaux membres invités dans ce salon. %1$s"</string>
   <string name="crypto_identity_change_pin_violation">"L’identité de %1$s a été réinitialisée. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"L’identité de %1$s %2$s a été réinitialisée. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
@@ -386,6 +390,7 @@ Raison : %1$s."</string>
   <string name="dialog_title_error">"Erreur"</string>
   <string name="dialog_title_success">"Succès"</string>
   <string name="dialog_title_warning">"Attention"</string>
+  <string name="dialog_unsaved_changes_description">"Vous avez des modifications non-enregistrées."</string>
   <string name="dialog_unsaved_changes_description_android">"Vos modifications n’ont pas été enregistrées. Êtes-vous certain de vouloir quitter ?"</string>
   <string name="dialog_unsaved_changes_title">"Enregistrer les changements ?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"La taille maximale de fichier autorisée est: %1$s"</string>
@@ -425,6 +430,11 @@ Raison : %1$s."</string>
   <string name="screen_create_poll_options_section_title">"Options"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Supprimer %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Paramètres"</string>
+  <string name="screen_manage_authorized_spaces_header">"Espaces où les membres peuvent rejoindre le salon sans invitation."</string>
+  <string name="screen_manage_authorized_spaces_title">"Gérer les espaces"</string>
+  <string name="screen_manage_authorized_spaces_unknown_space">"(Espace inconnu)"</string>
+  <string name="screen_manage_authorized_spaces_unknown_spaces_section_title">"Autres espaces dont vous n’êtes pas membre"</string>
+  <string name="screen_manage_authorized_spaces_your_spaces_section_title">"Vos espaces"</string>
   <string name="screen_media_picker_error_failed_selection">"Échec de la sélection du média, veuillez réessayer."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Cliquez (clic long) sur un message et choisissez « %1$s » pour qu‘il apparaisse ici."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Épinglez les messages importants pour leur donner plus de visibilité"</string>
@@ -465,6 +475,7 @@ Raison : %1$s."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_parent_space">"Espace %1$s"</string>
   <string name="screen_space_list_title">"Espaces"</string>
+  <string name="screen_space_menu_action_members">"Voir les membres"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Le message n’a pas été envoyé car l’identité vérifiée de %1$s a été réinitialisée."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Le message n’a pas été envoyé car %1$s n’a pas vérifié tous ses appareils."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Message non envoyé car vous n’avez pas vérifié tous vos appareils."</string>
@@ -473,7 +484,7 @@ Raison : %1$s."</string>
   <string name="test_language_identifier">"fr"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"Les anciens messages ne sont pas disponibles sur cet appareil"</string>
   <string name="timeline_decryption_failure_historical_event_unverified_device">"Vous devez vérifier cet appareil pour accéder à l’historique des messages"</string>
-  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Vous n’avez pas accès à ce message"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Vous ne pouvez pas voir ce message"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Impossible de déchiffrer le message"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Ce message a été bloqué soit parce que vous n’avez pas vérifié votre session, soit parce que l’expéditeur doit vérifier votre identité."</string>
 </resources>

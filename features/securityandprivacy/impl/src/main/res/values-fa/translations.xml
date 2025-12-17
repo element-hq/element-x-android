@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_edit_room_address_title">"نشانی اتاق"</string>
+  <string name="screen_security_and_privacy_add_room_address_action">"افزودن نشانی اتاق"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"درخواست دعوت"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"بله. به کار انداختن رمزنگاری"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_title">"رمزگذاری فعال شود؟"</string>
+  <string name="screen_security_and_privacy_encryption_section_footer">"پس از به کار افتادن، رمزنگاری قابل از کار انداختن نیست."</string>
+  <string name="screen_security_and_privacy_encryption_section_header">"رمزنگاری"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"هرکسی می‌تواند یافته و بپیوندد"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"هرکسی"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"افراد فقط در صورت دعوت می‌توانند بپیوندند"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"فقط دعوتی"</string>
+  <string name="screen_security_and_privacy_room_access_section_header">"دسترسی اتاق"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_title">"اعضای فضا"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"در حال حاضر فضاها پشتیبانی نمی‌شوند"</string>
+  <string name="screen_security_and_privacy_room_address_section_header">"نشانی اتاق"</string>
+  <string name="screen_security_and_privacy_room_history_anyone_option_title">"هرکسی"</string>
+  <string name="screen_security_and_privacy_room_publishing_section_header">"انتشار اتاق"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_header">"نمایانی اتاق"</string>
+  <string name="screen_security_and_privacy_title">"امنیت و محرمانگی"</string>
+</resources>

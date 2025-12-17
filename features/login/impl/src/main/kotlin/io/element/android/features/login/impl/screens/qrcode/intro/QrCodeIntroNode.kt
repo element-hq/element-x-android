@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -12,11 +13,11 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.login.impl.di.QrCodeLoginScope
+import io.element.android.libraries.architecture.callback
 
 @ContributesNode(QrCodeLoginScope::class)
 @AssistedInject
@@ -26,25 +27,19 @@ class QrCodeIntroNode(
     private val presenter: QrCodeIntroPresenter,
 ) : Node(buildContext, plugins = plugins) {
     interface Callback : Plugin {
-        fun onCancelClicked()
-        fun onContinue()
+        fun cancel()
+        fun navigateToQrCodeScan()
     }
 
-    private fun onCancelClicked() {
-        plugins<Callback>().forEach { it.onCancelClicked() }
-    }
-
-    private fun onContinue() {
-        plugins<Callback>().forEach { it.onContinue() }
-    }
+    private val callback: Callback = callback()
 
     @Composable
     override fun View(modifier: Modifier) {
         val state = presenter.present()
         QrCodeIntroView(
             state = state,
-            onBackClick = ::onCancelClicked,
-            onContinue = ::onContinue,
+            onBackClick = callback::cancel,
+            onContinue = callback::navigateToQrCodeScan,
             modifier = modifier
         )
     }

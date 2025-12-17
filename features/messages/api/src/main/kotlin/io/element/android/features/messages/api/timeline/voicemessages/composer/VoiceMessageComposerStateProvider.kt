@@ -1,22 +1,22 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.messages.api.timeline.voicemessages.composer
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.designsystem.components.media.createFakeWaveform
+import io.element.android.libraries.designsystem.components.media.WaveFormSamples
 import io.element.android.libraries.textcomposer.model.VoiceMessageState
-import kotlinx.collections.immutable.toPersistentList
 import kotlin.time.Duration.Companion.seconds
 
 open class VoiceMessageComposerStateProvider : PreviewParameterProvider<VoiceMessageComposerState> {
     override val values: Sequence<VoiceMessageComposerState>
         get() = sequenceOf(
-            aVoiceMessageComposerState(voiceMessageState = VoiceMessageState.Recording(duration = 61.seconds, levels = aWaveformLevels)),
+            aVoiceMessageComposerState(voiceMessageState = VoiceMessageState.Recording(duration = 61.seconds, levels = WaveFormSamples.allRangeWaveForm)),
         )
 }
 
@@ -39,7 +39,5 @@ fun aVoiceMessagePreviewState() = VoiceMessageState.Preview(
     showCursor = false,
     playbackProgress = 0f,
     time = 10.seconds,
-    waveform = createFakeWaveform(),
+    waveform = WaveFormSamples.realisticWaveForm,
 )
-
-internal var aWaveformLevels = List(100) { it.toFloat() / 100 }.toPersistentList()

@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -14,15 +15,16 @@ fun Throwable.mapClientException(): ClientException {
     return when (this) {
         is RustClientException -> {
             when (this) {
-                is RustClientException.Generic -> ClientException.Generic(msg, details)
+                is RustClientException.Generic -> ClientException.Generic(message = msg, details = details, cause = this)
                 is RustClientException.MatrixApi -> ClientException.MatrixApi(
                     kind = kind.map(),
                     code = code,
                     message = msg,
                     details = details,
+                    cause = this,
                 )
             }
         }
-        else -> ClientException.Other(message ?: "Unknown error")
+        else -> ClientException.Other(message ?: "Unknown error", this)
     }
 }

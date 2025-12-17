@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="rich_text_editor_a11y_add_attachment">"Dodaj privitak"</string>
+  <string name="rich_text_editor_bullet_list">"Uključi/isključi popis s grafičkim oznakama"</string>
+  <string name="rich_text_editor_close_formatting_options">"Otkaži i zatvori oblikovanje teksta"</string>
+  <string name="rich_text_editor_code_block">"Uključi/isključi blok koda"</string>
+  <string name="rich_text_editor_composer_caption_placeholder">"Dodaj opis"</string>
+  <string name="rich_text_editor_composer_encrypted_placeholder">"Šifrirana poruka…"</string>
+  <string name="rich_text_editor_composer_placeholder">"Poruka…"</string>
+  <string name="rich_text_editor_composer_unencrypted_placeholder">"Nešifrirana poruka…"</string>
+  <string name="rich_text_editor_create_link">"Izradi poveznicu"</string>
+  <string name="rich_text_editor_edit_link">"Uredi poveznicu"</string>
+  <string name="rich_text_editor_format_action">"%1$s, stanje: %2$s"</string>
+  <string name="rich_text_editor_format_bold">"Primijeni podebljano"</string>
+  <string name="rich_text_editor_format_italic">"Primijeni kurziv"</string>
+  <string name="rich_text_editor_format_state_disabled">"onemogućen"</string>
+  <string name="rich_text_editor_format_state_off">"isključen"</string>
+  <string name="rich_text_editor_format_state_on">"uključen"</string>
+  <string name="rich_text_editor_format_strikethrough">"Primijeni precrtavanje"</string>
+  <string name="rich_text_editor_format_underline">"Primijeni podcrtavanje"</string>
+  <string name="rich_text_editor_full_screen_toggle">"Uključi/isključi prikaz na cijelom zaslonu"</string>
+  <string name="rich_text_editor_indent">"Uvlaka"</string>
+  <string name="rich_text_editor_inline_code">"Primijeni kod u retku"</string>
+  <string name="rich_text_editor_link">"Postavi poveznicu"</string>
+  <string name="rich_text_editor_numbered_list">"Uključi/isključi numerirani popis"</string>
+  <string name="rich_text_editor_open_compose_options">"Otvori mogućnosti sastavljanja"</string>
+  <string name="rich_text_editor_quote">"Uključi/isključi citat"</string>
+  <string name="rich_text_editor_remove_link">"Ukloni poveznicu"</string>
+  <string name="rich_text_editor_unindent">"Poništi uvlaku"</string>
+  <string name="rich_text_editor_url_placeholder">"Poveznica"</string>
+  <string name="screen_media_upload_preview_caption_warning">"Opisi možda neće biti vidljivi osobama koji se služe starijim aplikacijama."</string>
+  <string name="screen_room_voice_message_tooltip">"Držite za snimanje"</string>
+</resources>

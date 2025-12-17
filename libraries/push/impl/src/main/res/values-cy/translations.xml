@@ -78,6 +78,18 @@
   <string name="push_distributor_background_sync_android">"Cydweddu\'n y cefndir"</string>
   <string name="push_distributor_firebase_android">"Gwasanaethau Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Heb ganfod Google Play Services dilys. Efallai fydd hysbysiadau ddim yn gweithio\'n iawn."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_description">"Gwirio defnyddwyr sydd wedi\'u rhwystro"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_quick_fix">"Gweld defnyddwyr wedi\'u rhwystro"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_result_none">"Does dim defnyddwyr wedi\'u rhwystro."</string>
+  <plurals name="troubleshoot_notifications_test_blocked_users_result_some">
+    <item quantity="zero">"Rydych wedi rhwystro %1$d defnyddiwr. Fyddwch chi ddim yn derbyn hysbysiadau ar gyfer y defnyddiwr hwn."</item>
+    <item quantity="one">"Rydych wedi rhwystro %1$d defnyddiwr. Fyddwch chi ddim yn derbyn hysbysiadau ar gyfer y defnyddiwr hwn."</item>
+    <item quantity="two">"Rydych wedi rhwystro %1$d defnyddiwr. Fyddwch chi ddim yn derbyn hysbysiadau ar gyfer y defnyddiwr hwn."</item>
+    <item quantity="few">"Rydych wedi rhwystro %1$d defnyddiwr. Fyddwch chi ddim yn derbyn hysbysiadau ar gyfer y defnyddiwr hwn."</item>
+    <item quantity="many">"Rydych wedi rhwystro %1$d defnyddiwr. Fyddwch chi ddim yn derbyn hysbysiadau ar gyfer y defnyddiwr hwn."</item>
+    <item quantity="other">"Rydych wedi rhwystro %1$d defnyddiwr. Fyddwch chi ddim yn derbyn hysbysiadau ar gyfer y defnyddiwr hwn."</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_blocked_users_title">"Defnyddwyr wedi\'u rhwystro"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Cael enw\'r darparwr presennol."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Dim darparwyr gwthio wedi\'u dewis."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Darparwr gwthio presennol: %1$s."</string>

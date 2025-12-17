@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -12,7 +13,6 @@ import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.cryptography.api.AESEncryptionSpecs
 import io.element.android.libraries.cryptography.api.SecretKeyRepository
 import timber.log.Timber
@@ -26,7 +26,6 @@ import javax.crypto.SecretKey
  * The generated key uses AES algorithm, with a key size of 128 bits, and the GCM block mode.
  */
 @ContributesBinding(AppScope::class)
-@Inject
 class KeyStoreSecretKeyRepository(
     private val keyStore: KeyStore,
 ) : SecretKeyRepository {

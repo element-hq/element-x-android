@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -25,14 +26,14 @@ import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesBinding
 import im.vector.app.features.analytics.plan.Composer
 import io.element.android.features.messages.api.MessageComposerContext
-import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerEvents
+import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerEvent
 import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerPresenter
 import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerState
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.mediaupload.api.MediaSender
-import io.element.android.libraries.permissions.api.PermissionsEvents
+import io.element.android.libraries.mediaupload.api.MediaSenderFactory
+import io.element.android.libraries.permissions.api.PermissionsEvent
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageRecorderEvent
@@ -43,7 +44,6 @@ import io.element.android.libraries.voicerecorder.api.VoiceRecorderState
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -57,7 +57,7 @@ class DefaultVoiceMessageComposerPresenter(
     @Assisted private val timelineMode: Timeline.Mode,
     private val voiceRecorder: VoiceRecorder,
     private val analyticsService: AnalyticsService,
-    mediaSenderFactory: MediaSender.Factory,
+    mediaSenderFactory: MediaSenderFactory,
     private val player: VoiceMessageComposerPlayer,
     private val messageComposerContext: MessageComposerContext,
     permissionsPresenterFactory: PermissionsPresenter.Factory
@@ -69,7 +69,6 @@ class DefaultVoiceMessageComposerPresenter(
     }
 
     private val permissionsPresenter = permissionsPresenterFactory.create(Manifest.permission.RECORD_AUDIO)
-
     private val mediaSender = mediaSenderFactory.create(timelineMode)
 
     @Composable
@@ -89,7 +88,7 @@ class DefaultVoiceMessageComposerPresenter(
             player.setMedia(recording.file.path)
         }
 
-        val onLifecycleEvent = { event: Lifecycle.Event ->
+        fun handleLifecycleEvent(event: Lifecycle.Event) {
             when (event) {
                 Lifecycle.Event.ON_PAUSE -> {
                     sessionCoroutineScope.finishRecording()
@@ -102,18 +101,17 @@ class DefaultVoiceMessageComposerPresenter(
             }
         }
 
-        val onVoiceMessageRecorderEvent = { event: VoiceMessageComposerEvents.RecorderEvent ->
-            val permissionGranted = permissionState.permissionGranted
-            when (event.recorderEvent) {
+        fun handleVoiceMessageRecorderEvent(event: VoiceMessageRecorderEvent) {
+            when (event) {
                 VoiceMessageRecorderEvent.Start -> {
                     Timber.v("Voice message record button pressed")
                     when {
-                        permissionGranted -> {
+                        permissionState.permissionGranted -> {
                             localCoroutineScope.startRecording()
                         }
                         else -> {
                             Timber.i("Voice message permission needed")
-                            permissionState.eventSink(PermissionsEvents.RequestPermissions)
+                            permissionState.eventSink(PermissionsEvent.RequestPermissions)
                         }
                     }
                 }
@@ -127,7 +125,8 @@ class DefaultVoiceMessageComposerPresenter(
                 }
             }
         }
-        val onPlayerEvent = { event: VoiceMessagePlayerEvent ->
+
+        fun handleVoiceMessagePlayerEvent(event: VoiceMessagePlayerEvent) {
             localCoroutineScope.launch {
                 when (event) {
                     VoiceMessagePlayerEvent.Play -> player.play()
@@ -137,28 +136,16 @@ class DefaultVoiceMessageComposerPresenter(
             }
         }
 
-        val onAcceptPermissionsRationale = {
-            permissionState.eventSink(PermissionsEvents.OpenSystemSettingAndCloseDialog)
-        }
-
-        val onDismissPermissionsRationale = {
-            permissionState.eventSink(PermissionsEvents.CloseDialog)
-        }
-
-        val onDismissSendFailureDialog = {
-            showSendFailureDialog = false
-        }
-
-        val onSendButtonPress = lambda@{
+        fun sendVoiceMessage() {
             val finishedState = recorderState as? VoiceRecorderState.Finished
             if (finishedState == null) {
                 val exception = VoiceMessageException.FileException("No file to send")
                 analyticsService.trackError(exception)
                 Timber.e(exception)
-                return@lambda
+                return
             }
             if (isSending) {
-                return@lambda
+                return
             }
             isSending = true
             player.pause()
@@ -177,21 +164,27 @@ class DefaultVoiceMessageComposerPresenter(
             }
         }
 
-        val handleEvents: (VoiceMessageComposerEvents) -> Unit = { event ->
+        fun handleEvent(event: VoiceMessageComposerEvent) {
             when (event) {
-                is VoiceMessageComposerEvents.RecorderEvent -> onVoiceMessageRecorderEvent(event)
-                is VoiceMessageComposerEvents.PlayerEvent -> onPlayerEvent(event.playerEvent)
-                is VoiceMessageComposerEvents.SendVoiceMessage -> localCoroutineScope.launch {
-                    onSendButtonPress()
+                is VoiceMessageComposerEvent.RecorderEvent -> handleVoiceMessageRecorderEvent(event.recorderEvent)
+                is VoiceMessageComposerEvent.PlayerEvent -> handleVoiceMessagePlayerEvent(event.playerEvent)
+                is VoiceMessageComposerEvent.SendVoiceMessage -> localCoroutineScope.launch {
+                    sendVoiceMessage()
                 }
-                VoiceMessageComposerEvents.DeleteVoiceMessage -> {
+                VoiceMessageComposerEvent.DeleteVoiceMessage -> {
                     player.pause()
                     localCoroutineScope.deleteRecording()
                 }
-                VoiceMessageComposerEvents.DismissPermissionsRationale -> onDismissPermissionsRationale()
-                VoiceMessageComposerEvents.AcceptPermissionRationale -> onAcceptPermissionsRationale()
-                is VoiceMessageComposerEvents.LifecycleEvent -> onLifecycleEvent(event.event)
-                VoiceMessageComposerEvents.DismissSendFailureDialog -> onDismissSendFailureDialog()
+                VoiceMessageComposerEvent.DismissPermissionsRationale -> {
+                    permissionState.eventSink(PermissionsEvent.CloseDialog)
+                }
+                VoiceMessageComposerEvent.AcceptPermissionRationale -> {
+                    permissionState.eventSink(PermissionsEvent.OpenSystemSettingAndCloseDialog)
+                }
+                is VoiceMessageComposerEvent.LifecycleEvent -> handleLifecycleEvent(event.event)
+                VoiceMessageComposerEvent.DismissSendFailureDialog -> {
+                    showSendFailureDialog = false
+                }
             }
         }
 
@@ -199,7 +192,10 @@ class DefaultVoiceMessageComposerPresenter(
             voiceMessageState = when (val state = recorderState) {
                 is VoiceRecorderState.Recording -> VoiceMessageState.Recording(
                     duration = state.elapsedTime,
-                    levels = state.levels.toPersistentList(),
+                    levels = state.levels
+                        // Keep only the last 128 samples for display, else we can have a crash
+                        .takeLast(128)
+                        .toImmutableList(),
                 )
                 is VoiceRecorderState.Finished ->
                     previewState(
@@ -212,7 +208,7 @@ class DefaultVoiceMessageComposerPresenter(
             showPermissionRationaleDialog = permissionState.showDialog,
             showSendFailureDialog = showSendFailureDialog,
             keepScreenOn = keepScreenOn,
-            eventSink = handleEvents,
+            eventSink = ::handleEvent,
         )
     }
 

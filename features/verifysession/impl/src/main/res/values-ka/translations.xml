@@ -12,6 +12,7 @@
   <string name="screen_session_verification_compare_numbers_subtitle">"დაადასტურეთ, რომ ქვემოთ მოცემული ნომრები ემთხვევა თქვენს სხვა სესიაზე ნაჩვენები ნომრებს."</string>
   <string name="screen_session_verification_compare_numbers_title">"შეადარეთ რიცხვები"</string>
   <string name="screen_session_verification_complete_subtitle">"თქვენი ახალი სესია დადასტურებულია. მას აქვს წვდომა დაშიფრულ შეტყობინებებზე და სხვა მომხმარებლები მას სანდოდ ხედავენ."</string>
+  <string name="screen_session_verification_device_verified">"მოწყობილობა დადასტურებულია"</string>
   <string name="screen_session_verification_enter_recovery_key">"შეიყვანეთ აღდგენის გასაღები"</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"დაამტკიცეთ, რომ ეს თქვენ ხართ, რათა მიიღოთ წვდომა თქვენი დაშიფრული შეტყობინებების ისტორიასთან."</string>
   <string name="screen_session_verification_open_existing_session_title">"არსებული სესიის გახსნა"</string>
@@ -20,6 +21,7 @@
   <string name="screen_session_verification_positive_button_verifying_ongoing">"ველოდებით დამთხვევას"</string>
   <string name="screen_session_verification_ready_subtitle">"შეადარეთ ემოციების უნიკალური ნაკრები."</string>
   <string name="screen_session_verification_request_accepted_subtitle">"შეადარეთ უნიკალური ემოჯი, დარწმუნდით, რომ ისინი ერთი დ იმავე თანმიმდევრობით გამოჩნდნენ."</string>
+  <string name="screen_session_verification_request_success_subtitle">"თქვენი ახალი სესია დადასტურებულია. მას აქვს წვდომა დაშიფრულ შეტყობინებებზე და სხვა მომხმარებლები მას სანდოდ ხედავენ."</string>
   <string name="screen_session_verification_request_success_title">"მოწყობილობა დადასტურებულია"</string>
   <string name="screen_session_verification_they_dont_match">"ისინი არ ემთხვევიან ერთმანეთს"</string>
   <string name="screen_session_verification_they_match">"ისინი ემთხვევიან ერთმანეთს"</string>

@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -12,6 +13,7 @@ import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.ftue.impl.R
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.clickOn
@@ -43,7 +45,7 @@ class ChooseSessionVerificationModeViewTest {
     fun `clicking on use another device calls the callback`() {
         ensureCalledOnce { callback ->
             rule.setChooseSelfVerificationModeView(
-                aChooseSelfVerificationModeState(canUseAnotherDevice = true),
+                aChooseSelfVerificationModeState(AsyncData.Success(aButtonsState(canUseAnotherDevice = true))),
                 onUseAnotherDevice = callback,
             )
             rule.clickOn(R.string.screen_identity_use_another_device)
@@ -55,7 +57,7 @@ class ChooseSessionVerificationModeViewTest {
     fun `clicking on enter recovery key calls the callback`() {
         ensureCalledOnce { callback ->
             rule.setChooseSelfVerificationModeView(
-                aChooseSelfVerificationModeState(canEnterRecoveryKey = true),
+                aChooseSelfVerificationModeState(AsyncData.Success(aButtonsState(canEnterRecoveryKey = true))),
                 onEnterRecoveryKey = callback,
             )
             rule.clickOn(R.string.screen_session_verification_enter_recovery_key)

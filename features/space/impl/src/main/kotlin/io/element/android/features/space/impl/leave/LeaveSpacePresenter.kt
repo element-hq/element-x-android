@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -66,7 +67,8 @@ class LeaveSpacePresenter(
                 .orEmpty()
                 .partition { it.spaceRoom.roomId == leaveSpaceHandle.id }
             // By default select all rooms that can be left
-            selectedRoomIds = otherRooms
+            val otherRoomsExcludingDm = otherRooms.filter { it.spaceRoom.isDirect != true }
+            selectedRoomIds = otherRoomsExcludingDm
                 .filter { it.isLastAdmin.not() }
                 .map { it.spaceRoom.roomId }
             leaveSpaceRooms = rooms.fold(
@@ -74,7 +76,7 @@ class LeaveSpacePresenter(
                     AsyncData.Success(
                         LeaveSpaceRooms(
                             current = currentRoom.firstOrNull(),
-                            others = otherRooms.toImmutableList(),
+                            others = otherRoomsExcludingDm.toImmutableList(),
                         )
                     )
                 },
@@ -86,7 +88,7 @@ class LeaveSpacePresenter(
         }
         LaunchedEffect(selectedRoomIds, leaveSpaceRooms) {
             selectableSpaceRooms = leaveSpaceRooms.map {
-                it?.others.orEmpty().map { room ->
+                it.others.map { room ->
                     SelectableSpaceRoom(
                         spaceRoom = room.spaceRoom,
                         isLastAdmin = room.isLastAdmin,
@@ -96,7 +98,7 @@ class LeaveSpacePresenter(
             }
         }
 
-        fun handleEvents(event: LeaveSpaceEvents) {
+        fun handleEvent(event: LeaveSpaceEvents) {
             when (event) {
                 LeaveSpaceEvents.Retry -> {
                     leaveSpaceRooms = AsyncData.Loading()
@@ -129,11 +131,11 @@ class LeaveSpacePresenter(
         }
 
         return LeaveSpaceState(
-            spaceName = leaveSpaceRooms.dataOrNull()?.current?.spaceRoom?.name,
+            spaceName = leaveSpaceRooms.dataOrNull()?.current?.spaceRoom?.displayName,
             isLastAdmin = leaveSpaceRooms.dataOrNull()?.current?.isLastAdmin == true,
             selectableSpaceRooms = selectableSpaceRooms,
             leaveSpaceAction = leaveSpaceAction.value,
-            eventSink = ::handleEvents,
+            eventSink = ::handleEvent,
         )
     }
 

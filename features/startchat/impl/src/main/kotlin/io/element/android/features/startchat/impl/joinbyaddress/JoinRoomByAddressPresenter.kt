@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -48,7 +49,7 @@ class JoinRoomByAddressPresenter(
         var internalAddressState by remember { mutableStateOf<RoomAddressState>(RoomAddressState.Unknown) }
         var validateAddress: Boolean by remember { mutableStateOf(false) }
 
-        fun handleEvents(event: JoinRoomByAddressEvents) {
+        fun handleEvent(event: JoinRoomByAddressEvents) {
             when (event) {
                 JoinRoomByAddressEvents.Continue -> {
                     when (val currentState = internalAddressState) {
@@ -88,13 +89,13 @@ class JoinRoomByAddressPresenter(
         return JoinRoomByAddressState(
             address = address,
             addressState = addressState,
-            eventSink = ::handleEvents
+            eventSink = ::handleEvent,
         )
     }
 
     private fun onRoomFound(state: RoomAddressState.RoomFound) {
         navigator.onDismissJoinRoomByAddress()
-        navigator.onOpenRoom(
+        navigator.onRoomCreated(
             roomIdOrAlias = state.resolved.roomId.toRoomIdOrAlias(),
             serverNames = state.resolved.servers
         )

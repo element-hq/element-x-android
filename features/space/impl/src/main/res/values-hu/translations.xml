@@ -6,5 +6,11 @@
     <item quantity="other">"%1$d szoba és tér elhagyása"</item>
   </plurals>
   <string name="screen_leave_space_subtitle">"Ez a tér összes szobájából is eltávolítja."</string>
+  <string name="screen_leave_space_subtitle_last_admin">"Mielőtt elhagyhatná ezt a teret, ki kell jelölnie egy másik adminisztrátort."</string>
+  <string name="screen_leave_space_subtitle_only_last_admin">"Nem lesz eltávolítva a következő szobá(k)ból, mert ön az egyetlen adminisztrátor:"</string>
   <string name="screen_leave_space_title">"Kilép innen: %1$s?"</string>
+  <string name="screen_leave_space_title_last_admin">"Ön az egyetlen adminisztrátor itt: %1$s"</string>
+  <string name="screen_space_settings_leave_space">"Tér elhagyása"</string>
+  <string name="screen_space_settings_roles_and_permissions">"Szerepkörök és jogosultságok"</string>
+  <string name="screen_space_settings_security_and_privacy">"Biztonság és adatvédelem"</string>
 </resources>

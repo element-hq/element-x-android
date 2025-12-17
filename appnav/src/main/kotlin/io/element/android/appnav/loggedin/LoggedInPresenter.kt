@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -35,7 +36,7 @@ import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.push.api.PushService
-import io.element.android.libraries.pushproviders.api.RegistrationFailure
+import io.element.android.libraries.push.api.PusherRegistrationFailure
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.combine
@@ -70,7 +71,17 @@ class LoggedInPresenter(
                     when (sessionVerifiedStatus) {
                         SessionVerifiedStatus.Unknown -> Unit
                         SessionVerifiedStatus.Verified -> {
-                            ensurePusherIsRegistered(pusherRegistrationState)
+                            Timber.tag(pusherTag.value).d("Ensure pusher is registered")
+                            pushService.ensurePusherIsRegistered(matrixClient).fold(
+                                onSuccess = {
+                                    Timber.tag(pusherTag.value).d("Pusher registered")
+                                    pusherRegistrationState.value = AsyncData.Success(Unit)
+                                },
+                                onFailure = {
+                                    Timber.tag(pusherTag.value).e(it, "Failed to register pusher")
+                                    pusherRegistrationState.value = AsyncData.Failure(it)
+                                },
+                            )
                         }
                         SessionVerifiedStatus.NotVerified -> {
                             pusherRegistrationState.value = AsyncData.Failure(PusherRegistrationFailure.AccountNotVerified())
@@ -122,7 +133,7 @@ class LoggedInPresenter(
             ignoreRegistrationError = ignoreRegistrationError,
             forceNativeSlidingSyncMigration = forceNativeSlidingSyncMigration,
             appName = buildMeta.applicationName,
-            eventSink = ::handleEvent
+            eventSink = ::handleEvent,
         )
     }
 
@@ -130,59 +141,6 @@ class LoggedInPresenter(
     private suspend fun MatrixClient.needsForcedNativeSlidingSyncMigration(): Result<Boolean> = runCatchingExceptions {
         val currentSlidingSyncVersion = currentSlidingSyncVersion().getOrThrow()
         currentSlidingSyncVersion == SlidingSyncVersion.Proxy
-    }
-
-    private suspend fun ensurePusherIsRegistered(pusherRegistrationState: MutableState<AsyncData<Unit>>) {
-        Timber.tag(pusherTag.value).d("Ensure pusher is registered")
-        val currentPushProvider = pushService.getCurrentPushProvider()
-        val result = if (currentPushProvider == null) {
-            Timber.tag(pusherTag.value).d("Register with the first available push provider with at least one distributor")
-            val pushProvider = pushService.getAvailablePushProviders()
-                .firstOrNull { it.getDistributors().isNotEmpty() }
-            // Else fallback to the first available push provider (the list should never be empty)
-                ?: pushService.getAvailablePushProviders().firstOrNull()
-                ?: return Unit
-                    .also { Timber.tag(pusherTag.value).w("No push providers available") }
-                    .also { pusherRegistrationState.value = AsyncData.Failure(PusherRegistrationFailure.NoProvidersAvailable()) }
-            val distributor = pushProvider.getDistributors().firstOrNull()
-                ?: return Unit
-                    .also { Timber.tag(pusherTag.value).w("No distributors available") }
-                    .also {
-                        // In this case, consider the push provider is chosen.
-                        pushService.selectPushProvider(matrixClient.sessionId, pushProvider)
-                    }
-                    .also { pusherRegistrationState.value = AsyncData.Failure(PusherRegistrationFailure.NoDistributorsAvailable()) }
-            pushService.registerWith(matrixClient, pushProvider, distributor)
-        } else {
-            val currentPushDistributor = currentPushProvider.getCurrentDistributor(matrixClient.sessionId)
-            if (currentPushDistributor == null) {
-                Timber.tag(pusherTag.value).d("Register with the first available distributor")
-                val distributor = currentPushProvider.getDistributors().firstOrNull()
-                    ?: return Unit
-                        .also { Timber.tag(pusherTag.value).w("No distributors available") }
-                        .also { pusherRegistrationState.value = AsyncData.Failure(PusherRegistrationFailure.NoDistributorsAvailable()) }
-                pushService.registerWith(matrixClient, currentPushProvider, distributor)
-            } else {
-                Timber.tag(pusherTag.value).d("Re-register with the current distributor")
-                pushService.registerWith(matrixClient, currentPushProvider, currentPushDistributor)
-            }
-        }
-        result.fold(
-            onSuccess = {
-                Timber.tag(pusherTag.value).d("Pusher registered")
-                pusherRegistrationState.value = AsyncData.Success(Unit)
-            },
-            onFailure = {
-                Timber.tag(pusherTag.value).e(it, "Failed to register pusher")
-                if (it is RegistrationFailure) {
-                    pusherRegistrationState.value = AsyncData.Failure(
-                        PusherRegistrationFailure.RegistrationFailure(it.clientException, it.isRegisteringAgain)
-                    )
-                } else {
-                    pusherRegistrationState.value = AsyncData.Failure(it)
-                }
-            }
-        )
     }
 
     private fun reportCryptoStatusToAnalytics(verificationState: SessionVerifiedStatus, recoveryState: RecoveryState) {

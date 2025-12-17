@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -17,29 +18,24 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.join.JoinRule
-import io.element.android.libraries.matrix.api.room.message.RoomMessage
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
 import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
+import io.element.android.libraries.matrix.api.roomlist.LatestEventValue
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
-import io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_ROOM_RAW_NAME
 import io.element.android.libraries.matrix.test.A_ROOM_TOPIC
-import io.element.android.libraries.matrix.test.A_USER_ID
-import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toPersistentList
 
 fun aRoomSummary(
     info: RoomInfo = aRoomInfo(),
-    lastMessage: RoomMessage? = aRoomMessage(),
+    latestEventValue: LatestEventValue = aRemoteLatestEvent(),
 ) = RoomSummary(
     info = info,
-    lastMessage = lastMessage,
+    latestEvent = latestEventValue,
 )
 
 fun aRoomSummary(
@@ -79,7 +75,7 @@ fun aRoomSummary(
     numUnreadNotifications: Long = 0,
     numUnreadMentions: Long = 0,
     historyVisibility: RoomHistoryVisibility = RoomHistoryVisibility.Joined,
-    lastMessage: RoomMessage? = aRoomMessage(),
+    latestEvent: LatestEventValue = aRemoteLatestEvent(),
     roomVersion: String? = "11",
     privilegedCreatorRole: Boolean = false,
 ) = RoomSummary(
@@ -109,7 +105,7 @@ fun aRoomSummary(
         userDefinedNotificationMode = userDefinedNotificationMode,
         hasRoomCall = hasRoomCall,
         activeRoomCallParticipants = activeRoomCallParticipants.toImmutableList(),
-        heroes = heroes.toPersistentList(),
+        heroes = heroes.toImmutableList(),
         pinnedEventIds = pinnedEventIds.toImmutableList(),
         creators = roomCreators.toImmutableList(),
         isMarkedUnread = isMarkedUnread,
@@ -120,17 +116,5 @@ fun aRoomSummary(
         roomVersion = roomVersion,
         privilegedCreatorRole = privilegedCreatorRole,
     ),
-    lastMessage = lastMessage,
-)
-
-fun aRoomMessage(
-    eventId: EventId = AN_EVENT_ID,
-    event: EventTimelineItem = anEventTimelineItem(),
-    userId: UserId = A_USER_ID,
-    timestamp: Long = 0L,
-) = RoomMessage(
-    eventId = eventId,
-    event = event,
-    sender = userId,
-    originServerTs = timestamp,
+    latestEvent = latestEvent,
 )

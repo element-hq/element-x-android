@@ -8,14 +8,29 @@
   <string name="screen_advanced_settings_element_call_base_url">"Maxsus element qo‘ng‘iroqlar bazasi URL manzili"</string>
   <string name="screen_advanced_settings_element_call_base_url_description">"Element qo\'ng\'irog\'iga maxsus asosiy url or\'natish"</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL noto‘g‘ri, iltimos, protokol (http/https) va to‘g‘ri manzilni kiritganingizga ishonch hosil qiling."</string>
+  <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Xonaga taklif so‘rovlarida avatarlarni berkitish"</string>
+  <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Vaqt jadvalida mediaga razm solishlarni berkitish"</string>
   <string name="screen_advanced_settings_media_compression_description">"Rasm va videolarni tezroq yuklang va trafik sarfini kamaytiring"</string>
   <string name="screen_advanced_settings_media_compression_title">"Media sifatini yaxshilash"</string>
+  <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderatsiya va xavfsizlik"</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_description">"Tezroq yuklash va kichikroq fayl hajmi uchun rasmlarni avtomatik optimallashtirish."</string>
+  <string name="screen_advanced_settings_optimise_image_upload_quality_title">"Rasm yuklash sifatini optimallashtirish"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s. Oʻzgartirish uchun bu yerga bosing."</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_high">"Yuqori (1080p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_low">"Past (480p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_standard">"Standart (720p)"</string>
+  <string name="screen_advanced_settings_optimise_video_upload_quality_title">"Video yuklash sifati"</string>
   <string name="screen_advanced_settings_push_provider_android">"Push bildirishnoma provayderi"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Boy matn muharriri o\'chiring Markdown bilan qo\'lda yozish uchun"</string>
   <string name="screen_advanced_settings_send_read_receipts">"Kvitansiyalarni oʻqish"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Agar oʻchirib qo‘yilsa, sizning oʻqilganlik bildirishnomangiz hech kimga yuborilmaydi. Siz boshqa foydalanuvchilardan oʻqilganlik bildirishnomalarini olishda davom etasiz."</string>
   <string name="screen_advanced_settings_share_presence">"Mavjudligini ulashish"</string>
   <string name="screen_advanced_settings_share_presence_description">"Agar oʻchirib qoʻyilsa, siz oʻqilganlik haqidagi bildirishnomalarni yoki yozayotganingiz haqidagi xabarlarni yubora olmaysiz va qabul qila olmaysiz."</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_hide">"Doim berkitilsin"</string>
+  <string name="screen_advanced_settings_show_media_timeline_always_show">"Har doim ko‘rsatish"</string>
+  <string name="screen_advanced_settings_show_media_timeline_private_rooms">"Shaxsiy xonalarda"</string>
+  <string name="screen_advanced_settings_show_media_timeline_subtitle">"Yashirin media har doim unga bosish orqali ko‘rsatilishi mumkin"</string>
+  <string name="screen_advanced_settings_show_media_timeline_title">"Vaqt jadvalida media ko‘rsatish"</string>
   <string name="screen_advanced_settings_view_source_description">"Xabar manbasini vaqt jadvalida ko‘rish imkoniyatini yoqing."</string>
   <string name="screen_blocked_users_empty">"Sizda bloklangan foydalanuvchi yo‘q"</string>
   <string name="screen_blocked_users_unblock_alert_action">"Blokdan chiqarish"</string>
@@ -55,6 +70,7 @@ Davom ettirsangiz, baʼzi sozlamalaringiz oʻzgarishi mumkin."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"tizim sozlamalari"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Tizim bildirishnomalari o\'chirilgan"</string>
   <string name="screen_notification_settings_title">"Bildirishnomalar"</string>
+  <string name="troubleshoot_notifications_entry_point_push_history_title">"Bildirishnoma tarixi"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Muammolarni bartaraf etish"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Bildirishnomalar bilan bog‘liq muammolarni bartaraf etish"</string>
 </resources>

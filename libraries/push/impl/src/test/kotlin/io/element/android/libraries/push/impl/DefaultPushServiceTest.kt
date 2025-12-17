@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -11,12 +12,15 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
+import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.libraries.push.api.GetCurrentPushProvider
+import io.element.android.libraries.push.api.PusherRegistrationFailure
 import io.element.android.libraries.push.api.history.PushHistoryItem
 import io.element.android.libraries.push.impl.push.FakeMutableBatteryOptimizationStore
 import io.element.android.libraries.push.impl.push.MutableBatteryOptimizationStore
@@ -24,12 +28,14 @@ import io.element.android.libraries.push.impl.store.InMemoryPushDataStore
 import io.element.android.libraries.push.impl.store.PushDataStore
 import io.element.android.libraries.push.impl.test.FakeTestPush
 import io.element.android.libraries.push.impl.test.TestPush
+import io.element.android.libraries.push.impl.unregistration.FakeServiceUnregisteredHandler
+import io.element.android.libraries.push.impl.unregistration.ServiceUnregisteredHandler
 import io.element.android.libraries.push.test.FakeGetCurrentPushProvider
-import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
+import io.element.android.libraries.pushproviders.api.Config
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
 import io.element.android.libraries.pushproviders.test.FakePushProvider
-import io.element.android.libraries.pushproviders.test.aCurrentUserPushConfig
+import io.element.android.libraries.pushproviders.test.aSessionPushConfig
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecretStore
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStore
@@ -37,6 +43,7 @@ import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushSto
 import io.element.android.libraries.pushstore.test.userpushstore.clientsecret.InMemoryPushClientSecretStore
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
 import io.element.android.libraries.sessionstorage.test.observer.NoOpSessionObserver
+import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.flow.first
@@ -47,7 +54,7 @@ class DefaultPushServiceTest {
     @Test
     fun `test push no push provider`() = runTest {
         val defaultPushService = createDefaultPushService()
-        assertThat(defaultPushService.testPush()).isFalse()
+        assertThat(defaultPushService.testPush(A_SESSION_ID)).isFalse()
     }
 
     @Test
@@ -57,22 +64,22 @@ class DefaultPushServiceTest {
             pushProviders = setOf(aPushProvider),
             getCurrentPushProvider = FakeGetCurrentPushProvider(currentPushProvider = aPushProvider.name),
         )
-        assertThat(defaultPushService.testPush()).isFalse()
+        assertThat(defaultPushService.testPush(A_SESSION_ID)).isFalse()
     }
 
     @Test
     fun `test push ok`() = runTest {
-        val aConfig = aCurrentUserPushConfig()
-        val testPushResult = lambdaRecorder<CurrentUserPushConfig, Unit> { }
+        val aConfig = aSessionPushConfig()
+        val testPushResult = lambdaRecorder<Config, Unit> { }
         val aPushProvider = FakePushProvider(
-            currentUserPushConfig = aConfig
+            config = aConfig
         )
         val defaultPushService = createDefaultPushService(
             pushProviders = setOf(aPushProvider),
             getCurrentPushProvider = FakeGetCurrentPushProvider(currentPushProvider = aPushProvider.name),
             testPush = FakeTestPush(executeResult = testPushResult),
         )
-        assertThat(defaultPushService.testPush()).isTrue()
+        assertThat(defaultPushService.testPush(A_SESSION_ID)).isTrue()
         testPushResult.assertions()
             .isCalledOnce()
             .with(value(aConfig))
@@ -81,7 +88,7 @@ class DefaultPushServiceTest {
     @Test
     fun `getCurrentPushProvider null`() = runTest {
         val defaultPushService = createDefaultPushService()
-        val result = defaultPushService.getCurrentPushProvider()
+        val result = defaultPushService.getCurrentPushProvider(A_SESSION_ID)
         assertThat(result).isNull()
     }
 
@@ -92,7 +99,7 @@ class DefaultPushServiceTest {
             pushProviders = setOf(aPushProvider),
             getCurrentPushProvider = FakeGetCurrentPushProvider(currentPushProvider = aPushProvider.name),
         )
-        val result = defaultPushService.getCurrentPushProvider()
+        val result = defaultPushService.getCurrentPushProvider(A_SESSION_ID)
         assertThat(result).isEqualTo(aPushProvider)
     }
 
@@ -248,7 +255,7 @@ class DefaultPushServiceTest {
             ),
             pushClientSecretStore = pushClientSecretStore,
         )
-        defaultPushService.onSessionDeleted(A_SESSION_ID.value)
+        defaultPushService.onSessionDeleted(A_SESSION_ID.value, false)
         assertThat(userPushStore.getPushProviderName()).isNull()
         assertThat(pushClientSecretStore.getSecret(A_SESSION_ID)).isNull()
         onSessionDeletedLambda.assertions().isCalledOnce().with(value(A_SESSION_ID))
@@ -268,7 +275,7 @@ class DefaultPushServiceTest {
             ),
             pushClientSecretStore = pushClientSecretStore,
         )
-        defaultPushService.onSessionDeleted(A_SESSION_ID.value)
+        defaultPushService.onSessionDeleted(A_SESSION_ID.value, false)
         assertThat(userPushStore.getPushProviderName()).isNull()
         assertThat(pushClientSecretStore.getSecret(A_SESSION_ID)).isNull()
     }
@@ -336,6 +343,281 @@ class DefaultPushServiceTest {
         }
     }
 
+    @Test
+    fun `ensurePusher - error when account is not verified`() = runTest {
+        val sessionVerificationService = FakeSessionVerificationService(
+            initialSessionVerifiedStatus = SessionVerifiedStatus.NotVerified
+        )
+        val pushService = createDefaultPushService()
+        val result = pushService.ensurePusherIsRegistered(
+            FakeMatrixClient(
+                sessionVerificationService = sessionVerificationService,
+            )
+        )
+        assertThat(result.exceptionOrNull()!!).isInstanceOf(PusherRegistrationFailure.AccountNotVerified::class.java)
+    }
+
+    @Test
+    fun `ensurePusher - case two push providers but first one does not have distributor - second one will be used`() = runTest {
+        val lambda = lambdaRecorder<MatrixClient, Distributor, Result<Unit>> { _, _ ->
+            Result.success(Unit)
+        }
+        val sessionVerificationService = FakeSessionVerificationService(
+            initialSessionVerifiedStatus = SessionVerifiedStatus.Verified
+        )
+        val pushProvider0 = FakePushProvider(
+            index = 0,
+            name = "aFakePushProvider0",
+            distributors = emptyList(),
+        )
+        val distributor = Distributor("aDistributorValue1", "aDistributorName1")
+        val pushProvider1 = FakePushProvider(
+            index = 1,
+            name = "aFakePushProvider1",
+            distributors = listOf(distributor),
+            registerWithResult = lambda,
+        )
+        val pushService = createDefaultPushService(
+            pushProviders = setOf(
+                pushProvider0,
+                pushProvider1,
+            ),
+        )
+        val result = pushService.ensurePusherIsRegistered(
+            FakeMatrixClient(
+                sessionVerificationService = sessionVerificationService,
+            )
+        )
+        assertThat(result.isSuccess).isTrue()
+        lambda.assertions().isCalledOnce()
+            .with(
+                // MatrixClient
+                any(),
+                // First distributor of second push provider
+                value(distributor),
+            )
+    }
+
+    @Test
+    fun `ensurePusher - case one push provider but no distributor available`() = runTest {
+        val lambda = lambdaRecorder<MatrixClient, Distributor, Result<Unit>> { _, _ ->
+            Result.success(Unit)
+        }
+        val sessionVerificationService = FakeSessionVerificationService(
+            initialSessionVerifiedStatus = SessionVerifiedStatus.Verified
+        )
+        val pushProvider = FakePushProvider(
+            index = 0,
+            name = "aFakePushProvider",
+            distributors = emptyList(),
+            registerWithResult = lambda,
+        )
+        val pushService = createDefaultPushService(
+            pushProviders = setOf(pushProvider),
+        )
+        val result = pushService.ensurePusherIsRegistered(
+            FakeMatrixClient(
+                sessionVerificationService = sessionVerificationService,
+            )
+        )
+        assertThat(result.exceptionOrNull()).isInstanceOf(PusherRegistrationFailure.NoDistributorsAvailable::class.java)
+        lambda.assertions().isNeverCalled()
+    }
+
+    @Test
+    fun `ensurePusher - ensure default pusher is registered with default provider`() = runTest {
+        val lambda = lambdaRecorder<MatrixClient, Distributor, Result<Unit>> { _, _ ->
+            Result.success(Unit)
+        }
+        val sessionVerificationService = FakeSessionVerificationService(
+            initialSessionVerifiedStatus = SessionVerifiedStatus.Verified
+        )
+        val pushService = createDefaultPushService(
+            pushProviders = setOf(
+                FakePushProvider(
+                    index = 0,
+                    name = "aFakePushProvider",
+                    distributors = listOf(Distributor("aDistributorValue0", "aDistributorName0")),
+                    registerWithResult = lambda,
+                )
+            ),
+        )
+        val result = pushService.ensurePusherIsRegistered(
+            FakeMatrixClient(
+                sessionVerificationService = sessionVerificationService,
+            )
+        )
+        assertThat(result.isSuccess).isTrue()
+        lambda.assertions()
+            .isCalledOnce()
+            .with(
+                // MatrixClient
+                any(),
+                // First distributor
+                value(pushService.getAvailablePushProviders()[0].getDistributors()[0]),
+            )
+    }
+
+    @Test
+    fun `ensurePusher - ensure default pusher is registered with default provider - fail to register`() = runTest {
+        val lambda = lambdaRecorder<MatrixClient, Distributor, Result<Unit>> { _, _ ->
+            Result.failure(AN_EXCEPTION)
+        }
+        val sessionVerificationService = FakeSessionVerificationService(
+            initialSessionVerifiedStatus = SessionVerifiedStatus.Verified
+        )
+        val pushService = createDefaultPushService(
+            pushProviders = setOf(
+                FakePushProvider(
+                    index = 0,
+                    name = "aFakePushProvider",
+                    distributors = listOf(Distributor("aDistributorValue0", "aDistributorName0")),
+                    registerWithResult = lambda,
+                )
+            ),
+        )
+        val result = pushService.ensurePusherIsRegistered(
+            FakeMatrixClient(
+                sessionVerificationService = sessionVerificationService,
+            )
+        )
+        assertThat(result.isFailure).isTrue()
+        lambda.assertions()
+            .isCalledOnce()
+            .with(
+                // MatrixClient
+                any(),
+                // First distributor
+                value(pushService.getAvailablePushProviders()[0].getDistributors()[0]),
+            )
+    }
+
+    @Test
+    fun `ensurePusher - if current push provider does not have distributors, nothing happen`() = runTest {
+        val lambda = lambdaRecorder<MatrixClient, Distributor, Result<Unit>> { _, _ ->
+            Result.success(Unit)
+        }
+        val sessionVerificationService = FakeSessionVerificationService(
+            initialSessionVerifiedStatus = SessionVerifiedStatus.Verified
+        )
+        val pushProvider = FakePushProvider(
+            index = 0,
+            name = "aFakePushProvider0",
+            distributors = emptyList(),
+            registerWithResult = lambda,
+        )
+        val pushService = createDefaultPushService(
+            pushProviders = setOf(pushProvider),
+            getCurrentPushProvider = FakeGetCurrentPushProvider(currentPushProvider = pushProvider.name),
+        )
+        val result = pushService.ensurePusherIsRegistered(
+            FakeMatrixClient(
+                sessionVerificationService = sessionVerificationService,
+            )
+        )
+        assertThat(result.exceptionOrNull())
+            .isInstanceOf(PusherRegistrationFailure.NoDistributorsAvailable::class.java)
+        lambda.assertions()
+            .isNeverCalled()
+    }
+
+    @Test
+    fun `ensurePusher - ensure current provider is registered with current distributor`() = runTest {
+        val lambda = lambdaRecorder<MatrixClient, Distributor, Result<Unit>> { _, _ ->
+            Result.success(Unit)
+        }
+        val sessionVerificationService = FakeSessionVerificationService(
+            initialSessionVerifiedStatus = SessionVerifiedStatus.Verified
+        )
+        val distributor = Distributor("aDistributorValue1", "aDistributorName1")
+        val pushProvider = FakePushProvider(
+            index = 0,
+            name = "aFakePushProvider0",
+            distributors = listOf(
+                Distributor("aDistributorValue0", "aDistributorName0"),
+                distributor,
+            ),
+            currentDistributor = { distributor },
+            registerWithResult = lambda,
+        )
+        val pushService = createDefaultPushService(
+            pushProviders = setOf(pushProvider),
+            getCurrentPushProvider = FakeGetCurrentPushProvider(currentPushProvider = pushProvider.name),
+        )
+        val result = pushService.ensurePusherIsRegistered(
+            FakeMatrixClient(
+                sessionVerificationService = sessionVerificationService,
+            )
+        )
+        assertThat(result.isSuccess).isTrue()
+        lambda.assertions()
+            .isCalledOnce()
+            .with(
+                // MatrixClient
+                any(),
+                // Current distributor
+                value(distributor),
+            )
+    }
+
+    @Test
+    fun `ensurePusher - case no push provider available provider`() = runTest {
+        val lambda = lambdaRecorder<MatrixClient, Distributor, Result<Unit>> { _, _ ->
+            Result.success(Unit)
+        }
+        val sessionVerificationService = FakeSessionVerificationService(SessionVerifiedStatus.Verified)
+        val pushService = createDefaultPushService(
+            pushProviders = emptySet(),
+        )
+        val result = pushService.ensurePusherIsRegistered(
+            FakeMatrixClient(
+                sessionVerificationService = sessionVerificationService,
+            )
+        )
+        assertThat(result.exceptionOrNull())
+            .isInstanceOf(PusherRegistrationFailure.NoProvidersAvailable::class.java)
+        lambda.assertions()
+            .isNeverCalled()
+    }
+
+    @Test
+    fun `ensurePusher - if current push provider does not have current distributor, the first one is used`() = runTest {
+        val lambda = lambdaRecorder<MatrixClient, Distributor, Result<Unit>> { _, _ ->
+            Result.success(Unit)
+        }
+        val sessionVerificationService = FakeSessionVerificationService(
+            initialSessionVerifiedStatus = SessionVerifiedStatus.Verified
+        )
+        val pushProvider = FakePushProvider(
+            index = 0,
+            name = "aFakePushProvider0",
+            distributors = listOf(
+                Distributor("aDistributorValue0", "aDistributorName0"),
+                Distributor("aDistributorValue1", "aDistributorName1"),
+            ),
+            currentDistributor = { null },
+            registerWithResult = lambda,
+        )
+        val pushService = createDefaultPushService(
+            pushProviders = setOf(pushProvider),
+            getCurrentPushProvider = FakeGetCurrentPushProvider(currentPushProvider = pushProvider.name),
+        )
+        val result = pushService.ensurePusherIsRegistered(
+            FakeMatrixClient(
+                sessionVerificationService = sessionVerificationService,
+            )
+        )
+        assertThat(result.isSuccess).isTrue()
+        lambda.assertions()
+            .isCalledOnce()
+            .with(
+                // MatrixClient
+                any(),
+                // First distributor
+                value(pushService.getAvailablePushProviders()[0].getDistributors()[0]),
+            )
+    }
+
     private fun createDefaultPushService(
         testPush: TestPush = FakeTestPush(),
         userPushStoreFactory: UserPushStoreFactory = FakeUserPushStoreFactory(),
@@ -345,6 +627,7 @@ class DefaultPushServiceTest {
         pushClientSecretStore: PushClientSecretStore = InMemoryPushClientSecretStore(),
         pushDataStore: PushDataStore = InMemoryPushDataStore(),
         mutableBatteryOptimizationStore: MutableBatteryOptimizationStore = FakeMutableBatteryOptimizationStore(),
+        serviceUnregisteredHandler: ServiceUnregisteredHandler = FakeServiceUnregisteredHandler(),
     ): DefaultPushService {
         return DefaultPushService(
             testPush = testPush,
@@ -355,6 +638,7 @@ class DefaultPushServiceTest {
             pushClientSecretStore = pushClientSecretStore,
             pushDataStore = pushDataStore,
             mutableBatteryOptimizationStore = mutableBatteryOptimizationStore,
+            serviceUnregisteredHandler = serviceUnregisteredHandler,
         )
     }
 }

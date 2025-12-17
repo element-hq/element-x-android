@@ -1,13 +1,16 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.announcement.impl.spaces
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.announcement.api.Announcement
+import io.element.android.features.announcement.impl.store.AnnouncementStatus
 import io.element.android.features.announcement.impl.store.AnnouncementStore
 import io.element.android.features.announcement.impl.store.InMemoryAnnouncementStore
 import io.element.android.tests.testutils.test
@@ -23,10 +26,10 @@ class SpaceAnnouncementPresenterTest {
             announcementStore = store,
         )
         presenter.test {
-            assertThat(store.spaceAnnouncementFlow().first()).isEqualTo(AnnouncementStore.SpaceAnnouncement.NeverShown)
+            assertThat(store.announcementStatusFlow(Announcement.Space).first()).isEqualTo(AnnouncementStatus.NeverShown)
             val state = awaitItem()
             state.eventSink(SpaceAnnouncementEvents.Continue)
-            assertThat(store.spaceAnnouncementFlow().first()).isEqualTo(AnnouncementStore.SpaceAnnouncement.Shown)
+            assertThat(store.announcementStatusFlow(Announcement.Space).first()).isEqualTo(AnnouncementStatus.Shown)
         }
     }
 }

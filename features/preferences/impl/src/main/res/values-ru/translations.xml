@@ -45,6 +45,7 @@
   <string name="screen_edit_profile_title">"Редактировать профиль"</string>
   <string name="screen_edit_profile_updating_details">"Обновление профиля…"</string>
   <string name="screen_labs_enable_threads">"Включить ответы в топике"</string>
+  <string name="screen_labs_enable_threads_description">"Приложение перезапустится, чтобы применить это изменение."</string>
   <string name="screen_labs_header_description">"Попробуйте наши последние идеи в разработке. Эти функции ещё не завершены, они могут быть нестабильны и могут измениться."</string>
   <string name="screen_labs_header_title">"Хотите попробовать?"</string>
   <string name="screen_labs_title">"Лаборатория"</string>

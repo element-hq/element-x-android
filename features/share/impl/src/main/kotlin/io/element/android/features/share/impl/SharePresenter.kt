@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -22,10 +23,8 @@ import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
-import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
-import io.element.android.libraries.mediaupload.api.MediaPreProcessor
-import io.element.android.libraries.mediaupload.api.MediaSender
+import io.element.android.libraries.mediaupload.api.MediaSenderRoomFactory
 import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -38,7 +37,7 @@ class SharePresenter(
     private val sessionCoroutineScope: CoroutineScope,
     private val shareIntentHandler: ShareIntentHandler,
     private val matrixClient: MatrixClient,
-    private val mediaPreProcessor: MediaPreProcessor,
+    private val mediaSenderRoomFactory: MediaSenderRoomFactory,
     private val activeRoomsHolder: ActiveRoomsHolder,
     private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
 ) : Presenter<ShareState> {
@@ -55,7 +54,7 @@ class SharePresenter(
 
     @Composable
     override fun present(): ShareState {
-        fun handleEvents(event: ShareEvents) {
+        fun handleEvent(event: ShareEvents) {
             when (event) {
                 ShareEvents.ClearError -> shareActionState.value = AsyncAction.Uninitialized
             }
@@ -63,7 +62,7 @@ class SharePresenter(
 
         return ShareState(
             shareAction = shareActionState.value,
-            eventSink = { handleEvents(it) }
+            eventSink = ::handleEvent,
         )
     }
 
@@ -87,12 +86,7 @@ class SharePresenter(
                         roomIds
                             .map { roomId ->
                                 val room = getJoinedRoom(roomId) ?: return@map false
-                                val mediaSender = MediaSender(
-                                    preProcessor = mediaPreProcessor,
-                                    room = room,
-                                    timelineMode = Timeline.Mode.Live,
-                                    mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
-                                )
+                                val mediaSender = mediaSenderRoomFactory.create(room = room)
                                 filesToShare
                                     .map { fileToShare ->
                                         val result = mediaSender.sendMedia(

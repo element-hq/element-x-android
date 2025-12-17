@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -15,7 +16,6 @@ import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevels
-import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsValues
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiRoom
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiRoomListService
@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.room.aRoomInfo
+import io.element.android.libraries.matrix.test.room.defaultRoomPowerLevelValues
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.persistentMapOf
 import kotlinx.coroutines.flow.SharingStarted
@@ -125,7 +126,7 @@ class RustBaseRoomTest {
         val rustBaseRoom = createRustBaseRoom(
             initialRoomInfo = aRoomInfo(
                 roomPowerLevels = RoomPowerLevels(
-                    values = RoomPowerLevelsValues(50, 50, 50, 50, 50, 50, 50, 50),
+                    values = defaultRoomPowerLevelValues(),
                     users = persistentMapOf(A_USER_ID to 100L)
                 )
             ),

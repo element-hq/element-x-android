@@ -10,6 +10,7 @@
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Virheellinen URL-osoite. Varmista, että sisällytät protokollan (http/https) ja oikean osoitteen."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Piilota huoneiden avatarit kutsuista"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Piilota median esikatselu aikajanalla"</string>
+  <string name="screen_advanced_settings_labs">"Labrat"</string>
   <string name="screen_advanced_settings_media_compression_description">"Lähetä valokuvia ja videoita nopeammin ja vähennä datan käyttöä."</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimoi median laatu"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderointi ja Turvallisuus"</string>
@@ -43,6 +44,11 @@
   <string name="screen_edit_profile_error_title">"Profiilin muokkaaminen ei onnistunut"</string>
   <string name="screen_edit_profile_title">"Muokkaa profiilia"</string>
   <string name="screen_edit_profile_updating_details">"Muokataan profiilia…"</string>
+  <string name="screen_labs_enable_threads">"Ota käyttöön viestiketjuvastaukset"</string>
+  <string name="screen_labs_enable_threads_description">"Sovellus käynnistyy uudelleen muutoksen käyttöönottamiseksi."</string>
+  <string name="screen_labs_header_description">"Kokeile uusimpia kehitteillä olevia ideoitamme. Nämä ominaisuudet eivät ole vielä valmiita; ne voivat olla epävakaita ja muuttua."</string>
+  <string name="screen_labs_header_title">"Kokeilunhaluinen olo?"</string>
+  <string name="screen_labs_title">"Labrat"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Lisäasetukset"</string>
   <string name="screen_notification_settings_calls_label">"Ääni- ja videopuheluista"</string>
   <string name="screen_notification_settings_configuration_mismatch">"Konfiguraatio ei täsmää"</string>

@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -19,7 +20,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.theme.Theme
 import io.element.android.compound.theme.isDark
 import io.element.android.compound.theme.mapToTheme
-import io.element.android.features.enterprise.api.EnterpriseService
+import io.element.android.compound.tokens.generated.SemanticColors
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
@@ -53,7 +54,8 @@ val LocalBuildMeta = staticCompositionLocalOf {
 @Composable
 fun ElementThemeApp(
     appPreferencesStore: AppPreferencesStore,
-    enterpriseService: EnterpriseService,
+    compoundLight: SemanticColors,
+    compoundDark: SemanticColors,
     buildMeta: BuildMeta,
     content: @Composable () -> Unit,
 ) {
@@ -70,8 +72,6 @@ fun ElementThemeApp(
             }
         )
     }
-    val compoundLight = remember { enterpriseService.semanticColorsLight() }
-    val compoundDark = remember { enterpriseService.semanticColorsDark() }
     CompositionLocalProvider(
         LocalBuildMeta provides buildMeta,
     ) {

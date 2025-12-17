@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -24,7 +25,7 @@ import io.element.android.libraries.matrix.api.room.join.JoinRoom
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.model.InviteSender
-import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toImmutableList
 
 open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
     override val values: Sequence<JoinRoomState>
@@ -189,7 +190,7 @@ fun aLoadedDetailsSpace(
     heroes: List<MatrixUser> = emptyList(),
 ) = LoadedDetails.Space(
     childrenCount = childrenCount,
-    heroes = heroes.toPersistentList()
+    heroes = heroes.toImmutableList()
 )
 
 fun aJoinRoomState(

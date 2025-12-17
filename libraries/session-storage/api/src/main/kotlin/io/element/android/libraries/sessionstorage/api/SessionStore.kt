@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -51,6 +52,11 @@ interface SessionStore {
     suspend fun getAllSessions(): List<SessionData>
 
     /**
+     * Get the number of sessions.
+     */
+    suspend fun numberOfSessions(): Int
+
+    /**
      * Get the latest session, or null if no session exists.
      */
     suspend fun getLatestSession(): SessionData?
@@ -72,4 +78,16 @@ fun List<SessionData>.toUserList(): List<String> {
 
 fun Flow<List<SessionData>>.toUserListFlow(): Flow<List<String>> {
     return map { it.toUserList() }
+}
+
+/**
+ * @return a flow emitting the sessionId of the latest session if logged in, null otherwise.
+ */
+fun SessionStore.sessionIdFlow(): Flow<String?> {
+    return loggedInStateFlow().map {
+        when (it) {
+            is LoggedInState.LoggedIn -> it.sessionId
+            is LoggedInState.NotLoggedIn -> null
+        }
+    }
 }

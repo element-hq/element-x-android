@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -16,7 +17,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.features.rageshake.api.crash.CrashDetectionEvents
 import io.element.android.features.rageshake.api.crash.CrashDetectionPresenter
@@ -29,7 +29,6 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultCrashDetectionPresenter(
     private val buildMeta: BuildMeta,
     private val crashDataStore: CrashDataStore,
@@ -49,7 +48,7 @@ class DefaultCrashDetectionPresenter(
                 }
         }.collectAsState(false)
 
-        fun handleEvents(event: CrashDetectionEvents) {
+        fun handleEvent(event: CrashDetectionEvents) {
             when (event) {
                 CrashDetectionEvents.ResetAllCrashData -> localCoroutineScope.resetAll()
                 CrashDetectionEvents.ResetAppHasCrashed -> localCoroutineScope.resetAppHasCrashed()
@@ -59,7 +58,7 @@ class DefaultCrashDetectionPresenter(
         return CrashDetectionState(
             appName = buildMeta.applicationName,
             crashDetected = crashDetected,
-            eventSink = ::handleEvents
+            eventSink = ::handleEvent,
         )
     }
 

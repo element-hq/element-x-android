@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -63,7 +64,7 @@ class FullScreenIntentPermissionsPresenter(
         val isGranted = notificationManagerCompat.canUseFullScreenIntent()
         val isBannerDismissed by isFullScreenIntentBannerDismissed.collectAsState(initial = true)
 
-        fun handleEvents(event: FullScreenIntentPermissionsEvents) {
+        fun handleEvent(event: FullScreenIntentPermissionsEvents) {
             when (event) {
                 FullScreenIntentPermissionsEvents.Dismiss -> coroutineScope.launch {
                     dismissFullScreenIntentBanner()
@@ -75,7 +76,7 @@ class FullScreenIntentPermissionsPresenter(
         return FullScreenIntentPermissionsState(
             permissionGranted = isGranted,
             shouldDisplayBanner = !isBannerDismissed && !isGranted,
-            eventSink = ::handleEvents,
+            eventSink = ::handleEvent,
         )
     }
 
@@ -87,7 +88,7 @@ class FullScreenIntentPermissionsPresenter(
                     "package:${buildMeta.applicationId}".toUri()
                 )
                 externalIntentLauncher.launch(intent)
-            } catch (e: ActivityNotFoundException) {
+            } catch (_: ActivityNotFoundException) {
                 val intent = Intent(Settings.ACTION_APP_NOTIFICATION_SETTINGS)
                     .putExtra(Settings.EXTRA_APP_PACKAGE, buildMeta.applicationId)
                 externalIntentLauncher.launch(intent)

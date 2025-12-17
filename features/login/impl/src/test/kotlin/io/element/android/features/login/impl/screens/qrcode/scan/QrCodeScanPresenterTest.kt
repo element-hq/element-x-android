@@ -1,15 +1,13 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.login.impl.screens.qrcode.scan
 
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
@@ -34,9 +32,7 @@ class QrCodeScanPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val presenter = createQrCodeScanPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             awaitItem().run {
                 assertThat(isScanning).isTrue()
                 assertThat(authenticationAction.isUninitialized()).isTrue()
@@ -114,9 +110,7 @@ class QrCodeScanPresenterTest {
             parseQrCodeLoginDataResult = { Result.failure(Exception("Failed to parse QR code")) }
         )
         val presenter = createQrCodeScanPresenter(qrCodeLoginDataFactory = qrCodeLoginDataFactory)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             initialState.eventSink(QrCodeScanEvents.QrCodeScanned(byteArrayOf()))
             assertThat(awaitItem().isScanning).isFalse()
@@ -140,9 +134,7 @@ class QrCodeScanPresenterTest {
         }
         qrCodeLoginManager.resetAction = resetAction
         val presenter = createQrCodeScanPresenter(qrCodeLoginDataFactory = qrCodeLoginDataFactory, qrCodeLoginManager = qrCodeLoginManager)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             // Skip initial item
             skipItems(1)
 

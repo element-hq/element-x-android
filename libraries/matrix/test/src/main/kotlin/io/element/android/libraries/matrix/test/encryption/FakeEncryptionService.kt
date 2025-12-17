@@ -1,12 +1,14 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.matrix.test.encryption
 
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.BackupUploadState
@@ -24,7 +26,6 @@ import kotlinx.coroutines.flow.flowOf
 class FakeEncryptionService(
     var startIdentityResetLambda: () -> Result<IdentityResetHandle?> = { lambdaError() },
     private val pinUserIdentityResult: (UserId) -> Result<Unit> = { lambdaError() },
-    private val isUserVerifiedResult: (UserId) -> Result<Boolean> = { lambdaError() },
     private val withdrawVerificationResult: (UserId) -> Result<Unit> = { lambdaError() },
     private val getUserIdentityResult: (UserId) -> Result<IdentityState?> = { lambdaError() },
     private val enableRecoveryLambda: (Boolean) -> Result<Unit> = { lambdaError() },
@@ -34,7 +35,7 @@ class FakeEncryptionService(
     override val recoveryStateStateFlow: MutableStateFlow<RecoveryState> = MutableStateFlow(RecoveryState.UNKNOWN)
     override val enableRecoveryProgressStateFlow: MutableStateFlow<EnableRecoveryProgress> = MutableStateFlow(EnableRecoveryProgress.Starting)
     override val isLastDevice: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    override val hasDevicesToVerifyAgainst: MutableStateFlow<Boolean> = MutableStateFlow(true)
+    override val hasDevicesToVerifyAgainst: MutableStateFlow<AsyncData<Boolean>> = MutableStateFlow(AsyncData.Uninitialized)
     private var waitForBackupUploadSteadyStateFlow: Flow<BackupUploadState> = flowOf()
 
     private var recoverFailure: Exception? = null
@@ -84,7 +85,7 @@ class FakeEncryptionService(
         this.isLastDevice.value = isLastDevice
     }
 
-    fun emitHasDevicesToVerifyAgainst(hasDevicesToVerifyAgainst: Boolean) {
+    fun emitHasDevicesToVerifyAgainst(hasDevicesToVerifyAgainst: AsyncData<Boolean>) {
         this.hasDevicesToVerifyAgainst.value = hasDevicesToVerifyAgainst
     }
 
@@ -137,11 +138,7 @@ class FakeEncryptionService(
         return withdrawVerificationResult(userId)
     }
 
-    override suspend fun isUserVerified(userId: UserId): Result<Boolean> = simulateLongTask {
-        isUserVerifiedResult(userId)
-    }
-
-    override suspend fun getUserIdentity(userId: UserId): Result<IdentityState?> = simulateLongTask {
+    override suspend fun getUserIdentity(userId: UserId, fallbackToServer: Boolean): Result<IdentityState?> = simulateLongTask {
         return getUserIdentityResult(userId)
     }
 

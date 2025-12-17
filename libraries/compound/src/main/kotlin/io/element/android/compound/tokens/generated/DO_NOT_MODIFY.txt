@@ -1,1 +1,1 @@
-Files inside this package are generated automatically from the Compound project (https://github.com/vector-im/compound-design-tokens) and will be batch-replaced when new tokens are generated.
+Files inside this package are generated automatically from the Compound project (https://github.com/element-hq/compound-design-tokens) and will be batch-replaced when new tokens are generated.

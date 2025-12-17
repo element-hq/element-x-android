@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_browser_delete_confirmation_subtitle">"Bu fayl xonadan olib tashlanadi va a’zolar unga kira olmaydilar."</string>
+  <string name="screen_media_browser_delete_confirmation_title">"Fayl oʻchirilsinmi?"</string>
+  <string name="screen_media_browser_download_error_message">"Internet aloqangizni tekshiring va qayta urining."</string>
+  <string name="screen_media_browser_files_empty_state_subtitle">"Ushbu xonaga yuklangan hujjatlar, audio fayllar va ovozli xabarlar shu yerda ko‘rsatiladi."</string>
+  <string name="screen_media_browser_files_empty_state_title">"Hali hech qanday fayl yuklanmagan"</string>
+  <string name="screen_media_browser_list_loading_files">"Fayllar yuklanmoqda…"</string>
+  <string name="screen_media_browser_list_loading_media">"Media yuklanmoqda…"</string>
+  <string name="screen_media_browser_list_mode_files">"Fayllar"</string>
+  <string name="screen_media_browser_list_mode_media">"Media"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"Bu xonaga yuklangan rasm va videolar shu yerda chiqadi."</string>
+  <string name="screen_media_browser_media_empty_state_title">"Hali hech qanday media yuklanmagan"</string>
+  <string name="screen_media_browser_title">"Media va fayllar"</string>
+  <string name="screen_media_details_file_format">"Fayl formati"</string>
+  <string name="screen_media_details_filename">"Fayl nomi"</string>
+  <string name="screen_media_details_no_more_files_to_show">"Ko‘rsatish uchun boshqa fayllar yo‘q"</string>
+  <string name="screen_media_details_no_more_media_to_show">"Ko‘rsatish uchun boshqa media yo‘q"</string>
+  <string name="screen_media_details_uploaded_by">"Tomonidan yuklangan"</string>
+  <string name="screen_media_details_uploaded_on">"Yuklangan"</string>
+</resources>

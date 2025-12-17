@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -29,8 +30,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarM
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.room.BaseRoom
-import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOther
-import io.element.android.libraries.matrix.api.room.powerlevels.canRedactOwn
+import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
 import io.element.android.libraries.mediaviewer.impl.datasource.MediaGalleryDataSource
@@ -38,8 +38,10 @@ import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetSta
 import io.element.android.libraries.mediaviewer.impl.local.LocalMediaActions
 import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
+import io.element.android.libraries.mediaviewer.impl.model.MediaPermissions
 import io.element.android.libraries.mediaviewer.impl.model.eventId
 import io.element.android.libraries.mediaviewer.impl.model.mediaInfo
+import io.element.android.libraries.mediaviewer.impl.model.mediaPermissions
 import io.element.android.libraries.mediaviewer.impl.model.mediaSource
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
@@ -79,10 +81,14 @@ class MediaGalleryPresenter(
             mediaGalleryDataSource.start()
         }
 
+        val permissions by room.permissionsAsState(MediaPermissions.DEFAULT) { perms ->
+            perms.mediaPermissions()
+        }
+
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
         localMediaActions.Configure()
 
-        fun handleEvents(event: MediaGalleryEvents) {
+        fun handleEvent(event: MediaGalleryEvents) {
             when (event) {
                 is MediaGalleryEvents.ChangeMode -> {
                     mode = event.mode
@@ -105,6 +111,10 @@ class MediaGalleryPresenter(
                         share(it)
                     }
                 }
+                is MediaGalleryEvents.Forward -> {
+                    mediaBottomSheetState = MediaBottomSheetState.Hidden
+                    navigator.onForwardClick(event.eventId)
+                }
                 is MediaGalleryEvents.ViewInTimeline -> {
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
                     navigator.onViewInTimelineClick(event.eventId)
@@ -114,8 +124,8 @@ class MediaGalleryPresenter(
                         eventId = event.mediaItem.eventId(),
                         canDelete = when (event.mediaItem.mediaInfo().senderId) {
                             null -> false
-                            room.sessionId -> room.canRedactOwn().getOrElse { false } && event.mediaItem.eventId() != null
-                            else -> room.canRedactOther().getOrElse { false } && event.mediaItem.eventId() != null
+                            room.sessionId -> permissions.canRedactOwn && event.mediaItem.eventId() != null
+                            else -> permissions.canRedactOther && event.mediaItem.eventId() != null
                         },
                         mediaInfo = event.mediaItem.mediaInfo(),
                         thumbnailSource = when (event.mediaItem) {
@@ -146,7 +156,7 @@ class MediaGalleryPresenter(
             groupedMediaItems = groupedMediaItems,
             mediaBottomSheetState = mediaBottomSheetState,
             snackbarMessage = snackbarMessage,
-            eventSink = ::handleEvents
+            eventSink = ::handleEvent,
         )
     }
 

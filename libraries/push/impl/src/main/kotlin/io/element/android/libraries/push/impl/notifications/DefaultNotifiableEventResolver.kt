@@ -1,23 +1,28 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.push.impl.notifications
 
 import android.content.Context
+import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
+import androidx.core.app.NotificationCompat
 import androidx.core.content.FileProvider
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.annotations.ApplicationContext
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.EventId
@@ -44,6 +49,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageTy
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.ui.messages.toPlainText
+import io.element.android.libraries.push.api.push.NotificationEventRequest
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
@@ -77,7 +83,6 @@ interface NotifiableEventResolver {
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-@Inject
 class DefaultNotifiableEventResolver(
     private val stringProvider: StringProvider,
     private val matrixClientProvider: MatrixClientProvider,
@@ -86,6 +91,7 @@ class DefaultNotifiableEventResolver(
     private val permalinkParser: PermalinkParser,
     private val callNotificationEventResolver: CallNotificationEventResolver,
     private val fallbackNotificationFactory: FallbackNotificationFactory,
+    private val featureFlagService: FeatureFlagService,
 ) : NotifiableEventResolver {
     override suspend fun resolveEvents(
         sessionId: SessionId,
@@ -93,9 +99,12 @@ class DefaultNotifiableEventResolver(
     ): ResolvePushEventsResult {
         Timber.d("Queueing notifications: $notificationEventRequests")
         val client = matrixClientProvider.getOrRestore(sessionId).getOrElse {
-            return Result.failure(IllegalStateException("Couldn't get or restore client for session $sessionId"))
+            return Result.failure(it)
         }
-        val ids = notificationEventRequests.groupBy { it.roomId }.mapValues { (_, value) -> value.map { it.eventId } }
+        val ids = notificationEventRequests.groupBy { it.roomId }
+            .mapValues { (_, requests) ->
+                requests.map { it.eventId }
+            }
 
         // TODO this notificationData is not always valid at the moment, sometimes the Rust SDK can't fetch the matching event
         val notificationsResult = client.notificationService.getNotifications(ids)
@@ -133,19 +142,25 @@ class DefaultNotifiableEventResolver(
             is NotificationContent.MessageLike.RoomMessage -> {
                 val showMediaPreview = client.mediaPreviewService.getMediaPreviewValue() == MediaPreviewValue.On
                 val senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId)
-                val messageBody = descriptionFromMessageContent(content, senderDisambiguatedDisplayName)
+                val imageMimeType = if (showMediaPreview) content.getImageMimetype() else null
+                val imageUriString = imageMimeType?.let { content.fetchImageIfPresent(client, imageMimeType)?.toString() }
+                val messageBody = descriptionFromMessageContent(
+                    content = content,
+                    senderDisambiguatedDisplayName = senderDisambiguatedDisplayName,
+                    hasImageUri = imageUriString != null,
+                )
                 val notifiableMessageEvent = buildNotifiableMessageEvent(
                     sessionId = userId,
                     senderId = content.senderId,
                     roomId = roomId,
                     eventId = eventId,
-                    threadId = threadId,
+                    threadId = threadId.takeIf { featureFlagService.isFeatureEnabled(FeatureFlags.Threads) },
                     noisy = isNoisy,
                     timestamp = this.timestamp,
                     senderDisambiguatedDisplayName = senderDisambiguatedDisplayName,
                     body = messageBody,
-                    imageUriString = if (showMediaPreview) content.fetchImageIfPresent(client)?.toString() else null,
-                    imageMimeType = if (showMediaPreview) content.getImageMimetype() else null,
+                    imageUriString = imageUriString,
+                    imageMimeType = imageMimeType.takeIf { imageUriString != null },
                     roomName = roomDisplayName,
                     roomIsDm = isDm,
                     roomAvatarPath = roomAvatarUrl,
@@ -168,7 +183,11 @@ class DefaultNotifiableEventResolver(
                     soundName = null,
                     isRedacted = false,
                     isUpdated = false,
-                    description = descriptionFromRoomMembershipInvite(senderDisambiguatedDisplayName, isDirect),
+                    description = descriptionFromRoomMembershipInvite(
+                        senderDisambiguatedDisplayName = senderDisambiguatedDisplayName,
+                        isDirectRoom = isDirect,
+                        isSpace = isSpace
+                    ),
                     // TODO check if type is needed anymore
                     type = null,
                     // TODO check if title is needed anymore
@@ -294,13 +313,18 @@ class DefaultNotifiableEventResolver(
     private fun descriptionFromMessageContent(
         content: NotificationContent.MessageLike.RoomMessage,
         senderDisambiguatedDisplayName: String,
-    ): String {
+        hasImageUri: Boolean,
+    ): String? {
         return when (val messageType = content.messageType) {
             is AudioMessageType -> messageType.bestDescription
             is VoiceMessageType -> stringProvider.getString(CommonStrings.common_voice_message)
             is EmoteMessageType -> "* $senderDisambiguatedDisplayName ${messageType.body}"
             is FileMessageType -> messageType.bestDescription
-            is ImageMessageType -> messageType.bestDescription
+            is ImageMessageType -> if (hasImageUri) {
+                messageType.caption
+            } else {
+                messageType.bestDescription
+            }
             is StickerMessageType -> messageType.bestDescription
             is NoticeMessageType -> messageType.body
             is TextMessageType -> messageType.toPlainText(permalinkParser = permalinkParser)
@@ -312,23 +336,50 @@ class DefaultNotifiableEventResolver(
 
     private fun descriptionFromRoomMembershipInvite(
         senderDisambiguatedDisplayName: String,
-        isDirectRoom: Boolean
+        isDirectRoom: Boolean,
+        isSpace: Boolean,
     ): String {
-        return if (isDirectRoom) {
-            stringProvider.getString(R.string.notification_invite_body_with_sender, senderDisambiguatedDisplayName)
-        } else {
-            stringProvider.getString(R.string.notification_room_invite_body_with_sender, senderDisambiguatedDisplayName)
+        return when {
+            isDirectRoom -> {
+                stringProvider.getString(R.string.notification_invite_body_with_sender, senderDisambiguatedDisplayName)
+            }
+            isSpace -> {
+                stringProvider.getString(R.string.notification_space_invite_body_with_sender, senderDisambiguatedDisplayName)
+            }
+            else -> {
+                stringProvider.getString(R.string.notification_room_invite_body_with_sender, senderDisambiguatedDisplayName)
+            }
         }
     }
 
-    private suspend fun NotificationContent.MessageLike.RoomMessage.fetchImageIfPresent(client: MatrixClient): Uri? {
+    /**
+     * Fetch the image for message type, only if the mime type is supported, as recommended
+     * per [NotificationCompat.MessagingStyle.Message.setData] documentation.
+     * Then convert to a [Uri] accessible to the Notification Service.
+     */
+    private suspend fun NotificationContent.MessageLike.RoomMessage.fetchImageIfPresent(
+        client: MatrixClient,
+        mimeType: String,
+    ): Uri? {
         val fileResult = when (val messageType = messageType) {
-            is ImageMessageType -> notificationMediaRepoFactory.create(client)
-                .getMediaFile(
-                    mediaSource = messageType.source,
-                    mimeType = messageType.info?.mimetype,
-                    filename = messageType.filename,
-                )
+            is ImageMessageType -> {
+                val isMimeTypeSupported = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                    ImageDecoder.isMimeTypeSupported(mimeType)
+                } else {
+                    // Assume it's supported on old systems...
+                    true
+                }
+                if (isMimeTypeSupported) {
+                    notificationMediaRepoFactory.create(client).getMediaFile(
+                        mediaSource = messageType.source,
+                        mimeType = messageType.info?.mimetype,
+                        filename = messageType.filename,
+                    )
+                } else {
+                    Timber.tag(loggerTag.value).d("Mime type $mimeType not supported by the system")
+                    null
+                }
+            }
             is VideoMessageType -> null // Use the thumbnail here?
             else -> null
         }

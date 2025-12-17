@@ -1,18 +1,23 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.space.impl.root
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -23,6 +28,7 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -33,6 +39,8 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.atomic.molecules.InviteButtonsRowMolecule
+import io.element.android.libraries.designsystem.components.ClickableLinkText
+import io.element.android.libraries.designsystem.components.SimpleModalBottomSheet
 import io.element.android.libraries.designsystem.components.async.AsyncIndicator
 import io.element.android.libraries.designsystem.components.async.AsyncIndicatorHost
 import io.element.android.libraries.designsystem.components.async.rememberAsyncIndicatorState
@@ -46,6 +54,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
+import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -61,6 +70,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SpaceView(
     state: SpaceState,
@@ -68,6 +78,8 @@ fun SpaceView(
     onRoomClick: (spaceRoom: SpaceRoom) -> Unit,
     onShareSpace: () -> Unit,
     onLeaveSpaceClick: () -> Unit,
+    onDetailsClick: () -> Unit,
+    onViewMembersClick: () -> Unit,
     modifier: Modifier = Modifier,
     acceptDeclineInviteView: @Composable () -> Unit,
 ) {
@@ -76,9 +88,12 @@ fun SpaceView(
         topBar = {
             SpaceViewTopBar(
                 currentSpace = state.currentSpace,
+                canAccessSpaceSettings = state.canAccessSpaceSettings,
                 onBackClick = onBackClick,
                 onLeaveSpaceClick = onLeaveSpaceClick,
                 onShareSpace = onShareSpace,
+                onDetailsClick = onDetailsClick,
+                onViewMembersClick = onViewMembersClick,
             )
         },
         content = { padding ->
@@ -87,7 +102,10 @@ fun SpaceView(
             ) {
                 SpaceViewContent(
                     state = state,
-                    onRoomClick = onRoomClick
+                    onRoomClick = onRoomClick,
+                    onTopicClick = { topic ->
+                        state.eventSink(SpaceEvents.ShowTopicViewer(topic))
+                    }
                 )
                 JoinRoomFailureEffect(
                     hasAnyFailure = state.hasAnyFailure,
@@ -97,6 +115,14 @@ fun SpaceView(
             }
         },
     )
+    if (state.topicViewerState is TopicViewerState.Shown) {
+        TopicViewerBottomSheet(
+            topicViewerState = state.topicViewerState,
+            onDismiss = {
+                state.eventSink(SpaceEvents.HideTopicViewer)
+            }
+        )
+    }
 }
 
 @Composable
@@ -121,9 +147,30 @@ private fun JoinRoomFailureEffect(
 }
 
 @Composable
+private fun TopicViewerBottomSheet(
+    topicViewerState: TopicViewerState.Shown,
+    onDismiss: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    SimpleModalBottomSheet(
+        title = stringResource(CommonStrings.common_description),
+        onDismiss = onDismiss,
+        modifier = modifier
+    ) {
+        ClickableLinkText(
+            text = topicViewerState.topic,
+            interactionSource = remember { MutableInteractionSource() },
+            style = ElementTheme.typography.fontBodyMdRegular,
+            color = ElementTheme.colors.textSecondary,
+        )
+    }
+}
+
+@Composable
 private fun SpaceViewContent(
     state: SpaceState,
     onRoomClick: (spaceRoom: SpaceRoom) -> Unit,
+    onTopicClick: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier.fillMaxSize()) {
@@ -132,40 +179,49 @@ private fun SpaceViewContent(
             item {
                 SpaceHeaderView(
                     avatarData = currentSpace.getAvatarData(AvatarSize.SpaceHeader),
-                    name = currentSpace.name,
+                    name = currentSpace.displayName,
                     topic = currentSpace.topic,
+                    topicMaxLines = 2,
                     visibility = currentSpace.visibility,
                     heroes = currentSpace.heroes.toImmutableList(),
                     numberOfMembers = currentSpace.numJoinedMembers,
+                    onTopicClick = onTopicClick
                 )
             }
-        }
-        state.children.forEach { spaceRoom ->
             item {
-                val isInvitation = spaceRoom.state == CurrentUserMembership.INVITED
-                val isCurrentlyJoining = state.isJoining(spaceRoom.roomId)
-                SpaceRoomItemView(
-                    spaceRoom = spaceRoom,
-                    showUnreadIndicator = isInvitation && spaceRoom.roomId !in state.seenSpaceInvites,
-                    hideAvatars = isInvitation && state.hideInvitesAvatar,
-                    onClick = {
-                        onRoomClick(spaceRoom)
+                HorizontalDivider()
+            }
+        }
+        itemsIndexed(
+            items = state.children,
+            key = { _, spaceRoom -> spaceRoom.roomId }
+        ) { index, spaceRoom ->
+            val isInvitation = spaceRoom.state == CurrentUserMembership.INVITED
+            val isCurrentlyJoining = state.isJoining(spaceRoom.roomId)
+            SpaceRoomItemView(
+                spaceRoom = spaceRoom,
+                showUnreadIndicator = isInvitation && spaceRoom.roomId !in state.seenSpaceInvites,
+                hideAvatars = isInvitation && state.hideInvitesAvatar,
+                onClick = {
+                    onRoomClick(spaceRoom)
+                },
+                onLongClick = {
+                    // TODO
+                },
+                trailingAction = spaceRoom.trailingAction(isCurrentlyJoining = isCurrentlyJoining) {
+                    state.eventSink(SpaceEvents.Join(spaceRoom))
+                },
+                bottomAction = spaceRoom.inviteButtons(
+                    onAcceptClick = {
+                        state.eventSink(SpaceEvents.AcceptInvite(spaceRoom))
                     },
-                    onLongClick = {
-                        // TODO
-                    },
-                    trailingAction = spaceRoom.trailingAction(isCurrentlyJoining = isCurrentlyJoining) {
-                        state.eventSink(SpaceEvents.Join(spaceRoom))
-                    },
-                    bottomAction = spaceRoom.inviteButtons(
-                        onAcceptClick = {
-                            state.eventSink(SpaceEvents.AcceptInvite(spaceRoom))
-                        },
-                        onDeclineClick = {
-                            state.eventSink(SpaceEvents.DeclineInvite(spaceRoom))
-                        }
-                    )
+                    onDeclineClick = {
+                        state.eventSink(SpaceEvents.DeclineInvite(spaceRoom))
+                    }
                 )
+            )
+            if (index != state.children.lastIndex) {
+                HorizontalDivider()
             }
         }
         if (state.hasMoreToLoad) {
@@ -200,9 +256,12 @@ private fun LoadingMoreIndicator(
 @Composable
 private fun SpaceViewTopBar(
     currentSpace: SpaceRoom?,
+    canAccessSpaceSettings: Boolean,
     onBackClick: () -> Unit,
     onLeaveSpaceClick: () -> Unit,
+    onDetailsClick: () -> Unit,
     onShareSpace: () -> Unit,
+    onViewMembersClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     TopAppBar(
@@ -212,9 +271,13 @@ private fun SpaceViewTopBar(
         },
         title = {
             if (currentSpace != null) {
+                val roundedCornerShape = RoundedCornerShape(8.dp)
                 SpaceAvatarAndNameRow(
-                    name = currentSpace.name,
+                    name = currentSpace.displayName,
                     avatarData = currentSpace.getAvatarData(AvatarSize.TimelineRoom),
+                    modifier = Modifier
+                        .clip(roundedCornerShape)
+                        .clickable(enabled = canAccessSpaceSettings, onClick = onDetailsClick)
                 )
             }
         },
@@ -249,11 +312,25 @@ private fun SpaceViewTopBar(
                 DropdownMenuItem(
                     onClick = {
                         showMenu = false
+                        onViewMembersClick()
+                    },
+                    text = { Text(stringResource(id = CommonStrings.screen_space_menu_action_members)) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = CompoundIcons.User(),
+                            tint = ElementTheme.colors.iconSecondary,
+                            contentDescription = null,
+                        )
+                    }
+                )
+                DropdownMenuItem(
+                    onClick = {
+                        showMenu = false
                         onLeaveSpaceClick()
                     },
                     text = {
                         Text(
-                            text = stringResource(id = CommonStrings.action_leave),
+                            text = stringResource(id = CommonStrings.action_leave_space),
                             color = ElementTheme.colors.textCriticalPrimary,
                         )
                     },
@@ -344,6 +421,8 @@ internal fun SpaceViewPreview(
         onShareSpace = {},
         onLeaveSpaceClick = {},
         acceptDeclineInviteView = {},
+        onDetailsClick = {},
+        onViewMembersClick = {},
         onBackClick = {},
     )
 }

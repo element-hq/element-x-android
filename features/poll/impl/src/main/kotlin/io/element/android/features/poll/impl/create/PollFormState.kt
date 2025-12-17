@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -13,7 +14,7 @@ import io.element.android.features.poll.impl.PollConstants
 import io.element.android.features.poll.impl.PollConstants.MIN_ANSWERS
 import io.element.android.libraries.matrix.api.poll.PollKind
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toImmutableList
 
 /**
  * Represents the state of the poll creation / edit form.
@@ -28,7 +29,7 @@ data class PollFormState(
     companion object {
         val Empty = PollFormState(
             question = "",
-            answers = MutableList(MIN_ANSWERS) { "" }.toPersistentList(),
+            answers = MutableList(MIN_ANSWERS) { "" }.toImmutableList(),
             isDisclosed = true,
         )
     }
@@ -49,7 +50,7 @@ data class PollFormState(
             return this
         }
 
-        return copy(answers = (answers + "").toPersistentList())
+        return copy(answers = (answers + "").toImmutableList())
     }
 
     /**
@@ -66,7 +67,7 @@ data class PollFormState(
             return this
         }
 
-        return copy(answers = answers.filterIndexed { i, _ -> i != index }.toPersistentList())
+        return copy(answers = answers.filterIndexed { i, _ -> i != index }.toImmutableList())
     }
 
     /**
@@ -82,7 +83,7 @@ data class PollFormState(
     fun withAnswerChanged(index: Int, rawAnswer: String): PollFormState =
         copy(answers = answers.toMutableList().apply {
             this[index] = rawAnswer.take(PollConstants.MAX_ANSWER_LENGTH)
-        }.toPersistentList())
+        }.toImmutableList())
 
     /**
      * Whether a new answer can be added.
@@ -114,7 +115,7 @@ internal val pollFormStateSaver = mapSaver(
     restore = { saved ->
         PollFormState(
             question = saved["question"] as String,
-            answers = (saved["answers"] as Array<*>).map { it as String }.toPersistentList(),
+            answers = (saved["answers"] as Array<*>).map { it as String }.toImmutableList(),
             isDisclosed = saved["isDisclosed"] as Boolean,
         )
     }

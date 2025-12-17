@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -13,13 +14,13 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarColors
 import androidx.compose.material3.SearchBarDefaults
-import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -44,6 +45,9 @@ import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.ui.strings.CommonStrings
 
+/**
+ * Ref: https://www.figma.com/design/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?node-id=1992-8350
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun <T> SearchBar(
@@ -62,14 +66,12 @@ fun <T> SearchBar(
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
     inactiveBarColors: SearchBarColors = ElementSearchBarDefaults.inactiveColors(),
     activeBarColors: SearchBarColors = ElementSearchBarDefaults.activeColors(),
-    inactiveTextInputColors: TextFieldColors = ElementSearchBarDefaults.inactiveInputFieldColors(),
-    activeTextInputColors: TextFieldColors = ElementSearchBarDefaults.activeInputFieldColors(),
     contentPrefix: @Composable ColumnScope.() -> Unit = {},
     contentSuffix: @Composable ColumnScope.() -> Unit = {},
     resultHandler: @Composable ColumnScope.(T) -> Unit = {},
 ) {
     val focusManager = LocalFocusManager.current
-
+    val colors = if (active) activeBarColors else inactiveBarColors
     val updatedOnQueryChange by rememberUpdatedState(onQueryChange)
     LaunchedEffect(active) {
         if (!active) {
@@ -106,28 +108,25 @@ fun <T> SearchBar(
                             }
                         }
                     }
-
                     !active -> {
                         {
                             Icon(
                                 imageVector = CompoundIcons.Search(),
                                 contentDescription = stringResource(CommonStrings.action_search),
-                                tint = ElementTheme.colors.iconTertiary,
                             )
                         }
                     }
-
                     else -> null
                 },
                 interactionSource = interactionSource,
-                colors = if (active) activeTextInputColors else inactiveTextInputColors,
+                colors = colors.inputFieldColors,
             )
         },
         expanded = active,
         onExpandedChange = onActiveChange,
         modifier = modifier.padding(horizontal = if (!active) 16.dp else 0.dp),
         shape = shape,
-        colors = if (active) activeBarColors else inactiveBarColors,
+        colors = colors,
         tonalElevation = tonalElevation,
         windowInsets = windowInsets,
         content = {
@@ -162,35 +161,43 @@ object ElementSearchBarDefaults {
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun inactiveColors() = SearchBarDefaults.colors(
-        containerColor = ElementTheme.materialColors.surfaceVariant,
-        dividerColor = ElementTheme.materialColors.outline,
+        containerColor = Color.Transparent,
+        dividerColor = ElementTheme.colors.borderInteractivePrimary,
+        inputFieldColors = inactiveInputFieldColors(),
     )
 
     @Composable
     fun inactiveInputFieldColors() = TextFieldDefaults.colors(
         unfocusedPlaceholderColor = ElementTheme.colors.textDisabled,
         focusedPlaceholderColor = ElementTheme.colors.textDisabled,
-        unfocusedLeadingIconColor = ElementTheme.materialColors.primary,
-        focusedLeadingIconColor = ElementTheme.materialColors.primary,
-        unfocusedTrailingIconColor = ElementTheme.materialColors.primary,
-        focusedTrailingIconColor = ElementTheme.materialColors.primary,
+        unfocusedTrailingIconColor = ElementTheme.colors.iconDisabled,
+        focusedTrailingIconColor = ElementTheme.colors.iconDisabled,
+        focusedContainerColor = ElementTheme.colors.bgSubtleSecondary,
+        unfocusedContainerColor = ElementTheme.colors.bgSubtleSecondary,
+        disabledContainerColor = ElementTheme.colors.bgSubtleSecondary,
+        errorContainerColor = ElementTheme.colors.bgSubtleSecondary,
     )
 
     @OptIn(ExperimentalMaterial3Api::class)
     @Composable
     fun activeColors() = SearchBarDefaults.colors(
         containerColor = Color.Transparent,
-        dividerColor = ElementTheme.materialColors.outline,
+        dividerColor = ElementTheme.colors.borderInteractivePrimary,
+        inputFieldColors = activeInputFieldColors(),
     )
 
     @Composable
     fun activeInputFieldColors() = TextFieldDefaults.colors(
-        unfocusedPlaceholderColor = ElementTheme.colors.textDisabled,
-        focusedPlaceholderColor = ElementTheme.colors.textDisabled,
-        unfocusedLeadingIconColor = ElementTheme.materialColors.primary,
-        focusedLeadingIconColor = ElementTheme.materialColors.primary,
-        unfocusedTrailingIconColor = ElementTheme.materialColors.primary,
-        focusedTrailingIconColor = ElementTheme.materialColors.primary,
+        unfocusedPlaceholderColor = ElementTheme.colors.textSecondary,
+        focusedPlaceholderColor = ElementTheme.colors.textSecondary,
+        unfocusedLeadingIconColor = ElementTheme.colors.iconPrimary,
+        focusedLeadingIconColor = ElementTheme.colors.iconPrimary,
+        unfocusedTrailingIconColor = ElementTheme.colors.iconTertiary,
+        focusedTrailingIconColor = ElementTheme.colors.iconTertiary,
+        focusedContainerColor = Color.Transparent,
+        unfocusedContainerColor = Color.Transparent,
+        disabledContainerColor = Color.Transparent,
+        errorContainerColor = Color.Transparent,
     )
 }
 
@@ -294,6 +301,7 @@ private fun ContentToPreview(
     resultHandler: @Composable ColumnScope.(String) -> Unit = {},
 ) {
     SearchBar(
+        modifier = Modifier.heightIn(max = 200.dp),
         query = query,
         active = active,
         resultState = resultState,

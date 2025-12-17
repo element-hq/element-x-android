@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_leave_space_last_admin_info">"%1$s (管理员)"</string>
+  <plurals name="screen_leave_space_submit">
+    <item quantity="other">"离开 %1$d 个房间和空间"</item>
+  </plurals>
+  <string name="screen_leave_space_subtitle">"选择您想要离开且您不是其唯一管理员的房间："</string>
+  <string name="screen_leave_space_subtitle_last_admin">"您需要为该空间指定另一位管理员才能离开。"</string>
+  <string name="screen_leave_space_subtitle_only_last_admin">"您不会从以下房间中被移除，因为您是唯一的管理员："</string>
+  <string name="screen_leave_space_title">"离开%1$s？"</string>
+  <string name="screen_leave_space_title_last_admin">"您是 %1$s 的唯一管理员"</string>
+  <string name="screen_space_settings_leave_space">"离开空间"</string>
+  <string name="screen_space_settings_roles_and_permissions">"角色与权限"</string>
+  <string name="screen_space_settings_security_and_privacy">"安全与隐私"</string>
+</resources>

@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -16,7 +17,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.rageshake.api.detection.RageshakeDetectionEvents
 import io.element.android.features.rageshake.api.detection.RageshakeDetectionPresenter
 import io.element.android.features.rageshake.api.detection.RageshakeDetectionState
@@ -30,7 +30,6 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultRageshakeDetectionPresenter(
     private val screenshotHolder: ScreenshotHolder,
     private val rageShake: RageShake,
@@ -50,7 +49,7 @@ class DefaultRageshakeDetectionPresenter(
             mutableStateOf(false)
         }
 
-        fun handleEvents(event: RageshakeDetectionEvents) {
+        fun handleEvent(event: RageshakeDetectionEvents) {
             when (event) {
                 RageshakeDetectionEvents.Disable -> {
                     preferencesState.eventSink(RageshakePreferencesEvents.SetIsEnabled(false))
@@ -69,7 +68,7 @@ class DefaultRageshakeDetectionPresenter(
                 takeScreenshot = takeScreenshot.value,
                 showDialog = showDialog.value,
                 preferenceState = preferencesState,
-                eventSink = ::handleEvents
+                eventSink = ::handleEvent,
             )
         }
 

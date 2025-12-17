@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="a11y_add_reaction">"Добавить реакцию:%1$s"</string>
+  <string name="a11y_add_reaction">"Добавить реакцию: %1$s"</string>
   <string name="a11y_avatar">"Аватар"</string>
   <string name="a11y_collapse_message_text_field">"Свернуть поле текста сообщения"</string>
   <string name="a11y_delete">"Удалить"</string>
@@ -29,7 +29,7 @@
   <string name="a11y_pin_field">"Поле PIN-кода"</string>
   <string name="a11y_play">"Воспроизвести"</string>
   <string name="a11y_poll">"Опрос"</string>
-  <string name="a11y_poll_end">"Опрос завершен"</string>
+  <string name="a11y_poll_end">"Завершённый опрос"</string>
   <string name="a11y_react_with">"Реагировать вместе с %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Реакция с помощью эмодзи"</string>
   <string name="a11y_read_receipts_multiple">"Прочитано %1$s и %2$s"</string>
@@ -47,6 +47,7 @@
   <string name="a11y_session_verification_time_limited_action_required">"Требуется действие, на которое есть ограничение по времени, у вас есть одна минута для проверки"</string>
   <string name="a11y_show_password">"Показать пароль"</string>
   <string name="a11y_start_call">"Начать звонок"</string>
+  <string name="a11y_tombstoned_room">"Брошенная комната"</string>
   <string name="a11y_user_avatar">"Аватар пользователя"</string>
   <string name="a11y_user_menu">"Меню пользователя"</string>
   <string name="a11y_view_avatar">"Просмотреть аватар"</string>
@@ -81,9 +82,10 @@
   <string name="action_decline">"Отклонить"</string>
   <string name="action_decline_and_block">"Отклонить и заблокировать"</string>
   <string name="action_delete_poll">"Удалить опрос"</string>
+  <string name="action_deselect_all">"Отменить выбор"</string>
   <string name="action_disable">"Отключить"</string>
   <string name="action_discard">"Отменить"</string>
-  <string name="action_dismiss">"Отклонить"</string>
+  <string name="action_dismiss">"Закрыть"</string>
   <string name="action_done">"Готово"</string>
   <string name="action_edit">"Редактировать"</string>
   <string name="action_edit_caption">"Изменить подпись"</string>
@@ -95,6 +97,8 @@
   <string name="action_forgot_password">"Забыли пароль?"</string>
   <string name="action_forward">"Переслать"</string>
   <string name="action_go_back">"Вернуться"</string>
+  <string name="action_go_to_roles_and_permissions">"Перейти к ролям и разрешениям"</string>
+  <string name="action_go_to_settings">"Перейти к настройкам"</string>
   <string name="action_ignore">"Игнорировать"</string>
   <string name="action_invite">"Пригласить"</string>
   <string name="action_invite_friends">"Пригласить в комнату"</string>
@@ -140,6 +144,7 @@
   <string name="action_retry_decryption">"Повторите расшифровку"</string>
   <string name="action_save">"Сохранить"</string>
   <string name="action_search">"Поиск"</string>
+  <string name="action_select_all">"Выбрать все"</string>
   <string name="action_send">"Отправить"</string>
   <string name="action_send_edited_message">"Отправить изменённое сообщение"</string>
   <string name="action_send_message">"Отправить сообщение"</string>
@@ -190,10 +195,9 @@
   <string name="common_current_user_left_room">"Покинул комнату"</string>
   <string name="common_current_user_left_space">"Покинуть пространство"</string>
   <string name="common_current_user_rejected_invite">"Приглашение отклонено"</string>
-  <string name="common_dark">"Тёмное"</string>
+  <string name="common_dark">"Темная"</string>
   <string name="common_decryption_error">"Ошибка расшифровки"</string>
   <string name="common_description">"Описание"</string>
-  <string name="common_deselect_all">"Отменить выбор"</string>
   <string name="common_developer_options">"Для разработчика"</string>
   <string name="common_device_id">"Идентификатор устройства"</string>
   <string name="common_direct_chat">"Личный чат"</string>
@@ -227,7 +231,7 @@
   <string name="common_in_reply_to">"В ответ на %1$s"</string>
   <string name="common_install_apk_android">"Установить APK"</string>
   <string name="common_invite_unknown_profile">"Идентификатор Matrix ID не найден, приглашение может быть не получено."</string>
-  <string name="common_leaving_room">"Покидание комнаты"</string>
+  <string name="common_leaving_room">"Покидаем комнату"</string>
   <string name="common_leaving_space">"Покинуть пространство"</string>
   <string name="common_light">"Светлое"</string>
   <string name="common_line_copied_to_clipboard">"Строка скопирована в буфер обмена"</string>
@@ -311,7 +315,6 @@
   <string name="common_security">"Безопасность"</string>
   <string name="common_seen_by">"Просмотрено"</string>
   <string name="common_select_account">"Выберите учетную запись"</string>
-  <string name="common_select_all">"Выбрать все"</string>
   <string name="common_send_to">"Отправить"</string>
   <string name="common_sending">"Отправка…"</string>
   <string name="common_sending_failed">"Сбой отправки"</string>
@@ -323,10 +326,11 @@
   <string name="common_settings">"Настройки"</string>
   <string name="common_share_space">"Поделиться пространством"</string>
   <string name="common_shared_location">"Поделился местоположением"</string>
+  <string name="common_shared_space">"Общее пространство"</string>
   <string name="common_signing_out">"Выход…"</string>
   <string name="common_something_went_wrong">"Что-то пошло не так"</string>
   <string name="common_something_went_wrong_message">"Мы столкнулись с проблемой. Пожалуйста, попробуйте еще раз."</string>
-  <string name="common_space">"Подпространство"</string>
+  <string name="common_space">"Пространство"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d Пространство"</item>
     <item quantity="few">"%1$d Пространств"</item>
@@ -392,6 +396,7 @@
   <string name="dialog_title_error">"Ошибка"</string>
   <string name="dialog_title_success">"Успешно"</string>
   <string name="dialog_title_warning">"Предупреждение"</string>
+  <string name="dialog_unsaved_changes_description">"У вас есть несохраненные изменения."</string>
   <string name="dialog_unsaved_changes_description_android">"Изменения не сохранены. Вы действительно хотите вернуться?"</string>
   <string name="dialog_unsaved_changes_title">"Сохранить изменения?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Максимально допустимый размер файла: %1$s"</string>
@@ -472,6 +477,7 @@
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_parent_space">"%1$s пространство"</string>
   <string name="screen_space_list_title">"Пространства"</string>
+  <string name="screen_space_menu_action_members">"Просмотреть участников"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Сообщение не отправлено, потому что подтвержденная личность %1$s была сброшена."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Сообщение не отправлено, потому что %1$s не проверил одно или несколько устройств."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Сообщение не отправлено, поскольку вы не подтвердили одно или несколько своих устройств."</string>
@@ -480,7 +486,7 @@
   <string name="test_language_identifier">"ru"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"На этом устройстве недоступна история сообщений"</string>
   <string name="timeline_decryption_failure_historical_event_unverified_device">"Вам необходимо проверить это устройство для доступа к истории сообщений"</string>
-  <string name="timeline_decryption_failure_historical_event_user_not_joined">"У вас нет доступа к этому сообщению"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Вы не имеете доступа к этому сообщению"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Не удалось расшифровать сообщение"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Это сообщение было заблокировано по причине того, что вы не подтвердили свое устройство, либо отправителю необходимо подтвердить вашу личность."</string>
 </resources>

@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -15,23 +16,19 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClientProvider
 import io.element.android.libraries.matrix.test.notification.FakeNotificationService
 import io.element.android.libraries.matrix.test.notification.aNotificationData
+import io.element.android.libraries.matrix.ui.media.test.FakeImageLoaderHolder
 import io.element.android.libraries.push.impl.notifications.fake.FakeActiveNotificationsProvider
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationDataFactory
 import io.element.android.libraries.push.impl.notifications.fake.FakeNotificationDisplayer
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.libraries.push.test.notifications.FakeCallNotificationEventResolver
-import io.element.android.libraries.push.test.notifications.FakeImageLoaderHolder
 import io.element.android.services.appnavstate.test.FakeAppNavigationStateService
 import io.element.android.tests.testutils.lambda.lambdaRecorder
-import io.mockk.mockk
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
-import org.junit.runner.RunWith
-import org.robolectric.RobolectricTestRunner
 
-@RunWith(RobolectricTestRunner::class)
 class DefaultOnMissedCallNotificationHandlerTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
@@ -51,9 +48,8 @@ class DefaultOnMissedCallNotificationHandlerTest {
         val defaultOnMissedCallNotificationHandler = DefaultOnMissedCallNotificationHandler(
             matrixClientProvider = matrixClientProvider,
             defaultNotificationDrawerManager = DefaultNotificationDrawerManager(
-                notificationManager = mockk(relaxed = true),
-                notificationRenderer = NotificationRenderer(
-                    notificationDisplayer = FakeNotificationDisplayer(),
+                notificationDisplayer = FakeNotificationDisplayer(),
+                notificationRenderer = createNotificationRenderer(
                     notificationDataFactory = dataFactory,
                 ),
                 appNavigationStateService = FakeAppNavigationStateService(),

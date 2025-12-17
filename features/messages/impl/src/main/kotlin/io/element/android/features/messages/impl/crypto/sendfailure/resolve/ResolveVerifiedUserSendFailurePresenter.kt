@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -47,7 +48,7 @@ class ResolveVerifiedUserSendFailurePresenter(
         }
         val coroutineScope = rememberCoroutineScope()
 
-        fun handleEvents(event: ResolveVerifiedUserSendFailureEvents) {
+        fun handleEvent(event: ResolveVerifiedUserSendFailureEvents) {
             when (event) {
                 is ResolveVerifiedUserSendFailureEvents.ComputeForMessage -> {
                     val sendState = event.messageEvent.localSendState as? LocalEventSendState.Failed.VerifiedUser
@@ -92,7 +93,7 @@ class ResolveVerifiedUserSendFailurePresenter(
             verifiedUserSendFailure = verifiedUserSendFailure,
             resolveAction = resolveAction.value,
             retryAction = retryAction.value,
-            eventSink = ::handleEvents
+            eventSink = ::handleEvent,
         )
     }
 }

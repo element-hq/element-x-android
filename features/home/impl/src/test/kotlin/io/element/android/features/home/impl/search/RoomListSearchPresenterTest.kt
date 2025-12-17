@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -13,7 +14,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.home.impl.datasource.aRoomListRoomSummaryFactory
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
-import io.element.android.libraries.eventformatter.test.FakeRoomLastMessageFormatter
+import io.element.android.libraries.eventformatter.test.FakeRoomLatestEventFormatter
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.test.room.aRoomSummary
@@ -125,7 +126,7 @@ fun TestScope.createRoomListSearchPresenter(
             roomListService = roomListService,
             roomSummaryFactory = aRoomListRoomSummaryFactory(
                 dateFormatter = FakeDateFormatter(),
-                roomLastMessageFormatter = FakeRoomLastMessageFormatter(),
+                roomLatestEventFormatter = FakeRoomLatestEventFormatter(),
             ),
             coroutineDispatchers = testCoroutineDispatchers(),
         ),

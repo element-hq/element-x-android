@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -33,7 +34,6 @@ class AccountProviderDataSourceTest {
                     subtitle = null,
                     isPublic = true,
                     isMatrixOrg = true,
-                    isValid = false,
                 )
             )
         }
@@ -55,7 +55,6 @@ class AccountProviderDataSourceTest {
                     subtitle = null,
                     isPublic = true,
                     isMatrixOrg = true,
-                    isValid = false,
                 )
             )
         }
@@ -77,7 +76,6 @@ class AccountProviderDataSourceTest {
                     subtitle = null,
                     isPublic = true,
                     isMatrixOrg = true,
-                    isValid = false,
                 )
             )
         }
@@ -89,7 +87,7 @@ class AccountProviderDataSourceTest {
         sut.flow.test {
             val initialState = awaitItem()
             assertThat(initialState.url).isEqualTo(AuthenticationConfig.MATRIX_ORG_URL)
-            sut.userSelection(AccountProvider(url = "https://example.com"))
+            sut.setAccountProvider(AccountProvider(url = "https://example.com"))
             val changedState = awaitItem()
             assertThat(changedState).isEqualTo(
                 AccountProvider(
@@ -98,7 +96,29 @@ class AccountProviderDataSourceTest {
                     subtitle = null,
                     isPublic = false,
                     isMatrixOrg = false,
-                    isValid = false,
+                )
+            )
+            sut.reset()
+            val resetState = awaitItem()
+            assertThat(resetState.url).isEqualTo(AuthenticationConfig.MATRIX_ORG_URL)
+        }
+    }
+
+    @Test
+    fun `present - set url and reset`() = runTest {
+        val sut = AccountProviderDataSource(FakeEnterpriseService())
+        sut.flow.test {
+            val initialState = awaitItem()
+            assertThat(initialState.url).isEqualTo(AuthenticationConfig.MATRIX_ORG_URL)
+            sut.setUrl(url = "https://example.com")
+            val changedState = awaitItem()
+            assertThat(changedState).isEqualTo(
+                AccountProvider(
+                    url = "https://example.com",
+                    title = "example.com",
+                    subtitle = null,
+                    isPublic = false,
+                    isMatrixOrg = false,
                 )
             )
             sut.reset()

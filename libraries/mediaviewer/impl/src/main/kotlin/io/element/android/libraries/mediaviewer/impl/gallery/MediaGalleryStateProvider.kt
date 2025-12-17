@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -9,7 +10,7 @@ package io.element.android.libraries.mediaviewer.impl.gallery
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.designsystem.components.media.aWaveForm
+import io.element.android.libraries.designsystem.components.media.WaveFormSamples
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.details.aMediaDetailsBottomSheetState
@@ -71,7 +72,7 @@ open class MediaGalleryStateProvider : PreviewParameterProvider<MediaGalleryStat
                             aMediaItemAudio(id = UniqueId("4")),
                             aMediaItemVoice(
                                 id = UniqueId("5"),
-                                waveform = aWaveForm(),
+                                waveform = WaveFormSamples.realisticWaveForm,
                             ),
                             aMediaItemLoadingIndicator(),
                         ).toImmutableList()

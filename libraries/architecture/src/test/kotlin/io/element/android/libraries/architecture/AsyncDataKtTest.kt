@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -75,22 +76,21 @@ class AsyncDataKtTest {
 private class TestableMutableState<T>(
     value: T
 ) : MutableState<T> {
-    @Suppress("ktlint:standard:property-naming")
-    private val _deque = ArrayDeque<T>(listOf(value))
+    private val deque = ArrayDeque(listOf(value))
 
     override var value: T
-        get() = _deque.last()
+        get() = deque.last()
         set(value) {
-            _deque.addLast(value)
+            deque.addLast(value)
         }
 
     /**
      * Returns the states that were set in the order they were set.
      */
-    fun popFirst(): T = _deque.removeFirst()
+    fun popFirst(): T = deque.removeFirst()
 
     fun assertNoMoreValues() {
-        assertThat(_deque).isEmpty()
+        assertThat(deque).isEmpty()
     }
 
     override operator fun component1(): T = value

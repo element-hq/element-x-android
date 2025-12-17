@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
 
-# Copyright 2024 New Vector Ltd.
+# Copyright (c) 2025 Element Creations Ltd.
+# Copyright 2024, 2025 New Vector Ltd.
 #
-# SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+# SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
 # Please see LICENSE files in the repository root for full details.
 
+import re
 import sys
 from xml.dom import minidom
 
@@ -13,7 +15,7 @@ file = sys.argv[1]
 # Dict of forbidden terms, with exceptions for some String name
 # Keys are the terms, values are the exceptions.
 forbiddenTerms = {
-    "Element": [
+    r"\bElement\b": [
         # Those 2 strings are only used in debug version
         "screen_advanced_settings_element_call_base_url",
         "screen_advanced_settings_element_call_base_url_description",
@@ -47,7 +49,8 @@ for elem in content.getElementsByTagName('string'):
     value = child.nodeValue
     # If value contains a forbidden term, add the error to errors
     for (term, exceptions) in forbiddenTerms.items():
-        if term in value and name not in exceptions:
+        matches = re.search(term, value)
+        if matches and name not in exceptions:
             errors.append('Forbidden term "' + term + '" in string: "' + name + '": ' + value)
 
 ### Plurals
@@ -64,7 +67,8 @@ for elem in content.getElementsByTagName('plurals'):
         value = child.nodeValue
         # If value contains a forbidden term, add the error to errors
         for (term, exceptions) in forbiddenTerms.items():
-            if term in value and name not in exceptions:
+            matches = re.search(term, value)
+            if matches and name not in exceptions:
                 errors.append('Forbidden term "' + term + '" in plural: "' + name + '": ' + value)
 
 # If errors is not empty print the report

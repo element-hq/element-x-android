@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.composable.PermanentChild
@@ -23,7 +25,6 @@ import com.bumble.appyx.core.navigation.NavKey
 import com.bumble.appyx.core.navigation.model.permanent.PermanentNavModel
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.BackStack.State.ACTIVE
 import com.bumble.appyx.navmodel.backstack.BackStack.State.CREATED
@@ -38,7 +39,6 @@ import com.bumble.appyx.navmodel.backstack.operation.replace
 import com.bumble.appyx.navmodel.backstack.operation.singleTop
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
-import im.vector.app.features.analytics.plan.JoinedRoom
 import io.element.android.annotations.ContributesNode
 import io.element.android.appnav.loggedin.LoggedInNode
 import io.element.android.appnav.loggedin.MediaPreviewConfigMigration
@@ -46,6 +46,8 @@ import io.element.android.appnav.loggedin.SendQueues
 import io.element.android.appnav.room.RoomFlowNode
 import io.element.android.appnav.room.RoomNavigationTarget
 import io.element.android.appnav.room.joined.JoinedRoomLoadedFlowNode
+import io.element.android.compound.colors.SemanticColorsLightDark
+import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.api.SessionEnterpriseService
 import io.element.android.features.ftue.api.FtueEntryPoint
 import io.element.android.features.ftue.api.state.FtueService
@@ -53,19 +55,23 @@ import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.home.api.HomeEntryPoint
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
+import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorContainer
 import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.features.roomdirectory.api.RoomDirectoryEntryPoint
 import io.element.android.features.securebackup.api.SecureBackupEntryPoint
 import io.element.android.features.share.api.ShareEntryPoint
-import io.element.android.features.space.api.SpaceEntryPoint
 import io.element.android.features.startchat.api.StartChatEntryPoint
 import io.element.android.features.userprofile.api.UserProfileEntryPoint
 import io.element.android.features.verifysession.api.IncomingVerificationEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
+import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.createNode
+import io.element.android.libraries.architecture.waitForChildAttached
 import io.element.android.libraries.architecture.waitForNavTargetAttached
+import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.designsystem.theme.ElementThemeApp
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
@@ -77,10 +83,16 @@ import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
+import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.api.verification.SessionVerificationServiceListener
 import io.element.android.libraries.matrix.api.verification.VerificationRequest
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
 import io.element.android.libraries.ui.common.nodes.emptyNode
+import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
+import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.api.watchers.AnalyticsRoomListStateWatcher
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
@@ -97,6 +109,7 @@ import java.util.UUID
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toKotlinDuration
+import im.vector.app.features.analytics.plan.JoinedRoom as JoinedRoomAnalyticsEvent
 
 @ContributesNode(SessionScope::class)
 @AssistedInject
@@ -122,7 +135,13 @@ class LoggedInFlowNode(
     private val sessionEnterpriseService: SessionEnterpriseService,
     private val networkMonitor: NetworkMonitor,
     private val notificationConversationService: NotificationConversationService,
+    private val syncService: SyncService,
+    private val enterpriseService: EnterpriseService,
+    private val appPreferencesStore: AppPreferencesStore,
+    private val buildMeta: BuildMeta,
     snackbarDispatcher: SnackbarDispatcher,
+    private val analyticsService: AnalyticsService,
+    private val analyticsRoomListStateWatcher: AnalyticsRoomListStateWatcher,
 ) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Placeholder,
@@ -136,10 +155,11 @@ class LoggedInFlowNode(
     plugins = plugins
 ) {
     interface Callback : Plugin {
-        fun onOpenBugReport()
-        fun onAddAccount()
+        fun navigateToBugReport()
+        fun navigateToAddAccount()
     }
 
+    private val callback: Callback = callback()
     private val loggedInFlowProcessor = LoggedInEventProcessor(
         snackbarDispatcher = snackbarDispatcher,
         roomMembershipObserver = matrixClient.roomMembershipObserver,
@@ -185,6 +205,7 @@ class LoggedInFlowNode(
         }
         lifecycle.subscribe(
             onCreate = {
+                analyticsRoomListStateWatcher.start()
                 appNavigationStateService.onNavigateToSession(id, matrixClient.sessionId)
                 // TODO We do not support Space yet, so directly navigate to main space
                 appNavigationStateService.onNavigateToSpace(id, MAIN_SPACE)
@@ -197,6 +218,8 @@ class LoggedInFlowNode(
                     networkMonitor.connectivity.first { networkStatus -> networkStatus == NetworkStatus.Connected }
                     matrixClient.getMaxFileUploadSize()
                 }
+
+                analyticsService.startLongRunningTransaction(AnalyticsLongRunningTransaction.FirstRoomsDisplayed)
 
                 ftueService.state
                     .onEach { ftueState ->
@@ -219,6 +242,7 @@ class LoggedInFlowNode(
                 appNavigationStateService.onLeavingSession(id)
                 loggedInFlowProcessor.stopObserving()
                 matrixClient.sessionVerificationService.setListener(null)
+                analyticsRoomListStateWatcher.stop()
             }
         )
         setupSendingQueue()
@@ -242,9 +266,9 @@ class LoggedInFlowNode(
         data class Room(
             val roomIdOrAlias: RoomIdOrAlias,
             val serverNames: List<String> = emptyList(),
-            val trigger: JoinedRoom.Trigger? = null,
+            val trigger: JoinedRoomAnalyticsEvent.Trigger? = null,
             val roomDescription: RoomDescription? = null,
-            val initialElement: RoomNavigationTarget = RoomNavigationTarget.Messages(),
+            val initialElement: RoomNavigationTarget = RoomNavigationTarget.Root(),
             val targetId: UUID = UUID.randomUUID(),
         ) : NavTarget
 
@@ -270,7 +294,7 @@ class LoggedInFlowNode(
         data object Ftue : NavTarget
 
         @Parcelize
-        data object RoomDirectorySearch : NavTarget
+        data object RoomDirectory : NavTarget
 
         @Parcelize
         data class IncomingShare(val intent: Intent) : NavTarget
@@ -292,50 +316,52 @@ class LoggedInFlowNode(
             }
             NavTarget.Home -> {
                 val callback = object : HomeEntryPoint.Callback {
-                    override fun onRoomClick(roomId: RoomId) {
-                        backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias()))
+                    override fun navigateToRoom(roomId: RoomId, joinedRoom: JoinedRoom?) {
+                        backstack.push(
+                            NavTarget.Room(
+                                roomIdOrAlias = roomId.toRoomIdOrAlias(),
+                                initialElement = RoomNavigationTarget.Root(joinedRoom = joinedRoom)
+                            )
+                        )
                     }
 
-                    override fun onSettingsClick() {
+                    override fun navigateToSettings() {
                         backstack.push(NavTarget.Settings())
                     }
 
-                    override fun onStartChatClick() {
+                    override fun navigateToCreateRoom() {
                         backstack.push(NavTarget.CreateRoom)
                     }
 
-                    override fun onSetUpRecoveryClick() {
+                    override fun navigateToSetUpRecovery() {
                         backstack.push(NavTarget.SecureBackup(initialElement = SecureBackupEntryPoint.InitialTarget.Root))
                     }
 
-                    override fun onSessionConfirmRecoveryKeyClick() {
+                    override fun navigateToEnterRecoveryKey() {
                         backstack.push(NavTarget.SecureBackup(initialElement = SecureBackupEntryPoint.InitialTarget.EnterRecoveryKey))
                     }
 
-                    override fun onRoomSettingsClick(roomId: RoomId) {
+                    override fun navigateToRoomSettings(roomId: RoomId) {
                         backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias(), initialElement = RoomNavigationTarget.Details))
                     }
 
-                    override fun onReportBugClick() {
-                        plugins<Callback>().forEach { it.onOpenBugReport() }
+                    override fun navigateToBugReport() {
+                        callback.navigateToBugReport()
                     }
                 }
-                homeEntryPoint
-                    .nodeBuilder(this, buildContext)
-                    .callback(callback)
-                    .build()
+                homeEntryPoint.createNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    callback = callback,
+                )
             }
             is NavTarget.Room -> {
                 val joinedRoomCallback = object : JoinedRoomLoadedFlowNode.Callback {
-                    override fun onOpenRoom(roomId: RoomId, serverNames: List<String>) {
+                    override fun navigateToRoom(roomId: RoomId, serverNames: List<String>) {
                         backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias(), serverNames))
                     }
 
-                    override fun onForwardedToSingleRoom(roomId: RoomId) {
-                        sessionCoroutineScope.launch { attachRoom(roomId.toRoomIdOrAlias(), clearBackstack = false) }
-                    }
-
-                    override fun onPermalinkClick(data: PermalinkData, pushToBackstack: Boolean) {
+                    override fun handlePermalinkClick(data: PermalinkData, pushToBackstack: Boolean) {
                         when (data) {
                             is PermalinkData.UserLink -> {
                                 // Should not happen (handled by MessagesNode)
@@ -345,8 +371,8 @@ class LoggedInFlowNode(
                                 val target = NavTarget.Room(
                                     roomIdOrAlias = data.roomIdOrAlias,
                                     serverNames = data.viaParameters,
-                                    trigger = JoinedRoom.Trigger.Timeline,
-                                    initialElement = RoomNavigationTarget.Messages(data.eventId),
+                                    trigger = JoinedRoomAnalyticsEvent.Trigger.Timeline,
+                                    initialElement = RoomNavigationTarget.Root(data.eventId),
                                 )
                                 if (pushToBackstack) {
                                     backstack.push(target)
@@ -361,13 +387,8 @@ class LoggedInFlowNode(
                         }
                     }
 
-                    override fun onOpenGlobalNotificationSettings() {
+                    override fun navigateToGlobalNotificationSettings() {
                         backstack.push(NavTarget.Settings(PreferencesEntryPoint.InitialTarget.NotificationSettings))
-                    }
-                }
-                val spaceCallback = object : SpaceEntryPoint.Callback {
-                    override fun onOpenRoom(roomId: RoomId, viaParameters: List<String>) {
-                        backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias(), serverNames = viaParameters))
                     }
                 }
                 val inputs = RoomFlowNode.Inputs(
@@ -377,114 +398,126 @@ class LoggedInFlowNode(
                     trigger = Optional.ofNullable(navTarget.trigger),
                     initialElement = navTarget.initialElement
                 )
-                createNode<RoomFlowNode>(buildContext, plugins = listOf(inputs, joinedRoomCallback, spaceCallback))
+                createNode<RoomFlowNode>(buildContext, plugins = listOf(inputs, joinedRoomCallback))
             }
             is NavTarget.UserProfile -> {
                 val callback = object : UserProfileEntryPoint.Callback {
-                    override fun onOpenRoom(roomId: RoomId) {
+                    override fun navigateToRoom(roomId: RoomId) {
                         backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias()))
                     }
                 }
-                userProfileEntryPoint.nodeBuilder(this, buildContext)
-                    .params(UserProfileEntryPoint.Params(userId = navTarget.userId))
-                    .callback(callback)
-                    .build()
+                userProfileEntryPoint.createNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    params = UserProfileEntryPoint.Params(userId = navTarget.userId),
+                    callback = callback,
+                )
             }
             is NavTarget.Settings -> {
                 val callback = object : PreferencesEntryPoint.Callback {
-                    override fun onAddAccount() {
-                        plugins<Callback>().forEach { it.onAddAccount() }
+                    override fun navigateToAddAccount() {
+                        callback.navigateToAddAccount()
                     }
 
-                    override fun onOpenBugReport() {
-                        plugins<Callback>().forEach { it.onOpenBugReport() }
+                    override fun navigateToBugReport() {
+                        callback.navigateToBugReport()
                     }
 
-                    override fun onSecureBackupClick() {
+                    override fun navigateToSecureBackup() {
                         backstack.push(NavTarget.SecureBackup())
                     }
 
-                    override fun onOpenRoomNotificationSettings(roomId: RoomId) {
+                    override fun navigateToRoomNotificationSettings(roomId: RoomId) {
                         backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias(), initialElement = RoomNavigationTarget.NotificationSettings))
                     }
 
-                    override fun navigateTo(roomId: RoomId, eventId: EventId) {
-                        backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias(), initialElement = RoomNavigationTarget.Messages(eventId)))
+                    override fun navigateToEvent(roomId: RoomId, eventId: EventId) {
+                        backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias(), initialElement = RoomNavigationTarget.Root(eventId)))
                     }
                 }
                 val inputs = PreferencesEntryPoint.Params(navTarget.initialElement)
-                preferencesEntryPoint.nodeBuilder(this, buildContext)
-                    .params(inputs)
-                    .callback(callback)
-                    .build()
+                preferencesEntryPoint.createNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    params = inputs,
+                    callback = callback,
+                )
             }
             NavTarget.CreateRoom -> {
                 val callback = object : StartChatEntryPoint.Callback {
-                    override fun onOpenRoom(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>) {
+                    override fun onRoomCreated(roomIdOrAlias: RoomIdOrAlias, serverNames: List<String>) {
                         backstack.replace(NavTarget.Room(roomIdOrAlias = roomIdOrAlias, serverNames = serverNames))
                     }
 
-                    override fun onOpenRoomDirectory() {
-                        backstack.push(NavTarget.RoomDirectorySearch)
+                    override fun navigateToRoomDirectory() {
+                        backstack.push(NavTarget.RoomDirectory)
                     }
                 }
 
-                startChatEntryPoint
-                    .nodeBuilder(this, buildContext)
-                    .callback(callback)
-                    .build()
+                startChatEntryPoint.createNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    callback = callback,
+                )
             }
             is NavTarget.SecureBackup -> {
-                secureBackupEntryPoint.nodeBuilder(this, buildContext)
-                    .params(SecureBackupEntryPoint.Params(initialElement = navTarget.initialElement))
-                    .callback(object : SecureBackupEntryPoint.Callback {
+                secureBackupEntryPoint.createNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    params = SecureBackupEntryPoint.Params(initialElement = navTarget.initialElement),
+                    callback = object : SecureBackupEntryPoint.Callback {
                         override fun onDone() {
                             backstack.pop()
                         }
-                    })
-                    .build()
+                    },
+                )
             }
             NavTarget.Ftue -> {
                 ftueEntryPoint.createNode(this, buildContext)
             }
-            NavTarget.RoomDirectorySearch -> {
-                roomDirectoryEntryPoint.nodeBuilder(this, buildContext)
-                    .callback(object : RoomDirectoryEntryPoint.Callback {
-                        override fun onResultClick(roomDescription: RoomDescription) {
+            NavTarget.RoomDirectory -> {
+                roomDirectoryEntryPoint.createNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    callback = object : RoomDirectoryEntryPoint.Callback {
+                        override fun navigateToRoom(roomDescription: RoomDescription) {
                             backstack.push(
                                 NavTarget.Room(
                                     roomIdOrAlias = roomDescription.roomId.toRoomIdOrAlias(),
                                     roomDescription = roomDescription,
-                                    trigger = JoinedRoom.Trigger.RoomDirectory,
+                                    trigger = JoinedRoomAnalyticsEvent.Trigger.RoomDirectory,
                                 )
                             )
                         }
-                    })
-                    .build()
+                    },
+                )
             }
             is NavTarget.IncomingShare -> {
-                shareEntryPoint.nodeBuilder(this, buildContext)
-                    .callback(object : ShareEntryPoint.Callback {
+                shareEntryPoint.createNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    params = ShareEntryPoint.Params(intent = navTarget.intent),
+                    callback = object : ShareEntryPoint.Callback {
                         override fun onDone(roomIds: List<RoomId>) {
-                            navigateUp()
-                            if (roomIds.size == 1) {
-                                val targetRoomId = roomIds.first()
-                                backstack.push(NavTarget.Room(targetRoomId.toRoomIdOrAlias()))
+                            backstack.pop()
+                            roomIds.singleOrNull()?.let { roomId ->
+                                backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias()))
                             }
                         }
-                    })
-                    .params(ShareEntryPoint.Params(intent = navTarget.intent))
-                    .build()
+                    },
+                )
             }
             is NavTarget.IncomingVerificationRequest -> {
-                incomingVerificationEntryPoint.nodeBuilder(this, buildContext)
-                    .params(IncomingVerificationEntryPoint.Params(navTarget.data))
-                    .callback(object : IncomingVerificationEntryPoint.Callback {
+                incomingVerificationEntryPoint.createNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    params = IncomingVerificationEntryPoint.Params(navTarget.data),
+                    callback = object : IncomingVerificationEntryPoint.Callback {
                         override fun onDone() {
                             backstack.pop()
                         }
-                    })
-                    .build()
+                    },
+                )
             }
         }
     }
@@ -492,10 +525,10 @@ class LoggedInFlowNode(
     suspend fun attachRoom(
         roomIdOrAlias: RoomIdOrAlias,
         serverNames: List<String> = emptyList(),
-        trigger: JoinedRoom.Trigger? = null,
+        trigger: JoinedRoomAnalyticsEvent.Trigger? = null,
         eventId: EventId? = null,
         clearBackstack: Boolean,
-    ) {
+    ): RoomFlowNode {
         waitForNavTargetAttached { navTarget ->
             navTarget is NavTarget.Home
         }
@@ -504,11 +537,18 @@ class LoggedInFlowNode(
                 roomIdOrAlias = roomIdOrAlias,
                 serverNames = serverNames,
                 trigger = trigger,
-                initialElement = RoomNavigationTarget.Messages(
-                    focusedEventId = eventId
-                )
+                initialElement = RoomNavigationTarget.Root(eventId = eventId)
             )
             backstack.accept(AttachRoomOperation(roomNavTarget, clearBackstack))
+        }
+
+        // If we don't do this check, we might be returning while a previous node with the same type is still displayed
+        // This means we may attach some new nodes to that one, which will be quickly replaced by the one instantiated above
+        return waitForChildAttached<RoomFlowNode, NavTarget> {
+            it is NavTarget.Room &&
+                it.roomIdOrAlias == roomIdOrAlias &&
+                it.initialElement is RoomNavigationTarget.Root &&
+                it.initialElement.eventId == eventId
         }
     }
 
@@ -538,11 +578,27 @@ class LoggedInFlowNode(
 
     @Composable
     override fun View(modifier: Modifier) {
-        Box(modifier = modifier) {
-            val ftueState by ftueService.state.collectAsState()
-            BackstackView()
-            if (ftueState is FtueState.Complete) {
-                PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)
+        val colors by remember {
+            enterpriseService.semanticColorsFlow(sessionId = matrixClient.sessionId)
+        }.collectAsState(SemanticColorsLightDark.default)
+        ElementThemeApp(
+            appPreferencesStore = appPreferencesStore,
+            compoundLight = colors.light,
+            compoundDark = colors.dark,
+            buildMeta = buildMeta,
+        ) {
+            val isOnline by syncService.isOnline.collectAsState()
+            ConnectivityIndicatorContainer(
+                isOnline = isOnline,
+                modifier = modifier,
+            ) { contentModifier ->
+                Box(modifier = contentModifier) {
+                    val ftueState by ftueService.state.collectAsState()
+                    BackstackView()
+                    if (ftueState is FtueState.Complete) {
+                        PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)
+                    }
+                }
             }
         }
     }

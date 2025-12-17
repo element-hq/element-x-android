@@ -1,15 +1,14 @@
 /*
- * Copyright 2022-2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2022-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
-import java.net.URI
-
 pluginManagement {
     repositories {
-                includeBuild("plugins")
+        includeBuild("plugins")
         gradlePluginPortal()
         google()
         mavenCentral()
@@ -18,13 +17,16 @@ pluginManagement {
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
     repositories {
-                google()
-        mavenCentral()
         maven {
-            url = URI("https://www.jitpack.io")
+            url = uri("https://www.jitpack.io")
             content {
                 includeModule("com.github.matrix-org", "matrix-analytics-events")
             }
+        }
+        google()
+        mavenCentral()
+        maven {
+            url = uri("https://repo1.maven.org/maven2/")
         }
         flatDir {
             dirs("libraries/matrix/libs")

@@ -1,9 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_leave_space_last_admin_info">"%1$s (Admin)"</string>
+  <plurals name="screen_leave_space_submit">
+    <item quantity="one">"Forlat %1$d rom og område"</item>
+    <item quantity="other">"Forlat %1$d rom og område"</item>
+  </plurals>
   <string name="screen_leave_space_subtitle">"Velg rommene du vil forlate, som du ikke er den eneste administratoren for:"</string>
   <string name="screen_leave_space_subtitle_last_admin">"Du må tildele en annen administrator for dette området før du kan forlate det."</string>
   <string name="screen_leave_space_subtitle_only_last_admin">"Du vil ikke bli fjernet fra følgende rom fordi du er den eneste administratoren:"</string>
   <string name="screen_leave_space_title">"Forlat %1$s?"</string>
   <string name="screen_leave_space_title_last_admin">"Du er den eneste administratoren for %1$s"</string>
+  <string name="screen_space_settings_leave_space">"Forlat område"</string>
+  <string name="screen_space_settings_roles_and_permissions">"Roller og tillatelser"</string>
+  <string name="screen_space_settings_security_and_privacy">"Sikkerhet og personvern"</string>
 </resources>

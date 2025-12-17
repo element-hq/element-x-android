@@ -70,7 +70,7 @@ Se prosseguires, algumas delas podem ser alteradas."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"configurações do sistema"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Notificações do sistema desativadas"</string>
   <string name="screen_notification_settings_title">"Notificações"</string>
-  <string name="troubleshoot_notifications_entry_point_push_history_title">"Histórico de notificações"</string>
+  <string name="troubleshoot_notifications_entry_point_push_history_title">"Histórico de push"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Resolução de problemas"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Corrigir notificações"</string>
 </resources>

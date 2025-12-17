@@ -382,6 +382,7 @@
   <string name="dialog_title_error">"Помилка"</string>
   <string name="dialog_title_success">"Успіх"</string>
   <string name="dialog_title_warning">"Попередження"</string>
+  <string name="dialog_unsaved_changes_description">"У вас є не збережені зміни."</string>
   <string name="dialog_unsaved_changes_description_android">"Внесені зміни не збережено. Ви впевнені, що хочете повернутися?"</string>
   <string name="dialog_unsaved_changes_title">"Зберегти зміни?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Максимально дозволений розмір файлу: %1$s"</string>
@@ -469,7 +470,7 @@
   <string name="test_language_identifier">"uk"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"Історичні повідомлення недоступні на цьому пристрої"</string>
   <string name="timeline_decryption_failure_historical_event_unverified_device">"Щоб отримати доступ до історичних повідомлень, потрібно верифікувати цей пристрій"</string>
-  <string name="timeline_decryption_failure_historical_event_user_not_joined">"У вас немає доступу до цього повідомлення"</string>
+  <string name="timeline_decryption_failure_historical_event_user_not_joined">"Ви не маєте доступу до цього повідомлення"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Неможливо розшифрувати повідомлення"</string>
   <string name="timeline_decryption_failure_withheld_unverified">"Це повідомлення заблоковано оскільки ви не верифікували свій пристрій, або тому, що відправнику потрібно верифікувати вашу особистість."</string>
 </resources>

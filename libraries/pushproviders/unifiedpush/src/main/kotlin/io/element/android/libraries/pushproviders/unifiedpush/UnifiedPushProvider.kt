@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -12,7 +13,7 @@ import dev.zacsweers.metro.ContributesIntoSet
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.pushproviders.api.CurrentUserPushConfig
+import io.element.android.libraries.pushproviders.api.Config
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
@@ -25,7 +26,7 @@ class UnifiedPushProvider(
     private val unRegisterUnifiedPushUseCase: UnregisterUnifiedPushUseCase,
     private val pushClientSecret: PushClientSecret,
     private val unifiedPushStore: UnifiedPushStore,
-    private val unifiedPushCurrentUserPushConfigProvider: UnifiedPushCurrentUserPushConfigProvider,
+    private val unifiedPushSessionPushConfigProvider: UnifiedPushSessionPushConfigProvider,
 ) : PushProvider {
     override val index = UnifiedPushConfig.INDEX
     override val name = UnifiedPushConfig.NAME
@@ -62,8 +63,8 @@ class UnifiedPushProvider(
         unRegisterUnifiedPushUseCase.cleanup(clientSecret)
     }
 
-    override suspend fun getCurrentUserPushConfig(): CurrentUserPushConfig? {
-        return unifiedPushCurrentUserPushConfigProvider.provide()
+    override suspend fun getPushConfig(sessionId: SessionId): Config? {
+        return unifiedPushSessionPushConfigProvider.provide(sessionId)
     }
 
     override fun canRotateToken(): Boolean = false

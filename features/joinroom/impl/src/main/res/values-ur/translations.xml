@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_join_room_join_action">"کمرے میں شامل ہوں"</string>
+  <string name="screen_join_room_join_action">"شامل ہوں"</string>
   <string name="screen_join_room_knock_action">"شامل ہونے کی درخواست بھیجیں"</string>
   <string name="screen_join_room_space_not_supported_description">"%1$s ابھی تک خالی جگہوں کی حمایت نہیں کرتا۔ آپ جال پر خالی جگہوں تک رسائی حاصل کرسکتے ہیں۔"</string>
   <string name="screen_join_room_space_not_supported_title">"ابھی تک جگہیں تعاون یافتہ نہیں"</string>

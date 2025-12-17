@@ -2,9 +2,10 @@ import extension.setupDependencyInjection
 import extension.testCommonDependencies
 
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2022-2024 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -51,6 +52,7 @@ dependencies {
     testImplementation(projects.libraries.mediaupload.test)
     testImplementation(projects.libraries.permissions.test)
     testImplementation(projects.libraries.usersearch.test)
+    testImplementation(projects.features.createroom.test)
     testImplementation(projects.features.startchat.test)
     testImplementation(projects.libraries.featureflag.test)
 }

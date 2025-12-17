@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -40,6 +41,7 @@ fun ListDialog(
     submitText: String = stringResource(CommonStrings.action_ok),
     enabled: Boolean = true,
     applyPaddingToContents: Boolean = true,
+    destructiveSubmit: Boolean = false,
     listItems: LazyListScope.() -> Unit,
 ) {
     val decoratedSubtitle: @Composable (() -> Unit)? = subtitle?.let {
@@ -64,6 +66,7 @@ fun ListDialog(
             enabled = enabled,
             listItems = listItems,
             applyPaddingToContents = applyPaddingToContents,
+            destructiveSubmit = destructiveSubmit,
         )
     }
 }
@@ -78,6 +81,7 @@ private fun ListDialogContent(
     title: String?,
     enabled: Boolean,
     applyPaddingToContents: Boolean,
+    destructiveSubmit: Boolean,
     subtitle: @Composable (() -> Unit)? = null,
 ) {
     SimpleAlertDialogContent(
@@ -89,6 +93,7 @@ private fun ListDialogContent(
         onSubmitClick = onSubmitClick,
         enabled = enabled,
         applyPaddingToContents = applyPaddingToContents,
+        destructiveSubmit = destructiveSubmit,
     ) {
         // No start padding if padding is already applied to the content
         val horizontalPadding = if (applyPaddingToContents) 0.dp else 8.dp
@@ -119,6 +124,7 @@ internal fun ListDialogContentPreview() {
                 cancelText = "Cancel",
                 submitText = "Save",
                 enabled = true,
+                destructiveSubmit = false,
                 applyPaddingToContents = true,
             )
         }

@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -21,7 +22,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
-import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toImmutableList
 
 open class HomeStateProvider : PreviewParameterProvider<HomeState> {
     override val values: Sequence<HomeState>
@@ -63,7 +64,7 @@ internal fun aHomeState(
     directLogoutState: DirectLogoutState = aDirectLogoutState(),
     eventSink: (HomeEvents) -> Unit = {}
 ) = HomeState(
-    currentUserAndNeighbors = currentUserAndNeighbors.toPersistentList(),
+    currentUserAndNeighbors = currentUserAndNeighbors.toImmutableList(),
     showAvatarIndicator = showAvatarIndicator,
     hasNetworkConnection = hasNetworkConnection,
     snackbarMessage = snackbarMessage,

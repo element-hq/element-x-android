@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -9,7 +10,6 @@ package io.element.android.libraries.matrix.impl.tracing
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.tracing.LogLevel
 import io.element.android.libraries.matrix.api.tracing.TracingConfiguration
@@ -20,7 +20,6 @@ import org.matrix.rustcomponents.sdk.reloadTracingFileWriter
 import timber.log.Timber
 
 @ContributesBinding(AppScope::class)
-@Inject
 class RustTracingService(private val buildMeta: BuildMeta) : TracingService {
     override fun createTimberTree(target: String): Timber.Tree {
         return RustTracingTree(target = target, retrieveFromStackTrace = buildMeta.isDebuggable)
@@ -61,5 +60,5 @@ fun TracingConfiguration.map(): org.matrix.rustcomponents.sdk.TracingConfigurati
     extraTargets = extraTargets,
     traceLogPacks = traceLogPacks.map(),
     writeToFiles = writesToFilesConfiguration.toTracingFileConfiguration(),
-    sentryDsn = null,
+    sentryDsn = sdkSentryDsn,
 )

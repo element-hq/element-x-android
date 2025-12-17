@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -169,7 +170,7 @@ class RoomListViewTest {
             // Remove automatic initial events
             eventsRecorder.clear()
 
-            rule.onNodeWithText(room0.lastMessage!!.toString()).performClick()
+            rule.onNodeWithText(room0.latestEvent.content().toString()).performClick()
         }
 
         eventsRecorder.assertEmpty()
@@ -191,7 +192,7 @@ class RoomListViewTest {
             )
             // Remove automatic initial events
             eventsRecorder.clear()
-            rule.onNodeWithText(room0.lastMessage!!.toString())
+            rule.onNodeWithText(room0.latestEvent.content().toString())
                 .performClick()
                 .performClick()
         }
@@ -213,7 +214,7 @@ class RoomListViewTest {
         // Remove automatic initial events
         eventsRecorder.clear()
 
-        rule.onNodeWithText(room0.lastMessage!!.toString()).performTouchInput { longClick() }
+        rule.onNodeWithText(room0.latestEvent.content().toString()).performTouchInput { longClick() }
         eventsRecorder.assertSingle(RoomListEvents.ShowContextMenu(room0))
     }
 

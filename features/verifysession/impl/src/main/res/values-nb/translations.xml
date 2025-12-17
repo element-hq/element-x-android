@@ -18,7 +18,7 @@
   <string name="screen_session_verification_compare_numbers_title">"Sammenlign tallene"</string>
   <string name="screen_session_verification_complete_subtitle">"Nå kan du lese eller sende meldinger sikkert på den andre enheten din."</string>
   <string name="screen_session_verification_complete_user_subtitle">"Nå kan du stole på identiteten til denne brukeren når du sender eller mottar meldinger."</string>
-  <string name="screen_session_verification_device_verified">"Enheten er verifisert"</string>
+  <string name="screen_session_verification_device_verified">"Enhet verifisert"</string>
   <string name="screen_session_verification_enter_recovery_key">"Skriv inn gjenopprettingsnøkkel"</string>
   <string name="screen_session_verification_failed_subtitle">"Enten ble forespørselen tidsavbrutt, forespørselen ble avslått eller det var en feil i verifiseringen."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Bevis at det er deg for å få tilgang til den krypterte meldingshistorikken din."</string>

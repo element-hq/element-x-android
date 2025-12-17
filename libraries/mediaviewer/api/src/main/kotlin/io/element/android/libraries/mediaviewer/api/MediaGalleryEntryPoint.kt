@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -14,15 +15,15 @@ import io.element.android.libraries.architecture.FeatureEntryPoint
 import io.element.android.libraries.matrix.api.core.EventId
 
 interface MediaGalleryEntryPoint : FeatureEntryPoint {
-    fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
-
-    interface NodeBuilder {
-        fun callback(callback: Callback): NodeBuilder
-        fun build(): Node
-    }
+    fun createNode(
+        parentNode: Node,
+        buildContext: BuildContext,
+        callback: Callback,
+    ): Node
 
     interface Callback : Plugin {
         fun onBackClick()
-        fun onViewInTimeline(eventId: EventId)
+        fun viewInTimeline(eventId: EventId)
+        fun forward(eventId: EventId, fromPinnedEvents: Boolean)
     }
 }

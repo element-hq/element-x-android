@@ -1,13 +1,16 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.announcement.impl
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.announcement.api.Announcement
+import io.element.android.features.announcement.impl.store.AnnouncementStatus
 import io.element.android.features.announcement.impl.store.AnnouncementStore
 import io.element.android.features.announcement.impl.store.InMemoryAnnouncementStore
 import io.element.android.tests.testutils.test
@@ -33,10 +36,10 @@ class AnnouncementPresenterTest {
         presenter.test {
             val state = awaitItem()
             assertThat(state.showSpaceAnnouncement).isFalse()
-            store.setSpaceAnnouncementValue(AnnouncementStore.SpaceAnnouncement.Show)
+            store.setAnnouncementStatus(Announcement.Space, AnnouncementStatus.Show)
             val updatedState = awaitItem()
             assertThat(updatedState.showSpaceAnnouncement).isTrue()
-            store.setSpaceAnnouncementValue(AnnouncementStore.SpaceAnnouncement.Shown)
+            store.setAnnouncementStatus(Announcement.Space, AnnouncementStatus.Shown)
             val finalState = awaitItem()
             assertThat(finalState.showSpaceAnnouncement).isFalse()
         }

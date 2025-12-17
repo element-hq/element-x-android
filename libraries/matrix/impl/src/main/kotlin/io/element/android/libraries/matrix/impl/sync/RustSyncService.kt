@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -29,7 +30,7 @@ import org.matrix.rustcomponents.sdk.SyncService as InnerSyncService
 class RustSyncService(
     private val inner: InnerSyncService,
     private val dispatcher: CoroutineDispatcher,
-    sessionCoroutineScope: CoroutineScope
+    sessionCoroutineScope: CoroutineScope,
 ) : SyncService {
     private val isServiceReady = AtomicBoolean(true)
 
@@ -70,10 +71,10 @@ class RustSyncService(
     override val syncState: StateFlow<SyncState> =
         inner.stateFlow()
             .map(SyncServiceState::toSyncState)
+            .distinctUntilChanged()
             .onEach { state ->
                 Timber.i("Sync state=$state")
             }
-            .distinctUntilChanged()
             .stateIn(sessionCoroutineScope, SharingStarted.Eagerly, SyncState.Idle)
 
     override val isOnline: StateFlow<Boolean> = syncState.mapState { it != SyncState.Offline }

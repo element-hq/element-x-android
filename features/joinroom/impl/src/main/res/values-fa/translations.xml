@@ -9,10 +9,12 @@
   <string name="screen_join_room_decline_and_block_alert_confirmation">"بله. رد و انسداد"</string>
   <string name="screen_join_room_decline_and_block_alert_title">"رد دعوت و انسداد"</string>
   <string name="screen_join_room_decline_and_block_button_title">"رد و انسداد"</string>
-  <string name="screen_join_room_fail_message">"پیوستن به اتاق شکست خورد."</string>
+  <string name="screen_join_room_fail_message">"پیوستن شکست خورد"</string>
   <string name="screen_join_room_forget_action">"فراموشی این اتاق"</string>
   <string name="screen_join_room_invite_required_message">"برای پیوستن به این اتاق نیاز به دعوت دارید"</string>
-  <string name="screen_join_room_join_action">"پیوستن به اتاق"</string>
+  <string name="screen_join_room_invited_by">"دعوت شده از سوی"</string>
+  <string name="screen_join_room_join_action">"پیوستن"</string>
+  <string name="screen_join_room_join_restricted_message">"برای پیوستن به فضا باید دعوت شده باشید."</string>
   <string name="screen_join_room_knock_action">"در زدن برای پیوستن"</string>
   <string name="screen_join_room_knock_message_description">"پیام (اختیاری)"</string>
   <string name="screen_join_room_knock_sent_title">"درخواست پیوستن فرستاده شد"</string>

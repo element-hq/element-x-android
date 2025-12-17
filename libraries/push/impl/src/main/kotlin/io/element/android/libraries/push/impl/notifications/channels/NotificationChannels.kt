@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -20,7 +21,6 @@ import androidx.core.app.NotificationChannelCompat
 import androidx.core.app.NotificationManagerCompat
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.appconfig.NotificationConfig
 import io.element.android.libraries.di.annotations.ApplicationContext
@@ -62,7 +62,6 @@ private fun supportNotificationChannels() = Build.VERSION.SDK_INT >= Build.VERSI
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultNotificationChannels(
     private val notificationManager: NotificationManagerCompat,
     private val stringProvider: StringProvider,
@@ -72,10 +71,6 @@ class DefaultNotificationChannels(
     init {
         createNotificationChannels()
     }
-
-    /* ==========================================================================================
-     * Channel names
-     * ========================================================================================== */
 
     /**
      * Create notification channels.
@@ -111,10 +106,7 @@ class DefaultNotificationChannels(
             }
         }
 
-        /**
-         * Default notification importance: shows everywhere, makes noise, but does not visually
-         * intrude.
-         */
+        // Default notification importance: shows everywhere, makes noise, but does not visually intrude.
         notificationManager.createNotificationChannel(
             NotificationChannelCompat.Builder(
                 NOISY_NOTIFICATION_CHANNEL_ID,
@@ -139,9 +131,7 @@ class DefaultNotificationChannels(
                 .build()
         )
 
-        /**
-         * Low notification importance: shows everywhere, but is not intrusive.
-         */
+        // Low notification importance: shows everywhere, but is not intrusive.
         notificationManager.createNotificationChannel(
             NotificationChannelCompat.Builder(
                 SILENT_NOTIFICATION_CHANNEL_ID,

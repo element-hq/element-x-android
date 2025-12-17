@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -47,7 +48,7 @@ class DirectLogoutPresenter(
 
         val isLastDevice by encryptionService.isLastDevice.collectAsState()
 
-        fun handleEvents(event: DirectLogoutEvents) {
+        fun handleEvent(event: DirectLogoutEvents) {
             when (event) {
                 is DirectLogoutEvents.Logout -> {
                     if (logoutAction.value.isConfirming() || event.ignoreSdkError) {
@@ -66,7 +67,7 @@ class DirectLogoutPresenter(
             canDoDirectSignOut = !isLastDevice &&
                 !backupUploadState.isBackingUp(),
             logoutAction = logoutAction.value,
-            eventSink = ::handleEvents
+            eventSink = ::handleEvent,
         )
     }
 

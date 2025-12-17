@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -20,14 +21,13 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
-import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.mediaupload.api.MaxUploadSizeProvider
+import io.element.android.libraries.mediaupload.test.FakeMediaOptimizationConfigProvider
 import io.element.android.libraries.mediaviewer.api.aVideoMediaInfo
 import io.element.android.libraries.mediaviewer.api.anImageMediaInfo
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.test.viewer.aLocalMedia
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
-import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
 import io.mockk.mockk
 import kotlinx.coroutines.test.runTest
@@ -205,7 +205,7 @@ class DefaultMediaOptimizationSelectorPresenterTest {
     @Test
     fun `present - max upload size will default to 100MB if we can't get it`() = runTest {
         val presenter = createDefaultMediaOptimizationSelectorPresenter(
-            maxUploadSizeProvider = MaxUploadSizeProvider(FakeMatrixClient(getMaxUploadSizeResult = { Result.failure(AN_EXCEPTION) }))
+            maxUploadSizeProvider = MaxUploadSizeProvider { Result.failure(AN_EXCEPTION) }
         )
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -232,19 +232,17 @@ class DefaultMediaOptimizationSelectorPresenterTest {
 
     private fun createDefaultMediaOptimizationSelectorPresenter(
         localMedia: LocalMedia = aLocalMedia(mockMediaUrl, aVideoMediaInfo()),
-        maxUploadSizeProvider: MaxUploadSizeProvider = MaxUploadSizeProvider(
-            FakeMatrixClient(getMaxUploadSizeResult = { Result.success(1_000L) }),
-        ),
-        sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
+        maxUploadSizeProvider: MaxUploadSizeProvider = MaxUploadSizeProvider { Result.success(1_000L) },
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.SelectableMediaQuality.key to true)),
         mediaExtractorFactory: FakeVideoMetadataExtractorFactory = FakeVideoMetadataExtractorFactory(),
+        mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
     ): DefaultMediaOptimizationSelectorPresenter {
         return DefaultMediaOptimizationSelectorPresenter(
             localMedia = localMedia,
             maxUploadSizeProvider = maxUploadSizeProvider,
-            sessionPreferencesStore = sessionPreferencesStore,
             featureFlagService = featureFlagService,
             mediaExtractorFactory = mediaExtractorFactory,
+            mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
         )
     }
 }

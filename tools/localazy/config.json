@@ -129,6 +129,7 @@
       "includeRegex" : [
         "push_.*",
         "notification_.*",
+        "notification\\..*",
         "troubleshoot_notifications\\.test_blocked_users\\..*",
         "troubleshoot_notifications_test_current_push_provider.*",
         "troubleshoot_notifications_test_detect_push_provider.*",
@@ -197,6 +198,7 @@
         "screen_room_details_.*",
         "screen\\.room_details\\..*",
         "screen_room_member_list_.*",
+        "screen\\.room_member_list\\..*",
         "screen_room_notification_settings_.*",
         "screen_notification_settings_edit_failed_updating_default_mode",
         "screen_polls_history_title",
@@ -208,9 +210,19 @@
       ]
     },
     {
+      "name" : ":features:roomdetailsedit:impl",
+      "includeRegex" : [
+        "screen_room_details_edit_room_title",
+        "screen_room_details_edition_error",
+        "screen_room_details_edition_error_title",
+        "screen_room_details_updating_room"
+      ]
+    },
+    {
       "name" : ":features:space:impl",
       "includeRegex" : [
-        "screen\\.leave_space\\..*"
+        "screen\\.leave_space\\..*",
+        "screen\\.space_settings\\..*"
       ]
     },
     {
@@ -366,11 +378,21 @@
       ]
     },
     {
-      "name" : ":features:changeroommemberroles:impl",
+      "name" : ":features:rolesandpermissions:impl",
       "includeRegex" : [
         "screen_room_change_.*",
+        "screen\\.room_change_permissions\\..*",
         "screen_room_roles_.*",
-        "screen_room_member_list.*"
+        "screen\\.room_roles_and_permissions\\..*",
+        "screen_room_member_list.*",
+        "screen\\.room_member_list\\..*"
+      ]
+    },
+    {
+      "name" : ":features:securityandprivacy:impl",
+      "includeRegex" : [
+        "screen\\.edit_room_address\\..*",
+        "screen\\.security_and_privacy\\..*"
       ]
     }
   ]

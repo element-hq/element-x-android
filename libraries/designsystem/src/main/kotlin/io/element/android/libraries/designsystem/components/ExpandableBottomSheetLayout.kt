@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -76,28 +77,9 @@ fun ExpandableBottomSheetLayout(
     var calculatedMaxBottomContentHeightPx by remember(maxBottomContentHeightPx) { mutableIntStateOf(maxBottomContentHeightPx) }
     val animatable = remember { Animatable(0f) }
 
-    fun calculatePercentage(currentPos: Int, minPos: Int, maxPos: Int): Float {
-        val currentProgress = currentPos - minPos
-        if (currentProgress < 0) {
-            Timber.e("Invalid current progress: $currentProgress, minPos: $minPos, maxPos: $maxPos")
-            return 0f
-        }
-        val total = (maxPos - minPos).toFloat()
-        if (total <= 0) {
-            Timber.e("Invalid total space: $total, minPos: $minPos, maxPos: $maxPos")
-            return 0f
-        }
-        return currentProgress / total
-    }
-
     LaunchedEffect(animatable.value) {
         if (animatable.isRunning && animatable.value != animatable.targetValue) {
             currentBottomContentHeightPx = animatable.value.roundToInt()
-            state.internalDraggingPercentage = calculatePercentage(
-                currentPos = currentBottomContentHeightPx,
-                minPos = minBottomContentHeightPx,
-                maxPos = calculatedMaxBottomContentHeightPx,
-            )
         }
     }
 
@@ -121,11 +103,6 @@ fun ExpandableBottomSheetLayout(
                                         minBottomContentHeightPx -> ExpandableBottomSheetLayoutState.Position.COLLAPSED
                                         else -> ExpandableBottomSheetLayoutState.Position.DRAGGING
                                     }
-                                    state.internalDraggingPercentage = calculatePercentage(
-                                        currentPos = newHeight,
-                                        minPos = minBottomContentHeightPx,
-                                        maxPos = calculatedMaxBottomContentHeightPx,
-                                    )
                                     currentBottomContentHeightPx = newHeight
                                 },
                                 onDragEnd = {

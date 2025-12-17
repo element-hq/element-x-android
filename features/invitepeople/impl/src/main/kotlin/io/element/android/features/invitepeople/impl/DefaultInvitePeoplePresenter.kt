@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -103,7 +104,7 @@ class DefaultInvitePeoplePresenter(
             )
         }
 
-        fun handleEvents(event: InvitePeopleEvents) {
+        fun handleEvent(event: InvitePeopleEvents) {
             when (event) {
                 is DefaultInvitePeopleEvents.OnSearchActiveChanged -> {
                     searchActive = event.active
@@ -139,7 +140,7 @@ class DefaultInvitePeoplePresenter(
             searchResults = searchResults.value,
             showSearchLoader = showSearchLoader.value,
             sendInvitesAction = sendInvitesAction.value,
-            eventSink = ::handleEvents,
+            eventSink = ::handleEvent,
         )
     }
 

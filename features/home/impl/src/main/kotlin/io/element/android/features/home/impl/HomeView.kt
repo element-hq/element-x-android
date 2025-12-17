@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -18,7 +19,7 @@ import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
@@ -40,9 +41,9 @@ import dev.chrisbanes.haze.materials.HazeMaterials
 import dev.chrisbanes.haze.rememberHazeState
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.home.impl.components.HomeTopBar
 import io.element.android.features.home.impl.components.RoomListContentView
 import io.element.android.features.home.impl.components.RoomListMenuAction
-import io.element.android.features.home.impl.components.RoomListTopBar
 import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.features.home.impl.roomlist.RoomListContextMenu
 import io.element.android.features.home.impl.roomlist.RoomListDeclineInviteMenu
@@ -50,7 +51,6 @@ import io.element.android.features.home.impl.roomlist.RoomListEvents
 import io.element.android.features.home.impl.roomlist.RoomListState
 import io.element.android.features.home.impl.search.RoomListSearchView
 import io.element.android.features.home.impl.spaces.HomeSpacesView
-import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorContainer
 import io.element.android.libraries.androidutils.throttler.FirstThrottler
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -64,6 +64,7 @@ import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.RoomId
+import kotlinx.coroutines.launch
 
 @Composable
 fun HomeView(
@@ -84,56 +85,47 @@ fun HomeView(
     val state: RoomListState = homeState.roomListState
     val coroutineScope = rememberCoroutineScope()
     val firstThrottler = remember { FirstThrottler(300, coroutineScope) }
-
-    ConnectivityIndicatorContainer(
-        modifier = modifier,
-        isOnline = homeState.hasNetworkConnection,
-    ) { topPadding ->
-        Box {
-            if (state.contextMenu is RoomListState.ContextMenu.Shown) {
-                RoomListContextMenu(
-                    contextMenu = state.contextMenu,
-                    canReportRoom = state.canReportRoom,
-                    eventSink = state.eventSink,
-                    onRoomSettingsClick = onRoomSettingsClick,
-                    onReportRoomClick = onReportRoomClick,
-                )
-            }
-            if (state.declineInviteMenu is RoomListState.DeclineInviteMenu.Shown) {
-                RoomListDeclineInviteMenu(
-                    menu = state.declineInviteMenu,
-                    canReportRoom = state.canReportRoom,
-                    eventSink = state.eventSink,
-                    onDeclineAndBlockClick = onDeclineInviteAndBlockUser,
-                )
-            }
-
-            leaveRoomView()
-
-            HomeScaffold(
-                state = homeState,
-                onSetUpRecoveryClick = onSetUpRecoveryClick,
-                onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
-                onRoomClick = { if (firstThrottler.canHandle()) onRoomClick(it) },
-                onOpenSettings = { if (firstThrottler.canHandle()) onSettingsClick() },
-                onStartChatClick = { if (firstThrottler.canHandle()) onStartChatClick() },
-                onMenuActionClick = onMenuActionClick,
-                modifier = Modifier.padding(top = topPadding),
-            )
-            // This overlaid view will only be visible when state.displaySearchResults is true
-            RoomListSearchView(
-                state = state.searchState,
+    Box(modifier) {
+        if (state.contextMenu is RoomListState.ContextMenu.Shown) {
+            RoomListContextMenu(
+                contextMenu = state.contextMenu,
+                canReportRoom = state.canReportRoom,
                 eventSink = state.eventSink,
-                hideInvitesAvatars = state.hideInvitesAvatars,
-                onRoomClick = { if (firstThrottler.canHandle()) onRoomClick(it) },
-                modifier = Modifier
-                    .statusBarsPadding()
-                    .padding(top = topPadding)
-                    .fillMaxSize()
-                    .background(ElementTheme.colors.bgCanvasDefault)
+                onRoomSettingsClick = onRoomSettingsClick,
+                onReportRoomClick = onReportRoomClick,
             )
-            acceptDeclineInviteView()
         }
+        if (state.declineInviteMenu is RoomListState.DeclineInviteMenu.Shown) {
+            RoomListDeclineInviteMenu(
+                menu = state.declineInviteMenu,
+                canReportRoom = state.canReportRoom,
+                eventSink = state.eventSink,
+                onDeclineAndBlockClick = onDeclineInviteAndBlockUser,
+            )
+        }
+
+        leaveRoomView()
+
+        HomeScaffold(
+            state = homeState,
+            onSetUpRecoveryClick = onSetUpRecoveryClick,
+            onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
+            onRoomClick = { if (firstThrottler.canHandle()) onRoomClick(it) },
+            onOpenSettings = { if (firstThrottler.canHandle()) onSettingsClick() },
+            onStartChatClick = { if (firstThrottler.canHandle()) onStartChatClick() },
+            onMenuActionClick = onMenuActionClick,
+        )
+        // This overlaid view will only be visible when state.displaySearchResults is true
+        RoomListSearchView(
+            state = state.searchState,
+            eventSink = state.eventSink,
+            hideInvitesAvatars = state.hideInvitesAvatars,
+            onRoomClick = { if (firstThrottler.canHandle()) onRoomClick(it) },
+            modifier = Modifier
+                .fillMaxSize()
+                .background(ElementTheme.colors.bgCanvasDefault)
+        )
+        acceptDeclineInviteView()
     }
 }
 
@@ -154,7 +146,7 @@ private fun HomeScaffold(
     }
 
     val appBarState = rememberTopAppBarState()
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(appBarState)
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(appBarState)
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
     val roomListState: RoomListState = state.roomListState
 
@@ -165,11 +157,13 @@ private fun HomeScaffold(
     }
 
     val hazeState = rememberHazeState()
+    val roomsLazyListState = rememberLazyListState()
+    val spacesLazyListState = rememberLazyListState()
 
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            RoomListTopBar(
+            HomeTopBar(
                 title = stringResource(state.currentHomeNavigationBarItem.labelRes),
                 currentUserAndNeighbors = state.currentUserAndNeighbors,
                 showAvatarIndicator = state.showAvatarIndicator,
@@ -182,7 +176,7 @@ private fun HomeScaffold(
                 },
                 scrollBehavior = scrollBehavior,
                 displayMenuItems = state.displayActions,
-                displayFilters = roomListState.displayFilters && state.currentHomeNavigationBarItem == HomeNavigationBarItem.Chats,
+                displayFilters = state.displayRoomListFilters,
                 filtersState = roomListState.filtersState,
                 canReportBug = state.canReportBug,
                 modifier = if (state.isSpaceFeatureEnabled) {
@@ -191,41 +185,39 @@ private fun HomeScaffold(
                         style = HazeMaterials.thick(),
                     )
                 } else {
-                    Modifier
-                        .background(ElementTheme.colors.bgCanvasDefault)
+                    Modifier.background(ElementTheme.colors.bgCanvasDefault)
                 }
             )
         },
         bottomBar = {
             if (state.showNavigationBar) {
-                NavigationBar(
-                    containerColor = Color.Transparent,
-                    modifier = Modifier
-                        .hazeEffect(
-                            state = hazeState,
-                            style = HazeMaterials.thick(),
-                        )
-                ) {
-                    HomeNavigationBarItem.entries.forEach { item ->
-                        val isSelected = state.currentHomeNavigationBarItem == item
-                        NavigationBarItem(
-                            selected = isSelected,
-                            onClick = {
-                                state.eventSink(HomeEvents.SelectHomeNavigationBarItem(item))
-                            },
-                            icon = {
-                                NavigationBarIcon(
-                                    imageVector = item.icon(isSelected),
-                                )
-                            },
-                            label = {
-                                NavigationBarText(
-                                    text = stringResource(item.labelRes),
-                                )
+                val coroutineScope = rememberCoroutineScope()
+                HomeBottomBar(
+                    currentHomeNavigationBarItem = state.currentHomeNavigationBarItem,
+                    onItemClick = { item ->
+                        // scroll to top if selecting the same item
+                        if (item == state.currentHomeNavigationBarItem) {
+                            val lazyListStateTarget = when (item) {
+                                HomeNavigationBarItem.Chats -> roomsLazyListState
+                                HomeNavigationBarItem.Spaces -> spacesLazyListState
                             }
-                        )
-                    }
-                }
+                            coroutineScope.launch {
+                                if (lazyListStateTarget.firstVisibleItemIndex > 10) {
+                                    lazyListStateTarget.scrollToItem(10)
+                                }
+                                // Also reset the scrollBehavior height offset as it's not triggered by programmatic scrolls
+                                scrollBehavior.state.heightOffset = 0f
+                                lazyListStateTarget.animateScrollToItem(0)
+                            }
+                        } else {
+                            state.eventSink(HomeEvents.SelectHomeNavigationBarItem(item))
+                        }
+                    },
+                    modifier = Modifier.hazeEffect(
+                        state = hazeState,
+                        style = HazeMaterials.thick(),
+                    )
+                )
             }
         },
         content = { padding ->
@@ -234,6 +226,7 @@ private fun HomeScaffold(
                     RoomListContentView(
                         contentState = roomListState.contentState,
                         filtersState = roomListState.filtersState,
+                        lazyListState = roomsLazyListState,
                         hideInvitesAvatars = roomListState.hideInvitesAvatars,
                         eventSink = roomListState.eventSink,
                         onSetUpRecoveryClick = onSetUpRecoveryClick,
@@ -271,6 +264,7 @@ private fun HomeScaffold(
                             .consumeWindowInsets(padding)
                             .hazeSource(state = hazeState),
                         state = state.homeSpacesState,
+                        lazyListState = spacesLazyListState,
                         onSpaceClick = { spaceId ->
                             onRoomClick(spaceId)
                         }
@@ -292,6 +286,38 @@ private fun HomeScaffold(
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
     )
+}
+
+@Composable
+private fun HomeBottomBar(
+    currentHomeNavigationBarItem: HomeNavigationBarItem,
+    onItemClick: (HomeNavigationBarItem) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    NavigationBar(
+        containerColor = Color.Transparent,
+        modifier = modifier
+    ) {
+        HomeNavigationBarItem.entries.forEach { item ->
+            val isSelected = currentHomeNavigationBarItem == item
+            NavigationBarItem(
+                selected = isSelected,
+                onClick = {
+                    onItemClick(item)
+                },
+                icon = {
+                    NavigationBarIcon(
+                        imageVector = item.icon(isSelected),
+                    )
+                },
+                label = {
+                    NavigationBarText(
+                        text = stringResource(item.labelRes),
+                    )
+                }
+            )
+        }
+    }
 }
 
 internal fun RoomListRoomSummary.contentType() = displayType.ordinal

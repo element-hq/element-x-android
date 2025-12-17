@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_room_change_permissions_administrators">"Само администратори"</string>
+  <string name="screen_room_change_permissions_delete_messages">"Премахване на съобщения"</string>
+  <string name="screen_room_change_permissions_invite_people">"Поканване на хора и приемане на заявки за присъединяване"</string>
+  <string name="screen_room_change_permissions_messages_and_content">"Съобщения и съдържание"</string>
+  <string name="screen_room_change_permissions_moderators">"Администратори и модератори"</string>
+  <string name="screen_room_change_permissions_remove_people">"Премахване на хора и отхвърляне на заявки за присъединяване"</string>
+  <string name="screen_room_change_permissions_room_details">"Редактиране на стаята"</string>
+  <string name="screen_room_change_permissions_room_name">"Промяна на името на стаята"</string>
+  <string name="screen_room_change_permissions_room_topic">"Промяна на темата на стаята"</string>
+  <string name="screen_room_change_permissions_send_messages">"Изпращане на съобщения"</string>
+  <string name="screen_room_change_role_administrators_title">"Редактиране на администраторите"</string>
+  <string name="screen_room_change_role_confirm_add_admin_title">"Добавяне на администратор?"</string>
+  <string name="screen_room_change_role_moderators_admin_section_footer">"Администраторите автоматично имат модераторски права"</string>
+  <string name="screen_room_change_role_moderators_title">"Редактиране на модераторите"</string>
+  <string name="screen_room_change_role_section_administrators">"Администратори"</string>
+  <string name="screen_room_change_role_section_moderators">"Модератори"</string>
+  <string name="screen_room_change_role_section_users">"Членове"</string>
+  <plurals name="screen_room_member_list_header_title">
+    <item quantity="one">"%1$d човек"</item>
+    <item quantity="other">"%1$d души"</item>
+  </plurals>
+  <string name="screen_room_member_list_mode_members">"Членове"</string>
+  <string name="screen_room_member_list_role_administrator">"Само администратори"</string>
+  <string name="screen_room_member_list_role_moderator">"Администратори и модератори"</string>
+  <string name="screen_room_member_list_room_members_header_title">"Членове на стаята"</string>
+  <string name="screen_room_roles_and_permissions_admins">"Администратори"</string>
+  <string name="screen_room_roles_and_permissions_change_my_role">"Промяна на моята роля"</string>
+  <string name="screen_room_roles_and_permissions_member_moderation">"Модериране на членове"</string>
+  <string name="screen_room_roles_and_permissions_messages_and_content">"Съобщения и съдържание"</string>
+  <string name="screen_room_roles_and_permissions_moderators">"Модератори"</string>
+  <string name="screen_room_roles_and_permissions_reset">"Нулиране на разрешенията"</string>
+  <string name="screen_room_roles_and_permissions_roles_header">"Роли"</string>
+  <string name="screen_room_roles_and_permissions_room_details">"Подробности за стаята"</string>
+  <string name="screen_room_roles_and_permissions_space_details">"Подробности за пространството"</string>
+  <string name="screen_room_roles_and_permissions_title">"Роли и разрешения"</string>
+</resources>

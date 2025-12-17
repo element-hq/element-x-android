@@ -88,6 +88,7 @@
   <string name="action_decline">"Gwrthod"</string>
   <string name="action_decline_and_block">"Gwrthod a rhwystro"</string>
   <string name="action_delete_poll">"Dileu Pleidlais"</string>
+  <string name="action_deselect_all">"Dad ddewis y cyfan"</string>
   <string name="action_disable">"Analluogi"</string>
   <string name="action_discard">"Dileu"</string>
   <string name="action_dismiss">"Cau"</string>
@@ -146,6 +147,7 @@
   <string name="action_retry_decryption">"Cynnig arall ar ddadgryptio"</string>
   <string name="action_save">"Cadw"</string>
   <string name="action_search">"Chwilio"</string>
+  <string name="action_select_all">"Dewis y cyfan"</string>
   <string name="action_send">"Anfon"</string>
   <string name="action_send_edited_message">"Anfon neges wedi\'i golygu"</string>
   <string name="action_send_message">"Anfonwch neges"</string>
@@ -262,6 +264,7 @@ Rheswm: %1$s."</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Dim canlyniadau"</string>
   <string name="common_no_room_name">"Dim enw i\'r ystafell"</string>
+  <string name="common_no_space_name">"Dim enw gofod"</string>
   <string name="common_not_encrypted">"Heb ei amgryptio"</string>
   <string name="common_offline">"All-lein"</string>
   <string name="common_open_source_licenses">"Trwyddedau cod agored"</string>
@@ -402,8 +405,8 @@ Rheswm: %1$s."</string>
 Ydych chi\'n siŵr eich bod am barhau?"</string>
   <string name="dialog_confirm_link_title">"Gwnewch yn siŵr fod y ddolen hon yn iawn"</string>
   <string name="dialog_default_video_quality_selector_subtitle">"Dewiswch ansawdd rhagosodedig y fideos rydych chi\'n eu llwytho."</string>
-  <string name="dialog_default_video_quality_selector_title">"Ansawdd llwytho fideo"</string>
-  <string name="dialog_file_too_large_to_upload_subtitle">"Y maint ffeil mwyaf sy\'n cael ei ganiatáu yw:%1$s"</string>
+  <string name="dialog_default_video_quality_selector_title">"Ansawdd lwytho fideo"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"Y maint ffeil mwyaf sy\'n cael ei ganiatáu yw: %1$s"</string>
   <string name="dialog_file_too_large_to_upload_title">"Mae maint y ffeil yn rhy fawr i\'w llwytho"</string>
   <string name="dialog_room_reported">"Adroddwyd am yr ystafell"</string>
   <string name="dialog_room_reported_and_left">"Adroddwyd a gadael yr ystafell"</string>
@@ -411,6 +414,7 @@ Ydych chi\'n siŵr eich bod am barhau?"</string>
   <string name="dialog_title_error">"Gwall"</string>
   <string name="dialog_title_success">"Llwyddiant"</string>
   <string name="dialog_title_warning">"Rhybudd"</string>
+  <string name="dialog_unsaved_changes_description">"Mae gennych newidiadau heb eu cadw."</string>
   <string name="dialog_unsaved_changes_description_android">"Dyw eich newidiadau heb gael eu cadw. Ydych chi\'n siŵr eich bod am fynd nôl?"</string>
   <string name="dialog_unsaved_changes_title">"Cadw\'r newidiadau?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Y maint ffeil mwyaf sy\'n cael ei ganiatáu yw: %1$s"</string>
@@ -492,6 +496,7 @@ Ydych chi\'n siŵr eich bod am barhau?"</string>
   <string name="screen_share_this_location_action">"Rhannu\'r lleoliad hwn"</string>
   <string name="screen_space_list_description">"Gofodau rydych wedi\'u creu neu wedi ymuno â nhw."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_parent_space">"Gofod %1$s"</string>
   <string name="screen_space_list_title">"Gofodau"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Heb anfon y neges oherwydd bod hunaniaeth wedi \'i ddilysu %1$s wedi\'i ailosod."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Heb anfon y neges oherwydd nid yw %1$s wedi gwirio pob dyfais."</string>

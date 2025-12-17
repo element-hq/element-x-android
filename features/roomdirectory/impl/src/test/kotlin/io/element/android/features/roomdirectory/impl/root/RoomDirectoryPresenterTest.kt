@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -42,14 +43,14 @@ class RoomDirectoryPresenterTest {
 
     @Test
     fun `present - room directory list emits empty state`() = runTest {
-        val directoryListStateFlow = MutableSharedFlow<RoomDirectoryList.State>(replay = 1)
+        val directoryListStateFlow = MutableSharedFlow<RoomDirectoryList.SearchResult>(replay = 1)
         val roomDirectoryList = FakeRoomDirectoryList(directoryListStateFlow)
         val roomDirectoryService = FakeRoomDirectoryService { roomDirectoryList }
         val presenter = createRoomDirectoryPresenter(roomDirectoryService = roomDirectoryService)
         presenter.test {
             skipItems(1)
             directoryListStateFlow.emit(
-                RoomDirectoryList.State(false, emptyList())
+                RoomDirectoryList.SearchResult(false, emptyList())
             )
             awaitItem().also { state ->
                 assertThat(state.displayEmptyState).isTrue()
@@ -60,14 +61,14 @@ class RoomDirectoryPresenterTest {
 
     @Test
     fun `present - room directory list emits non-empty state`() = runTest {
-        val directoryListStateFlow = MutableSharedFlow<RoomDirectoryList.State>(replay = 1)
+        val directoryListStateFlow = MutableSharedFlow<RoomDirectoryList.SearchResult>(replay = 1)
         val roomDirectoryList = FakeRoomDirectoryList(directoryListStateFlow)
         val roomDirectoryService = FakeRoomDirectoryService { roomDirectoryList }
         val presenter = createRoomDirectoryPresenter(roomDirectoryService = roomDirectoryService)
         presenter.test {
             skipItems(1)
             directoryListStateFlow.emit(
-                RoomDirectoryList.State(
+                RoomDirectoryList.SearchResult(
                     hasMoreToLoad = true,
                     items = listOf(aRoomDescription())
                 )
@@ -105,9 +106,7 @@ class RoomDirectoryPresenterTest {
 
     @Test
     fun `present - emit load more event`() = runTest {
-        val loadMoreLambda = lambdaRecorder { ->
-            Result.success(Unit)
-        }
+        val loadMoreLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
         val roomDirectoryList = FakeRoomDirectoryList(loadMoreLambda = loadMoreLambda)
         val roomDirectoryService = FakeRoomDirectoryService { roomDirectoryList }
         val presenter = createRoomDirectoryPresenter(roomDirectoryService = roomDirectoryService)

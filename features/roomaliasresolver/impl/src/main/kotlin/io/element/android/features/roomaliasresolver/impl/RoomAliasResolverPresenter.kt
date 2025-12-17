@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -44,7 +45,7 @@ class RoomAliasResolverPresenter(
             resolveAlias(resolveState)
         }
 
-        fun handleEvents(event: RoomAliasResolverEvents) {
+        fun handleEvent(event: RoomAliasResolverEvents) {
             when (event) {
                 RoomAliasResolverEvents.Retry -> coroutineScope.resolveAlias(resolveState)
                 RoomAliasResolverEvents.DismissError -> resolveState.value = AsyncData.Uninitialized
@@ -54,7 +55,7 @@ class RoomAliasResolverPresenter(
         return RoomAliasResolverState(
             roomAlias = roomAlias,
             resolveState = resolveState.value,
-            eventSink = ::handleEvents
+            eventSink = ::handleEvent,
         )
     }
 

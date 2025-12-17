@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -21,6 +22,7 @@ import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import org.matrix.rustcomponents.sdk.LatestEventValue
 import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
 
 class RoomSummaryListProcessorTest {
@@ -172,13 +174,13 @@ class RoomSummaryListProcessorTest {
 
     private fun aRustRoom(roomId: RoomId = A_ROOM_ID) = FakeFfiRoom(
         roomId = roomId,
-        latestEventLambda = { null },
+        latestEventLambda = { LatestEventValue.None }
     )
 
     private fun TestScope.createProcessor() = RoomSummaryListProcessor(
         summaries,
         FakeFfiRoomListService(),
         coroutineContext = StandardTestDispatcher(testScheduler),
-        roomSummaryDetailsFactory = RoomSummaryFactory(),
+        roomSummaryFactory = RoomSummaryFactory(),
     )
 }

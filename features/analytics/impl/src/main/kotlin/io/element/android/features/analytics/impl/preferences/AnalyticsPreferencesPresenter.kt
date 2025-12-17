@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -30,7 +31,7 @@ class AnalyticsPreferencesPresenter(
         val localCoroutineScope = rememberCoroutineScope()
         val isEnabled = analyticsService.userConsentFlow.collectAsState(initial = false)
 
-        fun handleEvents(event: AnalyticsOptInEvents) {
+        fun handleEvent(event: AnalyticsOptInEvents) {
             when (event) {
                 is AnalyticsOptInEvents.EnableAnalytics -> localCoroutineScope.setIsEnabled(event.isEnabled)
             }
@@ -40,7 +41,7 @@ class AnalyticsPreferencesPresenter(
             applicationName = buildMeta.applicationName,
             isEnabled = isEnabled.value,
             policyUrl = AnalyticsConfig.POLICY_LINK,
-            eventSink = ::handleEvents
+            eventSink = ::handleEvent,
         )
     }
 

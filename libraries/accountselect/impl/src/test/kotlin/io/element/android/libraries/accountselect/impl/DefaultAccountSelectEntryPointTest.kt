@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -32,12 +33,14 @@ class DefaultAccountSelectEntryPointTest {
             )
         }
         val callback = object : AccountSelectEntryPoint.Callback {
-            override fun onSelectAccount(sessionId: SessionId) = lambdaError()
+            override fun onAccountSelected(sessionId: SessionId) = lambdaError()
             override fun onCancel() = lambdaError()
         }
-        val result = entryPoint.nodeBuilder(parentNode, BuildContext.root(null))
-            .callback(callback)
-            .build()
+        val result = entryPoint.createNode(
+            parentNode = parentNode,
+            buildContext = BuildContext.root(null),
+            callback = callback,
+        )
         assertThat(result).isInstanceOf(AccountSelectNode::class.java)
         assertThat(result.plugins).contains(callback)
     }

@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -41,9 +42,20 @@ fun LoginModeView(
             when (val error = loginMode.error) {
                 is ChangeServerError -> {
                     when (error) {
+                        ChangeServerError.InvalidServer ->
+                            ErrorDialog(
+                                content = stringResource(R.string.screen_change_server_error_invalid_homeserver),
+                                onSubmit = onClearError,
+                            )
+                        is ChangeServerError.UnsupportedServer -> {
+                            ErrorDialog(
+                                content = stringResource(R.string.screen_login_error_unsupported_authentication),
+                                onSubmit = onClearError,
+                            )
+                        }
                         is ChangeServerError.Error -> {
                             ErrorDialog(
-                                content = error.message(),
+                                content = error.messageStr ?: stringResource(CommonStrings.error_unknown),
                                 onSubmit = onClearError,
                             )
                         }
@@ -91,7 +103,7 @@ fun LoginModeView(
                 }
                 is AuthenticationException.AccountAlreadyLoggedIn -> {
                     ErrorDialog(
-                        content = stringResource(CommonStrings.error_account_already_logged_in, error.message.orEmpty()),
+                        content = stringResource(CommonStrings.error_account_already_logged_in, error.userId),
                         onSubmit = onClearError,
                     )
                 }

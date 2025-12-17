@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -14,11 +15,11 @@ import io.element.android.features.login.impl.accountprovider.AccountProviderDat
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
-import io.element.android.libraries.matrix.test.A_HOMESERVER
 import io.element.android.libraries.matrix.test.A_PASSWORD
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
+import io.element.android.libraries.matrix.test.auth.aMatrixHomeServerDetails
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.test.runTest
@@ -42,8 +43,11 @@ class LoginPasswordPresenterTest {
 
     @Test
     fun `present - enter login and password`() = runTest {
-        val authenticationService = FakeMatrixAuthenticationService()
-        authenticationService.givenHomeserver(A_HOMESERVER)
+        val authenticationService = FakeMatrixAuthenticationService(
+            setHomeserverResult = {
+                Result.success(aMatrixHomeServerDetails())
+            },
+        )
         createLoginPasswordPresenter(
             authenticationService = authenticationService,
         ).test {
@@ -61,8 +65,11 @@ class LoginPasswordPresenterTest {
 
     @Test
     fun `present - submit`() = runTest {
-        val authenticationService = FakeMatrixAuthenticationService()
-        authenticationService.givenHomeserver(A_HOMESERVER)
+        val authenticationService = FakeMatrixAuthenticationService(
+            setHomeserverResult = {
+                Result.success(aMatrixHomeServerDetails())
+            },
+        )
         createLoginPasswordPresenter(
             authenticationService = authenticationService,
         ).test {
@@ -81,8 +88,11 @@ class LoginPasswordPresenterTest {
 
     @Test
     fun `present - submit with error`() = runTest {
-        val authenticationService = FakeMatrixAuthenticationService()
-        authenticationService.givenHomeserver(A_HOMESERVER)
+        val authenticationService = FakeMatrixAuthenticationService(
+            setHomeserverResult = {
+                Result.success(aMatrixHomeServerDetails())
+            },
+        )
         createLoginPasswordPresenter(
             authenticationService = authenticationService,
         ).test {
@@ -102,8 +112,11 @@ class LoginPasswordPresenterTest {
 
     @Test
     fun `present - clear error`() = runTest {
-        val authenticationService = FakeMatrixAuthenticationService()
-        authenticationService.givenHomeserver(A_HOMESERVER)
+        val authenticationService = FakeMatrixAuthenticationService(
+            setHomeserverResult = {
+                Result.success(aMatrixHomeServerDetails())
+            },
+        )
         createLoginPasswordPresenter(
             authenticationService = authenticationService,
         ).test {

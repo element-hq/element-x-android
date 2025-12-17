@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_room_details_edit_room_title">"Kamer bewerken"</string>
+  <string name="screen_room_details_edition_error">"Er is een onbekende fout opgetreden en de informatie kon niet worden gewijzigd."</string>
+  <string name="screen_room_details_edition_error_title">"Kan kamer niet bijwerken"</string>
+  <string name="screen_room_details_updating_room">"Kamer bijwerken…"</string>
+</resources>

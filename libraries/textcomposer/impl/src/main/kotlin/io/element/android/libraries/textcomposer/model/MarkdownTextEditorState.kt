@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -128,15 +129,15 @@ class MarkdownTextEditorState(
     }
 
     @Parcelize
-    data class SavedState(
+    data class SavedValue(
         val text: CharSequence,
         val selectionStart: Int,
         val selectionEnd: Int,
     ) : Parcelable
 }
 
-object MarkdownTextEditorStateSaver : Saver<MarkdownTextEditorState, MarkdownTextEditorState.SavedState> {
-    override fun restore(value: MarkdownTextEditorState.SavedState): MarkdownTextEditorState {
+object MarkdownTextEditorStateSaver : Saver<MarkdownTextEditorState, MarkdownTextEditorState.SavedValue> {
+    override fun restore(value: MarkdownTextEditorState.SavedValue): MarkdownTextEditorState {
         return MarkdownTextEditorState(
             initialText = "",
             initialFocus = false,
@@ -146,8 +147,8 @@ object MarkdownTextEditorStateSaver : Saver<MarkdownTextEditorState, MarkdownTex
         }
     }
 
-    override fun SaverScope.save(value: MarkdownTextEditorState): MarkdownTextEditorState.SavedState {
-        return MarkdownTextEditorState.SavedState(
+    override fun SaverScope.save(value: MarkdownTextEditorState): MarkdownTextEditorState.SavedValue {
+        return MarkdownTextEditorState.SavedValue(
             text = value.text.value(),
             selectionStart = value.selection.first,
             selectionEnd = value.selection.last,

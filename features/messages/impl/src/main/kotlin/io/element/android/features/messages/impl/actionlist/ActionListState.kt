@@ -1,7 +1,8 @@
 /*
- * Copyright 2022-2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2022-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -13,7 +14,6 @@ import io.element.android.features.messages.impl.crypto.sendfailure.VerifiedUser
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import kotlinx.collections.immutable.ImmutableList
 
-@Immutable
 data class ActionListState(
     val target: Target,
     val eventSink: (ActionListEvents) -> Unit,

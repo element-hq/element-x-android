@@ -42,7 +42,7 @@ jobs:
 
       - name: ✅ Upload kover report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: kover-results
           path: |
@@ -60,7 +60,7 @@ jobs:
     name: Dependency analysis
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Use JDK 21
         uses: actions/setup-java@v5
         with:
@@ -74,7 +74,7 @@ jobs:
         run: ./gradlew dependencyCheckAnalyze $CI_GRADLE_ARG_PROPERTIES
       - name: Upload dependency analysis
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: dependency-analysis
           path: build/reports/dependency-check-report.html

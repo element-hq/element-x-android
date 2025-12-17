@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -39,6 +40,7 @@ import androidx.compose.ui.zIndex
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.home.impl.R
+import io.element.android.features.home.impl.model.LatestEvent
 import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.features.home.impl.model.RoomListRoomSummaryProvider
 import io.element.android.features.home.impl.model.RoomSummaryDisplayType
@@ -218,16 +220,20 @@ private fun NameAndTimestampRow(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = spacedBy(16.dp)
     ) {
-        // Name
-        Text(
+        Row(
             modifier = Modifier.weight(1f),
-            style = ElementTheme.typography.fontBodyLgMedium,
-            text = name ?: stringResource(id = CommonStrings.common_no_room_name),
-            fontStyle = FontStyle.Italic.takeIf { name == null },
-            color = ElementTheme.colors.roomListRoomName,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            // Name
+            Text(
+                style = ElementTheme.typography.fontBodyLgMedium,
+                text = name ?: stringResource(id = CommonStrings.common_no_room_name),
+                fontStyle = FontStyle.Italic.takeIf { name == null },
+                color = ElementTheme.colors.roomListRoomName,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+        }
         // Timestamp
         Text(
             text = timestamp ?: "",
@@ -271,24 +277,64 @@ private fun MessagePreviewAndIndicatorRow(
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
-        horizontalArrangement = spacedBy(28.dp)
     ) {
-        val messagePreview = if (room.isTombstoned) {
-            stringResource(R.string.screen_roomlist_tombstoned_room_description)
+        if (room.isTombstoned) {
+            Text(
+                modifier = Modifier.weight(1f),
+                text = stringResource(R.string.screen_roomlist_tombstoned_room_description),
+                color = ElementTheme.colors.roomListRoomMessage,
+                style = ElementTheme.typography.fontBodyMdRegular,
+                minLines = 2,
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis,
+            )
         } else {
-            room.lastMessage.orEmpty()
+            if (room.latestEvent is LatestEvent.Error) {
+                Icon(
+                    modifier = Modifier
+                        .padding(top = 2.dp)
+                        .size(16.dp),
+                    imageVector = CompoundIcons.ErrorSolid(),
+                    // The last message contains the error.
+                    contentDescription = null,
+                    tint = ElementTheme.colors.iconCriticalPrimary,
+                )
+                Spacer(modifier = Modifier.width(6.dp))
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = stringResource(CommonStrings.common_message_failed_to_send),
+                    color = ElementTheme.colors.textCriticalPrimary,
+                    style = ElementTheme.typography.fontBodyMdRegular,
+                    minLines = 2,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            } else {
+                if (room.latestEvent is LatestEvent.Sending) {
+                    Icon(
+                        modifier = Modifier
+                            .padding(top = 2.dp)
+                            .size(16.dp),
+                        imageVector = CompoundIcons.Time(),
+                        contentDescription = stringResource(CommonStrings.common_sending),
+                        tint = ElementTheme.colors.iconTertiary,
+                    )
+                    Spacer(modifier = Modifier.width(6.dp))
+                }
+                val messagePreview = room.latestEvent.content()
+                val annotatedMessagePreview = messagePreview as? AnnotatedString ?: AnnotatedString(text = messagePreview.orEmpty().toString())
+                Text(
+                    modifier = Modifier.weight(1f),
+                    text = annotatedMessagePreview,
+                    color = ElementTheme.colors.roomListRoomMessage,
+                    style = ElementTheme.typography.fontBodyMdRegular,
+                    minLines = 2,
+                    maxLines = 2,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
         }
-        val annotatedMessagePreview = messagePreview as? AnnotatedString ?: AnnotatedString(text = messagePreview.toString())
-        Text(
-            modifier = Modifier.weight(1f),
-            text = annotatedMessagePreview,
-            color = ElementTheme.colors.roomListRoomMessage,
-            style = ElementTheme.typography.fontBodyMdRegular,
-            minLines = 2,
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis
-        )
-
+        Spacer(modifier = Modifier.width(16.dp))
         // Call and unread
         Row(
             modifier = Modifier

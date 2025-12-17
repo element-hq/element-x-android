@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_space_announcement_item1">"Vaadata kogukondi, mille oled loonud või millega oled liitunud"</string>
+  <string name="screen_space_announcement_item2">"Nõustuda kutsetega liitumiseks kogukonnaga või sellest keelduda"</string>
+  <string name="screen_space_announcement_item3">"Uurida neis kogukondades leiduvaid jututube ning nendega liituda"</string>
+  <string name="screen_space_announcement_item4">"Liituda avalike kogukondadega"</string>
+  <string name="screen_space_announcement_item5">"Lahkuda kogukonnast, millega oled liitunud"</string>
+  <string name="screen_space_announcement_notice">"Kogukondade filtreerimine, loomine ja haldamine lisandub peagi"</string>
+  <string name="screen_space_announcement_subtitle">"Tere tulemast kasutama kogukondade beetaversiooni! Selles esimeses versioonis saad sa:"</string>
+  <string name="screen_space_announcement_title">"Võtame kasutusele kogukonnad"</string>
+</resources>

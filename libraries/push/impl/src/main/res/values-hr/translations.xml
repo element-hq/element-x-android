@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="notification_channel_call">"Poziv"</string>
+  <string name="notification_channel_listening_for_events">"Osluškivanje događaja"</string>
+  <string name="notification_channel_noisy">"Glasne obavijesti"</string>
+  <string name="notification_channel_ringing_calls">"Pozivi (telefon zvoni)"</string>
+  <string name="notification_channel_silent">"Tihe obavijesti"</string>
+  <plurals name="notification_compat_summary_line_for_room">
+    <item quantity="one">"%1$s: %2$d poruka"</item>
+    <item quantity="few">"%1$s: %2$d poruke"</item>
+    <item quantity="other">"%1$s: %2$d poruka"</item>
+  </plurals>
+  <plurals name="notification_compat_summary_title">
+    <item quantity="one">"%d obavijest"</item>
+    <item quantity="few">"%d obavijesti"</item>
+    <item quantity="other">"%d obavijesti"</item>
+  </plurals>
+  <string name="notification_error_unified_push_unregistered_android">"Distributer obavijesti UnifiedPush nije mogao biti registriran, tako da više nećete primati obavijesti. Provjerite postavke obavijesti u aplikaciji i status distributera push obavijesti."</string>
+  <string name="notification_fallback_content">"Imate nove poruke."</string>
+  <string name="notification_incoming_call">"📹 Dolazni poziv"</string>
+  <string name="notification_inline_reply_failed">"** Slanje nije uspjelo – otvorite sobu"</string>
+  <string name="notification_invitation_action_join">"Pridruži se"</string>
+  <string name="notification_invitation_action_reject">"Odbij"</string>
+  <plurals name="notification_invitations">
+    <item quantity="one">"%d pozivnica"</item>
+    <item quantity="few">"%d pozivnice"</item>
+    <item quantity="other">"%d pozivnica"</item>
+  </plurals>
+  <string name="notification_invite_body">"Pozvao/la te na razgovor"</string>
+  <string name="notification_invite_body_with_sender">"%1$s pozvao/la te na razgovor"</string>
+  <string name="notification_mentioned_you_body">"Korisnik vas je spomenuo: %1$s"</string>
+  <string name="notification_new_messages">"Nove poruke"</string>
+  <plurals name="notification_new_messages_for_room">
+    <item quantity="one">"%d nova poruka"</item>
+    <item quantity="few">"%d nove poruke"</item>
+    <item quantity="other">"%d novih poruka"</item>
+  </plurals>
+  <string name="notification_reaction_body">"Reagirao/la je s %1$s"</string>
+  <string name="notification_room_action_mark_as_read">"Označi kao pročitano"</string>
+  <string name="notification_room_action_quick_reply">"Brzi odgovor"</string>
+  <string name="notification_room_invite_body">"Pozvao/la te je da se pridružiš sobi"</string>
+  <string name="notification_room_invite_body_with_sender">"%1$s pozvao/la te da se pridružiš sobi"</string>
+  <string name="notification_sender_me">"Ja"</string>
+  <string name="notification_sender_mention_reply">"%1$s je spomenuo/la ili odgovorio/la"</string>
+  <string name="notification_space_invite_body">"Pozvao/la vas je da se pridružite prostoru"</string>
+  <string name="notification_space_invite_body_with_sender">"%1$s pozvao/la vas je da se pridružite prostoru"</string>
+  <string name="notification_test_push_notification_content">"Gledate obavijest! Kliknite me!"</string>
+  <string name="notification_thread_in_room">"Nit u %1$s"</string>
+  <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
+  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
+  <plurals name="notification_unread_notified_messages">
+    <item quantity="one">"%d nepročitana poruka s obavijesti"</item>
+    <item quantity="few">"%d nepročitane poruke s obavijesti"</item>
+    <item quantity="other">"%d nepročitanih poruka s obavijesti"</item>
+  </plurals>
+  <string name="notification_unread_notified_messages_and_invitation">"%1$s i %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room">"%1$s u %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s u %2$s i %3$s"</string>
+  <plurals name="notification_unread_notified_messages_in_room_rooms">
+    <item quantity="one">"%d soba"</item>
+    <item quantity="few">"%d sobe"</item>
+    <item quantity="other">"%d soba"</item>
+  </plurals>
+  <string name="push_distributor_background_sync_android">"Sinkronizacija u pozadini"</string>
+  <string name="push_distributor_firebase_android">"Googleove usluge"</string>
+  <string name="push_no_valid_google_play_services_apk_android">"Nisu pronađene valjane usluge Google Play. Obavijesti možda neće ispravno funkcionirati."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_description">"Provjera blokiranih korisnika"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_quick_fix">"Prikaži blokirane korisnike"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_result_none">"Nijedan korisnik nije blokiran."</string>
+  <plurals name="troubleshoot_notifications_test_blocked_users_result_some">
+    <item quantity="one">"Blokirali ste %1$d korisnika. Nećete primati obavijesti za ovog korisnika."</item>
+    <item quantity="few">"Blokirali ste %1$d korisnika. Nećete primati obavijesti za te korisnike."</item>
+    <item quantity="other">"Blokirali ste %1$d korisnika. Nećete primati obavijesti za te korisnike."</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_blocked_users_title">"Blokirani korisnici"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_description">"Dohvatite naziv trenutačnog pružatelja."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure">"Nije odabran nijedan pružatelj push obavijesti."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found">"Trenutačni pružatelj push obavijesti je %1$s i trenutačni distributer je %2$s. Ali distributer %3$s nije pronađen. Možda je aplikacija deinstalirana?"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_no_distributor">"Trenutačni pružatelj push obavijesti je %1$s, ali nijedan distributer nije konfiguriran."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success">"Trenutačni pružatelj push obavijesti: %1$s ."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success_with_distributor">"Trenutačni pružatelj push obavijesti: %1$s (%2$s)"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_title">"Trenutačni pružatelj push obavijesti"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"Provjerite podržava li aplikacija barem jednog pružatelja push obavijesti"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Nije pronađena podrška za pružatelja push obavijesti."</string>
+  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
+    <item quantity="one">"Pronađen je %1$d pružatelj push obavijesti: %2$s"</item>
+    <item quantity="few">"Pronađena su %1$d pružatelja push obavijesti: %2$s"</item>
+    <item quantity="other">"Pronađeno je %1$d pružatelja push obavijesti: %2$s"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_success_2">"Aplikacija je razvijena s podrškom za: %1$s"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Podrška za pružatelja push obavijesti"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"Provjerite može li aplikacija prikazivati ​​obavijesti."</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"Obavijest nije kliknuta."</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Obavijest nije moguće prikazati."</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"Obavijest je kliknuta!"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"Prikaz obavijesti"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Kliknite na obavijest za nastavak testa."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_description">"Provjerite prima li aplikacija push obavijesti."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_1">"Pogreška: sustav za push obavijesti odbio je zahtjev."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"Pogreška: %1$s ."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Pogreška, nije moguće testirati push obavijesti."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Pogreška, isteklo je vrijeme čekanja na push obavijest."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_success">"Povratna push obavijest trajala je %1$d ms."</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_title">"Testiraj povratnu push obavijest"</string>
+</resources>

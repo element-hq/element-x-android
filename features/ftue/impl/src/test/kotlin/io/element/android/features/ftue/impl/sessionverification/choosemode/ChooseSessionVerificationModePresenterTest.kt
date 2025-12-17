@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -11,6 +12,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.logout.api.direct.DirectLogoutEvents
 import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.logout.api.direct.aDirectLogoutState
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
@@ -22,20 +24,89 @@ import org.junit.Test
 
 class ChooseSessionVerificationModePresenterTest {
     @Test
-    fun `initial state - is relayed from EncryptionService`() = runTest {
-        val encryptionService = FakeEncryptionService().apply {
-            // Has device to verify against
-            emitHasDevicesToVerifyAgainst(false)
-            // Can enter recovery key
-            emitRecoveryState(RecoveryState.INCOMPLETE)
-        }
-        val presenter = createPresenter(encryptionService = encryptionService)
+    fun `present - initial state`() = runTest {
+        val presenter = createPresenter()
         presenter.test {
             awaitItem().run {
-                assertThat(canUseAnotherDevice).isFalse()
-                assertThat(canEnterRecoveryKey).isTrue()
+                assertThat(buttonsState.isLoading()).isTrue()
                 assertThat(directLogoutState.logoutAction.isUninitialized()).isTrue()
             }
+        }
+    }
+
+    @Test
+    fun `present - state is relayed from EncryptionService, order 1`() = runTest {
+        val encryptionService = FakeEncryptionService()
+        val presenter = createPresenter(encryptionService = encryptionService)
+        presenter.test {
+            assertThat(awaitItem().buttonsState.isLoading()).isTrue()
+            // Has device to verify against
+            encryptionService.emitHasDevicesToVerifyAgainst(AsyncData.Success(false))
+            // Can enter recovery key
+            encryptionService.emitRecoveryState(RecoveryState.DISABLED)
+            assertThat(awaitItem().buttonsState.dataOrNull()).isEqualTo(
+                ChooseSelfVerificationModeState.ButtonsState(
+                    canUseAnotherDevice = false,
+                    canEnterRecoveryKey = false,
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - state is relayed from EncryptionService, order 2`() = runTest {
+        val encryptionService = FakeEncryptionService()
+        val presenter = createPresenter(encryptionService = encryptionService)
+        presenter.test {
+            assertThat(awaitItem().buttonsState.isLoading()).isTrue()
+            // Can enter recovery key
+            encryptionService.emitRecoveryState(RecoveryState.DISABLED)
+            // Has device to verify against
+            encryptionService.emitHasDevicesToVerifyAgainst(AsyncData.Success(false))
+            assertThat(awaitItem().buttonsState.dataOrNull()).isEqualTo(
+                ChooseSelfVerificationModeState.ButtonsState(
+                    canUseAnotherDevice = false,
+                    canEnterRecoveryKey = false,
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - can use another device`() = runTest {
+        val encryptionService = FakeEncryptionService()
+        val presenter = createPresenter(encryptionService = encryptionService)
+        presenter.test {
+            assertThat(awaitItem().buttonsState.isLoading()).isTrue()
+            // Can enter recovery key
+            encryptionService.emitRecoveryState(RecoveryState.DISABLED)
+            // Has device to verify against
+            encryptionService.emitHasDevicesToVerifyAgainst(AsyncData.Success(true))
+            assertThat(awaitItem().buttonsState.dataOrNull()).isEqualTo(
+                ChooseSelfVerificationModeState.ButtonsState(
+                    canUseAnotherDevice = true,
+                    canEnterRecoveryKey = false,
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - can enter recovery key`() = runTest {
+        val encryptionService = FakeEncryptionService()
+        val presenter = createPresenter(encryptionService = encryptionService)
+        presenter.test {
+            assertThat(awaitItem().buttonsState.isLoading()).isTrue()
+            // Can enter recovery key
+            encryptionService.emitRecoveryState(RecoveryState.INCOMPLETE)
+            // Has device to verify against
+            encryptionService.emitHasDevicesToVerifyAgainst(AsyncData.Success(false))
+            assertThat(awaitItem().buttonsState.dataOrNull()).isEqualTo(
+                ChooseSelfVerificationModeState.ButtonsState(
+                    canUseAnotherDevice = false,
+                    canEnterRecoveryKey = true,
+                )
+            )
         }
     }
 
@@ -49,8 +120,8 @@ class ChooseSessionVerificationModePresenterTest {
         presenter.test {
             val initial = awaitItem()
             initial.eventSink(ChooseSelfVerificationModeEvent.SignOut)
-
-            logoutEventRecorder.assertions().isCalledOnce().with(value(DirectLogoutEvents.Logout(ignoreSdkError = false)))
+            logoutEventRecorder.assertions().isCalledOnce()
+                .with(value(DirectLogoutEvents.Logout(ignoreSdkError = false)))
         }
     }
 

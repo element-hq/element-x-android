@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -42,11 +43,13 @@ fun TextFieldDialog(
     validation: (String?) -> Boolean = { true },
     onValidationErrorMessage: String? = null,
     autoSelectOnDisplay: Boolean = true,
-    maxLines: Int = 1,
+    minLines: Int = 1,
+    maxLines: Int = minLines,
     content: String? = null,
     label: String? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
     submitText: String = stringResource(CommonStrings.action_ok),
+    destructiveSubmit: Boolean = false,
 ) {
     val focusRequester = remember { FocusRequester() }
     var textFieldContents by rememberSaveable(stateSaver = TextFieldValue.Saver) {
@@ -66,6 +69,7 @@ fun TextFieldDialog(
         onDismissRequest = onDismissRequest,
         enabled = canSubmit,
         submitText = submitText,
+        destructiveSubmit = destructiveSubmit,
         modifier = modifier,
     ) {
         if (content != null) {
@@ -92,6 +96,7 @@ fun TextFieldDialog(
                         onSubmit(textFieldContents.text)
                     }
                 }),
+                minLines = minLines,
                 maxLines = maxLines,
                 modifier = Modifier
                     .fillMaxWidth()

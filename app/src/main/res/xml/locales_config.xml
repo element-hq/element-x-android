@@ -9,13 +9,13 @@
     <locale android:name="el"/>
     <locale android:name="en"/>
     <locale android:name="en_US"/>
-    <locale android:name="eo"/>
     <locale android:name="es"/>
     <locale android:name="et"/>
     <locale android:name="eu"/>
     <locale android:name="fa"/>
     <locale android:name="fi"/>
     <locale android:name="fr"/>
+    <locale android:name="hr"/>
     <locale android:name="hu"/>
     <locale android:name="in"/>
     <locale android:name="it"/>

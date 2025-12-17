@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -14,7 +15,6 @@ import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.newRoot
 import dev.zacsweers.metro.Assisted
@@ -27,6 +27,7 @@ import io.element.android.features.lockscreen.impl.setup.biometric.SetupBiometri
 import io.element.android.features.lockscreen.impl.setup.pin.SetupPinNode
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
+import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
 import kotlinx.parcelize.Parcelize
@@ -50,9 +51,7 @@ class LockScreenSetupFlowNode(
         fun onSetupDone()
     }
 
-    private fun onSetupDone() {
-        plugins<Callback>().forEach { it.onSetupDone() }
-    }
+    private val callback: Callback = callback()
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
@@ -67,7 +66,7 @@ class LockScreenSetupFlowNode(
             if (biometricAuthenticatorManager.hasAvailableAuthenticator) {
                 backstack.newRoot(NavTarget.Biometric)
             } else {
-                onSetupDone()
+                callback.onSetupDone()
             }
         }
     }
@@ -91,7 +90,7 @@ class LockScreenSetupFlowNode(
             NavTarget.Biometric -> {
                 val callback = object : SetupBiometricNode.Callback {
                     override fun onBiometricSetupDone() {
-                        onSetupDone()
+                        callback.onSetupDone()
                     }
                 }
                 createNode<SetupBiometricNode>(buildContext, plugins = listOf(callback))

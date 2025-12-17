@@ -3,7 +3,7 @@
   <string name="screen_decline_and_block_block_user_option_description">"Du wirst keine Nachrichten oder Chat-Einladungen von diesem Nutzer sehen."</string>
   <string name="screen_decline_and_block_block_user_option_title">"Nutzer blockieren"</string>
   <string name="screen_decline_and_block_report_user_option_description">"Melde diesen Chat deinem Konto-Anbieter."</string>
-  <string name="screen_decline_and_block_report_user_reason_placeholder">"Nenne den Grund für die Meldung…"</string>
+  <string name="screen_decline_and_block_report_user_reason_placeholder">"Beschreibe den Grund für die Meldung…"</string>
   <string name="screen_decline_and_block_title">"Ablehnen und blockieren"</string>
   <string name="screen_invites_decline_chat_message">"Möchtest du die Einladung zum Betreten von %1$s wirklich ablehnen?"</string>
   <string name="screen_invites_decline_chat_title">"Einladung ablehnen"</string>

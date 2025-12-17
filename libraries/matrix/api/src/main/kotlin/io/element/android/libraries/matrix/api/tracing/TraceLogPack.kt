@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -19,6 +20,12 @@ enum class TraceLogPack(val key: String) {
     },
     NOTIFICATION_CLIENT("notification_client") {
         override val title: String = "Notification Client"
+    },
+    SYNC_PROFILING("sync_profiling") {
+        override val title: String = "Sync Profiling"
+    },
+    LATEST_EVENTS("latest_events") {
+        override val title = "Latest Events"
     };
 
     abstract val title: String

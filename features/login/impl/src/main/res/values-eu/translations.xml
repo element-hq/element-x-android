@@ -28,6 +28,7 @@
   <string name="screen_login_title_with_homeserver">"Hasi saioa %1$s(e)n"</string>
   <string name="screen_onboarding_app_version">"%1$s bertsioa"</string>
   <string name="screen_onboarding_sign_in_manually">"Hasi saioa eskuz"</string>
+  <string name="screen_onboarding_sign_in_to">"Hasi saioa %1$s(e)n"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"Hasi saioa QR kodearekin"</string>
   <string name="screen_onboarding_sign_up">"Sortu kontua"</string>
   <string name="screen_onboarding_welcome_message">"Ongi etorri inoizko %1$s azkarrenera. Abiaduraz eta sinpletasunaz gainkargatua."</string>

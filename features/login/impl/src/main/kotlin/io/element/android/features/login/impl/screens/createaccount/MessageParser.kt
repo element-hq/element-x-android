@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -9,10 +10,9 @@ package io.element.android.features.login.impl.screens.createaccount
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
+import io.element.android.libraries.androidutils.json.JsonProvider
 import io.element.android.libraries.matrix.api.auth.external.ExternalSession
-import kotlinx.serialization.json.Json
 
 interface MessageParser {
     /**
@@ -23,13 +23,12 @@ interface MessageParser {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultMessageParser(
     private val accountProviderDataSource: AccountProviderDataSource,
+    private val json: JsonProvider,
 ) : MessageParser {
     override fun parse(message: String): ExternalSession {
-        val parser = Json { ignoreUnknownKeys = true }
-        val response = parser.decodeFromString(MobileRegistrationResponse.serializer(), message)
+        val response = json().decodeFromString(MobileRegistrationResponse.serializer(), message)
         val userId = response.userId ?: error("No user ID in response")
         val homeServer = response.homeServer ?: accountProviderDataSource.flow.value.url
         val accessToken = response.accessToken ?: error("No access token in response")
@@ -40,7 +39,6 @@ class DefaultMessageParser(
             accessToken = accessToken,
             deviceId = deviceId,
             refreshToken = null,
-            slidingSyncProxy = null
         )
     }
 }

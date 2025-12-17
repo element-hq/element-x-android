@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -15,7 +16,6 @@ import com.google.accompanist.permissions.PermissionState
 import com.google.accompanist.permissions.rememberPermissionState
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 
 interface ComposablePermissionStateProvider {
     @Composable
@@ -23,7 +23,6 @@ interface ComposablePermissionStateProvider {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class AccompanistPermissionStateProvider : ComposablePermissionStateProvider {
     @Composable
     override fun provide(permission: String, onPermissionResult: (Boolean) -> Unit): PermissionState {

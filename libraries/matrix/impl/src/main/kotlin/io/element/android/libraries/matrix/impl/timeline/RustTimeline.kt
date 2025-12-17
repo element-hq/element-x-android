@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -29,7 +30,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransa
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.impl.media.MediaUploadHandlerImpl
 import io.element.android.libraries.matrix.impl.media.map
-import io.element.android.libraries.matrix.impl.media.toMSC3246range
 import io.element.android.libraries.matrix.impl.poll.toInner
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
 import io.element.android.libraries.matrix.impl.room.location.toInner
@@ -81,15 +81,17 @@ private const val PAGINATION_SIZE = 50
 class RustTimeline(
     private val inner: InnerTimeline,
     override val mode: Timeline.Mode,
-    systemClock: SystemClock,
+    private val systemClock: SystemClock,
     private val joinedRoom: JoinedRoom,
     private val coroutineScope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
     private val roomContentForwarder: RoomContentForwarder,
-    onNewSyncedEvent: () -> Unit,
 ) : Timeline {
     private val _timelineItems: MutableSharedFlow<List<MatrixTimelineItem>> =
         MutableSharedFlow(replay = 1, extraBufferCapacity = Int.MAX_VALUE)
+
+    private val _membershipChangeEventReceived = MutableSharedFlow<Unit>(extraBufferCapacity = 1)
+    private val _onSyncedEventReceived: MutableSharedFlow<Unit> = MutableSharedFlow(extraBufferCapacity = 1)
 
     private val timelineEventContentMapper = TimelineEventContentMapper()
     private val inReplyToMapper = InReplyToMapper(timelineEventContentMapper)
@@ -99,18 +101,19 @@ class RustTimeline(
         virtualTimelineItemMapper = VirtualTimelineItemMapper(),
         eventTimelineItemMapper = EventTimelineItemMapper(
             contentMapper = timelineEventContentMapper
-        )
+        ),
     )
     private val timelineDiffProcessor = MatrixTimelineDiffProcessor(
         timelineItems = _timelineItems,
-        timelineItemFactory = timelineItemMapper,
+        membershipChangeEventReceivedFlow = _membershipChangeEventReceived,
+        syncedEventReceivedFlow = _onSyncedEventReceived,
+        timelineItemMapper = timelineItemMapper,
     )
     private val timelineItemsSubscriber = TimelineItemsSubscriber(
         timeline = inner,
         timelineCoroutineScope = coroutineScope,
         timelineDiffProcessor = timelineDiffProcessor,
         dispatcher = dispatcher,
-        onNewSyncedEvent = onNewSyncedEvent,
     )
 
     private val roomBeginningPostProcessor = RoomBeginningPostProcessor(mode)
@@ -152,11 +155,23 @@ class RustTimeline(
             .launchIn(this)
     }
 
-    override val membershipChangeEventReceived: Flow<Unit> = timelineDiffProcessor.membershipChangeEventReceived
+    override val membershipChangeEventReceived: Flow<Unit> = _membershipChangeEventReceived
+        .onStart { timelineItemsSubscriber.subscribeIfNeeded() }
+        .onCompletion { timelineItemsSubscriber.unsubscribeIfNeeded() }
+
+    override val onSyncedEventReceived: Flow<Unit> = _onSyncedEventReceived
+        .onStart { timelineItemsSubscriber.subscribeIfNeeded() }
+        .onCompletion { timelineItemsSubscriber.unsubscribeIfNeeded() }
 
     override suspend fun sendReadReceipt(eventId: EventId, receiptType: ReceiptType): Result<Unit> = withContext(dispatcher) {
         runCatchingExceptions {
             inner.sendReadReceipt(receiptType.toRustReceiptType(), eventId.value)
+        }
+    }
+
+    override suspend fun markAsRead(receiptType: ReceiptType): Result<Unit> = withContext(dispatcher) {
+        runCatchingExceptions {
+            inner.markAsRead(receiptType.toRustReceiptType())
         }
     }
 
@@ -202,10 +217,12 @@ class RustTimeline(
         backwardPaginationStatus,
         forwardPaginationStatus,
         joinedRoom.roomInfoFlow.map { it.creators to it.isDm }.distinctUntilChanged(),
-    ) { timelineItems,
+    ) {
+        timelineItems,
         backwardPaginationStatus,
         forwardPaginationStatus,
-        (roomCreators, isDm) ->
+        (roomCreators, isDm),
+        ->
         withContext(dispatcher) {
             timelineItems
                 .let { items ->
@@ -484,7 +501,7 @@ class RustTimeline(
                     inReplyTo = inReplyToEventId?.value,
                 ),
                 audioInfo = audioInfo.map(),
-                waveform = waveform.toMSC3246range(),
+                waveform = waveform,
             )
         }
     }
@@ -584,6 +601,12 @@ class RustTimeline(
     override suspend fun unpinEvent(eventId: EventId): Result<Boolean> = withContext(dispatcher) {
         runCatchingExceptions {
             inner.unpinEvent(eventId = eventId.value)
+        }
+    }
+
+    override suspend fun getLatestEventId(): Result<EventId?> = withContext(dispatcher) {
+        runCatchingExceptions {
+            inner.latestEventId()?.let(::EventId)
         }
     }
 

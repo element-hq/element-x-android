@@ -1,13 +1,15 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.space.impl.root
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.compose.ui.tooling.preview.datasource.LoremIpsum
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.features.invite.api.acceptdecline.anAcceptDeclineInviteState
 import io.element.android.libraries.architecture.AsyncAction
@@ -25,52 +27,33 @@ open class SpaceStateProvider : PreviewParameterProvider<SpaceState> {
     override val values: Sequence<SpaceState>
         get() = sequenceOf(
             aSpaceState(),
+            aSpaceState(parentSpace = aParentSpace(joinRule = JoinRule.Public)),
+            aSpaceState(parentSpace = aParentSpace(joinRule = JoinRule.Restricted(persistentListOf()))),
+            aSpaceState(children = aListOfSpaceRooms()),
             aSpaceState(
-                parentSpace = aSpaceRoom(
-                    joinRule = JoinRule.Public
-                )
-            ),
-            aSpaceState(
-                parentSpace = aSpaceRoom(
-                    joinRule = JoinRule.Restricted(persistentListOf())
-                )
-            ),
-            aSpaceState(
-                parentSpace = aSpaceRoom(
-                    rawName = null,
-                    numJoinedMembers = 5,
-                    childrenCount = 10,
-                    worldReadable = true,
-                ),
-                hasMoreToLoad = true,
-            ),
-            aSpaceState(
-                hasMoreToLoad = true,
-                children = aListOfSpaceRooms(),
-            ),
-            aSpaceState(
-                hasMoreToLoad = false,
+                parentSpace = aParentSpace(),
                 children = aListOfSpaceRooms(),
                 joiningRooms = setOf(RoomId("!spaceId0:example.com")),
-            )
+                hasMoreToLoad = false
+            ),
+            aSpaceState(
+                topicViewerState = TopicViewerState.Shown(topic = "Space description goes here." + LoremIpsum(20).values.first()),
+            ),
             // Add other states here
         )
 }
 
 fun aSpaceState(
-    parentSpace: SpaceRoom? = aSpaceRoom(
-        numJoinedMembers = 5,
-        childrenCount = 10,
-        worldReadable = true,
-        roomId = RoomId("!spaceId0:example.com"),
-    ),
+    parentSpace: SpaceRoom? = aParentSpace(),
     children: List<SpaceRoom> = emptyList(),
     seenSpaceInvites: Set<RoomId> = emptySet(),
     joiningRooms: Set<RoomId> = emptySet(),
     joinActions: Map<RoomId, AsyncAction<Unit>> = joiningRooms.associateWith { AsyncAction.Loading },
     hideInvitesAvatar: Boolean = false,
-    hasMoreToLoad: Boolean = false,
+    hasMoreToLoad: Boolean = true,
     acceptDeclineInviteState: AcceptDeclineInviteState = anAcceptDeclineInviteState(),
+    topicViewerState: TopicViewerState = TopicViewerState.Hidden,
+    canAccessSpaceSettings: Boolean = true,
     eventSink: (SpaceEvents) -> Unit = { },
 ) = SpaceState(
     currentSpace = parentSpace,
@@ -80,8 +63,23 @@ fun aSpaceState(
     hasMoreToLoad = hasMoreToLoad,
     joinActions = joinActions.toImmutableMap(),
     acceptDeclineInviteState = acceptDeclineInviteState,
+    topicViewerState = topicViewerState,
+    canAccessSpaceSettings = canAccessSpaceSettings,
     eventSink = eventSink,
 )
+
+private fun aParentSpace(
+    joinRule: JoinRule? = null,
+): SpaceRoom {
+    return aSpaceRoom(
+        numJoinedMembers = 5,
+        childrenCount = 10,
+        worldReadable = true,
+        joinRule = joinRule,
+        roomId = RoomId("!spaceId0:example.com"),
+        topic = "Space description goes here. " + LoremIpsum(20).values.first(),
+    )
+}
 
 private fun aListOfSpaceRooms(): List<SpaceRoom> {
     return listOf(

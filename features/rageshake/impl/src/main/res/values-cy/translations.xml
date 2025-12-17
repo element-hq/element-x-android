@@ -14,5 +14,7 @@
   <string name="screen_bug_report_include_screenshot">"Anfon luniau sgrin"</string>
   <string name="screen_bug_report_logs_description">"Bydd cofnodion yn cael eu cynnwys gyda\'ch neges i wneud yn siŵr bod popeth yn gweithio\'n iawn. I anfon eich neges heb logiau, diffoddwch y gosodiad hwn."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"Chwalodd %1$s y tro diwethaf iddo gael ei ddefnyddio. Hoffech chi rannu adroddiad gwall gyda ni?"</string>
+  <string name="screen_bug_report_send_notification_settings_description">"Os ydych chi\'n cael problemau gyda hysbysiadau, gall llwytho\'r gosodiadau hysbysiadau ein helpu i ddarganfod yr achos gwreiddiol."</string>
+  <string name="screen_bug_report_send_notification_settings_title">"Anfon gosodiadau hysbysiadau"</string>
   <string name="screen_bug_report_view_logs">"Gweld logiau"</string>
 </resources>

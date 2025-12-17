@@ -2,9 +2,10 @@ import extension.setupDependencyInjection
 import extension.testCommonDependencies
 
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -27,8 +28,9 @@ dependencies {
     implementation(platform(libs.network.retrofit.bom))
     implementation(libs.network.retrofit)
     implementation(libs.serialization.json)
-    implementation(projects.libraries.architecture)
     implementation(projects.libraries.core)
+    implementation(projects.libraries.androidutils)
+    implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.network)
 

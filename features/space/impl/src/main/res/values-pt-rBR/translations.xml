@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_leave_space_last_admin_info">"%1$s (Administrador)"</string>
+  <plurals name="screen_leave_space_submit">
+    <item quantity="one">"Sair de %1$d sala e espaço"</item>
+    <item quantity="other">"Sair de %1$d salas e do espaço"</item>
+  </plurals>
+  <string name="screen_leave_space_subtitle">"Selecione as salas que gostaria de sair nas quais você não é o único administrador:"</string>
+  <string name="screen_leave_space_subtitle_last_admin">"Você precisa atribuir outro administrador para este espaço antes de sair."</string>
+  <string name="screen_leave_space_subtitle_only_last_admin">"Você não será removido das seguintes salas porque você é o único administrador:"</string>
+  <string name="screen_leave_space_title">"Sair de %1$s?"</string>
+  <string name="screen_leave_space_title_last_admin">"Você é o único administrador de %1$s"</string>
+  <string name="screen_space_settings_leave_space">"Sair do espaço"</string>
+  <string name="screen_space_settings_roles_and_permissions">"Cargos e permissões"</string>
+  <string name="screen_space_settings_security_and_privacy">"Segurança e privacidade"</string>
+</resources>

@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -24,16 +25,16 @@ class LinkPresenter(
     override fun present(): LinkState {
         val linkClick: MutableState<AsyncAction<Link>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
-        fun handleEvents(linkEvents: LinkEvents) {
-            when (linkEvents) {
+        fun handleEvent(event: LinkEvents) {
+            when (event) {
                 is LinkEvents.OnLinkClick -> {
                     linkClick.value = AsyncAction.Loading
-                    val result = linkChecker.isSafe(linkEvents.link)
+                    val result = linkChecker.isSafe(event.link)
                     if (result) {
-                        linkClick.value = AsyncAction.Success(linkEvents.link)
+                        linkClick.value = AsyncAction.Success(event.link)
                     } else {
                         // Confirm first
-                        linkClick.value = ConfirmingLinkClick(linkEvents.link)
+                        linkClick.value = ConfirmingLinkClick(event.link)
                     }
                 }
                 LinkEvents.Confirm -> {
@@ -48,7 +49,7 @@ class LinkPresenter(
         }
         return LinkState(
             linkClick = linkClick.value,
-            eventSink = ::handleEvents,
+            eventSink = ::handleEvent,
         )
     }
 }

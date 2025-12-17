@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -17,7 +18,6 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.core.content.FileProvider
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.mediapickers.api.ComposePickerLauncher
 import io.element.android.libraries.mediapickers.api.NoOpPickerLauncher
@@ -27,7 +27,6 @@ import io.element.android.libraries.mediapickers.api.PickerType
 import java.io.File
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultPickerProvider(
     @ApplicationContext private val context: Context,
 ) : PickerProvider {

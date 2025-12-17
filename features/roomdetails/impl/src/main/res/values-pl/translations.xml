@@ -7,15 +7,13 @@
   <string name="screen_polls_history_title">"Ankiety"</string>
   <string name="screen_room_change_permissions_administrators">"Tylko administratorzy"</string>
   <string name="screen_room_change_permissions_ban_people">"Banowanie osób"</string>
-  <string name="screen_room_change_permissions_delete_messages">"Usuwanie wiadomości"</string>
-  <string name="screen_room_change_permissions_everyone">"Wszyscy"</string>
+  <string name="screen_room_change_permissions_delete_messages">"Usuń wiadomości"</string>
   <string name="screen_room_change_permissions_invite_people">"Zapraszanie osób i akceptowanie próśb o dołączenie"</string>
-  <string name="screen_room_change_permissions_member_moderation">"Moderacja członków"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Wiadomości i zawartość"</string>
   <string name="screen_room_change_permissions_moderators">"Administratorzy i moderatorzy"</string>
   <string name="screen_room_change_permissions_remove_people">"Usuwanie osób i odrzucanie próśb o dołączenie"</string>
   <string name="screen_room_change_permissions_room_avatar">"Zmień awatar pokoju"</string>
-  <string name="screen_room_change_permissions_room_details">"Szczegóły pokoju"</string>
+  <string name="screen_room_change_permissions_room_details">"Edytuj pokój"</string>
   <string name="screen_room_change_permissions_room_name">"Zmień nazwę pokoju"</string>
   <string name="screen_room_change_permissions_room_topic">"Zmień temat pokoju"</string>
   <string name="screen_room_change_permissions_send_messages">"Wysyłanie wiadomości"</string>
@@ -50,6 +48,8 @@
   <string name="screen_room_details_error_loading_notification_settings">"Wystąpił błąd podczas ładowania ustawień powiadomień."</string>
   <string name="screen_room_details_error_muting">"Wyciszenie tego pokoju nie powiodło się, spróbuj ponownie."</string>
   <string name="screen_room_details_error_unmuting">"Nie udało się wyłączyć wyciszenia tego pokoju. Spróbuj ponownie."</string>
+  <string name="screen_room_details_invite_people_dont_close">"Nie zamykaj aplikacji przed zakończeniem."</string>
+  <string name="screen_room_details_invite_people_preparing">"Przygotowywanie zaproszeń…"</string>
   <string name="screen_room_details_invite_people_title">"Zaproś znajomych"</string>
   <string name="screen_room_details_leave_conversation_title">"Opuść rozmowę"</string>
   <string name="screen_room_details_leave_room_title">"Opuść pokój"</string>
@@ -78,12 +78,11 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Tylko usuń członka"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"Odbanuj"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"Będą mogli ponownie dołączyć do tego pokoju, jeśli zostaną zaproszeni."</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"Odbanuj użytkownika"</string>
+  <string name="screen_room_member_list_manage_member_unban_title">"Odbanuj z pokoju"</string>
   <string name="screen_room_member_list_mode_banned">"Zbanowanych"</string>
   <string name="screen_room_member_list_mode_members">"Członków"</string>
-  <string name="screen_room_member_list_pending_header_title">"Oczekujące"</string>
-  <string name="screen_room_member_list_role_administrator">"Administrator"</string>
-  <string name="screen_room_member_list_role_moderator">"Moderator"</string>
+  <string name="screen_room_member_list_role_administrator">"Tylko administratorzy"</string>
+  <string name="screen_room_member_list_role_moderator">"Administratorzy i moderatorzy"</string>
   <string name="screen_room_member_list_role_owner">"Właściciel"</string>
   <string name="screen_room_member_list_room_members_header_title">"Członkowie pokoju"</string>
   <string name="screen_room_member_list_unbanning_user">"Odbanowanie %1$s"</string>
@@ -110,7 +109,6 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"Wiadomości i zawartość"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderatorzy"</string>
   <string name="screen_room_roles_and_permissions_owners">"Właściciele"</string>
-  <string name="screen_room_roles_and_permissions_permissions_header">"Uprawnienia"</string>
   <string name="screen_room_roles_and_permissions_reset">"Resetuj uprawnienia"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Po zresetowaniu uprawnień utracisz bieżące ustawienia."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Zresetować uprawnienia?"</string>
@@ -133,9 +131,9 @@ Odradzamy włączanie szyfrowania dla pokoi, które każdy może znaleźć i do 
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Tylko osoby z zaproszeniem mogą dołączyć"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Tylko zaproszenie"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Dostęp do pokoju"</string>
-  <string name="screen_security_and_privacy_room_access_space_members_option_description">"Przestrzenie nie są obecnie wspierane"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Członkowie przestrzeni"</string>
-  <string name="screen_security_and_privacy_room_address_section_footer">"Aby pokój był widoczny w katalogu pokoi, potrzebny jest adres pokoju."</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Przestrzenie nie są obecnie wspierane"</string>
+  <string name="screen_security_and_privacy_room_address_section_footer">"Aby pokój był widoczny w katalogu, potrzebny jest adres pokoju."</string>
   <string name="screen_security_and_privacy_room_address_section_header">"Adres pokoju"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Zezwól na znalezienie tego pokoju wyszukując %1$s w katalogu pokoi publicznych"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Widoczny w katalogu pokoi publicznych"</string>
@@ -146,8 +144,6 @@ Odradzamy włączanie szyfrowania dla pokoi, które każdy może znaleźć i do 
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Adresy pokoju umożliwiają łatwe znalezienie i dołączenie do pokojów.
 Również możesz się zdecydować na upublicznienie Twojego serwera w katalogu pokoi publicznych."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Publikowanie pokoju"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_footer">"Adresy pokoju umożliwiają łatwe znalezienie i dołączenie do pokojów.
-Dodatkowo adres pokoju jest wymagany, aby pomieszczenie było widoczne w katalogu pokoi publicznych %1$s."</string>
-  <string name="screen_security_and_privacy_room_visibility_section_header">"Widoczność pomieszczenia"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_header">"Widoczność pokoju"</string>
   <string name="screen_security_and_privacy_title">"Bezpieczeństwo i prywatność"</string>
 </resources>

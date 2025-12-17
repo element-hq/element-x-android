@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -9,7 +10,6 @@ package io.element.android.features.messages.impl.link
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.extensions.containsRtLOverride
 import io.element.android.wysiwyg.link.Link
@@ -20,7 +20,6 @@ interface LinkChecker {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultLinkChecker : LinkChecker {
     override fun isSafe(link: Link): Boolean {
         return if (link.url.containsRtLOverride()) {

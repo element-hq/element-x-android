@@ -18,6 +18,7 @@
   <string name="screen_session_verification_compare_numbers_title">"Bandingkan angka"</string>
   <string name="screen_session_verification_complete_subtitle">"Sesi baru Anda sekarang diverifikasi. Ini memiliki akses ke pesan terenkripsi Anda, dan pengguna lain akan melihatnya sebagai tepercaya."</string>
   <string name="screen_session_verification_complete_user_subtitle">"Sekarang Anda dapat mempercayai identitas pengguna ini saat mengirim atau menerima pesan."</string>
+  <string name="screen_session_verification_device_verified">"Perangkat terverifikasi"</string>
   <string name="screen_session_verification_enter_recovery_key">"Masukkan kunci pemulihan"</string>
   <string name="screen_session_verification_failed_subtitle">"Entah permintaan habis waktu, permintaan ditolak, atau ada ketidakcocokan verifikasi."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Buktikan bahwa ini memang Anda untuk mengakses riwayat pesan terenkripsi Anda."</string>
@@ -32,7 +33,7 @@
   <string name="screen_session_verification_request_failure_title">"Verifikasi gagal"</string>
   <string name="screen_session_verification_request_footer">"Lanjutkan hanya jika Anda memulai verifikasi ini."</string>
   <string name="screen_session_verification_request_subtitle">"Verifikasi perangkat lain untuk menjaga riwayat pesan Anda tetap aman."</string>
-  <string name="screen_session_verification_request_success_subtitle">"Sekarang Anda dapat membaca atau mengirim pesan dengan aman di perangkat Anda yang lain."</string>
+  <string name="screen_session_verification_request_success_subtitle">"Sesi baru Anda sekarang diverifikasi. Ini memiliki akses ke pesan terenkripsi Anda, dan pengguna lain akan melihatnya sebagai tepercaya."</string>
   <string name="screen_session_verification_request_success_title">"Perangkat terverifikasi"</string>
   <string name="screen_session_verification_request_title">"Verifikasi diminta"</string>
   <string name="screen_session_verification_they_dont_match">"Mereka tidak cocok"</string>
@@ -44,7 +45,7 @@
   <string name="screen_session_verification_user_responder_subtitle">"Untuk keamanan tambahan, pengguna lain ingin memverifikasi identitas Anda. Anda akan ditampilkan satu set emoji untuk dibandingkan."</string>
   <string name="screen_session_verification_waiting_another_device_subtitle">"Anda akan melihat popup di perangkat lain. Mulai verifikasi dari sana sekarang."</string>
   <string name="screen_session_verification_waiting_another_device_title">"Mulai verifikasi di perangkat lain"</string>
-  <string name="screen_session_verification_waiting_other_device_title">"Menunggu perangkat lain"</string>
+  <string name="screen_session_verification_waiting_other_device_title">"Mulai verifikasi di perangkat lain"</string>
   <string name="screen_session_verification_waiting_other_user_title">"Menunggu pengguna lain"</string>
   <string name="screen_session_verification_waiting_subtitle">"Setelah diterima, Anda akan dapat melanjutkan verifikasi."</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Terima permintaan untuk memulai proses verifikasi di sesi Anda yang lain untuk melanjutkan."</string>

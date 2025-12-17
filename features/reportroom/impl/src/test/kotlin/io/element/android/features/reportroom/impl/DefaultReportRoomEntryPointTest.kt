@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -32,7 +33,11 @@ class DefaultReportRoomEntryPointTest {
                 }
             )
         }
-        val result = entryPoint.createNode(parentNode, BuildContext.root(null), A_ROOM_ID)
+        val result = entryPoint.createNode(
+            parentNode = parentNode,
+            buildContext = BuildContext.root(null),
+            roomId = A_ROOM_ID,
+        )
         assertThat(result).isInstanceOf(ReportRoomNode::class.java)
         assertThat(result.plugins).contains(ReportRoomNode.Inputs(A_ROOM_ID))
     }

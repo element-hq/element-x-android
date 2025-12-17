@@ -15,6 +15,7 @@
     <item quantity="few">"%d oznámenia"</item>
     <item quantity="other">"%d oznámení"</item>
   </plurals>
+  <string name="notification_error_unified_push_unregistered_android">"Distribútora oznámení UnifiedPush sa nepodarilo zaregistrovať, takže už nebudete dostávať oznámenia. Skontrolujte nastavenia oznámení v aplikácii a stav distribútora push oznámení."</string>
   <string name="notification_fallback_content">"Máte nové správy."</string>
   <string name="notification_incoming_call">"📹 Prichádzajúci hovor"</string>
   <string name="notification_inline_reply_failed">"** Nepodarilo sa odoslať - prosím otvorte miestnosť"</string>
@@ -42,6 +43,7 @@
   <string name="notification_sender_me">"Ja"</string>
   <string name="notification_sender_mention_reply">"%1$s spomenul/a alebo odpovedal/a"</string>
   <string name="notification_test_push_notification_content">"Prezeráte si oznámenie! Kliknite na mňa!"</string>
+  <string name="notification_thread_in_room">"Vlákno v %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
@@ -60,9 +62,21 @@
   <string name="push_distributor_background_sync_android">"Synchronizácia na pozadí"</string>
   <string name="push_distributor_firebase_android">"Služby Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Nenašli sa žiadne platné služby Google Play. Oznámenia nemusia fungovať správne."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_description">"Kontrola blokovaných používateľov"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_quick_fix">"Zobraziť blokovaných používateľov"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_result_none">"Žiadni používatelia nie sú blokovaní."</string>
+  <plurals name="troubleshoot_notifications_test_blocked_users_result_some">
+    <item quantity="one">"Zablokovali ste %1$d používateľa. Nebudete dostávať oznámenia od tohto používateľa."</item>
+    <item quantity="few">"Zablokovali ste %1$d používateľov. Nebudete dostávať oznámenia od týchto používateľov."</item>
+    <item quantity="other">"Zablokovali ste %1$d používateľov. Nebudete dostávať oznámenia od týchto používateľov."</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_blocked_users_title">"Blokovaní používatelia"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Získaťe názov aktuálneho poskytovateľa."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Nie sú vybraní žiadni poskytovatelia push."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found">"Aktuálny poskytovateľ push oznámení: %1$s a súčasný distribútor: %2$s. Ale distribútor %3$s sa nenašiel. Možno bola aplikácia odinštalovaná?"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_no_distributor">"Aktuálny poskytovateľ push oznámení: %1$s, ale neboli nakonfigurovaní žiadni distribútori."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Aktuálny poskytovateľ push: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success_with_distributor">"Aktuálny poskytovateľ push oznámení: %1$s (%2$s)"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Aktuálny poskytovateľ push"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Uistite sa, že aplikácia má aspoň jedného poskytovateľa push."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Nenašli sa žiadni poskytovatelia push."</string>

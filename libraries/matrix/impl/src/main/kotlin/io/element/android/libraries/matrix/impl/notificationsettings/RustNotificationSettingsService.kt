@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -130,13 +131,17 @@ class RustNotificationSettingsService(
         }
     }
 
-    override suspend fun getRoomsWithUserDefinedRules(): Result<List<String>> =
+    override suspend fun getRoomsWithUserDefinedRules(): Result<List<RoomId>> =
         runCatchingExceptions {
-            notificationSettings.await().getRoomsWithUserDefinedRules(enabled = true)
+            notificationSettings.await().getRoomsWithUserDefinedRules(enabled = true).map(::RoomId)
         }
 
     override suspend fun canHomeServerPushEncryptedEventsToDevice(): Result<Boolean> =
         runCatchingExceptions {
             notificationSettings.await().canPushEncryptedEventToDevice()
         }
+
+    override suspend fun getRawPushRules(): Result<String?> = runCatchingExceptions {
+        notificationSettings.await().getRawPushRules()
+    }
 }

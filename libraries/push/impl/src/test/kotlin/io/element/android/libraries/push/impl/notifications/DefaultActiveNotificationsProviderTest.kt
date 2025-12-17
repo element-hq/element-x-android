@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -16,6 +17,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
+import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import io.mockk.every
 import io.mockk.mockk
@@ -43,7 +45,7 @@ class DefaultActiveNotificationsProviderTest {
     @Test
     fun `getMembershipNotificationsForSession returns only membership notifications for that session id`() {
         val activeNotifications = listOf(
-            aStatusBarNotification(id = notificationIdProvider.getRoomMessagesNotificationId(A_SESSION_ID), groupId = A_SESSION_ID.value,),
+            aStatusBarNotification(id = notificationIdProvider.getRoomMessagesNotificationId(A_SESSION_ID), groupId = A_SESSION_ID.value),
             aStatusBarNotification(id = notificationIdProvider.getSummaryNotificationId(A_SESSION_ID_2), groupId = A_SESSION_ID_2.value),
             aStatusBarNotification(
                 id = notificationIdProvider.getRoomInvitationNotificationId(A_SESSION_ID_2),
@@ -80,8 +82,35 @@ class DefaultActiveNotificationsProviderTest {
         )
         val activeNotificationsProvider = createActiveNotificationsProvider(activeNotifications = activeNotifications)
 
-        assertThat(activeNotificationsProvider.getMessageNotificationsForRoom(A_SESSION_ID, A_ROOM_ID)).hasSize(1)
-        assertThat(activeNotificationsProvider.getMessageNotificationsForRoom(A_SESSION_ID_2, A_ROOM_ID_2)).isEmpty()
+        assertThat(activeNotificationsProvider.getMessageNotificationsForRoom(A_SESSION_ID, A_ROOM_ID, null)).hasSize(1)
+        assertThat(activeNotificationsProvider.getMessageNotificationsForRoom(A_SESSION_ID_2, A_ROOM_ID_2, null)).isEmpty()
+    }
+
+    @Test
+    fun `getMessageNotificationsForRoom with thread id returns only message notifications for a thread using those session and room ids`() {
+        val activeNotifications = listOf(
+            aStatusBarNotification(
+                id = notificationIdProvider.getRoomMessagesNotificationId(A_SESSION_ID),
+                groupId = A_SESSION_ID.value,
+                tag = "$A_ROOM_ID|$A_THREAD_ID",
+            ),
+            aStatusBarNotification(id = notificationIdProvider.getSummaryNotificationId(A_SESSION_ID), groupId = A_SESSION_ID.value, tag = A_ROOM_ID.value),
+            aStatusBarNotification(
+                id = notificationIdProvider.getRoomMessagesNotificationId(A_SESSION_ID_2),
+                groupId = A_SESSION_ID_2.value,
+                tag = "$A_ROOM_ID|$A_THREAD_ID",
+            ),
+            aStatusBarNotification(id = notificationIdProvider.getSummaryNotificationId(A_SESSION_ID_2), groupId = A_SESSION_ID_2.value, tag = A_ROOM_ID.value),
+            aStatusBarNotification(
+                id = notificationIdProvider.getRoomInvitationNotificationId(A_SESSION_ID_2),
+                groupId = A_SESSION_ID_2.value,
+                tag = "$A_ROOM_ID|$A_THREAD_ID",
+            ),
+        )
+        val activeNotificationsProvider = createActiveNotificationsProvider(activeNotifications = activeNotifications)
+
+        assertThat(activeNotificationsProvider.getMessageNotificationsForRoom(A_SESSION_ID, A_ROOM_ID, A_THREAD_ID)).hasSize(1)
+        assertThat(activeNotificationsProvider.getMessageNotificationsForRoom(A_SESSION_ID_2, A_ROOM_ID_2, A_THREAD_ID)).isEmpty()
     }
 
     @Test

@@ -1,14 +1,15 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.lockscreen.impl.pin.model
 
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toImmutableList
 
 data class PinEntry(
     val digits: ImmutableList<PinDigit>,
@@ -17,7 +18,7 @@ data class PinEntry(
         fun createEmpty(size: Int): PinEntry {
             val digits = List(size) { PinDigit.Empty }
             return PinEntry(
-                digits = digits.toPersistentList()
+                digits = digits.toImmutableList()
             )
         }
     }
@@ -37,7 +38,7 @@ data class PinEntry(
                 newDigits[index] = PinDigit.Filled(char)
             }
         }
-        return copy(digits = newDigits.toPersistentList())
+        return copy(digits = newDigits.toImmutableList())
     }
 
     fun deleteLast(): PinEntry {
@@ -46,7 +47,7 @@ data class PinEntry(
         newDigits.indexOfLast { it is PinDigit.Filled }.also { lastFilled ->
             newDigits[lastFilled] = PinDigit.Empty
         }
-        return copy(digits = newDigits.toPersistentList())
+        return copy(digits = newDigits.toImmutableList())
     }
 
     fun addDigit(digit: Char): PinEntry {
@@ -55,7 +56,7 @@ data class PinEntry(
         newDigits.indexOfFirst { it is PinDigit.Empty }.also { firstEmpty ->
             newDigits[firstEmpty] = PinDigit.Filled(digit)
         }
-        return copy(digits = newDigits.toPersistentList())
+        return copy(digits = newDigits.toImmutableList())
     }
 
     fun clear(): PinEntry {

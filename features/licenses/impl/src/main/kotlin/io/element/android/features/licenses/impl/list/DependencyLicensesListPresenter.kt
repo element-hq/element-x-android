@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -20,7 +21,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toImmutableList
 
 @Inject
 class DependencyLicensesListPresenter(
@@ -37,7 +38,7 @@ class DependencyLicensesListPresenter(
         var filter by remember { mutableStateOf("") }
         LaunchedEffect(Unit) {
             runCatchingExceptions {
-                licenses = AsyncData.Success(licensesProvider.provides().toPersistentList())
+                licenses = AsyncData.Success(licensesProvider.provides().toImmutableList())
             }.onFailure {
                 licenses = AsyncData.Failure(it)
             }
@@ -50,16 +51,16 @@ class DependencyLicensesListPresenter(
                     it.safeName.contains(safeFilter, ignoreCase = true) ||
                         it.groupId.contains(safeFilter, ignoreCase = true) ||
                         it.artifactId.contains(safeFilter, ignoreCase = true)
-                }.toPersistentList())
+                }.toImmutableList())
             } else {
                 filteredLicenses = licenses
             }
         }
 
-        fun handleEvent(dependencyLicensesListEvent: DependencyLicensesListEvent) {
-            when (dependencyLicensesListEvent) {
+        fun handleEvent(event: DependencyLicensesListEvent) {
+            when (event) {
                 is DependencyLicensesListEvent.SetFilter -> {
-                    filter = dependencyLicensesListEvent.filter
+                    filter = event.filter
                 }
             }
         }

@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -13,35 +14,38 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
-import androidx.compose.runtime.mutableStateMapOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.snapshots.SnapshotStateMap
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
+import androidx.compose.ui.graphics.toArgb
 import dev.zacsweers.metro.Inject
+import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.preferences.impl.developer.tracing.toLogLevel
 import io.element.android.features.preferences.impl.developer.tracing.toLogLevelItem
+import io.element.android.features.preferences.impl.model.EnabledFeature
 import io.element.android.features.preferences.impl.tasks.ClearCacheUseCase
 import io.element.android.features.preferences.impl.tasks.ComputeCacheSizeUseCase
+import io.element.android.features.preferences.impl.tasks.VacuumStoresUseCase
 import io.element.android.features.rageshake.api.preferences.RageshakePreferencesState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runCatchingUpdatingState
-import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
-import io.element.android.libraries.featureflag.api.Feature
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
-import io.element.android.libraries.matrix.api.tracing.TraceLogPack
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.map
@@ -50,28 +54,30 @@ import java.net.URL
 
 @Inject
 class DeveloperSettingsPresenter(
+    private val sessionId: SessionId,
     private val featureFlagService: FeatureFlagService,
     private val computeCacheSizeUseCase: ComputeCacheSizeUseCase,
     private val clearCacheUseCase: ClearCacheUseCase,
     private val rageshakePresenter: Presenter<RageshakePreferencesState>,
     private val appPreferencesStore: AppPreferencesStore,
     private val buildMeta: BuildMeta,
+    private val enterpriseService: EnterpriseService,
+    private val vacuumStoresUseCase: VacuumStoresUseCase,
 ) : Presenter<DeveloperSettingsState> {
     @Composable
     override fun present(): DeveloperSettingsState {
         val rageshakeState = rageshakePresenter.present()
-
-        val features = remember {
-            mutableStateMapOf<String, Feature>()
-        }
         val enabledFeatures = remember {
-            mutableStateMapOf<String, Boolean>()
+            mutableStateListOf<EnabledFeature>()
         }
         val cacheSize = remember {
             mutableStateOf<AsyncData<String>>(AsyncData.Uninitialized)
         }
         val clearCacheAction = remember {
             mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
+        }
+        var showColorPicker by remember {
+            mutableStateOf(false)
         }
         val customElementCallBaseUrl by remember {
             appPreferencesStore
@@ -82,16 +88,15 @@ class DeveloperSettingsPresenter(
             appPreferencesStore.getTracingLogLevelFlow().map { AsyncData.Success(it.toLogLevelItem()) }
         }
         val tracingLogLevel by tracingLogLevelFlow.collectAsState(initial = AsyncData.Uninitialized)
-        val tracingLogPacks by produceState(persistentListOf<TraceLogPack>()) {
+        val tracingLogPacks by produceState(persistentListOf()) {
             appPreferencesStore.getTracingLogPacksFlow()
                 // Sort the entries alphabetically by its title
-                .map { it.sortedBy { it.title }.toPersistentList() }
-                .collectLatest { value = it }
+                .map { it.sortedBy { pack -> pack.title } }
+                .collectLatest { value = it.toImmutableList() }
         }
 
         LaunchedEffect(Unit) {
             featureFlagService.getAvailableFeatures()
-                .filter { it.isInLabs.not() && it.isFinished.not() }
                 .run {
                     // Never display room directory search in release builds for Play Store
                     if (buildMeta.flavorDescription == "GooglePlay" && buildMeta.buildType == BuildType.RELEASE) {
@@ -101,25 +106,23 @@ class DeveloperSettingsPresenter(
                     }
                 }
                 .forEach { feature ->
-                    features[feature.key] = feature
-                    enabledFeatures[feature.key] = featureFlagService.isFeatureEnabled(feature)
+                    enabledFeatures.add(EnabledFeature(feature, featureFlagService.isFeatureEnabled(feature)))
                 }
         }
-        val featureUiModels = createUiModels(features, enabledFeatures)
+        val featureUiModels = createUiModels(enabledFeatures)
         val coroutineScope = rememberCoroutineScope()
         // Compute cache size each time the clear cache action value is changed
         LaunchedEffect(clearCacheAction.value.isSuccess()) {
             computeCacheSize(cacheSize)
         }
 
-        fun handleEvents(event: DeveloperSettingsEvents) {
+        fun handleEvent(event: DeveloperSettingsEvents) {
             when (event) {
                 is DeveloperSettingsEvents.UpdateEnabledFeature -> coroutineScope.updateEnabledFeature(
-                    features,
-                    enabledFeatures,
-                    event.feature,
-                    event.isEnabled,
-                    triggerClearCache = { handleEvents(DeveloperSettingsEvents.ClearCache) }
+                    enabledFeatures = enabledFeatures,
+                    featureKey = event.feature.key,
+                    enabled = event.isEnabled,
+                    triggerClearCache = { handleEvent(DeveloperSettingsEvents.ClearCache) }
                 )
                 is DeveloperSettingsEvents.SetCustomElementCallBaseUrl -> coroutineScope.launch {
                     val urlToSave = event.baseUrl.takeIf { !it.isNullOrEmpty() }
@@ -138,11 +141,26 @@ class DeveloperSettingsPresenter(
                     }
                     appPreferencesStore.setTracingLogPacks(currentPacks)
                 }
+                is DeveloperSettingsEvents.ChangeBrandColor -> coroutineScope.launch {
+                    showColorPicker = false
+                    val color = event.color
+                        ?.toArgb()
+                        ?.toHexString(HexFormat.UpperCase)
+                        ?.substring(2, 8)
+                        ?.padStart(7, '#')
+                    enterpriseService.overrideBrandColor(sessionId, color)
+                }
+                is DeveloperSettingsEvents.SetShowColorPicker -> {
+                    showColorPicker = event.show
+                }
+                DeveloperSettingsEvents.VacuumStores -> coroutineScope.launch {
+                    vacuumStoresUseCase()
+                }
             }
         }
 
         return DeveloperSettingsState(
-            features = featureUiModels.toImmutableList(),
+            features = featureUiModels,
             cacheSize = cacheSize.value,
             clearCacheAction = clearCacheAction.value,
             rageshakeState = rageshakeState,
@@ -152,41 +170,41 @@ class DeveloperSettingsPresenter(
             ),
             tracingLogLevel = tracingLogLevel,
             tracingLogPacks = tracingLogPacks,
-            eventSink = ::handleEvents
+            isEnterpriseBuild = enterpriseService.isEnterpriseBuild,
+            showColorPicker = showColorPicker,
+            eventSink = ::handleEvent,
         )
     }
 
     @Composable
     private fun createUiModels(
-        features: SnapshotStateMap<String, Feature>,
-        enabledFeatures: SnapshotStateMap<String, Boolean>
-    ): List<FeatureUiModel> {
-        return features.values.map { feature ->
-            key(feature.key) {
-                val isEnabled = enabledFeatures[feature.key].orFalse()
-                remember(feature, isEnabled) {
+        enabledFeatures: SnapshotStateList<EnabledFeature>,
+    ): ImmutableList<FeatureUiModel> {
+        return enabledFeatures.map { enabledFeature ->
+            key(enabledFeature.feature.key) {
+                remember(enabledFeature) {
                     FeatureUiModel(
-                        key = feature.key,
-                        title = feature.title,
-                        description = feature.description,
+                        key = enabledFeature.feature.key,
+                        title = enabledFeature.feature.title,
+                        description = enabledFeature.feature.description,
                         icon = null,
-                        isEnabled = isEnabled
+                        isEnabled = enabledFeature.isEnabled
                     )
                 }
             }
-        }
+        }.toImmutableList()
     }
 
     private fun CoroutineScope.updateEnabledFeature(
-        features: SnapshotStateMap<String, Feature>,
-        enabledFeatures: SnapshotStateMap<String, Boolean>,
-        featureUiModel: FeatureUiModel,
+        enabledFeatures: SnapshotStateList<EnabledFeature>,
+        featureKey: String,
         enabled: Boolean,
         @Suppress("UNUSED_PARAMETER") triggerClearCache: () -> Unit,
     ) = launch {
-        val feature = features[featureUiModel.key] ?: return@launch
+        val featureIndex = enabledFeatures.indexOfFirst { it.feature.key == featureKey }.takeIf { it != -1 } ?: return@launch
+        val feature = enabledFeatures[featureIndex].feature
         if (featureFlagService.setFeatureEnabled(feature, enabled)) {
-            enabledFeatures[featureUiModel.key] = enabled
+            enabledFeatures[featureIndex] = enabledFeatures[featureIndex].copy(isEnabled = enabled)
         }
     }
 

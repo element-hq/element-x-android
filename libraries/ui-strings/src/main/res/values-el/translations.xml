@@ -326,6 +326,7 @@
   <string name="dialog_title_error">"Σφάλμα"</string>
   <string name="dialog_title_success">"Επιτυχία"</string>
   <string name="dialog_title_warning">"Προειδοποίηση"</string>
+  <string name="dialog_unsaved_changes_description">"Έχεις μη αποθηκευμένες αλλαγές."</string>
   <string name="dialog_unsaved_changes_description_android">"Οι αλλαγές σου δεν έχουν αποθηκευτεί. Σίγουρα θες να πας πίσω;"</string>
   <string name="dialog_unsaved_changes_title">"Αποθήκευση αλλαγών;"</string>
   <string name="error_account_creation_not_possible">"Ο οικιακός διακομιστής σου πρέπει να αναβαθμιστεί για να υποστηρίζει το Matrix Authentication Service και τη δημιουργία λογαριασμού."</string>

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_room_details_edit_room_title">"Рэдагаваць пакой"</string>
+  <string name="screen_room_details_edition_error">"Адбылася невядомая памылка, і інфармацыю нельга было змяніць."</string>
+  <string name="screen_room_details_edition_error_title">"Немагчыма абнавіць пакой"</string>
+  <string name="screen_room_details_updating_room">"Ідзе абнаўленне пакоя…"</string>
+</resources>

@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -16,9 +17,11 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
+import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStoreFactory
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.push.impl.R
@@ -72,8 +75,12 @@ class NotificationBroadcastReceiverHandler(
                 notificationCleaner.clearEvent(sessionId, eventId)
             }
             actionIds.markRoomRead -> if (roomId != null) {
-                notificationCleaner.clearMessagesForRoom(sessionId, roomId)
-                handleMarkAsRead(sessionId, roomId)
+                if (threadId == null) {
+                    notificationCleaner.clearMessagesForRoom(sessionId, roomId)
+                } else {
+                    notificationCleaner.clearMessagesForThread(sessionId, roomId, threadId)
+                }
+                handleMarkAsRead(sessionId, roomId, threadId)
             }
             actionIds.join -> if (roomId != null) {
                 notificationCleaner.clearMembershipNotificationForRoom(sessionId, roomId)
@@ -96,7 +103,8 @@ class NotificationBroadcastReceiverHandler(
         client.getRoom(roomId)?.leave()
     }
 
-    private fun handleMarkAsRead(sessionId: SessionId, roomId: RoomId) = appCoroutineScope.launch {
+    @Suppress("unused")
+    private fun handleMarkAsRead(sessionId: SessionId, roomId: RoomId, threadId: ThreadId?) = appCoroutineScope.launch {
         val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return@launch
         val isSendPublicReadReceiptsEnabled = sessionPreferencesStore.get(sessionId, this).isSendPublicReadReceiptsEnabled().first()
         val receiptType = if (isSendPublicReadReceiptsEnabled) {
@@ -104,7 +112,26 @@ class NotificationBroadcastReceiverHandler(
         } else {
             ReceiptType.READ_PRIVATE
         }
-        client.getRoom(roomId)?.markAsRead(receiptType = receiptType)
+        val room = client.getJoinedRoom(roomId) ?: return@launch
+        val timeline = if (threadId != null) {
+            room.createTimeline(CreateTimelineParams.Threaded(threadId)).getOrNull()
+        } else {
+            room.liveTimeline
+        }
+        timeline?.markAsRead(receiptType)
+            ?.onSuccess {
+                if (threadId != null) {
+                    Timber.d("Marked thread $threadId in room $roomId as read with receipt type $receiptType")
+                } else {
+                    Timber.d("Marked room $roomId as read with receipt type $receiptType")
+                }
+            }
+            ?.onFailure {
+                Timber.e(it, "Fails to mark as read with receipt type $receiptType")
+            }
+        if (timeline?.mode != Timeline.Mode.Live) {
+            timeline?.close()
+        }
     }
 
     private fun handleSmartReply(

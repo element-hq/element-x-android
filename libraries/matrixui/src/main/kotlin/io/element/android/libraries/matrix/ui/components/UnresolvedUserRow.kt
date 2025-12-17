@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -11,7 +12,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
@@ -44,8 +44,7 @@ fun UnresolvedUserRow(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .heightIn(min = 56.dp)
-            .padding(start = 16.dp, top = 8.dp, end = 16.dp, bottom = 8.dp),
+            .padding(start = 16.dp, top = 12.dp, end = 16.dp, bottom = 12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Avatar(

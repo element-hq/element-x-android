@@ -1,13 +1,14 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.libraries.mediaviewer.impl.model
 
-import io.element.android.libraries.designsystem.components.media.aWaveForm
+import io.element.android.libraries.designsystem.components.media.WaveFormSamples
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -91,7 +92,7 @@ fun aMediaItemVoice(
     filename: String = "filename.ogg",
     caption: String? = null,
     duration: String? = "1:23",
-    waveform: List<Float> = aWaveForm(),
+    waveform: List<Float> = WaveFormSamples.realisticWaveForm,
 ): MediaItem.Voice {
     return MediaItem.Voice(
         id = id,

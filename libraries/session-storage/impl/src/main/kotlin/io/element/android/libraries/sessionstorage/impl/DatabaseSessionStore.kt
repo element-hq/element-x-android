@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -12,13 +13,13 @@ import app.cash.sqldelight.coroutines.mapToList
 import app.cash.sqldelight.coroutines.mapToOneOrNull
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.sessionstorage.api.LoggedInState
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -26,7 +27,6 @@ import timber.log.Timber
 
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
-@Inject
 class DatabaseSessionStore(
     private val database: SessionDatabase,
     private val dispatchers: CoroutineDispatchers,
@@ -47,6 +47,7 @@ class DatabaseSessionStore(
                     )
                 }
             }
+            .distinctUntilChanged()
     }
 
     override suspend fun addSession(sessionData: SessionData) {
@@ -158,6 +159,15 @@ class DatabaseSessionStore(
             database.sessionDataQueries.selectAll()
                 .executeAsList()
                 .map { it.toApiModel() }
+        }
+    }
+
+    override suspend fun numberOfSessions(): Int {
+        return sessionDataMutex.withLock {
+            database.sessionDataQueries.count()
+                .executeAsOneOrNull()
+                ?.toInt()
+                ?: 0
         }
     }
 

@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -15,6 +16,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asFlow
@@ -38,16 +40,21 @@ open class LoadingRoomStateProvider : PreviewParameterProvider<LoadingRoomState>
 
 @Inject
 class LoadingRoomStateFlowFactory(private val matrixClient: MatrixClient) {
-    fun create(lifecycleScope: CoroutineScope, roomId: RoomId): StateFlow<LoadingRoomState> =
-        getJoinedRoomFlow(roomId)
-            .map { room ->
-                if (room != null) {
-                    LoadingRoomState.Loaded(room)
-                } else {
-                    LoadingRoomState.Error
+    fun create(lifecycleScope: CoroutineScope, roomId: RoomId, joinedRoom: JoinedRoom?): StateFlow<LoadingRoomState> {
+        return if (joinedRoom != null) {
+            MutableStateFlow<LoadingRoomState>(LoadingRoomState.Loaded(joinedRoom))
+        } else {
+            getJoinedRoomFlow(roomId)
+                .map { room ->
+                    if (room != null) {
+                        LoadingRoomState.Loaded(room)
+                    } else {
+                        LoadingRoomState.Error
+                    }
                 }
-            }
-            .stateIn(lifecycleScope, SharingStarted.Eagerly, LoadingRoomState.Loading)
+                .stateIn(lifecycleScope, SharingStarted.Eagerly, LoadingRoomState.Loading)
+        }
+    }
 
     private fun getJoinedRoomFlow(roomId: RoomId): Flow<JoinedRoom?> = suspend {
         matrixClient.getJoinedRoom(roomId = roomId)

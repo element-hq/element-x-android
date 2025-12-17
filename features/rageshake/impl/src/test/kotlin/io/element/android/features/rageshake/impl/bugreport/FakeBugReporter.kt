@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -26,6 +27,7 @@ class FakeBugReporter(val mode: Mode = Mode.Success) : BugReporter {
         withScreenshot: Boolean,
         problemDescription: String,
         canContact: Boolean,
+        sendPushRules: Boolean,
         listener: BugReporterListener,
     ) {
         delay(100)
@@ -53,15 +55,11 @@ class FakeBugReporter(val mode: Mode = Mode.Success) : BugReporter {
         return File("fake")
     }
 
-    override fun setLogDirectorySubfolder(subfolderName: String?) {
-        // No op
-    }
-
     override fun setCurrentTracingLogLevel(logLevel: String) {
         // No op
     }
 
-    override fun saveLogCat() {
-        // No op
+    override fun saveLogCat(): File? {
+        return null
     }
 }

@@ -4,6 +4,7 @@
   <string name="screen_advanced_settings_developer_mode">"Режим за програмисти"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Активирайте, за да имате достъп до функции и функционалности за програмисти."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Скриване на профилните снимки в заявките за покана за стая"</string>
+  <string name="screen_advanced_settings_labs">"Експерименти"</string>
   <string name="screen_advanced_settings_media_compression_description">"Качвайте снимки и видеоклипове по-бързо и намалете използването на данни"</string>
   <string name="screen_advanced_settings_media_compression_title">"Оптимизиране на качеството на медията"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Модерация и безопасност"</string>
@@ -27,6 +28,9 @@
   <string name="screen_edit_profile_error_title">"Не може да се обнови профила"</string>
   <string name="screen_edit_profile_title">"Редактиране на профила"</string>
   <string name="screen_edit_profile_updating_details">"Обновяване на профила…"</string>
+  <string name="screen_labs_enable_threads">"Включване на отговори в нишка"</string>
+  <string name="screen_labs_header_title">"Искате ли да експериментирате?"</string>
+  <string name="screen_labs_title">"Експерименти"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Допълнителни настройки"</string>
   <string name="screen_notification_settings_calls_label">"Аудио и видео разговори"</string>
   <string name="screen_notification_settings_configuration_mismatch">"Несъответствие в конфигурацията"</string>

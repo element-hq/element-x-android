@@ -4,17 +4,19 @@
   <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Kitiltás"</string>
   <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Többé nem csatlakozhat ehhez a szobához, akkor sem, ha meghívják."</string>
   <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Biztos, hogy kitiltja ezt a tagot?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description">"Ha meghívják őket akkor sem tudnak újra csatlakozni ehhez a térhez, de továbbra is megtartják tagságukat a szobáikban vagy altereikben."</string>
   <string name="screen_bottom_sheet_manage_room_member_banning_user">"%1$s kitiltása"</string>
   <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"Eltávolítás"</string>
   <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"Ehhez a szobához is csatlakozhat, ha meghívják."</string>
   <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"Biztos, hogy eltávolítja ezt a tagot?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description">"Ha meghívják őket újra csatlakozhatnak ehhez a térhez, és továbbra is megtartják a tagságukat a szobáikban vagy altereikben."</string>
   <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Profil megtekintése"</string>
-  <string name="screen_bottom_sheet_manage_room_member_remove">"Eltávolítás a szobából"</string>
+  <string name="screen_bottom_sheet_manage_room_member_remove">"Felhasználó eltávolítása"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Eltávolítja a tagot, és megtiltja a jövőbeni csatlakozást?"</string>
   <string name="screen_bottom_sheet_manage_room_member_removing_user">"%1$s eltávolítása…"</string>
   <string name="screen_bottom_sheet_manage_room_member_unban">"Visszaengedés a szobába"</string>
-  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_action">"Kitiltás visszavonása"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_action">"Tiltás feloldása"</string>
   <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_description">"Újra beléphetnek a szobába, ha meghívják őket."</string>
   <string name="screen_bottom_sheet_manage_room_member_unban_member_confirmation_title">"Biztos, hogy feloldja a felhasználó kitiltását?"</string>
-  <string name="screen_bottom_sheet_manage_room_member_unbanning_user">"%1$s kitiltásának feloldása"</string>
+  <string name="screen_bottom_sheet_manage_room_member_unbanning_user">"%1$s tiltásának feloldása"</string>
 </resources>

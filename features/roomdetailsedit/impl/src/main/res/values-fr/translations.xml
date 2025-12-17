@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_room_details_edit_room_title">"Modifier les détails"</string>
+  <string name="screen_room_details_edition_error">"Une erreur inconnue s’est produite et les informations n’ont pas pu être modifiées."</string>
+  <string name="screen_room_details_edition_error_title">"Impossible de mettre à jour le salon"</string>
+  <string name="screen_room_details_updating_room">"Mise à jour du salon…"</string>
+</resources>

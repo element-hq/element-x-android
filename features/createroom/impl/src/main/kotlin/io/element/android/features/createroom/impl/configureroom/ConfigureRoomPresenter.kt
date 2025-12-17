@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -17,6 +18,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.core.net.toUri
 import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.plan.CreatedRoom
 import io.element.android.libraries.architecture.AsyncAction
@@ -38,7 +40,7 @@ import io.element.android.libraries.matrix.ui.room.address.RoomAddressValidityEf
 import io.element.android.libraries.mediapickers.api.PickerProvider
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.api.MediaPreProcessor
-import io.element.android.libraries.permissions.api.PermissionsEvents
+import io.element.android.libraries.permissions.api.PermissionsEvent
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.toImmutableList
@@ -115,7 +117,7 @@ class ConfigureRoomPresenter(
             localCoroutineScope.createRoom(config, createRoomAction)
         }
 
-        fun handleEvents(event: ConfigureRoomEvents) {
+        fun handleEvent(event: ConfigureRoomEvents) {
             when (event) {
                 is ConfigureRoomEvents.RoomNameChanged -> dataStore.setRoomName(event.name)
                 is ConfigureRoomEvents.TopicChanged -> dataStore.setTopic(event.topic)
@@ -130,7 +132,7 @@ class ConfigureRoomPresenter(
                             cameraPhotoPicker.launch()
                         } else {
                             pendingPermissionRequest = true
-                            cameraPermissionState.eventSink(PermissionsEvents.RequestPermissions)
+                            cameraPermissionState.eventSink(PermissionsEvent.RequestPermissions)
                         }
                         AvatarAction.Remove -> dataStore.setAvatarUri(uri = null)
                     }
@@ -148,7 +150,7 @@ class ConfigureRoomPresenter(
             cameraPermissionState = cameraPermissionState,
             homeserverName = homeserverName,
             roomAddressValidity = roomAddressValidity.value,
-            eventSink = ::handleEvents,
+            eventSink = ::handleEvent,
         )
     }
 
@@ -157,7 +159,7 @@ class ConfigureRoomPresenter(
         createRoomAction: MutableState<AsyncAction<RoomId>>
     ) = launch {
         suspend {
-            val avatarUrl = config.avatarUri?.let { uploadAvatar(it) }
+            val avatarUrl = config.avatarUri?.let { uploadAvatar(it.toUri()) }
             val params = if (config.roomVisibility is RoomVisibilityState.Public) {
                 CreateRoomParameters(
                     name = config.roomName,

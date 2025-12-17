@@ -1,7 +1,8 @@
 /*
- * Copyright 2022-2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2022-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -89,6 +90,7 @@ fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:designsystem"))
     implementation(project(":libraries:matrix:impl"))
     implementation(project(":libraries:matrixui"))
+    implementation(project(":libraries:matrixmedia:impl"))
     implementation(project(":libraries:network"))
     implementation(project(":libraries:core"))
     implementation(project(":libraries:eventformatter:impl"))
@@ -118,6 +120,8 @@ fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:fullscreenintent:impl"))
     implementation(project(":libraries:wellknown:impl"))
     implementation(project(":libraries:oidc:impl"))
+    implementation(project(":libraries:workmanager:impl"))
+    implementation(project(":libraries:recentemojis:impl"))
 }
 
 fun DependencyHandlerScope.allServicesImpl() {

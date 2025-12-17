@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="dialog_permission_camera">"Kako biste aplikaciji omogućili korištenje kamere, dajte dopuštenje u postavkama sustava."</string>
+  <string name="dialog_permission_generic">"Dajte dopuštenje u postavkama sustava."</string>
+  <string name="dialog_permission_microphone">"Kako biste aplikaciji omogućili korištenje mikrofona, dajte dopuštenje u postavkama sustava."</string>
+  <string name="dialog_permission_notification">"Kako biste aplikaciji omogućili prikaz obavijesti, dajte dopuštenje u postavkama sustava."</string>
+</resources>

@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -16,6 +17,7 @@ import io.element.android.libraries.matrix.test.AN_ACCOUNT_PROVIDER
 import io.element.android.libraries.matrix.test.AN_ACCOUNT_PROVIDER_2
 import io.element.android.libraries.matrix.test.AN_ACCOUNT_PROVIDER_URL
 import io.element.android.libraries.wellknown.api.ElementWellKnown
+import io.element.android.libraries.wellknown.api.WellknownRetrieverResult
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertThrows
 import org.junit.Test
@@ -155,7 +157,13 @@ class DefaultAccountProviderAccessControlTest {
             defaultHomeserverListResult = { allowedAccountProviders },
         ),
         wellknownRetriever = FakeWellknownRetriever(
-            getElementWellKnownResult = { elementWellKnown },
+            getElementWellKnownResult = {
+                if (elementWellKnown == null) {
+                    WellknownRetrieverResult.NotFound
+                } else {
+                    WellknownRetrieverResult.Success(elementWellKnown)
+                }
+            },
         ),
     )
 

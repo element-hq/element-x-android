@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_space_announcement_item1">"Wyświetlić przestrzenie, które stworzyłeś lub do których dołączyłeś"</string>
+  <string name="screen_space_announcement_item2">"Akceptować lub odrzucać zaproszenia"</string>
+  <string name="screen_space_announcement_item3">"Odkrywać wszystkie pokoje, do których możesz dołączyć w swoich przestrzeniach"</string>
+  <string name="screen_space_announcement_item4">"Dołączać do przestrzeni publicznych"</string>
+  <string name="screen_space_announcement_item5">"Opuszczać jakąkolwiek przestrzeń, do której dołączyłeś"</string>
+  <string name="screen_space_announcement_notice">"Filtrowanie, tworzenie i zarządzanie przestrzeniami pojawi się wkrótce."</string>
+  <string name="screen_space_announcement_subtitle">"Witamy w wersji beta przestrzeni! W tej wersji możesz:"</string>
+  <string name="screen_space_announcement_title">"Przedstawiamy przestrzenie"</string>
+</resources>

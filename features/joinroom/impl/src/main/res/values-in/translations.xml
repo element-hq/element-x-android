@@ -15,7 +15,7 @@
   <string name="screen_join_room_fail_reason">"Ruangan ini hanya untuk undangan atau mungkin ada pembatasan akses pada tingkat space."</string>
   <string name="screen_join_room_forget_action">"Lupakan ruangan ini"</string>
   <string name="screen_join_room_invite_required_message">"Anda memerlukan undangan untuk bergabung dalam ruangan ini"</string>
-  <string name="screen_join_room_join_action">"Gabung dengan ruangan"</string>
+  <string name="screen_join_room_join_action">"Gabung"</string>
   <string name="screen_join_room_join_restricted_message">"Anda mungkin perlu diundang atau menjadi anggota space untuk bergabung."</string>
   <string name="screen_join_room_knock_action">"Ketuk untuk bergabung"</string>
   <string name="screen_join_room_knock_message_description">"Pesan (opsional)"</string>

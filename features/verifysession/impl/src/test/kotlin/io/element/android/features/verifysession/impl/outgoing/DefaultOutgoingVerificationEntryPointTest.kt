@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -34,7 +35,7 @@ class DefaultOutgoingVerificationEntryPointTest {
             )
         }
         val callback = object : OutgoingVerificationEntryPoint.Callback {
-            override fun onLearnMoreAboutEncryption() = lambdaError()
+            override fun navigateToLearnMoreAboutEncryption() = lambdaError()
             override fun onBack() = lambdaError()
             override fun onDone() = lambdaError()
         }
@@ -42,10 +43,12 @@ class DefaultOutgoingVerificationEntryPointTest {
             showDeviceVerifiedScreen = true,
             verificationRequest = anOutgoingSessionVerificationRequest(),
         )
-        val result = entryPoint.nodeBuilder(parentNode, BuildContext.root(null))
-            .params(params)
-            .callback(callback)
-            .build()
+        val result = entryPoint.createNode(
+            parentNode = parentNode,
+            buildContext = BuildContext.root(null),
+            params = params,
+            callback = callback,
+        )
         assertThat(result).isInstanceOf(OutgoingVerificationNode::class.java)
         assertThat(result.plugins).contains(params)
         assertThat(result.plugins).contains(callback)

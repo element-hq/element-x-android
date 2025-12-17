@@ -60,9 +60,21 @@
   <string name="push_distributor_background_sync_android">"Synchronizacja w tle"</string>
   <string name="push_distributor_firebase_android">"Usługi Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Nie znaleziono usług Google Play. Powiadomienia mogą nie działać prawidłowo."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_description">"Sprawdzam zablokowanych użytkowników"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_quick_fix">"Wyświetl zablokowanych użytkowników"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_result_none">"Żaden użytkownik nie jest zablokowany."</string>
+  <plurals name="troubleshoot_notifications_test_blocked_users_result_some">
+    <item quantity="one">"Zablokowano %1$d użytkownika. Nie otrzymasz od niego żadnych powiadomień."</item>
+    <item quantity="few">"Zablokowano %1$d użytkowników. Nie otrzymasz od nich żadnych powiadomień."</item>
+    <item quantity="many">"Zablokowano %1$d użytkowników. Nie otrzymasz od nich żadnych powiadomień."</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_blocked_users_title">"Zablokowani użytkownicy"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Uzyskaj nazwę bieżącego dostawcy."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Nie wybrano dostawców push."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found">"Aktualny dostawca usług push: %1$s, dystrybutor: %2$s. Nie znaleziono dystrybutora %3$s. Sprawdź czy aplikacja nie została usunięta."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_no_distributor">"Aktualny dostawca usługi push: %1$s, nie skonfigurowano żadnych dystrybutorów."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Bieżący dostawca push: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success_with_distributor">"Aktualny dostawca usług push: %1$s (%2$s)"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Bieżący dostawca push"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Upewnij się, że aplikacja ma co najmniej jednego dostawcę push."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Nie znaleziono dostawców push."</string>

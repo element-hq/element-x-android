@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -50,7 +51,7 @@ class CreateAccountPresenter(
         val pageProgress: MutableState<Int> = remember { mutableIntStateOf(0) }
         val createAction: MutableState<AsyncAction<SessionId>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
-        fun handleEvents(event: CreateAccountEvents) {
+        fun handleEvent(event: CreateAccountEvents) {
             when (event) {
                 is CreateAccountEvents.SetPageProgress -> {
                     pageProgress.value = event.progress
@@ -68,7 +69,7 @@ class CreateAccountPresenter(
             pageProgress = pageProgress.value,
             isDebugBuild = buildMeta.isDebuggable,
             createAction = createAction.value,
-            eventSink = ::handleEvents
+            eventSink = ::handleEvent,
         )
     }
 

@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -24,32 +25,37 @@ class FakeMessagesNavigator(
     private val onPreviewAttachmentLambda: (attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?) -> Unit = { _, _ -> lambdaError() },
     private val onNavigateToRoomLambda: (roomId: RoomId, threadId: EventId?, serverNames: List<String>) -> Unit = { _, _, _ -> lambdaError() },
     private val onOpenThreadLambda: (threadRootId: ThreadId, focusedEventId: EventId?) -> Unit = { _, _ -> lambdaError() },
+    private val closeLambda: () -> Unit = { lambdaError() },
 ) : MessagesNavigator {
-    override fun onShowEventDebugInfoClick(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
+    override fun navigateToEventDebugInfo(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
         onShowEventDebugInfoClickLambda(eventId, debugInfo)
     }
 
-    override fun onForwardEventClick(eventId: EventId) {
+    override fun forwardEvent(eventId: EventId) {
         onForwardEventClickLambda(eventId)
     }
 
-    override fun onReportContentClick(eventId: EventId, senderId: UserId) {
+    override fun navigateToReportMessage(eventId: EventId, senderId: UserId) {
         onReportContentClickLambda(eventId, senderId)
     }
 
-    override fun onEditPollClick(eventId: EventId) {
+    override fun navigateToEditPoll(eventId: EventId) {
         onEditPollClickLambda(eventId)
     }
 
-    override fun onPreviewAttachment(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?) {
+    override fun navigateToPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?) {
         onPreviewAttachmentLambda(attachments, inReplyToEventId)
     }
 
-    override fun onNavigateToRoom(roomId: RoomId, eventId: EventId?, serverNames: List<String>) {
+    override fun navigateToRoom(roomId: RoomId, eventId: EventId?, serverNames: List<String>) {
         onNavigateToRoomLambda(roomId, eventId, serverNames)
     }
 
-    override fun onOpenThread(threadRootId: ThreadId, focusedEventId: EventId?) {
+    override fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?) {
         onOpenThreadLambda(threadRootId, focusedEventId)
+    }
+
+    override fun close() {
+        closeLambda()
     }
 }

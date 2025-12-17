@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_space_announcement_item1">"Az Ön által létrehozott vagy csatlakozott térek megtekintése"</string>
+  <string name="screen_space_announcement_item2">"A meghívások elfogadására vagy elutasítására a terekhez"</string>
+  <string name="screen_space_announcement_item3">"Szobák felfedezése a terekben, amelyekhez csatlakozhat"</string>
+  <string name="screen_space_announcement_item4">"Csatlakozás nyilvános terekhez"</string>
+  <string name="screen_space_announcement_item5">"Terek elhagyása"</string>
+  <string name="screen_space_announcement_notice">"Terek szűrése, készítése és kezelése hamarosan érkezik."</string>
+  <string name="screen_space_announcement_subtitle">"Üdvözöljük a tér béta verziójában! Ezzel az első verzióval a következőket teheti:"</string>
+  <string name="screen_space_announcement_title">"Bemutatkoznak a terek"</string>
+</resources>

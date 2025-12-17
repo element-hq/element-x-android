@@ -1,17 +1,20 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
 package io.element.android.features.login.impl.screens.onboarding
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.appconfig.AuthenticationConfig
 import io.element.android.appconfig.OnBoardingConfig
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
+import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.login.LoginHelper
 import io.element.android.features.login.impl.web.FakeWebClientUrlForAuthenticationRetriever
 import io.element.android.features.login.impl.web.WebClientUrlForAuthenticationRetriever
@@ -24,6 +27,7 @@ import io.element.android.libraries.matrix.test.AN_ACCOUNT_PROVIDER_2
 import io.element.android.libraries.matrix.test.AN_ACCOUNT_PROVIDER_3
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_HOMESERVER_URL
+import io.element.android.libraries.matrix.test.A_HOMESERVER_URL_2
 import io.element.android.libraries.matrix.test.A_LOGIN_HINT
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.core.aBuildMeta
@@ -36,6 +40,7 @@ import io.element.android.libraries.wellknown.api.WellknownRetriever
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -214,7 +219,12 @@ class OnBoardingPresenterTest {
 
     @Test
     fun `present - default account provider - login and clear error`() = runTest {
-        val authenticationService = FakeMatrixAuthenticationService()
+        val authenticationService = FakeMatrixAuthenticationService(
+            setHomeserverResult = {
+                Result.failure(AN_EXCEPTION)
+            },
+        )
+        val accountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService())
         val presenter = createPresenter(
             params = OnBoardingNode.Params(
                 accountProvider = A_HOMESERVER_URL,
@@ -226,15 +236,17 @@ class OnBoardingPresenterTest {
             loginHelper = createLoginHelper(
                 authenticationService = authenticationService,
             ),
+            accountProviderDataSource = accountProviderDataSource,
         )
         presenter.test {
             skipItems(3)
             awaitItem().also {
                 assertThat(it.defaultAccountProvider).isEqualTo(A_HOMESERVER_URL)
-                authenticationService.givenChangeServerError(AN_EXCEPTION)
-                it.eventSink(OnBoardingEvents.OnSignIn(A_HOMESERVER_URL))
+                assertThat(accountProviderDataSource.flow.first().url).isEqualTo(AuthenticationConfig.MATRIX_ORG_URL)
+                it.eventSink(OnBoardingEvents.OnSignIn(A_HOMESERVER_URL_2))
                 skipItems(1) // Loading
-
+                // Account data source has been updated
+                assertThat(accountProviderDataSource.flow.first().url).isEqualTo(A_HOMESERVER_URL_2)
                 // Check an error was returned
                 val submittedState = awaitItem()
                 assertThat(submittedState.loginMode).isInstanceOf(AsyncData.Failure::class.java)
@@ -257,6 +269,7 @@ private fun createPresenter(
     loginHelper: LoginHelper = createLoginHelper(),
     onBoardingLogoResIdProvider: OnBoardingLogoResIdProvider = OnBoardingLogoResIdProvider { null },
     sessionStore: SessionStore = InMemorySessionStore(),
+    accountProviderDataSource: AccountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
 ) = OnBoardingPresenter(
     params = params,
     buildMeta = buildMeta,
@@ -269,6 +282,7 @@ private fun createPresenter(
     loginHelper = loginHelper,
     onBoardingLogoResIdProvider = onBoardingLogoResIdProvider,
     sessionStore = sessionStore,
+    accountProviderDataSource = accountProviderDataSource,
 )
 
 fun createLoginHelper(

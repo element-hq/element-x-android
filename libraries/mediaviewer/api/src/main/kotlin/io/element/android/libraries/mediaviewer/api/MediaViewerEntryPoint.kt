@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -19,18 +20,19 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import kotlinx.parcelize.Parcelize
 
 interface MediaViewerEntryPoint : FeatureEntryPoint {
-    fun nodeBuilder(parentNode: Node, buildContext: BuildContext): NodeBuilder
+    fun createNode(
+        parentNode: Node,
+        buildContext: BuildContext,
+        params: Params,
+        callback: Callback,
+    ): Node
 
-    interface NodeBuilder {
-        fun callback(callback: Callback): NodeBuilder
-        fun params(params: Params): NodeBuilder
-        fun avatar(filename: String, avatarUrl: String): NodeBuilder
-        fun build(): Node
-    }
+    fun createParamsForAvatar(filename: String, avatarUrl: String): Params
 
     interface Callback : Plugin {
         fun onDone()
-        fun onViewInTimeline(eventId: EventId)
+        fun viewInTimeline(eventId: EventId)
+        fun forwardEvent(eventId: EventId, fromPinnedEvents: Boolean)
     }
 
     data class Params(

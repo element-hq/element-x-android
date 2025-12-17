@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -31,6 +32,11 @@ sealed interface AsyncAction<out T> {
     interface Confirming : AsyncAction<Nothing>
 
     data object ConfirmingNoParams : Confirming
+
+    /**
+     * User cancels the action, use this object to ask for confirmation.
+     */
+    data object ConfirmingCancellation : Confirming
 
     /**
      * Represents an operation that is currently ongoing.
@@ -149,16 +155,16 @@ inline fun <T> MutableState<AsyncAction<T>>.runUpdatingStateNoSuccess(
  * @param resultBlock a suspending function that returns a [Result].
  * @return the [Result] returned by [resultBlock].
  */
-@OptIn(ExperimentalContracts::class)
 @Suppress("REDUNDANT_INLINE_SUSPEND_FUNCTION_TYPE")
 suspend inline fun <T> runUpdatingState(
     state: MutableState<AsyncAction<T>>,
     errorTransform: (Throwable) -> Throwable = { it },
     resultBlock: suspend () -> Result<T>,
 ): Result<T> {
-    contract {
-        callsInPlace(resultBlock, InvocationKind.EXACTLY_ONCE)
-    }
+    // Restore when the issue with contracts and AGP 8.13.x is fixed
+//    contract {
+//        callsInPlace(resultBlock, InvocationKind.EXACTLY_ONCE)
+//    }
     state.value = AsyncAction.Loading
     return try {
         resultBlock()

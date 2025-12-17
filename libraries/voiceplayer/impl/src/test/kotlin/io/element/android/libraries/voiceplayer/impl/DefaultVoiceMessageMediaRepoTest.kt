@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -11,8 +12,8 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaSource
-import io.element.android.libraries.matrix.api.mxc.MxcTools
 import io.element.android.libraries.matrix.test.media.FakeMatrixMediaLoader
+import io.element.android.libraries.matrix.test.mxc.FakeMxcTools
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -130,7 +131,7 @@ private fun createDefaultVoiceMessageMediaRepo(
     mxcUri: String = MXC_URI,
 ) = DefaultVoiceMessageMediaRepo(
     cacheDir = temporaryFolder.root,
-    mxcTools = MxcTools(),
+    mxcTools = FakeMxcTools(),
     matrixMediaLoader = matrixMediaLoader,
     mediaSource = MediaSource(
         url = mxcUri,

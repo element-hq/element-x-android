@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -9,7 +10,6 @@ package io.element.android.libraries.pushproviders.unifiedpush
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.MatrixClientProvider
@@ -28,7 +28,6 @@ interface UnifiedPushNewGatewayHandler {
 }
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultUnifiedPushNewGatewayHandler(
     private val pusherSubscriber: PusherSubscriber,
     private val userPushStoreFactory: UserPushStoreFactory,
@@ -40,7 +39,7 @@ class DefaultUnifiedPushNewGatewayHandler(
         val userId = pushClientSecret.getUserIdFromSecret(clientSecret) ?: return Result.failure<Unit>(
             IllegalStateException("Unable to retrieve session")
         ).also {
-            Timber.w("Unable to retrieve session")
+            Timber.tag(loggerTag.value).w("Unable to retrieve session")
         }
         val userDataStore = userPushStoreFactory.getOrCreate(userId)
         return if (userDataStore.getPushProviderName() == UnifiedPushConfig.NAME) {
@@ -48,6 +47,9 @@ class DefaultUnifiedPushNewGatewayHandler(
                 .getOrRestore(userId)
                 .flatMap { client ->
                     pusherSubscriber.registerPusher(client, endpoint, pushGateway)
+                }
+                .onFailure {
+                    Timber.tag(loggerTag.value).w(it, "Unable to register pusher")
                 }
         } else {
             Timber.tag(loggerTag.value).d("This session is not using UnifiedPush pusher")

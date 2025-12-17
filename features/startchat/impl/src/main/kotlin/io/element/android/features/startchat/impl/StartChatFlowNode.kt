@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -16,7 +17,6 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.navigation.transition.JumpToEndTransitionHandler
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
@@ -29,6 +29,7 @@ import io.element.android.features.startchat.impl.root.StartChatNode
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.OverlayView
+import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -60,15 +61,12 @@ class StartChatFlowNode(
         data object JoinByAddress : NavTarget
     }
 
+    private val callback: StartChatEntryPoint.Callback = callback()
     private val navigator = DefaultStartChatNavigator(
         backstack = backstack,
         overlay = overlay,
-        openRoom = { roomIdOrAlias, viaServers ->
-            plugins<StartChatEntryPoint.Callback>().forEach { it.onOpenRoom(roomIdOrAlias, viaServers) }
-        },
-        openRoomDirectory = {
-            plugins<StartChatEntryPoint.Callback>().forEach { it.onOpenRoomDirectory() }
-        }
+        openRoom = callback::onRoomCreated,
+        openRoomDirectory = callback::navigateToRoomDirectory,
     )
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -79,12 +77,14 @@ class StartChatFlowNode(
             NavTarget.NewRoom -> {
                 val callback = object : CreateRoomEntryPoint.Callback {
                     override fun onRoomCreated(roomId: RoomId) {
-                        navigator.onOpenRoom(roomId.toRoomIdOrAlias(), emptyList())
+                        navigator.onRoomCreated(roomId.toRoomIdOrAlias(), emptyList())
                     }
                 }
-                createRoomEntryPoint.nodeBuilder(parentNode = this, buildContext = buildContext)
-                    .callback(callback)
-                    .build()
+                createRoomEntryPoint.createNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    callback = callback,
+                )
             }
             NavTarget.JoinByAddress -> {
                 createNode<JoinRoomByAddressNode>(buildContext = buildContext, plugins = listOf(navigator))

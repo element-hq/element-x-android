@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_edit_room_address_title">"Gelaren helbidea"</string>
+  <string name="screen_security_and_privacy_add_room_address_action">"Gehitu gelaren helbidea"</string>
+  <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Bai, gaitu zifratzea"</string>
+  <string name="screen_security_and_privacy_encryption_section_header">"Zifratzea"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Edonork aurkitu eta bat egin dezake"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Edonork"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Gonbidatutako pertsonak bakarrik sartu ahal izango dira"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Gonbidapen bidez"</string>
+  <string name="screen_security_and_privacy_room_access_section_header">"Gelarako sarbidea"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_title">"Guneko kideak"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Gaur-gaurkoz ez da guneekin bateragarria"</string>
+  <string name="screen_security_and_privacy_room_address_section_header">"Gelaren helbidea"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Gela publikoen direktorioan ikusgai"</string>
+  <string name="screen_security_and_privacy_room_history_anyone_option_title">"Edonork"</string>
+  <string name="screen_security_and_privacy_room_history_section_header">"Nork irakur dezake historia"</string>
+  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Kideek bakarrik, gonbidatu zituztenetik"</string>
+  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Kideek bakarrik, aukera hau hautatu zenetik"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_header">"Gelaren ikusgarritasuna"</string>
+  <string name="screen_security_and_privacy_title">"Segurtasuna eta pribatutasuna"</string>
+</resources>

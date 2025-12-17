@@ -45,6 +45,7 @@
   <string name="screen_edit_profile_title">"Modifier le profil"</string>
   <string name="screen_edit_profile_updating_details">"Mise à jour du profil…"</string>
   <string name="screen_labs_enable_threads">"Activez les fils de discussion."</string>
+  <string name="screen_labs_enable_threads_description">"Un changement entraînera le redémarrage de l’application."</string>
   <string name="screen_labs_header_description">"Découvrez nos dernières idées en cours de développement. Ces fonctionnalités ne sont pas encore finalisées; elles peuvent être instables et évoluer."</string>
   <string name="screen_labs_header_title">"Envie d’expérimenter?"</string>
   <string name="screen_labs_title">"Expérimental"</string>

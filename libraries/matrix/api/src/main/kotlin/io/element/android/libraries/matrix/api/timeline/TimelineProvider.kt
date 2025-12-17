@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -16,7 +17,7 @@ import kotlinx.coroutines.flow.first
  * It could be the live timeline, a pinned timeline or a detached timeline.
  * By default, the active timeline is the live timeline.
  */
-interface TimelineProvider {
+fun interface TimelineProvider {
     fun activeTimelineFlow(): StateFlow<Timeline?>
 }
 

@@ -4,8 +4,8 @@
     android:autoMirrored="true"
     android:viewportWidth="24"
     android:viewportHeight="24">
-    <path
-        android:fillColor="#FF000000"
-        android:fillType="evenOdd"
-        android:pathData="M15.7 2.64a2 2 0 0 1 2.84 0l2.82 2.82a2 2 0 0 1 0 2.83L9.61 20.05a1 1 0 0 1-0.47 0.26l-5.66 1.42a1 1 0 0 1-1.2-1.21l1.4-5.66a1 1 0 0 1 0.27-0.47z m1.23 7.26L14.1 7.07l-8.54 8.54-0.94 3.78 3.77-0.95z"/>
+  <path
+      android:pathData="M15.706,2.637a2,2 0,0 1,2.829 0l2.828,2.828a2,2 0,0 1,0 2.829L9.605,20.052a1,1 0,0 1,-0.465 0.263L3.483,21.73a1,1 0,0 1,-1.212 -1.213l1.414,-5.657a1,1 0,0 1,0.263 -0.465zM16.93,9.899L14.102,7.07l-8.544,8.544 -0.943,3.771 3.771,-0.943z"
+      android:fillColor="#FF000000"
+      android:fillType="evenOdd"/>
 </vector>

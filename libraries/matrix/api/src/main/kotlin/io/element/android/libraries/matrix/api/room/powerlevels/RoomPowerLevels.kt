@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -32,19 +33,6 @@ data class RoomPowerLevels(
      */
     fun powerLevelOf(userId: UserId): Long {
         return users[userId] ?: 0L
-    }
-
-    /**
-     * Returns the set of [UserId]s that have the given role in the room.
-     *
-     * **WARNING**: This method must not be used with a creator role. It'll result in a runtime error.
-     */
-    fun usersWithRole(role: RoomMember.Role): Set<UserId> {
-        return if (role is RoomMember.Role.Owner && role.isCreator) {
-            error("RoomPowerLevels.usersWithRole should not be used with a creator role, use roomInfo.creators instead")
-        } else {
-            users.filterValues { RoomMember.Role.forPowerLevel(it) == role }.keys
-        }
     }
 
     /**

@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -14,11 +15,11 @@ import androidx.compose.ui.platform.UriHandler
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.appconfig.LearnMoreConfig
+import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.di.SessionScope
 
 @ContributesNode(SessionScope::class)
@@ -32,27 +33,13 @@ class SecureBackupRootNode(
     plugins = plugins
 ) {
     interface Callback : Plugin {
-        fun onSetupClick()
-        fun onChangeClick()
-        fun onDisableClick()
-        fun onConfirmRecoveryKeyClick()
+        fun navigateToSetup()
+        fun navigateToChange()
+        fun navigateToDisable()
+        fun navigateToEnterRecoveryKey()
     }
 
-    private fun onSetupClick() {
-        plugins<Callback>().forEach { it.onSetupClick() }
-    }
-
-    private fun onChangeClick() {
-        plugins<Callback>().forEach { it.onChangeClick() }
-    }
-
-    private fun onDisableClick() {
-        plugins<Callback>().forEach { it.onDisableClick() }
-    }
-
-    private fun onConfirmRecoveryKeyClick() {
-        plugins<Callback>().forEach { it.onConfirmRecoveryKeyClick() }
-    }
+    private val callback: Callback = callback()
 
     private fun onLearnMoreClick(uriHandler: UriHandler) {
         uriHandler.openUri(LearnMoreConfig.SECURE_BACKUP_URL)
@@ -65,10 +52,10 @@ class SecureBackupRootNode(
         SecureBackupRootView(
             state = state,
             onBackClick = ::navigateUp,
-            onSetupClick = ::onSetupClick,
-            onChangeClick = ::onChangeClick,
-            onDisableClick = ::onDisableClick,
-            onConfirmRecoveryKeyClick = ::onConfirmRecoveryKeyClick,
+            onSetupClick = callback::navigateToSetup,
+            onChangeClick = callback::navigateToChange,
+            onDisableClick = callback::navigateToDisable,
+            onConfirmRecoveryKeyClick = callback::navigateToEnterRecoveryKey,
             onLearnMoreClick = { onLearnMoreClick(uriHandler) },
             modifier = modifier,
         )

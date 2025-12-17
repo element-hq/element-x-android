@@ -25,7 +25,7 @@ jobs:
       group: ${{ github.ref == 'refs/heads/develop' && format('build-develop-{0}-{1}', matrix.variant, github.sha) || format('build-{0}-{1}', matrix.variant, github.ref)  }}
       cancel-in-progress: true
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
         with:
           # Ensure we are building the branch and not the branch after being merged on develop
           # https://github.com/actions/checkout/issues/881
@@ -46,6 +46,7 @@ jobs:
           ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID: ${{ secrets.MAPTILER_LIGHT_MAP_ID }}
           ELEMENT_ANDROID_MAPTILER_DARK_MAP_ID: ${{ secrets.MAPTILER_DARK_MAP_ID }}
           ELEMENT_ANDROID_SENTRY_DSN: ${{ secrets.ELEMENT_ANDROID_SENTRY_DSN }}
+          ELEMENT_SDK_SENTRY_DSN: ${{ secrets.ELEMENT_SDK_SENTRY_DSN }}
           ELEMENT_CALL_SENTRY_DSN: ${{ secrets.ELEMENT_CALL_SENTRY_DSN }}
           ELEMENT_CALL_POSTHOG_API_HOST: ${{ secrets.ELEMENT_CALL_POSTHOG_API_HOST }}
           ELEMENT_CALL_POSTHOG_API_KEY: ${{ secrets.ELEMENT_CALL_POSTHOG_API_KEY }}
@@ -53,7 +54,7 @@ jobs:
         run: ./gradlew :app:assembleGplayDebug app:assembleFDroidDebug -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
       - name: Upload debug APKs
         if: ${{ matrix.variant == 'debug' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: elementx-debug
           path: |
@@ -61,7 +62,7 @@ jobs:
             app/build/outputs/apk/fdroid/debug/*-universal-debug.apk
       - name: Upload x86_64 APK for Maestro
         if: ${{ matrix.variant == 'debug' }}
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: elementx-apk-maestro
           path: |
@@ -69,7 +70,7 @@ jobs:
           retention-days: 5
           overwrite: true
           if-no-files-found: error
-      - uses: rnkdsh/action-upload-diawi@26292a7b424bdc9f4ab4ccea6202fc513f571370 # v1.5.11
+      - uses: rnkdsh/action-upload-diawi@4e1421305be7cfc510d05f47850262eeaf345108 # v1.5.12
         id: diawi
         # Do not fail the whole build if Diawi upload fails
         continue-on-error: true

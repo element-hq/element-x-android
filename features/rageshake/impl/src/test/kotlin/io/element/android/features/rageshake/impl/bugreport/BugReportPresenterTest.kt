@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -103,6 +104,20 @@ class BugReportPresenterTest {
             assertThat(awaitItem().formState).isEqualTo(BugReportFormState.Default.copy(sendScreenshot = true))
             initialState.eventSink.invoke(BugReportEvents.SetSendScreenshot(false))
             assertThat(awaitItem().formState).isEqualTo(BugReportFormState.Default.copy(sendScreenshot = false))
+        }
+    }
+
+    @Test
+    fun `present - send notification settings`() = runTest {
+        val presenter = createPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitItem()
+            initialState.eventSink.invoke(BugReportEvents.SetSendPushRules(true))
+            assertThat(awaitItem().formState).isEqualTo(BugReportFormState.Default.copy(sendPushRules = true))
+            initialState.eventSink.invoke(BugReportEvents.SetSendPushRules(false))
+            assertThat(awaitItem().formState).isEqualTo(BugReportFormState.Default.copy(sendPushRules = false))
         }
     }
 

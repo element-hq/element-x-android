@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -13,13 +14,13 @@ import androidx.compose.ui.platform.LocalContext
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.login.impl.util.openLearnMorePage
 import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.matrix.api.auth.OidcDetails
 
@@ -34,13 +35,14 @@ class OnBoardingNode(
     plugins = plugins
 ) {
     interface Callback : Plugin {
-        fun onSignUp()
-        fun onSignIn(mustChooseAccountProvider: Boolean)
-        fun onSignInWithQrCode()
-        fun onReportProblem()
-        fun onLoginPasswordNeeded()
-        fun onOidcDetails(oidcDetails: OidcDetails)
-        fun onCreateAccountContinue(url: String)
+        fun navigateToSignUpFlow()
+        fun navigateToSignInFlow(mustChooseAccountProvider: Boolean)
+        fun navigateToQrCode()
+        fun navigateToBugReport()
+        fun navigateToLoginPassword()
+        fun navigateToOidc(oidcDetails: OidcDetails)
+        fun navigateToCreateAccount(url: String)
+        fun onDone()
     }
 
     data class Params(
@@ -48,39 +50,12 @@ class OnBoardingNode(
         val loginHint: String?,
     ) : NodeInputs
 
+    private val callback: Callback = callback()
     private val params = inputs<Params>()
 
     private val presenter = presenterFactory.create(
         params = params,
     )
-
-    private fun onSignIn(mustChooseAccountProvider: Boolean) {
-        plugins<Callback>().forEach { it.onSignIn(mustChooseAccountProvider) }
-    }
-
-    private fun onSignUp() {
-        plugins<Callback>().forEach { it.onSignUp() }
-    }
-
-    private fun onSignInWithQrCode() {
-        plugins<Callback>().forEach { it.onSignInWithQrCode() }
-    }
-
-    private fun onReportProblem() {
-        plugins<Callback>().forEach { it.onReportProblem() }
-    }
-
-    private fun onOidcDetails(data: OidcDetails) {
-        plugins<Callback>().forEach { it.onOidcDetails(data) }
-    }
-
-    private fun onLoginPasswordNeeded() {
-        plugins<Callback>().forEach { it.onLoginPasswordNeeded() }
-    }
-
-    private fun onCreateAccountContinue(url: String) {
-        plugins<Callback>().forEach { it.onCreateAccountContinue(url) }
-    }
 
     @Composable
     override fun View(modifier: Modifier) {
@@ -89,15 +64,15 @@ class OnBoardingNode(
         OnBoardingView(
             state = state,
             modifier = modifier,
-            onSignIn = ::onSignIn,
-            onCreateAccount = ::onSignUp,
-            onSignInWithQrCode = ::onSignInWithQrCode,
-            onReportProblem = ::onReportProblem,
-            onOidcDetails = ::onOidcDetails,
-            onNeedLoginPassword = ::onLoginPasswordNeeded,
+            onSignIn = callback::navigateToSignInFlow,
+            onCreateAccount = callback::navigateToSignUpFlow,
+            onSignInWithQrCode = callback::navigateToQrCode,
+            onReportProblem = callback::navigateToBugReport,
+            onOidcDetails = callback::navigateToOidc,
+            onNeedLoginPassword = callback::navigateToLoginPassword,
             onLearnMoreClick = { openLearnMorePage(context) },
-            onCreateAccountContinue = ::onCreateAccountContinue,
-            onBackClick = ::navigateUp,
+            onCreateAccountContinue = callback::navigateToCreateAccount,
+            onBackClick = callback::onDone,
         )
     }
 }

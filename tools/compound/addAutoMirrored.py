@@ -1,10 +1,17 @@
 #!/usr/bin/env python3
 
+# Copyright (c) 2025 Element Creations Ltd.
+#
+# SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+# Please see LICENSE files in the repository root for full details.
+
 files = [
     "ic_compound_arrow_left.xml",
     "ic_compound_arrow_right.xml",
     "ic_compound_arrow_up_right.xml",
     "ic_compound_attachment.xml",
+    "ic_compound_backspace.xml",
+    "ic_compound_backspace_solid.xml",
     "ic_compound_block.xml",
     "ic_compound_chart.xml",
     "ic_compound_chat.xml",

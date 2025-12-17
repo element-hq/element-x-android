@@ -1,7 +1,8 @@
 /*
+ * Copyright (c) 2025 Element Creations Ltd.
  * Copyright 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -72,13 +73,14 @@ private fun LineRow(
     colorationMode: ColorationMode,
 ) {
     val context = LocalContext.current
+    val toastMessage = stringResource(CommonStrings.common_line_copied_to_clipboard)
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clickable(onClick = {
                 context.copyToClipboard(
                     text = line,
-                    toastMessage = context.getString(CommonStrings.common_line_copied_to_clipboard),
+                    toastMessage = toastMessage,
                 )
             })
     ) {

@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -14,10 +15,10 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.stringResource
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
@@ -27,6 +28,7 @@ import io.element.android.features.messages.impl.timeline.di.TimelineItemPresent
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.androidutils.system.copyToClipboard
 import io.element.android.libraries.androidutils.system.openUrlInExternalApp
+import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -34,7 +36,6 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
-import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @ContributesNode(RoomScope::class)
@@ -48,14 +49,15 @@ class PinnedMessagesListNode(
     private val permalinkParser: PermalinkParser,
 ) : Node(buildContext, plugins = plugins), PinnedMessagesListNavigator {
     interface Callback : Plugin {
-        fun onEventClick(event: TimelineItem.Event)
-        fun onUserDataClick(userId: UserId)
-        fun onViewInTimelineClick(eventId: EventId)
-        fun onRoomPermalinkClick(data: PermalinkData.RoomLink)
-        fun onShowEventDebugInfoClick(eventId: EventId?, debugInfo: TimelineItemDebugInfo)
-        fun onForwardEventClick(eventId: EventId)
+        fun handleEventClick(event: TimelineItem.Event)
+        fun navigateToRoomMemberDetails(userId: UserId)
+        fun viewInTimeline(eventId: EventId)
+        fun handlePermalinkClick(data: PermalinkData.RoomLink)
+        fun navigateToEventDebugInfo(eventId: EventId?, debugInfo: TimelineItemDebugInfo)
+        fun handleForwardEventClick(eventId: EventId)
     }
 
+    private val callback: Callback = callback()
     private val presenter = presenterFactory.create(
         navigator = this,
         actionListPresenter = actionListPresenterFactory.create(
@@ -63,25 +65,16 @@ class PinnedMessagesListNode(
             timelineMode = Timeline.Mode.PinnedEvents,
         )
     )
-    private val callbacks = plugins<Callback>()
-
-    private fun onEventClick(event: TimelineItem.Event) {
-        return callbacks.forEach { it.onEventClick(event) }
-    }
-
-    private fun onUserDataClick(user: MatrixUser) {
-        callbacks.forEach { it.onUserDataClick(user.userId) }
-    }
 
     private fun onLinkClick(context: Context, url: String) {
         when (val permalink = permalinkParser.parse(url)) {
             is PermalinkData.UserLink -> {
                 // Open the room member profile, it will fallback to
                 // the user profile if the user is not in the room
-                callbacks.forEach { it.onUserDataClick(permalink.userId) }
+                callback.navigateToRoomMemberDetails(permalink.userId)
             }
             is PermalinkData.RoomLink -> {
-                callbacks.forEach { it.onRoomPermalinkClick(permalink) }
+                callback.handlePermalinkClick(permalink)
             }
             is PermalinkData.FallbackLink,
             is PermalinkData.RoomEmailInviteLink -> {
@@ -90,16 +83,16 @@ class PinnedMessagesListNode(
         }
     }
 
-    override fun onViewInTimelineClick(eventId: EventId) {
-        callbacks.forEach { it.onViewInTimelineClick(eventId) }
+    override fun viewInTimeline(eventId: EventId) {
+        callback.viewInTimeline(eventId)
     }
 
-    override fun onShowEventDebugInfoClick(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
-        callbacks.forEach { it.onShowEventDebugInfoClick(eventId, debugInfo) }
+    override fun navigateToEventDebugInfo(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
+        callback.navigateToEventDebugInfo(eventId, debugInfo)
     }
 
-    override fun onForwardEventClick(eventId: EventId) {
-        callbacks.forEach { it.onForwardEventClick(eventId) }
+    override fun forwardEvent(eventId: EventId) {
+        callback.handleForwardEventClick(eventId)
     }
 
     @Composable
@@ -108,21 +101,22 @@ class PinnedMessagesListNode(
             LocalTimelineItemPresenterFactories provides timelineItemPresenterFactories,
         ) {
             val context = LocalContext.current
+            val toastMessage = stringResource(CommonStrings.common_copied_to_clipboard)
             val view = LocalView.current
             val state = presenter.present()
             PinnedMessagesListView(
                 state = state,
                 onBackClick = ::navigateUp,
-                onEventClick = ::onEventClick,
-                onUserDataClick = ::onUserDataClick,
+                onEventClick = callback::handleEventClick,
+                onUserDataClick = { callback.navigateToRoomMemberDetails(it.userId) },
                 onLinkClick = { link -> onLinkClick(context, link.url) },
                 onLinkLongClick = {
                     view.performHapticFeedback(
                         HapticFeedbackConstants.LONG_PRESS
                     )
                     context.copyToClipboard(
-                        it.url,
-                        context.getString(CommonStrings.common_copied_to_clipboard)
+                        text = it.url,
+                        toastMessage = toastMessage,
                     )
                 },
                 modifier = modifier

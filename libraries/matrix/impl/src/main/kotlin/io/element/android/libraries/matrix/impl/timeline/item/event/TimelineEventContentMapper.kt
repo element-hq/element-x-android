@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -31,6 +32,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.UnknownConten
 import io.element.android.libraries.matrix.api.timeline.item.event.UtdCause
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.poll.map
+import io.element.android.libraries.matrix.impl.room.join.map
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
 import org.matrix.rustcomponents.sdk.EmbeddedEventDetails
@@ -209,7 +211,7 @@ private fun RustOtherState.map(): OtherState {
         RustOtherState.RoomEncryption -> OtherState.RoomEncryption
         RustOtherState.RoomGuestAccess -> OtherState.RoomGuestAccess
         RustOtherState.RoomHistoryVisibility -> OtherState.RoomHistoryVisibility
-        RustOtherState.RoomJoinRules -> OtherState.RoomJoinRules
+        is RustOtherState.RoomJoinRules -> OtherState.RoomJoinRules(joinRule?.map())
         is RustOtherState.RoomName -> OtherState.RoomName(name)
         is RustOtherState.RoomPinnedEvents -> OtherState.RoomPinnedEvents(change.map())
         is RustOtherState.RoomPowerLevels -> OtherState.RoomUserPowerLevels(users)
@@ -219,6 +221,8 @@ private fun RustOtherState.map(): OtherState {
         is RustOtherState.RoomTopic -> OtherState.RoomTopic(topic)
         RustOtherState.SpaceChild -> OtherState.SpaceChild
         RustOtherState.SpaceParent -> OtherState.SpaceParent
+        is RustOtherState.RoomCreate -> OtherState.RoomCreate
+        is RustOtherState.RoomHistoryVisibility -> OtherState.RoomHistoryVisibility
     }
 }
 

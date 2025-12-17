@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -41,7 +42,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.timeline.item.event.ProfileTimelineDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnail
 import io.element.android.libraries.matrix.ui.messages.sender.SenderName
@@ -73,7 +74,7 @@ fun InReplyToView(
 @Composable
 private fun ReplyToReadyContent(
     senderId: UserId,
-    senderProfile: ProfileTimelineDetails,
+    senderProfile: ProfileDetails,
     metadata: InReplyToMetadata?,
     modifier: Modifier = Modifier,
 ) {

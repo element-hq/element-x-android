@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -45,7 +46,7 @@ import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.compose.LocalAnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
-import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun AdvancedSettingsView(
@@ -73,7 +74,7 @@ fun AdvancedSettingsView(
         PreferenceDropdown(
             title = stringResource(id = CommonStrings.common_appearance),
             selectedOption = state.theme,
-            options = ThemeOption.entries.toPersistentList(),
+            options = ThemeOption.entries.toImmutableList(),
             onSelectOption = { themeOption ->
                 state.eventSink(AdvancedSettingsEvents.SetTheme(themeOption))
             }

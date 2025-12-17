@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -111,7 +112,7 @@ fun EventDebugInfoView(
 private fun prettyJSON(maybeJSON: String): String {
     return try {
         JSONObject(maybeJSON).toString(2)
-    } catch (e: JSONException) {
+    } catch (_: JSONException) {
         // Prefer not pretty-printing over crashing if the data is not actually JSON
         maybeJSON
     }

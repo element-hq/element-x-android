@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -62,7 +63,7 @@ class RoomDirectoryPresenter(
                 loadingMore = false
             }
         }
-        fun handleEvents(event: RoomDirectoryEvents) {
+        fun handleEvent(event: RoomDirectoryEvents) {
             when (event) {
                 RoomDirectoryEvents.LoadMore -> {
                     loadingMore = true
@@ -77,7 +78,7 @@ class RoomDirectoryPresenter(
             query = searchQuery.orEmpty(),
             roomDescriptions = listState.items,
             displayLoadMoreIndicator = listState.hasMoreToLoad,
-            eventSink = ::handleEvents
+            eventSink = ::handleEvent,
         )
     }
 

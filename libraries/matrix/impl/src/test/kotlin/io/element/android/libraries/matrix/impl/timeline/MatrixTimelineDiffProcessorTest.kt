@@ -1,7 +1,8 @@
 /*
- * Copyright 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2024, 2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -156,10 +157,12 @@ class MatrixTimelineDiffProcessorTest {
 }
 
 internal fun TestScope.createMatrixTimelineDiffProcessor(
-    timelineItems: MutableSharedFlow<List<MatrixTimelineItem>>,
-): MatrixTimelineDiffProcessor {
+    timelineItems: MutableSharedFlow<List<MatrixTimelineItem>> = MutableSharedFlow(),
+    membershipChangeEventReceivedFlow: MutableSharedFlow<Unit> = MutableSharedFlow(),
+    syncedEventReceivedFlow: MutableSharedFlow<Unit> = MutableSharedFlow(),
+    ): MatrixTimelineDiffProcessor {
     val timelineEventContentMapper = TimelineEventContentMapper()
-    val timelineItemMapper = MatrixTimelineItemMapper(
+    val timelineItemFactory = MatrixTimelineItemMapper(
         fetchDetailsForEvent = { _ -> Result.success(Unit) },
         coroutineScope = this,
         virtualTimelineItemMapper = VirtualTimelineItemMapper(),
@@ -169,6 +172,8 @@ internal fun TestScope.createMatrixTimelineDiffProcessor(
     )
     return MatrixTimelineDiffProcessor(
         timelineItems = timelineItems,
-        timelineItemFactory = timelineItemMapper,
+        membershipChangeEventReceivedFlow = membershipChangeEventReceivedFlow,
+        syncedEventReceivedFlow = syncedEventReceivedFlow,
+        timelineItemMapper = timelineItemFactory,
     )
 }

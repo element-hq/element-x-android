@@ -1,7 +1,8 @@
 /*
- * Copyright 2023, 2024 New Vector Ltd.
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2023-2025 New Vector Ltd.
  *
- * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
@@ -13,7 +14,6 @@ import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
-import com.bumble.appyx.core.plugin.plugins
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
@@ -38,6 +38,7 @@ import io.element.android.features.preferences.impl.user.editprofile.EditUserPro
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.appyx.canPop
+import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.EventId
@@ -116,63 +117,65 @@ class PreferencesFlowNode(
         data object OssLicenses : NavTarget
     }
 
+    private val callback: PreferencesEntryPoint.Callback = callback()
+
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             NavTarget.Root -> {
                 val callback = object : PreferencesRootNode.Callback {
-                    override fun onAddAccount() {
-                        plugins<PreferencesEntryPoint.Callback>().forEach { it.onAddAccount() }
+                    override fun navigateToAddAccount() {
+                        callback.navigateToAddAccount()
                     }
 
-                    override fun onOpenBugReport() {
-                        plugins<PreferencesEntryPoint.Callback>().forEach { it.onOpenBugReport() }
+                    override fun navigateToBugReport() {
+                        callback.navigateToBugReport()
                     }
 
-                    override fun onSecureBackupClick() {
-                        plugins<PreferencesEntryPoint.Callback>().forEach { it.onSecureBackupClick() }
+                    override fun navigateToSecureBackup() {
+                        callback.navigateToSecureBackup()
                     }
 
-                    override fun onOpenAnalytics() {
+                    override fun navigateToAnalyticsSettings() {
                         backstack.push(NavTarget.AnalyticsSettings)
                     }
 
-                    override fun onOpenAbout() {
+                    override fun navigateToAbout() {
                         backstack.push(NavTarget.About)
                     }
 
-                    override fun onOpenDeveloperSettings() {
+                    override fun navigateToDeveloperSettings() {
                         backstack.push(NavTarget.DeveloperSettings)
                     }
 
-                    override fun onOpenNotificationSettings() {
+                    override fun navigateToNotificationSettings() {
                         backstack.push(NavTarget.NotificationSettings)
                     }
 
-                    override fun onOpenLockScreenSettings() {
+                    override fun navigateToLockScreenSettings() {
                         backstack.push(NavTarget.LockScreenSettings)
                     }
 
-                    override fun onOpenAdvancedSettings() {
+                    override fun navigateToAdvancedSettings() {
                         backstack.push(NavTarget.AdvancedSettings)
                     }
 
-                    override fun onOpenLabs() {
+                    override fun navigateToLabs() {
                         backstack.push(NavTarget.Labs)
                     }
 
-                    override fun onOpenUserProfile(matrixUser: MatrixUser) {
+                    override fun navigateToUserProfile(matrixUser: MatrixUser) {
                         backstack.push(NavTarget.UserProfile(matrixUser))
                     }
 
-                    override fun onOpenBlockedUsers() {
+                    override fun navigateToBlockedUsers() {
                         backstack.push(NavTarget.BlockedUsers)
                     }
 
-                    override fun onSignOutClick() {
+                    override fun startSignOutFlow() {
                         backstack.push(NavTarget.SignOut)
                     }
 
-                    override fun onOpenAccountDeactivation() {
+                    override fun startAccountDeactivationFlow() {
                         backstack.push(NavTarget.AccountDeactivation)
                     }
                 }
@@ -180,18 +183,27 @@ class PreferencesFlowNode(
             }
             NavTarget.DeveloperSettings -> {
                 val developerSettingsCallback = object : DeveloperSettingsNode.Callback {
-                    override fun onPushHistoryClick() {
+                    override fun navigateToPushHistory() {
                         backstack.push(NavTarget.PushHistory)
+                    }
+
+                    override fun onDone() {
+                        backstack.pop()
                     }
                 }
                 createNode<DeveloperSettingsNode>(buildContext, listOf(developerSettingsCallback))
             }
             NavTarget.Labs -> {
-                createNode<LabsNode>(buildContext)
+                val callback = object : LabsNode.Callback {
+                    override fun onDone() {
+                        backstack.pop()
+                    }
+                }
+                createNode<LabsNode>(buildContext, listOf(callback))
             }
             NavTarget.About -> {
                 val callback = object : AboutNode.Callback {
-                    override fun openOssLicenses() {
+                    override fun navigateToOssLicenses() {
                         backstack.push(NavTarget.OssLicenses)
                     }
                 }
@@ -202,19 +214,21 @@ class PreferencesFlowNode(
             }
             NavTarget.NotificationSettings -> {
                 val notificationSettingsCallback = object : NotificationSettingsNode.Callback {
-                    override fun editDefaultNotificationMode(isOneToOne: Boolean) {
+                    override fun navigateToEditDefaultNotificationSetting(isOneToOne: Boolean) {
                         backstack.push(NavTarget.EditDefaultNotificationSetting(isOneToOne))
                     }
 
-                    override fun onTroubleshootNotificationsClick() {
+                    override fun navigateToTroubleshootNotifications() {
                         backstack.push(NavTarget.TroubleshootNotifications)
                     }
                 }
                 createNode<NotificationSettingsNode>(buildContext, listOf(notificationSettingsCallback))
             }
             NavTarget.TroubleshootNotifications -> {
-                notificationTroubleShootEntryPoint.nodeBuilder(this, buildContext)
-                    .callback(object : NotificationTroubleShootEntryPoint.Callback {
+                notificationTroubleShootEntryPoint.createNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    callback = object : NotificationTroubleShootEntryPoint.Callback {
                         override fun onDone() {
                             if (backstack.canPop()) {
                                 backstack.pop()
@@ -223,15 +237,17 @@ class PreferencesFlowNode(
                             }
                         }
 
-                        override fun openIgnoredUsers() {
+                        override fun navigateToBlockedUsers() {
                             backstack.push(NavTarget.BlockedUsers)
                         }
-                    })
-                    .build()
+                    },
+                )
             }
             NavTarget.PushHistory -> {
-                pushHistoryEntryPoint.nodeBuilder(this, buildContext)
-                    .callback(object : PushHistoryEntryPoint.Callback {
+                pushHistoryEntryPoint.createNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    callback = object : PushHistoryEntryPoint.Callback {
                         override fun onDone() {
                             if (backstack.canPop()) {
                                 backstack.pop()
@@ -240,16 +256,16 @@ class PreferencesFlowNode(
                             }
                         }
 
-                        override fun navigateTo(roomId: RoomId, eventId: EventId) {
-                            plugins<PreferencesEntryPoint.Callback>().forEach { it.navigateTo(roomId, eventId) }
+                        override fun navigateToEvent(roomId: RoomId, eventId: EventId) {
+                            callback.navigateToEvent(roomId, eventId)
                         }
-                    })
-                    .build()
+                    },
+                )
             }
             is NavTarget.EditDefaultNotificationSetting -> {
                 val callback = object : EditDefaultNotificationSettingNode.Callback {
-                    override fun openRoomNotificationSettings(roomId: RoomId) {
-                        plugins<PreferencesEntryPoint.Callback>().forEach { it.onOpenRoomNotificationSettings(roomId) }
+                    override fun navigateToRoomNotificationSettings(roomId: RoomId) {
+                        callback.navigateToRoomNotificationSettings(roomId)
                     }
                 }
                 val input = EditDefaultNotificationSettingNode.Inputs(navTarget.isOneToOne)
@@ -260,23 +276,39 @@ class PreferencesFlowNode(
             }
             is NavTarget.UserProfile -> {
                 val inputs = EditUserProfileNode.Inputs(navTarget.matrixUser)
-                createNode<EditUserProfileNode>(buildContext, listOf(inputs))
+                val callback = object : EditUserProfileNode.Callback {
+                    override fun onDone() {
+                        backstack.pop()
+                    }
+                }
+                createNode<EditUserProfileNode>(buildContext, listOf(inputs, callback))
             }
             NavTarget.LockScreenSettings -> {
-                lockScreenEntryPoint.nodeBuilder(this, buildContext, LockScreenEntryPoint.Target.Settings).build()
+                lockScreenEntryPoint.createNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    navTarget = LockScreenEntryPoint.Target.Settings,
+                    callback = object : LockScreenEntryPoint.Callback {
+                        override fun onSetupDone() {
+                            // No op
+                        }
+                    }
+                )
             }
             NavTarget.BlockedUsers -> {
                 createNode<BlockedUsersNode>(buildContext)
             }
             NavTarget.SignOut -> {
                 val callBack: LogoutEntryPoint.Callback = object : LogoutEntryPoint.Callback {
-                    override fun onChangeRecoveryKeyClick() {
-                        plugins<PreferencesEntryPoint.Callback>().forEach { it.onSecureBackupClick() }
+                    override fun navigateToSecureBackup() {
+                        callback.navigateToSecureBackup()
                     }
                 }
-                logoutEntryPoint.nodeBuilder(this, buildContext)
-                    .callback(callBack)
-                    .build()
+                logoutEntryPoint.createNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    callback = callBack,
+                )
             }
             is NavTarget.OssLicenses -> {
                 openSourceLicensesEntryPoint.createNode(this, buildContext)
