@@ -5,6 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:Suppress("UnstableApiUsage")
+
 package io.element.android.services.analyticsproviders.sentry
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -36,8 +38,16 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class SentryAnalyticsProviderTest {
     @Test
-    fun `init enables Sentry`() {
+    fun `init enables Sentry if DSN is present`() {
         createSentryAnalyticsProvider().run {
+            init()
+        }
+        assertThat(Sentry.isEnabled()).isTrue()
+    }
+
+    @Test
+    fun `init does nothing if DSN is not present`() {
+        createSentryAnalyticsProvider(sentryDsn = null).run {
             init()
         }
         assertThat(Sentry.isEnabled()).isTrue()
@@ -58,7 +68,7 @@ class SentryAnalyticsProviderTest {
             init()
             capture(object : VectorAnalyticsEvent {
                 override fun getName(): String = "Test"
-                override fun getProperties(): Map<String, Any?>? = null
+                override fun getProperties(): Map<String, Any?>? = mapOf("foo" to "bar")
             })
         }
         assertThat(Sentry.getCurrentScopes().scope.breadcrumbs.isNotEmpty()).isTrue()
@@ -70,7 +80,7 @@ class SentryAnalyticsProviderTest {
             init()
             screen(object : VectorAnalyticsScreen {
                 override fun getName(): String = "Test"
-                override fun getProperties(): Map<String, Any>? = null
+                override fun getProperties(): Map<String, Any>? = mapOf("foo" to "bar")
             })
         }
         assertThat(Sentry.getCurrentScopes().scope.breadcrumbs.isNotEmpty()).isTrue()
@@ -161,11 +171,69 @@ class SentryAnalyticsProviderTest {
         }
     }
 
+    @Test
+    fun `prepareTransactionBeforeSend removes unwanted data and doesn't add anything if no session id is provided`() {
+        createSentryAnalyticsProvider(
+            getDatabaseSizesUseCase = GetDatabaseSizesUseCase {
+                Result.success(
+                    SdkStoreSizes(stateStore = 10.megaBytes, eventCacheStore = 11.megaBytes, mediaStore = 12.megaBytes, cryptoStore = 13.megaBytes)
+                )
+            },
+            appNavigationStateService = FakeAppNavigationStateService(
+                MutableStateFlow(AppNavigationState(navigationState = NavigationState.Root, isInForeground = true))
+            )
+        ).run {
+            init()
+
+            val transaction = SentryTransaction(Sentry.startTransaction("foo", "bar") as SentryTracer)
+            // Add a user id value
+            transaction.setExtra("user", "@some:user")
+
+            val result = prepareTransactionBeforeSend(transaction)
+
+            // The user id value should have been removed
+            assertThat(result.getExtra("user")).isNull()
+
+            // The DB sizes are missing since there was no session id to query them
+            assertThat(result.extras).isEmpty()
+        }
+    }
+
+    @Test
+    fun `prepareTransactionBeforeSend removes unwanted data and doesn't add anything if no store sizes are available`() {
+        createSentryAnalyticsProvider(
+            getDatabaseSizesUseCase = GetDatabaseSizesUseCase {
+                Result.success(
+                    SdkStoreSizes(stateStore = null, eventCacheStore = null, mediaStore = null, cryptoStore = null)
+                )
+            },
+            appNavigationStateService = FakeAppNavigationStateService(
+                MutableStateFlow(AppNavigationState(navigationState = NavigationState.Session("owner", A_SESSION_ID), isInForeground = true))
+            )
+        ).run {
+            init()
+
+            val transaction = SentryTransaction(Sentry.startTransaction("foo", "bar") as SentryTracer)
+            // Add a user id value
+            transaction.setExtra("user", "@some:user")
+
+            val result = prepareTransactionBeforeSend(transaction)
+
+            // The user id value should have been removed
+            assertThat(result.getExtra("user")).isNull()
+
+            // The DB sizes are missing since there was no session id to query them
+            assertThat(result.extras).isEmpty()
+        }
+    }
+
     private fun createSentryAnalyticsProvider(
         sentryDsn: SentryDsn? = SentryDsn("https://1234@sentry.com/a"),
         buildMeta: BuildMeta = aBuildMeta(),
         getDatabaseSizesUseCase: GetDatabaseSizesUseCase = GetDatabaseSizesUseCase { Result.success(SdkStoreSizes(null, null, null, null)) },
-        appNavigationStateService: FakeAppNavigationStateService = FakeAppNavigationStateService(),
+        appNavigationStateService: FakeAppNavigationStateService = FakeAppNavigationStateService(
+            MutableStateFlow(AppNavigationState(navigationState = NavigationState.Session("owner", A_SESSION_ID), isInForeground = true))
+        )
     ) = SentryAnalyticsProvider(
         context = InstrumentationRegistry.getInstrumentation().targetContext,
         sentryDsn = sentryDsn,
