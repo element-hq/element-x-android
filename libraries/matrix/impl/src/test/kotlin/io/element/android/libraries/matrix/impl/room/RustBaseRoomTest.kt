@@ -174,7 +174,6 @@ class RustBaseRoomTest {
                 dispatchers = dispatchers,
             ),
             roomMembershipObserver = roomMembershipObserver,
-            // Not using backgroundScope here, but the test scope
             sessionCoroutineScope = backgroundScope,
             roomInfoMapper = RoomInfoMapper(),
             initialRoomInfo = initialRoomInfo,
