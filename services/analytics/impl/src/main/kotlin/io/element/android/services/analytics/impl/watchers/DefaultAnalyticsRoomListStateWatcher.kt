@@ -52,7 +52,7 @@ class DefaultAnalyticsRoomListStateWatcher(
             .withPreviousValue()
             .onEach { (wasInForeground, isInForeground) ->
                 if (isInForeground && roomListService.state.value != RoomListService.State.Running) {
-                    analyticsService.startLongRunningTransaction(AnalyticsLongRunningTransaction.ResumeAppUntilNewRoomsReceived)
+                    analyticsService.startLongRunningTransaction(AnalyticsLongRunningTransaction.CatchUp)
                 }
 
                 if (wasInForeground == false && isInForeground) {
@@ -64,7 +64,7 @@ class DefaultAnalyticsRoomListStateWatcher(
         roomListService.state
             .onEach { state ->
                 if (state == RoomListService.State.Running && isWarmState.get()) {
-                    analyticsService.finishLongRunningTransaction(AnalyticsLongRunningTransaction.ResumeAppUntilNewRoomsReceived)
+                    analyticsService.finishLongRunningTransaction(AnalyticsLongRunningTransaction.CatchUp)
                 }
             }
             .launchIn(coroutineScope)

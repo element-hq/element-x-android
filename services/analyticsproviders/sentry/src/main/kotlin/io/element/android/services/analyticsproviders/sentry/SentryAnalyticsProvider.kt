@@ -112,8 +112,8 @@ class SentryAnalyticsProvider(
         Sentry.captureException(throwable)
     }
 
-    override fun startTransaction(name: String, operation: String?): AnalyticsTransaction? {
-        return SentryAnalyticsTransaction(name, operation)
+    override fun startTransaction(name: String, operation: String?, description: String?): AnalyticsTransaction? {
+        return SentryAnalyticsTransaction(name, operation, description)
     }
 
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)

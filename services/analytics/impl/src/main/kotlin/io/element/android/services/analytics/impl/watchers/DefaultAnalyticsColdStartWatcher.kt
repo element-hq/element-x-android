@@ -37,7 +37,7 @@ class DefaultAnalyticsColdStartWatcher(
                 if (hasConsent) {
                     if (isColdStart.get()) {
                         Timber.d("Starting cold start check")
-                        analyticsService.startLongRunningTransaction(AnalyticsLongRunningTransaction.ColdStartUntilCachedRoomList)
+                        analyticsService.startLongRunningTransaction(AnalyticsLongRunningTransaction.ColdStart)
                     } else {
                         error("The app is no longer in a cold start state")
                     }
@@ -49,7 +49,7 @@ class DefaultAnalyticsColdStartWatcher(
 
     override fun whenLoggingIn() {
         if (isColdStart.getAndSet(false)) {
-            analyticsService.cancelLongRunningTransaction(AnalyticsLongRunningTransaction.ColdStartUntilCachedRoomList)
+            analyticsService.cancelLongRunningTransaction(AnalyticsLongRunningTransaction.ColdStart)
             Timber.d("Canceled cold start check: user is logging in")
         }
     }
@@ -57,7 +57,7 @@ class DefaultAnalyticsColdStartWatcher(
     override fun onRoomListVisible() {
         if (isColdStart.getAndSet(false)) {
             Timber.d("Room list is visible, finishing cold start check")
-            analyticsService.finishLongRunningTransaction(AnalyticsLongRunningTransaction.ColdStartUntilCachedRoomList)
+            analyticsService.finishLongRunningTransaction(AnalyticsLongRunningTransaction.ColdStart)
         }
     }
 }

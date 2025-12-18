@@ -8,7 +8,7 @@
 package io.element.android.services.analytics.impl.watchers
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.ColdStartUntilCachedRoomList
+import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.ColdStart
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
@@ -31,14 +31,14 @@ class DefaultAnalyticsColdStartWatcherTest {
         runCurrent()
 
         // The transaction is running
-        assertThat(analyticsService.getLongRunningTransaction(ColdStartUntilCachedRoomList)).isNotNull()
+        assertThat(analyticsService.getLongRunningTransaction(ColdStart)).isNotNull()
 
         // As soon as the room list is visible
         watcher.onRoomListVisible()
         runCurrent()
 
         // The transaction is now finished
-        assertThat(analyticsService.getLongRunningTransaction(ColdStartUntilCachedRoomList)).isNull()
+        assertThat(analyticsService.getLongRunningTransaction(ColdStart)).isNull()
     }
 
     @Test
@@ -54,14 +54,14 @@ class DefaultAnalyticsColdStartWatcherTest {
         runCurrent()
 
         // The transaction is running
-        assertThat(analyticsService.getLongRunningTransaction(ColdStartUntilCachedRoomList)).isNotNull()
+        assertThat(analyticsService.getLongRunningTransaction(ColdStart)).isNotNull()
 
         // If the user starts a login flow
         watcher.whenLoggingIn()
         runCurrent()
 
         // The transaction is gone
-        assertThat(analyticsService.getLongRunningTransaction(ColdStartUntilCachedRoomList)).isNull()
+        assertThat(analyticsService.getLongRunningTransaction(ColdStart)).isNull()
     }
 
     @Test
@@ -80,7 +80,7 @@ class DefaultAnalyticsColdStartWatcherTest {
         runCurrent()
 
         // The transaction never starts
-        assertThat(analyticsService.getLongRunningTransaction(ColdStartUntilCachedRoomList)).isNull()
+        assertThat(analyticsService.getLongRunningTransaction(ColdStart)).isNull()
     }
 
     @Test
@@ -95,7 +95,7 @@ class DefaultAnalyticsColdStartWatcherTest {
         runCurrent()
 
         // The transaction is not running in that case
-        assertThat(analyticsService.getLongRunningTransaction(ColdStartUntilCachedRoomList)).isNull()
+        assertThat(analyticsService.getLongRunningTransaction(ColdStart)).isNull()
     }
 
     private fun TestScope.createAnalyticsColdStartWatcher(

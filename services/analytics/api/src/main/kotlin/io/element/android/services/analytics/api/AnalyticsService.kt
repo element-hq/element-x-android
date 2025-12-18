@@ -53,7 +53,7 @@ interface AnalyticsService : AnalyticsTracker, ErrorTracker {
     /**
      * Starts a transaction to measure the performance of an operation.
      */
-    fun startTransaction(name: String, operation: String? = null): AnalyticsTransaction
+    fun startTransaction(name: String, operation: String? = null, description: String? = null): AnalyticsTransaction
 
     /**
      * Starts an [AnalyticsLongRunningTransaction], that can be shared with other components.
@@ -80,11 +80,12 @@ interface AnalyticsService : AnalyticsTracker, ErrorTracker {
 inline fun <T> AnalyticsService.recordTransaction(
     name: String,
     operation: String,
+    description: String? = null,
     parentTransaction: AnalyticsTransaction? = null,
     block: (AnalyticsTransaction) -> T
 ): T {
-    val transaction = parentTransaction?.startChild(name, operation)
-        ?: startTransaction(name, operation)
+    val transaction = parentTransaction?.startChild(operation, description)
+        ?: startTransaction(name, operation, description)
     try {
         val result = block(transaction)
         return result

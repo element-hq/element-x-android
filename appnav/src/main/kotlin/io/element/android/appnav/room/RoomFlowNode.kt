@@ -49,7 +49,7 @@ import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.ui.room.LoadingRoomState
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.LoadJoinedRoomFlow
-import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.NotificationTapOpensTimeline
+import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.NotificationToMessage
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.OpenRoom
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.flow.SharingStarted
@@ -128,7 +128,7 @@ class RoomFlowNode(
 
     override fun onBuilt() {
         super.onBuilt()
-        val parentTransaction = analyticsService.getLongRunningTransaction(NotificationTapOpensTimeline)
+        val parentTransaction = analyticsService.getLongRunningTransaction(NotificationToMessage)
         val openRoomTransaction = analyticsService.startLongRunningTransaction(OpenRoom, parentTransaction)
         analyticsService.startLongRunningTransaction(LoadJoinedRoomFlow, openRoomTransaction)
         resolveRoomId()

@@ -320,7 +320,7 @@ class RootFlowNode(
             is ResolvedIntent.Navigation -> {
                 val openingRoomFromNotification = intent.getBooleanExtra(ROOM_OPENED_FROM_NOTIFICATION, false)
                 if (openingRoomFromNotification && resolvedIntent.deeplinkData is DeeplinkData.Room) {
-                    analyticsService.startLongRunningTransaction(AnalyticsLongRunningTransaction.NotificationTapOpensTimeline)
+                    analyticsService.startLongRunningTransaction(AnalyticsLongRunningTransaction.NotificationToMessage)
                 }
                 navigateTo(resolvedIntent.deeplinkData)
             }

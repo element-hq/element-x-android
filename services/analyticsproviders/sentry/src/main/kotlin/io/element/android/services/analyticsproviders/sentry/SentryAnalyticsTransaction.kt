@@ -14,7 +14,9 @@ import io.sentry.Sentry
 import timber.log.Timber
 
 class SentryAnalyticsTransaction private constructor(span: ISpan) : AnalyticsTransaction {
-    constructor(name: String, operation: String?) : this(Sentry.startTransaction(name, operation.orEmpty()))
+    constructor(name: String, operation: String?, description: String? = null) : this(
+        Sentry.startTransaction(name, operation.orEmpty()).also { it.description = description }
+    )
     private val inner = span
 
     override fun startChild(operation: String, description: String?): AnalyticsTransaction = SentryAnalyticsTransaction(
@@ -30,7 +32,7 @@ class SentryAnalyticsTransaction private constructor(span: ISpan) : AnalyticsTra
     }
     override fun finish() {
         val name = if (inner is ITransaction) inner.name else inner.operation
-        Timber.d("Finishing transaction: $name")
+        Timber.d("Finishing transaction: '$name'")
         inner.finish()
     }
 }

@@ -40,7 +40,7 @@ class NoopAnalyticsService : AnalyticsService {
     override fun updateUserProperties(userProperties: UserProperties) = Unit
     override fun trackError(throwable: Throwable) = Unit
     override fun updateSuperProperties(updatedProperties: SuperProperties) = Unit
-    override fun startTransaction(name: String, operation: String?): AnalyticsTransaction = NoopAnalyticsTransaction
+    override fun startTransaction(name: String, operation: String?, description: String?): AnalyticsTransaction = NoopAnalyticsTransaction
     override fun startLongRunningTransaction(
         longRunningTransaction: AnalyticsLongRunningTransaction,
         parentTransaction: AnalyticsTransaction?,

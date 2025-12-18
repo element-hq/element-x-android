@@ -124,7 +124,7 @@ class PosthogAnalyticsProvider(
         return withSuperProperties.takeIf { it.isEmpty().not() }
     }
 
-    override fun startTransaction(name: String, operation: String?): AnalyticsTransaction? = null
+    override fun startTransaction(name: String, operation: String?, description: String?): AnalyticsTransaction? = null
 }
 
 private fun Map<String, Any?>.keepOnlyNonNullValues(): Map<String, Any> {

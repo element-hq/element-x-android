@@ -10,7 +10,7 @@ package io.element.android.services.analytics.impl.watchers
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
-import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.ResumeAppUntilNewRoomsReceived
+import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.CatchUp
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.appnavstate.api.AppNavigationState
 import io.element.android.services.appnavstate.api.NavigationState
@@ -49,14 +49,14 @@ class DefaultAnalyticsRoomListStateWatcherTest {
         runCurrent()
 
         // The transaction should be present now
-        assertThat(analyticsService.getLongRunningTransaction(ResumeAppUntilNewRoomsReceived)).isNotNull()
+        assertThat(analyticsService.getLongRunningTransaction(CatchUp)).isNotNull()
 
         // And now the room list service running
         roomListService.postState(RoomListService.State.Running)
         runCurrent()
 
         // And the transaction should now be gone
-        assertThat(analyticsService.getLongRunningTransaction(ResumeAppUntilNewRoomsReceived)).isNull()
+        assertThat(analyticsService.getLongRunningTransaction(CatchUp)).isNull()
 
         watcher.stop()
     }
@@ -86,7 +86,7 @@ class DefaultAnalyticsRoomListStateWatcherTest {
         runCurrent()
 
         // The transaction was never present
-        assertThat(analyticsService.getLongRunningTransaction(ResumeAppUntilNewRoomsReceived)).isNull()
+        assertThat(analyticsService.getLongRunningTransaction(CatchUp)).isNull()
 
         watcher.stop()
     }
@@ -116,12 +116,12 @@ class DefaultAnalyticsRoomListStateWatcherTest {
         runCurrent()
 
         // The transaction should be present now
-        assertThat(analyticsService.getLongRunningTransaction(ResumeAppUntilNewRoomsReceived)).isNotNull()
+        assertThat(analyticsService.getLongRunningTransaction(CatchUp)).isNotNull()
 
         runCurrent()
 
         // But without the room list syncing, it never finishes
-        assertThat(analyticsService.getLongRunningTransaction(ResumeAppUntilNewRoomsReceived)).isNotNull()
+        assertThat(analyticsService.getLongRunningTransaction(CatchUp)).isNotNull()
 
         watcher.stop()
     }
@@ -151,7 +151,7 @@ class DefaultAnalyticsRoomListStateWatcherTest {
         runCurrent()
 
         // The transaction was never added
-        assertThat(analyticsService.getLongRunningTransaction(ResumeAppUntilNewRoomsReceived)).isNull()
+        assertThat(analyticsService.getLongRunningTransaction(CatchUp)).isNull()
 
         watcher.stop()
     }

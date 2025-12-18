@@ -161,9 +161,9 @@ class DefaultAnalyticsService(
         }
     }
 
-    override fun startTransaction(name: String, operation: String?): AnalyticsTransaction {
+    override fun startTransaction(name: String, operation: String?, description: String?): AnalyticsTransaction {
         return if (userConsent.get()) {
-            analyticsProviders.firstNotNullOfOrNull { it.startTransaction(name, operation) }
+            analyticsProviders.firstNotNullOfOrNull { it.startTransaction(name, operation, description) }
         } else {
             null
         } ?: NoopAnalyticsTransaction
@@ -173,8 +173,8 @@ class DefaultAnalyticsService(
         longRunningTransaction: AnalyticsLongRunningTransaction,
         parentTransaction: AnalyticsTransaction?,
     ): AnalyticsTransaction {
-        val transaction = parentTransaction?.startChild(longRunningTransaction.name, longRunningTransaction.operation)
-            ?: startTransaction(longRunningTransaction.name, longRunningTransaction.operation)
+        val transaction = parentTransaction?.startChild(longRunningTransaction.operation.orEmpty(), longRunningTransaction.name)
+            ?: startTransaction(longRunningTransaction.name, longRunningTransaction.operation, longRunningTransaction.description)
 
         pendingLongRunningTransactions[longRunningTransaction] = transaction
         return transaction

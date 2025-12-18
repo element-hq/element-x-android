@@ -56,7 +56,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.DisplayFirstTimelineItems
-import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.NotificationTapOpensTimeline
+import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.NotificationToMessage
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.OpenRoom
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.api.finishLongRunningTransaction
@@ -205,7 +205,7 @@ class TimelinePresenter(
                 }.start()
                 is TimelineEvents.OnFocusEventRender -> {
                     // If there was a pending 'notification tap opens timeline' transaction, finish it now we're focused in the required event
-                    analyticsService.finishLongRunningTransaction(NotificationTapOpensTimeline)
+                    analyticsService.finishLongRunningTransaction(NotificationToMessage)
 
                     focusRequestState.value = focusRequestState.value.onFocusEventRender()
                 }
