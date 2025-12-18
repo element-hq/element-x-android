@@ -39,7 +39,7 @@ jobs:
           ELEMENT_CALL_RAGESHAKE_URL: ${{ secrets.ELEMENT_CALL_RAGESHAKE_URL }}
         run: ./gradlew bundleGplayRelease $CI_GRADLE_ARG_PROPERTIES
       - name: Upload bundle as artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: elementx-app-gplay-bundle-unsigned
           path: |
@@ -75,7 +75,7 @@ jobs:
           ELEMENT_ANDROID_MAPTILER_DARK_MAP_ID: ${{ secrets.MAPTILER_DARK_MAP_ID }}
         run: ./gradlew bundleGplayRelease $CI_GRADLE_ARG_PROPERTIES
       - name: Upload bundle as artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: elementx-enterprise-app-gplay-bundle-unsigned
           path: |
@@ -103,7 +103,7 @@ jobs:
           ELEMENT_ANDROID_MAPTILER_DARK_MAP_ID: ${{ secrets.MAPTILER_DARK_MAP_ID }}
         run: ./gradlew assembleFdroidRelease $CI_GRADLE_ARG_PROPERTIES
       - name: Upload apks as artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: elementx-app-fdroid-apks-unsigned
           path: |

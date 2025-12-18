@@ -42,7 +42,7 @@ jobs:
 
       - name: ✅ Upload kover report
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: kover-results
           path: |
@@ -74,7 +74,7 @@ jobs:
         run: ./gradlew dependencyCheckAnalyze $CI_GRADLE_ARG_PROPERTIES
       - name: Upload dependency analysis
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: dependency-analysis
           path: build/reports/dependency-check-report.html

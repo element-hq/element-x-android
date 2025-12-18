@@ -54,7 +54,7 @@ jobs:
         run: ./gradlew :app:assembleGplayDebug app:assembleFDroidDebug -PallWarningsAsErrors=true $CI_GRADLE_ARG_PROPERTIES
       - name: Upload debug APKs
         if: ${{ matrix.variant == 'debug' }}
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: elementx-debug
           path: |
@@ -62,7 +62,7 @@ jobs:
             app/build/outputs/apk/fdroid/debug/*-universal-debug.apk
       - name: Upload x86_64 APK for Maestro
         if: ${{ matrix.variant == 'debug' }}
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: elementx-apk-maestro
           path: |

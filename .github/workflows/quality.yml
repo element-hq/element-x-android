@@ -97,7 +97,7 @@ jobs:
         run: ./gradlew :tests:konsist:testDebugUnitTest $CI_GRADLE_ARG_PROPERTIES --no-daemon
       - name: Upload reports
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: konsist-report
           path: |
@@ -174,7 +174,7 @@ jobs:
         run: ./gradlew :app:lintGplayDebug :app:lintFdroidDebug lintDebug $CI_GRADLE_ARG_PROPERTIES --continue
       - name: Upload reports
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: linting-report
           path: |
@@ -214,7 +214,7 @@ jobs:
         run: ./gradlew detekt $CI_GRADLE_ARG_PROPERTIES --no-daemon
       - name: Upload reports
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: detekt-report
           path: |
@@ -254,7 +254,7 @@ jobs:
         run: ./gradlew ktlintCheck $CI_GRADLE_ARG_PROPERTIES
       - name: Upload reports
         if: always()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: ktlint-report
           path: |
@@ -317,7 +317,7 @@ jobs:
           # https://github.com/actions/checkout/issues/881
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.sha || github.ref }}
       - name: Download reports from previous jobs
-        uses: actions/download-artifact@v6
+        uses: actions/download-artifact@v7
       - name: Prepare Danger
         if: always()
         run: |

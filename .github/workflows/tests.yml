@@ -61,7 +61,7 @@ jobs:
 
       - name: 🚫 Upload kover failed coverage reports
         if: failure()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: kover-error-report
           path: |
@@ -73,7 +73,7 @@ jobs:
 
       - name: 🚫 Upload test results on error
         if: failure()
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: tests-and-screenshot-tests-results
           path: |
