@@ -26,6 +26,7 @@ import kotlinx.coroutines.flow.asStateFlow
 class FakeAnalyticsService(
     isEnabled: Boolean = false,
     didAskUserConsent: Boolean = false,
+    private val startTransactionLambda: (String, String?, String?) -> AnalyticsTransaction = { _, _, _ -> NoopAnalyticsTransaction },
 ) : AnalyticsService {
     private val isEnabledFlow = MutableStateFlow(isEnabled)
     override val didAskUserConsentFlow = MutableStateFlow(didAskUserConsent)
@@ -72,7 +73,11 @@ class FakeAnalyticsService(
         // No op
     }
 
-    override fun startTransaction(name: String, operation: String?): AnalyticsTransaction = NoopAnalyticsTransaction
+    override fun startTransaction(name: String, operation: String?, description: String?): AnalyticsTransaction = startTransactionLambda(
+        name,
+        operation,
+        description
+    )
     override fun startLongRunningTransaction(
         longRunningTransaction: AnalyticsLongRunningTransaction,
         parentTransaction: AnalyticsTransaction?

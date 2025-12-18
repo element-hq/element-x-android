@@ -26,6 +26,7 @@ import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettingsState
+import io.element.android.libraries.matrix.api.room.SendQueueUpdate
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.knock.KnockRequest
@@ -66,6 +67,8 @@ import org.matrix.rustcomponents.sdk.DateDividerMode
 import org.matrix.rustcomponents.sdk.IdentityStatusChangeListener
 import org.matrix.rustcomponents.sdk.KnockRequestsListener
 import org.matrix.rustcomponents.sdk.RoomMessageEventMessageType
+import org.matrix.rustcomponents.sdk.RoomSendQueueUpdate
+import org.matrix.rustcomponents.sdk.SendQueueListener
 import org.matrix.rustcomponents.sdk.TimelineConfiguration
 import org.matrix.rustcomponents.sdk.TimelineFilter
 import org.matrix.rustcomponents.sdk.TimelineFocus
@@ -483,6 +486,16 @@ class JoinedRustRoom(
                 userIds = userIds.map { it.value },
                 sendHandle = (sendHandle as RustSendHandle).inner,
             )
+        }
+    }
+
+    override fun subscribeToSendQueueUpdates(): Flow<SendQueueUpdate> {
+        return mxCallbackFlow {
+            innerRoom.subscribeToSendQueueUpdates(object : SendQueueListener {
+                override fun onUpdate(update: RoomSendQueueUpdate) {
+                    trySend(update.map())
+                }
+            })
         }
     }
 

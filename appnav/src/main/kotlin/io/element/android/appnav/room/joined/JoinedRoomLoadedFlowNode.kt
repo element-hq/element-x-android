@@ -98,6 +98,8 @@ class JoinedRoomLoadedFlowNode(
     private val callback: Callback = callback()
     override val graph = roomGraphFactory.create(inputs.room)
 
+    private val sendMessageWatcher = (graph as? TimelineBindings)?.analyticsSendMessageWatcher
+
     // This is an ugly hack to check activity recreation
     private var currentActivity: Activity? = null
 
@@ -109,6 +111,7 @@ class JoinedRoomLoadedFlowNode(
                 Timber.v("OnCreate => ${inputs.room.roomId}")
                 appNavigationStateService.onNavigateToRoom(id, inputs.room.roomId)
                 activeRoomsHolder.addRoom(inputs.room)
+                sendMessageWatcher?.start()
                 fetchRoomMembers()
                 trackVisitedRoom()
             },
@@ -120,6 +123,7 @@ class JoinedRoomLoadedFlowNode(
             },
             onDestroy = {
                 Timber.v("OnDestroy")
+                sendMessageWatcher?.stop()
                 // If we're just going through an activity recreation there's no need to destroy the Room object
                 // Destroying it would actually cause an issue where its methods can no longer be called
                 if (currentActivity?.isChangingConfigurations != true) {

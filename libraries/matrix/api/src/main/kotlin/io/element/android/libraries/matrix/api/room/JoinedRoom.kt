@@ -177,4 +177,9 @@ interface JoinedRoom : BaseRoom {
      *
      */
     suspend fun withdrawVerificationAndResend(userIds: List<UserId>, sendHandle: SendHandle): Result<Unit>
+
+    /**
+     * Subscribe to a [Flow] of [SendQueueUpdate] related to this room.
+     */
+    fun subscribeToSendQueueUpdates(): Flow<SendQueueUpdate>
 }
