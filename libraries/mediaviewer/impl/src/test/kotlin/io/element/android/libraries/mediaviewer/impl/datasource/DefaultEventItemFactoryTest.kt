@@ -84,7 +84,7 @@ class DefaultEventItemFactoryTest {
                 ),
                 mediaSource = MediaSource("")
             ),
-            UnableToDecryptContent(UnableToDecryptContent.Data.Unknown),
+            UnableToDecryptContent(data = UnableToDecryptContent.Data.Unknown, threadInfo = null),
             UnknownContent,
         )
         contents.forEach {
@@ -397,8 +397,8 @@ class DefaultEventItemFactoryTest {
                                 height = 1L,
                                 width = 2L,
                                 blurhash = null,
-                            )
-                        )
+                            ),
+                        ),
                     )
                 )
             )

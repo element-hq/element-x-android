@@ -123,11 +123,13 @@ fun aStickerContent(
     info: ImageInfo,
     mediaSource: MediaSource,
     body: String? = null,
+    threadInfo: EventThreadInfo? = null,
 ) = StickerContent(
     filename = filename,
     body = body,
     info = info,
     source = mediaSource,
+    threadInfo = threadInfo,
 )
 
 fun aTimelineItemDebugInfo(
@@ -148,6 +150,7 @@ fun aPollContent(
     votes: ImmutableMap<String, ImmutableList<UserId>> = persistentMapOf(),
     endTime: ULong? = null,
     isEdited: Boolean = false,
+    threadInfo: EventThreadInfo? = null,
 ) = PollContent(
     question = question,
     kind = kind,
@@ -156,4 +159,5 @@ fun aPollContent(
     votes = votes,
     endTime = endTime,
     isEdited = isEdited,
+    threadInfo = threadInfo,
 )

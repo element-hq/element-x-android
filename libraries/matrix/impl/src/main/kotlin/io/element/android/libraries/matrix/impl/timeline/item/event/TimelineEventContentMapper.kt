@@ -36,6 +36,7 @@ import io.element.android.libraries.matrix.impl.room.join.map
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
 import org.matrix.rustcomponents.sdk.EmbeddedEventDetails
+import org.matrix.rustcomponents.sdk.MsgLikeContent
 import org.matrix.rustcomponents.sdk.MsgLikeKind
 import org.matrix.rustcomponents.sdk.TimelineItemContent
 import org.matrix.rustcomponents.sdk.use
@@ -68,37 +69,11 @@ class TimelineEventContentMapper(
                     when (val kind = it.content.kind) {
                         is MsgLikeKind.Message -> {
                             val inReplyTo = it.content.inReplyTo
-                            val threadSummary = it.content.threadSummary?.use { summary ->
-                                val numberOfReplies = summary.numReplies().toLong()
-                                val latestEvent = summary.latestEvent()
-                                val details = when (latestEvent) {
-                                    is EmbeddedEventDetails.Unavailable -> AsyncData.Uninitialized
-                                    is EmbeddedEventDetails.Pending -> AsyncData.Loading()
-                                    is EmbeddedEventDetails.Error -> AsyncData.Failure(IllegalStateException(latestEvent.message))
-                                    is EmbeddedEventDetails.Ready -> {
-                                        AsyncData.Success(
-                                            EmbeddedEventInfo(
-                                                eventOrTransactionId = latestEvent.eventOrTransactionId.map(),
-                                                content = map(latestEvent.content),
-                                                senderId = UserId(latestEvent.sender),
-                                                senderProfile = latestEvent.senderProfile.map(),
-                                                timestamp = latestEvent.timestamp.toLong(),
-                                            )
-                                        )
-                                    }
-                                }
-                                ThreadSummary(
-                                    latestEvent = details,
-                                    numberOfReplies = numberOfReplies,
-                                )
-                            }
-                            val threadRootId = it.content.threadRoot?.let(::ThreadId)
-                            val threadInfo = when {
-                                threadSummary != null -> EventThreadInfo.ThreadRoot(threadSummary)
-                                threadRootId != null -> EventThreadInfo.ThreadResponse(threadRootId)
-                                else -> null
-                            }
-                            eventMessageMapper.map(kind, inReplyTo, threadInfo)
+                            eventMessageMapper.map(
+                                message = kind,
+                                inReplyTo = inReplyTo,
+                                threadInfo = extractThreadInfo(it.content)
+                            )
                         }
                         is MsgLikeKind.Redacted -> {
                             RedactedContent
@@ -114,11 +89,13 @@ class TimelineEventContentMapper(
                                 }.toImmutableMap(),
                                 endTime = kind.endTime,
                                 isEdited = kind.hasBeenEdited,
+                                threadInfo = extractThreadInfo(it.content),
                             )
                         }
                         is MsgLikeKind.UnableToDecrypt -> {
                             UnableToDecryptContent(
-                                data = kind.msg.map()
+                                data = kind.msg.map(),
+                                threadInfo = extractThreadInfo(it.content),
                             )
                         }
                         is MsgLikeKind.Sticker -> {
@@ -127,6 +104,7 @@ class TimelineEventContentMapper(
                                 body = null,
                                 info = kind.info.map(),
                                 source = kind.source.map(),
+                                threadInfo = extractThreadInfo(it.content),
                             )
                         }
                         is MsgLikeKind.Other -> UnknownContent
@@ -157,6 +135,43 @@ class TimelineEventContentMapper(
                 is TimelineItemContent.CallInvite -> LegacyCallInviteContent
                 is TimelineItemContent.RtcNotification -> CallNotifyContent
             }
+        }
+    }
+
+    private fun extractThreadInfo(content: MsgLikeContent): EventThreadInfo? {
+        val threadSummary = extractThreadSummary(content.threadSummary)
+        val threadRootId = content.threadRoot?.let(::ThreadId)
+        return when {
+            threadSummary != null -> EventThreadInfo.ThreadRoot(threadSummary)
+            threadRootId != null -> EventThreadInfo.ThreadResponse(threadRootId)
+            else -> null
+        }
+    }
+
+    private fun extractThreadSummary(threadSummary: org.matrix.rustcomponents.sdk.ThreadSummary?): ThreadSummary? {
+        return threadSummary?.use { summary ->
+            val numberOfReplies = summary.numReplies().toLong()
+            val latestEvent = summary.latestEvent()
+            val details = when (latestEvent) {
+                is EmbeddedEventDetails.Unavailable -> AsyncData.Uninitialized
+                is EmbeddedEventDetails.Pending -> AsyncData.Loading()
+                is EmbeddedEventDetails.Error -> AsyncData.Failure(IllegalStateException(latestEvent.message))
+                is EmbeddedEventDetails.Ready -> {
+                    AsyncData.Success(
+                        EmbeddedEventInfo(
+                            eventOrTransactionId = latestEvent.eventOrTransactionId.map(),
+                            content = map(latestEvent.content),
+                            senderId = UserId(latestEvent.sender),
+                            senderProfile = latestEvent.senderProfile.map(),
+                            timestamp = latestEvent.timestamp.toLong(),
+                        )
+                    )
+                }
+            }
+            ThreadSummary(
+                latestEvent = details,
+                numberOfReplies = numberOfReplies,
+            )
         }
     }
 }

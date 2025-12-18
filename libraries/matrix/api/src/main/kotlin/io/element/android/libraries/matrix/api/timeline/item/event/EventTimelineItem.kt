@@ -39,7 +39,11 @@ data class EventTimelineItem(
         return (content as? MessageContent)?.inReplyTo
     }
 
-    fun threadInfo(): EventThreadInfo? = (content as? MessageContent)?.threadInfo
+    fun threadInfo(): EventThreadInfo? = when (content) {
+        is MessageContent -> content.threadInfo
+        is PollContent -> content.threadInfo
+        else -> null
+    }
 
     fun hasNotLoadedInReplyTo(): Boolean {
         val details = inReplyTo()

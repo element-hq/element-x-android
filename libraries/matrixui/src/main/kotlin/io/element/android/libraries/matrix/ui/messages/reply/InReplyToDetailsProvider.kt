@@ -89,6 +89,7 @@ open class InReplyToDetailsProvider : PreviewParameterProvider<InReplyToDetails>
                 votes = persistentMapOf(),
                 endTime = null,
                 isEdited = false,
+                threadInfo = null,
             ),
         ).map {
             aInReplyToDetails(
@@ -116,7 +117,7 @@ class InReplyToDetailsInformativeProvider : InReplyToDetailsProvider() {
     override val values: Sequence<InReplyToDetails>
         get() = sequenceOf(
             RedactedContent,
-            UnableToDecryptContent(UnableToDecryptContent.Data.Unknown),
+            UnableToDecryptContent(data = UnableToDecryptContent.Data.Unknown, threadInfo = null),
         ).map {
             aInReplyToDetails(
                 eventContent = it,

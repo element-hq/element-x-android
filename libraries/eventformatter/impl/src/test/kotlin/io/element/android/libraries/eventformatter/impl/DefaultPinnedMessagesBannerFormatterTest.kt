@@ -103,7 +103,11 @@ class DefaultPinnedMessagesBannerFormatterTest {
     fun `Unable to decrypt content`() {
         val expected = "Waiting for this message"
         val senderName = "Someone"
-        val message = createRoomEvent(false, senderName, UnableToDecryptContent(UnableToDecryptContent.Data.Unknown))
+        val message = createRoomEvent(
+            sentByYou = false,
+            senderDisplayName = senderName,
+            content = UnableToDecryptContent(data = UnableToDecryptContent.Data.Unknown, threadInfo = null)
+        )
         val result = formatter.format(message)
         assertThat(result).isEqualTo(expected)
     }

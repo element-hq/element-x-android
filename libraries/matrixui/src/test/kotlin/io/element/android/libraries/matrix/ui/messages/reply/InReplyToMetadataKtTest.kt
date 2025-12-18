@@ -134,7 +134,8 @@ class InReplyToMetadataKtTest {
                     filename = "filename",
                     body = "body",
                     info = anImageInfo(),
-                    source = aMediaSource(url = "url")
+                    source = aMediaSource(url = "url"),
+                    threadInfo = null,
                 )
             ).metadata(hideImage = false)
         }.test {
@@ -161,7 +162,8 @@ class InReplyToMetadataKtTest {
                     filename = "filename",
                     body = "body",
                     info = anImageInfo(),
-                    source = aMediaSource(url = "url")
+                    source = aMediaSource(url = "url"),
+                    threadInfo = null,
                 )
             ).metadata(hideImage = true)
         }.test {
@@ -445,7 +447,10 @@ class InReplyToMetadataKtTest {
     fun `unable to decrypt content`() = runTest {
         moleculeFlow(RecompositionMode.Immediate) {
             anInReplyToDetailsReady(
-                eventContent = UnableToDecryptContent(UnableToDecryptContent.Data.Unknown)
+                eventContent = UnableToDecryptContent(
+                    data = UnableToDecryptContent.Data.Unknown,
+                    threadInfo = null,
+                ),
             ).metadata(hideImage = false)
         }.test {
             awaitItem().let {

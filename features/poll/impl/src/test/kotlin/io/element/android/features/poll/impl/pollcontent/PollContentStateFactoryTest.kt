@@ -220,6 +220,7 @@ class PollContentStateFactoryTest {
         votes = votes,
         endTime = endTime,
         isEdited = false,
+        threadInfo = null,
     )
 
     private fun aPollContentState(

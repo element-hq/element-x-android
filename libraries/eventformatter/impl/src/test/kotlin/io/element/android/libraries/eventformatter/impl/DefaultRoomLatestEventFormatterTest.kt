@@ -112,7 +112,11 @@ class DefaultRoomLatestEventFormatterTest {
         val expected = "Waiting for this message"
         val senderName = "Someone"
         sequenceOf(false, true).forEach { isDm ->
-            val message = createLatestEvent(false, senderName, UnableToDecryptContent(UnableToDecryptContent.Data.Unknown))
+            val message = createLatestEvent(
+                sentByYou = false,
+                senderDisplayName = senderName,
+                content = UnableToDecryptContent(data = UnableToDecryptContent.Data.Unknown, threadInfo = null),
+            )
             val result = formatter.format(message, isDm)
             if (isDm) {
                 assertThat(result).isEqualTo(expected)
