@@ -38,6 +38,8 @@ import androidx.media3.common.VideoSize
 import androidx.media3.common.text.CueGroup
 import androidx.media3.common.util.Clock
 import androidx.media3.common.util.Size
+import androidx.media3.exoplayer.CodecParameters
+import androidx.media3.exoplayer.CodecParametersChangeListener
 import androidx.media3.exoplayer.DecoderCounters
 import androidx.media3.exoplayer.ExoPlaybackException
 import androidx.media3.exoplayer.ExoPlayer
@@ -160,6 +162,8 @@ class ExoPlayerForPreview(
     override fun getAudioAttributes(): AudioAttributes = throw NotImplementedError()
     override fun setVolume(volume: Float) = throw NotImplementedError()
     override fun getVolume(): Float = throw NotImplementedError()
+    override fun mute() {}
+    override fun unmute() {}
     override fun clearVideoSurface() {}
     override fun clearVideoSurface(surface: Surface?) {}
     override fun setVideoSurface(surface: Surface?) {}
@@ -192,6 +196,7 @@ class ExoPlayerForPreview(
     override fun getRendererCount(): Int = throw NotImplementedError()
     override fun getRendererType(index: Int): Int = throw NotImplementedError()
     override fun getRenderer(index: Int): Renderer = throw NotImplementedError()
+    override fun getSecondaryRenderer(index: Int): Renderer? = throw NotImplementedError()
     override fun getTrackSelector(): TrackSelector? = throw NotImplementedError()
     override fun getCurrentTrackGroups(): TrackGroupArray = throw NotImplementedError()
     override fun getCurrentTrackSelections(): TrackSelectionArray = throw NotImplementedError()
@@ -216,6 +221,7 @@ class ExoPlayerForPreview(
     override fun setAuxEffectInfo(auxEffectInfo: AuxEffectInfo) {}
     override fun clearAuxEffectInfo() {}
     override fun setPreferredAudioDevice(audioDeviceInfo: AudioDeviceInfo?) {}
+    override fun setVirtualDeviceId(virtualDeviceId: Int) {}
     override fun setSkipSilenceEnabled(skipSilenceEnabled: Boolean) {}
     override fun getSkipSilenceEnabled(): Boolean = throw NotImplementedError()
     override fun setScrubbingModeEnabled(scrubbingModeEnabled: Boolean) {}
@@ -234,6 +240,9 @@ class ExoPlayerForPreview(
     override fun createMessage(target: PlayerMessage.Target): PlayerMessage = throw NotImplementedError()
     override fun setSeekParameters(seekParameters: SeekParameters?) {}
     override fun getSeekParameters(): SeekParameters = throw NotImplementedError()
+    override fun setSeekBackIncrementMs(seekBackIncrementMs: Long) {}
+    override fun setSeekForwardIncrementMs(seekForwardIncrementMs: Long) {}
+    override fun setMaxSeekToPreviousPositionMs(maxSeekToPreviousPositionMs: Long) {}
     override fun setForegroundMode(foregroundMode: Boolean) {}
     override fun setPauseAtEndOfMediaItems(pauseAtEndOfMediaItems: Boolean) {}
     override fun getPauseAtEndOfMediaItems(): Boolean = throw NotImplementedError()
@@ -249,4 +258,10 @@ class ExoPlayerForPreview(
     override fun isTunnelingEnabled(): Boolean = throw NotImplementedError()
     override fun isReleased(): Boolean = throw NotImplementedError()
     override fun setImageOutput(imageOutput: ImageOutput?) {}
+    override fun setAudioCodecParameters(codecParameters: CodecParameters) {}
+    override fun addAudioCodecParametersChangeListener(listener: CodecParametersChangeListener, keys: List<String>) {}
+    override fun removeAudioCodecParametersChangeListener(listener: CodecParametersChangeListener) {}
+    override fun setVideoCodecParameters(codecParameters: CodecParameters) {}
+    override fun addVideoCodecParametersChangeListener(listener: CodecParametersChangeListener, keys: List<String>) {}
+    override fun removeVideoCodecParametersChangeListener(listener: CodecParametersChangeListener) {}
 }
