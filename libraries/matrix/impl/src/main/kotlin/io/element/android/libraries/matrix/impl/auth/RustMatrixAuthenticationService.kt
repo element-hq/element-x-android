@@ -36,6 +36,7 @@ import io.element.android.libraries.matrix.impl.keys.PassphraseGenerator
 import io.element.android.libraries.matrix.impl.mapper.toSessionData
 import io.element.android.libraries.matrix.impl.paths.SessionPaths
 import io.element.android.libraries.matrix.impl.paths.SessionPathsFactory
+import io.element.android.libraries.matrix.impl.toSession
 import io.element.android.libraries.sessionstorage.api.LoginType
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import kotlinx.coroutines.CancellationException
@@ -172,9 +173,15 @@ class RustMatrixAuthenticationService(
                     passphrase = pendingPassphrase,
                     sessionPaths = currentSessionPaths,
                 )
+
+                // We restore the client using the just retrieved session data
+                client.restoreSession(sessionData.toSession())
                 val matrixClient = rustMatrixClientFactory.create(client)
+
+                // We wait for the verification state to be known
                 matrixClient.waitForKnownVerificationState()
 
+                // And once it's ready we share it and save the actual session data
                 newMatrixClientObservers.forEach { it.invoke(matrixClient) }
                 sessionStore.addSession(sessionData)
 

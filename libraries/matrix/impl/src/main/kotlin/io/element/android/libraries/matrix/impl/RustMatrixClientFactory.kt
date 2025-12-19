@@ -193,7 +193,7 @@ sealed interface ClientBuilderSlidingSync {
     data object Native : ClientBuilderSlidingSync
 }
 
-private fun SessionData.toSession() = Session(
+fun SessionData.toSession() = Session(
     accessToken = accessToken,
     refreshToken = refreshToken,
     userId = userId,
