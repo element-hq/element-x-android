@@ -42,6 +42,8 @@ data class EventTimelineItem(
     fun threadInfo(): EventThreadInfo? = when (content) {
         is MessageContent -> content.threadInfo
         is PollContent -> content.threadInfo
+        is StickerContent -> content.threadInfo
+        is UnableToDecryptContent -> content.threadInfo
         else -> null
     }
 
