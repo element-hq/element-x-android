@@ -116,12 +116,7 @@ class RustSessionVerificationService(
 
     init {
         // Instantiate the verification controller when possible, this is needed to get incoming verification requests
-        sessionCoroutineScope.launch {
-            tryOrNull {
-                ensureEncryptionIsInitialized()
-                initVerificationControllerIfNeeded()
-            }
-        }
+        sessionCoroutineScope.launch { ensureEncryptionIsInitialized() }
     }
 
     override fun setListener(listener: SessionVerificationServiceListener?) {
@@ -130,14 +125,12 @@ class RustSessionVerificationService(
 
     override suspend fun requestCurrentSessionVerification() = tryOrFail {
         ensureEncryptionIsInitialized()
-        initVerificationControllerIfNeeded()
         verificationController.requestDeviceVerification()
         currentVerificationRequest = VerificationRequest.Outgoing.CurrentSession
     }
 
     override suspend fun requestUserVerification(userId: UserId) = tryOrFail {
         ensureEncryptionIsInitialized()
-        initVerificationControllerIfNeeded()
         verificationController.requestUserVerification(userId.value)
         currentVerificationRequest = VerificationRequest.Outgoing.User(userId)
     }
@@ -158,7 +151,6 @@ class RustSessionVerificationService(
 
     override suspend fun acknowledgeVerificationRequest(verificationRequest: VerificationRequest.Incoming) = tryOrFail {
         ensureEncryptionIsInitialized()
-        initVerificationControllerIfNeeded()
         verificationController.acknowledgeVerificationRequest(
             senderId = verificationRequest.details.senderProfile.userId.value,
             flowId = verificationRequest.details.flowId.value,
@@ -259,17 +251,6 @@ class RustSessionVerificationService(
         }
     }
 
-    private var initControllerMutex = Mutex()
-
-    private suspend fun initVerificationControllerIfNeeded() = initControllerMutex.withLock {
-        if (!this::verificationController.isInitialized) {
-            tryOrFail {
-                verificationController = client.getSessionVerificationController()
-                verificationController.setDelegate(this)
-            }
-        }
-    }
-
     private fun updateVerificationStatus() {
         runCatchingExceptions {
             _sessionVerifiedStatus.value = encryptionService.verificationState().map()
@@ -278,9 +259,18 @@ class RustSessionVerificationService(
     }
 
     private suspend fun ensureEncryptionIsInitialized() = initializationMutex.withLock {
-        if (!isInitialized.get()) {
-            encryptionService.waitForE2eeInitializationTasks()
-            isInitialized.set(true)
+        // We're keeping the separate checks instead of unconditionally calling the suspend methods
+        // so we can skip crossing the FFI layer when it's not needed
+        tryOrFail {
+            if (!isInitialized.get()) {
+                encryptionService.waitForE2eeInitializationTasks()
+                isInitialized.set(true)
+            }
+
+            if (!this::verificationController.isInitialized) {
+                verificationController = client.getSessionVerificationController()
+                verificationController.setDelegate(this)
+            }
         }
     }
 }
