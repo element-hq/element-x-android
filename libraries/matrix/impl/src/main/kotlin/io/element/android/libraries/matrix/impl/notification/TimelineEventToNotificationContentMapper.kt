@@ -18,7 +18,7 @@ import io.element.android.libraries.matrix.impl.timeline.item.event.EventMessage
 import org.matrix.rustcomponents.sdk.MessageLikeEventContent
 import org.matrix.rustcomponents.sdk.StateEventContent
 import org.matrix.rustcomponents.sdk.TimelineEvent
-import org.matrix.rustcomponents.sdk.TimelineEventType
+import org.matrix.rustcomponents.sdk.TimelineEventContent
 import org.matrix.rustcomponents.sdk.use
 import org.matrix.rustcomponents.sdk.RtcNotificationType as SdkRtcNotificationType
 
@@ -27,18 +27,18 @@ class TimelineEventToNotificationContentMapper {
         return runCatchingExceptions {
             timelineEvent.use {
                 val senderId = UserId(timelineEvent.senderId())
-                timelineEvent.eventType().use { eventType ->
-                    eventType.toContent(senderId = senderId)
+                timelineEvent.content().use { eventContent ->
+                    eventContent.toContent(senderId = senderId)
                 }
             }
         }
     }
 }
 
-private fun TimelineEventType.toContent(senderId: UserId): NotificationContent {
+private fun TimelineEventContent.toContent(senderId: UserId): NotificationContent {
     return when (this) {
-        is TimelineEventType.MessageLike -> content.toContent(senderId)
-        is TimelineEventType.State -> content.toContent()
+        is TimelineEventContent.MessageLike -> content.toContent(senderId)
+        is TimelineEventContent.State -> content.toContent()
     }
 }
 

@@ -13,12 +13,12 @@ import org.matrix.rustcomponents.sdk.FormattedBody
 import org.matrix.rustcomponents.sdk.MessageLikeEventContent
 import org.matrix.rustcomponents.sdk.MessageType
 import org.matrix.rustcomponents.sdk.TextMessageContent
-import org.matrix.rustcomponents.sdk.TimelineEventType
+import org.matrix.rustcomponents.sdk.TimelineEventContent
 
-fun aRustTimelineEventTypeMessageLike(
+fun aRustTimelineEventContentMessageLike(
     content: MessageLikeEventContent = aRustMessageLikeEventContentRoomMessage(),
-): TimelineEventType.MessageLike {
-    return TimelineEventType.MessageLike(
+): TimelineEventContent.MessageLike {
+    return TimelineEventContent.MessageLike(
         content = content,
     )
 }
