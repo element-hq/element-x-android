@@ -51,7 +51,7 @@ class RustSpaceService(
 
     override suspend fun joinedSpaces(): Result<List<SpaceRoom>> = withContext(sessionDispatcher) {
         runCatchingExceptions {
-            innerSpaceService.joinedSpaces()
+            innerSpaceService.topLevelJoinedSpaces()
                 .map {
                     it.let(spaceRoomMapper::map)
                 }
@@ -97,7 +97,7 @@ internal fun SpaceServiceInterface.spaceListUpdate(): Flow<List<SpaceListUpdate>
             }
         }
         Timber.d("Open spaceDiffFlow for SpaceServiceInterface ${this@spaceListUpdate}")
-        val taskHandle = subscribeToJoinedSpaces(listener)
+        val taskHandle = subscribeToTopLevelJoinedSpaces(listener)
         awaitClose {
             Timber.d("Close spaceDiffFlow for SpaceServiceInterface ${this@spaceListUpdate}")
             taskHandle.cancelAndDestroy()
