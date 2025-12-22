@@ -394,9 +394,8 @@ class TimelinePresenter(
             newMostRecentItemId != prevMostRecentItemIdValue
 
         if (hasNewEvent) {
-            val newMostRecentEvent = newMostRecentItem
             // Scroll to bottom if the new event is from me, even if sent from another device
-            val fromMe = newMostRecentEvent?.isMine == true
+            val fromMe = newMostRecentItem.isMine
             newEventState.value = if (fromMe) {
                 NewEventState.FromMe
             } else {
