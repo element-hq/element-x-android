@@ -643,14 +643,14 @@ class RoomDetailsPresenterTest {
             canRedactOwn = canRedactOwn,
             canSendState = { eventType ->
                 when (eventType) {
-                    StateEventType.ROOM_JOIN_RULES -> canChangeRoomAccess
-                    StateEventType.ROOM_HISTORY_VISIBILITY -> canChangeHistoryVisibility
-                    StateEventType.ROOM_ENCRYPTION -> canChangeEncryption
-                    StateEventType.ROOM_CANONICAL_ALIAS -> canChangeRoomVisibility
-                    StateEventType.ROOM_AVATAR -> canChangeAvatar
-                    StateEventType.ROOM_NAME -> canChangeName
-                    StateEventType.ROOM_TOPIC -> canChangeTopic
-                    StateEventType.ROOM_POWER_LEVELS -> canChangePowerLevels
+                    StateEventType.RoomJoinRules -> canChangeRoomAccess
+                    StateEventType.RoomHistoryVisibility -> canChangeHistoryVisibility
+                    StateEventType.RoomEncryption -> canChangeEncryption
+                    StateEventType.RoomCanonicalAlias -> canChangeRoomVisibility
+                    StateEventType.RoomAvatar -> canChangeAvatar
+                    StateEventType.RoomName -> canChangeName
+                    StateEventType.RoomTopic -> canChangeTopic
+                    StateEventType.RoomPowerLevels -> canChangePowerLevels
                     else -> lambdaError()
                 }
             }

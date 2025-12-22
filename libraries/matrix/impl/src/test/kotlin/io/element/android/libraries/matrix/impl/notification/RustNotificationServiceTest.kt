@@ -32,7 +32,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.NotificationClient
 import org.matrix.rustcomponents.sdk.NotificationStatus
-import org.matrix.rustcomponents.sdk.TimelineEventType
+import org.matrix.rustcomponents.sdk.TimelineEventContent
 
 class RustNotificationServiceTest {
     @Test
@@ -58,9 +58,9 @@ class RustNotificationServiceTest {
 
     @Test
     fun `test mapping invalid item only drops that item`() = runTest {
-        val error = IllegalStateException("This event type is not supported")
+        val error = IllegalStateException("This event content is not supported")
         val faultyEvent = object : FakeFfiTimelineEvent() {
-            override fun eventType(): TimelineEventType {
+            override fun content(): TimelineEventContent {
                 throw error
             }
         }

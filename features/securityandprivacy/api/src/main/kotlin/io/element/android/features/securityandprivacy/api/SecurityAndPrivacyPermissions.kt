@@ -44,9 +44,9 @@ data class SecurityAndPrivacyPermissions(
 
 fun RoomPermissions.securityAndPrivacyPermissions(): SecurityAndPrivacyPermissions {
     return SecurityAndPrivacyPermissions(
-        canChangeRoomAccess = canOwnUserSendState(StateEventType.ROOM_JOIN_RULES),
-        canChangeHistoryVisibility = canOwnUserSendState(StateEventType.ROOM_HISTORY_VISIBILITY),
-        canChangeEncryption = canOwnUserSendState(StateEventType.ROOM_ENCRYPTION),
-        canChangeRoomVisibility = canOwnUserSendState(StateEventType.ROOM_CANONICAL_ALIAS),
+        canChangeRoomAccess = canOwnUserSendState(StateEventType.RoomJoinRules),
+        canChangeHistoryVisibility = canOwnUserSendState(StateEventType.RoomHistoryVisibility),
+        canChangeEncryption = canOwnUserSendState(StateEventType.RoomEncryption),
+        canChangeRoomVisibility = canOwnUserSendState(StateEventType.RoomCanonicalAlias),
     )
 }

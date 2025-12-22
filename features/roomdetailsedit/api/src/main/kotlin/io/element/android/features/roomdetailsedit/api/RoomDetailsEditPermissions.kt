@@ -30,8 +30,8 @@ data class RoomDetailsEditPermissions(
 
 fun RoomPermissions.roomDetailsEditPermissions(): RoomDetailsEditPermissions {
     return RoomDetailsEditPermissions(
-        canEditName = canOwnUserSendState(StateEventType.ROOM_NAME),
-        canEditTopic = canOwnUserSendState(StateEventType.ROOM_TOPIC),
-        canEditAvatar = canOwnUserSendState(StateEventType.ROOM_AVATAR),
+        canEditName = canOwnUserSendState(StateEventType.RoomName),
+        canEditTopic = canOwnUserSendState(StateEventType.RoomTopic),
+        canEditAvatar = canOwnUserSendState(StateEventType.RoomAvatar),
     )
 }

@@ -136,7 +136,7 @@ interface RoomPermissions : AutoCloseable {
  * a power levels state event.
  */
 fun RoomPermissions.canEditRolesAndPermissions(): Boolean {
-    return canOwnUserSendState(StateEventType.ROOM_POWER_LEVELS)
+    return canOwnUserSendState(StateEventType.RoomPowerLevels)
 }
 
 /**
@@ -144,7 +144,7 @@ fun RoomPermissions.canEditRolesAndPermissions(): Boolean {
  * a call member state event.
  */
 fun RoomPermissions.canCall(): Boolean {
-    return canOwnUserSendState(StateEventType.CALL_MEMBER)
+    return canOwnUserSendState(StateEventType.CallMember)
 }
 
 fun <T> Result<RoomPermissions>.use(default: T, block: (RoomPermissions) -> T): T {

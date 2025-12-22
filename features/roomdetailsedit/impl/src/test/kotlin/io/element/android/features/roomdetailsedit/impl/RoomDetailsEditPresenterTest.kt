@@ -129,9 +129,9 @@ class RoomDetailsEditPresenterTest {
         val room = aJoinedRoom(
             canSendState = { stateEventType ->
                 when (stateEventType) {
-                    StateEventType.ROOM_NAME -> true
-                    StateEventType.ROOM_AVATAR -> false
-                    StateEventType.ROOM_TOPIC -> false
+                    StateEventType.RoomName -> true
+                    StateEventType.RoomAvatar -> false
+                    StateEventType.RoomTopic -> false
                     else -> lambdaError()
                 }
             }
@@ -162,9 +162,9 @@ class RoomDetailsEditPresenterTest {
             avatarUrl = AN_AVATAR_URL,
             canSendState = { stateEventType ->
                 when (stateEventType) {
-                    StateEventType.ROOM_NAME -> false
-                    StateEventType.ROOM_AVATAR -> true
-                    StateEventType.ROOM_TOPIC -> false
+                    StateEventType.RoomName -> false
+                    StateEventType.RoomAvatar -> true
+                    StateEventType.RoomTopic -> false
                     else -> lambdaError()
                 }
             }
@@ -194,9 +194,9 @@ class RoomDetailsEditPresenterTest {
             avatarUrl = AN_AVATAR_URL,
             canSendState = { stateEventType ->
                 when (stateEventType) {
-                    StateEventType.ROOM_NAME -> false
-                    StateEventType.ROOM_AVATAR -> false
-                    StateEventType.ROOM_TOPIC -> true
+                    StateEventType.RoomName -> false
+                    StateEventType.RoomAvatar -> false
+                    StateEventType.RoomTopic -> true
                     else -> lambdaError()
                 }
             }

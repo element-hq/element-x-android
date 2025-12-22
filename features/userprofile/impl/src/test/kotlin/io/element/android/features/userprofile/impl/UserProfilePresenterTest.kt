@@ -134,7 +134,7 @@ class UserProfilePresenterTest {
             roomPermissions = FakeRoomPermissions(
                 canSendState = { type ->
                     when (type) {
-                        StateEventType.CALL_MEMBER -> canUserJoinCall
+                        StateEventType.CallMember -> canUserJoinCall
                         else -> lambdaError()
                     }
                 }

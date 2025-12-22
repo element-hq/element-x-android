@@ -8,27 +8,33 @@
 
 package io.element.android.libraries.matrix.api.room
 
-enum class StateEventType {
-    POLICY_RULE_ROOM,
-    POLICY_RULE_SERVER,
-    POLICY_RULE_USER,
-    CALL_MEMBER,
-    ROOM_ALIASES,
-    ROOM_AVATAR,
-    ROOM_CANONICAL_ALIAS,
-    ROOM_CREATE,
-    ROOM_ENCRYPTION,
-    ROOM_GUEST_ACCESS,
-    ROOM_HISTORY_VISIBILITY,
-    ROOM_JOIN_RULES,
-    ROOM_MEMBER_EVENT,
-    ROOM_NAME,
-    ROOM_PINNED_EVENTS,
-    ROOM_POWER_LEVELS,
-    ROOM_SERVER_ACL,
-    ROOM_THIRD_PARTY_INVITE,
-    ROOM_TOMBSTONE,
-    ROOM_TOPIC,
-    SPACE_CHILD,
-    SPACE_PARENT
+sealed interface StateEventType {
+    data object PolicyRuleRoom : StateEventType
+    data object PolicyRuleServer : StateEventType
+    data object PolicyRuleUser : StateEventType
+    data object CallMember : StateEventType
+    data object RoomAliases : StateEventType
+    data object RoomAvatar : StateEventType
+    data object RoomCanonicalAlias : StateEventType
+    data object RoomCreate : StateEventType
+    data object RoomEncryption : StateEventType
+    data object RoomGuestAccess : StateEventType
+    data object RoomHistoryVisibility : StateEventType
+    data object RoomJoinRules : StateEventType
+    data object RoomMemberEvent : StateEventType
+    data object RoomName : StateEventType
+    data object RoomPinnedEvents : StateEventType
+    data object RoomPowerLevels : StateEventType
+    data object RoomServerAcl : StateEventType
+    data object RoomThirdPartyInvite : StateEventType
+    data object RoomTombstone : StateEventType
+    data object RoomTopic : StateEventType
+    data object SpaceChild : StateEventType
+    data object SpaceParent : StateEventType
+    data object BeaconInfo : StateEventType
+    data object MemberHints : StateEventType
+    data object RoomImagePack : StateEventType
+    data object RoomLanguage : StateEventType
+
+    data class Custom(val type: String) : StateEventType
 }

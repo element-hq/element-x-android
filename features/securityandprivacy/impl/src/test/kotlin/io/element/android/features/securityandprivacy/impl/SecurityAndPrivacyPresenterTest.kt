@@ -387,10 +387,10 @@ class SecurityAndPrivacyPresenterTest {
         return FakeRoomPermissions(
             canSendState = { eventType ->
                 when (eventType) {
-                    StateEventType.ROOM_JOIN_RULES -> canChangeRoomAccess
-                    StateEventType.ROOM_HISTORY_VISIBILITY -> canChangeHistoryVisibility
-                    StateEventType.ROOM_ENCRYPTION -> canChangeEncryption
-                    StateEventType.ROOM_CANONICAL_ALIAS -> canChangeRoomVisibility
+                    StateEventType.RoomJoinRules -> canChangeRoomAccess
+                    StateEventType.RoomHistoryVisibility -> canChangeHistoryVisibility
+                    StateEventType.RoomEncryption -> canChangeEncryption
+                    StateEventType.RoomCanonicalAlias -> canChangeRoomVisibility
                     else -> lambdaError()
                 }
             }

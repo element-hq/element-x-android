@@ -230,7 +230,7 @@ class RoomCallStatePresenterTest {
         return FakeRoomPermissions(
             canSendState = { stateEvent ->
                 when (stateEvent) {
-                    StateEventType.CALL_MEMBER -> canJoinCall
+                    StateEventType.CallMember -> canJoinCall
                     else -> lambdaError()
                 }
             }

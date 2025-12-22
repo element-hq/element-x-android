@@ -1236,7 +1236,7 @@ class MessagesPresenterTest {
     ) = FakeRoomPermissions(
         canSendState = { type ->
             when (type) {
-                StateEventType.CALL_MEMBER -> canStartCall
+                StateEventType.CallMember -> canStartCall
                 else -> lambdaError()
             }
         },
