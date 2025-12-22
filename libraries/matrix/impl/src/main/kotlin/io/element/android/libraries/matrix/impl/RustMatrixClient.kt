@@ -151,7 +151,9 @@ class RustMatrixClient(
     private val sessionDispatcher = dispatchers.io.limitedParallelism(64)
 
     private val innerRoomListService = innerSyncService.roomListService()
-    private val innerSpaceService = innerClient.spaceService()
+
+    // TODO refactor this and `innerNotificationClient` to be behind a suspend function instead
+    private val innerSpaceService = runBlocking { innerClient.spaceService() }
 
     override val roomMembershipObserver = RoomMembershipObserver()
 

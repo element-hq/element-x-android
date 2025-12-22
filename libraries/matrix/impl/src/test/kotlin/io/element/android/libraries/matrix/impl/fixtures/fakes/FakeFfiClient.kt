@@ -60,7 +60,7 @@ class FakeFfiClient(
     override suspend fun cachedAvatarUrl(): String? = null
     override suspend fun restoreSession(session: Session) = Unit
     override fun syncService(): SyncServiceBuilder = FakeFfiSyncServiceBuilder()
-    override fun spaceService(): SpaceService = FakeFfiSpaceService()
+    override suspend fun spaceService(): SpaceService = FakeFfiSpaceService()
     override fun roomDirectorySearch(): RoomDirectorySearch = FakeFfiRoomDirectorySearch()
     override suspend fun setPusher(
         identifiers: PusherIdentifiers,
