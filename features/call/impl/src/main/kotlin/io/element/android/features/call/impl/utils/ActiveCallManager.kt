@@ -177,8 +177,8 @@ class DefaultActiveCallManager(
     suspend fun incomingCallTimedOut(displayMissedCallNotification: Boolean) = mutex.withLock {
         Timber.tag(tag).d("Incoming call timed out")
 
-        val previousActiveCall = activeCall.value ?: return
-        val notificationData = (previousActiveCall.callState as? CallState.Ringing)?.notificationData ?: return
+        val previousActiveCall = activeCall.value ?: return@withLock
+        val notificationData = (previousActiveCall.callState as? CallState.Ringing)?.notificationData ?: return@withLock
         activeCall.value = null
         if (activeWakeLock?.isHeld == true) {
             Timber.tag(tag).d("Releasing partial wakelock after timeout")
@@ -196,11 +196,11 @@ class DefaultActiveCallManager(
         Timber.tag(tag).d("Hung up call: $callType")
         val currentActiveCall = activeCall.value ?: run {
             Timber.tag(tag).w("No active call, ignoring hang up")
-            return
+            return@withLock
         }
         if (currentActiveCall.callType != callType) {
             Timber.tag(tag).w("Call type $callType does not match the active call type, ignoring")
-            return
+            return@withLock
         }
         if (currentActiveCall.callState is CallState.Ringing) {
             // Decline the call
