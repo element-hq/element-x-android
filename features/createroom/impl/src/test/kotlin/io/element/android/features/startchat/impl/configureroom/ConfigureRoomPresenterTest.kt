@@ -51,15 +51,10 @@ import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.test
-import io.mockk.every
 import io.mockk.mockk
-import io.mockk.mockkStatic
-import io.mockk.unmockkAll
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
-import org.junit.After
-import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -75,17 +70,6 @@ private const val AN_URI_FROM_GALLERY = "content://uri_from_gallery"
 class ConfigureRoomPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
-
-    @Before
-    fun setup() {
-        mockkStatic(File::readBytes)
-        every { any<File>().readBytes() } returns byteArrayOf()
-    }
-
-    @After
-    fun tearDown() {
-        unmockkAll()
-    }
 
     @Test
     fun `present - initial state`() = runTest {
@@ -261,20 +245,25 @@ class ConfigureRoomPresenterTest {
             val initialState = initialState()
             dataStore.setAvatarUri(Uri.parse(AN_URI_FROM_GALLERY))
             skipItems(1)
-            mediaPreProcessor.givenResult(Result.success(MediaUploadInfo.Image(mockk(), mockk(), mockk())))
-            matrixClient.givenUploadMediaResult(Result.failure(AN_EXCEPTION))
+            val file = File.createTempFile("test", "jpg")
+            try {
+                mediaPreProcessor.givenResult(Result.success(MediaUploadInfo.Image(file, mockk(), mockk())))
+                matrixClient.givenUploadMediaResult(Result.failure(AN_EXCEPTION))
 
-            initialState.eventSink(ConfigureRoomEvents.CreateRoom)
-            assertThat(awaitItem().createRoomAction).isInstanceOf(AsyncAction.Loading::class.java)
-            val stateAfterCreateRoom = awaitItem()
-            assertThat(stateAfterCreateRoom.createRoomAction).isInstanceOf(AsyncAction.Failure::class.java)
-            assertThat(analyticsService.capturedEvents.filterIsInstance<CreatedRoom>()).isEmpty()
+                initialState.eventSink(ConfigureRoomEvents.CreateRoom)
+                assertThat(awaitItem().createRoomAction).isInstanceOf(AsyncAction.Loading::class.java)
+                val stateAfterCreateRoom = awaitItem()
+                assertThat(stateAfterCreateRoom.createRoomAction).isInstanceOf(AsyncAction.Failure::class.java)
+                assertThat(analyticsService.capturedEvents.filterIsInstance<CreatedRoom>()).isEmpty()
 
-            matrixClient.givenUploadMediaResult(Result.success(AN_AVATAR_URL))
-            stateAfterCreateRoom.eventSink(ConfigureRoomEvents.CreateRoom)
-            assertThat(awaitItem().createRoomAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
-            assertThat(awaitItem().createRoomAction).isInstanceOf(AsyncAction.Loading::class.java)
-            assertThat(awaitItem().createRoomAction).isInstanceOf(AsyncAction.Success::class.java)
+                matrixClient.givenUploadMediaResult(Result.success(AN_AVATAR_URL))
+                stateAfterCreateRoom.eventSink(ConfigureRoomEvents.CreateRoom)
+                assertThat(awaitItem().createRoomAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
+                assertThat(awaitItem().createRoomAction).isInstanceOf(AsyncAction.Loading::class.java)
+                assertThat(awaitItem().createRoomAction).isInstanceOf(AsyncAction.Success::class.java)
+            } finally {
+                file.delete()
+            }
         }
     }
 

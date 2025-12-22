@@ -35,6 +35,7 @@ import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.fake.FakeTemporaryUriDeleter
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.matching
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import io.mockk.every
@@ -528,22 +529,29 @@ class RoomDetailsEditPresenterTest {
             avatarUrl = AN_AVATAR_URL,
             updateAvatarResult = updateAvatarResult,
         )
-        givenPickerReturnsFile()
+        val tmpFile = givenPickerReturnsFile()
         val deleteCallback = lambdaRecorder<Uri?, Unit> {}
         val presenter = createRoomDetailsEditPresenter(
             room = room,
             temporaryUriDeleter = FakeTemporaryUriDeleter(deleteCallback),
         )
-        presenter.test {
-            val initialState = awaitItem()
-            initialState.eventSink(RoomDetailsEditEvent.HandleAvatarAction(AvatarAction.ChoosePhoto))
-            initialState.eventSink(RoomDetailsEditEvent.Save)
-            skipItems(4)
-            updateAvatarResult.assertions().isCalledOnce().with(value(MimeTypes.Jpeg), value(fakeFileContents))
-            deleteCallback.assertions().isCalledExactly(2).withSequence(
-                listOf(value(null)),
-                listOf(value(roomAvatarUri)),
-            )
+        try {
+            presenter.test {
+                val initialState = awaitItem()
+                initialState.eventSink(RoomDetailsEditEvent.HandleAvatarAction(AvatarAction.ChoosePhoto))
+                initialState.eventSink(RoomDetailsEditEvent.Save)
+                skipItems(4)
+                updateAvatarResult.assertions().isCalledOnce().with(
+                    value(MimeTypes.Jpeg),
+                    matching<ByteArray> { it.contentEquals(fakeFileContents) }
+                )
+                deleteCallback.assertions().isCalledExactly(2).withSequence(
+                    listOf(value(null)),
+                    listOf(value(roomAvatarUri)),
+                )
+            }
+        } finally {
+            tmpFile.delete()
         }
     }
 
@@ -605,19 +613,23 @@ class RoomDetailsEditPresenterTest {
 
     @Test
     fun `present - sets save action to failure if setting avatar fails`() = runTest {
-        givenPickerReturnsFile()
+        val tmpFile = givenPickerReturnsFile()
         val room = aJoinedRoom(
             topic = "My topic",
             displayName = "Name",
             avatarUrl = AN_AVATAR_URL,
             updateAvatarResult = { _, _ -> Result.failure(RuntimeException("!")) },
         )
-        saveAndAssertFailure(room, RoomDetailsEditEvent.HandleAvatarAction(AvatarAction.ChoosePhoto), deleteCallbackNumberOfInvocation = 2)
+        try {
+            saveAndAssertFailure(room, RoomDetailsEditEvent.HandleAvatarAction(AvatarAction.ChoosePhoto), deleteCallbackNumberOfInvocation = 2)
+        } finally {
+            tmpFile.delete()
+        }
     }
 
     @Test
     fun `present - CancelSaveChanges resets save action state`() = runTest {
-        givenPickerReturnsFile()
+        val tmpFile = givenPickerReturnsFile()
         val room = aJoinedRoom(
             topic = "My topic",
             displayName = "Name",
@@ -629,14 +641,18 @@ class RoomDetailsEditPresenterTest {
             room = room,
             temporaryUriDeleter = FakeTemporaryUriDeleter(deleteCallback),
         )
-        presenter.test {
-            val initialState = awaitItem()
-            initialState.eventSink(RoomDetailsEditEvent.UpdateRoomTopic("foo"))
-            initialState.eventSink(RoomDetailsEditEvent.Save)
-            skipItems(3)
-            assertThat(awaitItem().saveAction).isInstanceOf(AsyncAction.Failure::class.java)
-            initialState.eventSink(RoomDetailsEditEvent.CloseDialog)
-            assertThat(awaitItem().saveAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
+        try {
+            presenter.test {
+                val initialState = awaitItem()
+                initialState.eventSink(RoomDetailsEditEvent.UpdateRoomTopic("foo"))
+                initialState.eventSink(RoomDetailsEditEvent.Save)
+                skipItems(3)
+                assertThat(awaitItem().saveAction).isInstanceOf(AsyncAction.Failure::class.java)
+                initialState.eventSink(RoomDetailsEditEvent.CloseDialog)
+                assertThat(awaitItem().saveAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
+            }
+        } finally {
+            tmpFile.delete()
         }
     }
 
@@ -736,20 +752,19 @@ class RoomDetailsEditPresenterTest {
         }
     }
 
-    private fun givenPickerReturnsFile() {
-        mockkStatic(File::readBytes)
-        val processedFile: File = mockk {
-            every { readBytes() } returns fakeFileContents
-        }
+    private fun givenPickerReturnsFile(): File {
+        val tmpFile = File.createTempFile("test", "jpg")
+        tmpFile.writeBytes(fakeFileContents)
         fakePickerProvider.givenResult(anotherAvatarUri)
         fakeMediaPreProcessor.givenResult(
             Result.success(
                 MediaUploadInfo.AnyFile(
-                    file = processedFile,
+                    file = tmpFile,
                     fileInfo = mockk(),
                 )
             )
         )
+        return tmpFile
     }
 
     private fun aJoinedRoom(

@@ -323,7 +323,7 @@ class DefaultBugReporterTest {
                 while (part != null) {
                     part.headers["Content-Disposition"]?.let { contentDisposition ->
                         regex.find(contentDisposition)?.groupValues?.get(1)?.let { name ->
-                            foundValues.put(name, part!!.body.readUtf8())
+                            foundValues.put(name, part.body.readUtf8())
                         }
                     }
                     part = multipartReader.nextPart()

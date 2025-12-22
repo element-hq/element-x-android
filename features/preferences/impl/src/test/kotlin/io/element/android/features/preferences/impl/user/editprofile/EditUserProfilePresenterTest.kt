@@ -56,8 +56,6 @@ class EditUserProfilePresenterTest {
     private val userAvatarUri: Uri = mockk()
     private val anotherAvatarUri: Uri = mockk()
 
-    private val fakeFileContents = ByteArray(2)
-
     @Before
     fun setup() {
         fakePickerProvider = FakePickerProvider()
@@ -397,7 +395,7 @@ class EditUserProfilePresenterTest {
     fun `present - save processes and sets avatar when processor returns successfully`() = runTest {
         val matrixClient = FakeMatrixClient()
         val user = aMatrixUser(id = A_USER_ID.value, displayName = "Name", avatarUrl = AN_AVATAR_URL)
-        givenPickerReturnsFile()
+        val tmpFile = givenPickerReturnsFile()
         val presenter = createEditUserProfilePresenter(
             matrixClient = matrixClient,
             matrixUser = user,
@@ -405,12 +403,16 @@ class EditUserProfilePresenterTest {
                 deleteLambda = { assertThat(it).isEqualTo(userAvatarUri) }
             ),
         )
-        presenter.test {
-            val initialState = awaitItem()
-            initialState.eventSink(EditUserProfileEvent.HandleAvatarAction(AvatarAction.ChoosePhoto))
-            initialState.eventSink(EditUserProfileEvent.Save)
-            consumeItemsUntilPredicate { matrixClient.uploadAvatarCalled }
-            assertThat(matrixClient.uploadAvatarCalled).isTrue()
+        try {
+            presenter.test {
+                val initialState = awaitItem()
+                initialState.eventSink(EditUserProfileEvent.HandleAvatarAction(AvatarAction.ChoosePhoto))
+                initialState.eventSink(EditUserProfileEvent.Save)
+                consumeItemsUntilPredicate { matrixClient.uploadAvatarCalled }
+                assertThat(matrixClient.uploadAvatarCalled).isTrue()
+            }
+        } finally {
+            tmpFile.delete()
         }
     }
 
@@ -457,30 +459,38 @@ class EditUserProfilePresenterTest {
 
     @Test
     fun `present - sets save action to failure if setting avatar fails`() = runTest {
-        givenPickerReturnsFile()
+        val tmpFile = givenPickerReturnsFile()
         val user = aMatrixUser(id = A_USER_ID.value, displayName = "Name", avatarUrl = AN_AVATAR_URL)
         val matrixClient = FakeMatrixClient().apply {
             givenUploadAvatarResult(Result.failure(RuntimeException("!")))
         }
-        saveAndAssertFailure(user, matrixClient, EditUserProfileEvent.HandleAvatarAction(AvatarAction.ChoosePhoto))
+        try {
+            saveAndAssertFailure(user, matrixClient, EditUserProfileEvent.HandleAvatarAction(AvatarAction.ChoosePhoto))
+        } finally {
+            tmpFile.delete()
+        }
     }
 
     @Test
     fun `present - CloseDialog resets save action state`() = runTest {
-        givenPickerReturnsFile()
+        val tmpFile = givenPickerReturnsFile()
         val user = aMatrixUser(id = A_USER_ID.value, displayName = "Name", avatarUrl = AN_AVATAR_URL)
         val matrixClient = FakeMatrixClient().apply {
             givenSetDisplayNameResult(Result.failure(RuntimeException("!")))
         }
         val presenter = createEditUserProfilePresenter(matrixUser = user, matrixClient = matrixClient)
-        presenter.test {
-            val initialState = awaitItem()
-            initialState.eventSink(EditUserProfileEvent.UpdateDisplayName("foo"))
-            initialState.eventSink(EditUserProfileEvent.Save)
-            skipItems(2)
-            assertThat(awaitItem().saveAction).isInstanceOf(AsyncAction.Failure::class.java)
-            initialState.eventSink(EditUserProfileEvent.CloseDialog)
-            assertThat(awaitItem().saveAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
+        try {
+            presenter.test {
+                val initialState = awaitItem()
+                initialState.eventSink(EditUserProfileEvent.UpdateDisplayName("foo"))
+                initialState.eventSink(EditUserProfileEvent.Save)
+                skipItems(2)
+                assertThat(awaitItem().saveAction).isInstanceOf(AsyncAction.Failure::class.java)
+                initialState.eventSink(EditUserProfileEvent.CloseDialog)
+                assertThat(awaitItem().saveAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
+            }
+        } finally {
+            tmpFile.delete()
         }
     }
 
@@ -502,20 +512,18 @@ class EditUserProfilePresenterTest {
         }
     }
 
-    private fun givenPickerReturnsFile() {
-        mockkStatic(File::readBytes)
-        val processedFile: File = mockk {
-            every { readBytes() } returns fakeFileContents
-        }
+    private fun givenPickerReturnsFile(): File {
+        val file = File.createTempFile("test", "jpg")
         fakePickerProvider.givenResult(anotherAvatarUri)
         fakeMediaPreProcessor.givenResult(
             Result.success(
                 MediaUploadInfo.AnyFile(
-                    file = processedFile,
+                    file = file,
                     fileInfo = mockk(),
                 )
             )
         )
+        return file
     }
 
     companion object {
