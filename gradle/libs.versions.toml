@@ -32,7 +32,7 @@ accompanist = "0.37.3"
 
 # Test
 test_core = "1.7.0"
-roborazzi = "1.52.0"
+roborazzi = "1.53.0"
 
 # Jetbrain
 datetime = "0.7.1"
