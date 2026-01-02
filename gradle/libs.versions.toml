@@ -22,7 +22,7 @@ camera = "1.5.2"
 work = "2.11.0"
 
 # Compose
-compose_bom = "2025.12.00"
+compose_bom = "2025.12.01"
 
 # Coroutines
 coroutines = "1.10.2"
