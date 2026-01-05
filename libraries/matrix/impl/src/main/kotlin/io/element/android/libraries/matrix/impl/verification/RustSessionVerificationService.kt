@@ -72,7 +72,8 @@ class RustSessionVerificationService(
     // Listen for changes in verification status and update accordingly
     private val verificationStateListenerTaskHandle = encryptionService.verificationStateListener(object : VerificationStateListener {
         override fun onUpdate(status: VerificationState) {
-            if (!isInitialized.get()) {
+            // If the status is verified, just use it. It can't be a false positive like unknown or unverified
+            if (!isInitialized.get() && status != VerificationState.VERIFIED) {
                 Timber.d("Discarding new verifications state: $status. E2EE is not initialised yet")
                 return
             }
