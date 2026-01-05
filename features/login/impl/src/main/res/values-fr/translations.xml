@@ -60,6 +60,8 @@
   <string name="screen_qr_code_login_error_cancelled_title">"Demande de connexion annulée"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"La connexion a été refusée sur l’autre appareil."</string>
   <string name="screen_qr_code_login_error_declined_title">"Connexion refusée"</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_subtitle">"Vous n’avez rien d’autre à faire."</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_title">"Votre autre appareil est déjà connecté"</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"Connexion expirée. Veuillez essayer à nouveau."</string>
   <string name="screen_qr_code_login_error_expired_title">"La connexion a pris trop de temps."</string>
   <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"Votre autre appareil ne supporte pas la connexion à %s avec un QR code. Essayer de vous connecter manuellement, ou scanner le QR code avec un autre appareil."</string>

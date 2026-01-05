@@ -11,7 +11,7 @@
   </plurals>
   <string name="a11y_edit_avatar">"Uredi avatar"</string>
   <string name="a11y_edit_room_address_hint">"Potpuna adresa bit će %1$s"</string>
-  <string name="a11y_encryption_details">"Pojedinosti šifriranja"</string>
+  <string name="a11y_encryption_details">"Pojedinosti o šifriranju"</string>
   <string name="a11y_expand_message_text_field">"Proširi tekstno polje poruke"</string>
   <string name="a11y_hide_password">"Sakrij zaporku"</string>
   <string name="a11y_join_call">"Pridruži se pozivu"</string>
@@ -58,7 +58,7 @@
   <string name="a11y_your_avatar">"Vaš avatar"</string>
   <string name="action_accept">"Prihvati"</string>
   <string name="action_add_caption">"Dodaj opis"</string>
-  <string name="action_add_to_timeline">"Dodaj na vremensku crtu"</string>
+  <string name="action_add_to_timeline">"Dodaj na vremensku traku"</string>
   <string name="action_back">"Natrag"</string>
   <string name="action_call">"Poziv"</string>
   <string name="action_cancel">"Odustani"</string>

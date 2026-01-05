@@ -161,6 +161,7 @@
   <string name="action_static_map_load">"Cliquez pour charger la carte"</string>
   <string name="action_take_photo">"Prendre une photo"</string>
   <string name="action_tap_for_options">"Appuyez pour afficher les options"</string>
+  <string name="action_translate">"Traduire"</string>
   <string name="action_try_again">"Essayer à nouveau"</string>
   <string name="action_unpin">"Désépingler"</string>
   <string name="action_view">"Voir"</string>
@@ -235,6 +236,7 @@ Raison : %1$s."</string>
   <string name="common_light">"Clair"</string>
   <string name="common_line_copied_to_clipboard">"Ligne copiée dans le presse-papiers"</string>
   <string name="common_link_copied_to_clipboard">"Lien copié dans le presse-papiers"</string>
+  <string name="common_link_new_device">"Associer un nouvel appareil"</string>
   <string name="common_loading">"Chargement…"</string>
   <string name="common_loading_more">"Chargement…"</string>
   <plurals name="common_many_members">
@@ -252,6 +254,7 @@ Raison : %1$s."</string>
   <string name="common_message_removed">"Message supprimé"</string>
   <string name="common_modern">"Moderne"</string>
   <string name="common_mute">"Mettre en sourdine"</string>
+  <string name="common_name">"Nom"</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Aucun résultat"</string>
   <string name="common_no_room_name">"Salon sans nom"</string>
@@ -326,6 +329,7 @@ Raison : %1$s."</string>
   <string name="common_something_went_wrong">"Une erreur s’est produite"</string>
   <string name="common_something_went_wrong_message">"Nous avons rencontré un problème. Veuillez réessayer."</string>
   <string name="common_space">"Espace"</string>
+  <string name="common_space_topic_placeholder">"Quel est le sujet de cet espace ?"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d Espace"</item>
     <item quantity="other">"%1$d Espaces"</item>
@@ -370,7 +374,7 @@ Raison : %1$s."</string>
   <string name="common_waiting">"En attente…"</string>
   <string name="common_waiting_for_decryption_key">"En attente de la clé de déchiffrement"</string>
   <string name="common_you">"Vous"</string>
-  <string name="crypto_history_visible">"Les messages que vous enverrez seront partagés avec les nouveaux membres invités dans ce salon. %1$s"</string>
+  <string name="crypto_history_visible">"Ce salon a été configuré pour que les nouveaux membres puissent lire l’historique. %1$s"</string>
   <string name="crypto_identity_change_pin_violation">"L’identité de %1$s a été réinitialisée. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"L’identité de %1$s %2$s a été réinitialisée. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>

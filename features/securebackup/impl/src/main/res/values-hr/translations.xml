@@ -42,7 +42,7 @@
   <string name="screen_recovery_key_confirm_description">"Pazite da nitko ne vidi ovaj zaslon!"</string>
   <string name="screen_recovery_key_confirm_error_content">"Pokušajte ponovno potvrditi pristup pohrani ključeva."</string>
   <string name="screen_recovery_key_confirm_error_title">"Neispravan ključ za oporavak"</string>
-  <string name="screen_recovery_key_confirm_key_description">"Ako imate sigurnosni ključ ili sigurnosnu frazu, i ovo će funkcionirati."</string>
+  <string name="screen_recovery_key_confirm_key_description">"Ako imate sigurnosni ključ ili sigurnosni izraz, i ovo će funkcionirati."</string>
   <string name="screen_recovery_key_confirm_key_placeholder">"Unos…"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"Izgubili ste ključ za oporavak?"</string>
   <string name="screen_recovery_key_confirm_success">"Ključ za oporavak je potvrđen"</string>
