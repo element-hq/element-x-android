@@ -33,7 +33,7 @@ class RoomListSearchPresenterTest {
         }.test {
             awaitItem().let { state ->
                 assertThat(state.isSearchActive).isFalse()
-                assertThat(state.query).isEmpty()
+                assertThat(state.query.text.toString()).isEmpty()
                 assertThat(state.results).isEmpty()
             }
         }
@@ -72,10 +72,10 @@ class RoomListSearchPresenterTest {
                 ).isEqualTo(
                     RoomListFilter.None
                 )
-                state.eventSink(RoomListSearchEvents.QueryChanged("Search"))
+                state.query.edit { append("Search") }
             }
             awaitItem().let { state ->
-                assertThat(state.query).isEqualTo("Search")
+                assertThat(state.query.text).isEqualTo("Search")
                 assertThat(
                     roomListService.allRooms.currentFilter.value
                 ).isEqualTo(
@@ -84,7 +84,7 @@ class RoomListSearchPresenterTest {
                 state.eventSink(RoomListSearchEvents.ClearQuery)
             }
             awaitItem().let { state ->
-                assertThat(state.query).isEmpty()
+                assertThat(state.query.text.toString()).isEmpty()
                 assertThat(
                     roomListService.allRooms.currentFilter.value
                 ).isEqualTo(

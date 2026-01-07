@@ -8,6 +8,8 @@
 
 package io.element.android.features.home.impl.search
 
+import androidx.compose.foundation.text.input.clearText
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -29,29 +31,24 @@ class RoomListSearchPresenter(
         var isSearchActive by remember {
             mutableStateOf(false)
         }
-        var searchQuery by remember {
-            mutableStateOf("")
-        }
+        val searchQuery = rememberTextFieldState()
 
         LaunchedEffect(isSearchActive) {
             dataSource.setIsActive(isSearchActive)
         }
 
-        LaunchedEffect(searchQuery) {
-            dataSource.setSearchQuery(searchQuery)
+        LaunchedEffect(searchQuery.text) {
+            dataSource.setSearchQuery(searchQuery.text.toString())
         }
 
         fun handleEvent(event: RoomListSearchEvents) {
             when (event) {
                 RoomListSearchEvents.ClearQuery -> {
-                    searchQuery = ""
-                }
-                is RoomListSearchEvents.QueryChanged -> {
-                    searchQuery = event.query
+                    searchQuery.clearText()
                 }
                 RoomListSearchEvents.ToggleSearchVisibility -> {
                     isSearchActive = !isSearchActive
-                    searchQuery = ""
+                    searchQuery.clearText()
                 }
             }
         }

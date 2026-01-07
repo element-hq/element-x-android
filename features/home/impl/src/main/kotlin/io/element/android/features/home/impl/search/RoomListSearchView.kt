@@ -18,16 +18,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.focus.FocusRequester
@@ -35,7 +32,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -112,23 +108,14 @@ private fun RoomListSearchContent(
                 },
                 navigationIcon = { BackButton(onClick = ::onBackButtonClick) },
                 title = {
-                    // TODO replace `state.query` with TextFieldState when it's available for M3 TextField
                     // The stateSaver will keep the selection state when returning to this UI
-                    var value by rememberSaveable(stateSaver = TextFieldValue.Saver) {
-                        mutableStateOf(TextFieldValue(state.query))
-                    }
-
                     val focusRequester = remember { FocusRequester() }
                     FilledTextField(
                         modifier = Modifier
                             .fillMaxWidth()
                             .focusRequester(focusRequester),
-                        value = value,
-                        singleLine = true,
-                        onValueChange = {
-                            value = it
-                            state.eventSink(RoomListSearchEvents.QueryChanged(it.text))
-                        },
+                        state = state.query,
+                        lineLimits = TextFieldLineLimits.SingleLine,
                         colors = TextFieldDefaults.colors(
                             focusedContainerColor = Color.Transparent,
                             unfocusedContainerColor = Color.Transparent,
@@ -139,19 +126,15 @@ private fun RoomListSearchContent(
                             errorIndicatorColor = Color.Transparent,
                         ),
                         trailingIcon = {
-                            if (value.text.isNotEmpty()) {
-                                IconButton(onClick = {
-                                    state.eventSink(RoomListSearchEvents.ClearQuery)
-                                    // Clear local state too
-                                    value = value.copy(text = "")
-                                }) {
+                            if (state.query.text.isNotEmpty()) {
+                                IconButton(onClick = { state.eventSink(RoomListSearchEvents.ClearQuery) }) {
                                     Icon(
                                         imageVector = CompoundIcons.Close(),
                                         contentDescription = stringResource(CommonStrings.action_cancel)
                                     )
                                 }
                             }
-                        }
+                        },
                     )
 
                     LaunchedEffect(Unit) {

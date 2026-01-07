@@ -10,6 +10,5 @@ package io.element.android.features.home.impl.search
 
 sealed interface RoomListSearchEvents {
     data object ToggleSearchVisibility : RoomListSearchEvents
-    data class QueryChanged(val query: String) : RoomListSearchEvents
     data object ClearQuery : RoomListSearchEvents
 }

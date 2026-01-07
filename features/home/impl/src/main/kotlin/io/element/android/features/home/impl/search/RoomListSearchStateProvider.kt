@@ -8,6 +8,7 @@
 
 package io.element.android.features.home.impl.search
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.features.home.impl.roomlist.aRoomListRoomSummaryList
@@ -33,7 +34,7 @@ fun aRoomListSearchState(
     eventSink: (RoomListSearchEvents) -> Unit = { },
 ) = RoomListSearchState(
     isSearchActive = isSearchActive,
-    query = query,
+    query = TextFieldState(initialText = query),
     results = results,
     eventSink = eventSink,
 )
