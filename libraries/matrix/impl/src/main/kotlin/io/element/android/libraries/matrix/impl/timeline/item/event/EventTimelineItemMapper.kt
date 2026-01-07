@@ -30,7 +30,7 @@ import org.matrix.rustcomponents.sdk.QueueWedgeError
 import org.matrix.rustcomponents.sdk.Reaction
 import org.matrix.rustcomponents.sdk.ShieldState
 import org.matrix.rustcomponents.sdk.TimelineItemContent
-import uniffi.matrix_sdk_common.ShieldStateCode
+import uniffi.matrix_sdk_ui.TimelineEventShieldStateCode
 import org.matrix.rustcomponents.sdk.EventSendState as RustEventSendState
 import org.matrix.rustcomponents.sdk.EventTimelineItem as RustEventTimelineItem
 import org.matrix.rustcomponents.sdk.EventTimelineItemDebugInfo as RustEventTimelineItemDebugInfo
@@ -58,7 +58,7 @@ class EventTimelineItemMapper(
             content = contentMapper.map(content),
             origin = origin?.map(),
             timelineItemDebugInfoProvider = { lazyProvider.debugInfo().map() },
-            messageShieldProvider = { strict -> lazyProvider.getShields(strict)?.map() },
+            messageShieldProvider = { strict -> lazyProvider.getShields(strict).map() },
             sendHandleProvider = { lazyProvider.getSendHandle()?.let(::RustSendHandle) }
         )
     }
@@ -182,13 +182,13 @@ private fun ShieldState?.map(): MessageShield? {
         is ShieldState.Red -> true
     }
     return when (shieldStateCode) {
-        ShieldStateCode.AUTHENTICITY_NOT_GUARANTEED -> MessageShield.AuthenticityNotGuaranteed(isCritical)
-        ShieldStateCode.UNKNOWN_DEVICE -> MessageShield.UnknownDevice(isCritical)
-        ShieldStateCode.UNSIGNED_DEVICE -> MessageShield.UnsignedDevice(isCritical)
-        ShieldStateCode.UNVERIFIED_IDENTITY -> MessageShield.UnverifiedIdentity(isCritical)
-        ShieldStateCode.SENT_IN_CLEAR -> MessageShield.SentInClear(isCritical)
-        ShieldStateCode.VERIFICATION_VIOLATION -> MessageShield.VerificationViolation(isCritical)
-        ShieldStateCode.MISMATCHED_SENDER -> MessageShield.MismatchedSender(isCritical)
+        TimelineEventShieldStateCode.AUTHENTICITY_NOT_GUARANTEED -> MessageShield.AuthenticityNotGuaranteed(isCritical)
+        TimelineEventShieldStateCode.UNKNOWN_DEVICE -> MessageShield.UnknownDevice(isCritical)
+        TimelineEventShieldStateCode.UNSIGNED_DEVICE -> MessageShield.UnsignedDevice(isCritical)
+        TimelineEventShieldStateCode.UNVERIFIED_IDENTITY -> MessageShield.UnverifiedIdentity(isCritical)
+        TimelineEventShieldStateCode.SENT_IN_CLEAR -> MessageShield.SentInClear(isCritical)
+        TimelineEventShieldStateCode.VERIFICATION_VIOLATION -> MessageShield.VerificationViolation(isCritical)
+        TimelineEventShieldStateCode.MISMATCHED_SENDER -> MessageShield.MismatchedSender(isCritical)
     }
 }
 
