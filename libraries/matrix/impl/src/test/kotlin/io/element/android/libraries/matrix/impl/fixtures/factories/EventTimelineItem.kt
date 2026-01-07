@@ -35,8 +35,10 @@ internal fun aRustEventTimelineItem(
     readReceipts: Map<String, Receipt> = emptyMap(),
     origin: EventItemOrigin? = EventItemOrigin.SYNC,
     canBeRepliedTo: Boolean = true,
-    shieldsState: ShieldState? = null,
+    shieldsState: ShieldState = ShieldState.None,
     localCreatedAt: ULong? = null,
+    forwarder: String? = null,
+    forwarderProfile: ProfileDetails? = null,
 ) = EventTimelineItem(
     isRemote = isRemote,
     eventOrTransactionId = eventOrTransactionId,
@@ -54,5 +56,7 @@ internal fun aRustEventTimelineItem(
     lazyProvider = FakeFfiLazyTimelineItemProvider(
         debugInfo = debugInfo,
         shieldsState = shieldsState,
-    )
+    ),
+    forwarder = forwarder,
+    forwarderProfile = forwarderProfile,
 )
