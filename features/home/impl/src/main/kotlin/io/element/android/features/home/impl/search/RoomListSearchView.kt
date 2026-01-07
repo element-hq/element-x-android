@@ -125,8 +125,8 @@ private fun RoomListSearchContent(
                             disabledIndicatorColor = Color.Transparent,
                             errorIndicatorColor = Color.Transparent,
                         ),
-                        trailingIcon = {
-                            if (state.query.text.isNotEmpty()) {
+                        trailingIcon = if (state.query.text.isNotEmpty()) {
+                            @Composable {
                                 IconButton(onClick = { state.eventSink(RoomListSearchEvents.ClearQuery) }) {
                                     Icon(
                                         imageVector = CompoundIcons.Close(),
@@ -134,6 +134,8 @@ private fun RoomListSearchContent(
                                     )
                                 }
                             }
+                        } else {
+                            null
                         },
                     )
 
