@@ -15,9 +15,15 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.InputTransformation
+import androidx.compose.foundation.text.input.KeyboardActionHandler
+import androidx.compose.foundation.text.input.OutputTransformation
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.TextFieldColors
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.TextFieldLabelScope
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -129,6 +135,51 @@ fun FilledTextField(
         keyboardActions = keyboardActions,
         singleLine = singleLine,
         maxLines = maxLines,
+        interactionSource = interactionSource,
+        shape = shape,
+        colors = colors,
+    )
+}
+
+@Composable
+fun FilledTextField(
+    state: TextFieldState,
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    readOnly: Boolean = false,
+    textStyle: TextStyle = LocalTextStyle.current,
+    label: @Composable (TextFieldLabelScope.() -> Unit)? = null,
+    placeholder: @Composable (() -> Unit)? = null,
+    leadingIcon: @Composable (() -> Unit)? = null,
+    trailingIcon: @Composable (() -> Unit)? = null,
+    supportingText: @Composable (() -> Unit)? = null,
+    isError: Boolean = false,
+    inputTransformation: InputTransformation? = null,
+    outputTransformation: OutputTransformation? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions.Default,
+    keyboardActions: KeyboardActionHandler? = null,
+    lineLimits: TextFieldLineLimits = TextFieldLineLimits.Default,
+    interactionSource: MutableInteractionSource? = null,
+    shape: Shape = TextFieldDefaults.shape,
+    colors: TextFieldColors = TextFieldDefaults.colors()
+) {
+    androidx.compose.material3.TextField(
+        state = state,
+        modifier = modifier,
+        enabled = enabled,
+        readOnly = readOnly,
+        textStyle = textStyle,
+        label = label,
+        placeholder = placeholder,
+        leadingIcon = leadingIcon,
+        trailingIcon = trailingIcon,
+        supportingText = supportingText,
+        isError = isError,
+        inputTransformation = inputTransformation,
+        outputTransformation = outputTransformation,
+        keyboardOptions = keyboardOptions,
+        onKeyboardAction = keyboardActions,
+        lineLimits = lineLimits,
         interactionSource = interactionSource,
         shape = shape,
         colors = colors,
