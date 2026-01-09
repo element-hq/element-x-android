@@ -8,15 +8,17 @@
 
 package io.element.android.features.createroom.impl.configureroom
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.text.KeyboardOptions
@@ -29,8 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.clearAndSetSemantics
-import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -41,6 +41,7 @@ import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtomSize
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.async.AsyncActionViewDefaults
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -58,7 +59,8 @@ import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
-import io.element.android.libraries.matrix.ui.components.UnsavedAvatar
+import io.element.android.libraries.matrix.ui.components.AvatarPickerState
+import io.element.android.libraries.matrix.ui.components.AvatarPickerView
 import io.element.android.libraries.matrix.ui.room.address.RoomAddressField
 import io.element.android.libraries.permissions.api.PermissionsView
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -207,20 +209,27 @@ private fun RoomNameWithAvatar(
         horizontalArrangement = Arrangement.spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        val a11yAvatar = stringResource(CommonStrings.a11y_room_avatar)
-        UnsavedAvatar(
-            avatarUri = avatarUri,
-            avatarSize = AvatarSize.EditRoomDetails,
-            avatarType = if (isSpace) AvatarType.Space() else AvatarType.Room(),
-            modifier = Modifier
-                .clickable(
-                    onClick = onAvatarClick,
-                    onClickLabel = stringResource(CommonStrings.action_open_context_menu),
-                )
-                .clearAndSetSemantics {
-                    contentDescription = a11yAvatar
-                },
-        )
+        Box(
+            modifier = Modifier.padding(end = 8.dp).size(AvatarSize.EditRoomDetails.dp),
+            contentAlignment = Alignment.Center,
+        ) {
+            val avatarState = remember(avatarUri) {
+                if (avatarUri != null) {
+                    AvatarPickerState.Selected(
+                        avatarData = AvatarData(id = "#", name = null, url = avatarUri, size = AvatarSize.EditRoomDetails),
+                        type = if (isSpace) AvatarType.Space() else AvatarType.Room(),
+                    )
+                } else {
+                    val containerSize = 48.dp
+                    val padding = PaddingValues((AvatarSize.EditRoomDetails.dp - containerSize) / 2)
+                    AvatarPickerState.Pick(buttonSize = 48.dp, iconSize = 24.dp, externalPadding = padding)
+                }
+            }
+            AvatarPickerView(
+                state = avatarState,
+                onClick = onAvatarClick,
+            )
+        }
 
         TextField(
             label = if (isSpace) stringResource(CommonStrings.common_name) else stringResource(R.string.screen_create_room_room_name_label),

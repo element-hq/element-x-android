@@ -13,7 +13,6 @@ package io.element.android.features.roomdetailsedit.impl
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -24,6 +23,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
@@ -33,6 +33,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.async.AsyncActionViewDefaults
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -45,7 +46,8 @@ import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
-import io.element.android.libraries.matrix.ui.components.EditableAvatarView
+import io.element.android.libraries.matrix.ui.components.AvatarPickerState
+import io.element.android.libraries.matrix.ui.components.AvatarPickerView
 import io.element.android.libraries.permissions.api.PermissionsView
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -99,20 +101,15 @@ fun RoomDetailsEditView(
                 .verticalScroll(rememberScrollState())
         ) {
             Spacer(modifier = Modifier.height(24.dp))
-            EditableAvatarView(
-                matrixId = state.roomId.value,
-                // As per Element Web, we use the raw name for the avatar as well
-                displayName = state.roomRawName,
-                avatarUrl = state.roomAvatarUrl,
-                avatarSize = AvatarSize.EditRoomDetails,
-                avatarType = if (state.isSpace) {
-                    AvatarType.Space()
-                } else {
-                    AvatarType.Room()
-                },
-                enabled = state.canChangeAvatar,
-                onAvatarClick = ::onAvatarClick,
-                modifier = Modifier.fillMaxWidth(),
+            val avatarPickerState = remember(state.roomAvatarUrl) {
+                val size = AvatarSize.EditRoomDetails
+                val type = AvatarType.Room()
+                AvatarPickerState.Selected(avatarData = AvatarData(id = state.roomId.value, name = state.roomRawName, size = size, url = state.roomAvatarUrl), type = type)
+            }
+            AvatarPickerView(
+                state = avatarPickerState,
+                onClick = ::onAvatarClick,
+                modifier = Modifier.align(Alignment.CenterHorizontally),
             )
             Spacer(modifier = Modifier.height(32.dp))
 
