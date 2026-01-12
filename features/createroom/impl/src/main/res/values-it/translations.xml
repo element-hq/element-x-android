@@ -8,15 +8,10 @@
   <string name="screen_create_room_public_option_description">"Chiunque può trovare questa stanza.
 Puoi modificarlo in qualsiasi momento nelle impostazioni della stanza."</string>
   <string name="screen_create_room_public_option_title">"Stanza pubblica"</string>
-  <string name="screen_create_room_room_access_section_anyone_option_description">"Chiunque può entrare in questa stanza"</string>
-  <string name="screen_create_room_room_access_section_anyone_option_title">"Chiunque"</string>
-  <string name="screen_create_room_room_access_section_header">"Accesso alla stanza"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Chiunque può chiedere di entrare nella stanza, ma un amministratore o un moderatore dovrà accettare la richiesta"</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Chiedi di entrare"</string>
   <string name="screen_create_room_room_address_section_footer">"Affinché questa stanza sia visibile nell\'elenco delle stanze pubbliche, è necessario un indirizzo della stanza."</string>
   <string name="screen_create_room_room_address_section_title">"Indirizzo della stanza"</string>
-  <string name="screen_create_room_room_name_label">"Nome stanza"</string>
   <string name="screen_create_room_room_visibility_section_title">"Visibilità della stanza"</string>
-  <string name="screen_create_room_title">"Crea una stanza"</string>
   <string name="screen_create_room_topic_label">"Argomento (facoltativo)"</string>
 </resources>

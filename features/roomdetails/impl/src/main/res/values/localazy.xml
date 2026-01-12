@@ -63,7 +63,7 @@
   <string name="screen_room_details_profile_row_title">"Profile"</string>
   <string name="screen_room_details_requests_to_join_title">"Requests to join"</string>
   <string name="screen_room_details_roles_and_permissions">"Roles &amp; permissions"</string>
-  <string name="screen_room_details_room_name_label">"Room name"</string>
+  <string name="screen_room_details_room_name_label">"Name"</string>
   <string name="screen_room_details_security_and_privacy_title">"Security &amp; privacy"</string>
   <string name="screen_room_details_security_title">"Security"</string>
   <string name="screen_room_details_share_room_title">"Share room"</string>
@@ -131,7 +131,7 @@
   <string name="screen_security_and_privacy_add_room_address_action">"Add address"</string>
   <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Anyone in authorised spaces can join, but everyone else must request access."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Everyone must request access."</string>
-  <string name="screen_security_and_privacy_ask_to_join_option_title">"Ask to join"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Allow ask to join"</string>
   <string name="screen_security_and_privacy_ask_to_join_single_space_members_option_description">"Anyone in %1$s can join, but everyone else must request access."</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Yes, enable encryption"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Once enabled, encryption for a room cannot be disabled, Message history will only be visible for room members since they were invited or since they joined the room.

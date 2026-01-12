@@ -8,11 +8,7 @@
   <string name="screen_create_room_public_option_description">"Всеки може да намери тази стая.
 Можете да промените това по всяко време в настройките на стаята."</string>
   <string name="screen_create_room_public_option_title">"Общодостъпна стая"</string>
-  <string name="screen_create_room_room_access_section_anyone_option_description">"Всеки може да се присъедини към тази стая"</string>
-  <string name="screen_create_room_room_access_section_anyone_option_title">"Всеки"</string>
   <string name="screen_create_room_room_address_section_footer">"За да бъде тази стая видима в директорията на общодостъпните стаи, ще ви е необходим адрес на стаята."</string>
-  <string name="screen_create_room_room_name_label">"Име на стаята"</string>
   <string name="screen_create_room_room_visibility_section_title">"Видимост на стаята"</string>
-  <string name="screen_create_room_title">"Създаване на стая"</string>
   <string name="screen_create_room_topic_label">"Тема за разговор (незадължително)"</string>
 </resources>

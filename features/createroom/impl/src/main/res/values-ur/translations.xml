@@ -8,7 +8,5 @@
   <string name="screen_create_room_public_option_description">"کوئی بھی یہ کمرہ ڈھونڈ سکتا ہے۔
 آپ اسے کمرے کی ترتیبات میں کسی بھی وقت تبدیل کرسکتے ہیں۔"</string>
   <string name="screen_create_room_public_option_title">"عوامی کمرہ"</string>
-  <string name="screen_create_room_room_name_label">"کمرے کا نام"</string>
-  <string name="screen_create_room_title">"ایک کمرہ بنائیں"</string>
   <string name="screen_create_room_topic_label">"موضوع (اختیاری)"</string>
 </resources>

@@ -8,15 +8,10 @@
   <string name="screen_create_room_public_option_description">"Jeder kann diesen Chat finden.
 Du kannst dies jederzeit in den Einstellungen des Chats ändern."</string>
   <string name="screen_create_room_public_option_title">"Öffentlicher Chat"</string>
-  <string name="screen_create_room_room_access_section_anyone_option_description">"Jeder darf diesem Chat beitreten"</string>
-  <string name="screen_create_room_room_access_section_anyone_option_title">"Jeder"</string>
-  <string name="screen_create_room_room_access_section_header">"Chat Zugang"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Jeder kann den Beitritt zum Chat erbitten, aber ein Admin oder Moderator muss die Anfrage akzeptieren."</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Beitritt beantragen"</string>
   <string name="screen_create_room_room_address_section_footer">"Du benötigst eine Chat-Adresse, damit dieser Chat im öffentlichen Verzeichnis sichtbar ist."</string>
   <string name="screen_create_room_room_address_section_title">"Chatroom Adresse"</string>
-  <string name="screen_create_room_room_name_label">"Chat-Name"</string>
   <string name="screen_create_room_room_visibility_section_title">" Sichtbarkeit des Chats"</string>
-  <string name="screen_create_room_title">"Chat erstellen"</string>
   <string name="screen_create_room_topic_label">"Thema (optional)"</string>
 </resources>

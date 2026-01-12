@@ -183,7 +183,7 @@ private fun ConfigureRoomToolbar(
     onNextClick: () -> Unit,
 ) {
     TopAppBar(
-        titleStr = stringResource(if (isSpace) R.string.screen_create_room_new_space_title else R.string.screen_create_room_title),
+        titleStr = stringResource(if (isSpace) R.string.screen_create_room_new_space_title else R.string.screen_create_room_new_room_title),
         navigationIcon = { BackButton(onClick = onBackClick) },
         actions = {
             TextButton(
@@ -232,7 +232,7 @@ private fun RoomNameWithAvatar(
         }
 
         TextField(
-            label = if (isSpace) stringResource(CommonStrings.common_name) else stringResource(R.string.screen_create_room_room_name_label),
+            label = stringResource(CommonStrings.common_name),
             value = roomName,
             placeholder = stringResource(CommonStrings.common_room_name_placeholder),
             singleLine = true,

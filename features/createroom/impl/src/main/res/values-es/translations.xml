@@ -8,14 +8,9 @@
   <string name="screen_create_room_public_option_description">"Cualquiera puede encontrar esta sala.
 Puedes cambiar esto en cualquier momento en los ajustes de la sala."</string>
   <string name="screen_create_room_public_option_title">"Sala pública"</string>
-  <string name="screen_create_room_room_access_section_anyone_option_description">"Cualquiera puede unirse a esta sala"</string>
-  <string name="screen_create_room_room_access_section_anyone_option_title">"Cualquiera"</string>
-  <string name="screen_create_room_room_access_section_header">"Acceso a la sala"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Cualquiera puede solicitar unirse a la sala, pero un administrador o un moderador tendrá que aceptar la solicitud"</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Solicitud para unirse"</string>
   <string name="screen_create_room_room_address_section_footer">"Para que esta sala sea visible en el directorio de salas públicas, necesitarás una dirección de sala."</string>
-  <string name="screen_create_room_room_name_label">"Nombre de la sala"</string>
   <string name="screen_create_room_room_visibility_section_title">"Visibilidad de la sala"</string>
-  <string name="screen_create_room_title">"Crear una sala"</string>
   <string name="screen_create_room_topic_label">"Tema (opcional)"</string>
 </resources>

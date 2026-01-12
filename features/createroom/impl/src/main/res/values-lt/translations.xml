@@ -7,7 +7,5 @@
   <string name="screen_create_room_private_option_title">"Privatus kambarys"</string>
   <string name="screen_create_room_public_option_description">"Bet kas gali rasti šį kambarį.
 Tai galite bet kada pakeisti kambario nustatymuose."</string>
-  <string name="screen_create_room_room_name_label">"Kambario pavadinimas"</string>
-  <string name="screen_create_room_title">"Kurti kambarį"</string>
   <string name="screen_create_room_topic_label">"Tema (nebūtina)"</string>
 </resources>

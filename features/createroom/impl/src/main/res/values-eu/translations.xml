@@ -8,12 +8,7 @@
   <string name="screen_create_room_public_option_description">"Edonork aurki dezake gela hau.
 Gelaren ezarpenetan aldatu dezakezu hobespena."</string>
   <string name="screen_create_room_public_option_title">"Gela publikoa"</string>
-  <string name="screen_create_room_room_access_section_anyone_option_description">"Edonor sar daiteke gela honetara"</string>
-  <string name="screen_create_room_room_access_section_anyone_option_title">"Edonork"</string>
-  <string name="screen_create_room_room_access_section_header">"Gelarako sarbidea"</string>
   <string name="screen_create_room_room_address_section_title">"Gelaren helbidea"</string>
-  <string name="screen_create_room_room_name_label">"Gelaren izena"</string>
   <string name="screen_create_room_room_visibility_section_title">"Gelaren ikusgarritasuna"</string>
-  <string name="screen_create_room_title">"Sortu gela"</string>
   <string name="screen_create_room_topic_label">"Mintzagaia (aukerakoa)"</string>
 </resources>
