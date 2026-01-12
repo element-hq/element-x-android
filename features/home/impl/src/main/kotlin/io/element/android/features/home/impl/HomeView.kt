@@ -74,6 +74,7 @@ fun HomeView(
     onSetUpRecoveryClick: () -> Unit,
     onConfirmRecoveryKeyClick: () -> Unit,
     onStartChatClick: () -> Unit,
+    onCreateSpaceClick: () -> Unit,
     onRoomSettingsClick: (roomId: RoomId) -> Unit,
     onMenuActionClick: (RoomListMenuAction) -> Unit,
     onReportRoomClick: (roomId: RoomId) -> Unit,
@@ -113,6 +114,7 @@ fun HomeView(
             onRoomClick = { if (firstThrottler.canHandle()) onRoomClick(it) },
             onOpenSettings = { if (firstThrottler.canHandle()) onSettingsClick() },
             onStartChatClick = { if (firstThrottler.canHandle()) onStartChatClick() },
+            onCreateSpaceClick = { if (firstThrottler.canHandle()) onCreateSpaceClick() },
             onMenuActionClick = onMenuActionClick,
         )
         // This overlaid view will only be visible when state.displaySearchResults is true
@@ -138,6 +140,7 @@ private fun HomeScaffold(
     onRoomClick: (RoomId) -> Unit,
     onOpenSettings: () -> Unit,
     onStartChatClick: () -> Unit,
+    onCreateSpaceClick: () -> Unit,
     onMenuActionClick: (RoomListMenuAction) -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -164,6 +167,7 @@ private fun HomeScaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             HomeTopBar(
+                selectedNavigationItem = state.currentHomeNavigationBarItem,
                 title = stringResource(state.currentHomeNavigationBarItem.labelRes),
                 currentUserAndNeighbors = state.currentUserAndNeighbors,
                 showAvatarIndicator = state.showAvatarIndicator,
@@ -174,8 +178,8 @@ private fun HomeScaffold(
                 onAccountSwitch = {
                     state.eventSink(HomeEvents.SwitchToAccount(it))
                 },
+                onCreateSpace = onCreateSpaceClick,
                 scrollBehavior = scrollBehavior,
-                displayMenuItems = state.displayActions,
                 displayFilters = state.displayRoomListFilters,
                 filtersState = roomListState.filtersState,
                 canReportBug = state.canReportBug,
@@ -328,6 +332,7 @@ internal fun HomeViewPreview(@PreviewParameter(HomeStateProvider::class) state: 
         onSetUpRecoveryClick = {},
         onConfirmRecoveryKeyClick = {},
         onStartChatClick = {},
+        onCreateSpaceClick = {},
         onRoomSettingsClick = {},
         onReportRoomClick = {},
         onMenuActionClick = {},
@@ -347,6 +352,7 @@ internal fun HomeViewA11yPreview() = ElementPreview {
         onSetUpRecoveryClick = {},
         onConfirmRecoveryKeyClick = {},
         onStartChatClick = {},
+        onCreateSpaceClick = {},
         onRoomSettingsClick = {},
         onReportRoomClick = {},
         onMenuActionClick = {},

@@ -22,7 +22,7 @@ We do not recommend enabling encryption for rooms that anyone can find and join.
   <string name="screen_security_and_privacy_encryption_toggle_title">"Enable end-to-end encryption"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Anyone can join."</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Anyone"</string>
-  <string name="screen_security_and_privacy_room_access_footer">"Choose which spaces’ members can join this room without an invitation.  %1$s"</string>
+  <string name="screen_security_and_privacy_room_access_footer">"Choose which spaces’ members can join this room without an invitation. %1$s"</string>
   <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Manage spaces"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Only invited people can join."</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Invite only"</string>

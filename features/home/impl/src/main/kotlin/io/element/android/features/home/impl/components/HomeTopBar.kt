@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.appconfig.RoomListConfig
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.home.impl.HomeNavigationBarItem
 import io.element.android.features.home.impl.R
 import io.element.android.features.home.impl.filters.RoomListFiltersState
 import io.element.android.features.home.impl.filters.RoomListFiltersView
@@ -73,6 +74,7 @@ import kotlinx.collections.immutable.toImmutableList
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeTopBar(
+    selectedNavigationItem: HomeNavigationBarItem,
     title: String,
     currentUserAndNeighbors: ImmutableList<MatrixUser>,
     showAvatarIndicator: Boolean,
@@ -81,8 +83,8 @@ fun HomeTopBar(
     onMenuActionClick: (RoomListMenuAction) -> Unit,
     onOpenSettings: () -> Unit,
     onAccountSwitch: (SessionId) -> Unit,
+    onCreateSpace: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
-    displayMenuItems: Boolean,
     canReportBug: Boolean,
     displayFilters: Boolean,
     filtersState: RoomListFiltersState,
@@ -117,63 +119,9 @@ fun HomeTopBar(
                 )
             },
             actions = {
-                if (displayMenuItems) {
-                    IconButton(
-                        onClick = onToggleSearch,
-                    ) {
-                        Icon(
-                            imageVector = CompoundIcons.Search(),
-                            contentDescription = stringResource(CommonStrings.action_search),
-                        )
-                    }
-                    if (RoomListConfig.HAS_DROP_DOWN_MENU) {
-                        var showMenu by remember { mutableStateOf(false) }
-                        IconButton(
-                            onClick = { showMenu = !showMenu }
-                        ) {
-                            Icon(
-                                imageVector = CompoundIcons.OverflowVertical(),
-                                contentDescription = null,
-                            )
-                        }
-                        DropdownMenu(
-                            expanded = showMenu,
-                            onDismissRequest = { showMenu = false }
-                        ) {
-                            if (RoomListConfig.SHOW_INVITE_MENU_ITEM) {
-                                DropdownMenuItem(
-                                    onClick = {
-                                        showMenu = false
-                                        onMenuActionClick(RoomListMenuAction.InviteFriends)
-                                    },
-                                    text = { Text(stringResource(id = CommonStrings.action_invite)) },
-                                    leadingIcon = {
-                                        Icon(
-                                            imageVector = CompoundIcons.ShareAndroid(),
-                                            tint = ElementTheme.colors.iconSecondary,
-                                            contentDescription = null,
-                                        )
-                                    }
-                                )
-                            }
-                            if (RoomListConfig.SHOW_REPORT_PROBLEM_MENU_ITEM && canReportBug) {
-                                DropdownMenuItem(
-                                    onClick = {
-                                        showMenu = false
-                                        onMenuActionClick(RoomListMenuAction.ReportBug)
-                                    },
-                                    text = { Text(stringResource(id = CommonStrings.common_report_a_problem)) },
-                                    leadingIcon = {
-                                        Icon(
-                                            imageVector = CompoundIcons.ChatProblem(),
-                                            tint = ElementTheme.colors.iconSecondary,
-                                            contentDescription = null,
-                                        )
-                                    }
-                                )
-                            }
-                        }
-                    }
+                when (selectedNavigationItem) {
+                    HomeNavigationBarItem.Chats -> RoomListMenuItems(onToggleSearch, onMenuActionClick, canReportBug)
+                    HomeNavigationBarItem.Spaces -> SpacesMenuItems(onCreateSpace)
                 }
             },
             // We want a 16dp left padding for the navigationIcon :
@@ -190,6 +138,80 @@ fun HomeTopBar(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun RoomListMenuItems(
+    onToggleSearch: () -> Unit,
+    onMenuActionClick: (RoomListMenuAction) -> Unit,
+    canReportBug: Boolean,
+) {
+    IconButton(
+        onClick = onToggleSearch,
+    ) {
+        Icon(
+            imageVector = CompoundIcons.Search(),
+            contentDescription = stringResource(CommonStrings.action_search),
+        )
+    }
+    if (RoomListConfig.HAS_DROP_DOWN_MENU) {
+        var showMenu by remember { mutableStateOf(false) }
+        IconButton(
+            onClick = { showMenu = !showMenu }
+        ) {
+            Icon(
+                imageVector = CompoundIcons.OverflowVertical(),
+                contentDescription = null,
+            )
+        }
+        DropdownMenu(
+            expanded = showMenu,
+            onDismissRequest = { showMenu = false }
+        ) {
+            if (RoomListConfig.SHOW_INVITE_MENU_ITEM) {
+                DropdownMenuItem(
+                    onClick = {
+                        showMenu = false
+                        onMenuActionClick(RoomListMenuAction.InviteFriends)
+                    },
+                    text = { Text(stringResource(id = CommonStrings.action_invite)) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = CompoundIcons.ShareAndroid(),
+                            tint = ElementTheme.colors.iconSecondary,
+                            contentDescription = null,
+                        )
+                    }
+                )
+            }
+            if (RoomListConfig.SHOW_REPORT_PROBLEM_MENU_ITEM && canReportBug) {
+                DropdownMenuItem(
+                    onClick = {
+                        showMenu = false
+                        onMenuActionClick(RoomListMenuAction.ReportBug)
+                    },
+                    text = { Text(stringResource(id = CommonStrings.common_report_a_problem)) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = CompoundIcons.ChatProblem(),
+                            tint = ElementTheme.colors.iconSecondary,
+                            contentDescription = null,
+                        )
+                    }
+                )
+            }
+        }
+    }
+}
+
+@Composable
+private fun SpacesMenuItems(onCreateSpace: () -> Unit) {
+    IconButton(onClick = onCreateSpace) {
+        Icon(
+            imageVector = CompoundIcons.Plus(),
+            contentDescription = stringResource(CommonStrings.action_create_space)
+        )
     }
 }
 
@@ -273,6 +295,7 @@ private fun AccountIcon(
 @Composable
 internal fun HomeTopBarPreview() = ElementPreview {
     HomeTopBar(
+        selectedNavigationItem = HomeNavigationBarItem.Chats,
         title = stringResource(R.string.screen_roomlist_main_space_title),
         currentUserAndNeighbors = persistentListOf(MatrixUser(UserId("@id:domain"), "Alice")),
         showAvatarIndicator = false,
@@ -281,7 +304,7 @@ internal fun HomeTopBarPreview() = ElementPreview {
         onOpenSettings = {},
         onAccountSwitch = {},
         onToggleSearch = {},
-        displayMenuItems = true,
+        onCreateSpace = {},
         canReportBug = true,
         displayFilters = true,
         filtersState = aRoomListFiltersState(),
@@ -294,6 +317,7 @@ internal fun HomeTopBarPreview() = ElementPreview {
 @Composable
 internal fun HomeTopBarWithIndicatorPreview() = ElementPreview {
     HomeTopBar(
+        selectedNavigationItem = HomeNavigationBarItem.Chats,
         title = stringResource(R.string.screen_roomlist_main_space_title),
         currentUserAndNeighbors = persistentListOf(MatrixUser(UserId("@id:domain"), "Alice")),
         showAvatarIndicator = true,
@@ -302,7 +326,7 @@ internal fun HomeTopBarWithIndicatorPreview() = ElementPreview {
         onOpenSettings = {},
         onAccountSwitch = {},
         onToggleSearch = {},
-        displayMenuItems = true,
+        onCreateSpace = {},
         canReportBug = true,
         displayFilters = true,
         filtersState = aRoomListFiltersState(),
@@ -315,6 +339,7 @@ internal fun HomeTopBarWithIndicatorPreview() = ElementPreview {
 @Composable
 internal fun HomeTopBarMultiAccountPreview() = ElementPreview {
     HomeTopBar(
+        selectedNavigationItem = HomeNavigationBarItem.Chats,
         title = stringResource(R.string.screen_roomlist_main_space_title),
         currentUserAndNeighbors = aMatrixUserList().take(3).toImmutableList(),
         showAvatarIndicator = false,
@@ -323,7 +348,7 @@ internal fun HomeTopBarMultiAccountPreview() = ElementPreview {
         onOpenSettings = {},
         onAccountSwitch = {},
         onToggleSearch = {},
-        displayMenuItems = true,
+        onCreateSpace = {},
         canReportBug = true,
         displayFilters = true,
         filtersState = aRoomListFiltersState(),

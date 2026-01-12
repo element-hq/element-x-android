@@ -75,6 +75,7 @@
   <string name="action_copy_text">"Copy text"</string>
   <string name="action_create">"Create"</string>
   <string name="action_create_a_room">"Create a room"</string>
+  <string name="action_create_space">"Create space"</string>
   <string name="action_deactivate">"Deactivate"</string>
   <string name="action_deactivate_account">"Deactivate account"</string>
   <string name="action_decline">"Decline"</string>
@@ -191,6 +192,7 @@
   <string name="common_copied_to_clipboard">"Copied to clipboard"</string>
   <string name="common_copyright">"Copyright"</string>
   <string name="common_creating_room">"Creating room…"</string>
+  <string name="common_creating_space">"Creating space…"</string>
   <string name="common_current_user_canceled_knock">"Request canceled"</string>
   <string name="common_current_user_left_room">"Left room"</string>
   <string name="common_current_user_left_space">"Left space"</string>
@@ -337,6 +339,7 @@ Reason: %1$s."</string>
   <string name="common_starting_chat">"Starting chat…"</string>
   <string name="common_sticker">"Sticker"</string>
   <string name="common_success">"Success"</string>
+  <string name="common_suggested">"Suggested"</string>
   <string name="common_suggestions">"Suggestions"</string>
   <string name="common_syncing">"Syncing"</string>
   <string name="common_system">"System"</string>
