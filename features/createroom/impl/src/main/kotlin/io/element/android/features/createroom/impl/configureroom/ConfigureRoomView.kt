@@ -45,6 +45,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.list.ListItemContent
+import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.modifiers.clearFocusOnTap
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -61,6 +62,7 @@ import io.element.android.libraries.matrix.ui.components.UnsavedAvatar
 import io.element.android.libraries.matrix.ui.room.address.RoomAddressField
 import io.element.android.libraries.permissions.api.PermissionsView
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlin.jvm.optionals.getOrNull
 
 @Composable
 fun ConfigureRoomView(
@@ -82,6 +84,7 @@ fun ConfigureRoomView(
         modifier = modifier.clearFocusOnTap(focusManager),
         topBar = {
             ConfigureRoomToolbar(
+                isSpace = isSpace,
                 isNextActionEnabled = state.isValid,
                 onBackClick = onBackClick,
                 onNextClick = {
@@ -100,6 +103,7 @@ fun ConfigureRoomView(
             verticalArrangement = Arrangement.spacedBy(24.dp),
         ) {
             RoomNameWithAvatar(
+                isSpace = isSpace,
                 modifier = Modifier.padding(horizontal = 16.dp),
                 avatarUri = state.config.avatarUri,
                 roomName = state.config.roomName.orEmpty(),
@@ -107,34 +111,31 @@ fun ConfigureRoomView(
                 onChangeRoomName = { state.eventSink(ConfigureRoomEvents.RoomNameChanged(it)) },
             )
             RoomTopic(
+                isSpace = isSpace,
                 modifier = Modifier.padding(horizontal = 16.dp),
                 topic = state.config.topic.orEmpty(),
                 onTopicChange = { state.eventSink(ConfigureRoomEvents.TopicChanged(it)) },
             )
+
             RoomVisibilityOptions(
                 selected = when (state.config.roomVisibility) {
                     is RoomVisibilityState.Private -> RoomVisibilityItem.Private
-                    is RoomVisibilityState.Public -> RoomVisibilityItem.Public
+                    is RoomVisibilityState.Public -> when (state.config.roomVisibility.roomAccess) {
+                        RoomAccess.Knocking -> RoomVisibilityItem.AskToJoin
+                        RoomAccess.Anyone -> RoomVisibilityItem.Public
+                    }
                 },
+                isKnockingEnabled = state.isKnockFeatureEnabled,
                 onOptionClick = {
                     focusManager.clearFocus()
                     state.eventSink(ConfigureRoomEvents.RoomVisibilityChanged(it))
                 },
             )
-            if (state.config.roomVisibility is RoomVisibilityState.Public && state.isKnockFeatureEnabled) {
-                RoomAccessOptions(
-                    selected = when (state.config.roomVisibility.roomAccess) {
-                        RoomAccess.Anyone -> RoomAccessItem.Anyone
-                        RoomAccess.Knocking -> RoomAccessItem.AskToJoin
-                    },
-                    onOptionClick = {
-                        focusManager.clearFocus()
-                        state.eventSink(ConfigureRoomEvents.RoomAccessChanged(it))
-                    },
-                )
+
+            if (state.config.roomVisibility !is RoomVisibilityState.Private) {
                 RoomAddressField(
                     modifier = Modifier.padding(horizontal = 16.dp),
-                    address = state.config.roomVisibility.roomAddress.value,
+                    address = state.config.roomVisibility.roomAddress().getOrNull().orEmpty(),
                     homeserverName = state.homeserverName,
                     addressValidity = state.roomAddressValidity,
                     onAddressChange = { state.eventSink(ConfigureRoomEvents.RoomAddressChanged(it)) },
@@ -157,11 +158,11 @@ fun ConfigureRoomView(
         async = state.createRoomAction,
         progressDialog = {
             AsyncActionViewDefaults.ProgressDialog(
-                progressText = stringResource(CommonStrings.common_creating_room),
+                progressText = stringResource(if (isSpace) CommonStrings.common_creating_space else CommonStrings.common_creating_room),
             )
         },
         onSuccess = { onCreateRoomSuccess(it) },
-        errorMessage = { stringResource(R.string.screen_create_room_error_creating_room) },
+        errorMessage = { stringResource(if (isSpace) R.string.screen_create_room_error_creating_space else R.string.screen_create_room_error_creating_room) },
         onRetry = { state.eventSink(ConfigureRoomEvents.CreateRoom) },
         onErrorDismiss = { state.eventSink(ConfigureRoomEvents.CancelCreateRoom) },
     )
@@ -174,12 +175,13 @@ fun ConfigureRoomView(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ConfigureRoomToolbar(
+    isSpace: Boolean,
     isNextActionEnabled: Boolean,
     onBackClick: () -> Unit,
     onNextClick: () -> Unit,
 ) {
     TopAppBar(
-        titleStr = stringResource(R.string.screen_create_room_title),
+        titleStr = stringResource(if (isSpace) R.string.screen_create_room_new_space_title else R.string.screen_create_room_title),
         navigationIcon = { BackButton(onClick = onBackClick) },
         actions = {
             TextButton(
@@ -193,6 +195,7 @@ private fun ConfigureRoomToolbar(
 
 @Composable
 private fun RoomNameWithAvatar(
+    isSpace: Boolean,
     avatarUri: String?,
     roomName: String,
     onAvatarClick: () -> Unit,
@@ -208,7 +211,7 @@ private fun RoomNameWithAvatar(
         UnsavedAvatar(
             avatarUri = avatarUri,
             avatarSize = AvatarSize.EditRoomDetails,
-            avatarType = AvatarType.Room(),
+            avatarType = if (isSpace) AvatarType.Space() else AvatarType.Room(),
             modifier = Modifier
                 .clickable(
                     onClick = onAvatarClick,
@@ -220,7 +223,7 @@ private fun RoomNameWithAvatar(
         )
 
         TextField(
-            label = stringResource(R.string.screen_create_room_room_name_label),
+            label = if (isSpace) stringResource(CommonStrings.common_name) else stringResource(R.string.screen_create_room_room_name_label),
             value = roomName,
             placeholder = stringResource(CommonStrings.common_room_name_placeholder),
             singleLine = true,
@@ -231,6 +234,7 @@ private fun RoomNameWithAvatar(
 
 @Composable
 private fun RoomTopic(
+    isSpace: Boolean,
     topic: String,
     onTopicChange: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -241,7 +245,7 @@ private fun RoomTopic(
         value = topic,
         onValueChange = onTopicChange,
         maxLines = 3,
-        supportingText = stringResource(CommonStrings.common_topic_placeholder),
+        supportingText = if (isSpace) null else stringResource(CommonStrings.common_topic_placeholder),
         keyboardOptions = KeyboardOptions(
             capitalization = KeyboardCapitalization.Sentences,
         ),
@@ -270,47 +274,50 @@ private fun ConfigureRoomOptions(
 @Composable
 private fun RoomVisibilityOptions(
     selected: RoomVisibilityItem,
+    isKnockingEnabled: Boolean,
     onOptionClick: (RoomVisibilityItem) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     ConfigureRoomOptions(
-        title = stringResource(R.string.screen_create_room_room_visibility_section_title),
+        title = stringResource(R.string.screen_create_room_room_access_section_title),
         modifier = modifier,
     ) {
         RoomVisibilityItem.entries.forEach { item ->
+            if (item == RoomVisibilityItem.AskToJoin && !isKnockingEnabled) {
+                return@forEach
+            }
+
             val isSelected = item == selected
             ListItem(
                 leadingContent = ListItemContent.Custom {
                     RoundedIconAtom(
                         size = RoundedIconAtomSize.Big,
-                        resourceId = item.icon,
+                        resourceId = when (item) {
+                            RoomVisibilityItem.Public -> CompoundDrawables.ic_compound_public
+                            RoomVisibilityItem.AskToJoin -> CompoundDrawables.ic_compound_user_add
+                            RoomVisibilityItem.Private -> CompoundDrawables.ic_compound_lock
+                        },
                         tint = if (isSelected) ElementTheme.colors.iconPrimary else ElementTheme.colors.iconSecondary,
                     )
                 },
-                headlineContent = { Text(text = stringResource(item.title)) },
-                supportingContent = { Text(text = stringResource(item.description)) },
+                headlineContent = {
+                    val title = when (item) {
+                        RoomVisibilityItem.Public -> stringResource(R.string.screen_create_room_public_option_title)
+                        RoomVisibilityItem.AskToJoin -> stringResource(R.string.screen_create_room_room_access_section_knocking_option_title)
+                        RoomVisibilityItem.Private -> stringResource(R.string.screen_create_room_private_option_title)
+                    }
+                    Text(text = title)
+                },
+                supportingContent = {
+                    // TODO handle description of items in a certain space/org
+                    val description = when (item) {
+                        RoomVisibilityItem.Public -> stringResource(R.string.screen_create_room_public_option_short_description)
+                        RoomVisibilityItem.AskToJoin -> stringResource(R.string.screen_create_room_room_access_section_knocking_option_description)
+                        RoomVisibilityItem.Private -> stringResource(R.string.screen_create_room_private_option_description)
+                    }
+                    Text(text = description)
+                },
                 trailingContent = ListItemContent.RadioButton(selected = isSelected),
-                onClick = { onOptionClick(item) },
-            )
-        }
-    }
-}
-
-@Composable
-private fun RoomAccessOptions(
-    selected: RoomAccessItem,
-    onOptionClick: (RoomAccessItem) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    ConfigureRoomOptions(
-        title = stringResource(R.string.screen_create_room_room_access_section_header),
-        modifier = modifier,
-    ) {
-        RoomAccessItem.entries.forEach { item ->
-            ListItem(
-                headlineContent = { Text(text = stringResource(item.title)) },
-                supportingContent = { Text(text = stringResource(item.description)) },
-                trailingContent = ListItemContent.RadioButton(selected = item == selected),
                 onClick = { onOptionClick(item) },
             )
         }
