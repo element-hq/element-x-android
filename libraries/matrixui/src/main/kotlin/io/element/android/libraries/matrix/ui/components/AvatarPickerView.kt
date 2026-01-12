@@ -233,7 +233,7 @@ internal fun AvatarPickerSizesPreview() = ElementPreview {
                     type = AvatarType.User
                 ),
                 onClick = {},
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(6.dp)
             )
             AvatarPickerView(
                 AvatarPickerState.Selected(
@@ -241,7 +241,7 @@ internal fun AvatarPickerSizesPreview() = ElementPreview {
                     type = AvatarType.User
                 ),
                 onClick = {},
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(6.dp)
             )
             AvatarPickerView(
                 AvatarPickerState.Selected(
@@ -249,7 +249,7 @@ internal fun AvatarPickerSizesPreview() = ElementPreview {
                     type = AvatarType.User
                 ),
                 onClick = {},
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(6.dp)
             )
             AvatarPickerView(
                 AvatarPickerState.Selected(
@@ -257,7 +257,7 @@ internal fun AvatarPickerSizesPreview() = ElementPreview {
                     type = AvatarType.User
                 ),
                 onClick = {},
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(6.dp)
             )
             AvatarPickerView(
                 AvatarPickerState.Selected(
@@ -265,7 +265,7 @@ internal fun AvatarPickerSizesPreview() = ElementPreview {
                     type = AvatarType.User
                 ),
                 onClick = {},
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(6.dp)
             )
         }
         Row {
@@ -275,7 +275,7 @@ internal fun AvatarPickerSizesPreview() = ElementPreview {
                     type = AvatarType.Space()
                 ),
                 onClick = {},
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(6.dp)
             )
             AvatarPickerView(
                 AvatarPickerState.Selected(
@@ -283,7 +283,7 @@ internal fun AvatarPickerSizesPreview() = ElementPreview {
                     type = AvatarType.Space()
                 ),
                 onClick = {},
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(6.dp)
             )
             AvatarPickerView(
                 AvatarPickerState.Selected(
@@ -291,7 +291,7 @@ internal fun AvatarPickerSizesPreview() = ElementPreview {
                     type = AvatarType.Space()
                 ),
                 onClick = {},
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(6.dp)
             )
             AvatarPickerView(
                 AvatarPickerState.Selected(
@@ -299,7 +299,7 @@ internal fun AvatarPickerSizesPreview() = ElementPreview {
                     type = AvatarType.Space()
                 ),
                 onClick = {},
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(6.dp)
             )
             AvatarPickerView(
                 AvatarPickerState.Selected(
@@ -307,7 +307,7 @@ internal fun AvatarPickerSizesPreview() = ElementPreview {
                     type = AvatarType.Space()
                 ),
                 onClick = {},
-                modifier = Modifier.padding(10.dp)
+                modifier = Modifier.padding(6.dp)
             )
         }
     }
