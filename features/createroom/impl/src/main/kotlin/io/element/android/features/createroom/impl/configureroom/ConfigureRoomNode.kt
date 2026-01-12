@@ -62,7 +62,6 @@ class ConfigureRoomNode(
     override fun View(modifier: Modifier) {
         val state = presenter.present()
         ConfigureRoomView(
-            isSpace = inputs.isSpace,
             state = state,
             modifier = modifier,
             onBackClick = this::navigateUp,

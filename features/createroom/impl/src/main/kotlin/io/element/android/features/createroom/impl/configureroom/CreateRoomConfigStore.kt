@@ -114,6 +114,12 @@ class CreateRoomConfigStore(
         }
     }
 
+    fun setIsSpace(isSpace: Boolean) {
+        createRoomConfigFlow.getAndUpdate { config ->
+            config.copy(isSpace = isSpace)
+        }
+    }
+
     fun clearCachedData() {
         cachedAvatarUri = null
     }

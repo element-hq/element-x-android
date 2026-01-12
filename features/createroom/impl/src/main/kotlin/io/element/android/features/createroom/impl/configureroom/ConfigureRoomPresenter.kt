@@ -72,10 +72,14 @@ class ConfigureRoomPresenter(
     private val cameraPermissionPresenter: PermissionsPresenter = permissionsPresenterFactory.create(android.Manifest.permission.CAMERA)
     private var pendingPermissionRequest = false
 
+    init {
+        dataStore.setIsSpace(isSpace)
+    }
+
     @Composable
     override fun present(): ConfigureRoomState {
         val cameraPermissionState = cameraPermissionPresenter.present()
-        val createRoomConfig by dataStore.getCreateRoomConfigFlow().collectAsState(CreateRoomConfig())
+        val createRoomConfig by dataStore.getCreateRoomConfigFlow().collectAsState()
         val homeserverName = remember { matrixClient.userIdServerName() }
         val isKnockFeatureEnabled by remember {
             featureFlagService.isFeatureEnabledFlow(FeatureFlags.Knock)

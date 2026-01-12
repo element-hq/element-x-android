@@ -78,6 +78,18 @@ open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomSt
                 ),
                 roomAddressValidity = RoomAddressValidity.Valid,
             ),
+            aConfigureRoomState(
+                config = CreateRoomConfig(
+                    isSpace = true,
+                    roomName = "Space 101",
+                    topic = "Space topic for this space when the text goes onto multiple lines and is really long, there shouldn’t be more than 3 lines",
+                    roomVisibility = RoomVisibilityState.Public(
+                        roomAddress = RoomAddress.AutoFilled("Space-101"),
+                        roomAccess = RoomAccess.Anyone,
+                    ),
+                ),
+                roomAddressValidity = RoomAddressValidity.Valid,
+            ),
         )
 }
 

@@ -69,12 +69,12 @@ import kotlin.jvm.optionals.getOrNull
 
 @Composable
 fun ConfigureRoomView(
-    isSpace: Boolean,
     state: ConfigureRoomState,
     onBackClick: () -> Unit,
     onCreateRoomSuccess: (RoomId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val isSpace = state.config.isSpace
     val focusManager = LocalFocusManager.current
     val isAvatarActionsSheetVisible = remember { mutableStateOf(false) }
 
@@ -349,7 +349,6 @@ internal fun ConfigureRoomViewDarkPreview(@PreviewParameter(ConfigureRoomStatePr
 @Composable
 private fun ContentToPreview(state: ConfigureRoomState) {
     ConfigureRoomView(
-        isSpace = false,
         state = state,
         onBackClick = {},
         onCreateRoomSuccess = {},

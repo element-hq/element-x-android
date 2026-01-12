@@ -13,6 +13,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
 data class CreateRoomConfig(
+    val isSpace: Boolean = false,
     val roomName: String? = null,
     val topic: String? = null,
     val avatarUri: String? = null,
