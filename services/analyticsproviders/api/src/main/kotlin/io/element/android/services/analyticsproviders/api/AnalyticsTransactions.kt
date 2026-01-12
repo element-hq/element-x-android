@@ -9,13 +9,13 @@ package io.element.android.services.analyticsproviders.api
 
 object AnalyticsTransactions {
     val coldStart = TransactionDefinition(
-        name = "Cold start",
+        name = "Cached room list",
         operation = "ux",
         description = "Cold start until the cached room list is displayed",
     )
 
     val catchUp = TransactionDefinition(
-        name = "Catch-up",
+        name = "Up-to-date room list",
         operation = "ux",
         description = "The app syncs and the room list becomes up-to-date",
     )
