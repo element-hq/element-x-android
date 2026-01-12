@@ -119,7 +119,7 @@ fun ConfigureRoomView(
                 onTopicChange = { state.eventSink(ConfigureRoomEvents.TopicChanged(it)) },
             )
 
-            RoomVisibilityOptions(
+            RoomVisibilityAndAccessOptions(
                 selected = when (state.config.roomVisibility) {
                     is RoomVisibilityState.Private -> RoomVisibilityItem.Private
                     is RoomVisibilityState.Public -> when (state.config.roomVisibility.roomAccess) {
@@ -281,7 +281,7 @@ private fun ConfigureRoomOptions(
 }
 
 @Composable
-private fun RoomVisibilityOptions(
+private fun RoomVisibilityAndAccessOptions(
     selected: RoomVisibilityItem,
     isKnockingEnabled: Boolean,
     onOptionClick: (RoomVisibilityItem) -> Unit,
