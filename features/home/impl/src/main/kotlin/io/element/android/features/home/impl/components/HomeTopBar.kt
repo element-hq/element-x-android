@@ -120,15 +120,11 @@ fun HomeTopBar(
                 )
             },
             actions = {
-                when (selectedNavigationItem) {
-                    HomeNavigationBarItem.Chats -> RoomListMenuItems(
+                if (selectedNavigationItem == HomeNavigationBarItem.Chats) {
+                    RoomListMenuItems(
                         onToggleSearch = onToggleSearch,
                         onMenuActionClick = onMenuActionClick,
                         canReportBug = canReportBug
-                    )
-                    HomeNavigationBarItem.Spaces -> SpacesMenuItems(
-                        canCreateSpaces = canCreateSpaces,
-                        onCreateSpace = onCreateSpace
                     )
                 }
             },
@@ -209,21 +205,6 @@ private fun RoomListMenuItems(
                     }
                 )
             }
-        }
-    }
-}
-
-@Composable
-private fun SpacesMenuItems(
-    canCreateSpaces: Boolean,
-    onCreateSpace: () -> Unit
-) {
-    if (canCreateSpaces) {
-        IconButton(onClick = onCreateSpace) {
-            Icon(
-                imageVector = CompoundIcons.Plus(),
-                contentDescription = stringResource(CommonStrings.action_create_space)
-            )
         }
     }
 }

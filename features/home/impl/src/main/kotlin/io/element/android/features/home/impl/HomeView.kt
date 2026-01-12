@@ -13,6 +13,7 @@ package io.element.android.features.home.impl
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
@@ -21,19 +22,25 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingToolbarDefaults.ScreenOffset
+import androidx.compose.material3.HorizontalFloatingToolbar
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
@@ -56,14 +63,11 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.NavigationBar
-import io.element.android.libraries.designsystem.theme.components.NavigationBarIcon
-import io.element.android.libraries.designsystem.theme.components.NavigationBarItem
-import io.element.android.libraries.designsystem.theme.components.NavigationBarText
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
 
 @Composable
@@ -190,7 +194,7 @@ private fun HomeScaffold(
                 )
             )
         },
-        bottomBar = {
+        floatingActionButton = {
             if (state.showNavigationBar) {
                 val coroutineScope = rememberCoroutineScope()
                 HomeBottomBar(
@@ -214,13 +218,16 @@ private fun HomeScaffold(
                             state.eventSink(HomeEvents.SelectHomeNavigationBarItem(item))
                         }
                     },
-                    modifier = Modifier.hazeEffect(
-                        state = hazeState,
-                        style = HazeMaterials.thick(),
-                    )
+                    floatingActionButton = {
+                        when (state.currentHomeNavigationBarItem) {
+                            HomeNavigationBarItem.Chats -> HomeFloatingActionButton(onStartChatClick, CommonStrings.action_create_a_room)
+                            HomeNavigationBarItem.Spaces -> HomeFloatingActionButton(onCreateSpaceClick, CommonStrings.action_create_space)
+                        }
+                    }
                 )
             }
         },
+        floatingActionButtonPosition = FabPosition.Center,
         content = { padding ->
             when (state.currentHomeNavigationBarItem) {
                 HomeNavigationBarItem.Chats -> {
@@ -273,50 +280,51 @@ private fun HomeScaffold(
                 }
             }
         },
-        floatingActionButton = {
-            if (state.displayActions) {
-                FloatingActionButton(
-                    onClick = onStartChatClick,
-                ) {
-                    Icon(
-                        imageVector = CompoundIcons.Plus(),
-                        contentDescription = stringResource(id = R.string.screen_roomlist_a11y_create_message),
-                    )
-                }
-            }
-        },
         snackbarHost = { SnackbarHost(snackbarHostState) },
     )
 }
 
 @Composable
+private fun HomeFloatingActionButton(
+    onClick: () -> Unit,
+    contentDescription: Int,
+    modifier: Modifier = Modifier,
+) {
+    FloatingActionButton(onClick = onClick, modifier = modifier) {
+        Icon(
+            imageVector = CompoundIcons.Plus(),
+            contentDescription = stringResource(id = contentDescription),
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
+@Composable
 private fun HomeBottomBar(
     currentHomeNavigationBarItem: HomeNavigationBarItem,
     onItemClick: (HomeNavigationBarItem) -> Unit,
+    floatingActionButton: @Composable () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    NavigationBar(
-        containerColor = Color.Transparent,
+    HorizontalFloatingToolbar(
+        expanded = true,
+        floatingActionButton = floatingActionButton,
         modifier = modifier
+            .padding(bottom = ScreenOffset)
+            .zIndex(1f),
     ) {
         HomeNavigationBarItem.entries.forEach { item ->
             val isSelected = currentHomeNavigationBarItem == item
-            NavigationBarItem(
-                selected = isSelected,
-                onClick = {
-                    onItemClick(item)
-                },
-                icon = {
-                    NavigationBarIcon(
+            IconButton(
+                onClick = { onItemClick(item) },
+            ) {
+                Column(horizontalAlignment = Alignment.CenterHorizontally) {
+                    Icon(
                         imageVector = item.icon(isSelected),
-                    )
-                },
-                label = {
-                    NavigationBarText(
-                        text = stringResource(item.labelRes),
+                        contentDescription = stringResource(item.labelRes),
                     )
                 }
-            )
+            }
         }
     }
 }
