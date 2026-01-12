@@ -18,10 +18,12 @@ import io.element.android.libraries.di.SessionScope
 @ContributesBinding(SessionScope::class)
 class DefaultCreateRoomEntryPoint : CreateRoomEntryPoint {
     override fun createNode(
+        isSpace: Boolean,
         parentNode: Node,
         buildContext: BuildContext,
         callback: CreateRoomEntryPoint.Callback,
     ): Node {
-        return parentNode.createNode<CreateRoomFlowNode>(buildContext, listOf(callback))
+        val inputs = CreateRoomFlowNode.Inputs(isSpace)
+        return parentNode.createNode<CreateRoomFlowNode>(buildContext, listOf(inputs, callback))
     }
 }

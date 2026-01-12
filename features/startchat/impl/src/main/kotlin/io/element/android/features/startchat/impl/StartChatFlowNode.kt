@@ -81,6 +81,7 @@ class StartChatFlowNode(
                     }
                 }
                 createRoomEntryPoint.createNode(
+                    isSpace = false,
                     parentNode = this,
                     buildContext = buildContext,
                     callback = callback,

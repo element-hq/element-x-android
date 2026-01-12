@@ -64,6 +64,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun ConfigureRoomView(
+    isSpace: Boolean,
     state: ConfigureRoomState,
     onBackClick: () -> Unit,
     onCreateRoomSuccess: (RoomId) -> Unit,
@@ -330,6 +331,7 @@ internal fun ConfigureRoomViewDarkPreview(@PreviewParameter(ConfigureRoomStatePr
 @Composable
 private fun ContentToPreview(state: ConfigureRoomState) {
     ConfigureRoomView(
+        isSpace = false,
         state = state,
         onBackClick = {},
         onCreateRoomSuccess = {},

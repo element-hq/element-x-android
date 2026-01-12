@@ -25,6 +25,7 @@ interface HomeEntryPoint : FeatureEntryPoint {
     interface Callback : Plugin {
         fun navigateToRoom(roomId: RoomId, joinedRoom: JoinedRoom?)
         fun navigateToCreateRoom()
+        fun navigateToCreateSpace()
         fun navigateToSettings()
         fun navigateToSetUpRecovery()
         fun navigateToEnterRecoveryKey()

@@ -40,6 +40,7 @@ class DefaultCreateRoomEntryPointTest {
             override fun onRoomCreated(roomId: RoomId) = lambdaError()
         }
         val result = entryPoint.createNode(
+            isSpace = false,
             parentNode = parentNode,
             buildContext = BuildContext.root(null),
             callback = callback,
