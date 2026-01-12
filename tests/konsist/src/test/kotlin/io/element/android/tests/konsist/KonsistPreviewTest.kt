@@ -80,6 +80,7 @@ class KonsistPreviewTest {
         "AsyncIndicatorFailurePreview",
         "AsyncIndicatorLoadingPreview",
         "AvatarPickerSizesPreview",
+        "AvatarPickerViewPreview",
         "AvatarPickerViewRtlPreview",
         "BackgroundVerticalGradientDisabledPreview",
         "BackgroundVerticalGradientPreview",
