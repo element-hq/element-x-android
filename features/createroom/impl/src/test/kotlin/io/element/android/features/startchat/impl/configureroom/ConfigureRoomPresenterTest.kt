@@ -380,6 +380,7 @@ class ConfigureRoomPresenterTest {
     )
 
     private fun createConfigureRoomPresenter(
+        isSpace: Boolean = false,
         roomAliasHelper: RoomAliasHelper = FakeRoomAliasHelper(),
         dataStore: CreateRoomConfigStore = CreateRoomConfigStore(roomAliasHelper),
         matrixClient: MatrixClient = createMatrixClient(),
@@ -390,6 +391,7 @@ class ConfigureRoomPresenterTest {
         isKnockFeatureEnabled: Boolean = true,
         mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
     ) = ConfigureRoomPresenter(
+        isSpace = isSpace,
         dataStore = dataStore,
         matrixClient = matrixClient,
         mediaPickerProvider = pickerProvider,
