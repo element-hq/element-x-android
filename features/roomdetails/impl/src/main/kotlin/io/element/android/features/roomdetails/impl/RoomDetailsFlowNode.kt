@@ -227,6 +227,8 @@ class RoomDetailsFlowNode(
                         val inputs = CallType.RoomCall(
                             sessionId = room.sessionId,
                             roomId = room.roomId,
+                            // TODO
+                            voiceIntent = false
                         )
                         analyticsService.captureInteraction(Interaction.Name.MobileRoomCallButton)
                         elementCallEntryPoint.startCall(inputs)
@@ -285,7 +287,14 @@ class RoomDetailsFlowNode(
                     }
 
                     override fun startCall(dmRoomId: RoomId) {
-                        elementCallEntryPoint.startCall(CallType.RoomCall(roomId = dmRoomId, sessionId = room.sessionId))
+                        elementCallEntryPoint.startCall(
+                            CallType.RoomCall(
+                                roomId = dmRoomId,
+                                sessionId = room.sessionId,
+                                // TODO
+                                voiceIntent = false
+                            )
+                        )
                     }
 
                     override fun startVerifyUserFlow(userId: UserId) {

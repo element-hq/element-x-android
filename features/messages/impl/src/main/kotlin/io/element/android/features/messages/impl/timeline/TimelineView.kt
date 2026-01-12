@@ -100,7 +100,7 @@ fun TimelineView(
     onReactionLongClick: (emoji: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
-    onJoinCallClick: () -> Unit,
+    onJoinCallClick: (voiceIntent: Boolean) -> Unit,
     modifier: Modifier = Modifier,
     lazyListState: LazyListState = rememberLazyListState(),
     forceJumpToBottomVisibility: Boolean = false,

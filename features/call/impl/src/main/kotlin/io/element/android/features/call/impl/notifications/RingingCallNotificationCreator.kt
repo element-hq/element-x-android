@@ -88,7 +88,8 @@ class RingingCallNotificationCreator(
             .setImportant(true)
             .build()
 
-        val answerIntent = IntentProvider.getPendingIntent(context, CallType.RoomCall(sessionId, roomId))
+        // TODO
+        val answerIntent = IntentProvider.getPendingIntent(context, CallType.RoomCall(sessionId, roomId, voiceIntent = false))
         val notificationData = CallNotificationData(
             sessionId = sessionId,
             roomId = roomId,

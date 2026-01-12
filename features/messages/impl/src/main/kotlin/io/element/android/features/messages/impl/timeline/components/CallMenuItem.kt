@@ -10,6 +10,7 @@ package io.element.android.features.messages.impl.timeline.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.size
@@ -35,7 +36,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 internal fun CallMenuItem(
     roomCallState: RoomCallState,
-    onJoinCallClick: () -> Unit,
+    onJoinCallClick: (voiceOnly: Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     when (roomCallState) {
@@ -52,7 +53,7 @@ internal fun CallMenuItem(
         is RoomCallState.OnGoing -> {
             OnGoingCallMenuItem(
                 roomCallState = roomCallState,
-                onJoinCallClick = onJoinCallClick,
+                onJoinCallClick = { onJoinCallClick(roomCallState.isVoiceIntent) },
                 modifier = modifier,
             )
         }
@@ -62,18 +63,30 @@ internal fun CallMenuItem(
 @Composable
 private fun StandByCallMenuItem(
     roomCallState: RoomCallState.StandBy,
-    onJoinCallClick: () -> Unit,
+    onJoinCallClick: (voiceOnly: Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    IconButton(
-        modifier = modifier,
-        onClick = onJoinCallClick,
-        enabled = roomCallState.canStartCall,
-    ) {
-        Icon(
-            imageVector = CompoundIcons.VideoCallSolid(),
-            contentDescription = stringResource(CommonStrings.a11y_start_call),
-        )
+    Row(modifier = modifier) {
+        IconButton(
+            modifier = modifier,
+            onClick = { onJoinCallClick(true) },
+            enabled = roomCallState.canStartCall,
+        ) {
+            Icon(
+                imageVector = CompoundIcons.VoiceCallSolid(),
+                contentDescription = stringResource(CommonStrings.a11y_start_call),
+            )
+        }
+        IconButton(
+            modifier = modifier,
+            onClick = { onJoinCallClick(false) },
+            enabled = roomCallState.canStartCall,
+        ) {
+            Icon(
+                imageVector = CompoundIcons.VideoCallSolid(),
+                contentDescription = stringResource(CommonStrings.a11y_start_call),
+            )
+        }
     }
 }
 
@@ -96,7 +109,11 @@ private fun OnGoingCallMenuItem(
         ) {
             Icon(
                 modifier = Modifier.size(20.dp),
-                imageVector = CompoundIcons.VideoCallSolid(),
+                imageVector = if (roomCallState.isVoiceIntent) {
+                    CompoundIcons.VoiceCallSolid()
+                } else {
+                    CompoundIcons.VideoCallSolid()
+                },
                 contentDescription = null
             )
             Spacer(Modifier.width(8.dp))

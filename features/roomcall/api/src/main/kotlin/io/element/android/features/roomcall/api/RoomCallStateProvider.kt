@@ -17,6 +17,7 @@ open class RoomCallStateProvider : PreviewParameterProvider<RoomCallState> {
         anOngoingCallState(),
         anOngoingCallState(canJoinCall = false),
         anOngoingCallState(canJoinCall = true, isUserInTheCall = true),
+        anOngoingCallState(canJoinCall = true, isVoiceIntent = true),
         RoomCallState.Unavailable,
     )
 }
@@ -25,10 +26,12 @@ fun anOngoingCallState(
     canJoinCall: Boolean = true,
     isUserInTheCall: Boolean = false,
     isUserLocallyInTheCall: Boolean = isUserInTheCall,
+    isVoiceIntent: Boolean = false,
 ) = RoomCallState.OnGoing(
     canJoinCall = canJoinCall,
     isUserInTheCall = isUserInTheCall,
     isUserLocallyInTheCall = isUserLocallyInTheCall,
+    isVoiceIntent = isVoiceIntent
 )
 
 fun aStandByCallState(

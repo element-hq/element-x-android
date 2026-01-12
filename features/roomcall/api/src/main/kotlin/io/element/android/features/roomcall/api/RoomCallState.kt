@@ -18,10 +18,12 @@ sealed interface RoomCallState {
 
     data class StandBy(
         val canStartCall: Boolean,
+        // TODO: add is DM to know if should show the voice call option?
     ) : RoomCallState
 
     data class OnGoing(
         val canJoinCall: Boolean,
+        val isVoiceIntent: Boolean,
         val isUserInTheCall: Boolean,
         val isUserLocallyInTheCall: Boolean,
     ) : RoomCallState

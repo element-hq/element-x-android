@@ -84,7 +84,8 @@ class UserProfileFlowNode(
                     }
 
                     override fun startCall(dmRoomId: RoomId) {
-                        elementCallEntryPoint.startCall(CallType.RoomCall(sessionId = sessionId, roomId = dmRoomId))
+                        // TODO
+                        elementCallEntryPoint.startCall(CallType.RoomCall(sessionId = sessionId, roomId = dmRoomId, voiceIntent = false))
                     }
 
                     override fun startVerifyUserFlow(userId: UserId) {

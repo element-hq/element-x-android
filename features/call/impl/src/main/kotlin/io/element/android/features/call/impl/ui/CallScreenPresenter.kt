@@ -226,6 +226,7 @@ class CallScreenPresenter(
                         sessionId = inputs.sessionId,
                         roomId = inputs.roomId,
                         clientId = UUID.randomUUID().toString(),
+                        voiceOnly = inputs.voiceIntent,
                         languageTag = languageTag,
                         theme = theme,
                     ).getOrThrow()

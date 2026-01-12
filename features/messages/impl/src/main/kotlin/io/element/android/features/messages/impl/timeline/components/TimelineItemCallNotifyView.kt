@@ -46,7 +46,7 @@ internal fun TimelineItemCallNotifyView(
     event: TimelineItem.Event,
     roomCallState: RoomCallState,
     onLongClick: (TimelineItem.Event) -> Unit,
-    onJoinCallClick: () -> Unit,
+    onJoinCallClick: (voiceOnly: Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(

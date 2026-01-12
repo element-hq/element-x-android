@@ -56,6 +56,7 @@ class RoomCallStatePresenter(
                         canJoinCall = canJoinCall,
                         isUserInTheCall = isUserInTheCall,
                         isUserLocallyInTheCall = isUserLocallyInTheCall,
+                        isVoiceIntent = false // TODO
                     )
                     else -> RoomCallState.StandBy(canStartCall = canJoinCall)
                 }

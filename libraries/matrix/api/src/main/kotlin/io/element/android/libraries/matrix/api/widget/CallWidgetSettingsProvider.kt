@@ -16,6 +16,7 @@ interface CallWidgetSettingsProvider {
         widgetId: String = UUID.randomUUID().toString(),
         encrypted: Boolean,
         direct: Boolean,
+        voiceOnly: Boolean,
         hasActiveCall: Boolean,
     ): MatrixWidgetSettings
 }

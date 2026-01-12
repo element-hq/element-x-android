@@ -125,7 +125,7 @@ class MessagesNode(
         fun navigateToSendLocation()
         fun navigateToCreatePoll()
         fun navigateToEditPoll(eventId: EventId)
-        fun navigateToRoomCall(roomId: RoomId)
+        fun navigateToRoomCall(roomId: RoomId, voiceIntent: Boolean)
         fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?)
         fun navigateToRoomDetails()
         fun navigateToPinnedMessagesList()
@@ -279,7 +279,9 @@ class MessagesNode(
                 },
                 onSendLocationClick = callback::navigateToSendLocation,
                 onCreatePollClick = callback::navigateToCreatePoll,
-                onJoinCallClick = { callback.navigateToRoomCall(room.roomId) },
+                onJoinCallClick = { voiceOnly ->
+                    callback.navigateToRoomCall(room.roomId, voiceOnly)
+                },
                 onViewAllPinnedMessagesClick = callback::navigateToPinnedMessagesList,
                 modifier = modifier,
                 knockRequestsBannerView = {
