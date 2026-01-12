@@ -47,7 +47,7 @@ class CreateRoomFlowNode(
     @Parcelize
     data class Inputs(
         val isSpace: Boolean
-    ): NodeInputs, Parcelable
+    ) : NodeInputs, Parcelable
 
     private val callback: CreateRoomEntryPoint.Callback = callback()
 

@@ -14,6 +14,7 @@ import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeCreateRoomEntryPoint : CreateRoomEntryPoint {
     override fun createNode(
+        isSpace: Boolean,
         parentNode: Node,
         buildContext: BuildContext,
         callback: CreateRoomEntryPoint.Callback,

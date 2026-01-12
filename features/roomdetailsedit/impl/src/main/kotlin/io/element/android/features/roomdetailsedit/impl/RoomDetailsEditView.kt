@@ -104,7 +104,10 @@ fun RoomDetailsEditView(
             val avatarPickerState = remember(state.roomAvatarUrl) {
                 val size = AvatarSize.EditRoomDetails
                 val type = AvatarType.Room()
-                AvatarPickerState.Selected(avatarData = AvatarData(id = state.roomId.value, name = state.roomRawName, size = size, url = state.roomAvatarUrl), type = type)
+                AvatarPickerState.Selected(
+                    avatarData = AvatarData(id = state.roomId.value, name = state.roomRawName, size = size, url = state.roomAvatarUrl),
+                    type = type
+                )
             }
             AvatarPickerView(
                 state = avatarPickerState,

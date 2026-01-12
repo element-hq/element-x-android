@@ -108,7 +108,10 @@ fun EditUserProfileView(
             val avatarPickerState = remember(state.userAvatarUrl) {
                 val size = AvatarSize.EditProfileDetails
                 val type = AvatarType.User
-                AvatarPickerState.Selected(avatarData = AvatarData(id = state.userId.value, name = state.displayName, size = size, url = state.userAvatarUrl), type = type)
+                AvatarPickerState.Selected(
+                    avatarData = AvatarData(id = state.userId.value, name = state.displayName, size = size, url = state.userAvatarUrl),
+                    type = type
+                )
             }
             AvatarPickerView(
                 state = avatarPickerState,
