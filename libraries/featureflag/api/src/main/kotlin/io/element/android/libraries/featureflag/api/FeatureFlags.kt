@@ -70,6 +70,13 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
+    CreateSpaces(
+        key = "feature.createSpaces",
+        title = "Create spaces",
+        description = "Allow creating spaces.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
     SpaceSettings(
         key = "feature.spaceSettings",
         title = "Space settings",

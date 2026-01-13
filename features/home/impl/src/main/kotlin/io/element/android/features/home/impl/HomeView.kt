@@ -182,6 +182,7 @@ private fun HomeScaffold(
                 scrollBehavior = scrollBehavior,
                 displayFilters = state.displayRoomListFilters,
                 filtersState = roomListState.filtersState,
+                canCreateSpaces = state.homeSpacesState.canCreateSpaces,
                 canReportBug = state.canReportBug,
                 modifier = Modifier.hazeEffect(
                     state = hazeState,

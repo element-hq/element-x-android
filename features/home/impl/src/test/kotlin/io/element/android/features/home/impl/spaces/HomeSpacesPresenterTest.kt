@@ -11,6 +11,9 @@ package io.element.android.features.home.impl.spaces
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.invite.test.InMemorySeenInvitesStore
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.tests.testutils.test
@@ -23,18 +26,25 @@ class HomeSpacesPresenterTest {
         val presenter = createPresenter()
         presenter.test {
             val state = awaitItem()
+            // canCreateSpaces is initially false
+            assertThat(state.canCreateSpaces).isFalse()
             assertThat(state.space).isEqualTo(CurrentSpace.Root)
             assertThat(state.spaceRooms).isEmpty()
             assertThat(state.hideInvitesAvatar).isFalse()
             assertThat(state.seenSpaceInvites).isEmpty()
+
+            // It'll eventually be true
+            assertThat(awaitItem().canCreateSpaces).isTrue()
         }
     }
 
     private fun createPresenter(
         client: MatrixClient = FakeMatrixClient(),
         seenInvitesStore: SeenInvitesStore = InMemorySeenInvitesStore(),
+        featureFlagsService: FeatureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.CreateSpaces.key to true)),
     ) = HomeSpacesPresenter(
         client = client,
         seenInvitesStore = seenInvitesStore,
+        featureFlagsService = featureFlagsService,
     )
 }

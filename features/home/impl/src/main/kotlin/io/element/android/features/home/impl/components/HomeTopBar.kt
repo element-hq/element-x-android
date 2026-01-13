@@ -85,6 +85,7 @@ fun HomeTopBar(
     onAccountSwitch: (SessionId) -> Unit,
     onCreateSpace: () -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
+    canCreateSpaces: Boolean,
     canReportBug: Boolean,
     displayFilters: Boolean,
     filtersState: RoomListFiltersState,
@@ -120,8 +121,15 @@ fun HomeTopBar(
             },
             actions = {
                 when (selectedNavigationItem) {
-                    HomeNavigationBarItem.Chats -> RoomListMenuItems(onToggleSearch, onMenuActionClick, canReportBug)
-                    HomeNavigationBarItem.Spaces -> SpacesMenuItems(onCreateSpace)
+                    HomeNavigationBarItem.Chats -> RoomListMenuItems(
+                        onToggleSearch = onToggleSearch,
+                        onMenuActionClick = onMenuActionClick,
+                        canReportBug = canReportBug
+                    )
+                    HomeNavigationBarItem.Spaces -> SpacesMenuItems(
+                        canCreateSpaces = canCreateSpaces,
+                        onCreateSpace = onCreateSpace
+                    )
                 }
             },
             // We want a 16dp left padding for the navigationIcon :
@@ -206,12 +214,17 @@ private fun RoomListMenuItems(
 }
 
 @Composable
-private fun SpacesMenuItems(onCreateSpace: () -> Unit) {
-    IconButton(onClick = onCreateSpace) {
-        Icon(
-            imageVector = CompoundIcons.Plus(),
-            contentDescription = stringResource(CommonStrings.action_create_space)
-        )
+private fun SpacesMenuItems(
+    canCreateSpaces: Boolean,
+    onCreateSpace: () -> Unit
+) {
+    if (canCreateSpaces) {
+        IconButton(onClick = onCreateSpace) {
+            Icon(
+                imageVector = CompoundIcons.Plus(),
+                contentDescription = stringResource(CommonStrings.action_create_space)
+            )
+        }
     }
 }
 
@@ -305,6 +318,7 @@ internal fun HomeTopBarPreview() = ElementPreview {
         onAccountSwitch = {},
         onToggleSearch = {},
         onCreateSpace = {},
+        canCreateSpaces = true,
         canReportBug = true,
         displayFilters = true,
         filtersState = aRoomListFiltersState(),
@@ -327,6 +341,7 @@ internal fun HomeTopBarWithIndicatorPreview() = ElementPreview {
         onAccountSwitch = {},
         onToggleSearch = {},
         onCreateSpace = {},
+        canCreateSpaces = true,
         canReportBug = true,
         displayFilters = true,
         filtersState = aRoomListFiltersState(),
@@ -349,6 +364,7 @@ internal fun HomeTopBarMultiAccountPreview() = ElementPreview {
         onAccountSwitch = {},
         onToggleSearch = {},
         onCreateSpace = {},
+        canCreateSpaces = true,
         canReportBug = true,
         displayFilters = true,
         filtersState = aRoomListFiltersState(),

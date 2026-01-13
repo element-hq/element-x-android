@@ -15,6 +15,8 @@ import androidx.compose.runtime.remember
 import dev.zacsweers.metro.Inject
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.ui.safety.rememberHideInvitesAvatar
 import kotlinx.collections.immutable.persistentListOf
@@ -27,9 +29,11 @@ import kotlinx.coroutines.flow.map
 class HomeSpacesPresenter(
     private val client: MatrixClient,
     private val seenInvitesStore: SeenInvitesStore,
+    private val featureFlagsService: FeatureFlagService,
 ) : Presenter<HomeSpacesState> {
     @Composable
     override fun present(): HomeSpacesState {
+        val canCreateSpaces by featureFlagsService.isFeatureEnabledFlow(FeatureFlags.CreateSpaces).collectAsState(false)
         val hideInvitesAvatar by client.rememberHideInvitesAvatar()
         val spaceRooms by remember {
             client.spaceService.spaceRoomsFlow.map { it.toImmutableList() }
@@ -48,6 +52,7 @@ class HomeSpacesPresenter(
             spaceRooms = spaceRooms,
             seenSpaceInvites = seenSpaceInvites,
             hideInvitesAvatar = hideInvitesAvatar,
+            canCreateSpaces = canCreateSpaces,
             eventSink = ::handleEvent,
         )
     }
