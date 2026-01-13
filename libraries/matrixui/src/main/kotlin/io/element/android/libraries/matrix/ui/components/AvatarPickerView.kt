@@ -123,8 +123,7 @@ fun AvatarPickerView(
                 buttonSize = state.buttonSize,
                 iconSize = state.iconSize,
                 iconId = state.iconId,
-                externalPadding = state.externalPadding,
-                modifier = modifier.then(clickableModifier),
+                modifier = modifier.padding(state.externalPadding).then(clickableModifier),
             )
         }
         is AvatarPickerState.Selected -> {
@@ -146,12 +145,10 @@ private fun PickButton(
     buttonSize: Dp,
     iconSize: Dp,
     @DrawableRes iconId: Int,
-    externalPadding: PaddingValues,
     modifier: Modifier = Modifier,
 ) {
     Box(
         modifier = modifier
-            .padding(externalPadding)
             .size(buttonSize)
             .clip(CircleShape)
             .border(BorderStroke(1.dp, ElementTheme.colors.borderInteractiveSecondary), shape = CircleShape)
