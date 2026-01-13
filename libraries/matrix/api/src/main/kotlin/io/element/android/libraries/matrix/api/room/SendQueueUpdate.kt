@@ -18,5 +18,5 @@ sealed interface SendQueueUpdate {
     data class SendError(val transactionId: TransactionId) : SendQueueUpdate
     data class RetrySendingEvent(val transactionId: TransactionId) : SendQueueUpdate
     data class SentEvent(val transactionId: TransactionId, val eventId: EventId) : SendQueueUpdate
-    data class MediaUpload(val relatedTo: EventId, val file: MediaSource?, val index: Long, val progress: Float) : SendQueueUpdate
+    data class MediaUpload(val relatedTo: TransactionId, val file: MediaSource?, val index: Long, val progress: Float) : SendQueueUpdate
 }

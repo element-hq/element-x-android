@@ -17,7 +17,7 @@ fun RoomSendQueueUpdate.map(): SendQueueUpdate = when (this) {
     is RoomSendQueueUpdate.NewLocalEvent -> SendQueueUpdate.NewLocalEvent(TransactionId(transactionId))
     is RoomSendQueueUpdate.CancelledLocalEvent -> SendQueueUpdate.CancelledLocalEvent(TransactionId(transactionId))
     is RoomSendQueueUpdate.MediaUpload -> SendQueueUpdate.MediaUpload(
-        relatedTo = EventId(relatedTo),
+        relatedTo = TransactionId(relatedTo),
         file = file?.map(),
         index = index.toLong(),
         progress = progress.current.toFloat() / progress.total.toFloat(),
