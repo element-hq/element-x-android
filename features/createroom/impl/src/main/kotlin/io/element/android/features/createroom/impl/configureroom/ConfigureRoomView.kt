@@ -114,7 +114,6 @@ fun ConfigureRoomView(
                 onChangeRoomName = { state.eventSink(ConfigureRoomEvents.RoomNameChanged(it)) },
             )
             RoomTopic(
-                isSpace = isSpace,
                 modifier = Modifier.padding(horizontal = 16.dp),
                 topic = state.config.topic.orEmpty(),
                 onTopicChange = { state.eventSink(ConfigureRoomEvents.TopicChanged(it)) },
@@ -235,7 +234,7 @@ private fun RoomNameWithAvatar(
         TextField(
             label = stringResource(CommonStrings.common_name),
             value = roomName,
-            placeholder = stringResource(CommonStrings.common_room_name_placeholder),
+            placeholder = stringResource(R.string.screen_create_room_name_placeholder),
             singleLine = true,
             onValueChange = onChangeRoomName,
         )
@@ -244,7 +243,6 @@ private fun RoomNameWithAvatar(
 
 @Composable
 private fun RoomTopic(
-    isSpace: Boolean,
     topic: String,
     onTopicChange: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -255,7 +253,7 @@ private fun RoomTopic(
         value = topic,
         onValueChange = onTopicChange,
         maxLines = 3,
-        supportingText = if (isSpace) null else stringResource(CommonStrings.common_topic_placeholder),
+        placeholder = stringResource(R.string.screen_create_room_topic_placeholder),
         keyboardOptions = KeyboardOptions(
             capitalization = KeyboardCapitalization.Sentences,
         ),

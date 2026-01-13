@@ -4,6 +4,7 @@
   <string name="screen_create_room_add_people_title">"Invite people"</string>
   <string name="screen_create_room_error_creating_room">"An error occurred when creating the room"</string>
   <string name="screen_create_room_error_creating_space">"The space could not be created because of an unknown error. Try again later."</string>
+  <string name="screen_create_room_name_placeholder">"Add name…"</string>
   <string name="screen_create_room_new_room_title">"New room"</string>
   <string name="screen_create_room_new_space_title">"New space"</string>
   <string name="screen_create_room_private_option_description">"Only people invited can join."</string>
@@ -23,4 +24,5 @@ You can change this anytime in room settings."</string>
   <string name="screen_create_room_room_address_section_title">"Address"</string>
   <string name="screen_create_room_room_visibility_section_title">"Room visibility"</string>
   <string name="screen_create_room_topic_label">"Topic (optional)"</string>
+  <string name="screen_create_room_topic_placeholder">"Add description…"</string>
 </resources>
