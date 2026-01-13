@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
@@ -53,6 +52,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
 import io.element.android.libraries.designsystem.theme.components.ListItem
+import io.element.android.libraries.designsystem.theme.components.ListSectionHeader
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
@@ -103,7 +103,7 @@ fun ConfigureRoomView(
                 .imePadding()
                 .verticalScroll(rememberScrollState())
                 .consumeWindowInsets(padding),
-            verticalArrangement = Arrangement.spacedBy(24.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
             RoomNameWithAvatar(
                 isSpace = isSpace,
@@ -135,16 +135,18 @@ fun ConfigureRoomView(
             )
 
             if (state.config.roomVisibility !is RoomVisibilityState.Private) {
-                RoomAddressField(
-                    modifier = Modifier.padding(horizontal = 16.dp),
-                    address = state.config.roomVisibility.roomAddress().getOrNull().orEmpty(),
-                    homeserverName = state.homeserverName,
-                    addressValidity = state.roomAddressValidity,
-                    onAddressChange = { state.eventSink(ConfigureRoomEvents.RoomAddressChanged(it)) },
-                    label = stringResource(R.string.screen_create_room_room_address_section_title),
-                    supportingText = stringResource(R.string.screen_create_room_room_address_section_footer),
-                )
-                Spacer(Modifier)
+                Column {
+                    ListSectionHeader(title = stringResource(R.string.screen_create_room_room_address_section_title))
+                    RoomAddressField(
+                        modifier = Modifier.padding(horizontal = 16.dp),
+                        address = state.config.roomVisibility.roomAddress().getOrNull().orEmpty(),
+                        homeserverName = state.homeserverName,
+                        addressValidity = state.roomAddressValidity,
+                        onAddressChange = { state.eventSink(ConfigureRoomEvents.RoomAddressChanged(it)) },
+                        label = null,
+                        supportingText = stringResource(R.string.screen_create_room_room_address_section_footer),
+                    )
+                }
             }
         }
     }
@@ -232,6 +234,7 @@ private fun RoomNameWithAvatar(
         }
 
         TextField(
+            modifier = Modifier.padding(bottom = 18.dp),
             label = stringResource(CommonStrings.common_name),
             value = roomName,
             placeholder = stringResource(R.string.screen_create_room_name_placeholder),
@@ -269,12 +272,7 @@ private fun ConfigureRoomOptions(
     Column(
         modifier = modifier.selectableGroup()
     ) {
-        Text(
-            text = title,
-            style = ElementTheme.typography.fontBodyLgMedium,
-            color = ElementTheme.colors.textPrimary,
-            modifier = Modifier.padding(horizontal = 16.dp),
-        )
+        ListSectionHeader(title = title)
         content()
     }
 }
