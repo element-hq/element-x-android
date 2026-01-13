@@ -329,6 +329,29 @@ internal fun HomeTopBarPreview() = ElementPreview {
 @OptIn(ExperimentalMaterial3Api::class)
 @PreviewsDayNight
 @Composable
+internal fun HomeTopBarSpacesPreview() = ElementPreview {
+    HomeTopBar(
+        selectedNavigationItem = HomeNavigationBarItem.Spaces,
+        title = stringResource(R.string.screen_home_tab_spaces),
+        currentUserAndNeighbors = persistentListOf(MatrixUser(UserId("@id:domain"), "Alice")),
+        showAvatarIndicator = false,
+        areSearchResultsDisplayed = false,
+        scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()),
+        onOpenSettings = {},
+        onAccountSwitch = {},
+        onToggleSearch = {},
+        onCreateSpace = {},
+        canCreateSpaces = true,
+        canReportBug = true,
+        displayFilters = false,
+        filtersState = aRoomListFiltersState(),
+        onMenuActionClick = {},
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@PreviewsDayNight
+@Composable
 internal fun HomeTopBarWithIndicatorPreview() = ElementPreview {
     HomeTopBar(
         selectedNavigationItem = HomeNavigationBarItem.Chats,
