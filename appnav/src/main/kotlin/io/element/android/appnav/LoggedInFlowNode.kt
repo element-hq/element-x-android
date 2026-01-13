@@ -516,9 +516,18 @@ class LoggedInFlowNode(
                     params = ShareEntryPoint.Params(intent = navTarget.intent),
                     callback = object : ShareEntryPoint.Callback {
                         override fun onDone(roomIds: List<RoomId>) {
+                            // Remove the incoming share screen
                             backstack.pop()
+
+                            // Navigate to the room if the text/media was shared to a single one
                             roomIds.singleOrNull()?.let { roomId ->
-                                backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias()))
+                                sessionCoroutineScope.launch {
+                                    // Wait until the incoming share screen is removed
+                                    backstack.elements.first { it.lastOrNull()?.key?.navTarget !is NavTarget.IncomingShare }
+
+                                    // Then attach the room
+                                    attachRoom(roomId.toRoomIdOrAlias(), clearBackstack = false)
+                                }
                             }
                         }
                     },
@@ -644,7 +653,21 @@ private class AttachRoomOperation(
                 operation = this
             )
         } else {
-            Push<LoggedInFlowNode.NavTarget>(roomTarget).invoke(elements)
+            val existingRoomElement = elements.find {
+                val roomNavTarget = it.key.navTarget as? LoggedInFlowNode.NavTarget.Room
+                roomNavTarget?.roomIdOrAlias == roomTarget.roomIdOrAlias
+            }
+            if (existingRoomElement != null) {
+                elements.mapNotNull { element ->
+                    if (element == existingRoomElement) {
+                        null
+                    } else {
+                        element.transitionTo(STASHED, this)
+                    }
+                } + existingRoomElement.transitionTo(ACTIVE, this)
+            } else {
+                Push<LoggedInFlowNode.NavTarget>(roomTarget).invoke(elements)
+            }
         }
     }
 }
