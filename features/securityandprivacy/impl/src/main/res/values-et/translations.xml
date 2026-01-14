@@ -10,7 +10,7 @@
   <string name="screen_security_and_privacy_add_room_address_action">"Lisa aadress"</string>
   <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Liituda saavad kõik volitatud kogukondade liikmed, kuid kõik teised peavad küsima võimalust ligipääsuks."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Kõik võivad paluda jututoaga liitumist."</string>
-  <string name="screen_security_and_privacy_ask_to_join_option_title">"Küsi võimalust liitumiseks"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Palu võimalust liituda"</string>
   <string name="screen_security_and_privacy_ask_to_join_single_space_members_option_description">"Liituda saavad kõik „%1$s“ kogukonna liikmed, kuid kõik teised peavad küsima võimalust ligipääsuks."</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Jah, lülita krüptimine sisse"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Kui jututoa krüptimine on kord sisse lülitatud, siis seda välja lülitada ei saa. Sõnumite ajalugu on nähtav vaid jututoa liikmetele alates kutse saamise või liitumise hetkest.
@@ -21,7 +21,7 @@ Me ei soovita krüptimise kasutamist selliste avalike jututubade puhul, millega 
   <string name="screen_security_and_privacy_encryption_section_header">"Krüptimine"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Võta läbiv krüptimine kasutusele"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Kõik võivad jututoaga liituda"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Kõik kasutajad"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Avalik"</string>
   <string name="screen_security_and_privacy_room_access_footer">"Vali kogukonnad, mille liikmed saavad selle jututoaga liituda ilma kutseta. %1$s"</string>
   <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Halda kogukondi"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Liituda saab vaid kutse olemasolul"</string>

@@ -28,7 +28,7 @@ Emme suosittele salauksen ottamista käyttöön huoneissa, jotka kuka tahansa vo
   <string name="screen_security_and_privacy_room_history_anyone_option_title">"Kuka tahansa"</string>
   <string name="screen_security_and_privacy_room_history_section_header">"Kuka voi lukea viestihistoriaa"</string>
   <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Jäsenet vasta kutsusta lähtien"</string>
-  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Jäsenet tämän vaihtoehdon valinnan jälkeen"</string>
+  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Jäsenet (koko historia)"</string>
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Huoneosoitteet ovat tapoja löytää ja käyttää huoneita. Näin voit myös helposti jakaa huoneesi muiden kanssa.
 Voit halutessasi julkaista huoneesi kotipalvelimesi julkisessa huonehakemistossa."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Huoneen julkaiseminen"</string>

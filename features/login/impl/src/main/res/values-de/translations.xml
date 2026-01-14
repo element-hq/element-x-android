@@ -60,6 +60,8 @@
   <string name="screen_qr_code_login_error_cancelled_title">"Anmeldeanfrage abgebrochen"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"Die Anmeldung auf dem anderen Gerät wurde abgelehnt."</string>
   <string name="screen_qr_code_login_error_declined_title">"Anmelden abgelehnt"</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_subtitle">"Du musst nichts weiter tun."</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_title">"Dein anderes Gerät ist schon angemeldet."</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"Die Anmeldung ist abgelaufen. Bitte versuche es erneut."</string>
   <string name="screen_qr_code_login_error_expired_title">"Die Anmeldung wurde nicht rechtzeitig abgeschlossen"</string>
   <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"Dein anderes Gerät unterstützt die Anmeldung bei %s mit einem QR-Code nicht.

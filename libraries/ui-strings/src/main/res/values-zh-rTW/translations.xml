@@ -110,6 +110,7 @@
   <string name="action_load_more">"載入更多"</string>
   <string name="action_manage_account">"管理帳號"</string>
   <string name="action_manage_devices">"管理裝置"</string>
+  <string name="action_manage_rooms">"管理聊天室"</string>
   <string name="action_message">"聊天"</string>
   <string name="action_minimize">"最小化"</string>
   <string name="action_next">"下一步"</string>

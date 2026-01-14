@@ -56,6 +56,7 @@
   <string name="a11y_your_avatar">"Dein Avatar"</string>
   <string name="action_accept">"Akzeptieren"</string>
   <string name="action_add_caption">"Bildunterschrift hinzufügen"</string>
+  <string name="action_add_existing_rooms">"Bestehende Chats hinzufügen"</string>
   <string name="action_add_to_timeline">"Zum Nachrichtenverlauf hinzufügen"</string>
   <string name="action_back">"Zurück"</string>
   <string name="action_call">"Anruf"</string>
@@ -75,6 +76,7 @@
   <string name="action_copy_text">"Text kopieren"</string>
   <string name="action_create">"Erstellen"</string>
   <string name="action_create_a_room">"Chat erstellen"</string>
+  <string name="action_create_space">"Space erstellen"</string>
   <string name="action_deactivate">"Deaktivieren"</string>
   <string name="action_deactivate_account">"Nutzerkonto deaktivieren"</string>
   <string name="action_decline">"Ablehnen"</string>
@@ -95,6 +97,7 @@
   <string name="action_forgot_password">"Passwort vergessen?"</string>
   <string name="action_forward">"Weiterleiten"</string>
   <string name="action_go_back">"Zurück"</string>
+  <string name="action_go_to_roles_and_permissions">"Gehe zu Rollen &amp; Berechtigungen"</string>
   <string name="action_go_to_settings">"Zu den Einstellungen"</string>
   <string name="action_ignore">"Ignorieren"</string>
   <string name="action_invite">"Einladen"</string>
@@ -111,6 +114,7 @@
   <string name="action_load_more">"Mehr laden…"</string>
   <string name="action_manage_account">"Konto verwalten"</string>
   <string name="action_manage_devices">"Geräte verwalten"</string>
+  <string name="action_manage_rooms">"Chats und Gruppen konfigurieren"</string>
   <string name="action_message">"Nachricht"</string>
   <string name="action_minimize">"Minimieren"</string>
   <string name="action_next">"Weiter"</string>
@@ -160,6 +164,7 @@
   <string name="action_static_map_load">"Tippe, um die Karte zu laden"</string>
   <string name="action_take_photo">"Foto aufnehmen"</string>
   <string name="action_tap_for_options">"Für Optionen tippen"</string>
+  <string name="action_translate">"Übersetzen"</string>
   <string name="action_try_again">"Erneut versuchen"</string>
   <string name="action_unpin">"Lösen"</string>
   <string name="action_view">"Ansicht"</string>
@@ -189,6 +194,7 @@
   <string name="common_copied_to_clipboard">"In die Zwischenablage kopiert"</string>
   <string name="common_copyright">"Copyright"</string>
   <string name="common_creating_room">"Chat wird erstellt…"</string>
+  <string name="common_creating_space">"Space wird angelegt…"</string>
   <string name="common_current_user_canceled_knock">"Anfrage abgebrochen"</string>
   <string name="common_current_user_left_room">"Hat den Chat verlassen"</string>
   <string name="common_current_user_left_space">"Space verlassen"</string>
@@ -234,6 +240,7 @@ Grund: %1$s."</string>
   <string name="common_light">"Hell"</string>
   <string name="common_line_copied_to_clipboard">"Zeile in die Zwischenablage kopiert"</string>
   <string name="common_link_copied_to_clipboard">"Link in die Zwischenablage kopiert"</string>
+  <string name="common_link_new_device">"Neues Gerät verknüpfen"</string>
   <string name="common_loading">"Laden…"</string>
   <string name="common_loading_more">"Mehr wird geladen…"</string>
   <plurals name="common_many_members">
@@ -246,10 +253,12 @@ Grund: %1$s."</string>
   </plurals>
   <string name="common_message">"Nachricht"</string>
   <string name="common_message_actions">"Nachrichtenaktionen"</string>
+  <string name="common_message_failed_to_send">"Nachricht konnte nicht gesendet werden"</string>
   <string name="common_message_layout">"Nachrichtenlayout"</string>
   <string name="common_message_removed">"Nachricht entfernt"</string>
   <string name="common_modern">"Modern"</string>
   <string name="common_mute">"Stumm"</string>
+  <string name="common_name">"Name"</string>
   <string name="common_name_and_id">"%1$s(%2$s)"</string>
   <string name="common_no_results">"Keine Ergebnisse"</string>
   <string name="common_no_room_name">"Kein Chat-Name"</string>
@@ -295,7 +304,7 @@ Grund: %1$s."</string>
   <string name="common_rich_text_editor">"Rich-Text-Editor"</string>
   <string name="common_room">"Chat"</string>
   <string name="common_room_name">"Chat-Name"</string>
-  <string name="common_room_name_placeholder">"z.B. dein Projektname"</string>
+  <string name="common_room_name_placeholder">"z.B. Projektname"</string>
   <plurals name="common_rooms">
     <item quantity="one">"%1$d Chat"</item>
     <item quantity="other">"%1$d Chats"</item>
@@ -324,6 +333,7 @@ Grund: %1$s."</string>
   <string name="common_something_went_wrong">"Es ist ein Fehler aufgetreten."</string>
   <string name="common_something_went_wrong_message">"Wir haben ein Problem festgestellt. Bitte versuch es erneut."</string>
   <string name="common_space">"Space"</string>
+  <string name="common_space_topic_placeholder">"Worum geht es hier?"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d Space"</item>
     <item quantity="other">"%1$d Spaces"</item>
@@ -331,6 +341,7 @@ Grund: %1$s."</string>
   <string name="common_starting_chat">"Chat wird gestartet…"</string>
   <string name="common_sticker">"Sticker"</string>
   <string name="common_success">"Erfolg"</string>
+  <string name="common_suggested">"Empfohlen"</string>
   <string name="common_suggestions">"Vorschläge"</string>
   <string name="common_syncing">"Synchronisieren"</string>
   <string name="common_system">"System"</string>
@@ -338,7 +349,7 @@ Grund: %1$s."</string>
   <string name="common_third_party_notices">"Hinweise von Drittanbietern"</string>
   <string name="common_thread">"Thread"</string>
   <string name="common_topic">"Thema"</string>
-  <string name="common_topic_placeholder">"Worum geht es in diesem Chat?"</string>
+  <string name="common_topic_placeholder">"Worum geht is in diesem Chat?"</string>
   <string name="common_unable_to_decrypt">"Entschlüsselung nicht möglich"</string>
   <string name="common_unable_to_decrypt_insecure_device">"Von einem ungesicherten Gerät gesendet"</string>
   <string name="common_unable_to_decrypt_no_access">"Du hast keinen Zugriff auf diese Nachricht."</string>
@@ -368,6 +379,8 @@ Grund: %1$s."</string>
   <string name="common_waiting">"Warten…"</string>
   <string name="common_waiting_for_decryption_key">"Warte auf diese Nachricht"</string>
   <string name="common_you">"Du"</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) hat diese Nachricht geteilt, weil du nicht im Chat warst, als sie verschickt wurde."</string>
+  <string name="crypto_history_visible">"Diese Gruppe wurde so konfiguriert, dass neue Mitglieder den vergangenen Nachrichtenverlauf lesen können. %1$s"</string>
   <string name="crypto_identity_change_pin_violation">"%1$s\'s Identität has sich geändert. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"%1$s\'s %2$s Identität hat sich geändert. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
@@ -464,11 +477,18 @@ Möchtest du wirklich fortfahren?"</string>
   <string name="screen_share_open_google_maps">"In Google Maps öffnen"</string>
   <string name="screen_share_open_osm_maps">"In OpenStreetMap öffnen"</string>
   <string name="screen_share_this_location_action">"Diesen Standort teilen"</string>
+  <string name="screen_space_add_rooms_room_access_description">"Das Hinzufügen eines Chats hat keinen Einfluss auf die Beitrittsregeln. Um die Regeln zu ändern, gehe zu \"Raum Info\" und dann zu \"Datenschutz und Sicherheit\""</string>
   <string name="screen_space_list_description">"Von dir erstellte oder beigetretene Spaces."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_empty_state_title">"Erstelle einen Space, um Chats zu organisieren"</string>
   <string name="screen_space_list_parent_space">"%1$s Space"</string>
   <string name="screen_space_list_title">"Spaces"</string>
   <string name="screen_space_menu_action_members">"Mitglieder anzeigen"</string>
+  <string name="screen_space_remove_rooms_confirmation_content">"Das Entfernen eines Chats hat keinen Einfluss auf die Beitrittsregeln. Um die Regeln zu ändern, gehe zu \"Raum Info\" und dann zu \"Datenschutz und Sicherheit\""</string>
+  <plurals name="screen_space_remove_rooms_confirmation_title">
+    <item quantity="one">"Chat aus %1$s entfernen"</item>
+    <item quantity="other">"%1$d chats aus %2$s entfernen"</item>
+  </plurals>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Nachricht nicht gesendet, weil sich die verifizierte Identität von %1$s geändert hat."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Die Nachricht wurde nicht gesendet, weil %1$s nicht alle Geräte verifiziert hat."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Die Nachricht wurde nicht gesendet, weil du eines oder mehrere deiner Geräte nicht verifiziert hast."</string>

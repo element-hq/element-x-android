@@ -112,6 +112,7 @@
   <string name="action_load_more">"Carica altro"</string>
   <string name="action_manage_account">"Gestisci account"</string>
   <string name="action_manage_devices">"Gestisci dispositivi"</string>
+  <string name="action_manage_rooms">"Gestisci le stanze"</string>
   <string name="action_message">"Invia messaggio"</string>
   <string name="action_minimize">"Riduci"</string>
   <string name="action_next">"Avanti"</string>

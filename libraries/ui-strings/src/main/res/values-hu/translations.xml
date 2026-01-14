@@ -112,6 +112,7 @@
   <string name="action_load_more">"Továbbiak betöltése"</string>
   <string name="action_manage_account">"Fiók kezelése"</string>
   <string name="action_manage_devices">"Eszközök kezelése"</string>
+  <string name="action_manage_rooms">"Szobák kezelése"</string>
   <string name="action_message">"Üzenet"</string>
   <string name="action_minimize">"Minimalizálás"</string>
   <string name="action_next">"Következő"</string>

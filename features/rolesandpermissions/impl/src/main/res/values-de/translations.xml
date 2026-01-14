@@ -1,17 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_room_change_permissions_administrators">"Nur Admins"</string>
+  <string name="screen_room_change_permissions_administrators">"Admin"</string>
   <string name="screen_room_change_permissions_ban_people">"Mitglieder sperren"</string>
+  <string name="screen_room_change_permissions_change_settings">"Einstellungen ändern"</string>
   <string name="screen_room_change_permissions_delete_messages">"Nachrichten entfernen"</string>
-  <string name="screen_room_change_permissions_invite_people">"Personen einladen und Beitrittsanfragen annehmen"</string>
+  <string name="screen_room_change_permissions_everyone">"Mitglied"</string>
+  <string name="screen_room_change_permissions_invite_people">"Mitglieder hinzufügen"</string>
+  <string name="screen_room_change_permissions_manage_space">"Space konfigurieren"</string>
+  <string name="screen_room_change_permissions_manage_space_rooms">"Chats und Gruppen konfigurieren"</string>
+  <string name="screen_room_change_permissions_member_moderation">"Mitglieder verwalten"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Nachrichten senden &amp; löschen"</string>
-  <string name="screen_room_change_permissions_moderators">"Admins und Moderatoren"</string>
-  <string name="screen_room_change_permissions_remove_people">"Personen entfernen und Beitrittsanfragen ablehnen"</string>
+  <string name="screen_room_change_permissions_moderators">"Moderator"</string>
+  <string name="screen_room_change_permissions_remove_people">"Mitglieder entfernen"</string>
   <string name="screen_room_change_permissions_room_avatar">"Avatar ändern"</string>
   <string name="screen_room_change_permissions_room_details">"Chat bearbeiten"</string>
   <string name="screen_room_change_permissions_room_name">"Chat-Namen ändern"</string>
   <string name="screen_room_change_permissions_room_topic">"Chat Thema ändern"</string>
   <string name="screen_room_change_permissions_send_messages">"Nachrichten senden"</string>
+  <string name="screen_room_change_permissions_title">"Berechtigungen"</string>
   <string name="screen_room_change_role_administrators_title">"Admins bearbeiten"</string>
   <string name="screen_room_change_role_confirm_add_admin_description">"Du kannst diese Aktion nicht mehr rückgängig machen. Du vergibst dieselbe Rolle, die du auch hast."</string>
   <string name="screen_room_change_role_confirm_add_admin_title">"Als Admin hinzufügen?"</string>
@@ -32,6 +38,12 @@
   <string name="screen_room_change_role_unsaved_changes_description">"Du hast nicht gespeicherte Änderungen."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Änderungen speichern?"</string>
   <string name="screen_room_member_list_banned_empty">"Es gibt keine gesperrten Nutzer."</string>
+  <plurals name="screen_room_member_list_banned_header_title">
+    <item quantity="one">"%1$d gesperrt"</item>
+    <item quantity="other">"%1$d gesperrt"</item>
+  </plurals>
+  <string name="screen_room_member_list_empty_search_subtitle">"Überprüfe die Schreibweise oder versuch\'s mit einer neuen Suche"</string>
+  <string name="screen_room_member_list_empty_search_title">"Keine Ergebnisse für „%1$s“"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d Person"</item>
     <item quantity="other">"%1$d Personen"</item>
@@ -43,8 +55,13 @@
   <string name="screen_room_member_list_manage_member_unban_title">"Sperre für diesen Chat aufheben"</string>
   <string name="screen_room_member_list_mode_banned">"Gesperrt"</string>
   <string name="screen_room_member_list_mode_members">"Mitglieder"</string>
-  <string name="screen_room_member_list_role_administrator">"Nur Admins"</string>
-  <string name="screen_room_member_list_role_moderator">"Admins und Moderatoren"</string>
+  <plurals name="screen_room_member_list_pending_header_title">
+    <item quantity="one">"%1$d eingeladen"</item>
+    <item quantity="other">"%1$d eingeladen"</item>
+  </plurals>
+  <string name="screen_room_member_list_pending_status">"Ausstehend"</string>
+  <string name="screen_room_member_list_role_administrator">"Admin"</string>
+  <string name="screen_room_member_list_role_moderator">"Moderator"</string>
   <string name="screen_room_member_list_role_owner">"Eigentümer"</string>
   <string name="screen_room_member_list_room_members_header_title">"Mitglieder"</string>
   <string name="screen_room_member_list_unbanning_user">"%1$s wird entsperrt."</string>
@@ -57,10 +74,12 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"Nachrichten senden &amp; löschen"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderatoren"</string>
   <string name="screen_room_roles_and_permissions_owners">"Eigentümer"</string>
-  <string name="screen_room_roles_and_permissions_reset">"Rollen und Berechtigungen zurücksetzen"</string>
+  <string name="screen_room_roles_and_permissions_permissions_header">"Berechtigungen"</string>
+  <string name="screen_room_roles_and_permissions_reset">"Berechtigungen zurücksetzen"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Sobald du die Berechtigungen zurücksetzt, verlierst du die aktuellen Einstellungen."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Berechtigungen zurücksetzen?"</string>
   <string name="screen_room_roles_and_permissions_roles_header">"Rollen"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Chat-Details anpassen"</string>
+  <string name="screen_room_roles_and_permissions_space_details">"Details zum Space"</string>
   <string name="screen_room_roles_and_permissions_title">"Rollen und Berechtigungen"</string>
 </resources>

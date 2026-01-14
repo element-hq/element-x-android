@@ -4,7 +4,7 @@
   <string name="screen_edit_room_address_title">"Endereço da sala"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Adicionar endereço de sala"</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Qualquer pessoa pode pedir para entrar na sala, mas um administrador ou moderador tem que aceitar o pedido."</string>
-  <string name="screen_security_and_privacy_ask_to_join_option_title">"Pedir para participar"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Pedir para entrar"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Sim, ativar cifragem"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Uma vez ativada, a cifragem não pode ser desativada. O histórico de mensagens só será visível a membros a partir do momento em que foram convidados ou que entraram na sala.
 Ninguém além dos membros poderão ler quaisquer mensagens. Isto pode impedir que robôs (\"bots\") e pontes (\"bridges\") funcionem devidamente.

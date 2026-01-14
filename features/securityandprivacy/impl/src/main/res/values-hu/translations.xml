@@ -14,7 +14,7 @@ Nem javasoljuk a titkosítás engedélyezését az olyan szobákban, amelyeket b
   <string name="screen_security_and_privacy_encryption_section_header">"Titkosítás"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Végpontok közötti titkosítás engedélyezése"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Bárki csatlakozhat."</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Bárki"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Nyilvános"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Csak a meghívott emberek léphetnek be."</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Csak meghívásos"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Hozzáférés"</string>

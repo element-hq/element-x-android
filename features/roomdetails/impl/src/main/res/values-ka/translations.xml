@@ -46,7 +46,6 @@
   <string name="screen_room_details_notification_title">"შეტყობინებები"</string>
   <string name="screen_room_details_profile_row_title">"პროფილი"</string>
   <string name="screen_room_details_roles_and_permissions">"როლები და ნებართვები"</string>
-  <string name="screen_room_details_room_name_label">"ოთახის სახელი"</string>
   <string name="screen_room_details_security_title">"უსაფრთხოება"</string>
   <string name="screen_room_details_share_room_title">"ოთახის გაზიარება"</string>
   <string name="screen_room_details_title">"ოთახის ინფორმაცია"</string>

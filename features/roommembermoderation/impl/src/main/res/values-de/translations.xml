@@ -4,10 +4,12 @@
   <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Sperren"</string>
   <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Sie können diesem Chat auch auf Einladung nicht erneut beitreten."</string>
   <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Möchtest du diesen Nutzer wirklich sperren?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description">"Mitglieder können diesem Space auch mit Einladung nicht mehr beitreten, aber sie bleiben weiterhin Mitglied in allen Chats und untergeordneten Spaces."</string>
   <string name="screen_bottom_sheet_manage_room_member_banning_user">"%1$s wird gesperrt."</string>
   <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"Entfernen"</string>
   <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"Die Nutzer können dem Chat wieder beitreten, wenn sie eingeladen werden."</string>
   <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"Möchtest du dieses Mitglied wirklich entfernen?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description">"Sie können diesem Space wieder beitreten, wenn sie eingeladen werden. Außerdem behalten sie ihre Mitgliedschaft in allen Chats und untergeordneten Spaces."</string>
   <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Nutzerprofil anzeigen"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove">"Mitglied entfernen"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Mitglied entfernen und für die Zukunft sperren?"</string>

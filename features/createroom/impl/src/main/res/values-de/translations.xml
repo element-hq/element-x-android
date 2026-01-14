@@ -3,15 +3,26 @@
   <string name="screen_create_room_action_create_room">"Neuer Chat"</string>
   <string name="screen_create_room_add_people_title">"Nutzer einladen"</string>
   <string name="screen_create_room_error_creating_room">"Beim Erstellen des Chats ist ein Fehler aufgetreten"</string>
-  <string name="screen_create_room_private_option_description">"Nur eingeladene Personen haben Zutritt zu diesem Chat. Alle Nachrichten sind Ende-zu-Ende verschlüsselt."</string>
-  <string name="screen_create_room_private_option_title">"Privater Chat"</string>
+  <string name="screen_create_room_error_creating_space">"Der Space konnte wegen eines unbekannten Fehlers nicht erstellt werden. Versuch\' es später nochmal."</string>
+  <string name="screen_create_room_name_placeholder">"Name hinzufügen…"</string>
+  <string name="screen_create_room_new_room_title">"Neuer Chat"</string>
+  <string name="screen_create_room_new_space_title">"Neuer Space"</string>
+  <string name="screen_create_room_private_option_description">"Nur eingeladene Personen haben Zutritt zu diesem Chat."</string>
+  <string name="screen_create_room_private_option_title">"Privat"</string>
   <string name="screen_create_room_public_option_description">"Jeder kann diesen Chat finden.
 Du kannst dies jederzeit in den Einstellungen des Chats ändern."</string>
-  <string name="screen_create_room_public_option_title">"Öffentlicher Chat"</string>
+  <string name="screen_create_room_public_option_short_description">"Jeder kann beitreten."</string>
+  <string name="screen_create_room_public_option_title">"Öffentlicher Chatroom"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Jeder kann den Beitritt zum Chat erbitten, aber ein Admin oder Moderator muss die Anfrage akzeptieren."</string>
-  <string name="screen_create_room_room_access_section_knocking_option_title">"Beitritt beantragen"</string>
-  <string name="screen_create_room_room_address_section_footer">"Du benötigst eine Chat-Adresse, damit dieser Chat im öffentlichen Verzeichnis sichtbar ist."</string>
-  <string name="screen_create_room_room_address_section_title">"Chatroom Adresse"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Anfrage zum Beitritt zulassen"</string>
+  <string name="screen_create_room_room_access_section_private_option_description">"Nur eingeladene Personen können beitreten."</string>
+  <string name="screen_create_room_room_access_section_private_option_title">"Privat"</string>
+  <string name="screen_create_room_room_access_section_public_option_description">"Jeder darf diesem Chat beitreten."</string>
+  <string name="screen_create_room_room_access_section_public_option_title">"Jeder"</string>
+  <string name="screen_create_room_room_access_section_title">"Wer hat Zugang"</string>
+  <string name="screen_create_room_room_address_section_footer">"Du benötigst eine Adresse, um diesen Chat im öffentlichen Verzeichnis sichtbar zu machen."</string>
+  <string name="screen_create_room_room_address_section_title">"Adresse"</string>
   <string name="screen_create_room_room_visibility_section_title">" Sichtbarkeit des Chats"</string>
   <string name="screen_create_room_topic_label">"Thema (optional)"</string>
+  <string name="screen_create_room_topic_placeholder">"Beschreibung hinzufügen…"</string>
 </resources>

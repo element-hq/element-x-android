@@ -60,6 +60,8 @@
   <string name="screen_qr_code_login_error_cancelled_title">"Solicitação de entrada foi cancelada"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"A entrada foi recusada no outro dispositivo."</string>
   <string name="screen_qr_code_login_error_declined_title">"Entrada recusada"</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_subtitle">"Você não precisa fazer mais nada."</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_title">"O seu outro dispositivo já está conectado"</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"O processo de entrada expirou. Tente novamente."</string>
   <string name="screen_qr_code_login_error_expired_title">"A entrada não foi concluída a tempo"</string>
   <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"Seu outro dispositivo não tem suporte a entrar no %s com um código QR.

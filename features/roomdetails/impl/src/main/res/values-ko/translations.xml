@@ -59,7 +59,6 @@
   <string name="screen_room_details_profile_row_title">"프로필"</string>
   <string name="screen_room_details_requests_to_join_title">"참여 요청"</string>
   <string name="screen_room_details_roles_and_permissions">"역할 및 권한"</string>
-  <string name="screen_room_details_room_name_label">"방 이름"</string>
   <string name="screen_room_details_security_and_privacy_title">"보안 및 개인정보 보호"</string>
   <string name="screen_room_details_security_title">"보안"</string>
   <string name="screen_room_details_share_room_title">"방 공유하기"</string>
@@ -113,7 +112,6 @@
   <string name="screen_room_roles_and_permissions_title">"역할 및 권한"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"방 주소 추가"</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"누구나 방에 참여 요청을 할 수 있지만, 관리자나 운영자가 요청을 수락해야 합니다."</string>
-  <string name="screen_security_and_privacy_ask_to_join_option_title">"참가 요청"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"예, 암호화 활성화"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"일단 활성화되면, 방의 암호화는 비활성화할 수 없습니다. 메시지 기록은 방에 초대된 후 또는 방에 참여한 이후부터 방 구성원만 볼 수 있습니다.
 방 구성원 외에는 아무도 메시지를 읽을 수 없습니다. 이로 인해 봇과 브리지가 제대로 작동하지 않을 수 있습니다.
@@ -123,7 +121,6 @@
   <string name="screen_security_and_privacy_encryption_section_header">"암호화"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"종단간 암호화 활성화"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"누구나 찾을 수 있고 참여할 수 있습니다."</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"누구나"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"초대받은 사용자만 가입할 수 있습니다."</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"초대 전용"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"방 액세스"</string>

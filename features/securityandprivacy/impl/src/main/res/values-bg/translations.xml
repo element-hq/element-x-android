@@ -7,7 +7,6 @@
   <string name="screen_security_and_privacy_encryption_section_header">"Шифроване"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Включване на шифроване от край до край"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Всеки може да намери и да се присъедини"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Всеки"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Хората могат да се присъединят само ако са поканени"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Само с покана"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Достъп до стаята"</string>

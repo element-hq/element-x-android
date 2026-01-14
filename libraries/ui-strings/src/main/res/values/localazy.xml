@@ -379,6 +379,8 @@ Reason: %1$s."</string>
   <string name="common_waiting">"Waiting…"</string>
   <string name="common_waiting_for_decryption_key">"Waiting for this message"</string>
   <string name="common_you">"You"</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) shared this message since you were not in the room when it was sent."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s shared this message since you were not in the room when it was sent."</string>
   <string name="crypto_history_visible">"This room has been configured so that new members can read history. %1$s"</string>
   <string name="crypto_identity_change_pin_violation">"%1$s\'s identity was reset. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"%1$s’s %2$s identity was reset. %3$s"</string>
@@ -476,12 +478,18 @@ Are you sure you want to continue?"</string>
   <string name="screen_share_open_google_maps">"Open in Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Open in OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Share this location"</string>
+  <string name="screen_space_add_rooms_room_access_description">"Adding a room will not affect the room access. To change the access go to Room info &gt; Privacy &amp; security."</string>
   <string name="screen_space_list_description">"Spaces you have created or joined."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_empty_state_title">"Create spaces to organize rooms"</string>
   <string name="screen_space_list_parent_space">"%1$s space"</string>
   <string name="screen_space_list_title">"Spaces"</string>
   <string name="screen_space_menu_action_members">"View members"</string>
+  <string name="screen_space_remove_rooms_confirmation_content">"Removing a room will not affect the room access. To change the access go to Room info &gt; Privacy &amp; security."</string>
+  <plurals name="screen_space_remove_rooms_confirmation_title">
+    <item quantity="one">"Remove room from %1$s"</item>
+    <item quantity="other">"Remove %1$d rooms from %2$s"</item>
+  </plurals>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Message not sent because %1$s’s verified identity was reset."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Message not sent because %1$s has not verified all devices."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Message not sent because you have not verified one or more of your devices."</string>

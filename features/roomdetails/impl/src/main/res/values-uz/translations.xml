@@ -60,7 +60,6 @@
   <string name="screen_room_details_profile_row_title">"Profil"</string>
   <string name="screen_room_details_requests_to_join_title">"Qo‘shilish uchun so‘rovlar"</string>
   <string name="screen_room_details_roles_and_permissions">"Rollar va ruxsatlar"</string>
-  <string name="screen_room_details_room_name_label">"Xona nomi"</string>
   <string name="screen_room_details_security_and_privacy_title">"Xavfsizlik va maxfiylik"</string>
   <string name="screen_room_details_security_title">"Xavfsizlik"</string>
   <string name="screen_room_details_share_room_title">"Xonani baham ko\'ring"</string>
@@ -115,7 +114,6 @@
   <string name="screen_room_roles_and_permissions_title">"Rollar va ruxsatlar"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Xona manzilini kiritish"</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Xonaga qo‘shilishni istalgan kishi so‘rashi mumkin, lekin administrator yoki moderator so‘rovni qabul qilishi kerak"</string>
-  <string name="screen_security_and_privacy_ask_to_join_option_title">"Qo‘shilishni so‘rang"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Ha, shifrlashni yoqish"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Yoqilgandan so‘ng, xona uchun shifrlashni o‘chirib bo‘lmaydi. Xabarlar tarixi faqat xona a’zolari taklif qilinganidan yoki xonaga qo‘shilganidan keyingi davrdan boshlab ko‘rinadi. Xona a’zolaridan tashqari hech kim xabarlarni o‘qiy olmaydi. Bu botlar va ko‘priklarning to‘g‘ri ishlashiga to‘sqinlik qilishi mumkin.
 Shu sababli, har kim topishi va qo‘shilishi mumkin bo‘lgan xonalar uchun shifrlashni yoqishni tavsiya etmaymiz."</string>
@@ -124,7 +122,6 @@ Shu sababli, har kim topishi va qo‘shilishi mumkin bo‘lgan xonalar uchun shi
   <string name="screen_security_and_privacy_encryption_section_header">"Shifrlash"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"End-to-end shifrlashni yoqish"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Istalgan kishi topishi va qo‘shilishi mumkin"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Har kim"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Odamlar faqat taklif qilingan taqdirdagina qo‘shilishi mumkin"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Faqat taklif qilish"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Xonaga kirish huquqi"</string>

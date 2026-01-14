@@ -114,6 +114,7 @@
   <string name="action_load_more">"Načítať viac"</string>
   <string name="action_manage_account">"Spravovať účet"</string>
   <string name="action_manage_devices">"Spravovať zariadenia"</string>
+  <string name="action_manage_rooms">"Spravovať miestnosti"</string>
   <string name="action_message">"Poslať správu"</string>
   <string name="action_minimize">"Minimalizovať"</string>
   <string name="action_next">"Ďalej"</string>

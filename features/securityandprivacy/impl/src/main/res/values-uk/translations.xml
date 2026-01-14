@@ -4,7 +4,7 @@
   <string name="screen_edit_room_address_title">"Адреса кімнати"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Додати адресу кімнати"</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Будь-хто може надіслати запит приєднатися до кімнати, але адміністратор або модератор повинні прийняти запит."</string>
-  <string name="screen_security_and_privacy_ask_to_join_option_title">"Запросити приєднатися"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Запит на приєднання"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Так, увімкнути шифрування"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Після ввімкнення шифрування кімнати, його неможливо вимкнути, історію повідомлень бачитимуть лише учасники кімнати, яких було запрошено або які приєдналися до кімнати.
 Ніхто, крім учасників кімнати, не зможе прочитати повідомлення. Це може перешкоджати коректній роботі ботів і мостів.
@@ -14,7 +14,7 @@
   <string name="screen_security_and_privacy_encryption_section_header">"Шифрування"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Увімкнути наскрізне шифрування"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Будь-хто може знайти та приєднатися."</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Кожний"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Будь-хто"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Люди можуть приєднатися, лише якщо їх запросили"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Лише запрошені"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Доступ до кімнати"</string>

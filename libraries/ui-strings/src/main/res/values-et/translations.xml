@@ -112,6 +112,7 @@
   <string name="action_load_more">"Näita veel"</string>
   <string name="action_manage_account">"Halda kasutajakontot"</string>
   <string name="action_manage_devices">"Halda seadmeid"</string>
+  <string name="action_manage_rooms">"Halda jututuba"</string>
   <string name="action_message">"Saada sõnum"</string>
   <string name="action_minimize">"Minimeeri"</string>
   <string name="action_next">"Edasi"</string>

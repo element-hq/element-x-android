@@ -75,6 +75,7 @@
   <string name="action_copy_text">"Copiar texto"</string>
   <string name="action_create">"Criar"</string>
   <string name="action_create_a_room">"Criar uma sala"</string>
+  <string name="action_create_space">"Criar espaço"</string>
   <string name="action_deactivate">"Desativar"</string>
   <string name="action_deactivate_account">"Desativar conta"</string>
   <string name="action_decline">"Recusar"</string>
@@ -112,6 +113,7 @@
   <string name="action_load_more">"Carregar mais"</string>
   <string name="action_manage_account">"Gerenciar conta"</string>
   <string name="action_manage_devices">"Gerenciar dispositivos"</string>
+  <string name="action_manage_rooms">"Gerenciar salas"</string>
   <string name="action_message">"Mensagem"</string>
   <string name="action_minimize">"Minimizar"</string>
   <string name="action_next">"Avançar"</string>
@@ -161,6 +163,7 @@
   <string name="action_static_map_load">"Toque para carregar o mapa"</string>
   <string name="action_take_photo">"Tirar foto"</string>
   <string name="action_tap_for_options">"Toque para opções"</string>
+  <string name="action_translate">"Traduzir"</string>
   <string name="action_try_again">"Tente novamente"</string>
   <string name="action_unpin">"Desafixar"</string>
   <string name="action_view">"Visualizar"</string>
@@ -190,6 +193,7 @@
   <string name="common_copied_to_clipboard">"Copiado para a área de transferência"</string>
   <string name="common_copyright">"Direitos autorais"</string>
   <string name="common_creating_room">"Criando sala…"</string>
+  <string name="common_creating_space">"Criando espaço…"</string>
   <string name="common_current_user_canceled_knock">"Solicitação cancelada"</string>
   <string name="common_current_user_left_room">"Saiu da sala"</string>
   <string name="common_current_user_left_space">"Saiu do espaço"</string>
@@ -336,6 +340,7 @@ Motivo:​ %1$s."</string>
   <string name="common_starting_chat">"Iniciando a conversa…"</string>
   <string name="common_sticker">"Figurinha"</string>
   <string name="common_success">"Sucesso"</string>
+  <string name="common_suggested">"Sugerido"</string>
   <string name="common_suggestions">"Sugestões"</string>
   <string name="common_syncing">"Sincronizando"</string>
   <string name="common_system">"Sistema"</string>

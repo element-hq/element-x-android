@@ -112,6 +112,7 @@
   <string name="action_load_more">"Indlæs mere"</string>
   <string name="action_manage_account">"Administrer konto"</string>
   <string name="action_manage_devices">"Administrer enheder"</string>
+  <string name="action_manage_rooms">"Administrer rum"</string>
   <string name="action_message">"Besked"</string>
   <string name="action_minimize">"Minimér"</string>
   <string name="action_next">"Næste"</string>

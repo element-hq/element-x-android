@@ -55,7 +55,6 @@
   <string name="screen_room_details_profile_row_title">"Profil"</string>
   <string name="screen_room_details_requests_to_join_title">"Permintaan untuk bergabung"</string>
   <string name="screen_room_details_roles_and_permissions">"Peran dan perizinan"</string>
-  <string name="screen_room_details_room_name_label">"Nama ruangan"</string>
   <string name="screen_room_details_security_and_privacy_title">"Keamanan &amp; privasi"</string>
   <string name="screen_room_details_security_title">"Keamanan"</string>
   <string name="screen_room_details_share_room_title">"Bagikan ruangan"</string>
@@ -106,7 +105,6 @@
   <string name="screen_room_roles_and_permissions_title">"Peran dan perizinan"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Tambahkan alamat ruangan"</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Siapa pun dapat meminta untuk bergabung dengan ruangan tetapi administrator atau moderator harus menerima permintaan tersebut."</string>
-  <string name="screen_security_and_privacy_ask_to_join_option_title">"Minta untuk bergabung"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Ya, aktifkan enkripsi"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Setelah diaktifkan, encryption untuk sebuah ruangan tidak dapat dinonaktifkan, Riwayat pesan hanya akan terlihat oleh anggota ruangan sejak mereka diundang atau sejak mereka bergabung dengan ruangan tersebut.
 Tidak ada orang lain selain anggota ruangan yang dapat membaca pesan. Hal ini dapat mencegah bot dan jembatan bekerja dengan benar.
@@ -116,7 +114,6 @@ Kami tidak menyarankan untuk mengaktifkan enkripsi untuk ruangan yang dapat dite
   <string name="screen_security_and_privacy_encryption_section_header">"Enkripsi"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Aktifkan enkripsi ujung ke ujung"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Siapa pun dapat menemukan dan bergabung"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Siapa pun"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Orang hanya dapat bergabung jika mereka diundang"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Hanya undangan"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Akses ruangan"</string>

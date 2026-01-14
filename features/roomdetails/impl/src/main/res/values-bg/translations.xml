@@ -42,7 +42,6 @@
   <string name="screen_room_details_pinned_events_row_title">"Закачени съобщения"</string>
   <string name="screen_room_details_profile_row_title">"Профил"</string>
   <string name="screen_room_details_roles_and_permissions">"Роли и разрешения"</string>
-  <string name="screen_room_details_room_name_label">"Име на стаята"</string>
   <string name="screen_room_details_security_and_privacy_title">"Защита и поверителност"</string>
   <string name="screen_room_details_security_title">"Защита"</string>
   <string name="screen_room_details_share_room_title">"Споделяне на стаята"</string>
@@ -86,7 +85,6 @@
   <string name="screen_security_and_privacy_encryption_section_header">"Шифроване"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Включване на шифроване от край до край"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Всеки може да намери и да се присъедини"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Всеки"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Хората могат да се присъединят само ако са поканени"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Само с покана"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Достъп до стаята"</string>

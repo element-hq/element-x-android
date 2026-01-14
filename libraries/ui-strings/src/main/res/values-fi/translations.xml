@@ -112,6 +112,7 @@
   <string name="action_load_more">"Lataa lisää"</string>
   <string name="action_manage_account">"Hallitse tiliä"</string>
   <string name="action_manage_devices">"Hallitse laitteita"</string>
+  <string name="action_manage_rooms">"Huoneiden hallitseminen"</string>
   <string name="action_message">"Lähetä viesti"</string>
   <string name="action_minimize">"Pienennä"</string>
   <string name="action_next">"Seuraava"</string>

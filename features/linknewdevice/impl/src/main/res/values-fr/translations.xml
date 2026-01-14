@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_link_new_device_desktop_scanning_title">"Scannez le QR code"</string>
+  <string name="screen_link_new_device_desktop_scanning_title">"Scannez le code QR"</string>
   <string name="screen_link_new_device_desktop_step1">"Ouvrir %1$s sur un ordinateur"</string>
-  <string name="screen_link_new_device_desktop_step3">"Scanner le QR code avec cet appareil"</string>
+  <string name="screen_link_new_device_desktop_step3">"Scanner le code QR avec cet appareil"</string>
   <string name="screen_link_new_device_desktop_submit">"Prêt à scanner"</string>
   <string name="screen_link_new_device_desktop_title">"Ouvrir %1$s sur un ordinateur pour obtenir le code QR"</string>
   <string name="screen_link_new_device_enter_number_error_numbers_do_not_match">"Les nombres ne correspondent pas"</string>
@@ -12,7 +12,7 @@
   <string name="screen_link_new_device_error_app_not_supported_subtitle">"Votre fournisseur de compte ne supporte pas %1$s."</string>
   <string name="screen_link_new_device_error_app_not_supported_title">"%1$s n’est pas supporté"</string>
   <string name="screen_link_new_device_error_not_supported_subtitle">"Votre fournisseur de compte ne prend pas en charge la connexion à un nouvel appareil à l’aide d’un code QR."</string>
-  <string name="screen_link_new_device_error_not_supported_title">"QR code non supporté"</string>
+  <string name="screen_link_new_device_error_not_supported_title">"Code QR non supporté"</string>
   <string name="screen_link_new_device_error_request_cancelled_subtitle">"La connexion a été annulée sur l’autre appareil."</string>
   <string name="screen_link_new_device_error_request_cancelled_title">"Demande de connexion annulée"</string>
   <string name="screen_link_new_device_error_request_timeout_subtitle">"Connexion expirée. Veuillez essayer à nouveau."</string>
@@ -30,7 +30,7 @@
   <string name="screen_link_new_device_wrong_number_title">"Les nombres ne correspondent pas"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Aucune connexion sécurisée n’a pu être établie avec la nouvelle session. Vos sessions existantes sont toujours en sécurité et vous n’avez pas à vous en soucier."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_header">"Et maintenant ?"</string>
-  <string name="screen_qr_code_login_connection_note_secure_state_list_item_1">"Essayez de vous connecter à nouveau à l’aide du QR code au cas où il s’agirait d’un problème réseau"</string>
+  <string name="screen_qr_code_login_connection_note_secure_state_list_item_1">"Essayez de vous connecter à nouveau à l’aide du code QR au cas où il s’agirait d’un problème réseau"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"Si vous rencontrez le même problème, essayez un autre réseau wifi ou utilisez vos données mobiles au lieu du wifi"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Si cela ne fonctionne pas, connectez-vous manuellement"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"La connexion n’est pas sécurisée"</string>
@@ -42,14 +42,14 @@
   <string name="screen_qr_code_login_error_device_already_signed_in_title">"Votre autre appareil est déjà connecté"</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"Connexion expirée. Veuillez essayer à nouveau."</string>
   <string name="screen_qr_code_login_error_expired_title">"La connexion a pris trop de temps."</string>
-  <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"Votre autre appareil ne supporte pas la connexion à %s avec un QR code. Essayer de vous connecter manuellement, ou scanner le QR code avec un autre appareil."</string>
-  <string name="screen_qr_code_login_error_linking_not_suported_title">"QR code non supporté"</string>
+  <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"Votre autre appareil ne supporte pas la connexion à %s avec un code QR. Essayer de vous connecter manuellement, ou scanner le code QR avec un autre appareil."</string>
+  <string name="screen_qr_code_login_error_linking_not_suported_title">"Code QR non supporté"</string>
   <string name="screen_qr_code_login_error_sliding_sync_not_supported_subtitle">"Votre fournisseur de compte ne supporte pas %1$s."</string>
   <string name="screen_qr_code_login_error_sliding_sync_not_supported_title">"%1$s n’est pas supporté"</string>
-  <string name="screen_qr_code_login_invalid_scan_state_description">"Scannez le QR code affiché sur l’autre appareil."</string>
+  <string name="screen_qr_code_login_invalid_scan_state_description">"Scannez le code QR affiché sur l’autre appareil."</string>
   <string name="screen_qr_code_login_invalid_scan_state_retry_button">"Essayer à nouveau"</string>
-  <string name="screen_qr_code_login_invalid_scan_state_subtitle">"QR code erroné"</string>
+  <string name="screen_qr_code_login_invalid_scan_state_subtitle">"Code QR erroné"</string>
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Vous devez autoriser %1$s à utiliser la camera de votre appareil pour continuer."</string>
-  <string name="screen_qr_code_login_no_camera_permission_state_title">"Autoriser l’usage de la caméra pour scanner le QR code"</string>
+  <string name="screen_qr_code_login_no_camera_permission_state_title">"Autoriser l’usage de la caméra pour scanner le code QR"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Une erreur inattendue s’est produite. Veuillez réessayer."</string>
 </resources>

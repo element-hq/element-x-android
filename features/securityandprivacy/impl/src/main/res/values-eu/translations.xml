@@ -5,7 +5,6 @@
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Bai, gaitu zifratzea"</string>
   <string name="screen_security_and_privacy_encryption_section_header">"Zifratzea"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Edonork aurkitu eta bat egin dezake"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Edonork"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Gonbidatutako pertsonak bakarrik sartu ahal izango dira"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Gonbidapen bidez"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Gelarako sarbidea"</string>

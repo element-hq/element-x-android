@@ -63,7 +63,6 @@
   <string name="screen_room_details_profile_row_title">"Profil"</string>
   <string name="screen_room_details_requests_to_join_title">"Csatlakozási kérelem"</string>
   <string name="screen_room_details_roles_and_permissions">"Szerepkörök és jogosultságok"</string>
-  <string name="screen_room_details_room_name_label">"Szoba neve"</string>
   <string name="screen_room_details_security_and_privacy_title">"Biztonság és adatvédelem"</string>
   <string name="screen_room_details_security_title">"Biztonság"</string>
   <string name="screen_room_details_share_room_title">"Szoba megosztása"</string>
@@ -132,7 +131,7 @@ Nem javasoljuk a titkosítás engedélyezését az olyan szobákban, amelyeket b
   <string name="screen_security_and_privacy_encryption_section_header">"Titkosítás"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Végpontok közötti titkosítás engedélyezése"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Bárki csatlakozhat."</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Bárki"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Nyilvános"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Csak a meghívott emberek léphetnek be."</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Csak meghívásos"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Hozzáférés"</string>

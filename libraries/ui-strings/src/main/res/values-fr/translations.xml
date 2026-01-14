@@ -56,6 +56,7 @@
   <string name="a11y_your_avatar">"Votre avatar"</string>
   <string name="action_accept">"Accepter"</string>
   <string name="action_add_caption">"Ajouter une légende"</string>
+  <string name="action_add_existing_rooms">"Ajouter des salons existants"</string>
   <string name="action_add_to_timeline">"Ajouter à la discussion"</string>
   <string name="action_back">"Retour"</string>
   <string name="action_call">"Appel"</string>
@@ -75,6 +76,7 @@
   <string name="action_copy_text">"Copier le texte"</string>
   <string name="action_create">"Créer"</string>
   <string name="action_create_a_room">"Créer un salon"</string>
+  <string name="action_create_space">"Créer un espace"</string>
   <string name="action_deactivate">"Désactiver"</string>
   <string name="action_deactivate_account">"Désactiver le compte"</string>
   <string name="action_decline">"Refuser"</string>
@@ -112,6 +114,7 @@
   <string name="action_load_more">"Voir plus"</string>
   <string name="action_manage_account">"Gérer le compte"</string>
   <string name="action_manage_devices">"Gérez les sessions"</string>
+  <string name="action_manage_rooms">"Gérer les salons"</string>
   <string name="action_message">"Message"</string>
   <string name="action_minimize">"Minimiser"</string>
   <string name="action_next">"Suivant"</string>
@@ -191,6 +194,7 @@
   <string name="common_copied_to_clipboard">"Copié dans le presse-papiers"</string>
   <string name="common_copyright">"Droits d’auteur"</string>
   <string name="common_creating_room">"Création du salon…"</string>
+  <string name="common_creating_space">"Création de l’espace…"</string>
   <string name="common_current_user_canceled_knock">"Demande annulée"</string>
   <string name="common_current_user_left_room">"Vous avez quitté le salon"</string>
   <string name="common_current_user_left_space">"Vous avez quitté l’espace"</string>
@@ -337,6 +341,7 @@ Raison : %1$s."</string>
   <string name="common_starting_chat">"Création de la discussion…"</string>
   <string name="common_sticker">"Autocollant"</string>
   <string name="common_success">"Succès"</string>
+  <string name="common_suggested">"Recommandé"</string>
   <string name="common_suggestions">"Suggestions"</string>
   <string name="common_syncing">"Synchronisation"</string>
   <string name="common_system">"Système"</string>
@@ -374,6 +379,8 @@ Raison : %1$s."</string>
   <string name="common_waiting">"En attente…"</string>
   <string name="common_waiting_for_decryption_key">"En attente de la clé de déchiffrement"</string>
   <string name="common_you">"Vous"</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) a partagé ce message avec vous car vous n’étiez pas dans le salon lors de son envoi."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s a partagé ce message avec vous car vous n’étiez pas dans le salon lors de son envoi."</string>
   <string name="crypto_history_visible">"Ce salon a été configuré pour que les nouveaux membres puissent lire l’historique. %1$s"</string>
   <string name="crypto_identity_change_pin_violation">"L’identité de %1$s a été réinitialisée. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"L’identité de %1$s %2$s a été réinitialisée. %3$s"</string>
@@ -473,6 +480,7 @@ Raison : %1$s."</string>
   <string name="screen_share_this_location_action">"Partager cette position"</string>
   <string name="screen_space_list_description">"Espaces que vous avez créés ou rejoints."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_empty_state_title">"Créer des espaces pour organiser les salons"</string>
   <string name="screen_space_list_parent_space">"Espace %1$s"</string>
   <string name="screen_space_list_title">"Espaces"</string>
   <string name="screen_space_menu_action_members">"Voir les membres"</string>

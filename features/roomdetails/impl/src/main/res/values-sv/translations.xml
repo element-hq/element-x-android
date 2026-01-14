@@ -59,7 +59,6 @@
   <string name="screen_room_details_profile_row_title">"Profil"</string>
   <string name="screen_room_details_requests_to_join_title">"Begäran om att gå med"</string>
   <string name="screen_room_details_roles_and_permissions">"Roller och behörigheter"</string>
-  <string name="screen_room_details_room_name_label">"Rumsnamn"</string>
   <string name="screen_room_details_security_and_privacy_title">"Säkerhet och sekretess"</string>
   <string name="screen_room_details_security_title">"Säkerhet"</string>
   <string name="screen_room_details_share_room_title">"Dela rum"</string>

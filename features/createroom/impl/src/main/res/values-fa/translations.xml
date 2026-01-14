@@ -7,8 +7,10 @@
   <string name="screen_create_room_private_option_title">"اتاق خصوصی"</string>
   <string name="screen_create_room_public_option_description">"هرکسی می‌تواند اتاق را بیابد.
 می‌توانید بعداً در تظیمات اتاق عوضش کنید."</string>
-  <string name="screen_create_room_public_option_title">"اتاق عمومی"</string>
+  <string name="screen_create_room_public_option_title">"اتاق عمومی (هرکسی)"</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"درخواست دعوت"</string>
+  <string name="screen_create_room_room_access_section_public_option_description">"هرکسی می‌تواند به این اتاق بپیوندد"</string>
+  <string name="screen_create_room_room_access_section_public_option_title">"هرکسی"</string>
   <string name="screen_create_room_room_address_section_title">"نشانی اتاق"</string>
   <string name="screen_create_room_room_visibility_section_title">"نمایانی اتاق"</string>
   <string name="screen_create_room_topic_label">"موضوع (اختیاری)"</string>

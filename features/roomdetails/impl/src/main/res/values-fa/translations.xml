@@ -61,7 +61,6 @@
   <string name="screen_room_details_profile_row_title">"نمایه"</string>
   <string name="screen_room_details_requests_to_join_title">"درخواست‌های پیوستن"</string>
   <string name="screen_room_details_roles_and_permissions">"نقش‌ها و اجازه‌ها"</string>
-  <string name="screen_room_details_room_name_label">"نام اتاق"</string>
   <string name="screen_room_details_security_and_privacy_title">"امنیت و محرمانگی"</string>
   <string name="screen_room_details_security_title">"امنیت"</string>
   <string name="screen_room_details_share_room_title">"هم‌رسانی اتاق"</string>

@@ -114,6 +114,7 @@
   <string name="action_load_more">"Učitaj više"</string>
   <string name="action_manage_account">"Upravljanje računom"</string>
   <string name="action_manage_devices">"Upravljanje uređajima"</string>
+  <string name="action_manage_rooms">"Upravljaj sobama"</string>
   <string name="action_message">"Poruka"</string>
   <string name="action_minimize">"Minimiziraj"</string>
   <string name="action_next">"Dalje"</string>

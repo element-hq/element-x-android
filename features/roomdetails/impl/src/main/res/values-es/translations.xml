@@ -55,7 +55,6 @@
   <string name="screen_room_details_profile_row_title">"Perfil"</string>
   <string name="screen_room_details_requests_to_join_title">"Solicitudes de unión"</string>
   <string name="screen_room_details_roles_and_permissions">"Roles y permisos"</string>
-  <string name="screen_room_details_room_name_label">"Nombre de la sala"</string>
   <string name="screen_room_details_security_and_privacy_title">"Seguridad y privacidad"</string>
   <string name="screen_room_details_security_title">"Seguridad"</string>
   <string name="screen_room_details_share_room_title">"Compartir sala"</string>
@@ -107,7 +106,6 @@
   <string name="screen_room_roles_and_permissions_title">"Roles y permisos"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Agregar dirección de sala"</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Cualquiera puede solicitar unirse a la sala, pero un administrador o moderador tendrá que aceptar la solicitud."</string>
-  <string name="screen_security_and_privacy_ask_to_join_option_title">"Solicitud para unirse"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Sí, activar cifrado"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Una vez activado, el cifrado de una sala no se puede desactivar. El historial de mensajes solo será visible para los miembros de la sala desde que fueron invitados o desde que se unieron a la sala.
 Nadie más que los miembros de la sala podrán leer los mensajes. Esto puede impedir que los bots y los puentes funcionen correctamente.
@@ -117,7 +115,6 @@ No recomendamos habilitar el cifrado para las salas que cualquiera pueda encontr
   <string name="screen_security_and_privacy_encryption_section_header">"Cifrado"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Activar el cifrado de extremo a extremo"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Cualquiera puede encontrarla y unirse"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Cualquiera"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Las personas solo pueden unirse si están invitadas"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Solo por invitación"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Acceso a la sala"</string>

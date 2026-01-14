@@ -61,7 +61,6 @@
   <string name="screen_room_details_profile_row_title">"个人资料"</string>
   <string name="screen_room_details_requests_to_join_title">"申请加入"</string>
   <string name="screen_room_details_roles_and_permissions">"角色与权限"</string>
-  <string name="screen_room_details_room_name_label">"聊天室名称"</string>
   <string name="screen_room_details_security_and_privacy_title">"安全与隐私"</string>
   <string name="screen_room_details_security_title">"安全"</string>
   <string name="screen_room_details_share_room_title">"分享聊天室"</string>

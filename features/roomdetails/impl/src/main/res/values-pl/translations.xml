@@ -61,7 +61,6 @@
   <string name="screen_room_details_profile_row_title">"Profil"</string>
   <string name="screen_room_details_requests_to_join_title">"Prośby o dołączenie"</string>
   <string name="screen_room_details_roles_and_permissions">"Role i uprawnienia"</string>
-  <string name="screen_room_details_room_name_label">"Nazwa pokoju"</string>
   <string name="screen_room_details_security_and_privacy_title">"Bezpieczeństwo i prywatność"</string>
   <string name="screen_room_details_security_title">"Bezpieczeństwo"</string>
   <string name="screen_room_details_share_room_title">"Udostępnij pokój"</string>
@@ -127,7 +126,7 @@ Odradzamy włączanie szyfrowania dla pokoi, które każdy może znaleźć i do 
   <string name="screen_security_and_privacy_encryption_section_header">"Szyfrowanie"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Włącz szyfrowanie end-to-end"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Każdy może znaleźć i dołączyć"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Wszyscy"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Każdy"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Tylko osoby z zaproszeniem mogą dołączyć"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Tylko zaproszenie"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Dostęp do pokoju"</string>

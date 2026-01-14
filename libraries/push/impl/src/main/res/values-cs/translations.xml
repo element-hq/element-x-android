@@ -42,6 +42,8 @@
   <string name="notification_room_invite_body_with_sender">"%1$s vás pozval(a) do místnosti"</string>
   <string name="notification_sender_me">"Já"</string>
   <string name="notification_sender_mention_reply">"%1$s zmínil(a) nebo odpověděl(a)"</string>
+  <string name="notification_space_invite_body">"Pozvali vás do prostoru"</string>
+  <string name="notification_space_invite_body_with_sender">"%1$s vás pozvali do prostoru"</string>
   <string name="notification_test_push_notification_content">"Prohlížíte si oznámení! Klikněte na mě!"</string>
   <string name="notification_thread_in_room">"Vlákno v %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
@@ -99,5 +101,5 @@
   <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"Chyba, nelze otestovat push."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"Chyba, časový limit čekání na push."</string>
   <string name="troubleshoot_notifications_test_push_loop_back_success">"Push zpětná smyčka trvala %1$d ms."</string>
-  <string name="troubleshoot_notifications_test_push_loop_back_title">"Otestovat push zpětnou smyčku"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_title">"Otestovat push pomocí zpětného volání"</string>
 </resources>

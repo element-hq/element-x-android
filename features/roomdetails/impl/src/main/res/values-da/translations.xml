@@ -63,7 +63,6 @@
   <string name="screen_room_details_profile_row_title">"Profil"</string>
   <string name="screen_room_details_requests_to_join_title">"Anmodninger om at deltage"</string>
   <string name="screen_room_details_roles_and_permissions">"Roller og tilladelser"</string>
-  <string name="screen_room_details_room_name_label">"Navn på rum"</string>
   <string name="screen_room_details_security_and_privacy_title">"Sikkerhed og privatliv"</string>
   <string name="screen_room_details_security_title">"Sikkerhed"</string>
   <string name="screen_room_details_share_room_title">"Del rum"</string>
@@ -130,7 +129,6 @@
   <string name="screen_room_roles_and_permissions_title">"Roller og tilladelser"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Tilføj adresse"</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Alle skal anmode om adgang."</string>
-  <string name="screen_security_and_privacy_ask_to_join_option_title">"Spørg om at deltage"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Ja, aktivér kryptering"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Når det først er aktiveret, kan kryptering for et rum ikke deaktiveres igen. Beskedhistorik vil kun være synlig for rummedlemmer, siden de blev inviteret, eller siden de blev medlem af rummet.
 Ingen udover medlemmer af rummet vil være i stand til at læse beskeder. Dette kan forhindre bots og broer i at fungere korrekt.
@@ -140,7 +138,6 @@ Vi anbefaler ikke at aktivere kryptering for rum, som alle kan finde og deltage 
   <string name="screen_security_and_privacy_encryption_section_header">"Kryptering"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Aktivér end-to-end-kryptering"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Alle kan være med."</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Enhver"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Kun inviterede personer kan deltage i dette rum."</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Kun inviterede"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Adgang"</string>

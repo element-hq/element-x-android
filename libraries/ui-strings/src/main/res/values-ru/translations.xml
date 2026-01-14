@@ -114,6 +114,7 @@
   <string name="action_load_more">"Загрузить еще"</string>
   <string name="action_manage_account">"Настройки учетной записи"</string>
   <string name="action_manage_devices">"Управление устройствами"</string>
+  <string name="action_manage_rooms">"Управление комнатами"</string>
   <string name="action_message">"Сообщение"</string>
   <string name="action_minimize">"Свернуть"</string>
   <string name="action_next">"Далее"</string>

@@ -14,7 +14,7 @@ Odradzamy włączanie szyfrowania dla pokoi, które każdy może znaleźć i do 
   <string name="screen_security_and_privacy_encryption_section_header">"Szyfrowanie"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Włącz szyfrowanie end-to-end"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Każdy może znaleźć i dołączyć"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Wszyscy"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Każdy"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Tylko osoby z zaproszeniem mogą dołączyć"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Tylko zaproszenie"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Dostęp do pokoju"</string>

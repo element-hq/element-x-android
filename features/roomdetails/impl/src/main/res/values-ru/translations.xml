@@ -63,7 +63,6 @@
   <string name="screen_room_details_profile_row_title">"Профиль"</string>
   <string name="screen_room_details_requests_to_join_title">"Запросы на вступление"</string>
   <string name="screen_room_details_roles_and_permissions">"Роли и разрешения"</string>
-  <string name="screen_room_details_room_name_label">"Название комнаты"</string>
   <string name="screen_room_details_security_and_privacy_title">"Безопасность и конфиденциальность"</string>
   <string name="screen_room_details_security_title">"Безопасность"</string>
   <string name="screen_room_details_share_room_title">"Поделиться комнатой"</string>
@@ -123,7 +122,7 @@
   <string name="screen_room_roles_and_permissions_title">"Роли и разрешения"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Добавить адрес"</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Каждый должен запросить доступ."</string>
-  <string name="screen_security_and_privacy_ask_to_join_option_title">"Попросить присоединиться"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Присоединиться"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Да, включить шифрование"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Шифрование комнаты нельзя будет отключить, история сообщений будет видна только участникам комнаты с момента их приглашения или с момента присоединения к комнате.
 Никто, кроме членов комнаты, не сможет читать сообщения. Это может помешать ботам и мостам работать корректно.
@@ -133,7 +132,7 @@
   <string name="screen_security_and_privacy_encryption_section_header">"Шифрование"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Включить сквозное шифрование"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Любой желающий может найти и присоединиться"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Любой"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Публичный"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Присоединиться могут только приглашенные люди."</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Только по приглашению"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Доступ"</string>

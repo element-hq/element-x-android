@@ -10,7 +10,6 @@
   <string name="screen_security_and_privacy_add_room_address_action">"Adăugați o adresă"</string>
   <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Oricine se află în spațiile autorizate se poate alătura, dar toți ceilalți trebuie să solicite accesul."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Toată lumea trebuie să solicite acces."</string>
-  <string name="screen_security_and_privacy_ask_to_join_option_title">"Cereți să vă alăturați"</string>
   <string name="screen_security_and_privacy_ask_to_join_single_space_members_option_description">"Oricine în %1$s se poate alătura, dar toți ceilalți trebuie să solicite acces."</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Da, activați criptarea"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Odată activată, criptarea pentru o cameră nu poate fi dezactivată. Mesajele anterioare vor fi vizibile numai pentru membrii camerei de la momentul la care au fost invitați sau de la momentul la care s-au alăturat camerei. 
@@ -21,7 +20,6 @@ Nu recomandăm activarea criptării pentru camerele pe care oricine le poate gă
   <string name="screen_security_and_privacy_encryption_section_header">"Criptare"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Activați criptarea end-to-end"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Oricine se poate alătura."</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Oricine"</string>
   <string name="screen_security_and_privacy_room_access_footer">"Alegeți membrii căror spații se pot alătura acestei camere fără invitație. %1$s"</string>
   <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Gestionați spațiile"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Doar persoanele invitate se pot alătura."</string>

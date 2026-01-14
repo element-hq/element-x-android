@@ -63,7 +63,7 @@
   <string name="screen_room_details_profile_row_title">"Profil"</string>
   <string name="screen_room_details_requests_to_join_title">"Žádosti o vstup"</string>
   <string name="screen_room_details_roles_and_permissions">"Role a oprávnění"</string>
-  <string name="screen_room_details_room_name_label">"Název místnosti"</string>
+  <string name="screen_room_details_room_name_label">"Název"</string>
   <string name="screen_room_details_security_and_privacy_title">"Zabezpečení a soukromí"</string>
   <string name="screen_room_details_security_title">"Zabezpečení"</string>
   <string name="screen_room_details_share_room_title">"Sdílet místnost"</string>
@@ -132,8 +132,10 @@
   <string name="screen_room_roles_and_permissions_room_details">"Podrobnosti místnosti"</string>
   <string name="screen_room_roles_and_permissions_title">"Role a oprávnění"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Přidat adresu"</string>
+  <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Připojit se může kdokoli v autorizovaných prostorách, ale všichni ostatní musí o přístup požádat."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Všichni musí požádat o přístup."</string>
-  <string name="screen_security_and_privacy_ask_to_join_option_title">"Požádat o připojení"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Požádat o vstup"</string>
+  <string name="screen_security_and_privacy_ask_to_join_single_space_members_option_description">"Kdokoli v %1$s se může připojit, ale všichni ostatní musí o přístup požádat."</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Ano, povolit šifrování"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Po aktivaci nelze šifrování místnosti deaktivovat. Historie zpráv bude viditelná pouze pro členy místnosti od doby, kdy byli pozváni nebo od té doby, co do místnosti vstoupili.
 Nikdo kromě členů místnosti nebude moci číst zprávy. To může bránit správnému fungování robotů a propojení.
@@ -144,7 +146,8 @@ Nedoporučujeme povolovat šifrování pro místnosti, které může kdokoli naj
   <string name="screen_security_and_privacy_encryption_toggle_title">"Povolit koncové šifrování"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Vstoupit může kdokoli."</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Kdokoliv"</string>
-  <string name="screen_security_and_privacy_room_access_footer">"Vyberte, kteří členové prostorů se k této místnosti mohou připojit bez pozvánky. %1$s"</string>
+  <string name="screen_security_and_privacy_room_access_footer">"Vyberte, kteří členové prostorů mohou vstoupit do této místnosti bez pozvánky. %1$s"</string>
+  <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Spravovat prostory"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Vstoupit mohou pouze pozvaní lidé."</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Pouze pro zvané"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Přístup"</string>
@@ -157,10 +160,11 @@ Nedoporučujeme povolovat šifrování pro místnosti, které může kdokoli naj
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Umožněte nalezení této místnosti prohledáním adresáře veřejných místností na %1$s"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_description">"Umožnit nalezení vyhledáváním ve veřejném adresáři."</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Viditelné ve veřejném adresáři"</string>
-  <string name="screen_security_and_privacy_room_history_anyone_option_title">"Kdokoliv"</string>
+  <string name="screen_security_and_privacy_room_history_anyone_option_title">"Kdokoli (historie je veřejná)"</string>
+  <string name="screen_security_and_privacy_room_history_section_footer">"Změny neovlivní starší zprávy, pouze nové. %1$s"</string>
   <string name="screen_security_and_privacy_room_history_section_header">"Kdo může číst historii"</string>
-  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Pouze členové od té doby, co byli pozváni"</string>
-  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Pouze členové od výběru této možnosti"</string>
+  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Členové od pozvání"</string>
+  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Členové (úplná historie)"</string>
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Adresy místností představují způsoby, jak najít místnosti a získat k nim přístup. Díky tomu můžete svoji místnost snadno sdílet s ostatními.
 Můžete se rozhodnout publikovat svou místnost ve veřejném adresáři místnosti vašeho domovského serveru."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Publikování místnosti"</string>

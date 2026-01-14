@@ -4,7 +4,7 @@
   <string name="screen_edit_room_address_title">"Oda adresi"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Oda adresi ekle"</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Herkes odaya katılma isteğinde bulunabilir ancak bir yönetici veya moderatörün isteği kabul etmesi gerekir."</string>
-  <string name="screen_security_and_privacy_ask_to_join_option_title">"Katılmak için sor"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Katılma isteği gönder"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Evet, şifrelemeyi etkinleştir"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Etkinleştirildikten sonra, bir oda için şifreleme devre dışı bırakılamaz, Mesaj geçmişi yalnızca davet edildiklerinden veya odaya katıldıklarından beri oda üyeleri için görünür olacaktır.
 Oda üyeleri dışında hiç kimse mesajları okuyamayacaktır. Bu, botların ve köprülerin düzgün çalışmasını engelleyebilir.
