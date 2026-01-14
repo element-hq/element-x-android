@@ -270,6 +270,7 @@ private fun RoomsViewList(
         // is moved to the top of the list.
         itemsIndexed(
             items = state.summaries,
+            key = { _, room -> room.roomId },
             contentType = { _, room -> room.contentType() },
         ) { index, room ->
             RoomSummaryRow(
