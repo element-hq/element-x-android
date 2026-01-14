@@ -126,7 +126,7 @@ class RoomSummaryListProcessor(
                     analyticsService.trackError(
                         IllegalStateException(
                             "Found duplicates in room summaries after a list update from the SDK: $duplicates. " +
-                                "Updates: $updates"
+                                "Updates: ${updates.description()}"
                         )
                     )
                 }
@@ -136,3 +136,5 @@ class RoomSummaryListProcessor(
         }
     }
 }
+
+private fun List<RoomListEntriesUpdate>.description(): String = joinToString { it.describe() }

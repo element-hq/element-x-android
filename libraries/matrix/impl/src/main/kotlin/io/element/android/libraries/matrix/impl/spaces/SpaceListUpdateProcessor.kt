@@ -45,7 +45,7 @@ internal class SpaceListUpdateProcessor(
             if (spaceRooms.size != uniqueRooms.size) {
                 val duplicateKeys = spaceRooms.groupBy { it.roomId }.filter { it.value.size > 1 }.keys
                 analyticsService.trackError(
-                    IllegalStateException("Found duplicate keys in space rooms list ($duplicateKeys) after SDK updates: $updates")
+                    IllegalStateException("Found duplicate keys in space rooms list ($duplicateKeys) after SDK updates: ${updates.description()}")
                 )
             }
 
@@ -94,4 +94,20 @@ internal class SpaceListUpdateProcessor(
             }
         }
     }
+}
+
+private fun List<SpaceListUpdate>.description(): String = joinToString { it.description() }
+
+private fun SpaceListUpdate.description(): String = when (this) {
+    is SpaceListUpdate.Append -> "Append(${values.map { it.roomId }})"
+    SpaceListUpdate.Clear -> "Clear"
+    is SpaceListUpdate.Insert -> "Insert($index, ${value.roomId})"
+    SpaceListUpdate.PopBack -> "PopBack"
+    SpaceListUpdate.PopFront -> "PopFront"
+    is SpaceListUpdate.PushBack -> "PushBack(${value.roomId})"
+    is SpaceListUpdate.PushFront -> "PushFront(${value.roomId})"
+    is SpaceListUpdate.Remove -> "Remove($index)"
+    is SpaceListUpdate.Reset -> "Reset(${values.map { it.roomId }})"
+    is SpaceListUpdate.Set -> "Set($index, ${value.roomId})"
+    is SpaceListUpdate.Truncate -> "Truncate($length)"
 }
