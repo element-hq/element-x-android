@@ -203,6 +203,7 @@ class RustMatrixClient(
         roomMembershipObserver = roomMembershipObserver,
         sessionCoroutineScope = sessionCoroutineScope,
         sessionDispatcher = sessionDispatcher,
+        analyticsService = analyticsService,
     )
 
     override val sessionVerificationService = RustSessionVerificationService(

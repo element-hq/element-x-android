@@ -109,6 +109,7 @@ class SentryAnalyticsProvider(
     }
 
     override fun trackError(throwable: Throwable) {
+        Timber.e(throwable, "Sending error to Sentry")
         Sentry.captureException(throwable)
     }
 

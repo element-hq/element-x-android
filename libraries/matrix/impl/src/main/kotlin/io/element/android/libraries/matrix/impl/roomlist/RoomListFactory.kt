@@ -56,7 +56,7 @@ internal class RoomListFactory(
         val loadingStateFlow: MutableStateFlow<RoomList.LoadingState> = MutableStateFlow(RoomList.LoadingState.NotLoaded)
         val filteredSummariesFlow = MutableSharedFlow<List<RoomSummary>>(replay = 1, extraBufferCapacity = 1)
         val summariesFlow = MutableSharedFlow<List<RoomSummary>>(replay = 1, extraBufferCapacity = 1)
-        val processor = RoomSummaryListProcessor(summariesFlow, innerRoomListService, coroutineContext, roomSummaryFactory)
+        val processor = RoomSummaryListProcessor(summariesFlow, innerRoomListService, coroutineContext, roomSummaryFactory, analyticsService)
         // Makes sure we don't miss any events
         val dynamicEvents = MutableSharedFlow<RoomListDynamicEvents>(replay = 100)
         val currentFilter = MutableStateFlow(initialFilter)

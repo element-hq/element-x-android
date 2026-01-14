@@ -19,6 +19,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
+import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
@@ -31,7 +32,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import timber.log.Timber
+import java.lang.IllegalStateException
 import kotlin.time.Duration.Companion.seconds
 
 @Inject
@@ -43,6 +44,7 @@ class RoomListDataSource(
     @SessionCoroutineScope
     private val sessionCoroutineScope: CoroutineScope,
     private val dateTimeObserver: DateTimeObserver,
+    private val analyticsService: AnalyticsService,
 ) {
     init {
         observeNotificationSettings()
@@ -139,10 +141,18 @@ class RoomListDataSource(
         // TODO remove once https://github.com/element-hq/element-x-android/issues/5031 has been confirmed as fixed
         val duplicates = cachingResults.filter { (_, operations) -> operations.size > 1 }
         if (duplicates.isNotEmpty()) {
-            Timber.e("Found duplicates in room summaries after an UI update: $duplicates. This could be a race condition/caching issue of some kind")
-        }
+            analyticsService.trackError(
+                IllegalStateException(
+                    "Found duplicates in room summaries after a local UI update: $duplicates. " +
+                    "This could be a race condition/caching issue of some kind"
+                )
+            )
 
-        _allRooms.emit(roomListRoomSummaries.toImmutableList())
+            // Remove duplicates before emitting the new values
+            _allRooms.emit(roomListRoomSummaries.distinctBy { it.roomId }.toImmutableList())
+        } else {
+            _allRooms.emit(roomListRoomSummaries.toImmutableList())
+        }
     }
 
     private fun buildAndCacheItem(roomSummaries: List<RoomSummary>, index: Int): RoomListRoomSummary? {

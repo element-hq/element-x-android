@@ -12,6 +12,7 @@ import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import io.element.android.libraries.matrix.api.spaces.SpaceRoomList
+import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -32,6 +33,7 @@ class RustSpaceRoomList(
     private val innerProvider: suspend () -> InnerSpaceRoomList,
     private val coroutineScope: CoroutineScope,
     spaceRoomMapper: SpaceRoomMapper,
+    private val analyticsService: AnalyticsService,
 ) : SpaceRoomList {
     private val innerCompletable = CompletableDeferred<InnerSpaceRoomList>()
 
@@ -43,7 +45,8 @@ class RustSpaceRoomList(
         MutableStateFlow(SpaceRoomList.PaginationStatus.Idle(hasMoreToLoad = false))
     private val spaceListUpdateProcessor = SpaceListUpdateProcessor(
         spaceRoomsFlow = spaceRoomsFlow,
-        mapper = spaceRoomMapper
+        mapper = spaceRoomMapper,
+        analyticsService = analyticsService,
     )
 
     init {

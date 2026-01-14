@@ -9,6 +9,7 @@
 package io.element.android.libraries.matrix.impl.roomlist
 
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
+import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -18,6 +19,7 @@ import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
 import org.matrix.rustcomponents.sdk.RoomListServiceInterface
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
+import kotlin.collections.groupingBy
 import kotlin.coroutines.CoroutineContext
 
 class RoomSummaryListProcessor(
@@ -25,26 +27,21 @@ class RoomSummaryListProcessor(
     private val roomListService: RoomListServiceInterface,
     private val coroutineContext: CoroutineContext,
     private val roomSummaryFactory: RoomSummaryFactory,
+    private val analyticsService: AnalyticsService,
 ) {
     private val mutex = Mutex()
 
     suspend fun postUpdate(updates: List<RoomListEntriesUpdate>) {
-        updateRoomSummaries {
+        updateRoomSummaries(updates) {
             Timber.v("Update rooms from postUpdates (with ${updates.size} items) on ${Thread.currentThread()}")
             updates.forEach { update ->
                 applyUpdate(update)
-            }
-
-            // TODO remove once https://github.com/element-hq/element-x-android/issues/5031 has been confirmed as fixed
-            val duplicates = groupingBy { it.roomId }.eachCount().filter { it.value > 1 }
-            if (duplicates.isNotEmpty()) {
-                Timber.e("Found duplicates in room summaries after a list update from the SDK: $duplicates. Updates: $updates")
             }
         }
     }
 
     suspend fun rebuildRoomSummaries() {
-        updateRoomSummaries {
+        updateRoomSummaries(emptyList()) {
             forEachIndexed { i, summary ->
                 val result = buildRoomSummaryForIdentifier(summary.roomId.value)
                 if (result != null) {
@@ -112,12 +109,30 @@ class RoomSummaryListProcessor(
         }
     }
 
-    private suspend fun updateRoomSummaries(block: suspend MutableList<RoomSummary>.() -> Unit) = withContext(coroutineContext) {
+    private suspend fun updateRoomSummaries(updates: List<RoomListEntriesUpdate>, block: suspend MutableList<RoomSummary>.() -> Unit) = withContext(
+        coroutineContext
+    ) {
         mutex.withLock {
             val current = roomSummaries.replayCache.lastOrNull()
             val mutableRoomSummaries = current.orEmpty().toMutableList()
             block(mutableRoomSummaries)
-            roomSummaries.emit(mutableRoomSummaries)
+
+            // TODO remove once https://github.com/element-hq/element-x-android/issues/5031 has been confirmed as fixed
+            val uniqueRooms = mutableRoomSummaries.distinctBy { it.roomId }
+
+            if (uniqueRooms.size != mutableRoomSummaries.size) {
+                val duplicates = mutableRoomSummaries.groupingBy { it.roomId }.eachCount().filter { it.value > 1 }
+                if (duplicates.isNotEmpty()) {
+                    analyticsService.trackError(
+                        IllegalStateException(
+                            "Found duplicates in room summaries after a list update from the SDK: $duplicates. " +
+                                "Updates: $updates"
+                        )
+                    )
+                }
+            }
+
+            roomSummaries.emit(uniqueRooms)
         }
     }
 }
