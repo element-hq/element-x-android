@@ -35,9 +35,7 @@ class RoomSummaryListProcessorTest {
         summaries.value = listOf(aRoomSummary())
         val processor = createProcessor()
 
-        processor.postUpdate(listOf(RoomListEntriesUpdate.Append(
-            listOf(aRustRoom(A_ROOM_ID_2), aRustRoom(A_ROOM_ID_3), aRustRoom(A_ROOM_ID_4))))
-        )
+        processor.postUpdate(listOf(RoomListEntriesUpdate.Append(listOf(aRustRoom(A_ROOM_ID_2), aRustRoom(A_ROOM_ID_3), aRustRoom(A_ROOM_ID_4)))))
 
         assertThat(summaries.value.count()).isEqualTo(4)
         assertThat(summaries.value.subList(1, 4).map { it.roomId }).isEqualTo(listOf(A_ROOM_ID_2, A_ROOM_ID_3, A_ROOM_ID_4))

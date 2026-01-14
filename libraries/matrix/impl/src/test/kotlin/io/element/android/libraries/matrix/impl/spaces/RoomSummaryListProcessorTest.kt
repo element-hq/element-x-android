@@ -31,8 +31,10 @@ class RoomSummaryListProcessorTest {
         spaceRoomsFlow.value = listOf(aSpaceRoom())
         val processor = createProcessor()
 
-        processor.postUpdates(listOf(SpaceListUpdate.Append(
-            listOf(aRustSpaceRoom(roomId = A_ROOM_ID_2), aRustSpaceRoom(roomId = A_ROOM_ID_3), aRustSpaceRoom(roomId = A_ROOM_ID_4))))
+        processor.postUpdates(
+            listOf(
+                SpaceListUpdate.Append(listOf(aRustSpaceRoom(roomId = A_ROOM_ID_2), aRustSpaceRoom(roomId = A_ROOM_ID_3), aRustSpaceRoom(roomId = A_ROOM_ID_4)))
+            )
         )
 
         assertThat(spaceRoomsFlow.value.count()).isEqualTo(4)
