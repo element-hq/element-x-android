@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
+import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
@@ -103,5 +104,6 @@ class RoomListDataSourceTest {
         notificationSettingsService = notificationSettingsService,
         sessionCoroutineScope = backgroundScope,
         dateTimeObserver = dateTimeObserver,
+        analyticsService = FakeAnalyticsService(),
     )
 }

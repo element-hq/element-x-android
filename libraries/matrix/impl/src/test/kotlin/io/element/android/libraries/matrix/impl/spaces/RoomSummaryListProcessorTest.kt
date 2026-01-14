@@ -14,7 +14,9 @@ import io.element.android.libraries.matrix.impl.fixtures.factories.aRustSpaceRoo
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_ROOM_ID_3
+import io.element.android.libraries.matrix.test.A_ROOM_ID_4
 import io.element.android.libraries.previewutils.room.aSpaceRoom
+import io.element.android.services.analytics.test.FakeAnalyticsService
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
@@ -29,11 +31,12 @@ class RoomSummaryListProcessorTest {
         spaceRoomsFlow.value = listOf(aSpaceRoom())
         val processor = createProcessor()
 
-        val newEntry = aRustSpaceRoom(roomId = A_ROOM_ID_2)
-        processor.postUpdates(listOf(SpaceListUpdate.Append(listOf(newEntry, newEntry, newEntry))))
+        processor.postUpdates(listOf(SpaceListUpdate.Append(
+            listOf(aRustSpaceRoom(roomId = A_ROOM_ID_2), aRustSpaceRoom(roomId = A_ROOM_ID_3), aRustSpaceRoom(roomId = A_ROOM_ID_4))))
+        )
 
         assertThat(spaceRoomsFlow.value.count()).isEqualTo(4)
-        assertThat(spaceRoomsFlow.value.subList(1, 4).all { it.roomId == A_ROOM_ID_2 }).isTrue()
+        assertThat(spaceRoomsFlow.value.subList(1, 4).map { it.roomId }).isEqualTo(listOf(A_ROOM_ID_2, A_ROOM_ID_3, A_ROOM_ID_4))
     }
 
     @Test
@@ -186,5 +189,6 @@ class RoomSummaryListProcessorTest {
     ) = SpaceListUpdateProcessor(
         spaceRoomsFlow = spaceRoomsFlow,
         mapper = SpaceRoomMapper(),
+        analyticsService = FakeAnalyticsService(),
     )
 }

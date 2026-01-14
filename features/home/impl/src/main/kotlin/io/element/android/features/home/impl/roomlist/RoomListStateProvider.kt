@@ -91,7 +91,7 @@ internal fun aRoomListRoomSummaryList(): ImmutableList<RoomListRoomSummary> {
             timestamp = "14:18",
             latestEvent = LatestEvent.Synced("A very very very very long message which suites on two lines"),
             avatarData = AvatarData("!id", "R", size = AvatarSize.RoomListItem),
-            id = "!roomId:domain",
+            id = "!roomId5:domain",
         ),
         aRoomListRoomSummary(
             name = "Room#2",

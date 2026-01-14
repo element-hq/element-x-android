@@ -16,7 +16,9 @@ import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiRoomListSe
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.A_ROOM_ID_3
+import io.element.android.libraries.matrix.test.A_ROOM_ID_4
 import io.element.android.libraries.matrix.test.room.aRoomSummary
+import io.element.android.services.analytics.test.FakeAnalyticsService
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.TestScope
@@ -33,11 +35,12 @@ class RoomSummaryListProcessorTest {
         summaries.value = listOf(aRoomSummary())
         val processor = createProcessor()
 
-        val newEntry = aRustRoom(A_ROOM_ID_2)
-        processor.postUpdate(listOf(RoomListEntriesUpdate.Append(listOf(newEntry, newEntry, newEntry))))
+        processor.postUpdate(listOf(RoomListEntriesUpdate.Append(
+            listOf(aRustRoom(A_ROOM_ID_2), aRustRoom(A_ROOM_ID_3), aRustRoom(A_ROOM_ID_4))))
+        )
 
         assertThat(summaries.value.count()).isEqualTo(4)
-        assertThat(summaries.value.subList(1, 4).all { it.roomId == A_ROOM_ID_2 }).isTrue()
+        assertThat(summaries.value.subList(1, 4).map { it.roomId }).isEqualTo(listOf(A_ROOM_ID_2, A_ROOM_ID_3, A_ROOM_ID_4))
     }
 
     @Test
@@ -182,5 +185,6 @@ class RoomSummaryListProcessorTest {
         FakeFfiRoomListService(),
         coroutineContext = StandardTestDispatcher(testScheduler),
         roomSummaryFactory = RoomSummaryFactory(),
+        analyticsService = FakeAnalyticsService(),
     )
 }
