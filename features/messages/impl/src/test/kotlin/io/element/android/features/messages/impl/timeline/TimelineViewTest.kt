@@ -16,6 +16,7 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToIndex
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.element.android.features.messages.impl.timeline.components.MessageShieldData
 import io.element.android.features.messages.impl.timeline.components.aCriticalShield
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
@@ -122,7 +123,7 @@ class TimelineViewTest {
         eventsRecorder.assertList(
             listOf(
                 TimelineEvents.OnScrollFinished(0),
-                TimelineEvents.ShowShieldDialog(MessageShield.UnverifiedIdentity(true)),
+                TimelineEvents.ShowShieldDialog(MessageShieldData(MessageShield.UnverifiedIdentity(true))),
             )
         )
     }

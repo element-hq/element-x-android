@@ -124,7 +124,7 @@ sealed interface TimelineItem {
 
         // No need to be lazy here?
         val messageShield: MessageShieldData? = messageShieldProvider(strict = false)?.let {
-            MessageShieldData(it)
+            MessageShieldData(it, forwarder, forwarderProfile)
         }
 
         val debugInfo: TimelineItemDebugInfo

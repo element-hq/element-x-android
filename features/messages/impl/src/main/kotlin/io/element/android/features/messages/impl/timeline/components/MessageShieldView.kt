@@ -63,7 +63,13 @@ data class MessageShieldData(
      * The message shield that the rust layer thinks we should show.
      */
     val shield: MessageShield,
-);
+    /**
+     * If the keys to this message were forwarded by another user via history sharing (MSC4268), the ID of that user.
+     */
+    val forwarder: UserId? = null,
+    /** If [forwarder] is set, the profile of the forwarding user, if it was cached at the time the `EventTimelineItem` was created. */
+    val forwarderProfile: ProfileDetails? = null,
+)
 
 val MessageShieldData.isCritical: Boolean
     get() = shield.isCritical
@@ -86,6 +92,21 @@ private fun MessageShieldData.toTextColor(): Color {
 
 @Composable
 internal fun MessageShieldData.toText(): String {
+    if (shield is MessageShield.AuthenticityNotGuaranteed && forwarder != null) {
+        var displayName = forwarderProfile?.getDisplayName()
+        return if (displayName == null) {
+            stringResource(
+                CommonStrings.crypto_event_key_forwarded_unknown_profile_dialog_content,
+                forwarder.toString(),
+            )
+        } else {
+            stringResource(
+                CommonStrings.crypto_event_key_forwarded_known_profile_dialog_content,
+                displayName,
+                forwarder.toString(),
+            )
+        }
+    }
     return stringResource(
         id = when (shield) {
             is MessageShield.AuthenticityNotGuaranteed -> CommonStrings.event_shield_reason_authenticity_not_guaranteed
@@ -128,6 +149,23 @@ internal fun MessageShieldViewPreview() {
             )
             MessageShieldView(
                 shield = MessageShieldData(MessageShield.AuthenticityNotGuaranteed(false))
+            )
+            MessageShieldView(
+                shield = MessageShieldData(
+                    MessageShield.AuthenticityNotGuaranteed(false),
+                    forwarder = UserId("@alice:example.com"),
+                )
+            )
+            MessageShieldView(
+                shield = MessageShieldData(
+                    MessageShield.AuthenticityNotGuaranteed(false),
+                    forwarder = UserId("@alice:example.com"),
+                    forwarderProfile = ProfileDetails.Ready(
+                        displayName = "Alice",
+                        displayNameAmbiguous = false,
+                        avatarUrl = null,
+                    ),
+                )
             )
             MessageShieldView(
                 shield = MessageShieldData(MessageShield.UnsignedDevice(false))
