@@ -220,7 +220,7 @@ fun TimelineView(
 
 @Composable
 private fun MessageShieldDialog(state: TimelineState) {
-    val messageShield = state.messageShield ?: return
+    val messageShield = state.messageShieldDialogData ?: return
     AlertDialog(
         content = messageShield.toText(),
         onDismiss = { state.eventSink.invoke(TimelineEvents.HideShieldDialog) },

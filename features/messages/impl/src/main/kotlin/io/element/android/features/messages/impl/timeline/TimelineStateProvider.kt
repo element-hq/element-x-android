@@ -10,6 +10,7 @@ package io.element.android.features.messages.impl.timeline
 
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureState
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.aResolveVerifiedUserSendFailureState
+import io.element.android.features.messages.impl.timeline.components.MessageShieldData
 import io.element.android.features.messages.impl.timeline.components.receipt.aReadReceiptData
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.ReadReceiptData
@@ -71,7 +72,7 @@ fun aTimelineState(
         newEventState = NewEventState.None,
         isLive = isLive,
         focusRequestState = focusRequestState,
-        messageShield = messageShield,
+        messageShieldDialogData = messageShield?.let { MessageShieldData(it) },
         resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailureState,
         displayThreadSummaries = displayThreadSummaries,
         eventSink = eventSink,

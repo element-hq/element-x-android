@@ -10,6 +10,7 @@ package io.element.android.features.messages.impl.timeline
 
 import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureState
+import io.element.android.features.messages.impl.timeline.components.MessageShieldData
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.typing.TypingNotificationState
@@ -18,7 +19,6 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import kotlinx.collections.immutable.ImmutableList
 import kotlin.time.Duration
 
@@ -31,7 +31,7 @@ data class TimelineState(
     val isLive: Boolean,
     val focusRequestState: FocusRequestState,
     // If not null, info will be rendered in a dialog
-    val messageShield: MessageShield?,
+    val messageShieldDialogData: MessageShieldData?,
     val resolveVerifiedUserSendFailureState: ResolveVerifiedUserSendFailureState,
     val displayThreadSummaries: Boolean,
     val eventSink: (TimelineEvents) -> Unit,

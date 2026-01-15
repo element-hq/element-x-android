@@ -8,12 +8,12 @@
 
 package io.element.android.features.messages.impl.timeline
 
+import io.element.android.features.messages.impl.timeline.components.MessageShieldData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import kotlin.time.Duration
 
 sealed interface TimelineEvents {
@@ -31,7 +31,7 @@ sealed interface TimelineEvents {
     sealed interface EventFromTimelineItem : TimelineEvents
 
     data class ComputeVerifiedUserSendFailure(val event: TimelineItem.Event) : EventFromTimelineItem
-    data class ShowShieldDialog(val messageShield: MessageShield) : EventFromTimelineItem
+    data class ShowShieldDialog(val messageShieldData: MessageShieldData) : EventFromTimelineItem
     data class LoadMore(val direction: Timeline.PaginationDirection) : EventFromTimelineItem
     data class OpenThread(val threadRootEventId: ThreadId, val focusedEvent: EventId?) : EventFromTimelineItem
 

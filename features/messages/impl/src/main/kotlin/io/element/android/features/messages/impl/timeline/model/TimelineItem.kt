@@ -9,6 +9,7 @@
 package io.element.android.features.messages.impl.timeline.model
 
 import androidx.compose.runtime.Immutable
+import io.element.android.features.messages.impl.timeline.components.MessageShieldData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
@@ -115,7 +116,9 @@ sealed interface TimelineItem {
             get() = EventOrTransactionId.from(eventId = eventId, transactionId = transactionId)
 
         // No need to be lazy here?
-        val messageShield: MessageShield? = messageShieldProvider(strict = false)
+        val messageShield: MessageShieldData? = messageShieldProvider(strict = false)?.let {
+            MessageShieldData(it)
+        }
 
         val debugInfo: TimelineItemDebugInfo
             get() = timelineItemDebugInfoProvider()
