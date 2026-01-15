@@ -47,6 +47,8 @@ class TimelineItemGrouperTest {
         timelineItemDebugInfoProvider = { aTimelineItemDebugInfo() },
         messageShieldProvider = { null },
         sendHandleProvider = { FakeSendHandle() },
+        forwarder = null,
+        forwarderProfile = null,
     )
     private val aNonGroupableItem = aMessageEvent()
     private val aNonGroupableItemNoEvent = TimelineItem.Virtual(UniqueId("virtual"), aTimelineItemDaySeparatorModel("Today"))

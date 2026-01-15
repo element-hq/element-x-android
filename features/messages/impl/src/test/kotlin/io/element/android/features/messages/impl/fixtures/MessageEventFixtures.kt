@@ -68,4 +68,6 @@ internal fun aMessageEvent(
     timelineItemDebugInfoProvider = debugInfoProvider,
     messageShieldProvider = messageShieldProvider,
     sendHandleProvider = sendHandleProvider,
+    forwarder = null,
+    forwarderProfile = null,
 )

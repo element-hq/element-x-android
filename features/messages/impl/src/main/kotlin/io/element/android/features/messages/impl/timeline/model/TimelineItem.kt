@@ -88,6 +88,13 @@ sealed interface TimelineItem {
         val timelineItemDebugInfoProvider: TimelineItemDebugInfoProvider,
         val messageShieldProvider: MessageShieldProvider,
         val sendHandleProvider: SendHandleProvider,
+        /**
+         * If the keys to this message were forwarded by another user via history sharing (MSC4268), the ID of that user.
+         * If this is non-null, then [messageShieldProvider] will also return [MessageShield.AuthenticityNotGuaranteed].
+         */
+        val forwarder: UserId?,
+        /** If [forwarder] is set, the profile of the forwarding user, if it was cached at the time the `EventTimelineItem` was created. */
+        val forwarderProfile: ProfileDetails?,
     ) : TimelineItem {
         val showSenderInformation = groupPosition.isNew() && !isMine
 

@@ -177,7 +177,9 @@ internal fun aTimelineItemEvent(
         origin = null,
         timelineItemDebugInfoProvider = { debugInfo },
         messageShieldProvider = { messageShield },
-        sendHandleProvider = { null }
+        sendHandleProvider = { null },
+        forwarder = null,
+        forwarderProfile = null,
     )
 }
 

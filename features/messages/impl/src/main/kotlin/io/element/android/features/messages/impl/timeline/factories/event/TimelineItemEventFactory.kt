@@ -118,6 +118,8 @@ class TimelineItemEventFactory(
             timelineItemDebugInfoProvider = currentTimelineItem.event.timelineItemDebugInfoProvider,
             messageShieldProvider = currentTimelineItem.event.messageShieldProvider,
             sendHandleProvider = currentTimelineItem.event.sendHandleProvider,
+            forwarder = currentTimelineItem.event.forwarder,
+            forwarderProfile = currentTimelineItem.event.forwarderProfile,
         )
     }
 
