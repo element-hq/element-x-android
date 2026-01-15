@@ -370,6 +370,14 @@ class RustMatrixClient(
 
     override suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId> = withContext(sessionDispatcher) {
         runCatchingExceptions {
+            val powerLevels = if (createRoomParams.isSpace) {
+                defaultRoomCreationSpacePowerLevels(
+                    isPublic = createRoomParams.preset == RoomPreset.PUBLIC_CHAT || createRoomParams.joinRuleOverride == JoinRule.Public,
+                )
+            } else {
+                defaultRoomCreationPowerLevels
+            }
+
             val rustParams = RustCreateRoomParameters(
                 name = createRoomParams.name,
                 topic = createRoomParams.topic,
@@ -383,12 +391,12 @@ class RustMatrixClient(
                 },
                 invite = createRoomParams.invite?.map { it.value },
                 avatar = createRoomParams.avatar,
-                powerLevelContentOverride = defaultRoomCreationPowerLevels.copy(
+                powerLevelContentOverride = powerLevels.copy(
                     invite = if (createRoomParams.joinRuleOverride == JoinRule.Knock) {
                         // override the invite power level so it's the same as kick.
                         RoomMember.Role.Moderator.powerLevel.toInt()
                     } else {
-                        null
+                        powerLevels.invite
                     }
                 ),
                 joinRuleOverride = createRoomParams.joinRuleOverride?.map(),
@@ -847,4 +855,19 @@ private val defaultRoomCreationPowerLevels = PowerLevels(
         "m.call.member" to 0,
         "org.matrix.msc3401.call.member" to 0,
     )
+)
+
+private fun defaultRoomCreationSpacePowerLevels(isPublic: Boolean) = PowerLevels(
+    usersDefault = null,
+    // Only admins should be able to send events in general
+    eventsDefault = 100,
+    stateDefault = null,
+    ban = null,
+    kick = null,
+    redact = null,
+    // If the space is public, anyone can invite other users, if it's private only moderators and admins can
+    invite = if (isPublic) 0 else 50,
+    notifications = null,
+    users = mapOf(),
+    events = mapOf(),
 )
