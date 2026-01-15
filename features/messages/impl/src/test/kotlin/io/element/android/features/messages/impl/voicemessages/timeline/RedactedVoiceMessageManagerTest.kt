@@ -99,6 +99,8 @@ fun aRedactedMatrixTimeline(eventId: EventId) = listOf<MatrixTimelineItem>(
             },
             messageShieldProvider = { null },
             sendHandleProvider = { FakeSendHandle() },
+            forwarder = null,
+            forwarderProfile = null,
         ),
     )
 )
