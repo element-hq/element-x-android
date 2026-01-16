@@ -370,13 +370,8 @@ class RustMatrixClient(
 
     override suspend fun createRoom(createRoomParams: CreateRoomParameters): Result<RoomId> = withContext(sessionDispatcher) {
         runCatchingExceptions {
-            val powerLevels = if (createRoomParams.isSpace) {
-                defaultRoomCreationSpacePowerLevels(
-                    isPublic = createRoomParams.preset == RoomPreset.PUBLIC_CHAT || createRoomParams.joinRuleOverride == JoinRule.Public,
-                )
-            } else {
-                defaultRoomCreationPowerLevels
-            }
+            val hasPublicAccess = createRoomParams.preset == RoomPreset.PUBLIC_CHAT || createRoomParams.joinRuleOverride == JoinRule.Public
+            val powerLevels = defaultRoomCreationPowerLevels(isSpace = createRoomParams.isSpace, isPublic = hasPublicAccess)
 
             val rustParams = RustCreateRoomParameters(
                 name = createRoomParams.name,
@@ -841,33 +836,23 @@ class RustMatrixClient(
     }
 }
 
-private val defaultRoomCreationPowerLevels = PowerLevels(
-    usersDefault = null,
-    eventsDefault = null,
-    stateDefault = null,
-    ban = null,
-    kick = null,
-    redact = null,
-    invite = null,
-    notifications = null,
-    users = mapOf(),
-    events = mapOf(
-        "m.call.member" to 0,
-        "org.matrix.msc3401.call.member" to 0,
-    )
-)
-
-private fun defaultRoomCreationSpacePowerLevels(isPublic: Boolean) = PowerLevels(
+private fun defaultRoomCreationPowerLevels(isPublic: Boolean, isSpace: Boolean) = PowerLevels(
     usersDefault = null,
     // Only admins should be able to send events in general
-    eventsDefault = 100,
+    eventsDefault = if (isSpace) 100 else null,
     stateDefault = null,
     ban = null,
     kick = null,
     redact = null,
-    // If the space is public, anyone can invite other users, if it's private only moderators and admins can
     invite = if (isPublic) 0 else 50,
     notifications = null,
     users = mapOf(),
-    events = mapOf(),
+    events = if (!isSpace) {
+        mapOf(
+            "m.call.member" to 0,
+            "org.matrix.msc3401.call.member" to 0,
+        )
+    } else {
+        mapOf()
+    }
 )
