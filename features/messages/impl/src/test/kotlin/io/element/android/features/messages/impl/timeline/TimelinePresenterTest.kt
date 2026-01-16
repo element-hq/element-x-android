@@ -853,9 +853,10 @@ class TimelinePresenterTest {
         presenter.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.messageShieldDialogData).isNull()
-            initialState.eventSink(TimelineEvents.ShowShieldDialog(MessageShieldData(shield, null, null)))
+            val shieldData = MessageShieldData(shield, null, null)
+            initialState.eventSink(TimelineEvents.ShowShieldDialog(shieldData))
             awaitItem().also { state ->
-                assertThat(state.messageShieldDialogData).isEqualTo(shield)
+                assertThat(state.messageShieldDialogData).isEqualTo(shieldData)
                 state.eventSink(TimelineEvents.HideShieldDialog)
             }
             awaitItem().also { state ->
