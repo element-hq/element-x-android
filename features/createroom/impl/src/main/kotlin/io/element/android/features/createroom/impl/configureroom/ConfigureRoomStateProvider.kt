@@ -101,14 +101,17 @@ fun aConfigureRoomState(
     cameraPermissionState: PermissionsState = aPermissionsState(showDialog = false),
     homeserverName: String = "matrix.org",
     roomAddressValidity: RoomAddressValidity = RoomAddressValidity.Valid,
+    availableVisibilityOptions: List<RoomVisibilityItem> = RoomVisibilityItem.entries.filter {
+        if (!isKnockFeatureEnabled) it != RoomVisibilityItem.AskToJoin else true
+    },
     eventSink: (ConfigureRoomEvents) -> Unit = { },
 ) = ConfigureRoomState(
     config = config,
-    isKnockFeatureEnabled = isKnockFeatureEnabled,
     avatarActions = avatarActions.toImmutableList(),
     createRoomAction = createRoomAction,
     cameraPermissionState = cameraPermissionState,
     homeserverName = homeserverName,
     roomAddressValidity = roomAddressValidity,
+    availableVisibilityOptions = availableVisibilityOptions.toImmutableList(),
     eventSink = eventSink,
 )
