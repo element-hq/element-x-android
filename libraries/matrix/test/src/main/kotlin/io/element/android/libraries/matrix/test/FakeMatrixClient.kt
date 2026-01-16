@@ -112,6 +112,7 @@ class FakeMatrixClient(
     private val markRoomAsFullyReadResult: (RoomId, EventId) -> Result<Unit> = { _, _ -> lambdaError() },
     private val performDatabaseVacuumLambda: () -> Result<Unit> = { lambdaError() },
     private val getDatabaseSizesLambda: () -> Result<SdkStoreSizes> = { lambdaError() },
+    private val resetWellKnownConfigLambda: () -> Result<Unit> = { lambdaError() },
 ) : MatrixClient {
     var setDisplayNameCalled: Boolean = false
         private set
@@ -378,5 +379,9 @@ class FakeMatrixClient(
 
     override fun createLinkMobileHandler(): Result<LinkMobileHandler> {
         return createLinkMobileHandlerResult()
+    }
+
+    override suspend fun resetWellKnownConfig(): Result<Unit> {
+        return resetWellKnownConfigLambda()
     }
 }

@@ -791,6 +791,13 @@ class RustMatrixClient(
         }
     }
 
+    override suspend fun resetWellKnownConfig(): Result<Unit> {
+        return runCatchingExceptions {
+            Timber.d("Resetting well-known config for session $sessionId")
+            innerClient.resetWellKnown()
+        }
+    }
+
     private suspend fun getCacheSize(
         includeCryptoDb: Boolean = false,
     ): Long = withContext(sessionDispatcher) {
