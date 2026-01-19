@@ -36,6 +36,7 @@ data class NotificationData(
     val timestamp: Long,
     val content: NotificationContent,
     val hasMention: Boolean,
+    val isPublicRoom: Boolean,
 ) {
     fun getDisambiguatedDisplayName(userId: UserId): String = when {
         senderDisplayName.isNullOrBlank() -> userId.value

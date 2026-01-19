@@ -27,7 +27,8 @@ fun aNotificationData(
     timestamp: Long = A_TIMESTAMP,
     senderDisplayName: String? = A_USER_NAME_2,
     senderIsNameAmbiguous: Boolean = false,
-    roomDisplayName: String? = A_ROOM_NAME
+    roomDisplayName: String? = A_ROOM_NAME,
+    isPublicRoom: Boolean = true,
 ): NotificationData {
     return NotificationData(
         sessionId = A_SESSION_ID,
@@ -47,5 +48,6 @@ fun aNotificationData(
         timestamp = timestamp,
         content = content,
         hasMention = hasMention,
+        isPublicRoom = isPublicRoom,
     )
 }

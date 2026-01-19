@@ -140,10 +140,24 @@ class DefaultNotifiableEventResolver(
     ): Result<ResolvedPushEvent> = runCatchingExceptions {
         when (val content = this.content) {
             is NotificationContent.MessageLike.RoomMessage -> {
-                val showMediaPreview = client.mediaPreviewService.getMediaPreviewValue() == MediaPreviewValue.On
+                val showMediaPreview = when (client.mediaPreviewService.getMediaPreviewValue()) {
+                    MediaPreviewValue.On -> true
+                    MediaPreviewValue.Private -> !isPublicRoom
+                    MediaPreviewValue.Off -> false
+                }
                 val senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId)
-                val imageMimeType = if (showMediaPreview) content.getImageMimetype() else null
-                val imageUriString = imageMimeType?.let { content.fetchImageIfPresent(client, imageMimeType)?.toString() }
+                val imageMimeType = content.getImageMimetype()
+                val imageUriString = if (showMediaPreview && imageMimeType != null) {
+                    content.fetchImageIfPresent(client, imageMimeType)?.toString()
+                } else {
+                    null
+                }
+
+                if (content.getImageMimetype() != null && !showMediaPreview && isPublicRoom) {
+                    Timber.tag(loggerTag.value)
+                        .d("We should only display media previews for private rooms and the current room is public. Ignoring image uri.")
+                }
+
                 val messageBody = descriptionFromMessageContent(
                     content = content,
                     senderDisambiguatedDisplayName = senderDisambiguatedDisplayName,
