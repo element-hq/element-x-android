@@ -98,7 +98,7 @@ class AttachmentsPreviewPresenter(
         val mediaOptimizationSelectorPresenter = remember {
             mediaOptimizationSelectorPresenterFactory.create(mediaAttachment.localMedia)
         }
-        val mediaOptimizationSelectorState = mediaOptimizationSelectorPresenter.present()
+        val mediaOptimizationSelectorState by rememberUpdatedState(mediaOptimizationSelectorPresenter.present())
 
         val observableSendState = snapshotFlow { sendActionState.value }
 
