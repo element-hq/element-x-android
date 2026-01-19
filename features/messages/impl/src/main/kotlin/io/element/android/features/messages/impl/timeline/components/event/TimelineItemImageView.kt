@@ -9,7 +9,6 @@
 package io.element.android.features.messages.impl.timeline.components.event
 
 import android.text.SpannedString
-import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -22,21 +21,15 @@ import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
-import coil3.compose.AsyncImagePainter
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.components.ATimelineItemEventRow
@@ -86,11 +79,9 @@ fun TimelineItemImageView(
                 hideContent = hideMediaContent,
                 onShowClick = onShowContentClick,
             ) {
-                var isLoaded by remember { mutableStateOf(false) }
                 AsyncImage(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .then(if (isLoaded) Modifier.background(Color.White) else Modifier)
                         .then(
                             if (!isTalkbackActive() && onContentClick != null) {
                                 Modifier
@@ -107,7 +98,6 @@ fun TimelineItemImageView(
                     contentScale = ContentScale.Crop,
                     alignment = Alignment.Center,
                     contentDescription = description,
-                    onState = { isLoaded = it is AsyncImagePainter.State.Success },
                 )
             }
         }

@@ -16,8 +16,12 @@ import androidx.compose.ui.unit.IntSize
 fun Modifier.blurHashBackground(blurHash: String?, alpha: Float = 1f) = this.composed {
     val blurHashBitmap = rememberBlurHashImage(blurHash)
     if (blurHashBitmap != null) {
-        Modifier.drawBehind {
-            drawImage(blurHashBitmap, dstSize = IntSize(size.width.toInt(), size.height.toInt()), alpha = alpha)
+        if (blurHashBitmap.hasAlpha) {
+            this
+        } else {
+            Modifier.drawBehind {
+                drawImage(blurHashBitmap, dstSize = IntSize(size.width.toInt(), size.height.toInt()), alpha = alpha)
+            }
         }
     } else {
         this
