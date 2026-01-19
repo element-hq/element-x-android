@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2025 Element Creations Ltd.
+  ~
+  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+  ~ Please see LICENSE files in the repository root for full details.
+  -->
+<resources>
+  <!-- Strings for per-room custom notification sounds feature.
+       Please add these to Localazy and then they can be removed from this file. -->
+  <string name="screen_room_notification_settings_sound_section_title">"Sound"</string>
+  <string name="screen_room_notification_settings_enable_custom_sound">"Custom notification sound"</string>
+  <string name="screen_room_notification_settings_enable_custom_sound_subtitle">"Set a unique sound for this conversation"</string>
+  <string name="screen_room_notification_settings_edit_sound">"Change notification sound"</string>
+  <string name="screen_room_notification_settings_edit_sound_subtitle">"Opens Android settings"</string>
+  <string name="screen_room_notification_settings_remove_custom_sound">"Remove custom sound"</string>
+</resources>

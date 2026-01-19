@@ -23,6 +23,8 @@ data class RoomNotificationSettingsState(
     val setNotificationSettingAction: AsyncAction<Unit>,
     val restoreDefaultAction: AsyncAction<Unit>,
     val displayMentionsOnlyDisclaimer: Boolean,
+    val hasCustomSound: Boolean,
+    val customSoundAvailable: Boolean,
     val eventSink: (RoomNotificationSettingsEvents) -> Unit
 )
 

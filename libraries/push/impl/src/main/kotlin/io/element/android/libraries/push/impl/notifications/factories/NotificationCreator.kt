@@ -148,10 +148,13 @@ class DefaultNotificationCreator(
             )
         }
         val containsMissedCall = events.any { it.type == EventType.RTC_NOTIFICATION }
-        val channelId = if (containsMissedCall) {
-            notificationChannels.getChannelForIncomingCall(false)
-        } else {
-            notificationChannels.getChannelIdForMessage(noisy = roomInfo.shouldBing)
+        val channelId = when {
+            containsMissedCall -> notificationChannels.getChannelForIncomingCall(false)
+            notificationChannels.hasChannelForRoom(roomInfo.roomId) -> {
+                notificationChannels.getChannelIdForRoom(roomInfo.roomId)
+                    ?: notificationChannels.getChannelIdForMessage(noisy = roomInfo.shouldBing)
+            }
+            else -> notificationChannels.getChannelIdForMessage(noisy = roomInfo.shouldBing)
         }
         // A category allows groups of notifications to be ranked and filtered – per user or system settings.
         // For example, alarm notifications should display before promo notifications, or message from known contact

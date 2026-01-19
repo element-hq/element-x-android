@@ -31,6 +31,8 @@ internal class RoomNotificationSettingsStateProvider : PreviewParameterProvider<
         setNotificationSettingAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
         restoreDefaultAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
         displayMentionsOnlyDisclaimer: Boolean = false,
+        hasCustomSound: Boolean = false,
+        customSoundAvailable: Boolean = true,
     ): RoomNotificationSettingsState {
         return RoomNotificationSettingsState(
             showUserDefinedSettingStyle = false,
@@ -45,6 +47,8 @@ internal class RoomNotificationSettingsStateProvider : PreviewParameterProvider<
             setNotificationSettingAction = setNotificationSettingAction,
             restoreDefaultAction = restoreDefaultAction,
             displayMentionsOnlyDisclaimer = displayMentionsOnlyDisclaimer,
+            hasCustomSound = hasCustomSound,
+            customSoundAvailable = customSoundAvailable,
             eventSink = { },
         )
     }

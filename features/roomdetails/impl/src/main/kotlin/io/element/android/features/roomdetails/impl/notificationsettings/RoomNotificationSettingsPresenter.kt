@@ -8,6 +8,7 @@
 
 package io.element.android.features.roomdetails.impl.notificationsettings
 
+import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -30,6 +31,9 @@ import io.element.android.libraries.matrix.api.notificationsettings.Notification
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
+import io.element.android.libraries.push.api.store.CustomNotificationChannelsStore
+import io.element.android.libraries.push.impl.notifications.channels.NotificationChannels
+import io.element.android.libraries.push.impl.store.CustomNotificationChannelsStoreFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
@@ -42,20 +46,33 @@ import kotlin.time.Duration.Companion.seconds
 class RoomNotificationSettingsPresenter(
     private val room: JoinedRoom,
     private val notificationSettingsService: NotificationSettingsService,
+    private val customNotificationChannelsStoreFactory: CustomNotificationChannelsStoreFactory,
+    private val notificationChannels: NotificationChannels,
     @Assisted private val showUserDefinedSettingStyle: Boolean,
+    @Assisted private val onOpenSoundSettings: (String) -> Unit,
 ) : Presenter<RoomNotificationSettingsState> {
     @AssistedFactory
     interface Factory {
-        fun create(showUserDefinedSettingStyle: Boolean): RoomNotificationSettingsPresenter
+        fun create(
+            showUserDefinedSettingStyle: Boolean,
+            onOpenSoundSettings: (String) -> Unit,
+        ): RoomNotificationSettingsPresenter
     }
+
+    private val customSoundAvailable = Build.VERSION.SDK_INT >= Build.VERSION_CODES.O
 
     @Composable
     override fun present(): RoomNotificationSettingsState {
         var shouldDisplayMentionsOnlyDisclaimer by remember { mutableStateOf(false) }
+        var hasCustomSound by remember { mutableStateOf(false) }
         val defaultRoomNotificationMode: MutableState<RoomNotificationMode?> = rememberSaveable {
             mutableStateOf(null)
         }
         val localCoroutineScope = rememberCoroutineScope()
+
+        val customNotificationChannelsStore = remember {
+            customNotificationChannelsStoreFactory.getOrCreate(sessionId = room.sessionId)
+        }
         val setNotificationSettingAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
         val restoreDefaultAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
 
@@ -100,6 +117,12 @@ class RoomNotificationSettingsPresenter(
                 !notificationSettingsService.canHomeServerPushEncryptedEventsToDevice().getOrDefault(true)
         }
 
+        LaunchedEffect(Unit) {
+            customNotificationChannelsStore.roomIdsWithCustomChannel().collect { roomIds ->
+                hasCustomSound = roomIds.contains(room.roomId)
+            }
+        }
+
         fun handleEvent(event: RoomNotificationSettingsEvents) {
             when (event) {
                 is RoomNotificationSettingsEvents.ChangeRoomNotificationMode -> {
@@ -123,6 +146,24 @@ class RoomNotificationSettingsPresenter(
                 RoomNotificationSettingsEvents.ClearRestoreDefaultError -> {
                     restoreDefaultAction.value = AsyncAction.Uninitialized
                 }
+                RoomNotificationSettingsEvents.EnableCustomSound -> {
+                    // Use room.roomCoroutineScope to survive navigation to Android settings
+                    room.roomCoroutineScope.enableCustomSound(displayName.orEmpty(), customNotificationChannelsStore) { channelId ->
+                        // hasCustomSound is automatically updated by the flow collection in LaunchedEffect
+                        onOpenSoundSettings(channelId)
+                    }
+                }
+                RoomNotificationSettingsEvents.DisableCustomSound -> {
+                    // Use room.roomCoroutineScope to survive any navigation
+                    room.roomCoroutineScope.disableCustomSound(customNotificationChannelsStore) {
+                        // hasCustomSound is automatically updated by the flow collection in LaunchedEffect
+                    }
+                }
+                RoomNotificationSettingsEvents.OpenSoundSettings -> {
+                    // Use getOrCreate to ensure channel exists even if it was somehow deleted
+                    val channelId = notificationChannels.getOrCreateChannelForRoom(room.roomId, displayName.orEmpty())
+                    onOpenSoundSettings(channelId)
+                }
             }
         }
 
@@ -136,6 +177,8 @@ class RoomNotificationSettingsPresenter(
             setNotificationSettingAction = setNotificationSettingAction.value,
             restoreDefaultAction = restoreDefaultAction.value,
             displayMentionsOnlyDisclaimer = shouldDisplayMentionsOnlyDisclaimer,
+            hasCustomSound = hasCustomSound,
+            customSoundAvailable = customSoundAvailable,
             eventSink = ::handleEvent,
         )
     }
@@ -204,5 +247,24 @@ class RoomNotificationSettingsPresenter(
             }
             result.getOrThrow()
         }.runCatchingUpdatingState(action)
+    }
+
+    private fun CoroutineScope.enableCustomSound(
+        roomDisplayName: String,
+        customNotificationChannelsStore: CustomNotificationChannelsStore,
+        onSuccess: (String) -> Unit,
+    ) = launch {
+        val channelId = notificationChannels.getOrCreateChannelForRoom(room.roomId, roomDisplayName)
+        customNotificationChannelsStore.addCustomChannel(room.roomId)
+        onSuccess(channelId)
+    }
+
+    private fun CoroutineScope.disableCustomSound(
+        customNotificationChannelsStore: CustomNotificationChannelsStore,
+        onSuccess: () -> Unit,
+    ) = launch {
+        notificationChannels.deleteChannelForRoom(room.roomId)
+        customNotificationChannelsStore.removeCustomChannel(room.roomId)
+        onSuccess()
     }
 }

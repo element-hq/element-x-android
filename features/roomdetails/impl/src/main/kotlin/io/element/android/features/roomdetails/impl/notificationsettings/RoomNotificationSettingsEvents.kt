@@ -16,4 +16,7 @@ sealed interface RoomNotificationSettingsEvents {
     data object DeleteCustomNotification : RoomNotificationSettingsEvents
     data object ClearSetNotificationError : RoomNotificationSettingsEvents
     data object ClearRestoreDefaultError : RoomNotificationSettingsEvents
+    data object EnableCustomSound : RoomNotificationSettingsEvents
+    data object DisableCustomSound : RoomNotificationSettingsEvents
+    data object OpenSoundSettings : RoomNotificationSettingsEvents
 }

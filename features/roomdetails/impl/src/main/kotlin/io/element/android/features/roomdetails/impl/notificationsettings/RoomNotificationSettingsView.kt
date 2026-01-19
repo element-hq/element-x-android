@@ -31,7 +31,10 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.buildAnnotatedStringWithStyledPart
+import io.element.android.libraries.designsystem.theme.components.ListItem
+import io.element.android.libraries.designsystem.theme.components.ListItemStyle
 import io.element.android.libraries.designsystem.theme.components.Scaffold
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -141,6 +144,56 @@ private fun RoomSpecificNotificationSettingsView(
                             state.eventSink(RoomNotificationSettingsEvents.ChangeRoomNotificationMode(it.mode))
                         },
                     )
+                }
+
+                // Custom sound section - only show on Android O+ when custom settings are enabled
+                if (state.customSoundAvailable) {
+                    PreferenceCategory(title = stringResource(R.string.screen_room_notification_settings_sound_section_title)) {
+                        if (state.hasCustomSound) {
+                            // Show option to change or remove custom sound
+                            ListItem(
+                                headlineContent = {
+                                    Text(stringResource(R.string.screen_room_notification_settings_edit_sound))
+                                },
+                                supportingContent = {
+                                    Text(
+                                        text = stringResource(R.string.screen_room_notification_settings_edit_sound_subtitle),
+                                        style = ElementTheme.typography.fontBodySmRegular,
+                                        color = ElementTheme.colors.textSecondary,
+                                    )
+                                },
+                                onClick = {
+                                    state.eventSink(RoomNotificationSettingsEvents.OpenSoundSettings)
+                                }
+                            )
+                            ListItem(
+                                headlineContent = {
+                                    Text(stringResource(R.string.screen_room_notification_settings_remove_custom_sound))
+                                },
+                                style = ListItemStyle.Destructive,
+                                onClick = {
+                                    state.eventSink(RoomNotificationSettingsEvents.DisableCustomSound)
+                                }
+                            )
+                        } else {
+                            // Show option to enable custom sound
+                            ListItem(
+                                headlineContent = {
+                                    Text(stringResource(R.string.screen_room_notification_settings_enable_custom_sound))
+                                },
+                                supportingContent = {
+                                    Text(
+                                        text = stringResource(R.string.screen_room_notification_settings_enable_custom_sound_subtitle),
+                                        style = ElementTheme.typography.fontBodySmRegular,
+                                        color = ElementTheme.colors.textSecondary,
+                                    )
+                                },
+                                onClick = {
+                                    state.eventSink(RoomNotificationSettingsEvents.EnableCustomSound)
+                                }
+                            )
+                        }
+                    }
                 }
             }
 

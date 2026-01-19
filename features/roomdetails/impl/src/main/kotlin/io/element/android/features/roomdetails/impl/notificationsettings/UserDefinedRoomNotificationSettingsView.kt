@@ -19,10 +19,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.core.bool.orTrue
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.ListItem
@@ -63,6 +65,56 @@ fun UserDefinedRoomNotificationSettingsView(
                         state.eventSink(RoomNotificationSettingsEvents.ChangeRoomNotificationMode(it.mode))
                     },
                 )
+            }
+
+            // Custom sound section - only show on Android O+
+            if (state.customSoundAvailable) {
+                PreferenceCategory(title = stringResource(R.string.screen_room_notification_settings_sound_section_title)) {
+                    if (state.hasCustomSound) {
+                        // Show option to change or remove custom sound
+                        ListItem(
+                            headlineContent = {
+                                Text(stringResource(R.string.screen_room_notification_settings_edit_sound))
+                            },
+                            supportingContent = {
+                                Text(
+                                    text = stringResource(R.string.screen_room_notification_settings_edit_sound_subtitle),
+                                    style = ElementTheme.typography.fontBodySmRegular,
+                                    color = ElementTheme.colors.textSecondary,
+                                )
+                            },
+                            onClick = {
+                                state.eventSink(RoomNotificationSettingsEvents.OpenSoundSettings)
+                            }
+                        )
+                        ListItem(
+                            headlineContent = {
+                                Text(stringResource(R.string.screen_room_notification_settings_remove_custom_sound))
+                            },
+                            style = ListItemStyle.Destructive,
+                            onClick = {
+                                state.eventSink(RoomNotificationSettingsEvents.DisableCustomSound)
+                            }
+                        )
+                    } else {
+                        // Show option to enable custom sound
+                        ListItem(
+                            headlineContent = {
+                                Text(stringResource(R.string.screen_room_notification_settings_enable_custom_sound))
+                            },
+                            supportingContent = {
+                                Text(
+                                    text = stringResource(R.string.screen_room_notification_settings_enable_custom_sound_subtitle),
+                                    style = ElementTheme.typography.fontBodySmRegular,
+                                    color = ElementTheme.colors.textSecondary,
+                                )
+                            },
+                            onClick = {
+                                state.eventSink(RoomNotificationSettingsEvents.EnableCustomSound)
+                            }
+                        )
+                    }
+                }
             }
 
             ListItem(

@@ -13,11 +13,16 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.roomdetails.impl.aJoinedRoom
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
+import io.element.android.libraries.push.api.store.CustomNotificationChannelsStore
+import io.element.android.libraries.push.impl.store.CustomNotificationChannelsStoreFactory
+import io.element.android.libraries.push.test.InMemoryCustomNotificationChannelsStore
+import io.element.android.libraries.push.test.notifications.channels.FakeNotificationChannels
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import kotlinx.coroutines.test.runTest
@@ -182,14 +187,123 @@ class RoomNotificationSettingsPresenterTest {
         }
     }
 
+    @Test
+    fun `present - enable custom sound creates channel and opens settings`() = runTest {
+        val customNotificationChannelsStore = InMemoryCustomNotificationChannelsStore()
+        var openedChannelId: String? = null
+        val room = aJoinedRoom(roomCoroutineScope = this)
+        val presenter = createRoomNotificationSettingsPresenter(
+            room = room,
+            customNotificationChannelsStore = customNotificationChannelsStore,
+            onOpenSoundSettings = { channelId -> openedChannelId = channelId },
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = awaitLastSequentialItem()
+            assertThat(initialState.hasCustomSound).isFalse()
+
+            initialState.eventSink(RoomNotificationSettingsEvents.EnableCustomSound)
+
+            val updatedState = consumeItemsUntilPredicate { it.hasCustomSound }.last()
+            assertThat(updatedState.hasCustomSound).isTrue()
+            assertThat(openedChannelId).isNotNull()
+            assertThat(openedChannelId).contains("ROOM_CHANNEL_")
+            assertThat(customNotificationChannelsStore.hasCustomChannel(A_ROOM_ID)).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - disable custom sound removes channel from store`() = runTest {
+        val customNotificationChannelsStore = InMemoryCustomNotificationChannelsStore()
+        // Pre-populate store with custom channel
+        customNotificationChannelsStore.addCustomChannel(A_ROOM_ID)
+        val room = aJoinedRoom(roomCoroutineScope = this)
+
+        val presenter = createRoomNotificationSettingsPresenter(
+            room = room,
+            customNotificationChannelsStore = customNotificationChannelsStore,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val initialState = consumeItemsUntilPredicate { it.hasCustomSound }.last()
+            assertThat(initialState.hasCustomSound).isTrue()
+
+            initialState.eventSink(RoomNotificationSettingsEvents.DisableCustomSound)
+
+            val updatedState = consumeItemsUntilPredicate { !it.hasCustomSound }.last()
+            assertThat(updatedState.hasCustomSound).isFalse()
+            assertThat(customNotificationChannelsStore.hasCustomChannel(A_ROOM_ID)).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - open sound settings calls callback with channel id`() = runTest {
+        val customNotificationChannelsStore = InMemoryCustomNotificationChannelsStore()
+        // Pre-populate store with custom channel
+        customNotificationChannelsStore.addCustomChannel(A_ROOM_ID)
+        var openedChannelId: String? = null
+
+        val presenter = createRoomNotificationSettingsPresenter(
+            customNotificationChannelsStore = customNotificationChannelsStore,
+            onOpenSoundSettings = { channelId -> openedChannelId = channelId },
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            val state = consumeItemsUntilPredicate { it.hasCustomSound }.last()
+            assertThat(state.hasCustomSound).isTrue()
+
+            state.eventSink(RoomNotificationSettingsEvents.OpenSoundSettings)
+
+            // Give time for the event to be processed
+            awaitItem()
+            assertThat(openedChannelId).isNotNull()
+            assertThat(openedChannelId).contains("ROOM_CHANNEL_")
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - hasCustomSound reflects store state`() = runTest {
+        val customNotificationChannelsStore = InMemoryCustomNotificationChannelsStore()
+        val presenter = createRoomNotificationSettingsPresenter(
+            customNotificationChannelsStore = customNotificationChannelsStore,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            // Initially no custom sound
+            val initialState = awaitLastSequentialItem()
+            assertThat(initialState.hasCustomSound).isFalse()
+
+            // Add custom channel externally
+            customNotificationChannelsStore.addCustomChannel(A_ROOM_ID)
+
+            // State should update
+            val updatedState = consumeItemsUntilPredicate { it.hasCustomSound }.last()
+            assertThat(updatedState.hasCustomSound).isTrue()
+        }
+    }
+
     private fun createRoomNotificationSettingsPresenter(
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
         room: FakeJoinedRoom = aJoinedRoom(notificationSettingsService = notificationSettingsService),
+        customNotificationChannelsStore: CustomNotificationChannelsStore = InMemoryCustomNotificationChannelsStore(),
+        notificationChannels: FakeNotificationChannels = FakeNotificationChannels(),
+        onOpenSoundSettings: (String) -> Unit = {},
     ): RoomNotificationSettingsPresenter {
+        val fakeFactory = object : CustomNotificationChannelsStoreFactory {
+            override fun getOrCreate(sessionId: SessionId): CustomNotificationChannelsStore = customNotificationChannelsStore
+        }
         return RoomNotificationSettingsPresenter(
             room = room,
             notificationSettingsService = notificationSettingsService,
+            customNotificationChannelsStoreFactory = fakeFactory,
+            notificationChannels = notificationChannels,
             showUserDefinedSettingStyle = false,
+            onOpenSoundSettings = onOpenSoundSettings,
         )
     }
 }

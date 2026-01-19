@@ -8,6 +8,8 @@
 
 package io.element.android.features.roomdetails.impl.notificationsettings
 
+import android.content.Context
+import android.os.Build
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.lifecycle.subscribe
@@ -18,10 +20,12 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.annotations.ContributesNode
+import io.element.android.libraries.androidutils.system.openNotificationChannelSettings
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.services.analytics.api.AnalyticsService
 
 @ContributesNode(RoomScope::class)
@@ -31,6 +35,7 @@ class RoomNotificationSettingsNode(
     @Assisted plugins: List<Plugin>,
     presenterFactory: RoomNotificationSettingsPresenter.Factory,
     private val analyticsService: AnalyticsService,
+    @ApplicationContext private val context: Context,
 ) : Node(buildContext, plugins = plugins) {
     data class RoomNotificationSettingInput(
         val showUserDefinedSettingStyle: Boolean
@@ -43,7 +48,16 @@ class RoomNotificationSettingsNode(
     private val callback: Callback = callback()
     private val inputs = inputs<RoomNotificationSettingInput>()
 
-    private val presenter = presenterFactory.create(inputs.showUserDefinedSettingStyle)
+    private val presenter = presenterFactory.create(
+        showUserDefinedSettingStyle = inputs.showUserDefinedSettingStyle,
+        onOpenSoundSettings = { channelId -> openSoundSettings(channelId) },
+    )
+
+    private fun openSoundSettings(channelId: String) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.openNotificationChannelSettings(channelId)
+        }
+    }
 
     init {
         lifecycle.subscribe(

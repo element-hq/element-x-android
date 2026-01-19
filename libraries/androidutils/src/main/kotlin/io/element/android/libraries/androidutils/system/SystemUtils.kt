@@ -205,3 +205,29 @@ fun Context.toast(resId: Int) {
 fun Context.toast(message: String) {
     Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
 }
+
+/**
+ * Opens Android's notification channel settings for a specific channel.
+ * This allows users to customize sound, vibration, and other channel settings.
+ *
+ * @param channelId The ID of the notification channel to open settings for.
+ * @param noActivityFoundMessage Message to display if the settings activity cannot be found.
+ */
+@RequiresApi(Build.VERSION_CODES.O)
+fun Context.openNotificationChannelSettings(
+    channelId: String,
+    noActivityFoundMessage: String = getString(R.string.error_no_compatible_app_found),
+) {
+    val intent = Intent(Settings.ACTION_CHANNEL_NOTIFICATION_SETTINGS).apply {
+        putExtra(Settings.EXTRA_APP_PACKAGE, packageName)
+        putExtra(Settings.EXTRA_CHANNEL_ID, channelId)
+        if (this@openNotificationChannelSettings !is Activity) {
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+        }
+    }
+    try {
+        startActivity(intent)
+    } catch (_: ActivityNotFoundException) {
+        toast(noActivityFoundMessage)
+    }
+}

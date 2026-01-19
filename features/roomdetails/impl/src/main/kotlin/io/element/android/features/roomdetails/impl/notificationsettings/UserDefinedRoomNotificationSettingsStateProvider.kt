@@ -32,6 +32,27 @@ internal class UserDefinedRoomNotificationSettingsStateProvider : PreviewParamet
                 setNotificationSettingAction = AsyncAction.Uninitialized,
                 restoreDefaultAction = AsyncAction.Uninitialized,
                 displayMentionsOnlyDisclaimer = false,
+                hasCustomSound = false,
+                customSoundAvailable = true,
+                eventSink = { },
+            ),
+            RoomNotificationSettingsState(
+                showUserDefinedSettingStyle = false,
+                roomName = "Room 1",
+                AsyncData.Success(
+                    aRoomNotificationSettings(
+                        mode = RoomNotificationMode.MUTE,
+                        isDefault = false
+                    )
+                ),
+                pendingRoomNotificationMode = null,
+                pendingSetDefault = null,
+                defaultRoomNotificationMode = RoomNotificationMode.ALL_MESSAGES,
+                setNotificationSettingAction = AsyncAction.Uninitialized,
+                restoreDefaultAction = AsyncAction.Uninitialized,
+                displayMentionsOnlyDisclaimer = false,
+                hasCustomSound = true,
+                customSoundAvailable = true,
                 eventSink = { },
             ),
         )

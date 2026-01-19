@@ -24,8 +24,11 @@ import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
 import io.element.android.appconfig.NotificationConfig
 import io.element.android.libraries.di.annotations.ApplicationContext
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.push.impl.R
 import io.element.android.services.toolbox.api.strings.StringProvider
+
+private const val ROOM_NOTIFICATION_CHANNEL_PREFIX = "ROOM_NOTIFICATION_CHANNEL_"
 
 /* ==========================================================================================
  * IDs for channels
@@ -55,6 +58,35 @@ interface NotificationChannels {
      * Get the channel for test notifications.
      */
     fun getChannelIdForTest(): String
+
+    /**
+     * Get or create a custom notification channel for a specific room.
+     * @param roomId the room ID.
+     * @param roomDisplayName the display name of the room.
+     * @return the channel ID for the room.
+     */
+    fun getOrCreateChannelForRoom(roomId: RoomId, roomDisplayName: String): String
+
+    /**
+     * Delete the custom notification channel for a specific room.
+     * @param roomId the room ID.
+     * @return true if the channel was deleted, false if it didn't exist.
+     */
+    fun deleteChannelForRoom(roomId: RoomId): Boolean
+
+    /**
+     * Check if a custom notification channel exists for a specific room.
+     * @param roomId the room ID.
+     * @return true if a custom channel exists for the room.
+     */
+    fun hasChannelForRoom(roomId: RoomId): Boolean
+
+    /**
+     * Get the channel ID for a specific room if it exists.
+     * @param roomId the room ID.
+     * @return the channel ID if it exists, null otherwise.
+     */
+    fun getChannelIdForRoom(roomId: RoomId): String?
 }
 
 @ChecksSdkIntAtLeast(api = Build.VERSION_CODES.O)
@@ -191,4 +223,82 @@ class DefaultNotificationChannels(
     }
 
     override fun getChannelIdForTest(): String = NOISY_NOTIFICATION_CHANNEL_ID
+
+    override fun getOrCreateChannelForRoom(roomId: RoomId, roomDisplayName: String): String {
+        if (!supportNotificationChannels()) {
+            return NOISY_NOTIFICATION_CHANNEL_ID
+        }
+
+        val channelId = getChannelIdForRoomInternal(roomId)
+        val existingChannel = notificationManager.getNotificationChannel(channelId)
+
+        if (existingChannel != null) {
+            return channelId
+        }
+
+        // Create a new channel based on the NOISY channel settings
+        val accentColor = NotificationConfig.NOTIFICATION_ACCENT_COLOR
+        notificationManager.createNotificationChannel(
+            NotificationChannelCompat.Builder(
+                channelId,
+                NotificationManagerCompat.IMPORTANCE_DEFAULT
+            )
+                .setSound(
+                    Uri.Builder()
+                        .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
+                        .path("//" + context.packageName + "/" + R.raw.message)
+                        .build(),
+                    AudioAttributes.Builder()
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .setUsage(USAGE_NOTIFICATION)
+                        .build(),
+                )
+                .setName(stringProvider.getString(R.string.notification_channel_room_custom, roomDisplayName))
+                .setDescription(stringProvider.getString(R.string.notification_channel_room_custom, roomDisplayName))
+                .setVibrationEnabled(true)
+                .setLightsEnabled(true)
+                .setLightColor(accentColor)
+                .build()
+        )
+
+        return channelId
+    }
+
+    override fun deleteChannelForRoom(roomId: RoomId): Boolean {
+        if (!supportNotificationChannels()) {
+            return false
+        }
+
+        val channelId = getChannelIdForRoomInternal(roomId)
+        val existingChannel = notificationManager.getNotificationChannel(channelId)
+
+        if (existingChannel != null) {
+            notificationManager.deleteNotificationChannel(channelId)
+            return true
+        }
+
+        return false
+    }
+
+    override fun hasChannelForRoom(roomId: RoomId): Boolean {
+        if (!supportNotificationChannels()) {
+            return false
+        }
+
+        val channelId = getChannelIdForRoomInternal(roomId)
+        return notificationManager.getNotificationChannel(channelId) != null
+    }
+
+    override fun getChannelIdForRoom(roomId: RoomId): String? {
+        if (!supportNotificationChannels()) {
+            return null
+        }
+
+        val channelId = getChannelIdForRoomInternal(roomId)
+        return notificationManager.getNotificationChannel(channelId)?.let { channelId }
+    }
+
+    private fun getChannelIdForRoomInternal(roomId: RoomId): String {
+        return "$ROOM_NOTIFICATION_CHANNEL_PREFIX${roomId.value}"
+    }
 }

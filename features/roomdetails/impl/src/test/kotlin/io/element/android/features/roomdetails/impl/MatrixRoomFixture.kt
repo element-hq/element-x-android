@@ -27,6 +27,8 @@ import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
 import io.element.android.tests.testutils.lambda.lambdaError
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.test.TestScope
 
 fun aRoom(
     sessionId: SessionId = A_SESSION_ID,
@@ -106,7 +108,9 @@ fun aJoinedRoom(
     publishRoomAliasInRoomDirectoryResult: (RoomAlias) -> Result<Boolean> = { lambdaError() },
     removeRoomAliasFromRoomDirectoryResult: (RoomAlias) -> Result<Boolean> = { lambdaError() },
     setIsFavoriteResult: (Boolean) -> Result<Unit> = { lambdaError() },
+    roomCoroutineScope: CoroutineScope = TestScope(),
 ) = FakeJoinedRoom(
+    roomCoroutineScope = roomCoroutineScope,
     roomNotificationSettingsService = notificationSettingsService,
     setNameResult = setNameResult,
     setTopicResult = setTopicResult,
