@@ -483,7 +483,7 @@ Are you sure you want to continue?"</string>
   <string name="screen_share_open_google_maps">"Open in Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Open in OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Share this location"</string>
-  <string name="screen_space_add_rooms_room_access_description">"Adding a room will not affect the room access. To change the access go to Room settings &gt; Security &amp;amp; privacy."</string>
+  <string name="screen_space_add_rooms_room_access_description">"Adding a room will not affect the room access. To change the access go to Room settings &gt; Security &amp; privacy."</string>
   <string name="screen_space_list_description">"Spaces you have created or joined."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_empty_state_title">"Create spaces to organize rooms"</string>
