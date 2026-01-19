@@ -9,6 +9,7 @@
 package io.element.android.libraries.matrix.api.media
 
 import android.os.Parcelable
+import androidx.core.net.toUri
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
@@ -22,3 +23,25 @@ data class MediaSource(
      */
     val json: String? = null,
 ) : Parcelable
+
+/**
+ * Returns a new [MediaSource] with a valid URL.
+ */
+fun MediaSource.withCleanUrl(): MediaSource {
+    val uri = this.url.toUri()
+    if (uri.scheme != "mxc") return this
+
+    // We've seen some MXC urls in the wild having some `mxc://foo/bar#auto` fragment suffix, which is invalid
+    val cleanedUrl = buildString {
+        append(uri.scheme)
+        if (!this.endsWith("://")) {
+            append("://")
+        }
+        append(uri.host)
+        if (uri.path != null) {
+            append(uri.path)
+        }
+    }
+
+    return this.copy(url = cleanedUrl)
+}
