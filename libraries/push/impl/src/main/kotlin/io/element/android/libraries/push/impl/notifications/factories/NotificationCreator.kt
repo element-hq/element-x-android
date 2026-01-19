@@ -47,6 +47,7 @@ import io.element.android.libraries.push.impl.notifications.shortcut.createShort
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.appnavstate.api.ROOM_OPENED_FROM_NOTIFICATION
 import io.element.android.services.toolbox.api.strings.StringProvider
+import timber.log.Timber
 
 interface NotificationCreator {
     /**
@@ -435,6 +436,7 @@ class DefaultNotificationCreator(
                 )
                 else -> {
                     if (event.imageMimeType != null && event.imageUri != null) {
+                        Timber.d("Adding image with uri ${event.imageUri} to notification")
                         // Image case
                         val message = MessagingStyle.Message(
                             // This text will not be rendered, but some systems does not render the image

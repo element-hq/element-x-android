@@ -18,6 +18,7 @@ import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.mxc.MxcTools
+import timber.log.Timber
 import java.io.File
 
 /**
@@ -97,6 +98,9 @@ class DefaultNotificationMediaRepo(
                         error("Failed to move file to cache.")
                     }
                 }
+            }
+            .onSuccess {
+                Timber.d("Downloaded ${mediaSource.url} to $it")
             }
         }
     }

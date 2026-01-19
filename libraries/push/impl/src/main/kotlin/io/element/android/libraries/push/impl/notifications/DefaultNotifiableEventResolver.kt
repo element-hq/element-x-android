@@ -323,6 +323,7 @@ class DefaultNotifiableEventResolver(
             is ImageMessageType -> if (hasImageUri) {
                 messageType.caption
             } else {
+                Timber.tag(loggerTag.value).w("Image message with no image uri, using best description")
                 messageType.bestDescription
             }
             is StickerMessageType -> messageType.bestDescription
@@ -393,13 +394,18 @@ class DefaultNotifiableEventResolver(
                 val authority = "${context.packageName}.notifications.fileprovider"
                 FileProvider.getUriForFile(context, authority, mediaFile)
             }
+            .onSuccess { Timber.tag(loggerTag.value).d("Downloaded image with uri $it") }
             .getOrNull()
     }
 
     private fun NotificationContent.MessageLike.RoomMessage.getImageMimetype(): String? {
         return when (val messageType = messageType) {
             is ImageMessageType -> messageType.info?.mimetype
-            is VideoMessageType -> null // Use the thumbnail here?
+            is VideoMessageType -> {
+                // Use the thumbnail here?
+                Timber.tag(loggerTag.value).d("Media file in notification is a video (${messageType.info?.mimetype}), not an image")
+                null
+            }
             else -> null
         }
     }
