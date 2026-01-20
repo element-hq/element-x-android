@@ -93,6 +93,7 @@
   <string name="action_enable">"Enable"</string>
   <string name="action_end_poll">"End poll"</string>
   <string name="action_enter_pin">"Enter PIN"</string>
+  <string name="action_explore_public_spaces">"Explore public spaces"</string>
   <string name="action_finish">"Finish"</string>
   <string name="action_forgot_password">"Forgot password?"</string>
   <string name="action_forward">"Forward"</string>
