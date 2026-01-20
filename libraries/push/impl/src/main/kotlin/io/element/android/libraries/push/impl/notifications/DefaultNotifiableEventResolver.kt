@@ -156,6 +156,9 @@ class DefaultNotifiableEventResolver(
                 if (content.getImageMimetype() != null && !showMediaPreview && isPublicRoom) {
                     Timber.tag(loggerTag.value)
                         .d("We should only display media previews for private rooms and the current room is public. Ignoring image uri.")
+                } else if (showMediaPreview && content.messageType is ImageMessageType && imageUriString == null) {
+                    Timber.tag(loggerTag.value)
+                        .w("No image uri returned for message with an image and previews enabled. Something went wrong.")
                 }
 
                 val messageBody = descriptionFromMessageContent(
