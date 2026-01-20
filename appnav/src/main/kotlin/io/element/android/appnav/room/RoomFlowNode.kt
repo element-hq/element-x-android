@@ -214,6 +214,10 @@ class RoomFlowNode(
                 )
             }
             is NavTarget.JoinRoom -> {
+                // Clear analytics transactions for opening a joined room, since we're display a non-joined one
+                analyticsService.removeLongRunningTransaction(LoadJoinedRoomFlow)
+                analyticsService.removeLongRunningTransaction(OpenRoom)
+
                 val inputs = JoinRoomEntryPoint.Inputs(
                     roomId = navTarget.roomId,
                     roomIdOrAlias = inputs.roomIdOrAlias,

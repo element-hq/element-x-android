@@ -41,6 +41,10 @@ import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.ui.room.LoadingRoomState
 import io.element.android.libraries.matrix.ui.room.LoadingRoomStateFlowFactory
+import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.LoadJoinedRoomFlow
+import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.NotificationToMessage
+import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.OpenRoom
+import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -53,6 +57,7 @@ class JoinedRoomFlowNode(
     @Assisted val buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     loadingRoomStateFlowFactory: LoadingRoomStateFlowFactory,
+    private val analyticsService: AnalyticsService,
 ) :
     BaseFlowNode<JoinedRoomFlowNode.NavTarget>(
         backstack = BackStack(
@@ -81,6 +86,11 @@ class JoinedRoomFlowNode(
 
     override fun onBuilt() {
         super.onBuilt()
+
+        val parentTransaction = analyticsService.getLongRunningTransaction(NotificationToMessage)
+        val openRoomTransaction = analyticsService.startLongRunningTransaction(OpenRoom, parentTransaction)
+        analyticsService.startLongRunningTransaction(LoadJoinedRoomFlow, openRoomTransaction)
+
         loadingRoomStateStateFlow
             .map {
                 it is LoadingRoomState.Loaded

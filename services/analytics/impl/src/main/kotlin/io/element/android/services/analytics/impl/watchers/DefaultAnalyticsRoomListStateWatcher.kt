@@ -46,13 +46,17 @@ class DefaultAnalyticsRoomListStateWatcher(
             return
         }
 
+        val longRunningTransaction = AnalyticsLongRunningTransaction.CatchUp
+
         appNavigationStateService.appNavigationState
             .map { it.isInForeground }
             .distinctUntilChanged()
             .withPreviousValue()
             .onEach { (wasInForeground, isInForeground) ->
                 if (isInForeground && roomListService.state.value != RoomListService.State.Running) {
-                    analyticsService.startLongRunningTransaction(AnalyticsLongRunningTransaction.CatchUp)
+                    analyticsService.startLongRunningTransaction(longRunningTransaction)
+                } else if (!isInForeground) {
+                    analyticsService.removeLongRunningTransaction(longRunningTransaction)
                 }
 
                 if (wasInForeground == false && isInForeground) {
@@ -64,7 +68,7 @@ class DefaultAnalyticsRoomListStateWatcher(
         roomListService.state
             .onEach { state ->
                 if (state == RoomListService.State.Running && isWarmState.get()) {
-                    analyticsService.finishLongRunningTransaction(AnalyticsLongRunningTransaction.CatchUp)
+                    analyticsService.finishLongRunningTransaction(longRunningTransaction)
                 }
             }
             .launchIn(coroutineScope)

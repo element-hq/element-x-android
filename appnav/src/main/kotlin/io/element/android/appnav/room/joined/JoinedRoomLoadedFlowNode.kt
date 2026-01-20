@@ -48,8 +48,6 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.LoadJoinedRoomFlow
-import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.LoadMessagesUi
-import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.OpenRoom
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.api.finishLongRunningTransaction
 import io.element.android.services.appnavstate.api.ActiveRoomsHolder
@@ -106,8 +104,6 @@ class JoinedRoomLoadedFlowNode(
     init {
         lifecycle.subscribe(
             onCreate = {
-                val parent = analyticsService.getLongRunningTransaction(OpenRoom)
-                analyticsService.startLongRunningTransaction(LoadMessagesUi, parent)
                 Timber.v("OnCreate => ${inputs.room.roomId}")
                 appNavigationStateService.onNavigateToRoom(id, inputs.room.roomId)
                 activeRoomsHolder.addRoom(inputs.room)
