@@ -199,7 +199,7 @@ matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose",
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-driver-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
-sqlcipher = "net.zetetic:sqlcipher-android:4.12.0"
+sqlcipher = "net.zetetic:sqlcipher-android:4.13.0"
 sqlite = "androidx.sqlite:sqlite-ktx:2.6.2"
 unifiedpush = "org.unifiedpush.android:connector:3.2.0"
 vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
