@@ -35,8 +35,8 @@ test_core = "1.7.0"
 roborazzi = "1.56.0"
 
 # Jetbrain
-datetime = "0.7.1"
-serialization_json = "1.9.0"
+datetime = "0.7.1-0.6.x-compat"
+serialization_json = "1.10.0"
 
 #other
 coil = "3.3.0"
