@@ -6,11 +6,11 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-plugins {
-    id("io.element.jvm-library")
-}
+package io.element.android.libraries.di
 
-dependencies {
-    api(libs.metro.runtime)
-    api("javax.inject:javax.inject:1")
-}
+import javax.inject.Scope
+import kotlin.reflect.KClass
+
+@Scope
+@Retention(AnnotationRetention.RUNTIME)
+annotation class SingleIn(val scope: KClass<*>)
