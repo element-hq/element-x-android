@@ -6,11 +6,6 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-plugins {
-    id("io.element.jvm-library")
-}
+package io.element.android.libraries.di
 
-dependencies {
-    api(libs.metro.runtime)
-    api("javax.inject:javax.inject:1")
-}
+abstract class AppScope private constructor()

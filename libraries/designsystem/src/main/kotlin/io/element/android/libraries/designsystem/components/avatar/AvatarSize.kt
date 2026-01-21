@@ -79,5 +79,6 @@ enum class AvatarSize(val dp: Dp) {
     LeaveSpaceRoom(32.dp),
     SelectParentSpace(32.dp),
     AccountItem(32.dp),
-    LocationPin(32.dp)
+    LocationPin(32.dp),
+    ShareShortcut(108.dp),
 }
