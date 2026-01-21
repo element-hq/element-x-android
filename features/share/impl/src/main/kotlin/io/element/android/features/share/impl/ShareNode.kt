@@ -77,13 +77,16 @@ class ShareNode(
 
     @Composable
     override fun View(modifier: Modifier) {
-        Box(modifier = modifier) {
-            // Will render to room select screen
-            Children(
-                navModel = navModel,
-            )
+        val state = presenter.present()
 
-            val state = presenter.present()
+        Box(modifier = modifier) {
+            // Only show room selection if this is NOT a direct share
+            if (!state.isDirectShare) {
+                Children(
+                    navModel = navModel,
+                )
+            }
+
             ShareView(
                 state = state,
                 onShareSuccess = callback::onDone,
