@@ -106,6 +106,15 @@ class ConfigureRoomPresenter(
             }
         }
 
+        var spaces by remember { mutableStateOf<ImmutableList<SpaceRoom>>(persistentListOf()) }
+        LaunchedEffect(canAddRoomToSpace) {
+            spaces = if (canAddRoomToSpace) {
+                matrixClient.spaceService.editableSpaces().getOrElse { emptyList() }.toImmutableList()
+            } else {
+                persistentListOf()
+            }
+        }
+
         LaunchedEffect(cameraPermissionState.permissionGranted) {
             if (cameraPermissionState.permissionGranted && pendingPermissionRequest) {
                 pendingPermissionRequest = false
@@ -175,6 +184,7 @@ class ConfigureRoomPresenter(
             homeserverName = homeserverName,
             roomAddressValidity = roomAddressValidity.value,
             availableVisibilityOptions = availableVisibilityOptions,
+            spaces = spaces,
             eventSink = ::handleEvent,
         )
     }
