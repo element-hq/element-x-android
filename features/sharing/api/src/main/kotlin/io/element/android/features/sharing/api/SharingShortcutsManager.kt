@@ -7,14 +7,12 @@
 
 package io.element.android.features.sharing.api
 
-import kotlinx.collections.immutable.ImmutableList
-
 interface SharingShortcutsManager {
     /**
      * Publish shortcuts for the given rooms.
      * Call this from a background coroutine or viewModelScope ideally.
      */
-    suspend fun publishShortcutsForRooms(rooms: ImmutableList<SharingRoomInfo>)
+    suspend fun publishShortcutsForRooms(rooms: List<SharingRoomInfo>)
 
     /**
      * Remove a room shortcut (call when user leaves the room).
