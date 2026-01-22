@@ -6,7 +6,6 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-import java.net.URI
 
 pluginManagement {
     repositories {
@@ -21,7 +20,6 @@ pluginManagement {
 
 
 
-include(":features:sharing")
 
 dependencyResolutionManagement {
     repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
