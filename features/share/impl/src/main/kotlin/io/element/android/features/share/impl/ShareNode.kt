@@ -41,7 +41,11 @@ class ShareNode(
     private val roomSelectEntryPoint: RoomSelectEntryPoint,
 ) : ParentNode<ShareNode.NavTarget>(
     navModel = PermanentNavModel(
-        navTargets = setOf(NavTarget),
+        navTargets = if (plugins.filterIsInstance<Inputs>().firstOrNull()?.intent?.hasExtra(ShareEntryPoint.EXTRA_SHARE_TARGET_ROOM_ID) == true) {
+            emptySet()
+        } else {
+            setOf(NavTarget)
+        },
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -80,12 +84,9 @@ class ShareNode(
         val state = presenter.present()
 
         Box(modifier = modifier) {
-            // Only show room selection if this is NOT a direct share
-            if (!state.isDirectShare) {
-                Children(
-                    navModel = navModel,
-                )
-            }
+            Children(
+                navModel = navModel,
+            )
 
             ShareView(
                 state = state,
