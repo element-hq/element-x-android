@@ -24,6 +24,7 @@ interface SharingShortcutsManager {
 /** Light-weight room descriptor used by the manager. */
 data class SharingRoomInfo(
     val roomId: String,
+    val sessionId: String,
     val displayName: String,
     val avatarUrl: String?,
 )

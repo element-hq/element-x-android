@@ -64,6 +64,7 @@ class DefaultSharingShortcutsManager @Inject constructor(
             component = ComponentName(context.packageName, "io.element.android.features.sharing.impl.ShareReceiverActivity")
             type = "*/*"
             putExtra("room_id", room.roomId)
+            putExtra("session_id", room.sessionId)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
 

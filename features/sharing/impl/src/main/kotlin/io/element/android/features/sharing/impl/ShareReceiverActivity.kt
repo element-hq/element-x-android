@@ -36,6 +36,7 @@ class ShareReceiverActivity : ComponentActivity() {
         val shortcutId = incoming?.getStringExtra(Intent.EXTRA_SHORTCUT_ID)
         val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
         val roomIdFromExtra = incoming?.getStringExtra("room_id")
+        val sessionIdFromExtra = incoming?.getStringExtra("session_id")
         val resolvedRoomId = when {
             !shortcutId.isNullOrEmpty() -> {
                 prefs.getString(PREF_PREFIX + shortcutId, null) ?: roomIdFromExtra
@@ -46,7 +47,7 @@ class ShareReceiverActivity : ComponentActivity() {
         if (resolvedRoomId.isNullOrEmpty()) {
             val text = incoming?.getStringExtra(Intent.EXTRA_TEXT)
             val uris = extractUris(incoming)
-            launchMainActivity(null, text, uris, incoming?.type)
+            launchMainActivity(null, null, text, uris, incoming?.type)
             finish()
             return
         }
@@ -55,18 +56,18 @@ class ShareReceiverActivity : ComponentActivity() {
         when (action) {
             Intent.ACTION_SEND -> {
                 if (type?.startsWith("text") == true) {
-                    handleSendText(incoming, resolvedRoomId)
+                    handleSendText(incoming, resolvedRoomId, sessionIdFromExtra)
                 } else {
-                    handleSendStream(incoming, resolvedRoomId)
+                    handleSendStream(incoming, resolvedRoomId, sessionIdFromExtra)
                 }
             }
             Intent.ACTION_SEND_MULTIPLE -> {
-                handleSendMultipleStreams(incoming, resolvedRoomId)
+                handleSendMultipleStreams(incoming, resolvedRoomId, sessionIdFromExtra)
             }
             else -> {
                 val text = incoming?.getStringExtra(Intent.EXTRA_TEXT)
                 val uris = extractUris(incoming)
-                launchMainActivity(null, text, uris, incoming?.type)
+                launchMainActivity(null, null, text, uris, incoming?.type)
             }
         }
 
@@ -75,22 +76,22 @@ class ShareReceiverActivity : ComponentActivity() {
         finish()
     }
 
-    private fun handleSendText(intent: Intent, roomId: String) {
+    private fun handleSendText(intent: Intent, roomId: String, sessionId: String?) {
         val text = intent.getStringExtra(Intent.EXTRA_TEXT)
-        launchMainActivity(roomId, text, null, intent.type)
+        launchMainActivity(roomId, sessionId, text, null, intent.type)
     }
 
-    private fun handleSendStream(intent: Intent, roomId: String) {
+    private fun handleSendStream(intent: Intent, roomId: String, sessionId: String?) {
         val uri = intent.getParcelableExtra<Uri>(Intent.EXTRA_STREAM)
         val uris = if (uri != null) arrayListOf(uri) else null
         takePersistablePermissionsIfNeeded(uris)
-        launchMainActivity(roomId, null, uris, intent.type)
+        launchMainActivity(roomId, sessionId, null, uris, intent.type)
     }
 
-    private fun handleSendMultipleStreams(intent: Intent, roomId: String) {
+    private fun handleSendMultipleStreams(intent: Intent, roomId: String, sessionId: String?) {
         val uris = intent.getParcelableArrayListExtra<Uri>(Intent.EXTRA_STREAM)
         takePersistablePermissionsIfNeeded(uris)
-        launchMainActivity(roomId, null, uris, intent.type)
+        launchMainActivity(roomId, sessionId, null, uris, intent.type)
     }
 
     private fun extractUris(intent: Intent?): ArrayList<Uri>? {
@@ -121,13 +122,16 @@ class ShareReceiverActivity : ComponentActivity() {
         }
     }
 
-    private fun launchMainActivity(roomId: String?, text: String?, uris: ArrayList<Uri>?, type: String?) {
+    private fun launchMainActivity(roomId: String?, sessionId: String?, text: String?, uris: ArrayList<Uri>?, type: String?) {
         val out = Intent(this, Class.forName("io.element.android.x.MainActivity")).apply {
             action = Intent.ACTION_SEND
             this.type = type
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP
             if (roomId != null) {
                 putExtra(ShareEntryPoint.EXTRA_SHARE_TARGET_ROOM_ID, roomId)
+            }
+            if (sessionId != null) {
+                putExtra("session_id", sessionId)
             }
             if (!text.isNullOrEmpty()) putExtra(Intent.EXTRA_TEXT, text)
             if (!uris.isNullOrEmpty()) {
