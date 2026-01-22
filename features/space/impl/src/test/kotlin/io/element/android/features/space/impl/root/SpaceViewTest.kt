@@ -15,6 +15,7 @@ import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.element.android.features.space.impl.R
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
@@ -30,6 +31,7 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.pressBack
 import io.element.android.tests.testutils.pressBackKey
 import org.junit.Rule
@@ -200,6 +202,22 @@ class SpaceViewTest {
         rule.clickOn(CommonStrings.action_remove, inDialog = true)
         eventsRecorder.assertSingle(SpaceEvents.ConfirmRoomRemoval)
     }
+
+    @Test
+    fun `clicking create room button calls the expected callback`() {
+        val onCreateRoomClick = lambdaRecorder<Unit> { }
+        rule.setSpaceView(
+            aSpaceState(
+                children = emptyList(),
+                hasMoreToLoad = false,
+                isManageMode = true,
+                canManageRooms = true,
+            ),
+            onCreateRoomClick = onCreateRoomClick,
+        )
+        rule.clickOn(R.string.screen_space_add_room_action)
+        onCreateRoomClick.assertions().isCalledOnce()
+    }
 }
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setSpaceView(
@@ -210,6 +228,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setSpace
     onLeaveSpaceClick: () -> Unit = EnsureNeverCalled(),
     onSettingsClick: () -> Unit = EnsureNeverCalled(),
     onViewMembersClick: () -> Unit = EnsureNeverCalled(),
+    onCreateRoomClick: () -> Unit = EnsureNeverCalled(),
     onAddRoomClick: () -> Unit = EnsureNeverCalled(),
     acceptDeclineInviteView: @Composable () -> Unit = {},
 ) {
@@ -224,6 +243,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setSpace
             onViewMembersClick = onViewMembersClick,
             onAddRoomClick = onAddRoomClick,
             acceptDeclineInviteView = acceptDeclineInviteView,
+            onCreateRoomClick = onCreateRoomClick,
         )
     }
 }

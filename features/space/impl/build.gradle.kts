@@ -50,5 +50,6 @@ dependencies {
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.featureflag.test)
+    testImplementation(projects.features.createroom.test)
     testImplementation(projects.features.invite.test)
 }

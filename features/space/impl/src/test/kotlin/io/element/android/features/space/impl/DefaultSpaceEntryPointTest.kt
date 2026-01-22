@@ -12,6 +12,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.createroom.api.FakeCreateRoomEntryPoint
 import io.element.android.features.space.api.SpaceEntryPoint
 import io.element.android.features.space.impl.di.FakeSpaceFlowGraph
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -43,7 +44,8 @@ class DefaultSpaceEntryPointTest {
                     spaceRoomListResult = { _: RoomId -> FakeSpaceRoomList(A_ROOM_ID) }
                 ),
                 room = FakeJoinedRoom(),
-                graphFactory = FakeSpaceFlowGraph.Factory
+                graphFactory = FakeSpaceFlowGraph.Factory,
+                createRoomEntryPoint = FakeCreateRoomEntryPoint(),
             )
         }
         val callback = object : SpaceEntryPoint.Callback {

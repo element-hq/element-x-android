@@ -10,11 +10,15 @@ package io.element.android.features.createroom.api
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeCreateRoomEntryPoint : CreateRoomEntryPoint {
+    override fun setIsSpace(isSpace: Boolean): CreateRoomEntryPoint = this
+
+    override fun setParentSpace(parentSpaceId: RoomId): CreateRoomEntryPoint = this
+
     override fun createNode(
-        isSpace: Boolean,
         parentNode: Node,
         buildContext: BuildContext,
         callback: CreateRoomEntryPoint.Callback,
