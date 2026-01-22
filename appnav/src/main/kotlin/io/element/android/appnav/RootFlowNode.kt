@@ -425,7 +425,14 @@ class RootFlowNode(
     }
 
     private suspend fun onIncomingShare(shareIntentData: ShareIntentData) {
-        // Is there a session already?
+        val sessionIdFromIntent = shareIntentData.intent.getStringExtra("session_id")?.let(::SessionId)
+
+        if (sessionIdFromIntent != null) {
+            val loggedInFlowNode = attachSession(sessionIdFromIntent)
+            loggedInFlowNode.attachIncomingShare(shareIntentData)
+            return
+        }
+
         val latestSessionId = sessionStore.getLatestSessionId()
         if (latestSessionId == null) {
             // No session, open login
