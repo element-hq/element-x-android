@@ -61,7 +61,7 @@ internal fun SelectParentSpaceOptions(
             headlineContent = {
                 Text(
                     text = selectedSpace?.displayName
-                        ?: stringResource(R.string.screen_create_room_parent_space_home_title),
+                        ?: stringResource(R.string.screen_create_room_space_selection_no_space_title),
                     maxLines = 1
                 )
             },
@@ -70,7 +70,7 @@ internal fun SelectParentSpaceOptions(
                     text = if (selectedSpace != null) {
                         selectedSpace.canonicalAlias?.value.orEmpty()
                     } else {
-                        stringResource(R.string.screen_create_room_parent_space_home_description)
+                        stringResource(R.string.screen_create_room_space_selection_no_space_description)
                     },
                     maxLines = 1
                 )
@@ -125,7 +125,7 @@ private fun ColumnScope.SelectParentSpaceBottomSheet(
     onSelectSpace: (SpaceRoom?) -> Unit,
 ) {
     ListSectionHeader(
-        title = stringResource(io.element.android.features.createroom.impl.R.string.screen_create_room_space_selection_sheet_title),
+        title = stringResource(R.string.screen_create_room_space_selection_sheet_title),
         hasDivider = false
     )
     LazyColumn(modifier = Modifier.fillMaxWidth()) {
@@ -133,18 +133,18 @@ private fun ColumnScope.SelectParentSpaceBottomSheet(
             ListItem(
                 headlineContent = {
                     Text(
-                        stringResource(io.element.android.features.createroom.impl.R.string.screen_create_room_parent_space_home_title),
+                        stringResource(R.string.screen_create_room_space_selection_no_space_title),
                         maxLines = 1
                     )
                 },
                 supportingContent = {
                     Text(
-                        stringResource(io.element.android.features.createroom.impl.R.string.screen_create_room_parent_space_home_description),
+                        stringResource(R.string.screen_create_room_space_selection_no_space_description),
                         maxLines = 1
                     )
                 },
                 leadingContent = ListItemContent.Icon(
-                    IconSource.Vector(io.element.android.compound.tokens.generated.CompoundIcons.Home())
+                    IconSource.Vector(CompoundIcons.Home())
                 ),
                 trailingContent = ListItemContent.RadioButton(
                     selected = selectedSpace == null
