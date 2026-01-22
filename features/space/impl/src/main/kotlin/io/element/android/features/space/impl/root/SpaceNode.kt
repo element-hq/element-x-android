@@ -47,6 +47,8 @@ class SpaceNode(
         fun navigateToRoomMemberList()
         fun startLeaveSpaceFlow()
         fun navigateToAddRoom()
+
+        fun onCreateRoom()
     }
 
     private val callback: Callback = callback()
@@ -105,6 +107,7 @@ class SpaceNode(
                     modifier = Modifier
                 )
             },
+            onCreateRoomClick = callback::onCreateRoom,
             modifier = modifier
         )
     }

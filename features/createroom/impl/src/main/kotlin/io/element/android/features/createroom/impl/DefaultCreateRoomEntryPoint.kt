@@ -14,16 +14,29 @@ import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.SessionScope
+import io.element.android.libraries.matrix.api.core.RoomId
 
 @ContributesBinding(SessionScope::class)
 class DefaultCreateRoomEntryPoint : CreateRoomEntryPoint {
+    private var isSpace = false
+    private var parentSpaceId: RoomId? = null
+
+    override fun setIsSpace(isSpace: Boolean): CreateRoomEntryPoint {
+        this.isSpace = isSpace
+        return this
+    }
+
+    override fun setParentSpace(parentSpaceId: RoomId): CreateRoomEntryPoint {
+        this.parentSpaceId = parentSpaceId
+        return this
+    }
+
     override fun createNode(
-        isSpace: Boolean,
         parentNode: Node,
         buildContext: BuildContext,
         callback: CreateRoomEntryPoint.Callback,
     ): Node {
-        val inputs = CreateRoomFlowNode.Inputs(isSpace)
+        val inputs = CreateRoomFlowNode.Inputs(isSpace = isSpace, parentSpaceId = parentSpaceId)
         return parentNode.createNode<CreateRoomFlowNode>(buildContext, listOf(inputs, callback))
     }
 }

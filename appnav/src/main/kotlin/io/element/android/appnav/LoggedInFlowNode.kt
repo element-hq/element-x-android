@@ -484,7 +484,9 @@ class LoggedInFlowNode(
                         backstack.replace(NavTarget.Room(roomIdOrAlias = RoomIdOrAlias.Id(roomId), serverNames = emptyList()))
                     }
                 }
-                createRoomEntryPoint.createNode(isSpace = true, parentNode = this, buildContext = buildContext, callback = callback)
+                createRoomEntryPoint
+                    .setIsSpace(true)
+                    .createNode(parentNode = this, buildContext = buildContext, callback = callback)
             }
             is NavTarget.SecureBackup -> {
                 secureBackupEntryPoint.createNode(

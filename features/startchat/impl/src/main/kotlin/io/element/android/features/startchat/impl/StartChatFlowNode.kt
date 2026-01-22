@@ -80,12 +80,13 @@ class StartChatFlowNode(
                         navigator.onRoomCreated(roomId.toRoomIdOrAlias(), emptyList())
                     }
                 }
-                createRoomEntryPoint.createNode(
-                    isSpace = false,
-                    parentNode = this,
-                    buildContext = buildContext,
-                    callback = callback,
-                )
+                createRoomEntryPoint
+                    .setIsSpace(false)
+                    .createNode(
+                        parentNode = this,
+                        buildContext = buildContext,
+                        callback = callback,
+                    )
             }
             NavTarget.JoinByAddress -> {
                 createNode<JoinRoomByAddressNode>(buildContext = buildContext, plugins = listOf(navigator))

@@ -38,6 +38,7 @@ dependencies {
     implementation(projects.services.analytics.api)
     implementation(libs.coil.compose)
     implementation(projects.libraries.featureflag.api)
+    implementation(projects.features.createroom.api)
     implementation(projects.features.invite.api)
     implementation(projects.libraries.previewutils)
     implementation(projects.features.securityandprivacy.api)

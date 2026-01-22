@@ -15,8 +15,10 @@ import io.element.android.libraries.architecture.FeatureEntryPoint
 import io.element.android.libraries.matrix.api.core.RoomId
 
 interface CreateRoomEntryPoint : FeatureEntryPoint {
+    fun setIsSpace(isSpace: Boolean): CreateRoomEntryPoint
+    fun setParentSpace(parentSpaceId: RoomId): CreateRoomEntryPoint
+
     fun createNode(
-        isSpace: Boolean,
         parentNode: Node,
         buildContext: BuildContext,
         callback: Callback,

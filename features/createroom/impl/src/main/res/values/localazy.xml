@@ -7,6 +7,8 @@
   <string name="screen_create_room_name_placeholder">"Add name…"</string>
   <string name="screen_create_room_new_room_title">"New room"</string>
   <string name="screen_create_room_new_space_title">"New space"</string>
+  <string name="screen_create_room_parent_space_home_description">"(no space)"</string>
+  <string name="screen_create_room_parent_space_home_title">"Home"</string>
   <string name="screen_create_room_private_option_description">"Only people invited can join."</string>
   <string name="screen_create_room_private_option_title">"Private"</string>
   <string name="screen_create_room_public_option_description">"Anyone can find this room.
