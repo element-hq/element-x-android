@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.startchat.impl.configureroom
+package io.element.android.features.createroom.impl
 
 import android.net.Uri
 import androidx.core.net.toUri
