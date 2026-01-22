@@ -74,6 +74,7 @@ enum class AvatarSize(val dp: Dp) {
     RoomPreviewInviter(56.dp),
     SpaceMember(24.dp),
     LeaveSpaceRoom(32.dp),
+    SelectParentSpace(32.dp),
 
     AccountItem(32.dp),
 }

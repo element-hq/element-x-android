@@ -59,6 +59,7 @@ import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
 import io.element.android.libraries.matrix.ui.components.AvatarPickerState
 import io.element.android.libraries.matrix.ui.components.AvatarPickerView
@@ -120,27 +121,30 @@ fun ConfigureRoomView(
                 onTopicChange = { state.eventSink(ConfigureRoomEvents.TopicChanged(it)) },
             )
 
-            RoomVisibilityAndAccessOptions(
-                options = state.availableVisibilityOptions,
-                selected = when (state.config.roomVisibility) {
-                    is RoomVisibilityState.Private -> RoomVisibilityItem.Private
-                    is RoomVisibilityState.Public -> when (state.config.roomVisibility.roomAccess) {
-                        RoomAccess.Knocking -> RoomVisibilityItem.AskToJoin
-                        RoomAccess.Anyone -> RoomVisibilityItem.Public
-                    }
-                },
+            if (!state.config.isSpace && state.spaces.isNotEmpty()) {
+                SelectParentSpaceOptions(
+                    spaces = state.spaces,
+                    selectedSpace = state.config.parentSpace,
+                    onSelectSpace = { state.eventSink(ConfigureRoomEvents.SetParentSpace(it)) },
+                )
+            }
+
+            RoomJoinRuleOptions(
+                options = state.availableJoinRules,
+                selected = state.config.visibilityState.joinRuleItem,
+                parentSpace = state.config.parentSpace,
                 onOptionClick = {
                     focusManager.clearFocus()
-                    state.eventSink(ConfigureRoomEvents.RoomVisibilityChanged(it))
+                    state.eventSink(ConfigureRoomEvents.JoinRuleChanged(it))
                 },
             )
 
-            if (state.config.roomVisibility !is RoomVisibilityState.Private) {
+            if (state.config.visibilityState !is RoomVisibilityState.Private) {
                 Column {
                     ListSectionHeader(title = stringResource(R.string.screen_create_room_room_address_section_title))
                     RoomAddressField(
                         modifier = Modifier.padding(horizontal = 16.dp),
-                        address = state.config.roomVisibility.roomAddress().getOrNull().orEmpty(),
+                        address = state.config.visibilityState.roomAddress().getOrNull().orEmpty(),
                         homeserverName = state.homeserverName,
                         addressValidity = state.roomAddressValidity,
                         onAddressChange = { state.eventSink(ConfigureRoomEvents.RoomAddressChanged(it)) },
@@ -265,7 +269,7 @@ private fun RoomTopic(
 }
 
 @Composable
-private fun ConfigureRoomOptions(
+internal fun ConfigureRoomOptions(
     title: String,
     modifier: Modifier = Modifier,
     content: @Composable ColumnScope.() -> Unit,
@@ -279,10 +283,11 @@ private fun ConfigureRoomOptions(
 }
 
 @Composable
-private fun RoomVisibilityAndAccessOptions(
-    options: ImmutableList<RoomVisibilityItem>,
-    selected: RoomVisibilityItem,
-    onOptionClick: (RoomVisibilityItem) -> Unit,
+private fun RoomJoinRuleOptions(
+    options: ImmutableList<JoinRuleItem>,
+    selected: JoinRuleItem,
+    onOptionClick: (JoinRuleItem) -> Unit,
+    parentSpace: SpaceRoom?,
     modifier: Modifier = Modifier,
 ) {
     ConfigureRoomOptions(
@@ -296,9 +301,11 @@ private fun RoomVisibilityAndAccessOptions(
                     RoundedIconAtom(
                         size = RoundedIconAtomSize.Big,
                         resourceId = when (item) {
-                            RoomVisibilityItem.Public -> CompoundDrawables.ic_compound_public
-                            RoomVisibilityItem.AskToJoin -> CompoundDrawables.ic_compound_user_add
-                            RoomVisibilityItem.Private -> CompoundDrawables.ic_compound_lock
+                            JoinRuleItem.PublicVisibility.Public -> CompoundDrawables.ic_compound_public
+                            is JoinRuleItem.PublicVisibility.Restricted -> CompoundDrawables.ic_compound_space
+                            JoinRuleItem.PublicVisibility.AskToJoin,
+                            is JoinRuleItem.PublicVisibility.AskToJoinRestricted -> CompoundDrawables.ic_compound_user_add
+                            JoinRuleItem.Private -> CompoundDrawables.ic_compound_lock
                         },
                         tint = if (isSelected) ElementTheme.colors.iconPrimary else ElementTheme.colors.iconSecondary,
                         backgroundTint = Color.Transparent,
@@ -306,18 +313,29 @@ private fun RoomVisibilityAndAccessOptions(
                 },
                 headlineContent = {
                     val title = when (item) {
-                        RoomVisibilityItem.Public -> stringResource(R.string.screen_create_room_public_option_title)
-                        RoomVisibilityItem.AskToJoin -> stringResource(R.string.screen_create_room_room_access_section_knocking_option_title)
-                        RoomVisibilityItem.Private -> stringResource(R.string.screen_create_room_private_option_title)
+                        JoinRuleItem.PublicVisibility.Public -> stringResource(R.string.screen_create_room_room_access_section_public_option_title)
+                        is JoinRuleItem.PublicVisibility.Restricted -> stringResource(R.string.screen_create_room_room_access_section_restricted_option_title)
+                        JoinRuleItem.PublicVisibility.AskToJoin -> stringResource(R.string.screen_create_room_room_access_section_knocking_option_title)
+                        is JoinRuleItem.PublicVisibility.AskToJoinRestricted -> stringResource(
+                            R.string.screen_create_room_room_access_section_knocking_restricted_option_title
+                        )
+                        JoinRuleItem.Private -> stringResource(R.string.screen_create_room_room_access_section_private_option_title)
                     }
                     Text(text = title)
                 },
                 supportingContent = {
-                    // TODO handle description of items in a certain space/org
                     val description = when (item) {
-                        RoomVisibilityItem.Public -> stringResource(R.string.screen_create_room_public_option_short_description)
-                        RoomVisibilityItem.AskToJoin -> stringResource(R.string.screen_create_room_room_access_section_knocking_option_description)
-                        RoomVisibilityItem.Private -> stringResource(R.string.screen_create_room_private_option_description)
+                        JoinRuleItem.PublicVisibility.Public -> stringResource(R.string.screen_create_room_room_access_section_public_option_description)
+                        is JoinRuleItem.PublicVisibility.Restricted -> stringResource(
+                            R.string.screen_create_room_room_access_section_restricted_option_description,
+                            parentSpace?.displayName.orEmpty()
+                        )
+                        JoinRuleItem.PublicVisibility.AskToJoin -> stringResource(R.string.screen_create_room_room_access_section_knocking_option_description)
+                        is JoinRuleItem.PublicVisibility.AskToJoinRestricted -> stringResource(
+                            R.string.screen_create_room_room_access_section_knocking_restricted_option_description,
+                            parentSpace?.displayName.orEmpty()
+                        )
+                        JoinRuleItem.Private -> stringResource(R.string.screen_create_room_room_access_section_private_option_description)
                     }
                     Text(text = description)
                 },
