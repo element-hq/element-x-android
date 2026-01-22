@@ -36,6 +36,7 @@ import io.element.android.libraries.matrix.api.createroom.RoomPreset
 import io.element.android.libraries.matrix.api.room.alias.RoomAliasHelper
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
+import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.matrix.ui.room.address.RoomAddressValidity
 import io.element.android.libraries.matrix.ui.room.address.RoomAddressValidityEffect
@@ -157,8 +158,12 @@ class ConfigureRoomPresenter(
                         AvatarAction.Remove -> dataStore.setAvatarUri(uri = null)
                     }
                 }
-
-                ConfigureRoomEvents.CancelCreateRoom -> createRoomAction.value = AsyncAction.Uninitialized
+                is ConfigureRoomEvents.SetParentSpace -> {
+                    dataStore.setParentSpace(event.space)
+                }
+                ConfigureRoomEvents.CancelCreateRoom -> {
+                    createRoomAction.value = AsyncAction.Uninitialized
+                }
             }
         }
 
@@ -208,7 +213,7 @@ class ConfigureRoomPresenter(
                     isSpace = isSpace,
                 )
             }
-            matrixClient.createRoom(params)
+            val roomId = matrixClient.createRoom(params)
                 .onFailure { failure ->
                     Timber.e(failure, "Failed to create room")
                 }
@@ -217,7 +222,22 @@ class ConfigureRoomPresenter(
                     analyticsService.capture(CreatedRoom(isDM = false))
                 }
                 .getOrThrow()
+
+            // Add the newly created room to the parent space too
+            if (config.parentSpace != null) {
+                Timber.d("Adding room $roomId to parent space ${config.parentSpace.roomId}")
+                // Wait until we receive the power level info for the room, as it's needed to check if it can be added to a space
+                // TODO create some SDK function that does this instead?
+                withTimeoutOrNull(30.seconds) {
+                    matrixClient.getRoomInfoFlow(roomId).first { it.getOrNull()?.roomPowerLevels != null }
+                } ?: error("Did not receive created room power levels for room $roomId, needed for adding it to a space")
+
+                matrixClient.spaceService.addChildToSpace(spaceId = config.parentSpace.roomId, childId = roomId).getOrThrow()
+            }
+
+            roomId
         }.runCatchingUpdatingState(createRoomAction)
+            .onFailure { Timber.e(it, "Could not create room or add it to parent space ${config.parentSpace?.roomId}") }
     }
 
     private suspend fun uploadAvatar(avatarUri: Uri): String {
