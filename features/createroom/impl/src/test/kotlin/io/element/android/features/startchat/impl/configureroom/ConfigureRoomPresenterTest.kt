@@ -46,6 +46,7 @@ import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
+import io.element.android.libraries.previewutils.room.aSpaceRoom
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
@@ -358,6 +359,42 @@ class ConfigureRoomPresenterTest {
             awaitItem().also { state ->
                 assertThat(state.roomAddressValidity).isEqualTo(RoomAddressValidity.Valid)
             }
+        }
+    }
+
+    @Test
+    fun `present - when a space is selected, the selected join rule is reset to private`() = runTest {
+        val presenter = createConfigureRoomPresenter()
+        presenter.test {
+            val initialState = initialState()
+
+            // First change the join rule to public
+            initialState.eventSink(ConfigureRoomEvents.JoinRuleChanged(JoinRuleItem.PublicVisibility.Public))
+            assertThat(awaitItem().config.visibilityState).isInstanceOf(RoomVisibilityState.Public::class.java)
+
+            // Then check changing the parent space resets it to private
+            initialState.eventSink(ConfigureRoomEvents.SetParentSpace(aSpaceRoom()))
+            assertThat(awaitItem().config.visibilityState).isEqualTo(RoomVisibilityState.Private())
+
+            // If we change the join rule back to public
+            initialState.eventSink(ConfigureRoomEvents.JoinRuleChanged(JoinRuleItem.PublicVisibility.Public))
+            assertThat(awaitItem().config.visibilityState).isInstanceOf(RoomVisibilityState.Public::class.java)
+
+            // Then remove the parent space, it'll be private again
+            initialState.eventSink(ConfigureRoomEvents.SetParentSpace(null))
+            assertThat(awaitItem().config.visibilityState).isEqualTo(RoomVisibilityState.Private())
+        }
+    }
+
+    @Test
+    fun `present - setting a parent space for a space currently throws an error`() = runTest {
+        val presenter = createConfigureRoomPresenter(isSpace = true)
+        presenter.test {
+            val initialState = initialState()
+
+            initialState.eventSink(ConfigureRoomEvents.SetParentSpace(aSpaceRoom()))
+
+            assertThat(awaitError())
         }
     }
 

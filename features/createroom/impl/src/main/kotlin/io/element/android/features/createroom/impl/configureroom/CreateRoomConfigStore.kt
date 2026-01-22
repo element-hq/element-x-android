@@ -109,8 +109,7 @@ class CreateRoomConfigStore(
         createRoomConfigFlow.getAndUpdate { config ->
             config.copy(
                 parentSpace = parentSpace,
-                // If a space is selected, reset room access just in case
-                visibilityState = if (parentSpace != null) RoomVisibilityState.Private() else config.visibilityState,
+                visibilityState = RoomVisibilityState.Private(),
             )
         }
     }
