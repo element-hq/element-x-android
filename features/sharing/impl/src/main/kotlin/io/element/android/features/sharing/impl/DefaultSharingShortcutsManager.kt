@@ -20,15 +20,17 @@ import coil3.ImageLoader
 import coil3.imageLoader
 import coil3.request.ImageRequest
 import coil3.toBitmap
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.SingleIn
 import dev.zacsweers.metro.Inject
 import io.element.android.features.sharing.api.SharingRoomInfo
 import io.element.android.features.sharing.api.SharingShortcutsManager
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.di.annotations.ApplicationContext
-import kotlinx.collections.immutable.ImmutableList
 import java.security.MessageDigest
 
+@SingleIn(AppScope::class)
 class DefaultSharingShortcutsManager @Inject constructor(
     @ApplicationContext private val context: Context,
 ) : SharingShortcutsManager {
@@ -45,7 +47,7 @@ class DefaultSharingShortcutsManager @Inject constructor(
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     }
 
-    override suspend fun publishShortcutsForRooms(rooms: ImmutableList<SharingRoomInfo>) {
+    override suspend fun publishShortcutsForRooms(rooms: List<SharingRoomInfo>) {
         val shortcuts = rooms.mapNotNull { buildShortcutForRoom(it) }
         if (shortcuts.isNotEmpty()) {
             ShortcutManagerCompat.setDynamicShortcuts(context, shortcuts)

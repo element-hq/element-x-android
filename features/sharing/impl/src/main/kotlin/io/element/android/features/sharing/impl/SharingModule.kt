@@ -10,14 +10,13 @@ package io.element.android.features.sharing.impl
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.ContributesTo
+import dev.zacsweers.metro.AppScope
+
 import io.element.android.features.sharing.api.SharingShortcutsManager
-import io.element.android.libraries.di.AppScope
-import io.element.android.libraries.di.SingleIn
 
 @BindingContainer
 @ContributesTo(AppScope::class)
 interface SharingModule {
     @Binds
-    @SingleIn(AppScope::class)
     fun bindSharingShortcutsManager(impl: DefaultSharingShortcutsManager): SharingShortcutsManager
 }
