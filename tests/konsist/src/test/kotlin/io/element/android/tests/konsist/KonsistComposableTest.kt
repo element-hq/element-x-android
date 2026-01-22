@@ -28,6 +28,7 @@ class KonsistComposableTest {
             .functions()
             .withTopLevel()
             .withoutModifier(KoModifier.PRIVATE)
+            .withoutModifier(KoModifier.INTERNAL)
             .withoutNameEndingWith("Preview")
             .withAllAnnotationsOf(Composable::class)
             .withoutReceiverType()

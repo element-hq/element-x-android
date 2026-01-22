@@ -18,9 +18,8 @@ import io.element.android.features.createroom.impl.configureroom.ConfigureRoomPr
 import io.element.android.features.createroom.impl.configureroom.ConfigureRoomState
 import io.element.android.features.createroom.impl.configureroom.CreateRoomConfig
 import io.element.android.features.createroom.impl.configureroom.CreateRoomConfigStore
-import io.element.android.features.createroom.impl.configureroom.RoomAccess
+import io.element.android.features.createroom.impl.configureroom.JoinRuleItem
 import io.element.android.features.createroom.impl.configureroom.RoomAddress
-import io.element.android.features.createroom.impl.configureroom.RoomVisibilityItem
 import io.element.android.features.createroom.impl.configureroom.RoomVisibilityState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.featureflag.api.FeatureFlags
@@ -81,7 +80,7 @@ class ConfigureRoomPresenterTest {
             assertThat(initialState.config.topic).isNull()
             assertThat(initialState.config.invites).isEmpty()
             assertThat(initialState.config.avatarUri).isNull()
-            assertThat(initialState.config.roomVisibility).isEqualTo(RoomVisibilityState.Private)
+            assertThat(initialState.config.visibilityState).isEqualTo(RoomVisibilityState.Private())
             assertThat(initialState.createRoomAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
             assertThat(initialState.homeserverName).isEqualTo("matrix.org")
         }
@@ -174,12 +173,12 @@ class ConfigureRoomPresenterTest {
             assertThat(newState.config).isEqualTo(expectedConfig)
 
             // Room privacy
-            newState.eventSink(ConfigureRoomEvents.RoomVisibilityChanged(RoomVisibilityItem.Public))
+            newState.eventSink(ConfigureRoomEvents.JoinRuleChanged(JoinRuleItem.PublicVisibility.Public))
             newState = awaitItem()
             expectedConfig = expectedConfig.copy(
-                roomVisibility = RoomVisibilityState.Public(
+                visibilityState = RoomVisibilityState.Public(
                     roomAddress = RoomAddress.AutoFilled(roomAliasHelper.roomAliasNameFromRoomDisplayName(expectedConfig.roomName ?: "")),
-                    roomAccess = RoomAccess.Anyone,
+                    joinRuleItem = JoinRuleItem.PublicVisibility.Public,
                 )
             )
             assertThat(newState.config).isEqualTo(expectedConfig)
@@ -311,7 +310,7 @@ class ConfigureRoomPresenterTest {
         )
         presenter.test {
             val initialState = initialState()
-            initialState.eventSink(ConfigureRoomEvents.RoomVisibilityChanged(RoomVisibilityItem.Public))
+            initialState.eventSink(ConfigureRoomEvents.JoinRuleChanged(JoinRuleItem.PublicVisibility.Public))
             skipItems(1)
             initialState.eventSink(ConfigureRoomEvents.RoomAddressChanged("invalid address"))
             skipItems(1)
@@ -331,7 +330,7 @@ class ConfigureRoomPresenterTest {
         )
         presenter.test {
             val initialState = initialState()
-            initialState.eventSink(ConfigureRoomEvents.RoomVisibilityChanged(RoomVisibilityItem.Public))
+            initialState.eventSink(ConfigureRoomEvents.JoinRuleChanged(JoinRuleItem.PublicVisibility.Public))
             skipItems(1)
             initialState.eventSink(ConfigureRoomEvents.RoomAddressChanged("address"))
             skipItems(1)
@@ -351,7 +350,7 @@ class ConfigureRoomPresenterTest {
         )
         presenter.test {
             val initialState = initialState()
-            initialState.eventSink(ConfigureRoomEvents.RoomVisibilityChanged(RoomVisibilityItem.Public))
+            initialState.eventSink(ConfigureRoomEvents.JoinRuleChanged(JoinRuleItem.PublicVisibility.Public))
             skipItems(1)
             initialState.eventSink(ConfigureRoomEvents.RoomAddressChanged("address"))
             skipItems(1)
