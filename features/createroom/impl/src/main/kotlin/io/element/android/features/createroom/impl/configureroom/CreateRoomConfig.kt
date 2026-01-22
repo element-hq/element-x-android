@@ -8,6 +8,7 @@
 
 package io.element.android.features.createroom.impl.configureroom
 
+import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -19,4 +20,5 @@ data class CreateRoomConfig(
     val avatarUri: String? = null,
     val invites: ImmutableList<MatrixUser> = persistentListOf(),
     val roomVisibility: RoomVisibilityState = RoomVisibilityState.Private,
+    val parentSpace: SpaceRoom? = null,
 )

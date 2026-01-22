@@ -12,6 +12,7 @@ import android.net.Uri
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.matrix.api.room.alias.RoomAliasHelper
+import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.getAndUpdate
@@ -117,6 +118,14 @@ class CreateRoomConfigStore(
     fun setIsSpace(isSpace: Boolean) {
         createRoomConfigFlow.getAndUpdate { config ->
             config.copy(isSpace = isSpace)
+        }
+    }
+
+    fun setParentSpace(parentSpace: SpaceRoom?) {
+        createRoomConfigFlow.getAndUpdate { config ->
+            config.copy(
+                parentSpace = parentSpace,
+            )
         }
     }
 
