@@ -7,6 +7,7 @@
 
 package io.element.android.features.share.api
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
@@ -15,17 +16,19 @@ import kotlinx.parcelize.Parcelize
  * Share intent data, mapped from the original [android.content.Intent].
  */
 sealed interface ShareIntentData : Parcelable {
+    val intent: Intent
+
     /**
      * A list of [Uri]s to share and their mime types, with an optional [text] to be used as caption.
      */
     @Parcelize
-    data class Uris(val text: String?, val uris: List<UriToShare>) : ShareIntentData
+    data class Uris(override val intent: Intent, val text: String?, val uris: List<UriToShare>) : ShareIntentData
 
     /**
      * A plain text to share.
      */
     @Parcelize
-    data class PlainText(val content: String) : ShareIntentData
+    data class PlainText(override val intent: Intent, val content: String) : ShareIntentData
 }
 
 /**

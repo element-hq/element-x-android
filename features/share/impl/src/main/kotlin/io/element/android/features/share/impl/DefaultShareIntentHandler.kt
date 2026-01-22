@@ -50,6 +50,7 @@ class DefaultShareIntentHandler(
                 type.isMimeTypeText() ||
                 type.isMimeTypeAny() -> {
                 ShareIntentData.Uris(
+                    intent = intent,
                     text = intent.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString()?.takeIf { it.isNotEmpty() },
                     uris = uris,
                 )
@@ -61,7 +62,7 @@ class DefaultShareIntentHandler(
     private fun handlePlainText(intent: Intent): ShareIntentData.PlainText? {
         val content = intent.getCharSequenceExtra(Intent.EXTRA_TEXT)?.toString()
         return if (content?.isNotEmpty() == true) {
-            ShareIntentData.PlainText(content)
+            ShareIntentData.PlainText(intent, content)
         } else {
             null
         }

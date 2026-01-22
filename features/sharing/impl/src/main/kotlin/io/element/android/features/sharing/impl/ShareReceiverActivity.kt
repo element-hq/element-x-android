@@ -44,6 +44,13 @@ class ShareReceiverActivity : ComponentActivity() {
             else -> roomIdFromExtra
         }
 
+        val resolvedSessionId = when {
+            !shortcutId.isNullOrEmpty() -> {
+                prefs.getString(PREF_PREFIX + "session_" + shortcutId, null) ?: sessionIdFromExtra
+            }
+            else -> sessionIdFromExtra
+        }
+
         if (resolvedRoomId.isNullOrEmpty()) {
             val text = incoming?.getStringExtra(Intent.EXTRA_TEXT)
             val uris = extractUris(incoming)
@@ -56,13 +63,13 @@ class ShareReceiverActivity : ComponentActivity() {
         when (action) {
             Intent.ACTION_SEND -> {
                 if (type?.startsWith("text") == true) {
-                    handleSendText(incoming, resolvedRoomId, sessionIdFromExtra)
+                    handleSendText(incoming, resolvedRoomId, resolvedSessionId)
                 } else {
-                    handleSendStream(incoming, resolvedRoomId, sessionIdFromExtra)
+                    handleSendStream(incoming, resolvedRoomId, resolvedSessionId)
                 }
             }
             Intent.ACTION_SEND_MULTIPLE -> {
-                handleSendMultipleStreams(incoming, resolvedRoomId, sessionIdFromExtra)
+                handleSendMultipleStreams(incoming, resolvedRoomId, resolvedSessionId)
             }
             else -> {
                 val text = incoming?.getStringExtra(Intent.EXTRA_TEXT)

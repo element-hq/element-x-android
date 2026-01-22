@@ -41,7 +41,7 @@ class ShareNode(
     private val roomSelectEntryPoint: RoomSelectEntryPoint,
 ) : ParentNode<ShareNode.NavTarget>(
     navModel = PermanentNavModel(
-        navTargets = if (plugins.filterIsInstance<Inputs>().firstOrNull()?.intent?.hasExtra(ShareEntryPoint.EXTRA_SHARE_TARGET_ROOM_ID) == true) {
+        navTargets = if (plugins.filterIsInstance<Inputs>().firstOrNull()?.shareIntentData?.intent?.hasExtra(ShareEntryPoint.EXTRA_SHARE_TARGET_ROOM_ID) == true) {
             emptySet()
         } else {
             setOf(NavTarget)

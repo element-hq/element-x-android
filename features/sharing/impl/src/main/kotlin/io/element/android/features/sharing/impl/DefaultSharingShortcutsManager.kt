@@ -78,7 +78,10 @@ class DefaultSharingShortcutsManager @Inject constructor(
         } ?: IconCompat.createWithResource(context, android.R.drawable.sym_def_app_icon)
 
         // store mapping in prefs so ShareReceiverActivity can resolve roomId (no DI required there).
-        prefs.edit().putString(PREF_PREFIX + id, room.roomId).apply()
+        prefs.edit()
+            .putString(PREF_PREFIX + id, room.roomId)
+            .putString(PREF_PREFIX + "session_" + id, room.sessionId)
+            .apply()
 
         return ShortcutInfoCompat.Builder(context, id)
             .setShortLabel(safeShortLabel(room.displayName))
