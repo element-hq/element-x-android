@@ -34,23 +34,20 @@ class CreateRoomConfigStore(
 
     fun setRoomName(roomName: String) {
         createRoomConfigFlow.getAndUpdate { config ->
-            val newVisibility = when (config.roomVisibility) {
-                is RoomVisibilityState.Public -> {
-                    val roomAddress = config.roomVisibility.roomAddress
-                    if (roomAddress is RoomAddress.AutoFilled || roomName.isEmpty()) {
-                        val roomAliasName = roomAliasHelper.roomAliasNameFromRoomDisplayName(roomName)
-                        config.roomVisibility.copy(
-                            roomAddress = RoomAddress.AutoFilled(roomAliasName),
-                        )
-                    } else {
-                        config.roomVisibility
-                    }
+            val roomAccessWithNewAddress = if (config.visibilityState is RoomVisibilityState.Public) {
+                val roomAddress = config.visibilityState.roomAddress
+                if (roomAddress is RoomAddress.AutoFilled || roomName.isEmpty()) {
+                    val roomAliasName = roomAliasHelper.roomAliasNameFromRoomDisplayName(roomName)
+                    config.visibilityState.copy(roomAddress = RoomAddress.AutoFilled(roomAliasName))
+                } else {
+                    config.visibilityState
                 }
-                else -> config.roomVisibility
+            } else {
+                config.visibilityState
             }
             config.copy(
                 roomName = roomName.takeIf { it.isNotEmpty() },
-                roomVisibility = newVisibility,
+                visibilityState = roomAccessWithNewAddress,
             )
         }
     }
@@ -68,16 +65,19 @@ class CreateRoomConfigStore(
         }
     }
 
-    fun setRoomVisibility(visibility: RoomVisibilityItem) {
+    /**
+     * Sets both the room visibility and its access based on the provided join rule.
+     */
+    fun setJoinRule(joinRule: JoinRuleItem) {
         createRoomConfigFlow.getAndUpdate { config ->
             config.copy(
-                roomVisibility = when (visibility) {
-                    RoomVisibilityItem.Private -> RoomVisibilityState.Private
-                    RoomVisibilityItem.Public, RoomVisibilityItem.AskToJoin -> {
+                visibilityState = when (joinRule) {
+                    JoinRuleItem.Private -> RoomVisibilityState.Private()
+                    is JoinRuleItem.PublicVisibility -> {
                         val roomAliasName = roomAliasHelper.roomAliasNameFromRoomDisplayName(config.roomName.orEmpty())
                         RoomVisibilityState.Public(
                             roomAddress = RoomAddress.AutoFilled(roomAliasName),
-                            roomAccess = if (visibility == RoomVisibilityItem.AskToJoin) RoomAccess.Knocking else RoomAccess.Anyone,
+                            joinRuleItem = joinRule,
                         )
                     }
                 }
@@ -88,28 +88,12 @@ class CreateRoomConfigStore(
     fun setRoomAddress(address: String) {
         createRoomConfigFlow.getAndUpdate { config ->
             config.copy(
-                roomVisibility = when (config.roomVisibility) {
+                visibilityState = when (config.visibilityState) {
                     is RoomVisibilityState.Public -> {
                         val sanitizedAddress = address.lowercase()
-                        config.roomVisibility.copy(roomAddress = RoomAddress.Edited(sanitizedAddress))
+                        config.visibilityState.copy(roomAddress = RoomAddress.Edited(sanitizedAddress))
                     }
-                    else -> config.roomVisibility
-                }
-            )
-        }
-    }
-
-    fun setRoomAccess(access: RoomAccessItem) {
-        createRoomConfigFlow.getAndUpdate { config ->
-            config.copy(
-                roomVisibility = when (config.roomVisibility) {
-                    is RoomVisibilityState.Public -> {
-                        when (access) {
-                            RoomAccessItem.Anyone -> config.roomVisibility.copy(roomAccess = RoomAccess.Anyone)
-                            RoomAccessItem.AskToJoin -> config.roomVisibility.copy(roomAccess = RoomAccess.Knocking)
-                        }
-                    }
-                    else -> config.roomVisibility
+                    else -> config.visibilityState
                 }
             )
         }
@@ -125,6 +109,8 @@ class CreateRoomConfigStore(
         createRoomConfigFlow.getAndUpdate { config ->
             config.copy(
                 parentSpace = parentSpace,
+                // If a space is selected, reset room access just in case
+                visibilityState = if (parentSpace != null) RoomVisibilityState.Private() else config.visibilityState,
             )
         }
     }

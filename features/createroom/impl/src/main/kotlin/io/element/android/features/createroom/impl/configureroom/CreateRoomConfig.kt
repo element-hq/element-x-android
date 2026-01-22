@@ -19,6 +19,6 @@ data class CreateRoomConfig(
     val topic: String? = null,
     val avatarUri: String? = null,
     val invites: ImmutableList<MatrixUser> = persistentListOf(),
-    val roomVisibility: RoomVisibilityState = RoomVisibilityState.Private,
+    val visibilityState: RoomVisibilityState = RoomVisibilityState.Private(),
     val parentSpace: SpaceRoom? = null,
 )

@@ -11,11 +11,12 @@ package io.element.android.features.createroom.impl.configureroom
 import java.util.Optional
 
 sealed interface RoomVisibilityState {
-    data object Private : RoomVisibilityState
+    val joinRuleItem: JoinRuleItem
+    data class Private(override val joinRuleItem: JoinRuleItem.Private = JoinRuleItem.Private) : RoomVisibilityState
 
     data class Public(
         val roomAddress: RoomAddress,
-        val roomAccess: RoomAccess,
+        override val joinRuleItem: JoinRuleItem.PublicVisibility,
     ) : RoomVisibilityState
 
     fun roomAddress(): Optional<String> {

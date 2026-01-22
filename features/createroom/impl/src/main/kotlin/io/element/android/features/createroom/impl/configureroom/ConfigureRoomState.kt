@@ -10,6 +10,7 @@ package io.element.android.features.createroom.impl.configureroom
 
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.matrix.ui.room.address.RoomAddressValidity
 import io.element.android.libraries.permissions.api.PermissionsState
@@ -22,9 +23,10 @@ data class ConfigureRoomState(
     val cameraPermissionState: PermissionsState,
     val roomAddressValidity: RoomAddressValidity,
     val homeserverName: String,
-    val availableVisibilityOptions: ImmutableList<RoomVisibilityItem>,
+    val availableJoinRules: ImmutableList<JoinRuleItem>,
+    val spaces: ImmutableList<SpaceRoom>,
     val eventSink: (ConfigureRoomEvents) -> Unit
 ) {
     val isValid: Boolean = config.roomName?.isNotEmpty() == true &&
-        (config.roomVisibility is RoomVisibilityState.Private || roomAddressValidity == RoomAddressValidity.Valid)
+        (config.visibilityState is RoomVisibilityState.Private || roomAddressValidity == RoomAddressValidity.Valid)
 }

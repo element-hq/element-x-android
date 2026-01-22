@@ -10,12 +10,15 @@ package io.element.android.features.createroom.impl.configureroom
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.matrix.ui.room.address.RoomAddressValidity
 import io.element.android.libraries.permissions.api.PermissionsState
 import io.element.android.libraries.permissions.api.aPermissionsState
+import io.element.android.libraries.previewutils.room.aSpaceRoom
 import kotlinx.collections.immutable.toImmutableList
 
 open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomState> {
@@ -28,9 +31,9 @@ open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomSt
                     roomName = "Room 101",
                     topic = "Room topic for this room when the text goes onto multiple lines and is really long, there shouldn’t be more than 3 lines",
                     invites = aMatrixUserList().toImmutableList(),
-                    roomVisibility = RoomVisibilityState.Public(
+                    visibilityState = RoomVisibilityState.Public(
                         roomAddress = RoomAddress.AutoFilled("Room-101"),
-                        roomAccess = RoomAccess.Knocking,
+                        joinRuleItem = JoinRuleItem.PublicVisibility.AskToJoin,
                     ),
                 ),
             ),
@@ -39,9 +42,9 @@ open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomSt
                     roomName = "Room 101",
                     topic = "Room topic for this room when the text goes onto multiple lines and is really long, there shouldn’t be more than 3 lines",
                     invites = aMatrixUserList().toImmutableList(),
-                    roomVisibility = RoomVisibilityState.Public(
+                    visibilityState = RoomVisibilityState.Public(
                         roomAddress = RoomAddress.AutoFilled("Room-101"),
-                        roomAccess = RoomAccess.Knocking,
+                        joinRuleItem = JoinRuleItem.PublicVisibility.AskToJoin,
                     ),
                 ),
             ),
@@ -49,9 +52,9 @@ open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomSt
                 config = CreateRoomConfig(
                     roomName = "Room 101",
                     topic = "Room topic for this room when the text goes onto multiple lines and is really long, there shouldn’t be more than 3 lines",
-                    roomVisibility = RoomVisibilityState.Public(
+                    visibilityState = RoomVisibilityState.Public(
                         roomAddress = RoomAddress.AutoFilled("Room-101"),
-                        roomAccess = RoomAccess.Knocking,
+                        joinRuleItem = JoinRuleItem.PublicVisibility.AskToJoin,
                     ),
                 ),
                 roomAddressValidity = RoomAddressValidity.NotAvailable,
@@ -60,9 +63,9 @@ open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomSt
                 config = CreateRoomConfig(
                     roomName = "Room 101",
                     topic = "Room topic for this room when the text goes onto multiple lines and is really long, there shouldn’t be more than 3 lines",
-                    roomVisibility = RoomVisibilityState.Public(
+                    visibilityState = RoomVisibilityState.Public(
                         roomAddress = RoomAddress.AutoFilled("Room-101"),
-                        roomAccess = RoomAccess.Knocking,
+                        joinRuleItem = JoinRuleItem.PublicVisibility.AskToJoin,
                     ),
                 ),
                 roomAddressValidity = RoomAddressValidity.InvalidSymbols,
@@ -71,9 +74,9 @@ open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomSt
                 config = CreateRoomConfig(
                     roomName = "Room 101",
                     topic = "Room topic for this room when the text goes onto multiple lines and is really long, there shouldn’t be more than 3 lines",
-                    roomVisibility = RoomVisibilityState.Public(
+                    visibilityState = RoomVisibilityState.Public(
                         roomAddress = RoomAddress.AutoFilled("Room-101"),
-                        roomAccess = RoomAccess.Knocking,
+                        joinRuleItem = JoinRuleItem.PublicVisibility.AskToJoin,
                     ),
                 ),
                 roomAddressValidity = RoomAddressValidity.Valid,
@@ -83,11 +86,39 @@ open class ConfigureRoomStateProvider : PreviewParameterProvider<ConfigureRoomSt
                     isSpace = true,
                     roomName = "Space 101",
                     topic = "Space topic for this space when the text goes onto multiple lines and is really long, there shouldn’t be more than 3 lines",
-                    roomVisibility = RoomVisibilityState.Public(
+                    visibilityState = RoomVisibilityState.Public(
                         roomAddress = RoomAddress.AutoFilled("Space-101"),
-                        roomAccess = RoomAccess.Anyone,
+                        joinRuleItem = JoinRuleItem.PublicVisibility.Public,
                     ),
                 ),
+                roomAddressValidity = RoomAddressValidity.Valid,
+            ),
+            aConfigureRoomState(
+                config = CreateRoomConfig(
+                    isSpace = false,
+                    roomName = "Room 101",
+                    topic = "Room topic for this room when the text goes onto multiple lines and is really long, there shouldn’t be more than 3 lines",
+                    parentSpace = null,
+                    visibilityState = RoomVisibilityState.Public(
+                        roomAddress = RoomAddress.AutoFilled("Space-101"),
+                        joinRuleItem = JoinRuleItem.PublicVisibility.Restricted(aSpaceRoom().roomId),
+                    ),
+                ),
+                spaces = listOf(aSpaceRoom()),
+                roomAddressValidity = RoomAddressValidity.Valid,
+            ),
+            aConfigureRoomState(
+                config = CreateRoomConfig(
+                    isSpace = false,
+                    roomName = "Room 101",
+                    topic = "Room topic for this room when the text goes onto multiple lines and is really long, there shouldn’t be more than 3 lines",
+                    parentSpace = aSpaceRoom(canonicalAlias = RoomAlias("#a-space-room:example.org")),
+                    visibilityState = RoomVisibilityState.Public(
+                        roomAddress = RoomAddress.AutoFilled("Space-101"),
+                        joinRuleItem = JoinRuleItem.PublicVisibility.Restricted(aSpaceRoom().roomId),
+                    ),
+                ),
+                spaces = listOf(aSpaceRoom()),
                 roomAddressValidity = RoomAddressValidity.Valid,
             ),
         )
@@ -101,9 +132,20 @@ fun aConfigureRoomState(
     cameraPermissionState: PermissionsState = aPermissionsState(showDialog = false),
     homeserverName: String = "matrix.org",
     roomAddressValidity: RoomAddressValidity = RoomAddressValidity.Valid,
-    availableVisibilityOptions: List<RoomVisibilityItem> = RoomVisibilityItem.entries.filter {
-        if (!isKnockFeatureEnabled) it != RoomVisibilityItem.AskToJoin else true
+    availableVisibilityOptions: List<JoinRuleItem> = if (config.parentSpace != null) {
+        listOfNotNull(
+            JoinRuleItem.PublicVisibility.Restricted(config.parentSpace.roomId),
+            JoinRuleItem.PublicVisibility.AskToJoinRestricted(config.parentSpace.roomId).takeIf { isKnockFeatureEnabled },
+            JoinRuleItem.Private,
+        )
+    } else {
+        listOfNotNull(
+            JoinRuleItem.PublicVisibility.Public,
+            JoinRuleItem.PublicVisibility.AskToJoin.takeIf { isKnockFeatureEnabled },
+            JoinRuleItem.Private,
+        )
     },
+    spaces: List<SpaceRoom> = emptyList(),
     eventSink: (ConfigureRoomEvents) -> Unit = { },
 ) = ConfigureRoomState(
     config = config,
@@ -112,6 +154,7 @@ fun aConfigureRoomState(
     cameraPermissionState = cameraPermissionState,
     homeserverName = homeserverName,
     roomAddressValidity = roomAddressValidity,
-    availableVisibilityOptions = availableVisibilityOptions.toImmutableList(),
+    availableJoinRules = availableVisibilityOptions.toImmutableList(),
+    spaces = spaces.toImmutableList(),
     eventSink = eventSink,
 )
