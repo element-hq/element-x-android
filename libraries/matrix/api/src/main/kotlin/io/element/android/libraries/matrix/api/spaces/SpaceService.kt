@@ -21,7 +21,20 @@ interface SpaceService {
 
     fun spaceRoomList(id: RoomId): SpaceRoomList
 
+    /**
+     * Get the list of spaces in which the current user can modify their rooms (adding or removing them).
+     */
+    suspend fun editableSpaces(): Result<List<SpaceRoom>>
+
     fun getLeaveSpaceHandle(spaceId: RoomId): LeaveSpaceHandle
+
+    /**
+     * Add a child room to a space.
+     * @param spaceId The space ID to which to add the child.
+     * @param childId The room ID of the child to add.
+     * @return A result indicating success or failure.
+     */
+    suspend fun addChildToSpace(spaceId: RoomId, childId: RoomId): Result<Unit>
 
     /**
      * Remove a child room from a space.

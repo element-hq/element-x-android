@@ -87,6 +87,12 @@ class RustSpaceService(
         )
     }
 
+    override suspend fun editableSpaces(): Result<List<SpaceRoom>> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerSpaceService.editableSpaces().map(spaceRoomMapper::map)
+        }
+    }
+
     override fun getLeaveSpaceHandle(spaceId: RoomId): LeaveSpaceHandle {
         return RustLeaveSpaceHandle(
             id = spaceId,
@@ -95,6 +101,12 @@ class RustSpaceService(
             sessionCoroutineScope = sessionCoroutineScope,
         ) {
             innerSpaceService.leaveSpace(spaceId.value)
+        }
+    }
+
+    override suspend fun addChildToSpace(spaceId: RoomId, childId: RoomId): Result<Unit> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerSpaceService.addChildToSpace(childId = childId.value, spaceId = spaceId.value)
         }
     }
 
