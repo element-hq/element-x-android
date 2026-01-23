@@ -536,6 +536,6 @@ class DefaultBugReporterTest {
     }
 
     companion object {
-        private const val EXPECTED_NUMBER_OF_PROGRESS_VALUE = 18
+        private const val EXPECTED_NUMBER_OF_PROGRESS_VALUE = 17
     }
 }
