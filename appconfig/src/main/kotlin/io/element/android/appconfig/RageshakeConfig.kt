@@ -30,4 +30,9 @@ object RageshakeConfig {
      * The maximum size of a single log file.
      */
     const val MAX_LOG_CONTENT_SIZE = 100 * 1024 * 1024L
+
+    /**
+     * The maximum number of log lines a rageshake can contain.
+     */
+    const val MAX_LOG_LINES_SIZE = 1_000_000
 }

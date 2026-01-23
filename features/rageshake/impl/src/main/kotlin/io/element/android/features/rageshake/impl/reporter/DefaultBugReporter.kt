@@ -135,6 +135,7 @@ class DefaultBugReporter(
         // enumerate files to delete
         val bugReportFiles: MutableList<File> = ArrayList()
         var response: Response? = null
+        var totalLogLines = 0L
         try {
             var serverError: String? = null
             withContext(coroutineDispatchers.io) {
@@ -154,7 +155,15 @@ class DefaultBugReporter(
                         it.length() < RageshakeConfig.MAX_LOG_CONTENT_SIZE
                     }
                     filesBySize[true].orEmpty().mapNotNullTo(gzippedFiles) { file ->
+                        val logLines = countLogLines(file)
+                        totalLogLines += logLines
+
                         when {
+                            totalLogLines > RageshakeConfig.MAX_LOG_LINES_SIZE -> {
+                                totalLogLines -= logLines
+                                Timber.e("Could not upload file ${file.name} because it would exceed the max log lines size ($totalLogLines/${RageshakeConfig.MAX_LOG_LINES_SIZE}")
+                                null
+                            }
                             file.extension == "gz" -> file
                             else -> compressFile(file)
                         }
@@ -200,6 +209,7 @@ class DefaultBugReporter(
                 if (filesTooBig > 0) {
                     builder.addFormDataPart("omitted_logs", filesTooBig.toString())
                 }
+
                 userId?.let {
                     matrixClientProvider.getOrNull(it)?.let { client ->
                         val curveKey = client.encryptionService.deviceCurve25519()
@@ -210,6 +220,7 @@ class DefaultBugReporter(
 
                         if (sendPushRules) {
                             client.notificationSettingsService.getRawPushRules().getOrNull()?.let { pushRules ->
+                                totalLogLines += pushRules.lineSequence().count()
                                 builder.addFormDataPart(
                                     name = "file",
                                     filename = "push_rules.json",
@@ -452,5 +463,9 @@ class DefaultBugReporter(
         } catch (e: IOException) {
             Timber.e(e, "getLogCatContent fails")
         }
+    }
+
+    private fun countLogLines(file: File): Int {
+        return file.reader().useLines { it.count() }
     }
 }
