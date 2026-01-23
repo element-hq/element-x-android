@@ -10,17 +10,23 @@ package io.element.android.libraries.matrix.impl.platform
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.platform.InitPlatformService
 import io.element.android.libraries.matrix.api.tracing.TracingConfiguration
 import io.element.android.libraries.matrix.impl.tracing.map
 import org.matrix.rustcomponents.sdk.initPlatform
+import timber.log.Timber
 
 @ContributesBinding(AppScope::class)
 class RustInitPlatformService : InitPlatformService {
     override fun init(tracingConfiguration: TracingConfiguration) {
-        initPlatform(
-            config = tracingConfiguration.map(),
-            useLightweightTokioRuntime = false
-        )
+        runCatchingExceptions {
+            initPlatform(
+                config = tracingConfiguration.map(),
+                useLightweightTokioRuntime = false
+            )
+        }.onFailure {
+            Timber.e(it, "Could not initialize logging in the Rust SDK")
+        }
     }
 }
