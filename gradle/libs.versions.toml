@@ -35,7 +35,7 @@ test_core = "1.7.0"
 roborazzi = "1.56.0"
 
 # Jetbrain
-datetime = "0.7.1"
+datetime = "0.7.1-0.6.x-compat"
 serialization_json = "1.10.0"
 
 #other
@@ -265,7 +265,7 @@ paparazzi = "app.cash.paparazzi:2.0.0-alpha02"
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 firebaseAppDistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebaseAppDistribution" }
-knit = { id = "org.jetbrains.kotlinx.knit", version = "0.5.0" }
+knit = { id = "org.jetbrains.kotlinx.knit", version = "0.5.1" }
 sonarqube = "org.sonarqube:7.2.2.6593"
 licensee = "app.cash.licensee:1.14.1"
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
