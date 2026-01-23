@@ -8,9 +8,6 @@
 
 package io.element.android.features.startchat.impl.userlist
 
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -20,6 +17,7 @@ import io.element.android.libraries.usersearch.api.UserSearchResult
 import io.element.android.libraries.usersearch.api.UserSearchResultState
 import io.element.android.libraries.usersearch.test.FakeUserRepository
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.test
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -40,9 +38,7 @@ class DefaultUserListPresenterTest {
                 UserListDataStore(),
                 FakeMatrixClient(),
             )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.searchQuery).isEmpty()
@@ -62,9 +58,7 @@ class DefaultUserListPresenterTest {
                 UserListDataStore(),
                 FakeMatrixClient(),
             )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.searchQuery).isEmpty()
@@ -84,9 +78,7 @@ class DefaultUserListPresenterTest {
                 UserListDataStore(),
                 FakeMatrixClient(),
             )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(1)
             val initialState = awaitItem()
 
@@ -121,9 +113,7 @@ class DefaultUserListPresenterTest {
                 UserListDataStore(),
                 FakeMatrixClient(),
             )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(1)
             val initialState = awaitItem()
 
@@ -174,9 +164,7 @@ class DefaultUserListPresenterTest {
                 UserListDataStore(),
                 FakeMatrixClient(),
             )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(1)
             val initialState = awaitItem()
 
@@ -200,9 +188,7 @@ class DefaultUserListPresenterTest {
                 UserListDataStore(),
                 FakeMatrixClient(),
             )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(1)
             val initialState = awaitItem()
 

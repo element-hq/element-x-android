@@ -25,6 +25,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.space.api.SpaceEntryPoint
+import io.element.android.features.space.impl.addroom.AddRoomToSpaceNode
 import io.element.android.features.space.impl.di.SpaceFlowGraph
 import io.element.android.features.space.impl.leave.LeaveSpaceNode
 import io.element.android.features.space.impl.root.SpaceNode
@@ -69,6 +70,9 @@ class SpaceFlowNode(
 
         @Parcelize
         data object Leave : NavTarget
+
+        @Parcelize
+        data object AddRoom : NavTarget
     }
 
     override fun onBuilt() {
@@ -111,6 +115,10 @@ class SpaceFlowNode(
                     override fun startLeaveSpaceFlow() {
                         backstack.push(NavTarget.Leave)
                     }
+
+                    override fun navigateToAddRoom() {
+                        backstack.push(NavTarget.AddRoom)
+                    }
                 }
                 createNode<SpaceNode>(buildContext, listOf(callback))
             }
@@ -131,6 +139,14 @@ class SpaceFlowNode(
                     }
                 }
                 createNode<SpaceSettingsFlowNode>(buildContext, listOf(callback))
+            }
+            NavTarget.AddRoom -> {
+                val callback = object : AddRoomToSpaceNode.Callback {
+                    override fun onFinish() {
+                        backstack.pop()
+                    }
+                }
+                createNode<AddRoomToSpaceNode>(buildContext, listOf(callback))
             }
         }
     }

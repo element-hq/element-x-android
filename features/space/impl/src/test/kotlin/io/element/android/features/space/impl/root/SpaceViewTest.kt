@@ -210,6 +210,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setSpace
     onLeaveSpaceClick: () -> Unit = EnsureNeverCalled(),
     onSettingsClick: () -> Unit = EnsureNeverCalled(),
     onViewMembersClick: () -> Unit = EnsureNeverCalled(),
+    onAddRoomClick: () -> Unit = EnsureNeverCalled(),
     acceptDeclineInviteView: @Composable () -> Unit = {},
 ) {
     setContent {
@@ -221,6 +222,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setSpace
             onLeaveSpaceClick = onLeaveSpaceClick,
             onSettingsClick = onSettingsClick,
             onViewMembersClick = onViewMembersClick,
+            onAddRoomClick = onAddRoomClick,
             acceptDeclineInviteView = acceptDeclineInviteView,
         )
     }

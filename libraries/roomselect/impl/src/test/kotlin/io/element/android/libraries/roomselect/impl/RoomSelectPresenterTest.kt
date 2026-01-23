@@ -22,6 +22,7 @@ import io.element.android.libraries.roomselect.api.RoomSelectMode
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -119,8 +120,13 @@ internal fun TestScope.createRoomSelectPresenter(
     roomListService: RoomListService = FakeRoomListService(),
 ) = RoomSelectPresenter(
     mode = mode,
-    dataSource = RoomSelectSearchDataSource(
-        roomListService = roomListService,
-        coroutineDispatchers = testCoroutineDispatchers(),
-    ),
+    dataSourceFactory = object : RoomSelectSearchDataSource.Factory {
+        override fun create(coroutineScope: CoroutineScope): RoomSelectSearchDataSource {
+            return RoomSelectSearchDataSource(
+                coroutineScope = coroutineScope,
+                roomListService = roomListService,
+                coroutineDispatchers = testCoroutineDispatchers(),
+            )
+        }
+    }
 )

@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.tests.testutils.testCoroutineDispatchers
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -122,13 +123,18 @@ fun TestScope.createRoomListSearchPresenter(
     roomListService: RoomListService = FakeRoomListService(),
 ): RoomListSearchPresenter {
     return RoomListSearchPresenter(
-        dataSource = RoomListSearchDataSource(
-            roomListService = roomListService,
-            roomSummaryFactory = aRoomListRoomSummaryFactory(
-                dateFormatter = FakeDateFormatter(),
-                roomLatestEventFormatter = FakeRoomLatestEventFormatter(),
-            ),
-            coroutineDispatchers = testCoroutineDispatchers(),
-        ),
+        dataSourceFactory = object : RoomListSearchDataSource.Factory {
+            override fun create(coroutineScope: CoroutineScope): RoomListSearchDataSource {
+                return RoomListSearchDataSource(
+                    roomListService = roomListService,
+                    roomSummaryFactory = aRoomListRoomSummaryFactory(
+                        dateFormatter = FakeDateFormatter(),
+                        roomLatestEventFormatter = FakeRoomLatestEventFormatter(),
+                    ),
+                    coroutineDispatchers = testCoroutineDispatchers(),
+                    coroutineScope = coroutineScope,
+                )
+            }
+        }
     )
 }

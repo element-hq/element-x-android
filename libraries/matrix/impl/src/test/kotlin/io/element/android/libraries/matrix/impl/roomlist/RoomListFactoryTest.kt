@@ -20,12 +20,12 @@ class RoomListFactoryTest {
     fun `createRoomList should work`() = runTest {
         val sut = RoomListFactory(
             innerRoomListService = FakeFfiRoomListService(),
-            sessionCoroutineScope = backgroundScope,
             analyticsService = FakeAnalyticsService(),
         )
         sut.createRoomList(
             pageSize = 10,
             coroutineContext = EmptyCoroutineContext,
+            coroutineScope = backgroundScope,
         ) {
             FakeFfiRoomList()
         }

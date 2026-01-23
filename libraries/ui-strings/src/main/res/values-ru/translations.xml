@@ -492,7 +492,6 @@
   <string name="screen_share_open_google_maps">"Открыть в Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Открыть в OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Поделиться этим местоположением"</string>
-  <string name="screen_space_add_rooms_room_access_description">"Добавление комнаты не повлияет на доступ к ней. Чтобы изменить доступ к комнате, перейдите в Настройки &gt; Безопасность и конфиденциальность."</string>
   <string name="screen_space_list_description">"Пространства, которые вы создали или к которым присоединились."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_empty_state_title">"Создавайте пространства для организации комнат"</string>

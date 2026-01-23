@@ -36,7 +36,7 @@ roborazzi = "1.56.0"
 
 # Jetbrain
 datetime = "0.7.1"
-serialization_json = "1.9.0"
+serialization_json = "1.10.0"
 
 #other
 coil = "3.3.0"
@@ -52,7 +52,7 @@ haze = "1.7.1"
 dependencyAnalysis = "3.5.1"
 
 # DI
-metro = "0.9.4"
+metro = "0.10.0"
 
 # Auto service
 autoservice = "1.1.1"
@@ -165,7 +165,7 @@ test_konsist = "com.lemonappdev:konsist:0.17.3"
 test_turbine = "app.cash.turbine:turbine:1.2.1"
 test_truth = "com.google.truth:truth:1.4.5"
 test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.20"
-test_robolectric = "org.robolectric:robolectric:4.16"
+test_robolectric = "org.robolectric:robolectric:4.16.1"
 test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "appyx" }
 test_composable_preview_scanner = "io.github.sergio-sastre.ComposablePreviewScanner:android:0.8.1"
 test_detekt_api = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detekt" }
@@ -177,7 +177,7 @@ test_detekt_test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version
 # https://github.com/matrix-org/matrix-rust-components-kotlin/commits/main/sdk/sdk-android/src/main/kotlin/org/matrix/rustcomponents/sdk/matrix_sdk_ffi.kt
 # All new features should not be implemented in the pull request that upgrades the version, developers should
 # only fix API breaks and may add some TODOs.
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.1.16"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.1.22"
 
 # Others
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
@@ -218,8 +218,8 @@ haze_materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = 
 color_picker = "io.mhssn:colorpicker:1.0.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.28.1"
-sentry = "io.sentry:sentry-android:8.30.0"
+posthog = "com.posthog:posthog-android:3.29.1"
+sentry = "io.sentry:sentry-android:8.31.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.29.2"
 

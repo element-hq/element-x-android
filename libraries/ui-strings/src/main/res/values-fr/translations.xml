@@ -483,7 +483,6 @@ Raison : %1$s."</string>
   <string name="screen_share_open_google_maps">"Ouvrir dans Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Ouvrir dans OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Partager cette position"</string>
-  <string name="screen_space_add_rooms_room_access_description">"Ajouter un salon ne changera pas l’accès au salon. Pour modifier l’accès, aller dans les paramètres du salon puis dans Sécurité &amp; confidentialité."</string>
   <string name="screen_space_list_description">"Espaces que vous avez créés ou rejoints."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_empty_state_title">"Créer des espaces pour organiser les salons"</string>

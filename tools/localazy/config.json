@@ -234,7 +234,8 @@
       "includeRegex" : [
         "screen\\.leave_space\\..*",
         "screen\\.space_settings\\..*",
-        "screen\\.space\\..*"
+        "screen\\.space\\..*",
+        "screen\\.space_add_rooms\\..*"
       ]
     },
     {

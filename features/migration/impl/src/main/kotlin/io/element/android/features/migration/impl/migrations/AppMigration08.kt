@@ -10,7 +10,6 @@ package io.element.android.features.migration.impl.migrations
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
 import io.element.android.features.announcement.api.Announcement
 import io.element.android.features.announcement.api.AnnouncementService
 
@@ -18,7 +17,6 @@ import io.element.android.features.announcement.api.AnnouncementService
  * Ensure the new notification sound banner is displayed, but only on application upgrade.
  */
 @ContributesIntoSet(AppScope::class)
-@Inject
 class AppMigration08(
     private val announcementService: AnnouncementService,
 ) : AppMigration {

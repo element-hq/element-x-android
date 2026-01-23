@@ -10,6 +10,7 @@ package io.element.android.libraries.matrix.api.roomlist
 
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.core.RoomId
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.filterIsInstance
@@ -39,11 +40,13 @@ interface RoomListService {
      * @param pageSize the number of rooms to load at once.
      * @param initialFilter the initial filter to apply to the rooms.
      * @param source the source of the rooms, either all rooms or invites.
+     * @param coroutineScope the coroutine scope to use for the room list operations.
      */
     fun createRoomList(
         pageSize: Int,
         initialFilter: RoomListFilter,
         source: RoomList.Source,
+        coroutineScope: CoroutineScope,
     ): DynamicRoomList
 
     /**

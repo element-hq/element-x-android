@@ -10,7 +10,13 @@
   <string name="screen_leave_space_subtitle_only_last_admin">"Du vil ikke blive fjernet fra følgende rum, fordi du er den eneste administrator:"</string>
   <string name="screen_leave_space_title">"Forlad %1$s?"</string>
   <string name="screen_leave_space_title_last_admin">"Du er den eneste administrator for %1$s"</string>
+  <string name="screen_space_add_rooms_room_access_description">"Tilføjelse af et rum påvirker ikke adgangen til rummet. For at ændre adgangen, gå til Rumindstillinger &gt; Sikkerhed og privatliv."</string>
   <string name="screen_space_menu_action_members">"Vis medlemmer"</string>
+  <string name="screen_space_remove_rooms_confirmation_content">"Fjernelse af et rum påvirker ikke adgangen til rummet. For at ændre adgangen, gå til Rum-info &gt; Privatliv og sikkerhed."</string>
+  <plurals name="screen_space_remove_rooms_confirmation_title">
+    <item quantity="one">"Fjern %1$d rum fra %2$s"</item>
+    <item quantity="other">"Fjern %1$d rum fra %2$s"</item>
+  </plurals>
   <string name="screen_space_settings_leave_space">"Forlad gruppe"</string>
   <string name="screen_space_settings_roles_and_permissions">"Roller og tilladelser"</string>
   <string name="screen_space_settings_security_and_privacy">"Sikkerhed og privatliv"</string>

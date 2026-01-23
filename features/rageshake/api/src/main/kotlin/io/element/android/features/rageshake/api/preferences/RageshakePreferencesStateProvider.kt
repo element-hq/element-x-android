@@ -23,7 +23,7 @@ fun aRageshakePreferencesState(
     isEnabled: Boolean = false,
     isSupported: Boolean = true,
     sensitivity: Float = 0.3f,
-    eventSink: (RageshakePreferencesEvents) -> Unit = {}
+    eventSink: (RageshakePreferencesEvent) -> Unit = {}
 ) = RageshakePreferencesState(
     isFeatureEnabled = isFeatureEnabled,
     isEnabled = isEnabled,

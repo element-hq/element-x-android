@@ -16,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.Presenter
@@ -23,7 +24,7 @@ import kotlinx.collections.immutable.persistentListOf
 
 @Inject
 class RoomListSearchPresenter(
-    private val dataSource: RoomListSearchDataSource,
+    private val dataSourceFactory: RoomListSearchDataSource.Factory,
 ) : Presenter<RoomListSearchState> {
     @Composable
     override fun present(): RoomListSearchState {
@@ -32,6 +33,9 @@ class RoomListSearchPresenter(
             mutableStateOf(false)
         }
         val searchQuery = rememberTextFieldState()
+
+        val coroutineScope = rememberCoroutineScope()
+        val dataSource = remember { dataSourceFactory.create(coroutineScope) }
 
         LaunchedEffect(isSearchActive) {
             dataSource.setIsActive(isSearchActive)

@@ -8,7 +8,9 @@
 
 package io.element.android.features.home.impl.search
 
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.home.impl.datasource.RoomListRoomSummaryFactory
 import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -18,6 +20,7 @@ import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.loadAllIncrementally
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOn
@@ -25,16 +28,23 @@ import kotlinx.coroutines.flow.map
 
 private const val PAGE_SIZE = 30
 
-@Inject
+@AssistedInject
 class RoomListSearchDataSource(
+    @Assisted coroutineScope: CoroutineScope,
     roomListService: RoomListService,
     coroutineDispatchers: CoroutineDispatchers,
     private val roomSummaryFactory: RoomListRoomSummaryFactory,
 ) {
+    @AssistedFactory
+    interface Factory {
+        fun create(coroutineScope: CoroutineScope): RoomListSearchDataSource
+    }
+
     private val roomList = roomListService.createRoomList(
         pageSize = PAGE_SIZE,
         initialFilter = RoomListFilter.None,
         source = RoomList.Source.All,
+        coroutineScope = coroutineScope
     )
 
     val roomSummaries: Flow<ImmutableList<RoomListRoomSummary>> = roomList.filteredSummaries

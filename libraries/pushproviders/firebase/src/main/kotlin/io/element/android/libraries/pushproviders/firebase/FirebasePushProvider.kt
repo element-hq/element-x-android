@@ -10,7 +10,6 @@ package io.element.android.libraries.pushproviders.firebase
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -23,7 +22,6 @@ import timber.log.Timber
 private val loggerTag = LoggerTag("FirebasePushProvider", LoggerTag.PushLoggerTag)
 
 @ContributesIntoSet(AppScope::class)
-@Inject
 class FirebasePushProvider(
     private val firebaseStore: FirebaseStore,
     private val pusherSubscriber: PusherSubscriber,

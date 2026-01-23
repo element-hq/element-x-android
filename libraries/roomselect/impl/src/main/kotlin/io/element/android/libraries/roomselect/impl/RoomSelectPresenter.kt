@@ -16,6 +16,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
@@ -31,7 +32,7 @@ import kotlinx.collections.immutable.toImmutableList
 @AssistedInject
 class RoomSelectPresenter(
     @Assisted private val mode: RoomSelectMode,
-    private val dataSource: RoomSelectSearchDataSource,
+    private val dataSourceFactory: RoomSelectSearchDataSource.Factory,
 ) : Presenter<RoomSelectState> {
     @AssistedFactory
     fun interface Factory {
@@ -44,9 +45,8 @@ class RoomSelectPresenter(
         var searchQuery by remember { mutableStateOf("") }
         var isSearchActive by remember { mutableStateOf(false) }
 
-        LaunchedEffect(Unit) {
-            dataSource.load()
-        }
+        val coroutineScope = rememberCoroutineScope()
+        val dataSource = remember { dataSourceFactory.create(coroutineScope) }
 
         LaunchedEffect(searchQuery) {
             dataSource.setSearchQuery(searchQuery)

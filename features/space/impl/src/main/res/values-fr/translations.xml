@@ -10,6 +10,7 @@
   <string name="screen_leave_space_subtitle_only_last_admin">"Vous ne quitterez pas le ou les salons suivants car vous y êtes le seul administrateur:"</string>
   <string name="screen_leave_space_title">"Quitter %1$s?"</string>
   <string name="screen_leave_space_title_last_admin">"Vous êtes le seul administrateur de %1$s"</string>
+  <string name="screen_space_add_rooms_room_access_description">"Ajouter un salon ne changera pas l’accès au salon. Pour modifier l’accès, aller dans les paramètres du salon puis dans Sécurité &amp; confidentialité."</string>
   <string name="screen_space_menu_action_members">"Voir les membres"</string>
   <string name="screen_space_remove_rooms_confirmation_content">"Supprimer un salon n’affectera pas ses paramètres d’accès. Pour modifier l’accès, aller dans les settings du salon puis \"Sécurité &amp; confidentialité\"."</string>
   <plurals name="screen_space_remove_rooms_confirmation_title">

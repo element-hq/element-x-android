@@ -75,7 +75,7 @@
   <string name="action_copy_link_to_message">"Copy link to message"</string>
   <string name="action_copy_text">"Copy text"</string>
   <string name="action_create">"Create"</string>
-  <string name="action_create_a_room">"Create room"</string>
+  <string name="action_create_room">"Create room"</string>
   <string name="action_create_space">"Create space"</string>
   <string name="action_deactivate">"Deactivate"</string>
   <string name="action_deactivate_account">"Deactivate account"</string>
@@ -304,6 +304,7 @@ Reason: %1$s."</string>
   <string name="common_report_a_problem">"Report a problem"</string>
   <string name="common_report_submitted">"Report submitted"</string>
   <string name="common_rich_text_editor">"Rich text editor"</string>
+  <string name="common_role">"Role"</string>
   <string name="common_room">"Room"</string>
   <string name="common_room_name">"Room name"</string>
   <string name="common_room_name_placeholder">"e.g. your project name"</string>
@@ -484,7 +485,6 @@ Are you sure you want to continue?"</string>
   <string name="screen_share_open_google_maps">"Open in Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Open in OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Share this location"</string>
-  <string name="screen_space_add_rooms_room_access_description">"Adding a room will not affect the room access. To change the access go to Room settings &gt; Security &amp; privacy."</string>
   <string name="screen_space_list_description">"Spaces you have created or joined."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_empty_state_title">"Create spaces to organize rooms"</string>

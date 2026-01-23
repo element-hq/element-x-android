@@ -61,11 +61,11 @@ class FakeSpaceService(
         return leaveSpaceHandleResult(spaceId)
     }
 
-    override suspend fun removeChildFromSpace(spaceId: RoomId, childId: RoomId): Result<Unit> = simulateLongTask {
-        removeChildFromSpaceResult(spaceId, childId)
+    override suspend fun addChildToSpace(spaceId: RoomId, childId: RoomId): Result<Unit> = simulateLongTask {
+        addChildToSpaceResult(spaceId, childId)
     }
 
-    override suspend fun addChildToSpace(spaceId: RoomId, childId: RoomId): Result<Unit> {
-        return addChildToSpaceResult(spaceId, childId)
+    override suspend fun removeChildFromSpace(spaceId: RoomId, childId: RoomId): Result<Unit> = simulateLongTask {
+        removeChildFromSpaceResult(spaceId, childId)
     }
 }

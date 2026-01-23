@@ -12,7 +12,6 @@ import android.content.Context
 import androidx.annotation.VisibleForTesting
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
 import im.vector.app.features.analytics.itf.VectorAnalyticsEvent
 import im.vector.app.features.analytics.itf.VectorAnalyticsScreen
 import im.vector.app.features.analytics.plan.SuperProperties
@@ -38,7 +37,6 @@ import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 
 @ContributesIntoSet(AppScope::class)
-@Inject
 class SentryAnalyticsProvider(
     @ApplicationContext private val context: Context,
     private val sentryDsn: SentryDsn?,

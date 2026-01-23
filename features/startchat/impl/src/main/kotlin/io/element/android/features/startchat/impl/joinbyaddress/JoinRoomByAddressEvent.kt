@@ -8,8 +8,8 @@
 
 package io.element.android.features.startchat.impl.joinbyaddress
 
-sealed interface JoinRoomByAddressEvents {
-    data object Dismiss : JoinRoomByAddressEvents
-    data object Continue : JoinRoomByAddressEvents
-    data class UpdateAddress(val address: String) : JoinRoomByAddressEvents
+sealed interface JoinRoomByAddressEvent {
+    data object Dismiss : JoinRoomByAddressEvent
+    data object Continue : JoinRoomByAddressEvent
+    data class UpdateAddress(val address: String) : JoinRoomByAddressEvent
 }
