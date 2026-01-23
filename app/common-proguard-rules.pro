@@ -8,12 +8,6 @@
 # Increase optimizations passes to 3
 -optimizationpasses 3
 
-# Keep, optimize and shrink anything that's not enterprise-related
--keep,allowoptimization,allowshrinking class !io.element.android.enterpriseconfig.**,!io.element.android.enterprise.features.enterprise.impl.** { *; }
-
-# Keep package names besides class names for `io.element` package, except for the enterprise packages
--keeppackagenames !io.element.android.enterpriseconfig.**,!io.element.android.enterprise.features.enterprise.impl.**,io.element.**
-
 # JNA
 -dontwarn java.awt.*
 -keep class com.sun.jna.** { *; }
