@@ -10,7 +10,9 @@
   <string name="screen_leave_space_subtitle_only_last_admin">"You will not be removed from the following room(s) because you\'re the only administrator:"</string>
   <string name="screen_leave_space_title">"Leave %1$s?"</string>
   <string name="screen_leave_space_title_last_admin">"You are the only admin for %1$s"</string>
+  <string name="screen_space_add_room_action">"Room"</string>
   <string name="screen_space_add_rooms_room_access_description">"Adding a room will not affect the room access. To change the access go to Room settings &gt; Security &amp; privacy."</string>
+  <string name="screen_space_empty_state_title">"Add your first room"</string>
   <string name="screen_space_menu_action_members">"View members"</string>
   <string name="screen_space_remove_rooms_confirmation_content">"Removing a room will not affect the room access. To change the access go to Room info &gt; Privacy &amp; security."</string>
   <plurals name="screen_space_remove_rooms_confirmation_title">

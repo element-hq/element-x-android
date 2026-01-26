@@ -18,7 +18,7 @@
   <string name="action_copy">"Kopijuoti"</string>
   <string name="action_copy_link">"Kopijuoti nuorodą"</string>
   <string name="action_create">"Sukurti"</string>
-  <string name="action_create_a_room">"Kurti kambarį"</string>
+  <string name="action_create_room">"Kurti kambarį"</string>
   <string name="action_decline">"Atmesti"</string>
   <string name="action_disable">"Išjungti"</string>
   <string name="action_done">"Atlikta"</string>

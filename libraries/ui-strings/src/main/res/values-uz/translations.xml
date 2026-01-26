@@ -74,7 +74,7 @@
   <string name="action_copy_link_to_message">"Havolani xabaraga nusxalash"</string>
   <string name="action_copy_text">"Matnni nusxalash"</string>
   <string name="action_create">"Yaratmoq"</string>
-  <string name="action_create_a_room">"Xonani yaratish"</string>
+  <string name="action_create_room">"Xonani yaratish"</string>
   <string name="action_deactivate">"Faolsizlantirish"</string>
   <string name="action_deactivate_account">"Hisobni faolsizlantirish"</string>
   <string name="action_decline">"Rad etish"</string>

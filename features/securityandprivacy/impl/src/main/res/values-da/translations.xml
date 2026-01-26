@@ -2,8 +2,16 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_edit_room_address_room_address_section_footer">"Du skal bruge en adresse for at gøre det synligt i det offentlige register."</string>
   <string name="screen_edit_room_address_title">"Redigér adresse"</string>
+  <string name="screen_manage_authorized_spaces_header">"Grupper, hvor medlemmer kan deltage i rummet uden en invitation."</string>
+  <string name="screen_manage_authorized_spaces_title">"Administrer grupper"</string>
+  <string name="screen_manage_authorized_spaces_unknown_space">"(Ukendt gruppe)"</string>
+  <string name="screen_manage_authorized_spaces_unknown_spaces_section_title">"Andre grupper, du ikke er medlem af"</string>
+  <string name="screen_manage_authorized_spaces_your_spaces_section_title">"Dine grupper"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Tilføj adresse"</string>
+  <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Alle i autoriserede grupper kan deltage, men alle andre skal anmode om adgang."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Alle skal anmode om adgang."</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Bed om at deltage"</string>
+  <string name="screen_security_and_privacy_ask_to_join_single_space_members_option_description">"Alle i %1$s kan tilmelde sig, men alle andre skal anmode om adgang."</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Ja, aktivér kryptering"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Når det først er aktiveret, kan kryptering for et rum ikke deaktiveres igen. Beskedhistorik vil kun være synlig for rummedlemmer, siden de blev inviteret, eller siden de blev medlem af rummet.
 Ingen udover medlemmer af rummet vil være i stand til at læse beskeder. Dette kan forhindre bots og broer i at fungere korrekt.
@@ -13,9 +21,14 @@ Vi anbefaler ikke at aktivere kryptering for rum, som alle kan finde og deltage 
   <string name="screen_security_and_privacy_encryption_section_header">"Kryptering"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Aktivér end-to-end-kryptering"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Alle kan være med."</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Alle"</string>
+  <string name="screen_security_and_privacy_room_access_footer">"Vælg, hvilke gruppers medlemmer der kan deltage i dette rum uden en invitation.%1$s"</string>
+  <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Administrer grupper"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Kun inviterede personer kan deltage i dette rum."</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Kun inviterede"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Adgang"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_multiple_parents_description">"Alle i autoriserede grupper kan deltage."</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_single_parent_description">"Alle i %1$s kan deltage."</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Medlemmer af gruppen"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Grupper understøttes ikke i øjeblikket"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Du skal bruge en adresse for at gøre det synligt i det offentlige register."</string>
@@ -23,12 +36,15 @@ Vi anbefaler ikke at aktivere kryptering for rum, som alle kan finde og deltage 
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Tillad, at dette rum kan findes ved at søge i %1$s fortegnelse over offentlige rum"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_description">"Gør det muligt at blive fundet ved søgninger i det offentlige register."</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Synlig i det offentlige register"</string>
+  <string name="screen_security_and_privacy_room_history_anyone_option_title">"Alle (historikken er offentlig)"</string>
+  <string name="screen_security_and_privacy_room_history_section_footer">"Ændringer vil ikke påvirke tidligere beskeder, kun nye. %1$s"</string>
   <string name="screen_security_and_privacy_room_history_section_header">"Hvem kan læse historikken?"</string>
-  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Kun medlemmer, efter de blev inviteret"</string>
-  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Kun medlemmer siden valg af denne mulighed"</string>
+  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Medlemmer siden de blev inviteret"</string>
+  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Medlemmer (fuld historik)"</string>
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Rum-adresser er en måde at finde og få adgang til værelser på. Dette sikrer også, at du nemt kan dele dit rum med andre.
 Du kan vælge at offentliggøre dit rum i din hjemmeservers offentlige katalog over rum."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Udgivelse af rum"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_footer">"Adresser er en måde at finde og få adgang til rum og grupper. Dette sikrer også, at du nemt kan dele dem med andre."</string>
   <string name="screen_security_and_privacy_room_visibility_section_header">"Synlighed"</string>
   <string name="screen_security_and_privacy_title">"Sikkerhed og privatliv"</string>
 </resources>

@@ -76,7 +76,7 @@
   <string name="action_copy_link_to_message">"Kopiuj link do wiadomości"</string>
   <string name="action_copy_text">"Kopiuj tekst"</string>
   <string name="action_create">"Utwórz"</string>
-  <string name="action_create_a_room">"Utwórz pokój"</string>
+  <string name="action_create_room">"Utwórz pokój"</string>
   <string name="action_deactivate">"Dezaktywuj"</string>
   <string name="action_deactivate_account">"Dezaktywuj konto"</string>
   <string name="action_decline">"Odrzuć"</string>

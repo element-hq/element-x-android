@@ -53,7 +53,7 @@
   <string name="action_copy_link_to_message">"Копиране на връзката към съобщението"</string>
   <string name="action_copy_text">"Копиране на текста"</string>
   <string name="action_create">"Създаване"</string>
-  <string name="action_create_a_room">"Създаване на стая"</string>
+  <string name="action_create_room">"Създаване на стая"</string>
   <string name="action_deactivate">"Деактивиране"</string>
   <string name="action_deactivate_account">"Деактивиране на акаунта"</string>
   <string name="action_decline">"Отхвърляне"</string>

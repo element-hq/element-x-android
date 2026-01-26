@@ -10,6 +10,7 @@
   <string name="screen_security_and_privacy_add_room_address_action">"Adicionar endereço"</string>
   <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Qualquer um nos espaços autorizados podem entrar, mas todos os outros devem pedir acesso."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Qualquer um pode pedir acesso, mas um administrador terá que aceitar o pedido."</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Pedir para entrar"</string>
   <string name="screen_security_and_privacy_ask_to_join_single_space_members_option_description">"Qualquer um em %1$s pode entrar, mas todos os outros devem pedir acesso."</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Sim, ativar a criptografia"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Uma vez ativada, a criptografia de uma sala não pode ser desativada. O histórico de mensagens só será visível para os membros da sala desde que foram convidados ou desde que entraram na sala.

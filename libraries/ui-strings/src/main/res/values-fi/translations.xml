@@ -74,7 +74,7 @@
   <string name="action_copy_link_to_message">"Kopioi linkki viestiin"</string>
   <string name="action_copy_text">"Kopioi teksti"</string>
   <string name="action_create">"Luo"</string>
-  <string name="action_create_a_room">"Luo huone"</string>
+  <string name="action_create_room">"Luo huone"</string>
   <string name="action_deactivate">"Deaktivoi"</string>
   <string name="action_deactivate_account">"Deaktivoi tili"</string>
   <string name="action_decline">"Hylkää"</string>

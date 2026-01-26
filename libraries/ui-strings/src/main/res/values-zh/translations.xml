@@ -72,7 +72,7 @@
   <string name="action_copy_link_to_message">"复制消息链接"</string>
   <string name="action_copy_text">"复制文本"</string>
   <string name="action_create">"创建"</string>
-  <string name="action_create_a_room">"创建聊天室"</string>
+  <string name="action_create_room">"创建聊天室"</string>
   <string name="action_deactivate">"停用"</string>
   <string name="action_deactivate_account">"停用账户"</string>
   <string name="action_decline">"拒绝"</string>

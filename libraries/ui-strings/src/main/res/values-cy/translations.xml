@@ -82,7 +82,7 @@
   <string name="action_copy_link_to_message">"Copïo dolen i\'r neges"</string>
   <string name="action_copy_text">"Copïo testun"</string>
   <string name="action_create">"Creu"</string>
-  <string name="action_create_a_room">"Creu ystafell"</string>
+  <string name="action_create_room">"Creu ystafell"</string>
   <string name="action_deactivate">"Dadweithredu"</string>
   <string name="action_deactivate_account">"Cau cyfrif"</string>
   <string name="action_decline">"Gwrthod"</string>

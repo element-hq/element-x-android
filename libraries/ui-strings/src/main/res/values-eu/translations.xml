@@ -62,7 +62,7 @@
   <string name="action_copy_link_to_message">"Kopiatu esteka mezura"</string>
   <string name="action_copy_text">"Kopiatu testua"</string>
   <string name="action_create">"Sortu"</string>
-  <string name="action_create_a_room">"Sortu gela"</string>
+  <string name="action_create_room">"Sortu gela"</string>
   <string name="action_deactivate">"Desaktibatu"</string>
   <string name="action_deactivate_account">"Desaktibatu kontua"</string>
   <string name="action_decline">"Ukatu"</string>

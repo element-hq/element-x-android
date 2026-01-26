@@ -72,7 +72,7 @@
   <string name="action_copy_link_to_message">"Kopiera länk till meddelande"</string>
   <string name="action_copy_text">"Kopiera text"</string>
   <string name="action_create">"Skapa"</string>
-  <string name="action_create_a_room">"Skapa ett rum"</string>
+  <string name="action_create_room">"Skapa ett rum"</string>
   <string name="action_deactivate">"Inaktivera"</string>
   <string name="action_deactivate_account">"Inaktivera konto"</string>
   <string name="action_decline">"Neka"</string>

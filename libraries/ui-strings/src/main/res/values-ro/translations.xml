@@ -76,7 +76,7 @@
   <string name="action_copy_link_to_message">"Copiați linkul către mesaj"</string>
   <string name="action_copy_text">"Copiați textul"</string>
   <string name="action_create">"Creați"</string>
-  <string name="action_create_a_room">"Creați o cameră"</string>
+  <string name="action_create_room">"Creați o cameră"</string>
   <string name="action_deactivate">"Dezactivați"</string>
   <string name="action_deactivate_account">"Dezactivați contul"</string>
   <string name="action_decline">"Refuzați"</string>

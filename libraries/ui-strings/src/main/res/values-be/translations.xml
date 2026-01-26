@@ -53,7 +53,7 @@
   <string name="action_copy_link">"Скапіраваць спасылку"</string>
   <string name="action_copy_link_to_message">"Скапіраваць спасылку на паведамленне"</string>
   <string name="action_create">"Стварыць"</string>
-  <string name="action_create_a_room">"Стварыце пакой"</string>
+  <string name="action_create_room">"Стварыце пакой"</string>
   <string name="action_deactivate">"Дэактываваць"</string>
   <string name="action_deactivate_account">"Дэактываваць уліковы запіс"</string>
   <string name="action_decline">"Адхіліць"</string>

@@ -76,7 +76,7 @@
   <string name="action_copy_link_to_message">"Kopiraj poveznicu u poruku"</string>
   <string name="action_copy_text">"Kopiraj tekst"</string>
   <string name="action_create">"Stvori"</string>
-  <string name="action_create_a_room">"Stvori sobu"</string>
+  <string name="action_create_room">"Stvori sobu"</string>
   <string name="action_deactivate">"Deaktiviraj"</string>
   <string name="action_deactivate_account">"Deaktiviraj račun"</string>
   <string name="action_decline">"Odbij"</string>

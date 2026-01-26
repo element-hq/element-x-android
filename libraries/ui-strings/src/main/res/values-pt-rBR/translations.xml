@@ -56,6 +56,7 @@
   <string name="a11y_your_avatar">"Seu avatar"</string>
   <string name="action_accept">"Aceitar"</string>
   <string name="action_add_caption">"Adicionar legenda"</string>
+  <string name="action_add_existing_rooms">"Adicionar salas existentes"</string>
   <string name="action_add_to_timeline">"Adicionar à linha do tempo"</string>
   <string name="action_back">"Voltar"</string>
   <string name="action_call">"Chamar"</string>
@@ -74,7 +75,7 @@
   <string name="action_copy_link_to_message">"Copiar link para a mensagem"</string>
   <string name="action_copy_text">"Copiar texto"</string>
   <string name="action_create">"Criar"</string>
-  <string name="action_create_a_room">"Criar uma sala"</string>
+  <string name="action_create_room">"Criar sala"</string>
   <string name="action_create_space">"Criar espaço"</string>
   <string name="action_deactivate">"Desativar"</string>
   <string name="action_deactivate_account">"Desativar conta"</string>
@@ -92,6 +93,7 @@
   <string name="action_enable">"Ativar"</string>
   <string name="action_end_poll">"Encerrar enquete"</string>
   <string name="action_enter_pin">"Digitar PIN"</string>
+  <string name="action_explore_public_spaces">"Explorar espaços públicos"</string>
   <string name="action_finish">"Concluir"</string>
   <string name="action_forgot_password">"Esqueceu a senha?"</string>
   <string name="action_forward">"Encaminhar"</string>
@@ -292,6 +294,7 @@ Motivo:​ %1$s."</string>
   <string name="common_reason">"Motivo"</string>
   <string name="common_recovery_key">"Chave de recuperação"</string>
   <string name="common_refreshing">"Recarregando…"</string>
+  <string name="common_removing">"Removendo…"</string>
   <plurals name="common_replies">
     <item quantity="one">"%1$d resposta"</item>
     <item quantity="other">"%1$d respostas"</item>
@@ -301,6 +304,7 @@ Motivo:​ %1$s."</string>
   <string name="common_report_a_problem">"Relatar um problema"</string>
   <string name="common_report_submitted">"Relatório enviado"</string>
   <string name="common_rich_text_editor">"Editor de rich text"</string>
+  <string name="common_role">"Cargo"</string>
   <string name="common_room">"Sala"</string>
   <string name="common_room_name">"Nome da sala"</string>
   <string name="common_room_name_placeholder">"por exemplo, o nome do seu projeto"</string>
@@ -316,6 +320,10 @@ Motivo:​ %1$s."</string>
   <string name="common_security">"Segurança"</string>
   <string name="common_seen_by">"Visto por"</string>
   <string name="common_select_account">"Selecionar uma conta"</string>
+  <plurals name="common_selected_count">
+    <item quantity="one">"%1$d selecionado"</item>
+    <item quantity="other">"%1$d selecionados"</item>
+  </plurals>
   <string name="common_send_to">"Enviar para"</string>
   <string name="common_sending">"Enviando…"</string>
   <string name="common_sending_failed">"Envio falhou"</string>
@@ -378,6 +386,8 @@ Motivo:​ %1$s."</string>
   <string name="common_waiting">"Aguardando…"</string>
   <string name="common_waiting_for_decryption_key">"Aguardando por esta mensagem"</string>
   <string name="common_you">"Você"</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) compartilhou esta mensagem já que você não estava na sala quando foi enviada."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s compartilhou esta mensagem já que você não estava na sala quando foi enviada."</string>
   <string name="crypto_history_visible">"Esta sala foi configurada para que membros novos possam ler o histórico. %1$s"</string>
   <string name="crypto_identity_change_pin_violation">"A identidade de %1$s foi redefinida. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"A identidade de %1$s %2$s foi redefinida. %3$s"</string>
@@ -477,6 +487,7 @@ Você tem certeza de que deseja continuar?"</string>
   <string name="screen_share_this_location_action">"Compartilhar esta localização"</string>
   <string name="screen_space_list_description">"Os espaços que você criou ou entrou."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_empty_state_title">"Crie espaços para organizar salas"</string>
   <string name="screen_space_list_parent_space">"Espaço %1$s"</string>
   <string name="screen_space_list_title">"Espaços"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Mensagem não enviada porque a identidade verificada de %1$s foi redefinida."</string>

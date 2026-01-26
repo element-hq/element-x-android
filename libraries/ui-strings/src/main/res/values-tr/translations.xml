@@ -54,7 +54,7 @@
   <string name="action_copy_link_to_message">"Bağlantıyı mesaja kopyala"</string>
   <string name="action_copy_text">"Metni kopyala"</string>
   <string name="action_create">"Oluştur"</string>
-  <string name="action_create_a_room">"Bir oda oluştur"</string>
+  <string name="action_create_room">"Bir oda oluştur"</string>
   <string name="action_deactivate">"Devre dışı bırak"</string>
   <string name="action_deactivate_account">"Hesabı devre dışı bırak"</string>
   <string name="action_decline">"Reddet"</string>

@@ -50,6 +50,7 @@ Nincs olvasatlan üzenete!"</string>
   <string name="screen_roomlist_mark_as_read">"Megjelölés olvasottként"</string>
   <string name="screen_roomlist_mark_as_unread">"Megjelölés olvasatlanként"</string>
   <string name="screen_roomlist_tombstoned_room_description">"A szoba verzióját frissítették"</string>
+  <string name="screen_roomlist_your_spaces">"Saját terek"</string>
   <string name="session_verification_banner_message">"Úgy tűnik, hogy új eszközt használ. Ellenőrizze egy másik eszközzel, hogy a továbbiakban elérje a titkosított üzeneteket."</string>
   <string name="session_verification_banner_title">"Ellenőrizze, hogy Ön az"</string>
 </resources>

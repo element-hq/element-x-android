@@ -11,7 +11,16 @@
   <string name="screen_leave_space_subtitle_only_last_admin">"Z nasledujúcich miestností nebudete odstránený/á, pretože ste jediným správcom:"</string>
   <string name="screen_leave_space_title">"Opustiť %1$s?"</string>
   <string name="screen_leave_space_title_last_admin">"Ste jediným administrátorom pre %1$s"</string>
+  <string name="screen_space_add_room_action">"Miestnosť"</string>
+  <string name="screen_space_add_rooms_room_access_description">"Pridanie miestnosti neovplyvní prístup k miestnosti. Ak chcete zmeniť prístup, prejdite do časti Nastavenia miestnosti &gt; Zabezpečenie a súkromie."</string>
+  <string name="screen_space_empty_state_title">"Pridajte svoju prvú miestnosť"</string>
   <string name="screen_space_menu_action_members">"Zobraziť členov"</string>
+  <string name="screen_space_remove_rooms_confirmation_content">"Odstránenie miestnosti neovplyvní prístup k miestnosti. Ak chcete zmeniť prístup, prejdite do sekcie Informácie o miestnosti &gt; Súkromie a zabezpečenie."</string>
+  <plurals name="screen_space_remove_rooms_confirmation_title">
+    <item quantity="one">"Odstrániť %1$d miestnosť z priestoru %2$s"</item>
+    <item quantity="few">"Odstrániť %1$d miestnosti z priestoru %2$s"</item>
+    <item quantity="other">"Odstrániť %1$d miestností z priestoru %2$s"</item>
+  </plurals>
   <string name="screen_space_settings_leave_space">"Opustiť priestor"</string>
   <string name="screen_space_settings_roles_and_permissions">"Roly a povolenia"</string>
   <string name="screen_space_settings_security_and_privacy">"Bezpečnosť a súkromie"</string>

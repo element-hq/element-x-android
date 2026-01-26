@@ -3,15 +3,30 @@
   <string name="screen_create_room_action_create_room">"Nyt rum"</string>
   <string name="screen_create_room_add_people_title">"Invitér andre"</string>
   <string name="screen_create_room_error_creating_room">"Der opstod en fejl ved oprettelsen af rummet"</string>
-  <string name="screen_create_room_private_option_description">"Kun inviterede personer kan få adgang til dette rum. Alle meddelelser er ende-til-ende krypteret."</string>
+  <string name="screen_create_room_error_creating_space">"Gruppen kunne ikke oprettes på grund af en ukendt fejl. Prøv igen senere."</string>
+  <string name="screen_create_room_name_placeholder">"Tilføj navn…"</string>
+  <string name="screen_create_room_new_room_title">"Nyt rum"</string>
+  <string name="screen_create_room_new_space_title">"Ny gruppe"</string>
+  <string name="screen_create_room_private_option_description">"Kun inviterede personer kan deltage."</string>
+  <string name="screen_create_room_private_option_title">"Privat"</string>
   <string name="screen_create_room_public_option_description">"Alle kan finde dette rum.
 Du kan ændre dette når som helst i rummets indstillinger."</string>
+  <string name="screen_create_room_public_option_short_description">"Alle kan deltage."</string>
+  <string name="screen_create_room_public_option_title">"Offentlig"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Alle kan bede om at deltage i rummet, men en administrator eller en moderator skal acceptere anmodningen"</string>
-  <string name="screen_create_room_room_access_section_knocking_option_title">"Spørg om at deltage"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Tillad at man kan anmode om deltagelse"</string>
+  <string name="screen_create_room_room_access_section_knocking_restricted_option_description">"Enhver i %1$s kan deltage, men alle andre skal anmode om adgang."</string>
+  <string name="screen_create_room_room_access_section_knocking_restricted_option_title">"Anmod om at deltage"</string>
+  <string name="screen_create_room_room_access_section_private_option_description">"Kun inviterede brugere kan deltage."</string>
+  <string name="screen_create_room_room_access_section_private_option_title">"Privat"</string>
   <string name="screen_create_room_room_access_section_public_option_description">"Alle kan deltage i dette rum"</string>
-  <string name="screen_create_room_room_access_section_public_option_title">"Enhver"</string>
-  <string name="screen_create_room_room_address_section_footer">"Hvis dette rum skal være synligt i det offentlige register, skal du bruge en rum-adresse."</string>
-  <string name="screen_create_room_room_address_section_title">"Rummets adresse"</string>
+  <string name="screen_create_room_room_access_section_public_option_title">"Offentlig"</string>
+  <string name="screen_create_room_room_access_section_restricted_option_description">"Alle i %1$s kan deltage."</string>
+  <string name="screen_create_room_room_access_section_restricted_option_title">"Standard"</string>
+  <string name="screen_create_room_room_access_section_title">"Hvem har adgang"</string>
+  <string name="screen_create_room_room_address_section_footer">"Hvis dette rum skal være synligt i det offentlige register, skal du bruge en adresse."</string>
+  <string name="screen_create_room_room_address_section_title">"Adresse"</string>
   <string name="screen_create_room_room_visibility_section_title">"Rummets synlighed"</string>
   <string name="screen_create_room_topic_label">"Emne (valgfrit)"</string>
+  <string name="screen_create_room_topic_placeholder">"Tilføj beskrivelse…"</string>
 </resources>

@@ -52,7 +52,7 @@
   <string name="action_copy_link">"ربط نقل کریں"</string>
   <string name="action_copy_link_to_message">"پیغام کا ربط نقل کریں"</string>
   <string name="action_create">"تخلیق کریں"</string>
-  <string name="action_create_a_room">"ایک کمرہ بنائیں"</string>
+  <string name="action_create_room">"ایک کمرہ بنائیں"</string>
   <string name="action_deactivate">"غیر فعال کریں"</string>
   <string name="action_deactivate_account">"اکاؤنٹ کو غیر فعال کریں"</string>
   <string name="action_decline">"مسترد کریں"</string>

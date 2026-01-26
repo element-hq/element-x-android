@@ -74,7 +74,7 @@
   <string name="action_copy_link_to_message">"Kopeeri sõnumi link"</string>
   <string name="action_copy_text">"Kopeeri tekst"</string>
   <string name="action_create">"Loo"</string>
-  <string name="action_create_a_room">"Loo jututuba"</string>
+  <string name="action_create_room">"Loo jututuba"</string>
   <string name="action_deactivate">"Eemalda konto"</string>
   <string name="action_deactivate_account">"Eemalda konto kasutusest"</string>
   <string name="action_decline">"Keeldu"</string>

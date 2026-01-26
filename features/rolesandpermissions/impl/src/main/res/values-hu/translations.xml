@@ -38,6 +38,10 @@
   <string name="screen_room_change_role_unsaved_changes_description">"Mentetlen módosításai vannak."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Menti a módosításokat?"</string>
   <string name="screen_room_member_list_banned_empty">"Ebben a szobában nincsenek kitiltott felhasználók."</string>
+  <plurals name="screen_room_member_list_banned_header_title">
+    <item quantity="one">"%1$d kitiltva"</item>
+    <item quantity="other">"%1$d kitiltva"</item>
+  </plurals>
   <string name="screen_room_member_list_empty_search_subtitle">"Ellenőrizze a helyesírást, vagy próbáljon meg egy új keresést"</string>
   <string name="screen_room_member_list_empty_search_title">"Nincs találat a következőre: „%1$s\""</string>
   <plurals name="screen_room_member_list_header_title">
@@ -51,6 +55,10 @@
   <string name="screen_room_member_list_manage_member_unban_title">"Visszaengedés a szobába"</string>
   <string name="screen_room_member_list_mode_banned">"Kitiltva"</string>
   <string name="screen_room_member_list_mode_members">"Tagok"</string>
+  <plurals name="screen_room_member_list_pending_header_title">
+    <item quantity="one">"%1$d meghívott"</item>
+    <item quantity="other">"%1$d meghívott"</item>
+  </plurals>
   <string name="screen_room_member_list_pending_status">"Függőben"</string>
   <string name="screen_room_member_list_role_administrator">"Adminisztrátor"</string>
   <string name="screen_room_member_list_role_moderator">"Moderátor"</string>

@@ -69,7 +69,7 @@
   <string name="action_copy_link_to_message">"Kopieer link naar bericht"</string>
   <string name="action_copy_text">"Tekst kopiëren"</string>
   <string name="action_create">"Aanmaken"</string>
-  <string name="action_create_a_room">"Creëer een kamer"</string>
+  <string name="action_create_room">"Creëer een kamer"</string>
   <string name="action_deactivate">"Sluiten"</string>
   <string name="action_deactivate_account">"Account sluiten"</string>
   <string name="action_decline">"Weigeren"</string>

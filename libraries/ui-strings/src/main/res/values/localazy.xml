@@ -75,7 +75,7 @@
   <string name="action_copy_link_to_message">"Copy link to message"</string>
   <string name="action_copy_text">"Copy text"</string>
   <string name="action_create">"Create"</string>
-  <string name="action_create_a_room">"Create a room"</string>
+  <string name="action_create_room">"Create room"</string>
   <string name="action_create_space">"Create space"</string>
   <string name="action_deactivate">"Deactivate"</string>
   <string name="action_deactivate_account">"Deactivate account"</string>
@@ -304,6 +304,7 @@ Reason: %1$s."</string>
   <string name="common_report_a_problem">"Report a problem"</string>
   <string name="common_report_submitted">"Report submitted"</string>
   <string name="common_rich_text_editor">"Rich text editor"</string>
+  <string name="common_role">"Role"</string>
   <string name="common_room">"Room"</string>
   <string name="common_room_name">"Room name"</string>
   <string name="common_room_name_placeholder">"e.g. your project name"</string>

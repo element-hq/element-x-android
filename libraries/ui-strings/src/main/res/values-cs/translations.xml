@@ -76,7 +76,7 @@
   <string name="action_copy_link_to_message">"Kopírovat odkaz na zprávu"</string>
   <string name="action_copy_text">"Kopírovat text"</string>
   <string name="action_create">"Vytvořit"</string>
-  <string name="action_create_a_room">"Vytvořit místnost"</string>
+  <string name="action_create_room">"Vytvořit místnost"</string>
   <string name="action_deactivate">"Deaktivovat"</string>
   <string name="action_deactivate_account">"Deaktivovat účet"</string>
   <string name="action_decline">"Odmítnout"</string>

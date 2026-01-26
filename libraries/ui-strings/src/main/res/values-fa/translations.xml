@@ -71,7 +71,7 @@
   <string name="action_copy_link_to_message">"رونوشت از پیوند پیام"</string>
   <string name="action_copy_text">"رونوشت از متن"</string>
   <string name="action_create">"ایجاد"</string>
-  <string name="action_create_a_room">"ایجاد اتاق"</string>
+  <string name="action_create_room">"ایجاد اتاق"</string>
   <string name="action_deactivate">"غیرفعّال"</string>
   <string name="action_deactivate_account">"غیرفعّال‌سازی حساب"</string>
   <string name="action_decline">"رد"</string>

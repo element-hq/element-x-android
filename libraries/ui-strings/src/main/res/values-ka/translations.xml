@@ -46,7 +46,7 @@
   <string name="action_copy_link">"ბმულის კოპირება"</string>
   <string name="action_copy_link_to_message">"დააკოპირეთ შეტყობინების ბმული"</string>
   <string name="action_create">"შექმნა"</string>
-  <string name="action_create_a_room">"ოთახის შექმნა"</string>
+  <string name="action_create_room">"ოთახის შექმნა"</string>
   <string name="action_decline">"უარყოფა"</string>
   <string name="action_delete_poll">"გამოკითხვის წაშლა"</string>
   <string name="action_disable">"გამორთვა"</string>

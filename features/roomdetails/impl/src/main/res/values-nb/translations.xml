@@ -109,6 +109,7 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"Meldinger og innhold"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderatorer"</string>
   <string name="screen_room_roles_and_permissions_owners">"Eiere"</string>
+  <string name="screen_room_roles_and_permissions_permissions_header">"Tillatelser"</string>
   <string name="screen_room_roles_and_permissions_reset">"Tilbakestill tillatelser"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Når du har tilbakestilt tillatelsene, mister du gjeldende innstillinger."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Vil du tilbakestille tillatelsene?"</string>
@@ -117,6 +118,7 @@
   <string name="screen_room_roles_and_permissions_title">"Roller og tillatelser"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Legg til adresse"</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Alle må be om tilgang."</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_title">"Be om å få bli med"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Ja, aktiver kryptering"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Når kryptering for et rom er aktivert, kan den ikke deaktiveres. Meldingshistorikken vil bare være synlig for rommedlemmer siden de ble invitert eller siden de ble med i rommet.
 Ingen andre enn rommedlemmene vil kunne lese meldingene. Dette kan føre til at bots og broer ikke fungerer som de skal.
@@ -126,6 +128,7 @@ Vi anbefaler ikke å aktivere kryptering for rom som hvem som helst kan finne og
   <string name="screen_security_and_privacy_encryption_section_header">"Kryptering"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Aktiver ende-til-ende-kryptering"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Alle kan bli med."</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Hvem som helst"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Bare inviterte personer kan bli med."</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Kun for inviterte"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Tilgang"</string>

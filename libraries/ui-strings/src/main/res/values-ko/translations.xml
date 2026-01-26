@@ -72,7 +72,7 @@
   <string name="action_copy_link_to_message">"메시지에 링크 복사"</string>
   <string name="action_copy_text">"텍스트 복사"</string>
   <string name="action_create">"만들기"</string>
-  <string name="action_create_a_room">"방 만들기"</string>
+  <string name="action_create_room">"방 만들기"</string>
   <string name="action_deactivate">"비활성화"</string>
   <string name="action_deactivate_account">"계정 비활성화"</string>
   <string name="action_decline">"거절"</string>

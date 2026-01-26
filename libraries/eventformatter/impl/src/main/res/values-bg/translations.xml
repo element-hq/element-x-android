@@ -57,5 +57,6 @@
   <string name="state_event_room_topic_changed_by_you">"Вие променихте темата на: %1$s"</string>
   <string name="state_event_room_topic_removed">"%1$s премахна темата на стаята"</string>
   <string name="state_event_room_topic_removed_by_you">"Вие премахнахте темата на стаята"</string>
+  <string name="state_event_room_unban">"%1$s премахна забраната на %2$s"</string>
   <string name="state_event_room_unknown_membership_change">"%1$s направи неизвестна промяна в членството си"</string>
 </resources>

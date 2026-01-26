@@ -58,7 +58,7 @@
   <string name="action_copy_link_to_message">"Αντιγραφή συνδέσμου στο μήνυμα"</string>
   <string name="action_copy_text">"Αντιγραφή κειμένου"</string>
   <string name="action_create">"Δημιουργία"</string>
-  <string name="action_create_a_room">"Δημιουργία αίθουσας"</string>
+  <string name="action_create_room">"Δημιουργία αίθουσας"</string>
   <string name="action_deactivate">"Απενεργοποίηση"</string>
   <string name="action_deactivate_account">"Απενεργοποίηση λογαριασμού"</string>
   <string name="action_decline">"Απόρριψη"</string>

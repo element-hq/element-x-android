@@ -56,6 +56,7 @@
   <string name="a11y_your_avatar">"Saját profilkép"</string>
   <string name="action_accept">"Elfogadás"</string>
   <string name="action_add_caption">"Felirat hozzáadása"</string>
+  <string name="action_add_existing_rooms">"Létező szobák hozzáadása"</string>
   <string name="action_add_to_timeline">"Hozzáadás az idővonalhoz"</string>
   <string name="action_back">"Vissza"</string>
   <string name="action_call">"Hívás"</string>
@@ -74,7 +75,8 @@
   <string name="action_copy_link_to_message">"Üzenethivatkozás másolása"</string>
   <string name="action_copy_text">"Szöveg másolása"</string>
   <string name="action_create">"Létrehozás"</string>
-  <string name="action_create_a_room">"Szoba létrehozása"</string>
+  <string name="action_create_room">"Szoba létrehozása"</string>
+  <string name="action_create_space">"Tér létrehozása"</string>
   <string name="action_deactivate">"Deaktiválás"</string>
   <string name="action_deactivate_account">"Fiók deaktiválása"</string>
   <string name="action_decline">"Elutasítás"</string>
@@ -91,6 +93,7 @@
   <string name="action_enable">"Engedélyezés"</string>
   <string name="action_end_poll">"Szavazás lezárása"</string>
   <string name="action_enter_pin">"Adja meg a PIN-kódot"</string>
+  <string name="action_explore_public_spaces">"Nyilvános terek felfedezése"</string>
   <string name="action_finish">"Befejezés"</string>
   <string name="action_forgot_password">"Elfelejtette a jelszót?"</string>
   <string name="action_forward">"Tovább"</string>
@@ -162,6 +165,7 @@
   <string name="action_static_map_load">"Koppintson a térkép betöltéséhez"</string>
   <string name="action_take_photo">"Fénykép készítése"</string>
   <string name="action_tap_for_options">"Koppintson a beállításokért"</string>
+  <string name="action_translate">"Fordítás"</string>
   <string name="action_try_again">"Próbálja újra"</string>
   <string name="action_unpin">"Kitűzés feloldása"</string>
   <string name="action_view">"Megtekintés"</string>
@@ -191,6 +195,7 @@
   <string name="common_copied_to_clipboard">"A vágólapra másolva"</string>
   <string name="common_copyright">"Szerzői jogok"</string>
   <string name="common_creating_room">"Szoba létrehozása…"</string>
+  <string name="common_creating_space">"Tér létrehozása…"</string>
   <string name="common_current_user_canceled_knock">"Kérés megszakítva"</string>
   <string name="common_current_user_left_room">"Elhagyta a szobát"</string>
   <string name="common_current_user_left_space">"Tér elhagyva"</string>
@@ -236,6 +241,7 @@ Ok: %1$s."</string>
   <string name="common_light">"Világos"</string>
   <string name="common_line_copied_to_clipboard">"A sor a vágólapra másolva"</string>
   <string name="common_link_copied_to_clipboard">"Hivatkozás a vágólapra másolva"</string>
+  <string name="common_link_new_device">"Új eszköz összekapcsolása"</string>
   <string name="common_loading">"Betöltés…"</string>
   <string name="common_loading_more">"Továbbiak betöltése…"</string>
   <plurals name="common_many_members">
@@ -248,10 +254,12 @@ Ok: %1$s."</string>
   </plurals>
   <string name="common_message">"Üzenet"</string>
   <string name="common_message_actions">"Üzenetműveletek"</string>
+  <string name="common_message_failed_to_send">"Az üzenet elküldése sikertelen"</string>
   <string name="common_message_layout">"Üzenet elrendezése"</string>
   <string name="common_message_removed">"Üzenet eltávolítva"</string>
   <string name="common_modern">"Modern"</string>
   <string name="common_mute">"Némítás"</string>
+  <string name="common_name">"Név"</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Nincs találat"</string>
   <string name="common_no_room_name">"Nincs szobanév"</string>
@@ -286,6 +294,7 @@ Ok: %1$s."</string>
   <string name="common_reason">"Ok"</string>
   <string name="common_recovery_key">"Helyreállítási kulcs"</string>
   <string name="common_refreshing">"Frissítés…"</string>
+  <string name="common_removing">"Eltávolítás…"</string>
   <plurals name="common_replies">
     <item quantity="other">"%1$d válasz"</item>
   </plurals>
@@ -294,6 +303,7 @@ Ok: %1$s."</string>
   <string name="common_report_a_problem">"Probléma jelentése"</string>
   <string name="common_report_submitted">"A jelentés elküldve"</string>
   <string name="common_rich_text_editor">"Formázott szöveges szerkesztő"</string>
+  <string name="common_role">"Szerepkör"</string>
   <string name="common_room">"Szoba"</string>
   <string name="common_room_name">"Szoba neve"</string>
   <string name="common_room_name_placeholder">"például a projektje neve"</string>
@@ -309,6 +319,10 @@ Ok: %1$s."</string>
   <string name="common_security">"Biztonság"</string>
   <string name="common_seen_by">"Látta"</string>
   <string name="common_select_account">"Fiók kiválasztása"</string>
+  <plurals name="common_selected_count">
+    <item quantity="one">"%1$d kiválasztva"</item>
+    <item quantity="other">"%1$d kiválasztva"</item>
+  </plurals>
   <string name="common_send_to">"Címzett"</string>
   <string name="common_sending">"Küldés…"</string>
   <string name="common_sending_failed">"A küldés sikertelen"</string>
@@ -325,6 +339,7 @@ Ok: %1$s."</string>
   <string name="common_something_went_wrong">"Valamilyen hiba történt"</string>
   <string name="common_something_went_wrong_message">"Problémába ütköztünk. Próbálja újra."</string>
   <string name="common_space">"Tér"</string>
+  <string name="common_space_topic_placeholder">"Miről szól ez a tér?"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d tér"</item>
     <item quantity="other">"%1$d tér"</item>
@@ -332,6 +347,7 @@ Ok: %1$s."</string>
   <string name="common_starting_chat">"Csevegés megkezdése…"</string>
   <string name="common_sticker">"Matrica"</string>
   <string name="common_success">"Sikeres"</string>
+  <string name="common_suggested">"Javaslat"</string>
   <string name="common_suggestions">"Javaslatok"</string>
   <string name="common_syncing">"Szinkronizálás"</string>
   <string name="common_system">"Rendszer"</string>
@@ -369,6 +385,9 @@ Ok: %1$s."</string>
   <string name="common_waiting">"Várakozás…"</string>
   <string name="common_waiting_for_decryption_key">"Várakozás a visszafejtési kulcsra"</string>
   <string name="common_you">"Ön"</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) megosztotta ezt az üzenetet, mivel Ön nem volt a szobában, amikor elküldték."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s megosztotta ezt az üzenetet, mivel Ön nem volt a szobában, amikor elküldték."</string>
+  <string name="crypto_history_visible">"Az elküldött üzenetek megosztásra kerülnek a szobába meghívott új tagokkal.%1$s"</string>
   <string name="crypto_identity_change_pin_violation">"%1$s személyazonossága megváltozott. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"%1$s (%2$s) személyazonossága megváltozott. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
@@ -467,6 +486,7 @@ Biztos, hogy folytatja?"</string>
   <string name="screen_share_this_location_action">"E hely megosztása"</string>
   <string name="screen_space_list_description">"Létrehozott vagy olyan terek, melyekhez csatlakozott."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_empty_state_title">"Terek létrehozása a szobák rendszerezéséhez"</string>
   <string name="screen_space_list_parent_space">"%1$s tér"</string>
   <string name="screen_space_list_title">"Terek"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Az üzenet nem lett elküldve, mert %1$s ellenőrzött személyazonossága megváltozott."</string>

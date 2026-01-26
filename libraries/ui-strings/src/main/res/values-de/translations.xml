@@ -75,7 +75,7 @@
   <string name="action_copy_link_to_message">"Link zur Nachricht kopieren"</string>
   <string name="action_copy_text">"Text kopieren"</string>
   <string name="action_create">"Erstellen"</string>
-  <string name="action_create_a_room">"Chat erstellen"</string>
+  <string name="action_create_room">"Chat erstellen"</string>
   <string name="action_create_space">"Space erstellen"</string>
   <string name="action_deactivate">"Deaktivieren"</string>
   <string name="action_deactivate_account">"Nutzerkonto deaktivieren"</string>
@@ -293,6 +293,7 @@ Grund: %1$s."</string>
   <string name="common_reason">"Grund"</string>
   <string name="common_recovery_key">"Wiederherstellungsschlüssel"</string>
   <string name="common_refreshing">"Wird erneuert…"</string>
+  <string name="common_removing">"Entferne…"</string>
   <plurals name="common_replies">
     <item quantity="one">"%1$d Antwort"</item>
     <item quantity="other">"%1$d Antworten"</item>
@@ -317,6 +318,10 @@ Grund: %1$s."</string>
   <string name="common_security">"Sicherheit"</string>
   <string name="common_seen_by">"Gesehen von"</string>
   <string name="common_select_account">"Konto auswählen"</string>
+  <plurals name="common_selected_count">
+    <item quantity="one">"%1$d ausgewählt"</item>
+    <item quantity="other">"%1$d ausgewählt"</item>
+  </plurals>
   <string name="common_send_to">"Senden an"</string>
   <string name="common_sending">"Wird gesendet…"</string>
   <string name="common_sending_failed">"Senden fehlgeschlagen"</string>
@@ -380,6 +385,7 @@ Grund: %1$s."</string>
   <string name="common_waiting_for_decryption_key">"Warte auf diese Nachricht"</string>
   <string name="common_you">"Du"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) hat diese Nachricht geteilt, weil du nicht im Chat warst, als sie verschickt wurde."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"Diese Nachricht wurde von %1$s weitergeleitet, da du zum Zeitpunkt des Versands kein Mitglied der Gruppe warst."</string>
   <string name="crypto_history_visible">"Diese Gruppe wurde so konfiguriert, dass neue Mitglieder den vergangenen Nachrichtenverlauf lesen können. %1$s"</string>
   <string name="crypto_identity_change_pin_violation">"%1$s\'s Identität has sich geändert. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"%1$s\'s %2$s Identität hat sich geändert. %3$s"</string>

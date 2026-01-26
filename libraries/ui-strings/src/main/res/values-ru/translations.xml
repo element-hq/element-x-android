@@ -77,7 +77,7 @@
   <string name="action_copy_link_to_message">"Скопировать ссылку в сообщение"</string>
   <string name="action_copy_text">"Копировать текст"</string>
   <string name="action_create">"Создать"</string>
-  <string name="action_create_a_room">"Создать комнату"</string>
+  <string name="action_create_room">"Создать комнату"</string>
   <string name="action_create_space">"Создать пространство"</string>
   <string name="action_deactivate">"Отключить"</string>
   <string name="action_deactivate_account">"Отключить учётную запись"</string>
