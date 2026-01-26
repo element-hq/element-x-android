@@ -11,8 +11,6 @@ package io.element.android.features.messages.impl.di
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.ContributesTo
-import io.element.android.features.messages.impl.crypto.historyvisible.HistoryVisibleState
-import io.element.android.features.messages.impl.crypto.historyvisible.HistoryVisibleStatePresenter
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeState
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeStatePresenter
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailurePresenter
@@ -63,7 +61,4 @@ interface MessagesBindsModule {
 
     @Binds
     fun bindIdentityChangeStatePresenter(presenter: IdentityChangeStatePresenter): Presenter<IdentityChangeState>
-
-    @Binds
-    fun bindHistoryVisibleStatePresenter(presenter: HistoryVisibleStatePresenter): Presenter<HistoryVisibleState>
 }

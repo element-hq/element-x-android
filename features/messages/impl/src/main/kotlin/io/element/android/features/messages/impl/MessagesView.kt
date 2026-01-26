@@ -54,7 +54,6 @@ import io.element.android.features.messages.api.timeline.voicemessages.composer.
 import io.element.android.features.messages.impl.actionlist.ActionListEvents
 import io.element.android.features.messages.impl.actionlist.ActionListView
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
-import io.element.android.features.messages.impl.crypto.historyvisible.HistoryVisibleStateView
 import io.element.android.features.messages.impl.crypto.identity.IdentityChangeStateView
 import io.element.android.features.messages.impl.link.LinkEvents
 import io.element.android.features.messages.impl.link.LinkView
@@ -497,17 +496,10 @@ private fun MessagesViewComposerBottomSheetContents(
                 // Do not show the identity change if user is composing a Rich message or is seeing suggestion(s).
                 if (state.composerState.suggestions.isEmpty() &&
                     state.composerState.textEditorState is TextEditorState.Markdown) {
-                    if (state.identityChangeState.roomMemberIdentityStateChanges.isNotEmpty()) {
-                        IdentityChangeStateView(
-                            state = state.identityChangeState,
-                            onLinkClick = onLinkClick,
-                        )
-                    } else {
-                        HistoryVisibleStateView(
-                            state = state.historyVisibleState,
-                            onLinkClick = onLinkClick,
-                        )
-                    }
+                    IdentityChangeStateView(
+                        state = state.identityChangeState,
+                        onLinkClick = onLinkClick,
+                    )
                 }
                 val verificationViolation = state.identityChangeState.roomMemberIdentityStateChanges.firstOrNull {
                     it.identityState == IdentityState.VerificationViolation
