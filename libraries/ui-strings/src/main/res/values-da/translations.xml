@@ -74,7 +74,6 @@
   <string name="action_copy_link_to_message">"Kopiér link til besked"</string>
   <string name="action_copy_text">"Kopiér tekst"</string>
   <string name="action_create">"Opret"</string>
-  <string name="action_create_a_room">"Opret et rum"</string>
   <string name="action_deactivate">"Deaktiver"</string>
   <string name="action_deactivate_account">"Deaktiver konto"</string>
   <string name="action_decline">"Afvis"</string>

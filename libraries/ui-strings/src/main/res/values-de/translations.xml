@@ -75,7 +75,6 @@
   <string name="action_copy_link_to_message">"Link zur Nachricht kopieren"</string>
   <string name="action_copy_text">"Text kopieren"</string>
   <string name="action_create">"Erstellen"</string>
-  <string name="action_create_a_room">"Chat erstellen"</string>
   <string name="action_create_space">"Space erstellen"</string>
   <string name="action_deactivate">"Deaktivieren"</string>
   <string name="action_deactivate_account">"Nutzerkonto deaktivieren"</string>
