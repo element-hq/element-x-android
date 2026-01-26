@@ -225,6 +225,7 @@ fun MessagesView(
                             heroes = state.heroes,
                             roomCallState = state.roomCallState,
                             dmUserIdentityState = state.dmUserVerificationState,
+                            showSharedHistoryIcon = state.showSharedHistoryIcon,
                             onBackClick = { hidingKeyboard { onBackClick() } },
                             onRoomDetailsClick = { hidingKeyboard { onRoomDetailsClick() } },
                             onJoinCallClick = onJoinCallClick,

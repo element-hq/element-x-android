@@ -56,6 +56,10 @@ data class MessagesState(
     val pinnedMessagesBannerState: PinnedMessagesBannerState,
     val dmUserVerificationState: IdentityState?,
     val roomMemberModerationState: RoomMemberModerationState,
+
+    /** Should the top bar include the "history" icon? */
+    val showSharedHistoryIcon: Boolean,
+
     val successorRoom: SuccessorRoom?,
     val eventSink: (MessagesEvents) -> Unit
 ) {

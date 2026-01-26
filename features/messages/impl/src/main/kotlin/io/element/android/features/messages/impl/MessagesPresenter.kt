@@ -76,6 +76,7 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembersState
+import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
@@ -208,6 +209,13 @@ class MessagesPresenter(
         val dmRoomMember by room.getDirectRoomMember(membersState)
         val roomMemberIdentityStateChanges = identityChangeState.roomMemberIdentityStateChanges
 
+        val isKeyShareOnInviteEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.EnableKeyShareOnInvite).collectAsState(initial = false)
+        // The top bar should show a "history" icon if:
+        //   * History sharing is enabled,
+        //   * The room is encrypted, and:
+        //   * The room's history_visibility allows future users to see content.
+        val showSharedHistoryIcon = isKeyShareOnInviteEnabled && roomInfo.isEncrypted == true && (roomInfo.historyVisibility == RoomHistoryVisibility.Shared || roomInfo.historyVisibility == RoomHistoryVisibility.WorldReadable)
+
         LifecycleResumeEffect(dmRoomMember, roomInfo.isEncrypted) {
             if (roomInfo.isEncrypted == true) {
                 val dmRoomMemberId = dmRoomMember?.userId
@@ -292,6 +300,7 @@ class MessagesPresenter(
             pinnedMessagesBannerState = pinnedMessagesBannerState,
             dmUserVerificationState = dmUserVerificationState,
             roomMemberModerationState = roomMemberModerationState,
+            showSharedHistoryIcon = showSharedHistoryIcon,
             successorRoom = roomInfo.successorRoom,
             eventSink = ::handleEvent,
         )

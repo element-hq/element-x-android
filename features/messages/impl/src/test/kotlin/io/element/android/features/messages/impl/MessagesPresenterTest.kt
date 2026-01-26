@@ -65,6 +65,7 @@ import io.element.android.libraries.matrix.api.room.MessageEventType
 import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.StateEventType
+import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
@@ -1223,6 +1224,27 @@ class MessagesPresenterTest {
             closeLambda.assertions().isCalledOnce()
 
             cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - shows a "history" icon if the room is encrypted and history is shared`() = runTest {
+        val presenter = createMessagesPresenter(
+            joinedRoom = FakeJoinedRoom(
+                baseRoom = FakeBaseRoom(
+                    roomPermissions = roomPermissions(),
+                    initialRoomInfo = aRoomInfo(isEncrypted = true, historyVisibility = RoomHistoryVisibility.Shared),
+                ),
+            ),
+            featureFlagService = FakeFeatureFlagService(
+                initialState = mapOf(FeatureFlags.EnableKeyShareOnInvite.key to true)
+            )
+        )
+        presenter.testWithLifecycleOwner {
+            awaitItem()
+            runCurrent()
+            val state = awaitItem()
+            assertThat(state.showSharedHistoryIcon).isTrue()
         }
     }
 
