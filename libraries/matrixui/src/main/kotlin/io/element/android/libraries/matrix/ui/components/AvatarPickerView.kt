@@ -78,18 +78,19 @@ fun AvatarPickerView(
     enabled: Boolean = true,
 ) {
     val a11yAvatar = stringResource(CommonStrings.a11y_avatar)
-
-    val clickableModifier = Modifier.clickable(
-        enabled = enabled,
-        interactionSource = remember { MutableInteractionSource() },
-        onClickLabel = onClickLabel,
-        onClick = onClick,
-        indication = ripple(bounded = false),
-    )
-    .testTag(TestTags.editAvatar)
-    .clearAndSetSemantics {
-        contentDescription = a11yAvatar
-    }
+    val interactionSource = remember { MutableInteractionSource() }
+    val clickableModifier = Modifier
+        .clickable(
+            enabled = enabled,
+            interactionSource = interactionSource,
+            onClickLabel = onClickLabel,
+            onClick = onClick,
+            indication = ripple(bounded = false),
+        )
+        .testTag(TestTags.editAvatar)
+        .clearAndSetSemantics {
+            contentDescription = a11yAvatar
+        }
 
     val layoutDirection = LocalLayoutDirection.current
 
@@ -123,18 +124,30 @@ fun AvatarPickerView(
                 buttonSize = state.buttonSize,
                 iconSize = state.iconSize,
                 iconId = state.iconId,
-                modifier = modifier.padding(state.externalPadding).then(clickableModifier),
+                modifier = modifier
+                    .padding(state.externalPadding)
+                    .then(clickableModifier),
             )
         }
         is AvatarPickerState.Selected -> {
             Box(modifier = modifier) {
+                val backgroundModifier = if (enabled) {
+                    eraseBackgroundModifier(state.avatarData.size.dp, state.avatarData.size.dp * 0.225f)
+                } else {
+                    Modifier
+                }
                 Avatar(
                     avatarData = state.avatarData,
                     avatarType = state.type,
-                    modifier = clickableModifier.then(eraseBackgroundModifier(state.avatarData.size.dp, state.avatarData.size.dp * 0.225f)),
+                    modifier = clickableModifier.then(backgroundModifier),
                 )
-
-                OverlayEditButton(editButtonSize = state.avatarData.size.dp * 0.44f)
+                if (enabled) {
+                    OverlayEditButton(
+                        editButtonSize = state.avatarData.size.dp * 0.44f,
+                        onClick = onClick,
+                        interactionSource = interactionSource
+                    )
+                }
             }
         }
     }
@@ -165,12 +178,18 @@ private fun PickButton(
 }
 
 @Composable
-private fun BoxScope.OverlayEditButton(editButtonSize: Dp) {
+private fun BoxScope.OverlayEditButton(
+    editButtonSize: Dp,
+    onClick: () -> Unit,
+    interactionSource: MutableInteractionSource
+) {
     Box(
-        modifier = Modifier.align(Alignment.BottomEnd)
+        modifier = Modifier
+            .align(Alignment.BottomEnd)
             .size(editButtonSize)
             .offset(x = editButtonSize * 0.266f)
             .clip(CircleShape)
+            .clickable(interactionSource = interactionSource, onClick = onClick, indication = null)
             .background(ElementTheme.colors.bgCanvasDefault)
             .border(BorderStroke(1.dp, ElementTheme.colors.borderInteractiveSecondary), shape = CircleShape),
         contentAlignment = Alignment.Center,

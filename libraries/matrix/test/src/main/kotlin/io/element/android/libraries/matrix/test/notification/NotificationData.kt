@@ -11,6 +11,7 @@ package io.element.android.libraries.matrix.test.notification
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
@@ -27,7 +28,8 @@ fun aNotificationData(
     timestamp: Long = A_TIMESTAMP,
     senderDisplayName: String? = A_USER_NAME_2,
     senderIsNameAmbiguous: Boolean = false,
-    roomDisplayName: String? = A_ROOM_NAME
+    roomDisplayName: String? = A_ROOM_NAME,
+    roomJoinRule: JoinRule? = null,
 ): NotificationData {
     return NotificationData(
         sessionId = A_SESSION_ID,
@@ -47,5 +49,6 @@ fun aNotificationData(
         timestamp = timestamp,
         content = content,
         hasMention = hasMention,
+        roomJoinRule = roomJoinRule,
     )
 }

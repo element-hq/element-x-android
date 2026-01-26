@@ -1,14 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_room_change_permissions_administrators">"Apenas administradores"</string>
+  <string name="screen_room_change_permissions_administrators">"Administrador"</string>
   <string name="screen_room_change_permissions_ban_people">"Banir pessoas"</string>
   <string name="screen_room_change_permissions_delete_messages">"Remover mensagens"</string>
-  <string name="screen_room_change_permissions_invite_people">"Convidar pessoas e aceitar pedidos de entrada"</string>
+  <string name="screen_room_change_permissions_everyone">"Membro"</string>
+  <string name="screen_room_change_permissions_invite_people">"Convidar pessoas"</string>
+  <string name="screen_room_change_permissions_member_moderation">"Gerir membros"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Mensagens e conteúdo"</string>
-  <string name="screen_room_change_permissions_moderators">"Administradores e moderadores"</string>
-  <string name="screen_room_change_permissions_remove_people">"Remover pessoas e rejeitar pedidos de entrada"</string>
+  <string name="screen_room_change_permissions_moderators">"Moderador"</string>
+  <string name="screen_room_change_permissions_remove_people">"Remover pessoas"</string>
   <string name="screen_room_change_permissions_room_avatar">"Alterar o ícone da sala"</string>
-  <string name="screen_room_change_permissions_room_details">"Editar sala"</string>
+  <string name="screen_room_change_permissions_room_details">"Editar detalhes"</string>
   <string name="screen_room_change_permissions_room_name">"Altera o nome da sala"</string>
   <string name="screen_room_change_permissions_room_topic">"Alterar a descrição da sala"</string>
   <string name="screen_room_change_permissions_send_messages">"Enviar mensagens"</string>
@@ -31,7 +33,7 @@
   <string name="screen_room_change_role_section_users">"Participantes"</string>
   <string name="screen_room_change_role_unsaved_changes_description">"Tens alterações por guardar."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Guardar alterações?"</string>
-  <string name="screen_room_member_list_banned_empty">"Não há nenhum utilizador banido desta sala."</string>
+  <string name="screen_room_member_list_banned_empty">"Não há nenhum utilizador banido."</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d pessoa"</item>
     <item quantity="other">"%1$d pessoas"</item>
@@ -43,8 +45,8 @@
   <string name="screen_room_member_list_manage_member_unban_title">"Desbanir da sala"</string>
   <string name="screen_room_member_list_mode_banned">"Banidos"</string>
   <string name="screen_room_member_list_mode_members">"Participantes"</string>
-  <string name="screen_room_member_list_role_administrator">"Apenas administradores"</string>
-  <string name="screen_room_member_list_role_moderator">"Administradores e moderadores"</string>
+  <string name="screen_room_member_list_role_administrator">"Administrador"</string>
+  <string name="screen_room_member_list_role_moderator">"Moderador"</string>
   <string name="screen_room_member_list_role_owner">"Dono / Dona"</string>
   <string name="screen_room_member_list_room_members_header_title">"Participantes"</string>
   <string name="screen_room_member_list_unbanning_user">"A anular banimento de %1$s"</string>

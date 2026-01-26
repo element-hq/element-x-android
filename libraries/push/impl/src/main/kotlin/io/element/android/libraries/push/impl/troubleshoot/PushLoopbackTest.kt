@@ -9,7 +9,6 @@
 package io.element.android.libraries.push.impl.troubleshoot
 
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.PushService
@@ -31,7 +30,6 @@ import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 
 @ContributesIntoSet(SessionScope::class)
-@Inject
 class PushLoopbackTest(
     private val sessionId: SessionId,
     private val pushService: PushService,

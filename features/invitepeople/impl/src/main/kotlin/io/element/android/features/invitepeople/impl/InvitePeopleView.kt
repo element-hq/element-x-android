@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -31,6 +32,8 @@ import io.element.android.libraries.designsystem.components.async.AsyncLoading
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
+import io.element.android.libraries.designsystem.theme.components.ListSectionHeader
 import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -82,9 +85,13 @@ private fun InvitePeopleContentView(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(16.dp),
     ) {
+        fun toggleUser(user: MatrixUser) {
+            state.eventSink(DefaultInvitePeopleEvents.ToggleUser(user))
+        }
+
         InvitePeopleSearchBar(
             modifier = Modifier.fillMaxWidth(),
-            query = state.searchQuery,
+            queryState = state.searchQuery,
             showLoader = state.showSearchLoader,
             selectedUsers = state.selectedUsers,
             state = state.searchResults,
@@ -96,18 +103,45 @@ private fun InvitePeopleContentView(
                     )
                 )
             },
-            onTextChange = { state.eventSink(DefaultInvitePeopleEvents.UpdateSearchQuery(it)) },
-            onToggleUser = { state.eventSink(DefaultInvitePeopleEvents.ToggleUser(it)) },
+            onToggleUser = ::toggleUser,
         )
 
         if (!state.isSearchActive) {
-            SelectedUsersRowList(
-                modifier = Modifier.fillMaxWidth(),
-                selectedUsers = state.selectedUsers,
-                autoScroll = true,
-                onUserRemove = { state.eventSink(DefaultInvitePeopleEvents.ToggleUser(it)) },
-                contentPadding = PaddingValues(16.dp),
-            )
+            if (state.selectedUsers.isNotEmpty()) {
+                SelectedUsersRowList(
+                    modifier = Modifier.fillMaxWidth(),
+                    selectedUsers = state.selectedUsers,
+                    autoScroll = true,
+                    onUserRemove = ::toggleUser,
+                    contentPadding = PaddingValues(all = 16.dp),
+                )
+            }
+            if (state.suggestions.isNotEmpty()) {
+                LazyColumn {
+                    item {
+                        ListSectionHeader(
+                            title = stringResource(id = CommonStrings.common_suggestions),
+                            hasDivider = false,
+                        )
+                    }
+                    itemsIndexed(state.suggestions) { index, invitableUser ->
+                        CheckableUserRow(
+                            checked = invitableUser.isSelected,
+                            onCheckedChange = {
+                                state.eventSink(DefaultInvitePeopleEvents.ToggleUser(invitableUser.matrixUser))
+                            },
+                            data = CheckableUserRowData.Resolved(
+                                avatarData = invitableUser.matrixUser.getAvatarData(AvatarSize.UserListItem),
+                                name = invitableUser.matrixUser.getBestName(),
+                                subtext = invitableUser.matrixUser.userId.value,
+                            ),
+                        )
+                        if (index < state.suggestions.lastIndex) {
+                            HorizontalDivider()
+                        }
+                    }
+                }
+            }
         }
     }
 }
@@ -115,20 +149,18 @@ private fun InvitePeopleContentView(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun InvitePeopleSearchBar(
-    query: String,
+    queryState: TextFieldState,
     state: SearchBarResultState<ImmutableList<InvitableUser>>,
     showLoader: Boolean,
     selectedUsers: ImmutableList<MatrixUser>,
     active: Boolean,
     onActiveChange: (Boolean) -> Unit,
-    onTextChange: (String) -> Unit,
     onToggleUser: (MatrixUser) -> Unit,
     modifier: Modifier = Modifier,
     placeHolderTitle: String = stringResource(CommonStrings.common_search_for_someone),
 ) {
     SearchBar(
-        query = query,
-        onQueryChange = onTextChange,
+        queryState = queryState,
         active = active,
         onActiveChange = onActiveChange,
         modifier = modifier,
@@ -140,7 +172,7 @@ private fun InvitePeopleSearchBar(
                     selectedUsers = selectedUsers,
                     autoScroll = true,
                     onUserRemove = onToggleUser,
-                    contentPadding = PaddingValues(16.dp),
+                    contentPadding = PaddingValues(all = 16.dp),
                 )
             }
         },

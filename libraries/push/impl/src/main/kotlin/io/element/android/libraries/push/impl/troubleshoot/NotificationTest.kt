@@ -10,7 +10,6 @@ package io.element.android.libraries.push.impl.troubleshoot
 
 import androidx.compose.ui.graphics.toArgb
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
 import io.element.android.appconfig.NotificationConfig
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.libraries.di.SessionScope
@@ -31,7 +30,6 @@ import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 
 @ContributesIntoSet(SessionScope::class)
-@Inject
 class NotificationTest(
     private val sessionId: SessionId,
     private val notificationCreator: NotificationCreator,

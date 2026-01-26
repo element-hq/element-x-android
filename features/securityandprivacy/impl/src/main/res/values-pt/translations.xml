@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_edit_room_address_room_address_section_footer">"É necessário um endereço para tornar a sala visível no diretório."</string>
-  <string name="screen_edit_room_address_title">"Endereço da sala"</string>
-  <string name="screen_security_and_privacy_add_room_address_action">"Adicionar endereço de sala"</string>
-  <string name="screen_security_and_privacy_ask_to_join_option_description">"Qualquer pessoa pode pedir para entrar na sala, mas um administrador ou moderador tem que aceitar o pedido."</string>
+  <string name="screen_edit_room_address_room_address_section_footer">"É necessário um endereço para tornar a sala visível no diretório público."</string>
+  <string name="screen_edit_room_address_title">"Editar endereço"</string>
+  <string name="screen_security_and_privacy_add_room_address_action">"Adicionar endereço"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_description">"Todos precisam de pedir acesso."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_title">"Pedir para entrar"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Sim, ativar cifragem"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Uma vez ativada, a cifragem não pode ser desativada. O histórico de mensagens só será visível a membros a partir do momento em que foram convidados ou que entraram na sala.
@@ -13,24 +13,24 @@ Não recomendamos ativar a cifragem em salas que qualquer pessoa possa encontrar
   <string name="screen_security_and_privacy_encryption_section_footer">"Uma vez ativada, a cifragem não pode ser desativada."</string>
   <string name="screen_security_and_privacy_encryption_section_header">"Cifragem"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Ativar cifragem ponta-a-ponta"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Qualquer pessoa pode encontrar a sala e entrar"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"Qualquer pessoa pode entrar."</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Qualquer pessoa"</string>
-  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Só é possível entrar tendo um convite"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Apenas pessoas convidadas podem entrar."</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Apenas por convite"</string>
-  <string name="screen_security_and_privacy_room_access_section_header">"Acesso à sala"</string>
+  <string name="screen_security_and_privacy_room_access_section_header">"Acesso"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Membros do espaço"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Os espaços ainda não estão implementados"</string>
-  <string name="screen_security_and_privacy_room_address_section_footer">"É necessário um endereço para tornar a sala visível no diretório."</string>
-  <string name="screen_security_and_privacy_room_address_section_header">"Endereço da sala"</string>
+  <string name="screen_security_and_privacy_room_address_section_footer">"É necessário um endereço para tornar a sala visível no diretório público."</string>
+  <string name="screen_security_and_privacy_room_address_section_header">"Endereço"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Permite que esta sala seja encontrada através do diretório público do %1$s."</string>
-  <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Visível no diretório público de salas"</string>
-  <string name="screen_security_and_privacy_room_history_anyone_option_title">"Qualquer pessoa"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Visível no diretório público"</string>
+  <string name="screen_security_and_privacy_room_history_anyone_option_title">"Qualquer pessoa (histórico público)"</string>
   <string name="screen_security_and_privacy_room_history_section_header">"Quem pode ler o histórico de mensagens"</string>
-  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Apenas membros, desde o momento em que forem convidados"</string>
-  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Apenas membros, desde o memento em que esta opção for selecionada"</string>
+  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Membros, desde que foram convidados"</string>
+  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Membros (histórico completo)"</string>
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Estes endereços permitem encontrar e aceder a sala, bem como a sua fácil partilha com outros.
 Podes escolher publicar a sala no diretório público do teu servidor."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Publicar sala"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_header">"Visibilidade da sala"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_header">"Visibilidade"</string>
   <string name="screen_security_and_privacy_title">"Segurança e privacidade"</string>
 </resources>

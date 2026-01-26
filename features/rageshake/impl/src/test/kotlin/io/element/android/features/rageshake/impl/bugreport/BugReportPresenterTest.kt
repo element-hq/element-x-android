@@ -8,9 +8,6 @@
 
 package io.element.android.features.rageshake.impl.bugreport
 
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.rageshake.api.reporter.BugReporter
 import io.element.android.features.rageshake.impl.crash.A_CRASH_DATA
@@ -22,6 +19,7 @@ import io.element.android.features.rageshake.impl.screenshot.ScreenshotHolder
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.test.A_FAILURE_REASON
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.test
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -37,9 +35,7 @@ class BugReportPresenterTest {
     @Test
     fun `present - initial state`() = runTest {
         val presenter = createPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.hasCrashLogs).isFalse()
             assertThat(initialState.formState).isEqualTo(BugReportFormState.Default)
@@ -53,9 +49,7 @@ class BugReportPresenterTest {
     @Test
     fun `present - set description`() = runTest {
         val presenter = createPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             initialState.eventSink.invoke(BugReportEvents.SetDescription(A_SHORT_DESCRIPTION))
             assertThat(awaitItem().submitEnabled).isTrue()
@@ -67,9 +61,7 @@ class BugReportPresenterTest {
     @Test
     fun `present - can contact`() = runTest {
         val presenter = createPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             initialState.eventSink.invoke(BugReportEvents.SetCanContact(true))
             assertThat(awaitItem().formState).isEqualTo(BugReportFormState.Default.copy(canContact = true))
@@ -81,9 +73,7 @@ class BugReportPresenterTest {
     @Test
     fun `present - send logs`() = runTest {
         val presenter = createPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             // Since this is true by default, start by disabling
             initialState.eventSink.invoke(BugReportEvents.SetSendLog(false))
@@ -96,9 +86,7 @@ class BugReportPresenterTest {
     @Test
     fun `present - send screenshot`() = runTest {
         val presenter = createPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             initialState.eventSink.invoke(BugReportEvents.SetSendScreenshot(true))
             assertThat(awaitItem().formState).isEqualTo(BugReportFormState.Default.copy(sendScreenshot = true))
@@ -110,9 +98,7 @@ class BugReportPresenterTest {
     @Test
     fun `present - send notification settings`() = runTest {
         val presenter = createPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             initialState.eventSink.invoke(BugReportEvents.SetSendPushRules(true))
             assertThat(awaitItem().formState).isEqualTo(BugReportFormState.Default.copy(sendPushRules = true))
@@ -127,9 +113,7 @@ class BugReportPresenterTest {
             crashDataStore = FakeCrashDataStore(crashData = A_CRASH_DATA, appHasCrashed = true),
             screenshotHolder = FakeScreenshotHolder(screenshotUri = A_SCREENSHOT_URI),
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.hasCrashLogs).isTrue()
@@ -148,9 +132,7 @@ class BugReportPresenterTest {
             FakeCrashDataStore(crashData = A_CRASH_DATA, appHasCrashed = true),
             FakeScreenshotHolder(screenshotUri = A_SCREENSHOT_URI),
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             initialState.eventSink.invoke(BugReportEvents.SetDescription(A_LONG_DESCRIPTION))
             skipItems(1)
@@ -174,9 +156,7 @@ class BugReportPresenterTest {
             FakeCrashDataStore(crashData = A_CRASH_DATA, appHasCrashed = true),
             FakeScreenshotHolder(screenshotUri = A_SCREENSHOT_URI),
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             initialState.eventSink.invoke(BugReportEvents.SetDescription(A_LONG_DESCRIPTION))
             skipItems(1)
@@ -200,9 +180,7 @@ class BugReportPresenterTest {
     @Test
     fun `present - send failure description too short`() = runTest {
         val presenter = createPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             initialState.eventSink.invoke(BugReportEvents.SetDescription(A_SHORT_DESCRIPTION))
             skipItems(1)
@@ -223,9 +201,7 @@ class BugReportPresenterTest {
             FakeCrashDataStore(crashData = A_CRASH_DATA, appHasCrashed = true),
             FakeScreenshotHolder(screenshotUri = A_SCREENSHOT_URI),
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             initialState.eventSink.invoke(BugReportEvents.SetDescription(A_LONG_DESCRIPTION))
             skipItems(1)

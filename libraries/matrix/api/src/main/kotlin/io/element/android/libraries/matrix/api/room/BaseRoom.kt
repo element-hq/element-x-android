@@ -86,6 +86,13 @@ interface BaseRoom : Closeable {
     suspend fun getUpdatedMember(userId: UserId): Result<RoomMember>
 
     /**
+     * Gets the direct room member, if any.
+     * This is a convenience method for getting the other member in a direct message room.
+     * Returns null if the room is not a dm or if the member cannot be found.
+     */
+    suspend fun getDirectRoomMember(): RoomMember?
+
+    /**
      * Adds the room to the sync subscription list.
      */
     suspend fun subscribeToSync()

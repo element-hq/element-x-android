@@ -55,6 +55,7 @@ class FakeBaseRoom(
     private val leaveRoomLambda: () -> Result<Unit> = { lambdaError() },
     private var updateMembersResult: () -> Unit = { lambdaError() },
     private val getMembersResult: (Int) -> Result<List<RoomMember>> = { lambdaError() },
+    private val getDirectRoomMemberResult: () -> RoomMember? = { null },
     private val saveComposerDraftLambda: (ComposerDraft) -> Result<Unit> = { _: ComposerDraft -> Result.success(Unit) },
     private val loadComposerDraftLambda: () -> Result<ComposerDraft?> = { Result.success<ComposerDraft?>(null) },
     private val clearComposerDraftLambda: () -> Result<Unit> = { Result.success(Unit) },
@@ -88,6 +89,10 @@ class FakeBaseRoom(
 
     override suspend fun getMembers(limit: Int): Result<List<RoomMember>> {
         return getMembersResult(limit)
+    }
+
+    override suspend fun getDirectRoomMember(): RoomMember? {
+        return getDirectRoomMemberResult()
     }
 
     override suspend fun subscribeToSync() {

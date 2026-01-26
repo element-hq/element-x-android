@@ -477,7 +477,6 @@ Möchtest du wirklich fortfahren?"</string>
   <string name="screen_share_open_google_maps">"In Google Maps öffnen"</string>
   <string name="screen_share_open_osm_maps">"In OpenStreetMap öffnen"</string>
   <string name="screen_share_this_location_action">"Diesen Standort teilen"</string>
-  <string name="screen_space_add_rooms_room_access_description">"Das Hinzufügen eines Chats hat keinen Einfluss auf die Beitrittsregeln. Um die Regeln zu ändern, gehe zu \"Raum Info\" und dann zu \"Datenschutz und Sicherheit\""</string>
   <string name="screen_space_list_description">"Von dir erstellte oder beigetretene Spaces."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_empty_state_title">"Erstelle einen Space, um Chats zu organisieren"</string>

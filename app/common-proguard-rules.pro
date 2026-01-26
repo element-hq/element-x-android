@@ -5,6 +5,9 @@
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
+# Increase optimizations passes to 3
+-optimizationpasses 3
+
 # JNA
 -dontwarn java.awt.*
 -keep class com.sun.jna.** { *; }
@@ -41,7 +44,6 @@
     static int windowAttachCount(android.view.View);
 }
 
-
 # Keep LogSessionId class and related classes (https://github.com/androidx/media/issues/2535)
 -keep class android.media.metrics.LogSessionId { *; }
 -keep class android.media.metrics.** { *; }
@@ -66,10 +68,9 @@
 -dontwarn androidx.window.sidecar.SidecarWindowLayoutInfo
 
 # Also needed after AGP 8.13.1 upgrade, it seems like proguard is now more aggressive on removing unused code
--keep,allowshrinking class org.matrix.rustcomponents.sdk.** { *;}
--keep,allowshrinking class uniffi.** { *;}
--keep,allowshrinking class io.element.android.x.di.** { *; }
--keepclasseswithmembernames,allowoptimization,allowshrinking class io.element.android.** { *; }
+-keep,allowoptimization,allowshrinking class org.matrix.rustcomponents.sdk.** { *;}
+-keep,allowoptimization,allowshrinking class uniffi.** { *;}
+-keep,allowoptimization,allowshrinking class io.element.android.x.di.** { *; }
 
 # Keep Metro classes
--keep,allowshrinking class dev.zacsweers.metro.** { *; }
+-keep,allowoptimization,allowshrinking class dev.zacsweers.metro.** { *; }

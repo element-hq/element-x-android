@@ -33,5 +33,5 @@ data class HomeState(
 ) {
     val displayActions = currentHomeNavigationBarItem == HomeNavigationBarItem.Chats
     val displayRoomListFilters = currentHomeNavigationBarItem == HomeNavigationBarItem.Chats && roomListState.displayFilters
-    val showNavigationBar = homeSpacesState.spaceRooms.isNotEmpty()
+    val showNavigationBar = homeSpacesState.canCreateSpaces || homeSpacesState.spaceRooms.isNotEmpty()
 }

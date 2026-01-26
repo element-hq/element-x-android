@@ -118,8 +118,7 @@ fun ChangeRolesView(
                         .fillMaxWidth()
                         .padding(bottom = 16.dp),
                     placeHolderTitle = stringResource(CommonStrings.common_search_for_someone),
-                    query = state.query.orEmpty(),
-                    onQueryChange = { state.eventSink(ChangeRolesEvent.QueryChanged(it)) },
+                    queryState = state.searchQuery,
                     active = state.isSearchActive,
                     onActiveChange = { state.eventSink(ChangeRolesEvent.ToggleSearchActive) },
                     resultState = state.searchResults,

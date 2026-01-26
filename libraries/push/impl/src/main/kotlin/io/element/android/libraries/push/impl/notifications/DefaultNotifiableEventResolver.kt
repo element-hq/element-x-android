@@ -31,11 +31,12 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.exception.NotificationResolverException
-import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.matrix.api.media.getMediaPreviewValue
+import io.element.android.libraries.matrix.api.media.isPreviewEnabled
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
@@ -140,10 +141,24 @@ class DefaultNotifiableEventResolver(
     ): Result<ResolvedPushEvent> = runCatchingExceptions {
         when (val content = this.content) {
             is NotificationContent.MessageLike.RoomMessage -> {
-                val showMediaPreview = client.mediaPreviewService.getMediaPreviewValue() == MediaPreviewValue.On
+                val showMediaPreview = client.mediaPreviewService.getMediaPreviewValue().isPreviewEnabled(roomJoinRule)
                 val senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId)
-                val imageMimeType = if (showMediaPreview) content.getImageMimetype() else null
-                val imageUriString = imageMimeType?.let { content.fetchImageIfPresent(client, imageMimeType)?.toString() }
+                val imageMimeType = content.getImageMimetype()
+                val imageUriString = if (showMediaPreview && imageMimeType != null) {
+                    content.fetchImageIfPresent(client, imageMimeType)?.toString()
+                } else {
+                    null
+                }
+
+                val isPublicRoom = roomJoinRule == null || roomJoinRule == JoinRule.Public
+                if (imageMimeType != null && !showMediaPreview && isPublicRoom) {
+                    Timber.tag(loggerTag.value)
+                        .d("We should only display media previews for private rooms and the current room is public. Ignoring image uri.")
+                } else if (showMediaPreview && content.messageType is ImageMessageType && imageUriString == null) {
+                    Timber.tag(loggerTag.value)
+                        .w("No image uri returned for message with an image and previews enabled. Something went wrong.")
+                }
+
                 val messageBody = descriptionFromMessageContent(
                     content = content,
                     senderDisambiguatedDisplayName = senderDisambiguatedDisplayName,

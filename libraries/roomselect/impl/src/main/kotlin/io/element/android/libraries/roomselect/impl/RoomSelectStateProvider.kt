@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.roomselect.impl
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -22,16 +23,16 @@ open class RoomSelectStateProvider : PreviewParameterProvider<RoomSelectState> {
     override val values: Sequence<RoomSelectState>
         get() = sequenceOf(
             aRoomSelectState(),
-            aRoomSelectState(query = "Test", isSearchActive = true),
+            aRoomSelectState(searchQuery = "Test", isSearchActive = true),
             aRoomSelectState(resultState = SearchBarResultState.Results(aRoomSelectRoomList())),
             aRoomSelectState(
                 resultState = SearchBarResultState.Results(aRoomSelectRoomList()),
-                query = "Test",
+                searchQuery = "Test",
                 isSearchActive = true,
             ),
             aRoomSelectState(
                 resultState = SearchBarResultState.Results(aRoomSelectRoomList()),
-                query = "Test",
+                searchQuery = "Test",
                 isSearchActive = true,
                 selectedRooms = aRoomSelectRoomList().subList(0, 1),
             ),
@@ -45,13 +46,13 @@ open class RoomSelectStateProvider : PreviewParameterProvider<RoomSelectState> {
 private fun aRoomSelectState(
     mode: RoomSelectMode = RoomSelectMode.Forward,
     resultState: SearchBarResultState<ImmutableList<SelectRoomInfo>> = SearchBarResultState.Initial(),
-    query: String = "",
+    searchQuery: String = "",
     isSearchActive: Boolean = false,
     selectedRooms: ImmutableList<SelectRoomInfo> = persistentListOf(),
 ) = RoomSelectState(
     mode = mode,
     resultState = resultState,
-    query = query,
+    searchQuery = TextFieldState(initialText = searchQuery),
     isSearchActive = isSearchActive,
     selectedRooms = selectedRooms,
     eventSink = {}

@@ -32,6 +32,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
+import coil3.request.CachePolicy
 import coil3.request.ImageRequest
 import io.element.android.features.rageshake.impl.R
 import io.element.android.libraries.architecture.AsyncAction
@@ -135,6 +136,9 @@ fun BugReportView(
                         val context = LocalContext.current
                         val model = ImageRequest.Builder(context)
                             .data(state.screenshotUri)
+                            // Since `screenshotUri` always has the same value, we need to disable memory cache to
+                            // ensure the image is reloaded when the URI content changes
+                            .memoryCachePolicy(CachePolicy.DISABLED)
                             .build()
                         AsyncImage(
                             modifier = Modifier.fillMaxWidth(fraction = 0.5f),

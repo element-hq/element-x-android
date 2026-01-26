@@ -268,7 +268,10 @@ private fun HomeScaffold(
                         lazyListState = spacesLazyListState,
                         onSpaceClick = { spaceId ->
                             onRoomClick(spaceId)
-                        }
+                        },
+                        onCreateSpaceClick = onCreateSpaceClick,
+                        // TODO use actual callbacks for this
+                        onExploreClick = {},
                     )
                 }
             }

@@ -8,7 +8,7 @@
 
 package io.element.android.features.rageshake.api.preferences
 
-sealed interface RageshakePreferencesEvents {
-    data class SetSensitivity(val sensitivity: Float) : RageshakePreferencesEvents
-    data class SetIsEnabled(val isEnabled: Boolean) : RageshakePreferencesEvents
+sealed interface RageshakePreferencesEvent {
+    data class SetSensitivity(val sensitivity: Float) : RageshakePreferencesEvent
+    data class SetIsEnabled(val isEnabled: Boolean) : RageshakePreferencesEvent
 }

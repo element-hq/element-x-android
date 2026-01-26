@@ -35,17 +35,19 @@ internal class RustRoomListService(
     private val sessionDispatcher: CoroutineDispatcher,
     private val roomListFactory: RoomListFactory,
     private val roomSyncSubscriber: RoomSyncSubscriber,
-    sessionCoroutineScope: CoroutineScope,
+    private val sessionCoroutineScope: CoroutineScope,
 ) : RoomListService {
     override fun createRoomList(
         pageSize: Int,
         initialFilter: RoomListFilter,
-        source: RoomList.Source
+        source: RoomList.Source,
+        coroutineScope: CoroutineScope,
     ): DynamicRoomList {
         return roomListFactory.createRoomList(
             pageSize = pageSize,
             initialFilter = initialFilter,
             coroutineContext = sessionDispatcher,
+            coroutineScope = coroutineScope,
         ) {
             when (source) {
                 RoomList.Source.All -> innerRoomListService.allRooms()
@@ -60,6 +62,7 @@ internal class RustRoomListService(
     override val allRooms: DynamicRoomList = roomListFactory.createRoomList(
         pageSize = DEFAULT_PAGE_SIZE,
         coroutineContext = sessionDispatcher,
+        coroutineScope = sessionCoroutineScope,
     ) {
         innerRoomListService.allRooms()
     }

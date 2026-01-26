@@ -8,6 +8,7 @@
 
 package io.element.android.features.roomdetails.impl.members
 
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.architecture.Presenter
@@ -42,7 +43,7 @@ class RoomMemberListPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.filteredRoomMembers.isLoading()).isTrue()
-            assertThat(initialState.searchQuery).isEmpty()
+            assertThat(initialState.searchQuery.text.toString()).isEmpty()
             assertThat(initialState.selectedSection).isEqualTo(SelectedSection.MEMBERS)
         }
     }
@@ -87,7 +88,7 @@ class RoomMemberListPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.filteredRoomMembers.isLoading()).isTrue()
-            assertThat(initialState.searchQuery).isEmpty()
+            assertThat(initialState.searchQuery.text.toString()).isEmpty()
             room.givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
             // Skip items while the new members state is processed
             skipItems(2)
@@ -116,9 +117,9 @@ class RoomMemberListPresenterTest {
             assertThat(loadedRoomMembers.invited).isNotEmpty()
             assertThat(loadedRoomMembers.isEmpty(SelectedSection.MEMBERS)).isFalse()
             assertThat(loadedRoomMembers.isEmpty(SelectedSection.BANNED)).isFalse()
-            loadedState.eventSink(RoomMemberListEvents.UpdateSearchQuery("something"))
+            loadedState.searchQuery.setTextAndPlaceCursorAtEnd("something")
             val searchQueryUpdatedState = awaitItem()
-            assertThat(searchQueryUpdatedState.searchQuery).isEqualTo("something")
+            assertThat(searchQueryUpdatedState.searchQuery.text).isEqualTo("something")
             val searchSearchResultDelivered = awaitItem()
             val emptyRoomMembers = searchSearchResultDelivered.filteredRoomMembers.dataOrNull()!!
             assertThat(emptyRoomMembers.joined).isEmpty()
@@ -144,9 +145,9 @@ class RoomMemberListPresenterTest {
             assertThat(loadedRoomMembers.invited).isNotEmpty()
             assertThat(loadedRoomMembers.isEmpty(SelectedSection.MEMBERS)).isFalse()
             assertThat(loadedRoomMembers.isEmpty(SelectedSection.BANNED)).isFalse()
-            loadedState.eventSink(RoomMemberListEvents.UpdateSearchQuery("alice"))
+            loadedState.searchQuery.setTextAndPlaceCursorAtEnd("alice")
             val searchQueryUpdatedState = awaitItem()
-            assertThat(searchQueryUpdatedState.searchQuery).isEqualTo("alice")
+            assertThat(searchQueryUpdatedState.searchQuery.text).isEqualTo("alice")
             val searchSearchResultDelivered = awaitItem()
             val emptyRoomMembers = searchSearchResultDelivered.filteredRoomMembers.dataOrNull()!!
             assertThat(emptyRoomMembers.joined).isNotEmpty()

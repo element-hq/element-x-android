@@ -10,13 +10,11 @@ package io.element.android.features.migration.impl.migrations
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.BaseDirectory
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import java.io.File
 
 @ContributesIntoSet(AppScope::class)
-@Inject
 class AppMigration05(
     private val sessionStore: SessionStore,
     @BaseDirectory private val baseDirectory: File,

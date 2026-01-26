@@ -9,9 +9,6 @@
 package io.element.android.features.startchat.impl.root
 
 import androidx.compose.runtime.MutableState
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.invitepeople.test.FakeStartDMAction
 import io.element.android.features.startchat.api.ConfirmingStartDmWithMatrixUser
@@ -33,6 +30,7 @@ import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.test
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -49,9 +47,7 @@ class StartChatPresenterTest {
         }
         val startDMAction = FakeStartDMAction(executeResult = executeResult)
         val presenter = createStartChatPresenter(startDMAction)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.startDmAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
             assertThat(initialState.applicationName).isEqualTo(aBuildMeta().applicationName)
@@ -83,9 +79,7 @@ class StartChatPresenterTest {
         }
         val startDMAction = FakeStartDMAction(executeResult = executeResult)
         val presenter = createStartChatPresenter(startDMAction)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.startDmAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
             assertThat(initialState.applicationName).isEqualTo(aBuildMeta().applicationName)
@@ -114,9 +108,7 @@ class StartChatPresenterTest {
         }
         val startDMAction = FakeStartDMAction(executeResult = executeResult)
         val presenter = createStartChatPresenter(startDMAction)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.startDmAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
             initialState.eventSink(StartChatEvents.StartDM(matrixUser))
@@ -144,9 +136,7 @@ class StartChatPresenterTest {
         }
         val startDMAction = FakeStartDMAction(executeResult = executeResult)
         val presenter = createStartChatPresenter(startDMAction)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
             assertThat(initialState.startDmAction).isInstanceOf(AsyncAction.Uninitialized::class.java)
             initialState.eventSink(StartChatEvents.StartDM(matrixUser))
@@ -169,9 +159,7 @@ class StartChatPresenterTest {
     @Test
     fun `present - room directory search`() = runTest {
         val presenter = createStartChatPresenter(isRoomDirectorySearchEnabled = true)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(1)
             awaitItem().let { state ->
                 assertThat(state.isRoomDirectorySearchEnabled).isTrue()

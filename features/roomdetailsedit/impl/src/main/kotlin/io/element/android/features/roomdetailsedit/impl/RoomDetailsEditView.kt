@@ -101,9 +101,9 @@ fun RoomDetailsEditView(
                 .verticalScroll(rememberScrollState())
         ) {
             Spacer(modifier = Modifier.height(24.dp))
-            val avatarPickerState = remember(state.roomAvatarUrl) {
+            val avatarPickerState = remember(state.roomAvatarUrl, state.roomRawName) {
                 val size = AvatarSize.EditRoomDetails
-                val type = AvatarType.Room()
+                val type = if (state.isSpace) AvatarType.Space() else AvatarType.Room()
                 AvatarPickerState.Selected(
                     avatarData = AvatarData(id = state.roomId.value, name = state.roomRawName, size = size, url = state.roomAvatarUrl),
                     type = type
@@ -112,6 +112,7 @@ fun RoomDetailsEditView(
             AvatarPickerView(
                 state = avatarPickerState,
                 onClick = ::onAvatarClick,
+                enabled = state.canChangeAvatar,
                 modifier = Modifier.align(Alignment.CenterHorizontally),
             )
             Spacer(modifier = Modifier.height(32.dp))

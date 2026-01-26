@@ -24,6 +24,14 @@ interface SpaceService {
     fun getLeaveSpaceHandle(spaceId: RoomId): LeaveSpaceHandle
 
     /**
+     * Add a child room to a space.
+     * @param spaceId The space ID to which the child will be added.
+     * @param childId The room ID of the child to add.
+     * @return A result indicating success or failure.
+     */
+    suspend fun addChildToSpace(spaceId: RoomId, childId: RoomId): Result<Unit>
+
+    /**
      * Remove a child room from a space.
      * @param spaceId The space ID from which to remove the child.
      * @param childId The room ID of the child to remove.

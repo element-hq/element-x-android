@@ -22,7 +22,7 @@ fun CrashDetectionView(
     onOpenBugReport: () -> Unit = { },
 ) {
     fun onPopupDismissed() {
-        state.eventSink(CrashDetectionEvents.ResetAllCrashData)
+        state.eventSink(CrashDetectionEvent.ResetAllCrashData)
     }
 
     if (state.crashDetected) {

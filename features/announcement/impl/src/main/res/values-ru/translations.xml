@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_space_announcement_item1">"Просмотр пространств, которые вы создали или к которым присоединились"</string>
+  <string name="screen_space_announcement_item1">"Просмотреть пространства, которые вы создали или к которым присоединились"</string>
   <string name="screen_space_announcement_item2">"Принимать или отклонять приглашения в пространства"</string>
-  <string name="screen_space_announcement_item3">"Откройте для себя все комнаты, к которым вы можете присоединиться в своих пространствах."</string>
-  <string name="screen_space_announcement_item4">"Присоединиться к публичному пространству"</string>
+  <string name="screen_space_announcement_item3">"Найти все комнаты, к которым можно присоединиться в ваших пространствах"</string>
+  <string name="screen_space_announcement_item4">"Присоединяться к публичным пространствам"</string>
   <string name="screen_space_announcement_item5">"Покинуть все пространства, к которым вы присоединились"</string>
   <string name="screen_space_announcement_notice">"Работа с пространствами скоро станет доступна"</string>
-  <string name="screen_space_announcement_subtitle">"Добро пожаловать в бета-версию Spaces! В этой первой версии вы сможете:"</string>
+  <string name="screen_space_announcement_subtitle">"Добро пожаловать в бета-версию пространств! В этой первой версии вы сможете:"</string>
   <string name="screen_space_announcement_title">"Представляем пространства"</string>
 </resources>

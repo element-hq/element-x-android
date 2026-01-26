@@ -9,6 +9,7 @@
 package io.element.android.features.messages.impl.timeline.components.customreaction.picker
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.Immutable
 import io.element.android.emojibasebindings.Emoji
 import io.element.android.libraries.designsystem.theme.components.IconSource
@@ -20,7 +21,7 @@ import kotlinx.collections.immutable.ImmutableList
 data class EmojiPickerState(
     val categories: ImmutableList<EmojiCategory>,
     val allEmojis: ImmutableList<Emoji>,
-    val searchQuery: String,
+    val searchQuery: TextFieldState,
     val isSearchActive: Boolean,
     val searchResults: SearchBarResultState<ImmutableList<Emoji>>,
     val eventSink: (EmojiPickerEvents) -> Unit,

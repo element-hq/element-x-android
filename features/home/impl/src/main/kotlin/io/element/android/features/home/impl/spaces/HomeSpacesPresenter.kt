@@ -53,6 +53,8 @@ class HomeSpacesPresenter(
             seenSpaceInvites = seenSpaceInvites,
             hideInvitesAvatar = hideInvitesAvatar,
             canCreateSpaces = canCreateSpaces,
+            // TODO enable once we can link to the screen to explore public spaces
+            canExploreSpaces = false,
             eventSink = ::handleEvent,
         )
     }

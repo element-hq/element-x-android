@@ -50,7 +50,7 @@ fun JoinRoomByAddressView(
         modifier = modifier,
         sheetState = sheetState,
         onDismissRequest = {
-            state.eventSink(JoinRoomByAddressEvents.Dismiss)
+            state.eventSink(JoinRoomByAddressEvent.Dismiss)
         },
     ) {
         Column(
@@ -64,10 +64,10 @@ fun JoinRoomByAddressView(
                 addressState = state.addressState,
                 requestFocus = sheetState.isVisible,
                 onAddressChange = {
-                    state.eventSink(JoinRoomByAddressEvents.UpdateAddress(it))
+                    state.eventSink(JoinRoomByAddressEvent.UpdateAddress(it))
                 },
                 onContinue = {
-                    state.eventSink(JoinRoomByAddressEvents.Continue)
+                    state.eventSink(JoinRoomByAddressEvent.Continue)
                 },
             )
             Spacer(modifier = Modifier.height(24.dp))
@@ -76,7 +76,7 @@ fun JoinRoomByAddressView(
                 modifier = Modifier.fillMaxWidth(),
                 showProgress = state.addressState is RoomAddressState.Resolving,
                 onClick = {
-                    state.eventSink(JoinRoomByAddressEvents.Continue)
+                    state.eventSink(JoinRoomByAddressEvent.Continue)
                 }
             )
         }

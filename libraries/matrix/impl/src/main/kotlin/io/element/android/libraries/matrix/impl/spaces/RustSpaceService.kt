@@ -98,6 +98,12 @@ class RustSpaceService(
         }
     }
 
+    override suspend fun addChildToSpace(spaceId: RoomId, childId: RoomId): Result<Unit> = withContext(sessionDispatcher) {
+        runCatchingExceptions {
+            innerSpaceService.addChildToSpace(childId = childId.value, spaceId = spaceId.value)
+        }
+    }
+
     override suspend fun removeChildFromSpace(spaceId: RoomId, childId: RoomId): Result<Unit> = withContext(sessionDispatcher) {
         runCatchingExceptions {
             innerSpaceService.removeChildFromSpace(childId = childId.value, spaceId = spaceId.value)

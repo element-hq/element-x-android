@@ -10,10 +10,10 @@ package io.element.android.features.rageshake.api.detection
 
 import io.element.android.features.rageshake.api.screenshot.ImageResult
 
-sealed interface RageshakeDetectionEvents {
-    data object Dismiss : RageshakeDetectionEvents
-    data object Disable : RageshakeDetectionEvents
-    data object StartDetection : RageshakeDetectionEvents
-    data object StopDetection : RageshakeDetectionEvents
-    data class ProcessScreenshot(val imageResult: ImageResult) : RageshakeDetectionEvents
+sealed interface RageshakeDetectionEvent {
+    data object Dismiss : RageshakeDetectionEvent
+    data object Disable : RageshakeDetectionEvent
+    data object StartDetection : RageshakeDetectionEvent
+    data object StopDetection : RageshakeDetectionEvent
+    data class ProcessScreenshot(val imageResult: ImageResult) : RageshakeDetectionEvent
 }

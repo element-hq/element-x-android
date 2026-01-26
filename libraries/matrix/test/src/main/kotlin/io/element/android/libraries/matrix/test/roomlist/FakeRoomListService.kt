@@ -14,6 +14,7 @@ import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -44,7 +45,8 @@ class FakeRoomListService(
     override fun createRoomList(
         pageSize: Int,
         initialFilter: RoomListFilter,
-        source: RoomList.Source
+        source: RoomList.Source,
+        coroutineScope: CoroutineScope,
     ): DynamicRoomList {
         return when (source) {
             RoomList.Source.All -> allRooms

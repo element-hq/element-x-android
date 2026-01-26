@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.roomselect.impl
 
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
@@ -22,6 +23,7 @@ import io.element.android.libraries.roomselect.api.RoomSelectMode
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -77,13 +79,13 @@ class RoomSelectPresenterTest {
             assertThat(result).isEqualTo(listOf(expectedRoomInfo))
             initialState.eventSink(RoomSelectEvents.ToggleSearchActive)
             skipItems(1)
-            initialState.eventSink(RoomSelectEvents.UpdateQuery("string not contained"))
+            initialState.searchQuery.setTextAndPlaceCursorAtEnd("string not contained")
             assertThat(
                 roomListService.allRooms.currentFilter.value
             ).isEqualTo(
                 RoomListFilter.NormalizedMatchRoomName("string not contained")
             )
-            assertThat(awaitItem().query).isEqualTo("string not contained")
+            assertThat(awaitItem().searchQuery.text.toString()).isEqualTo("string not contained")
             roomListService.postAllRooms(
                 emptyList()
             )
@@ -119,8 +121,13 @@ internal fun TestScope.createRoomSelectPresenter(
     roomListService: RoomListService = FakeRoomListService(),
 ) = RoomSelectPresenter(
     mode = mode,
-    dataSource = RoomSelectSearchDataSource(
-        roomListService = roomListService,
-        coroutineDispatchers = testCoroutineDispatchers(),
-    ),
+    dataSourceFactory = object : RoomSelectSearchDataSource.Factory {
+        override fun create(coroutineScope: CoroutineScope): RoomSelectSearchDataSource {
+            return RoomSelectSearchDataSource(
+                coroutineScope = coroutineScope,
+                roomListService = roomListService,
+                coroutineDispatchers = testCoroutineDispatchers(),
+            )
+        }
+    }
 )

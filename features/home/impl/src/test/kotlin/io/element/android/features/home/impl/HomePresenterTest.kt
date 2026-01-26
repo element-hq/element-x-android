@@ -173,7 +173,7 @@ class HomePresenterTest {
     }
 
     @Test
-    fun `present - NavigationBar is hidden when the last space is left`() = runTest {
+    fun `present - NavigationBar is hidden when the last space is left when the user can't create new spaces`() = runTest {
         val homeSpacesPresenter = MutablePresenter(aHomeSpacesState())
         val presenter = createHomePresenter(
             sessionStore = InMemorySessionStore(
@@ -193,7 +193,7 @@ class HomePresenterTest {
             val spaceState = awaitItem()
             assertThat(spaceState.currentHomeNavigationBarItem).isEqualTo(HomeNavigationBarItem.Spaces)
             // The last space is left
-            homeSpacesPresenter.updateState(aHomeSpacesState(spaceRooms = emptyList()))
+            homeSpacesPresenter.updateState(aHomeSpacesState(spaceRooms = emptyList(), canCreateSpaces = false))
             skipItems(1)
             val finalState = awaitItem()
             // We are back to Chats

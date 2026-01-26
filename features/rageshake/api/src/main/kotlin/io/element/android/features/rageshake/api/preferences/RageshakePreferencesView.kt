@@ -29,11 +29,11 @@ fun RageshakePreferencesView(
     modifier: Modifier = Modifier,
 ) {
     fun onSensitivityChanged(sensitivity: Float) {
-        state.eventSink(RageshakePreferencesEvents.SetSensitivity(sensitivity = sensitivity))
+        state.eventSink(RageshakePreferencesEvent.SetSensitivity(sensitivity = sensitivity))
     }
 
     fun onEnabledChanged(isEnabled: Boolean) {
-        state.eventSink(RageshakePreferencesEvents.SetIsEnabled(isEnabled = isEnabled))
+        state.eventSink(RageshakePreferencesEvent.SetIsEnabled(isEnabled = isEnabled))
     }
 
     Column(modifier = modifier) {

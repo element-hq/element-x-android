@@ -8,6 +8,7 @@
 
 package io.element.android.features.rolesandpermissions.impl.roles
 
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -68,7 +69,7 @@ class ChangeRolesPresenter(
 
     @Composable
     override fun present(): ChangeRolesState {
-        var query by rememberSaveable { mutableStateOf<String?>(null) }
+        val queryState = rememberTextFieldState()
         var searchActive by rememberSaveable { mutableStateOf(false) }
         var searchResults by remember {
             mutableStateOf<SearchBarResultState<MembersByRole>>(SearchBarResultState.Initial())
@@ -105,9 +106,10 @@ class ChangeRolesPresenter(
         val roomMemberState by room.membersStateFlow.collectAsState()
 
         // Update search results for every query change
+        val query = queryState.text.toString()
         LaunchedEffect(query, roomMemberState) {
             val results = dataSource
-                .search(query.orEmpty())
+                .search(query)
                 .groupedByRole()
 
             searchResults = if (results.isEmpty()) {
@@ -135,9 +137,6 @@ class ChangeRolesPresenter(
             when (event) {
                 is ChangeRolesEvent.ToggleSearchActive -> {
                     searchActive = !searchActive
-                }
-                is ChangeRolesEvent.QueryChanged -> {
-                    query = event.query
                 }
                 is ChangeRolesEvent.UserSelectionToggled -> {
                     val newList = selectedUsers.value.toMutableList()
@@ -188,7 +187,7 @@ class ChangeRolesPresenter(
         }
         return ChangeRolesState(
             role = role,
-            query = query,
+            searchQuery = queryState,
             isSearchActive = searchActive,
             searchResults = searchResults,
             selectedUsers = selectedUsers.value,

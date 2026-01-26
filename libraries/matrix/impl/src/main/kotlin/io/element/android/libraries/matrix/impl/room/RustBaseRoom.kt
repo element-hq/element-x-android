@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
+import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPermissions
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsValues
 import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
@@ -110,6 +111,20 @@ class RustBaseRoom(
                 }
             }
         }
+    }
+
+    override suspend fun getDirectRoomMember(): RoomMember? = withContext(roomDispatcher) {
+        runCatchingExceptions {
+            if (info().isDm) {
+                innerRoom.membersNoSync().use { members ->
+                    members.nextChunk(members.len())
+                        ?.map(RoomMemberMapper::map)
+                        ?.firstOrNull { roomMember -> roomMember.userId != sessionId && roomMember.membership.isActive() }
+                }
+            } else {
+                null
+            }
+        }.getOrNull()
     }
 
     override suspend fun getUpdatedMember(userId: UserId): Result<RoomMember> = withContext(roomDispatcher) {

@@ -8,6 +8,7 @@
 
 package io.element.android.features.rolesandpermissions.impl.roles
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
@@ -34,8 +35,8 @@ class ChangeRolesStateProvider : PreviewParameterProvider<ChangeRolesState> {
             aChangeRolesStateWithSelectedUsers().copy(
                 selectedUsers = aMatrixUserList().take(2).toImmutableList(),
             ),
-            aChangeRolesStateWithSelectedUsers().copy(
-                query = "Alice",
+            aChangeRolesState(
+                searchQuery = "Alice",
                 isSearchActive = true,
                 searchResults = SearchBarResultState.Results(
                     MembersByRole(
@@ -44,6 +45,8 @@ class ChangeRolesStateProvider : PreviewParameterProvider<ChangeRolesState> {
                     )
                 ),
                 selectedUsers = aMatrixUserList().take(1).toImmutableList(),
+                hasPendingChanges = true,
+                canRemoveMember = { it != UserId("@alice:server.org") },
             ),
             aChangeRolesStateWithSelectedUsers().copy(savingState = AsyncAction.ConfirmingCancellation),
             aChangeRolesStateWithSelectedUsers().copy(savingState = ConfirmingModifyingAdmins),
@@ -59,7 +62,7 @@ class ChangeRolesStateProvider : PreviewParameterProvider<ChangeRolesState> {
 
 internal fun aChangeRolesState(
     role: RoomMember.Role = RoomMember.Role.Admin,
-    query: String? = null,
+    searchQuery: String = "",
     isSearchActive: Boolean = false,
     searchResults: SearchBarResultState<MembersByRole> = SearchBarResultState.NoResultsFound(),
     selectedUsers: ImmutableList<MatrixUser> = persistentListOf(),
@@ -69,7 +72,7 @@ internal fun aChangeRolesState(
     eventSink: (ChangeRolesEvent) -> Unit = {},
 ) = ChangeRolesState(
     role = role,
-    query = query,
+    searchQuery = TextFieldState(initialText = searchQuery),
     isSearchActive = isSearchActive,
     searchResults = searchResults,
     selectedUsers = selectedUsers,

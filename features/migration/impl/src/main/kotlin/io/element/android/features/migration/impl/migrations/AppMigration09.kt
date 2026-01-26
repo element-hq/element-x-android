@@ -9,7 +9,6 @@ package io.element.android.features.migration.impl.migrations
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -18,7 +17,6 @@ import io.element.android.libraries.sessionstorage.api.SessionStore
  * Ensure we clear the well-known cached config, since it could be invalid due to an SDK issue.
  */
 @ContributesIntoSet(AppScope::class)
-@Inject
 class AppMigration09(
     private val sessionStore: SessionStore,
     private val matrixClientProvider: MatrixClientProvider,

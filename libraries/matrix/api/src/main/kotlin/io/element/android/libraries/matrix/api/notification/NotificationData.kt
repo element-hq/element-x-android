@@ -14,6 +14,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
 
 data class NotificationData(
@@ -36,6 +37,7 @@ data class NotificationData(
     val timestamp: Long,
     val content: NotificationContent,
     val hasMention: Boolean,
+    val roomJoinRule: JoinRule?,
 ) {
     fun getDisambiguatedDisplayName(userId: UserId): String = when {
         senderDisplayName.isNullOrBlank() -> userId.value

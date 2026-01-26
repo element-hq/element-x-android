@@ -8,9 +8,7 @@
 
 package io.element.android.features.startchat.impl.userlist
 
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
-import app.cash.turbine.test
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -20,6 +18,7 @@ import io.element.android.libraries.usersearch.api.UserSearchResult
 import io.element.android.libraries.usersearch.api.UserSearchResultState
 import io.element.android.libraries.usersearch.test.FakeUserRepository
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.test
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -40,12 +39,10 @@ class DefaultUserListPresenterTest {
                 UserListDataStore(),
                 FakeMatrixClient(),
             )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(1)
             val initialState = awaitItem()
-            assertThat(initialState.searchQuery).isEmpty()
+            assertThat(initialState.searchQuery.text.toString()).isEmpty()
             assertThat(initialState.isMultiSelectionEnabled).isFalse()
             assertThat(initialState.isSearchActive).isFalse()
             assertThat(initialState.selectedUsers).isEmpty()
@@ -62,12 +59,10 @@ class DefaultUserListPresenterTest {
                 UserListDataStore(),
                 FakeMatrixClient(),
             )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(1)
             val initialState = awaitItem()
-            assertThat(initialState.searchQuery).isEmpty()
+            assertThat(initialState.searchQuery.text.toString()).isEmpty()
             assertThat(initialState.isMultiSelectionEnabled).isTrue()
             assertThat(initialState.isSearchActive).isFalse()
             assertThat(initialState.selectedUsers).isEmpty()
@@ -84,9 +79,7 @@ class DefaultUserListPresenterTest {
                 UserListDataStore(),
                 FakeMatrixClient(),
             )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(1)
             val initialState = awaitItem()
 
@@ -94,14 +87,14 @@ class DefaultUserListPresenterTest {
             assertThat(awaitItem().isSearchActive).isTrue()
 
             val matrixIdQuery = "@name:matrix.org"
-            initialState.eventSink(UserListEvents.UpdateSearchQuery(matrixIdQuery))
-            assertThat(awaitItem().searchQuery).isEqualTo(matrixIdQuery)
+            initialState.searchQuery.setTextAndPlaceCursorAtEnd(matrixIdQuery)
+            assertThat(awaitItem().searchQuery.text.toString()).isEqualTo(matrixIdQuery)
             assertThat(userRepository.providedQuery).isEqualTo(matrixIdQuery)
             skipItems(1)
 
             val notMatrixIdQuery = "name"
-            initialState.eventSink(UserListEvents.UpdateSearchQuery(notMatrixIdQuery))
-            assertThat(awaitItem().searchQuery).isEqualTo(notMatrixIdQuery)
+            initialState.searchQuery.setTextAndPlaceCursorAtEnd(notMatrixIdQuery)
+            assertThat(awaitItem().searchQuery.text.toString()).isEqualTo(notMatrixIdQuery)
             assertThat(userRepository.providedQuery).isEqualTo(notMatrixIdQuery)
             skipItems(1)
 
@@ -121,13 +114,11 @@ class DefaultUserListPresenterTest {
                 UserListDataStore(),
                 FakeMatrixClient(),
             )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(1)
             val initialState = awaitItem()
 
-            initialState.eventSink(UserListEvents.UpdateSearchQuery("alice"))
+            initialState.searchQuery.setTextAndPlaceCursorAtEnd("alice")
             assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
             assertThat(userRepository.providedQuery).isEqualTo("alice")
             skipItems(2)
@@ -174,13 +165,11 @@ class DefaultUserListPresenterTest {
                 UserListDataStore(),
                 FakeMatrixClient(),
             )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(1)
             val initialState = awaitItem()
 
-            initialState.eventSink(UserListEvents.UpdateSearchQuery("alice"))
+            initialState.searchQuery.setTextAndPlaceCursorAtEnd("alice")
             assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
             assertThat(userRepository.providedQuery).isEqualTo("alice")
             skipItems(2)
@@ -200,9 +189,7 @@ class DefaultUserListPresenterTest {
                 UserListDataStore(),
                 FakeMatrixClient(),
             )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(1)
             val initialState = awaitItem()
 

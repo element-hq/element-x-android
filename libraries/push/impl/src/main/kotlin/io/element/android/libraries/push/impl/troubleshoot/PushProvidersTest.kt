@@ -10,7 +10,6 @@ package io.element.android.libraries.push.impl.troubleshoot
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.pushproviders.api.PushProvider
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTest
@@ -21,7 +20,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
 @ContributesIntoSet(AppScope::class)
-@Inject
 class PushProvidersTest(
     pushProviders: Set<@JvmSuppressWildcards PushProvider>,
     private val stringProvider: StringProvider,

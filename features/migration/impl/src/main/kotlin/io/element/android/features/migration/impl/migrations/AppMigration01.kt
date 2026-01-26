@@ -10,14 +10,12 @@ package io.element.android.features.migration.impl.migrations
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
 import io.element.android.features.rageshake.api.logs.LogFilesRemover
 
 /**
  * Remove existing logs from the device to remove any leaks of sensitive data.
  */
 @ContributesIntoSet(AppScope::class)
-@Inject
 class AppMigration01(
     private val logFilesRemover: LogFilesRemover,
 ) : AppMigration {

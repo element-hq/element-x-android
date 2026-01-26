@@ -31,7 +31,7 @@ class JoinBaseRoomByAddressViewTest {
 
     @Test
     fun `entering text emits the expected event`() {
-        val eventsRecorder = EventsRecorder<JoinRoomByAddressEvents>()
+        val eventsRecorder = EventsRecorder<JoinRoomByAddressEvent>()
         rule.setJoinRoomByAddressView(
             aJoinRoomByAddressState(
                 eventSink = eventsRecorder,
@@ -39,19 +39,19 @@ class JoinBaseRoomByAddressViewTest {
         )
         val text = rule.activity.getString(R.string.screen_start_chat_join_room_by_address_action)
         rule.onNodeWithText(text).performTextInput("#address:matrix.org")
-        eventsRecorder.assertSingle(JoinRoomByAddressEvents.UpdateAddress("#address:matrix.org"))
+        eventsRecorder.assertSingle(JoinRoomByAddressEvent.UpdateAddress("#address:matrix.org"))
     }
 
     @Test
     fun `clicking on continue emits the expected event`() {
-        val eventsRecorder = EventsRecorder<JoinRoomByAddressEvents>()
+        val eventsRecorder = EventsRecorder<JoinRoomByAddressEvent>()
         rule.setJoinRoomByAddressView(
             aJoinRoomByAddressState(
                 eventSink = eventsRecorder,
             )
         )
         rule.clickOn(CommonStrings.action_continue)
-        eventsRecorder.assertSingle(JoinRoomByAddressEvents.Continue)
+        eventsRecorder.assertSingle(JoinRoomByAddressEvent.Continue)
     }
 }
 

@@ -98,6 +98,7 @@ fun SpaceView(
     onLeaveSpaceClick: () -> Unit,
     onSettingsClick: () -> Unit,
     onViewMembersClick: () -> Unit,
+    onAddRoomClick: () -> Unit,
     modifier: Modifier = Modifier,
     acceptDeclineInviteView: @Composable () -> Unit,
 ) {
@@ -140,6 +141,7 @@ fun SpaceView(
                         onShareSpace = onShareSpace,
                         onViewMembersClick = onViewMembersClick,
                         onManageRoomsClick = { state.eventSink(SpaceEvents.EnterManageMode) },
+                        onAddRoomClick = onAddRoomClick,
                     )
                 }
             }
@@ -344,6 +346,7 @@ private fun SpaceViewTopBar(
     onShareSpace: () -> Unit,
     onViewMembersClick: () -> Unit,
     onManageRoomsClick: () -> Unit,
+    onAddRoomClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     TopAppBar(
@@ -376,6 +379,14 @@ private fun SpaceViewTopBar(
                 onDismissRequest = { showMenu = false }
             ) {
                 if (showManageRoomsAction) {
+                    SpaceMenuItem(
+                        titleRes = CommonStrings.action_add_existing_rooms,
+                        icon = CompoundIcons.Room(),
+                        onClick = {
+                            showMenu = false
+                            onAddRoomClick()
+                        }
+                    )
                     SpaceMenuItem(
                         titleRes = CommonStrings.action_manage_rooms,
                         icon = CompoundIcons.Edit(),
@@ -600,6 +611,7 @@ internal fun SpaceViewPreview(
         acceptDeclineInviteView = {},
         onSettingsClick = {},
         onViewMembersClick = {},
+        onAddRoomClick = {},
         onBackClick = {},
     )
 }

@@ -60,6 +60,8 @@
   <string name="screen_qr_code_login_error_cancelled_title">"Запрос на вход отменен"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"Вход в систему был отклонен на другом устройстве."</string>
   <string name="screen_qr_code_login_error_declined_title">"Вход отклонен"</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_subtitle">"Больше ничего не нужно делать."</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_title">"Вход уже выполнен на другом устройстве"</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"Срок действия входа истек. Пожалуйста, попробуйте еще раз."</string>
   <string name="screen_qr_code_login_error_expired_title">"Вход в систему не был выполнен вовремя"</string>
   <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"Другое устройство не поддерживает вход в %s с помощью QR-кода.

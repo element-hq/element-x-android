@@ -293,6 +293,7 @@ Raison : %1$s."</string>
   <string name="common_reason">"Raison"</string>
   <string name="common_recovery_key">"Clé de récupération"</string>
   <string name="common_refreshing">"Actualisation…"</string>
+  <string name="common_removing">"Suppression…"</string>
   <plurals name="common_replies">
     <item quantity="one">"%1$d réponse"</item>
     <item quantity="other">"%1$d réponses"</item>
@@ -317,6 +318,10 @@ Raison : %1$s."</string>
   <string name="common_security">"Sécurité"</string>
   <string name="common_seen_by">"Vu par"</string>
   <string name="common_select_account">"Choisir un compte"</string>
+  <plurals name="common_selected_count">
+    <item quantity="one">"%1$d élément sélectionné"</item>
+    <item quantity="other">"%1$d éléments sélectionnés"</item>
+  </plurals>
   <string name="common_send_to">"Envoyer vers"</string>
   <string name="common_sending">"Envoi en cours…"</string>
   <string name="common_sending_failed">"Échec de l’envoi"</string>

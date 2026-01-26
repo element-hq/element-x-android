@@ -42,7 +42,6 @@ import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubti
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -89,13 +88,8 @@ fun RoomMemberListView(
                 .consumeWindowInsets(padding),
             verticalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            var searchQuery by textFieldState(state.searchQuery)
             SearchField(
-                value = searchQuery,
-                onValueChange = { newQuery ->
-                    searchQuery = newQuery
-                    state.eventSink(RoomMemberListEvents.UpdateSearchQuery(newQuery))
-                },
+                state = state.searchQuery,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 16.dp),
@@ -105,7 +99,7 @@ fun RoomMemberListView(
                 roomMembersData = state.filteredRoomMembers,
                 selectedSection = state.selectedSection,
                 showBannedSection = state.showBannedSection,
-                searchQuery = state.searchQuery,
+                searchQuery = state.searchQuery.text.toString(),
                 onSelectedSectionChange = { state.eventSink(RoomMemberListEvents.ChangeSelectedSection(it)) },
                 onSelectUser = ::onSelectUser,
             )

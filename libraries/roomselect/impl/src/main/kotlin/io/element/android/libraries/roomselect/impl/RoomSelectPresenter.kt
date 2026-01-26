@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.roomselect.impl
 
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
@@ -16,6 +17,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
@@ -31,7 +33,7 @@ import kotlinx.collections.immutable.toImmutableList
 @AssistedInject
 class RoomSelectPresenter(
     @Assisted private val mode: RoomSelectMode,
-    private val dataSource: RoomSelectSearchDataSource,
+    private val dataSourceFactory: RoomSelectSearchDataSource.Factory,
 ) : Presenter<RoomSelectState> {
     @AssistedFactory
     fun interface Factory {
@@ -41,13 +43,13 @@ class RoomSelectPresenter(
     @Composable
     override fun present(): RoomSelectState {
         var selectedRooms by remember { mutableStateOf(persistentListOf<SelectRoomInfo>()) }
-        var searchQuery by remember { mutableStateOf("") }
+        val queryState = rememberTextFieldState()
         var isSearchActive by remember { mutableStateOf(false) }
 
-        LaunchedEffect(Unit) {
-            dataSource.load()
-        }
+        val coroutineScope = rememberCoroutineScope()
+        val dataSource = remember { dataSourceFactory.create(coroutineScope) }
 
+        val searchQuery = queryState.text.toString()
         LaunchedEffect(searchQuery) {
             dataSource.setSearchQuery(searchQuery)
         }
@@ -77,7 +79,6 @@ class RoomSelectPresenter(
 //                    }
                 }
                 RoomSelectEvents.RemoveSelectedRoom -> selectedRooms = persistentListOf()
-                is RoomSelectEvents.UpdateQuery -> searchQuery = event.query
                 RoomSelectEvents.ToggleSearchActive -> isSearchActive = !isSearchActive
             }
         }
@@ -85,7 +86,7 @@ class RoomSelectPresenter(
         return RoomSelectState(
             mode = mode,
             resultState = searchResults,
-            query = searchQuery,
+            searchQuery = queryState,
             isSearchActive = isSearchActive,
             selectedRooms = selectedRooms,
             eventSink = ::handleEvent,

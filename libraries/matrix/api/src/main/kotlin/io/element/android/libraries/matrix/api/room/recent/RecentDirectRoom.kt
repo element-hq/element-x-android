@@ -11,48 +11,35 @@ package io.element.android.libraries.matrix.api.room.recent
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.toMatrixUser
 import io.element.android.libraries.matrix.api.user.MatrixUser
-import kotlinx.coroutines.flow.first
-
-private const val MAX_RECENT_DIRECT_ROOMS_TO_RETURN = 5
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 
 data class RecentDirectRoom(
     val roomId: RoomId,
     val matrixUser: MatrixUser,
 )
 
-suspend fun MatrixClient.getRecentDirectRooms(
-    maxNumberOfResults: Int = MAX_RECENT_DIRECT_ROOMS_TO_RETURN,
-): List<RecentDirectRoom> {
-    val result = mutableListOf<RecentDirectRoom>()
+/**
+ * Returns a [Flow] of [RecentDirectRoom] from recently visited DM rooms.
+ * The flow emits items lazily, allowing callers to filter and take only what they need.
+ * Use [kotlinx.coroutines.flow.take] to limit results and stop iteration early.
+ */
+fun MatrixClient.getRecentDirectRooms(): Flow<RecentDirectRoom> = flow {
     val foundUserIds = mutableSetOf<UserId>()
-    getRecentlyVisitedRooms().getOrNull()?.let { roomIds ->
-        roomIds
-            .mapNotNull { roomId -> getRoom(roomId) }
-            .filter { it.isDm() && it.isJoined() }
-            .map { room ->
-                val otherUser = room.getMembers().getOrNull()
-                    ?.firstOrNull { it.userId != sessionId }
-                    ?.takeIf { foundUserIds.add(it.userId) }
-                    ?.toMatrixUser()
-                if (otherUser != null) {
-                    result.add(
-                        RecentDirectRoom(room.roomId, otherUser)
-                    )
-                    // Return early to avoid useless computation
-                    if (result.size >= maxNumberOfResults) {
-                        return@map
-                    }
+    val recentlyVisitedRooms = getRecentlyVisitedRooms().getOrDefault(emptyList())
+    for (roomId in recentlyVisitedRooms) {
+        getRoom(roomId)?.use { room ->
+            val info = room.info()
+            if (info.isDm && info.currentUserMembership == CurrentUserMembership.JOINED) {
+                val otherUser = room.getDirectRoomMember()?.toMatrixUser()
+                if (otherUser != null && foundUserIds.add(otherUser.userId)) {
+                    emit(RecentDirectRoom(room.roomId, otherUser))
                 }
             }
+        }
     }
-    return result
-}
-
-suspend fun BaseRoom.isJoined(): Boolean {
-    return roomInfoFlow.first().currentUserMembership == CurrentUserMembership.JOINED
 }

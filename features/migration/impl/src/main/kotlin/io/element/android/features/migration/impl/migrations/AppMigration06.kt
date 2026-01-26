@@ -10,7 +10,6 @@ package io.element.android.features.migration.impl.migrations
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.di.CacheDirectory
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import java.io.File
@@ -19,7 +18,6 @@ import java.io.File
  * Create the cache directory for the existing sessions.
  */
 @ContributesIntoSet(AppScope::class)
-@Inject
 class AppMigration06(
     private val sessionStore: SessionStore,
     @CacheDirectory private val cacheDirectory: File,

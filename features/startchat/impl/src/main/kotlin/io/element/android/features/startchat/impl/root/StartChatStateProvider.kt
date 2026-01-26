@@ -27,10 +27,10 @@ open class StartChatStateProvider : PreviewParameterProvider<StartChatState> {
             aCreateRoomRootState(
                 startDmAction = AsyncAction.Loading,
                 userListState = aMatrixUser().let {
-                    aUserListState().copy(
+                    aUserListState(
                         searchQuery = it.userId.value,
                         searchResults = SearchBarResultState.Results(persistentListOf(UserSearchResult(it, false))),
-                        selectedUsers = persistentListOf(it),
+                        selectedUsers = listOf(it),
                         isSearchActive = true,
                     )
                 }
@@ -38,10 +38,10 @@ open class StartChatStateProvider : PreviewParameterProvider<StartChatState> {
             aCreateRoomRootState(
                 startDmAction = AsyncAction.Failure(RuntimeException("error")),
                 userListState = aMatrixUser().let {
-                    aUserListState().copy(
+                    aUserListState(
                         searchQuery = it.userId.value,
                         searchResults = SearchBarResultState.Results(persistentListOf(UserSearchResult(it, false))),
-                        selectedUsers = persistentListOf(it),
+                        selectedUsers = listOf(it),
                         isSearchActive = true,
                     )
                 }

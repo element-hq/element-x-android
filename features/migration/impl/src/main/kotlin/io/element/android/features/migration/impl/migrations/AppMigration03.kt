@@ -10,13 +10,11 @@ package io.element.android.features.migration.impl.migrations
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
 
 /**
  * This performs the same operation as [AppMigration01], since we need to clear the local logs again.
  */
 @ContributesIntoSet(AppScope::class)
-@Inject
 class AppMigration03(
     private val migration01: AppMigration01,
 ) : AppMigration {

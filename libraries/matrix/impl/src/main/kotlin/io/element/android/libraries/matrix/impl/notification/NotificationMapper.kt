@@ -18,6 +18,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.room.isDm
+import io.element.android.libraries.matrix.impl.room.join.map
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import org.matrix.rustcomponents.sdk.NotificationEvent
 import org.matrix.rustcomponents.sdk.NotificationItem
@@ -59,6 +60,7 @@ class NotificationMapper(
                     timestamp = timestamp,
                     content = notificationContentMapper.map(item.event).getOrThrow(),
                     hasMention = item.hasMention.orFalse(),
+                    roomJoinRule = item.roomInfo.joinRule?.map(),
                 )
             }
         }

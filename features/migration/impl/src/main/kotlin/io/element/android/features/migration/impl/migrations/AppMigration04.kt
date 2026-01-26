@@ -11,7 +11,6 @@ package io.element.android.features.migration.impl.migrations
 import android.content.Context
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.annotations.ApplicationContext
 
@@ -19,13 +18,13 @@ import io.element.android.libraries.di.annotations.ApplicationContext
  * Remove notifications.bin file, used to store notification data locally.
  */
 @ContributesIntoSet(AppScope::class)
-@Inject
 class AppMigration04(
     @ApplicationContext private val context: Context,
 ) : AppMigration {
     companion object {
         internal const val NOTIFICATION_FILE_NAME = "notifications.bin"
     }
+
     override val order: Int = 4
 
     override suspend fun migrate(isFreshInstall: Boolean) {

@@ -10,7 +10,6 @@ package io.element.android.libraries.pushproviders.unifiedpush.troubleshoot
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.pushproviders.unifiedpush.R
 import io.element.android.libraries.pushproviders.unifiedpush.UnifiedPushConfig
 import io.element.android.libraries.pushproviders.unifiedpush.UnifiedPushDistributorProvider
@@ -24,7 +23,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
 @ContributesIntoSet(AppScope::class)
-@Inject
 class UnifiedPushTest(
     private val unifiedPushDistributorProvider: UnifiedPushDistributorProvider,
     private val openDistributorWebPageAction: OpenDistributorWebPageAction,
