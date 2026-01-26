@@ -35,6 +35,7 @@ import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.createroom.impl.R
 import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtom
@@ -46,7 +47,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.list.ListItemContent
-import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.modifiers.clearFocusOnTap
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
@@ -300,12 +300,12 @@ private fun RoomJoinRuleOptions(
                 leadingContent = ListItemContent.Custom {
                     RoundedIconAtom(
                         size = RoundedIconAtomSize.Big,
-                        resourceId = when (item) {
-                            JoinRuleItem.PublicVisibility.Public -> CompoundDrawables.ic_compound_public
-                            is JoinRuleItem.PublicVisibility.Restricted -> CompoundDrawables.ic_compound_space
+                        imageVector = when (item) {
+                            JoinRuleItem.PublicVisibility.Public -> CompoundIcons.Public()
+                            is JoinRuleItem.PublicVisibility.Restricted -> CompoundIcons.Space()
                             JoinRuleItem.PublicVisibility.AskToJoin,
-                            is JoinRuleItem.PublicVisibility.AskToJoinRestricted -> CompoundDrawables.ic_compound_user_add
-                            JoinRuleItem.Private -> CompoundDrawables.ic_compound_lock
+                            is JoinRuleItem.PublicVisibility.AskToJoinRestricted -> CompoundIcons.UserAdd()
+                            JoinRuleItem.Private -> CompoundIcons.Lock()
                         },
                         tint = if (isSelected) ElementTheme.colors.iconPrimary else ElementTheme.colors.iconSecondary,
                         backgroundTint = Color.Transparent,
