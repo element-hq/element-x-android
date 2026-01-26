@@ -8,6 +8,8 @@
 
 package io.element.android.features.invitepeople.impl
 
+import androidx.compose.foundation.text.input.clearText
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -80,7 +82,7 @@ class DefaultInvitePeoplePresenter(
         val roomMembers = remember { mutableStateOf<AsyncData<ImmutableList<RoomMember>>>(AsyncData.Loading()) }
         val selectedUsers = remember { mutableStateOf<ImmutableList<MatrixUser>>(persistentListOf()) }
         val searchResults = remember { mutableStateOf<SearchBarResultState<ImmutableList<InvitableUser>>>(SearchBarResultState.Initial()) }
-        var searchQuery by rememberSaveable { mutableStateOf("") }
+        val queryState = rememberTextFieldState()
         var searchActive by rememberSaveable { mutableStateOf(false) }
         val showSearchLoader = rememberSaveable { mutableStateOf(false) }
         val sendInvitesAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
@@ -129,6 +131,7 @@ class DefaultInvitePeoplePresenter(
                 fetchMembers(it, roomMembers)
             }
         }
+        val searchQuery = queryState.text.toString()
         LaunchedEffect(searchQuery, roomMembers) {
             performSearch(
                 searchResults = searchResults,
@@ -143,11 +146,9 @@ class DefaultInvitePeoplePresenter(
             when (event) {
                 is DefaultInvitePeopleEvents.OnSearchActiveChanged -> {
                     searchActive = event.active
-                    searchQuery = ""
-                }
-
-                is DefaultInvitePeopleEvents.UpdateSearchQuery -> {
-                    searchQuery = event.query
+                    if (!event.active) {
+                        queryState.clearText()
+                    }
                 }
 
                 is DefaultInvitePeopleEvents.ToggleUser -> {
@@ -162,7 +163,7 @@ class DefaultInvitePeoplePresenter(
                 }
                 is InvitePeopleEvents.CloseSearch -> {
                     searchActive = false
-                    searchQuery = ""
+                    queryState.clearText()
                 }
             }
         }
@@ -171,7 +172,7 @@ class DefaultInvitePeoplePresenter(
             room = room.map { },
             canInvite = selectedUsers.value.isNotEmpty() && !sendInvitesAction.value.isLoading(),
             selectedUsers = selectedUsers.value,
-            searchQuery = searchQuery,
+            searchQuery = queryState,
             isSearchActive = searchActive,
             searchResults = searchResults.value,
             showSearchLoader = showSearchLoader.value,

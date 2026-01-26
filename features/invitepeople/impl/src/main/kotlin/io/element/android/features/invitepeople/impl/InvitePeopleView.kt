@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -90,7 +91,7 @@ private fun InvitePeopleContentView(
 
         InvitePeopleSearchBar(
             modifier = Modifier.fillMaxWidth(),
-            query = state.searchQuery,
+            queryState = state.searchQuery,
             showLoader = state.showSearchLoader,
             selectedUsers = state.selectedUsers,
             state = state.searchResults,
@@ -102,7 +103,6 @@ private fun InvitePeopleContentView(
                     )
                 )
             },
-            onTextChange = { state.eventSink(DefaultInvitePeopleEvents.UpdateSearchQuery(it)) },
             onToggleUser = ::toggleUser,
         )
 
@@ -149,20 +149,18 @@ private fun InvitePeopleContentView(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun InvitePeopleSearchBar(
-    query: String,
+    queryState: TextFieldState,
     state: SearchBarResultState<ImmutableList<InvitableUser>>,
     showLoader: Boolean,
     selectedUsers: ImmutableList<MatrixUser>,
     active: Boolean,
     onActiveChange: (Boolean) -> Unit,
-    onTextChange: (String) -> Unit,
     onToggleUser: (MatrixUser) -> Unit,
     modifier: Modifier = Modifier,
     placeHolderTitle: String = stringResource(CommonStrings.common_search_for_someone),
 ) {
     SearchBar(
-        query = query,
-        onQueryChange = onTextChange,
+        queryState = queryState,
         active = active,
         onActiveChange = onActiveChange,
         modifier = modifier,

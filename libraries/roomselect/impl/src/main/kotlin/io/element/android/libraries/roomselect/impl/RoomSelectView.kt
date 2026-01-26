@@ -132,8 +132,7 @@ fun RoomSelectView(
             SearchBar(
                 modifier = Modifier.fillMaxWidth(),
                 placeHolderTitle = stringResource(CommonStrings.action_search),
-                query = state.query,
-                onQueryChange = { state.eventSink(RoomSelectEvents.UpdateQuery(it)) },
+                queryState = state.searchQuery,
                 active = state.isSearchActive,
                 onActiveChange = { state.eventSink(RoomSelectEvents.ToggleSearchActive) },
                 resultState = state.resultState,

@@ -8,6 +8,7 @@
 
 package io.element.android.features.invitepeople.impl
 
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import app.cash.turbine.ReceiveTurbine
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.invitepeople.api.InvitePeopleEvents
@@ -68,7 +69,7 @@ internal class DefaultInvitePeoplePresenterTest {
             assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
             assertThat(initialState.isSearchActive).isFalse()
             assertThat(initialState.canInvite).isFalse()
-            assertThat(initialState.searchQuery).isEmpty()
+            assertThat(initialState.searchQuery.text.toString()).isEmpty()
 
             cancelAndIgnoreRemainingEvents()
         }
@@ -85,15 +86,15 @@ internal class DefaultInvitePeoplePresenterTest {
 
             initialState.eventSink(DefaultInvitePeopleEvents.OnSearchActiveChanged(true))
 
-            val resultState = awaitItem()
+            val resultState = awaitItemAsDefault()
             assertThat(resultState.isSearchActive).isTrue()
-            resultState.eventSink(DefaultInvitePeopleEvents.UpdateSearchQuery("some query"))
-            assertThat(awaitItemAsDefault().searchQuery).isEqualTo("some query")
+            resultState.searchQuery.setTextAndPlaceCursorAtEnd("some query")
+            assertThat(awaitItemAsDefault().searchQuery.text.toString()).isEqualTo("some query")
             resultState.eventSink(InvitePeopleEvents.CloseSearch)
             skipItems(2)
             awaitItemAsDefault().also {
                 assertThat(it.isSearchActive).isFalse()
-                assertThat(it.searchQuery).isEmpty()
+                assertThat(it.searchQuery.text.toString()).isEmpty()
             }
             cancelAndIgnoreRemainingEvents()
         }
@@ -107,8 +108,8 @@ internal class DefaultInvitePeoplePresenterTest {
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         )
         presenter.test {
-            val initialState = awaitItem()
-            initialState.eventSink(DefaultInvitePeopleEvents.UpdateSearchQuery("some query"))
+            val initialState = awaitItemAsDefault()
+            initialState.searchQuery.setTextAndPlaceCursorAtEnd("some query")
             assertThat(repository.providedQuery).isEqualTo("some query")
             repository.emitState(UserSearchResultState(results = emptyList(), isSearching = true))
             skipItems(3)
@@ -132,10 +133,10 @@ internal class DefaultInvitePeoplePresenterTest {
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         )
         presenter.test {
-            val initialState = awaitItem()
+            val initialState = awaitItemAsDefault()
             skipItems(1)
 
-            initialState.eventSink(DefaultInvitePeopleEvents.UpdateSearchQuery("some query"))
+            initialState.searchQuery.setTextAndPlaceCursorAtEnd("some query")
             skipItems(1)
 
             assertThat(repository.providedQuery).isEqualTo("some query")
@@ -185,10 +186,10 @@ internal class DefaultInvitePeoplePresenterTest {
             coroutineDispatchers = coroutineDispatchers,
         )
         presenter.test {
-            val initialState = awaitItem()
+            val initialState = awaitItemAsDefault()
             skipItems(1)
 
-            initialState.eventSink(DefaultInvitePeopleEvents.UpdateSearchQuery("some query"))
+            initialState.searchQuery.setTextAndPlaceCursorAtEnd("some query")
             skipItems(1)
 
             assertThat(repository.providedQuery).isEqualTo("some query")
@@ -245,10 +246,10 @@ internal class DefaultInvitePeoplePresenterTest {
         )
 
         presenter.test {
-            val initialState = awaitItem()
+            val initialState = awaitItemAsDefault()
             skipItems(1)
 
-            initialState.eventSink(DefaultInvitePeopleEvents.UpdateSearchQuery("some query"))
+            initialState.searchQuery.setTextAndPlaceCursorAtEnd("some query")
             skipItems(1)
 
             assertThat(repository.providedQuery).isEqualTo("some query")
@@ -312,14 +313,14 @@ internal class DefaultInvitePeoplePresenterTest {
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         )
         presenter.test {
-            val initialState = awaitItem()
+            val initialState = awaitItemAsDefault()
             skipItems(1)
 
             val selectedUser = aMatrixUser()
 
             initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(selectedUser))
 
-            initialState.eventSink(DefaultInvitePeopleEvents.UpdateSearchQuery("some query"))
+            initialState.searchQuery.setTextAndPlaceCursorAtEnd("some query")
             skipItems(1)
 
             assertThat(repository.providedQuery).isEqualTo("some query")
@@ -350,13 +351,13 @@ internal class DefaultInvitePeoplePresenterTest {
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
         )
         presenter.test {
-            val initialState = awaitItem()
+            val initialState = awaitItemAsDefault()
             skipItems(1)
 
             val selectedUser = aMatrixUser()
 
             // Given a query is made
-            initialState.eventSink(DefaultInvitePeopleEvents.UpdateSearchQuery("some query"))
+            initialState.searchQuery.setTextAndPlaceCursorAtEnd("some query")
             skipItems(1)
 
             assertThat(repository.providedQuery).isEqualTo("some query")

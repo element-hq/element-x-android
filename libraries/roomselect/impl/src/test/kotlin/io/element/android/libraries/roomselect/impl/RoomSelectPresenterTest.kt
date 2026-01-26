@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.roomselect.impl
 
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
@@ -78,13 +79,13 @@ class RoomSelectPresenterTest {
             assertThat(result).isEqualTo(listOf(expectedRoomInfo))
             initialState.eventSink(RoomSelectEvents.ToggleSearchActive)
             skipItems(1)
-            initialState.eventSink(RoomSelectEvents.UpdateQuery("string not contained"))
+            initialState.searchQuery.setTextAndPlaceCursorAtEnd("string not contained")
             assertThat(
                 roomListService.allRooms.currentFilter.value
             ).isEqualTo(
                 RoomListFilter.NormalizedMatchRoomName("string not contained")
             )
-            assertThat(awaitItem().query).isEqualTo("string not contained")
+            assertThat(awaitItem().searchQuery.text.toString()).isEqualTo("string not contained")
             roomListService.postAllRooms(
                 emptyList()
             )

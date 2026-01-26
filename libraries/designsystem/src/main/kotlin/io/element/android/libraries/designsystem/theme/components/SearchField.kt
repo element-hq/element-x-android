@@ -22,8 +22,10 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.foundation.text.input.clearText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -34,7 +36,6 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -50,8 +51,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
  */
 @Composable
 fun SearchField(
-    value: String,
-    onValueChange: (String) -> Unit,
+    state: TextFieldState,
     modifier: Modifier = Modifier,
     placeholder: String? = null,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
@@ -59,67 +59,28 @@ fun SearchField(
     val focusManager = LocalFocusManager.current
     val isFocused by interactionSource.collectIsFocusedAsState()
     BasicTextField(
-        value = value,
-        onValueChange = onValueChange,
+        state = state,
         modifier = modifier,
         textStyle = textFieldStyle(),
-        singleLine = true,
+        lineLimits = TextFieldLineLimits.SingleLine,
         interactionSource = interactionSource,
         keyboardOptions = KeyboardOptions(
             imeAction = ImeAction.Search,
         ),
-        keyboardActions = KeyboardActions(
-            onSearch = {
-                focusManager.clearFocus()
-            }
-        ),
+        onKeyboardAction = {
+            focusManager.clearFocus()
+        },
         cursorBrush = SolidColor(ElementTheme.colors.textActionAccent),
-    ) { innerTextField ->
-        DecorationBox(
-            isFocused = isFocused,
-            placeholder = placeholder,
-            isTextEmpty = value.isEmpty(),
-            innerTextField = innerTextField,
-            onClear = { onValueChange("") },
-        )
-    }
-}
-
-@Composable
-fun SearchField(
-    value: TextFieldValue,
-    onValueChange: (TextFieldValue) -> Unit,
-    modifier: Modifier = Modifier,
-    placeholder: String? = null,
-    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
-) {
-    val focusManager = LocalFocusManager.current
-    val isFocused by interactionSource.collectIsFocusedAsState()
-    BasicTextField(
-        value = value,
-        onValueChange = onValueChange,
-        modifier = modifier,
-        textStyle = textFieldStyle(),
-        singleLine = true,
-        interactionSource = interactionSource,
-        keyboardOptions = KeyboardOptions(
-            imeAction = ImeAction.Search,
-        ),
-        keyboardActions = KeyboardActions(
-            onSearch = {
-                focusManager.clearFocus()
-            }
-        ),
-        cursorBrush = SolidColor(ElementTheme.colors.textActionAccent),
-    ) { innerTextField ->
-        DecorationBox(
-            isFocused = isFocused,
-            placeholder = placeholder,
-            isTextEmpty = value.text.isEmpty(),
-            innerTextField = innerTextField,
-            onClear = { TextFieldValue() }
-        )
-    }
+        decorator = { innerTextField ->
+            DecorationBox(
+                isFocused = isFocused,
+                placeholder = placeholder,
+                isTextEmpty = state.text.isEmpty(),
+                innerTextField = innerTextField,
+                onClear = { state.clearText() },
+            )
+        }
+    )
 }
 
 @Composable
@@ -211,14 +172,12 @@ private fun ContentToPreview() {
         verticalArrangement = spacedBy(8.dp)
     ) {
         SearchField(
-            onValueChange = {},
             placeholder = "Search",
-            value = "",
+            state = TextFieldState(""),
         )
         SearchField(
-            onValueChange = {},
             placeholder = "Search",
-            value = "Search term",
+            state = TextFieldState("Search term"),
         )
     }
 }

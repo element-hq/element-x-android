@@ -54,7 +54,7 @@ class AddRoomToSpaceViewTest {
             ),
         )
         rule.pressBack()
-        eventsRecorder.assertSingle(AddRoomToSpaceEvent.CloseSearch)
+        eventsRecorder.assertSingle(AddRoomToSpaceEvent.OnSearchActiveChanged(false))
     }
 
     @Test
@@ -67,12 +67,7 @@ class AddRoomToSpaceViewTest {
             ),
         )
         rule.clickOn(CommonStrings.action_save)
-        eventsRecorder.assertList(
-            listOf(
-                AddRoomToSpaceEvent.UpdateSearchQuery(""), // SearchBar initialization
-                AddRoomToSpaceEvent.Save,
-            )
-        )
+        eventsRecorder.assertSingle(AddRoomToSpaceEvent.Save)
     }
 
     @Config(qualifiers = "h1024dp")
@@ -87,12 +82,7 @@ class AddRoomToSpaceViewTest {
             ),
         )
         rule.onNodeWithText(suggestions.first().name!!).performClick()
-        eventsRecorder.assertList(
-            listOf(
-                AddRoomToSpaceEvent.UpdateSearchQuery(""), // SearchBar initialization
-                AddRoomToSpaceEvent.ToggleRoom(suggestions.first()),
-            )
-        )
+        eventsRecorder.assertSingle(AddRoomToSpaceEvent.ToggleRoom(suggestions.first()))
     }
 
     @Test

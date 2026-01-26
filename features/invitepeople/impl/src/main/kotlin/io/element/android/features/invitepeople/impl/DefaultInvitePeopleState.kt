@@ -8,6 +8,7 @@
 
 package io.element.android.features.invitepeople.impl
 
+import androidx.compose.foundation.text.input.TextFieldState
 import io.element.android.features.invitepeople.api.InvitePeopleEvents
 import io.element.android.features.invitepeople.api.InvitePeopleState
 import io.element.android.libraries.architecture.AsyncAction
@@ -19,7 +20,7 @@ import kotlinx.collections.immutable.ImmutableList
 data class DefaultInvitePeopleState(
     val room: AsyncData<Unit>,
     override val canInvite: Boolean,
-    val searchQuery: String,
+    val searchQuery: TextFieldState,
     val showSearchLoader: Boolean,
     val searchResults: SearchBarResultState<ImmutableList<InvitableUser>>,
     val selectedUsers: ImmutableList<MatrixUser>,

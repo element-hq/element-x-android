@@ -46,15 +46,14 @@ fun UserListView(
     ) {
         SearchUserBar(
             modifier = Modifier.fillMaxWidth(),
-            query = state.searchQuery,
-            state = state.searchResults,
+            queryState = state.searchQuery,
+            resultState = state.searchResults,
             selectedUsers = state.selectedUsers,
             active = state.isSearchActive,
             showLoader = state.showSearchLoader,
             isMultiSelectionEnable = state.isMultiSelectionEnabled,
             showBackButton = showBackButton,
             onActiveChange = { state.eventSink(UserListEvents.OnSearchActiveChanged(it)) },
-            onTextChange = { state.eventSink(UserListEvents.UpdateSearchQuery(it)) },
             onUserSelect = {
                 state.eventSink(UserListEvents.AddToSelection(it))
                 onSelectUser(it)

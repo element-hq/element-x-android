@@ -8,6 +8,7 @@
 
 package io.element.android.features.invitepeople.impl
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
@@ -108,7 +109,7 @@ private fun aDefaultInvitePeopleState(
     return DefaultInvitePeopleState(
         room = room,
         canInvite = canInvite,
-        searchQuery = searchQuery,
+        searchQuery = TextFieldState(initialText = searchQuery),
         searchResults = searchResults,
         selectedUsers = selectedUsers,
         isSearchActive = isSearchActive,

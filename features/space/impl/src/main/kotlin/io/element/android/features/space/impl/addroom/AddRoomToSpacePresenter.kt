@@ -7,6 +7,8 @@
 
 package io.element.android.features.space.impl.addroom
 
+import androidx.compose.foundation.text.input.clearText
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
@@ -43,7 +45,7 @@ class AddRoomToSpacePresenter(
     @Composable
     override fun present(): AddRoomToSpaceState {
         var selectedRooms: ImmutableList<SelectRoomInfo> by remember { mutableStateOf(persistentListOf()) }
-        var searchQuery by remember { mutableStateOf("") }
+        var searchQuery = rememberTextFieldState()
         var isSearchActive by remember { mutableStateOf(false) }
         val saveAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
 
@@ -51,8 +53,8 @@ class AddRoomToSpacePresenter(
         val dataSource = remember { dataSourceFactory.create(coroutineScope) }
 
         // Update search query in data source
-        LaunchedEffect(searchQuery) {
-            dataSource.setSearchQuery(searchQuery)
+        LaunchedEffect(searchQuery.text) {
+            dataSource.setSearchQuery(searchQuery.text.toString())
         }
         LaunchedEffect(isSearchActive) {
             dataSource.setIsActive(isSearchActive)
@@ -65,7 +67,7 @@ class AddRoomToSpacePresenter(
             derivedStateOf {
                 when {
                     filteredRooms.isNotEmpty() -> SearchBarResultState.Results(filteredRooms)
-                    isSearchActive && searchQuery.isNotEmpty() -> SearchBarResultState.NoResultsFound()
+                    isSearchActive && searchQuery.text.isNotEmpty() -> SearchBarResultState.NoResultsFound()
                     else -> SearchBarResultState.Initial()
                 }
             }
@@ -80,18 +82,11 @@ class AddRoomToSpacePresenter(
                         (selectedRooms + event.room).toImmutableList()
                     }
                 }
-                is AddRoomToSpaceEvent.UpdateSearchQuery -> {
-                    searchQuery = event.query
-                }
                 is AddRoomToSpaceEvent.OnSearchActiveChanged -> {
                     isSearchActive = event.active
                     if (!event.active) {
-                        searchQuery = ""
+                        searchQuery.clearText()
                     }
-                }
-                AddRoomToSpaceEvent.CloseSearch -> {
-                    isSearchActive = false
-                    searchQuery = ""
                 }
                 AddRoomToSpaceEvent.Save -> {
                     coroutineScope.addRoomsToSpace(

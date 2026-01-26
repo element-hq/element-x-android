@@ -76,7 +76,7 @@ class ChangeRolesViewTest {
             ),
         )
         rule.pressBackKey()
-        eventsRecorder.assertList(listOf(ChangeRolesEvent.QueryChanged(""), ChangeRolesEvent.Exit))
+        eventsRecorder.assertSingle(ChangeRolesEvent.Exit)
     }
 
     @Test
@@ -89,7 +89,7 @@ class ChangeRolesViewTest {
             ),
         )
         rule.pressBack()
-        eventsRecorder.assertList(listOf(ChangeRolesEvent.QueryChanged(""), ChangeRolesEvent.Exit))
+        eventsRecorder.assertSingle(ChangeRolesEvent.Exit)
     }
 
     @Test
@@ -102,7 +102,7 @@ class ChangeRolesViewTest {
             ),
         )
         rule.clickOn(CommonStrings.action_save)
-        eventsRecorder.assertList(listOf(ChangeRolesEvent.QueryChanged(""), ChangeRolesEvent.Save))
+        eventsRecorder.assertSingle(ChangeRolesEvent.Save)
     }
 
     @Test
@@ -115,7 +115,7 @@ class ChangeRolesViewTest {
             ),
         )
         rule.clickOn(CommonStrings.action_save)
-        eventsRecorder.assertList(listOf(ChangeRolesEvent.QueryChanged("")))
+        eventsRecorder.assertEmpty()
     }
 
     @Test
@@ -238,12 +238,7 @@ class ChangeRolesViewTest {
             label = contentDescription,
             useUnmergedTree = true,
         ).performClick()
-        eventsRecorder.assertList(
-            listOf(
-                ChangeRolesEvent.QueryChanged(""),
-                ChangeRolesEvent.UserSelectionToggled(userToDeselect),
-            )
-        )
+        eventsRecorder.assertSingle(ChangeRolesEvent.UserSelectionToggled(userToDeselect))
     }
 
     @Test
@@ -262,12 +257,7 @@ class ChangeRolesViewTest {
         )
         // Select the user from the user list
         rule.onNodeWithText("Carol").performClick()
-        eventsRecorder.assertList(
-            listOf(
-                ChangeRolesEvent.QueryChanged(""),
-                ChangeRolesEvent.UserSelectionToggled(userToSelect),
-            )
-        )
+        eventsRecorder.assertSingle(ChangeRolesEvent.UserSelectionToggled(userToSelect))
     }
 
     @Test
@@ -288,12 +278,7 @@ class ChangeRolesViewTest {
             text = "Bob",
             useUnmergedTree = true,
         )[1].performClick()
-        eventsRecorder.assertList(
-            listOf(
-                ChangeRolesEvent.QueryChanged(""),
-                ChangeRolesEvent.UserSelectionToggled(userToSelect),
-            )
-        )
+        eventsRecorder.assertSingle(ChangeRolesEvent.UserSelectionToggled(userToSelect))
     }
 
     private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setChangeRolesContent(

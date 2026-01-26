@@ -7,13 +7,14 @@
 
 package io.element.android.features.space.impl.addroom
 
+import androidx.compose.foundation.text.input.TextFieldState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
 import kotlinx.collections.immutable.ImmutableList
 
 data class AddRoomToSpaceState(
-    val searchQuery: String,
+    val searchQuery: TextFieldState,
     val isSearchActive: Boolean,
     val searchResults: SearchBarResultState<ImmutableList<SelectRoomInfo>>,
     val selectedRooms: ImmutableList<SelectRoomInfo>,

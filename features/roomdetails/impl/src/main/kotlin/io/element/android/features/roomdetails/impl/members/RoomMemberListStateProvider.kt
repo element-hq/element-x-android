@@ -8,6 +8,7 @@
 
 package io.element.android.features.roomdetails.impl.members
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationPermissions
@@ -88,7 +89,7 @@ internal fun aRoomMemberListState(
 ) = RoomMemberListState(
     roomMembers = roomMembers,
     filteredRoomMembers = roomMembers.map { it.filter(searchQuery) },
-    searchQuery = searchQuery,
+    searchQuery = TextFieldState(searchQuery),
     canInvite = canInvite,
     moderationState = moderationState,
     selectedSection = selectedSection,

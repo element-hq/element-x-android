@@ -8,6 +8,7 @@
 
 package io.element.android.features.startchat.impl.userlist
 
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -64,12 +65,13 @@ class DefaultUserListPresenter(
         }
         var isSearchActive by rememberSaveable { mutableStateOf(false) }
         val selectedUsers by userListDataStore.selectedUsers.collectAsState(emptyList())
-        var searchQuery by rememberSaveable { mutableStateOf("") }
+        val queryState = rememberTextFieldState()
         var searchResults: SearchBarResultState<ImmutableList<UserSearchResult>> by remember {
             mutableStateOf(SearchBarResultState.Initial())
         }
         var showSearchLoader by remember { mutableStateOf(false) }
 
+        val searchQuery = queryState.text.toString()
         LaunchedEffect(searchQuery) {
             searchResults = SearchBarResultState.Initial()
             showSearchLoader = false
@@ -86,14 +88,13 @@ class DefaultUserListPresenter(
         fun handleEvent(event: UserListEvents) {
             when (event) {
                 is UserListEvents.OnSearchActiveChanged -> isSearchActive = event.active
-                is UserListEvents.UpdateSearchQuery -> searchQuery = event.query
                 is UserListEvents.AddToSelection -> userListDataStore.selectUser(event.matrixUser)
                 is UserListEvents.RemoveFromSelection -> userListDataStore.removeUserFromSelection(event.matrixUser)
             }
         }
 
         return UserListState(
-            searchQuery = searchQuery,
+            searchQuery = queryState,
             searchResults = searchResults,
             selectedUsers = selectedUsers.toImmutableList(),
             isSearchActive = isSearchActive,

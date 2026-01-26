@@ -8,6 +8,7 @@
 
 package io.element.android.features.startchat.impl.userlist
 
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -41,7 +42,7 @@ class DefaultUserListPresenterTest {
         presenter.test {
             skipItems(1)
             val initialState = awaitItem()
-            assertThat(initialState.searchQuery).isEmpty()
+            assertThat(initialState.searchQuery.text.toString()).isEmpty()
             assertThat(initialState.isMultiSelectionEnabled).isFalse()
             assertThat(initialState.isSearchActive).isFalse()
             assertThat(initialState.selectedUsers).isEmpty()
@@ -61,7 +62,7 @@ class DefaultUserListPresenterTest {
         presenter.test {
             skipItems(1)
             val initialState = awaitItem()
-            assertThat(initialState.searchQuery).isEmpty()
+            assertThat(initialState.searchQuery.text.toString()).isEmpty()
             assertThat(initialState.isMultiSelectionEnabled).isTrue()
             assertThat(initialState.isSearchActive).isFalse()
             assertThat(initialState.selectedUsers).isEmpty()
@@ -86,14 +87,14 @@ class DefaultUserListPresenterTest {
             assertThat(awaitItem().isSearchActive).isTrue()
 
             val matrixIdQuery = "@name:matrix.org"
-            initialState.eventSink(UserListEvents.UpdateSearchQuery(matrixIdQuery))
-            assertThat(awaitItem().searchQuery).isEqualTo(matrixIdQuery)
+            initialState.searchQuery.setTextAndPlaceCursorAtEnd(matrixIdQuery)
+            assertThat(awaitItem().searchQuery.text.toString()).isEqualTo(matrixIdQuery)
             assertThat(userRepository.providedQuery).isEqualTo(matrixIdQuery)
             skipItems(1)
 
             val notMatrixIdQuery = "name"
-            initialState.eventSink(UserListEvents.UpdateSearchQuery(notMatrixIdQuery))
-            assertThat(awaitItem().searchQuery).isEqualTo(notMatrixIdQuery)
+            initialState.searchQuery.setTextAndPlaceCursorAtEnd(notMatrixIdQuery)
+            assertThat(awaitItem().searchQuery.text.toString()).isEqualTo(notMatrixIdQuery)
             assertThat(userRepository.providedQuery).isEqualTo(notMatrixIdQuery)
             skipItems(1)
 
@@ -117,7 +118,7 @@ class DefaultUserListPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
 
-            initialState.eventSink(UserListEvents.UpdateSearchQuery("alice"))
+            initialState.searchQuery.setTextAndPlaceCursorAtEnd("alice")
             assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
             assertThat(userRepository.providedQuery).isEqualTo("alice")
             skipItems(2)
@@ -168,7 +169,7 @@ class DefaultUserListPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
 
-            initialState.eventSink(UserListEvents.UpdateSearchQuery("alice"))
+            initialState.searchQuery.setTextAndPlaceCursorAtEnd("alice")
             assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
             assertThat(userRepository.providedQuery).isEqualTo("alice")
             skipItems(2)

@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.roomselect.impl
 
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
@@ -42,12 +43,13 @@ class RoomSelectPresenter(
     @Composable
     override fun present(): RoomSelectState {
         var selectedRooms by remember { mutableStateOf(persistentListOf<SelectRoomInfo>()) }
-        var searchQuery by remember { mutableStateOf("") }
+        val queryState = rememberTextFieldState()
         var isSearchActive by remember { mutableStateOf(false) }
 
         val coroutineScope = rememberCoroutineScope()
         val dataSource = remember { dataSourceFactory.create(coroutineScope) }
 
+        val searchQuery = queryState.text.toString()
         LaunchedEffect(searchQuery) {
             dataSource.setSearchQuery(searchQuery)
         }
@@ -77,7 +79,6 @@ class RoomSelectPresenter(
 //                    }
                 }
                 RoomSelectEvents.RemoveSelectedRoom -> selectedRooms = persistentListOf()
-                is RoomSelectEvents.UpdateQuery -> searchQuery = event.query
                 RoomSelectEvents.ToggleSearchActive -> isSearchActive = !isSearchActive
             }
         }
@@ -85,7 +86,7 @@ class RoomSelectPresenter(
         return RoomSelectState(
             mode = mode,
             resultState = searchResults,
-            query = searchQuery,
+            searchQuery = queryState,
             isSearchActive = isSearchActive,
             selectedRooms = selectedRooms,
             eventSink = ::handleEvent,

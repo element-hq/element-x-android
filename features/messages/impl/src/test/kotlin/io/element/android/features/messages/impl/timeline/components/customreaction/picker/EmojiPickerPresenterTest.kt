@@ -8,6 +8,7 @@
 
 package io.element.android.features.messages.impl.timeline.components.customreaction.picker
 
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import androidx.compose.runtime.InternalComposeApi
 import androidx.compose.runtime.currentComposer
 import androidx.compose.ui.platform.LocalConfiguration
@@ -40,19 +41,19 @@ class EmojiPickerPresenterTest {
     val warmUpRule = WarmUpRule()
 
     @Test
-    fun `UpdateSearchQuery loads new results`() = runTest {
+    fun `updating search query loads new results`() = runTest {
         testPresenter {
             skipItems(1)
 
             val initialState = awaitItem()
-            assertThat(initialState.searchQuery).isEmpty()
+            assertThat(initialState.searchQuery.text.toString()).isEmpty()
             assertThat(initialState.searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
 
-            initialState.eventSink(EmojiPickerEvents.UpdateSearchQuery("smile"))
-            assertThat(awaitItem().searchQuery).isEqualTo("smile")
+            initialState.searchQuery.setTextAndPlaceCursorAtEnd("smile")
+            assertThat(awaitItem().searchQuery.text.toString()).isEqualTo("smile")
 
             val stateWithResults = awaitItem()
-            assertThat(stateWithResults.searchQuery).isEqualTo("smile")
+            assertThat(stateWithResults.searchQuery.text.toString()).isEqualTo("smile")
             assertThat(stateWithResults.searchResults).isInstanceOf(SearchBarResultState.Results::class.java)
         }
     }

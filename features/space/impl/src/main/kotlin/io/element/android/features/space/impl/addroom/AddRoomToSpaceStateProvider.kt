@@ -7,6 +7,7 @@
 
 package io.element.android.features.space.impl.addroom
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
@@ -69,7 +70,7 @@ internal fun anAddRoomToSpaceState(
     eventSink: (AddRoomToSpaceEvent) -> Unit = {},
 ): AddRoomToSpaceState {
     return AddRoomToSpaceState(
-        searchQuery = searchQuery,
+        searchQuery = TextFieldState(searchQuery),
         searchResults = searchResults,
         selectedRooms = selectedRooms,
         isSearchActive = isSearchActive,

@@ -8,6 +8,7 @@
 
 package io.element.android.features.rolesandpermissions.impl.roles
 
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.RoomModeration
 import io.element.android.features.rolesandpermissions.impl.RoomMemberListDataSource
@@ -49,7 +50,7 @@ class ChangeRolesPresenterTest {
         presenter.test {
             with(awaitItem()) {
                 assertThat(role).isEqualTo(RoomMember.Role.Admin)
-                assertThat(query).isNull()
+                assertThat(searchQuery.text.toString()).isEmpty()
                 assertThat(isSearchActive).isFalse()
                 assertThat(searchResults).isInstanceOf(SearchBarResultState.Initial::class.java)
                 assertThat(selectedUsers).isEmpty()
@@ -206,7 +207,7 @@ class ChangeRolesPresenterTest {
     }
 
     @Test
-    fun `present - QueryChanged produces new results`() = runTest {
+    fun `present - updating query produces new results`() = runTest {
         val room = FakeJoinedRoom().apply {
             givenRoomMembersState(RoomMembersState.Ready(aRoomMemberList()))
         }
@@ -219,7 +220,7 @@ class ChangeRolesPresenterTest {
             assertThat(initialResults?.moderators).hasSize(1)
             assertThat(initialResults?.admins).hasSize(1)
 
-            initialState.eventSink(ChangeRolesEvent.QueryChanged("Alice"))
+            initialState.searchQuery.setTextAndPlaceCursorAtEnd("Alice")
             skipItems(1)
 
             val searchResults = (awaitItem().searchResults as? SearchBarResultState.Results)?.results

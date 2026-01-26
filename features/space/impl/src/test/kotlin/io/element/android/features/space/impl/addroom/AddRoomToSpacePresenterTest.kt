@@ -9,6 +9,7 @@
 
 package io.element.android.features.space.impl.addroom
 
+import androidx.compose.foundation.text.input.setTextAndPlaceCursorAtEnd
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
@@ -38,7 +39,7 @@ class AddRoomToSpacePresenterTest {
         presenter.test {
             val state = awaitItem()
             assertThat(state.selectedRooms).isEmpty()
-            assertThat(state.searchQuery).isEmpty()
+            assertThat(state.searchQuery.text.toString()).isEmpty()
             assertThat(state.isSearchActive).isFalse()
             assertThat(state.saveAction).isEqualTo(AsyncAction.Uninitialized)
             assertThat(state.canSave).isFalse()
@@ -78,17 +79,6 @@ class AddRoomToSpacePresenterTest {
     }
 
     @Test
-    fun `present - UpdateSearchQuery updates query`() = runTest {
-        val presenter = createAddRoomToSpacePresenter()
-        presenter.test {
-            val state = awaitItem()
-            state.eventSink(AddRoomToSpaceEvent.UpdateSearchQuery("test"))
-            val updatedState = awaitItem()
-            assertThat(updatedState.searchQuery).isEqualTo("test")
-        }
-    }
-
-    @Test
     fun `present - OnSearchActiveChanged activates search`() = runTest {
         val presenter = createAddRoomToSpacePresenter()
         presenter.test {
@@ -107,33 +97,14 @@ class AddRoomToSpacePresenterTest {
             // Activate search and set query
             state.eventSink(AddRoomToSpaceEvent.OnSearchActiveChanged(true))
             awaitItem()
-            state.eventSink(AddRoomToSpaceEvent.UpdateSearchQuery("test"))
+            state.searchQuery.setTextAndPlaceCursorAtEnd("test")
             awaitItem()
             // Deactivate search
             state.eventSink(AddRoomToSpaceEvent.OnSearchActiveChanged(false))
             advanceUntilIdle()
             val finalState = expectMostRecentItem()
             assertThat(finalState.isSearchActive).isFalse()
-            assertThat(finalState.searchQuery).isEmpty()
-        }
-    }
-
-    @Test
-    fun `present - CloseSearch deactivates and clears query`() = runTest {
-        val presenter = createAddRoomToSpacePresenter()
-        presenter.test {
-            val state = awaitItem()
-            // Activate search and set query
-            state.eventSink(AddRoomToSpaceEvent.OnSearchActiveChanged(true))
-            awaitItem()
-            state.eventSink(AddRoomToSpaceEvent.UpdateSearchQuery("test"))
-            awaitItem()
-            // Close search
-            state.eventSink(AddRoomToSpaceEvent.CloseSearch)
-            advanceUntilIdle()
-            val finalState = expectMostRecentItem()
-            assertThat(finalState.isSearchActive).isFalse()
-            assertThat(finalState.searchQuery).isEmpty()
+            assertThat(finalState.searchQuery.text.toString()).isEmpty()
         }
     }
 
@@ -168,11 +139,11 @@ class AddRoomToSpacePresenterTest {
             val state = awaitItem()
             state.eventSink(AddRoomToSpaceEvent.OnSearchActiveChanged(true))
             awaitItem()
-            state.eventSink(AddRoomToSpaceEvent.UpdateSearchQuery("nonexistent"))
+            state.searchQuery.setTextAndPlaceCursorAtEnd("nonexistent")
             advanceUntilIdle()
             val finalState = expectMostRecentItem()
             assertThat(finalState.isSearchActive).isTrue()
-            assertThat(finalState.searchQuery).isEqualTo("nonexistent")
+            assertThat(finalState.searchQuery.text).isEqualTo("nonexistent")
             assertThat(finalState.searchResults).isInstanceOf(SearchBarResultState.NoResultsFound::class.java)
         }
     }

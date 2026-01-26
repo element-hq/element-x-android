@@ -10,5 +10,4 @@ package io.element.android.features.messages.impl.timeline.components.customreac
 
 sealed interface EmojiPickerEvents {
     data class ToggleSearchActive(val isActive: Boolean) : EmojiPickerEvents
-    data class UpdateSearchQuery(val query: String) : EmojiPickerEvents
 }

@@ -64,7 +64,7 @@ fun AddRoomToSpaceView(
 
     fun onBack() {
         if (state.isSearchActive) {
-            state.eventSink(AddRoomToSpaceEvent.CloseSearch)
+            state.eventSink(AddRoomToSpaceEvent.OnSearchActiveChanged(false))
         } else {
             onBackClick()
         }
@@ -105,12 +105,11 @@ fun AddRoomToSpaceView(
             SearchBar(
                 modifier = Modifier.fillMaxWidth(),
                 placeHolderTitle = stringResource(CommonStrings.action_search),
-                query = state.searchQuery,
-                onQueryChange = { state.eventSink(AddRoomToSpaceEvent.UpdateSearchQuery(it)) },
+                queryState = state.searchQuery,
                 active = state.isSearchActive,
                 onActiveChange = { state.eventSink(AddRoomToSpaceEvent.OnSearchActiveChanged(it)) },
-                resultState = state.searchResults,
                 showBackButton = false,
+                resultState = state.searchResults,
                 contentPrefix = {
                     if (state.selectedRooms.isNotEmpty()) {
                         SelectedRoomsRow(
