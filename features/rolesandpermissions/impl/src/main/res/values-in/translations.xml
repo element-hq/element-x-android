@@ -8,11 +8,11 @@
   <string name="screen_room_change_permissions_moderators">"Admin dan moderator"</string>
   <string name="screen_room_change_permissions_remove_people">"Keluarkan orang-orang dan tolak permintaan untuk bergabung"</string>
   <string name="screen_room_change_permissions_room_avatar">"Ubah avatar ruangan"</string>
-  <string name="screen_room_change_permissions_room_details">"Sunting Ruangan"</string>
+  <string name="screen_room_change_permissions_room_details">"Edit detail"</string>
   <string name="screen_room_change_permissions_room_name">"Ubah nama ruangan"</string>
   <string name="screen_room_change_permissions_room_topic">"Ubah topik ruangan"</string>
   <string name="screen_room_change_permissions_send_messages">"Kirim pesan"</string>
-  <string name="screen_room_change_role_administrators_title">"Sunting Admin"</string>
+  <string name="screen_room_change_role_administrators_title">"Edit Admin"</string>
   <string name="screen_room_change_role_confirm_add_admin_description">"Anda tidak akan dapat mengurungkan tindakan ini. Anda mempromosikan pengguna untuk memiliki tingkat daya yang sama seperti Anda."</string>
   <string name="screen_room_change_role_confirm_add_admin_title">"Tambahkan Admin?"</string>
   <string name="screen_room_change_role_confirm_demote_self_action">"Turunkan"</string>
@@ -21,7 +21,7 @@
   <string name="screen_room_change_role_invited_member_name">"%1$s (Tertunda)"</string>
   <string name="screen_room_change_role_invited_member_name_android">"(Tertunda)"</string>
   <string name="screen_room_change_role_moderators_admin_section_footer">"Admin secara otomatis memiliki hak moderator"</string>
-  <string name="screen_room_change_role_moderators_title">"Sunting Moderator"</string>
+  <string name="screen_room_change_role_moderators_title">"Edit Moderator"</string>
   <string name="screen_room_change_role_section_administrators">"Admin"</string>
   <string name="screen_room_change_role_section_moderators">"Moderator"</string>
   <string name="screen_room_change_role_section_users">"Anggota"</string>

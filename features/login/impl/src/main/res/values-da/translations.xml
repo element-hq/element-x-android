@@ -60,6 +60,8 @@
   <string name="screen_qr_code_login_error_cancelled_title">"Anmodning om login annulleret"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"Login blev afvist på den anden enhed."</string>
   <string name="screen_qr_code_login_error_declined_title">"Login afvist"</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_subtitle">"Du behøver ikke gøre andet."</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_title">"Din anden enhed er allerede logget ind"</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"Login er udløbet. Prøv venligst igen."</string>
   <string name="screen_qr_code_login_error_expired_title">"Login blev ikke afsluttet i tide"</string>
   <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"Din anden enhed understøtter ikke at logge ind på %s med en QR-kode.

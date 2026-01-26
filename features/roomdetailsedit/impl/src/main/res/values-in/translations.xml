@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_room_details_edit_room_title">"Sunting Ruangan"</string>
+  <string name="screen_room_details_edit_room_title">"Edit detail"</string>
   <string name="screen_room_details_edition_error">"Terjadi kesalahan yang tidak diketahui dan informasinya tidak dapat diubah."</string>
   <string name="screen_room_details_edition_error_title">"Tidak dapat memperbarui ruangan"</string>
   <string name="screen_room_details_updating_room">"Memperbarui ruangan…"</string>

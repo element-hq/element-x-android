@@ -8,8 +8,10 @@
   <string name="screen_manage_authorized_spaces_unknown_spaces_section_title">"Iné priestory, ktorých nie ste členom"</string>
   <string name="screen_manage_authorized_spaces_your_spaces_section_title">"Vaše priestory"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Pridať adresu"</string>
+  <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Pripojiť sa môže ktokoľvek z autorizovaných priestorov, ale všetci ostatní musia o prístup požiadať."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Všetci musia požiadať o prístup."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_title">"Požiadať o pripojenie"</string>
+  <string name="screen_security_and_privacy_ask_to_join_single_space_members_option_description">"Ktokoľvek v %1$s sa môže pripojiť, ale všetci ostatní musia požiadať o prístup."</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Áno, povoliť šifrovanie"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Po aktivácii nie je možné zakázať šifrovanie pre miestnosť. História správ bude viditeľná len pre členov miestnosti, odkedy boli pozvaní alebo keď vstúpili do miestnosti. 
 Nikto okrem členov miestnosti nebude môcť čítať správy. 
@@ -20,7 +22,7 @@ To môže brániť správnemu fungovaniu robotov a premostení. Neodporúčame p
   <string name="screen_security_and_privacy_encryption_toggle_title">"Povoliť end-to-end šifrovanie"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Pripojiť sa môže ktokoľvek."</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Ktokoľvek"</string>
-  <string name="screen_security_and_privacy_room_access_footer">"Vyberte, ktorých členovia priestorov sa môžu pripojiť k tejto miestnosti bez pozvánky.  %1$s"</string>
+  <string name="screen_security_and_privacy_room_access_footer">"Vyberte, členovia ktorých priestorov sa môžu pripojiť k tejto miestnosti bez pozvánky. %1$s"</string>
   <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Spravovať priestory"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Pripojiť sa môžu iba pozvaní ľudia."</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Iba na pozvánku"</string>
@@ -34,10 +36,11 @@ To môže brániť správnemu fungovaniu robotov a premostení. Neodporúčame p
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Umožniť vyhľadanie tejto miestnosti v adresári verejných miestností %1$s"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_description">"Umožniť nájdenie vyhľadávaním vo verejnom adresári."</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Viditeľné vo verejnom adresári"</string>
-  <string name="screen_security_and_privacy_room_history_anyone_option_title">"Ktokoľvek"</string>
+  <string name="screen_security_and_privacy_room_history_anyone_option_title">"Ktokoľvek (história je verejná)"</string>
+  <string name="screen_security_and_privacy_room_history_section_footer">"Zmeny neovplyvnia predchádzajúce správy, iba nové. %1$s"</string>
   <string name="screen_security_and_privacy_room_history_section_header">"Kto môže čítať históriu"</string>
-  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Len pre členov, odkedy boli pozvaní"</string>
-  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Len členovia od zvolenia tejto možnosti"</string>
+  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Členovia, odkedy boli pozvaní"</string>
+  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Členovia (úplná história)"</string>
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Adresy miestností predstavujú spôsoby, ako nájsť a získať prístup k miestnostiam. To tiež zaisťuje, že môžete jednoducho zdieľať svoju miestnosť s ostatnými. 
 Môžete sa rozhodnúť zverejniť svoju miestnosť v adresári verejných miestností vášho domovského servera."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Zverejnenie miestnosti"</string>

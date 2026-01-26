@@ -27,6 +27,9 @@ Vous pouvez modifier cela à tout moment dans les paramètres du salon."</string
   <string name="screen_create_room_room_address_section_footer">"Vous aurez besoin d’une adresse pour qu’il soit visible dans le répertoire public."</string>
   <string name="screen_create_room_room_address_section_title">"Adresse"</string>
   <string name="screen_create_room_room_visibility_section_title">"Visibilité du salon"</string>
+  <string name="screen_create_room_space_selection_no_space_description">"(pas d’espace)"</string>
+  <string name="screen_create_room_space_selection_no_space_title">"Accueil"</string>
+  <string name="screen_create_room_space_selection_sheet_title">"Ajouter à l’espace"</string>
   <string name="screen_create_room_topic_label">"Sujet (facultatif)"</string>
   <string name="screen_create_room_topic_placeholder">"Ajouter une description…"</string>
 </resources>

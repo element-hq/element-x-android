@@ -60,6 +60,8 @@
   <string name="screen_qr_code_login_error_cancelled_title">"Žiadosť o prihlásenie bola zrušená"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"Prihlásenie bolo zamietnuté na druhom zariadení."</string>
   <string name="screen_qr_code_login_error_declined_title">"Prihlásenie bolo odmietnuté"</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_subtitle">"Nemusíte spraviť nič iné."</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_title">"Vaše druhé zariadenie je už prihlásené"</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"Platnosť prihlásenia vypršala. Skúste to prosím znova."</string>
   <string name="screen_qr_code_login_error_expired_title">"Prihlásenie nebolo včas dokončené"</string>
   <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"Vaše druhé zariadenie nepodporuje prihlásenie do aplikácie %s pomocou QR kódu.

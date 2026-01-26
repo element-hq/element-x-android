@@ -50,6 +50,7 @@ Você não tem nenhuma mensagem não lida!"</string>
   <string name="screen_roomlist_mark_as_read">"Marcar como lida"</string>
   <string name="screen_roomlist_mark_as_unread">"Marcar como não lida"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Esta sala foi atualizada"</string>
+  <string name="screen_roomlist_your_spaces">"Seus espaços"</string>
   <string name="session_verification_banner_message">"Parece que você está usando um novo dispositivo. Verifique com outro dispositivo para acessar suas mensagens criptografadas."</string>
   <string name="session_verification_banner_title">"Verifique se é você"</string>
 </resources>

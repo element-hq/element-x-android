@@ -21,7 +21,7 @@
   <string name="screen_room_attachment_source_files">"Lampiran"</string>
   <string name="screen_room_attachment_source_gallery">"Pustaka Foto &amp; Video"</string>
   <string name="screen_room_attachment_source_location">"Lokasi"</string>
-  <string name="screen_room_attachment_source_poll">"Pemungutan suara"</string>
+  <string name="screen_room_attachment_source_poll">"Jajak pendapat"</string>
   <string name="screen_room_attachment_text_formatting">"Pemformatan Teks"</string>
   <string name="screen_room_encrypted_history_banner">"Riwayat pesan saat ini tidak tersedia di ruangan ini"</string>
   <string name="screen_room_encrypted_history_banner_unverified">"Riwayat pesan tidak tersedia di ruangan ini. Verifikasi perangkat ini untuk melihat riwayat pesan."</string>

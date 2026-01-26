@@ -2,9 +2,12 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_room_change_permissions_administrators">"Admin"</string>
   <string name="screen_room_change_permissions_ban_people">"Forby folk"</string>
+  <string name="screen_room_change_permissions_change_settings">"Endre innstillinger"</string>
   <string name="screen_room_change_permissions_delete_messages">"Fjern meldinger"</string>
   <string name="screen_room_change_permissions_everyone">"Medlem"</string>
   <string name="screen_room_change_permissions_invite_people">"Inviter folk"</string>
+  <string name="screen_room_change_permissions_manage_space">"Administrer området"</string>
+  <string name="screen_room_change_permissions_manage_space_rooms">"Administrer rom"</string>
   <string name="screen_room_change_permissions_member_moderation">"Administrer medlemmer"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Meldinger og innhold"</string>
   <string name="screen_room_change_permissions_moderators">"Moderator"</string>
@@ -14,6 +17,7 @@
   <string name="screen_room_change_permissions_room_name">"Endre romnavn"</string>
   <string name="screen_room_change_permissions_room_topic">"Endre temaet til rommet"</string>
   <string name="screen_room_change_permissions_send_messages">"Send meldinger"</string>
+  <string name="screen_room_change_permissions_title">"Tillatelser"</string>
   <string name="screen_room_change_role_administrators_title">"Rediger administratorer"</string>
   <string name="screen_room_change_role_confirm_add_admin_description">"Du vil ikke kunne angre denne handlingen. Du forfremmer brukeren til å ha samme rettighetsnivå som deg."</string>
   <string name="screen_room_change_role_confirm_add_admin_title">"Legg til administrator?"</string>
@@ -59,10 +63,12 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"Meldinger og innhold"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderatorer"</string>
   <string name="screen_room_roles_and_permissions_owners">"Eiere"</string>
+  <string name="screen_room_roles_and_permissions_permissions_header">"Tillatelser"</string>
   <string name="screen_room_roles_and_permissions_reset">"Tilbakestill tillatelser"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Når du har tilbakestilt tillatelsene, mister du gjeldende innstillinger."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Vil du tilbakestille tillatelsene?"</string>
   <string name="screen_room_roles_and_permissions_roles_header">"Roller"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Romdetaljer"</string>
+  <string name="screen_room_roles_and_permissions_space_details">"Detaljer om området"</string>
   <string name="screen_room_roles_and_permissions_title">"Roller og tillatelser"</string>
 </resources>

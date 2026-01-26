@@ -15,14 +15,20 @@ Du kannst dies jederzeit in den Einstellungen des Chats ändern."</string>
   <string name="screen_create_room_public_option_title">"Öffentlicher Chatroom"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Jeder kann den Beitritt zum Chat erbitten, aber ein Admin oder Moderator muss die Anfrage akzeptieren."</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Anfrage zum Beitritt zulassen"</string>
+  <string name="screen_create_room_room_access_section_knocking_restricted_option_description">"Jeder in %1$s kann beitreten, aber alle anderen müssen den Beitritt anfragen."</string>
+  <string name="screen_create_room_room_access_section_knocking_restricted_option_title">"Beitritt anfragen"</string>
   <string name="screen_create_room_room_access_section_private_option_description">"Nur eingeladene Personen können beitreten."</string>
   <string name="screen_create_room_room_access_section_private_option_title">"Privat"</string>
   <string name="screen_create_room_room_access_section_public_option_description">"Jeder darf diesem Chat beitreten."</string>
   <string name="screen_create_room_room_access_section_public_option_title">"Jeder"</string>
+  <string name="screen_create_room_room_access_section_restricted_option_description">"Jeder in %1$s kann beitreten."</string>
+  <string name="screen_create_room_room_access_section_restricted_option_title">"Standard"</string>
   <string name="screen_create_room_room_access_section_title">"Wer hat Zugang"</string>
   <string name="screen_create_room_room_address_section_footer">"Du benötigst eine Adresse, um diesen Chat im öffentlichen Verzeichnis sichtbar zu machen."</string>
   <string name="screen_create_room_room_address_section_title">"Adresse"</string>
   <string name="screen_create_room_room_visibility_section_title">" Sichtbarkeit des Chats"</string>
+  <string name="screen_create_room_space_selection_no_space_description">"(kein Space)"</string>
+  <string name="screen_create_room_space_selection_sheet_title">"Space hinzufügen"</string>
   <string name="screen_create_room_topic_label">"Thema (optional)"</string>
   <string name="screen_create_room_topic_placeholder">"Beschreibung hinzufügen…"</string>
 </resources>

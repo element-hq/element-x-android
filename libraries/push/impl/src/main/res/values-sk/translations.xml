@@ -42,6 +42,8 @@
   <string name="notification_room_invite_body_with_sender">"%1$s vás pozval/a, aby ste sa pripojili k miestnosti"</string>
   <string name="notification_sender_me">"Ja"</string>
   <string name="notification_sender_mention_reply">"%1$s spomenul/a alebo odpovedal/a"</string>
+  <string name="notification_space_invite_body">"Boli ste pozvaní, aby ste sa pripojili do priestoru"</string>
+  <string name="notification_space_invite_body_with_sender">"%1$s vás pozval/a, aby ste sa pripojili k priestoru"</string>
   <string name="notification_test_push_notification_content">"Prezeráte si oznámenie! Kliknite na mňa!"</string>
   <string name="notification_thread_in_room">"Vlákno v %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>

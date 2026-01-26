@@ -60,6 +60,8 @@
   <string name="screen_qr_code_login_error_cancelled_title">"Bejelentkezési kérés törölve"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"A bejelentkezést elutasították a másik eszközön."</string>
   <string name="screen_qr_code_login_error_declined_title">"A bejelentkezés elutasítva"</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_subtitle">"Semmi mást nem kell tennie."</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_title">"A másik eszköz már be van jelentkezve"</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"A bejelentkezés lejárt. Próbálja újra."</string>
   <string name="screen_qr_code_login_error_expired_title">"A bejelentkezés nem fejeződött be időben"</string>
   <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"A másik eszköz nem támogatja QR-kóddal történő bejelentkezést az %sbe.

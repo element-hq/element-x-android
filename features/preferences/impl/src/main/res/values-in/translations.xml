@@ -34,7 +34,7 @@
   <string name="screen_edit_profile_display_name_placeholder">"Nama tampilan Anda"</string>
   <string name="screen_edit_profile_error">"Terjadi kesalahan yang tidak diketahui dan informasi tidak dapat diubah."</string>
   <string name="screen_edit_profile_error_title">"Tidak dapat memperbarui profil"</string>
-  <string name="screen_edit_profile_title">"Sunting profil"</string>
+  <string name="screen_edit_profile_title">"Edit profil"</string>
   <string name="screen_edit_profile_updating_details">"Memperbarui profil…"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Pengaturan tambahan"</string>
   <string name="screen_notification_settings_calls_label">"Panggilan audio dan video"</string>
