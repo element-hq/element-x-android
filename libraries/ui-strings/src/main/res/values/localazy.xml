@@ -334,6 +334,7 @@ Reason: %1$s."</string>
   <string name="common_server_url">"Server URL"</string>
   <string name="common_settings">"Settings"</string>
   <string name="common_share_space">"Share space"</string>
+  <string name="common_shared_history">"New members see history"</string>
   <string name="common_shared_location">"Shared location"</string>
   <string name="common_shared_space">"Shared space"</string>
   <string name="common_signing_out">"Signing out"</string>

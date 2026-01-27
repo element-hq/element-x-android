@@ -114,7 +114,7 @@ internal fun MessagesViewTopBar(
                     Icon(
                         imageVector = CompoundIcons.History(),
                         tint = ElementTheme.colors.iconInfoPrimary,
-                        contentDescription = null,
+                        contentDescription = stringResource(CommonStrings.common_shared_history),
                     )
                 }
             }
