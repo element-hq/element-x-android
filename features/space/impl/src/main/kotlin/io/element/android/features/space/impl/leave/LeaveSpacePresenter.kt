@@ -69,7 +69,7 @@ class LeaveSpacePresenter(
             // By default select all rooms that can be left
             val otherRoomsExcludingDm = otherRooms.filter { it.spaceRoom.isDirect != true }
             selectedRoomIds = otherRoomsExcludingDm
-                .filter { it.isLastAdmin.not() }
+                .filter { it.isLastOwner.not() }
                 .map { it.spaceRoom.roomId }
             leaveSpaceRooms = rooms.fold(
                 onSuccess = {
@@ -91,7 +91,7 @@ class LeaveSpacePresenter(
                 it.others.map { room ->
                     SelectableSpaceRoom(
                         spaceRoom = room.spaceRoom,
-                        isLastAdmin = room.isLastAdmin,
+                        isLastOwner = room.isLastOwner,
                         isSelected = selectedRoomIds.contains(room.spaceRoom.roomId),
                     )
                 }.toImmutableList()
@@ -110,7 +110,7 @@ class LeaveSpacePresenter(
                 LeaveSpaceEvents.SelectAllRooms -> {
                     selectedRoomIds = selectableSpaceRooms.dataOrNull()
                         .orEmpty()
-                        .filter { it.isLastAdmin.not() }
+                        .filter { it.isLastOwner.not() }
                         .map { it.spaceRoom.roomId }
                 }
                 is LeaveSpaceEvents.ToggleRoomSelection -> {
@@ -132,7 +132,7 @@ class LeaveSpacePresenter(
 
         return LeaveSpaceState(
             spaceName = leaveSpaceRooms.dataOrNull()?.current?.spaceRoom?.displayName,
-            isLastAdmin = leaveSpaceRooms.dataOrNull()?.current?.isLastAdmin == true,
+            isLastOwner = leaveSpaceRooms.dataOrNull()?.current?.isLastOwner == true,
             selectableSpaceRooms = selectableSpaceRooms,
             leaveSpaceAction = leaveSpaceAction.value,
             eventSink = ::handleEvent,

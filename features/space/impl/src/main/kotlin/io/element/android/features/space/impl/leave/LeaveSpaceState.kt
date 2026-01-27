@@ -15,7 +15,7 @@ import kotlinx.collections.immutable.toImmutableList
 
 data class LeaveSpaceState(
     val spaceName: String?,
-    val isLastAdmin: Boolean,
+    val isLastOwner: Boolean,
     val selectableSpaceRooms: AsyncData<ImmutableList<SelectableSpaceRoom>>,
     val leaveSpaceAction: AsyncAction<Unit>,
     val eventSink: (LeaveSpaceEvents) -> Unit,
@@ -25,7 +25,7 @@ data class LeaveSpaceState(
     private val selectableRooms: ImmutableList<SelectableSpaceRoom>
 
     init {
-        val partition = rooms.partition { it.isLastAdmin }
+        val partition = rooms.partition { it.isLastOwner }
         lastAdminRooms = partition.first.toImmutableList()
         selectableRooms = partition.second.toImmutableList()
     }
@@ -33,12 +33,12 @@ data class LeaveSpaceState(
     /**
      * True if we should show the quick action to select/deselect all rooms.
      */
-    val showQuickAction = isLastAdmin.not() && selectableRooms.isNotEmpty()
+    val showQuickAction = isLastOwner.not() && selectableRooms.isNotEmpty()
 
     /**
      * True if we should show the leave button.
      */
-    val showLeaveButton = isLastAdmin.not() && selectableSpaceRooms is AsyncData.Success
+    val showLeaveButton = isLastOwner.not() && selectableSpaceRooms is AsyncData.Success
 
     /**
      * True if there all the selectable rooms are selected.

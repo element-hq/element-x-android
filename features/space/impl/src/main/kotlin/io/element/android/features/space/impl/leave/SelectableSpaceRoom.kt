@@ -12,6 +12,6 @@ import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 
 data class SelectableSpaceRoom(
     val spaceRoom: SpaceRoom,
-    val isLastAdmin: Boolean,
+    val isLastOwner: Boolean,
     val isSelected: Boolean,
 )

@@ -94,7 +94,7 @@ fun LeaveSpaceView(
                 modifier = Modifier
                     .weight(1f),
             ) {
-                if (state.isLastAdmin.not()) {
+                if (state.isLastOwner.not()) {
                     when (state.selectableSpaceRooms) {
                         is AsyncData.Success -> {
                             // List rooms where the user is the only admin
@@ -132,7 +132,7 @@ fun LeaveSpaceView(
                     state.eventSink(LeaveSpaceEvents.LeaveSpace)
                 },
                 onCancel = onCancel,
-                showRolesAndPermissionsButton = state.isLastAdmin,
+                showRolesAndPermissionsButton = state.isLastOwner,
                 onRolesAndPermissionsClick = onRolesAndPermissionsClick,
             )
         }
@@ -162,11 +162,11 @@ private fun LeaveSpaceHeader(
             modifier = Modifier.padding(top = 0.dp, bottom = 8.dp, start = 24.dp, end = 24.dp),
             iconStyle = BigIcon.Style.AlertSolid,
             title = stringResource(
-                if (state.isLastAdmin) R.string.screen_leave_space_title_last_admin else R.string.screen_leave_space_title,
+                if (state.isLastOwner) R.string.screen_leave_space_title_last_admin else R.string.screen_leave_space_title,
                 state.spaceName ?: stringResource(CommonStrings.common_space)
             ),
             subTitle =
-                if (state.isLastAdmin) {
+                if (state.isLastOwner) {
                     stringResource(R.string.screen_leave_space_subtitle_last_admin)
                 } else if (state.selectableSpaceRooms is AsyncData.Success && state.selectableSpaceRooms.data.isNotEmpty()) {
                     if (state.hasOnlyLastAdminRoom) {
@@ -265,11 +265,11 @@ private fun SpaceItem(
             .toggleable(
                 value = selectableSpaceRoom.isSelected,
                 role = Role.Checkbox,
-                enabled = selectableSpaceRoom.isLastAdmin.not(),
+                enabled = selectableSpaceRoom.isLastOwner.not(),
                 onValueChange = { onClick() }
             )
             .clickable(
-                enabled = selectableSpaceRoom.isLastAdmin.not(),
+                enabled = selectableSpaceRoom.isLastOwner.not(),
                 // TODO
                 onClickLabel = null,
                 role = Role.Checkbox,
@@ -324,7 +324,7 @@ private fun SpaceItem(
                     room.numJoinedMembers,
                     room.numJoinedMembers
                 )
-                val subTitle = if (selectableSpaceRoom.isLastAdmin) {
+                val subTitle = if (selectableSpaceRoom.isLastOwner) {
                     stringResource(R.string.screen_leave_space_last_admin_info, membersCount)
                 } else {
                     membersCount
@@ -343,7 +343,7 @@ private fun SpaceItem(
             Checkbox(
                 checked = selectableSpaceRoom.isSelected,
                 onCheckedChange = null,
-                enabled = selectableSpaceRoom.isLastAdmin.not(),
+                enabled = selectableSpaceRoom.isLastOwner.not(),
             )
         }
     }

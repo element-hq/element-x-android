@@ -34,7 +34,7 @@ class LeaveSpaceStateProvider : PreviewParameterProvider<LeaveSpaceState> {
                                 displayName = "A long space name that should be truncated",
                                 worldReadable = true,
                             ),
-                            isLastAdmin = true,
+                            isLastOwner = true,
                         ),
                         aSelectableSpaceRoom(
                             spaceRoom = aSpaceRoom(
@@ -52,7 +52,7 @@ class LeaveSpaceStateProvider : PreviewParameterProvider<LeaveSpaceState> {
                             spaceRoom = aSpaceRoom(
                                 worldReadable = true,
                             ),
-                            isLastAdmin = true,
+                            isLastOwner = true,
                         ),
                         aSelectableSpaceRoom(
                             spaceRoom = aSpaceRoom(
@@ -70,7 +70,7 @@ class LeaveSpaceStateProvider : PreviewParameterProvider<LeaveSpaceState> {
                             spaceRoom = aSpaceRoom(
                                 worldReadable = true,
                             ),
-                            isLastAdmin = true,
+                            isLastOwner = true,
                         ),
                     )
                 ),
@@ -82,11 +82,11 @@ class LeaveSpaceStateProvider : PreviewParameterProvider<LeaveSpaceState> {
                             spaceRoom = aSpaceRoom(
                                 worldReadable = true,
                             ),
-                            isLastAdmin = true,
+                            isLastOwner = true,
                         ),
                         aSelectableSpaceRoom(
                             spaceRoom = aSpaceRoom(),
-                            isLastAdmin = true,
+                            isLastOwner = true,
                         ),
                     )
                 ),
@@ -107,19 +107,19 @@ class LeaveSpaceStateProvider : PreviewParameterProvider<LeaveSpaceState> {
                 selectableSpaceRooms = AsyncData.Failure(Exception("An error")),
             ),
             aLeaveSpaceState(
-                isLastAdmin = true,
+                isLastOwner = true,
             ),
         )
 }
 
 fun aLeaveSpaceState(
     spaceName: String? = "Space name",
-    isLastAdmin: Boolean = false,
+    isLastOwner: Boolean = false,
     selectableSpaceRooms: AsyncData<ImmutableList<SelectableSpaceRoom>> = AsyncData.Uninitialized,
     leaveSpaceAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
 ) = LeaveSpaceState(
     spaceName = spaceName,
-    isLastAdmin = isLastAdmin,
+    isLastOwner = isLastOwner,
     selectableSpaceRooms = selectableSpaceRooms,
     leaveSpaceAction = leaveSpaceAction,
     eventSink = { }
@@ -127,10 +127,10 @@ fun aLeaveSpaceState(
 
 fun aSelectableSpaceRoom(
     spaceRoom: SpaceRoom = aSpaceRoom(),
-    isLastAdmin: Boolean = false,
+    isLastOwner: Boolean = false,
     isSelected: Boolean = false,
 ) = SelectableSpaceRoom(
     spaceRoom = spaceRoom,
-    isLastAdmin = isLastAdmin,
+    isLastOwner = isLastOwner,
     isSelected = isSelected,
 )
