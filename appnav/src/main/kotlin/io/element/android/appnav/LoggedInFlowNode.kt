@@ -485,8 +485,9 @@ class LoggedInFlowNode(
                     }
                 }
                 createRoomEntryPoint
+                    .builder(parentNode = this, buildContext = buildContext, callback = callback)
                     .setIsSpace(true)
-                    .createNode(parentNode = this, buildContext = buildContext, callback = callback)
+                    .build()
             }
             is NavTarget.SecureBackup -> {
                 secureBackupEntryPoint.createNode(

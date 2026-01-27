@@ -14,13 +14,15 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeCreateRoomEntryPoint : CreateRoomEntryPoint {
-    override fun setIsSpace(isSpace: Boolean): CreateRoomEntryPoint = this
+    class Builder : CreateRoomEntryPoint.Builder {
+        override fun setIsSpace(isSpace: Boolean): Builder = this
+        override fun setParentSpace(parentSpaceId: RoomId): Builder = this
+        override fun build(): Node = lambdaError()
+    }
 
-    override fun setParentSpace(parentSpaceId: RoomId): CreateRoomEntryPoint = this
-
-    override fun createNode(
+    override fun builder(
         parentNode: Node,
         buildContext: BuildContext,
         callback: CreateRoomEntryPoint.Callback,
-    ): Node = lambdaError()
+    ): Builder = lambdaError()
 }

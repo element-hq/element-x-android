@@ -156,12 +156,13 @@ class SpaceFlowNode(
                     }
                 }
                 createRoomEntryPoint
-                    .setParentSpace(spaceRoomList.roomId)
-                    .createNode(
+                    .builder(
                         parentNode = this,
                         buildContext = buildContext,
                         callback = callback,
                     )
+                    .setParentSpace(spaceRoomList.roomId)
+                    .build()
             }
             NavTarget.AddRoom -> {
                 val callback = object : AddRoomToSpaceNode.Callback {

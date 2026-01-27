@@ -18,25 +18,31 @@ import io.element.android.libraries.matrix.api.core.RoomId
 
 @ContributesBinding(SessionScope::class)
 class DefaultCreateRoomEntryPoint : CreateRoomEntryPoint {
-    private var isSpace = false
-    private var parentSpaceId: RoomId? = null
+    class Builder(
+        private val parentNode: Node,
+        private val buildContext: BuildContext,
+        private val callback: CreateRoomEntryPoint.Callback,
+    ) : CreateRoomEntryPoint.Builder {
+        private var isSpace = false
+        private var parentSpaceId: RoomId? = null
 
-    override fun setIsSpace(isSpace: Boolean): CreateRoomEntryPoint {
-        this.isSpace = isSpace
-        return this
+        override fun setIsSpace(isSpace: Boolean): Builder {
+            this.isSpace = isSpace
+            return this
+        }
+
+        override fun setParentSpace(parentSpaceId: RoomId): Builder {
+            this.parentSpaceId = parentSpaceId
+            return this
+        }
+
+        override fun build(): Node {
+            val inputs = CreateRoomFlowNode.Inputs(isSpace = isSpace, parentSpaceId = parentSpaceId)
+            return parentNode.createNode<CreateRoomFlowNode>(buildContext, listOf(inputs, callback))
+        }
     }
 
-    override fun setParentSpace(parentSpaceId: RoomId): CreateRoomEntryPoint {
-        this.parentSpaceId = parentSpaceId
-        return this
-    }
-
-    override fun createNode(
-        parentNode: Node,
-        buildContext: BuildContext,
-        callback: CreateRoomEntryPoint.Callback,
-    ): Node {
-        val inputs = CreateRoomFlowNode.Inputs(isSpace = isSpace, parentSpaceId = parentSpaceId)
-        return parentNode.createNode<CreateRoomFlowNode>(buildContext, listOf(inputs, callback))
+    override fun builder(parentNode: Node, buildContext: BuildContext, callback: CreateRoomEntryPoint.Callback): CreateRoomEntryPoint.Builder {
+        return Builder(parentNode, buildContext, callback)
     }
 }

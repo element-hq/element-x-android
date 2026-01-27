@@ -37,17 +37,16 @@ class DefaultCreateRoomEntryPointTest {
                 plugins = plugins,
             )
         }
+        val buildContext = BuildContext.root(null)
+
         val callback = object : CreateRoomEntryPoint.Callback {
             override fun onRoomCreated(roomId: RoomId) = lambdaError()
         }
         val result = entryPoint
+            .builder(parentNode, buildContext, callback)
             .setIsSpace(true)
             .setParentSpace(A_ROOM_ID)
-            .createNode(
-                parentNode = parentNode,
-                buildContext = BuildContext.root(null),
-                callback = callback,
-            )
+            .build()
         assertThat(result.plugins).contains(callback)
     }
 }
