@@ -147,6 +147,7 @@ fun SpaceView(
                         onViewMembersClick = onViewMembersClick,
                         onManageRoomsClick = { state.eventSink(SpaceEvents.EnterManageMode) },
                         onAddRoomClick = onAddRoomClick,
+                        onCreateRoomClick = onCreateRoomClick,
                     )
                 }
             }
@@ -383,6 +384,7 @@ private fun SpaceViewTopBar(
     onViewMembersClick: () -> Unit,
     onManageRoomsClick: () -> Unit,
     onAddRoomClick: () -> Unit,
+    onCreateRoomClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     TopAppBar(
@@ -415,6 +417,14 @@ private fun SpaceViewTopBar(
                 onDismissRequest = { showMenu = false }
             ) {
                 if (showManageRoomsAction) {
+                    SpaceMenuItem(
+                        titleRes = CommonStrings.action_create_room,
+                        icon = CompoundIcons.Plus(),
+                        onClick = {
+                            showMenu = false
+                            onCreateRoomClick()
+                        }
+                    )
                     SpaceMenuItem(
                         titleRes = CommonStrings.action_add_existing_rooms,
                         icon = CompoundIcons.Room(),
