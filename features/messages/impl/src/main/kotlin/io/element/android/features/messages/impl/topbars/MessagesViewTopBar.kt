@@ -111,7 +111,8 @@ internal fun MessagesViewTopBar(
                 }
 
                 if (showSharedHistoryIcon) {
-                    Icon(imageVector = CompoundIcons.History(),
+                    Icon(
+                        imageVector = CompoundIcons.History(),
                         tint = ElementTheme.colors.iconInfoPrimary,
                         contentDescription = null,
                     )
