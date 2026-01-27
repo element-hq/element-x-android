@@ -38,7 +38,7 @@ class CreateRoomFlowNode(
     @Assisted plugins: List<Plugin>,
 ) : BaseFlowNode<CreateRoomFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.ConfigureRoom(isSpace = plugins.filterIsInstance<Inputs>().first().isSpace),
+        initialElement = initialElementFromInputs(plugins.filterIsInstance<Inputs>().first()),
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -55,7 +55,7 @@ class CreateRoomFlowNode(
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
             is NavTarget.ConfigureRoom -> {
-                val inputs = ConfigureRoomNode.Inputs(isSpace = navTarget.isSpace)
+                val inputs = ConfigureRoomNode.Inputs(isSpace = navTarget.isSpace, parentSpaceId = navTarget.parentSpaceId)
                 val callback = object : ConfigureRoomNode.Callback {
                     override fun onCreateRoomSuccess(roomId: RoomId) {
                         backstack.replace(NavTarget.AddPeople(roomId))
@@ -82,9 +82,14 @@ class CreateRoomFlowNode(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        data class ConfigureRoom(val isSpace: Boolean) : NavTarget
+        data class ConfigureRoom(val isSpace: Boolean, val parentSpaceId: RoomId?) : NavTarget
 
         @Parcelize
         data class AddPeople(val roomId: RoomId) : NavTarget
     }
 }
+
+private fun initialElementFromInputs(inputs: CreateRoomFlowNode.Inputs) = CreateRoomFlowNode.NavTarget.ConfigureRoom(
+    isSpace = inputs.isSpace,
+    parentSpaceId = inputs.parentSpaceId,
+)

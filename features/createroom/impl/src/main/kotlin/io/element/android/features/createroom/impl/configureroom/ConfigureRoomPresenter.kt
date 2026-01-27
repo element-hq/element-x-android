@@ -63,6 +63,7 @@ import kotlin.time.Duration.Companion.seconds
 @AssistedInject
 class ConfigureRoomPresenter(
     @Assisted private val isSpace: Boolean,
+    @Assisted private val initialParentSpaceId: RoomId?,
     private val dataStore: CreateRoomConfigStore,
     private val matrixClient: MatrixClient,
     private val mediaPickerProvider: PickerProvider,
@@ -75,7 +76,7 @@ class ConfigureRoomPresenter(
 ) : Presenter<ConfigureRoomState> {
     @AssistedFactory
     interface Factory {
-        fun create(isSpace: Boolean): ConfigureRoomPresenter
+        fun create(isSpace: Boolean, parentSpaceId: RoomId?): ConfigureRoomPresenter
     }
 
     private val cameraPermissionPresenter: PermissionsPresenter = permissionsPresenterFactory.create(android.Manifest.permission.CAMERA)
@@ -122,6 +123,9 @@ class ConfigureRoomPresenter(
             } else {
                 persistentListOf()
             }
+
+            val parentSpace = spaces.find { it.roomId == initialParentSpaceId }
+            parentSpace?.let { dataStore.setParentSpace(it) }
         }
 
         LaunchedEffect(cameraPermissionState.permissionGranted) {

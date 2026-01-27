@@ -42,11 +42,12 @@ class ConfigureRoomNode(
     @Parcelize
     data class Inputs(
         val isSpace: Boolean,
+        val parentSpaceId: RoomId?,
     ) : NodeInputs, Parcelable
 
     private val inputs = inputs<Inputs>()
 
-    private val presenter = presenterFactory.create(inputs.isSpace)
+    private val presenter = presenterFactory.create(inputs.isSpace, inputs.parentSpaceId)
 
     init {
         lifecycle.subscribe(
