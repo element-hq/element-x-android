@@ -532,6 +532,7 @@ class ConfigureRoomPresenterTest {
 
     private fun createConfigureRoomPresenter(
         isSpace: Boolean = false,
+        initialParenSpaceId: RoomId? = null,
         roomAliasHelper: RoomAliasHelper = FakeRoomAliasHelper(),
         dataStore: CreateRoomConfigStore = CreateRoomConfigStore(roomAliasHelper),
         matrixClient: MatrixClient = createMatrixClient(),
@@ -543,6 +544,7 @@ class ConfigureRoomPresenterTest {
         mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
     ) = ConfigureRoomPresenter(
         isSpace = isSpace,
+        initialParentSpaceId = initialParenSpaceId,
         dataStore = dataStore,
         matrixClient = matrixClient,
         mediaPickerProvider = pickerProvider,
