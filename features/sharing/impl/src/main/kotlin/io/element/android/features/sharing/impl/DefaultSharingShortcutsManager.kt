@@ -23,6 +23,7 @@ import coil3.toBitmap
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.SingleIn
 import dev.zacsweers.metro.Inject
+import io.element.android.features.sharing.api.SharingConstants
 import io.element.android.features.sharing.api.SharingRoomInfo
 import io.element.android.features.sharing.api.SharingShortcutsManager
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -42,29 +43,22 @@ class DefaultSharingShortcutsManager @Inject constructor(
         private const val PREFS_NAME = "sharing_shortcuts_prefs"
     }
 
-
     private val prefs: SharedPreferences by lazy {
         context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     }
 
     override suspend fun publishShortcutsForRooms(rooms: List<SharingRoomInfo>) {
         val shortcuts = rooms.mapNotNull { buildShortcutForRoom(it) }
-        if (shortcuts.isNotEmpty()) {
-            ShortcutManagerCompat.setDynamicShortcuts(context, shortcuts)
-            shortcuts.forEach { ShortcutManagerCompat.pushDynamicShortcut(context, it) }
-        } else {
-             ShortcutManagerCompat.removeAllDynamicShortcuts(context)
-        }
+        ShortcutManagerCompat.setDynamicShortcuts(context, shortcuts)
     }
 
     private suspend fun buildShortcutForRoom(room: SharingRoomInfo): ShortcutInfoCompat? {
-        val id = shortcutIdForRoom(room.roomId)
+        val id = shortcutIdForRoom(room.sessionId.value, room.roomId.value)
 
-        val baseIntent = Intent(Intent.ACTION_SEND).apply {
-            component = ComponentName(context.packageName, "io.element.android.features.sharing.impl.ShareReceiverActivity")
-            type = "*/*"
-            putExtra("room_id", room.roomId)
-            putExtra("session_id", room.sessionId)
+        val baseIntent = Intent(context, ShareReceiverActivity::class.java).apply {
+            action = Intent.ACTION_SEND
+            putExtra(SharingConstants.EXTRA_SHARE_TARGET_ROOM_ID, room.roomId.value)
+            putExtra(SharingConstants.EXTRA_SHARE_TARGET_SESSION_ID, room.sessionId.value)
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
 
@@ -79,8 +73,8 @@ class DefaultSharingShortcutsManager @Inject constructor(
 
         // store mapping in prefs so ShareReceiverActivity can resolve roomId (no DI required there).
         prefs.edit()
-            .putString(PREF_PREFIX + id, room.roomId)
-            .putString(PREF_PREFIX + "session_" + id, room.sessionId)
+            .putString(PREF_PREFIX + id, room.roomId.value)
+            .putString(PREF_PREFIX + "session_" + id, room.sessionId.value)
             .apply()
 
         return ShortcutInfoCompat.Builder(context, id)
@@ -93,7 +87,7 @@ class DefaultSharingShortcutsManager @Inject constructor(
             .setPerson(
                 androidx.core.app.Person.Builder()
                 .setName(room.displayName)
-                .setKey(room.roomId)
+                .setKey(createCompositeKey(room.sessionId.value, room.roomId.value))
                 .build()
             )
             .build()
@@ -102,7 +96,7 @@ class DefaultSharingShortcutsManager @Inject constructor(
     private suspend fun loadAvatar(room: SharingRoomInfo, isAdaptive: Boolean): Bitmap? {
         val sizeToken = if (isAdaptive) AvatarSize.ShareShortcut else AvatarSize.CurrentUserTopBar
         val avatarData = AvatarData(
-            id = room.roomId,
+            id = room.roomId.value,
             name = room.displayName,
             url = room.avatarUrl,
             size = sizeToken,
@@ -115,7 +109,7 @@ class DefaultSharingShortcutsManager @Inject constructor(
 
         return if (isAdaptive) {
             val density = context.resources.displayMetrics.density
-            val targetSize = (108 * density).toInt()
+            val targetSize = (AvatarSize.ShareShortcut.dp.value * density).toInt()
 
             // Scale the bitmap to the target size if needed
             if (bitmap.width != targetSize || bitmap.height != targetSize) {
@@ -128,17 +122,17 @@ class DefaultSharingShortcutsManager @Inject constructor(
         }
     }
 
-    override fun removeShortcutForRoom(roomId: String) {
-        val id = shortcutIdForRoom(roomId)
-        ShortcutManagerCompat.removeLongLivedShortcuts(context, listOf(id))
-        prefs.edit().remove(PREF_PREFIX + id).apply()
-    }
 
-    private fun shortcutIdForRoom(roomId: String): String {
+    private fun shortcutIdForRoom(sessionId: String, roomId: String): String {
+        val combined = createCompositeKey(sessionId, roomId)
         val md = MessageDigest.getInstance("SHA-256")
-        val bytes = md.digest(roomId.toByteArray(Charsets.UTF_8))
+        val bytes = md.digest(combined.toByteArray(Charsets.UTF_8))
         val hex = bytes.joinToString("") { "%02x".format(it) }
         return "room_" + hex.take(24)
+    }
+
+    private fun createCompositeKey(sessionId: String, roomId: String): String {
+        return "$sessionId/$roomId"
     }
 
     private fun safeShortLabel(displayName: String): String {
