@@ -58,9 +58,6 @@ class AddRoomToSpacePresenter(
         LaunchedEffect(searchQuery.text) {
             dataSource.setSearchQuery(searchQuery.text.toString())
         }
-        LaunchedEffect(isSearchActive) {
-            dataSource.setIsActive(isSearchActive)
-        }
 
         val suggestions by dataSource.suggestions.collectAsState(initial = persistentListOf())
 
@@ -110,6 +107,9 @@ class AddRoomToSpacePresenter(
                     if (hasAddedRooms) {
                         coroutineScope.launch { spaceRoomList.reset() }
                     }
+                }
+                is AddRoomToSpaceEvent.UpdateSearchVisibleRange -> coroutineScope.launch {
+                    dataSource.updateVisibleRange(event.range)
                 }
             }
         }

@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -47,6 +48,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.OnVisibleRangeChangeEffect
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -154,7 +156,12 @@ private fun RoomListSearchContent(
                 .padding(padding)
                 .consumeWindowInsets(padding)
         ) {
+            val lazyListState = rememberLazyListState()
+            OnVisibleRangeChangeEffect(lazyListState) { visibleRange ->
+                state.eventSink(RoomListSearchEvent.UpdateVisibleRange(visibleRange))
+            }
             LazyColumn(
+                state = lazyListState,
                 modifier = Modifier.weight(1f),
             ) {
                 items(

@@ -12,11 +12,17 @@ import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.lazy.LazyListLayoutInfo
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 
 /**
  * Returns whether the lazy list is currently scrolling up.
@@ -71,5 +77,22 @@ suspend fun LazyListState.animateScrollToItemCenter(index: Int) {
     // and then adjust according to the actual item size.
     layoutInfo.resolveItemOffsetToCenter(index)?.let { offset ->
         animateScrollToItem(index, offset)
+    }
+}
+
+@Composable
+fun OnVisibleRangeChangeEffect(lazyListState: LazyListState, onChange: (IntRange) -> Unit) {
+    val onChangeUpdated by rememberUpdatedState(onChange)
+    LaunchedEffect(lazyListState) {
+        snapshotFlow { lazyListState.layoutInfo.visibleItemsInfo }
+            .map { visibleItemsInfo ->
+                val firstItemIndex = visibleItemsInfo.firstOrNull()?.index ?: 0
+                val size = visibleItemsInfo.size
+                firstItemIndex until firstItemIndex + size
+            }
+            .distinctUntilChanged()
+            .collectLatest { visibleRange ->
+                onChangeUpdated(visibleRange)
+            }
     }
 }

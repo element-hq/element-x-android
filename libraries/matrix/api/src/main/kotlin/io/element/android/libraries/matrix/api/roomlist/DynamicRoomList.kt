@@ -8,12 +8,7 @@
 
 package io.element.android.libraries.matrix.api.roomlist
 
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 
 /**
  * RoomList with dynamic filtering and loading.
@@ -21,11 +16,7 @@ import kotlinx.coroutines.flow.onEach
  * It lets load rooms on demand and filter them.
  */
 interface DynamicRoomList : RoomList {
-    val currentFilter: StateFlow<RoomListFilter>
-    val loadedPages: StateFlow<Int>
     val pageSize: Int
-
-    val filteredSummaries: SharedFlow<List<RoomSummary>>
 
     /**
      * Load more rooms into the list if possible.
@@ -44,28 +35,13 @@ interface DynamicRoomList : RoomList {
     suspend fun updateFilter(filter: RoomListFilter)
 }
 
-/**
- * Offers a way to load all the rooms incrementally.
- * It will load more room until all are loaded.
- * If total number of rooms increase, it will load more pages if needed.
- * The number of rooms is independent of the filter.
- */
-fun DynamicRoomList.loadAllIncrementally(coroutineScope: CoroutineScope) {
-    combine(
-        loadedPages,
-        loadingState,
-    ) { loadedPages, loadingState ->
-        loadedPages to loadingState
+suspend fun DynamicRoomList.updateVisibleRange(
+    visibleRange: IntRange,
+    paginationThreshold: Int = pageSize * 3
+) {
+    val loadedCount = summaries.replayCache.firstOrNull().orEmpty().count()
+    val threshold = loadedCount - paginationThreshold
+    if (visibleRange.last >= threshold) {
+        loadMore()
     }
-        .onEach { (loadedPages, loadingState) ->
-            when (loadingState) {
-                is RoomList.LoadingState.Loaded -> {
-                    if (pageSize * loadedPages < loadingState.numberOfRooms) {
-                        loadMore()
-                    }
-                }
-                RoomList.LoadingState.NotLoaded -> Unit
-            }
-        }
-        .launchIn(coroutineScope)
 }

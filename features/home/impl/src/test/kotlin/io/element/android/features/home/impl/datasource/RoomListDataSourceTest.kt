@@ -42,7 +42,7 @@ class RoomListDataSourceTest {
             dateTimeObserver = dateTimeObserver,
         )
 
-        roomListDataSource.allRooms.test {
+        roomListDataSource.roomSummariesFlow.test {
             // Observe room list items changes
             roomListDataSource.launchIn(backgroundScope)
             // Get the initial room list
@@ -75,7 +75,7 @@ class RoomListDataSourceTest {
             ),
             dateTimeObserver = dateTimeObserver,
         )
-        roomListDataSource.allRooms.test {
+        roomListDataSource.roomSummariesFlow.test {
             // Observe room list items changes
             roomListDataSource.launchIn(backgroundScope)
             // Get the initial room list

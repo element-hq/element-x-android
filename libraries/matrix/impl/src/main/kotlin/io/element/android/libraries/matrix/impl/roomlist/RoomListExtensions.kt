@@ -21,9 +21,10 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.matrix.rustcomponents.sdk.Room
-import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind
+import org.matrix.rustcomponents.sdk.RoomListDynamicEntriesController
 import org.matrix.rustcomponents.sdk.RoomListEntriesListener
 import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
+import org.matrix.rustcomponents.sdk.RoomListEntriesDynamicFilterKind
 import org.matrix.rustcomponents.sdk.RoomListInterface
 import org.matrix.rustcomponents.sdk.RoomListLoadingState
 import org.matrix.rustcomponents.sdk.RoomListLoadingStateListener
@@ -57,8 +58,8 @@ fun RoomListInterface.loadingStateFlow(): Flow<RoomListLoadingState> =
 
 internal fun RoomListInterface.entriesFlow(
     pageSize: Int,
-    roomListDynamicEvents: Flow<RoomListDynamicEvents>,
-    initialFilterKind: RoomListEntriesDynamicFilterKind
+    initialFilterKind: RoomListEntriesDynamicFilterKind,
+    onControllerCreated: (RoomListDynamicEntriesController) -> Unit,
 ): Flow<List<RoomListEntriesUpdate>> =
     callbackFlow {
         val listener = object : RoomListEntriesListener {
@@ -73,19 +74,7 @@ internal fun RoomListInterface.entriesFlow(
         )
         val controller = result.controller()
         controller.setFilter(initialFilterKind)
-        roomListDynamicEvents.onEach { controllerEvents ->
-            when (controllerEvents) {
-                is RoomListDynamicEvents.SetFilter -> {
-                    controller.setFilter(controllerEvents.filter)
-                }
-                is RoomListDynamicEvents.LoadMore -> {
-                    controller.addOnePage()
-                }
-                is RoomListDynamicEvents.Reset -> {
-                    controller.resetToOnePage()
-                }
-            }
-        }.launchIn(this)
+        onControllerCreated(controller)
         awaitClose {
             result.entriesStream().cancelAndDestroy()
             controller.destroy()

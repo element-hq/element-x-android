@@ -57,8 +57,6 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
@@ -67,9 +65,6 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
-
-private const val EXTENDED_RANGE_SIZE = 40
-private const val SUBSCRIBE_TO_VISIBLE_ROOMS_DEBOUNCE_IN_MILLIS = 300L
 
 @Inject
 class RoomListPresenter(
@@ -119,7 +114,7 @@ class RoomListPresenter(
         fun handleEvent(event: RoomListEvent) {
             when (event) {
                 is RoomListEvent.UpdateVisibleRange -> coroutineScope.launch {
-                    updateVisibleRange(event.range)
+                    roomListDataSource.updateVisibleRange(event.range)
                 }
                 RoomListEvent.DismissRequestVerificationPrompt -> securityBannerDismissed = true
                 RoomListEvent.DismissBanner -> securityBannerDismissed = true
@@ -217,7 +212,7 @@ class RoomListPresenter(
         showNewNotificationSoundBanner: Boolean,
     ): RoomListContentState {
         val roomSummaries by produceState(initialValue = AsyncData.Loading()) {
-            roomListDataSource.allRooms.collect { value = AsyncData.Success(it) }
+            roomListDataSource.roomSummariesFlow.collect { value = AsyncData.Success(it) }
         }
         val loadingState by roomListDataSource.loadingState.collectAsState()
         val showEmpty by remember {
@@ -323,22 +318,5 @@ class RoomListPresenter(
         }
     }
 
-    private var currentUpdateVisibleRangeJob: Job? = null
-    private fun CoroutineScope.updateVisibleRange(range: IntRange) {
-        currentUpdateVisibleRangeJob?.cancel()
-        currentUpdateVisibleRangeJob = launch {
-            // Debounce the subscription to avoid subscribing to too many rooms
-            delay(SUBSCRIBE_TO_VISIBLE_ROOMS_DEBOUNCE_IN_MILLIS)
 
-            if (range.isEmpty()) return@launch
-            val currentRoomList = roomListDataSource.allRooms.first()
-            // Use extended range to 'prefetch' the next rooms info
-            val midExtendedRangeSize = EXTENDED_RANGE_SIZE / 2
-            val extendedRange = range.first until range.last + midExtendedRangeSize
-            val roomIds = extendedRange.mapNotNull { index ->
-                currentRoomList.getOrNull(index)?.roomId
-            }
-            roomListDataSource.subscribeToVisibleRooms(roomIds)
-        }
-    }
 }

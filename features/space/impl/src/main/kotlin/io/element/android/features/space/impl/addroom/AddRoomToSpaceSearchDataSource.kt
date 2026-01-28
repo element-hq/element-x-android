@@ -20,14 +20,13 @@ import io.element.android.libraries.matrix.api.room.recent.getRecentlyVisitedRoo
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
-import io.element.android.libraries.matrix.api.roomlist.loadAllIncrementally
+import io.element.android.libraries.matrix.api.roomlist.updateVisibleRange
 import io.element.android.libraries.matrix.api.spaces.SpaceRoomList
 import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
 import io.element.android.libraries.matrix.ui.model.toSelectRoomInfo
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -58,7 +57,6 @@ class AddRoomToSpaceSearchDataSource(
 
     private val roomList = roomListService.createRoomList(
         pageSize = PAGE_SIZE,
-        initialFilter = RoomListFilter.all(),
         source = RoomList.Source.All,
         coroutineScope = coroutineScope,
     )
@@ -87,7 +85,7 @@ class AddRoomToSpaceSearchDataSource(
     }
 
     val roomInfoList: Flow<ImmutableList<SelectRoomInfo>> = combine(
-        roomList.filteredSummaries,
+        roomList.summaries,
         spaceChildrenFlow,
         addedRoomIdsFlow,
     ) { roomSummaries, childIds, addedIds ->
@@ -109,12 +107,8 @@ class AddRoomToSpaceSearchDataSource(
             .toImmutableList()
     }.flowOn(coroutineDispatchers.computation)
 
-    suspend fun setIsActive(isActive: Boolean) = coroutineScope {
-        if (isActive) {
-            roomList.loadAllIncrementally(this)
-        } else {
-            roomList.reset()
-        }
+    suspend fun updateVisibleRange(visibleRange: IntRange) {
+        roomList.updateVisibleRange(visibleRange)
     }
 
     suspend fun setSearchQuery(searchQuery: String) {

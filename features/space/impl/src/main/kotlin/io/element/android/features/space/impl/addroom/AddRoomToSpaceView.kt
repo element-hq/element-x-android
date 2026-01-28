@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -43,6 +44,7 @@ import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.OnVisibleRangeChangeEffect
 import io.element.android.libraries.matrix.ui.components.SelectedRoom
 import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
 import io.element.android.libraries.matrix.ui.model.getAvatarData
@@ -121,6 +123,10 @@ fun AddRoomToSpaceView(
                     }
                 },
             ) { rooms ->
+                val lazyListState = rememberLazyListState()
+                OnVisibleRangeChangeEffect(lazyListState) { visibleRange ->
+                    state.eventSink(AddRoomToSpaceEvent.UpdateSearchVisibleRange(visibleRange))
+                }
                 LazyColumn {
                     items(rooms, key = { it.roomId }) { roomInfo ->
                         RoomListItem(

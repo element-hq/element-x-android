@@ -29,6 +29,7 @@ import io.element.android.libraries.roomselect.api.RoomSelectMode
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.launch
 
 @AssistedInject
 class RoomSelectPresenter(
@@ -80,6 +81,9 @@ class RoomSelectPresenter(
                 }
                 RoomSelectEvents.RemoveSelectedRoom -> selectedRooms = persistentListOf()
                 RoomSelectEvents.ToggleSearchActive -> isSearchActive = !isSearchActive
+                is RoomSelectEvents.UpdateVisibleRange -> coroutineScope.launch {
+                    dataSource.updateVisibleRange(event.range)
+                }
             }
         }
 

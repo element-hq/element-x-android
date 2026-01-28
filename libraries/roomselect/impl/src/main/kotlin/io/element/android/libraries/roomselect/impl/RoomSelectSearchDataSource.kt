@@ -16,7 +16,7 @@ import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
-import io.element.android.libraries.matrix.api.roomlist.loadAllIncrementally
+import io.element.android.libraries.matrix.api.roomlist.updateVisibleRange
 import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
 import io.element.android.libraries.matrix.ui.model.toSelectRoomInfo
 import kotlinx.collections.immutable.ImmutableList
@@ -46,14 +46,11 @@ class RoomSelectSearchDataSource(
 
     private val roomList = roomListService.createRoomList(
         pageSize = PAGE_SIZE,
-        initialFilter = RoomListFilter.all(),
         source = RoomList.Source.All,
         coroutineScope = coroutineScope
-    ).apply {
-        loadAllIncrementally(coroutineScope)
-    }
+    )
 
-    val roomInfoList: Flow<ImmutableList<SelectRoomInfo>> = roomList.filteredSummaries
+    val roomInfoList: Flow<ImmutableList<SelectRoomInfo>> = roomList.summaries
         .map { roomSummaries ->
             roomSummaries
                 .filter { it.info.currentUserMembership == CurrentUserMembership.JOINED }
@@ -62,6 +59,10 @@ class RoomSelectSearchDataSource(
                 .toImmutableList()
         }
         .flowOn(coroutineDispatchers.computation)
+
+    suspend fun updateVisibleRange(visibleRange: IntRange) {
+        roomList.updateVisibleRange(visibleRange)
+    }
 
     suspend fun setSearchQuery(searchQuery: String) = coroutineScope {
         val filter = if (searchQuery.isBlank()) {

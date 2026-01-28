@@ -44,7 +44,6 @@ class FakeRoomListService(
 
     override fun createRoomList(
         pageSize: Int,
-        initialFilter: RoomListFilter,
         source: RoomList.Source,
         coroutineScope: CoroutineScope,
     ): DynamicRoomList {

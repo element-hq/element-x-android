@@ -21,6 +21,7 @@ import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.launch
 
 @Inject
 class RoomListSearchPresenter(
@@ -37,10 +38,6 @@ class RoomListSearchPresenter(
         val coroutineScope = rememberCoroutineScope()
         val dataSource = remember { dataSourceFactory.create(coroutineScope) }
 
-        LaunchedEffect(isSearchActive) {
-            dataSource.setIsActive(isSearchActive)
-        }
-
         LaunchedEffect(searchQuery.text) {
             dataSource.setSearchQuery(searchQuery.text.toString())
         }
@@ -53,6 +50,9 @@ class RoomListSearchPresenter(
                 RoomListSearchEvent.ToggleSearchVisibility -> {
                     isSearchActive = !isSearchActive
                     searchQuery.clearText()
+                }
+                is RoomListSearchEvent.UpdateVisibleRange -> coroutineScope.launch {
+                    dataSource.updateVisibleRange(visibleRange = event.range)
                 }
             }
         }
