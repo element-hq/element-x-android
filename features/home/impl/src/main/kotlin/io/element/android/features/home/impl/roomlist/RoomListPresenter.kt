@@ -63,7 +63,6 @@ import io.element.android.services.analytics.api.watchers.AnalyticsColdStartWatc
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
-import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
@@ -117,12 +116,12 @@ class RoomListPresenter(
                 .collect { topRooms ->
                     val shortcuts = topRooms.map { summary ->
                         SharingRoomInfo(
-                            roomId = summary.roomId.value,
-                            sessionId = client.sessionId.value,
+                            sessionId = client.sessionId,
+                            roomId = summary.roomId,
                             displayName = summary.name ?: summary.roomId.value,
                             avatarUrl = summary.avatarData.url
                         )
-                    }.toPersistentList()
+                    }
                     sharingShortcutsManager.publishShortcutsForRooms(shortcuts)
                 }
         }
