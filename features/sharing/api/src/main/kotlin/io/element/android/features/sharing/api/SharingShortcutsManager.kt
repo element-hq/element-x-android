@@ -7,24 +7,21 @@
 
 package io.element.android.features.sharing.api
 
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+
 interface SharingShortcutsManager {
     /**
      * Publish shortcuts for the given rooms.
      * Call this from a background coroutine or viewModelScope ideally.
      */
     suspend fun publishShortcutsForRooms(rooms: List<SharingRoomInfo>)
-
-    /**
-     * Remove a room shortcut (call when user leaves the room).
-     * This removes the stored mapping as well.
-     */
-    fun removeShortcutForRoom(roomId: String)
 }
 
 /** Light-weight room descriptor used by the manager. */
 data class SharingRoomInfo(
-    val roomId: String,
-    val sessionId: String,
+    val sessionId: SessionId,
+    val roomId: RoomId,
     val displayName: String,
     val avatarUrl: String?,
 )

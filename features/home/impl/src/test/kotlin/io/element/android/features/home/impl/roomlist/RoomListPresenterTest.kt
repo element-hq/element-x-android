@@ -709,6 +709,6 @@ class RoomListPresenterTest {
 }
 
 class FakeSharingShortcutsManager : SharingShortcutsManager {
-    override suspend fun publishShortcutsForRooms(rooms: kotlinx.collections.immutable.ImmutableList<SharingRoomInfo>) {}
-    override fun removeShortcutForRoom(roomId: String) {}
+    override suspend fun publishShortcutsForRooms(rooms: List<SharingRoomInfo>) {}
+
 }

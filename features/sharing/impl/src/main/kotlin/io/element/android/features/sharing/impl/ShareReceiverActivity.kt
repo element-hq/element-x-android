@@ -13,6 +13,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.core.content.pm.ShortcutManagerCompat
 import io.element.android.features.share.api.ShareEntryPoint
+import io.element.android.features.sharing.api.SharingConstants
 
 
 class ShareReceiverActivity : ComponentActivity() {
@@ -35,8 +36,8 @@ class ShareReceiverActivity : ComponentActivity() {
 
         val shortcutId = incoming?.getStringExtra(Intent.EXTRA_SHORTCUT_ID)
         val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
-        val roomIdFromExtra = incoming?.getStringExtra("room_id")
-        val sessionIdFromExtra = incoming?.getStringExtra("session_id")
+        val roomIdFromExtra = incoming?.getStringExtra(SharingConstants.EXTRA_SHARE_TARGET_ROOM_ID)
+        val sessionIdFromExtra = incoming?.getStringExtra(SharingConstants.EXTRA_SHARE_TARGET_SESSION_ID)
         val resolvedRoomId = when {
             !shortcutId.isNullOrEmpty() -> {
                 prefs.getString(PREF_PREFIX + shortcutId, null) ?: roomIdFromExtra
@@ -138,7 +139,7 @@ class ShareReceiverActivity : ComponentActivity() {
                 putExtra(ShareEntryPoint.EXTRA_SHARE_TARGET_ROOM_ID, roomId)
             }
             if (sessionId != null) {
-                putExtra("session_id", sessionId)
+                putExtra(SharingConstants.EXTRA_SHARE_TARGET_SESSION_ID, sessionId)
             }
             if (!text.isNullOrEmpty()) putExtra(Intent.EXTRA_TEXT, text)
             if (!uris.isNullOrEmpty()) {
