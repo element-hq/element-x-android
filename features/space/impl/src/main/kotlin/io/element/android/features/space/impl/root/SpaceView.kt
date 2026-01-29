@@ -24,20 +24,26 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
@@ -81,7 +87,6 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
-import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import io.element.android.libraries.matrix.api.spaces.SpaceRoomVisibility
 import io.element.android.libraries.matrix.ui.components.JoinButton
@@ -115,6 +120,8 @@ fun SpaceView(
         }
     }
 
+    var headerAnimationProgress by remember { mutableFloatStateOf(0f) }
+
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -137,7 +144,6 @@ fun SpaceView(
                     exit = fadeOut()
                 ) {
                     SpaceViewTopBar(
-                        spaceInfo = state.spaceInfo,
                         canAccessSpaceSettings = state.canAccessSpaceSettings,
                         canEditSpaceGraph = state.canEditSpaceGraph,
                         showManageRoomsAction = state.showManageRoomsAction,
@@ -149,7 +155,18 @@ fun SpaceView(
                         onManageRoomsClick = { state.eventSink(SpaceEvents.EnterManageMode) },
                         onAddRoomClick = onAddRoomClick,
                         onCreateRoomClick = onCreateRoomClick,
-                    )
+                    ) {
+                        val roundedCornerShape = RoundedCornerShape(8.dp)
+                        SpaceAvatarAndNameRow(
+                            name = state.spaceInfo.name,
+                            avatarData = state.spaceInfo.getAvatarData(AvatarSize.TimelineRoom),
+                            modifier = Modifier
+                                // Apply a crude 'top half' filter so we only take into account the `0.5-1.0` range
+                                .alpha((headerAnimationProgress - 0.5f).coerceIn(0f, 1f) * 2)
+                                .clip(roundedCornerShape)
+                                .clickable(enabled = state.canAccessSpaceSettings, onClick = onSettingsClick)
+                        )
+                    }
                 }
             }
         },
@@ -170,6 +187,7 @@ fun SpaceView(
                         state.eventSink(SpaceEvents.ShowTopicViewer(topic))
                     },
                     onCreateRoomClick = onCreateRoomClick,
+                    onHeaderAnimationProgress = { headerAnimationProgress = it },
                 )
                 JoinFailuresEffect(
                     hasAnyFailure = state.hasAnyJoinFailures,
@@ -240,21 +258,46 @@ private fun TopicViewerBottomSheet(
 @Composable
 private fun SpaceViewContent(
     state: SpaceState,
+    lazyListState: LazyListState = rememberLazyListState(),
     onRoomClick: (spaceRoom: SpaceRoom) -> Unit,
     onTopicClick: (String) -> Unit,
     onCreateRoomClick: () -> Unit,
+    onHeaderAnimationProgress: (Float) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(modifier.fillMaxSize()) {
+    var headerHeight by remember { mutableIntStateOf(-1) }
+    var animationProgress by remember { mutableFloatStateOf(0f) }
+
+    LaunchedEffect(headerHeight, lazyListState.firstVisibleItemScrollOffset) {
+        if (headerHeight <= 0) return@LaunchedEffect
+
+        val newAnimationProgress = if (lazyListState.firstVisibleItemIndex == 0) {
+            (lazyListState.firstVisibleItemScrollOffset.toFloat() / headerHeight.toFloat()).coerceIn(0f, 1f)
+        } else {
+            1f
+        }
+        println("New animation progress: $newAnimationProgress")
+
+        animationProgress = newAnimationProgress
+
+        onHeaderAnimationProgress(animationProgress)
+    }
+
+    LazyColumn(
+        modifier = modifier.fillMaxSize(),
+        state = lazyListState,
+    ) {
         val spaceInfo = state.spaceInfo
         item(key = "space_header") {
             AnimatedVisibility(
-                !state.isManageMode,
+                modifier = Modifier.alpha(1f - animationProgress),
+                visible = !state.isManageMode,
                 enter = fadeIn() + expandVertically(),
                 exit = fadeOut() + shrinkVertically()
             ) {
                 Column {
                     SpaceHeaderView(
+                        modifier = Modifier.onSizeChanged { headerHeight = it.height },
                         avatarData = spaceInfo.getAvatarData(AvatarSize.SpaceHeader),
                         name = spaceInfo.name,
                         topic = spaceInfo.topic,
@@ -375,7 +418,6 @@ private fun LoadingMoreIndicator(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun SpaceViewTopBar(
-    spaceInfo: RoomInfo,
     canAccessSpaceSettings: Boolean,
     canEditSpaceGraph: Boolean,
     showManageRoomsAction: Boolean,
@@ -388,22 +430,14 @@ private fun SpaceViewTopBar(
     onAddRoomClick: () -> Unit,
     onCreateRoomClick: () -> Unit,
     modifier: Modifier = Modifier,
+    title: @Composable () -> Unit,
 ) {
     TopAppBar(
         modifier = modifier,
         navigationIcon = {
             BackButton(onClick = onBackClick)
         },
-        title = {
-            val roundedCornerShape = RoundedCornerShape(8.dp)
-            SpaceAvatarAndNameRow(
-                name = spaceInfo.name,
-                avatarData = spaceInfo.getAvatarData(AvatarSize.TimelineRoom),
-                modifier = Modifier
-                    .clip(roundedCornerShape)
-                    .clickable(enabled = canAccessSpaceSettings, onClick = onSettingsClick)
-            )
-        },
+        title = title,
         actions = {
             var showMenu by remember { mutableStateOf(false) }
             IconButton(
