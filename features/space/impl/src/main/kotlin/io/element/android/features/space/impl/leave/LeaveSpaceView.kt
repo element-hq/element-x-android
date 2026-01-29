@@ -12,8 +12,10 @@ package io.element.android.features.space.impl.leave
 
 import androidx.annotation.StringRes
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.heightIn
@@ -73,6 +75,7 @@ fun LeaveSpaceView(
 ) {
     HeaderFooterPage(
         modifier = modifier,
+        contentPadding = PaddingValues(bottom = 14.dp),
         topBar = {
             TopAppBar(
                 navigationIcon = {
@@ -150,7 +153,7 @@ private fun LeaveSpaceHeader(
 ) {
     Column {
         IconTitleSubtitleMolecule(
-            modifier = Modifier.padding(top = 0.dp, bottom = 8.dp, start = 24.dp, end = 24.dp),
+            modifier = Modifier.padding(top = 24.dp, bottom = 8.dp, start = 24.dp, end = 24.dp),
             iconStyle = BigIcon.Style.AlertSolid,
             title = if (state.needsOwnerChange) {
                 if (state.areCreatorsPrivileged) {
@@ -221,7 +224,7 @@ private fun LeaveSpaceButtons(
     onCancel: () -> Unit,
 ) {
     ButtonColumnMolecule(
-        modifier = Modifier.padding(16.dp)
+        modifier = Modifier.padding(top = 16.dp)
     ) {
         if (showLeaveButton) {
             val text = if (selectedRoomsCount > 0) {
@@ -272,6 +275,7 @@ private fun SpaceItem(
         modifier = Modifier
             .fillMaxWidth()
             .heightIn(min = 66.dp)
+            .padding(horizontal = 16.dp)
             .toggleable(
                 value = selectableSpaceRoom.isSelected,
                 role = Role.Checkbox,
@@ -286,9 +290,9 @@ private fun SpaceItem(
                 onClick = onClick,
             ),
         verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(16.dp),
     ) {
         Avatar(
-            modifier = Modifier.padding(horizontal = 16.dp),
             avatarData = room.getAvatarData(AvatarSize.LeaveSpaceRoom),
             avatarType = if (room.isSpace) AvatarType.Space() else AvatarType.Room(),
         )
