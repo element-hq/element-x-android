@@ -19,7 +19,7 @@ lifecycle = "2.10.0"
 activity = "1.12.2"
 media3 = "1.9.1"
 camera = "1.5.2"
-work = "2.11.0"
+work = "2.11.1"
 
 # Compose
 compose_bom = "2026.01.00"
