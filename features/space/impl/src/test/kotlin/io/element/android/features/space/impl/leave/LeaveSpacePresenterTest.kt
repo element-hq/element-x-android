@@ -227,6 +227,20 @@ class LeaveSpacePresenterTest {
         }
     }
 
+    @Test
+    fun `present - needsOwnerChange is false if user is the last joined member`() = runTest {
+        val presenter = createLeaveSpacePresenter(
+            leaveSpaceHandle = FakeLeaveSpaceHandle(
+                roomsResult = { Result.success(listOf(aLeaveSpaceRoom(spaceRoom = aSpaceRoom(numJoinedMembers = 1), isLastOwner = true))) },
+            )
+        )
+        presenter.test {
+            skipItems(3)
+            val state = awaitItem()
+            assertThat(state.needsOwnerChange).isFalse()
+        }
+    }
+
     private fun createLeaveSpacePresenter(
         leaveSpaceHandle: LeaveSpaceHandle = FakeLeaveSpaceHandle(),
     ): LeaveSpacePresenter {
