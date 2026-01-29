@@ -92,6 +92,7 @@ class LeaveSpacePresenter(
                     SelectableSpaceRoom(
                         spaceRoom = room.spaceRoom,
                         isLastOwner = room.isLastOwner,
+                        joinedMembersCount = room.spaceRoom.numJoinedMembers,
                         isSelected = selectedRoomIds.contains(room.spaceRoom.roomId),
                     )
                 }.toImmutableList()
@@ -132,7 +133,7 @@ class LeaveSpacePresenter(
 
         return LeaveSpaceState(
             spaceName = leaveSpaceRooms.dataOrNull()?.current?.spaceRoom?.displayName,
-            isLastOwner = leaveSpaceRooms.dataOrNull()?.current?.isLastOwner == true,
+            isLastOwner = leaveSpaceRooms.dataOrNull()?.current?.let { it.spaceRoom.numJoinedMembers > 1 && it.isLastOwner } == true,
             areCreatorsPrivileged = leaveSpaceRooms.dataOrNull()?.current?.areCreatorsPrivileged == true,
             selectableSpaceRooms = selectableSpaceRooms,
             leaveSpaceAction = leaveSpaceAction.value,

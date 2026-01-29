@@ -26,7 +26,7 @@ data class LeaveSpaceState(
     private val selectableRooms: ImmutableList<SelectableSpaceRoom>
 
     init {
-        val partition = rooms.partition { it.isLastOwner }
+        val partition = rooms.partition { it.isLastOwner && it.joinedMembersCount > 1 }
         lastAdminRooms = partition.first.toImmutableList()
         selectableRooms = partition.second.toImmutableList()
     }

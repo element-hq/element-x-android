@@ -134,9 +134,11 @@ fun aLeaveSpaceState(
 fun aSelectableSpaceRoom(
     spaceRoom: SpaceRoom = aSpaceRoom(),
     isLastOwner: Boolean = false,
+    joinedMembersCount: Int = 2,
     isSelected: Boolean = false,
 ) = SelectableSpaceRoom(
     spaceRoom = spaceRoom,
     isLastOwner = isLastOwner,
+    joinedMembersCount = joinedMembersCount,
     isSelected = isSelected,
 )

@@ -13,5 +13,6 @@ import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 data class SelectableSpaceRoom(
     val spaceRoom: SpaceRoom,
     val isLastOwner: Boolean,
+    val joinedMembersCount: Int,
     val isSelected: Boolean,
 )
