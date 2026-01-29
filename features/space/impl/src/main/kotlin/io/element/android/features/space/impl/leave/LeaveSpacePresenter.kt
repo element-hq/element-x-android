@@ -133,6 +133,7 @@ class LeaveSpacePresenter(
         return LeaveSpaceState(
             spaceName = leaveSpaceRooms.dataOrNull()?.current?.spaceRoom?.displayName,
             isLastOwner = leaveSpaceRooms.dataOrNull()?.current?.isLastOwner == true,
+            areCreatorsPrivileged = leaveSpaceRooms.dataOrNull()?.current?.areCreatorsPrivileged == true,
             selectableSpaceRooms = selectableSpaceRooms,
             leaveSpaceAction = leaveSpaceAction.value,
             eventSink = ::handleEvent,

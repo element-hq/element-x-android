@@ -41,6 +41,7 @@ class RustLeaveSpaceHandle(
             LeaveSpaceRoom(
                 spaceRoom = spaceRoomMapper.map(leaveSpaceRoom.spaceRoom),
                 isLastOwner = leaveSpaceRoom.isLastOwner,
+                areCreatorsPrivileged = leaveSpaceRoom.areCreatorsPrivileged,
             )
         }
     }

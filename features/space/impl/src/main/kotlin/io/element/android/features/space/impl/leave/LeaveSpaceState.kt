@@ -16,6 +16,7 @@ import kotlinx.collections.immutable.toImmutableList
 data class LeaveSpaceState(
     val spaceName: String?,
     val isLastOwner: Boolean,
+    val areCreatorsPrivileged: Boolean,
     val selectableSpaceRooms: AsyncData<ImmutableList<SelectableSpaceRoom>>,
     val leaveSpaceAction: AsyncAction<Unit>,
     val eventSink: (LeaveSpaceEvents) -> Unit,

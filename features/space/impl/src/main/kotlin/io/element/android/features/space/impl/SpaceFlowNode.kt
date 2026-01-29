@@ -22,10 +22,13 @@ import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
+import com.bumble.appyx.navmodel.backstack.operation.replace
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.createroom.api.CreateRoomEntryPoint
+import io.element.android.features.rolesandpermissions.api.ChangeRoomMemberRolesEntryPoint
+import io.element.android.features.rolesandpermissions.api.ChangeRoomMemberRolesListType
 import io.element.android.features.space.api.SpaceEntryPoint
 import io.element.android.features.space.impl.addroom.AddRoomToSpaceNode
 import io.element.android.features.space.impl.di.SpaceFlowGraph
@@ -38,10 +41,15 @@ import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.di.DependencyInjectionGraphOwner
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.spaces.SpaceService
 import io.element.android.libraries.matrix.api.spaces.loadAllIncrementally
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(RoomScope::class)
@@ -49,10 +57,12 @@ import kotlinx.parcelize.Parcelize
 class SpaceFlowNode(
     @Assisted val buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    room: JoinedRoom,
+    private val room: JoinedRoom,
     spaceService: SpaceService,
     graphFactory: SpaceFlowGraph.Factory,
     private val createRoomEntryPoint: CreateRoomEntryPoint,
+    private val changeRoomMemberRolesEntryPoint: ChangeRoomMemberRolesEntryPoint,
+    @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
 ) : BaseFlowNode<SpaceFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
@@ -80,6 +90,9 @@ class SpaceFlowNode(
 
         @Parcelize
         data object AddRoom : NavTarget
+
+        @Parcelize
+        data object ChangeOwners : NavTarget
     }
 
     override fun onBuilt() {
@@ -104,6 +117,10 @@ class SpaceFlowNode(
 
                     override fun navigateToRolesAndPermissions() {
                         backstack.push(NavTarget.Settings(SpaceSettingsFlowNode.NavTarget.RolesAndPermissions))
+                    }
+
+                    override fun navigateToChooseOwners() {
+                        backstack.replace(NavTarget.ChangeOwners)
                     }
                 }
                 createNode<LeaveSpaceNode>(buildContext, listOf(callback))
@@ -176,6 +193,29 @@ class SpaceFlowNode(
                     }
                 }
                 createNode<AddRoomToSpaceNode>(buildContext, listOf(callback))
+            }
+            NavTarget.ChangeOwners -> {
+                val node = changeRoomMemberRolesEntryPoint.createNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    room = room,
+                    listType = ChangeRoomMemberRolesListType.SelectNewOwnersWhenLeaving,
+                )
+
+                val completionProxy = node as ChangeRoomMemberRolesEntryPoint.NodeProxy
+                sessionCoroutineScope.launch {
+                    val changedOwners = withContext(NonCancellable) {
+                        completionProxy.waitForCompletion()
+                    }
+
+                    if (changedOwners) {
+                        backstack.replace(NavTarget.Leave)
+                    } else {
+                        backstack.pop()
+                    }
+                }
+
+                node
             }
         }
     }

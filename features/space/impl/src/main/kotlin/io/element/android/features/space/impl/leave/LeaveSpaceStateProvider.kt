@@ -109,17 +109,23 @@ class LeaveSpaceStateProvider : PreviewParameterProvider<LeaveSpaceState> {
             aLeaveSpaceState(
                 isLastOwner = true,
             ),
+            aLeaveSpaceState(
+                isLastOwner = true,
+                areCreatorsPrivileged = true,
+            ),
         )
 }
 
 fun aLeaveSpaceState(
     spaceName: String? = "Space name",
     isLastOwner: Boolean = false,
+    areCreatorsPrivileged: Boolean = false,
     selectableSpaceRooms: AsyncData<ImmutableList<SelectableSpaceRoom>> = AsyncData.Uninitialized,
     leaveSpaceAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
 ) = LeaveSpaceState(
     spaceName = spaceName,
     isLastOwner = isLastOwner,
+    areCreatorsPrivileged = areCreatorsPrivileged,
     selectableSpaceRooms = selectableSpaceRooms,
     leaveSpaceAction = leaveSpaceAction,
     eventSink = { }
