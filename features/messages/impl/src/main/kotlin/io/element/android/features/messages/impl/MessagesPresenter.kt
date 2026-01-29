@@ -210,7 +210,7 @@ class MessagesPresenter(
         //   * History sharing is enabled,
         //   * The room is encrypted, and:
         //   * The room's history_visibility allows future users to see content.
-        val topBarSharedHistoryIcon = if (isKeyShareOnInviteEnabled) roomInfo.sharedHistoryIcon() else SharedHistoryIcon.NONE;
+        val topBarSharedHistoryIcon = if (isKeyShareOnInviteEnabled) roomInfo.sharedHistoryIcon() else SharedHistoryIcon.NONE
 
         LifecycleResumeEffect(dmRoomMember, roomInfo.isEncrypted) {
             if (roomInfo.isEncrypted == true) {
@@ -302,13 +302,14 @@ class MessagesPresenter(
 
     private fun RoomInfo.sharedHistoryIcon(): SharedHistoryIcon {
         if (isEncrypted == true) {
-            if (historyVisibility == RoomHistoryVisibility.Shared)
-                return SharedHistoryIcon.SHARED;
-            else if (historyVisibility == RoomHistoryVisibility.WorldReadable)
-                return SharedHistoryIcon.WORLD_READABLE;
+            if (historyVisibility == RoomHistoryVisibility.Shared) {
+                return SharedHistoryIcon.SHARED
+            } else if (historyVisibility == RoomHistoryVisibility.WorldReadable) {
+                return SharedHistoryIcon.WORLD_READABLE
+            }
         }
 
-        return SharedHistoryIcon.NONE;
+        return SharedHistoryIcon.NONE
     }
 
     private fun RoomInfo.avatarData(): AvatarData {
