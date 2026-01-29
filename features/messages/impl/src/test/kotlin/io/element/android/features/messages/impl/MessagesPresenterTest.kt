@@ -1233,7 +1233,28 @@ class MessagesPresenterTest {
             awaitItem()
             runCurrent()
             val state = awaitItem()
-            assertThat(state.showSharedHistoryIcon).isTrue()
+            assertThat(state.topBarSharedHistoryIcon).isEqualTo(SharedHistoryIcon.SHARED)
+        }
+    }
+
+    @Test
+    fun `present - shows a "world_readable" icon if the room is encrypted and history is world_readable`() = runTest {
+        val presenter = createMessagesPresenter(
+            joinedRoom = FakeJoinedRoom(
+                baseRoom = FakeBaseRoom(
+                    roomPermissions = roomPermissions(),
+                    initialRoomInfo = aRoomInfo(isEncrypted = true, historyVisibility = RoomHistoryVisibility.WorldReadable),
+                ),
+            ),
+            featureFlagService = FakeFeatureFlagService(
+                initialState = mapOf(FeatureFlags.EnableKeyShareOnInvite.key to true)
+            )
+        )
+        presenter.testWithLifecycleOwner {
+            awaitItem()
+            runCurrent()
+            val state = awaitItem()
+            assertThat(state.topBarSharedHistoryIcon).isEqualTo(SharedHistoryIcon.WORLD_READABLE)
         }
     }
 

@@ -386,6 +386,7 @@ Reason: %1$s."</string>
   <string name="common_voice_message">"Voice message"</string>
   <string name="common_waiting">"Waiting…"</string>
   <string name="common_waiting_for_decryption_key">"Waiting for this message"</string>
+  <string name="common_world_readable_history">"Anyone can see history"</string>
   <string name="common_you">"You"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) shared this message since you were not in the room when it was sent."</string>
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s shared this message since you were not in the room when it was sent."</string>
