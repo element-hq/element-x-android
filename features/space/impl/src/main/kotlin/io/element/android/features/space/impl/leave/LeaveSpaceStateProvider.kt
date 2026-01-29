@@ -124,7 +124,7 @@ fun aLeaveSpaceState(
     leaveSpaceAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
 ) = LeaveSpaceState(
     spaceName = spaceName,
-    isLastOwner = isLastOwner,
+    needsOwnerChange = isLastOwner,
     areCreatorsPrivileged = areCreatorsPrivileged,
     selectableSpaceRooms = selectableSpaceRooms,
     leaveSpaceAction = leaveSpaceAction,

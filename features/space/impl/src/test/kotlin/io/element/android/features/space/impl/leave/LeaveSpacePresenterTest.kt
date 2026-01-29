@@ -39,7 +39,7 @@ class LeaveSpacePresenterTest {
         presenter.test {
             val state = awaitItem()
             assertThat(state.spaceName).isNull()
-            assertThat(state.isLastOwner).isFalse()
+            assertThat(state.needsOwnerChange).isFalse()
             assertThat(state.selectableSpaceRooms.isLoading()).isTrue()
             assertThat(state.leaveSpaceAction).isEqualTo(AsyncAction.Uninitialized)
             cancelAndIgnoreRemainingEvents()
@@ -82,7 +82,7 @@ class LeaveSpacePresenterTest {
             skipItems(2)
             val finalState = awaitItem()
             assertThat(finalState.spaceName).isEqualTo(A_SPACE_NAME)
-            assertThat(finalState.isLastOwner).isTrue()
+            assertThat(finalState.needsOwnerChange).isTrue()
             // The current state is not in the sub room list
             assertThat(finalState.selectableSpaceRooms.dataOrNull()!!).isEmpty()
         }
@@ -152,7 +152,7 @@ class LeaveSpacePresenterTest {
             skipItems(3)
             val state = awaitItem()
             assertThat(state.spaceName).isNull()
-            assertThat(state.isLastOwner).isFalse()
+            assertThat(state.needsOwnerChange).isFalse()
             val data = state.selectableSpaceRooms.dataOrNull()!!
             assertThat(data.size).isEqualTo(2)
             // Only one room is selectable as the user is the last admin in the other one

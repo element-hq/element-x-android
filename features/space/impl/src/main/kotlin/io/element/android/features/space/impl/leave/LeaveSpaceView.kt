@@ -92,14 +92,14 @@ fun LeaveSpaceView(
                     state.eventSink(LeaveSpaceEvents.LeaveSpace)
                 },
                 onCancel = onCancel,
-                showRolesAndPermissionsButton = state.isLastOwner && !state.areCreatorsPrivileged,
-                showChooseOwnersButton = state.isLastOwner && state.areCreatorsPrivileged,
+                showRolesAndPermissionsButton = state.needsOwnerChange && !state.areCreatorsPrivileged,
+                showChooseOwnersButton = state.needsOwnerChange && state.areCreatorsPrivileged,
                 onChooseOwnersButtonClick = onChooseOwnersClick,
                 onRolesAndPermissionsClick = onRolesAndPermissionsClick,
             )
         },
         content = {
-            if (state.isLastOwner.not()) {
+            if (state.needsOwnerChange.not()) {
                 LazyColumn(
                     modifier = Modifier.padding(top = 20.dp),
                 ) {
@@ -152,7 +152,7 @@ private fun LeaveSpaceHeader(
         IconTitleSubtitleMolecule(
             modifier = Modifier.padding(top = 0.dp, bottom = 8.dp, start = 24.dp, end = 24.dp),
             iconStyle = BigIcon.Style.AlertSolid,
-            title = if (state.isLastOwner) {
+            title = if (state.needsOwnerChange) {
                 if (state.areCreatorsPrivileged) {
                     stringResource(R.string.screen_leave_space_title_last_owner)
                 } else {
@@ -162,7 +162,7 @@ private fun LeaveSpaceHeader(
                 stringResource(R.string.screen_leave_space_title, state.spaceName ?: stringResource(CommonStrings.common_space))
             },
             subTitle =
-                if (state.isLastOwner) {
+                if (state.needsOwnerChange) {
                     if (state.areCreatorsPrivileged) {
                         stringResource(R.string.screen_leave_space_subtitle_last_owner, state.spaceName ?: stringResource(CommonStrings.common_space))
                     } else {

@@ -133,7 +133,7 @@ class LeaveSpacePresenter(
 
         return LeaveSpaceState(
             spaceName = leaveSpaceRooms.dataOrNull()?.current?.spaceRoom?.displayName,
-            isLastOwner = leaveSpaceRooms.dataOrNull()?.current?.let { it.spaceRoom.numJoinedMembers > 1 && it.isLastOwner } == true,
+            needsOwnerChange = leaveSpaceRooms.dataOrNull()?.current?.let { it.spaceRoom.numJoinedMembers > 1 && it.isLastOwner } == true,
             areCreatorsPrivileged = leaveSpaceRooms.dataOrNull()?.current?.areCreatorsPrivileged == true,
             selectableSpaceRooms = selectableSpaceRooms,
             leaveSpaceAction = leaveSpaceAction.value,
