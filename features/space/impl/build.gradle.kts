@@ -52,4 +52,5 @@ dependencies {
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.features.createroom.test)
     testImplementation(projects.features.invite.test)
+    testImplementation(projects.features.rolesandpermissions.test)
 }

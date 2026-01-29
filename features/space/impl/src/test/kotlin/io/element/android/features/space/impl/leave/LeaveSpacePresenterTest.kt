@@ -29,11 +29,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
 class LeaveSpacePresenterTest {
-    private val aSpace = aSpaceRoom(
-        roomId = A_SPACE_ID,
-        displayName = A_SPACE_NAME,
-    )
-
     @Test
     fun `present - initial state`() = runTest {
         val presenter = createLeaveSpacePresenter(
@@ -145,8 +140,8 @@ class LeaveSpacePresenterTest {
                 roomsResult = {
                     Result.success(
                         listOf(
-                            LeaveSpaceRoom(aSpaceRoom(roomId = A_ROOM_ID), isLastOwner = false),
-                            LeaveSpaceRoom(aSpaceRoom(roomId = A_ROOM_ID_2), isLastOwner = true),
+                            LeaveSpaceRoom(aSpaceRoom(roomId = A_ROOM_ID), isLastOwner = false, areCreatorsPrivileged = false),
+                            LeaveSpaceRoom(aSpaceRoom(roomId = A_ROOM_ID_2), isLastOwner = true, areCreatorsPrivileged = false),
                         )
                     )
                 },
@@ -241,13 +236,18 @@ class LeaveSpacePresenterTest {
     }
 }
 
+private val aSpace = aSpaceRoom(
+    roomId = A_SPACE_ID,
+    displayName = A_SPACE_NAME,
+    numJoinedMembers = 2,
+)
+
 private fun aLeaveSpaceRoom(
-    spaceRoom: SpaceRoom = aSpaceRoom(
-        roomId = A_SPACE_ID,
-        displayName = A_SPACE_NAME,
-    ),
+    spaceRoom: SpaceRoom = aSpace,
     isLastOwner: Boolean = false,
+    areCreatorsPrivileged: Boolean = false,
 ) = LeaveSpaceRoom(
     spaceRoom = spaceRoom,
     isLastOwner = isLastOwner,
+    areCreatorsPrivileged = areCreatorsPrivileged,
 )

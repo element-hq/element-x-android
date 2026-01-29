@@ -12,6 +12,7 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.testing.junit4.util.MainDispatcherRule
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.changeroommemberroles.test.FakeChangeRoomMemberRolesEntryPoint
 import io.element.android.features.createroom.api.FakeCreateRoomEntryPoint
 import io.element.android.features.space.api.SpaceEntryPoint
 import io.element.android.features.space.impl.di.FakeSpaceFlowGraph
@@ -22,6 +23,7 @@ import io.element.android.libraries.matrix.test.spaces.FakeSpaceRoomList
 import io.element.android.libraries.matrix.test.spaces.FakeSpaceService
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.node.TestParentNode
+import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
@@ -33,7 +35,7 @@ class DefaultSpaceEntryPointTest {
     val mainDispatcherRule = MainDispatcherRule()
 
     @Test
-    fun `test node builder`() {
+    fun `test node builder`() = runTest {
         val entryPoint = DefaultSpaceEntryPoint()
         val nodeInputs = SpaceEntryPoint.Inputs(A_ROOM_ID)
         val parentNode = TestParentNode.create { buildContext, plugins ->
@@ -46,6 +48,8 @@ class DefaultSpaceEntryPointTest {
                 room = FakeJoinedRoom(),
                 graphFactory = FakeSpaceFlowGraph.Factory,
                 createRoomEntryPoint = FakeCreateRoomEntryPoint(),
+                changeRoomMemberRolesEntryPoint = FakeChangeRoomMemberRolesEntryPoint(),
+                sessionCoroutineScope = backgroundScope,
             )
         }
         val callback = object : SpaceEntryPoint.Callback {
