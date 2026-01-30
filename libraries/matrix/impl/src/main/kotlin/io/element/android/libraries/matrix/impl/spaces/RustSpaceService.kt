@@ -16,6 +16,7 @@ import io.element.android.libraries.matrix.api.spaces.LeaveSpaceHandle
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import io.element.android.libraries.matrix.api.spaces.SpaceRoomList
 import io.element.android.libraries.matrix.api.spaces.SpaceService
+import io.element.android.libraries.matrix.api.spaces.SpaceServiceFilter
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.CoroutineDispatcher
@@ -31,9 +32,11 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.SpaceFilterUpdate
 import org.matrix.rustcomponents.sdk.SpaceListUpdate
 import org.matrix.rustcomponents.sdk.SpaceServiceInterface
 import org.matrix.rustcomponents.sdk.SpaceServiceJoinedSpacesListener
+import org.matrix.rustcomponents.sdk.SpaceServiceSpaceFiltersListener
 import timber.log.Timber
 import org.matrix.rustcomponents.sdk.SpaceService as ClientSpaceService
 
@@ -45,11 +48,19 @@ class RustSpaceService(
     private val analyticsService: AnalyticsService,
 ) : SpaceService {
     private val spaceRoomMapper = SpaceRoomMapper()
+    private val spaceFilterMapper = SpaceServiceFilterMapper(spaceRoomMapper)
+
     override val topLevelSpacesFlow = MutableSharedFlow<List<SpaceRoom>>(replay = 1, extraBufferCapacity = 1)
     private val spaceListUpdateProcessor = SpaceListUpdateProcessor(
         spaceRoomsFlow = topLevelSpacesFlow,
         mapper = spaceRoomMapper,
         analyticsService = analyticsService,
+    )
+
+    override val spaceFiltersFlow = MutableSharedFlow<List<SpaceServiceFilter>>(replay = 1, extraBufferCapacity = 1)
+    private val spaceFilterUpdateProcessor = SpaceServiceFilterUpdateProcessor(
+        spaceFiltersFlow = spaceFiltersFlow,
+        mapper = spaceFilterMapper,
     )
 
     override suspend fun joinedParents(spaceId: RoomId): Result<List<SpaceRoom>> = withContext(sessionDispatcher) {
@@ -115,6 +126,13 @@ class RustSpaceService(
                 spaceListUpdateProcessor.postUpdates(updates)
             }
             .launchIn(sessionCoroutineScope)
+
+        innerSpaceService
+            .spaceFilterListUpdate()
+            .onEach { updates ->
+                spaceFilterUpdateProcessor.postUpdates(updates)
+            }
+            .launchIn(sessionCoroutineScope)
     }
 }
 
@@ -133,4 +151,21 @@ internal fun SpaceServiceInterface.spaceListUpdate(): Flow<List<SpaceListUpdate>
         }
     }.catch {
         Timber.d(it, "spaceDiffFlow() failed")
+    }.buffer(Channel.UNLIMITED)
+
+internal fun SpaceServiceInterface.spaceFilterListUpdate(): Flow<List<SpaceFilterUpdate>> =
+    callbackFlow {
+        val listener = object : SpaceServiceSpaceFiltersListener {
+            override fun onUpdate(filterUpdates: List<SpaceFilterUpdate>) {
+                trySendBlocking(filterUpdates)
+            }
+        }
+        Timber.d("Open spaceFilterDiffFlow for SpaceServiceInterface ${this@spaceFilterListUpdate}")
+        val taskHandle = subscribeToSpaceFilters(listener)
+        awaitClose {
+            Timber.d("Close spaceFilterDiffFlow for SpaceServiceInterface ${this@spaceFilterListUpdate}")
+            taskHandle.cancelAndDestroy()
+        }
+    }.catch {
+        Timber.d(it, "spaceFilterListUpdate() failed")
     }.buffer(Channel.UNLIMITED)

@@ -13,6 +13,7 @@ import io.element.android.libraries.matrix.api.spaces.LeaveSpaceHandle
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
 import io.element.android.libraries.matrix.api.spaces.SpaceRoomList
 import io.element.android.libraries.matrix.api.spaces.SpaceService
+import io.element.android.libraries.matrix.api.spaces.SpaceServiceFilter
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -34,6 +35,14 @@ class FakeSpaceService(
 
     suspend fun emitTopLevelSpaces(value: List<SpaceRoom>) {
         _topLevelSpacesFlow.emit(value)
+    }
+
+    private val _spaceServiceFiltersFlow = MutableSharedFlow<List<SpaceServiceFilter>>()
+    override val spaceFiltersFlow: SharedFlow<List<SpaceServiceFilter>>
+        get() = _spaceServiceFiltersFlow.asSharedFlow()
+
+    suspend fun emitSpaceFilters(value: List<SpaceServiceFilter>) {
+        _spaceServiceFiltersFlow.emit(value)
     }
 
     override suspend fun joinedParents(spaceId: RoomId): Result<List<SpaceRoom>> {

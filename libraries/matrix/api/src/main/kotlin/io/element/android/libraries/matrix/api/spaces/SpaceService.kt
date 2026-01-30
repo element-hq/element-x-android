@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.SharedFlow
 
 interface SpaceService {
     val topLevelSpacesFlow: SharedFlow<List<SpaceRoom>>
+    val spaceFiltersFlow: SharedFlow<List<SpaceServiceFilter>>
     suspend fun joinedParents(spaceId: RoomId): Result<List<SpaceRoom>>
 
     suspend fun getSpaceRoom(spaceId: RoomId): SpaceRoom?
