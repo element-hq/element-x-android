@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
 
 class FakeSpaceService(
-    private val joinedSpacesResult: () -> Result<List<SpaceRoom>> = { lambdaError() },
     private val spaceRoomListResult: (RoomId) -> SpaceRoomList = { lambdaError() },
     private val leaveSpaceHandleResult: (RoomId) -> LeaveSpaceHandle = { lambdaError() },
     private val removeChildFromSpaceResult: (RoomId, RoomId) -> Result<Unit> = { _, _ -> lambdaError() },
@@ -29,16 +28,12 @@ class FakeSpaceService(
     private val editableSpacesResult: () -> Result<List<SpaceRoom>> = { lambdaError() },
     private val addChildToSpaceResult: (RoomId, RoomId) -> Result<Unit> = { _, _ -> lambdaError() },
 ) : SpaceService {
-    private val _spaceRoomsFlow = MutableSharedFlow<List<SpaceRoom>>()
-    override val spaceRoomsFlow: SharedFlow<List<SpaceRoom>>
-        get() = _spaceRoomsFlow.asSharedFlow()
+    private val _topLevelSpacesFlow = MutableSharedFlow<List<SpaceRoom>>()
+    override val topLevelSpacesFlow: SharedFlow<List<SpaceRoom>>
+        get() = _topLevelSpacesFlow.asSharedFlow()
 
-    suspend fun emitSpaceRoomList(value: List<SpaceRoom>) {
-        _spaceRoomsFlow.emit(value)
-    }
-
-    override suspend fun joinedSpaces(): Result<List<SpaceRoom>> = simulateLongTask {
-        return joinedSpacesResult()
+    suspend fun emitTopLevelSpaces(value: List<SpaceRoom>) {
+        _topLevelSpacesFlow.emit(value)
     }
 
     override suspend fun joinedParents(spaceId: RoomId): Result<List<SpaceRoom>> {

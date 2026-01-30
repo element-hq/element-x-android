@@ -45,20 +45,12 @@ class RustSpaceService(
     private val analyticsService: AnalyticsService,
 ) : SpaceService {
     private val spaceRoomMapper = SpaceRoomMapper()
-    override val spaceRoomsFlow = MutableSharedFlow<List<SpaceRoom>>(replay = 1, extraBufferCapacity = 1)
+    override val topLevelSpacesFlow = MutableSharedFlow<List<SpaceRoom>>(replay = 1, extraBufferCapacity = 1)
     private val spaceListUpdateProcessor = SpaceListUpdateProcessor(
-        spaceRoomsFlow = spaceRoomsFlow,
+        spaceRoomsFlow = topLevelSpacesFlow,
         mapper = spaceRoomMapper,
         analyticsService = analyticsService,
     )
-
-    override suspend fun joinedSpaces(): Result<List<SpaceRoom>> = withContext(sessionDispatcher) {
-        runCatchingExceptions {
-            innerSpaceService
-                .topLevelJoinedSpaces()
-                .map(spaceRoomMapper::map)
-        }
-    }
 
     override suspend fun joinedParents(spaceId: RoomId): Result<List<SpaceRoom>> = withContext(sessionDispatcher) {
         runCatchingExceptions {
