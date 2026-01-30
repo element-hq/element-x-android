@@ -16,6 +16,12 @@ plugins {
 
 android {
     namespace = "io.element.android.libraries.roomselect.impl"
+
+    testOptions {
+        unitTests {
+            isIncludeAndroidResources = true
+        }
+    }
 }
 
 setupDependencyInjection()
@@ -30,6 +36,6 @@ dependencies {
     implementation(projects.libraries.uiStrings)
     api(projects.libraries.roomselect.api)
 
-    testCommonDependencies(libs)
+    testCommonDependencies(libs, includeTestComposeView = true)
     testImplementation(projects.libraries.matrix.test)
 }

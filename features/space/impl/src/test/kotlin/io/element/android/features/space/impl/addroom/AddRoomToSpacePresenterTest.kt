@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.aRoomSummary
+import io.element.android.libraries.matrix.test.roomlist.FakeDynamicRoomList
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.spaces.FakeSpaceRoomList
 import io.element.android.libraries.matrix.test.spaces.FakeSpaceService
@@ -116,12 +117,15 @@ class AddRoomToSpacePresenterTest {
 
     @Test
     fun `present - searchResults shows Results when rooms available`() = runTest {
-        val roomListService = FakeRoomListService()
+        val roomList = FakeDynamicRoomList()
+        val roomListService = FakeRoomListService(
+            createRoomListLambda = { roomList }
+        )
         val presenter = createAddRoomToSpacePresenter(roomListService = roomListService)
         presenter.test {
             awaitItem() // Initial state
             // Post rooms to the service
-            roomListService.postAllRooms(
+            roomList.summaries.emit(
                 listOf(
                     aRoomSummary(
                         roomId = A_ROOM_ID,
@@ -293,6 +297,29 @@ class AddRoomToSpacePresenterTest {
             advanceUntilIdle()
             // reset should NOT be called since no rooms were added
             assert(resetResult).isNeverCalled()
+        }
+    }
+
+    @Test
+    fun `present - UpdateSearchVisibleRange triggers pagination when near end`() = runTest {
+        val loadMoreLambda = lambdaRecorder<Unit> { }
+        val roomList = FakeDynamicRoomList(loadMoreLambda = loadMoreLambda)
+        val roomListService = FakeRoomListService(
+            createRoomListLambda = { roomList }
+        )
+        val presenter = createAddRoomToSpacePresenter(roomListService = roomListService)
+        presenter.test {
+            val state = awaitItem()
+            // Post rooms to simulate loaded content
+            roomList.summaries.emit(listOf(aRoomSummary()))
+            advanceUntilIdle()
+            skipItems(1)
+
+            // UpdateSearchVisibleRange should trigger loadMore
+            state.eventSink(AddRoomToSpaceEvent.UpdateSearchVisibleRange(IntRange(0, 9)))
+            advanceUntilIdle()
+
+            assert(loadMoreLambda).isCalledOnce()
         }
     }
 

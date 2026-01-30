@@ -17,9 +17,7 @@ import io.element.android.features.home.impl.filters.selection.FilterSelectionSt
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.map
-import kotlin.time.Duration.Companion.milliseconds
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter as MatrixRoomListFilter
 
 @Inject

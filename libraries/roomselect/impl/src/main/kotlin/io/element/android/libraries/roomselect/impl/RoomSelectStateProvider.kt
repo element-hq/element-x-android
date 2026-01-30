@@ -43,22 +43,23 @@ open class RoomSelectStateProvider : PreviewParameterProvider<RoomSelectState> {
         )
 }
 
-private fun aRoomSelectState(
+internal fun aRoomSelectState(
     mode: RoomSelectMode = RoomSelectMode.Forward,
     resultState: SearchBarResultState<ImmutableList<SelectRoomInfo>> = SearchBarResultState.Initial(),
     searchQuery: String = "",
     isSearchActive: Boolean = false,
     selectedRooms: ImmutableList<SelectRoomInfo> = persistentListOf(),
+    eventSink: (RoomSelectEvents) -> Unit = {},
 ) = RoomSelectState(
     mode = mode,
     resultState = resultState,
     searchQuery = TextFieldState(initialText = searchQuery),
     isSearchActive = isSearchActive,
     selectedRooms = selectedRooms,
-    eventSink = {}
+    eventSink = eventSink,
 )
 
-private fun aRoomSelectRoomList() = persistentListOf(
+internal fun aRoomSelectRoomList() = persistentListOf(
     aSelectRoomInfo(
         roomId = RoomId("!room1:domain"),
         name = "Room with name",

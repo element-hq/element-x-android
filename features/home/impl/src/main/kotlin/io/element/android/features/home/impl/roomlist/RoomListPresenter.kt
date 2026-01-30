@@ -317,6 +317,4 @@ class RoomListPresenter(
             room.clearEventCacheStorage()
         }
     }
-
-
 }

@@ -90,8 +90,6 @@ internal class RoomListFactory(
     }
 }
 
-
-
 private fun RoomListLoadingState.toLoadingState(): RoomList.LoadingState {
     return when (this) {
         is RoomListLoadingState.Loaded -> RoomList.LoadingState.Loaded(maximumNumberOfRooms?.toInt() ?: 0)

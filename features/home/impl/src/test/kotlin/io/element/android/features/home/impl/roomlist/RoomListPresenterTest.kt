@@ -55,6 +55,7 @@ import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.room.aRoomSummary
+import io.element.android.libraries.matrix.test.roomlist.FakeDynamicRoomList
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
@@ -77,6 +78,7 @@ import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
@@ -91,7 +93,10 @@ class RoomListPresenterTest {
 
     @Test
     fun `present - load 1 room with success`() = runTest {
-        val roomListService = FakeRoomListService()
+        val roomList = FakeDynamicRoomList()
+        val roomListService = FakeRoomListService(
+            createRoomListLambda = { roomList }
+        )
         val matrixClient = FakeMatrixClient(
             roomListService = roomListService
         )
@@ -102,8 +107,8 @@ class RoomListPresenterTest {
         presenter.test {
             val initialState = consumeItemsUntilPredicate { state -> state.contentState is RoomListContentState.Skeleton }.last()
             assertThat(initialState.contentState).isInstanceOf(RoomListContentState.Skeleton::class.java)
-            roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
-            roomListService.postAllRooms(
+            roomList.loadingState.emit(RoomList.LoadingState.Loaded(1))
+            roomList.summaries.emit(
                 listOf(
                     aRoomSummary(
                         numUnreadMentions = 1,
@@ -128,9 +133,12 @@ class RoomListPresenterTest {
 
     @Test
     fun `present - handle DismissRequestVerificationPrompt`() = runTest {
-        val roomListService = FakeRoomListService().apply {
-            postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
-        }
+        val roomList = FakeDynamicRoomList(
+            loadingState = MutableStateFlow(RoomList.LoadingState.Loaded(1))
+        )
+        val roomListService = FakeRoomListService(
+            createRoomListLambda = { roomList }
+        )
         val encryptionService = FakeEncryptionService().apply {
             emitRecoveryState(RecoveryState.INCOMPLETE)
         }
@@ -154,9 +162,12 @@ class RoomListPresenterTest {
         val encryptionService = FakeEncryptionService().apply {
             recoveryStateStateFlow.emit(RecoveryState.DISABLED)
         }
-        val roomListService = FakeRoomListService().apply {
-            postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
-        }
+        val roomList = FakeDynamicRoomList(
+            loadingState = MutableStateFlow(RoomList.LoadingState.Loaded(1))
+        )
+        val roomListService = FakeRoomListService(
+            createRoomListLambda = { roomList }
+        )
         val matrixClient = FakeMatrixClient(
             roomListService = roomListService,
             encryptionService = encryptionService,
@@ -344,9 +355,13 @@ class RoomListPresenterTest {
     fun `present - change in notification settings updates the summary for decorations`() = runTest {
         val userDefinedMode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
         val notificationSettingsService = FakeNotificationSettingsService()
-        val roomListService = FakeRoomListService()
-        roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
-        roomListService.postAllRooms(listOf(aRoomSummary(userDefinedNotificationMode = userDefinedMode)))
+        val roomList = FakeDynamicRoomList(
+            summaries = MutableStateFlow(listOf(aRoomSummary(userDefinedNotificationMode = userDefinedMode))),
+            loadingState = MutableStateFlow(RoomList.LoadingState.Loaded(1))
+        )
+        val roomListService = FakeRoomListService(
+            createRoomListLambda = { roomList }
+        )
         val matrixClient = FakeMatrixClient(
             roomListService = roomListService,
             notificationSettingsService = notificationSettingsService
@@ -397,8 +412,12 @@ class RoomListPresenterTest {
 
     @Test
     fun `present - when room service returns no room, then contentState is Empty`() = runTest {
-        val roomListService = FakeRoomListService()
-        roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(0))
+        val roomList = FakeDynamicRoomList(
+            loadingState = MutableStateFlow(RoomList.LoadingState.Loaded(0))
+        )
+        val roomListService = FakeRoomListService(
+            createRoomListLambda = { roomList }
+        )
         val matrixClient = FakeMatrixClient(
             roomListService = roomListService,
         )
@@ -479,16 +498,21 @@ class RoomListPresenterTest {
         val acceptDeclinePresenter = Presenter {
             anAcceptDeclineInviteState(eventSink = eventSinkRecorder)
         }
-        val roomListService = FakeRoomListService()
-        val matrixClient = FakeMatrixClient(
-            roomListService = roomListService,
-        )
+
         val roomSummary = aRoomSummary(
             currentUserMembership = CurrentUserMembership.INVITED,
             inviter = aRoomMember(),
         )
-        roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
-        roomListService.postAllRooms(listOf(roomSummary))
+        val roomList = FakeDynamicRoomList(
+            summaries = MutableStateFlow(listOf(roomSummary)),
+            loadingState = MutableStateFlow(RoomList.LoadingState.Loaded(1))
+        )
+        val roomListService = FakeRoomListService(
+            createRoomListLambda = { roomList }
+        )
+        val matrixClient = FakeMatrixClient(
+            roomListService = roomListService,
+        )
         val presenter = createRoomListPresenter(
             client = matrixClient,
             acceptDeclineInvitePresenter = acceptDeclinePresenter
@@ -519,15 +543,20 @@ class RoomListPresenterTest {
     @Test
     fun `present - UpdateVisibleRange will cancel the previous subscription if called too soon`() = runTest {
         val subscribeToVisibleRoomsLambda = lambdaRecorder { _: List<RoomId> -> }
-        val roomListService = FakeRoomListService(subscribeToVisibleRoomsLambda = subscribeToVisibleRoomsLambda)
-        val matrixClient = FakeMatrixClient(
-            roomListService = roomListService,
-        )
         val roomSummary = aRoomSummary(
             currentUserMembership = CurrentUserMembership.INVITED
         )
-        roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
-        roomListService.postAllRooms(listOf(roomSummary))
+        val roomList = FakeDynamicRoomList(
+            summaries = MutableStateFlow(listOf(roomSummary)),
+            loadingState = MutableStateFlow(RoomList.LoadingState.Loaded(1))
+        )
+        val roomListService = FakeRoomListService(
+            createRoomListLambda = { roomList },
+            subscribeToVisibleRoomsLambda = subscribeToVisibleRoomsLambda,
+        )
+        val matrixClient = FakeMatrixClient(
+            roomListService = roomListService,
+        )
         val presenter = createRoomListPresenter(
             client = matrixClient,
         )
@@ -548,15 +577,20 @@ class RoomListPresenterTest {
     @Test
     fun `present - UpdateVisibleRange subscribes to rooms in visible range`() = runTest {
         val subscribeToVisibleRoomsLambda = lambdaRecorder { _: List<RoomId> -> }
-        val roomListService = FakeRoomListService(subscribeToVisibleRoomsLambda = subscribeToVisibleRoomsLambda)
-        val matrixClient = FakeMatrixClient(
-            roomListService = roomListService,
-        )
         val roomSummary = aRoomSummary(
             currentUserMembership = CurrentUserMembership.INVITED
         )
-        roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
-        roomListService.postAllRooms(listOf(roomSummary))
+        val roomList = FakeDynamicRoomList(
+            summaries = MutableStateFlow(listOf(roomSummary)),
+            loadingState = MutableStateFlow(RoomList.LoadingState.Loaded(1))
+        )
+        val roomListService = FakeRoomListService(
+            createRoomListLambda = { roomList },
+            subscribeToVisibleRoomsLambda = subscribeToVisibleRoomsLambda,
+        )
+        val matrixClient = FakeMatrixClient(
+            roomListService = roomListService,
+        )
         val presenter = createRoomListPresenter(
             client = matrixClient,
         )
@@ -579,15 +613,20 @@ class RoomListPresenterTest {
     @Test
     fun `present - notification sound banner`() = runTest {
         val subscribeToVisibleRoomsLambda = lambdaRecorder { _: List<RoomId> -> }
-        val roomListService = FakeRoomListService(subscribeToVisibleRoomsLambda = subscribeToVisibleRoomsLambda)
-        val matrixClient = FakeMatrixClient(
-            roomListService = roomListService,
-        )
         val roomSummary = aRoomSummary(
             currentUserMembership = CurrentUserMembership.INVITED
         )
-        roomListService.postAllRoomsLoadingState(RoomList.LoadingState.Loaded(1))
-        roomListService.postAllRooms(listOf(roomSummary))
+        val roomList = FakeDynamicRoomList(
+            summaries = MutableStateFlow(listOf(roomSummary)),
+            loadingState = MutableStateFlow(RoomList.LoadingState.Loaded(1))
+        )
+        val roomListService = FakeRoomListService(
+            createRoomListLambda = { roomList },
+            subscribeToVisibleRoomsLambda = subscribeToVisibleRoomsLambda,
+        )
+        val matrixClient = FakeMatrixClient(
+            roomListService = roomListService,
+        )
         val onAnnouncementDismissedResult = lambdaRecorder<Announcement, Unit> { }
         val announcementService = FakeAnnouncementService(
             onAnnouncementDismissedResult = onAnnouncementDismissedResult,

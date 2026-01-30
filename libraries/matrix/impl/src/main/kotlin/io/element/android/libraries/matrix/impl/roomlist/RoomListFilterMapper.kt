@@ -27,7 +27,6 @@ import org.matrix.rustcomponents.sdk.RoomListFilterCategory
  * Mapper for converting RoomListFilter to Rust SDK filter kinds.
  */
 internal object RoomListFilterMapper {
-
     /**
      * Base rust filters to always apply across all room lists.
      * These filters ensure we show:

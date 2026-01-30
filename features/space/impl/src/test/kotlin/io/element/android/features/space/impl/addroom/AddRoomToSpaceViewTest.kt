@@ -14,6 +14,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EventsRecorder
@@ -98,6 +99,21 @@ class AddRoomToSpaceViewTest {
                 onRoomsAdded = it,
             )
         }
+    }
+
+    @Config(qualifiers = "h1024dp")
+    @Test
+    fun `displaying search results sends UpdateSearchVisibleRange event`() {
+        val eventsRecorder = EventsRecorder<AddRoomToSpaceEvent>()
+        val rooms = aSelectRoomInfoList()
+        rule.setAddRoomToSpaceView(
+            anAddRoomToSpaceState(
+                isSearchActive = true,
+                searchResults = SearchBarResultState.Results(rooms),
+                eventSink = eventsRecorder,
+            ),
+        )
+        eventsRecorder.assertTrue(0) { it is AddRoomToSpaceEvent.UpdateSearchVisibleRange }
     }
 }
 

@@ -8,8 +8,6 @@
 
 package io.element.android.libraries.matrix.api.roomlist
 
-import timber.log.Timber
-
 /**
  * RoomList with dynamic filtering and loading.
  * This is useful for large lists of rooms.

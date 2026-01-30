@@ -27,7 +27,6 @@ internal class RustDynamicRoomList(
     private val dynamicController: () -> RoomListDynamicEntriesController?,
     private val addPagesCount: Int = DEFAULT_ADD_PAGES_COUNT
 ) : DynamicRoomList {
-
     private val mutex = Mutex()
 
     override suspend fun rebuildSummaries() {

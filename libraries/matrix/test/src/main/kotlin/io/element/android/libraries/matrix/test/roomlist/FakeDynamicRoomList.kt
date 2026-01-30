@@ -13,31 +13,30 @@ import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.getAndUpdate
 
-data class SimplePagedRoomList(
-    override val summaries: MutableStateFlow<List<RoomSummary>>,
-    override val loadingState: StateFlow<RoomList.LoadingState>,
-    private val currentFilter: MutableStateFlow<RoomListFilter>
+class FakeDynamicRoomList(
+    override val summaries: MutableStateFlow<List<RoomSummary>> = MutableStateFlow(emptyList()),
+    override val loadingState: MutableStateFlow<RoomList.LoadingState> = MutableStateFlow(RoomList.LoadingState.NotLoaded),
+    override val pageSize: Int = Int.MAX_VALUE,
+    val currentFilter: MutableStateFlow<RoomListFilter> = MutableStateFlow(RoomListFilter.None),
+    private val loadMoreLambda: () -> Unit = {},
+    private val resetLambda: () -> Unit = {},
+    private val updateFilterLambda: (RoomListFilter) -> Unit = { filter -> currentFilter.value = filter },
+    private val rebuildSummariesLambda: () -> Unit = {},
 ) : DynamicRoomList {
-    override val pageSize: Int = Int.MAX_VALUE
-    private val loadedPages = MutableStateFlow(1)
-
     override suspend fun loadMore() {
-        // No-op
-        loadedPages.getAndUpdate { it + 1 }
+        loadMoreLambda()
     }
 
     override suspend fun reset() {
-        loadedPages.emit(1)
+        resetLambda()
     }
 
     override suspend fun updateFilter(filter: RoomListFilter) {
-        currentFilter.emit(filter)
+        updateFilterLambda(filter)
     }
 
     override suspend fun rebuildSummaries() {
-        // No-op
+        rebuildSummariesLambda()
     }
 }

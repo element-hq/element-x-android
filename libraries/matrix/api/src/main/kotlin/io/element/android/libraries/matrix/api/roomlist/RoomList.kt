@@ -21,7 +21,6 @@ import kotlin.time.Duration
  * Can be retrieved from [RoomListService] methods.
  */
 interface RoomList {
-
     /**
      * The loading state of the room list.
      */
