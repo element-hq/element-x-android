@@ -19,6 +19,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
@@ -50,7 +51,6 @@ import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.di.RoomScope
-import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.analytics.toAnalyticsViewRoom
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -69,7 +69,6 @@ import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @ContributesNode(RoomScope::class)
@@ -77,7 +76,6 @@ import kotlinx.coroutines.launch
 class ThreadedMessagesNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
     private val room: JoinedRoom,
     private val analyticsService: AnalyticsService,
     private val messageComposerPresenterFactory: MessageComposerPresenter.Factory,
@@ -140,8 +138,8 @@ class ThreadedMessagesNode(
         super.onBuilt()
         lifecycle.subscribe(
             onCreate = {
-                sessionCoroutineScope.launch {
-                    analyticsService.capture(room.toAnalyticsViewRoom())
+                analyticsService.capture(room.toAnalyticsViewRoom())
+                lifecycleScope.launch {
                     presenter = createPresenter()
                 }
             },
