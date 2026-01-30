@@ -161,7 +161,8 @@ class RustMatrixClientFactory(
             .requestConfig(
                 RequestConfig(
                     timeout = 30_000uL,
-                    retryLimit = 0u,
+                    // retryLimit must be non-zero for the SDK to retry API calls when rate-limited.
+                    retryLimit = 3u,
                     // Use default values for the rest
                     maxConcurrentRequests = null,
                     maxRetryTime = null,
