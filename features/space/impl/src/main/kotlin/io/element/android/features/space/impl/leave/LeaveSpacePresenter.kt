@@ -131,10 +131,11 @@ class LeaveSpacePresenter(
             }
         }
 
+        val currentSpaceToLeave = leaveSpaceRooms.dataOrNull()?.current
         return LeaveSpaceState(
-            spaceName = leaveSpaceRooms.dataOrNull()?.current?.spaceRoom?.displayName,
-            needsOwnerChange = leaveSpaceRooms.dataOrNull()?.current?.let { it.spaceRoom.numJoinedMembers > 1 && it.isLastOwner } == true,
-            areCreatorsPrivileged = leaveSpaceRooms.dataOrNull()?.current?.areCreatorsPrivileged == true,
+            spaceName = currentSpaceToLeave?.spaceRoom?.displayName,
+            needsOwnerChange = currentSpaceToLeave?.let { it.spaceRoom.numJoinedMembers > 1 && it.isLastOwner } == true,
+            areCreatorsPrivileged = currentSpaceToLeave?.areCreatorsPrivileged == true,
             selectableSpaceRooms = selectableSpaceRooms,
             leaveSpaceAction = leaveSpaceAction.value,
             eventSink = ::handleEvent,
