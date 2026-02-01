@@ -1,0 +1,2814 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+Parallel Configuration Cache is an incubating feature.
+Configuration on demand is an incubating feature.
+Calculating task graph as no cached configuration is available for tasks: assembleDebug
+Included project: :features:analytics:api
+Included project: :features:analytics:impl
+Included project: :features:announcement:api
+Included project: :features:announcement:impl
+Included project: :features:announcement:test
+Included project: :features:cachecleaner:api
+Included project: :features:cachecleaner:impl
+Included project: :features:call:api
+Included project: :features:call:impl
+Included project: :features:call:test
+Included project: :features:createroom:api
+Included project: :features:createroom:impl
+Included project: :features:createroom:test
+Included project: :features:deactivation:api
+Included project: :features:deactivation:impl
+Included project: :features:deactivation:test
+Included project: :features:enterprise:api
+Included project: :features:enterprise:impl-foss
+Included project: :features:enterprise:test
+Included project: :features:forward:api
+Included project: :features:forward:impl
+Included project: :features:forward:test
+Included project: :features:ftue:api
+Included project: :features:ftue:impl
+Included project: :features:ftue:test
+Included project: :features:home:api
+Included project: :features:home:impl
+Included project: :features:invite:api
+Included project: :features:invite:impl
+Included project: :features:invite:test
+Included project: :features:invitepeople:api
+Included project: :features:invitepeople:impl
+Included project: :features:joinroom:api
+Included project: :features:joinroom:impl
+Included project: :features:knockrequests:api
+Included project: :features:knockrequests:impl
+Included project: :features:knockrequests:test
+Included project: :features:leaveroom:api
+Included project: :features:leaveroom:impl
+Included project: :features:licenses:api
+Included project: :features:licenses:impl
+Included project: :features:licenses:test
+Included project: :features:linknewdevice:api
+Included project: :features:linknewdevice:impl
+Included project: :features:linknewdevice:test
+Included project: :features:location:api
+Included project: :features:location:impl
+Included project: :features:location:test
+Included project: :features:lockscreen:api
+Included project: :features:lockscreen:impl
+Included project: :features:lockscreen:test
+Included project: :features:login:api
+Included project: :features:login:impl
+Included project: :features:login:test
+Included project: :features:logout:api
+Included project: :features:logout:impl
+Included project: :features:logout:test
+Included project: :features:messages:api
+Included project: :features:messages:impl
+Included project: :features:messages:test
+Included project: :features:migration:api
+Included project: :features:migration:impl
+Included project: :features:networkmonitor:api
+Included project: :features:networkmonitor:impl
+Included project: :features:networkmonitor:test
+Included project: :features:poll:api
+Included project: :features:poll:impl
+Included project: :features:poll:test
+Included project: :features:preferences:api
+Included project: :features:preferences:impl
+Included project: :features:rageshake:api
+Included project: :features:rageshake:impl
+Included project: :features:rageshake:test
+Included project: :features:reportroom:api
+Included project: :features:reportroom:impl
+Included project: :features:reportroom:test
+Included project: :features:rolesandpermissions:api
+Included project: :features:rolesandpermissions:impl
+Included project: :features:rolesandpermissions:test
+Included project: :features:roomaliasresolver:api
+Included project: :features:roomaliasresolver:impl
+Included project: :features:roomcall:api
+Included project: :features:roomcall:impl
+Included project: :features:roomdetails:api
+Included project: :features:roomdetails:impl
+Included project: :features:roomdetailsedit:api
+Included project: :features:roomdetailsedit:impl
+Included project: :features:roomdetailsedit:test
+Included project: :features:roomdirectory:api
+Included project: :features:roomdirectory:impl
+Included project: :features:roommembermoderation:api
+Included project: :features:roommembermoderation:impl
+Included project: :features:securebackup:api
+Included project: :features:securebackup:impl
+Included project: :features:securityandprivacy:api
+Included project: :features:securityandprivacy:impl
+Included project: :features:securityandprivacy:test
+Included project: :features:share:api
+Included project: :features:share:impl
+Included project: :features:signedout:api
+Included project: :features:signedout:impl
+Included project: :features:space:api
+Included project: :features:space:impl
+Included project: :features:startchat:api
+Included project: :features:startchat:impl
+Included project: :features:startchat:test
+Included project: :features:userprofile:api
+Included project: :features:userprofile:impl
+Included project: :features:userprofile:shared
+Included project: :features:verifysession:api
+Included project: :features:verifysession:impl
+Included project: :features:verifysession:test
+Included project: :features:viewfolder:api
+Included project: :features:viewfolder:impl
+Included project: :features:viewfolder:test
+Included project: :libraries:accountselect:api
+Included project: :libraries:accountselect:impl
+Included project: :libraries:androidutils
+Included project: :libraries:architecture
+Included project: :libraries:audio:api
+Included project: :libraries:audio:impl
+Included project: :libraries:audio:test
+Included project: :libraries:compound
+Included project: :libraries:core
+Included project: :libraries:cryptography:api
+Included project: :libraries:cryptography:impl
+Included project: :libraries:cryptography:test
+Included project: :libraries:dateformatter:api
+Included project: :libraries:dateformatter:impl
+Included project: :libraries:dateformatter:test
+Included project: :libraries:deeplink:api
+Included project: :libraries:deeplink:impl
+Included project: :libraries:designsystem
+Included project: :libraries:di
+Included project: :libraries:encrypted-db
+Included project: :libraries:eventformatter:api
+Included project: :libraries:eventformatter:impl
+Included project: :libraries:eventformatter:test
+Included project: :libraries:featureflag:api
+Included project: :libraries:featureflag:impl
+Included project: :libraries:featureflag:test
+Included project: :libraries:featureflag:ui
+Included project: :libraries:fullscreenintent:api
+Included project: :libraries:fullscreenintent:impl
+Included project: :libraries:indicator:api
+Included project: :libraries:indicator:impl
+Included project: :libraries:indicator:test
+Included project: :libraries:maplibre-compose
+Included project: :libraries:matrix:api
+Included project: :libraries:matrix:impl
+Included project: :libraries:matrix:test
+Included project: :libraries:matrixmedia:api
+Included project: :libraries:matrixmedia:impl
+Included project: :libraries:matrixmedia:test
+Included project: :libraries:matrixui
+Included project: :libraries:mediapickers:api
+Included project: :libraries:mediapickers:impl
+Included project: :libraries:mediapickers:test
+Included project: :libraries:mediaplayer:api
+Included project: :libraries:mediaplayer:impl
+Included project: :libraries:mediaplayer:test
+Included project: :libraries:mediaupload:api
+Included project: :libraries:mediaupload:impl
+Included project: :libraries:mediaupload:test
+Included project: :libraries:mediaviewer:api
+Included project: :libraries:mediaviewer:impl
+Included project: :libraries:mediaviewer:test
+Included project: :libraries:network
+Included project: :libraries:oidc:api
+Included project: :libraries:oidc:impl
+Included project: :libraries:oidc:test
+Included project: :libraries:permissions:api
+Included project: :libraries:permissions:impl
+Included project: :libraries:permissions:noop
+Included project: :libraries:permissions:test
+Included project: :libraries:preferences:api
+Included project: :libraries:preferences:impl
+Included project: :libraries:preferences:test
+Included project: :libraries:previewutils
+Included project: :libraries:push:api
+Included project: :libraries:push:impl
+Included project: :libraries:push:test
+Included project: :libraries:pushproviders:api
+Included project: :libraries:pushproviders:firebase
+Included project: :libraries:pushproviders:test
+Included project: :libraries:pushproviders:unifiedpush
+Included project: :libraries:pushstore:api
+Included project: :libraries:pushstore:impl
+Included project: :libraries:pushstore:test
+Included project: :libraries:qrcode
+Included project: :libraries:recentemojis:api
+Included project: :libraries:recentemojis:impl
+Included project: :libraries:recentemojis:test
+Included project: :libraries:roomselect:api
+Included project: :libraries:roomselect:impl
+Included project: :libraries:roomselect:test
+Included project: :libraries:rustsdk
+Included project: :libraries:session-storage:api
+Included project: :libraries:session-storage:impl
+Included project: :libraries:session-storage:test
+Included project: :libraries:testtags
+Included project: :libraries:textcomposer:impl
+Included project: :libraries:textcomposer:lib
+Included project: :libraries:troubleshoot:api
+Included project: :libraries:troubleshoot:impl
+Included project: :libraries:troubleshoot:test
+Included project: :libraries:ui-common
+Included project: :libraries:ui-strings
+Included project: :libraries:ui-utils
+Included project: :libraries:usersearch:api
+Included project: :libraries:usersearch:impl
+Included project: :libraries:usersearch:test
+Included project: :libraries:voiceplayer:api
+Included project: :libraries:voiceplayer:impl
+Included project: :libraries:voicerecorder:api
+Included project: :libraries:voicerecorder:impl
+Included project: :libraries:voicerecorder:test
+Included project: :libraries:wellknown:api
+Included project: :libraries:wellknown:impl
+Included project: :libraries:wellknown:test
+Included project: :libraries:workmanager:api
+Included project: :libraries:workmanager:impl
+Included project: :libraries:workmanager:test
+Included project: :services:analytics:api
+Included project: :services:analytics:compose
+Included project: :services:analytics:impl
+Included project: :services:analytics:noop
+Included project: :services:analytics:test
+Included project: :services:analyticsproviders:api
+Included project: :services:analyticsproviders:posthog
+Included project: :services:analyticsproviders:sentry
+Included project: :services:analyticsproviders:test
+Included project: :services:apperror:api
+Included project: :services:apperror:impl
+Included project: :services:apperror:test
+Included project: :services:appnavstate:api
+Included project: :services:appnavstate:impl
+Included project: :services:appnavstate:test
+Included project: :services:toolbox:api
+Included project: :services:toolbox:impl
+Included project: :services:toolbox:test
+Type-safe project accessors is an incubating feature.
+> Task :plugins:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :plugins:generateExternalPluginSpecBuilders UP-TO-DATE
+> Task :plugins:extractPrecompiledScriptPluginPlugins UP-TO-DATE
+> Task :plugins:compilePluginsBlocks UP-TO-DATE
+> Task :plugins:generatePrecompiledScriptPluginAccessors UP-TO-DATE
+> Task :plugins:generateScriptPluginAdapters UP-TO-DATE
+> Task :plugins:compileKotlin UP-TO-DATE
+> Task :plugins:compileJava NO-SOURCE
+> Task :plugins:pluginDescriptors UP-TO-DATE
+> Task :plugins:processResources UP-TO-DATE
+> Task :plugins:classes UP-TO-DATE
+> Task :plugins:jar UP-TO-DATE
+
+> Configure project :annotations
+WARNING: The option setting 'android.enableBuildConfigAsBytecode=true' is experimental.
+The current default is 'false'.
+WARNING: The option setting 'android.experimental.enableTestFixtures=true' is experimental.
+The current default is 'false'.
+WARNING: The option setting 'android.r8.gradual.support=true' is experimental.
+The current default is 'false'.
+
+> Configure project :app
+    ┌────────────────────────────────────────────────────────────────────────────────┐
+    │                  Building de.funker.messenger (Funker) [FOSS]                  │
+    └────────────────────────────────────────────────────────────────────────────────┘
+WARNING: BuildType(nightly): resValue 'string/app_name' value is being replaced.
+WARNING: BuildType(nightly): resValue 'string/login_redirect_scheme' value is being replaced.
+Analytics enabled with Posthog and Sentry
+
+> Task :appnav:preBuild UP-TO-DATE
+> Task :annotations:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:di:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :appicon:funker:preBuild UP-TO-DATE
+> Task :appconfig:preBuild UP-TO-DATE
+> Task :libraries:core:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:androidutils:preBuild UP-TO-DATE
+> Task :libraries:encrypted-db:preBuild UP-TO-DATE
+> Task :libraries:compound:preBuild UP-TO-DATE
+> Task :appnav:preDebugBuild UP-TO-DATE
+> Task :app:preBuild UP-TO-DATE
+> Task :libraries:designsystem:preBuild UP-TO-DATE
+> Task :libraries:architecture:preBuild UP-TO-DATE
+> Task :libraries:androidutils:preDebugBuild UP-TO-DATE
+> Task :appconfig:preDebugBuild UP-TO-DATE
+> Task :app:preFdroidDebugBuild UP-TO-DATE
+> Task :libraries:encrypted-db:preDebugBuild UP-TO-DATE
+> Task :libraries:architecture:preDebugBuild UP-TO-DATE
+> Task :libraries:compound:preDebugBuild UP-TO-DATE
+> Task :annotations:processResources NO-SOURCE
+> Task :libraries:core:processResources NO-SOURCE
+> Task :libraries:di:processResources NO-SOURCE
+> Task :appicon:funker:preDebugBuild UP-TO-DATE
+> Task :libraries:maplibre-compose:preBuild UP-TO-DATE
+> Task :libraries:designsystem:preDebugBuild UP-TO-DATE
+> Task :libraries:matrixui:preBuild UP-TO-DATE
+> Task :libraries:matrixui:preDebugBuild UP-TO-DATE
+> Task :libraries:maplibre-compose:preDebugBuild UP-TO-DATE
+> Task :libraries:network:preBuild UP-TO-DATE
+> Task :libraries:network:preDebugBuild UP-TO-DATE
+> Task :app:mergeFdroidDebugNativeDebugMetadata NO-SOURCE
+> Task :libraries:previewutils:preBuild UP-TO-DATE
+> Task :libraries:previewutils:preDebugBuild UP-TO-DATE
+> Task :libraries:maplibre-compose:writeDebugAarMetadata
+> Task :libraries:matrixui:writeDebugAarMetadata
+> Task :libraries:encrypted-db:writeDebugAarMetadata
+> Task :libraries:network:writeDebugAarMetadata
+> Task :libraries:architecture:writeDebugAarMetadata
+> Task :libraries:designsystem:writeDebugAarMetadata
+> Task :libraries:compound:writeDebugAarMetadata
+> Task :libraries:previewutils:writeDebugAarMetadata
+> Task :appconfig:writeDebugAarMetadata
+> Task :appnav:writeDebugAarMetadata
+> Task :appicon:funker:writeDebugAarMetadata
+> Task :libraries:androidutils:writeDebugAarMetadata
+> Task :libraries:ui-strings:preBuild UP-TO-DATE
+> Task :libraries:ui-common:preBuild UP-TO-DATE
+> Task :libraries:ui-utils:preBuild UP-TO-DATE
+> Task :libraries:ui-common:preDebugBuild UP-TO-DATE
+> Task :features:cachecleaner:api:preBuild UP-TO-DATE
+> Task :libraries:ui-utils:preDebugBuild UP-TO-DATE
+> Task :features:cachecleaner:api:preDebugBuild UP-TO-DATE
+> Task :features:analytics:api:preBuild UP-TO-DATE
+> Task :features:analytics:impl:preBuild UP-TO-DATE
+> Task :features:announcement:api:preBuild UP-TO-DATE
+> Task :libraries:ui-strings:preDebugBuild UP-TO-DATE
+> Task :features:analytics:api:preDebugBuild UP-TO-DATE
+> Task :features:announcement:api:preDebugBuild UP-TO-DATE
+> Task :app:generateFdroidDebugBuildConfig
+> Task :libraries:qrcode:preBuild UP-TO-DATE
+> Task :features:announcement:impl:preBuild UP-TO-DATE
+> Task :libraries:testtags:preBuild UP-TO-DATE
+> Task :libraries:testtags:preDebugBuild UP-TO-DATE
+> Task :libraries:qrcode:preDebugBuild UP-TO-DATE
+> Task :features:call:api:preBuild UP-TO-DATE
+> Task :features:announcement:impl:preDebugBuild UP-TO-DATE
+> Task :features:call:api:preDebugBuild UP-TO-DATE
+> Task :features:cachecleaner:impl:preBuild UP-TO-DATE
+> Task :features:analytics:impl:preDebugBuild UP-TO-DATE
+> Task :features:cachecleaner:impl:preDebugBuild UP-TO-DATE
+> Task :features:call:impl:preBuild UP-TO-DATE
+> Task :features:call:impl:preDebugBuild UP-TO-DATE
+> Task :features:announcement:api:writeDebugAarMetadata
+> Task :features:analytics:api:writeDebugAarMetadata
+> Task :libraries:ui-utils:writeDebugAarMetadata
+> Task :features:announcement:impl:writeDebugAarMetadata
+> Task :features:createroom:impl:preBuild UP-TO-DATE
+> Task :features:deactivation:api:preBuild UP-TO-DATE
+> Task :features:call:api:writeDebugAarMetadata
+> Task :features:createroom:impl:preDebugBuild UP-TO-DATE
+> Task :features:analytics:impl:writeDebugAarMetadata
+> Task :features:enterprise:api:preBuild UP-TO-DATE
+> Task :features:enterprise:api:preDebugBuild UP-TO-DATE
+> Task :features:createroom:api:preBuild UP-TO-DATE
+> Task :libraries:testtags:writeDebugAarMetadata
+> Task :features:createroom:api:preDebugBuild UP-TO-DATE
+> Task :features:deactivation:impl:preBuild UP-TO-DATE
+> Task :features:deactivation:impl:preDebugBuild UP-TO-DATE
+> Task :features:enterprise:impl-foss:preBuild UP-TO-DATE
+> Task :features:deactivation:api:preDebugBuild UP-TO-DATE
+> Task :features:cachecleaner:api:writeDebugAarMetadata
+> Task :features:enterprise:impl-foss:preDebugBuild UP-TO-DATE
+> Task :libraries:ui-common:writeDebugAarMetadata
+> Task :libraries:qrcode:writeDebugAarMetadata
+> Task :features:forward:api:preBuild UP-TO-DATE
+> Task :features:call:impl:writeDebugAarMetadata
+> Task :libraries:ui-strings:writeDebugAarMetadata
+> Task :features:ftue:api:preBuild UP-TO-DATE
+> Task :features:ftue:impl:preBuild UP-TO-DATE
+> Task :features:forward:impl:preBuild UP-TO-DATE
+> Task :features:ftue:impl:preDebugBuild UP-TO-DATE
+> Task :features:forward:impl:preDebugBuild UP-TO-DATE
+> Task :features:ftue:api:preDebugBuild UP-TO-DATE
+> Task :features:forward:api:preDebugBuild UP-TO-DATE
+> Task :features:home:api:preBuild UP-TO-DATE
+> Task :features:home:impl:preBuild UP-TO-DATE
+> Task :features:home:api:preDebugBuild UP-TO-DATE
+> Task :features:home:impl:preDebugBuild UP-TO-DATE
+> Task :features:cachecleaner:impl:writeDebugAarMetadata
+> Task :features:deactivation:impl:writeDebugAarMetadata
+> Task :features:createroom:impl:writeDebugAarMetadata
+> Task :features:invite:api:preBuild UP-TO-DATE
+> Task :features:invitepeople:api:preBuild UP-TO-DATE
+> Task :features:createroom:api:writeDebugAarMetadata
+> Task :features:invitepeople:api:preDebugBuild UP-TO-DATE
+> Task :features:invite:api:preDebugBuild UP-TO-DATE
+> Task :features:enterprise:api:writeDebugAarMetadata
+> Task :features:invite:impl:preBuild UP-TO-DATE
+> Task :features:invite:impl:preDebugBuild UP-TO-DATE
+> Task :features:invitepeople:impl:preBuild UP-TO-DATE
+> Task :features:invitepeople:impl:preDebugBuild UP-TO-DATE
+> Task :features:joinroom:api:preBuild UP-TO-DATE
+> Task :features:joinroom:api:preDebugBuild UP-TO-DATE
+> Task :features:ftue:impl:writeDebugAarMetadata
+> Task :features:forward:impl:writeDebugAarMetadata
+> Task :features:enterprise:impl-foss:writeDebugAarMetadata
+> Task :features:knockrequests:api:preBuild UP-TO-DATE
+> Task :features:knockrequests:api:preDebugBuild UP-TO-DATE
+> Task :features:joinroom:impl:preBuild UP-TO-DATE
+> Task :features:joinroom:impl:preDebugBuild UP-TO-DATE
+> Task :features:knockrequests:impl:preBuild UP-TO-DATE
+> Task :features:knockrequests:impl:preDebugBuild UP-TO-DATE
+> Task :features:ftue:api:writeDebugAarMetadata
+> Task :features:invitepeople:api:writeDebugAarMetadata
+> Task :features:home:api:writeDebugAarMetadata
+> Task :features:deactivation:api:writeDebugAarMetadata
+> Task :features:home:impl:writeDebugAarMetadata
+> Task :features:invite:api:writeDebugAarMetadata
+> Task :features:forward:api:writeDebugAarMetadata
+> Task :features:invite:impl:writeDebugAarMetadata
+> Task :features:leaveroom:api:preBuild UP-TO-DATE
+> Task :features:location:impl:preBuild UP-TO-DATE
+> Task :features:leaveroom:impl:preBuild UP-TO-DATE
+> Task :features:location:impl:preDebugBuild UP-TO-DATE
+> Task :features:leaveroom:impl:preDebugBuild UP-TO-DATE
+> Task :features:location:api:preBuild UP-TO-DATE
+> Task :features:location:api:preDebugBuild UP-TO-DATE
+> Task :features:leaveroom:api:preDebugBuild UP-TO-DATE
+> Task :features:licenses:api:preBuild UP-TO-DATE
+> Task :features:linknewdevice:impl:preBuild UP-TO-DATE
+> Task :features:linknewdevice:api:preBuild UP-TO-DATE
+> Task :features:linknewdevice:impl:preDebugBuild UP-TO-DATE
+> Task :features:licenses:impl:preBuild UP-TO-DATE
+> Task :features:linknewdevice:api:preDebugBuild UP-TO-DATE
+> Task :features:licenses:api:preDebugBuild UP-TO-DATE
+> Task :features:licenses:impl:preDebugBuild UP-TO-DATE
+> Task :features:invitepeople:impl:writeDebugAarMetadata
+> Task :features:lockscreen:api:preBuild UP-TO-DATE
+> Task :features:lockscreen:api:preDebugBuild UP-TO-DATE
+> Task :features:knockrequests:impl:writeDebugAarMetadata
+> Task :features:lockscreen:impl:preBuild UP-TO-DATE
+> Task :features:lockscreen:impl:preDebugBuild UP-TO-DATE
+> Task :features:joinroom:impl:writeDebugAarMetadata
+> Task :features:joinroom:api:writeDebugAarMetadata
+> Task :features:leaveroom:impl:writeDebugAarMetadata
+> Task :features:login:impl:preBuild UP-TO-DATE
+> Task :features:login:api:preBuild UP-TO-DATE
+> Task :features:knockrequests:api:writeDebugAarMetadata
+> Task :features:leaveroom:api:writeDebugAarMetadata
+> Task :features:logout:api:preBuild UP-TO-DATE
+> Task :features:logout:impl:preBuild UP-TO-DATE
+> Task :features:logout:api:preDebugBuild UP-TO-DATE
+> Task :features:logout:impl:preDebugBuild UP-TO-DATE
+> Task :features:linknewdevice:api:writeDebugAarMetadata
+> Task :features:location:api:writeDebugAarMetadata
+> Task :features:messages:impl:preBuild UP-TO-DATE
+> Task :features:login:impl:preDebugBuild UP-TO-DATE
+> Task :features:messages:api:preBuild UP-TO-DATE
+> Task :features:messages:impl:preDebugBuild UP-TO-DATE
+> Task :features:login:api:preDebugBuild UP-TO-DATE
+> Task :features:messages:api:preDebugBuild UP-TO-DATE
+> Task :features:migration:api:preBuild UP-TO-DATE
+> Task :features:migration:api:preDebugBuild UP-TO-DATE
+> Task :features:linknewdevice:impl:writeDebugAarMetadata
+> Task :features:licenses:impl:writeDebugAarMetadata
+> Task :features:licenses:api:writeDebugAarMetadata
+> Task :features:location:impl:writeDebugAarMetadata
+> Task :features:networkmonitor:impl:preBuild UP-TO-DATE
+> Task :features:networkmonitor:api:preBuild UP-TO-DATE
+> Task :features:poll:api:preBuild UP-TO-DATE
+> Task :features:poll:api:preDebugBuild UP-TO-DATE
+> Task :features:networkmonitor:impl:preDebugBuild UP-TO-DATE
+> Task :features:networkmonitor:api:preDebugBuild UP-TO-DATE
+> Task :features:migration:impl:preBuild UP-TO-DATE
+> Task :features:lockscreen:impl:writeDebugAarMetadata
+> Task :features:lockscreen:api:writeDebugAarMetadata
+> Task :features:migration:impl:preDebugBuild UP-TO-DATE
+> Task :features:preferences:api:preBuild UP-TO-DATE
+> Task :features:preferences:api:preDebugBuild UP-TO-DATE
+> Task :features:poll:impl:preBuild UP-TO-DATE
+> Task :features:poll:impl:preDebugBuild UP-TO-DATE
+> Task :features:messages:impl:writeDebugAarMetadata
+> Task :features:networkmonitor:impl:writeDebugAarMetadata
+> Task :features:logout:api:writeDebugAarMetadata
+> Task :features:rageshake:api:preBuild UP-TO-DATE
+> Task :features:logout:impl:writeDebugAarMetadata
+> Task :features:rageshake:api:preDebugBuild UP-TO-DATE
+> Task :features:preferences:impl:preBuild UP-TO-DATE
+> Task :features:rageshake:impl:preBuild UP-TO-DATE
+> Task :features:rageshake:impl:preDebugBuild UP-TO-DATE
+> Task :features:preferences:impl:preDebugBuild UP-TO-DATE
+> Task :features:networkmonitor:api:writeDebugAarMetadata
+> Task :features:reportroom:api:preBuild UP-TO-DATE
+> Task :features:login:api:writeDebugAarMetadata
+> Task :features:rolesandpermissions:api:preBuild UP-TO-DATE
+> Task :features:login:impl:writeDebugAarMetadata
+> Task :features:reportroom:api:preDebugBuild UP-TO-DATE
+> Task :features:poll:api:writeDebugAarMetadata
+> Task :features:rolesandpermissions:api:preDebugBuild UP-TO-DATE
+> Task :features:poll:impl:writeDebugAarMetadata
+> Task :features:roomaliasresolver:api:preBuild UP-TO-DATE
+> Task :features:roomaliasresolver:api:preDebugBuild UP-TO-DATE
+> Task :features:rolesandpermissions:impl:preBuild UP-TO-DATE
+> Task :features:reportroom:impl:preBuild UP-TO-DATE
+> Task :features:migration:api:writeDebugAarMetadata
+> Task :features:preferences:api:writeDebugAarMetadata
+> Task :features:messages:api:writeDebugAarMetadata
+> Task :features:rolesandpermissions:impl:preDebugBuild UP-TO-DATE
+> Task :features:roomaliasresolver:impl:preBuild UP-TO-DATE
+> Task :features:migration:impl:writeDebugAarMetadata
+> Task :features:reportroom:impl:preDebugBuild UP-TO-DATE
+> Task :features:roomcall:impl:preBuild UP-TO-DATE
+> Task :features:roomcall:impl:preDebugBuild UP-TO-DATE
+> Task :features:roomaliasresolver:impl:preDebugBuild UP-TO-DATE
+> Task :features:roomcall:api:preBuild UP-TO-DATE
+> Task :features:roomdetails:api:preBuild UP-TO-DATE
+> Task :features:roomdetails:api:preDebugBuild UP-TO-DATE
+> Task :features:roomdetails:impl:preBuild UP-TO-DATE
+> Task :features:roomcall:api:preDebugBuild UP-TO-DATE
+> Task :features:roomdetails:impl:preDebugBuild UP-TO-DATE
+> Task :features:rageshake:api:writeDebugAarMetadata
+> Task :features:rageshake:impl:writeDebugAarMetadata
+> Task :features:roomdetails:impl:writeDebugAarMetadata
+> Task :features:roomaliasresolver:impl:writeDebugAarMetadata
+> Task :features:rolesandpermissions:api:writeDebugAarMetadata
+> Task :features:roomaliasresolver:api:writeDebugAarMetadata
+> Task :features:preferences:impl:writeDebugAarMetadata
+> Task :features:roomdetails:api:writeDebugAarMetadata
+> Task :features:roomcall:api:writeDebugAarMetadata
+> Task :features:reportroom:api:writeDebugAarMetadata
+> Task :features:reportroom:impl:writeDebugAarMetadata
+> Task :features:roomdetailsedit:impl:preBuild UP-TO-DATE
+> Task :features:roomdetailsedit:api:preBuild UP-TO-DATE
+> Task :features:rolesandpermissions:impl:writeDebugAarMetadata
+> Task :features:roomcall:impl:writeDebugAarMetadata
+> Task :features:roomdetailsedit:api:preDebugBuild UP-TO-DATE
+> Task :features:securebackup:api:preBuild UP-TO-DATE
+> Task :features:roomdirectory:impl:preBuild UP-TO-DATE
+> Task :features:roomdirectory:api:preBuild UP-TO-DATE
+> Task :features:roomdetailsedit:impl:preDebugBuild UP-TO-DATE
+> Task :features:roommembermoderation:api:preBuild UP-TO-DATE
+> Task :features:securebackup:impl:preBuild UP-TO-DATE
+> Task :features:securityandprivacy:api:preBuild UP-TO-DATE
+> Task :features:securityandprivacy:api:preDebugBuild UP-TO-DATE
+> Task :features:roommembermoderation:impl:preBuild UP-TO-DATE
+> Task :features:share:impl:preBuild UP-TO-DATE
+> Task :features:securebackup:impl:preDebugBuild UP-TO-DATE
+> Task :features:securebackup:api:preDebugBuild UP-TO-DATE
+> Task :features:securityandprivacy:impl:preBuild UP-TO-DATE
+> Task :features:roommembermoderation:api:preDebugBuild UP-TO-DATE
+> Task :features:securityandprivacy:impl:preDebugBuild UP-TO-DATE
+> Task :features:share:api:preBuild UP-TO-DATE
+> Task :features:roomdirectory:impl:preDebugBuild UP-TO-DATE
+> Task :features:roomdirectory:api:preDebugBuild UP-TO-DATE
+> Task :features:share:api:preDebugBuild UP-TO-DATE
+> Task :features:roommembermoderation:impl:preDebugBuild UP-TO-DATE
+> Task :features:share:impl:preDebugBuild UP-TO-DATE
+> Task :features:signedout:api:preBuild UP-TO-DATE
+> Task :features:signedout:api:preDebugBuild UP-TO-DATE
+> Task :features:securityandprivacy:api:writeDebugAarMetadata
+> Task :features:share:impl:writeDebugAarMetadata
+> Task :features:signedout:impl:preBuild UP-TO-DATE
+> Task :features:signedout:impl:preDebugBuild UP-TO-DATE
+> Task :features:space:api:preBuild UP-TO-DATE
+> Task :features:space:api:preDebugBuild UP-TO-DATE
+> Task :features:roomdirectory:api:writeDebugAarMetadata
+> Task :features:space:impl:preBuild UP-TO-DATE
+> Task :features:securebackup:impl:writeDebugAarMetadata
+> Task :features:space:impl:preDebugBuild UP-TO-DATE
+> Task :features:startchat:api:preBuild UP-TO-DATE
+> Task :features:startchat:api:preDebugBuild UP-TO-DATE
+> Task :features:signedout:api:writeDebugAarMetadata
+> Task :features:share:api:writeDebugAarMetadata
+> Task :features:userprofile:api:preBuild UP-TO-DATE
+> Task :features:userprofile:api:preDebugBuild UP-TO-DATE
+> Task :features:roomdirectory:impl:writeDebugAarMetadata
+> Task :features:startchat:impl:preBuild UP-TO-DATE
+> Task :features:roomdetailsedit:api:writeDebugAarMetadata
+> Task :features:startchat:impl:preDebugBuild UP-TO-DATE
+> Task :features:userprofile:shared:preBuild UP-TO-DATE
+> Task :features:securityandprivacy:impl:writeDebugAarMetadata
+> Task :features:userprofile:shared:preDebugBuild UP-TO-DATE
+> Task :features:userprofile:impl:preBuild UP-TO-DATE
+> Task :features:verifysession:api:preBuild UP-TO-DATE
+> Task :features:userprofile:impl:preDebugBuild UP-TO-DATE
+> Task :features:verifysession:api:preDebugBuild UP-TO-DATE
+> Task :features:roommembermoderation:impl:writeDebugAarMetadata
+> Task :features:securebackup:api:writeDebugAarMetadata
+> Task :features:roommembermoderation:api:writeDebugAarMetadata
+> Task :features:verifysession:impl:preBuild UP-TO-DATE
+> Task :features:viewfolder:impl:preBuild UP-TO-DATE
+> Task :features:verifysession:impl:preDebugBuild UP-TO-DATE
+> Task :features:viewfolder:api:preBuild UP-TO-DATE
+> Task :features:viewfolder:impl:preDebugBuild UP-TO-DATE
+> Task :features:viewfolder:api:preDebugBuild UP-TO-DATE
+> Task :features:roomdetailsedit:impl:writeDebugAarMetadata
+> Task :libraries:accountselect:api:preBuild UP-TO-DATE
+> Task :libraries:accountselect:api:preDebugBuild UP-TO-DATE
+> Task :features:signedout:impl:writeDebugAarMetadata
+> Task :libraries:accountselect:impl:preBuild UP-TO-DATE
+> Task :libraries:accountselect:impl:preDebugBuild UP-TO-DATE
+> Task :features:viewfolder:impl:writeDebugAarMetadata
+> Task :libraries:accountselect:api:writeDebugAarMetadata
+> Task :features:space:impl:writeDebugAarMetadata
+> Task :features:startchat:impl:writeDebugAarMetadata
+> Task :features:startchat:api:writeDebugAarMetadata
+> Task :features:verifysession:api:writeDebugAarMetadata
+> Task :libraries:cryptography:api:preBuild UP-TO-DATE
+> Task :libraries:cryptography:api:preDebugBuild UP-TO-DATE
+> Task :libraries:dateformatter:api:preBuild UP-TO-DATE
+> Task :libraries:audio:api:preBuild UP-TO-DATE
+> Task :libraries:dateformatter:api:preDebugBuild UP-TO-DATE
+> Task :libraries:audio:impl:preBuild UP-TO-DATE
+> Task :features:viewfolder:api:writeDebugAarMetadata
+> Task :features:verifysession:impl:writeDebugAarMetadata
+> Task :features:space:api:writeDebugAarMetadata
+> Task :libraries:deeplink:api:preBuild UP-TO-DATE
+> Task :libraries:deeplink:api:preDebugBuild UP-TO-DATE
+> Task :libraries:dateformatter:impl:preBuild UP-TO-DATE
+> Task :libraries:dateformatter:impl:preDebugBuild UP-TO-DATE
+> Task :libraries:audio:api:preDebugBuild UP-TO-DATE
+> Task :features:userprofile:shared:writeDebugAarMetadata
+> Task :libraries:deeplink:impl:preBuild UP-TO-DATE
+> Task :libraries:deeplink:impl:preDebugBuild UP-TO-DATE
+> Task :libraries:eventformatter:api:preBuild UP-TO-DATE
+> Task :libraries:cryptography:impl:preBuild UP-TO-DATE
+> Task :libraries:cryptography:impl:preDebugBuild UP-TO-DATE
+> Task :features:userprofile:impl:writeDebugAarMetadata
+> Task :libraries:eventformatter:api:preDebugBuild UP-TO-DATE
+> Task :libraries:audio:impl:preDebugBuild UP-TO-DATE
+> Task :libraries:eventformatter:impl:preBuild UP-TO-DATE
+> Task :libraries:eventformatter:impl:preDebugBuild UP-TO-DATE
+> Task :libraries:featureflag:api:preBuild UP-TO-DATE
+> Task :features:userprofile:api:writeDebugAarMetadata
+> Task :libraries:featureflag:api:preDebugBuild UP-TO-DATE
+> Task :libraries:featureflag:impl:preBuild UP-TO-DATE
+> Task :libraries:featureflag:impl:preDebugBuild UP-TO-DATE
+> Task :libraries:cryptography:api:writeDebugAarMetadata
+> Task :libraries:featureflag:ui:preBuild UP-TO-DATE
+> Task :libraries:featureflag:ui:preDebugBuild UP-TO-DATE
+> Task :libraries:accountselect:impl:writeDebugAarMetadata
+> Task :libraries:audio:impl:writeDebugAarMetadata
+> Task :libraries:deeplink:impl:writeDebugAarMetadata
+> Task :libraries:dateformatter:api:writeDebugAarMetadata
+> Task :libraries:fullscreenintent:api:preBuild UP-TO-DATE
+> Task :libraries:fullscreenintent:api:preDebugBuild UP-TO-DATE
+> Task :libraries:indicator:impl:preBuild UP-TO-DATE
+> Task :libraries:indicator:impl:preDebugBuild UP-TO-DATE
+> Task :libraries:fullscreenintent:impl:preBuild UP-TO-DATE
+> Task :libraries:fullscreenintent:impl:preDebugBuild UP-TO-DATE
+> Task :libraries:indicator:api:preBuild UP-TO-DATE
+> Task :libraries:indicator:api:preDebugBuild UP-TO-DATE
+> Task :libraries:cryptography:impl:writeDebugAarMetadata
+> Task :libraries:deeplink:api:writeDebugAarMetadata
+> Task :libraries:featureflag:impl:writeDebugAarMetadata
+> Task :libraries:audio:api:writeDebugAarMetadata
+> Task :libraries:dateformatter:impl:writeDebugAarMetadata
+> Task :libraries:matrix:api:preBuild UP-TO-DATE
+> Task :libraries:matrixmedia:impl:preBuild UP-TO-DATE
+> Task :libraries:matrixmedia:impl:preDebugBuild UP-TO-DATE
+> Task :libraries:mediapickers:api:preBuild UP-TO-DATE
+> Task :libraries:mediapickers:api:preDebugBuild UP-TO-DATE
+> Task :libraries:matrixmedia:api:preBuild UP-TO-DATE
+> Task :libraries:eventformatter:impl:writeDebugAarMetadata
+> Task :libraries:matrix:impl:preBuild UP-TO-DATE
+> Task :libraries:matrix:api:preDebugBuild UP-TO-DATE
+> Task :libraries:matrix:impl:preDebugBuild UP-TO-DATE
+> Task :libraries:matrixmedia:api:preDebugBuild UP-TO-DATE
+> Task :libraries:mediapickers:impl:preBuild UP-TO-DATE
+> Task :libraries:mediapickers:impl:preDebugBuild UP-TO-DATE
+> Task :libraries:eventformatter:api:writeDebugAarMetadata
+> Task :libraries:mediaplayer:api:preBuild UP-TO-DATE
+> Task :libraries:mediaplayer:api:preDebugBuild UP-TO-DATE
+> Task :libraries:mediapickers:api:writeDebugAarMetadata
+> Task :libraries:indicator:impl:writeDebugAarMetadata
+> Task :libraries:featureflag:ui:writeDebugAarMetadata
+> Task :libraries:mediaplayer:impl:preBuild UP-TO-DATE
+> Task :libraries:mediaupload:api:preBuild UP-TO-DATE
+> Task :libraries:mediaplayer:impl:preDebugBuild UP-TO-DATE
+> Task :libraries:mediaupload:api:preDebugBuild UP-TO-DATE
+> Task :libraries:mediaplayer:api:writeDebugAarMetadata
+> Task :libraries:mediaupload:impl:preBuild UP-TO-DATE
+> Task :libraries:featureflag:api:writeDebugAarMetadata
+> Task :libraries:fullscreenintent:api:writeDebugAarMetadata
+> Task :libraries:mediaviewer:api:preBuild UP-TO-DATE
+> Task :libraries:mediaviewer:impl:preBuild UP-TO-DATE
+> Task :libraries:mediaviewer:api:preDebugBuild UP-TO-DATE
+> Task :libraries:mediaviewer:impl:preDebugBuild UP-TO-DATE
+> Task :libraries:matrixmedia:api:writeDebugAarMetadata
+> Task :libraries:matrixmedia:impl:writeDebugAarMetadata
+> Task :libraries:oidc:api:preBuild UP-TO-DATE
+> Task :libraries:oidc:api:preDebugBuild UP-TO-DATE
+> Task :libraries:mediapickers:impl:writeDebugAarMetadata
+> Task :libraries:mediaupload:impl:preDebugBuild UP-TO-DATE
+> Task :libraries:permissions:api:preBuild UP-TO-DATE
+> Task :libraries:oidc:impl:preBuild UP-TO-DATE
+> Task :libraries:matrix:api:writeDebugAarMetadata
+> Task :libraries:oidc:impl:preDebugBuild UP-TO-DATE
+> Task :libraries:fullscreenintent:impl:writeDebugAarMetadata
+> Task :libraries:indicator:api:writeDebugAarMetadata
+> Task :libraries:permissions:api:preDebugBuild UP-TO-DATE
+> Task :libraries:permissions:impl:preBuild UP-TO-DATE
+> Task :libraries:permissions:impl:preDebugBuild UP-TO-DATE
+> Task :libraries:preferences:api:preBuild UP-TO-DATE
+> Task :libraries:preferences:api:preDebugBuild UP-TO-DATE
+> Task :libraries:matrix:impl:writeDebugAarMetadata
+> Task :libraries:preferences:impl:preBuild UP-TO-DATE
+> Task :libraries:preferences:impl:preDebugBuild UP-TO-DATE
+> Task :libraries:push:api:preBuild UP-TO-DATE
+> Task :libraries:push:api:preDebugBuild UP-TO-DATE
+> Task :libraries:permissions:noop:preBuild UP-TO-DATE
+> Task :libraries:permissions:noop:preDebugBuild UP-TO-DATE
+> Task :libraries:mediaplayer:impl:writeDebugAarMetadata
+> Task :libraries:permissions:impl:writeDebugAarMetadata
+> Task :libraries:preferences:impl:writeDebugAarMetadata
+> Task :libraries:mediaviewer:impl:writeDebugAarMetadata
+> Task :libraries:preferences:api:writeDebugAarMetadata
+> Task :libraries:push:api:writeDebugAarMetadata
+> Task :libraries:oidc:impl:writeDebugAarMetadata
+> Task :libraries:push:impl:preBuild UP-TO-DATE
+> Task :libraries:push:impl:preDebugBuild UP-TO-DATE
+> Task :libraries:mediaupload:api:writeDebugAarMetadata
+> Task :libraries:pushproviders:api:preBuild UP-TO-DATE
+> Task :libraries:pushproviders:api:preDebugBuild UP-TO-DATE
+> Task :libraries:pushproviders:unifiedpush:preBuild UP-TO-DATE
+> Task :libraries:pushproviders:unifiedpush:preDebugBuild UP-TO-DATE
+> Task :libraries:oidc:api:writeDebugAarMetadata
+> Task :libraries:mediaupload:impl:writeDebugAarMetadata
+> Task :libraries:pushstore:api:preBuild UP-TO-DATE
+> Task :libraries:recentemojis:api:preBuild UP-TO-DATE
+> Task :libraries:pushstore:impl:preBuild UP-TO-DATE
+> Task :libraries:recentemojis:api:preDebugBuild UP-TO-DATE
+> Task :libraries:roomselect:api:preBuild UP-TO-DATE
+> Task :libraries:roomselect:api:preDebugBuild UP-TO-DATE
+> Task :libraries:recentemojis:impl:preBuild UP-TO-DATE
+> Task :libraries:recentemojis:impl:preDebugBuild UP-TO-DATE
+> Task :libraries:pushstore:impl:preDebugBuild UP-TO-DATE
+> Task :libraries:pushstore:api:preDebugBuild UP-TO-DATE
+> Task :libraries:roomselect:impl:preBuild UP-TO-DATE
+> Task :libraries:roomselect:impl:preDebugBuild UP-TO-DATE
+> Task :libraries:permissions:noop:writeDebugAarMetadata
+> Task :libraries:session-storage:impl:preBuild UP-TO-DATE
+> Task :libraries:session-storage:api:preBuild UP-TO-DATE
+> Task :libraries:session-storage:impl:preDebugBuild UP-TO-DATE
+> Task :libraries:session-storage:api:preDebugBuild UP-TO-DATE
+> Task :libraries:permissions:api:writeDebugAarMetadata
+> Task :libraries:push:impl:writeDebugAarMetadata
+> Task :libraries:troubleshoot:api:preBuild UP-TO-DATE
+> Task :libraries:textcomposer:impl:preBuild UP-TO-DATE
+> Task :libraries:textcomposer:impl:preDebugBuild UP-TO-DATE
+> Task :libraries:mediaviewer:api:writeDebugAarMetadata
+> Task :libraries:pushproviders:api:writeDebugAarMetadata
+> Task :libraries:pushproviders:unifiedpush:writeDebugAarMetadata
+> Task :libraries:troubleshoot:api:preDebugBuild UP-TO-DATE
+> Task :libraries:usersearch:impl:preBuild UP-TO-DATE
+> Task :libraries:usersearch:api:preBuild UP-TO-DATE
+> Task :libraries:usersearch:api:preDebugBuild UP-TO-DATE
+> Task :libraries:usersearch:impl:preDebugBuild UP-TO-DATE
+> Task :libraries:troubleshoot:impl:preBuild UP-TO-DATE
+> Task :libraries:troubleshoot:impl:preDebugBuild UP-TO-DATE
+> Task :libraries:recentemojis:api:writeDebugAarMetadata
+> Task :libraries:usersearch:impl:writeDebugAarMetadata
+> Task :libraries:voiceplayer:api:preBuild UP-TO-DATE
+> Task :libraries:voiceplayer:api:preDebugBuild UP-TO-DATE
+> Task :libraries:voiceplayer:impl:preBuild UP-TO-DATE
+> Task :libraries:voiceplayer:impl:preDebugBuild UP-TO-DATE
+> Task :libraries:roomselect:impl:writeDebugAarMetadata
+> Task :libraries:recentemojis:impl:writeDebugAarMetadata
+> Task :libraries:pushstore:api:writeDebugAarMetadata
+> Task :libraries:roomselect:api:writeDebugAarMetadata
+> Task :libraries:pushstore:impl:writeDebugAarMetadata
+> Task :libraries:textcomposer:impl:writeDebugAarMetadata
+> Task :libraries:voicerecorder:impl:preBuild UP-TO-DATE
+> Task :libraries:wellknown:impl:preBuild UP-TO-DATE
+> Task :libraries:workmanager:impl:preBuild UP-TO-DATE
+> Task :libraries:workmanager:api:preBuild UP-TO-DATE
+> Task :libraries:voiceplayer:api:writeDebugAarMetadata
+> Task :libraries:troubleshoot:impl:writeDebugAarMetadata
+> Task :libraries:troubleshoot:api:writeDebugAarMetadata
+> Task :libraries:voicerecorder:api:preBuild UP-TO-DATE
+> Task :libraries:usersearch:api:writeDebugAarMetadata
+> Task :libraries:wellknown:api:preBuild UP-TO-DATE
+> Task :libraries:voiceplayer:impl:writeDebugAarMetadata
+> Task :libraries:session-storage:impl:writeDebugAarMetadata
+> Task :libraries:session-storage:api:writeDebugAarMetadata
+> Task :services:analytics:api:preBuild UP-TO-DATE
+> Task :services:analytics:compose:preBuild UP-TO-DATE
+> Task :services:analytics:api:preDebugBuild UP-TO-DATE
+> Task :libraries:wellknown:impl:preDebugBuild UP-TO-DATE
+> Task :libraries:workmanager:api:preDebugBuild UP-TO-DATE
+> Task :services:analyticsproviders:posthog:preBuild UP-TO-DATE
+> Task :services:analyticsproviders:api:preBuild UP-TO-DATE
+> Task :libraries:voicerecorder:api:preDebugBuild UP-TO-DATE
+> Task :libraries:wellknown:api:preDebugBuild UP-TO-DATE
+> Task :services:analytics:noop:preBuild UP-TO-DATE
+> Task :services:analytics:compose:preDebugBuild UP-TO-DATE
+> Task :libraries:voicerecorder:impl:preDebugBuild UP-TO-DATE
+> Task :services:analytics:noop:preDebugBuild UP-TO-DATE
+> Task :libraries:workmanager:impl:preDebugBuild UP-TO-DATE
+> Task :services:analytics:impl:preBuild UP-TO-DATE
+> Task :services:analyticsproviders:posthog:preDebugBuild UP-TO-DATE
+> Task :services:analyticsproviders:api:preDebugBuild UP-TO-DATE
+> Task :services:analyticsproviders:sentry:preBuild UP-TO-DATE
+> Task :services:analyticsproviders:sentry:preDebugBuild UP-TO-DATE
+> Task :services:analytics:impl:preDebugBuild UP-TO-DATE
+> Task :libraries:workmanager:api:writeDebugAarMetadata
+> Task :services:apperror:api:preBuild UP-TO-DATE
+> Task :services:analytics:api:writeDebugAarMetadata
+> Task :services:apperror:api:preDebugBuild UP-TO-DATE
+> Task :services:apperror:impl:preBuild UP-TO-DATE
+> Task :libraries:workmanager:impl:writeDebugAarMetadata
+> Task :services:appnavstate:api:preBuild UP-TO-DATE
+> Task :services:appnavstate:api:preDebugBuild UP-TO-DATE
+> Task :services:analyticsproviders:posthog:writeDebugAarMetadata
+> Task :libraries:voicerecorder:api:writeDebugAarMetadata
+> Task :services:appnavstate:impl:preBuild UP-TO-DATE
+> Task :services:toolbox:api:preBuild UP-TO-DATE
+> Task :services:appnavstate:impl:preDebugBuild UP-TO-DATE
+> Task :services:apperror:impl:preDebugBuild UP-TO-DATE
+> Task :services:analyticsproviders:api:writeDebugAarMetadata
+> Task :libraries:wellknown:api:writeDebugAarMetadata
+> Task :services:analyticsproviders:sentry:writeDebugAarMetadata
+> Task :libraries:voicerecorder:impl:writeDebugAarMetadata
+> Task :services:analytics:noop:writeDebugAarMetadata
+> Task :services:analytics:compose:writeDebugAarMetadata
+> Task :libraries:wellknown:impl:writeDebugAarMetadata
+> Task :services:analytics:impl:writeDebugAarMetadata
+> Task :services:toolbox:impl:preBuild UP-TO-DATE
+> Task :services:toolbox:api:preDebugBuild UP-TO-DATE
+> Task :services:toolbox:impl:preDebugBuild UP-TO-DATE
+> Task :services:apperror:impl:writeDebugAarMetadata
+> Task :services:apperror:api:writeDebugAarMetadata
+> Task :services:appnavstate:api:writeDebugAarMetadata
+> Task :services:appnavstate:impl:writeDebugAarMetadata
+> Task :appconfig:processDebugNavigationResources
+> Task :services:toolbox:impl:writeDebugAarMetadata
+> Task :services:toolbox:api:writeDebugAarMetadata
+> Task :libraries:maplibre-compose:processDebugNavigationResources FROM-CACHE
+> Task :libraries:architecture:processDebugNavigationResources
+> Task :libraries:network:processDebugNavigationResources FROM-CACHE
+> Task :libraries:previewutils:processDebugNavigationResources FROM-CACHE
+> Task :libraries:encrypted-db:processDebugNavigationResources FROM-CACHE
+> Task :libraries:testtags:processDebugNavigationResources FROM-CACHE
+> Task :appicon:funker:processDebugNavigationResources
+> Task :libraries:qrcode:processDebugNavigationResources FROM-CACHE
+> Task :libraries:ui-common:processDebugNavigationResources FROM-CACHE
+> Task :libraries:designsystem:processDebugNavigationResources
+> Task :appnav:processDebugNavigationResources
+> Task :libraries:ui-utils:processDebugNavigationResources FROM-CACHE
+> Task :features:announcement:api:processDebugNavigationResources FROM-CACHE
+> Task :libraries:matrixui:processDebugNavigationResources
+> Task :features:createroom:api:processDebugNavigationResources FROM-CACHE
+> Task :features:announcement:impl:processDebugNavigationResources
+> Task :features:deactivation:api:processDebugNavigationResources FROM-CACHE
+> Task :features:analytics:api:processDebugNavigationResources
+> Task :features:cachecleaner:api:processDebugNavigationResources FROM-CACHE
+> Task :features:call:api:processDebugNavigationResources FROM-CACHE
+> Task :features:cachecleaner:impl:processDebugNavigationResources FROM-CACHE
+> Task :features:enterprise:impl-foss:processDebugNavigationResources FROM-CACHE
+> Task :features:analytics:impl:processDebugNavigationResources
+> Task :features:ftue:api:processDebugNavigationResources FROM-CACHE
+> Task :features:forward:impl:processDebugNavigationResources FROM-CACHE
+> Task :features:home:api:processDebugNavigationResources FROM-CACHE
+> Task :features:call:impl:processDebugNavigationResources
+> Task :features:forward:api:processDebugNavigationResources FROM-CACHE
+> Task :features:enterprise:api:processDebugNavigationResources FROM-CACHE
+> Task :libraries:androidutils:processDebugNavigationResources
+> Task :features:invite:api:processDebugNavigationResources FROM-CACHE
+> Task :features:invitepeople:api:processDebugNavigationResources FROM-CACHE
+> Task :features:deactivation:impl:processDebugNavigationResources
+> Task :features:joinroom:api:processDebugNavigationResources FROM-CACHE
+> Task :features:knockrequests:api:processDebugNavigationResources FROM-CACHE
+> Task :features:ftue:impl:processDebugNavigationResources
+> Task :features:leaveroom:impl:processDebugNavigationResources FROM-CACHE
+> Task :features:licenses:api:processDebugNavigationResources FROM-CACHE
+> Task :features:home:impl:processDebugNavigationResources
+> Task :features:createroom:impl:processDebugNavigationResources
+> Task :features:licenses:impl:processDebugNavigationResources FROM-CACHE
+> Task :features:joinroom:impl:processDebugNavigationResources
+> Task :features:invite:impl:processDebugNavigationResources
+> Task :features:linknewdevice:api:processDebugNavigationResources FROM-CACHE
+> Task :features:location:api:processDebugNavigationResources
+> Task :features:logout:api:processDebugNavigationResources FROM-CACHE
+> Task :features:location:impl:processDebugNavigationResources
+> Task :features:invitepeople:impl:processDebugNavigationResources
+> Task :features:lockscreen:api:processDebugNavigationResources FROM-CACHE
+> Task :features:login:api:processDebugNavigationResources FROM-CACHE
+> Task :features:messages:api:processDebugNavigationResources FROM-CACHE
+> Task :features:leaveroom:api:processDebugNavigationResources
+> Task :features:migration:api:processDebugNavigationResources FROM-CACHE
+> Task :features:networkmonitor:impl:processDebugNavigationResources FROM-CACHE
+> Task :features:networkmonitor:api:processDebugNavigationResources FROM-CACHE
+> Task :features:lockscreen:impl:processDebugNavigationResources
+> Task :features:migration:impl:processDebugNavigationResources FROM-CACHE
+> Task :features:login:impl:processDebugNavigationResources
+> Task :libraries:compound:processDebugNavigationResources
+> Task :features:knockrequests:impl:processDebugNavigationResources
+> Task :features:messages:impl:processDebugNavigationResources
+> Task :features:poll:api:processDebugNavigationResources
+> Task :features:logout:impl:processDebugNavigationResources
+> Task :features:linknewdevice:impl:processDebugNavigationResources
+> Task :libraries:ui-strings:processDebugNavigationResources
+> Task :features:reportroom:api:processDebugNavigationResources FROM-CACHE
+> Task :features:roomaliasresolver:api:processDebugNavigationResources FROM-CACHE
+> Task :features:preferences:api:processDebugNavigationResources FROM-CACHE
+> Task :features:rolesandpermissions:api:processDebugNavigationResources FROM-CACHE
+> Task :features:roomcall:api:processDebugNavigationResources FROM-CACHE
+> Task :features:roomdetails:api:processDebugNavigationResources FROM-CACHE
+> Task :features:roomaliasresolver:impl:processDebugNavigationResources
+> Task :features:preferences:impl:processDebugNavigationResources
+> Task :features:roommembermoderation:api:processDebugNavigationResources FROM-CACHE
+> Task :features:roomdirectory:api:processDebugNavigationResources FROM-CACHE
+> Task :features:roomdetailsedit:api:processDebugNavigationResources FROM-CACHE
+> Task :features:roomcall:impl:processDebugNavigationResources FROM-CACHE
+> Task :features:rageshake:api:processDebugNavigationResources
+> Task :features:securebackup:api:processDebugNavigationResources FROM-CACHE
+> Task :features:rageshake:impl:processDebugNavigationResources
+> Task :features:poll:impl:processDebugNavigationResources
+> Task :features:securityandprivacy:api:processDebugNavigationResources FROM-CACHE
+> Task :features:roomdetails:impl:processDebugNavigationResources
+> Task :features:roomdetailsedit:impl:processDebugNavigationResources
+> Task :features:rolesandpermissions:impl:processDebugNavigationResources
+> Task :features:reportroom:impl:processDebugNavigationResources
+> Task :features:share:api:processDebugNavigationResources FROM-CACHE
+> Task :features:startchat:api:processDebugNavigationResources FROM-CACHE
+> Task :features:roomdirectory:impl:processDebugNavigationResources
+> Task :features:space:api:processDebugNavigationResources FROM-CACHE
+> Task :features:share:impl:processDebugNavigationResources FROM-CACHE
+> Task :features:signedout:api:processDebugNavigationResources FROM-CACHE
+> Task :features:userprofile:impl:processDebugNavigationResources FROM-CACHE
+> Task :features:verifysession:api:processDebugNavigationResources FROM-CACHE
+> Task :features:viewfolder:api:processDebugNavigationResources FROM-CACHE
+> Task :features:viewfolder:impl:processDebugNavigationResources FROM-CACHE
+> Task :libraries:audio:api:processDebugNavigationResources FROM-CACHE
+> Task :libraries:audio:impl:processDebugNavigationResources FROM-CACHE
+> Task :libraries:accountselect:impl:processDebugNavigationResources FROM-CACHE
+> Task :libraries:accountselect:api:processDebugNavigationResources FROM-CACHE
+> Task :features:securebackup:impl:processDebugNavigationResources
+> Task :features:securityandprivacy:impl:processDebugNavigationResources
+> Task :features:roommembermoderation:impl:processDebugNavigationResources
+> Task :libraries:cryptography:api:processDebugNavigationResources FROM-CACHE
+> Task :libraries:dateformatter:api:processDebugNavigationResources FROM-CACHE
+> Task :libraries:cryptography:impl:processDebugNavigationResources FROM-CACHE
+> Task :libraries:deeplink:impl:processDebugNavigationResources FROM-CACHE
+> Task :libraries:deeplink:api:processDebugNavigationResources FROM-CACHE
+> Task :libraries:eventformatter:api:processDebugNavigationResources FROM-CACHE
+> Task :libraries:featureflag:ui:processDebugNavigationResources FROM-CACHE
+> Task :libraries:fullscreenintent:api:processDebugNavigationResources FROM-CACHE
+> Task :libraries:featureflag:api:processDebugNavigationResources FROM-CACHE
+> Task :features:userprofile:api:processDebugNavigationResources FROM-CACHE
+> Task :features:space:impl:processDebugNavigationResources
+> Task :libraries:featureflag:impl:processDebugNavigationResources FROM-CACHE
+> Task :features:startchat:impl:processDebugNavigationResources
+> Task :features:signedout:impl:processDebugNavigationResources
+> Task :features:userprofile:shared:processDebugNavigationResources
+> Task :libraries:indicator:impl:processDebugNavigationResources FROM-CACHE
+> Task :libraries:mediapickers:api:processDebugNavigationResources FROM-CACHE
+> Task :libraries:mediapickers:impl:processDebugNavigationResources FROM-CACHE
+> Task :libraries:fullscreenintent:impl:processDebugNavigationResources FROM-CACHE
+> Task :libraries:mediaplayer:api:processDebugNavigationResources FROM-CACHE
+> Task :libraries:matrixmedia:api:processDebugNavigationResources FROM-CACHE
+> Task :libraries:matrix:impl:processDebugNavigationResources FROM-CACHE
+> Task :libraries:mediaplayer:impl:processDebugNavigationResources FROM-CACHE
+> Task :libraries:indicator:api:processDebugNavigationResources FROM-CACHE
+> Task :libraries:dateformatter:impl:processDebugNavigationResources
+> Task :libraries:eventformatter:impl:processDebugNavigationResources
+> Task :libraries:matrix:api:processDebugNavigationResources FROM-CACHE
+> Task :libraries:matrixmedia:impl:processDebugNavigationResources FROM-CACHE
+> Task :libraries:preferences:impl:processDebugNavigationResources FROM-CACHE
+> Task :libraries:mediaupload:api:processDebugNavigationResources FROM-CACHE
+> Task :libraries:oidc:impl:processDebugNavigationResources FROM-CACHE
+> Task :libraries:mediaviewer:api:processDebugNavigationResources FROM-CACHE
+> Task :libraries:preferences:api:processDebugNavigationResources FROM-CACHE
+> Task :libraries:permissions:noop:processDebugNavigationResources FROM-CACHE
+> Task :libraries:oidc:api:processDebugNavigationResources FROM-CACHE
+> Task :libraries:pushstore:impl:processDebugNavigationResources FROM-CACHE
+> Task :libraries:recentemojis:api:processDebugNavigationResources FROM-CACHE
+> Task :libraries:pushstore:api:processDebugNavigationResources FROM-CACHE
+> Task :libraries:mediaviewer:impl:processDebugNavigationResources
+> Task :libraries:mediaupload:impl:processDebugNavigationResources FROM-CACHE
+> Task :libraries:recentemojis:impl:processDebugNavigationResources FROM-CACHE
+> Task :libraries:roomselect:impl:processDebugNavigationResources FROM-CACHE
+> Task :libraries:pushproviders:api:processDebugNavigationResources FROM-CACHE
+> Task :libraries:push:api:processDebugNavigationResources FROM-CACHE
+> Task :libraries:roomselect:api:processDebugNavigationResources FROM-CACHE
+> Task :features:verifysession:impl:processDebugNavigationResources
+> Task :libraries:session-storage:impl:processDebugNavigationResources FROM-CACHE
+> Task :libraries:pushproviders:unifiedpush:processDebugNavigationResources
+> Task :libraries:session-storage:api:processDebugNavigationResources FROM-CACHE
+> Task :libraries:permissions:impl:processDebugNavigationResources
+> Task :libraries:push:impl:processDebugNavigationResources
+> Task :libraries:permissions:api:processDebugNavigationResources
+> Task :libraries:voicerecorder:api:processDebugNavigationResources FROM-CACHE
+> Task :libraries:usersearch:api:processDebugNavigationResources FROM-CACHE
+> Task :libraries:usersearch:impl:processDebugNavigationResources FROM-CACHE
+> Task :libraries:wellknown:api:processDebugNavigationResources FROM-CACHE
+> Task :libraries:wellknown:impl:processDebugNavigationResources FROM-CACHE
+> Task :libraries:troubleshoot:api:processDebugNavigationResources FROM-CACHE
+> Task :libraries:voiceplayer:impl:processDebugNavigationResources FROM-CACHE
+> Task :libraries:voiceplayer:api:processDebugNavigationResources FROM-CACHE
+> Task :libraries:workmanager:api:processDebugNavigationResources FROM-CACHE
+> Task :libraries:voicerecorder:impl:processDebugNavigationResources FROM-CACHE
+> Task :libraries:textcomposer:impl:processDebugNavigationResources
+> Task :services:apperror:api:processDebugNavigationResources FROM-CACHE
+> Task :services:analyticsproviders:sentry:processDebugNavigationResources FROM-CACHE
+> Task :services:analytics:impl:processDebugNavigationResources FROM-CACHE
+> Task :services:analytics:compose:processDebugNavigationResources FROM-CACHE
+> Task :services:analytics:noop:processDebugNavigationResources FROM-CACHE
+> Task :libraries:troubleshoot:impl:processDebugNavigationResources
+> Task :libraries:workmanager:impl:processDebugNavigationResources FROM-CACHE
+> Task :services:analytics:api:processDebugNavigationResources FROM-CACHE
+> Task :services:analyticsproviders:api:processDebugNavigationResources FROM-CACHE
+> Task :services:appnavstate:api:processDebugNavigationResources FROM-CACHE
+> Task :services:apperror:impl:processDebugNavigationResources FROM-CACHE
+> Task :services:analyticsproviders:posthog:processDebugNavigationResources FROM-CACHE
+> Task :services:toolbox:impl:processDebugNavigationResources FROM-CACHE
+> Task :services:toolbox:api:processDebugNavigationResources FROM-CACHE
+> Task :services:appnavstate:impl:processDebugNavigationResources FROM-CACHE
+> Task :appconfig:generateDebugResValues
+> Task :libraries:androidutils:generateDebugResValues FROM-CACHE
+> Task :libraries:designsystem:generateDebugResValues FROM-CACHE
+> Task :appicon:funker:generateDebugResValues
+> Task :libraries:encrypted-db:generateDebugResValues
+> Task :libraries:architecture:generateDebugResValues
+> Task :libraries:matrixui:generateDebugResValues
+> Task :libraries:maplibre-compose:generateDebugResValues
+> Task :appnav:generateDebugResValues
+> Task :libraries:compound:generateDebugResValues
+> Task :appconfig:generateDebugResources
+> Task :libraries:maplibre-compose:generateDebugResources FROM-CACHE
+> Task :libraries:designsystem:generateDebugResources
+> Task :appicon:funker:generateDebugResources
+> Task :libraries:androidutils:generateDebugResources
+> Task :app:generateFdroidDebugResValues
+> Task :libraries:architecture:generateDebugResources
+> Task :libraries:matrixui:generateDebugResources
+> Task :libraries:compound:generateDebugResources
+> Task :appnav:generateDebugResources
+> Task :libraries:encrypted-db:generateDebugResources
+> Task :libraries:network:generateDebugResValues FROM-CACHE
+> Task :libraries:previewutils:generateDebugResValues FROM-CACHE
+> Task :libraries:qrcode:generateDebugResValues FROM-CACHE
+> Task :libraries:previewutils:generateDebugResources FROM-CACHE
+> Task :libraries:network:generateDebugResources FROM-CACHE
+> Task :libraries:qrcode:generateDebugResources FROM-CACHE
+> Task :libraries:ui-strings:generateDebugResValues FROM-CACHE
+> Task :libraries:testtags:generateDebugResValues FROM-CACHE
+> Task :libraries:ui-common:generateDebugResValues FROM-CACHE
+> Task :libraries:testtags:generateDebugResources FROM-CACHE
+> Task :libraries:ui-common:generateDebugResources FROM-CACHE
+> Task :libraries:ui-strings:generateDebugResources
+> Task :libraries:ui-utils:generateDebugResValues FROM-CACHE
+> Task :features:analytics:api:generateDebugResValues FROM-CACHE
+> Task :libraries:architecture:packageDebugResources
+> Task :libraries:ui-utils:generateDebugResources FROM-CACHE
+> Task :libraries:maplibre-compose:packageDebugResources
+> Task :appconfig:packageDebugResources
+> Task :features:announcement:api:generateDebugResValues FROM-CACHE
+> Task :features:analytics:impl:generateDebugResValues FROM-CACHE
+> Task :features:analytics:api:generateDebugResources
+> Task :features:announcement:api:generateDebugResources FROM-CACHE
+> Task :features:analytics:impl:generateDebugResources
+> Task :features:announcement:impl:generateDebugResValues FROM-CACHE
+> Task :libraries:encrypted-db:packageDebugResources
+> Task :features:cachecleaner:api:generateDebugResValues FROM-CACHE
+> Task :features:cachecleaner:api:generateDebugResources FROM-CACHE
+> Task :features:cachecleaner:impl:generateDebugResValues FROM-CACHE
+> Task :libraries:network:packageDebugResources
+> Task :features:announcement:impl:generateDebugResources
+> Task :features:call:impl:generateDebugResValues FROM-CACHE
+> Task :features:call:api:generateDebugResValues FROM-CACHE
+> Task :features:cachecleaner:impl:generateDebugResources FROM-CACHE
+> Task :libraries:previewutils:packageDebugResources
+> Task :features:call:api:generateDebugResources FROM-CACHE
+> Task :features:createroom:api:generateDebugResValues FROM-CACHE
+> Task :features:call:impl:generateDebugResources
+> Task :features:deactivation:api:generateDebugResValues FROM-CACHE
+> Task :features:createroom:impl:generateDebugResValues FROM-CACHE
+> Task :features:createroom:api:generateDebugResources FROM-CACHE
+> Task :libraries:testtags:packageDebugResources
+> Task :features:deactivation:impl:generateDebugResValues FROM-CACHE
+> Task :features:deactivation:api:generateDebugResources FROM-CACHE
+> Task :features:createroom:impl:generateDebugResources
+> Task :features:enterprise:api:generateDebugResValues FROM-CACHE
+> Task :features:enterprise:impl-foss:generateDebugResValues FROM-CACHE
+> Task :features:enterprise:impl-foss:generateDebugResources FROM-CACHE
+> Task :features:enterprise:api:generateDebugResources FROM-CACHE
+> Task :features:deactivation:impl:generateDebugResources
+> Task :features:ftue:api:generateDebugResValues FROM-CACHE
+> Task :features:forward:impl:generateDebugResValues FROM-CACHE
+> Task :features:forward:api:generateDebugResValues FROM-CACHE
+> Task :libraries:qrcode:packageDebugResources
+> Task :features:forward:impl:generateDebugResources FROM-CACHE
+> Task :features:ftue:api:generateDebugResources FROM-CACHE
+> Task :features:forward:api:generateDebugResources FROM-CACHE
+> Task :libraries:ui-common:packageDebugResources
+> Task :features:home:impl:generateDebugResValues FROM-CACHE
+> Task :features:home:api:generateDebugResValues FROM-CACHE
+> Task :features:ftue:impl:generateDebugResValues FROM-CACHE
+> Task :features:home:api:generateDebugResources FROM-CACHE
+> Task :features:invite:api:generateDebugResValues FROM-CACHE
+> Task :features:home:impl:generateDebugResources
+> Task :features:ftue:impl:generateDebugResources
+> Task :features:invite:impl:generateDebugResValues FROM-CACHE
+> Task :features:invitepeople:api:generateDebugResValues FROM-CACHE
+> Task :features:invite:api:generateDebugResources FROM-CACHE
+> Task :libraries:ui-utils:packageDebugResources
+> Task :libraries:designsystem:packageDebugResources
+> Task :features:invitepeople:impl:generateDebugResValues FROM-CACHE
+> Task :features:invitepeople:api:generateDebugResources FROM-CACHE
+> Task :features:invite:impl:generateDebugResources
+> Task :features:joinroom:impl:generateDebugResValues FROM-CACHE
+> Task :features:joinroom:api:generateDebugResValues FROM-CACHE
+> Task :features:invitepeople:impl:generateDebugResources
+> Task :features:joinroom:api:generateDebugResources FROM-CACHE
+> Task :features:knockrequests:api:generateDebugResValues FROM-CACHE
+> Task :features:knockrequests:impl:generateDebugResValues FROM-CACHE
+> Task :features:knockrequests:api:generateDebugResources FROM-CACHE
+> Task :features:leaveroom:api:generateDebugResValues FROM-CACHE
+> Task :features:knockrequests:impl:generateDebugResources
+> Task :features:leaveroom:api:generateDebugResources
+> Task :libraries:androidutils:packageDebugResources
+> Task :features:leaveroom:impl:generateDebugResValues FROM-CACHE
+> Task :features:leaveroom:impl:generateDebugResources FROM-CACHE
+> Task :features:licenses:impl:generateDebugResValues FROM-CACHE
+> Task :appicon:funker:packageDebugResources
+> Task :features:licenses:impl:generateDebugResources FROM-CACHE
+> Task :features:licenses:api:generateDebugResValues FROM-CACHE
+> Task :features:linknewdevice:api:generateDebugResValues FROM-CACHE
+> Task :features:licenses:api:generateDebugResources FROM-CACHE
+> Task :features:joinroom:impl:generateDebugResources
+> Task :features:linknewdevice:impl:generateDebugResValues FROM-CACHE
+> Task :features:location:api:generateDebugResValues FROM-CACHE
+> Task :features:linknewdevice:api:generateDebugResources FROM-CACHE
+> Task :appnav:packageDebugResources
+> Task :features:announcement:api:packageDebugResources
+> Task :features:location:impl:generateDebugResValues FROM-CACHE
+> Task :libraries:matrixui:packageDebugResources
+> Task :features:location:impl:generateDebugResources
+> Task :features:location:api:generateDebugResources
+> Task :features:cachecleaner:api:packageDebugResources
+> Task :features:cachecleaner:impl:packageDebugResources
+> Task :features:lockscreen:api:generateDebugResValues FROM-CACHE
+> Task :features:lockscreen:impl:generateDebugResValues FROM-CACHE
+> Task :features:lockscreen:api:generateDebugResources FROM-CACHE
+> Task :features:call:api:packageDebugResources
+> Task :features:lockscreen:impl:generateDebugResources
+> Task :features:linknewdevice:impl:generateDebugResources
+> Task :features:analytics:api:packageDebugResources
+> Task :features:analytics:impl:packageDebugResources
+> Task :features:announcement:impl:packageDebugResources
+> Task :features:login:api:generateDebugResValues FROM-CACHE
+> Task :features:login:impl:generateDebugResValues FROM-CACHE
+> Task :features:logout:api:generateDebugResValues FROM-CACHE
+> Task :features:login:api:generateDebugResources FROM-CACHE
+> Task :features:createroom:api:packageDebugResources
+> Task :features:deactivation:api:packageDebugResources
+> Task :features:logout:api:generateDebugResources FROM-CACHE
+> Task :features:login:impl:generateDebugResources
+> Task :features:enterprise:api:packageDebugResources
+> Task :libraries:compound:packageDebugResources
+> Task :features:logout:impl:generateDebugResValues FROM-CACHE
+> Task :features:messages:api:generateDebugResValues FROM-CACHE
+> Task :features:messages:impl:generateDebugResValues FROM-CACHE
+> Task :features:logout:impl:generateDebugResources
+> Task :features:messages:api:generateDebugResources FROM-CACHE
+> Task :features:migration:api:generateDebugResValues FROM-CACHE
+> Task :features:forward:api:packageDebugResources
+> Task :features:messages:impl:generateDebugResources
+> Task :features:enterprise:impl-foss:packageDebugResources
+> Task :features:forward:impl:packageDebugResources
+> Task :features:ftue:api:packageDebugResources
+> Task :features:migration:impl:generateDebugResValues FROM-CACHE
+> Task :features:migration:api:generateDebugResources FROM-CACHE
+> Task :features:networkmonitor:api:generateDebugResValues FROM-CACHE
+> Task :features:networkmonitor:api:generateDebugResources FROM-CACHE
+> Task :features:networkmonitor:impl:generateDebugResValues FROM-CACHE
+> Task :features:migration:impl:generateDebugResources FROM-CACHE
+> Task :features:poll:impl:generateDebugResValues FROM-CACHE
+> Task :features:networkmonitor:impl:generateDebugResources FROM-CACHE
+> Task :features:poll:impl:generateDebugResources
+> Task :features:preferences:api:generateDebugResValues FROM-CACHE
+> Task :features:invite:api:packageDebugResources
+> Task :features:home:api:packageDebugResources
+> Task :features:preferences:api:generateDebugResources FROM-CACHE
+> Task :features:preferences:impl:generateDebugResValues FROM-CACHE
+> Task :features:poll:api:generateDebugResValues FROM-CACHE
+> Task :features:rageshake:api:generateDebugResValues FROM-CACHE
+> Task :features:preferences:impl:generateDebugResources
+> Task :features:poll:api:generateDebugResources
+> Task :features:call:impl:packageDebugResources
+> Task :features:invitepeople:api:packageDebugResources
+> Task :features:rageshake:impl:generateDebugResValues FROM-CACHE
+> Task :features:rageshake:api:generateDebugResources
+> Task :features:reportroom:api:generateDebugResValues FROM-CACHE
+> Task :features:reportroom:impl:generateDebugResValues FROM-CACHE
+> Task :features:reportroom:api:generateDebugResources FROM-CACHE
+> Task :features:rageshake:impl:generateDebugResources
+> Task :features:rolesandpermissions:api:generateDebugResValues FROM-CACHE
+> Task :features:reportroom:impl:generateDebugResources
+> Task :features:rolesandpermissions:api:generateDebugResources FROM-CACHE
+> Task :features:rolesandpermissions:impl:generateDebugResValues FROM-CACHE
+> Task :features:deactivation:impl:packageDebugResources
+> Task :features:roomaliasresolver:impl:generateDebugResValues FROM-CACHE
+> Task :features:roomaliasresolver:api:generateDebugResValues FROM-CACHE
+> Task :features:rolesandpermissions:impl:generateDebugResources
+> Task :features:roomaliasresolver:impl:generateDebugResources
+> Task :features:roomcall:api:generateDebugResValues FROM-CACHE
+> Task :features:roomaliasresolver:api:generateDebugResources FROM-CACHE
+> Task :features:createroom:impl:packageDebugResources
+> Task :features:roomcall:impl:generateDebugResValues FROM-CACHE
+> Task :features:roomcall:api:generateDebugResources FROM-CACHE
+> Task :features:roomdetails:api:generateDebugResValues FROM-CACHE
+> Task :features:roomcall:impl:generateDebugResources FROM-CACHE
+> Task :features:roomdetailsedit:api:generateDebugResValues FROM-CACHE
+> Task :features:roomdetails:api:generateDebugResources FROM-CACHE
+> Task :features:roomdetailsedit:api:generateDebugResources FROM-CACHE
+> Task :features:roomdetailsedit:impl:generateDebugResValues FROM-CACHE
+> Task :features:roomdirectory:api:generateDebugResValues FROM-CACHE
+> Task :features:roomdirectory:api:generateDebugResources FROM-CACHE
+> Task :features:knockrequests:api:packageDebugResources
+> Task :features:roomdetailsedit:impl:generateDebugResources
+> Task :features:ftue:impl:packageDebugResources
+> Task :features:roomdirectory:impl:generateDebugResValues FROM-CACHE
+> Task :features:roommembermoderation:api:generateDebugResValues FROM-CACHE
+> Task :features:roommembermoderation:api:generateDebugResources FROM-CACHE
+> Task :features:joinroom:api:packageDebugResources
+> Task :features:roommembermoderation:impl:generateDebugResValues FROM-CACHE
+> Task :features:roomdetails:impl:generateDebugResValues FROM-CACHE
+> Task :features:roomdirectory:impl:generateDebugResources
+> Task :features:securebackup:api:generateDebugResValues FROM-CACHE
+> Task :features:roomdetails:impl:generateDebugResources
+> Task :features:securebackup:impl:generateDebugResValues FROM-CACHE
+> Task :features:securebackup:impl:generateDebugResources
+> Task :features:leaveroom:impl:packageDebugResources
+> Task :features:securityandprivacy:api:generateDebugResValues FROM-CACHE
+> Task :features:securebackup:api:generateDebugResources FROM-CACHE
+> Task :features:securityandprivacy:api:generateDebugResources FROM-CACHE
+> Task :libraries:ui-strings:packageDebugResources
+> Task :features:invite:impl:packageDebugResources
+> Task :features:roommembermoderation:impl:generateDebugResources
+> Task :features:licenses:api:packageDebugResources
+> Task :features:home:impl:packageDebugResources
+> Task :features:share:impl:generateDebugResValues FROM-CACHE
+> Task :features:share:api:generateDebugResValues FROM-CACHE
+> Task :features:securityandprivacy:impl:generateDebugResValues FROM-CACHE
+> Task :features:share:api:generateDebugResources FROM-CACHE
+> Task :features:signedout:api:generateDebugResValues FROM-CACHE
+> Task :features:securityandprivacy:impl:generateDebugResources
+> Task :features:signedout:impl:generateDebugResValues FROM-CACHE
+> Task :features:signedout:api:generateDebugResources FROM-CACHE
+> Task :features:space:api:generateDebugResValues FROM-CACHE
+> Task :features:licenses:impl:packageDebugResources
+> Task :features:linknewdevice:api:packageDebugResources
+> Task :features:location:api:packageDebugResources
+> Task :features:space:api:generateDebugResources FROM-CACHE
+> Task :features:space:impl:generateDebugResValues FROM-CACHE
+> Task :features:lockscreen:api:packageDebugResources
+> Task :features:space:impl:generateDebugResources
+> Task :features:share:impl:generateDebugResources FROM-CACHE
+> Task :features:signedout:impl:generateDebugResources
+> Task :features:location:impl:packageDebugResources
+> Task :features:userprofile:api:generateDebugResValues FROM-CACHE
+> Task :features:startchat:impl:generateDebugResValues FROM-CACHE
+> Task :features:userprofile:api:generateDebugResources FROM-CACHE
+> Task :features:joinroom:impl:packageDebugResources
+> Task :features:userprofile:impl:generateDebugResValues FROM-CACHE
+> Task :features:userprofile:impl:generateDebugResources FROM-CACHE
+> Task :features:userprofile:shared:generateDebugResValues FROM-CACHE
+> Task :features:startchat:impl:generateDebugResources
+> Task :features:invitepeople:impl:packageDebugResources
+> Task :features:verifysession:api:generateDebugResValues FROM-CACHE
+> Task :features:logout:api:packageDebugResources
+> Task :features:userprofile:shared:generateDebugResources
+> Task :features:login:api:packageDebugResources
+> Task :features:verifysession:api:generateDebugResources FROM-CACHE
+> Task :features:viewfolder:api:generateDebugResValues FROM-CACHE
+> Task :features:verifysession:impl:generateDebugResValues FROM-CACHE
+> Task :features:viewfolder:api:generateDebugResources FROM-CACHE
+> Task :features:startchat:api:generateDebugResValues FROM-CACHE
+> Task :features:verifysession:impl:generateDebugResources
+> Task :features:viewfolder:impl:generateDebugResValues FROM-CACHE
+> Task :features:knockrequests:impl:packageDebugResources
+> Task :features:startchat:api:generateDebugResources FROM-CACHE
+> Task :libraries:accountselect:api:generateDebugResValues FROM-CACHE
+> Task :features:messages:api:packageDebugResources
+> Task :libraries:accountselect:api:generateDebugResources FROM-CACHE
+> Task :libraries:accountselect:impl:generateDebugResValues FROM-CACHE
+> Task :features:viewfolder:impl:generateDebugResources FROM-CACHE
+> Task :libraries:accountselect:impl:generateDebugResources FROM-CACHE
+> Task :libraries:audio:impl:generateDebugResValues FROM-CACHE
+> Task :features:leaveroom:api:packageDebugResources
+> Task :libraries:audio:api:generateDebugResValues FROM-CACHE
+> Task :libraries:cryptography:api:generateDebugResValues FROM-CACHE
+> Task :features:migration:impl:packageDebugResources
+> Task :features:migration:api:packageDebugResources
+> Task :libraries:audio:impl:generateDebugResources FROM-CACHE
+> Task :libraries:cryptography:api:generateDebugResources FROM-CACHE
+> Task :libraries:audio:api:generateDebugResources FROM-CACHE
+> Task :libraries:cryptography:impl:generateDebugResValues FROM-CACHE
+> Task :libraries:dateformatter:api:generateDebugResValues FROM-CACHE
+> Task :libraries:cryptography:impl:generateDebugResources FROM-CACHE
+> Task :libraries:dateformatter:impl:generateDebugResValues FROM-CACHE
+> Task :libraries:deeplink:api:generateDebugResValues FROM-CACHE
+> Task :features:linknewdevice:impl:packageDebugResources
+> Task :libraries:dateformatter:api:generateDebugResources FROM-CACHE
+> Task :libraries:dateformatter:impl:generateDebugResources
+> Task :features:networkmonitor:impl:packageDebugResources
+> Task :libraries:deeplink:impl:generateDebugResValues FROM-CACHE
+> Task :libraries:eventformatter:api:generateDebugResValues FROM-CACHE
+> Task :libraries:deeplink:api:generateDebugResources FROM-CACHE
+> Task :features:networkmonitor:api:packageDebugResources
+> Task :libraries:deeplink:impl:generateDebugResources FROM-CACHE
+> Task :libraries:eventformatter:api:generateDebugResources FROM-CACHE
+> Task :libraries:featureflag:impl:generateDebugResValues FROM-CACHE
+> Task :libraries:featureflag:api:generateDebugResValues FROM-CACHE
+> Task :libraries:featureflag:impl:generateDebugResources FROM-CACHE
+> Task :libraries:featureflag:api:generateDebugResources FROM-CACHE
+> Task :features:preferences:api:packageDebugResources
+> Task :libraries:featureflag:ui:generateDebugResValues FROM-CACHE
+> Task :libraries:fullscreenintent:api:generateDebugResValues FROM-CACHE
+> Task :libraries:fullscreenintent:api:generateDebugResources FROM-CACHE
+> Task :libraries:featureflag:ui:generateDebugResources FROM-CACHE
+> Task :features:lockscreen:impl:packageDebugResources
+> Task :libraries:indicator:api:generateDebugResValues FROM-CACHE
+> Task :libraries:fullscreenintent:impl:generateDebugResValues FROM-CACHE
+> Task :libraries:fullscreenintent:impl:generateDebugResources FROM-CACHE
+> Task :libraries:indicator:impl:generateDebugResValues FROM-CACHE
+> Task :libraries:indicator:impl:generateDebugResources FROM-CACHE
+> Task :libraries:eventformatter:impl:generateDebugResValues FROM-CACHE
+> Task :libraries:matrix:api:generateDebugResValues FROM-CACHE
+> Task :libraries:matrix:api:generateDebugResources FROM-CACHE
+> Task :libraries:eventformatter:impl:generateDebugResources
+> Task :libraries:matrix:impl:generateDebugResValues FROM-CACHE
+> Task :libraries:matrixmedia:api:generateDebugResValues FROM-CACHE
+> Task :libraries:matrixmedia:api:generateDebugResources FROM-CACHE
+> Task :libraries:matrix:impl:generateDebugResources FROM-CACHE
+> Task :libraries:indicator:api:generateDebugResources FROM-CACHE
+> Task :libraries:mediapickers:api:generateDebugResValues FROM-CACHE
+> Task :libraries:matrixmedia:impl:generateDebugResValues FROM-CACHE
+> Task :libraries:mediapickers:impl:generateDebugResValues FROM-CACHE
+> Task :libraries:matrixmedia:impl:generateDebugResources FROM-CACHE
+> Task :libraries:mediaplayer:api:generateDebugResValues FROM-CACHE
+> Task :libraries:mediapickers:impl:generateDebugResources FROM-CACHE
+> Task :libraries:mediaplayer:api:generateDebugResources FROM-CACHE
+> Task :libraries:mediapickers:api:generateDebugResources FROM-CACHE
+> Task :libraries:mediaupload:impl:generateDebugResValues FROM-CACHE
+> Task :libraries:mediaupload:api:generateDebugResValues FROM-CACHE
+> Task :features:login:impl:packageDebugResources
+> Task :libraries:mediaupload:api:generateDebugResources FROM-CACHE
+> Task :libraries:mediaupload:impl:generateDebugResources FROM-CACHE
+> Task :libraries:mediaplayer:impl:generateDebugResValues FROM-CACHE
+> Task :features:logout:impl:packageDebugResources
+> Task :libraries:mediaviewer:impl:generateDebugResValues FROM-CACHE
+> Task :libraries:mediaviewer:api:generateDebugResValues FROM-CACHE
+> Task :libraries:mediaplayer:impl:generateDebugResources FROM-CACHE
+> Task :libraries:mediaviewer:api:generateDebugResources FROM-CACHE
+> Task :libraries:oidc:api:generateDebugResValues FROM-CACHE
+> Task :features:messages:impl:packageDebugResources
+> Task :libraries:mediaviewer:impl:generateDebugResources
+> Task :libraries:oidc:impl:generateDebugResValues FROM-CACHE
+> Task :libraries:oidc:api:generateDebugResources FROM-CACHE
+> Task :libraries:permissions:api:generateDebugResValues FROM-CACHE
+> Task :libraries:oidc:impl:generateDebugResources FROM-CACHE
+> Task :libraries:permissions:impl:generateDebugResValues FROM-CACHE
+> Task :libraries:permissions:noop:generateDebugResValues FROM-CACHE
+> Task :features:poll:impl:packageDebugResources
+> Task :libraries:permissions:api:generateDebugResources
+> Task :libraries:permissions:impl:generateDebugResources
+> Task :libraries:permissions:noop:generateDebugResources FROM-CACHE
+> Task :features:reportroom:api:packageDebugResources
+> Task :libraries:push:api:generateDebugResValues FROM-CACHE
+> Task :libraries:preferences:api:generateDebugResValues FROM-CACHE
+> Task :libraries:preferences:impl:generateDebugResValues FROM-CACHE
+> Task :features:rolesandpermissions:api:packageDebugResources
+> Task :libraries:preferences:api:generateDebugResources FROM-CACHE
+> Task :libraries:push:api:generateDebugResources FROM-CACHE
+> Task :libraries:preferences:impl:generateDebugResources FROM-CACHE
+> Task :libraries:push:impl:generateDebugResValues FROM-CACHE
+> Task :libraries:pushproviders:api:generateDebugResValues FROM-CACHE
+> Task :libraries:pushproviders:unifiedpush:generateDebugResValues FROM-CACHE
+> Task :libraries:pushproviders:api:generateDebugResources FROM-CACHE
+> Task :features:roomaliasresolver:api:packageDebugResources
+> Task :libraries:push:impl:generateDebugResources
+> Task :libraries:pushstore:api:generateDebugResValues FROM-CACHE
+> Task :libraries:pushstore:api:generateDebugResources FROM-CACHE
+> Task :libraries:pushproviders:unifiedpush:generateDebugResources
+> Task :libraries:pushstore:impl:generateDebugResValues FROM-CACHE
+> Task :libraries:pushstore:impl:generateDebugResources FROM-CACHE
+> Task :features:poll:api:packageDebugResources
+> Task :libraries:recentemojis:impl:generateDebugResValues FROM-CACHE
+> Task :libraries:roomselect:api:generateDebugResValues FROM-CACHE
+> Task :libraries:recentemojis:api:generateDebugResValues FROM-CACHE
+> Task :features:roomcall:api:packageDebugResources
+> Task :libraries:roomselect:api:generateDebugResources FROM-CACHE
+> Task :libraries:recentemojis:api:generateDebugResources FROM-CACHE
+> Task :libraries:recentemojis:impl:generateDebugResources FROM-CACHE
+> Task :features:rageshake:api:packageDebugResources
+> Task :features:rageshake:impl:packageDebugResources
+> Task :features:roomcall:impl:packageDebugResources
+> Task :libraries:session-storage:api:generateDebugResValues FROM-CACHE
+> Task :libraries:roomselect:impl:generateDebugResValues FROM-CACHE
+> Task :libraries:session-storage:impl:generateDebugResValues FROM-CACHE
+> Task :libraries:session-storage:api:generateDebugResources FROM-CACHE
+> Task :libraries:roomselect:impl:generateDebugResources FROM-CACHE
+> Task :libraries:session-storage:impl:generateDebugResources FROM-CACHE
+> Task :libraries:textcomposer:impl:generateDebugResValues FROM-CACHE
+> Task :libraries:troubleshoot:api:generateDebugResValues FROM-CACHE
+> Task :features:reportroom:impl:packageDebugResources
+> Task :features:roomdetailsedit:api:packageDebugResources
+> Task :features:roomdetails:api:packageDebugResources
+> Task :libraries:troubleshoot:impl:generateDebugResValues FROM-CACHE
+> Task :libraries:troubleshoot:api:generateDebugResources FROM-CACHE
+> Task :features:preferences:impl:packageDebugResources
+> Task :libraries:usersearch:api:generateDebugResValues FROM-CACHE
+> Task :libraries:troubleshoot:impl:generateDebugResources
+> Task :libraries:usersearch:api:generateDebugResources FROM-CACHE
+> Task :libraries:usersearch:impl:generateDebugResValues FROM-CACHE
+> Task :libraries:voiceplayer:api:generateDebugResValues FROM-CACHE
+> Task :libraries:usersearch:impl:generateDebugResources FROM-CACHE
+> Task :features:roomdirectory:api:packageDebugResources
+> Task :features:roommembermoderation:api:packageDebugResources
+> Task :features:roomaliasresolver:impl:packageDebugResources
+> Task :libraries:voiceplayer:impl:generateDebugResValues FROM-CACHE
+> Task :libraries:voiceplayer:api:generateDebugResources FROM-CACHE
+> Task :libraries:textcomposer:impl:generateDebugResources
+> Task :libraries:voiceplayer:impl:generateDebugResources FROM-CACHE
+> Task :libraries:voicerecorder:api:generateDebugResValues FROM-CACHE
+> Task :libraries:voicerecorder:impl:generateDebugResValues FROM-CACHE
+> Task :features:securebackup:api:packageDebugResources
+> Task :libraries:voicerecorder:impl:generateDebugResources FROM-CACHE
+> Task :libraries:wellknown:api:generateDebugResValues FROM-CACHE
+> Task :libraries:voicerecorder:api:generateDebugResources FROM-CACHE
+> Task :libraries:workmanager:api:generateDebugResValues FROM-CACHE
+> Task :libraries:wellknown:impl:generateDebugResValues FROM-CACHE
+> Task :libraries:wellknown:api:generateDebugResources FROM-CACHE
+> Task :libraries:workmanager:api:generateDebugResources FROM-CACHE
+> Task :libraries:wellknown:impl:generateDebugResources FROM-CACHE
+> Task :features:securityandprivacy:api:packageDebugResources
+> Task :features:rolesandpermissions:impl:packageDebugResources
+> Task :libraries:workmanager:impl:generateDebugResValues FROM-CACHE
+> Task :services:analytics:api:generateDebugResValues FROM-CACHE
+> Task :services:analytics:compose:generateDebugResValues FROM-CACHE
+> Task :services:analytics:compose:generateDebugResources FROM-CACHE
+> Task :libraries:workmanager:impl:generateDebugResources FROM-CACHE
+> Task :services:analytics:api:generateDebugResources FROM-CACHE
+> Task :services:analyticsproviders:api:generateDebugResValues FROM-CACHE
+> Task :services:analytics:impl:generateDebugResValues FROM-CACHE
+> Task :services:analytics:noop:generateDebugResValues FROM-CACHE
+> Task :features:share:impl:packageDebugResources
+> Task :features:share:api:packageDebugResources
+> Task :services:analytics:impl:generateDebugResources FROM-CACHE
+> Task :services:analyticsproviders:api:generateDebugResources FROM-CACHE
+> Task :services:analytics:noop:generateDebugResources FROM-CACHE
+> Task :services:analyticsproviders:posthog:generateDebugResValues FROM-CACHE
+> Task :services:analyticsproviders:posthog:generateDebugResources FROM-CACHE
+> Task :services:apperror:api:generateDebugResValues FROM-CACHE
+> Task :services:apperror:impl:generateDebugResValues FROM-CACHE
+> Task :services:apperror:api:generateDebugResources FROM-CACHE
+> Task :services:apperror:impl:generateDebugResources FROM-CACHE
+> Task :features:signedout:api:packageDebugResources
+> Task :services:appnavstate:api:generateDebugResValues FROM-CACHE
+> Task :services:appnavstate:impl:generateDebugResValues FROM-CACHE
+> Task :services:appnavstate:api:generateDebugResources FROM-CACHE
+> Task :services:appnavstate:impl:generateDebugResources FROM-CACHE
+> Task :services:toolbox:api:generateDebugResValues FROM-CACHE
+> Task :services:analyticsproviders:sentry:generateDebugResValues FROM-CACHE
+> Task :features:roomdetailsedit:impl:packageDebugResources
+> Task :services:toolbox:impl:generateDebugResValues FROM-CACHE
+> Task :services:analyticsproviders:sentry:generateDebugResources FROM-CACHE
+> Task :services:toolbox:api:generateDebugResources FROM-CACHE
+> Task :features:space:api:packageDebugResources
+> Task :services:toolbox:impl:generateDebugResources FROM-CACHE
+> Task :features:roomdirectory:impl:packageDebugResources
+> Task :app:createFdroidDebugCompatibleScreenManifests
+> Task :app:generateFdroidDebugResources
+> Task :app:extractDeepLinksFdroidDebug
+> Task :appconfig:extractDeepLinksDebug
+> Task :features:startchat:api:packageDebugResources
+> Task :features:userprofile:api:packageDebugResources
+> Task :appnav:extractDeepLinksDebug FROM-CACHE
+> Task :appicon:funker:extractDeepLinksDebug FROM-CACHE
+> Task :features:userprofile:impl:packageDebugResources
+> Task :features:roommembermoderation:impl:packageDebugResources
+> Task :features:securityandprivacy:impl:packageDebugResources
+> Task :features:verifysession:api:packageDebugResources
+> Task :features:signedout:impl:packageDebugResources
+> Task :features:securebackup:impl:packageDebugResources
+> Task :features:roomdetails:impl:packageDebugResources
+> Task :appicon:funker:processDebugManifest
+> Task :features:viewfolder:api:packageDebugResources
+> Task :features:space:impl:packageDebugResources
+> Task :features:viewfolder:impl:packageDebugResources
+> Task :libraries:accountselect:api:packageDebugResources
+> Task :libraries:androidutils:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:cryptography:api:packageDebugResources
+> Task :libraries:audio:impl:packageDebugResources
+> Task :libraries:audio:api:packageDebugResources
+> Task :libraries:cryptography:impl:packageDebugResources
+> Task :features:startchat:impl:packageDebugResources
+> Task :libraries:dateformatter:api:packageDebugResources
+> Task :libraries:deeplink:impl:packageDebugResources
+> Task :libraries:deeplink:api:packageDebugResources
+> Task :libraries:eventformatter:api:packageDebugResources
+> Task :libraries:accountselect:impl:packageDebugResources
+> Task :features:userprofile:shared:packageDebugResources
+> Task :libraries:fullscreenintent:impl:packageDebugResources
+> Task :libraries:featureflag:ui:packageDebugResources
+> Task :libraries:featureflag:api:packageDebugResources
+> Task :libraries:featureflag:impl:packageDebugResources
+> Task :libraries:fullscreenintent:api:packageDebugResources
+> Task :libraries:indicator:api:packageDebugResources
+> Task :libraries:matrixmedia:api:packageDebugResources
+> Task :libraries:indicator:impl:packageDebugResources
+> Task :libraries:matrix:api:packageDebugResources
+> Task :libraries:matrix:impl:packageDebugResources
+> Task :libraries:dateformatter:impl:packageDebugResources
+> Task :libraries:mediaplayer:impl:packageDebugResources
+> Task :libraries:matrixmedia:impl:packageDebugResources
+> Task :libraries:mediaplayer:api:packageDebugResources
+> Task :libraries:mediapickers:api:packageDebugResources
+> Task :libraries:mediapickers:impl:packageDebugResources
+> Task :libraries:oidc:impl:packageDebugResources
+> Task :libraries:oidc:api:packageDebugResources
+> Task :libraries:mediaviewer:api:packageDebugResources
+> Task :libraries:mediaupload:impl:packageDebugResources
+> Task :libraries:preferences:api:packageDebugResources
+> Task :libraries:permissions:noop:packageDebugResources
+> Task :libraries:preferences:impl:packageDebugResources
+> Task :libraries:eventformatter:impl:packageDebugResources
+> Task :libraries:push:api:packageDebugResources
+> Task :libraries:pushproviders:api:packageDebugResources
+> Task :features:verifysession:impl:packageDebugResources
+> Task :libraries:pushstore:api:packageDebugResources
+> Task :libraries:mediaviewer:impl:packageDebugResources
+> Task :libraries:recentemojis:api:packageDebugResources
+> Task :libraries:recentemojis:impl:packageDebugResources
+> Task :libraries:roomselect:api:packageDebugResources
+> Task :libraries:roomselect:impl:packageDebugResources
+> Task :libraries:session-storage:api:packageDebugResources
+> Task :libraries:permissions:impl:packageDebugResources
+> Task :libraries:pushproviders:unifiedpush:packageDebugResources
+> Task :libraries:troubleshoot:api:packageDebugResources
+> Task :libraries:usersearch:api:packageDebugResources
+> Task :libraries:mediaupload:api:packageDebugResources
+> Task :libraries:session-storage:impl:packageDebugResources
+> Task :libraries:push:impl:packageDebugResources
+> Task :libraries:usersearch:impl:packageDebugResources
+> Task :libraries:voiceplayer:api:packageDebugResources
+> Task :libraries:voicerecorder:api:packageDebugResources
+> Task :libraries:voiceplayer:impl:packageDebugResources
+> Task :libraries:wellknown:impl:packageDebugResources
+> Task :libraries:wellknown:api:packageDebugResources
+> Task :libraries:voicerecorder:impl:packageDebugResources
+> Task :libraries:workmanager:api:packageDebugResources
+> Task :services:analytics:api:packageDebugResources
+> Task :libraries:workmanager:impl:packageDebugResources
+> Task :services:analytics:impl:packageDebugResources
+> Task :services:analytics:noop:packageDebugResources
+> Task :services:analytics:compose:packageDebugResources
+> Task :services:analyticsproviders:api:packageDebugResources
+> Task :services:apperror:impl:packageDebugResources
+> Task :libraries:troubleshoot:impl:packageDebugResources
+> Task :libraries:permissions:api:packageDebugResources
+> Task :services:analyticsproviders:sentry:packageDebugResources
+> Task :services:apperror:api:packageDebugResources
+> Task :libraries:textcomposer:impl:packageDebugResources
+> Task :libraries:architecture:extractDeepLinksDebug FROM-CACHE
+> Task :services:toolbox:api:packageDebugResources
+> Task :services:appnavstate:api:packageDebugResources
+> Task :services:appnavstate:impl:packageDebugResources
+> Task :services:toolbox:impl:packageDebugResources
+> Task :app:packageFdroidDebugResources
+> Task :libraries:compound:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:encrypted-db:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:designsystem:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:maplibre-compose:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:matrixui:extractDeepLinksDebug FROM-CACHE
+> Task :appconfig:processDebugManifest
+> Task :libraries:maplibre-compose:processDebugManifest
+> Task :libraries:network:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:previewutils:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:previewutils:processDebugManifest
+> Task :libraries:qrcode:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:pushstore:impl:packageDebugResources
+> Task :libraries:testtags:extractDeepLinksDebug FROM-CACHE
+> Task :services:analyticsproviders:posthog:packageDebugResources
+> Task :libraries:androidutils:processDebugManifest
+> Task :libraries:encrypted-db:processDebugManifest
+> Task :libraries:ui-common:extractDeepLinksDebug FROM-CACHE
+> Task :appnav:processDebugManifest
+> Task :libraries:architecture:processDebugManifest
+> Task :libraries:matrixui:processDebugManifest
+> Task :libraries:ui-utils:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:ui-strings:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:network:processDebugManifest
+> Task :features:analytics:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:analytics:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:ui-utils:processDebugManifest
+> Task :features:analytics:impl:processDebugManifest
+> Task :features:announcement:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:announcement:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:designsystem:processDebugManifest
+> Task :libraries:ui-strings:processDebugManifest
+> Task :features:cachecleaner:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:cachecleaner:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:compound:processDebugManifest
+> Task :features:call:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:analytics:api:processDebugManifest
+> Task :features:call:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:call:impl:processDebugManifest
+> Task :features:createroom:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:createroom:api:processDebugManifest
+> Task :features:createroom:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:testtags:processDebugManifest
+> Task :features:deactivation:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:deactivation:api:processDebugManifest
+> Task :features:deactivation:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:deactivation:impl:processDebugManifest
+> Task :features:enterprise:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:announcement:impl:processDebugManifest
+> Task :features:enterprise:impl-foss:extractDeepLinksDebug FROM-CACHE
+> Task :features:cachecleaner:impl:processDebugManifest
+> Task :features:forward:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:announcement:api:processDebugManifest
+> Task :features:forward:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:createroom:impl:processDebugManifest
+> Task :features:forward:api:processDebugManifest
+> Task :features:ftue:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:ftue:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:call:api:processDebugManifest
+> Task :features:home:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:ftue:api:processDebugManifest
+> Task :features:home:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:forward:impl:processDebugManifest
+> Task :features:invite:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:ui-common:processDebugManifest
+> Task :features:home:impl:processDebugManifest
+> Task :features:home:api:processDebugManifest
+> Task :features:invite:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:invitepeople:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:invitepeople:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:invitepeople:api:processDebugManifest
+> Task :features:enterprise:api:processDebugManifest
+> Task :features:joinroom:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:joinroom:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:invite:api:processDebugManifest
+> Task :features:invitepeople:impl:processDebugManifest
+> Task :features:knockrequests:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:cachecleaner:api:processDebugManifest
+> Task :features:knockrequests:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:joinroom:impl:processDebugManifest
+> Task :features:leaveroom:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:enterprise:impl-foss:processDebugManifest
+> Task :features:leaveroom:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:licenses:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:knockrequests:impl:processDebugManifest
+> Task :features:leaveroom:api:processDebugManifest
+> Task :features:invite:impl:processDebugManifest
+> Task :features:leaveroom:impl:processDebugManifest
+> Task :features:licenses:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:linknewdevice:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:linknewdevice:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:location:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:knockrequests:api:processDebugManifest
+> Task :features:linknewdevice:api:processDebugManifest
+> Task :libraries:qrcode:processDebugManifest
+> Task :features:location:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:lockscreen:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:joinroom:api:processDebugManifest
+> Task :features:lockscreen:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:linknewdevice:impl:processDebugManifest
+> Task :features:login:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:login:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:lockscreen:api:processDebugManifest
+> Task :features:location:api:processDebugManifest
+> Task :features:logout:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:location:impl:processDebugManifest
+> Task :features:logout:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:messages:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:licenses:api:processDebugManifest
+> Task :features:messages:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:login:api:processDebugManifest
+> Task :features:logout:api:processDebugManifest
+> Task :features:login:impl:processDebugManifest
+> Task :features:migration:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:migration:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:messages:api:processDebugManifest
+> Task :features:networkmonitor:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:licenses:impl:processDebugManifest
+> Task :features:networkmonitor:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:poll:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:logout:impl:processDebugManifest
+> Task :features:lockscreen:impl:processDebugManifest
+> Task :features:poll:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:preferences:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:migration:api:processDebugManifest
+> Task :features:preferences:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:migration:impl:processDebugManifest
+> Task :features:poll:impl:processDebugManifest
+> Task :features:preferences:api:processDebugManifest
+> Task :features:rageshake:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:rageshake:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:reportroom:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:ftue:impl:processDebugManifest
+> Task :features:reportroom:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:messages:impl:processDebugManifest
+> Task :features:rageshake:impl:processDebugManifest
+> Task :features:preferences:impl:processDebugManifest
+> Task :features:rolesandpermissions:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:rolesandpermissions:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:roomaliasresolver:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:poll:api:processDebugManifest
+> Task :features:rageshake:api:processDebugManifest
+> Task :features:rolesandpermissions:api:processDebugManifest
+> Task :features:roomcall:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:roomaliasresolver:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:roomcall:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:rolesandpermissions:impl:processDebugManifest
+> Task :features:roomcall:api:processDebugManifest
+> Task :features:roomdetails:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:reportroom:api:processDebugManifest
+> Task :features:roomaliasresolver:impl:processDebugManifest
+> Task :features:roomdetails:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:roomdetailsedit:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:roomdetailsedit:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:roomdetails:api:processDebugManifest
+> Task :features:roomdetailsedit:api:processDebugManifest
+> Task :features:roomdetails:impl:processDebugManifest
+> Task :features:reportroom:impl:processDebugManifest
+> Task :features:roomdirectory:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:roomdirectory:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:roommembermoderation:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:roommembermoderation:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:roomdirectory:api:processDebugManifest
+> Task :features:networkmonitor:api:processDebugManifest
+> Task :features:securebackup:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:securebackup:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:roomdirectory:impl:processDebugManifest
+> Task :features:securityandprivacy:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:roommembermoderation:api:processDebugManifest
+> Task :features:networkmonitor:impl:processDebugManifest
+> Task :features:securityandprivacy:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:securityandprivacy:api:processDebugManifest
+> Task :features:roommembermoderation:impl:processDebugManifest
+> Task :features:share:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:share:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:securebackup:impl:processDebugManifest
+> Task :features:signedout:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:signedout:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:share:api:processDebugManifest
+> Task :features:securityandprivacy:impl:processDebugManifest
+> Task :features:space:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:roomaliasresolver:api:processDebugManifest
+> Task :features:space:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:securebackup:api:processDebugManifest
+> Task :features:share:impl:processDebugManifest
+> Task :features:startchat:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:startchat:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:signedout:impl:processDebugManifest
+> Task :features:userprofile:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:roomdetailsedit:impl:processDebugManifest
+> Task :features:userprofile:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:startchat:impl:processDebugManifest
+> Task :features:roomcall:impl:processDebugManifest
+> Task :features:userprofile:shared:extractDeepLinksDebug FROM-CACHE
+> Task :features:verifysession:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:verifysession:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:startchat:api:processDebugManifest
+> Task :features:userprofile:shared:processDebugManifest
+> Task :features:signedout:api:processDebugManifest
+> Task :features:viewfolder:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:verifysession:api:processDebugManifest
+> Task :features:viewfolder:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:accountselect:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:accountselect:impl:extractDeepLinksDebug FROM-CACHE
+> Task :features:userprofile:impl:processDebugManifest
+> Task :features:space:impl:processDebugManifest
+> Task :features:viewfolder:impl:processDebugManifest
+> Task :libraries:audio:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:audio:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:cryptography:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:userprofile:api:processDebugManifest
+> Task :features:verifysession:impl:processDebugManifest
+> Task :libraries:cryptography:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:audio:api:processDebugManifest
+> Task :libraries:dateformatter:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:accountselect:api:processDebugManifest
+> Task :libraries:audio:impl:processDebugManifest
+> Task :libraries:dateformatter:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:deeplink:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:deeplink:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:cryptography:api:processDebugManifest
+> Task :libraries:eventformatter:api:extractDeepLinksDebug FROM-CACHE
+> Task :features:viewfolder:api:processDebugManifest
+> Task :features:space:api:processDebugManifest
+> Task :libraries:deeplink:impl:processDebugManifest
+> Task :libraries:eventformatter:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:featureflag:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:deeplink:api:processDebugManifest
+> Task :libraries:featureflag:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:featureflag:ui:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:accountselect:impl:processDebugManifest
+> Task :libraries:eventformatter:api:processDebugManifest
+> Task :libraries:fullscreenintent:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:fullscreenintent:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:featureflag:impl:processDebugManifest
+> Task :libraries:indicator:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:featureflag:ui:processDebugManifest
+> Task :libraries:fullscreenintent:api:processDebugManifest
+> Task :libraries:fullscreenintent:impl:processDebugManifest
+> Task :libraries:indicator:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:eventformatter:impl:processDebugManifest
+> Task :libraries:matrix:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:matrix:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:matrixmedia:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:dateformatter:impl:processDebugManifest
+> Task :libraries:matrixmedia:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:matrix:impl:processDebugManifest
+> Task :libraries:dateformatter:api:processDebugManifest
+> Task :libraries:mediapickers:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:cryptography:impl:processDebugManifest
+> Task :libraries:mediapickers:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:matrix:api:processDebugManifest
+> Task :libraries:matrixmedia:impl:processDebugManifest
+> Task :libraries:mediaplayer:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:mediaplayer:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:mediaupload:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:matrixmedia:api:processDebugManifest
+> Task :libraries:indicator:api:processDebugManifest
+> Task :libraries:mediaupload:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:indicator:impl:processDebugManifest
+> Task :libraries:mediaviewer:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:mediaviewer:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:featureflag:api:processDebugManifest
+> Task :libraries:mediaplayer:impl:processDebugManifest
+> Task :libraries:oidc:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:mediaupload:api:processDebugManifest
+> Task :libraries:oidc:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:mediapickers:impl:processDebugManifest
+> Task :libraries:permissions:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:mediaplayer:api:processDebugManifest
+> Task :libraries:oidc:impl:processDebugManifest
+> Task :libraries:permissions:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:oidc:api:processDebugManifest
+> Task :libraries:permissions:noop:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:preferences:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:preferences:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:mediapickers:api:processDebugManifest
+> Task :libraries:permissions:noop:processDebugManifest
+> Task :libraries:mediaviewer:impl:processDebugManifest
+> Task :libraries:preferences:api:processDebugManifest
+> Task :libraries:preferences:impl:processDebugManifest
+> Task :libraries:push:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:push:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:pushproviders:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:pushproviders:unifiedpush:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:pushstore:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:permissions:api:processDebugManifest
+> Task :libraries:mediaupload:impl:processDebugManifest
+> Task :libraries:push:api:processDebugManifest
+> Task :libraries:pushstore:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:mediaviewer:api:processDebugManifest
+> Task :libraries:recentemojis:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:pushstore:api:processDebugManifest
+> Task :libraries:recentemojis:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:pushproviders:unifiedpush:processDebugManifest
+> Task :libraries:pushproviders:api:processDebugManifest
+> Task :libraries:permissions:impl:processDebugManifest
+> Task :libraries:push:impl:processDebugManifest
+> Task :libraries:pushstore:impl:processDebugManifest
+> Task :libraries:roomselect:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:session-storage:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:session-storage:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:roomselect:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:textcomposer:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:troubleshoot:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:troubleshoot:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:recentemojis:api:processDebugManifest
+> Task :libraries:session-storage:api:processDebugManifest
+> Task :libraries:usersearch:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:textcomposer:impl:processDebugManifest
+> Task :libraries:roomselect:api:processDebugManifest
+> Task :libraries:session-storage:impl:processDebugManifest
+> Task :libraries:troubleshoot:api:processDebugManifest
+> Task :libraries:roomselect:impl:processDebugManifest
+> Task :libraries:recentemojis:impl:processDebugManifest
+> Task :libraries:usersearch:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:voicerecorder:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:voiceplayer:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:voiceplayer:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:voicerecorder:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:wellknown:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:wellknown:impl:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:voiceplayer:api:processDebugManifest
+> Task :libraries:troubleshoot:impl:processDebugManifest
+> Task :libraries:usersearch:impl:processDebugManifest
+> Task :libraries:workmanager:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:voiceplayer:impl:processDebugManifest
+> Task :libraries:usersearch:api:processDebugManifest
+> Task :libraries:voicerecorder:api:processDebugManifest
+> Task :libraries:wellknown:api:processDebugManifest
+> Task :libraries:voicerecorder:impl:processDebugManifest
+> Task :libraries:workmanager:api:processDebugManifest
+> Task :services:analytics:compose:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:workmanager:impl:extractDeepLinksDebug FROM-CACHE
+> Task :services:analytics:api:extractDeepLinksDebug FROM-CACHE
+> Task :services:analytics:impl:extractDeepLinksDebug FROM-CACHE
+> Task :services:analytics:noop:extractDeepLinksDebug FROM-CACHE
+> Task :services:analyticsproviders:api:extractDeepLinksDebug FROM-CACHE
+> Task :libraries:wellknown:impl:processDebugManifest
+> Task :services:analyticsproviders:posthog:extractDeepLinksDebug FROM-CACHE
+> Task :services:analytics:api:processDebugManifest
+> Task :services:analyticsproviders:sentry:extractDeepLinksDebug FROM-CACHE
+> Task :services:analytics:noop:processDebugManifest
+> Task :services:analytics:compose:processDebugManifest
+> Task :libraries:workmanager:impl:processDebugManifest
+> Task :services:analytics:impl:processDebugManifest
+> Task :services:analyticsproviders:posthog:processDebugManifest
+> Task :services:apperror:api:extractDeepLinksDebug FROM-CACHE
+> Task :services:apperror:impl:extractDeepLinksDebug FROM-CACHE
+> Task :services:appnavstate:api:extractDeepLinksDebug FROM-CACHE
+> Task :services:toolbox:api:extractDeepLinksDebug FROM-CACHE
+> Task :services:analyticsproviders:api:processDebugManifest
+> Task :services:appnavstate:impl:extractDeepLinksDebug FROM-CACHE
+> Task :services:toolbox:impl:extractDeepLinksDebug FROM-CACHE
+> Task :services:analyticsproviders:sentry:processDebugManifest
+> Task :services:appnavstate:api:processDebugManifest
+> Task :services:toolbox:api:processDebugManifest
+> Task :services:apperror:impl:processDebugManifest
+> Task :services:appnavstate:impl:processDebugManifest
+> Task :services:apperror:api:processDebugManifest
+> Task :services:toolbox:impl:processDebugManifest
+> Task :appnav:compileDebugLibraryResources
+> Task :appconfig:compileDebugLibraryResources
+> Task :libraries:architecture:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:androidutils:compileDebugLibraryResources
+> Task :appconfig:parseDebugLocalResources
+> Task :libraries:androidutils:parseDebugLocalResources
+> Task :appicon:funker:parseDebugLocalResources
+> Task :appnav:parseDebugLocalResources
+> Task :libraries:architecture:parseDebugLocalResources
+> Task :libraries:compound:compileDebugLibraryResources
+> Task :libraries:compound:parseDebugLocalResources
+> Task :libraries:androidutils:generateDebugRFile
+> Task :appconfig:generateDebugRFile
+> Task :appnav:generateDebugRFile
+> Task :libraries:architecture:generateDebugRFile
+> Task :appicon:funker:generateDebugRFile
+> Task :libraries:compound:generateDebugRFile
+> Task :libraries:encrypted-db:parseDebugLocalResources FROM-CACHE
+> Task :libraries:encrypted-db:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:maplibre-compose:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:maplibre-compose:parseDebugLocalResources FROM-CACHE
+> Task :libraries:network:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:network:parseDebugLocalResources FROM-CACHE
+> Task :libraries:matrixui:compileDebugLibraryResources
+> Task :libraries:previewutils:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:previewutils:parseDebugLocalResources FROM-CACHE
+> Task :libraries:encrypted-db:generateDebugRFile
+> Task :libraries:maplibre-compose:generateDebugRFile
+> Task :libraries:matrixui:parseDebugLocalResources
+> Task :libraries:designsystem:parseDebugLocalResources
+> Task :libraries:qrcode:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:qrcode:parseDebugLocalResources FROM-CACHE
+> Task :libraries:network:generateDebugRFile
+> Task :libraries:testtags:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:testtags:parseDebugLocalResources FROM-CACHE
+> Task :libraries:ui-common:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:qrcode:generateDebugRFile
+> Task :libraries:matrixui:generateDebugRFile
+> Task :libraries:ui-common:parseDebugLocalResources FROM-CACHE
+> Task :libraries:designsystem:generateDebugRFile
+> Task :libraries:designsystem:compileDebugLibraryResources
+> Task :libraries:ui-utils:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:previewutils:generateDebugRFile
+> Task :libraries:ui-utils:parseDebugLocalResources FROM-CACHE
+> Task :libraries:testtags:generateDebugRFile
+> Task :libraries:ui-strings:compileDebugLibraryResources
+> Task :libraries:ui-common:generateDebugRFile
+> Task :features:announcement:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:analytics:api:compileDebugLibraryResources
+> Task :features:announcement:impl:compileDebugLibraryResources
+> Task :features:analytics:api:parseDebugLocalResources
+> Task :features:analytics:impl:compileDebugLibraryResources
+> Task :features:analytics:impl:parseDebugLocalResources
+> Task :features:announcement:api:parseDebugLocalResources FROM-CACHE
+> Task :features:cachecleaner:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:cachecleaner:api:parseDebugLocalResources FROM-CACHE
+> Task :features:announcement:impl:parseDebugLocalResources
+> Task :libraries:ui-strings:parseDebugLocalResources
+> Task :libraries:ui-utils:generateDebugRFile
+> Task :features:analytics:api:generateDebugRFile
+> Task :features:cachecleaner:impl:parseDebugLocalResources FROM-CACHE
+> Task :features:cachecleaner:impl:compileDebugLibraryResources FROM-CACHE
+> Task :features:announcement:api:generateDebugRFile
+> Task :features:analytics:impl:generateDebugRFile
+> Task :appicon:funker:compileDebugLibraryResources
+> Task :features:announcement:impl:generateDebugRFile
+> Task :features:call:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:createroom:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:call:api:parseDebugLocalResources FROM-CACHE
+> Task :features:createroom:api:parseDebugLocalResources FROM-CACHE
+> Task :features:cachecleaner:api:generateDebugRFile
+> Task :libraries:ui-strings:generateDebugRFile
+> Task :features:call:impl:compileDebugLibraryResources
+> Task :features:cachecleaner:impl:generateDebugRFile
+> Task :features:createroom:impl:compileDebugLibraryResources
+> Task :features:deactivation:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:deactivation:api:parseDebugLocalResources FROM-CACHE
+> Task :features:call:impl:parseDebugLocalResources
+> Task :features:call:api:generateDebugRFile
+> Task :features:deactivation:impl:parseDebugLocalResources
+> Task :features:createroom:api:generateDebugRFile
+> Task :features:enterprise:api:parseDebugLocalResources FROM-CACHE
+> Task :features:enterprise:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:createroom:impl:parseDebugLocalResources
+> Task :features:deactivation:impl:compileDebugLibraryResources
+> Task :features:enterprise:impl-foss:parseDebugLocalResources FROM-CACHE
+> Task :features:enterprise:impl-foss:compileDebugLibraryResources FROM-CACHE
+> Task :features:deactivation:api:generateDebugRFile
+> Task :features:forward:impl:compileDebugLibraryResources FROM-CACHE
+> Task :features:enterprise:api:generateDebugRFile
+> Task :features:forward:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:forward:api:parseDebugLocalResources FROM-CACHE
+> Task :features:forward:impl:parseDebugLocalResources FROM-CACHE
+> Task :features:ftue:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:ftue:api:parseDebugLocalResources FROM-CACHE
+> Task :features:enterprise:impl-foss:generateDebugRFile
+> Task :features:createroom:impl:generateDebugRFile
+> Task :features:deactivation:impl:generateDebugRFile
+> Task :features:call:impl:generateDebugRFile
+> Task :features:home:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:ftue:impl:compileDebugLibraryResources
+> Task :features:forward:api:generateDebugRFile
+> Task :features:invite:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:home:api:parseDebugLocalResources FROM-CACHE
+> Task :features:invite:api:parseDebugLocalResources FROM-CACHE
+> Task :features:ftue:impl:parseDebugLocalResources
+> Task :features:invite:impl:compileDebugLibraryResources
+> Task :features:forward:impl:generateDebugRFile
+> Task :features:ftue:api:generateDebugRFile
+> Task :features:home:api:generateDebugRFile
+> Task :features:invitepeople:api:parseDebugLocalResources FROM-CACHE
+> Task :features:home:impl:parseDebugLocalResources
+> Task :features:invitepeople:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:home:impl:compileDebugLibraryResources
+> Task :features:invite:impl:parseDebugLocalResources
+> Task :features:invitepeople:impl:compileDebugLibraryResources
+> Task :features:joinroom:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:home:impl:generateDebugRFile
+> Task :features:invitepeople:api:generateDebugRFile
+> Task :features:invite:api:generateDebugRFile
+> Task :features:ftue:impl:generateDebugRFile
+> Task :features:knockrequests:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:joinroom:api:parseDebugLocalResources FROM-CACHE
+> Task :features:knockrequests:api:parseDebugLocalResources FROM-CACHE
+> Task :features:invitepeople:impl:parseDebugLocalResources
+> Task :features:knockrequests:impl:compileDebugLibraryResources
+> Task :features:joinroom:impl:compileDebugLibraryResources
+> Task :features:leaveroom:api:compileDebugLibraryResources
+> Task :features:invitepeople:impl:generateDebugRFile
+> Task :features:invite:impl:generateDebugRFile
+> Task :features:knockrequests:api:generateDebugRFile
+> Task :features:joinroom:api:generateDebugRFile
+> Task :features:leaveroom:api:parseDebugLocalResources
+> Task :features:joinroom:impl:parseDebugLocalResources
+> Task :features:leaveroom:impl:parseDebugLocalResources FROM-CACHE
+> Task :features:licenses:api:parseDebugLocalResources FROM-CACHE
+> Task :features:leaveroom:impl:compileDebugLibraryResources FROM-CACHE
+> Task :features:knockrequests:impl:parseDebugLocalResources
+> Task :features:licenses:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:licenses:impl:compileDebugLibraryResources FROM-CACHE
+> Task :features:licenses:impl:parseDebugLocalResources FROM-CACHE
+> Task :features:linknewdevice:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:linknewdevice:api:parseDebugLocalResources FROM-CACHE
+> Task :features:leaveroom:api:generateDebugRFile
+> Task :features:joinroom:impl:generateDebugRFile
+> Task :features:linknewdevice:impl:compileDebugLibraryResources
+> Task :features:licenses:impl:generateDebugRFile
+> Task :features:licenses:api:generateDebugRFile
+> Task :features:leaveroom:impl:generateDebugRFile
+> Task :features:knockrequests:impl:generateDebugRFile
+> Task :features:lockscreen:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:linknewdevice:impl:parseDebugLocalResources
+> Task :features:location:api:parseDebugLocalResources
+> Task :features:lockscreen:api:parseDebugLocalResources FROM-CACHE
+> Task :features:location:api:compileDebugLibraryResources
+> Task :features:linknewdevice:api:generateDebugRFile
+> Task :features:lockscreen:impl:compileDebugLibraryResources
+> Task :features:login:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:login:api:parseDebugLocalResources FROM-CACHE
+> Task :features:location:impl:parseDebugLocalResources
+> Task :features:location:impl:compileDebugLibraryResources
+> Task :features:linknewdevice:impl:generateDebugRFile
+> Task :features:lockscreen:api:generateDebugRFile
+> Task :features:location:api:generateDebugRFile
+> Task :features:location:impl:generateDebugRFile
+> Task :features:logout:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:lockscreen:impl:parseDebugLocalResources
+> Task :features:login:api:generateDebugRFile
+> Task :features:messages:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:logout:api:parseDebugLocalResources FROM-CACHE
+> Task :features:messages:api:parseDebugLocalResources FROM-CACHE
+> Task :features:login:impl:parseDebugLocalResources
+> Task :features:login:impl:compileDebugLibraryResources
+> Task :features:logout:impl:parseDebugLocalResources
+> Task :features:logout:impl:compileDebugLibraryResources
+> Task :features:lockscreen:impl:generateDebugRFile
+> Task :features:messages:impl:compileDebugLibraryResources
+> Task :features:migration:api:parseDebugLocalResources FROM-CACHE
+> Task :features:migration:impl:compileDebugLibraryResources FROM-CACHE
+> Task :features:migration:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:messages:api:generateDebugRFile
+> Task :features:networkmonitor:api:parseDebugLocalResources FROM-CACHE
+> Task :features:networkmonitor:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:messages:impl:parseDebugLocalResources
+> Task :features:logout:api:generateDebugRFile
+> Task :features:migration:impl:parseDebugLocalResources FROM-CACHE
+> Task :features:login:impl:generateDebugRFile
+> Task :features:migration:api:generateDebugRFile
+> Task :features:networkmonitor:impl:parseDebugLocalResources FROM-CACHE
+> Task :features:networkmonitor:impl:compileDebugLibraryResources FROM-CACHE
+> Task :features:logout:impl:generateDebugRFile
+> Task :features:poll:api:compileDebugLibraryResources
+> Task :features:migration:impl:generateDebugRFile
+> Task :features:networkmonitor:api:generateDebugRFile
+> Task :features:messages:impl:generateDebugRFile
+> Task :features:networkmonitor:impl:generateDebugRFile
+> Task :features:poll:impl:compileDebugLibraryResources
+> Task :features:preferences:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:preferences:api:parseDebugLocalResources FROM-CACHE
+> Task :features:poll:api:parseDebugLocalResources
+> Task :features:rageshake:api:compileDebugLibraryResources
+> Task :features:preferences:impl:compileDebugLibraryResources
+> Task :features:rageshake:impl:compileDebugLibraryResources
+> Task :features:preferences:impl:parseDebugLocalResources
+> Task :features:reportroom:api:parseDebugLocalResources FROM-CACHE
+> Task :features:reportroom:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:rageshake:api:parseDebugLocalResources
+> Task :features:preferences:api:generateDebugRFile
+> Task :features:poll:impl:parseDebugLocalResources
+> Task :features:poll:api:generateDebugRFile
+> Task :features:rolesandpermissions:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:reportroom:api:generateDebugRFile
+> Task :features:rageshake:impl:parseDebugLocalResources
+> Task :features:reportroom:impl:compileDebugLibraryResources
+> Task :features:rageshake:api:generateDebugRFile
+> Task :features:rolesandpermissions:api:parseDebugLocalResources FROM-CACHE
+> Task :features:preferences:impl:generateDebugRFile
+> Task :features:roomaliasresolver:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:reportroom:impl:parseDebugLocalResources
+> Task :features:roomaliasresolver:api:parseDebugLocalResources FROM-CACHE
+> Task :features:poll:impl:generateDebugRFile
+> Task :features:rolesandpermissions:impl:compileDebugLibraryResources
+> Task :features:roomaliasresolver:impl:compileDebugLibraryResources
+> Task :features:roomcall:api:parseDebugLocalResources FROM-CACHE
+> Task :features:roomcall:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:rolesandpermissions:api:generateDebugRFile
+> Task :features:reportroom:impl:generateDebugRFile
+> Task :features:rolesandpermissions:impl:parseDebugLocalResources
+> Task :features:rageshake:impl:generateDebugRFile
+> Task :features:roomaliasresolver:impl:parseDebugLocalResources
+> Task :features:roomdetails:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:roomcall:impl:compileDebugLibraryResources FROM-CACHE
+> Task :features:roomcall:impl:parseDebugLocalResources FROM-CACHE
+> Task :features:roomdetails:api:parseDebugLocalResources FROM-CACHE
+> Task :features:roomdetails:impl:compileDebugLibraryResources
+> Task :features:roomdetailsedit:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:roomaliasresolver:api:generateDebugRFile
+> Task :features:roomaliasresolver:impl:generateDebugRFile
+> Task :features:roomcall:api:generateDebugRFile
+> Task :features:rolesandpermissions:impl:generateDebugRFile
+> Task :features:roomdetailsedit:api:parseDebugLocalResources FROM-CACHE
+> Task :features:roomdetails:api:generateDebugRFile
+> Task :features:roomdirectory:api:parseDebugLocalResources FROM-CACHE
+> Task :features:roomcall:impl:generateDebugRFile
+> Task :features:roomdetails:impl:parseDebugLocalResources
+> Task :features:roomdirectory:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:roommembermoderation:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:roomdetailsedit:impl:compileDebugLibraryResources
+> Task :features:roomdirectory:impl:compileDebugLibraryResources
+> Task :features:roomdetailsedit:impl:parseDebugLocalResources
+> Task :features:roomdirectory:api:generateDebugRFile
+> Task :features:roomdirectory:impl:parseDebugLocalResources
+> Task :features:securebackup:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:roommembermoderation:api:parseDebugLocalResources FROM-CACHE
+> Task :features:roomdetailsedit:api:generateDebugRFile
+> Task :features:roomdetails:impl:generateDebugRFile
+> Task :features:roommembermoderation:impl:compileDebugLibraryResources
+> Task :features:roommembermoderation:impl:parseDebugLocalResources
+> Task :features:securebackup:api:parseDebugLocalResources FROM-CACHE
+> Task :features:roomdirectory:impl:generateDebugRFile
+> Task :features:securityandprivacy:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:securityandprivacy:api:parseDebugLocalResources FROM-CACHE
+> Task :features:roomdetailsedit:impl:generateDebugRFile
+> Task :features:roommembermoderation:api:generateDebugRFile
+> Task :features:securebackup:impl:compileDebugLibraryResources
+> Task :features:share:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:securebackup:impl:parseDebugLocalResources
+> Task :features:securityandprivacy:impl:compileDebugLibraryResources
+> Task :features:securebackup:api:generateDebugRFile
+> Task :features:securityandprivacy:impl:parseDebugLocalResources
+> Task :features:roommembermoderation:impl:generateDebugRFile
+> Task :features:share:impl:parseDebugLocalResources FROM-CACHE
+> Task :features:signedout:api:parseDebugLocalResources FROM-CACHE
+> Task :features:signedout:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:share:impl:compileDebugLibraryResources FROM-CACHE
+> Task :features:share:api:parseDebugLocalResources FROM-CACHE
+> Task :features:securebackup:impl:generateDebugRFile
+> Task :features:securityandprivacy:api:generateDebugRFile
+> Task :features:signedout:impl:compileDebugLibraryResources
+> Task :features:securityandprivacy:impl:generateDebugRFile
+> Task :features:space:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:space:api:parseDebugLocalResources FROM-CACHE
+> Task :features:share:impl:generateDebugRFile
+> Task :features:signedout:api:generateDebugRFile
+> Task :features:share:api:generateDebugRFile
+> Task :features:signedout:impl:parseDebugLocalResources
+> Task :features:startchat:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:startchat:api:parseDebugLocalResources FROM-CACHE
+> Task :features:space:impl:compileDebugLibraryResources
+> Task :features:startchat:impl:compileDebugLibraryResources
+> Task :features:userprofile:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:userprofile:api:parseDebugLocalResources FROM-CACHE
+> Task :features:startchat:impl:parseDebugLocalResources
+> Task :features:userprofile:impl:parseDebugLocalResources FROM-CACHE
+> Task :features:userprofile:impl:compileDebugLibraryResources FROM-CACHE
+> Task :features:space:impl:parseDebugLocalResources
+> Task :features:signedout:impl:generateDebugRFile
+> Task :features:space:api:generateDebugRFile
+> Task :features:startchat:api:generateDebugRFile
+> Task :features:userprofile:api:generateDebugRFile
+> Task :features:verifysession:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:verifysession:api:parseDebugLocalResources FROM-CACHE
+> Task :features:userprofile:impl:generateDebugRFile
+> Task :features:userprofile:shared:compileDebugLibraryResources
+> Task :features:startchat:impl:generateDebugRFile
+> Task :features:viewfolder:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:viewfolder:api:parseDebugLocalResources FROM-CACHE
+> Task :features:viewfolder:impl:compileDebugLibraryResources FROM-CACHE
+> Task :features:space:impl:generateDebugRFile
+> Task :features:verifysession:api:generateDebugRFile
+> Task :libraries:accountselect:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:viewfolder:impl:parseDebugLocalResources FROM-CACHE
+> Task :libraries:accountselect:api:parseDebugLocalResources FROM-CACHE
+> Task :features:verifysession:impl:parseDebugLocalResources
+> Task :libraries:accountselect:impl:parseDebugLocalResources FROM-CACHE
+> Task :libraries:accountselect:impl:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:accountselect:api:generateDebugRFile
+> Task :libraries:audio:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:viewfolder:impl:generateDebugRFile
+> Task :libraries:audio:api:parseDebugLocalResources FROM-CACHE
+> Task :libraries:audio:impl:compileDebugLibraryResources FROM-CACHE
+> Task :features:viewfolder:api:generateDebugRFile
+> Task :libraries:audio:impl:parseDebugLocalResources FROM-CACHE
+> Task :libraries:cryptography:api:parseDebugLocalResources FROM-CACHE
+> Task :features:verifysession:impl:generateDebugRFile
+> Task :libraries:cryptography:api:compileDebugLibraryResources FROM-CACHE
+> Task :features:userprofile:shared:parseDebugLocalResources
+> Task :libraries:accountselect:impl:generateDebugRFile
+> Task :libraries:cryptography:impl:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:cryptography:impl:parseDebugLocalResources FROM-CACHE
+> Task :libraries:audio:api:generateDebugRFile
+> Task :libraries:dateformatter:api:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:dateformatter:api:parseDebugLocalResources FROM-CACHE
+> Task :libraries:dateformatter:impl:compileDebugLibraryResources
+> Task :features:userprofile:shared:generateDebugRFile
+> Task :libraries:audio:impl:generateDebugRFile
+> Task :libraries:cryptography:api:generateDebugRFile
+> Task :libraries:dateformatter:impl:parseDebugLocalResources
+> Task :libraries:cryptography:impl:generateDebugRFile
+> Task :features:verifysession:impl:compileDebugLibraryResources
+> Task :libraries:deeplink:api:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:deeplink:api:parseDebugLocalResources FROM-CACHE
+> Task :libraries:eventformatter:api:parseDebugLocalResources FROM-CACHE
+> Task :libraries:deeplink:impl:parseDebugLocalResources FROM-CACHE
+> Task :libraries:eventformatter:api:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:deeplink:impl:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:featureflag:api:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:dateformatter:api:generateDebugRFile
+> Task :libraries:eventformatter:impl:compileDebugLibraryResources
+> Task :libraries:dateformatter:impl:generateDebugRFile
+> Task :libraries:eventformatter:impl:parseDebugLocalResources
+> Task :libraries:eventformatter:api:generateDebugRFile
+> Task :libraries:deeplink:impl:generateDebugRFile
+> Task :libraries:featureflag:impl:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:featureflag:api:parseDebugLocalResources FROM-CACHE
+> Task :libraries:fullscreenintent:api:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:featureflag:impl:parseDebugLocalResources FROM-CACHE
+> Task :libraries:featureflag:ui:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:fullscreenintent:api:parseDebugLocalResources FROM-CACHE
+> Task :libraries:featureflag:ui:parseDebugLocalResources FROM-CACHE
+> Task :libraries:fullscreenintent:impl:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:fullscreenintent:impl:parseDebugLocalResources FROM-CACHE
+> Task :libraries:eventformatter:impl:generateDebugRFile
+> Task :libraries:featureflag:ui:generateDebugRFile
+> Task :libraries:indicator:api:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:deeplink:api:generateDebugRFile
+> Task :libraries:matrix:api:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:indicator:impl:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:indicator:impl:parseDebugLocalResources FROM-CACHE
+> Task :libraries:indicator:api:parseDebugLocalResources FROM-CACHE
+> Task :libraries:matrix:api:parseDebugLocalResources FROM-CACHE
+> Task :libraries:matrix:impl:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:featureflag:api:generateDebugRFile
+> Task :libraries:fullscreenintent:api:generateDebugRFile
+> Task :libraries:featureflag:impl:generateDebugRFile
+> Task :libraries:matrix:impl:parseDebugLocalResources FROM-CACHE
+> Task :libraries:matrixmedia:api:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:matrixmedia:api:parseDebugLocalResources FROM-CACHE
+> Task :libraries:matrixmedia:impl:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:matrixmedia:impl:parseDebugLocalResources FROM-CACHE
+> Task :libraries:matrix:api:generateDebugRFile
+> Task :libraries:fullscreenintent:impl:generateDebugRFile
+> Task :libraries:indicator:impl:generateDebugRFile
+> Task :libraries:matrix:impl:generateDebugRFile
+> Task :libraries:mediapickers:api:parseDebugLocalResources FROM-CACHE
+> Task :libraries:mediapickers:api:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:mediapickers:impl:parseDebugLocalResources FROM-CACHE
+> Task :libraries:mediapickers:impl:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:mediaplayer:api:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:mediaplayer:api:parseDebugLocalResources FROM-CACHE
+> Task :libraries:mediaplayer:impl:parseDebugLocalResources FROM-CACHE
+> Task :libraries:mediaplayer:impl:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:indicator:api:generateDebugRFile
+> Task :libraries:matrixmedia:api:generateDebugRFile
+> Task :libraries:mediaupload:api:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:mediapickers:api:generateDebugRFile
+> Task :libraries:matrixmedia:impl:generateDebugRFile
+> Task :libraries:mediaupload:api:parseDebugLocalResources FROM-CACHE
+> Task :libraries:mediaupload:impl:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:mediaupload:impl:parseDebugLocalResources FROM-CACHE
+> Task :libraries:mediaplayer:api:generateDebugRFile
+> Task :libraries:mediapickers:impl:generateDebugRFile
+> Task :libraries:mediaviewer:api:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:mediaviewer:api:parseDebugLocalResources FROM-CACHE
+> Task :libraries:oidc:api:parseDebugLocalResources FROM-CACHE
+> Task :libraries:oidc:api:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:oidc:impl:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:mediaviewer:impl:parseDebugLocalResources
+> Task :libraries:mediaplayer:impl:generateDebugRFile
+> Task :libraries:mediaviewer:impl:compileDebugLibraryResources
+> Task :libraries:mediaupload:api:generateDebugRFile
+> Task :libraries:oidc:api:generateDebugRFile
+> Task :libraries:mediaupload:impl:generateDebugRFile
+> Task :libraries:oidc:impl:parseDebugLocalResources FROM-CACHE
+> Task :libraries:permissions:noop:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:mediaviewer:api:generateDebugRFile
+> Task :libraries:permissions:api:parseDebugLocalResources
+> Task :libraries:oidc:impl:generateDebugRFile
+> Task :libraries:permissions:impl:compileDebugLibraryResources
+> Task :libraries:permissions:api:compileDebugLibraryResources
+> Task :libraries:permissions:noop:parseDebugLocalResources FROM-CACHE
+> Task :libraries:preferences:api:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:permissions:impl:parseDebugLocalResources
+> Task :libraries:preferences:api:parseDebugLocalResources FROM-CACHE
+> Task :libraries:push:api:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:preferences:impl:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:mediaviewer:impl:generateDebugRFile
+> Task :libraries:preferences:impl:parseDebugLocalResources FROM-CACHE
+> Task :libraries:push:api:parseDebugLocalResources FROM-CACHE
+> Task :libraries:permissions:noop:generateDebugRFile
+> Task :libraries:permissions:api:generateDebugRFile
+> Task :libraries:push:impl:parseDebugLocalResources
+> Task :libraries:pushproviders:api:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:preferences:impl:generateDebugRFile
+> Task :libraries:pushproviders:api:parseDebugLocalResources FROM-CACHE
+> Task :libraries:permissions:impl:generateDebugRFile
+> Task :libraries:push:impl:compileDebugLibraryResources
+> Task :libraries:preferences:api:generateDebugRFile
+> Task :libraries:pushstore:api:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:pushproviders:unifiedpush:compileDebugLibraryResources
+> Task :libraries:pushstore:impl:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:pushstore:api:parseDebugLocalResources FROM-CACHE
+> Task :libraries:pushproviders:unifiedpush:parseDebugLocalResources
+> Task :libraries:recentemojis:api:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:pushstore:impl:parseDebugLocalResources FROM-CACHE
+> Task :libraries:recentemojis:api:parseDebugLocalResources FROM-CACHE
+> Task :libraries:push:api:generateDebugRFile
+> Task :libraries:push:impl:generateDebugRFile
+> Task :libraries:pushstore:api:generateDebugRFile
+> Task :libraries:pushproviders:unifiedpush:generateDebugRFile
+> Task :libraries:roomselect:impl:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:recentemojis:impl:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:roomselect:api:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:roomselect:api:parseDebugLocalResources FROM-CACHE
+> Task :libraries:recentemojis:impl:parseDebugLocalResources FROM-CACHE
+> Task :libraries:session-storage:api:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:roomselect:impl:parseDebugLocalResources FROM-CACHE
+> Task :libraries:session-storage:api:parseDebugLocalResources FROM-CACHE
+> Task :libraries:pushproviders:api:generateDebugRFile
+> Task :libraries:session-storage:impl:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:session-storage:impl:parseDebugLocalResources FROM-CACHE
+> Task :libraries:textcomposer:impl:compileDebugLibraryResources
+> Task :libraries:pushstore:impl:generateDebugRFile
+> Task :libraries:recentemojis:api:generateDebugRFile
+> Task :libraries:recentemojis:impl:generateDebugRFile
+> Task :libraries:roomselect:impl:generateDebugRFile
+> Task :libraries:session-storage:api:generateDebugRFile
+> Task :libraries:roomselect:api:generateDebugRFile
+> Task :libraries:troubleshoot:api:parseDebugLocalResources FROM-CACHE
+> Task :libraries:usersearch:api:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:troubleshoot:api:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:usersearch:api:parseDebugLocalResources FROM-CACHE
+> Task :libraries:session-storage:impl:generateDebugRFile
+> Task :libraries:usersearch:impl:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:usersearch:impl:parseDebugLocalResources FROM-CACHE
+> Task :libraries:voiceplayer:api:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:troubleshoot:impl:compileDebugLibraryResources
+> Task :libraries:textcomposer:impl:parseDebugLocalResources
+> Task :libraries:voiceplayer:api:parseDebugLocalResources FROM-CACHE
+> Task :libraries:troubleshoot:impl:parseDebugLocalResources
+> Task :libraries:voiceplayer:impl:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:voiceplayer:impl:parseDebugLocalResources FROM-CACHE
+> Task :libraries:voicerecorder:api:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:troubleshoot:api:generateDebugRFile
+> Task :libraries:usersearch:impl:generateDebugRFile
+> Task :libraries:voicerecorder:impl:parseDebugLocalResources FROM-CACHE
+> Task :libraries:voicerecorder:api:parseDebugLocalResources FROM-CACHE
+> Task :libraries:usersearch:api:generateDebugRFile
+> Task :libraries:voiceplayer:api:generateDebugRFile
+> Task :libraries:voicerecorder:impl:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:troubleshoot:impl:generateDebugRFile
+> Task :libraries:wellknown:api:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:wellknown:api:parseDebugLocalResources FROM-CACHE
+> Task :libraries:wellknown:impl:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:workmanager:api:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:wellknown:impl:parseDebugLocalResources FROM-CACHE
+> Task :libraries:textcomposer:impl:generateDebugRFile
+> Task :libraries:voiceplayer:impl:generateDebugRFile
+> Task :libraries:workmanager:impl:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:voicerecorder:api:generateDebugRFile
+> Task :libraries:workmanager:impl:parseDebugLocalResources FROM-CACHE
+> Task :services:analytics:api:compileDebugLibraryResources FROM-CACHE
+> Task :services:analytics:compose:compileDebugLibraryResources FROM-CACHE
+> Task :services:analytics:api:parseDebugLocalResources FROM-CACHE
+> Task :libraries:workmanager:api:parseDebugLocalResources FROM-CACHE
+> Task :services:analytics:compose:parseDebugLocalResources FROM-CACHE
+> Task :libraries:workmanager:impl:generateDebugRFile
+> Task :libraries:voicerecorder:impl:generateDebugRFile
+> Task :libraries:wellknown:api:generateDebugRFile
+> Task :services:analytics:impl:compileDebugLibraryResources FROM-CACHE
+> Task :services:analytics:noop:compileDebugLibraryResources FROM-CACHE
+> Task :services:analytics:noop:parseDebugLocalResources FROM-CACHE
+> Task :services:analytics:impl:parseDebugLocalResources FROM-CACHE
+> Task :services:analyticsproviders:api:compileDebugLibraryResources FROM-CACHE
+> Task :services:analyticsproviders:api:parseDebugLocalResources FROM-CACHE
+> Task :libraries:wellknown:impl:generateDebugRFile
+> Task :services:analyticsproviders:posthog:compileDebugLibraryResources FROM-CACHE
+> Task :libraries:workmanager:api:generateDebugRFile
+> Task :services:analytics:api:generateDebugRFile
+> Task :services:analytics:impl:generateDebugRFile
+> Task :services:analytics:noop:generateDebugRFile
+> Task :services:analyticsproviders:posthog:parseDebugLocalResources FROM-CACHE
+> Task :services:apperror:impl:compileDebugLibraryResources FROM-CACHE
+> Task :services:apperror:api:compileDebugLibraryResources FROM-CACHE
+> Task :services:analyticsproviders:sentry:compileDebugLibraryResources FROM-CACHE
+> Task :services:analyticsproviders:sentry:parseDebugLocalResources FROM-CACHE
+> Task :services:apperror:api:parseDebugLocalResources FROM-CACHE
+> Task :services:analytics:compose:generateDebugRFile
+> Task :services:appnavstate:api:parseDebugLocalResources FROM-CACHE
+> Task :services:apperror:impl:parseDebugLocalResources FROM-CACHE
+> Task :services:appnavstate:api:compileDebugLibraryResources FROM-CACHE
+> Task :services:appnavstate:impl:parseDebugLocalResources FROM-CACHE
+> Task :services:appnavstate:impl:compileDebugLibraryResources FROM-CACHE
+> Task :services:analyticsproviders:posthog:generateDebugRFile
+> Task :services:toolbox:api:compileDebugLibraryResources FROM-CACHE
+> Task :services:analyticsproviders:api:generateDebugRFile
+> Task :services:appnavstate:api:generateDebugRFile
+> Task :services:apperror:api:generateDebugRFile
+> Task :services:apperror:impl:generateDebugRFile
+> Task :services:appnavstate:impl:generateDebugRFile
+> Task :appconfig:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:architecture:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :codegen:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:androidutils:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :services:toolbox:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :services:toolbox:api:parseDebugLocalResources FROM-CACHE
+> Task :services:toolbox:impl:compileDebugLibraryResources FROM-CACHE
+> Task :services:toolbox:impl:parseDebugLocalResources FROM-CACHE
+> Task :appconfig:generateDebugBuildConfig
+> Task :libraries:matrix:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:androidutils:generateDebugBuildConfig
+> Task :libraries:session-storage:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:matrix:api:generateDebugBuildConfig
+> Task :services:toolbox:impl:generateDebugRFile
+> Task :services:analytics:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :services:analyticsproviders:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :services:toolbox:api:generateDebugRFile
+> Task :libraries:session-storage:api:javaPreCompileDebug
+> Task :services:analyticsproviders:sentry:generateDebugRFile
+> Task :codegen:processResources
+> Task :services:analyticsproviders:api:javaPreCompileDebug FROM-CACHE
+> Task :services:analytics:api:javaPreCompileDebug FROM-CACHE
+> Task :libraries:matrix:api:javaPreCompileDebug FROM-CACHE
+> Task :libraries:compound:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :appnav:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:compound:javaPreCompileDebug FROM-CACHE
+> Task :libraries:designsystem:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :appconfig:javaPreCompileDebug FROM-CACHE
+> Task :libraries:testtags:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:designsystem:generateDebugBuildConfig
+> Task :libraries:testtags:javaPreCompileDebug FROM-CACHE
+> Task :libraries:ui-strings:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :services:toolbox:api:javaPreCompileDebug
+> Task :libraries:ui-strings:javaPreCompileDebug FROM-CACHE
+> Task :libraries:preferences:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:preferences:api:javaPreCompileDebug FROM-CACHE
+> Task :libraries:androidutils:javaPreCompileDebug
+> Task :libraries:matrixui:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:previewutils:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:previewutils:javaPreCompileDebug FROM-CACHE
+> Task :libraries:matrixmedia:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:matrixmedia:api:javaPreCompileDebug FROM-CACHE
+> Task :libraries:ui-common:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:ui-common:javaPreCompileDebug FROM-CACHE
+> Task :features:analytics:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:analytics:api:javaPreCompileDebug FROM-CACHE
+> Task :features:announcement:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:designsystem:javaPreCompileDebug
+> Task :features:announcement:api:javaPreCompileDebug FROM-CACHE
+> Task :features:cachecleaner:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:cachecleaner:api:javaPreCompileDebug FROM-CACHE
+> Task :features:call:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:call:api:javaPreCompileDebug FROM-CACHE
+> Task :features:createroom:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:createroom:api:javaPreCompileDebug FROM-CACHE
+> Task :features:deactivation:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:deactivation:api:javaPreCompileDebug FROM-CACHE
+> Task :features:enterprise:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:enterprise:api:javaPreCompileDebug FROM-CACHE
+> Task :features:forward:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:forward:api:javaPreCompileDebug FROM-CACHE
+> Task :features:ftue:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:ftue:api:javaPreCompileDebug FROM-CACHE
+> Task :features:home:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:home:api:javaPreCompileDebug FROM-CACHE
+> Task :features:invite:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:invite:api:javaPreCompileDebug FROM-CACHE
+> Task :features:invitepeople:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:invitepeople:api:javaPreCompileDebug FROM-CACHE
+> Task :features:joinroom:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:roomdirectory:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:roomdirectory:api:javaPreCompileDebug FROM-CACHE
+> Task :features:joinroom:api:javaPreCompileDebug FROM-CACHE
+> Task :features:knockrequests:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:knockrequests:api:javaPreCompileDebug FROM-CACHE
+> Task :features:leaveroom:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:leaveroom:api:javaPreCompileDebug FROM-CACHE
+> Task :features:licenses:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:licenses:api:javaPreCompileDebug FROM-CACHE
+> Task :features:linknewdevice:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:linknewdevice:api:javaPreCompileDebug FROM-CACHE
+> Task :features:location:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:location:api:generateDebugBuildConfig
+> Task :features:location:api:javaPreCompileDebug FROM-CACHE
+> Task :features:lockscreen:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:lockscreen:api:javaPreCompileDebug FROM-CACHE
+> Task :features:login:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:login:api:javaPreCompileDebug FROM-CACHE
+> Task :features:logout:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:logout:api:javaPreCompileDebug FROM-CACHE
+> Task :features:messages:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:mediaviewer:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:mediaviewer:api:javaPreCompileDebug FROM-CACHE
+> Task :libraries:ui-utils:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :services:toolbox:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :services:toolbox:impl:javaPreCompileDebug FROM-CACHE
+> Task :libraries:ui-utils:javaPreCompileDebug FROM-CACHE
+> Task :libraries:textcomposer:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:messages:api:javaPreCompileDebug FROM-CACHE
+> Task :features:migration:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:migration:api:javaPreCompileDebug FROM-CACHE
+> Task :features:networkmonitor:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:networkmonitor:api:javaPreCompileDebug FROM-CACHE
+> Task :features:poll:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:poll:api:javaPreCompileDebug FROM-CACHE
+> Task :features:preferences:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:preferences:api:javaPreCompileDebug FROM-CACHE
+> Task :features:rageshake:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:rageshake:api:javaPreCompileDebug FROM-CACHE
+> Task :features:reportroom:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:reportroom:api:javaPreCompileDebug FROM-CACHE
+> Task :features:rolesandpermissions:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:usersearch:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:usersearch:api:javaPreCompileDebug FROM-CACHE
+> Task :features:rolesandpermissions:api:javaPreCompileDebug FROM-CACHE
+> Task :features:roomaliasresolver:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:roomaliasresolver:api:javaPreCompileDebug FROM-CACHE
+> Task :features:roomcall:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:roomcall:api:javaPreCompileDebug FROM-CACHE
+> Task :features:roomdetails:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:roomdetails:api:javaPreCompileDebug FROM-CACHE
+> Task :features:roomdetailsedit:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:roomdetailsedit:api:javaPreCompileDebug FROM-CACHE
+> Task :features:roommembermoderation:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:roommembermoderation:api:javaPreCompileDebug FROM-CACHE
+> Task :features:securebackup:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:securebackup:api:javaPreCompileDebug FROM-CACHE
+> Task :features:securityandprivacy:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:securityandprivacy:api:javaPreCompileDebug FROM-CACHE
+> Task :features:share:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:share:api:javaPreCompileDebug FROM-CACHE
+> Task :features:signedout:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:signedout:api:javaPreCompileDebug FROM-CACHE
+> Task :features:space:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:space:api:javaPreCompileDebug FROM-CACHE
+> Task :features:startchat:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:startchat:api:javaPreCompileDebug FROM-CACHE
+> Task :features:userprofile:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:userprofile:api:javaPreCompileDebug FROM-CACHE
+> Task :features:verifysession:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:verifysession:api:javaPreCompileDebug FROM-CACHE
+> Task :features:viewfolder:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:viewfolder:api:javaPreCompileDebug FROM-CACHE
+> Task :libraries:accountselect:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:accountselect:api:javaPreCompileDebug FROM-CACHE
+> Task :libraries:deeplink:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:deeplink:api:javaPreCompileDebug FROM-CACHE
+> Task :libraries:featureflag:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:featureflag:api:javaPreCompileDebug FROM-CACHE
+> Task :libraries:oidc:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:oidc:api:javaPreCompileDebug FROM-CACHE
+> Task :libraries:push:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:pushproviders:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:pushproviders:api:javaPreCompileDebug FROM-CACHE
+> Task :libraries:push:api:javaPreCompileDebug FROM-CACHE
+> Task :services:apperror:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :annotations:compileKotlin
+> Task :libraries:ui-strings:compileDebugKotlin
+> Task :annotations:compileJava NO-SOURCE
+> Task :annotations:classes UP-TO-DATE
+> Task :libraries:ui-strings:compileDebugJavaWithJavac NO-SOURCE
+> Task :libraries:di:compileKotlin
+> Task :libraries:di:compileJava NO-SOURCE
+> Task :libraries:di:classes UP-TO-DATE
+> Task :app:processFdroidDebugNavigationResources
+> Task :annotations:jar
+> Task :app:mapFdroidDebugSourceSetPaths
+> Task :libraries:di:jar
+> Task :services:apperror:api:javaPreCompileDebug FROM-CACHE
+> Task :services:apperror:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :services:appnavstate:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :services:appnavstate:api:javaPreCompileDebug FROM-CACHE
+> Task :appicon:funker:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:ui-strings:bundleLibCompileToJarDebug
+> Task :appicon:funker:javaPreCompileDebug FROM-CACHE
+> Task :libraries:network:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:network:javaPreCompileDebug FROM-CACHE
+> Task :features:analytics:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:announcement:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:cachecleaner:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:call:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:call:impl:generateDebugBuildConfig
+> Task :libraries:audio:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:checkFdroidDebugAarMetadata
+> Task :libraries:audio:api:javaPreCompileDebug FROM-CACHE
+> Task :libraries:matrix:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:workmanager:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:workmanager:api:javaPreCompileDebug FROM-CACHE
+> Task :libraries:matrix:impl:javaPreCompileDebug FROM-CACHE
+> Task :features:createroom:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:mediapickers:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:mediapickers:api:javaPreCompileDebug FROM-CACHE
+> Task :libraries:mediaupload:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:mediaupload:api:javaPreCompileDebug FROM-CACHE
+> Task :libraries:permissions:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:permissions:api:javaPreCompileDebug FROM-CACHE
+> Task :libraries:usersearch:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:usersearch:impl:javaPreCompileDebug FROM-CACHE
+> Task :features:deactivation:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:enterprise:impl-foss:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:forward:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:roomselect:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:roomselect:api:javaPreCompileDebug FROM-CACHE
+> Task :features:ftue:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:permissions:noop:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:permissions:noop:javaPreCompileDebug FROM-CACHE
+> Task :features:home:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:dateformatter:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:compileFdroidDebugNavigationResources
+> Task :libraries:dateformatter:api:javaPreCompileDebug FROM-CACHE
+> Task :libraries:eventformatter:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:eventformatter:api:javaPreCompileDebug FROM-CACHE
+> Task :libraries:fullscreenintent:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:fullscreenintent:api:javaPreCompileDebug FROM-CACHE
+> Task :libraries:indicator:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:parseFdroidDebugLocalResources
+> Task :libraries:indicator:api:javaPreCompileDebug FROM-CACHE
+> Task :features:invite:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:invitepeople:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:joinroom:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:knockrequests:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:leaveroom:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:licenses:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:qrcode:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:qrcode:javaPreCompileDebug FROM-CACHE
+> Task :features:linknewdevice:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:wellknown:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :services:toolbox:api:compileDebugKotlin
+> Task :services:toolbox:api:compileDebugJavaWithJavac NO-SOURCE
+> Task :services:toolbox:api:bundleLibCompileToJarDebug
+> Task :libraries:wellknown:api:javaPreCompileDebug FROM-CACHE
+> Task :libraries:maplibre-compose:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:processFdroidDebugMainManifest
+> Task :libraries:audio:api:compileDebugKotlin
+> Task :libraries:audio:api:compileDebugJavaWithJavac NO-SOURCE
+> Task :libraries:audio:api:bundleLibCompileToJarDebug
+> Task :libraries:maplibre-compose:javaPreCompileDebug FROM-CACHE
+> Task :features:location:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:lockscreen:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:cryptography:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :app:processFdroidDebugManifest
+> Task :app:processFdroidDebugManifestForPackage
+> Task :libraries:cryptography:api:javaPreCompileDebug FROM-CACHE
+> Task :features:login:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:logout:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:messages:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:mediaplayer:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:mediaplayer:api:javaPreCompileDebug FROM-CACHE
+> Task :libraries:recentemojis:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:recentemojis:api:javaPreCompileDebug FROM-CACHE
+> Task :libraries:voiceplayer:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:voiceplayer:api:javaPreCompileDebug FROM-CACHE
+> Task :libraries:voicerecorder:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:announcement:api:compileDebugKotlin
+> Task :features:announcement:api:compileDebugJavaWithJavac NO-SOURCE
+> Task :features:announcement:api:bundleLibCompileToJarDebug
+> Task :libraries:voicerecorder:api:javaPreCompileDebug FROM-CACHE
+> Task :services:analytics:compose:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :services:analytics:noop:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :services:analytics:compose:javaPreCompileDebug FROM-CACHE
+> Task :features:migration:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:preferences:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:preferences:impl:javaPreCompileDebug FROM-CACHE
+> Task :features:networkmonitor:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:networkmonitor:impl:javaPreCompileDebug FROM-CACHE
+> Task :features:poll:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:preferences:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:preferences:impl:generateDebugBuildConfig
+> Task :libraries:featureflag:ui:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:featureflag:ui:javaPreCompileDebug FROM-CACHE
+> Task :libraries:pushstore:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:pushstore:api:javaPreCompileDebug FROM-CACHE
+> Task :libraries:troubleshoot:api:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:troubleshoot:api:javaPreCompileDebug FROM-CACHE
+> Task :features:rageshake:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:reportroom:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:rolesandpermissions:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:roomaliasresolver:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:roomcall:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:roomdetails:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:userprofile:shared:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:userprofile:shared:javaPreCompileDebug FROM-CACHE
+> Task :features:roomdetailsedit:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:roomdirectory:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:roommembermoderation:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:securebackup:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:securityandprivacy:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:share:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:signedout:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:space:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:startchat:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:userprofile:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:verifysession:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :features:viewfolder:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:accountselect:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :libraries:audio:impl:checkKotlinGradlePluginConfigurationErrors SKIPPED
+
+> Task :appicon:funker:compileDebugKotlin FAILED
+e: file:///home/fabian/funker-messenger/appicon/funker/src/main/kotlin/io/element/android/appicon/element/IconPreview.kt:29:44 Unresolved reference 'R'.
+e: file:///home/fabian/funker-messenger/appicon/funker/src/main/kotlin/io/element/android/appicon/element/IconPreview.kt:33:44 Unresolved reference 'R'.
+e: file:///home/fabian/funker-messenger/appicon/funker/src/main/kotlin/io/element/android/appicon/element/IconPreview.kt:45:44 Unresolved reference 'R'.
+e: file:///home/fabian/funker-messenger/appicon/funker/src/main/kotlin/io/element/android/appicon/element/IconPreview.kt:49:44 Unresolved reference 'R'.
+e: file:///home/fabian/funker-messenger/appicon/funker/src/main/kotlin/io/element/android/appicon/element/IconPreview.kt:63:44 Unresolved reference 'R'.
+
+> Task :services:analyticsproviders:api:compileDebugKotlin
+> Task :libraries:indicator:api:compileDebugKotlin
+> Task :libraries:dateformatter:api:compileDebugKotlin
+> Task :services:apperror:api:compileDebugKotlin
+> Task :libraries:testtags:compileDebugKotlin
+> Task :libraries:wellknown:api:compileDebugKotlin
+> Task :libraries:cryptography:api:compileDebugKotlin
+> Task :libraries:voicerecorder:api:compileDebugKotlin
+> Task :libraries:session-storage:api:compileDebugKotlin
+> Task :libraries:audio:impl:compileDebugKotlin
+> Task :libraries:core:compileKotlin
+> Task :app:mergeFdroidDebugResources
+> Task :codegen:compileKotlin
+> Task :libraries:maplibre-compose:compileDebugKotlin
+> Task :libraries:compound:compileDebugKotlin
+
+[Incubating] Problems report is available at: file:///home/fabian/funker-messenger/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+Execution failed for task ':appicon:funker:compileDebugKotlin'.
+> A failure occurred while executing org.jetbrains.kotlin.compilerRunner.GradleCompilerRunnerWithWorkers$GradleKotlinCompilerWorkAction
+   > Compilation error. See log for more details
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to generate a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 2m 18s
+1980 actionable tasks: 1019 executed, 952 from cache, 9 up-to-date
+Configuration cache entry stored.

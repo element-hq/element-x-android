@@ -65,6 +65,7 @@ fun aPollAnswerItem(
     showVotes: Boolean = true,
     votesCount: Int = 4,
     percentage: Float = 0.4f,
+    voters: ImmutableList<PollVoter> = persistentListOf(),
 ) = PollAnswerItem(
     answer = answer,
     isSelected = isSelected,
@@ -72,7 +73,8 @@ fun aPollAnswerItem(
     isWinner = isWinner,
     showVotes = showVotes,
     votesCount = votesCount,
-    percentage = percentage
+    percentage = percentage,
+    voters = voters,
 )
 
 fun aPollContentState(

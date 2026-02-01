@@ -13,14 +13,18 @@ import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.preferences.api.store.NicknameStore
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.runningFold
 
 @SingleIn(RoomScope::class)
 @Inject
-class RoomMemberProfilesCache {
+class RoomMemberProfilesCache(
+    private val nicknameStore: NicknameStore,
+) {
     private val cache = MutableStateFlow(mapOf<UserId, RoomMember>())
     val updateFlow = cache.drop(1).runningFold(0) { acc, _ -> acc + 1 }
 
@@ -31,4 +35,10 @@ class RoomMemberProfilesCache {
     fun getDisplayName(userId: UserId): String? {
         return cache.value[userId]?.disambiguatedDisplayName
     }
+
+    suspend fun getDisplayNameWithNickname(userId: UserId): String? {
+        val nickname = nicknameStore.getNickname(userId).first()
+        return nickname ?: cache.value[userId]?.disambiguatedDisplayName
+    }
 }
+

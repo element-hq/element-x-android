@@ -43,6 +43,7 @@ fun BlockUserDialogs(state: UserProfileState) {
                 onDismiss = { state.eventSink(UserProfileEvents.ClearConfirmationDialog) }
             )
         }
+        UserProfileState.ConfirmationDialog.EditNickname -> Unit
     }
 }
 

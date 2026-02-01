@@ -17,11 +17,15 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.poll.isDisclosed
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
+import io.element.android.features.poll.api.pollcontent.PollVoter
+import io.element.android.libraries.matrix.api.room.BaseRoom
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 @ContributesBinding(RoomScope::class)
 class DefaultPollContentStateFactory(
     private val matrixClient: MatrixClient,
+    private val room: BaseRoom,
 ) : PollContentStateFactory {
     override suspend fun create(
         eventId: EventId?,
@@ -48,6 +52,17 @@ class DefaultPollContentStateFactory(
             val isSelected = answer.id in myVotes
             val isWinner = answer.id in winnerIds
             val percentage = if (totalVoteCount > 0) answerVoteCount.toFloat() / totalVoteCount.toFloat() else 0f
+            
+            val voterUserIds = content.votes[answer.id] ?: persistentListOf()
+            val voters = voterUserIds.map { userId ->
+                val member = room.getUpdatedMember(userId).getOrNull()
+                PollVoter(
+                    userId = userId,
+                    displayName = member?.displayName ?: userId.value,
+                    avatarUrl = member?.avatarUrl
+                )
+            }.toImmutableList()
+
             PollAnswerItem(
                 answer = answer,
                 isSelected = isSelected,
@@ -56,6 +71,7 @@ class DefaultPollContentStateFactory(
                 showVotes = content.kind.isDisclosed || isPollEnded,
                 votesCount = answerVoteCount,
                 percentage = percentage,
+                voters = voters,
             )
         }
 

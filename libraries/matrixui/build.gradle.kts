@@ -37,6 +37,7 @@ dependencies {
     implementation(projects.libraries.testtags)
     implementation(libs.coil.compose)
     implementation(libs.matrix.richtexteditor)
+    implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.previewutils)
 
     testCommonDependencies(libs, true)

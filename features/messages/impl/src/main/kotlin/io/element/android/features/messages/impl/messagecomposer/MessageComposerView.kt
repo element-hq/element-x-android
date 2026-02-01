@@ -29,7 +29,17 @@ import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageRecorderEvent
 import kotlinx.coroutines.launch
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.rememberModalBottomSheetState
+import io.element.android.features.messages.impl.timeline.components.customreaction.picker.EmojiPicker
+import io.element.android.features.messages.impl.timeline.components.customreaction.picker.EmojiPickerPresenter
+import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import kotlinx.collections.immutable.persistentSetOf
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.remember
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MessageComposerView(
     state: MessageComposerState,
@@ -60,6 +70,10 @@ internal fun MessageComposerView(
 
     fun onSuggestionReceived(suggestion: Suggestion?) {
         state.eventSink(MessageComposerEvent.SuggestionReceived(suggestion))
+    }
+
+    fun onOpenEmojiPicker() {
+        state.eventSink(MessageComposerEvent.ToggleEmojiPicker)
     }
 
     fun onError(error: Throwable) {
@@ -114,7 +128,33 @@ internal fun MessageComposerView(
         onError = ::onError,
         onTyping = ::onTyping,
         onSelectRichContent = ::sendUri,
+        onOpenEmojiPicker = ::onOpenEmojiPicker,
     )
+
+    if (state.showEmojiPicker && state.emojibaseStore != null) {
+        val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+        ModalBottomSheet(
+            onDismissRequest = { state.eventSink(MessageComposerEvent.ToggleEmojiPicker) },
+            sheetState = sheetState,
+        ) {
+             val presenter = remember {
+                EmojiPickerPresenter(
+                    emojibaseStore = state.emojibaseStore,
+                    recentEmojis = state.recentEmojis,
+                    coroutineDispatchers = CoroutineDispatchers.Default,
+                )
+             }
+             EmojiPicker(
+                onSelectEmoji = { emoji ->
+                    state.eventSink(MessageComposerEvent.InsertEmoji(emoji))
+                },
+                state = presenter.present(),
+                selectedEmojis = persistentSetOf(),
+                modifier = Modifier.fillMaxSize(),
+             )
+        }
+    }
 }
 
 @PreviewsDayNight

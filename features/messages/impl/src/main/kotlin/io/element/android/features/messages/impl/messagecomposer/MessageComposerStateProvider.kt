@@ -14,6 +14,7 @@ import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.textcomposer.model.aTextEditorStateRich
 import io.element.android.wysiwyg.display.TextDisplay
+import io.element.android.emojibasebindings.EmojibaseStore
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 
@@ -32,6 +33,9 @@ fun aMessageComposerState(
     showAttachmentSourcePicker: Boolean = false,
     canShareLocation: Boolean = true,
     suggestions: ImmutableList<ResolvedSuggestion> = persistentListOf(),
+    showEmojiPicker: Boolean = false,
+    emojibaseStore: EmojibaseStore? = null,
+    recentEmojis: ImmutableList<String> = persistentListOf(),
     eventSink: (MessageComposerEvent) -> Unit = {},
 ) = MessageComposerState(
     textEditorState = textEditorState,
@@ -43,5 +47,8 @@ fun aMessageComposerState(
     suggestions = suggestions,
     resolveMentionDisplay = { _, _ -> TextDisplay.Plain },
     resolveAtRoomMentionDisplay = { TextDisplay.Plain },
+    showEmojiPicker = showEmojiPicker,
+    emojibaseStore = emojibaseStore,
+    recentEmojis = recentEmojis,
     eventSink = eventSink,
 )

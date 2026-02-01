@@ -23,6 +23,18 @@ interface AppPreferencesStore {
     suspend fun setTheme(theme: String)
     fun getThemeFlow(): Flow<String?>
 
+    suspend fun setUseDynamicTheme(useDynamicTheme: Boolean)
+    fun getUseDynamicThemeFlow(): Flow<Boolean>
+
+    suspend fun setCustomThemeColor(color: Int?)
+    fun getCustomThemeColorFlow(): Flow<Int?>
+
+    suspend fun setWallpaper(uri: String?)
+    fun getWallpaperFlow(): Flow<String?>
+
+    suspend fun setWallpaperDim(dim: Boolean)
+    fun getWallpaperDimFlow(): Flow<Boolean>
+
     @Deprecated("Use MediaPreviewService instead. Kept only for migration.")
     suspend fun setHideInviteAvatars(hide: Boolean?)
     @Deprecated("Use MediaPreviewService instead. Kept only for migration.")

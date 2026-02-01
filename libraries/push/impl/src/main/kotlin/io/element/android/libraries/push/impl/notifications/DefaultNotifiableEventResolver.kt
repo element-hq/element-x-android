@@ -57,6 +57,8 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableMess
 import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEvent
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
+import io.element.android.libraries.preferences.api.store.NicknameStore
+import kotlinx.coroutines.flow.firstOrNull
 import timber.log.Timber
 
 private val loggerTag = LoggerTag("DefaultNotifiableEventResolver", LoggerTag.NotificationLoggerTag)
@@ -90,9 +92,10 @@ class DefaultNotifiableEventResolver(
     private val notificationMediaRepoFactory: NotificationMediaRepo.Factory,
     @ApplicationContext private val context: Context,
     private val permalinkParser: PermalinkParser,
-    private val callNotificationEventResolver: CallNotificationEventResolver,
     private val fallbackNotificationFactory: FallbackNotificationFactory,
     private val featureFlagService: FeatureFlagService,
+    private val nicknameStore: NicknameStore,
+    private val callNotificationEventResolver: CallNotificationEventResolver,
 ) : NotifiableEventResolver {
     override suspend fun resolveEvents(
         sessionId: SessionId,
@@ -224,7 +227,7 @@ class DefaultNotifiableEventResolver(
                     eventId = eventId,
                     noisy = isNoisy,
                     timestamp = this.timestamp,
-                    senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId),
+                    senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId, this),
                     body = stringProvider.getString(CommonStrings.common_unsupported_call),
                     roomName = roomDisplayName,
                     roomIsDm = isDm,
@@ -255,7 +258,7 @@ class DefaultNotifiableEventResolver(
                     eventId = eventId,
                     noisy = isNoisy,
                     timestamp = this.timestamp,
-                    senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId),
+                    senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId, this),
                     body = stringProvider.getString(CommonStrings.common_poll_summary, content.question),
                     imageUriString = null,
                     roomName = roomDisplayName,
@@ -266,8 +269,24 @@ class DefaultNotifiableEventResolver(
                 ResolvedPushEvent.Event(notifiableEventMessage)
             }
             is NotificationContent.MessageLike.ReactionContent -> {
-                Timber.tag(loggerTag.value).d("Ignoring notification for reaction")
-                throw NotificationResolverException.EventFilteredOut
+                val senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId, this)
+                val messageBody = stringProvider.getString(R.string.notification_reaction_body_with_sender, senderDisambiguatedDisplayName, content.reactionKey)
+                val notifiableMessageEvent = buildNotifiableMessageEvent(
+                    sessionId = userId,
+                    senderId = content.senderId,
+                    roomId = roomId,
+                    eventId = eventId,
+                    noisy = isNoisy,
+                    timestamp = this.timestamp,
+                    senderDisambiguatedDisplayName = senderDisambiguatedDisplayName,
+                    body = messageBody,
+                    roomName = roomDisplayName,
+                    roomIsDm = isDm,
+                    roomAvatarPath = roomAvatarUrl,
+                    senderAvatarPath = senderAvatarUrl,
+                    type = EventType.REACTION,
+                )
+                ResolvedPushEvent.Event(notifiableMessageEvent)
             }
             NotificationContent.MessageLike.RoomEncrypted -> {
                 Timber.tag(loggerTag.value).w("Notification with encrypted content -> fallback")
@@ -417,6 +436,11 @@ class DefaultNotifiableEventResolver(
             is VideoMessageType -> null // Use the thumbnail here?
             else -> null
         }
+    }
+
+    private suspend fun getDisambiguatedDisplayName(userId: UserId, notificationData: NotificationData): String {
+        val nickname = nicknameStore.getNickname(userId).firstOrNull()
+        return nickname ?: notificationData.getDisambiguatedDisplayName(userId)
     }
 }
 

@@ -60,6 +60,7 @@ fun PreferencesRootView(
     onOpenLockScreenSettings: () -> Unit,
     onOpenAbout: () -> Unit,
     onOpenDeveloperSettings: () -> Unit,
+    onOpenThemeSettings: () -> Unit,
     onOpenAdvancedSettings: () -> Unit,
     onOpenLabs: () -> Unit,
     onOpenNotificationSettings: () -> Unit,
@@ -112,6 +113,7 @@ fun PreferencesRootView(
             onOpenAbout = onOpenAbout,
             onOpenAnalytics = onOpenAnalytics,
             onOpenRageShake = onOpenRageShake,
+            onOpenThemeSettings = onOpenThemeSettings,
             onOpenAdvancedSettings = onOpenAdvancedSettings,
             onOpenDeveloperSettings = onOpenDeveloperSettings,
             onOpenLabs = onOpenLabs,
@@ -242,12 +244,18 @@ private fun ColumnScope.GeneralSection(
     onOpenAbout: () -> Unit,
     onOpenAnalytics: () -> Unit,
     onOpenRageShake: () -> Unit,
+    onOpenThemeSettings: () -> Unit,
     onOpenAdvancedSettings: () -> Unit,
     onOpenLabs: () -> Unit,
     onOpenDeveloperSettings: () -> Unit,
     onSignOutClick: () -> Unit,
     onDeactivateClick: () -> Unit,
 ) {
+    ListItem(
+        headlineContent = { Text(stringResource(id = CommonStrings.common_appearance)) }, // Ensure string exists or use literal for now if needed, but common_appearance usually exists
+        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Edit())), // Use sensible icon
+        onClick = onOpenThemeSettings,
+    )
     ListItem(
         headlineContent = { Text(stringResource(id = CommonStrings.common_about)) },
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Info())),
@@ -358,6 +366,7 @@ private fun ContentToPreview(matrixUser: MatrixUser) {
         onOpenAnalytics = {},
         onOpenRageShake = {},
         onOpenDeveloperSettings = {},
+        onOpenThemeSettings = {},
         onOpenAdvancedSettings = {},
         onOpenLabs = {},
         onOpenAbout = {},

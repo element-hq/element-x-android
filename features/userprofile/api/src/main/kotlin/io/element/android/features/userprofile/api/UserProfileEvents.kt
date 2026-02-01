@@ -17,4 +17,6 @@ sealed interface UserProfileEvents {
     data object ClearConfirmationDialog : UserProfileEvents
     data object WithdrawVerification : UserProfileEvents
     data class CopyToClipboard(val text: String) : UserProfileEvents
+    data object SetNickname : UserProfileEvents
+    data class UpdateNickname(val nickname: String?) : UserProfileEvents
 }

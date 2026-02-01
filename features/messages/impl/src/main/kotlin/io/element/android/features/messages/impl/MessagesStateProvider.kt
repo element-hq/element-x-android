@@ -122,6 +122,8 @@ fun aMessagesState(
     roomMemberModerationState: RoomMemberModerationState = aRoomMemberModerationState(),
     showSharedHistoryIcon: Boolean = false,
     successorRoom: SuccessorRoom? = null,
+    wallpaperUri: String? = null,
+    wallpaperDim: Boolean = false,
     eventSink: (MessagesEvent) -> Unit = {},
 ) = MessagesState(
     roomId = RoomId("!id:domain"),
@@ -150,6 +152,8 @@ fun aMessagesState(
     roomMemberModerationState = roomMemberModerationState,
     showSharedHistoryIcon = showSharedHistoryIcon,
     successorRoom = successorRoom,
+    wallpaperUri = wallpaperUri,
+    wallpaperDim = wallpaperDim,
     eventSink = eventSink,
 )
 

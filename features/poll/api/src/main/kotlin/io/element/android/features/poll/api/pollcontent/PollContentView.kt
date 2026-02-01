@@ -10,11 +10,13 @@ package io.element.android.features.poll.api.pollcontent
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -37,6 +39,7 @@ import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PollContentView(
     state: PollContentState,
@@ -60,6 +63,7 @@ fun PollContentView(
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PollContentView(
     eventId: EventId?,
@@ -113,6 +117,75 @@ fun PollContentView(
             DisclosedPollBottomNotice(votesCount = votesCount)
         } else {
             UndisclosedPollBottomNotice()
+        }
+
+        // View Votes button
+        if ((isPollEnded || pollKind == PollKind.Disclosed) && votesCount > 0) {
+            var showVotesSheet by remember { mutableStateOf(false) }
+            
+            androidx.compose.material3.TextButton(
+                onClick = { showVotesSheet = true },
+                modifier = Modifier.align(Alignment.CenterHorizontally)
+            ) {
+                Text(
+                    text = "View Votes",
+                    style = ElementTheme.typography.fontBodySmMedium,
+                    color = ElementTheme.colors.textPrimary,
+                )
+            }
+
+            if (showVotesSheet) {
+                val sheetState = androidx.compose.material3.rememberModalBottomSheetState(skipPartiallyExpanded = true)
+                androidx.compose.material3.ModalBottomSheet(
+                    onDismissRequest = { showVotesSheet = false },
+                    sheetState = sheetState,
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(16.dp),
+                        verticalArrangement = Arrangement.spacedBy(16.dp)
+                    ) {
+                        Text(
+                            text = "Poll Votes",
+                            style = ElementTheme.typography.fontHeadingMdBold,
+                            color = ElementTheme.colors.textPrimary,
+                        )
+                        answerItems.forEach { answerItem ->
+                            if (answerItem.voters.isNotEmpty()) {
+                                Text(
+                                    text = answerItem.answer.text,
+                                    style = ElementTheme.typography.fontBodyLgMedium,
+                                    color = ElementTheme.colors.textPrimary,
+                                )
+                                answerItem.voters.forEach { voter ->
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically,
+                                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                                        modifier = Modifier.padding(start = 8.dp)
+                                    ) {
+                                        val avatarData = io.element.android.libraries.designsystem.components.avatar.AvatarData(
+                                            id = voter.userId.value,
+                                            name = voter.displayName,
+                                            url = voter.avatarUrl,
+                                            size = io.element.android.libraries.designsystem.components.avatar.AvatarSize.UserListItem,
+                                        )
+                                        io.element.android.libraries.designsystem.components.avatar.Avatar(
+                                            avatarData = avatarData,
+                                            avatarType = io.element.android.libraries.designsystem.components.avatar.AvatarType.User
+                                        )
+                                        Text(
+                                            text = voter.displayName ?: voter.userId.value,
+                                            style = ElementTheme.typography.fontBodyMdRegular,
+                                            color = ElementTheme.colors.textPrimary,
+                                        )
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
         }
 
         if (isMine) {

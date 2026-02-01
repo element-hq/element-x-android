@@ -43,6 +43,7 @@ class PreferencesRootNode(
         fun navigateToDeveloperSettings()
         fun navigateToNotificationSettings()
         fun navigateToLockScreenSettings()
+        fun navigateToThemeSettings()
         fun navigateToAdvancedSettings()
         fun navigateToLabs()
         fun navigateToLinkNewDevice()
@@ -83,6 +84,7 @@ class PreferencesRootNode(
             onOpenAbout = callback::navigateToAbout,
             onSecureBackupClick = callback::navigateToSecureBackup,
             onOpenDeveloperSettings = callback::navigateToDeveloperSettings,
+            onOpenThemeSettings = callback::navigateToThemeSettings,
             onOpenAdvancedSettings = callback::navigateToAdvancedSettings,
             onOpenLabs = callback::navigateToLabs,
             onLinkNewDeviceClick = callback::navigateToLinkNewDevice,

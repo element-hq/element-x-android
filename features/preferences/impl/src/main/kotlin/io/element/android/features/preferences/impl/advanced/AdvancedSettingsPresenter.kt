@@ -45,22 +45,8 @@ class AdvancedSettingsPresenter(
         val isSharePresenceEnabled by remember {
             sessionPreferencesStore.isSharePresenceEnabled()
         }.collectAsState(initial = true)
-        val theme = remember {
-            appPreferencesStore.getThemeFlow().mapToTheme()
-        }.collectAsState(initial = Theme.System)
 
         val mediaPreviewConfigState = mediaPreviewConfigStateStore.state()
-
-        val themeOption by remember {
-            derivedStateOf {
-                when (theme.value) {
-                    Theme.System -> ThemeOption.System
-                    Theme.Dark -> ThemeOption.Dark
-                    Theme.Light -> ThemeOption.Light
-                }
-            }
-        }
-
         val hasSplitMediaQualityOptions by produceState<Boolean?>(null) {
             value = featureFlagService.isFeatureEnabled(FeatureFlags.SelectableMediaQuality)
         }
@@ -83,7 +69,7 @@ class AdvancedSettingsPresenter(
             }.collect()
         }
 
-        fun handleEvent(event: AdvancedSettingsEvents) {
+        fun handleEvents(event: AdvancedSettingsEvents) {
             when (event) {
                 is AdvancedSettingsEvents.SetDeveloperModeEnabled -> sessionCoroutineScope.launch {
                     appPreferencesStore.setDeveloperModeEnabled(event.enabled)
@@ -93,13 +79,6 @@ class AdvancedSettingsPresenter(
                 }
                 is AdvancedSettingsEvents.SetCompressMedia -> sessionCoroutineScope.launch {
                     sessionPreferencesStore.setOptimizeImages(event.compress)
-                }
-                is AdvancedSettingsEvents.SetTheme -> sessionCoroutineScope.launch {
-                    when (event.theme) {
-                        ThemeOption.System -> appPreferencesStore.setTheme(Theme.System.name)
-                        ThemeOption.Dark -> appPreferencesStore.setTheme(Theme.Dark.name)
-                        ThemeOption.Light -> appPreferencesStore.setTheme(Theme.Light.name)
-                    }
                 }
                 is AdvancedSettingsEvents.SetHideInviteAvatars -> mediaPreviewConfigStateStore.setHideInviteAvatars(event.value)
                 is AdvancedSettingsEvents.SetTimelineMediaPreviewValue -> mediaPreviewConfigStateStore.setTimelineMediaPreviewValue(event.value)
@@ -112,13 +91,23 @@ class AdvancedSettingsPresenter(
             }
         }
 
+        val theme by remember {
+            appPreferencesStore.getThemeFlow().mapToTheme()
+        }.collectAsState(initial = Theme.System)
+
+        val themeOption = when (theme) {
+            Theme.System -> ThemeOption.System
+            Theme.Light -> ThemeOption.Light
+            Theme.Dark -> ThemeOption.Dark
+        }
+
         return AdvancedSettingsState(
             isDeveloperModeEnabled = isDeveloperModeEnabled,
             isSharePresenceEnabled = isSharePresenceEnabled,
             mediaOptimizationState = mediaOptimizationState,
             theme = themeOption,
             mediaPreviewConfigState = mediaPreviewConfigState,
-            eventSink = ::handleEvent,
+            eventSink = ::handleEvents,
         )
     }
 }

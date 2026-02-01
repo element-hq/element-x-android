@@ -18,4 +18,5 @@ object EventType {
     const val CALL_INVITE = "m.call.invite"
 
     const val RTC_NOTIFICATION = "org.matrix.msc4075.rtc.notification"
+    const val REACTION = "m.reaction"
 }

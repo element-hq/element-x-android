@@ -69,7 +69,9 @@ sealed interface NotificationContent {
         data object KeyVerificationMac : MessageLike
         data object KeyVerificationDone : MessageLike
         data class ReactionContent(
-            val relatedEventId: String
+            val relatedEventId: String,
+            val reactionKey: String,
+            val senderId: UserId
         ) : MessageLike
 
         data object RoomEncrypted : MessageLike

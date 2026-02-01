@@ -40,6 +40,7 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(projects.features.startchat.api)
     implementation(projects.services.analytics.api)
+    implementation(libs.androidx.compose.material3)
 
     testCommonDependencies(libs, true)
     testImplementation(projects.libraries.matrix.test)

@@ -9,6 +9,7 @@
 package io.element.android.features.messages.impl.messagecomposer
 
 import androidx.compose.runtime.Stable
+import io.element.android.emojibasebindings.EmojibaseStore
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.TextEditorState
@@ -23,6 +24,9 @@ data class MessageComposerState(
     val showAttachmentSourcePicker: Boolean,
     val showTextFormatting: Boolean,
     val canShareLocation: Boolean,
+    val showEmojiPicker: Boolean,
+    val emojibaseStore: EmojibaseStore?,
+    val recentEmojis: ImmutableList<String>,
     val suggestions: ImmutableList<ResolvedSuggestion>,
     val resolveMentionDisplay: (String, String) -> TextDisplay,
     val resolveAtRoomMentionDisplay: () -> TextDisplay,

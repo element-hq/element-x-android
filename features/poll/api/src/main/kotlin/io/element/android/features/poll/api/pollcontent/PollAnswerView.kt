@@ -8,6 +8,7 @@
 
 package io.element.android.features.poll.api.pollcontent
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -143,6 +144,34 @@ internal fun PollAnswerView(
                 trackColor = ElementTheme.colors.progressIndicatorTrackColor,
                 strokeCap = StrokeCap.Round,
             )
+            
+            if (answerItem.showVotes && answerItem.voters.isNotEmpty()) {
+                Spacer(modifier = Modifier.height(8.dp))
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy((-8).dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.padding(start = 4.dp)
+                ) {
+                    answerItem.voters.take(5).forEach { voter ->
+                        // Reverse mapping or direct creation?
+                        // AvatarData needs id, name, url, size
+                        val avatarData = io.element.android.libraries.designsystem.components.avatar.AvatarData(
+                            id = voter.userId.value,
+                            name = voter.displayName,
+                            url = voter.avatarUrl,
+                            size = io.element.android.libraries.designsystem.components.avatar.AvatarSize.TimelineThreadLatestEventSender,
+                        )
+                        io.element.android.libraries.designsystem.components.avatar.Avatar(
+                            avatarData = avatarData,
+                            avatarType = io.element.android.libraries.designsystem.components.avatar.AvatarType.User
+                        )
+                    }
+                    if (answerItem.voters.size > 5) {
+                         // Optional: Add "+N" indicator or just show first 5
+                         // For now, just showing first 5 as per plan "pile of first ~3-5 faces"
+                    }
+                }
+            }
         }
     }
 }

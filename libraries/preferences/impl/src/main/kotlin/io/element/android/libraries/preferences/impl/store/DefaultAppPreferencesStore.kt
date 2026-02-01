@@ -10,6 +10,7 @@ package io.element.android.libraries.preferences.impl.store
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
@@ -26,6 +27,10 @@ import kotlinx.coroutines.flow.map
 private val developerModeKey = booleanPreferencesKey("developerMode")
 private val customElementCallBaseUrlKey = stringPreferencesKey("elementCallBaseUrl")
 private val themeKey = stringPreferencesKey("theme")
+private val useDynamicThemeKey = booleanPreferencesKey("useDynamicTheme")
+private val customThemeColorKey = intPreferencesKey("customThemeColor")
+private val wallpaperUriKey = stringPreferencesKey("wallpaperUri")
+private val wallpaperDimKey = booleanPreferencesKey("wallpaperDim")
 private val hideInviteAvatarsKey = booleanPreferencesKey("hideInviteAvatars")
 private val timelineMediaPreviewValueKey = stringPreferencesKey("timelineMediaPreviewValue")
 private val logLevelKey = stringPreferencesKey("logLevel")
@@ -76,6 +81,62 @@ class DefaultAppPreferencesStore(
     override fun getThemeFlow(): Flow<String?> {
         return store.data.map { prefs ->
             prefs[themeKey]
+        }
+    }
+
+    override suspend fun setUseDynamicTheme(useDynamicTheme: Boolean) {
+        store.edit { prefs ->
+            prefs[useDynamicThemeKey] = useDynamicTheme
+        }
+    }
+
+    override fun getUseDynamicThemeFlow(): Flow<Boolean> {
+        return store.data.map { prefs ->
+            prefs[useDynamicThemeKey] ?: true
+        }
+    }
+
+    override suspend fun setCustomThemeColor(color: Int?) {
+        store.edit { prefs ->
+            if (color != null) {
+                prefs[customThemeColorKey] = color
+            } else {
+                prefs.remove(customThemeColorKey)
+            }
+        }
+    }
+
+    override fun getCustomThemeColorFlow(): Flow<Int?> {
+        return store.data.map { prefs ->
+            prefs[customThemeColorKey]
+        }
+    }
+
+    override suspend fun setWallpaper(uri: String?) {
+        store.edit { prefs ->
+            if (uri != null) {
+                prefs[wallpaperUriKey] = uri
+            } else {
+                prefs.remove(wallpaperUriKey)
+            }
+        }
+    }
+
+    override fun getWallpaperFlow(): Flow<String?> {
+        return store.data.map { prefs ->
+            prefs[wallpaperUriKey]
+        }
+    }
+
+    override suspend fun setWallpaperDim(dim: Boolean) {
+        store.edit { prefs ->
+            prefs[wallpaperDimKey] = dim
+        }
+    }
+
+    override fun getWallpaperDimFlow(): Flow<Boolean> {
+        return store.data.map { prefs ->
+            prefs[wallpaperDimKey] ?: false
         }
     }
 

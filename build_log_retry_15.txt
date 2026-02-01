@@ -1,0 +1,309 @@
+To honour the JVM settings for this build a single-use Daemon process will be forked. For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/gradle_daemon.html#sec:disabling_the_daemon in the Gradle documentation.
+Daemon will be stopped at the end of the build 
+Parallel Configuration Cache is an incubating feature.
+Configuration on demand is an incubating feature.
+Calculating task graph as configuration cache cannot be reused because file 'features/messages/impl/build.gradle.kts' has changed.
+Included project: :features:analytics:api
+Included project: :features:analytics:impl
+Included project: :features:announcement:api
+Included project: :features:announcement:impl
+Included project: :features:announcement:test
+Included project: :features:cachecleaner:api
+Included project: :features:cachecleaner:impl
+Included project: :features:call:api
+Included project: :features:call:impl
+Included project: :features:call:test
+Included project: :features:createroom:api
+Included project: :features:createroom:impl
+Included project: :features:createroom:test
+Included project: :features:deactivation:api
+Included project: :features:deactivation:impl
+Included project: :features:deactivation:test
+Included project: :features:enterprise:api
+Included project: :features:enterprise:impl-foss
+Included project: :features:enterprise:test
+Included project: :features:forward:api
+Included project: :features:forward:impl
+Included project: :features:forward:test
+Included project: :features:ftue:api
+Included project: :features:ftue:impl
+Included project: :features:ftue:test
+Included project: :features:home:api
+Included project: :features:home:impl
+Included project: :features:invite:api
+Included project: :features:invite:impl
+Included project: :features:invite:test
+Included project: :features:invitepeople:api
+Included project: :features:invitepeople:impl
+Included project: :features:joinroom:api
+Included project: :features:joinroom:impl
+Included project: :features:knockrequests:api
+Included project: :features:knockrequests:impl
+Included project: :features:knockrequests:test
+Included project: :features:leaveroom:api
+Included project: :features:leaveroom:impl
+Included project: :features:licenses:api
+Included project: :features:licenses:impl
+Included project: :features:licenses:test
+Included project: :features:linknewdevice:api
+Included project: :features:linknewdevice:impl
+Included project: :features:linknewdevice:test
+Included project: :features:location:api
+Included project: :features:location:impl
+Included project: :features:location:test
+Included project: :features:lockscreen:api
+Included project: :features:lockscreen:impl
+Included project: :features:lockscreen:test
+Included project: :features:login:api
+Included project: :features:login:impl
+Included project: :features:login:test
+Included project: :features:logout:api
+Included project: :features:logout:impl
+Included project: :features:logout:test
+Included project: :features:messages:api
+Included project: :features:messages:impl
+Included project: :features:messages:test
+Included project: :features:migration:api
+Included project: :features:migration:impl
+Included project: :features:networkmonitor:api
+Included project: :features:networkmonitor:impl
+Included project: :features:networkmonitor:test
+Included project: :features:poll:api
+Included project: :features:poll:impl
+Included project: :features:poll:test
+Included project: :features:preferences:api
+Included project: :features:preferences:impl
+Included project: :features:rageshake:api
+Included project: :features:rageshake:impl
+Included project: :features:rageshake:test
+Included project: :features:reportroom:api
+Included project: :features:reportroom:impl
+Included project: :features:reportroom:test
+Included project: :features:rolesandpermissions:api
+Included project: :features:rolesandpermissions:impl
+Included project: :features:rolesandpermissions:test
+Included project: :features:roomaliasresolver:api
+Included project: :features:roomaliasresolver:impl
+Included project: :features:roomcall:api
+Included project: :features:roomcall:impl
+Included project: :features:roomdetails:api
+Included project: :features:roomdetails:impl
+Included project: :features:roomdetailsedit:api
+Included project: :features:roomdetailsedit:impl
+Included project: :features:roomdetailsedit:test
+Included project: :features:roomdirectory:api
+Included project: :features:roomdirectory:impl
+Included project: :features:roommembermoderation:api
+Included project: :features:roommembermoderation:impl
+Included project: :features:securebackup:api
+Included project: :features:securebackup:impl
+Included project: :features:securityandprivacy:api
+Included project: :features:securityandprivacy:impl
+Included project: :features:securityandprivacy:test
+Included project: :features:share:api
+Included project: :features:share:impl
+Included project: :features:signedout:api
+Included project: :features:signedout:impl
+Included project: :features:space:api
+Included project: :features:space:impl
+Included project: :features:startchat:api
+Included project: :features:startchat:impl
+Included project: :features:startchat:test
+Included project: :features:userprofile:api
+Included project: :features:userprofile:impl
+Included project: :features:userprofile:shared
+Included project: :features:verifysession:api
+Included project: :features:verifysession:impl
+Included project: :features:verifysession:test
+Included project: :features:viewfolder:api
+Included project: :features:viewfolder:impl
+Included project: :features:viewfolder:test
+Included project: :libraries:accountselect:api
+Included project: :libraries:accountselect:impl
+Included project: :libraries:androidutils
+Included project: :libraries:architecture
+Included project: :libraries:audio:api
+Included project: :libraries:audio:impl
+Included project: :libraries:audio:test
+Included project: :libraries:compound
+Included project: :libraries:core
+Included project: :libraries:cryptography:api
+Included project: :libraries:cryptography:impl
+Included project: :libraries:cryptography:test
+Included project: :libraries:dateformatter:api
+Included project: :libraries:dateformatter:impl
+Included project: :libraries:dateformatter:test
+Included project: :libraries:deeplink:api
+Included project: :libraries:deeplink:impl
+Included project: :libraries:designsystem
+Included project: :libraries:di
+Included project: :libraries:encrypted-db
+Included project: :libraries:eventformatter:api
+Included project: :libraries:eventformatter:impl
+Included project: :libraries:eventformatter:test
+Included project: :libraries:featureflag:api
+Included project: :libraries:featureflag:impl
+Included project: :libraries:featureflag:test
+Included project: :libraries:featureflag:ui
+Included project: :libraries:fullscreenintent:api
+Included project: :libraries:fullscreenintent:impl
+Included project: :libraries:indicator:api
+Included project: :libraries:indicator:impl
+Included project: :libraries:indicator:test
+Included project: :libraries:maplibre-compose
+Included project: :libraries:matrix:api
+Included project: :libraries:matrix:impl
+Included project: :libraries:matrix:test
+Included project: :libraries:matrixmedia:api
+Included project: :libraries:matrixmedia:impl
+Included project: :libraries:matrixmedia:test
+Included project: :libraries:matrixui
+Included project: :libraries:mediapickers:api
+Included project: :libraries:mediapickers:impl
+Included project: :libraries:mediapickers:test
+Included project: :libraries:mediaplayer:api
+Included project: :libraries:mediaplayer:impl
+Included project: :libraries:mediaplayer:test
+Included project: :libraries:mediaupload:api
+Included project: :libraries:mediaupload:impl
+Included project: :libraries:mediaupload:test
+Included project: :libraries:mediaviewer:api
+Included project: :libraries:mediaviewer:impl
+Included project: :libraries:mediaviewer:test
+Included project: :libraries:network
+Included project: :libraries:oidc:api
+Included project: :libraries:oidc:impl
+Included project: :libraries:oidc:test
+Included project: :libraries:permissions:api
+Included project: :libraries:permissions:impl
+Included project: :libraries:permissions:noop
+Included project: :libraries:permissions:test
+Included project: :libraries:preferences:api
+Included project: :libraries:preferences:impl
+Included project: :libraries:preferences:test
+Included project: :libraries:previewutils
+Included project: :libraries:push:api
+Included project: :libraries:push:impl
+Included project: :libraries:push:test
+Included project: :libraries:pushproviders:api
+Included project: :libraries:pushproviders:firebase
+Included project: :libraries:pushproviders:test
+Included project: :libraries:pushproviders:unifiedpush
+Included project: :libraries:pushstore:api
+Included project: :libraries:pushstore:impl
+Included project: :libraries:pushstore:test
+Included project: :libraries:qrcode
+Included project: :libraries:recentemojis:api
+Included project: :libraries:recentemojis:impl
+Included project: :libraries:recentemojis:test
+Included project: :libraries:roomselect:api
+Included project: :libraries:roomselect:impl
+Included project: :libraries:roomselect:test
+Included project: :libraries:rustsdk
+Included project: :libraries:session-storage:api
+Included project: :libraries:session-storage:impl
+Included project: :libraries:session-storage:test
+Included project: :libraries:testtags
+Included project: :libraries:textcomposer:impl
+Included project: :libraries:textcomposer:lib
+Included project: :libraries:troubleshoot:api
+Included project: :libraries:troubleshoot:impl
+Included project: :libraries:troubleshoot:test
+Included project: :libraries:ui-common
+Included project: :libraries:ui-strings
+Included project: :libraries:ui-utils
+Included project: :libraries:usersearch:api
+Included project: :libraries:usersearch:impl
+Included project: :libraries:usersearch:test
+Included project: :libraries:voiceplayer:api
+Included project: :libraries:voiceplayer:impl
+Included project: :libraries:voicerecorder:api
+Included project: :libraries:voicerecorder:impl
+Included project: :libraries:voicerecorder:test
+Included project: :libraries:wellknown:api
+Included project: :libraries:wellknown:impl
+Included project: :libraries:wellknown:test
+Included project: :libraries:workmanager:api
+Included project: :libraries:workmanager:impl
+Included project: :libraries:workmanager:test
+Included project: :services:analytics:api
+Included project: :services:analytics:compose
+Included project: :services:analytics:impl
+Included project: :services:analytics:noop
+Included project: :services:analytics:test
+Included project: :services:analyticsproviders:api
+Included project: :services:analyticsproviders:posthog
+Included project: :services:analyticsproviders:sentry
+Included project: :services:analyticsproviders:test
+Included project: :services:apperror:api
+Included project: :services:apperror:impl
+Included project: :services:apperror:test
+Included project: :services:appnavstate:api
+Included project: :services:appnavstate:impl
+Included project: :services:appnavstate:test
+Included project: :services:toolbox:api
+Included project: :services:toolbox:impl
+Included project: :services:toolbox:test
+Type-safe project accessors is an incubating feature.
+> Task :plugins:checkKotlinGradlePluginConfigurationErrors SKIPPED
+> Task :plugins:generateExternalPluginSpecBuilders UP-TO-DATE
+> Task :plugins:extractPrecompiledScriptPluginPlugins UP-TO-DATE
+> Task :plugins:compilePluginsBlocks UP-TO-DATE
+> Task :plugins:generatePrecompiledScriptPluginAccessors UP-TO-DATE
+> Task :plugins:generateScriptPluginAdapters UP-TO-DATE
+> Task :plugins:compileKotlin UP-TO-DATE
+> Task :plugins:compileJava NO-SOURCE
+> Task :plugins:pluginDescriptors UP-TO-DATE
+> Task :plugins:processResources UP-TO-DATE
+> Task :plugins:classes UP-TO-DATE
+> Task :plugins:jar UP-TO-DATE
+
+> Configure project :annotations
+WARNING: The option setting 'android.enableBuildConfigAsBytecode=true' is experimental.
+The current default is 'false'.
+WARNING: The option setting 'android.experimental.enableTestFixtures=true' is experimental.
+The current default is 'false'.
+WARNING: The option setting 'android.r8.gradual.support=true' is experimental.
+The current default is 'false'.
+
+> Configure project :app
+    ┌────────────────────────────────────────────────────────────────────────────────┐
+    │                  Building de.funker.messenger (Funker) [FOSS]                  │
+    └────────────────────────────────────────────────────────────────────────────────┘
+WARNING: BuildType(nightly): resValue 'string/app_name' value is being replaced.
+WARNING: BuildType(nightly): resValue 'string/login_redirect_scheme' value is being replaced.
+Analytics enabled with Posthog and Sentry
+
+> Configure project :features:messages:impl
+e: file:///home/fabian/funker-messenger/features/messages/impl/build.gradle.kts:69:25: Unresolved reference 'collections'.
+
+[Incubating] Problems report is available at: file:///home/fabian/funker-messenger/build/reports/problems/problems-report.html
+
+FAILURE: Build failed with an exception.
+
+* Where:
+Build file '/home/fabian/funker-messenger/features/messages/impl/build.gradle.kts' line: 69
+
+* What went wrong:
+Script compilation error:
+
+  Line 69:     implementation(libs.collections.immutable)
+                                   ^ Unresolved reference 'collections'.
+
+1 error
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to generate a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+Deprecated Gradle features were used in this build, making it incompatible with Gradle 10.
+
+You can use '--warning-mode all' to show the individual deprecation warnings and determine if they come from your own scripts or plugins.
+
+For more on this, please refer to https://docs.gradle.org/9.2.1/userguide/command_line_interface.html#sec:command_line_warnings in the Gradle documentation.
+
+BUILD FAILED in 24s
+9 actionable tasks: 9 up-to-date
+Configuration cache entry stored.

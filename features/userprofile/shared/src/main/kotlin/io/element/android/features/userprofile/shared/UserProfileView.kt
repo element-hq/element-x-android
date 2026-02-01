@@ -15,8 +15,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.BasicAlertDialog
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -45,6 +50,11 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.components.CreateDmConfirmationBottomSheet
 import io.element.android.libraries.ui.strings.CommonStrings
+import androidx.compose.material3.AlertDialog
+import io.element.android.libraries.designsystem.theme.components.TextField
+import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.TextButton
+import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -95,8 +105,10 @@ fun UserProfileView(
             Spacer(modifier = Modifier.height(26.dp))
             if (!state.isCurrentUser) {
                 VerifyUserSection(state, onVerifyClick = { onVerifyClick(state.userId) })
+                NicknameSection(state)
                 BlockUserSection(state)
                 BlockUserDialogs(state)
+                NicknameDialogs(state)
             }
             AsyncActionView(
                 async = state.startDmActionState,
@@ -137,6 +149,52 @@ private fun VerifyUserSection(
             headlineContent = { Text(stringResource(CommonStrings.common_verify_user)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Lock())),
             onClick = onVerifyClick,
+        )
+    }
+}
+
+@Composable
+private fun NicknameSection(state: UserProfileState) {
+    ListItem(
+        headlineContent = { Text(stringResource(R.string.screen_user_profile_set_nickname)) },
+        supportingContent = state.localNickname?.let { { Text(it) } },
+        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Edit())),
+        onClick = { state.eventSink(UserProfileEvents.SetNickname) },
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun NicknameDialogs(state: UserProfileState) {
+    if (state.displayConfirmationDialog == UserProfileState.ConfirmationDialog.EditNickname) {
+        var nickname by remember { mutableStateOf(state.localNickname.orEmpty()) }
+        AlertDialog(
+            onDismissRequest = { state.eventSink(UserProfileEvents.ClearConfirmationDialog) },
+            title = { Text(stringResource(R.string.screen_user_profile_edit_nickname_title)) },
+            text = {
+                Column {
+                    Text(stringResource(R.string.screen_user_profile_edit_nickname_description))
+                    Spacer(modifier = Modifier.height(16.dp))
+                    TextField(
+                        value = nickname,
+                        onValueChange = { nickname = it },
+                        placeholder = stringResource(R.string.screen_user_profile_edit_nickname_placeholder),
+                        singleLine = true,
+                    )
+                }
+            },
+            confirmButton = {
+                Button(
+                    stringResource(CommonStrings.action_save),
+                    { state.eventSink(UserProfileEvents.UpdateNickname(nickname)) }
+                )
+            },
+            dismissButton = {
+                TextButton(
+                    stringResource(CommonStrings.action_cancel),
+                    { state.eventSink(UserProfileEvents.ClearConfirmationDialog) }
+                )
+            }
         )
     }
 }

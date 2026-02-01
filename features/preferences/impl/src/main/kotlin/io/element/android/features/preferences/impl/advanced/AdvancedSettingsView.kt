@@ -71,14 +71,6 @@ fun AdvancedSettingsView(
             )
         }
     ) {
-        PreferenceDropdown(
-            title = stringResource(id = CommonStrings.common_appearance),
-            selectedOption = state.theme,
-            options = ThemeOption.entries.toImmutableList(),
-            onSelectOption = { themeOption ->
-                state.eventSink(AdvancedSettingsEvents.SetTheme(themeOption))
-            }
-        )
         ListItem(
             headlineContent = {
                 Text(text = stringResource(id = CommonStrings.action_view_source))

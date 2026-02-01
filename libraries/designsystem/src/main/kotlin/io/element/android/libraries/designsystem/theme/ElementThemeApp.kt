@@ -72,14 +72,22 @@ fun ElementThemeApp(
             }
         )
     }
+    val useDynamicTheme by remember {
+        appPreferencesStore.getUseDynamicThemeFlow()
+    }
+        .collectAsState(initial = true)
+
     CompositionLocalProvider(
         LocalBuildMeta provides buildMeta,
     ) {
+        val dynamicLight = rememberDynamicSemanticColors(compoundLight, isDark = false, useDynamicTheme = useDynamicTheme)
+        val dynamicDark = rememberDynamicSemanticColors(compoundDark, isDark = true, useDynamicTheme = useDynamicTheme)
+        
         ElementTheme(
             darkTheme = theme.isDark(),
             content = content,
-            compoundLight = compoundLight,
-            compoundDark = compoundDark,
+            compoundLight = dynamicLight,
+            compoundDark = dynamicDark,
         )
     }
 }

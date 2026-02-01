@@ -21,12 +21,20 @@ class InMemoryAppPreferencesStore(
     hideInviteAvatars: Boolean? = null,
     timelineMediaPreviewValue: MediaPreviewValue? = null,
     theme: String? = null,
+    useDynamicTheme: Boolean = false,
+    customThemeColor: Int? = null,
+    wallpaperUri: String? = null,
+    wallpaperDim: Boolean = false,
     logLevel: LogLevel = LogLevel.INFO,
     traceLockPacks: Set<TraceLogPack> = emptySet(),
 ) : AppPreferencesStore {
     private val isDeveloperModeEnabled = MutableStateFlow(isDeveloperModeEnabled)
     private val customElementCallBaseUrl = MutableStateFlow(customElementCallBaseUrl)
     private val theme = MutableStateFlow(theme)
+    private val useDynamicTheme = MutableStateFlow(useDynamicTheme)
+    private val customThemeColor = MutableStateFlow(customThemeColor)
+    private val wallpaperUri = MutableStateFlow(wallpaperUri)
+    private val wallpaperDim = MutableStateFlow(wallpaperDim)
     private val logLevel = MutableStateFlow(logLevel)
     private val tracingLogPacks = MutableStateFlow(traceLockPacks)
     private val hideInviteAvatars = MutableStateFlow(hideInviteAvatars)
@@ -54,6 +62,38 @@ class InMemoryAppPreferencesStore(
 
     override fun getThemeFlow(): Flow<String?> {
         return theme
+    }
+
+    override suspend fun setUseDynamicTheme(useDynamicTheme: Boolean) {
+        this.useDynamicTheme.value = useDynamicTheme
+    }
+
+    override fun getUseDynamicThemeFlow(): Flow<Boolean> {
+        return useDynamicTheme
+    }
+
+    override suspend fun setCustomThemeColor(color: Int?) {
+        this.customThemeColor.value = color
+    }
+
+    override fun getCustomThemeColorFlow(): Flow<Int?> {
+        return customThemeColor
+    }
+
+    override suspend fun setWallpaper(uri: String?) {
+        this.wallpaperUri.value = uri
+    }
+
+    override fun getWallpaperFlow(): Flow<String?> {
+        return wallpaperUri
+    }
+
+    override suspend fun setWallpaperDim(dim: Boolean) {
+        this.wallpaperDim.value = dim
+    }
+
+    override fun getWallpaperDimFlow(): Flow<Boolean> {
+        return wallpaperDim
     }
 
     @Deprecated("Use MediaPreviewService instead. Kept only for migration.")

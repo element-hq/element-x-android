@@ -9,6 +9,7 @@
 package io.element.android.features.userprofile.impl.root
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
@@ -24,6 +25,7 @@ import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.enterprise.api.SessionEnterpriseService
 import io.element.android.features.startchat.api.StartDMAction
 import io.element.android.features.userprofile.api.UserProfileEvents
+import io.element.android.libraries.preferences.api.store.NicknameStore
 import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.api.UserProfileState.ConfirmationDialog
 import io.element.android.features.userprofile.api.UserProfileVerificationState
@@ -50,6 +52,7 @@ class UserProfilePresenter(
     private val client: MatrixClient,
     private val startDMAction: StartDMAction,
     private val sessionEnterpriseService: SessionEnterpriseService,
+    private val nicknameStore: NicknameStore,
 ) : Presenter<UserProfileState> {
     @AssistedFactory
     interface Factory {
@@ -92,6 +95,8 @@ class UserProfilePresenter(
         val isBlocked: MutableState<AsyncData<Boolean>> = remember { mutableStateOf(AsyncData.Uninitialized) }
         val dmRoomId by getDmRoomId()
         val canCall by getCanCall(dmRoomId)
+        val localNickname by nicknameStore.getNickname(userId).collectAsState(initial = null)
+
         LaunchedEffect(Unit) {
             client.ignoredUsersFlow
                 .map { ignoredUsers -> userId in ignoredUsers }
@@ -135,6 +140,15 @@ class UserProfilePresenter(
                 UserProfileEvents.ClearStartDMState -> {
                     startDmActionState.value = AsyncAction.Uninitialized
                 }
+                UserProfileEvents.SetNickname -> {
+                    confirmationDialog = ConfirmationDialog.EditNickname
+                }
+                is UserProfileEvents.UpdateNickname -> {
+                    coroutineScope.launch {
+                        nicknameStore.setNickname(userId, event.nickname)
+                    }
+                    confirmationDialog = null
+                }
                 // Do nothing for other event as they are handled by the RoomMemberDetailsPresenter if needed
                 UserProfileEvents.WithdrawVerification,
                 is UserProfileEvents.CopyToClipboard -> Unit
@@ -153,6 +167,7 @@ class UserProfilePresenter(
             dmRoomId = dmRoomId,
             canCall = canCall,
             snackbarMessage = null,
+            localNickname = localNickname,
             eventSink = ::handleEvent,
         )
     }

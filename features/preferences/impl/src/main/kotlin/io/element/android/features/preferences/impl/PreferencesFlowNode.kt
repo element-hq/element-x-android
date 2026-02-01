@@ -34,6 +34,7 @@ import io.element.android.features.preferences.impl.labs.LabsNode
 import io.element.android.features.preferences.impl.notifications.NotificationSettingsNode
 import io.element.android.features.preferences.impl.notifications.edit.EditDefaultNotificationSettingNode
 import io.element.android.features.preferences.impl.root.PreferencesRootNode
+import io.element.android.features.preferences.impl.theme.ThemeSettingsNode
 import io.element.android.features.preferences.impl.user.editprofile.EditUserProfileNode
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
@@ -73,6 +74,9 @@ class PreferencesFlowNode(
 
         @Parcelize
         data object DeveloperSettings : NavTarget
+
+        @Parcelize
+        data object ThemeSettings : NavTarget
 
         @Parcelize
         data object AdvancedSettings : NavTarget
@@ -153,6 +157,10 @@ class PreferencesFlowNode(
 
                     override fun navigateToLockScreenSettings() {
                         backstack.push(NavTarget.LockScreenSettings)
+                    }
+
+                    override fun navigateToThemeSettings() {
+                        backstack.push(NavTarget.ThemeSettings)
                     }
 
                     override fun navigateToAdvancedSettings() {
@@ -274,6 +282,9 @@ class PreferencesFlowNode(
                 }
                 val input = EditDefaultNotificationSettingNode.Inputs(navTarget.isOneToOne)
                 createNode<EditDefaultNotificationSettingNode>(buildContext, plugins = listOf(input, callback))
+            }
+            NavTarget.ThemeSettings -> {
+                createNode<ThemeSettingsNode>(buildContext)
             }
             NavTarget.AdvancedSettings -> {
                 createNode<AdvancedSettingsNode>(buildContext)

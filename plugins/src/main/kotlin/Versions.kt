@@ -94,7 +94,7 @@ object Versions {
      * Java version used for compilation.
      * Update this value when you want to use a newer Java version.
      */
-    private const val JAVA_VERSION = 21
+    private const val JAVA_VERSION = 17
 
     val javaVersion: JavaVersion = JavaVersion.toVersion(JAVA_VERSION)
     val javaLanguageVersion: JavaLanguageVersion = JavaLanguageVersion.of(JAVA_VERSION)

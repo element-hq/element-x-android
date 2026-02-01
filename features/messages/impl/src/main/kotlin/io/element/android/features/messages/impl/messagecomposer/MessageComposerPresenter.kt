@@ -98,6 +98,12 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 import io.element.android.libraries.core.mimetype.MimeTypes.Any as AnyMimeTypes
+import io.element.android.libraries.recentemojis.api.EmojibaseProvider
+import io.element.android.libraries.recentemojis.api.GetRecentEmojis
+import io.element.android.emojibasebindings.EmojibaseStore
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import kotlinx.coroutines.withContext
+import kotlinx.collections.immutable.ImmutableList
 
 @Suppress("LargeClass")
 @AssistedInject
@@ -125,6 +131,9 @@ class MessageComposerPresenter(
     private val suggestionsProcessor: SuggestionsProcessor,
     private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
     private val notificationConversationService: NotificationConversationService,
+    private val emojibaseProvider: EmojibaseProvider,
+    private val getRecentEmojis: GetRecentEmojis,
+    private val dispatchers: CoroutineDispatchers,
 ) : Presenter<MessageComposerState> {
     @AssistedFactory
     interface Factory {
@@ -227,6 +236,24 @@ class MessageComposerPresenter(
             )
             if (draft != null) {
                 applyDraft(draft, markdownTextEditorState, richTextEditorState)
+            }
+        }
+
+        var showEmojiPicker by remember { mutableStateOf(false) }
+        var recentEmojis by remember { mutableStateOf<ImmutableList<String>>(persistentListOf()) }
+        val emojibaseStore = remember { mutableStateOf<EmojibaseStore?>(null) }
+        
+        LaunchedEffect(Unit) {
+            withContext(dispatchers.io) {
+                emojibaseStore.value = emojibaseProvider.emojibaseStore
+            }
+        }
+
+        LaunchedEffect(showEmojiPicker) {
+            if (showEmojiPicker) {
+                 withContext(dispatchers.io) {
+                    recentEmojis = getRecentEmojis().getOrNull() ?: persistentListOf()
+                 }
             }
         }
 
@@ -354,6 +381,20 @@ class MessageComposerPresenter(
                     val draft = createDraftFromState(markdownTextEditorState, richTextEditorState)
                     sessionCoroutineScope.updateDraft(draft, isVolatile = false)
                 }
+                MessageComposerEvent.ToggleEmojiPicker -> {
+                    showEmojiPicker = !showEmojiPicker
+                }
+                is MessageComposerEvent.InsertEmoji -> {
+                    if (showTextFormatting) {
+                         val newHtml = richTextEditorState.messageHtml + event.emoji.unicode
+                         localCoroutineScope.launch {
+                             richTextEditorState.setHtml(newHtml)
+                         }
+                    } else {
+                         val currentText = markdownTextEditorState.text.value().toString()
+                         markdownTextEditorState.text.update(currentText + event.emoji.unicode, true)
+                    }
+                }
             }
         }
 
@@ -385,6 +426,9 @@ class MessageComposerPresenter(
             suggestions = suggestions.toImmutableList(),
             resolveMentionDisplay = resolveMentionDisplay,
             resolveAtRoomMentionDisplay = resolveAtRoomMentionDisplay,
+            showEmojiPicker = showEmojiPicker,
+            emojibaseStore = emojibaseStore.value,
+            recentEmojis = recentEmojis,
             eventSink = ::handleEvent,
         )
     }

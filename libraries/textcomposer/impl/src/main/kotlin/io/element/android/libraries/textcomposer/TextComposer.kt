@@ -108,6 +108,7 @@ fun TextComposer(
     onResetComposerMode: () -> Unit,
     onAddAttachment: () -> Unit,
     onDismissTextFormatting: () -> Unit,
+    onOpenEmojiPicker: () -> Unit = {},
     onVoiceRecorderEvent: (VoiceMessageRecorderEvent) -> Unit,
     onVoicePlayerEvent: (VoiceMessagePlayerEvent) -> Unit,
     onSendVoiceMessage: () -> Unit,
@@ -397,6 +398,7 @@ fun TextComposer(
             onAddAttachment = onAddAttachment,
             onDeleteVoiceMessage = onDeleteVoiceMessage,
             onVoiceRecorderEvent = onVoiceRecorderEvent,
+            onOpenEmojiPicker = onOpenEmojiPicker,
         )
     }
 
@@ -437,6 +439,7 @@ private fun StandardLayout(
     onAddAttachment: () -> Unit,
     onDeleteVoiceMessage: () -> Unit,
     onVoiceRecorderEvent: (VoiceMessageRecorderEvent) -> Unit,
+    onOpenEmojiPicker: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -495,6 +498,19 @@ private fun StandardLayout(
                         }
                     }
                 }
+            }
+            IconButton(
+                modifier = Modifier
+                    .padding(top = 5.dp, bottom = 5.dp, start = 0.dp, end = 0.dp)
+                    .size(48.dp),
+                onClick = onOpenEmojiPicker,
+            ) {
+                Icon(
+                    modifier = Modifier.size(24.dp),
+                    imageVector = CompoundIcons.ReactionAdd(),
+                    contentDescription = "Emojis",
+                    tint = ElementTheme.colors.iconSecondary,
+                )
             }
             Box(
                 modifier = Modifier

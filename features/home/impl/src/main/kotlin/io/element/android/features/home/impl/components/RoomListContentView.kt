@@ -116,13 +116,11 @@ private fun SkeletonView(
     LazyColumn(
         modifier = modifier,
         contentPadding = contentPadding,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         repeat(count) { index ->
             item {
                 RoomSummaryPlaceholderRow()
-                if (index != count - 1) {
-                    HorizontalDivider()
-                }
             }
         }
     }
@@ -231,6 +229,7 @@ private fun RoomsViewList(
         state = lazyListState,
         modifier = modifier,
         contentPadding = contentPadding,
+        verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         when (state.securityBannerState) {
             SecurityBannerState.SetUpRecovery -> {
@@ -280,9 +279,6 @@ private fun RoomsViewList(
                 onClick = onRoomClick,
                 eventSink = eventSink,
             )
-            if (index != state.summaries.lastIndex) {
-                HorizontalDivider()
-            }
         }
     }
 }

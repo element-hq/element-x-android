@@ -29,4 +29,5 @@ data class PollAnswerItem(
     val showVotes: Boolean,
     val votesCount: Int,
     val percentage: Float,
+    val voters: kotlinx.collections.immutable.ImmutableList<PollVoter>,
 )

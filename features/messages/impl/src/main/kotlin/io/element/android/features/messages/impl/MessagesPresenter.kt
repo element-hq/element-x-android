@@ -121,6 +121,7 @@ class MessagesPresenter(
     private val featureFlagService: FeatureFlagService,
     private val addRecentEmoji: AddRecentEmoji,
     private val markAsFullyRead: MarkAsFullyRead,
+    private val appPreferencesStore: io.element.android.libraries.preferences.api.store.AppPreferencesStore,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
 ) : Presenter<MessagesState> {
     @AssistedFactory
@@ -147,6 +148,8 @@ class MessagesPresenter(
         val coroutineScope = rememberCoroutineScope()
         val roomInfo by room.roomInfoFlow.collectAsState()
         val localCoroutineScope = rememberCoroutineScope()
+        val wallpaperUri by appPreferencesStore.getWallpaperFlow().collectAsState(initial = null)
+        val wallpaperDim by appPreferencesStore.getWallpaperDimFlow().collectAsState(initial = false)
         val composerState = composerPresenter.present()
         val voiceMessageComposerState = voiceMessageComposerPresenter.present()
         val timelineState = timelinePresenter.present()
@@ -299,6 +302,8 @@ class MessagesPresenter(
             roomMemberModerationState = roomMemberModerationState,
             showSharedHistoryIcon = showSharedHistoryIcon,
             successorRoom = roomInfo.successorRoom,
+            wallpaperUri = wallpaperUri,
+            wallpaperDim = wallpaperDim,
             eventSink = ::handleEvent,
         )
     }

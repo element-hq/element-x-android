@@ -178,7 +178,7 @@ private fun RoomSummaryScaffoldRow(
             onClick = { onClick(room) },
             onLongClick = { onLongClick(room) },
             onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
-            indication = ripple(),
+            indication = ripple(color = ElementTheme.colors.textActionAccent),
             interactionSource = remember { MutableInteractionSource() }
         )
         .onKeyboardContextMenuAction { onLongClick(room) }

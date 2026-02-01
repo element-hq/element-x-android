@@ -39,6 +39,7 @@ dependencies {
     implementation(projects.features.verifysession.api)
     api(projects.features.userprofile.api)
     api(projects.features.userprofile.shared)
+    implementation(projects.libraries.preferences.api)
     implementation(libs.coil.compose)
     implementation(projects.features.startchat.api)
     implementation(projects.services.analytics.api)

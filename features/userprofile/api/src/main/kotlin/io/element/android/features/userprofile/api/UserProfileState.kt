@@ -26,11 +26,13 @@ data class UserProfileState(
     val dmRoomId: RoomId?,
     val canCall: Boolean,
     val snackbarMessage: SnackbarMessage?,
+    val localNickname: String?,
     val eventSink: (UserProfileEvents) -> Unit
 ) {
     enum class ConfirmationDialog {
         Block,
-        Unblock
+        Unblock,
+        EditNickname
     }
 }
 
