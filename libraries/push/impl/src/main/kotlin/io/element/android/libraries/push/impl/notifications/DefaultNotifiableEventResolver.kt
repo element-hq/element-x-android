@@ -59,6 +59,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.libraries.preferences.api.store.NicknameStore
 import kotlinx.coroutines.flow.firstOrNull
+import io.element.android.libraries.preferences.api.store.NicknameStore
+import kotlinx.coroutines.flow.firstOrNull
 import timber.log.Timber
 
 private val loggerTag = LoggerTag("DefaultNotifiableEventResolver", LoggerTag.NotificationLoggerTag)
@@ -94,6 +96,8 @@ class DefaultNotifiableEventResolver(
     private val permalinkParser: PermalinkParser,
     private val fallbackNotificationFactory: FallbackNotificationFactory,
     private val featureFlagService: FeatureFlagService,
+    private val nicknameStore: NicknameStore,
+    private val callNotificationEventResolver: CallNotificationEventResolver,
     private val nicknameStore: NicknameStore,
     private val callNotificationEventResolver: CallNotificationEventResolver,
 ) : NotifiableEventResolver {
@@ -227,7 +231,7 @@ class DefaultNotifiableEventResolver(
                     eventId = eventId,
                     noisy = isNoisy,
                     timestamp = this.timestamp,
-                    senderDisambiguatedDisplayName = getDisambiguatedDisplayNameWithNickname(content.senderId, this),
+                    senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId, this),
                     body = stringProvider.getString(CommonStrings.common_unsupported_call),
                     roomName = roomDisplayName,
                     roomIsDm = isDm,
@@ -258,7 +262,7 @@ class DefaultNotifiableEventResolver(
                     eventId = eventId,
                     noisy = isNoisy,
                     timestamp = this.timestamp,
-                    senderDisambiguatedDisplayName = getDisambiguatedDisplayNameWithNickname(content.senderId, this),
+                    senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId, this),
                     body = stringProvider.getString(CommonStrings.common_poll_summary, content.question),
                     imageUriString = null,
                     roomName = roomDisplayName,
@@ -269,15 +273,14 @@ class DefaultNotifiableEventResolver(
                 ResolvedPushEvent.Event(notifiableEventMessage)
             }
             is NotificationContent.MessageLike.ReactionContent -> {
-                Timber.tag(loggerTag.value).d("Resolving Reaction notification: key=${content.reactionKey}")
-                val senderDisambiguatedDisplayName = getDisambiguatedDisplayNameWithNickname(content.senderId, this)
+                val senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId, this)
                 val messageBody = stringProvider.getString(R.string.notification_reaction_body_with_sender, senderDisambiguatedDisplayName, content.reactionKey)
                 val notifiableMessageEvent = buildNotifiableMessageEvent(
                     sessionId = userId,
                     senderId = content.senderId,
                     roomId = roomId,
                     eventId = eventId,
-                    noisy = true, // Force reactions to be noisy for visibility
+                    noisy = isNoisy,
                     timestamp = this.timestamp,
                     senderDisambiguatedDisplayName = senderDisambiguatedDisplayName,
                     body = messageBody,
@@ -439,7 +442,7 @@ class DefaultNotifiableEventResolver(
         }
     }
 
-    private suspend fun getDisambiguatedDisplayNameWithNickname(userId: UserId, notificationData: NotificationData): String {
+    private suspend fun getDisambiguatedDisplayName(userId: UserId, notificationData: NotificationData): String {
         val nickname = nicknameStore.getNickname(userId).firstOrNull()
         return nickname ?: notificationData.getDisambiguatedDisplayName(userId)
     }

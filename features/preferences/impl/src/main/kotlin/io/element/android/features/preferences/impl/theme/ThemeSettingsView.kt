@@ -7,18 +7,11 @@
 
 package io.element.android.features.preferences.impl.theme
 
-import android.content.Intent
 import android.os.Build
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -41,21 +34,17 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.toImmutableList
 
-import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.graphics.Color
+import android.content.Intent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.ui.platform.LocalContext
-import io.mhssn.colorpicker.ColorPickerDialog
-import io.mhssn.colorpicker.ColorPickerType
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ThemeSettingsView(
     state: ThemeSettingsState,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    var showColorPickerDialog by remember { mutableStateOf(false) }
-    
     val context = LocalContext.current
     val wallpaperLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument()
@@ -71,20 +60,6 @@ fun ThemeSettingsView(
             state.eventSink(ThemeSettingsEvents.SetWallpaper(it.toString()))
         }
     }
-
-    ColorPickerDialog(
-        show = showColorPickerDialog,
-        type = ColorPickerType.Classic(
-            showAlphaBar = false,
-        ),
-        onDismissRequest = {
-            showColorPickerDialog = false
-        },
-        onPickedColor = { color ->
-            state.eventSink(ThemeSettingsEvents.SetCustomThemeColor(color.hashCode()))
-            showColorPickerDialog = false
-        },
-    )
 
     PreferencePage(
         modifier = modifier,
@@ -112,18 +87,7 @@ fun ThemeSettingsView(
         if (!state.useDynamicTheme) {
              ListItem(
                 headlineContent = { Text("Custom Theme Color") },
-                supportingContent = {
-                    val colorText = state.customThemeColor?.let { String.format("#%06X", it and 0xFFFFFF) } ?: "Default (Green)"
-                    Text("Current color: $colorText")
-                },
-                trailingContent = state.customThemeColor?.let { colorInt ->
-                    ListItemContent.Custom {
-                        androidx.compose.foundation.Canvas(modifier = Modifier.size(24.dp)) {
-                            drawCircle(color = Color(colorInt))
-                        }
-                    }
-                },
-                onClick = { showColorPickerDialog = true }
+                supportingContent = { Text("Applies a custom seed color to the theme.") },
              )
         }
 
