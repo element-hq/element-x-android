@@ -12,6 +12,8 @@ import android.net.Uri
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -151,7 +153,7 @@ internal fun MessageComposerView(
                 },
                 state = presenter.present(),
                 selectedEmojis = persistentSetOf(),
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier.fillMaxWidth().fillMaxHeight(0.45f),
              )
         }
     }

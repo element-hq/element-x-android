@@ -23,20 +23,30 @@ import io.element.android.libraries.matrix.api.roomlist.LatestEventValue
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.toInviteSender
+import io.element.android.libraries.preferences.api.store.NicknameStore
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.firstOrNull
 
 @Inject
 class RoomListRoomSummaryFactory(
     private val dateFormatter: DateFormatter,
     private val roomLatestEventFormatter: RoomLatestEventFormatter,
+    private val nicknameStore: NicknameStore,
 ) {
-    fun create(roomSummary: RoomSummary): RoomListRoomSummary {
+    suspend fun create(roomSummary: RoomSummary): RoomListRoomSummary {
         val roomInfo = roomSummary.info
         val avatarData = roomInfo.getAvatarData(size = AvatarSize.RoomListItem)
+        val nickname = if (roomInfo.isDm) {
+            roomInfo.heroes.firstOrNull()?.let { hero ->
+                nicknameStore.getNickname(hero.userId).firstOrNull()
+            }
+        } else {
+            null
+        }
         return RoomListRoomSummary(
             id = roomSummary.roomId.value,
             roomId = roomSummary.roomId,
-            name = roomInfo.name,
+            name = nickname ?: roomInfo.name,
             numberOfUnreadMessages = roomInfo.numUnreadMessages,
             numberOfUnreadMentions = roomInfo.numUnreadMentions,
             numberOfUnreadNotifications = roomInfo.numUnreadNotifications,

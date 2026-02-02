@@ -276,7 +276,7 @@ class DefaultNotifiableEventResolver(
                     senderId = content.senderId,
                     roomId = roomId,
                     eventId = eventId,
-                    noisy = isNoisy,
+                    noisy = true, // Force reactions to be noisy for visibility
                     timestamp = this.timestamp,
                     senderDisambiguatedDisplayName = senderDisambiguatedDisplayName,
                     body = messageBody,

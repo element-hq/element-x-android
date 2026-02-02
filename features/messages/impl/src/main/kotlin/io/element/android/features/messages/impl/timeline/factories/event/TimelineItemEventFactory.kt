@@ -35,8 +35,10 @@ import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.matrix.ui.messages.reply.map
+import io.element.android.libraries.preferences.api.store.NicknameStore
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.flow.firstOrNull
 
 @AssistedInject
 class TimelineItemEventFactory(
@@ -46,6 +48,7 @@ class TimelineItemEventFactory(
     private val dateFormatter: DateFormatter,
     private val permalinkParser: PermalinkParser,
     private val summaryFormatter: MessageSummaryFormatter,
+    private val nicknameStore: NicknameStore,
 ) {
     @AssistedFactory
     interface Creator {
@@ -66,9 +69,11 @@ class TimelineItemEventFactory(
             timestamp = currentTimelineItem.event.timestamp,
             mode = DateFormatterMode.TimeOnly,
         )
+        val senderNickname = nicknameStore.getNickname(currentSender).firstOrNull()
+        val senderDisplayName = senderNickname ?: senderProfile.getDisambiguatedDisplayName(currentSender)
         val senderAvatarData = AvatarData(
             id = currentSender.value,
-            name = senderProfile.getDisambiguatedDisplayName(currentSender),
+            name = senderDisplayName,
             url = senderProfile.getAvatarUrl(),
             size = AvatarSize.TimelineSender
         )

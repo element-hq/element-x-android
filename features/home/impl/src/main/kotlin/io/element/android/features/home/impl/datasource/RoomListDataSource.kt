@@ -155,7 +155,7 @@ class RoomListDataSource(
         }
     }
 
-    private fun buildAndCacheItem(roomSummaries: List<RoomSummary>, index: Int): RoomListRoomSummary? {
+    private suspend fun buildAndCacheItem(roomSummaries: List<RoomSummary>, index: Int): RoomListRoomSummary? {
         val roomListSummary = roomSummaries.getOrNull(index)?.let { roomListRoomSummaryFactory.create(it) }
         diffCache[index] = roomListSummary
         return roomListSummary

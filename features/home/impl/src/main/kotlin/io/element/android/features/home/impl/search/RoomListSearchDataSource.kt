@@ -49,9 +49,11 @@ class RoomListSearchDataSource(
 
     val roomSummaries: Flow<ImmutableList<RoomListRoomSummary>> = roomList.filteredSummaries
         .map { roomSummaries ->
-            roomSummaries
-                .map(roomSummaryFactory::create)
-                .toImmutableList()
+            val result = mutableListOf<RoomListRoomSummary>()
+            for (roomSummary in roomSummaries) {
+                result.add(roomSummaryFactory.create(roomSummary))
+            }
+            result.toImmutableList()
         }
         .flowOn(coroutineDispatchers.computation)
 
