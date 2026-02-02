@@ -9,9 +9,6 @@
 package io.element.android.features.home.impl.filters
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.home.impl.FakeDateTimeObserver
-import io.element.android.features.home.impl.datasource.RoomListDataSource
-import io.element.android.features.home.impl.datasource.aRoomListRoomSummaryFactory
 import io.element.android.features.home.impl.filters.selection.DefaultFilterSelectionStrategy
 import io.element.android.features.home.impl.filters.selection.FilterSelectionState
 import io.element.android.libraries.dateformatter.api.DateFormatter
@@ -22,10 +19,8 @@ import io.element.android.libraries.matrix.api.notificationsettings.Notification
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
-import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.test
-import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
@@ -117,18 +112,6 @@ private fun TestScope.createRoomListFiltersPresenter(
     roomLatestEventFormatter: RoomLatestEventFormatter = FakeRoomLatestEventFormatter(),
 ): RoomListFiltersPresenter {
     return RoomListFiltersPresenter(
-        roomListDataSource = RoomListDataSource(
-            roomListService = roomListService,
-            roomListRoomSummaryFactory = aRoomListRoomSummaryFactory(
-                dateFormatter = dateFormatter,
-                roomLatestEventFormatter = roomLatestEventFormatter,
-            ),
-            coroutineDispatchers = testCoroutineDispatchers(),
-            notificationSettingsService = notificationSettingsService,
-            sessionCoroutineScope = backgroundScope,
-            dateTimeObserver = FakeDateTimeObserver(),
-            analyticsService = FakeAnalyticsService(),
-        ),
         filterSelectionStrategy = DefaultFilterSelectionStrategy(),
     )
 }

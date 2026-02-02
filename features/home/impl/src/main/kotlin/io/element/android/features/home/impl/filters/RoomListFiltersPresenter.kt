@@ -9,24 +9,17 @@
 package io.element.android.features.home.impl.filters
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.produceState
 import dev.zacsweers.metro.Inject
-import io.element.android.features.home.impl.datasource.RoomListDataSource
 import io.element.android.features.home.impl.filters.selection.FilterSelectionStrategy
 import io.element.android.libraries.architecture.Presenter
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.map
-import io.element.android.libraries.matrix.api.roomlist.RoomListFilter as MatrixRoomListFilter
 
 @Inject
 class RoomListFiltersPresenter(
-    private val roomListDataSource: RoomListDataSource,
     private val filterSelectionStrategy: FilterSelectionStrategy,
 ) : Presenter<RoomListFiltersState> {
-    private val initialFilters = filterSelectionStrategy.filterSelectionStates.value.toImmutableList()
-
     @Composable
     override fun present(): RoomListFiltersState {
         fun handleEvent(event: RoomListFiltersEvent) {
@@ -40,31 +33,9 @@ class RoomListFiltersPresenter(
             }
         }
 
-        val filters by produceState(initialValue = initialFilters) {
-            filterSelectionStrategy.filterSelectionStates
-                .map { filters ->
-                    value = filters.toImmutableList()
-                    filters.mapNotNull { filterState ->
-                        if (!filterState.isSelected) {
-                            return@mapNotNull null
-                        }
-                        when (filterState.filter) {
-                            RoomListFilter.Rooms -> MatrixRoomListFilter.Category.Group
-                            RoomListFilter.People -> MatrixRoomListFilter.Category.People
-                            RoomListFilter.Unread -> MatrixRoomListFilter.Unread
-                            RoomListFilter.Favourites -> MatrixRoomListFilter.Favorite
-                            RoomListFilter.Invites -> MatrixRoomListFilter.Invite
-                        }
-                    }
-                }
-                .collectLatest { filters ->
-                    val result = MatrixRoomListFilter.All(filters)
-                    roomListDataSource.updateFilter(result)
-                }
-        }
-
+        val filters by filterSelectionStrategy.filterSelectionStates.collectAsState()
         return RoomListFiltersState(
-            filterSelectionStates = filters,
+            filterSelectionStates = filters.toImmutableList(),
             eventSink = ::handleEvent,
         )
     }

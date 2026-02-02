@@ -8,6 +8,7 @@
 package io.element.android.features.home.impl.spacefilters
 
 import androidx.compose.foundation.text.input.TextFieldState
+import io.element.android.features.home.impl.filters.RoomListFilter
 import io.element.android.libraries.matrix.api.spaces.SpaceServiceFilter
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -39,4 +40,11 @@ sealed interface SpaceFiltersState {
         val selectedFilter: SpaceServiceFilter,
         val eventSink: (SpaceFiltersEvent.Selected) -> Unit,
     ) : SpaceFiltersState
+}
+
+fun SpaceFiltersState.selectedFilter(): SpaceServiceFilter? {
+    return when (this) {
+        is SpaceFiltersState.Selected -> this.selectedFilter
+        else -> null
+    }
 }
