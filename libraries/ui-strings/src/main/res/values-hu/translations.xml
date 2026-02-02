@@ -333,6 +333,7 @@ Ok: %1$s."</string>
   <string name="common_server_url">"Kiszolgáló webcíme"</string>
   <string name="common_settings">"Beállítások"</string>
   <string name="common_share_space">"Tér megosztása"</string>
+  <string name="common_shared_history">"Az új tagok látják az előzményeket"</string>
   <string name="common_shared_location">"Megosztott tartózkodási hely"</string>
   <string name="common_shared_space">"Megosztott tér"</string>
   <string name="common_signing_out">"Kijelentkezés"</string>

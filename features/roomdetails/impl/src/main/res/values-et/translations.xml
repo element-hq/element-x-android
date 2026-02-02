@@ -142,7 +142,7 @@ Me ei soovita krüptimise kasutamist selliste avalike jututubade puhul, millega 
   <string name="screen_security_and_privacy_encryption_section_header">"Krüptimine"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"Võta läbiv krüptimine kasutusele"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Kõik võivad jututoaga liituda"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Avalik"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_title">"Kõik"</string>
   <string name="screen_security_and_privacy_room_access_footer">"Vali kogukonnad, mille liikmed saavad selle jututoaga liituda ilma kutseta. %1$s"</string>
   <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Halda kogukondi"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Liituda saab vaid kutse olemasolul"</string>

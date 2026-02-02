@@ -28,6 +28,7 @@ Du kannst dies jederzeit in den Einstellungen des Chats ändern."</string>
   <string name="screen_create_room_room_address_section_title">"Adresse"</string>
   <string name="screen_create_room_room_visibility_section_title">" Sichtbarkeit des Chats"</string>
   <string name="screen_create_room_space_selection_no_space_description">"(kein Space)"</string>
+  <string name="screen_create_room_space_selection_no_space_title">"Home"</string>
   <string name="screen_create_room_space_selection_sheet_title">"Space hinzufügen"</string>
   <string name="screen_create_room_topic_label">"Thema (optional)"</string>
   <string name="screen_create_room_topic_placeholder">"Beschreibung hinzufügen…"</string>

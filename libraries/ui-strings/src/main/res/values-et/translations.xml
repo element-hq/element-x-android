@@ -56,6 +56,7 @@
   <string name="a11y_your_avatar">"Sinu tunnuspilt"</string>
   <string name="action_accept">"Nõustu"</string>
   <string name="action_add_caption">"Lisa selgitus"</string>
+  <string name="action_add_existing_rooms">"Lisa olemasolevaid jututube"</string>
   <string name="action_add_to_timeline">"Lisa ajajoonele"</string>
   <string name="action_back">"Tagasi"</string>
   <string name="action_call">"Helista"</string>
@@ -75,6 +76,7 @@
   <string name="action_copy_text">"Kopeeri tekst"</string>
   <string name="action_create">"Loo"</string>
   <string name="action_create_room">"Loo jututuba"</string>
+  <string name="action_create_space">"Loo kogukond"</string>
   <string name="action_deactivate">"Eemalda konto"</string>
   <string name="action_deactivate_account">"Eemalda konto kasutusest"</string>
   <string name="action_decline">"Keeldu"</string>
@@ -91,6 +93,7 @@
   <string name="action_enable">"Võta kasutusele"</string>
   <string name="action_end_poll">"Lõpeta küsitlus"</string>
   <string name="action_enter_pin">"Sisesta PIN-kood"</string>
+  <string name="action_explore_public_spaces">"Uuri ja avasta avalikke kogukondi"</string>
   <string name="action_finish">"Lõpeta"</string>
   <string name="action_forgot_password">"Kas unustasid salasõna?"</string>
   <string name="action_forward">"Edasta"</string>
@@ -160,7 +163,7 @@
   <string name="action_start_over">"Alusta uuesti"</string>
   <string name="action_start_verification">"Alusta verifitseerimist"</string>
   <string name="action_static_map_load">"Kaardi laadimiseks klõpsa"</string>
-  <string name="action_take_photo">"Tee pilt"</string>
+  <string name="action_take_photo">"Pildista"</string>
   <string name="action_tap_for_options">"Valikuteks klõpsa"</string>
   <string name="action_translate">"Tõlgi"</string>
   <string name="action_try_again">"Proovi uuesti"</string>
@@ -192,6 +195,7 @@
   <string name="common_copied_to_clipboard">"Kopeeritud lõikelauale"</string>
   <string name="common_copyright">"Autoriõigused"</string>
   <string name="common_creating_room">"Loome jututoa…"</string>
+  <string name="common_creating_space">"Loon kogukonda…"</string>
   <string name="common_current_user_canceled_knock">"Päring on tühistatud"</string>
   <string name="common_current_user_left_room">"Lahkus jututoast"</string>
   <string name="common_current_user_left_space">"Lahkus kogukonnast"</string>
@@ -290,6 +294,7 @@ Põhjus: %1$s."</string>
   <string name="common_reason">"Põhjus"</string>
   <string name="common_recovery_key">"Taastevõti"</string>
   <string name="common_refreshing">"Värskendame andmeid…"</string>
+  <string name="common_removing">"Eemaldan…"</string>
   <plurals name="common_replies">
     <item quantity="one">"%1$d vastus"</item>
     <item quantity="other">"%1$d vastust"</item>
@@ -299,9 +304,10 @@ Põhjus: %1$s."</string>
   <string name="common_report_a_problem">"Teata veast"</string>
   <string name="common_report_submitted">"Veateade on saadetud"</string>
   <string name="common_rich_text_editor">"Vormindatud teksti toimeti"</string>
+  <string name="common_role">"Roll"</string>
   <string name="common_room">"Jututuba"</string>
   <string name="common_room_name">"Jututoa nimi"</string>
-  <string name="common_room_name_placeholder">"näiteks sinu projekti või seltsingu nimi"</string>
+  <string name="common_room_name_placeholder">"nt. sinu projekti või seltsingu nimi"</string>
   <plurals name="common_rooms">
     <item quantity="one">"%1$d jututuba"</item>
     <item quantity="other">"%1$d jututuba"</item>
@@ -314,6 +320,10 @@ Põhjus: %1$s."</string>
   <string name="common_security">"Turvalisus"</string>
   <string name="common_seen_by">"Seda nägi(d)"</string>
   <string name="common_select_account">"Vali kasutajakonto"</string>
+  <plurals name="common_selected_count">
+    <item quantity="one">"%1$d on valitud"</item>
+    <item quantity="other">"%1$d on valitud"</item>
+  </plurals>
   <string name="common_send_to">"Saada kasutajale"</string>
   <string name="common_sending">"Saadame…"</string>
   <string name="common_sending_failed">"Saatmine ei õnnestunud"</string>
@@ -324,6 +334,7 @@ Põhjus: %1$s."</string>
   <string name="common_server_url">"Serveri URL"</string>
   <string name="common_settings">"Seadistused"</string>
   <string name="common_share_space">"Jaga kogukonda"</string>
+  <string name="common_shared_history">"Uued liikmed näevad ajalugu"</string>
   <string name="common_shared_location">"Jagatud asukoht"</string>
   <string name="common_shared_space">"Jagatud kogukond"</string>
   <string name="common_signing_out">"Logime välja"</string>
@@ -338,6 +349,7 @@ Põhjus: %1$s."</string>
   <string name="common_starting_chat">"Alustame vestlust…"</string>
   <string name="common_sticker">"Kleeps"</string>
   <string name="common_success">"Õnnestus"</string>
+  <string name="common_suggested">"Soovitatud"</string>
   <string name="common_suggestions">"Soovitused"</string>
   <string name="common_syncing">"Sünkroniseerime"</string>
   <string name="common_system">"Süsteem"</string>
@@ -374,7 +386,9 @@ Põhjus: %1$s."</string>
   <string name="common_voice_message">"Häälsõnum"</string>
   <string name="common_waiting">"Ootame…"</string>
   <string name="common_waiting_for_decryption_key">"Ootame selle sõnumi dekrüptimisvõtit"</string>
+  <string name="common_world_readable_history">"Kõik võivad ajalugu näha"</string>
   <string name="common_you">"Sina"</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"Kuna sind polnud saatmise ajal jututoas, siis %1$s (%2$s) jagas seda sõnumit sinuga."</string>
   <string name="crypto_history_visible">"See jututuba on seadistatud sedaviisi, et ka uued liikmed saavad lugeda varasemat ajalugu. %1$s"</string>
   <string name="crypto_identity_change_pin_violation">"Kasutaja %1$s võrguidentiteet on lähtestatud. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Kasutaja %1$s %2$s võrguidentiteet on lähtestatud. %3$s"</string>
@@ -467,6 +481,7 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="screen_share_this_location_action">"Jaga seda asukohta"</string>
   <string name="screen_space_list_description">"Sinu loodud kogukonnad ning need, millega oled liitunud."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_empty_state_title">"Jututubade haldamiseks võid luua kogukondi"</string>
   <string name="screen_space_list_parent_space">"Kogukond: %1$s"</string>
   <string name="screen_space_list_title">"Kogukonnad"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Sõnum on saatmata, kuna kasutaja %1$s verifitseeritud identiteet on lähtestatud."</string>

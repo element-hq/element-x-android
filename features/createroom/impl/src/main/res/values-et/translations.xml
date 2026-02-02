@@ -3,16 +3,22 @@
   <string name="screen_create_room_action_create_room">"Uus jututuba"</string>
   <string name="screen_create_room_add_people_title">"Kutsu osalejaid"</string>
   <string name="screen_create_room_error_creating_room">"Jututoa loomisel tekkis viga"</string>
-  <string name="screen_create_room_private_option_description">"Ligipääs siia jututuppa on vaid kutse alusel. Kõik sõnumid siin jututoas on läbivalt krüptitud."</string>
+  <string name="screen_create_room_name_placeholder">"Sisesta nimi…"</string>
+  <string name="screen_create_room_new_room_title">"Uus jututuba"</string>
+  <string name="screen_create_room_new_space_title">"Uus kogukond"</string>
+  <string name="screen_create_room_private_option_description">"Ligipääs siia jututuppa on vaid kutse alusel."</string>
   <string name="screen_create_room_public_option_description">"Kõik saavad seda jututuba leida.
 Sa võid seda jututoa seadistustest alati muuta."</string>
   <string name="screen_create_room_public_option_title">"Avalik jututuba"</string>
-  <string name="screen_create_room_room_access_section_knocking_option_description">"Kõik võivad paluda selle jututoaga liitumist, kuid peakasutaja või moderaator peavad selle kinnitama"</string>
-  <string name="screen_create_room_room_access_section_knocking_option_title">"Küsi võimalust liitumiseks"</string>
-  <string name="screen_create_room_room_access_section_public_option_description">"Kõik võivad selle jututoaga liituda"</string>
+  <string name="screen_create_room_room_access_section_knocking_option_description">"Kõik võivad paluda selle jututoaga liitumist, kuid peakasutaja või moderaator peavad selle kinnitama."</string>
+  <string name="screen_create_room_room_access_section_knocking_option_title">"Luba küsida liitumisvõimalust"</string>
+  <string name="screen_create_room_room_access_section_public_option_description">"Kõik võivad selle jututoaga liituda."</string>
   <string name="screen_create_room_room_access_section_public_option_title">"Kõik kasutajad"</string>
-  <string name="screen_create_room_room_address_section_footer">"Selleks, et see jututuba oleks nähtav jututubade avalikus kataloogis, sa vajad jututoa aadressi."</string>
-  <string name="screen_create_room_room_address_section_title">"Jututoa aadress"</string>
+  <string name="screen_create_room_room_address_section_footer">"Selleks, et jututuba oleks nähtav jututubade avalikus kataloogis, vajab ta aadressi."</string>
+  <string name="screen_create_room_room_address_section_title">"Aadress"</string>
   <string name="screen_create_room_room_visibility_section_title">"Jututoa nähtavus"</string>
+  <string name="screen_create_room_space_selection_no_space_title">"Avaleht"</string>
+  <string name="screen_create_room_space_selection_sheet_title">"Lisa kogukonda"</string>
   <string name="screen_create_room_topic_label">"Teema (kui soovid lisada)"</string>
+  <string name="screen_create_room_topic_placeholder">"Lisa kirjeldus…"</string>
 </resources>

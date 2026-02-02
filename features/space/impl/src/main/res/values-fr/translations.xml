@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_leave_space_choose_owners_action">"Choisir les propriétaires"</string>
   <string name="screen_leave_space_last_admin_info">"%1$s (Admin)"</string>
   <plurals name="screen_leave_space_submit">
     <item quantity="one">"Quitter %1$d salon et l’espace"</item>
@@ -7,9 +8,11 @@
   </plurals>
   <string name="screen_leave_space_subtitle">"Sélectionnez les salons que vous souhaitez quitter et dont vous n’êtes pas le seul administrateur:"</string>
   <string name="screen_leave_space_subtitle_last_admin">"Vous devez désigner un autre administrateur pour cet espace avant de pouvoir partir."</string>
+  <string name="screen_leave_space_subtitle_last_owner">"Vous êtes le seul propriétaire de %1$s. Vous devez transférer la propriété de l’espace à quelqu’un d’autre avant de le quitter."</string>
   <string name="screen_leave_space_subtitle_only_last_admin">"Vous ne quitterez pas le ou les salons suivants car vous y êtes le seul administrateur:"</string>
   <string name="screen_leave_space_title">"Quitter %1$s?"</string>
   <string name="screen_leave_space_title_last_admin">"Vous êtes le seul administrateur de %1$s"</string>
+  <string name="screen_leave_space_title_last_owner">"Transfert de propriété"</string>
   <string name="screen_space_add_room_action">"Salon"</string>
   <string name="screen_space_add_rooms_room_access_description">"Ajouter un salon ne changera pas l’accès au salon. Pour modifier l’accès, aller dans les paramètres du salon puis dans Sécurité &amp; confidentialité."</string>
   <string name="screen_space_empty_state_title">"Ajoutez votre premier salon"</string>

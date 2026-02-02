@@ -10,7 +10,9 @@
   <string name="screen_leave_space_subtitle_only_last_admin">"Du wirst aus den folgenden Chats nicht entfernt, weil du der einzige Admin bist:"</string>
   <string name="screen_leave_space_title">"%1$s verlassen?"</string>
   <string name="screen_leave_space_title_last_admin">"Du bist der einzige Administrator für %1$s"</string>
+  <string name="screen_space_add_room_action">"Chat"</string>
   <string name="screen_space_add_rooms_room_access_description">"Das Hinzufügen eines Chats hat keinen Einfluss auf die Beitrittsregeln. Um die Regeln zu ändern, gehe zu \"Raum Info\" und dann zu \"Datenschutz und Sicherheit\""</string>
+  <string name="screen_space_empty_state_title">"Füge deinen ersten Chat hinzu"</string>
   <string name="screen_space_menu_action_members">"Mitglieder anzeigen"</string>
   <string name="screen_space_remove_rooms_confirmation_content">"Das Entfernen eines Chats hat keinen Einfluss auf die Beitrittsregeln. Um die Regeln zu ändern, gehe zu \"Raum Info\" und dann zu \"Datenschutz und Sicherheit\""</string>
   <plurals name="screen_space_remove_rooms_confirmation_title">

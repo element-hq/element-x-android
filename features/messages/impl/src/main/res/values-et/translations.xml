@@ -31,7 +31,7 @@
   <string name="screen_report_content_explanation">"Teade selle sõnumi kohta edastatakse sinu koduserveri haldajale. Haldajal ei ole võimalik lugeda krüptitud sõnumite sisu."</string>
   <string name="screen_report_content_hint">"Sellest sisust teatamise põhjus"</string>
   <string name="screen_room_attachment_source_camera">"Kaamera"</string>
-  <string name="screen_room_attachment_source_camera_photo">"Tee pilt"</string>
+  <string name="screen_room_attachment_source_camera_photo">"Pildista"</string>
   <string name="screen_room_attachment_source_camera_video">"Salvesta video"</string>
   <string name="screen_room_attachment_source_files">"Manus"</string>
   <string name="screen_room_attachment_source_gallery">"Fotode ja videote galerii"</string>

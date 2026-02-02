@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_leave_space_choose_owners_action">"Vali omanikud"</string>
   <string name="screen_leave_space_last_admin_info">"%1$s (Peakasutaja)"</string>
   <plurals name="screen_leave_space_submit">
     <item quantity="one">"Lahku %1$d-st jututoast ja kogukonnast"</item>
@@ -10,7 +11,14 @@
   <string name="screen_leave_space_subtitle_only_last_admin">"Sind ei saa järgnevatest jututubadest eemaldada, kuna oled seal/neis ainus peakasutaja:"</string>
   <string name="screen_leave_space_title">"Kas lahkud %1$s kogukonnast?"</string>
   <string name="screen_leave_space_title_last_admin">"Sa oled siin ainus peakasutaja: %1$s"</string>
+  <string name="screen_leave_space_title_last_owner">"Anna omand üle"</string>
+  <string name="screen_space_add_room_action">"Jututuba"</string>
+  <string name="screen_space_empty_state_title">"Lisa oma esimene jututuba"</string>
   <string name="screen_space_menu_action_members">"Vaata liikmeid"</string>
+  <plurals name="screen_space_remove_rooms_confirmation_title">
+    <item quantity="one">"Eemalda %1$d jututuba „%2$s“ kogukonnast"</item>
+    <item quantity="other">"Eemalda %1$d jututuba „%2$s“ kogukonnast"</item>
+  </plurals>
   <string name="screen_space_settings_leave_space">"Lahku kogukonnast"</string>
   <string name="screen_space_settings_roles_and_permissions">"Rollid ja õigused"</string>
   <string name="screen_space_settings_security_and_privacy">"Turvalisus ja privaatsus"</string>
