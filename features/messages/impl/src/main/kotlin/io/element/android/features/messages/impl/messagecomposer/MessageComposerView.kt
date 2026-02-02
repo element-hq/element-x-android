@@ -12,6 +12,8 @@ import android.net.Uri
 import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -118,10 +120,52 @@ internal fun MessageComposerView(
         voiceMessageState.eventSink(VoiceMessageComposerEvent.PlayerEvent(event))
     }
 
-    // Hide keyboard when emoji picker is shown
-    LaunchedEffect(state.showEmojiPicker) {
-        if (state.showEmojiPicker) {
-            view.hideKeyboard()
+    TextComposer(
+        modifier = modifier,
+        state = state.textEditorState,
+        voiceMessageState = voiceMessageState.voiceMessageState,
+        onRequestFocus = ::onRequestFocus,
+        onSendMessage = ::sendMessage,
+        composerMode = state.mode,
+        showTextFormatting = state.showTextFormatting,
+        onResetComposerMode = ::onCloseSpecialMode,
+        onAddAttachment = ::onAddAttachment,
+        onDismissTextFormatting = ::onDismissTextFormatting,
+        onVoiceRecorderEvent = onVoiceRecorderEvent,
+        onVoicePlayerEvent = onVoicePlayerEvent,
+        onSendVoiceMessage = onSendVoiceMessage,
+        onDeleteVoiceMessage = onDeleteVoiceMessage,
+        onReceiveSuggestion = ::onSuggestionReceived,
+        resolveMentionDisplay = state.resolveMentionDisplay,
+        resolveAtRoomMentionDisplay = state.resolveAtRoomMentionDisplay,
+        onError = ::onError,
+        onTyping = ::onTyping,
+        onSelectRichContent = ::sendUri,
+        onOpenEmojiPicker = ::onOpenEmojiPicker,
+    )
+
+    if (state.showEmojiPicker && state.emojibaseStore != null) {
+        val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+
+        ModalBottomSheet(
+            onDismissRequest = { state.eventSink(MessageComposerEvent.ToggleEmojiPicker) },
+            sheetState = sheetState,
+        ) {
+             val presenter = remember {
+                EmojiPickerPresenter(
+                    emojibaseStore = state.emojibaseStore,
+                    recentEmojis = state.recentEmojis,
+                    coroutineDispatchers = CoroutineDispatchers.Default,
+                )
+             }
+             EmojiPicker(
+                onSelectEmoji = { emoji ->
+                    state.eventSink(MessageComposerEvent.InsertEmoji(emoji))
+                },
+                state = presenter.present(),
+                selectedEmojis = persistentSetOf(),
+                modifier = Modifier.fillMaxWidth().fillMaxHeight(0.45f),
+             )
         }
     }
 
