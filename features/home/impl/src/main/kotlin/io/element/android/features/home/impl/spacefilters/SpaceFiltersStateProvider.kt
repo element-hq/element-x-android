@@ -7,6 +7,7 @@
 
 package io.element.android.features.home.impl.spacefilters
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -53,9 +54,11 @@ fun aSelectingSpaceFiltersState(
             roomId = RoomId("!gaming:example.com"),
         ),
     ),
+    searchQuery: TextFieldState = TextFieldState(),
     eventSink: (SpaceFiltersEvent.Selecting) -> Unit = {},
 ) = SpaceFiltersState.Selecting(
     availableFilters = persistentListOf(*availableFilters.toTypedArray()),
+    searchQuery = searchQuery,
     eventSink = eventSink,
 )
 

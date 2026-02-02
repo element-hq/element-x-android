@@ -7,8 +7,10 @@
 
 package io.element.android.features.home.impl.spacefilters
 
+import androidx.compose.foundation.text.input.TextFieldState
 import io.element.android.libraries.matrix.api.spaces.SpaceServiceFilter
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 sealed interface SpaceFiltersState {
     data object Disabled : SpaceFiltersState
@@ -19,8 +21,19 @@ sealed interface SpaceFiltersState {
 
     data class Selecting(
         val availableFilters: ImmutableList<SpaceServiceFilter>,
+        val searchQuery: TextFieldState,
         val eventSink: (SpaceFiltersEvent.Selecting) -> Unit,
-    ) : SpaceFiltersState
+    ) : SpaceFiltersState {
+        val visibleFilters: ImmutableList<SpaceServiceFilter>
+            get() {
+                val query = searchQuery.text.toString()
+                if (query.isBlank()) return availableFilters
+                return availableFilters.filter { filter ->
+                    filter.spaceRoom.displayName.contains(query, ignoreCase = true) ||
+                        (filter.spaceRoom.canonicalAlias?.value ?: "").contains(query, ignoreCase = true)
+                }.toImmutableList()
+            }
+    }
 
     data class Selected(
         val selectedFilter: SpaceServiceFilter,

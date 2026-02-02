@@ -7,6 +7,7 @@
 
 package io.element.android.features.home.impl.spacefilters
 
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -42,6 +43,7 @@ class SpaceFiltersPresenter(
             matrixClient.spaceService.spaceFiltersFlow.map { it.toImmutableList() }
         }.collectAsState(initial = persistentListOf())
 
+
         var selectionMode by remember { mutableStateOf<SelectionMode>(SelectionMode.Unselected) }
 
         fun handleUnselectedEvent(event: SpaceFiltersEvent.Unselected) {
@@ -75,10 +77,14 @@ class SpaceFiltersPresenter(
             SelectionMode.Unselected -> SpaceFiltersState.Unselected(
                 eventSink = ::handleUnselectedEvent,
             )
-            SelectionMode.Selecting -> SpaceFiltersState.Selecting(
-                availableFilters = availableFilters,
-                eventSink = ::handleSelectingEvent,
-            )
+            SelectionMode.Selecting -> {
+                val searchQuery = rememberTextFieldState()
+                SpaceFiltersState.Selecting(
+                    availableFilters = availableFilters,
+                    searchQuery = searchQuery,
+                    eventSink = ::handleSelectingEvent,
+                )
+            }
             is SelectionMode.Selected -> SpaceFiltersState.Selected(
                 selectedFilter = mode.filter,
                 eventSink = ::handleSelectedEvent,

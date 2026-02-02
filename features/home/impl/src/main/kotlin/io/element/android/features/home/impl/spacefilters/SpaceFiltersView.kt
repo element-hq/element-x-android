@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.systemBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -30,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -39,9 +41,11 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
+import io.element.android.libraries.designsystem.theme.components.SearchField
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.spaces.SpaceServiceFilter
 import io.element.android.libraries.matrix.ui.model.getAvatarData
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -72,7 +76,8 @@ fun SpaceFiltersView(
                 onDismissRequest = { state.eventSink(SpaceFiltersEvent.Selecting.Cancel) },
             ) {
                 SpaceFiltersBottomSheetContent(
-                    filters = state.availableFilters,
+                    filters = state.visibleFilters,
+                    searchQuery = state.searchQuery,
                     onFilterSelected = { filter ->
                         state.eventSink(SpaceFiltersEvent.Selecting.SelectFilter(filter))
                     }
@@ -85,20 +90,26 @@ fun SpaceFiltersView(
 @Composable
 private fun SpaceFiltersBottomSheetContent(
     filters: List<SpaceServiceFilter>,
+    searchQuery: TextFieldState,
     onFilterSelected: (SpaceServiceFilter) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(bottom = 16.dp)
+            .padding(vertical = 16.dp, horizontal = 16.dp)
     ) {
         Text(
-            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
             text = "Your spaces",
-            style = ElementTheme.typography.fontBodyLgMedium,
+            style = ElementTheme.typography.fontHeadingSmMedium,
         )
-        Spacer(modifier = Modifier.height(8.dp))
+        Spacer(modifier = Modifier.height(12.dp))
+        SearchField(
+            state = searchQuery,
+            modifier = Modifier.fillMaxWidth(),
+            placeholder = stringResource(CommonStrings.action_search),
+        )
+        Spacer(modifier = Modifier.height(16.dp))
         LazyColumn {
             items(filters) { filter ->
                 SpaceFilterItem(
