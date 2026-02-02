@@ -7,6 +7,23 @@
 
 package io.element.android.features.home.impl.spacefilters
 
-data class SpaceFiltersState(
-    val eventSink: (SpaceFiltersEvent) -> Unit,
-)
+import io.element.android.libraries.matrix.api.spaces.SpaceServiceFilter
+import kotlinx.collections.immutable.ImmutableList
+
+sealed interface SpaceFiltersState {
+    data object Disabled : SpaceFiltersState
+
+    data class Unselected(
+        val eventSink: (SpaceFiltersEvent.Unselected) -> Unit,
+    ) : SpaceFiltersState
+
+    data class Selecting(
+        val availableFilters: ImmutableList<SpaceServiceFilter>,
+        val eventSink: (SpaceFiltersEvent.Selecting) -> Unit,
+    ) : SpaceFiltersState
+
+    data class Selected(
+        val selectedFilter: SpaceServiceFilter,
+        val eventSink: (SpaceFiltersEvent.Selected) -> Unit,
+    ) : SpaceFiltersState
+}

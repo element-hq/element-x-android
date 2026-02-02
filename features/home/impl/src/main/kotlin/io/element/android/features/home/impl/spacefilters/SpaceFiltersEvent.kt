@@ -7,4 +7,22 @@
 
 package io.element.android.features.home.impl.spacefilters
 
-sealed interface SpaceFiltersEvent
+import io.element.android.libraries.matrix.api.spaces.SpaceServiceFilter
+
+sealed interface SpaceFiltersEvent {
+    // Only valid in Unselected state
+    sealed interface Unselected : SpaceFiltersEvent {
+        data object ShowFilters : Unselected
+    }
+
+    // Only valid in Selecting state
+    sealed interface Selecting : SpaceFiltersEvent {
+        data object Cancel : Selecting
+        data class SelectFilter(val spaceFilter: SpaceServiceFilter) : Selecting
+    }
+
+    // Only valid in Selected state
+    sealed interface Selected : SpaceFiltersEvent {
+        data object ClearSelection : Selected
+    }
+}
