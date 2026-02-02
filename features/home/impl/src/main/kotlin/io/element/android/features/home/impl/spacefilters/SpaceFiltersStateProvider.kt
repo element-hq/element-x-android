@@ -8,6 +8,7 @@
 package io.element.android.features.home.impl.spacefilters
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.spaces.SpaceServiceFilter
 import io.element.android.libraries.previewutils.room.aSpaceRoom
@@ -33,9 +34,24 @@ fun anUnselectedSpaceFiltersState(
 
 fun aSelectingSpaceFiltersState(
     availableFilters: List<SpaceServiceFilter> = listOf(
-        aSpaceServiceFilter(displayName = "Work"),
-        aSpaceServiceFilter(displayName = "Personal", roomId = RoomId("!personal:example.com")),
-        aSpaceServiceFilter(displayName = "Gaming", roomId = RoomId("!gaming:example.com")),
+        aSpaceServiceFilter(
+            displayName = "Work",
+            canonicalAlias = RoomAlias("#work:example.com"),
+        ),
+        aSpaceServiceFilter(
+            displayName = "Personal",
+            roomId = RoomId("!personal:example.com"),
+        ),
+        aSpaceServiceFilter(
+            displayName = "Projects",
+            roomId = RoomId("!projects:example.com"),
+            canonicalAlias = RoomAlias("#projects:example.com"),
+            level = 1,
+        ),
+        aSpaceServiceFilter(
+            displayName = "Gaming",
+            roomId = RoomId("!gaming:example.com"),
+        ),
     ),
     eventSink: (SpaceFiltersEvent.Selecting) -> Unit = {},
 ) = SpaceFiltersState.Selecting(
@@ -54,10 +70,11 @@ fun aSelectedSpaceFiltersState(
 fun aSpaceServiceFilter(
     displayName: String = "Space",
     roomId: RoomId = RoomId("!space:example.com"),
+    canonicalAlias: RoomAlias? = null,
     level: Int = 0,
     descendants: List<RoomId> = emptyList(),
 ) = SpaceServiceFilter(
-    spaceRoom = aSpaceRoom(displayName = displayName, roomId = roomId),
+    spaceRoom = aSpaceRoom(displayName = displayName, roomId = roomId, canonicalAlias = canonicalAlias),
     level = level,
     descendants = descendants,
 )
