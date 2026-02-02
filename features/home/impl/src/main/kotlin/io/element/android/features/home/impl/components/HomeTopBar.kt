@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.pager.VerticalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.rememberTopAppBarState
@@ -44,10 +45,14 @@ import io.element.android.appconfig.RoomListConfig
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.home.impl.HomeNavigationBarItem
-import io.element.android.features.home.impl.R
 import io.element.android.features.home.impl.filters.RoomListFiltersState
 import io.element.android.features.home.impl.filters.RoomListFiltersView
 import io.element.android.features.home.impl.filters.aRoomListFiltersState
+import io.element.android.features.home.impl.spacefilters.SpaceFiltersEvent
+import io.element.android.features.home.impl.spacefilters.SpaceFiltersState
+import io.element.android.features.home.impl.spacefilters.aDisabledSpaceFiltersState
+import io.element.android.features.home.impl.spacefilters.aSelectedSpaceFiltersState
+import io.element.android.features.home.impl.spacefilters.anUnselectedSpaceFiltersState
 import io.element.android.libraries.designsystem.atomic.atoms.RedIndicatorAtom
 import io.element.android.libraries.designsystem.colors.gradientSubtleColors
 import io.element.android.libraries.designsystem.components.TopAppBarScrollBehaviorLayout
@@ -80,7 +85,6 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun HomeTopBar(
     selectedNavigationItem: HomeNavigationBarItem,
-    title: String,
     currentUserAndNeighbors: ImmutableList<MatrixUser>,
     showAvatarIndicator: Boolean,
     areSearchResultsDisplayed: Boolean,
@@ -94,6 +98,7 @@ fun HomeTopBar(
     canReportBug: Boolean,
     displayFilters: Boolean,
     filtersState: RoomListFiltersState,
+    spaceFiltersState: SpaceFiltersState,
     modifier: Modifier = Modifier,
 ) {
     // Determine title scale and alpha based on scroll behavior
@@ -221,6 +226,7 @@ private fun RoomListMenuItems(
     onToggleSearch: () -> Unit,
     onMenuActionClick: (RoomListMenuAction) -> Unit,
     canReportBug: Boolean,
+    spaceFiltersState: SpaceFiltersState,
 ) {
     IconButton(
         onClick = onToggleSearch,
@@ -230,6 +236,7 @@ private fun RoomListMenuItems(
             contentDescription = stringResource(CommonStrings.action_search),
         )
     }
+    SpaceFilterButton(spaceFiltersState = spaceFiltersState)
     if (RoomListConfig.HAS_DROP_DOWN_MENU) {
         var showMenu by remember { mutableStateOf(false) }
         IconButton(
@@ -291,6 +298,47 @@ private fun SpacesMenuItems(
                 imageVector = CompoundIcons.Plus(),
                 contentDescription = stringResource(CommonStrings.action_create_space)
             )
+        }
+    }
+}
+
+@Composable
+private fun SpaceFilterButton(
+    spaceFiltersState: SpaceFiltersState,
+) {
+    when (spaceFiltersState) {
+        SpaceFiltersState.Disabled -> Unit
+        is SpaceFiltersState.Unselected -> {
+            IconButton(
+                onClick = { spaceFiltersState.eventSink(SpaceFiltersEvent.Unselected.ShowFilters) }
+            ) {
+                Icon(
+                    imageVector = CompoundIcons.Filter(),
+                    contentDescription = null,
+                )
+            }
+        }
+        is SpaceFiltersState.Selecting -> {
+            IconButton(onClick = {}) {
+                Icon(
+                    imageVector = CompoundIcons.Filter(),
+                    contentDescription = null,
+                )
+            }
+        }
+        is SpaceFiltersState.Selected -> {
+            IconButton(
+                colors = IconButtonDefaults.iconButtonColors(
+                    containerColor = ElementTheme.colors.bgAccentRest,
+                    contentColor = ElementTheme.colors.iconOnSolidPrimary,
+                ),
+                onClick = { spaceFiltersState.eventSink(SpaceFiltersEvent.Selected.ClearSelection) },
+            ) {
+                Icon(
+                    imageVector = CompoundIcons.Filter(),
+                    contentDescription = null,
+                )
+            }
         }
     }
 }
@@ -376,7 +424,6 @@ private fun AccountIcon(
 internal fun HomeTopBarPreview() = ElementPreview {
     HomeTopBar(
         selectedNavigationItem = HomeNavigationBarItem.Chats,
-        title = stringResource(R.string.screen_roomlist_main_space_title),
         currentUserAndNeighbors = persistentListOf(MatrixUser(UserId("@id:domain"), "Alice")),
         showAvatarIndicator = false,
         areSearchResultsDisplayed = false,
@@ -389,6 +436,7 @@ internal fun HomeTopBarPreview() = ElementPreview {
         canReportBug = true,
         displayFilters = true,
         filtersState = aRoomListFiltersState(),
+        spaceFiltersState = anUnselectedSpaceFiltersState(),
         onMenuActionClick = {},
     )
 }
@@ -399,7 +447,6 @@ internal fun HomeTopBarPreview() = ElementPreview {
 internal fun HomeTopBarSpacesPreview() = ElementPreview {
     HomeTopBar(
         selectedNavigationItem = HomeNavigationBarItem.Spaces,
-        title = stringResource(R.string.screen_home_tab_spaces),
         currentUserAndNeighbors = persistentListOf(MatrixUser(UserId("@id:domain"), "Alice")),
         showAvatarIndicator = false,
         areSearchResultsDisplayed = false,
@@ -412,6 +459,7 @@ internal fun HomeTopBarSpacesPreview() = ElementPreview {
         canReportBug = true,
         displayFilters = false,
         filtersState = aRoomListFiltersState(),
+        spaceFiltersState = anUnselectedSpaceFiltersState(),
         onMenuActionClick = {},
     )
 }
@@ -422,7 +470,6 @@ internal fun HomeTopBarSpacesPreview() = ElementPreview {
 internal fun HomeTopBarWithIndicatorPreview() = ElementPreview {
     HomeTopBar(
         selectedNavigationItem = HomeNavigationBarItem.Chats,
-        title = stringResource(R.string.screen_roomlist_main_space_title),
         currentUserAndNeighbors = persistentListOf(MatrixUser(UserId("@id:domain"), "Alice")),
         showAvatarIndicator = true,
         areSearchResultsDisplayed = false,
@@ -435,6 +482,7 @@ internal fun HomeTopBarWithIndicatorPreview() = ElementPreview {
         canReportBug = true,
         displayFilters = true,
         filtersState = aRoomListFiltersState(),
+        spaceFiltersState = anUnselectedSpaceFiltersState(),
         onMenuActionClick = {},
     )
 }
@@ -445,7 +493,6 @@ internal fun HomeTopBarWithIndicatorPreview() = ElementPreview {
 internal fun HomeTopBarMultiAccountPreview() = ElementPreview {
     HomeTopBar(
         selectedNavigationItem = HomeNavigationBarItem.Chats,
-        title = stringResource(R.string.screen_roomlist_main_space_title),
         currentUserAndNeighbors = aMatrixUserList().take(3).toImmutableList(),
         showAvatarIndicator = false,
         areSearchResultsDisplayed = false,
@@ -458,6 +505,30 @@ internal fun HomeTopBarMultiAccountPreview() = ElementPreview {
         canReportBug = true,
         displayFilters = true,
         filtersState = aRoomListFiltersState(),
+        spaceFiltersState = anUnselectedSpaceFiltersState(),
+        onMenuActionClick = {},
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@PreviewsDayNight
+@Composable
+internal fun HomeTopSpaceFiltersSelectedPreview() = ElementPreview {
+    HomeTopBar(
+        selectedNavigationItem = HomeNavigationBarItem.Chats,
+        currentUserAndNeighbors = persistentListOf(MatrixUser(UserId("@id:domain"), "Alice")),
+        showAvatarIndicator = false,
+        areSearchResultsDisplayed = false,
+        scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()),
+        onOpenSettings = {},
+        onAccountSwitch = {},
+        onToggleSearch = {},
+        onCreateSpace = {},
+        canCreateSpaces = true,
+        canReportBug = true,
+        displayFilters = true,
+        filtersState = aRoomListFiltersState(),
+        spaceFiltersState = aSelectedSpaceFiltersState(),
         onMenuActionClick = {},
     )
 }

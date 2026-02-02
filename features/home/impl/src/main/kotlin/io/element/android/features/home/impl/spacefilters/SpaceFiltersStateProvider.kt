@@ -18,10 +18,8 @@ import kotlinx.collections.immutable.persistentListOf
 class SpaceFiltersStateProvider : PreviewParameterProvider<SpaceFiltersState> {
     override val values: Sequence<SpaceFiltersState>
         get() = sequenceOf(
-            aDisabledSpaceFiltersState(),
-            anUnselectedSpaceFiltersState(),
             aSelectingSpaceFiltersState(),
-            aSelectedSpaceFiltersState(),
+            aSelectingSpaceFiltersState(searchQuery = "Pr")
         )
 }
 
@@ -54,11 +52,11 @@ fun aSelectingSpaceFiltersState(
             roomId = RoomId("!gaming:example.com"),
         ),
     ),
-    searchQuery: TextFieldState = TextFieldState(),
+    searchQuery: String = "",
     eventSink: (SpaceFiltersEvent.Selecting) -> Unit = {},
 ) = SpaceFiltersState.Selecting(
     availableFilters = persistentListOf(*availableFilters.toTypedArray()),
-    searchQuery = searchQuery,
+    searchQuery = TextFieldState(searchQuery),
     eventSink = eventSink,
 )
 
