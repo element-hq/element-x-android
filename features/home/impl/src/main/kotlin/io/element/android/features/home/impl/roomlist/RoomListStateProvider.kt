@@ -18,6 +18,8 @@ import io.element.android.features.home.impl.model.aRoomListRoomSummary
 import io.element.android.features.home.impl.model.anInviteSender
 import io.element.android.features.home.impl.search.RoomListSearchState
 import io.element.android.features.home.impl.search.aRoomListSearchState
+import io.element.android.features.home.impl.spacefilters.SpaceFiltersState
+import io.element.android.features.home.impl.spacefilters.aDisabledSpaceFiltersState
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.features.invite.api.acceptdecline.anAcceptDeclineInviteState
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
@@ -52,6 +54,7 @@ internal fun aRoomListState(
     leaveRoomState: LeaveRoomState = aLeaveRoomState(),
     searchState: RoomListSearchState = aRoomListSearchState(),
     filtersState: RoomListFiltersState = aRoomListFiltersState(),
+    spaceFiltersState: SpaceFiltersState = aDisabledSpaceFiltersState(),
     contentState: RoomListContentState = aRoomsContentState(),
     acceptDeclineInviteState: AcceptDeclineInviteState = anAcceptDeclineInviteState(),
     hideInvitesAvatars: Boolean = false,
@@ -63,6 +66,7 @@ internal fun aRoomListState(
     leaveRoomState = leaveRoomState,
     filtersState = filtersState,
     searchState = searchState,
+    spaceFiltersState = spaceFiltersState,
     contentState = contentState,
     acceptDeclineInviteState = acceptDeclineInviteState,
     hideInvitesAvatars = hideInvitesAvatars,

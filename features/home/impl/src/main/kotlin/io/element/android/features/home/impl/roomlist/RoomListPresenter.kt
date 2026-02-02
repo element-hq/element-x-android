@@ -31,6 +31,7 @@ import io.element.android.features.home.impl.datasource.RoomListDataSource
 import io.element.android.features.home.impl.filters.RoomListFiltersState
 import io.element.android.features.home.impl.search.RoomListSearchEvent
 import io.element.android.features.home.impl.search.RoomListSearchState
+import io.element.android.features.home.impl.spacefilters.SpaceFiltersState
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents.AcceptInvite
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents.DeclineInvite
@@ -83,6 +84,7 @@ class RoomListPresenter(
     private val seenInvitesStore: SeenInvitesStore,
     private val announcementService: AnnouncementService,
     private val coldStartWatcher: AnalyticsColdStartWatcher,
+    private val spaceFiltersPresenter: Presenter<SpaceFiltersState>,
 ) : Presenter<RoomListState> {
     private val encryptionService = client.encryptionService
 
@@ -92,6 +94,7 @@ class RoomListPresenter(
         val leaveRoomState = leaveRoomPresenter.present()
         val filtersState = filtersPresenter.present()
         val searchState = searchPresenter.present()
+        val spaceFiltersState = spaceFiltersPresenter.present()
         val acceptDeclineInviteState = acceptDeclineInvitePresenter.present()
 
         LaunchedEffect(Unit) {
@@ -163,6 +166,7 @@ class RoomListPresenter(
             leaveRoomState = leaveRoomState,
             filtersState = filtersState,
             searchState = searchState,
+            spaceFiltersState = spaceFiltersState,
             contentState = contentState,
             acceptDeclineInviteState = acceptDeclineInviteState,
             hideInvitesAvatars = hideInvitesAvatar,
