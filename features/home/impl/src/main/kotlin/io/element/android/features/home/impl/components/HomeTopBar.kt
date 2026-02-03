@@ -45,12 +45,12 @@ import io.element.android.appconfig.RoomListConfig
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.home.impl.HomeNavigationBarItem
+import io.element.android.features.home.impl.R
 import io.element.android.features.home.impl.filters.RoomListFiltersState
 import io.element.android.features.home.impl.filters.RoomListFiltersView
 import io.element.android.features.home.impl.filters.aRoomListFiltersState
 import io.element.android.features.home.impl.spacefilters.SpaceFiltersEvent
 import io.element.android.features.home.impl.spacefilters.SpaceFiltersState
-import io.element.android.features.home.impl.spacefilters.aDisabledSpaceFiltersState
 import io.element.android.features.home.impl.spacefilters.aSelectedSpaceFiltersState
 import io.element.android.features.home.impl.spacefilters.anUnselectedSpaceFiltersState
 import io.element.android.libraries.designsystem.atomic.atoms.RedIndicatorAtom
@@ -306,40 +306,31 @@ private fun SpacesMenuItems(
 private fun SpaceFilterButton(
     spaceFiltersState: SpaceFiltersState,
 ) {
-    when (spaceFiltersState) {
-        SpaceFiltersState.Disabled -> Unit
-        is SpaceFiltersState.Unselected -> {
-            IconButton(
-                onClick = { spaceFiltersState.eventSink(SpaceFiltersEvent.Unselected.ShowFilters) }
-            ) {
-                Icon(
-                    imageVector = CompoundIcons.Filter(),
-                    contentDescription = null,
-                )
-            }
+    if (spaceFiltersState == SpaceFiltersState.Disabled) return
+
+    fun onClick() {
+        when (spaceFiltersState) {
+            is SpaceFiltersState.Unselected -> spaceFiltersState.eventSink(SpaceFiltersEvent.Unselected.ShowFilters)
+            is SpaceFiltersState.Selected -> spaceFiltersState.eventSink(SpaceFiltersEvent.Selected.ClearSelection)
+            else -> Unit
         }
-        is SpaceFiltersState.Selecting -> {
-            IconButton(onClick = {}) {
-                Icon(
-                    imageVector = CompoundIcons.Filter(),
-                    contentDescription = null,
-                )
-            }
-        }
-        is SpaceFiltersState.Selected -> {
-            IconButton(
-                colors = IconButtonDefaults.iconButtonColors(
-                    containerColor = ElementTheme.colors.bgAccentRest,
-                    contentColor = ElementTheme.colors.iconOnSolidPrimary,
-                ),
-                onClick = { spaceFiltersState.eventSink(SpaceFiltersEvent.Selected.ClearSelection) },
-            ) {
-                Icon(
-                    imageVector = CompoundIcons.Filter(),
-                    contentDescription = null,
-                )
-            }
-        }
+    }
+    val isSelected = spaceFiltersState is SpaceFiltersState.Selected
+    IconButton(
+        onClick = ::onClick,
+        colors = if (isSelected) {
+            IconButtonDefaults.iconButtonColors(
+                containerColor = ElementTheme.colors.bgAccentRest,
+                contentColor = ElementTheme.colors.iconOnSolidPrimary,
+            )
+        } else {
+            IconButtonDefaults.iconButtonColors()
+        },
+    ) {
+        Icon(
+            imageVector = CompoundIcons.Filter(),
+            contentDescription = stringResource(R.string.screen_roomlist_your_spaces),
+        )
     }
 }
 
