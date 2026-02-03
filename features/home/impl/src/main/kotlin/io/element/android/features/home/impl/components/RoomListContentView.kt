@@ -45,6 +45,8 @@ import io.element.android.features.home.impl.roomlist.RoomListContentState
 import io.element.android.features.home.impl.roomlist.RoomListContentStateProvider
 import io.element.android.features.home.impl.roomlist.RoomListEvent
 import io.element.android.features.home.impl.roomlist.SecurityBannerState
+import io.element.android.features.home.impl.spacefilters.SpaceFiltersState
+import io.element.android.features.home.impl.spacefilters.anUnselectedSpaceFiltersState
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -59,6 +61,7 @@ import kotlinx.collections.immutable.ImmutableList
 fun RoomListContentView(
     contentState: RoomListContentState,
     filtersState: RoomListFiltersState,
+    spaceFiltersState: SpaceFiltersState,
     lazyListState: LazyListState,
     hideInvitesAvatars: Boolean,
     eventSink: (RoomListEvent) -> Unit,
@@ -93,6 +96,7 @@ fun RoomListContentView(
                 state = contentState,
                 hideInvitesAvatars = hideInvitesAvatars,
                 filtersState = filtersState,
+                spaceFiltersState = spaceFiltersState,
                 eventSink = eventSink,
                 onSetUpRecoveryClick = onSetUpRecoveryClick,
                 onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
@@ -170,6 +174,7 @@ private fun RoomsView(
     state: RoomListContentState.Rooms,
     hideInvitesAvatars: Boolean,
     filtersState: RoomListFiltersState,
+    spaceFiltersState: SpaceFiltersState,
     eventSink: (RoomListEvent) -> Unit,
     onSetUpRecoveryClick: () -> Unit,
     onConfirmRecoveryKeyClick: () -> Unit,
@@ -178,9 +183,12 @@ private fun RoomsView(
     lazyListState: LazyListState,
     modifier: Modifier = Modifier,
 ) {
-    if (state.summaries.isEmpty() && filtersState.hasAnyFilterSelected) {
+    val isSpaceFilterSelected = spaceFiltersState is SpaceFiltersState.Selected
+    val hasAnyFilterSelected = filtersState.hasAnyFilterSelected || isSpaceFilterSelected
+    if (state.summaries.isEmpty() && hasAnyFilterSelected) {
         EmptyViewForFilterStates(
             selectedFilters = filtersState.selectedFilters(),
+            isSpaceFilterSelected = isSpaceFilterSelected,
             modifier = modifier.fillMaxSize()
         )
     } else {
@@ -274,9 +282,10 @@ private fun RoomsViewList(
 @Composable
 private fun EmptyViewForFilterStates(
     selectedFilters: ImmutableList<RoomListFilter>,
+    isSpaceFilterSelected: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    val emptyStateResources = RoomListFiltersEmptyStateResources.fromSelectedFilters(selectedFilters) ?: return
+    val emptyStateResources = RoomListFiltersEmptyStateResources.fromSelectedFilters(selectedFilters, isSpaceFilterSelected) ?: return
     EmptyScaffold(
         title = emptyStateResources.title,
         subtitle = emptyStateResources.subtitle,
@@ -327,6 +336,7 @@ internal fun RoomListContentViewPreview(@PreviewParameter(RoomListContentStatePr
                 )
             }
         ),
+        spaceFiltersState = anUnselectedSpaceFiltersState(),
         hideInvitesAvatars = false,
         eventSink = {},
         onSetUpRecoveryClick = {},

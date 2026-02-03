@@ -15,17 +15,29 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 @ContributesBinding(SessionScope::class)
 class DefaultFilterSelectionStrategy : FilterSelectionStrategy {
-    private val selectedFilters = LinkedHashSet<RoomListFilter>()
+    private val _selectedFilters = LinkedHashSet<RoomListFilter>()
+    private val hiddenFilters = LinkedHashSet<RoomListFilter>()
+    private val selectedFilters
+        get() = _selectedFilters - hiddenFilters
+
+    private val availableFilters
+        get() = RoomListFilter.entries.toSet() - hiddenFilters
 
     override val filterSelectionStates = MutableStateFlow(buildFilters())
 
+    override fun setHiddenFilters(filters: Set<RoomListFilter>) {
+        hiddenFilters.clear()
+        hiddenFilters.addAll(filters)
+        filterSelectionStates.value = buildFilters()
+    }
+
     override fun select(filter: RoomListFilter) {
-        selectedFilters.add(filter)
+        _selectedFilters.add(filter)
         filterSelectionStates.value = buildFilters()
     }
 
     override fun deselect(filter: RoomListFilter) {
-        selectedFilters.remove(filter)
+        _selectedFilters.remove(filter)
         filterSelectionStates.value = buildFilters()
     }
 
@@ -34,7 +46,7 @@ class DefaultFilterSelectionStrategy : FilterSelectionStrategy {
     }
 
     override fun clear() {
-        selectedFilters.clear()
+        _selectedFilters.clear()
         filterSelectionStates.value = buildFilters()
     }
 
@@ -45,7 +57,7 @@ class DefaultFilterSelectionStrategy : FilterSelectionStrategy {
                 isSelected = true
             )
         }
-        val unselectedFilters = RoomListFilter.entries - selectedFilters - selectedFilters.flatMap { it.incompatibleFilters }.toSet()
+        val unselectedFilters = availableFilters - selectedFilters - selectedFilters.flatMap { it.incompatibleFilters }.toSet()
         val unselectedFilterStates = unselectedFilters.map {
             FilterSelectionState(
                 filter = it,

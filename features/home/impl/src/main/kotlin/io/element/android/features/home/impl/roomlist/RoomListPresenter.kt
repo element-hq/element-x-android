@@ -28,6 +28,9 @@ import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.announcement.api.Announcement
 import io.element.android.features.announcement.api.AnnouncementService
 import io.element.android.features.home.impl.datasource.RoomListDataSource
+import io.element.android.features.home.impl.filters.RoomListFilter.People
+import io.element.android.features.home.impl.filters.RoomListFilter.Rooms
+import io.element.android.features.home.impl.filters.RoomListFiltersEvent
 import io.element.android.features.home.impl.filters.RoomListFiltersState
 import io.element.android.features.home.impl.filters.into
 import io.element.android.features.home.impl.search.RoomListSearchEvent
@@ -156,13 +159,16 @@ class RoomListPresenter(
             }
         }
 
-        LaunchedEffect(filtersState.filterSelectionStates, spaceFiltersState.selectedFilter()) {
-            val selectedFilters = filtersState.filterSelectionStates.mapNotNull { filterState ->
-                if (!filterState.isSelected) {
-                    return@mapNotNull null
-                }
-                filterState.filter.into()
+        LaunchedEffect(spaceFiltersState.selectedFilter()) {
+            val hiddenFilters = if (spaceFiltersState is SpaceFiltersState.Selected) {
+                setOf(People, Rooms)
+            } else {
+                emptySet()
             }
+            filtersState.eventSink(RoomListFiltersEvent.SetHiddenFilter(hiddenFilters))
+        }
+        LaunchedEffect(filtersState.filterSelectionStates, spaceFiltersState.selectedFilter()) {
+            val selectedFilters = filtersState.selectedFilters().map { filter -> filter.into() }
             val selectedSpaceFilter = when (spaceFiltersState) {
                 is SpaceFiltersState.Selected -> RoomListFilter.Identifiers(spaceFiltersState.selectedFilter.descendants)
                 else -> null

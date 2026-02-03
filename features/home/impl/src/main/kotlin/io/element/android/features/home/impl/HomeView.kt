@@ -231,6 +231,7 @@ private fun HomeScaffold(
                     RoomListContentView(
                         contentState = roomListState.contentState,
                         filtersState = roomListState.filtersState,
+                        spaceFiltersState = roomListState.spaceFiltersState,
                         lazyListState = roomsLazyListState,
                         hideInvitesAvatars = roomListState.hideInvitesAvatars,
                         eventSink = roomListState.eventSink,
