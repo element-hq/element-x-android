@@ -376,10 +376,9 @@ private fun JoinRule?.toJoinAuthorisationStatus(): JoinAuthorisationStatus {
     return when (this) {
         JoinRule.Knock,
         is JoinRule.KnockRestricted -> JoinAuthorisationStatus.CanKnock
-        JoinRule.Invite,
-        JoinRule.Private -> JoinAuthorisationStatus.NeedInvite
+        JoinRule.Invite -> JoinAuthorisationStatus.NeedInvite
         is JoinRule.Restricted -> JoinAuthorisationStatus.Restricted
         JoinRule.Public -> JoinAuthorisationStatus.CanJoin
-        else -> JoinAuthorisationStatus.Unknown
+        is JoinRule.Custom, null -> JoinAuthorisationStatus.Unknown
     }
 }

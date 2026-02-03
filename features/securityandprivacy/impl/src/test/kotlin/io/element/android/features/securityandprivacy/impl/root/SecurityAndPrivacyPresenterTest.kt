@@ -309,7 +309,7 @@ class SecurityAndPrivacyPresenterTest {
             baseRoom = FakeBaseRoom(
                 roomPermissions = roomPermissions(),
                 getRoomVisibilityResult = { Result.success(RoomVisibility.Private) },
-                initialRoomInfo = aRoomInfo(historyVisibility = RoomHistoryVisibility.Shared, joinRule = JoinRule.Private)
+                initialRoomInfo = aRoomInfo(historyVisibility = RoomHistoryVisibility.Shared, joinRule = JoinRule.Invite)
             ),
             enableEncryptionResult = enableEncryptionLambda,
             updateJoinRuleResult = updateJoinRuleLambda,
@@ -1091,7 +1091,7 @@ class SecurityAndPrivacyPresenterTest {
             baseRoom = FakeBaseRoom(
                 roomPermissions = roomPermissions(),
                 getRoomVisibilityResult = { Result.success(RoomVisibility.Private) },
-                initialRoomInfo = aRoomInfo(historyVisibility = RoomHistoryVisibility.Shared, joinRule = JoinRule.Private)
+                initialRoomInfo = aRoomInfo(historyVisibility = RoomHistoryVisibility.Shared, joinRule = JoinRule.Invite)
             ),
         ),
         navigator: SecurityAndPrivacyNavigator = FakeSecurityAndPrivacyNavigator(),

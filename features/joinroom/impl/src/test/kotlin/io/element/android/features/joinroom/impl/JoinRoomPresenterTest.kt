@@ -1036,34 +1036,6 @@ class JoinRoomPresenterTest {
     }
 
     @Test
-    fun `present - when room is not known RoomPreview is loaded as Private`() = runTest {
-        val client = FakeMatrixClient(
-            getNotJoinedRoomResult = { _, _ ->
-                Result.success(
-                    aRoomPreview(
-                        info = aRoomPreviewInfo(joinRule = JoinRule.Private),
-                        roomMembershipDetails = {
-                            Result.success(aRoomMembershipDetails())
-                        },
-                    )
-                )
-            },
-            spaceService = FakeSpaceService(
-                spaceRoomListResult = { FakeSpaceRoomList() },
-            ),
-        )
-        val presenter = createJoinRoomPresenter(
-            matrixClient = client
-        )
-        presenter.test {
-            skipItems(1)
-            awaitItem().also { state ->
-                assertThat(state.joinAuthorisationStatus).isEqualTo(JoinAuthorisationStatus.NeedInvite)
-            }
-        }
-    }
-
-    @Test
     fun `present - when room is not known RoomPreview is loaded as Custom`() = runTest {
         val client = FakeMatrixClient(
             getNotJoinedRoomResult = { _, _ ->

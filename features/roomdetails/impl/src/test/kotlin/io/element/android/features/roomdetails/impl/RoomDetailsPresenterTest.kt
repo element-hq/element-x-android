@@ -582,7 +582,7 @@ class RoomDetailsPresenterTest {
             assertThat(awaitItem().canShowKnockRequests).isFalse()
             featureFlagService.setFeatureEnabled(FeatureFlags.Knock, true)
             assertThat(awaitItem().canShowKnockRequests).isTrue()
-            room.givenRoomInfo(aRoomInfo(joinRule = JoinRule.Private))
+            room.givenRoomInfo(aRoomInfo(joinRule = JoinRule.Invite))
             assertThat(awaitItem().canShowKnockRequests).isFalse()
             cancelAndIgnoreRemainingEvents()
         }

@@ -35,7 +35,7 @@ sealed interface JoinRuleItem {
      * Transforms a [JoinRuleItem] option into a [JoinRule].
      */
     fun toJoinRule(): JoinRule = when (this) {
-        Private -> JoinRule.Private
+        Private -> JoinRule.Invite
         PublicVisibility.Public -> JoinRule.Public
         PublicVisibility.AskToJoin -> JoinRule.Knock
         is PublicVisibility.Restricted -> JoinRule.Restricted(persistentListOf(AllowRule.RoomMembership(parentSpaceId)))

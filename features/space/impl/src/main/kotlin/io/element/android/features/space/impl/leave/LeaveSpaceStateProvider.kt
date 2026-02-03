@@ -38,7 +38,7 @@ class LeaveSpaceStateProvider : PreviewParameterProvider<LeaveSpaceState> {
                         ),
                         aSelectableSpaceRoom(
                             spaceRoom = aSpaceRoom(
-                                joinRule = JoinRule.Private,
+                                joinRule = JoinRule.Invite,
                             ),
                             isSelected = false,
                         ),
@@ -56,7 +56,7 @@ class LeaveSpaceStateProvider : PreviewParameterProvider<LeaveSpaceState> {
                         ),
                         aSelectableSpaceRoom(
                             spaceRoom = aSpaceRoom(
-                                joinRule = JoinRule.Private,
+                                joinRule = JoinRule.Invite,
                             ),
                             isSelected = true,
                         ),
