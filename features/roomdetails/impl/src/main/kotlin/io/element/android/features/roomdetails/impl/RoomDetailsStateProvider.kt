@@ -26,6 +26,7 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
+import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import kotlinx.collections.immutable.toImmutableList
@@ -57,6 +58,9 @@ open class RoomDetailsStateProvider : PreviewParameterProvider<RoomDetailsState>
             aRoomDetailsState(isTombstoned = true),
             aDmRoomDetailsState(dmRoomMemberVerificationState = UserProfileVerificationState.VERIFIED),
             aDmRoomDetailsState(dmRoomMemberVerificationState = UserProfileVerificationState.VERIFICATION_VIOLATION),
+            aSharedHistoryRoomDetailsState(roomHistoryVisibility = RoomHistoryVisibility.Joined),
+            aSharedHistoryRoomDetailsState(roomHistoryVisibility = RoomHistoryVisibility.Shared),
+            aSharedHistoryRoomDetailsState(roomHistoryVisibility = RoomHistoryVisibility.WorldReadable),
             // Add other state here
         )
 }
@@ -117,6 +121,8 @@ fun aRoomDetailsState(
     canReportRoom: Boolean = true,
     isTombstoned: Boolean = false,
     showDebugInfo: Boolean = false,
+    enableKeyShareOnInvite: Boolean = false,
+    roomHistoryVisibility: RoomHistoryVisibility = RoomHistoryVisibility.Shared,
     eventSink: (RoomDetailsEvent) -> Unit = {},
 ) = RoomDetailsState(
     roomId = roomId,
@@ -147,6 +153,8 @@ fun aRoomDetailsState(
     isTombstoned = isTombstoned,
     showDebugInfo = showDebugInfo,
     roomVersion = "12",
+    enableKeyShareOnInvite = enableKeyShareOnInvite,
+    roomHistoryVisibility = roomHistoryVisibility,
     eventSink = eventSink,
 )
 
@@ -181,4 +189,12 @@ fun aDmRoomDetailsState(
         isBlocked = AsyncData.Success(isDmMemberIgnored),
         verificationState = dmRoomMemberVerificationState,
     )
+)
+
+fun aSharedHistoryRoomDetailsState(
+    roomHistoryVisibility: RoomHistoryVisibility
+) = aRoomDetailsState(
+    isEncrypted = true,
+    enableKeyShareOnInvite = true,
+    roomHistoryVisibility = roomHistoryVisibility,
 )

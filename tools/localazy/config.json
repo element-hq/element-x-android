@@ -206,6 +206,7 @@
     {
       "name" : ":features:roomdetails:impl",
       "includeRegex" : [
+        "crypto\\.history_sharing\\.room_info_.*",
         "screen_room_details_.*",
         "screen\\.room_details\\..*",
         "screen_room_member_list_.*",

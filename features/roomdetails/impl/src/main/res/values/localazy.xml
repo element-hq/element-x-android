@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crypto_history_sharing_room_info_hidden_badge_content">"New members don\'t see history"</string>
+  <string name="crypto_history_sharing_room_info_shared_badge_content">"New members see history"</string>
+  <string name="crypto_history_sharing_room_info_world_readable_badge_content">"Anyone can see history"</string>
   <string name="screen_edit_room_address_room_address_section_footer">"You’ll need an address in order to make it visible in the public directory."</string>
   <string name="screen_edit_room_address_title">"Edit address"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"An error occurred while updating the notification setting."</string>
