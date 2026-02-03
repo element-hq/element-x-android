@@ -472,7 +472,6 @@ private fun JoinRule?.map(): SecurityAndPrivacyRoomAccess {
         JoinRule.Invite -> SecurityAndPrivacyRoomAccess.InviteOnly
         // All other cases are not supported so we default to InviteOnly
         is JoinRule.Custom,
-        JoinRule.Private,
         null -> SecurityAndPrivacyRoomAccess.InviteOnly
     }
 }
@@ -481,7 +480,7 @@ private fun SecurityAndPrivacyRoomAccess.map(): JoinRule? {
     return when (this) {
         SecurityAndPrivacyRoomAccess.Anyone -> JoinRule.Public
         SecurityAndPrivacyRoomAccess.AskToJoin -> JoinRule.Knock
-        SecurityAndPrivacyRoomAccess.InviteOnly -> JoinRule.Private
+        SecurityAndPrivacyRoomAccess.InviteOnly -> JoinRule.Invite
         is SecurityAndPrivacyRoomAccess.SpaceMember -> JoinRule.Restricted(
             rules = this.spaceIds.map { AllowRule.RoomMembership(it) }.toImmutableList()
         )

@@ -311,8 +311,8 @@ private fun SpaceItem(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                if (room.joinRule == JoinRule.Private) {
-                    // Picto for private
+                if (room.joinRule == JoinRule.Invite) {
+                    // Picto for invite only
                     Icon(
                         modifier = Modifier
                             .size(16.dp)

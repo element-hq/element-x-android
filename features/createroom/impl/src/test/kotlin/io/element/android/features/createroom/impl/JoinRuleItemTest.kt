@@ -18,7 +18,7 @@ import org.junit.Test
 class JoinRuleItemTest {
     @Test
     fun `toJoinRule works as expected`() {
-        assertThat(JoinRuleItem.Private.toJoinRule()).isEqualTo(JoinRule.Private)
+        assertThat(JoinRuleItem.Private.toJoinRule()).isEqualTo(JoinRule.Invite)
         assertThat(JoinRuleItem.PublicVisibility.Public.toJoinRule()).isEqualTo(JoinRule.Public)
         assertThat(JoinRuleItem.PublicVisibility.AskToJoin.toJoinRule()).isEqualTo(JoinRule.Knock)
         assertThat(JoinRuleItem.PublicVisibility.Restricted(A_ROOM_ID).toJoinRule())
