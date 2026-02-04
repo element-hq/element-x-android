@@ -52,6 +52,8 @@ import io.element.android.features.home.impl.roomlist.RoomListDeclineInviteMenu
 import io.element.android.features.home.impl.roomlist.RoomListEvent
 import io.element.android.features.home.impl.roomlist.RoomListState
 import io.element.android.features.home.impl.search.RoomListSearchView
+import io.element.android.features.home.impl.spacefilters.SpaceFiltersEvent
+import io.element.android.features.home.impl.spacefilters.SpaceFiltersState
 import io.element.android.features.home.impl.spacefilters.SpaceFiltersView
 import io.element.android.features.home.impl.spaces.HomeSpacesView
 import io.element.android.libraries.androidutils.throttler.FirstThrottler
@@ -156,10 +158,15 @@ private fun HomeScaffold(
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
     val roomListState: RoomListState = state.roomListState
 
-    BackHandler(
-        enabled = state.currentHomeNavigationBarItem != HomeNavigationBarItem.Chats,
-    ) {
-        state.eventSink(HomeEvent.SelectHomeNavigationBarItem(HomeNavigationBarItem.Chats))
+    BackHandler(enabled = state.isBackHandlerEnabled) {
+        if (state.currentHomeNavigationBarItem != HomeNavigationBarItem.Chats) {
+            state.eventSink(HomeEvent.SelectHomeNavigationBarItem(HomeNavigationBarItem.Chats))
+        } else {
+            val spaceFiltersState = state.roomListState.spaceFiltersState
+            if (spaceFiltersState is SpaceFiltersState.Selected) {
+                spaceFiltersState.eventSink(SpaceFiltersEvent.Selected.ClearSelection)
+            }
+        }
     }
 
     val hazeState = rememberHazeState()
