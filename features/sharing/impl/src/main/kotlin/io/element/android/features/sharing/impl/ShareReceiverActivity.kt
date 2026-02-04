@@ -10,6 +10,7 @@ package io.element.android.features.sharing.impl
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Base64
 import androidx.activity.ComponentActivity
 import androidx.core.content.pm.ShortcutManagerCompat
 import io.element.android.features.share.api.ShareEntryPoint
@@ -18,10 +19,6 @@ import io.element.android.features.sharing.api.SharingConstants
 
 class ShareReceiverActivity : ComponentActivity() {
     companion object {
-        private const val PREFS_NAME = "sharing_shortcuts_prefs"
-        private const val PREF_PREFIX = "shareshortcut.room."
-
-
         const val EXTRA_TARGET_ROOM_ID = "io.element.android.features.sharing.extra.TARGET_ROOM_ID"
         const val EXTRA_SHARED_TEXT = "io.element.android.features.sharing.extra.SHARED_TEXT"
         const val EXTRA_SHARED_URIS = "io.element.android.features.sharing.extra.SHARED_URIS"
@@ -35,21 +32,22 @@ class ShareReceiverActivity : ComponentActivity() {
         val type = incoming?.type
 
         val shortcutId = incoming?.getStringExtra(Intent.EXTRA_SHORTCUT_ID)
-        val prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE)
-        val roomIdFromExtra = incoming?.getStringExtra(SharingConstants.EXTRA_SHARE_TARGET_ROOM_ID)
-        val sessionIdFromExtra = incoming?.getStringExtra(SharingConstants.EXTRA_SHARE_TARGET_SESSION_ID)
-        val resolvedRoomId = when {
-            !shortcutId.isNullOrEmpty() -> {
-                prefs.getString(PREF_PREFIX + shortcutId, null) ?: roomIdFromExtra
+        val (resolvedSessionId, resolvedRoomId) = if (shortcutId?.startsWith("directshare_") == true) {
+            try {
+                val parts = shortcutId.split("_")
+                val sessionEncoded = parts[1]
+                val roomEncoded = parts[2]
+                val sessionDecoded = String(Base64.decode(sessionEncoded, Base64.NO_WRAP))
+                val roomDecoded = String(Base64.decode(roomEncoded, Base64.NO_WRAP))
+                sessionDecoded to roomDecoded
+            } catch (e: Exception) {
+                null to null
             }
-            else -> roomIdFromExtra
-        }
-
-        val resolvedSessionId = when {
-            !shortcutId.isNullOrEmpty() -> {
-                prefs.getString(PREF_PREFIX + "session_" + shortcutId, null) ?: sessionIdFromExtra
-            }
-            else -> sessionIdFromExtra
+        } else {
+            null to null
+        }.let { (sessionFromId, roomFromId) ->
+            (sessionFromId ?: incoming?.getStringExtra(SharingConstants.EXTRA_SHARE_TARGET_SESSION_ID)) to
+                (roomFromId ?: incoming?.getStringExtra(SharingConstants.EXTRA_SHARE_TARGET_ROOM_ID))
         }
 
         if (resolvedRoomId.isNullOrEmpty()) {
