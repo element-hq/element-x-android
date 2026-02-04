@@ -13,7 +13,6 @@ package io.element.android.features.home.impl
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
@@ -25,14 +24,11 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingToolbarDefaults.ScreenOffset
-import androidx.compose.material3.HorizontalFloatingToolbar
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -65,6 +61,9 @@ import io.element.android.libraries.androidutils.throttler.FirstThrottler
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
+import io.element.android.libraries.designsystem.theme.components.HorizontalFloatingToolbar
+import io.element.android.libraries.designsystem.theme.components.HorizontalFloatingToolbarItem
+import io.element.android.libraries.designsystem.theme.components.HorizontalFloatingToolbarSeparator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
@@ -189,12 +188,10 @@ private fun HomeScaffold(
                 onAccountSwitch = {
                     state.eventSink(HomeEvent.SwitchToAccount(it))
                 },
-                onCreateSpace = onCreateSpaceClick,
                 scrollBehavior = scrollBehavior,
                 displayFilters = state.displayRoomListFilters,
                 filtersState = roomListState.filtersState,
                 spaceFiltersState = roomListState.spaceFiltersState,
-                canCreateSpaces = state.homeSpacesState.canCreateSpaces,
                 canReportBug = state.canReportBug,
                 modifier = Modifier.hazeEffect(
                     state = hazeState,
@@ -226,12 +223,21 @@ private fun HomeScaffold(
                             state.eventSink(HomeEvent.SelectHomeNavigationBarItem(item))
                         }
                     },
-                    floatingActionButton = {
-                        when (state.currentHomeNavigationBarItem) {
-                            HomeNavigationBarItem.Chats -> HomeFloatingActionButton(onStartChatClick, CommonStrings.action_create_a_room)
-                            HomeNavigationBarItem.Spaces -> HomeFloatingActionButton(onCreateSpaceClick, CommonStrings.action_create_space)
+                    floatingActionButton = when (state.currentHomeNavigationBarItem) {
+                        HomeNavigationBarItem.Chats -> {
+                            {
+                                HomeFloatingActionButton(onStartChatClick, CommonStrings.action_create_room)
+                            }
                         }
-                    }
+                        HomeNavigationBarItem.Spaces -> if (state.homeSpacesState.canCreateSpaces) {
+                            {
+                                HomeFloatingActionButton(onCreateSpaceClick, CommonStrings.action_create_space)
+                            }
+                        } else {
+                            // No FAB for spaces if we cannot create spaces
+                            null
+                        }
+                    },
                 )
             }
         },
@@ -311,33 +317,31 @@ private fun HomeFloatingActionButton(
     }
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class, ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 private fun HomeBottomBar(
     currentHomeNavigationBarItem: HomeNavigationBarItem,
     onItemClick: (HomeNavigationBarItem) -> Unit,
-    floatingActionButton: @Composable () -> Unit,
+    floatingActionButton: (@Composable () -> Unit)?,
     modifier: Modifier = Modifier,
 ) {
     HorizontalFloatingToolbar(
-        expanded = true,
         floatingActionButton = floatingActionButton,
         modifier = modifier
             .padding(bottom = ScreenOffset)
             .zIndex(1f),
     ) {
-        HomeNavigationBarItem.entries.forEach { item ->
-            val isSelected = currentHomeNavigationBarItem == item
-            IconButton(
-                onClick = { onItemClick(item) },
-            ) {
-                Column(horizontalAlignment = Alignment.CenterHorizontally) {
-                    Icon(
-                        imageVector = item.icon(isSelected),
-                        contentDescription = stringResource(item.labelRes),
-                    )
-                }
+        HomeNavigationBarItem.entries.forEachIndexed { index, item ->
+            if (index > 0) {
+                HorizontalFloatingToolbarSeparator()
             }
+            val isSelected = currentHomeNavigationBarItem == item
+            HorizontalFloatingToolbarItem(
+                icon = item.icon(isSelected),
+                tooltipLabel = stringResource(item.labelRes),
+                isSelected = isSelected,
+                onClick = { onItemClick(item) },
+            )
         }
     }
 }
