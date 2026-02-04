@@ -107,10 +107,10 @@ fun ListItem(
     onClick: (() -> Unit)? = null,
 ) {
     // We cannot just pass the disabled colors, they must be set manually: https://issuetracker.google.com/issues/280480132
-    val headlineColor = if (enabled) colors.headlineColor else colors.disabledHeadlineColor
-    val supportingColor = if (enabled) colors.supportingTextColor else colors.disabledHeadlineColor.copy(alpha = 0.80f)
-    val leadingContentColor = if (enabled) colors.leadingIconColor else colors.disabledLeadingIconColor
-    val trailingContentColor = if (enabled) colors.trailingIconColor else colors.disabledTrailingIconColor
+    val headlineColor = if (enabled) colors.contentColor else colors.disabledContentColor
+    val supportingColor = if (enabled) colors.supportingContentColor else colors.disabledContentColor.copy(alpha = 0.80f)
+    val leadingContentColor = if (enabled) colors.leadingContentColor else colors.disabledLeadingContentColor
+    val trailingContentColor = if (enabled) colors.trailingContentColor else colors.disabledTrailingContentColor
 
     val decoratedHeadlineContent: @Composable () -> Unit = {
         CompositionLocalProvider(
