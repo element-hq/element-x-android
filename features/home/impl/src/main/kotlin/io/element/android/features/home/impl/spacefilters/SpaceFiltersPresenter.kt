@@ -10,12 +10,12 @@ package io.element.android.features.home.impl.spacefilters
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
@@ -44,7 +44,6 @@ class SpaceFiltersPresenter(
         val availableFilters by remember {
             matrixClient.spaceService.spaceFiltersFlow.map { it.toImmutableList() }
         }.collectAsState(initial = persistentListOf())
-
 
         var selectionMode by remember { mutableStateOf<SelectionMode>(SelectionMode.Unselected) }
 
@@ -87,10 +86,20 @@ class SpaceFiltersPresenter(
                     eventSink = ::handleSelectingEvent,
                 )
             }
-            is SelectionMode.Selected -> SpaceFiltersState.Selected(
-                selectedFilter = mode.filter,
-                eventSink = ::handleSelectedEvent,
-            )
+            is SelectionMode.Selected -> {
+                // Keep in sync with the available filters if rooms are added/removed
+                val selectedFilter by remember {
+                    derivedStateOf {
+                        availableFilters
+                            .firstOrNull { it.spaceRoom.roomId == mode.filter.spaceRoom.roomId }
+                            ?: mode.filter
+                    }
+                }
+                SpaceFiltersState.Selected(
+                    selectedFilter = selectedFilter,
+                    eventSink = ::handleSelectedEvent,
+                )
+            }
         }
     }
 }
