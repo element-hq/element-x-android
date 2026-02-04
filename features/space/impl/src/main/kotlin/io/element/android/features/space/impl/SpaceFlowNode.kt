@@ -176,7 +176,7 @@ class SpaceFlowNode(
                 val callback = object : CreateRoomEntryPoint.Callback {
                     override fun onRoomCreated(roomId: RoomId) {
                         callback.navigateToRoom(roomId, emptyList())
-                        backstack.newRoot(NavTarget.Root)
+                        backstack.pop()
                     }
                 }
                 createRoomEntryPoint
