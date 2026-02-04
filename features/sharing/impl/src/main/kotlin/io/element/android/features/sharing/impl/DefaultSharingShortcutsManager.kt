@@ -10,7 +10,6 @@ package io.element.android.features.sharing.impl
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
-import android.content.SharedPreferences
 import android.graphics.Bitmap
 import android.os.Build
 import androidx.core.content.pm.ShortcutInfoCompat
@@ -29,7 +28,8 @@ import io.element.android.features.sharing.api.SharingShortcutsManager
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.di.annotations.ApplicationContext
-import java.security.MessageDigest
+import android.util.Base64
+import java.nio.charset.Charset
 
 @SingleIn(AppScope::class)
 class DefaultSharingShortcutsManager @Inject constructor(
@@ -39,12 +39,6 @@ class DefaultSharingShortcutsManager @Inject constructor(
 
     companion object {
         const val SHARE_CATEGORY = "io.element.android.x.SHARE_TARGET"
-        private const val PREF_PREFIX = "shareshortcut.room."
-        private const val PREFS_NAME = "sharing_shortcuts_prefs"
-    }
-
-    private val prefs: SharedPreferences by lazy {
-        context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
     }
 
     override suspend fun publishShortcutsForRooms(rooms: List<SharingRoomInfo>) {
@@ -70,12 +64,6 @@ class DefaultSharingShortcutsManager @Inject constructor(
                 IconCompat.createWithBitmap(it)
             }
         } ?: IconCompat.createWithResource(context, android.R.drawable.sym_def_app_icon)
-
-        // store mapping in prefs so ShareReceiverActivity can resolve roomId (no DI required there).
-        prefs.edit()
-            .putString(PREF_PREFIX + id, room.roomId.value)
-            .putString(PREF_PREFIX + "session_" + id, room.sessionId.value)
-            .apply()
 
         return ShortcutInfoCompat.Builder(context, id)
             .setShortLabel(safeShortLabel(room.displayName))
@@ -122,17 +110,15 @@ class DefaultSharingShortcutsManager @Inject constructor(
         }
     }
 
-
-    private fun shortcutIdForRoom(sessionId: String, roomId: String): String {
-        val combined = createCompositeKey(sessionId, roomId)
-        val md = MessageDigest.getInstance("SHA-256")
-        val bytes = md.digest(combined.toByteArray(Charsets.UTF_8))
-        val hex = bytes.joinToString("") { "%02x".format(it) }
-        return "room_" + hex.take(24)
-    }
-
     private fun createCompositeKey(sessionId: String, roomId: String): String {
         return "$sessionId/$roomId"
+    }
+
+    private fun shortcutIdForRoom(sessionId: String, roomId: String): String {
+        fun String.toBase64(): String =
+            Base64.encodeToString(this.toByteArray(Charset.forName("UTF-8")), Base64.NO_WRAP)
+
+        return "directshare_${sessionId.toBase64()}_${roomId.toBase64()}"
     }
 
     private fun safeShortLabel(displayName: String): String {
