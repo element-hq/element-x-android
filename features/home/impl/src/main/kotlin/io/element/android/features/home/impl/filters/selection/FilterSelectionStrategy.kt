@@ -13,8 +13,6 @@ import kotlinx.coroutines.flow.StateFlow
 
 interface FilterSelectionStrategy {
     val filterSelectionStates: StateFlow<Set<FilterSelectionState>>
-
-    fun setHiddenFilters(filters: Set<RoomListFilter>)
     fun select(filter: RoomListFilter)
     fun deselect(filter: RoomListFilter)
     fun isSelected(filter: RoomListFilter): Boolean

@@ -30,9 +30,6 @@ class RoomListFiltersPresenter(
                 is RoomListFiltersEvent.ToggleFilter -> {
                     filterSelectionStrategy.toggle(event.filter)
                 }
-                is RoomListFiltersEvent.SetHiddenFilter -> {
-                    filterSelectionStrategy.setHiddenFilters(event.filters)
-                }
             }
         }
 

@@ -36,6 +36,7 @@ import io.element.android.features.home.impl.filters.into
 import io.element.android.features.home.impl.search.RoomListSearchEvent
 import io.element.android.features.home.impl.search.RoomListSearchState
 import io.element.android.features.home.impl.spacefilters.SpaceFiltersState
+import io.element.android.features.home.impl.spacefilters.into
 import io.element.android.features.home.impl.spacefilters.selectedFilter
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents.AcceptInvite
@@ -159,20 +160,9 @@ class RoomListPresenter(
             }
         }
 
-        LaunchedEffect(spaceFiltersState.selectedFilter()) {
-            val hiddenFilters = if (spaceFiltersState is SpaceFiltersState.Selected) {
-                setOf(People, Rooms)
-            } else {
-                emptySet()
-            }
-            filtersState.eventSink(RoomListFiltersEvent.SetHiddenFilter(hiddenFilters))
-        }
         LaunchedEffect(filtersState.filterSelectionStates, spaceFiltersState.selectedFilter()) {
             val selectedFilters = filtersState.selectedFilters().map { filter -> filter.into() }
-            val selectedSpaceFilter = when (spaceFiltersState) {
-                is SpaceFiltersState.Selected -> RoomListFilter.Identifiers(spaceFiltersState.selectedFilter.descendants)
-                else -> null
-            }
+            val selectedSpaceFilter = spaceFiltersState.selectedFilter().into()
             val allFilters = RoomListFilter.All(selectedFilters + listOfNotNull(selectedSpaceFilter))
             roomListDataSource.updateFilter(allFilters)
         }
