@@ -174,6 +174,8 @@ class SpaceFlowNode(
             is NavTarget.CreateRoom -> {
                 val callback = object : CreateRoomEntryPoint.Callback {
                     override fun onRoomCreated(roomId: RoomId) {
+                        // Reset the room list in the space so this new room is displayed
+                        lifecycleScope.launch { spaceRoomList.reset() }
                         callback.navigateToRoom(roomId, emptyList())
                     }
                 }
