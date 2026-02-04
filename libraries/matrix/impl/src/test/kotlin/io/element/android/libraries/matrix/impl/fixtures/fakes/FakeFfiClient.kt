@@ -15,6 +15,7 @@ import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.simulateLongTask
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
+import org.matrix.rustcomponents.sdk.CreateRoomParameters
 import org.matrix.rustcomponents.sdk.Encryption
 import org.matrix.rustcomponents.sdk.HomeserverLoginDetails
 import org.matrix.rustcomponents.sdk.IgnoredUsersListener
@@ -48,6 +49,7 @@ class FakeFfiClient(
     private val getProfileResult: (String) -> UserProfile = { UserProfile(userId = userId, displayName = null, avatarUrl = null) },
     private val homeserverLoginDetailsResult: () -> HomeserverLoginDetails = { lambdaError() },
     private val getStoreSizesResult: () -> StoreSizes = { lambdaError() },
+    private val createRoomResult: (CreateRoomParameters) -> String = { lambdaError() },
     private val closeResult: () -> Unit = {},
 ) : Client(NoHandle) {
     override fun userId(): String = userId
@@ -95,6 +97,10 @@ class FakeFfiClient(
 
     override suspend fun getStoreSizes(): StoreSizes {
         return getStoreSizesResult()
+    }
+
+    override suspend fun createRoom(request: CreateRoomParameters): String {
+        return createRoomResult(request)
     }
 
     override fun close() = closeResult()
