@@ -11,14 +11,6 @@ package io.element.android.features.home.impl.filters
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.home.impl.filters.selection.DefaultFilterSelectionStrategy
 import io.element.android.features.home.impl.filters.selection.FilterSelectionState
-import io.element.android.libraries.dateformatter.api.DateFormatter
-import io.element.android.libraries.dateformatter.test.FakeDateFormatter
-import io.element.android.libraries.eventformatter.api.RoomLatestEventFormatter
-import io.element.android.libraries.eventformatter.test.FakeRoomLatestEventFormatter
-import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
-import io.element.android.libraries.matrix.api.roomlist.RoomListService
-import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
-import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -49,8 +41,7 @@ class RoomListFiltersPresenterTest {
     @Test
     @OptIn(ExperimentalCoroutinesApi::class)
     fun `present - toggle rooms filter`() = runTest {
-        val roomListService = FakeRoomListService()
-        val presenter = createRoomListFiltersPresenter(roomListService)
+        val presenter = createRoomListFiltersPresenter()
         presenter.test {
             awaitItem().eventSink.invoke(RoomListFiltersEvent.ToggleFilter(RoomListFilter.Rooms))
             awaitLastSequentialItem().let { state ->
@@ -84,8 +75,7 @@ class RoomListFiltersPresenterTest {
     @Test
     @OptIn(ExperimentalCoroutinesApi::class)
     fun `present - clear filters event`() = runTest {
-        val roomListService = FakeRoomListService()
-        val presenter = createRoomListFiltersPresenter(roomListService)
+        val presenter = createRoomListFiltersPresenter()
         presenter.test {
             awaitItem().eventSink.invoke(RoomListFiltersEvent.ToggleFilter(RoomListFilter.Rooms))
             awaitLastSequentialItem().let { state ->
@@ -105,12 +95,7 @@ private fun filterSelectionState(filter: RoomListFilter, selected: Boolean) = Fi
     isSelected = selected,
 )
 
-private fun TestScope.createRoomListFiltersPresenter(
-    roomListService: RoomListService = FakeRoomListService(),
-    notificationSettingsService: NotificationSettingsService = FakeNotificationSettingsService(),
-    dateFormatter: DateFormatter = FakeDateFormatter(),
-    roomLatestEventFormatter: RoomLatestEventFormatter = FakeRoomLatestEventFormatter(),
-): RoomListFiltersPresenter {
+private fun TestScope.createRoomListFiltersPresenter(): RoomListFiltersPresenter {
     return RoomListFiltersPresenter(
         filterSelectionStrategy = DefaultFilterSelectionStrategy(),
     )

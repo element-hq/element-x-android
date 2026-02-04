@@ -8,11 +8,13 @@
 package io.element.android.features.home.impl.spacefilters
 
 import androidx.compose.foundation.text.input.TextFieldState
+import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.spaces.SpaceServiceFilter
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
+@Immutable
 sealed interface SpaceFiltersState {
     data object Disabled : SpaceFiltersState
 
@@ -52,4 +54,3 @@ fun SpaceFiltersState.selectedFilter(): SpaceServiceFilter? {
 fun SpaceServiceFilter?.into(): RoomListFilter? {
     return this?.let { RoomListFilter.Identifiers(descendants) }
 }
-

@@ -37,12 +37,12 @@ class FakeSpaceService(
         _topLevelSpacesFlow.emit(value)
     }
 
-    private val _spaceServiceFiltersFlow = MutableSharedFlow<List<SpaceServiceFilter>>()
+    private val _spaceFiltersFlow = MutableSharedFlow<List<SpaceServiceFilter>>()
     override val spaceFiltersFlow: SharedFlow<List<SpaceServiceFilter>>
-        get() = _spaceServiceFiltersFlow.asSharedFlow()
+        get() = _spaceFiltersFlow.asSharedFlow()
 
     suspend fun emitSpaceFilters(value: List<SpaceServiceFilter>) {
-        _spaceServiceFiltersFlow.emit(value)
+        _spaceFiltersFlow.emit(value)
     }
 
     override suspend fun joinedParents(spaceId: RoomId): Result<List<SpaceRoom>> {

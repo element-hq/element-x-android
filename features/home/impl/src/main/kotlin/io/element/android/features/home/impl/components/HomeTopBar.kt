@@ -435,6 +435,29 @@ internal fun HomeTopBarPreview() = ElementPreview {
 @OptIn(ExperimentalMaterial3Api::class)
 @PreviewsDayNight
 @Composable
+internal fun HomeTopBarSpaceFiltersSelectedPreview() = ElementPreview {
+    HomeTopBar(
+        selectedNavigationItem = HomeNavigationBarItem.Chats,
+        currentUserAndNeighbors = persistentListOf(MatrixUser(UserId("@id:domain"), "Alice")),
+        showAvatarIndicator = false,
+        areSearchResultsDisplayed = false,
+        scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()),
+        onOpenSettings = {},
+        onAccountSwitch = {},
+        onToggleSearch = {},
+        onCreateSpace = {},
+        canCreateSpaces = true,
+        canReportBug = true,
+        displayFilters = true,
+        filtersState = aRoomListFiltersState(),
+        spaceFiltersState = aSelectedSpaceFiltersState(),
+        onMenuActionClick = {},
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@PreviewsDayNight
+@Composable
 internal fun HomeTopBarSpacesPreview() = ElementPreview {
     HomeTopBar(
         selectedNavigationItem = HomeNavigationBarItem.Spaces,
@@ -497,29 +520,6 @@ internal fun HomeTopBarMultiAccountPreview() = ElementPreview {
         displayFilters = true,
         filtersState = aRoomListFiltersState(),
         spaceFiltersState = anUnselectedSpaceFiltersState(),
-        onMenuActionClick = {},
-    )
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@PreviewsDayNight
-@Composable
-internal fun HomeTopSpaceFiltersSelectedPreview() = ElementPreview {
-    HomeTopBar(
-        selectedNavigationItem = HomeNavigationBarItem.Chats,
-        currentUserAndNeighbors = persistentListOf(MatrixUser(UserId("@id:domain"), "Alice")),
-        showAvatarIndicator = false,
-        areSearchResultsDisplayed = false,
-        scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()),
-        onOpenSettings = {},
-        onAccountSwitch = {},
-        onToggleSearch = {},
-        onCreateSpace = {},
-        canCreateSpaces = true,
-        canReportBug = true,
-        displayFilters = true,
-        filtersState = aRoomListFiltersState(),
-        spaceFiltersState = aSelectedSpaceFiltersState(),
         onMenuActionClick = {},
     )
 }

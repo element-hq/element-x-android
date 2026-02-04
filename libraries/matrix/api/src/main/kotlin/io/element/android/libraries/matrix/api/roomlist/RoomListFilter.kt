@@ -44,8 +44,8 @@ sealed interface RoomListFilter {
     ) : RoomListFilter
 
     data class Identifiers(
-        val values : List<RoomId>,
-    ): RoomListFilter
+        val values: List<RoomId>,
+    ) : RoomListFilter
 
     /**
      * A filter that matches rooms that are unread.

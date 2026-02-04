@@ -89,6 +89,7 @@ class KonsistPreviewTest {
         "GradientFloatingActionButtonCircleShapePreview",
         "HeaderFooterPageScrollablePreview",
         "HomeTopBarMultiAccountPreview",
+        "HomeTopBarSpaceFiltersSelectedPreview",
         "HomeTopBarSpacesPreview",
         "HomeTopBarWithIndicatorPreview",
         "IconsOtherPreview",
