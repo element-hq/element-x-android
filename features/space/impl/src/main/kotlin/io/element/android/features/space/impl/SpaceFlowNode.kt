@@ -177,6 +177,7 @@ class SpaceFlowNode(
                         // Reset the room list in the space so this new room is displayed
                         lifecycleScope.launch { spaceRoomList.reset() }
                         callback.navigateToRoom(roomId, emptyList())
+                        backstack.pop()
                     }
                 }
                 createRoomEntryPoint
