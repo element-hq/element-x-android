@@ -165,6 +165,43 @@ class SpaceFiltersPresenterTest {
     }
 
     @Test
+    fun `present - selected filter is cleared when space is removed from available filters`() = runTest {
+        val spaceFilter = aSpaceServiceFilter(displayName = "Work", roomId = RoomId("!work:example.com"))
+        val otherSpaceFilter = aSpaceServiceFilter(displayName = "Personal", roomId = RoomId("!personal:example.com"))
+
+        val spaceService = FakeSpaceService()
+        val matrixClient = FakeMatrixClient(spaceService = spaceService)
+
+        val presenter = createSpaceFiltersPresenter(
+            featureFlagService = FakeFeatureFlagService(
+                initialState = mapOf(FeatureFlags.RoomListSpaceFilters.key to true)
+            ),
+            matrixClient = matrixClient,
+        )
+        presenter.test {
+            // Go to Selecting and emit filters
+            val unselectedState = awaitLastSequentialItem() as SpaceFiltersState.Unselected
+            unselectedState.eventSink(SpaceFiltersEvent.Unselected.ShowFilters)
+            spaceService.emitSpaceFilters(listOf(spaceFilter, otherSpaceFilter))
+
+            // Select the filter
+            val selectingState = awaitLastSequentialItem() as SpaceFiltersState.Selecting
+            selectingState.eventSink(SpaceFiltersEvent.Selecting.SelectFilter(spaceFilter))
+
+            // Verify in Selected state
+            val selectedState = awaitLastSequentialItem() as SpaceFiltersState.Selected
+            assertThat(selectedState.selectedFilter).isEqualTo(spaceFilter)
+
+            // Remove the selected space from available filters (but keep other spaces)
+            spaceService.emitSpaceFilters(listOf(otherSpaceFilter))
+
+            // Should auto-transition to Unselected
+            val finalState = awaitLastSequentialItem()
+            assertThat(finalState).isInstanceOf(SpaceFiltersState.Unselected::class.java)
+        }
+    }
+
+    @Test
     fun `present - selected filter stays in sync when available filters update`() = runTest {
         val originalFilter = aSpaceServiceFilter(
             displayName = "Work",

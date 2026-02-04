@@ -9,8 +9,8 @@ package io.element.android.features.home.impl.spacefilters
 
 import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -86,12 +86,15 @@ class SpaceFiltersPresenter(
                 )
             }
             is SelectionMode.Selected -> {
-                // Keep in sync with the available filters if rooms are added/removed
-                val selectedFilter by remember {
-                    derivedStateOf {
-                        availableFilters
-                            .firstOrNull { it.spaceRoom.roomId == mode.filter.spaceRoom.roomId }
-                            ?: mode.filter
+                var selectedFilter by remember { mutableStateOf(mode.filter) }
+                // Makes sure the selectedFilter stays in sync with the available filters
+                LaunchedEffect(availableFilters) {
+                    val upToDateFilter = availableFilters
+                        .firstOrNull { it.spaceRoom.roomId == mode.filter.spaceRoom.roomId }
+                    if (upToDateFilter == null) {
+                        selectionMode = SelectionMode.Unselected
+                    } else {
+                        selectedFilter = upToDateFilter
                     }
                 }
                 SpaceFiltersState.Selected(
