@@ -45,12 +45,17 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withTimeoutOrNull
+import kotlin.time.Duration.Companion.seconds
 
 @AssistedInject
 class ChangeRolesPresenter(
@@ -220,7 +225,19 @@ class ChangeRolesPresenter(
                     add(UserRoleChange(selectedUser.userId, RoomMember.Role.User))
                 }
             }
-            room.updateUsersRoles(changes).map { true }
+            room.updateUsersRoles(changes).map {
+                // Wait for the changes to take effect or a timeout
+                withTimeoutOrNull(10.seconds) {
+                    room.roomInfoFlow
+                        .map { it.roomPowerLevels }
+                        .filterNotNull()
+                        .takeWhile { powerLevels ->
+                            changes.any { powerLevels.powerLevelOf(it.userId) != it.powerLevel }
+                        }
+                        .collect()
+                }
+                true
+            }
         }
     }
 
