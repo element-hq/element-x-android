@@ -49,6 +49,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.spaces.SpaceServiceFilter
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.CommonStrings
+import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,34 +58,50 @@ fun SpaceFiltersView(
     modifier: Modifier = Modifier
 ) {
     val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val isSelecting = state is SpaceFiltersState.Selecting
     var showSheet by remember { mutableStateOf(false) }
 
-    LaunchedEffect(state) {
-        when (state) {
-            is SpaceFiltersState.Selecting -> showSheet = true
-            else -> {
-                sheetState.hide()
-                showSheet = false
-            }
+    LaunchedEffect(isSelecting) {
+        if (isSelecting) {
+            showSheet = true
+        } else {
+            sheetState.hide()
         }
     }
 
-    Box(modifier = modifier) {
-        if (showSheet && state is SpaceFiltersState.Selecting) {
-            ModalBottomSheet(
+    // This is necessary because the animation can get cancelled
+    // then the sheetState is hidden but the showSheet is still true.
+    LaunchedEffect(sheetState.isVisible, sheetState.isAnimationRunning) {
+        if (!sheetState.isVisible && !sheetState.isAnimationRunning) {
+            showSheet = false
+        }
+    }
+    if (showSheet) {
+        ModalBottomSheet(
+            modifier = modifier
+                .systemBarsPadding()
+                .navigationBarsPadding(),
+            sheetState = sheetState,
+            onDismissRequest = {
+                if (isSelecting) {
+                    state.eventSink(SpaceFiltersEvent.Selecting.Cancel)
+                }
+            }
+        ) {
+            Box(
                 modifier = Modifier
-                    .systemBarsPadding()
-                    .navigationBarsPadding(),
-                sheetState = sheetState,
-                onDismissRequest = { state.eventSink(SpaceFiltersEvent.Selecting.Cancel) },
+                    .fillMaxWidth()
+                    .fillMaxHeight(0.9f)
             ) {
-                SpaceFiltersBottomSheetContent(
-                    filters = state.visibleFilters,
-                    searchQuery = state.searchQuery,
-                    onFilterSelected = { filter ->
-                        state.eventSink(SpaceFiltersEvent.Selecting.SelectFilter(filter))
-                    }
-                )
+                if (isSelecting) {
+                    SpaceFiltersBottomSheetContent(
+                        filters = state.visibleFilters,
+                        searchQuery = state.searchQuery,
+                        onFilterSelected = { filter ->
+                            state.eventSink(SpaceFiltersEvent.Selecting.SelectFilter(filter))
+                        }
+                    )
+                }
             }
         }
     }
@@ -98,10 +115,7 @@ private fun SpaceFiltersBottomSheetContent(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier
-            .fillMaxWidth()
-            .fillMaxHeight(0.9f)
-            .padding(vertical = 16.dp)
+        modifier = modifier.padding(vertical = 16.dp)
     ) {
         Text(
             text = stringResource(R.string.screen_roomlist_your_spaces),
@@ -113,7 +127,9 @@ private fun SpaceFiltersBottomSheetContent(
         Spacer(modifier = Modifier.height(12.dp))
         SearchField(
             state = searchQuery,
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp),
             placeholder = stringResource(CommonStrings.action_search),
         )
         Spacer(modifier = Modifier.height(16.dp))
