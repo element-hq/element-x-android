@@ -35,7 +35,7 @@ class SpaceFiltersPresenterTest {
     }
 
     @Test
-    fun `present - when feature flag is enabled returns Unselected state initially`() = runTest {
+    fun `present - when available filters is empty returns Disabled state`() = runTest {
         val presenter = createSpaceFiltersPresenter(
             featureFlagService = FakeFeatureFlagService(
                 initialState = mapOf(FeatureFlags.RoomListSpaceFilters.key to true)
@@ -43,18 +43,47 @@ class SpaceFiltersPresenterTest {
         )
         presenter.test {
             val state = awaitLastSequentialItem()
+            assertThat(state).isEqualTo(SpaceFiltersState.Disabled)
+        }
+    }
+
+    @Test
+    fun `present - when feature flag is enabled and filters exist returns Unselected state`() = runTest {
+        val spaceFilter = aSpaceServiceFilter(displayName = "Test Space")
+        val spaceService = FakeSpaceService()
+        val matrixClient = FakeMatrixClient(spaceService = spaceService)
+
+        val presenter = createSpaceFiltersPresenter(
+            featureFlagService = FakeFeatureFlagService(
+                initialState = mapOf(FeatureFlags.RoomListSpaceFilters.key to true)
+            ),
+            matrixClient = matrixClient,
+        )
+        presenter.test {
+            // Emit filters
+            spaceService.emitSpaceFilters(listOf(spaceFilter))
+
+            val state = awaitLastSequentialItem()
             assertThat(state).isInstanceOf(SpaceFiltersState.Unselected::class.java)
         }
     }
 
     @Test
     fun `present - ShowFilters event transitions from Unselected to Selecting`() = runTest {
+        val spaceFilter = aSpaceServiceFilter(displayName = "Test Space")
+        val spaceService = FakeSpaceService()
+        val matrixClient = FakeMatrixClient(spaceService = spaceService)
+
         val presenter = createSpaceFiltersPresenter(
             featureFlagService = FakeFeatureFlagService(
                 initialState = mapOf(FeatureFlags.RoomListSpaceFilters.key to true)
-            )
+            ),
+            matrixClient = matrixClient,
         )
         presenter.test {
+            // Emit filters first
+            spaceService.emitSpaceFilters(listOf(spaceFilter))
+
             val unselectedState = awaitLastSequentialItem() as SpaceFiltersState.Unselected
             unselectedState.eventSink(SpaceFiltersEvent.Unselected.ShowFilters)
 
@@ -65,12 +94,20 @@ class SpaceFiltersPresenterTest {
 
     @Test
     fun `present - Cancel event in Selecting state transitions back to Unselected`() = runTest {
+        val spaceFilter = aSpaceServiceFilter(displayName = "Test Space")
+        val spaceService = FakeSpaceService()
+        val matrixClient = FakeMatrixClient(spaceService = spaceService)
+
         val presenter = createSpaceFiltersPresenter(
             featureFlagService = FakeFeatureFlagService(
                 initialState = mapOf(FeatureFlags.RoomListSpaceFilters.key to true)
-            )
+            ),
+            matrixClient = matrixClient,
         )
         presenter.test {
+            // Emit filters first
+            spaceService.emitSpaceFilters(listOf(spaceFilter))
+
             // Start in Unselected
             val unselectedState = awaitLastSequentialItem() as SpaceFiltersState.Unselected
             unselectedState.eventSink(SpaceFiltersEvent.Unselected.ShowFilters)
@@ -88,12 +125,19 @@ class SpaceFiltersPresenterTest {
     @Test
     fun `present - SelectFilter event in Selecting state transitions to Selected`() = runTest {
         val spaceFilter = aSpaceServiceFilter(displayName = "Test Space")
+        val spaceService = FakeSpaceService()
+        val matrixClient = FakeMatrixClient(spaceService = spaceService)
+
         val presenter = createSpaceFiltersPresenter(
             featureFlagService = FakeFeatureFlagService(
                 initialState = mapOf(FeatureFlags.RoomListSpaceFilters.key to true)
-            )
+            ),
+            matrixClient = matrixClient,
         )
         presenter.test {
+            // Emit filters first
+            spaceService.emitSpaceFilters(listOf(spaceFilter))
+
             // Start in Unselected
             val unselectedState = awaitLastSequentialItem() as SpaceFiltersState.Unselected
             unselectedState.eventSink(SpaceFiltersEvent.Unselected.ShowFilters)
@@ -111,12 +155,19 @@ class SpaceFiltersPresenterTest {
     @Test
     fun `present - ClearSelection event in Selected state transitions back to Unselected`() = runTest {
         val spaceFilter = aSpaceServiceFilter(displayName = "Test Space")
+        val spaceService = FakeSpaceService()
+        val matrixClient = FakeMatrixClient(spaceService = spaceService)
+
         val presenter = createSpaceFiltersPresenter(
             featureFlagService = FakeFeatureFlagService(
                 initialState = mapOf(FeatureFlags.RoomListSpaceFilters.key to true)
-            )
+            ),
+            matrixClient = matrixClient,
         )
         presenter.test {
+            // Emit filters first
+            spaceService.emitSpaceFilters(listOf(spaceFilter))
+
             // Start in Unselected
             val unselectedState = awaitLastSequentialItem() as SpaceFiltersState.Unselected
             unselectedState.eventSink(SpaceFiltersEvent.Unselected.ShowFilters)
@@ -151,12 +202,12 @@ class SpaceFiltersPresenterTest {
             matrixClient = matrixClient,
         )
         presenter.test {
+            // Emit space filters
+            spaceService.emitSpaceFilters(spaceFilters)
+
             // Start in Unselected
             val unselectedState = awaitLastSequentialItem() as SpaceFiltersState.Unselected
             unselectedState.eventSink(SpaceFiltersEvent.Unselected.ShowFilters)
-
-            // Emit space filters
-            spaceService.emitSpaceFilters(spaceFilters)
 
             // Now in Selecting with available filters
             val selectingState = awaitLastSequentialItem() as SpaceFiltersState.Selecting
@@ -179,10 +230,12 @@ class SpaceFiltersPresenterTest {
             matrixClient = matrixClient,
         )
         presenter.test {
-            // Go to Selecting and emit filters
+            // Emit filters first
+            spaceService.emitSpaceFilters(listOf(spaceFilter, otherSpaceFilter))
+
+            // Go to Selecting
             val unselectedState = awaitLastSequentialItem() as SpaceFiltersState.Unselected
             unselectedState.eventSink(SpaceFiltersEvent.Unselected.ShowFilters)
-            spaceService.emitSpaceFilters(listOf(spaceFilter, otherSpaceFilter))
 
             // Select the filter
             val selectingState = awaitLastSequentialItem() as SpaceFiltersState.Selecting
@@ -224,12 +277,12 @@ class SpaceFiltersPresenterTest {
             matrixClient = matrixClient,
         )
         presenter.test {
+            // Emit initial space filters
+            spaceService.emitSpaceFilters(listOf(originalFilter))
+
             // Start in Unselected
             val unselectedState = awaitLastSequentialItem() as SpaceFiltersState.Unselected
             unselectedState.eventSink(SpaceFiltersEvent.Unselected.ShowFilters)
-
-            // Emit initial space filters
-            spaceService.emitSpaceFilters(listOf(originalFilter))
 
             // Now in Selecting
             val selectingState = awaitLastSequentialItem() as SpaceFiltersState.Selecting

@@ -36,13 +36,13 @@ class SpaceFiltersPresenter(
             .isFeatureEnabledFlow(FeatureFlags.RoomListSpaceFilters)
             .collectAsState(initial = false)
 
-        if (!isFeatureEnabled) {
-            return SpaceFiltersState.Disabled
-        }
-
         val availableFilters by remember {
             matrixClient.spaceService.spaceFiltersFlow.map { it.toImmutableList() }
         }.collectAsState(initial = persistentListOf())
+
+        if (!isFeatureEnabled || availableFilters.isEmpty()) {
+            return SpaceFiltersState.Disabled
+        }
 
         var selectionMode by remember { mutableStateOf<SelectionMode>(SelectionMode.Unselected) }
 

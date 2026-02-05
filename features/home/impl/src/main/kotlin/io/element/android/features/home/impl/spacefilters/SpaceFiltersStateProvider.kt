@@ -13,7 +13,7 @@ import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.spaces.SpaceServiceFilter
 import io.element.android.libraries.previewutils.room.aSpaceRoom
-import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toImmutableList
 
 class SpaceFiltersStateProvider : PreviewParameterProvider<SpaceFiltersState> {
     override val values: Sequence<SpaceFiltersState>
@@ -55,7 +55,7 @@ fun aSelectingSpaceFiltersState(
     searchQuery: String = "",
     eventSink: (SpaceFiltersEvent.Selecting) -> Unit = {},
 ) = SpaceFiltersState.Selecting(
-    availableFilters = persistentListOf(*availableFilters.toTypedArray()),
+    availableFilters = availableFilters.toImmutableList(),
     searchQuery = TextFieldState(searchQuery),
     eventSink = eventSink,
 )

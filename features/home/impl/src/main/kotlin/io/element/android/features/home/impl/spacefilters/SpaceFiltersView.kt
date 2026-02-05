@@ -49,7 +49,6 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.spaces.SpaceServiceFilter
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.CommonStrings
-import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
