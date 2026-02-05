@@ -122,4 +122,22 @@ class LinkifierHelperTest {
         assertThat(urlSpans.size).isEqualTo(1)
         assertThat(urlSpans.first().url).isEqualTo("https://github.com/element-hq/element-android/READ(ME)")
     }
+
+    @Test
+    fun `linkification handles mismatched opening parenthesis in URL`() {
+        val text = "A url: (https://github.com/element-hq/element-android/READ((((((ME))"
+        val result = LinkifyHelper.linkify(text)
+        val urlSpans = result.toSpannable().getSpans<URLSpan>()
+        assertThat(urlSpans.size).isEqualTo(1)
+        assertThat(urlSpans.first().url).isEqualTo("https://github.com/element-hq/element-android/READ((((((ME))")
+    }
+
+    @Test
+    fun `linkification handles mismatched closing parenthesis in URL`() {
+        val text = "A url: (https://github.com/element-hq/element-android/READ(ME)))))"
+        val result = LinkifyHelper.linkify(text)
+        val urlSpans = result.toSpannable().getSpans<URLSpan>()
+        assertThat(urlSpans.size).isEqualTo(1)
+        assertThat(urlSpans.first().url).isEqualTo("https://github.com/element-hq/element-android/READ(ME)")
+    }
 }

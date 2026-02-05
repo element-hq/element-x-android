@@ -97,7 +97,7 @@ object LinkifyHelper {
             val closingParenthesisCount = linkifiedTextLastPath.count { it == ')' }
             val openingParenthesisCount = linkifiedTextLastPath.count { it == '(' }
             // If it's not part of a pair, remove it from the link span by adjusting the end index
-            end -= closingParenthesisCount - openingParenthesisCount
+            end -= (closingParenthesisCount - openingParenthesisCount).coerceAtLeast(0)
         }
         return end
     }
