@@ -35,7 +35,7 @@ test_core = "1.7.0"
 roborazzi = "1.58.0"
 
 # Jetbrain
-datetime = "0.7.1"
+datetime = "0.7.1-0.6.x-compat"
 serialization_json = "1.10.0"
 
 #other
@@ -62,7 +62,7 @@ detekt = "1.23.8"
 # See https://github.com/pinterest/ktlint/releases/
 ktlint = "1.8.0"
 androidx-test-ext-junit = "1.3.0"
-kover = "0.9.5"
+kover = "0.9.6"
 
 [libraries]
 # Project
