@@ -21,7 +21,7 @@ import io.element.android.libraries.matrix.impl.certificates.UserCertificatesPro
 import io.element.android.libraries.matrix.impl.paths.SessionPaths
 import io.element.android.libraries.matrix.impl.paths.getSessionPaths
 import io.element.android.libraries.matrix.impl.proxy.ProxyProvider
-import io.element.android.libraries.matrix.impl.room.TimelineEventTypeFilterFactory
+import io.element.android.libraries.matrix.impl.room.TimelineEventFilterFactory
 import io.element.android.libraries.matrix.impl.storage.SqliteStoreBuilderProvider
 import io.element.android.libraries.matrix.impl.util.anonymizedTokens
 import io.element.android.libraries.network.useragent.UserAgentProvider
@@ -61,7 +61,7 @@ class RustMatrixClientFactory(
     private val clock: SystemClock,
     private val analyticsService: AnalyticsService,
     private val featureFlagService: FeatureFlagService,
-    private val timelineEventTypeFilterFactory: TimelineEventTypeFilterFactory,
+    private val timelineEventFilterFactory: TimelineEventFilterFactory,
     private val clientBuilderProvider: ClientBuilderProvider,
     private val sqliteStoreBuilderProvider: SqliteStoreBuilderProvider,
     private val workManagerScheduler: WorkManagerScheduler,
@@ -115,7 +115,7 @@ class RustMatrixClientFactory(
             dispatchers = coroutineDispatchers,
             baseCacheDirectory = cacheDirectory,
             clock = clock,
-            timelineEventTypeFilterFactory = timelineEventTypeFilterFactory,
+            timelineEventFilterFactory = timelineEventFilterFactory,
             featureFlagService = featureFlagService,
             analyticsService = analyticsService,
             workManagerScheduler = workManagerScheduler,

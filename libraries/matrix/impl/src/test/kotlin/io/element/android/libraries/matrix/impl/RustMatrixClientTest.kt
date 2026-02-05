@@ -15,7 +15,7 @@ import io.element.android.libraries.core.data.bytes
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClient
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiSyncService
-import io.element.android.libraries.matrix.impl.room.FakeTimelineEventTypeFilterFactory
+import io.element.android.libraries.matrix.impl.room.FakeTimelineEventFilterFactory
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_DEVICE_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -150,7 +150,7 @@ class RustMatrixClientTest {
         dispatchers = testCoroutineDispatchers(),
         baseCacheDirectory = File(""),
         clock = FakeSystemClock(),
-        timelineEventTypeFilterFactory = FakeTimelineEventTypeFilterFactory(),
+        timelineEventFilterFactory = FakeTimelineEventFilterFactory(),
         featureFlagService = FakeFeatureFlagService(),
         analyticsService = FakeAnalyticsService(),
         workManagerScheduler = FakeWorkManagerScheduler(submitLambda = {}),
