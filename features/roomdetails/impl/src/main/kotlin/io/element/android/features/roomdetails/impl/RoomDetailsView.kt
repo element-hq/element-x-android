@@ -527,7 +527,7 @@ private fun RoomBadge.toMatrixBadgeData(): MatrixBadgeAtom.MatrixBadgeData {
         }
         RoomBadge.SHARED_HISTORY_SHARED -> {
             MatrixBadgeAtom.MatrixBadgeData(
-                text = stringResource(R.string.crypto_history_sharing_room_info_hidden_badge_content),
+                text = stringResource(R.string.crypto_history_sharing_room_info_shared_badge_content),
                 icon = CompoundIcons.History(),
                 type = MatrixBadgeAtom.Type.Info
             )
