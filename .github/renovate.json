@@ -22,7 +22,8 @@
     {
       "versioning": "semver",
       "matchPackageNames": [
-        "/^org.maplibre/"
+        "/^org.maplibre/",
+        "/^org.jetbrains.kotlinx:kotlinx-datetime/"
       ]
     }
   ]
