@@ -8,7 +8,7 @@ android_gradle_plugin = "8.13.2"
 kotlin = "2.3.0"
 kotlinpoet = "2.2.0"
 ksp = "2.3.5"
-firebaseAppDistribution = "5.2.0"
+firebaseAppDistribution = "5.2.1"
 
 # AndroidX
 core = "1.17.0"
