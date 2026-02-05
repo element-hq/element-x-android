@@ -23,13 +23,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -56,33 +55,30 @@ fun SpaceFiltersView(
     state: SpaceFiltersState,
     modifier: Modifier = Modifier
 ) {
-    val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val isSelecting = state is SpaceFiltersState.Selecting
-    var showSheet by remember { mutableStateOf(false) }
-
+    val isSelecting by rememberUpdatedState(state is SpaceFiltersState.Selecting)
+    val sheetState = rememberModalBottomSheetState(
+        skipPartiallyExpanded = true,
+        confirmValueChange = { sheetValueTarget ->
+            // This ensures the hide animation is not cancelled
+            when (sheetValueTarget) {
+                SheetValue.Expanded -> isSelecting
+                else -> true
+            }
+        }
+    )
     LaunchedEffect(isSelecting) {
-        if (isSelecting) {
-            showSheet = true
-        } else {
+        if (!isSelecting) {
             sheetState.hide()
         }
     }
-
-    // This is necessary because the animation can get cancelled
-    // then the sheetState is hidden but the showSheet is still true.
-    LaunchedEffect(sheetState.isVisible, sheetState.isAnimationRunning) {
-        if (!sheetState.isVisible && !sheetState.isAnimationRunning) {
-            showSheet = false
-        }
-    }
-    if (showSheet) {
+    if (sheetState.isVisible || isSelecting) {
         ModalBottomSheet(
             modifier = modifier
                 .systemBarsPadding()
                 .navigationBarsPadding(),
             sheetState = sheetState,
             onDismissRequest = {
-                if (isSelecting) {
+                if (state is SpaceFiltersState.Selecting) {
                     state.eventSink(SpaceFiltersEvent.Selecting.Cancel)
                 }
             }
@@ -92,7 +88,7 @@ fun SpaceFiltersView(
                     .fillMaxWidth()
                     .fillMaxHeight(0.9f)
             ) {
-                if (isSelecting) {
+                if (state is SpaceFiltersState.Selecting) {
                     SpaceFiltersBottomSheetContent(
                         filters = state.visibleFilters,
                         searchQuery = state.searchQuery,
