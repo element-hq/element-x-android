@@ -178,10 +178,7 @@ class JoinedRustRoom(
     ): Result<Timeline> = withContext(roomDispatcher) {
         val hideThreadedEvents = featureFlagService.isFeatureEnabled(FeatureFlags.Threads)
         val focus = when (createTimelineParams) {
-            is CreateTimelineParams.PinnedOnly -> TimelineFocus.PinnedEvents(
-                maxEventsToLoad = 100u,
-                maxConcurrentRequests = 10u,
-            )
+            is CreateTimelineParams.PinnedOnly -> TimelineFocus.PinnedEvents
             is CreateTimelineParams.MediaOnly -> TimelineFocus.Live(hideThreadedEvents = hideThreadedEvents)
             is CreateTimelineParams.Focused -> TimelineFocus.Event(
                 eventId = createTimelineParams.focusedEventId.value,
