@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationSettings
+import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -50,6 +51,8 @@ data class RoomDetailsState(
     val isTombstoned: Boolean,
     val showDebugInfo: Boolean,
     val roomVersion: String?,
+    val enableKeyShareOnInvite: Boolean,
+    val roomHistoryVisibility: RoomHistoryVisibility,
     val eventSink: (RoomDetailsEvent) -> Unit
 ) {
     val roomBadges = buildList {
@@ -60,6 +63,14 @@ data class RoomDetailsState(
         }
         if (isPublic) {
             add(RoomBadge.PUBLIC)
+        }
+        if (enableKeyShareOnInvite && isEncrypted) {
+            when (roomHistoryVisibility) {
+                RoomHistoryVisibility.Invited, RoomHistoryVisibility.Joined -> add(RoomBadge.SHARED_HISTORY_HIDDEN)
+                RoomHistoryVisibility.Shared -> add(RoomBadge.SHARED_HISTORY_SHARED)
+                RoomHistoryVisibility.WorldReadable -> add(RoomBadge.SHARED_HISTORY_WORLD_READABLE)
+                else -> {}
+            }
         }
     }.toImmutableList()
 }
@@ -84,4 +95,7 @@ enum class RoomBadge {
     ENCRYPTED,
     NOT_ENCRYPTED,
     PUBLIC,
+    SHARED_HISTORY_HIDDEN,
+    SHARED_HISTORY_SHARED,
+    SHARED_HISTORY_WORLD_READABLE
 }

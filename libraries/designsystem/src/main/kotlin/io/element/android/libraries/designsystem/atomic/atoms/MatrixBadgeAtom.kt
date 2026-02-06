@@ -100,6 +100,18 @@ internal fun MatrixBadgeAtomNegativePreview() = ElementPreview {
 
 @PreviewsDayNight
 @Composable
+internal fun MatrixBadgeAtomNeutralWrappingPreview() = ElementPreview {
+    MatrixBadgeAtom.View(
+        MatrixBadgeAtom.MatrixBadgeData(
+            text = "How much wood could a wood chuck chuck if a wood chuck could chuck wood",
+            icon = CompoundIcons.LockOff(),
+            type = MatrixBadgeAtom.Type.Info,
+        )
+    )
+}
+
+@PreviewsDayNight
+@Composable
 internal fun MatrixBadgeAtomInfoPreview() = ElementPreview {
     MatrixBadgeAtom.View(
         MatrixBadgeAtom.MatrixBadgeData(

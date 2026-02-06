@@ -537,6 +537,27 @@ private fun RoomBadge.toMatrixBadgeData(): MatrixBadgeAtom.MatrixBadgeData {
                 type = MatrixBadgeAtom.Type.Info,
             )
         }
+        RoomBadge.SHARED_HISTORY_HIDDEN -> {
+            MatrixBadgeAtom.MatrixBadgeData(
+                text = stringResource(R.string.crypto_history_sharing_room_info_hidden_badge_content),
+                icon = CompoundIcons.VisibilityOff(),
+                type = MatrixBadgeAtom.Type.Info
+            )
+        }
+        RoomBadge.SHARED_HISTORY_SHARED -> {
+            MatrixBadgeAtom.MatrixBadgeData(
+                text = stringResource(R.string.crypto_history_sharing_room_info_shared_badge_content),
+                icon = CompoundIcons.History(),
+                type = MatrixBadgeAtom.Type.Info
+            )
+        }
+        RoomBadge.SHARED_HISTORY_WORLD_READABLE -> {
+            MatrixBadgeAtom.MatrixBadgeData(
+                text = stringResource(R.string.crypto_history_sharing_room_info_world_readable_badge_content),
+                icon = CompoundIcons.UserProfileSolid(),
+                type = MatrixBadgeAtom.Type.Info
+            )
+        }
     }
 }
 
