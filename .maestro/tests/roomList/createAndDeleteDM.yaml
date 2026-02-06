@@ -13,3 +13,8 @@ appId: ${MAESTRO_APP_ID}
 - scroll
 - tapOn: "Leave room"
 - tapOn: "Leave"
+- runFlow:
+    when:
+      visible: 'You need an invite in order to join'
+    commands:
+      - tapOn: "Back"
