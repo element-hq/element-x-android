@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
@@ -39,11 +39,25 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import io.element.android.compound.theme.ElementTheme
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.components.customreaction.picker.EmojiPicker
 import io.element.android.features.messages.impl.timeline.components.customreaction.picker.EmojiPickerPresenter
 import io.element.android.libraries.androidutils.ui.hideKeyboard
+import io.element.android.libraries.androidutils.ui.hideKeyboard
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import kotlinx.collections.immutable.persistentSetOf
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.unit.dp
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.unit.dp
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -89,7 +103,18 @@ internal fun MessageComposerView(
         }
     }
 
+    val coroutineScope = rememberCoroutineScope()
+    fun onRequestFocus() {
+        state.eventSink(MessageComposerEvent.SetShowEmojiPicker(false))
+        coroutineScope.launch {
+            state.textEditorState.requestFocus()
+        }
+    }
+
     fun onOpenEmojiPicker() {
+        if (state.showEmojiPicker) {
+            onRequestFocus()
+        }
         if (state.showEmojiPicker) {
             onRequestFocus()
         }
@@ -120,53 +145,41 @@ internal fun MessageComposerView(
         voiceMessageState.eventSink(VoiceMessageComposerEvent.PlayerEvent(event))
     }
 
-    TextComposer(
-        modifier = modifier,
-        state = state.textEditorState,
-        voiceMessageState = voiceMessageState.voiceMessageState,
-        onRequestFocus = ::onRequestFocus,
-        onSendMessage = ::sendMessage,
-        composerMode = state.mode,
-        showTextFormatting = state.showTextFormatting,
-        onResetComposerMode = ::onCloseSpecialMode,
-        onAddAttachment = ::onAddAttachment,
-        onDismissTextFormatting = ::onDismissTextFormatting,
-        onVoiceRecorderEvent = onVoiceRecorderEvent,
-        onVoicePlayerEvent = onVoicePlayerEvent,
-        onSendVoiceMessage = onSendVoiceMessage,
-        onDeleteVoiceMessage = onDeleteVoiceMessage,
-        onReceiveSuggestion = ::onSuggestionReceived,
-        resolveMentionDisplay = state.resolveMentionDisplay,
-        resolveAtRoomMentionDisplay = state.resolveAtRoomMentionDisplay,
-        onError = ::onError,
-        onTyping = ::onTyping,
-        onSelectRichContent = ::sendUri,
-        onOpenEmojiPicker = ::onOpenEmojiPicker,
-    )
-
-    if (state.showEmojiPicker && state.emojibaseStore != null) {
-        val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-
-        ModalBottomSheet(
-            onDismissRequest = { state.eventSink(MessageComposerEvent.ToggleEmojiPicker) },
-            sheetState = sheetState,
-        ) {
-             val presenter = remember {
-                EmojiPickerPresenter(
-                    emojibaseStore = state.emojibaseStore,
-                    recentEmojis = state.recentEmojis,
-                    coroutineDispatchers = CoroutineDispatchers.Default,
-                )
-             }
-             EmojiPicker(
-                onSelectEmoji = { emoji ->
-                    state.eventSink(MessageComposerEvent.InsertEmoji(emoji))
-                },
-                state = presenter.present(),
-                selectedEmojis = persistentSetOf(),
-                modifier = Modifier.fillMaxWidth().fillMaxHeight(0.45f),
-             )
+    // Hide keyboard when emoji picker is shown
+    LaunchedEffect(state.showEmojiPicker) {
+        if (state.showEmojiPicker) {
+            view.hideKeyboard()
         }
+    }
+
+    Column(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(ElementTheme.colors.bgCanvasDefault)
+    ) {
+        TextComposer(
+            modifier = Modifier.fillMaxWidth(),
+            state = state.textEditorState,
+            voiceMessageState = voiceMessageState.voiceMessageState,
+            onRequestFocus = ::onRequestFocus,
+            onSendMessage = ::sendMessage,
+            composerMode = state.mode,
+            showTextFormatting = state.showTextFormatting,
+            onResetComposerMode = ::onCloseSpecialMode,
+            onAddAttachment = ::onAddAttachment,
+            onDismissTextFormatting = ::onDismissTextFormatting,
+            onVoiceRecorderEvent = onVoiceRecorderEvent,
+            onVoicePlayerEvent = onVoicePlayerEvent,
+            onSendVoiceMessage = onSendVoiceMessage,
+            onDeleteVoiceMessage = onDeleteVoiceMessage,
+            onReceiveSuggestion = ::onSuggestionReceived,
+            resolveMentionDisplay = state.resolveMentionDisplay,
+            resolveAtRoomMentionDisplay = state.resolveAtRoomMentionDisplay,
+            onError = ::onError,
+            onTyping = ::onTyping,
+            onSelectRichContent = ::sendUri,
+            onOpenEmojiPicker = ::onOpenEmojiPicker,
+        )
     }
 
     Column(

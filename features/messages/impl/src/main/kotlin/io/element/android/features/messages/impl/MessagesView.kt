@@ -21,11 +21,23 @@ import io.element.android.libraries.androidutils.ui.hideKeyboard
 import io.element.android.features.messages.impl.messagecomposer.EmojiPickerView
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.ui.platform.LocalView
+import io.element.android.libraries.androidutils.ui.hideKeyboard
+import io.element.android.features.messages.impl.messagecomposer.EmojiPickerView
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import coil.compose.AsyncImage
 import androidx.compose.foundation.layout.Arrangement
+import androidx.activity.BackEventCompat
+import androidx.activity.compose.BackHandler
 import androidx.activity.BackEventCompat
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
@@ -36,7 +48,9 @@ import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -48,6 +62,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -56,7 +71,12 @@ import androidx.activity.compose.PredictiveBackHandler
 import kotlinx.coroutines.CancellationException
 import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.activity.compose.PredictiveBackHandler
+import kotlinx.coroutines.CancellationException
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -175,6 +195,21 @@ fun MessagesView(
             backProgress = 0f
         }
     }
+    // Predictive Back gesture with slide-out animation
+    var isGoingBack by remember { mutableStateOf(false) }
+    var backProgress by remember { mutableFloatStateOf(0f) }
+
+    PredictiveBackHandler { progress ->
+        try {
+            progress.collect { event ->
+                backProgress = event.progress
+            }
+            isGoingBack = true
+            onBackClick()
+        } catch (e: CancellationException) {
+            backProgress = 0f
+        }
+    }
     OnLifecycleEvent { _, event ->
         state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvent.LifecycleEvent(event))
     }
@@ -193,8 +228,26 @@ fun MessagesView(
         lastImeHeight.intValue = imeBottom
     }
 
+    // Unified bottom offset to prevent "double jump" when switched
+    val visualBottomOffset = with(density) {
+        maxOf(imeBottom, lastImeHeight.intValue.takeIf { state.composerState.showEmojiPicker } ?: 0).toDp()
+    }
+
     // This is needed because the composer is inside an AndroidView that can't be affected by the FocusManager in Compose
     val localView = LocalView.current
+
+    // Sync state: if keyboard opens, hide emoji picker to prevent state conflict
+    LaunchedEffect(imeBottom > 0) {
+        if (imeBottom > 0 && state.composerState.showEmojiPicker) {
+            state.composerState.eventSink(MessageComposerEvent.SetShowEmojiPicker(false))
+        }
+    }
+
+    LaunchedEffect(state.composerState.showEmojiPicker) {
+        if (state.composerState.showEmojiPicker) {
+            localView.hideKeyboard()
+        }
+    }
 
     fun hidingKeyboard(block: () -> Unit) {
         localView.hideKeyboard()
@@ -257,6 +310,7 @@ fun MessagesView(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.Transparent)
+                .padding(bottom = visualBottomOffset)
                 .graphicsLayer {
                     val scale = 1f - (0.1f * backProgress)
                     scaleX = scale
@@ -307,6 +361,7 @@ fun MessagesView(
                         modifier = Modifier
                             .padding(padding)
                             .consumeWindowInsets(padding)
+                            .background(ElementTheme.colors.bgCanvasDefault)
                             .background(ElementTheme.colors.bgCanvasDefault)
                     ) {
                         MessagesViewContent(
@@ -415,6 +470,25 @@ fun MessagesView(
         )
     }
 
+        // Emoji Picker positioned at absolute bottom
+        val pickerHeight = if (lastImeHeight.intValue > 0) {
+            with(density) { lastImeHeight.intValue.toDp() }
+        } else {
+            300.dp
+        }
+        
+        AnimatedVisibility(
+            visible = state.composerState.showEmojiPicker,
+            modifier = Modifier.align(Alignment.BottomCenter),
+            enter = expandVertically(expandFrom = Alignment.Bottom) + fadeIn(),
+            exit = shrinkVertically(shrinkTowards = Alignment.Bottom) + fadeOut()
+        ) {
+            EmojiPickerView(
+                state = state.composerState,
+                height = pickerHeight,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
     }
 
     var endPollConfirmingEvent: TimelineItem.Event? by remember { mutableStateOf(null) }
@@ -623,13 +697,6 @@ private fun MessagesViewComposerBottomSheetContents(
                 LaunchedEffect(state.composerState.showEmojiPicker) {
                     if (state.composerState.showEmojiPicker) {
                         localView.hideKeyboard()
-                    }
-                }
-
-                // Hide picker when keyboard opens
-                LaunchedEffect(imeBottom > 0) {
-                    if (imeBottom > 0 && state.composerState.showEmojiPicker) {
-                        state.composerState.eventSink(MessageComposerEvent.SetShowEmojiPicker(false))
                     }
                 }
 
