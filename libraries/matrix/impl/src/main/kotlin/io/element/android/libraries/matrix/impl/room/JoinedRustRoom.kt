@@ -80,6 +80,7 @@ import org.matrix.rustcomponents.sdk.getElementCallRequiredPermissions
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
 import uniffi.matrix_sdk.RoomPowerLevelChanges
+import uniffi.matrix_sdk_ui.TimelineEventFocusThreadMode
 import uniffi.matrix_sdk_ui.TimelineReadReceiptTracking
 import kotlin.coroutines.cancellation.CancellationException
 import org.matrix.rustcomponents.sdk.IdentityStatusChange as RustIdentityStateChange
@@ -177,21 +178,18 @@ class JoinedRustRoom(
     ): Result<Timeline> = withContext(roomDispatcher) {
         val hideThreadedEvents = featureFlagService.isFeatureEnabled(FeatureFlags.Threads)
         val focus = when (createTimelineParams) {
-            is CreateTimelineParams.PinnedOnly -> TimelineFocus.PinnedEvents(
-                maxEventsToLoad = 100u,
-                maxConcurrentRequests = 10u,
-            )
+            is CreateTimelineParams.PinnedOnly -> TimelineFocus.PinnedEvents
             is CreateTimelineParams.MediaOnly -> TimelineFocus.Live(hideThreadedEvents = hideThreadedEvents)
             is CreateTimelineParams.Focused -> TimelineFocus.Event(
                 eventId = createTimelineParams.focusedEventId.value,
                 numContextEvents = 50u,
-                hideThreadedEvents = hideThreadedEvents,
+                threadMode = TimelineEventFocusThreadMode.Automatic(hideThreadedEvents),
             )
             is CreateTimelineParams.MediaOnlyFocused -> TimelineFocus.Event(
                 eventId = createTimelineParams.focusedEventId.value,
                 numContextEvents = 50u,
                 // Never hide threaded events in media focused timeline
-                hideThreadedEvents = false,
+                threadMode = TimelineEventFocusThreadMode.Automatic(false),
             )
             is CreateTimelineParams.Threaded -> TimelineFocus.Thread(
                 rootEventId = createTimelineParams.threadRootEventId.value,

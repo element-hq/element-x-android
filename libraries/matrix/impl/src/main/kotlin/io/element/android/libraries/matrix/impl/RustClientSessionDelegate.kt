@@ -20,6 +20,7 @@ import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.ClientSessionDelegate
 import org.matrix.rustcomponents.sdk.Session
 import timber.log.Timber
+import uniffi.matrix_sdk_common.BackgroundTaskFailureReason
 import java.lang.ref.WeakReference
 import java.util.concurrent.atomic.AtomicBoolean
 
@@ -118,6 +119,11 @@ class RustClientSessionDelegate(
         } else {
             Timber.tag(loggerTag.value).v("didReceiveAuthError -> already cleaning up")
         }
+    }
+
+    override fun onBackgroundTaskErrorReport(taskName: String, error: BackgroundTaskFailureReason) {
+        // TODO actually implement the missing logic to report to sentry and crash the app
+        Timber.tag(loggerTag.value).e("onBackgroundTaskErrorReport(taskName=$taskName, error=$error)")
     }
 
     override fun retrieveSessionFromKeychain(userId: String): Session {

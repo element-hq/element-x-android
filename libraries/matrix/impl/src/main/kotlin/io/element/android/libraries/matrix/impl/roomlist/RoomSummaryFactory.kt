@@ -53,6 +53,11 @@ class RoomSummaryFactory(
                     senderProfile = event.profile.map(),
                     isOwn = event.isOwn,
                 )
+                is RustLatestEventValue.RemoteInvite -> LatestEventValue.RoomInvite(
+                    timestamp = event.timestamp.toLong(),
+                    inviterId = event.inviter?.let(::UserId),
+                    invitedProfile = event.inviterProfile.map(),
+                )
             }
         }
         return RoomSummary(
