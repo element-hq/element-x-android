@@ -1,0 +1,22 @@
+name: Close stale issues that are missing info.
+
+on:
+  schedule:
+    - cron: "30 1 * * *"
+
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+    steps:
+      - uses: actions/stale@v10
+        with:
+          only-labels: "X-Needs-Info"
+          days-before-issue-stale: 30
+          days-before-issue-close: 7
+          days-before-pr-stale: -1
+          stale-issue-label: "stale"
+          labels-to-remove-when-unstale: "X-Needs-Info"
+          stale-issue-message: "This issue has been awaiting further information for the past 30 days so will now be marked as stale. Please provide the requested information within the next 7 days to keep it open."
+          close-issue-message: "This issue is being closed due to inactivity after further information was requested."
