@@ -16,6 +16,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.colors.gradientSubtleColors
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -28,13 +30,18 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 @Composable
 fun Modifier.backgroundVerticalGradient(
     isVisible: Boolean = true,
+    height: Dp = 200.dp,
 ): Modifier {
     if (!isVisible) return this
+    val colors = gradientSubtleColors()
     return background(
         brush = Brush.verticalGradient(
-            colors = gradientSubtleColors(),
+            0.0f to colors[0],
+            0.10f to colors[1],
+            0.25f to Color.Transparent,
+            1.0f to Color.Transparent
         ),
-    )
+    ).height(height)
 }
 
 @PreviewsDayNight

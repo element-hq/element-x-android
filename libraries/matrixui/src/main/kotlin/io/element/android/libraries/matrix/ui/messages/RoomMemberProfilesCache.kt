@@ -36,6 +36,8 @@ class RoomMemberProfilesCache(
         return cache.value[userId]?.disambiguatedDisplayName
     }
 
+    fun getNicknameFlow(userId: UserId) = nicknameStore.getNickname(userId)
+
     suspend fun getDisplayNameWithNickname(userId: UserId): String? {
         val nickname = nicknameStore.getNickname(userId).first()
         return nickname ?: cache.value[userId]?.disambiguatedDisplayName

@@ -61,7 +61,7 @@ fun PlaybackSpeedButton(
 internal fun PlaybackSpeedButtonPreview() = ElementPreview {
     Row(
         modifier = Modifier
-            .background(ElementTheme.colors.messageFromMeBackground)
+            .background(messageFromMeBackground())
             .padding(4.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {

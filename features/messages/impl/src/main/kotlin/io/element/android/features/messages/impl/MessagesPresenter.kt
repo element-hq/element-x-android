@@ -25,6 +25,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.PinUnpinAction
+import kotlinx.coroutines.flow.firstOrNull
 import io.element.android.appconfig.MessageComposerConfig
 import io.element.android.features.messages.api.timeline.HtmlConverterProvider
 import io.element.android.features.messages.impl.actionlist.ActionListState
@@ -109,6 +110,7 @@ class MessagesPresenter(
     private val pinnedMessagesBannerPresenter: Presenter<PinnedMessagesBannerState>,
     private val roomCallStatePresenter: Presenter<RoomCallState>,
     private val roomMemberModerationPresenter: Presenter<RoomMemberModerationState>,
+    private val nicknameStore: io.element.android.libraries.preferences.api.store.NicknameStore,
     private val snackbarDispatcher: SnackbarDispatcher,
     private val dispatchers: CoroutineDispatchers,
     private val clipboardHelper: ClipboardHelper,
@@ -168,11 +170,25 @@ class MessagesPresenter(
             perms.userEventPermissions()
         }
 
+        val membersState by room.membersStateFlow.collectAsState()
+        val dmRoomMember by room.getDirectRoomMember(membersState)
+
         val roomAvatar by remember {
             derivedStateOf { roomInfo.avatarData() }
         }
         val heroes by remember {
             derivedStateOf { roomInfo.heroes().toImmutableList() }
+        }
+
+        // Get local nickname for DM rooms
+        var localNickname by remember { mutableStateOf<String?>(null) }
+        LaunchedEffect(roomInfo.isDm, membersState) {
+            if (roomInfo.isDm) {
+                val dmMemberUserId = dmRoomMember?.userId
+                dmMemberUserId?.let { userId ->
+                    localNickname = nicknameStore.getNickname(userId).firstOrNull()
+                }
+            }
         }
 
         var hasDismissedInviteDialog by rememberSaveable {
@@ -204,8 +220,6 @@ class MessagesPresenter(
 
         var dmUserVerificationState by remember { mutableStateOf<IdentityState?>(null) }
 
-        val membersState by room.membersStateFlow.collectAsState()
-        val dmRoomMember by room.getDirectRoomMember(membersState)
         val roomMemberIdentityStateChanges = identityChangeState.roomMemberIdentityStateChanges
 
         val isKeyShareOnInviteEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.EnableKeyShareOnInvite).collectAsState(initial = false)
@@ -277,7 +291,7 @@ class MessagesPresenter(
 
         return MessagesState(
             roomId = room.roomId,
-            roomName = roomInfo.name,
+            roomName = localNickname ?: roomInfo.name,
             roomAvatar = roomAvatar,
             heroes = heroes,
             userEventPermissions = userEventPermissions,

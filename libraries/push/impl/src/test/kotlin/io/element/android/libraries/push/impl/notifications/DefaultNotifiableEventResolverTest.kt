@@ -817,6 +817,29 @@ class DefaultNotifiableEventResolverTest {
     }
 
     @Test
+    fun `resolve event reaction`() = runTest {
+        val sut = createDefaultNotifiableEventResolver(
+            notificationResult = Result.success(
+                mapOf(
+                    AN_EVENT_ID to Result.success(aNotificationData(
+                        content = NotificationContent.MessageLike.ReactionContent(
+                            relatedEventId = AN_EVENT_ID_2.value,
+                            reactionKey = "👍",
+                            senderId = A_USER_ID_2,
+                        ),
+                    ))
+                )
+            )
+        )
+        val request = NotificationEventRequest(A_SESSION_ID, A_ROOM_ID, AN_EVENT_ID, "firebase")
+        val result = sut.resolveEvents(A_SESSION_ID, listOf(request))
+        val expectedResult = ResolvedPushEvent.Event(
+            aNotifiableMessageEvent(body = "Bob reacted with 👍", type = EventType.REACTION)
+        )
+        assertThat(result.getEvent(request)).isEqualTo(Result.success(expectedResult))
+    }
+
+    @Test
     fun `resolve null cases`() {
         testNoResults(NotificationContent.MessageLike.CallAnswer)
         testNoResults(NotificationContent.MessageLike.CallHangup)
@@ -828,7 +851,6 @@ class DefaultNotifiableEventResolverTest {
         testNoResults(NotificationContent.MessageLike.KeyVerificationKey)
         testNoResults(NotificationContent.MessageLike.KeyVerificationMac)
         testNoResults(NotificationContent.MessageLike.KeyVerificationDone)
-        testNoResults(NotificationContent.MessageLike.ReactionContent(relatedEventId = AN_EVENT_ID_2.value))
         testNoResults(NotificationContent.MessageLike.Sticker)
         testNoResults(NotificationContent.StateEvent.PolicyRuleRoom)
         testNoResults(NotificationContent.StateEvent.PolicyRuleServer)

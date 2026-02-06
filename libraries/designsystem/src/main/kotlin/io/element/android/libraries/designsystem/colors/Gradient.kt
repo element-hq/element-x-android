@@ -24,14 +24,22 @@ fun gradientActionColors(): List<Color> = listOf(
 
 @Composable
 @ReadOnlyComposable
-fun gradientSubtleColors(): List<Color> = listOf(
-    ElementTheme.colors.gradientSubtleStop1,
-    ElementTheme.colors.gradientSubtleStop2,
-    ElementTheme.colors.gradientSubtleStop3,
-    ElementTheme.colors.gradientSubtleStop4,
-    ElementTheme.colors.gradientSubtleStop5,
-    ElementTheme.colors.gradientSubtleStop6,
-)
+fun gradientSubtleColors(): List<Color> {
+    // Dynamic Material 3 adaptive gradient
+    val primary = androidx.compose.material3.MaterialTheme.colorScheme.primary
+    return listOf(
+        primary.copy(alpha = 0.12f),
+        primary.copy(alpha = 0.08f),
+        primary.copy(alpha = 0.04f),
+        primary.copy(alpha = 0.01f),
+        Color.Transparent,
+        Color.Transparent,
+        Color.Transparent,
+        Color.Transparent,
+        Color.Transparent,
+        Color.Transparent,
+    )
+}
 
 @Composable
 @ReadOnlyComposable

@@ -211,6 +211,8 @@ data class SemanticColors(
     val textSecondary: Color,
     /** Accent text colour for success state elements. */
     val textSuccessPrimary: Color,
+    /** Text color on top of accent backgrounds. */
+    val textOnAccentRest: Color,
     /** True for light theme, false for dark theme. */
     val isLight: Boolean,
 )

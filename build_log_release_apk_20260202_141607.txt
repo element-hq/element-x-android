@@ -1,0 +1,6 @@
+
+ERROR: JAVA_HOME is set to an invalid directory: /usr/lib/jvm/zulu-17
+
+Please set the JAVA_HOME variable in your environment to match the
+location of your Java installation.
+

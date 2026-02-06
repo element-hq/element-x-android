@@ -8,9 +8,11 @@
 
 package io.element.android.features.home.impl.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -31,6 +33,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
@@ -45,16 +49,17 @@ import io.element.android.features.home.impl.filters.RoomListFiltersState
 import io.element.android.features.home.impl.filters.RoomListFiltersView
 import io.element.android.features.home.impl.filters.aRoomListFiltersState
 import io.element.android.libraries.designsystem.atomic.atoms.RedIndicatorAtom
+import io.element.android.libraries.designsystem.colors.gradientSubtleColors
 import io.element.android.libraries.designsystem.components.TopAppBarScrollBehaviorLayout
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
-import io.element.android.libraries.designsystem.modifiers.backgroundVerticalGradient
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
 import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
+import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -91,60 +96,122 @@ fun HomeTopBar(
     filtersState: RoomListFiltersState,
     modifier: Modifier = Modifier,
 ) {
-    Column(modifier) {
-        TopAppBar(
-            modifier = Modifier
-                .backgroundVerticalGradient(
-                    isVisible = !areSearchResultsDisplayed,
+    // Determine title scale and alpha based on scroll behavior
+    val collapsedFraction = scrollBehavior.state.collapsedFraction
+    
+    // Wrap entire header with a darker base color
+    Box(
+        modifier = modifier
+    ) {
+        // Gradient overlay at the top - fixed height, independent of header size
+        if (!areSearchResultsDisplayed) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(80.dp) // Increase height to cover status bar area
+                        .background(
+                            brush = Brush.verticalGradient(
+                                0.0f to gradientSubtleColors()[0].copy(alpha = 0.2f),
+                                0.3f to gradientSubtleColors()[1].copy(alpha = 0.1f),
+                                1.0f to Color.Transparent
+                            ),
+                        )
+                        .alpha(1f - collapsedFraction)
                 )
-                .statusBarsPadding(),
-            colors = TopAppBarDefaults.topAppBarColors(
-                containerColor = Color.Transparent,
-                scrolledContainerColor = Color.Transparent,
-            ),
-            title = {
-                Text(
-                    modifier = Modifier.semantics {
-                        heading()
-                    },
-                    style = ElementTheme.typography.aliasScreenTitle,
-                    text = title,
-                )
-            },
-            navigationIcon = {
-                NavigationIcon(
-                    currentUserAndNeighbors = currentUserAndNeighbors,
-                    showAvatarIndicator = showAvatarIndicator,
-                    onAccountSwitch = onAccountSwitch,
-                    onClick = onOpenSettings,
-                )
-            },
-            actions = {
-                when (selectedNavigationItem) {
-                    HomeNavigationBarItem.Chats -> RoomListMenuItems(
-                        onToggleSearch = onToggleSearch,
-                        onMenuActionClick = onMenuActionClick,
-                        canReportBug = canReportBug
+        }
+        
+        Column(
+            modifier = Modifier.statusBarsPadding()
+        ) {
+            // Top Bar with profile and search icons
+            // Title is empty because we overlay our single transforming title
+            TopAppBar(
+                modifier = Modifier,
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = Color.Transparent,
+                    scrolledContainerColor = Color.Transparent,
+                ),
+                title = {},
+                navigationIcon = {
+                    NavigationIcon(
+                        currentUserAndNeighbors = currentUserAndNeighbors,
+                        showAvatarIndicator = showAvatarIndicator,
+                        onAccountSwitch = onAccountSwitch,
+                        onClick = onOpenSettings,
                     )
-                    HomeNavigationBarItem.Spaces -> SpacesMenuItems(
-                        canCreateSpaces = canCreateSpaces,
-                        onCreateSpace = onCreateSpace
-                    )
-                }
-            },
-            // We want a 16dp left padding for the navigationIcon :
-            // 4dp from default TopAppBarHorizontalPadding
-            // 8dp from AccountIcon default padding (because of IconButton)
-            // 4dp extra padding using left insets
-            windowInsets = WindowInsets(left = 4.dp),
-        )
-        if (displayFilters) {
+                },
+                actions = {
+                    when (selectedNavigationItem) {
+                        HomeNavigationBarItem.Chats -> RoomListMenuItems(
+                            onToggleSearch = onToggleSearch,
+                            onMenuActionClick = onMenuActionClick,
+                            canReportBug = canReportBug
+                        )
+                        HomeNavigationBarItem.Spaces -> SpacesMenuItems(
+                            canCreateSpaces = canCreateSpaces,
+                            onCreateSpace = onCreateSpace
+                        )
+                    }
+                },
+                windowInsets = WindowInsets(left = 4.dp),
+                scrollBehavior = null,
+            )
+
+            // Large area for filters and branding space
             TopAppBarScrollBehaviorLayout(scrollBehavior = scrollBehavior) {
-                RoomListFiltersView(
-                    state = filtersState,
-                    modifier = Modifier.padding(bottom = 16.dp)
-                )
+                Column {
+                    // Space for branding text when expanded
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(80.dp) // Height for branding space
+                    )
+
+                    // Filters below the branding
+                    if (displayFilters) {
+                        RoomListFiltersView(
+                            state = filtersState,
+                            modifier = Modifier
+                                .background(Color.Transparent)
+                                .padding(bottom = 16.dp)
+                        )
+                    }
+                }
             }
+        }
+
+        // --- Shared Branding Text (Transforming) ---
+        // We Use a Box that fills the whole header to place the text
+        val brandingFontSize = ElementTheme.typography.aliasScreenTitle.fontSize
+        val titleScale = 2.0f - (collapsedFraction * 1.0f)
+        
+        // Translation logic for smooth shared-element feel
+        // Expanded: Centered in the 144dp height (approx)
+        // Collapsed: Vertically centered next to avatar with proper offset
+        
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(104.dp)
+        ) {
+            // Calculate smooth values
+            val progress = collapsedFraction.coerceIn(0f, 1f)
+            
+            // X: Always centered horizontally
+            val horizontalBias = 0.0f
+            
+            // Y: Expanded lower (2.0f) to Collapsed centered in top section (-0.5f)
+            val verticalBias = 2.0f - (progress * 1.5f)
+
+            Text(
+                text = "Funker",
+                style = ElementTheme.typography.aliasScreenTitle.copy(
+                    fontSize = brandingFontSize * titleScale
+                ),
+                modifier = Modifier
+                    .align(androidx.compose.ui.BiasAlignment(horizontalBias, verticalBias))
+                    .semantics { heading() }
+            )
         }
     }
 }

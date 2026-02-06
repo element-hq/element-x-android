@@ -239,7 +239,7 @@ internal fun MentionSpanThemeInTimelinePreview() = ElementPreview {
             text = "Message from me",
             style = ElementTheme.typography.fontBodySmMedium,
         )
-        ElementTheme.colors.messageFromMeBackground.let { color ->
+        messageFromMeBackground().let { color ->
             MentionSpanThemeInTimelineContent(
                 modifier = Modifier
                     .padding(start = 60.dp, end = 8.dp)
@@ -252,7 +252,7 @@ internal fun MentionSpanThemeInTimelinePreview() = ElementPreview {
             )
         }
         // Message from other
-        ElementTheme.colors.messageFromOtherBackground.let { color ->
+        messageFromOtherBackground().let { color ->
             Text(
                 text = "Message from other",
                 style = ElementTheme.typography.fontBodySmMedium,

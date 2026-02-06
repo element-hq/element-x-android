@@ -10,7 +10,9 @@ package io.element.android.appnav
 
 import android.content.Intent
 import android.os.Parcelable
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.ui.graphics.Color
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -32,6 +34,7 @@ import com.bumble.appyx.navmodel.backstack.BackStack.State.STASHED
 import com.bumble.appyx.navmodel.backstack.BackStackElement
 import com.bumble.appyx.navmodel.backstack.BackStackElements
 import com.bumble.appyx.navmodel.backstack.operation.BackStackOperation
+import com.bumble.appyx.navmodel.backstack.operation.Pop
 import com.bumble.appyx.navmodel.backstack.operation.Push
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
@@ -40,6 +43,13 @@ import com.bumble.appyx.navmodel.backstack.operation.singleTop
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.Transition
+import androidx.compose.animation.core.spring
+import com.bumble.appyx.core.navigation.transition.ModifierTransitionHandler
+import com.bumble.appyx.core.navigation.transition.TransitionDescriptor
+import com.bumble.appyx.core.navigation.transition.TransitionSpec
+import com.bumble.appyx.navmodel.backstack.transitionhandler.rememberBackstackSlider
 import io.element.android.appnav.loggedin.LoggedInNode
 import io.element.android.appnav.loggedin.MediaPreviewConfigMigration
 import io.element.android.appnav.loggedin.SendQueues
@@ -638,12 +648,40 @@ class LoggedInFlowNode(
                 isOnline = isOnline,
                 modifier = modifier,
             ) { contentModifier ->
-                Box(modifier = contentModifier) {
+                Box(modifier = contentModifier.background(Color.Transparent)) {
                     val ftueState by ftueService.state.collectAsState()
-                    BackstackView()
+                    BackstackView(
+                        transitionHandler = rememberLoggedInNodeTransitionHandler()
+                    )
                     if (ftueState is FtueState.Complete) {
                         PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)
                     }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+private fun rememberLoggedInNodeTransitionHandler(): ModifierTransitionHandler<LoggedInFlowNode.NavTarget, BackStack.State> {
+    val created = rememberBackstackSlider<LoggedInFlowNode.NavTarget>(
+        transitionSpec = { spring(stiffness = Spring.StiffnessMediumLow) }
+    )
+    return remember(created) {
+        object : ModifierTransitionHandler<LoggedInFlowNode.NavTarget, BackStack.State>() {
+            override fun createModifier(
+                modifier: Modifier,
+                transition: Transition<BackStack.State>,
+                descriptor: TransitionDescriptor<LoggedInFlowNode.NavTarget, BackStack.State>
+            ): Modifier {
+                return if (descriptor.element == LoggedInFlowNode.NavTarget.Home && 
+                          (descriptor.operation is Push<*> || descriptor.operation is Pop<*>)) {
+                    // When pushing a new screen over Home, or popping back to Home,
+                    // keep Home stationary (don't slide out/in). 
+                    // This creates a "cover" effect where Room slides over Home.
+                     modifier
+                } else {
+                    created.createModifier(modifier, transition, descriptor)
                 }
             }
         }

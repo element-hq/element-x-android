@@ -13,5 +13,7 @@
         <item name="postSplashScreenTheme">@style/Theme.ElementX</item>
     </style>
 
-    <style name="Theme.ElementX" parent="Theme.Material3.Dark.NoActionBar" />
+    <style name="Theme.ElementX" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="android:windowBackground">@android:color/black</item>
+    </style>
 </resources>

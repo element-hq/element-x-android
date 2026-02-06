@@ -32,6 +32,7 @@ fun SenderName(
     senderProfile: ProfileDetails,
     senderNameMode: SenderNameMode,
     modifier: Modifier = Modifier,
+    nickname: String? = null,
 ) {
     Row(
         modifier = modifier,
@@ -45,12 +46,13 @@ fun SenderName(
                 MainText(text = senderId.value, mode = senderNameMode)
             }
             is ProfileDetails.Ready -> {
-                val displayName = senderProfile.displayName
+                // Use nickname if available, otherwise use profile display name
+                val displayName = nickname ?: senderProfile.displayName
                 if (displayName.isNullOrEmpty()) {
                     MainText(text = senderId.value, mode = senderNameMode)
                 } else {
                     MainText(text = displayName, mode = senderNameMode)
-                    if (senderProfile.displayNameAmbiguous) {
+                    if (senderProfile.displayNameAmbiguous && nickname == null) {
                         SecondaryText(text = senderId.value, mode = senderNameMode)
                     }
                 }

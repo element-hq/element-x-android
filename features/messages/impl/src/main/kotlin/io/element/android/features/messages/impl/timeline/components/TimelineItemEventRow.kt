@@ -32,7 +32,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.movableContentOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
@@ -112,6 +115,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToView
 import io.element.android.libraries.matrix.ui.messages.reply.eventId
+import io.element.android.libraries.matrix.ui.messages.LocalRoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.sender.SenderName
 import io.element.android.libraries.matrix.ui.messages.sender.SenderNameMode
 import io.element.android.libraries.testtags.TestTags
@@ -420,6 +424,14 @@ private fun TimelineItemEventRowContent(
         start.linkTo(parent.start)
     }
 
+    // Load nickname from cache - memoized by senderId to avoid recomputing on scroll
+    val roomMemberProfilesCache = LocalRoomMemberProfilesCache.current
+    val nicknameFlow = remember(event.senderId, roomMemberProfilesCache) {
+        roomMemberProfilesCache?.getNicknameFlow(event.senderId)
+    }
+    val nickname by (nicknameFlow?.collectAsState(initial = null) 
+        ?: remember { mutableStateOf<String?>(null) })
+
     ConstraintLayout(
         modifier = modifier
             .wrapContentHeight()
@@ -447,6 +459,7 @@ private fun TimelineItemEventRowContent(
                     }
                     .padding(horizontal = 16.dp)
                     .zIndex(1f),
+                nickname = nickname,
             )
         }
 
@@ -545,7 +558,8 @@ private fun MessageSenderInformation(
     senderProfile: ProfileDetails,
     senderAvatar: AvatarData,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    nickname: String? = null,
 ) {
     val avatarColors = AvatarColorsProvider.provide(senderAvatar.id)
     Row(
@@ -573,6 +587,7 @@ private fun MessageSenderInformation(
             senderId = senderId,
             senderProfile = senderProfile,
             senderNameMode = SenderNameMode.Timeline(avatarColors.foreground),
+            nickname = nickname,
         )
     }
 }

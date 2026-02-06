@@ -40,6 +40,7 @@ import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.coroutines.launch
@@ -99,9 +100,12 @@ fun EmojiPicker(
 
             HorizontalPager(
                 state = pagerState,
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f),
+                userScrollEnabled = !state.isSearchActive,
             ) { index ->
-                val emojis = state.categories[index].emojis
+                val emojis = state.categories.getOrNull(index)?.emojis ?: persistentListOf()
                 EmojiResults(
                     emojis = emojis,
                     isEmojiSelected = { selectedEmojis.contains(it.unicode) },
@@ -120,10 +124,10 @@ private fun EmojiResults(
 ) {
     LazyVerticalGrid(
         modifier = Modifier.fillMaxSize(),
-        columns = GridCells.Adaptive(minSize = 48.dp),
+        columns = GridCells.Fixed(7),
         contentPadding = PaddingValues(vertical = 10.dp, horizontal = 16.dp),
         horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(2.dp)
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(emojis, key = { it.unicode }) { item ->
             EmojiItem(

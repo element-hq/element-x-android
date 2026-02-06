@@ -8,6 +8,9 @@
 
 package io.element.android.libraries.designsystem.components.preferences
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.WindowInsets
@@ -21,7 +24,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.activity.compose.BackHandler
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
@@ -43,30 +49,45 @@ fun PreferencePage(
     snackbarHost: @Composable () -> Unit = {},
     content: @Composable ColumnScope.() -> Unit,
 ) {
-    Scaffold(
-        modifier = modifier
-            .fillMaxSize()
-            .systemBarsPadding()
-            .imePadding(),
-        contentWindowInsets = WindowInsets.statusBars,
-        topBar = {
-            PreferenceTopAppBar(
-                title = title,
-                onBackClick = onBackClick,
-            )
-        },
-        snackbarHost = snackbarHost,
-        content = {
-            Column(
-                modifier = Modifier
-                    .padding(it)
-                    .consumeWindowInsets(it)
-                    .verticalScroll(state = rememberScrollState())
-            ) {
-                content()
+    var isGoingBack = remember { mutableStateOf(false) }
+    
+    BackHandler(onBack = {
+        isGoingBack.value = true
+        onBackClick()
+    })
+    
+    AnimatedVisibility(
+        visible = !isGoingBack.value,
+        exit = slideOutHorizontally(
+            targetOffsetX = { it },
+            animationSpec = tween(300)
+        )
+    ) {
+        Scaffold(
+            modifier = modifier
+                .fillMaxSize()
+                .systemBarsPadding()
+                .imePadding(),
+            contentWindowInsets = WindowInsets.statusBars,
+            topBar = {
+                PreferenceTopAppBar(
+                    title = title,
+                    onBackClick = onBackClick,
+                )
+            },
+            snackbarHost = snackbarHost,
+            content = {
+                Column(
+                    modifier = Modifier
+                        .padding(it)
+                        .consumeWindowInsets(it)
+                        .verticalScroll(state = rememberScrollState())
+                ) {
+                    content()
+                }
             }
-        }
-    )
+        )
+    }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)

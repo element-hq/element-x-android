@@ -79,6 +79,7 @@ import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
+import io.element.android.libraries.matrix.ui.messages.LocalRoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.RoomNamesCache
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
@@ -626,7 +627,8 @@ class MessagesFlowNode(
     override fun View(modifier: Modifier) {
         mentionSpanTheme.updateStyles()
         CompositionLocalProvider(
-            LocalMentionSpanUpdater provides mentionSpanUpdater
+            LocalMentionSpanUpdater provides mentionSpanUpdater,
+            LocalRoomMemberProfilesCache provides roomMemberProfilesCache
         ) {
             BackstackWithOverlayBox(modifier)
         }

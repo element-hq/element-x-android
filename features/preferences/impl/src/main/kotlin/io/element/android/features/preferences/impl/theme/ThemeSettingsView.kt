@@ -11,7 +11,10 @@ import android.os.Build
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,6 +48,9 @@ fun ThemeSettingsView(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    var showColorPickerDialog by remember { mutableStateOf(false) }
+    var selectedColorHex by remember { mutableStateOf(state.customThemeColor?.let { String.format("#%06X", it) } ?: "#") }
+    
     val context = LocalContext.current
     val wallpaperLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.OpenDocument()
@@ -59,6 +65,23 @@ fun ThemeSettingsView(
             }
             state.eventSink(ThemeSettingsEvents.SetWallpaper(it.toString()))
         }
+    }
+
+    if (showColorPickerDialog) {
+        ColorPickerDialog(
+            initialColor = selectedColorHex,
+            onColorSelected = { color ->
+                selectedColorHex = color
+                try {
+                    val colorInt = color.substring(1).toLong(16).toInt()
+                    state.eventSink(ThemeSettingsEvents.SetCustomThemeColor(colorInt))
+                } catch (e: Exception) {
+                    // Invalid color format
+                }
+                showColorPickerDialog = false
+            },
+            onDismiss = { showColorPickerDialog = false }
+        )
     }
 
     PreferencePage(
@@ -88,6 +111,7 @@ fun ThemeSettingsView(
              ListItem(
                 headlineContent = { Text("Custom Theme Color") },
                 supportingContent = { Text("Applies a custom seed color to the theme.") },
+                onClick = { showColorPickerDialog = true }
              )
         }
 
@@ -126,6 +150,48 @@ fun PreferenceCategory(title: String, content: @Composable () -> Unit) {
         )
         content()
     }
+}
+
+@Composable
+private fun ColorPickerDialog(
+    initialColor: String,
+    onColorSelected: (String) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    var colorInput by remember { mutableStateOf(initialColor) }
+    
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Select Theme Color") },
+        text = {
+            Column {
+                Text("Enter a hex color code (e.g., #FF5733)", style = MaterialTheme.typography.labelSmall)
+                OutlinedTextField(
+                    value = colorInput,
+                    onValueChange = { colorInput = it.uppercase() },
+                    label = { Text("Hex Color") },
+                    modifier = Modifier
+                        .padding(top = 16.dp)
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(
+                onClick = {
+                    if (colorInput.matches(Regex("^#[0-9A-F]{6}$"))) {
+                        onColorSelected(colorInput)
+                    }
+                }
+            ) {
+                Text("Apply")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) {
+                Text("Cancel")
+            }
+        }
+    )
 }
 
 @Composable

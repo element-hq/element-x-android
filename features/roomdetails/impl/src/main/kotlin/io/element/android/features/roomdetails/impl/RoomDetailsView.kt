@@ -8,6 +8,10 @@
 
 package io.element.android.features.roomdetails.impl
 
+import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -115,17 +119,31 @@ fun RoomDetailsView(
     leaveRoomView: @Composable () -> Unit,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
-    Scaffold(
-        modifier = modifier,
-        topBar = {
-            RoomDetailsTopBar(
-                goBack = goBack,
-                showEdit = state.canEdit,
-                onActionClick = onActionClick
-            )
-        },
-        snackbarHost = { SnackbarHost(snackbarHostState) },
-    ) { padding ->
+    var isGoingBack by remember { mutableStateOf(false) }
+    
+    BackHandler(onBack = {
+        isGoingBack = true
+        goBack()
+    })
+    
+    AnimatedVisibility(
+        visible = !isGoingBack,
+        exit = slideOutHorizontally(
+            targetOffsetX = { it },
+            animationSpec = tween(300)
+        )
+    ) {
+        Scaffold(
+            modifier = modifier,
+            topBar = {
+                RoomDetailsTopBar(
+                    goBack = goBack,
+                    showEdit = state.canEdit,
+                    onActionClick = onActionClick
+                )
+            },
+            snackbarHost = { SnackbarHost(snackbarHostState) },
+        ) { padding ->
         Column(
             modifier = Modifier
                 .padding(padding)
@@ -268,6 +286,7 @@ fun RoomDetailsView(
                     roomVersion = state.roomVersion,
                 )
             }
+        }
         }
     }
 }

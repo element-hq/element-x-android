@@ -384,6 +384,9 @@ class MessageComposerPresenter(
                 MessageComposerEvent.ToggleEmojiPicker -> {
                     showEmojiPicker = !showEmojiPicker
                 }
+                is MessageComposerEvent.SetShowEmojiPicker -> {
+                    showEmojiPicker = event.show
+                }
                 is MessageComposerEvent.InsertEmoji -> {
                     if (showTextFormatting) {
                          val newHtml = richTextEditorState.messageHtml + event.emoji.unicode

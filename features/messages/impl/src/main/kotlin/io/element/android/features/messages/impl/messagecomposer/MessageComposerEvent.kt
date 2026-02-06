@@ -38,4 +38,5 @@ sealed interface MessageComposerEvent {
     data class InsertEmoji(val emoji: io.element.android.emojibasebindings.Emoji) : MessageComposerEvent
     data object SaveDraft : MessageComposerEvent
     data object ToggleEmojiPicker : MessageComposerEvent
+    data class SetShowEmojiPicker(val show: Boolean) : MessageComposerEvent
 }

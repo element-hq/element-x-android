@@ -11,11 +11,23 @@ package io.element.android.features.messages.impl
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.shrinkVertically
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.ui.platform.LocalView
+import io.element.android.libraries.androidutils.ui.hideKeyboard
+import io.element.android.features.messages.impl.messagecomposer.EmojiPickerView
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import coil.compose.AsyncImage
 import androidx.compose.foundation.layout.Arrangement
+import androidx.activity.BackEventCompat
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -23,7 +35,9 @@ import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -33,11 +47,17 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.activity.compose.PredictiveBackHandler
+import kotlinx.coroutines.CancellationException
+import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.RectangleShape
@@ -63,6 +83,7 @@ import io.element.android.features.messages.impl.link.LinkEvent
 import io.element.android.features.messages.impl.link.LinkView
 import io.element.android.features.messages.impl.messagecomposer.AttachmentsBottomSheet
 import io.element.android.features.messages.impl.messagecomposer.DisabledComposerView
+
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvent
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerView
 import io.element.android.features.messages.impl.messagecomposer.suggestions.SuggestionsPickerView
@@ -139,6 +160,21 @@ fun MessagesView(
     forceJumpToBottomVisibility: Boolean = false,
     knockRequestsBannerView: @Composable () -> Unit,
 ) {
+    // Predictive Back gesture with slide-out animation
+    var isGoingBack by remember { mutableStateOf(false) }
+    var backProgress by remember { mutableFloatStateOf(0f) }
+
+    PredictiveBackHandler { progress ->
+        try {
+            progress.collect { event ->
+                backProgress = event.progress
+            }
+            isGoingBack = true
+            onBackClick()
+        } catch (e: CancellationException) {
+            backProgress = 0f
+        }
+    }
     OnLifecycleEvent { _, event ->
         state.voiceMessageComposerState.eventSink(VoiceMessageComposerEvent.LifecycleEvent(event))
     }
@@ -150,9 +186,33 @@ fun MessagesView(
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
 
     var maxComposerHeightPx by remember { mutableIntStateOf(120) }
+    val density = LocalDensity.current
+    val imeBottom = WindowInsets.ime.getBottom(density)
+    val lastImeHeight = remember { mutableIntStateOf(0) }
+    if (imeBottom > 0) {
+        lastImeHeight.intValue = imeBottom
+    }
+
+    // Unified bottom offset to prevent "double jump" when switched
+    val visualBottomOffset = with(density) {
+        maxOf(imeBottom, lastImeHeight.intValue.takeIf { state.composerState.showEmojiPicker } ?: 0).toDp()
+    }
 
     // This is needed because the composer is inside an AndroidView that can't be affected by the FocusManager in Compose
     val localView = LocalView.current
+
+    // Sync state: if keyboard opens, hide emoji picker to prevent state conflict
+    LaunchedEffect(imeBottom > 0) {
+        if (imeBottom > 0 && state.composerState.showEmojiPicker) {
+            state.composerState.eventSink(MessageComposerEvent.SetShowEmojiPicker(false))
+        }
+    }
+
+    LaunchedEffect(state.composerState.showEmojiPicker) {
+        if (state.composerState.showEmojiPicker) {
+            localView.hideKeyboard()
+        }
+    }
 
     fun hidingKeyboard(block: () -> Unit) {
         localView.hideKeyboard()
@@ -197,20 +257,46 @@ fun MessagesView(
     }
 
     val expandableState = rememberExpandableBottomSheetLayoutState()
-    ExpandableBottomSheetLayout(
-        modifier = modifier
-            .fillMaxSize()
-            .imePadding()
-            .systemBarsPadding()
-            .onSizeChanged { size ->
-                // Let the composer takes at max half of the available height.
-                // The value will be different if the soft keyboard is displayed
-                // or not.
-                maxComposerHeightPx = (size.height * 0.5f).toInt()
-            },
-        content = {
-            Scaffold(
-                contentWindowInsets = WindowInsets.statusBars,
+    
+    // Picker height is now integrated into visualBottomOffset
+    val pickerHeight = if (state.composerState.showEmojiPicker) {
+        if (lastImeHeight.intValue > 0) with(density) { lastImeHeight.intValue.toDp() } else 300.dp
+    } else {
+        0.dp
+    }
+    
+    Box(modifier = Modifier.fillMaxSize().background(Color.Transparent)) {
+        AnimatedVisibility(
+            visible = !isGoingBack,
+            exit = slideOutHorizontally(
+                targetOffsetX = { it }, // Slide right (positive direction)
+                animationSpec = tween(300)
+            ),
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.Transparent)
+                .padding(bottom = visualBottomOffset)
+                .graphicsLayer {
+                    val scale = 1f - (0.1f * backProgress)
+                    scaleX = scale
+                    scaleY = scale
+                    translationX = 200.dp.toPx() * backProgress
+                }
+        ) {
+            ExpandableBottomSheetLayout(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .systemBarsPadding()
+                .onSizeChanged { size ->
+                    // Capture initial height to prevent growth when padding is added
+                    if (maxComposerHeightPx == 120) {
+                        maxComposerHeightPx = (size.height * 0.5f).toInt()
+                    }
+                },
+            content = {
+                Scaffold(
+                    containerColor = Color.Transparent,
+                    contentWindowInsets = WindowInsets.statusBars,
                 topBar = {
                     if (state.timelineState.timelineMode is Timeline.Mode.Thread) {
                         ThreadTopBar(
@@ -240,6 +326,7 @@ fun MessagesView(
                         modifier = Modifier
                             .padding(padding)
                             .consumeWindowInsets(padding)
+                            .background(ElementTheme.colors.bgCanvasDefault)
                     ) {
                         MessagesViewContent(
                             state = state,
@@ -343,7 +430,29 @@ fun MessagesView(
             RectangleShape
         },
         maxBottomSheetContentHeight = maxComposerHeightPx.toDp(),
-    )
+        )
+    }
+
+        // Emoji Picker positioned at absolute bottom
+        val pickerHeight = if (lastImeHeight.intValue > 0) {
+            with(density) { lastImeHeight.intValue.toDp() }
+        } else {
+            300.dp
+        }
+        
+        AnimatedVisibility(
+            visible = state.composerState.showEmojiPicker,
+            modifier = Modifier.align(Alignment.BottomCenter),
+            enter = expandVertically(expandFrom = Alignment.Bottom) + fadeIn(),
+            exit = shrinkVertically(shrinkTowards = Alignment.Bottom) + fadeOut()
+        ) {
+            EmojiPickerView(
+                state = state.composerState,
+                height = pickerHeight,
+                modifier = Modifier.fillMaxWidth(),
+            )
+        }
+    }
 
     var endPollConfirmingEvent: TimelineItem.Event? by remember { mutableStateOf(null) }
 
@@ -544,6 +653,19 @@ private fun MessagesViewComposerBottomSheetContents(
                         onLinkClick = onLinkClick,
                     )
                 }
+
+                // Handle Emoji Picker visibility and Keyboard interaction
+                val localView = LocalView.current
+                LaunchedEffect(state.composerState.showEmojiPicker) {
+                    if (state.composerState.showEmojiPicker) {
+                        localView.hideKeyboard()
+                    }
+                }
+
+                BackHandler(enabled = state.composerState.showEmojiPicker) {
+                    state.composerState.eventSink(MessageComposerEvent.ToggleEmojiPicker)
+                }
+                
                 val verificationViolation = state.identityChangeState.roomMemberIdentityStateChanges.firstOrNull {
                     it.identityState == IdentityState.VerificationViolation
                 }

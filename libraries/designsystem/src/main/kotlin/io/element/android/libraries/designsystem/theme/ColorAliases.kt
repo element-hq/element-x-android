@@ -8,8 +8,12 @@
 
 package io.element.android.libraries.designsystem.theme
 
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.compositeOver
+import androidx.compose.ui.draw.alpha
 import io.element.android.compound.annotations.CoreColorToken
 import io.element.android.compound.previews.ColorListPreview
 import io.element.android.compound.theme.ElementTheme
@@ -33,20 +37,37 @@ val SemanticColors.roomListRoomMessageDate
     get() = textSecondary
 
 val SemanticColors.unreadIndicator
-    get() = iconAccentTertiary
+    get() = iconAccentPrimary
 
 val SemanticColors.placeholderBackground
     get() = bgSubtleSecondary
 
-// This color is not present in Semantic color, so put hard-coded value for now
-@OptIn(CoreColorToken::class)
-val SemanticColors.messageFromMeBackground
-    get() = bgActionPrimaryRest
+// Material You palette support for message bubbles
+// Uses primaryContainer for outgoing messages, secondaryContainer for incoming
+// Falls back to bluish tones when Material You is not available
+@Composable
+@ReadOnlyComposable
+fun messageFromMeBackground(): Color {
+    // Force vibrant Material 3 colors or specific aqua tints
+    val primary = MaterialTheme.colorScheme.primary
+    return if (ElementTheme.colors.isLight) {
+        Color(0xFF4DD0E1) // Vibrant Aqua (Cyan 300)
+    } else {
+        // In dark mode, ensure it stays vibrant by mixing primary with background
+        primary.copy(alpha = 0.4f).compositeOver(ElementTheme.colors.bgCanvasDefault)
+    }
+}
 
-// This color is not present in Semantic color, so put hard-coded value for now
-@OptIn(CoreColorToken::class)
-val SemanticColors.messageFromOtherBackground
-    get() = if (isLight) LightColorTokens.colorGray200 else DarkColorTokens.colorGray700
+@Composable
+@ReadOnlyComposable
+fun messageFromOtherBackground(): Color {
+    // Subtle but distinct background for other messages
+    return if (ElementTheme.colors.isLight) {
+        Color(0xFFECEFF1) // Light gray-blue
+    } else {
+        MaterialTheme.colorScheme.secondaryContainer
+    }
+}
 
 // This color is not present in Semantic color, so put hard-coded value for now
 @OptIn(CoreColorToken::class)
@@ -87,8 +108,8 @@ internal fun ColorAliasesPreview() = ElementPreview {
             "roomListRoomMessageDate" to ElementTheme.colors.roomListRoomMessageDate,
             "unreadIndicator" to ElementTheme.colors.unreadIndicator,
             "placeholderBackground" to ElementTheme.colors.placeholderBackground,
-            "messageFromMeBackground" to ElementTheme.colors.messageFromMeBackground,
-            "messageFromOtherBackground" to ElementTheme.colors.messageFromOtherBackground,
+            "messageFromMeBackground" to messageFromMeBackground(),
+            "messageFromOtherBackground" to messageFromOtherBackground(),
             "progressIndicatorTrackColor" to ElementTheme.colors.progressIndicatorTrackColor,
             "temporaryColorBgSpecial" to ElementTheme.colors.temporaryColorBgSpecial,
         )

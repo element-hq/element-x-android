@@ -157,9 +157,9 @@ object MessageEventBubbleDefaults {
     @Composable
     fun backgroundBubbleColor(isMine: Boolean): Color {
         return if (isMine) {
-            ElementTheme.colors.messageFromMeBackground
+            messageFromMeBackground()
         } else {
-            ElementTheme.colors.messageFromOtherBackground
+            messageFromOtherBackground()
         }
     }
 

@@ -145,7 +145,7 @@ class DefaultNotifiableEventResolver(
         when (val content = this.content) {
             is NotificationContent.MessageLike.RoomMessage -> {
                 val showMediaPreview = client.mediaPreviewService.getMediaPreviewValue().isPreviewEnabled(roomJoinRule)
-                val senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId)
+                val senderDisambiguatedDisplayName = getDisambiguatedDisplayNameWithNickname(content.senderId, this)
                 val imageMimeType = content.getImageMimetype()
                 val imageUriString = if (showMediaPreview && imageMimeType != null) {
                     content.fetchImageIfPresent(client, imageMimeType)?.toString()
@@ -188,7 +188,7 @@ class DefaultNotifiableEventResolver(
                 ResolvedPushEvent.Event(notifiableMessageEvent)
             }
             is NotificationContent.Invite -> {
-                val senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId)
+                val senderDisambiguatedDisplayName = getDisambiguatedDisplayNameWithNickname(content.senderId, this)
                 val inviteNotifiableEvent = InviteNotifiableEvent(
                     sessionId = userId,
                     roomId = roomId,
@@ -227,7 +227,7 @@ class DefaultNotifiableEventResolver(
                     eventId = eventId,
                     noisy = isNoisy,
                     timestamp = this.timestamp,
-                    senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId, this),
+                    senderDisambiguatedDisplayName = getDisambiguatedDisplayNameWithNickname(content.senderId, this),
                     body = stringProvider.getString(CommonStrings.common_unsupported_call),
                     roomName = roomDisplayName,
                     roomIsDm = isDm,
@@ -258,7 +258,7 @@ class DefaultNotifiableEventResolver(
                     eventId = eventId,
                     noisy = isNoisy,
                     timestamp = this.timestamp,
-                    senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId, this),
+                    senderDisambiguatedDisplayName = getDisambiguatedDisplayNameWithNickname(content.senderId, this),
                     body = stringProvider.getString(CommonStrings.common_poll_summary, content.question),
                     imageUriString = null,
                     roomName = roomDisplayName,
@@ -269,7 +269,8 @@ class DefaultNotifiableEventResolver(
                 ResolvedPushEvent.Event(notifiableEventMessage)
             }
             is NotificationContent.MessageLike.ReactionContent -> {
-                val senderDisambiguatedDisplayName = getDisambiguatedDisplayName(content.senderId, this)
+                Timber.tag(loggerTag.value).d("Resolving Reaction notification: key=${content.reactionKey}")
+                val senderDisambiguatedDisplayName = getDisambiguatedDisplayNameWithNickname(content.senderId, this)
                 val messageBody = stringProvider.getString(R.string.notification_reaction_body_with_sender, senderDisambiguatedDisplayName, content.reactionKey)
                 val notifiableMessageEvent = buildNotifiableMessageEvent(
                     sessionId = userId,
@@ -438,7 +439,7 @@ class DefaultNotifiableEventResolver(
         }
     }
 
-    private suspend fun getDisambiguatedDisplayName(userId: UserId, notificationData: NotificationData): String {
+    private suspend fun getDisambiguatedDisplayNameWithNickname(userId: UserId, notificationData: NotificationData): String {
         val nickname = nicknameStore.getNickname(userId).firstOrNull()
         return nickname ?: notificationData.getDisambiguatedDisplayName(userId)
     }
