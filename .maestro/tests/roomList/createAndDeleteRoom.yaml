@@ -3,9 +3,9 @@ appId: ${MAESTRO_APP_ID}
 # Purpose: Test the creation and deletion of a room
 - tapOn: "Create a new conversation or room"
 - tapOn: "New room"
-- tapOn: "e.g. your project name"
+- tapOn: "Add name…"
 - inputText: "aRoomName"
-- tapOn: "What is this room about?"
+- tapOn: "Add description…"
 - inputText: "aRoomTopic"
 - tapOn: "Create"
 - takeScreenshot: build/maestro/320-createAndDeleteRoom
@@ -37,3 +37,8 @@ appId: ${MAESTRO_APP_ID}
 - scroll
 - tapOn: "Leave room"
 - tapOn: "Leave"
+- runFlow:
+    when:
+      visible: 'You need an invite in order to join'
+    commands:
+      - tapOn: "Back"
