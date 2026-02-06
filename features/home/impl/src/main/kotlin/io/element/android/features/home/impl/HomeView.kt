@@ -322,8 +322,8 @@ private fun HomeFloatingActionButton(
 private fun HomeBottomBar(
     currentHomeNavigationBarItem: HomeNavigationBarItem,
     onItemClick: (HomeNavigationBarItem) -> Unit,
-    floatingActionButton: (@Composable () -> Unit)?,
     modifier: Modifier = Modifier,
+    floatingActionButton: (@Composable () -> Unit)?,
 ) {
     HorizontalFloatingToolbar(
         floatingActionButton = floatingActionButton,
