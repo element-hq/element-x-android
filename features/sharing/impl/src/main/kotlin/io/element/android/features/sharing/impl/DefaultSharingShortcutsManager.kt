@@ -30,6 +30,8 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.di.annotations.ApplicationContext
 import android.util.Base64
 import java.nio.charset.Charset
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @SingleIn(AppScope::class)
 class DefaultSharingShortcutsManager @Inject constructor(
@@ -42,8 +44,10 @@ class DefaultSharingShortcutsManager @Inject constructor(
     }
 
     override suspend fun publishShortcutsForRooms(rooms: List<SharingRoomInfo>) {
-        val shortcuts = rooms.mapNotNull { buildShortcutForRoom(it) }
-        ShortcutManagerCompat.setDynamicShortcuts(context, shortcuts)
+        withContext(Dispatchers.IO) {
+            val shortcuts = rooms.mapNotNull { buildShortcutForRoom(it) }
+            ShortcutManagerCompat.setDynamicShortcuts(context, shortcuts)
+        }
     }
 
     private suspend fun buildShortcutForRoom(room: SharingRoomInfo): ShortcutInfoCompat? {
