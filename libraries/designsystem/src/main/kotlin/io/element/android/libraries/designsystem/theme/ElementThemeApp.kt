@@ -16,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
+import androidx.compose.ui.graphics.Color
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.theme.Theme
 import io.element.android.compound.theme.isDark
@@ -76,12 +77,21 @@ fun ElementThemeApp(
         appPreferencesStore.getUseDynamicThemeFlow()
     }
         .collectAsState(initial = true)
+    
+    val customThemeColorInt by remember {
+        appPreferencesStore.getCustomThemeColorFlow()
+    }
+        .collectAsState(initial = null)
+    
+    val customThemeColor = remember(customThemeColorInt) {
+        customThemeColorInt?.let { Color(it) }
+    }
 
     CompositionLocalProvider(
         LocalBuildMeta provides buildMeta,
     ) {
-        val dynamicLight = rememberDynamicSemanticColors(compoundLight, isDark = false, useDynamicTheme = useDynamicTheme)
-        val dynamicDark = rememberDynamicSemanticColors(compoundDark, isDark = true, useDynamicTheme = useDynamicTheme)
+        val dynamicLight = rememberDynamicSemanticColors(compoundLight, isDark = false, useDynamicTheme = useDynamicTheme, customThemeColor = customThemeColor)
+        val dynamicDark = rememberDynamicSemanticColors(compoundDark, isDark = true, useDynamicTheme = useDynamicTheme, customThemeColor = customThemeColor)
         
         ElementTheme(
             darkTheme = theme.isDark(),

@@ -10,10 +10,13 @@ package io.element.android.libraries.designsystem.theme
 import android.content.Context
 import android.os.Build
 import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
+import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import io.element.android.compound.tokens.generated.SemanticColors
 import io.element.android.compound.tokens.generated.compoundColorsDark
@@ -24,9 +27,10 @@ fun rememberDynamicSemanticColors(
     compoundColors: SemanticColors,
     isDark: Boolean,
     useDynamicTheme: Boolean,
+    customThemeColor: Color?,
 ): SemanticColors {
     val context = LocalContext.current
-    return remember(compoundColors, isDark, context, useDynamicTheme) {
+    return remember(compoundColors, isDark, context, useDynamicTheme, customThemeColor) {
         if (useDynamicTheme && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             val dynamicScheme = if (isDark) {
                 dynamicDarkColorScheme(context)
@@ -34,6 +38,27 @@ fun rememberDynamicSemanticColors(
                 dynamicLightColorScheme(context)
             }
             dynamicScheme.toSemanticColors(isDark, compoundColors)
+        } else if (customThemeColor != null) {
+            val customScheme = if (isDark) {
+                darkColorScheme(
+                    primary = customThemeColor,
+                    onPrimary = Color.Black,
+                    surface = Color(0xFF121212),
+                    onSurface = Color.White,
+                    background = Color.Black,
+                    onBackground = Color.White,
+                )
+            } else {
+                lightColorScheme(
+                    primary = customThemeColor,
+                    onPrimary = Color.White,
+                    surface = Color.White,
+                    onSurface = Color.Black,
+                    background = Color.White,
+                    onBackground = Color.Black,
+                )
+            }
+            customScheme.toSemanticColors(isDark, compoundColors)
         } else {
             compoundColors
         }

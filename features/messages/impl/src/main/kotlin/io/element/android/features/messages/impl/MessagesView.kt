@@ -193,26 +193,8 @@ fun MessagesView(
         lastImeHeight.intValue = imeBottom
     }
 
-    // Unified bottom offset to prevent "double jump" when switched
-    val visualBottomOffset = with(density) {
-        maxOf(imeBottom, lastImeHeight.intValue.takeIf { state.composerState.showEmojiPicker } ?: 0).toDp()
-    }
-
     // This is needed because the composer is inside an AndroidView that can't be affected by the FocusManager in Compose
     val localView = LocalView.current
-
-    // Sync state: if keyboard opens, hide emoji picker to prevent state conflict
-    LaunchedEffect(imeBottom > 0) {
-        if (imeBottom > 0 && state.composerState.showEmojiPicker) {
-            state.composerState.eventSink(MessageComposerEvent.SetShowEmojiPicker(false))
-        }
-    }
-
-    LaunchedEffect(state.composerState.showEmojiPicker) {
-        if (state.composerState.showEmojiPicker) {
-            localView.hideKeyboard()
-        }
-    }
 
     fun hidingKeyboard(block: () -> Unit) {
         localView.hideKeyboard()
@@ -275,7 +257,6 @@ fun MessagesView(
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.Transparent)
-                .padding(bottom = visualBottomOffset)
                 .graphicsLayer {
                     val scale = 1f - (0.1f * backProgress)
                     scaleX = scale
@@ -393,6 +374,7 @@ fun MessagesView(
                 onRoomSuccessorClick = { roomId ->
                     state.timelineState.eventSink(TimelineEvent.NavigateToPredecessorOrSuccessorRoom(roomId = roomId))
                 },
+                imeBottom = imeBottom,
             )
         },
         sheetDragHandle = @Composable { toggleAction ->
@@ -433,25 +415,6 @@ fun MessagesView(
         )
     }
 
-        // Emoji Picker positioned at absolute bottom
-        val pickerHeight = if (lastImeHeight.intValue > 0) {
-            with(density) { lastImeHeight.intValue.toDp() }
-        } else {
-            300.dp
-        }
-        
-        AnimatedVisibility(
-            visible = state.composerState.showEmojiPicker,
-            modifier = Modifier.align(Alignment.BottomCenter),
-            enter = expandVertically(expandFrom = Alignment.Bottom) + fadeIn(),
-            exit = shrinkVertically(shrinkTowards = Alignment.Bottom) + fadeOut()
-        ) {
-            EmojiPickerView(
-                state = state.composerState,
-                height = pickerHeight,
-                modifier = Modifier.fillMaxWidth(),
-            )
-        }
     }
 
     var endPollConfirmingEvent: TimelineItem.Event? by remember { mutableStateOf(null) }
@@ -638,6 +601,7 @@ private fun MessagesViewComposerBottomSheetContents(
     state: MessagesState,
     onRoomSuccessorClick: (RoomId) -> Unit,
     onLinkClick: (String, Boolean) -> Unit,
+    imeBottom: Int,
 ) {
     when {
         state.successorRoom != null -> {
@@ -662,6 +626,13 @@ private fun MessagesViewComposerBottomSheetContents(
                     }
                 }
 
+                // Hide picker when keyboard opens
+                LaunchedEffect(imeBottom > 0) {
+                    if (imeBottom > 0 && state.composerState.showEmojiPicker) {
+                        state.composerState.eventSink(MessageComposerEvent.SetShowEmojiPicker(false))
+                    }
+                }
+
                 BackHandler(enabled = state.composerState.showEmojiPicker) {
                     state.composerState.eventSink(MessageComposerEvent.ToggleEmojiPicker)
                 }
@@ -675,6 +646,31 @@ private fun MessagesViewComposerBottomSheetContents(
                     MessageComposerView(
                         state = state.composerState,
                         voiceMessageState = state.voiceMessageComposerState,
+                        modifier = Modifier.fillMaxWidth(),
+                    )
+                }
+
+                // Emoji Picker positioned below the composer inside the sheet
+                val density = LocalDensity.current
+                val imeBottom = WindowInsets.ime.getBottom(density)
+                val lastImeHeight = remember { mutableIntStateOf(0) }
+                if (imeBottom > 0) {
+                    lastImeHeight.intValue = imeBottom
+                }
+                val pickerHeight = if (lastImeHeight.intValue > 0) {
+                    with(density) { lastImeHeight.intValue.toDp() }
+                } else {
+                    300.dp
+                }
+
+                AnimatedVisibility(
+                    visible = state.composerState.showEmojiPicker,
+                    enter = expandVertically(expandFrom = Alignment.Top) + fadeIn(),
+                    exit = shrinkVertically(shrinkTowards = Alignment.Top) + fadeOut()
+                ) {
+                    EmojiPickerView(
+                        state = state.composerState,
+                        height = pickerHeight,
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }

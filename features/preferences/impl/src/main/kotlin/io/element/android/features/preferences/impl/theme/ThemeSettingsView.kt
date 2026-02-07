@@ -7,10 +7,14 @@
 
 package io.element.android.features.preferences.impl.theme
 
+import android.content.Intent
 import android.os.Build
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
@@ -37,11 +41,13 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.toImmutableList
 
-import android.content.Intent
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.ui.ExperimentalComposeUiApi
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import io.mhssn.colorpicker.ColorPickerDialog
+import io.mhssn.colorpicker.ColorPickerType
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun ThemeSettingsView(
     state: ThemeSettingsState,
@@ -49,7 +55,6 @@ fun ThemeSettingsView(
     modifier: Modifier = Modifier,
 ) {
     var showColorPickerDialog by remember { mutableStateOf(false) }
-    var selectedColorHex by remember { mutableStateOf(state.customThemeColor?.let { String.format("#%06X", it) } ?: "#") }
     
     val context = LocalContext.current
     val wallpaperLauncher = rememberLauncherForActivityResult(
@@ -67,22 +72,19 @@ fun ThemeSettingsView(
         }
     }
 
-    if (showColorPickerDialog) {
-        ColorPickerDialog(
-            initialColor = selectedColorHex,
-            onColorSelected = { color ->
-                selectedColorHex = color
-                try {
-                    val colorInt = color.substring(1).toLong(16).toInt()
-                    state.eventSink(ThemeSettingsEvents.SetCustomThemeColor(colorInt))
-                } catch (e: Exception) {
-                    // Invalid color format
-                }
-                showColorPickerDialog = false
-            },
-            onDismiss = { showColorPickerDialog = false }
-        )
-    }
+    ColorPickerDialog(
+        show = showColorPickerDialog,
+        type = ColorPickerType.Classic(
+            showAlphaBar = false,
+        ),
+        onDismissRequest = {
+            showColorPickerDialog = false
+        },
+        onPickedColor = { color ->
+            state.eventSink(ThemeSettingsEvents.SetCustomThemeColor(color.hashCode()))
+            showColorPickerDialog = false
+        },
+    )
 
     PreferencePage(
         modifier = modifier,
@@ -110,7 +112,17 @@ fun ThemeSettingsView(
         if (!state.useDynamicTheme) {
              ListItem(
                 headlineContent = { Text("Custom Theme Color") },
-                supportingContent = { Text("Applies a custom seed color to the theme.") },
+                supportingContent = {
+                    val colorText = state.customThemeColor?.let { String.format("#%06X", it and 0xFFFFFF) } ?: "Default (Green)"
+                    Text("Current color: $colorText")
+                },
+                trailingContent = state.customThemeColor?.let { colorInt ->
+                    ListItemContent.Custom {
+                        androidx.compose.foundation.Canvas(modifier = Modifier.size(24.dp)) {
+                            drawCircle(color = Color(colorInt))
+                        }
+                    }
+                },
                 onClick = { showColorPickerDialog = true }
              )
         }
@@ -150,48 +162,6 @@ fun PreferenceCategory(title: String, content: @Composable () -> Unit) {
         )
         content()
     }
-}
-
-@Composable
-private fun ColorPickerDialog(
-    initialColor: String,
-    onColorSelected: (String) -> Unit,
-    onDismiss: () -> Unit,
-) {
-    var colorInput by remember { mutableStateOf(initialColor) }
-    
-    AlertDialog(
-        onDismissRequest = onDismiss,
-        title = { Text("Select Theme Color") },
-        text = {
-            Column {
-                Text("Enter a hex color code (e.g., #FF5733)", style = MaterialTheme.typography.labelSmall)
-                OutlinedTextField(
-                    value = colorInput,
-                    onValueChange = { colorInput = it.uppercase() },
-                    label = { Text("Hex Color") },
-                    modifier = Modifier
-                        .padding(top = 16.dp)
-                )
-            }
-        },
-        confirmButton = {
-            TextButton(
-                onClick = {
-                    if (colorInput.matches(Regex("^#[0-9A-F]{6}$"))) {
-                        onColorSelected(colorInput)
-                    }
-                }
-            ) {
-                Text("Apply")
-            }
-        },
-        dismissButton = {
-            TextButton(onClick = onDismiss) {
-                Text("Cancel")
-            }
-        }
-    )
 }
 
 @Composable

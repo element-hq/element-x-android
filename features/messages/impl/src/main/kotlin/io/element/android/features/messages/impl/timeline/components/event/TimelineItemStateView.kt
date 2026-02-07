@@ -31,7 +31,11 @@ fun TimelineItemStateView(
     Text(
         modifier = modifier
             .background(
-                color = Color.Black.copy(alpha = 0.5f),
+                color = if (ElementTheme.isLightTheme) {
+                    Color.White.copy(alpha = 0.5f)
+                } else {
+                    Color.Black.copy(alpha = 0.5f)
+                },
                 shape = RoundedCornerShape(8.dp)
             )
             .padding(horizontal = 12.dp, vertical = 6.dp),
