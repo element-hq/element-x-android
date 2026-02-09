@@ -1,0 +1,59 @@
+/*
+ * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright 2025 New Vector Ltd.
+ *
+ * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+ * Please see LICENSE files in the repository root for full details.
+ */
+
+package io.element.android.features.preferences.impl.bugreportpreflight
+
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.node.Node
+import com.bumble.appyx.core.plugin.Plugin
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedInject
+import io.element.android.annotations.ContributesNode
+import io.element.android.features.preferences.impl.R
+import io.element.android.libraries.androidutils.system.copyToClipboard
+import io.element.android.libraries.androidutils.system.startSharePlainTextIntent
+import io.element.android.libraries.architecture.callback
+import io.element.android.libraries.di.SessionScope
+
+@ContributesNode(SessionScope::class)
+@AssistedInject
+class BugReportPreflightNode(
+    @Assisted buildContext: BuildContext,
+    @Assisted plugins: List<Plugin>,
+    private val presenter: BugReportPreflightPresenter,
+) : Node(buildContext, plugins = plugins) {
+    interface Callback : Plugin {
+        fun onDone()
+    }
+
+    private val callback: Callback = callback()
+
+    @Composable
+    override fun View(modifier: Modifier) {
+        val context = LocalContext.current
+        val state = presenter.present()
+        BugReportPreflightView(
+            state = state,
+            modifier = modifier,
+            onBackClick = callback::onDone,
+            onCopyClick = { text ->
+                context.copyToClipboard(text)
+            },
+            onShareClick = { text ->
+                context.startSharePlainTextIntent(
+                    activityResultLauncher = null,
+                    chooserTitle = context.getString(R.string.screen_bug_report_preflight_share_chooser_title),
+                    text = text,
+                )
+            },
+        )
+    }
+}

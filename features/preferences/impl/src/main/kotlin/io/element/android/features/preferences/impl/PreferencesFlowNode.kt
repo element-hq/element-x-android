@@ -29,6 +29,7 @@ import io.element.android.features.preferences.impl.about.AboutNode
 import io.element.android.features.preferences.impl.advanced.AdvancedSettingsNode
 import io.element.android.features.preferences.impl.analytics.AnalyticsSettingsNode
 import io.element.android.features.preferences.impl.blockedusers.BlockedUsersNode
+import io.element.android.features.preferences.impl.bugreportpreflight.BugReportPreflightNode
 import io.element.android.features.preferences.impl.developer.DeveloperSettingsNode
 import io.element.android.features.preferences.impl.labs.LabsNode
 import io.element.android.features.preferences.impl.notifications.NotificationSettingsNode
@@ -90,6 +91,9 @@ class PreferencesFlowNode(
         data object NotificationSettings : NavTarget
 
         @Parcelize
+        data object BugReportPreflight : NavTarget
+
+        @Parcelize
         data object TroubleshootNotifications : NavTarget
 
         @Parcelize
@@ -128,7 +132,7 @@ class PreferencesFlowNode(
                     }
 
                     override fun navigateToBugReport() {
-                        callback.navigateToBugReport()
+                        backstack.push(NavTarget.BugReportPreflight)
                     }
 
                     override fun navigateToSecureBackup() {
@@ -227,6 +231,14 @@ class PreferencesFlowNode(
                     }
                 }
                 createNode<NotificationSettingsNode>(buildContext, listOf(notificationSettingsCallback))
+            }
+            NavTarget.BugReportPreflight -> {
+                val callback = object : BugReportPreflightNode.Callback {
+                    override fun onDone() {
+                        backstack.pop()
+                    }
+                }
+                createNode<BugReportPreflightNode>(buildContext, listOf(callback))
             }
             NavTarget.TroubleshootNotifications -> {
                 notificationTroubleShootEntryPoint.createNode(
