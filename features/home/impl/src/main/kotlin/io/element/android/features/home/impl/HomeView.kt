@@ -243,6 +243,9 @@ private fun HomeScaffold(
         },
         floatingActionButtonPosition = FabPosition.Center,
         content = { padding ->
+            val contentPadding = PaddingValues(
+                bottom = 112.dp,
+            )
             when (state.currentHomeNavigationBarItem) {
                 HomeNavigationBarItem.Chats -> {
                     RoomListContentView(
@@ -256,15 +259,7 @@ private fun HomeScaffold(
                         onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
                         onRoomClick = ::onRoomClick,
                         onCreateRoomClick = onStartChatClick,
-                        contentPadding = PaddingValues(
-                            // FAB height is 56dp, bottom padding is 16dp, we add 8dp as extra margin -> 56+16+8 = 80,
-                            // and include provided bottom padding
-                            // Disable contentPadding due to navigation issue using the keyboard
-                            // See https://issuetracker.google.com/issues/436432313
-                            bottom = 80.dp,
-                            // bottom = 80.dp + padding.calculateBottomPadding(),
-                            // top = padding.calculateTopPadding()
-                        ),
+                        contentPadding = contentPadding,
                         modifier = Modifier
                             .padding(
                                 PaddingValues(
@@ -287,6 +282,7 @@ private fun HomeScaffold(
                             .padding(padding)
                             .consumeWindowInsets(padding)
                             .hazeSource(state = hazeState),
+                        contentPadding = contentPadding,
                         state = state.homeSpacesState,
                         lazyListState = spacesLazyListState,
                         onSpaceClick = { spaceId ->

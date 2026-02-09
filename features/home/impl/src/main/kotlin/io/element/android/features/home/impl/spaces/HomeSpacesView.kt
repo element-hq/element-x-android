@@ -10,6 +10,7 @@ package io.element.android.features.home.impl.spaces
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -48,6 +49,7 @@ import kotlinx.collections.immutable.toImmutableList
 fun HomeSpacesView(
     state: HomeSpacesState,
     lazyListState: LazyListState,
+    contentPadding: PaddingValues,
     onSpaceClick: (RoomId) -> Unit,
     onCreateSpaceClick: () -> Unit,
     onExploreClick: () -> Unit,
@@ -55,7 +57,7 @@ fun HomeSpacesView(
 ) {
     if (state.canCreateSpaces && state.spaceRooms.isEmpty()) {
         EmptySpaceHomeView(
-            modifier = modifier,
+            modifier = modifier.padding(contentPadding),
             onCreateSpaceClick = onCreateSpaceClick,
             onExploreClick = onExploreClick,
             canExploreSpaces = state.canExploreSpaces,
@@ -63,7 +65,8 @@ fun HomeSpacesView(
     } else {
         LazyColumn(
             modifier = modifier,
-            state = lazyListState
+            state = lazyListState,
+            contentPadding = contentPadding,
         ) {
             val space = state.space
             when (space) {
@@ -147,10 +150,7 @@ private fun EmptySpaceHomeView(
             }
         },
         footer = {
-            ButtonColumnMolecule(
-                // Add a padding bottom for the navigation bar
-                modifier = Modifier.padding(bottom = 112.dp)
-            ) {
+            ButtonColumnMolecule {
                 Button(
                     modifier = Modifier.fillMaxWidth(),
                     text = stringResource(CommonStrings.action_create_space),
@@ -179,5 +179,6 @@ internal fun HomeSpacesViewPreview(
         onSpaceClick = {},
         onCreateSpaceClick = {},
         onExploreClick = {},
+        contentPadding = PaddingValues(bottom = 112.dp),
     )
 }
