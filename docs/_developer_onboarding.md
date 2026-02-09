@@ -409,6 +409,21 @@ The data will be sent to an internal server, which is not publicly accessible. A
 
 Rageshake can be very useful to get logs from a release version of the application.
 
+
+#### Developer options
+
+Element X Android has hidden developer options that are accessible by tapping 7 times on
+the version number at the bottom of the application settings screen. After tapping, a
+new option named "Developer options" will appear at teh bottom of the list.
+
+The developer options include feature flags, notification/push history, Element call
+customization, Rust SDK log levels, per-feature tracing toggles, Showkase to debug UI
+components, rageshake controls, app crash controls, cache details/controls, persistent
+storage maintenance tasks.
+
+Keywords: Developer settings, developer mode
+
+
 ### Tips
 
 - Element Android has a `developer mode` in the `Settings/Advanced settings`. Other useful options are available here; (TODO Not supported yet!)
