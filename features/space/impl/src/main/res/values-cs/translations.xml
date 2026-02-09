@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_leave_space_choose_owners_action">"Vyberte vlastníky"</string>
   <string name="screen_leave_space_last_admin_info">"%1$s (Správce)"</string>
   <plurals name="screen_leave_space_submit">
     <item quantity="one">"Opustit %1$d místnost a prostor"</item>
@@ -8,10 +9,21 @@
   </plurals>
   <string name="screen_leave_space_subtitle">"Tím budete také odstraněni ze všech místností v tomto prostoru."</string>
   <string name="screen_leave_space_subtitle_last_admin">"Než budete moci odejít, musíte pro tento prostor přiřadit jiného správce."</string>
+  <string name="screen_leave_space_subtitle_last_owner">"Jste jediným vlastníkem %1$s. Před odchodem musíte převést vlastnictví na někoho jiného."</string>
   <string name="screen_leave_space_subtitle_only_last_admin">"Z následujících místností nebudete odstraněni, protože jste jediným administrátorem:"</string>
   <string name="screen_leave_space_title">"Opustit %1$s?"</string>
   <string name="screen_leave_space_title_last_admin">"Jste jediným administrátorem pro %1$s"</string>
+  <string name="screen_leave_space_title_last_owner">"Převést vlastnictví"</string>
+  <string name="screen_space_add_room_action">"Místnost"</string>
+  <string name="screen_space_add_rooms_room_access_description">"Přidání místnosti neovlivní přístup k místnosti. Chcete-li přístup změnit, přejděte do Nastavení místnosti &gt; Zabezpečení a soukromí."</string>
+  <string name="screen_space_empty_state_title">"Přidejte svou první místnost"</string>
   <string name="screen_space_menu_action_members">"Zobrazit členy"</string>
+  <string name="screen_space_remove_rooms_confirmation_content">"Odebrání místnosti neovlivní přístup k místnosti. Chcete-li přístup změnit, přejděte do sekce Informace o místnosti &gt; Soukromí a zabezpečení."</string>
+  <plurals name="screen_space_remove_rooms_confirmation_title">
+    <item quantity="one">"Odstranit %1$d místnost od %2$s"</item>
+    <item quantity="few">"Odstranit %1$d místnosti od %2$s"</item>
+    <item quantity="other">"Odstranit %1$d místností od %2$s"</item>
+  </plurals>
   <string name="screen_space_settings_leave_space">"Opustit prostor"</string>
   <string name="screen_space_settings_roles_and_permissions">"Role a oprávnění"</string>
   <string name="screen_space_settings_security_and_privacy">"Zabezpečení a soukromí"</string>

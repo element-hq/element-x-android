@@ -56,6 +56,7 @@
   <string name="a11y_your_avatar">"Din avatar"</string>
   <string name="action_accept">"Godta"</string>
   <string name="action_add_caption">"Legg til bildetekst"</string>
+  <string name="action_add_existing_rooms">"Legg til eksisterende rom"</string>
   <string name="action_add_to_timeline">"Legg til i tidslinjen"</string>
   <string name="action_back">"Tilbake"</string>
   <string name="action_call">"Ring"</string>
@@ -75,6 +76,7 @@
   <string name="action_copy_text">"Kopier tekst"</string>
   <string name="action_create">"Opprett"</string>
   <string name="action_create_room">"Opprett rom"</string>
+  <string name="action_create_space">"Opprett område"</string>
   <string name="action_deactivate">"Deaktiver"</string>
   <string name="action_deactivate_account">"Deaktiver kontoen"</string>
   <string name="action_decline">"Avslå"</string>
@@ -162,6 +164,7 @@
   <string name="action_static_map_load">"Trykk for å laste inn kart"</string>
   <string name="action_take_photo">"Ta bilde"</string>
   <string name="action_tap_for_options">"Trykk for alternativer"</string>
+  <string name="action_translate">"Oversett"</string>
   <string name="action_try_again">"Prøv igjen"</string>
   <string name="action_unpin">"Løsne"</string>
   <string name="action_view">"Vis"</string>
@@ -191,6 +194,7 @@
   <string name="common_copied_to_clipboard">"Kopiert til utklippstavlen"</string>
   <string name="common_copyright">"Opphavsrett"</string>
   <string name="common_creating_room">"Oppretter rom …"</string>
+  <string name="common_creating_space">"Oppretter område…"</string>
   <string name="common_current_user_canceled_knock">"Forespørsel kansellert"</string>
   <string name="common_current_user_left_room">"Forlot rommet"</string>
   <string name="common_current_user_left_space">"Forlot område"</string>
@@ -236,6 +240,7 @@
   <string name="common_light">"Lys"</string>
   <string name="common_line_copied_to_clipboard">"Linje kopiert til utklippstavlen"</string>
   <string name="common_link_copied_to_clipboard">"Lenke kopiert til utklippstavlen"</string>
+  <string name="common_link_new_device">"Koble til ny enhet"</string>
   <string name="common_loading">"Laster inn…"</string>
   <string name="common_loading_more">"Laster inn mer…"</string>
   <plurals name="common_many_members">
@@ -248,10 +253,12 @@
   </plurals>
   <string name="common_message">"Melding"</string>
   <string name="common_message_actions">"Meldingshandlinger"</string>
+  <string name="common_message_failed_to_send">"Sending av beskjed feilet"</string>
   <string name="common_message_layout">"Meldingsoppsett"</string>
   <string name="common_message_removed">"Melding fjernet"</string>
   <string name="common_modern">"Moderne"</string>
   <string name="common_mute">"Demp"</string>
+  <string name="common_name">"Navn"</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Ingen resultater"</string>
   <string name="common_no_room_name">"Ingen romnavn"</string>
@@ -324,6 +331,7 @@
   <string name="common_something_went_wrong">"Noe gikk galt"</string>
   <string name="common_something_went_wrong_message">"Vi har støtt på et problem. Vennligst prøv igjen."</string>
   <string name="common_space">"Område"</string>
+  <string name="common_space_topic_placeholder">"Hva handler dette området om?"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d Område"</item>
     <item quantity="other">"%1$d Områder"</item>
@@ -331,6 +339,7 @@
   <string name="common_starting_chat">"Starter chat…"</string>
   <string name="common_sticker">"Klistremerke"</string>
   <string name="common_success">"Suksess"</string>
+  <string name="common_suggested">"Foreslått"</string>
   <string name="common_suggestions">"Forslag"</string>
   <string name="common_syncing">"Synkroniserer"</string>
   <string name="common_system">"System"</string>
@@ -368,6 +377,7 @@
   <string name="common_waiting">"Venter…"</string>
   <string name="common_waiting_for_decryption_key">"Venter på denne meldingen"</string>
   <string name="common_you">"Du"</string>
+  <string name="crypto_history_visible">"Dette rommet er konfigurert slik at nye medlemmer kan lese historikken.%1$s"</string>
   <string name="crypto_identity_change_pin_violation">"%1$s\'s identitet ble tilbakestilt. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"%1$ss %2$s-identitet ble tilbakestilt. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
@@ -459,6 +469,7 @@ Er du sikker på at du vil fortsette?"</string>
   <string name="screen_share_this_location_action">"Del denne lokasjonen"</string>
   <string name="screen_space_list_description">"Områder du har opprettet eller blitt med i."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_empty_state_title">"Opprett område for å organisere rom"</string>
   <string name="screen_space_list_parent_space">"%1$s område"</string>
   <string name="screen_space_list_title">"Områder"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Meldingen ble ikke sendt fordi %1$ss verifiserte identitet er tilbakestilt."</string>

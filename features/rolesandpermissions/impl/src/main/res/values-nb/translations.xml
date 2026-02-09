@@ -38,6 +38,12 @@
   <string name="screen_room_change_role_unsaved_changes_description">"Du har endringer som ikke er lagret."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Lagre endringer?"</string>
   <string name="screen_room_member_list_banned_empty">"Det er ingen utestengte brukere."</string>
+  <plurals name="screen_room_member_list_banned_header_title">
+    <item quantity="one">"%1$d utestengt"</item>
+    <item quantity="other">"%1$d utestengt"</item>
+  </plurals>
+  <string name="screen_room_member_list_empty_search_subtitle">"Sjekk stavemåten eller prøv et nytt søk"</string>
+  <string name="screen_room_member_list_empty_search_title">"Ingen resultater for \"%1$s\""</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d person"</item>
     <item quantity="other">"%1$d personer"</item>
@@ -49,6 +55,11 @@
   <string name="screen_room_member_list_manage_member_unban_title">"Fjern utestengelsen fra rommet"</string>
   <string name="screen_room_member_list_mode_banned">"Utestengt"</string>
   <string name="screen_room_member_list_mode_members">"Medlemmer"</string>
+  <plurals name="screen_room_member_list_pending_header_title">
+    <item quantity="one">"%1$d invitert"</item>
+    <item quantity="other">"%1$d invitert"</item>
+  </plurals>
+  <string name="screen_room_member_list_pending_status">"Venter"</string>
   <string name="screen_room_member_list_role_administrator">"Admin"</string>
   <string name="screen_room_member_list_role_moderator">"Moderator"</string>
   <string name="screen_room_member_list_role_owner">"Eier"</string>

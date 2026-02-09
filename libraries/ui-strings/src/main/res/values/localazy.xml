@@ -285,8 +285,10 @@ Reason: %1$s."</string>
   </plurals>
   <string name="common_preparing">"Preparing…"</string>
   <string name="common_privacy_policy">"Privacy policy"</string>
+  <string name="common_private">"Private"</string>
   <string name="common_private_room">"Private room"</string>
   <string name="common_private_space">"Private space"</string>
+  <string name="common_public">"Public"</string>
   <string name="common_public_room">"Public room"</string>
   <string name="common_public_space">"Public space"</string>
   <string name="common_reaction">"Reaction"</string>
@@ -341,6 +343,7 @@ Reason: %1$s."</string>
   <string name="common_something_went_wrong">"Something went wrong"</string>
   <string name="common_something_went_wrong_message">"We encountered an issue. Please try again."</string>
   <string name="common_space">"Space"</string>
+  <string name="common_space_members">"Space members"</string>
   <string name="common_space_topic_placeholder">"What is this space about?"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d Space"</item>

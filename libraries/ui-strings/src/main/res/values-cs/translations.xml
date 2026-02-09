@@ -58,6 +58,7 @@
   <string name="a11y_your_avatar">"Váš avatar"</string>
   <string name="action_accept">"Přijmout"</string>
   <string name="action_add_caption">"Přidat titulek"</string>
+  <string name="action_add_existing_rooms">"Přidat stávající místnosti"</string>
   <string name="action_add_to_timeline">"Přidat na časovou osu"</string>
   <string name="action_back">"Zpět"</string>
   <string name="action_call">"Hovor"</string>
@@ -77,6 +78,7 @@
   <string name="action_copy_text">"Kopírovat text"</string>
   <string name="action_create">"Vytvořit"</string>
   <string name="action_create_room">"Vytvořit místnost"</string>
+  <string name="action_create_space">"Vytvořte prostor"</string>
   <string name="action_deactivate">"Deaktivovat"</string>
   <string name="action_deactivate_account">"Deaktivovat účet"</string>
   <string name="action_decline">"Odmítnout"</string>
@@ -93,6 +95,7 @@
   <string name="action_enable">"Povolit"</string>
   <string name="action_end_poll">"Ukončit hlasování"</string>
   <string name="action_enter_pin">"Zadejte PIN"</string>
+  <string name="action_explore_public_spaces">"Prozkoumejte veřejné prostory"</string>
   <string name="action_finish">"Dokončit"</string>
   <string name="action_forgot_password">"Zapomněli jste heslo?"</string>
   <string name="action_forward">"Přeposlat"</string>
@@ -194,6 +197,7 @@
   <string name="common_copied_to_clipboard">"Zkopírováno do schránky"</string>
   <string name="common_copyright">"Autorská práva"</string>
   <string name="common_creating_room">"Vytváření místnosti…"</string>
+  <string name="common_creating_space">"Vytváření prostoru…"</string>
   <string name="common_current_user_canceled_knock">"Žádost zrušena"</string>
   <string name="common_current_user_left_room">"Místnost opuštěna"</string>
   <string name="common_current_user_left_space">"Opustit prostor"</string>
@@ -295,6 +299,7 @@ Důvod: %1$s."</string>
   <string name="common_reason">"Důvod"</string>
   <string name="common_recovery_key">"Klíč pro obnovení"</string>
   <string name="common_refreshing">"Obnovování…"</string>
+  <string name="common_removing">"Odstraňování…"</string>
   <plurals name="common_replies">
     <item quantity="other">"%1$d odpovědí"</item>
   </plurals>
@@ -303,6 +308,7 @@ Důvod: %1$s."</string>
   <string name="common_report_a_problem">"Nahlásit problém"</string>
   <string name="common_report_submitted">"Zpráva odeslána"</string>
   <string name="common_rich_text_editor">"Editor formátovaného textu"</string>
+  <string name="common_role">"Role"</string>
   <string name="common_room">"Místnost"</string>
   <string name="common_room_name">"Název místnosti"</string>
   <string name="common_room_name_placeholder">"např. název vašeho projektu"</string>
@@ -319,6 +325,11 @@ Důvod: %1$s."</string>
   <string name="common_security">"Zabezpečení"</string>
   <string name="common_seen_by">"Viděno"</string>
   <string name="common_select_account">"Vybrat účet"</string>
+  <plurals name="common_selected_count">
+    <item quantity="one">"%1$d vybraný"</item>
+    <item quantity="few">"%1$d vybrané"</item>
+    <item quantity="other">"%1$d vybraných"</item>
+  </plurals>
   <string name="common_send_to">"Odeslat do"</string>
   <string name="common_sending">"Odesílání…"</string>
   <string name="common_sending_failed">"Odeslání se nezdařilo"</string>
@@ -329,6 +340,7 @@ Důvod: %1$s."</string>
   <string name="common_server_url">"URL serveru"</string>
   <string name="common_settings">"Nastavení"</string>
   <string name="common_share_space">"Sdílet prostor"</string>
+  <string name="common_shared_history">"Noví členové vidí historii"</string>
   <string name="common_shared_location">"Sdílená poloha"</string>
   <string name="common_shared_space">"Sdílený prostor"</string>
   <string name="common_signing_out">"Odhlašování"</string>
@@ -344,6 +356,7 @@ Důvod: %1$s."</string>
   <string name="common_starting_chat">"Zahajování chatu…"</string>
   <string name="common_sticker">"Nálepka"</string>
   <string name="common_success">"Úspěch"</string>
+  <string name="common_suggested">"Doporučeno"</string>
   <string name="common_suggestions">"Návrhy"</string>
   <string name="common_syncing">"Synchronizace"</string>
   <string name="common_system">"Systém"</string>
@@ -380,7 +393,10 @@ Důvod: %1$s."</string>
   <string name="common_voice_message">"Hlasová zpráva"</string>
   <string name="common_waiting">"Čekání…"</string>
   <string name="common_waiting_for_decryption_key">"Čekání na dešifrovací klíč"</string>
+  <string name="common_world_readable_history">"Kdokoli může vidět historii"</string>
   <string name="common_you">"Vy"</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) sdílel(a) tuto zprávu v době, kdy jste nebyli v místnosti."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s sdílel(a) tuto zprávu v době, kdy jste nebyli v místnosti."</string>
   <string name="crypto_history_visible">"Tato místnost byla nastavena tak, aby noví členové mohli číst historii. %1$s"</string>
   <string name="crypto_identity_change_pin_violation">"Identita uživatele %1$s se změnila. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Identita uživatele %1$s %2$s se změnila. %3$s"</string>
@@ -474,6 +490,7 @@ Opravdu chcete pokračovat?"</string>
   <string name="screen_share_this_location_action">"Sdílet tuto polohu"</string>
   <string name="screen_space_list_description">"Prostory, které jste vytvořili nebo se k nim připojili."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_empty_state_title">"Vytvořte prostory pro uspořádání místností"</string>
   <string name="screen_space_list_parent_space">"%1$s prostor"</string>
   <string name="screen_space_list_title">"Prostory"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Zpráva nebyla odeslána, protože ověřená identita uživatele %1$s se změnila."</string>

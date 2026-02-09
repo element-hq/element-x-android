@@ -389,6 +389,7 @@ Põhjus: %1$s."</string>
   <string name="common_world_readable_history">"Kõik võivad ajalugu näha"</string>
   <string name="common_you">"Sina"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"Kuna sind polnud saatmise ajal jututoas, siis %1$s (%2$s) jagas seda sõnumit sinuga."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s jagas seda sõnumit, kuna sind ei olnud selle algse saatmise ajal jututoas."</string>
   <string name="crypto_history_visible">"See jututuba on seadistatud sedaviisi, et ka uued liikmed saavad lugeda varasemat ajalugu. %1$s"</string>
   <string name="crypto_identity_change_pin_violation">"Kasutaja %1$s võrguidentiteet on lähtestatud. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Kasutaja %1$s %2$s võrguidentiteet on lähtestatud. %3$s"</string>

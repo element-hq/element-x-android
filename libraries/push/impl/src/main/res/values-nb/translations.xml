@@ -13,6 +13,7 @@
     <item quantity="one">"%d varsel"</item>
     <item quantity="other">"%d varsler"</item>
   </plurals>
+  <string name="notification_error_unified_push_unregistered_android">"UnifiedPush-varslingsdistributøren kunne ikke registreres, så du vil ikke motta varsler lenger. Sjekk varslingsinnstillingene til appen og statusen til push-distributøren."</string>
   <string name="notification_fallback_content">"Du har nye meldinger."</string>
   <string name="notification_incoming_call">"📹 Innkommende anrop"</string>
   <string name="notification_inline_reply_failed">"** Kunne ikke sende - vennligst åpne rommet"</string>
@@ -37,6 +38,8 @@
   <string name="notification_room_invite_body_with_sender">"%1$s inviterte deg til å bli med i rommet"</string>
   <string name="notification_sender_me">"Meg"</string>
   <string name="notification_sender_mention_reply">"%1$s nevnt eller besvart"</string>
+  <string name="notification_space_invite_body">"Inviterte deg til å bli med i området"</string>
+  <string name="notification_space_invite_body_with_sender">"%1$s inviterte deg til å bli med i området"</string>
   <string name="notification_test_push_notification_content">"Du ser på varselet! Klikk på meg!"</string>
   <string name="notification_thread_in_room">"Tråd i %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>

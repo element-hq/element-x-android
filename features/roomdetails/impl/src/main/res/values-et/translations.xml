@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crypto_history_sharing_room_info_hidden_badge_content">"Uued liikmed ei näe ajalugu"</string>
+  <string name="crypto_history_sharing_room_info_shared_badge_content">"Uued liikmed näevad ajalugu"</string>
+  <string name="crypto_history_sharing_room_info_world_readable_badge_content">"Kõik võivad ajalugu näha"</string>
   <string name="screen_edit_room_address_room_address_section_footer">"Selleks, et jututuba oleks nähtav jututubade avalikus kataloogis, vajab ta aadressi."</string>
   <string name="screen_edit_room_address_title">"Muuda aadressi"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Teavituste seadistamisel tekkis viga"</string>

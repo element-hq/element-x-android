@@ -114,7 +114,7 @@
   <string name="screen_room_roles_and_permissions_room_details">"Rumsdetaljer"</string>
   <string name="screen_room_roles_and_permissions_title">"Roller och behörigheter"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Lägg till rumsadress"</string>
-  <string name="screen_security_and_privacy_ask_to_join_option_description">"Vem som helst kan be om att gå med i rummet men en administratör eller moderator måste acceptera begäran."</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_description">"Alla måste begära åtkomst."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_title">"Be om att gå med"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Ja, aktivera kryptering"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"När det är aktiverat kan kryptering för ett rum inte inaktiveras, meddelandehistoriken visas bara för rumsmedlemmar sedan de blev inbjudna eller sedan de gick med i rummet.
@@ -126,9 +126,9 @@ Vi rekommenderar inte att aktivera kryptering för rum som vem som helst kan hit
   <string name="screen_security_and_privacy_encryption_toggle_title">"Aktivera totalsträckskryptering"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Vem som helst kan hitta och gå med"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Vem som helst"</string>
-  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Användare kan bara gå med om de är inbjudna"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"Endast inbjudna personer kan gå med."</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Endast inbjudan"</string>
-  <string name="screen_security_and_privacy_room_access_section_header">"Tillgång till rum"</string>
+  <string name="screen_security_and_privacy_room_access_section_header">"Åtkomst"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_title">"Utrymmesmedlemmar"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Utrymmen stöds för närvarande inte"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Du behöver en rumsadress för att göra den synlig i katalogen."</string>

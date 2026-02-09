@@ -20,7 +20,7 @@ Vous pouvez modifier cela à tout moment dans les paramètres du salon."</string
   <string name="screen_create_room_room_access_section_private_option_description">"Seules les personnes invitées peuvent joindre."</string>
   <string name="screen_create_room_room_access_section_private_option_title">"Privé"</string>
   <string name="screen_create_room_room_access_section_public_option_description">"Tout le monde peut joindre"</string>
-  <string name="screen_create_room_room_access_section_public_option_title">"Tout le monde"</string>
+  <string name="screen_create_room_room_access_section_public_option_title">"Public"</string>
   <string name="screen_create_room_room_access_section_restricted_option_description">"Toute membre de %1$s peut joindre le salon."</string>
   <string name="screen_create_room_room_access_section_restricted_option_title">"Standard"</string>
   <string name="screen_create_room_room_access_section_title">"Qui a accès"</string>
@@ -28,7 +28,8 @@ Vous pouvez modifier cela à tout moment dans les paramètres du salon."</string
   <string name="screen_create_room_room_address_section_title">"Adresse"</string>
   <string name="screen_create_room_room_visibility_section_title">"Visibilité du salon"</string>
   <string name="screen_create_room_space_selection_no_space_description">"(pas d’espace)"</string>
-  <string name="screen_create_room_space_selection_no_space_title">"Accueil"</string>
+  <string name="screen_create_room_space_selection_no_space_option">"Ne pas ajouter à un espace"</string>
+  <string name="screen_create_room_space_selection_no_space_title">"Aucun espace sélectionné"</string>
   <string name="screen_create_room_space_selection_sheet_title">"Ajouter à l’espace"</string>
   <string name="screen_create_room_topic_label">"Sujet (facultatif)"</string>
   <string name="screen_create_room_topic_placeholder">"Ajouter une description…"</string>
