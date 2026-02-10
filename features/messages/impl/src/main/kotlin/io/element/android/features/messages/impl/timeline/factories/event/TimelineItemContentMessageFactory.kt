@@ -83,7 +83,10 @@ class TimelineItemContentMessageFactory(
                 val dom = messageType.formattedCaption?.toHtmlDocument(permalinkParser = permalinkParser)
                 val formattedCaption = dom?.let(::parseHtml)
                     ?: messageType.caption?.withLinks()
-                val aspectRatio = aspectRatioOf(messageType.info?.width, messageType.info?.height)
+                // Coerce the image sizes and prevent invalid aspect ratios, which can cause crashes
+                val width = messageType.info?.width?.coerceIn(1, 10_000)
+                val height = messageType.info?.height?.coerceIn(1, 10_000)
+                val aspectRatio = aspectRatioOf(width, height)?.coerceAtMost(10f)
                 TimelineItemImageContent(
                     filename = messageType.filename,
                     fileSize = messageType.info?.size ?: 0,
@@ -94,8 +97,8 @@ class TimelineItemContentMessageFactory(
                     thumbnailSource = messageType.info?.thumbnailSource,
                     mimeType = messageType.info?.mimetype ?: MimeTypes.OctetStream,
                     blurhash = messageType.info?.blurhash,
-                    width = messageType.info?.width?.toInt(),
-                    height = messageType.info?.height?.toInt(),
+                    width = width?.toInt(),
+                    height = height?.toInt(),
                     thumbnailWidth = messageType.info?.thumbnailInfo?.width?.toInt(),
                     thumbnailHeight = messageType.info?.thumbnailInfo?.height?.toInt(),
                     aspectRatio = aspectRatio,
