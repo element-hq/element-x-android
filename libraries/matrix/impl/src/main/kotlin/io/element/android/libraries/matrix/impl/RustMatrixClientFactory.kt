@@ -66,7 +66,12 @@ class RustMatrixClientFactory(
     private val sqliteStoreBuilderProvider: SqliteStoreBuilderProvider,
     private val workManagerScheduler: WorkManagerScheduler,
 ) {
-    private val sessionDelegate = RustClientSessionDelegate(sessionStore, appCoroutineScope, coroutineDispatchers)
+    private val sessionDelegate = RustClientSessionDelegate(
+        sessionStore = sessionStore,
+        appCoroutineScope = appCoroutineScope,
+        analyticsService = analyticsService,
+        coroutineDispatchers = coroutineDispatchers
+    )
 
     suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
         val client = getBaseClientBuilder(
