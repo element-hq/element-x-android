@@ -413,9 +413,17 @@ Rageshake can be very useful to get logs from a release version of the applicati
 
 #### Developer options
 
-Element X Android has hidden developer options that are accessible by tapping 7 times on
-the version number at the bottom of the application settings screen. After tapping, a
-new option named "Developer options" will appear at the bottom of the list.
+> [!WARNING]
+> Developer options can result in unexpected application behavior or destructive
+> actions. Use with caution and only if you are instructed by someone at Element or are
+> already familiar.
+
+These options provide advanced controls for testing and debugging. They are visible by
+default in debug and nightly builds but are hidden in release versions.
+
+**Enabling in release builds:** Navigate to application settings and tap the version
+number at the bottom 7 times. After tapping, a new "Developer options" entry will appear
+at the bottom of the list.
 
 The developer options include feature flags, notification/push history, Element call
 customization, Rust SDK log levels, per-feature tracing toggles, Showkase to debug UI
