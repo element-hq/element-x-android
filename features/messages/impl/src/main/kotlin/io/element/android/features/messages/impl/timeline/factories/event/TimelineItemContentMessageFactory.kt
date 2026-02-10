@@ -50,6 +50,11 @@ import kotlinx.collections.immutable.toImmutableList
 import org.jsoup.nodes.Document
 import kotlin.time.Duration
 
+private const val MIN_IMAGE_SIZE = 1L
+private const val MAX_IMAGE_SIZE = 10_000L
+private const val MIN_ASPECT_RATIO = 0.001f
+private const val MAX_ASPECT_RATIO = 10f
+
 @Inject
 class TimelineItemContentMessageFactory(
     private val fileSizeFormatter: FileSizeFormatter,
@@ -84,9 +89,9 @@ class TimelineItemContentMessageFactory(
                 val formattedCaption = dom?.let(::parseHtml)
                     ?: messageType.caption?.withLinks()
                 // Coerce the image sizes and prevent invalid aspect ratios, which can cause crashes
-                val width = messageType.info?.width?.coerceIn(1, 10_000)
-                val height = messageType.info?.height?.coerceIn(1, 10_000)
-                val aspectRatio = aspectRatioOf(width, height)?.coerceAtMost(10f)
+                val width = messageType.info?.width?.coerceIn(MIN_IMAGE_SIZE, MAX_IMAGE_SIZE)
+                val height = messageType.info?.height?.coerceIn(MIN_IMAGE_SIZE, MAX_IMAGE_SIZE)
+                val aspectRatio = aspectRatioOf(width, height)?.coerceIn(MIN_ASPECT_RATIO, MAX_ASPECT_RATIO)
                 TimelineItemImageContent(
                     filename = messageType.filename,
                     fileSize = messageType.info?.size ?: 0,
@@ -99,8 +104,8 @@ class TimelineItemContentMessageFactory(
                     blurhash = messageType.info?.blurhash,
                     width = width?.toInt(),
                     height = height?.toInt(),
-                    thumbnailWidth = messageType.info?.thumbnailInfo?.width?.toInt(),
-                    thumbnailHeight = messageType.info?.thumbnailInfo?.height?.toInt(),
+                    thumbnailWidth = messageType.info?.thumbnailInfo?.width?.coerceIn(MIN_IMAGE_SIZE, MAX_IMAGE_SIZE)?.toInt(),
+                    thumbnailHeight = messageType.info?.thumbnailInfo?.height?.coerceIn(MIN_IMAGE_SIZE, MAX_IMAGE_SIZE)?.toInt(),
                     aspectRatio = aspectRatio,
                     formattedFileSize = fileSizeFormatter.format(messageType.info?.size ?: 0),
                     fileExtension = fileExtensionExtractor.extractFromName(messageType.filename)
