@@ -8,27 +8,6 @@ appId: ${MAESTRO_APP_ID}
 - tapOn:
     id: "login-continue"
 ## MAS page
-## Conditional workflow to pass the Chrome first launch welcome page.
-- retry:
-    maxRetries: 3
-    commands:
-      - runFlow:
-          when:
-            visible: 'Use without an account'
-          commands:
-            - tapOn: "Use without an account"
-      ## For older chrome versions
-      - runFlow:
-          when:
-            visible: 'Accept & continue'
-          commands:
-            - tapOn: "Accept & continue"
-      - runFlow:
-          when:
-            visible: 'No thanks'
-          commands:
-            - tapOn: "No thanks"
-## Working when running Maestro locally, but not on the CI yet.
 - retry:
     maxRetries: 3
     commands:
