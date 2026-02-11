@@ -109,10 +109,12 @@ fun SpaceView(
     modifier: Modifier = Modifier,
     acceptDeclineInviteView: @Composable () -> Unit,
 ) {
-    BackHandler {
+    var handledBack by remember { mutableStateOf(false) }
+    BackHandler(enabled = !handledBack) {
         if (state.isManageMode) {
             state.eventSink(SpaceEvents.ExitManageMode)
         } else {
+            handledBack = true
             onBackClick()
         }
     }
