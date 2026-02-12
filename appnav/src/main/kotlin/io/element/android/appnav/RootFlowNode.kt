@@ -16,9 +16,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.modality.BuildContext
+import com.bumble.appyx.core.navigation.NavElements
+import com.bumble.appyx.core.navigation.NavKey
+import com.bumble.appyx.core.navigation.Operation
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.state.MutableSavedStateMap
+import com.bumble.appyx.core.state.SavedStateMap
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
@@ -50,6 +54,7 @@ import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.waitForChildAttached
 import io.element.android.libraries.core.uri.ensureProtocol
 import io.element.android.libraries.deeplink.api.DeeplinkData
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.EventId
@@ -67,6 +72,7 @@ import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.api.watchers.AnalyticsColdStartWatcher
 import io.element.android.services.appnavstate.api.ROOM_OPENED_FROM_NOTIFICATION
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -93,19 +99,27 @@ class RootFlowNode(
     private val announcementService: AnnouncementService,
     private val analyticsService: AnalyticsService,
     private val analyticsColdStartWatcher: AnalyticsColdStartWatcher,
+    @AppCoroutineScope private val appCoroutineScope: CoroutineScope,
 ) : BaseFlowNode<RootFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.SplashScreen,
-        savedStateMap = buildContext.savedStateMap,
+        savedStateMap = null,
     ),
     buildContext = buildContext,
     plugins = plugins
 ) {
     override fun onBuilt() {
         analyticsColdStartWatcher.start()
-        matrixSessionCache.restoreWithSavedState(buildContext.savedStateMap)
+        appCoroutineScope.launch {
+            matrixSessionCache.restoreWithSavedState(buildContext.savedStateMap)
+            if (buildContext.savedStateMap != null) {
+                restoreSavedState(buildContext.savedStateMap)
+                observeNavState()
+            } else {
+                observeNavState()
+            }
+        }
         super.onBuilt()
-        observeNavState()
     }
 
     override fun onSaveInstanceState(state: MutableSavedStateMap) {
@@ -120,10 +134,15 @@ class RootFlowNode(
             when (navState.loggedInState) {
                 is LoggedInState.LoggedIn -> {
                     if (navState.loggedInState.isTokenValid) {
-                        tryToRestoreLatestSession(
-                            onSuccess = { sessionId -> switchToLoggedInFlow(sessionId, navState.cacheIndex) },
-                            onFailure = { switchToNotLoggedInFlow(null) }
-                        )
+                        val sessionId = SessionId(navState.loggedInState.sessionId)
+                        if (matrixSessionCache.getOrNull(sessionId) != null) {
+                            switchToLoggedInFlow(sessionId, navState.cacheIndex)
+                        } else {
+                            tryToRestoreLatestSession(
+                                onSuccess = { sessionId -> switchToLoggedInFlow(sessionId, navState.cacheIndex) },
+                                onFailure = { switchToNotLoggedInFlow(null) }
+                            )
+                        }
                     } else {
                         switchToSignedOutFlow(SessionId(navState.loggedInState.sessionId))
                     }
@@ -133,6 +152,41 @@ class RootFlowNode(
                 }
             }
         }.launchIn(lifecycleScope)
+    }
+
+    /**
+     * Restore the saved state for navigation in the current backstack.
+     *
+     * **WARNING:** this is an unsafe operation abusing the internals of the Appyx library, but it's the only way allow async state
+     * restoration and not having to block the main thread when the app starts.
+     *
+     * Modify with utmost care and double check any possible Appyx updates that might break this.
+     */
+    @Suppress("UNCHECKED_CAST")
+    private fun restoreSavedState(savedStateMap: SavedStateMap?) {
+        if (savedStateMap == null) return
+
+        // 'NavModel' is the key used for storing the nav model state data in the map in Appyx
+        val savedElements = buildContext.savedStateMap?.get("NavModel") as? NavElements<NavTarget, BackStack.State>
+        if (savedElements != null) {
+            Timber.d("restoreSavedElements: Saved elements found, restoring them.")
+            backstack.accept(RestoreHistoryOperation(savedElements))
+        }
+    }
+
+    /**
+     * Extract the saved state for navigation in the [navTarget].
+     *
+     * **WARNING:** this is an unsafe operation abusing the internals of the Appyx library, but it's the only way allow async state
+     * restoration and not having to block the main thread when the app starts.
+     *
+     * Modify with utmost care and double check any possible Appyx updates that might break this.
+     */
+    @Suppress("UNCHECKED_CAST")
+    private fun extractSavedStateForNavTarget(navTarget: NavTarget, savedStateMap: SavedStateMap?): SavedStateMap? {
+        // 'ChildrenState' is the key used for storing the children state data in the map in Appyx
+        val childrenState = savedStateMap?.get("ChildrenState") as? Map<NavKey<NavTarget>, SavedStateMap> ?: return null
+        return childrenState.entries.find { (key, _) -> key.navTarget == navTarget }?.value
     }
 
     private fun switchToLoggedInFlow(sessionId: SessionId, navId: Int) {
@@ -203,6 +257,17 @@ class RootFlowNode(
         }
     }
 
+    @Parcelize
+    class RestoreHistoryOperation<NavTarget : Any>(private val navElements: NavElements<NavTarget, BackStack.State>) : Operation<NavTarget, BackStack.State> {
+        override fun isApplicable(elements: NavElements<NavTarget, BackStack.State>): Boolean {
+            return true
+        }
+
+        override fun invoke(existing: NavElements<NavTarget, BackStack.State>): NavElements<NavTarget, BackStack.State> {
+            return navElements
+        }
+    }
+
     sealed interface NavTarget : Parcelable {
         @Parcelize data object SplashScreen : NavTarget
 
@@ -243,6 +308,13 @@ class RootFlowNode(
                     override fun navigateToAddAccount() {
                         backstack.push(NavTarget.NotLoggedInFlow(null))
                     }
+                }
+                val savedNavState = extractSavedStateForNavTarget(navTarget, this.buildContext.savedStateMap)
+                val buildContext = if (savedNavState != null) {
+                    Timber.d("Creating a $navTarget with restored saved state")
+                    buildContext.copy(savedStateMap = savedNavState)
+                } else {
+                    buildContext.copy(savedStateMap = savedNavState)
                 }
                 createNode<LoggedInAppScopeFlowNode>(buildContext, plugins = listOf(inputs, callback))
             }
