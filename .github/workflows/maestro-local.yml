@@ -18,9 +18,8 @@ jobs:
   build-apk:
     name: Build APK
     runs-on: ubuntu-latest
-    # Allow one per PR.
     concurrency:
-      group: ${{ format('maestro-{0}', github.ref) }}
+      group: ${{ format('maestro-build-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
       - uses: actions/checkout@v6
@@ -57,10 +56,10 @@ jobs:
     name: Maestro test suite
     runs-on: ubuntu-latest
     needs: [ build-apk ]
-    # Allow one per PR.
+    # Allow only one to run at a time, since they use the same environment.
+    # Otherwise, tests running in parallel can break each other.
     concurrency:
-      group: ${{ format('maestro-{0}', github.ref) }}
-      cancel-in-progress: true
+      group: maestro-test
     steps:
       - uses: actions/checkout@v6
         if: (github.event_name == 'pull_request' && github.event.pull_request.fork == null) || github.event_name == 'workflow_dispatch'
