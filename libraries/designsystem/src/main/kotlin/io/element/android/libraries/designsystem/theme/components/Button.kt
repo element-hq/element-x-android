@@ -229,7 +229,7 @@ private fun ButtonInternal(
                 Spacer(modifier = Modifier.width(8.dp))
             }
             leadingIcon != null -> {
-                androidx.compose.material.Icon(
+                Icon(
                     painter = leadingIcon.getPainter(),
                     contentDescription = null,
                     tint = LocalContentColor.current,
