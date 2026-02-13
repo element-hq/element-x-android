@@ -42,11 +42,12 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
+import kotlin.math.abs
 import kotlin.time.Duration.Companion.seconds
 
 private const val PAGE_SIZE = 20
 private const val EXTENDED_VISIBILITY_RANGE_SIZE = 40
-private const val SUBSCRIBE_TO_VISIBLE_ROOMS_DEBOUNCE_IN_MILLIS = 300L
+private const val SUBSCRIBE_TO_VISIBLE_ROOMS_DEBOUNCE_IN_MILLIS = 500L
 private const val PAGINATION_THRESHOLD = 3 * PAGE_SIZE
 
 @Inject
@@ -71,7 +72,7 @@ class RoomListDataSource(
         source = RoomList.Source.All,
         coroutineScope = sessionCoroutineScope
     )
-    private val _roomSummariesFlow = MutableSharedFlow<ImmutableList<RoomListRoomSummary>>(replay = 1)
+    private val _roomSummariesFlow = MutableSharedFlow<ImmutableList<RoomListRoomSummary>>(replay = 1, extraBufferCapacity = 5)
 
     private val lock = Mutex()
     private val diffCache = MutableListDiffCache<RoomListRoomSummary>()
@@ -106,13 +107,19 @@ class RoomListDataSource(
     }
 
     private var currentSubscribeToVisibleRoomsJob: Job? = null
+    private var prevRange = IntRange(0, 0)
     private fun CoroutineScope.subscribeToVisibleRoomsIfNeeded(range: IntRange) {
         currentSubscribeToVisibleRoomsJob?.cancel()
         currentSubscribeToVisibleRoomsJob = launch {
+            // Don't subscribe to new rooms unless we've moved enough in the room list
+            if (abs(range.last - prevRange.last) < 5) return@launch
+
             // Debounce the subscription to avoid subscribing to too many rooms
             delay(SUBSCRIBE_TO_VISIBLE_ROOMS_DEBOUNCE_IN_MILLIS)
 
             if (range.isEmpty()) return@launch
+
+            prevRange = range
             val currentRoomList = roomSummariesFlow.first()
             // Use extended range to 'prefetch' the next rooms info
             val midExtendedRangeSize = EXTENDED_VISIBILITY_RANGE_SIZE / 2
