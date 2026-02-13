@@ -13,6 +13,7 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
 import io.element.android.wysiwyg.utils.HtmlToDomParser
+import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 
 /**
@@ -33,17 +34,25 @@ fun FormattedBody.toHtmlDocument(
         // We don't trim the start in case it's used as indentation.
         ?.trimEnd()
         ?.let { formattedBody ->
-            val dom = if (prefix != null) {
-                HtmlToDomParser.document("$prefix $formattedBody")
-            } else {
-                HtmlToDomParser.document(formattedBody)
-            }
+            val htmlToProcess = if (prefix != null) "$prefix $formattedBody" else formattedBody
+
+            // Convert tables to pre/code blocks before the wysiwyg safelist strips them
+            val processedHtml = convertTablesInHtml(htmlToProcess)
+
+            val dom = HtmlToDomParser.document(processedHtml)
 
             // Prepend `@` to mentions
             fixMentions(dom, permalinkParser)
 
             dom
         }
+}
+
+private fun convertTablesInHtml(html: String): String {
+    if ("<table" !in html) return html
+    val doc = Jsoup.parse(html)
+    doc.convertTablesToText()
+    return doc.body().html()
 }
 
 private fun fixMentions(

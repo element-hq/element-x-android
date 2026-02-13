@@ -121,6 +121,22 @@ class ToPlainTextTest {
     }
 
     @Test
+    fun `FormattedBody toPlainText - converts table to plain text`() {
+        val formattedBody = FormattedBody(
+            format = MessageFormat.HTML,
+            body = "<table><thead><tr><th>Name</th><th>Age</th></tr></thead>" +
+                "<tbody><tr><td>Alice</td><td>30</td></tr></tbody></table>"
+        )
+        val result = formattedBody.toPlainText(permalinkParser = FakePermalinkParser())
+        // PlainTextNodeVisitor normalizes whitespace from TextNode.text(), so
+        // newlines and extra spaces in the pipe table are collapsed.
+        assertThat(result).contains("Name")
+        assertThat(result).contains("Age")
+        assertThat(result).contains("Alice")
+        assertThat(result).contains("30")
+    }
+
+    @Test
     fun `TextMessageType toPlainText - returns the markdown body if the formatted one cannot be parsed`() {
         val messageType = TextMessageType(
             body = "This is the fallback text",
