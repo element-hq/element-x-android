@@ -10,7 +10,13 @@ package io.element.android.libraries.matrix.impl.roomlist
 
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.services.analytics.api.AnalyticsService
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
@@ -19,7 +25,7 @@ import org.matrix.rustcomponents.sdk.RoomListEntriesUpdate
 import org.matrix.rustcomponents.sdk.RoomListServiceInterface
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
-import kotlin.collections.groupingBy
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.coroutines.CoroutineContext
 
 class RoomSummaryListProcessor(
@@ -29,14 +35,55 @@ class RoomSummaryListProcessor(
     private val roomSummaryFactory: RoomSummaryFactory,
     private val analyticsService: AnalyticsService,
 ) {
-    private val mutex = Mutex()
+    private val updateSummariesMutex = Mutex()
+    private val modifyPendingJobsMutex = Mutex()
+
+    private val coroutineScope = CoroutineScope(coroutineContext + Dispatchers.Default)
+
+    private var index = AtomicInteger(0)
+
+    private var pendingJobChannel = Channel<UpdateEntry>(Channel.UNLIMITED)
+    private var job: Job? = null
+
+    init {
+        setupChannel(reset = false)
+    }
+
+    private fun setupChannel(reset: Boolean) {
+        if (reset) {
+            job?.cancel()
+            pendingJobChannel.close()
+        }
+
+        pendingJobChannel = Channel(Channel.UNLIMITED)
+
+        job = coroutineScope.launch {
+            while (coroutineContext.isActive) {
+                val entry = pendingJobChannel.receive()
+                Timber.d("Applying entry update #${entry.index}")
+                updateRoomSummaries(entry.updates) {
+                    for (update in entry.updates) {
+                        applyUpdate(update)
+                    }
+                }
+            }
+        }
+    }
 
     suspend fun postUpdate(updates: List<RoomListEntriesUpdate>) {
-        updateRoomSummaries(updates) {
-            Timber.v("Update rooms from postUpdates (with ${updates.size} items) on ${Thread.currentThread()}")
-            updates.forEach { update ->
-                applyUpdate(update)
+        modifyPendingJobsMutex.withLock {
+            val firstUpdate = updates.firstOrNull()
+            // If there were any pending jobs for the room list and we receive a reset/clear operation, cancel them
+            // It makes no sense to apply them if we're going override them later
+            val indexedUpdates = UpdateEntry(index.incrementAndGet(), updates)
+            Timber.d("#${indexedUpdates.index} - Received entry update")
+
+            if (firstUpdate is RoomListEntriesUpdate.Reset || firstUpdate is RoomListEntriesUpdate.Clear) {
+                Timber.d("Cancelling all pending jobs: found entry update ${firstUpdate.javaClass}")
+                setupChannel(reset = true)
             }
+
+            pendingJobChannel.send(indexedUpdates)
         }
     }
 
@@ -112,7 +159,7 @@ class RoomSummaryListProcessor(
     private suspend fun updateRoomSummaries(updates: List<RoomListEntriesUpdate>, block: suspend MutableList<RoomSummary>.() -> Unit) = withContext(
         coroutineContext
     ) {
-        mutex.withLock {
+        updateSummariesMutex.withLock {
             val current = roomSummaries.replayCache.lastOrNull()
             val mutableRoomSummaries = current.orEmpty().toMutableList()
             block(mutableRoomSummaries)
@@ -138,3 +185,8 @@ class RoomSummaryListProcessor(
 }
 
 private fun List<RoomListEntriesUpdate>.description(): String = joinToString { it.describe() }
+
+data class UpdateEntry(
+    val index: Int,
+    val updates: List<RoomListEntriesUpdate>,
+)
