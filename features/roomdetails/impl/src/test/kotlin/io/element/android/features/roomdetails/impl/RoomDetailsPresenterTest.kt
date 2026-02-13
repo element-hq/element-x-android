@@ -565,6 +565,53 @@ class RoomDetailsPresenterTest {
     }
 
     @Test
+    fun `present - when set is low priority event is emitted, then the action is called`() = runTest {
+        val setIsLowPriorityResult = lambdaRecorder<Boolean, Result<Unit>> { _ -> Result.success(Unit) }
+        val room = aJoinedRoom(
+            setIsLowPriorityResult = setIsLowPriorityResult,
+            roomPermissions = roomPermissions(),
+        )
+        val analyticsService = FakeAnalyticsService()
+        val presenter =
+            createRoomDetailsPresenter(room = room, analyticsService = analyticsService)
+        presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
+            val initialState = awaitItem()
+            initialState.eventSink(RoomDetailsEvent.SetLowPriority(true))
+            setIsLowPriorityResult.assertions().isCalledOnce().with(value(true))
+            initialState.eventSink(RoomDetailsEvent.SetLowPriority(false))
+            setIsLowPriorityResult.assertions().isCalledExactly(2)
+                .withSequence(
+                    listOf(value(true)),
+                    listOf(value(false)),
+                )
+            assertThat(analyticsService.capturedEvents).containsExactly(
+                Interaction(name = Interaction.Name.MobileRoomLowPriorityToggle),
+                Interaction(name = Interaction.Name.MobileRoomLowPriorityToggle)
+            )
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - changes in room info updates the is low priority flag`() = runTest {
+        val room = aJoinedRoom(
+            roomPermissions = roomPermissions(),
+        )
+        val presenter = createRoomDetailsPresenter(room = room)
+        presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
+            room.givenRoomInfo(aRoomInfo(isLowPriority = true))
+            consumeItemsUntilPredicate { it.isLowPriority }.last().let { state ->
+                assertThat(state.isLowPriority).isTrue()
+            }
+            room.givenRoomInfo(aRoomInfo(isLowPriority = false))
+            consumeItemsUntilPredicate { !it.isLowPriority }.last().let { state ->
+                assertThat(state.isLowPriority).isFalse()
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
     fun `present - show knock requests`() = runTest {
         val room = aJoinedRoom(
             roomPermissions = roomPermissions(),

@@ -42,7 +42,7 @@ internal class RoomListFactory(
         pageSize: Int,
         coroutineContext: CoroutineContext,
         coroutineScope: CoroutineScope,
-        initialFilter: RoomListFilter = all(),
+        filter: RoomListFilter = all(),
         innerProvider: suspend () -> InnerRoomList
     ): DynamicRoomList {
         val loadingStateFlow: MutableStateFlow<RoomList.LoadingState> = MutableStateFlow(RoomList.LoadingState.NotLoaded)
@@ -58,7 +58,7 @@ internal class RoomListFactory(
             innerRoomList.let { innerRoomList ->
                 innerRoomList.entriesFlow(
                     pageSize = pageSize,
-                    initialFilterKind = RoomListFilterMapper.toRustFilter(initialFilter),
+                    initialFilterKind = RoomListFilterMapper.toRustFilter(filter),
                     onControllerCreated = { controller ->
                         dynamicController = controller
                     }

@@ -201,6 +201,13 @@ fun RoomDetailsView(
                     }
                 )
 
+                LowPriorityItem(
+                    isLowPriority = state.isLowPriority,
+                    onLowPriorityChanges = {
+                        state.eventSink(RoomDetailsEvent.SetLowPriority(it))
+                    }
+                )
+
                 if (state.canShowSecurityAndPrivacy) {
                     SecurityAndPrivacyItem(
                         onClick = onSecurityAndPrivacyClick
@@ -630,6 +637,19 @@ private fun FavoriteItem(
         title = stringResource(id = textResId),
         isChecked = isFavorite,
         onCheckedChange = onFavoriteChanges
+    )
+}
+
+@Composable
+private fun LowPriorityItem(
+    isLowPriority: Boolean,
+    onLowPriorityChanges: (Boolean) -> Unit,
+) {
+    PreferenceSwitch(
+        icon = CompoundIcons.ArrowDown(),
+        title = stringResource(id = CommonStrings.common_low_priority),
+        isChecked = isLowPriority,
+        onCheckedChange = onLowPriorityChanges
     )
 }
 

@@ -43,6 +43,7 @@ class RoomListSearchDataSource(
     private val roomList = roomListService.createRoomList(
         pageSize = PAGE_SIZE,
         source = RoomList.Source.All,
+        filter = RoomListFilter.All(emptyList()),
         coroutineScope = coroutineScope
     )
 

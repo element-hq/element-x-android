@@ -69,7 +69,8 @@ class RoomListDataSource(
     private val roomList = roomListService.createRoomList(
         pageSize = PAGE_SIZE,
         source = RoomList.Source.All,
-        coroutineScope = sessionCoroutineScope
+        filter = RoomListFilter.NonLowPriority,
+        coroutineScope = sessionCoroutineScope,
     )
     private val _roomSummariesFlow = MutableSharedFlow<ImmutableList<RoomListRoomSummary>>(replay = 1)
 

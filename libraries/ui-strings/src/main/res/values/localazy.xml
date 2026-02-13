@@ -252,6 +252,7 @@ Reason: %1$s."</string>
   <string name="common_link_new_device">"Link new device"</string>
   <string name="common_loading">"Loading…"</string>
   <string name="common_loading_more">"Loading more…"</string>
+  <string name="common_low_priority">"Low priority"</string>
   <plurals name="common_many_members">
     <item quantity="one">"%d other"</item>
     <item quantity="other">"%d others"</item>

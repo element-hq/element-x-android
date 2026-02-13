@@ -290,6 +290,19 @@ class RoomDetailsViewTest {
         eventsRecorder.assertSingle(RoomDetailsEvent.SetFavorite(true))
     }
 
+    @Config(qualifiers = "h1024dp")
+    @Test
+    fun `click on low priority emit expected Event`() {
+        val eventsRecorder = EventsRecorder<RoomDetailsEvent>()
+        rule.setRoomDetailView(
+            state = aRoomDetailsState(
+                eventSink = eventsRecorder,
+            ),
+        )
+        rule.clickOn(CommonStrings.common_low_priority)
+        eventsRecorder.assertSingle(RoomDetailsEvent.SetLowPriority(true))
+    }
+
     @Config(qualifiers = "h1500dp")
     @Test
     fun `click on leave emit expected Event`() {

@@ -28,7 +28,6 @@ import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.announcement.api.Announcement
 import io.element.android.features.announcement.api.AnnouncementService
 import io.element.android.features.home.impl.datasource.RoomListDataSource
-import io.element.android.features.home.impl.filters.RoomListFilter.Rooms
 import io.element.android.features.home.impl.filters.RoomListFiltersState
 import io.element.android.features.home.impl.filters.into
 import io.element.android.features.home.impl.search.RoomListSearchEvent
@@ -71,6 +70,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.takeWhile
 import kotlinx.coroutines.launch
+import io.element.android.features.home.impl.filters.RoomListFilter.LowPriority as LowPriorityFilter
 
 @Inject
 class RoomListPresenter(
@@ -140,6 +140,7 @@ class RoomListPresenter(
                     leaveRoomState.eventSink(LeaveRoomEvent.LeaveRoom(event.roomId, needsConfirmation = event.needsConfirmation))
                 }
                 is RoomListEvent.SetRoomIsFavorite -> coroutineScope.setRoomIsFavorite(event.roomId, event.isFavorite)
+                is RoomListEvent.SetRoomIsLowPriority -> coroutineScope.setRoomIsLowPriority(event.roomId, event.isLowPriority)
                 is RoomListEvent.MarkAsRead -> coroutineScope.markAsRead(event.roomId)
                 is RoomListEvent.MarkAsUnread -> coroutineScope.markAsUnread(event.roomId)
                 is RoomListEvent.AcceptInvite -> {
@@ -159,9 +160,16 @@ class RoomListPresenter(
         }
 
         LaunchedEffect(filtersState.filterSelectionStates, spaceFiltersState.selectedFilter()) {
-            val selectedFilters = filtersState.selectedFilters().map { filter -> filter.into() }
+            val filters = filtersState.selectedFilters()
+            val selectedFilters = filters.map { filter -> filter.into() }
+            // Hide low priority rooms by default; only show them when the LowPriority filter chip is active
+            val exclusions = if (filters.none { it == LowPriorityFilter }) {
+                listOf(RoomListFilter.NonLowPriority)
+            } else {
+                emptyList()
+            }
             val selectedSpaceFilter = spaceFiltersState.selectedFilter().into()
-            val allFilters = RoomListFilter.All(selectedFilters + listOfNotNull(selectedSpaceFilter))
+            val allFilters = RoomListFilter.All(selectedFilters + exclusions + listOfNotNull(selectedSpaceFilter))
             roomListDataSource.updateFilter(allFilters)
         }
 
@@ -270,6 +278,7 @@ class RoomListPresenter(
             roomName = event.roomSummary.name,
             isDm = event.roomSummary.isDm,
             isFavorite = event.roomSummary.isFavorite,
+            isLowPriority = event.roomSummary.isLowPriority,
             hasNewContent = event.roomSummary.hasNewContent,
             displayClearRoomCacheAction = appPreferencesStore.isDeveloperModeEnabledFlow().first(),
         )
@@ -280,13 +289,12 @@ class RoomListPresenter(
             val isShowingContextMenuFlow = snapshotFlow { contextMenuState.value is RoomListState.ContextMenu.Shown }
                 .distinctUntilChanged()
 
-            val isFavoriteFlow = room.roomInfoFlow
-                .map { it.isFavorite }
+            room.roomInfoFlow
+                .map { it.isFavorite to it.isLowPriority }
                 .distinctUntilChanged()
-
-            isFavoriteFlow
-                .onEach { isFavorite ->
-                    contextMenuState.value = initialState.copy(isFavorite = isFavorite)
+                .onEach { (isFavorite, isLowPriority) ->
+                    val current = contextMenuState.value as? RoomListState.ContextMenu.Shown ?: return@onEach
+                    contextMenuState.value = current.copy(isFavorite = isFavorite, isLowPriority = isLowPriority)
                 }
                 .flatMapLatest { isShowingContextMenuFlow }
                 .takeWhile { isShowingContextMenu -> isShowingContextMenu }
@@ -300,6 +308,12 @@ class RoomListPresenter(
                 .onSuccess {
                     analyticsService.captureInteraction(name = Interaction.Name.MobileRoomListRoomContextMenuFavouriteToggle)
                 }
+        }
+    }
+
+    private fun CoroutineScope.setRoomIsLowPriority(roomId: RoomId, isLowPriority: Boolean) = launch {
+        client.getRoom(roomId)?.use { room ->
+            room.setIsLowPriority(isLowPriority)
         }
     }
 

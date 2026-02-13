@@ -50,6 +50,7 @@ class FakeBaseRoom(
     private val getUpdatedMemberResult: (UserId) -> Result<RoomMember> = { lambdaError() },
     private val joinRoomResult: () -> Result<Unit> = { lambdaError() },
     private val setIsFavoriteResult: (Boolean) -> Result<Unit> = { lambdaError() },
+    private val setIsLowPriorityResult: (Boolean) -> Result<Unit> = { lambdaError() },
     private val markAsReadResult: (ReceiptType) -> Result<Unit> = { Result.success(Unit) },
     private val powerLevelsResult: () -> Result<RoomPowerLevelsValues> = { lambdaError() },
     private val leaveRoomLambda: () -> Result<Unit> = { lambdaError() },
@@ -155,6 +156,10 @@ class FakeBaseRoom(
 
     override suspend fun setIsFavorite(isFavorite: Boolean): Result<Unit> {
         return setIsFavoriteResult(isFavorite)
+    }
+
+    override suspend fun setIsLowPriority(isLowPriority: Boolean): Result<Unit> {
+        return setIsLowPriorityResult(isLowPriority)
     }
 
     override suspend fun markAsRead(receiptType: ReceiptType): Result<Unit> {

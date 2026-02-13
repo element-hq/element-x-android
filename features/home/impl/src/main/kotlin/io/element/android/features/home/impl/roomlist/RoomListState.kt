@@ -43,6 +43,7 @@ data class RoomListState(
             val roomName: String?,
             val isDm: Boolean,
             val isFavorite: Boolean,
+            val isLowPriority: Boolean,
             val hasNewContent: Boolean,
             val displayClearRoomCacheAction: Boolean,
         ) : ContextMenu

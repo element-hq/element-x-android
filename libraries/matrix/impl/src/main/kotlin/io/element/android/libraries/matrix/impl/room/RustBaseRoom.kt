@@ -213,6 +213,12 @@ class RustBaseRoom(
         }
     }
 
+    override suspend fun setIsLowPriority(isLowPriority: Boolean): Result<Unit> = withContext(roomDispatcher) {
+        runCatchingExceptions {
+            innerRoom.setIsLowPriority(isLowPriority, null)
+        }
+    }
+
     override suspend fun markAsRead(receiptType: ReceiptType): Result<Unit> = withContext(roomDispatcher) {
         runCatchingExceptions {
             innerRoom.markAsRead(receiptType.toRustReceiptType())

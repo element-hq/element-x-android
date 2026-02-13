@@ -113,6 +113,11 @@ interface BaseRoom : Closeable {
     suspend fun roomPermissions(): Result<RoomPermissions>
 
     /**
+     * Sets the room as low priority or not, based on the [isLowPriority] parameter.
+     */
+    suspend fun setIsLowPriority(isLowPriority: Boolean): Result<Unit>
+
+    /**
      * Gets the display name of the user with the provided [userId] in the room.
      */
     suspend fun userDisplayName(userId: UserId): Result<String?>
