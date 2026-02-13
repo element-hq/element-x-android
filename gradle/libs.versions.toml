@@ -126,7 +126,6 @@ androidx_compose_ui_tooling = { module = "androidx.compose.ui:ui-tooling" }
 androidx_compose_ui_tooling_preview = { module = "androidx.compose.ui:ui-tooling-preview" }
 androidx_compose_ui_test_manifest = { module = "androidx.compose.ui:ui-test-manifest" }
 androidx_compose_ui_test_junit = { module = "androidx.compose.ui:ui-test-junit4-android" }
-androidx_compose_material = { module = "androidx.compose.material:material" }
 androidx_compose_material_icons = { module = "androidx.compose.material:material-icons-extended" }
 
 # Coroutines
