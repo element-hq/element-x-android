@@ -31,8 +31,8 @@ jobs:
           android: false
           dotnet: true
           haskell: true
-          # This takes way too long to run
-          large-packages: true
+          # This takes way too long to run (~2 minutes) and it saves only ~5.5GB
+          large-packages: false
           docker-images: true
           swap-storage: false
 
