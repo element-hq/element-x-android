@@ -77,11 +77,11 @@ fun Project.setupKover() {
                     defaultVariants(project)
 
                     // Using the cache for coverage verification seems to be flaky, so we disable it for now.
-                    val taskName = "koverCachedVerify${variant.replaceFirstChar(Char::titlecase)}"
-                    val cachedTask = project.tasks.findByName(taskName)
-                    cachedTask?.let {
-                        it.outputs.upToDateWhen { false }
-                    }
+//                    val taskName = "koverCachedVerify${variant.replaceFirstChar(Char::titlecase)}"
+//                    val cachedTask = project.tasks.findByName(taskName)
+//                    cachedTask?.let {
+//                        it.outputs.upToDateWhen { false }
+//                    }
                 }
             }
 

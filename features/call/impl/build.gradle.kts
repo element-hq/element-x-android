@@ -32,31 +32,31 @@ android {
         buildConfigFieldStr(
             name = "SENTRY_DSN",
             value = System.getenv("ELEMENT_CALL_SENTRY_DSN")
-                ?: readLocalProperty("features.call.sentry.dsn")
+                ?: providers.gradleProperty("features.call.sentry.dsn")?.orNull
                 ?: ""
         )
         buildConfigFieldStr(
             name = "POSTHOG_USER_ID",
             value = System.getenv("ELEMENT_CALL_POSTHOG_USER_ID")
-                ?: readLocalProperty("features.call.posthog.userid")
+                ?: providers.gradleProperty("features.call.posthog.userid")?.orNull
                 ?: ""
         )
         buildConfigFieldStr(
             name = "POSTHOG_API_HOST",
             value = System.getenv("ELEMENT_CALL_POSTHOG_API_HOST")
-                ?: readLocalProperty("features.call.posthog.api.host")
+                ?: providers.gradleProperty("features.call.posthog.api.host")?.orNull
                 ?: ""
         )
         buildConfigFieldStr(
             name = "POSTHOG_API_KEY",
             value = System.getenv("ELEMENT_CALL_POSTHOG_API_KEY")
-                ?: readLocalProperty("features.call.posthog.api.key")
+                ?: providers.gradleProperty("features.call.posthog.api.key")?.orNull
                 ?: ""
         )
         buildConfigFieldStr(
             name = "RAGESHAKE_URL",
             value = System.getenv("ELEMENT_CALL_RAGESHAKE_URL")
-                ?: readLocalProperty("features.call.regeshake.url")
+                ?: providers.gradleProperty("features.call.regeshake.url")?.orNull
                 ?: ""
         )
     }

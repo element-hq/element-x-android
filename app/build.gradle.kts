@@ -31,7 +31,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     // When using precompiled plugins, we need to apply the firebase plugin like this
     id(libs.plugins.firebaseAppDistribution.get().pluginId)
-    alias(libs.plugins.knit)
+//    alias(libs.plugins.knit)
     id("kotlin-parcelize")
     alias(libs.plugins.licensee)
     alias(libs.plugins.kotlin.serialization)
@@ -90,12 +90,12 @@ android {
         }
         register("nightly") {
             keyAlias = System.getenv("ELEMENT_ANDROID_NIGHTLY_KEYID")
-                ?: project.property("signing.element.nightly.keyId") as? String?
+                ?: property("signing.element.nightly.keyId") as? String?
             keyPassword = System.getenv("ELEMENT_ANDROID_NIGHTLY_KEYPASSWORD")
-                ?: project.property("signing.element.nightly.keyPassword") as? String?
+                ?: property("signing.element.nightly.keyPassword") as? String?
             storeFile = file("./signature/nightly.keystore")
             storePassword = System.getenv("ELEMENT_ANDROID_NIGHTLY_STOREPASSWORD")
-                ?: project.property("signing.element.nightly.storePassword") as? String?
+                ?: property("signing.element.nightly.storePassword") as? String?
         }
     }
 
@@ -212,7 +212,7 @@ android {
         )
 
         jniLibs {
-            useLegacyPackaging = project.findProperty("useLegacyPackaging")?.toString()?.toBoolean()
+            useLegacyPackaging = providers.gradleProperty("useLegacyPackaging")?.orNull?.toBoolean()
         }
     }
 }
@@ -247,24 +247,24 @@ androidComponents {
 }
 
 // Knit
-apply {
-    plugin("kotlinx-knit")
-}
-
-knit {
-    files = fileTree(project.rootDir) {
-        include(
-            "**/*.md",
-            "**/*.kt",
-            "*/*.kts",
-        )
-        exclude(
-            "**/build/**",
-            "*/.gradle/**",
-            "**/CHANGES.md",
-        )
-    }
-}
+//apply {
+//    plugin("kotlinx-knit")
+//}
+//
+//knit {
+//    files = fileTree(project.rootDir) {
+//        include(
+//            "**/*.md",
+//            "**/*.kt",
+//            "*/*.kts",
+//        )
+//        exclude(
+//            "**/build/**",
+//            "*/.gradle/**",
+//            "**/CHANGES.md",
+//        )
+//    }
+//}
 
 setupDependencyInjection()
 

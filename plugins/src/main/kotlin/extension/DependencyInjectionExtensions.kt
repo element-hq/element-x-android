@@ -22,7 +22,7 @@ import org.gradle.plugin.use.PluginDependency
 fun Project.setupDependencyInjection(
     generateNodeFactories: Boolean = shouldApplyAppyxCodegen(),
 ) {
-    if (project.path.endsWith(":api")) {
+    if (path.endsWith(":api")) {
         error("api module should not use setupDependencyInjection(). Move the implementation to `:impl` module")
     }
 
@@ -35,16 +35,16 @@ fun Project.setupDependencyInjection(
         applyPluginIfNeeded(libs.plugins.ksp)
 
         // Annotations to generate DI code for Appyx nodes
-        dependencies.implementation(project.project(":annotations"))
+        dependencies.implementation(project(":annotations"))
         // Code generator for the annotations above
-        dependencies.add("ksp", project.project(":codegen"))
+        dependencies.add("ksp", project(":codegen"))
     }
 }
 
 // These dependencies should only be needed for compose library or application modules
 private fun Project.shouldApplyAppyxCodegen(): Boolean {
-    return project.pluginManager.hasPlugin("io.element.android-compose-library")
-        || project.pluginManager.hasPlugin("io.element.android-compose-application")
+    return pluginManager.hasPlugin("io.element.android-compose-library")
+        || pluginManager.hasPlugin("io.element.android-compose-application")
 }
 
 private fun Project.applyPluginIfNeeded(plugin: Provider<PluginDependency>) {
