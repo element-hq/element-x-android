@@ -10,6 +10,8 @@ package io.element.android.libraries.matrix.impl.tracing
 
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.libraries.core.data.ByteUnit
+import io.element.android.libraries.core.data.megaBytes
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.tracing.LogLevel
 import io.element.android.libraries.matrix.api.tracing.TracingConfiguration
@@ -49,7 +51,10 @@ private fun WriteToFilesConfiguration.toTracingFileConfiguration(): TracingFileC
             path = directory,
             filePrefix = filenamePrefix,
             fileSuffix = filenameSuffix,
-            maxFiles = numberOfFiles?.toULong(),
+            // Have at max 100MB of logs in disk
+            maxTotalSizeBytes = 100.megaBytes.into(ByteUnit.BYTES).toULong(),
+            // Store up to 7 days of logs
+            maxAgeSeconds = (7 * 24 * 60 * 60).toULong(),
         )
     }
 }

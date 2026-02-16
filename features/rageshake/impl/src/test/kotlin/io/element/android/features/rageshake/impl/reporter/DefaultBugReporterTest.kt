@@ -429,7 +429,7 @@ class DefaultBugReporterTest {
         assertThat((param as WriteToFilesConfiguration.Enabled).directory).endsWith("/cache/logs/server.org")
         assertThat((param as WriteToFilesConfiguration.Enabled).filenamePrefix).isEqualTo("logs")
         assertThat((param as WriteToFilesConfiguration.Enabled).numberOfFiles).isEqualTo(168)
-        assertThat((param as WriteToFilesConfiguration.Enabled).filenameSuffix).isEqualTo("log")
+        assertThat((param as WriteToFilesConfiguration.Enabled).filenameSuffix).isEqualTo(".log")
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -491,7 +491,7 @@ class DefaultBugReporterTest {
         assertThat((param as WriteToFilesConfiguration.Enabled).directory).endsWith("/cache/logs")
         assertThat((param as WriteToFilesConfiguration.Enabled).filenamePrefix).isEqualTo("logs")
         assertThat((param as WriteToFilesConfiguration.Enabled).numberOfFiles).isEqualTo(168)
-        assertThat((param as WriteToFilesConfiguration.Enabled).filenameSuffix).isEqualTo("log")
+        assertThat((param as WriteToFilesConfiguration.Enabled).filenameSuffix).isEqualTo(".log")
     }
 
     @Test
