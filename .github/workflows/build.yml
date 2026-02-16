@@ -30,7 +30,7 @@ jobs:
         with:
           # this might remove tools that are actually needed,
           # if set to "true" but frees about 6 GB
-          tool-cache: false
+          tool-cache: true
           # all of these default to true, but we should only need the 'android' one (and maybe swap-storage?)
           android: false
           dotnet: true
