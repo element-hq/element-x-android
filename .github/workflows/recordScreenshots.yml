@@ -17,6 +17,20 @@ jobs:
     if: github.event_name == 'workflow_dispatch' || github.event.label.name == 'Record-Screenshots'
 
     steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          # This might remove tools that are actually needed, if set to "true" but frees about 6 GB
+          tool-cache: true
+          # All of these default to true, but we should only need the 'android' one (and maybe swap-storage?)
+          android: false
+          dotnet: true
+          haskell: true
+          # This takes way too long to run
+          large-packages: true
+          docker-images: true
+          swap-storage: false
+
       - name: Remove Record-Screenshots label
         if: github.event.label.name == 'Record-Screenshots'
         uses: actions-ecosystem/action-remove-labels@2ce5d41b4b6aa8503e285553f75ed56e0a40bae0 # v1.3.0

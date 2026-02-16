@@ -22,6 +22,20 @@ jobs:
       group: ${{ github.ref == 'refs/heads/main' && format('unit-tests-main-{0}', github.sha) || github.ref == 'refs/heads/develop' && format('unit-tests-develop-{0}', github.sha) || format('unit-tests-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          # This might remove tools that are actually needed, if set to "true" but frees about 6 GB
+          tool-cache: true
+          # All of these default to true, but we should only need the 'android' one (and maybe swap-storage?)
+          android: false
+          dotnet: true
+          haskell: true
+          # This takes way too long to run
+          large-packages: true
+          docker-images: true
+          swap-storage: false
+
       # Increase swapfile size to prevent screenshot tests getting terminated
       # https://github.com/actions/runner-images/discussions/7188#discussioncomment-6750749
       - name: 💽 Increase swapfile size

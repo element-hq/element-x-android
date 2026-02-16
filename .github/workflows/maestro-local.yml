@@ -22,6 +22,20 @@ jobs:
       group: ${{ format('maestro-build-{0}', github.ref) }}
       cancel-in-progress: true
     steps:
+      - name: Free Disk Space (Ubuntu)
+        uses: jlumbroso/free-disk-space@main
+        with:
+          # This might remove tools that are actually needed, if set to "true" but frees about 6 GB
+          tool-cache: true
+          # All of these default to true, but we should only need the 'android' one (and maybe swap-storage?)
+          android: false
+          dotnet: true
+          haskell: true
+          # This takes way too long to run
+          large-packages: true
+          docker-images: true
+          swap-storage: false
+
       - uses: actions/checkout@v6
         with:
           # Ensure we are building the branch and not the branch after being merged on develop
