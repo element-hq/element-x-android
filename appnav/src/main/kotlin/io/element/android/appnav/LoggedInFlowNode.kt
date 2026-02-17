@@ -66,6 +66,7 @@ import io.element.android.features.share.api.ShareEntryPoint
 import io.element.android.features.startchat.api.StartChatEntryPoint
 import io.element.android.features.userprofile.api.UserProfileEntryPoint
 import io.element.android.features.verifysession.api.IncomingVerificationEntryPoint
+import io.element.android.libraries.androidutils.collections.takeExceptLast
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.callback
@@ -111,6 +112,10 @@ import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toKotlinDuration
 import im.vector.app.features.analytics.plan.JoinedRoom as JoinedRoomAnalyticsEvent
+
+// The maximum number of room nodes that should be kept in the backstack at the same time.
+// Having 5 rooms in the backstack seems reasonable and shouldn't grow the saved state size too much.
+private const val MAX_ROOM_NODE_COUNT = 5
 
 @ContributesNode(SessionScope::class)
 @AssistedInject
@@ -693,23 +698,12 @@ private class AttachRoomOperation(
             }
 
             // Make sure the backstack of rooms can't grow indefinitely when opening permalinks.
-            // Having 5 rooms in the backstack seems reasonable and shouldn't grow the saved state size too much.
-            val maxRoomCount = 5
             val roomElementCount = elements.count { it.key.navTarget is LoggedInFlowNode.NavTarget.Room }
 
-            Timber.d("Current room nodes: $roomElementCount/$maxRoomCount")
-            val currentElements = if (roomElementCount + 1 > maxRoomCount) {
-                var keptRooms = 0
-                // Reverse the order so we keep the latest room nodes
-                elements.asReversed().mapNotNull { element ->
-                    if (element.key.navTarget is LoggedInFlowNode.NavTarget.Room) {
-                        keptRooms++
-                        if (keptRooms > maxRoomCount) {
-                            Timber.w("Discarding old room node, already reached the max count: $maxRoomCount")
-                            return@mapNotNull null
-                        }
-                    }
-                    element
+            Timber.d("Current room nodes: $roomElementCount/$MAX_ROOM_NODE_COUNT")
+            val currentElements = if (roomElementCount + 1 > MAX_ROOM_NODE_COUNT) {
+                elements.takeExceptLast(MAX_ROOM_NODE_COUNT) { element ->
+                    element.key.navTarget is LoggedInFlowNode.NavTarget.Room
                 }
                     // Then reverse the order again after removing the extra room nodes
                     .asReversed()
