@@ -17,7 +17,7 @@ jobs:
     if: ${{ github.repository == 'element-hq/element-x-android' }}
     steps:
       - name: Free Disk Space (Ubuntu)
-        uses: jlumbroso/free-disk-space@main
+        uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be
         with:
           # This might remove tools that are actually needed, if set to "true" but frees about 6 GB
           tool-cache: true
