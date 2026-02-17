@@ -18,7 +18,6 @@ import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.navigation.NavElements
 import com.bumble.appyx.core.navigation.NavKey
-import com.bumble.appyx.core.navigation.Operation
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.core.state.MutableSavedStateMap
@@ -168,7 +167,7 @@ class RootFlowNode(
         val savedElements = buildContext.savedStateMap?.get("NavModel") as? NavElements<NavTarget, BackStack.State>
         if (savedElements != null) {
             Timber.d("restoreSavedElements: Saved elements found, restoring them.")
-            backstack.accept(RestoreHistoryOperation(savedElements))
+            backstack.accept(ReplaceAllOperation(savedElements))
         }
     }
 
@@ -252,17 +251,6 @@ class RootFlowNode(
             }
             BackstackView(transitionHandler = transitionHandler)
             announcementService.Render(Modifier)
-        }
-    }
-
-    @Parcelize
-    class RestoreHistoryOperation<NavTarget : Any>(private val navElements: NavElements<NavTarget, BackStack.State>) : Operation<NavTarget, BackStack.State> {
-        override fun isApplicable(elements: NavElements<NavTarget, BackStack.State>): Boolean {
-            return true
-        }
-
-        override fun invoke(existing: NavElements<NavTarget, BackStack.State>): NavElements<NavTarget, BackStack.State> {
-            return navElements
         }
     }
 
