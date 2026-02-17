@@ -323,7 +323,7 @@ class LoggedInFlowNode(
             NavTarget.Home -> {
                 val callback = object : HomeEntryPoint.Callback {
                     override fun navigateToRoom(roomId: RoomId, joinedRoom: JoinedRoom?) {
-                        sessionCoroutineScope.launch {
+                        lifecycleScope.launch {
                             attachRoom(
                                 roomIdOrAlias = roomId.toRoomIdOrAlias(),
                                 joinedRoom = joinedRoom,
@@ -371,7 +371,7 @@ class LoggedInFlowNode(
             is NavTarget.Room -> {
                 val joinedRoomCallback = object : JoinedRoomLoadedFlowNode.Callback {
                     override fun navigateToRoom(roomId: RoomId, serverNames: List<String>) {
-                        sessionCoroutineScope.launch {
+                        lifecycleScope.launch {
                             attachRoom(roomIdOrAlias = roomId.toRoomIdOrAlias(), serverNames = serverNames, clearBackstack = false)
                         }
                     }
@@ -390,7 +390,7 @@ class LoggedInFlowNode(
                                     initialElement = RoomNavigationTarget.Root(data.eventId),
                                 )
                                 if (pushToBackstack) {
-                                    sessionCoroutineScope.launch {
+                                    lifecycleScope.launch {
                                         attachRoom(
                                             roomIdOrAlias = data.roomIdOrAlias,
                                             serverNames = data.viaParameters,
@@ -426,7 +426,7 @@ class LoggedInFlowNode(
             is NavTarget.UserProfile -> {
                 val callback = object : UserProfileEntryPoint.Callback {
                     override fun navigateToRoom(roomId: RoomId) {
-                        sessionCoroutineScope.launch {
+                        lifecycleScope.launch {
                             attachRoom(roomIdOrAlias = roomId.toRoomIdOrAlias(), clearBackstack = false)
                         }
                     }
