@@ -33,6 +33,7 @@ import io.element.android.appnav.di.MatrixSessionCache
 import io.element.android.appnav.intent.IntentResolver
 import io.element.android.appnav.intent.ResolvedIntent
 import io.element.android.appnav.room.RoomFlowNode
+import io.element.android.appnav.room.RoomNavigationTarget
 import io.element.android.appnav.root.RootNavStateFlowFactory
 import io.element.android.appnav.root.RootPresenter
 import io.element.android.appnav.root.RootView
@@ -430,7 +431,7 @@ class RootFlowNode(
                     roomIdOrAlias = permalinkData.roomIdOrAlias,
                     trigger = JoinedRoom.Trigger.MobilePermalink,
                     serverNames = permalinkData.viaParameters,
-                    eventId = focusedEventId,
+                    initialElement = RoomNavigationTarget.Root(eventId = focusedEventId),
                     clearBackstack = true
                 ).maybeAttachThread(permalinkData.threadId, permalinkData.eventId)
             }
@@ -454,7 +455,7 @@ class RootFlowNode(
                 is DeeplinkData.Room -> {
                     loggedInFlowNode.attachRoom(
                         roomIdOrAlias = deeplinkData.roomId.toRoomIdOrAlias(),
-                        eventId = if (deeplinkData.threadId != null) deeplinkData.threadId?.asEventId() else deeplinkData.eventId,
+                        initialElement = RoomNavigationTarget.Root(eventId = deeplinkData.threadId?.asEventId() ?: deeplinkData.eventId),
                         clearBackstack = true,
                     ).maybeAttachThread(deeplinkData.threadId, deeplinkData.eventId)
                 }

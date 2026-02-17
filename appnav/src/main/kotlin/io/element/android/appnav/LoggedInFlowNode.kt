@@ -331,7 +331,7 @@ class LoggedInFlowNode(
                         lifecycleScope.launch {
                             attachRoom(
                                 roomIdOrAlias = roomId.toRoomIdOrAlias(),
-                                joinedRoom = joinedRoom,
+                                initialElement = RoomNavigationTarget.Root(joinedRoom = joinedRoom),
                                 clearBackstack = false,
                             )
                         }
@@ -358,8 +358,12 @@ class LoggedInFlowNode(
                     }
 
                     override fun navigateToRoomSettings(roomId: RoomId) {
-                        sessionCoroutineScope.launch {
-                            backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias(), initialElement = RoomNavigationTarget.Details))
+                        lifecycleScope.launch {
+                            attachRoom(
+                                roomIdOrAlias = roomId.toRoomIdOrAlias(),
+                                initialElement = RoomNavigationTarget.Details,
+                                clearBackstack = false
+                            )
                         }
                     }
 
@@ -388,24 +392,25 @@ class LoggedInFlowNode(
                                 Timber.e("User link clicked: ${data.userId}.")
                             }
                             is PermalinkData.RoomLink -> {
-                                val target = NavTarget.Room(
-                                    roomIdOrAlias = data.roomIdOrAlias,
-                                    serverNames = data.viaParameters,
-                                    trigger = JoinedRoomAnalyticsEvent.Trigger.Timeline,
-                                    initialElement = RoomNavigationTarget.Root(data.eventId),
-                                )
                                 if (pushToBackstack) {
                                     lifecycleScope.launch {
                                         attachRoom(
                                             roomIdOrAlias = data.roomIdOrAlias,
                                             serverNames = data.viaParameters,
                                             trigger = JoinedRoomAnalyticsEvent.Trigger.Timeline,
-                                            eventId = data.eventId,
+                                            initialElement = RoomNavigationTarget.Root(data.eventId),
                                             clearBackstack = false
                                         )
                                     }
                                 } else {
-                                    backstack.replace(target)
+                                    backstack.replace(
+                                        NavTarget.Room(
+                                            roomIdOrAlias = data.roomIdOrAlias,
+                                            serverNames = data.viaParameters,
+                                            trigger = JoinedRoomAnalyticsEvent.Trigger.Timeline,
+                                            initialElement = RoomNavigationTarget.Root(data.eventId),
+                                        )
+                                    )
                                 }
                             }
                             is PermalinkData.FallbackLink,
@@ -462,12 +467,21 @@ class LoggedInFlowNode(
                     }
 
                     override fun navigateToRoomNotificationSettings(roomId: RoomId) {
-                        backstack.push(NavTarget.Room(roomId.toRoomIdOrAlias(), initialElement = RoomNavigationTarget.NotificationSettings))
+                        lifecycleScope.launch {
+                            attachRoom(
+                                roomIdOrAlias = roomId.toRoomIdOrAlias(),
+                                initialElement = RoomNavigationTarget.NotificationSettings,
+                            )
+                        }
                     }
 
                     override fun navigateToEvent(roomId: RoomId, eventId: EventId) {
                         sessionCoroutineScope.launch {
-                            attachRoom(roomIdOrAlias = roomId.toRoomIdOrAlias(), eventId = eventId, clearBackstack = false)
+                            attachRoom(
+                                roomIdOrAlias = roomId.toRoomIdOrAlias(),
+                                initialElement = RoomNavigationTarget.Root(eventId),
+                                clearBackstack = false
+                            )
                         }
                     }
                 }
@@ -499,7 +513,13 @@ class LoggedInFlowNode(
             is NavTarget.CreateSpace -> {
                 val callback = object : CreateRoomEntryPoint.Callback {
                     override fun onRoomCreated(roomId: RoomId) {
-                        backstack.replace(NavTarget.Room(roomIdOrAlias = RoomIdOrAlias.Id(roomId), serverNames = emptyList()))
+                        lifecycleScope.launch {
+                            attachRoom(
+                                roomIdOrAlias = roomId.toRoomIdOrAlias(),
+                                serverNames = emptyList(),
+                                clearBackstack = false,
+                            )
+                        }
                     }
                 }
                 createRoomEntryPoint
@@ -536,13 +556,13 @@ class LoggedInFlowNode(
                     buildContext = buildContext,
                     callback = object : RoomDirectoryEntryPoint.Callback {
                         override fun navigateToRoom(roomDescription: RoomDescription) {
-                            backstack.push(
-                                NavTarget.Room(
+                            lifecycleScope.launch {
+                                attachRoom(
                                     roomIdOrAlias = roomDescription.roomId.toRoomIdOrAlias(),
                                     roomDescription = roomDescription,
                                     trigger = JoinedRoomAnalyticsEvent.Trigger.RoomDirectory,
                                 )
-                            )
+                            }
                         }
                     },
                 )
@@ -588,11 +608,11 @@ class LoggedInFlowNode(
 
     suspend fun attachRoom(
         roomIdOrAlias: RoomIdOrAlias,
-        joinedRoom: JoinedRoom? = null,
         serverNames: List<String> = emptyList(),
         trigger: JoinedRoomAnalyticsEvent.Trigger? = null,
-        eventId: EventId? = null,
-        clearBackstack: Boolean,
+        roomDescription: RoomDescription? = null,
+        initialElement: RoomNavigationTarget = RoomNavigationTarget.Root(),
+        clearBackstack: Boolean = false,
     ): RoomFlowNode {
         waitForNavTargetAttached { navTarget ->
             navTarget is NavTarget.Home
@@ -601,8 +621,9 @@ class LoggedInFlowNode(
             val roomNavTarget = NavTarget.Room(
                 roomIdOrAlias = roomIdOrAlias,
                 serverNames = serverNames,
+                roomDescription = roomDescription,
                 trigger = trigger,
-                initialElement = RoomNavigationTarget.Root(eventId = eventId, joinedRoom = joinedRoom)
+                initialElement = initialElement,
             )
             backstack.accept(AttachRoomOperation(roomNavTarget, clearBackstack))
         }
@@ -612,8 +633,7 @@ class LoggedInFlowNode(
         return waitForChildAttached<RoomFlowNode, NavTarget> {
             it is NavTarget.Room &&
                 it.roomIdOrAlias == roomIdOrAlias &&
-                it.initialElement is RoomNavigationTarget.Root &&
-                it.initialElement.eventId == eventId
+                it.initialElement == initialElement
         }
     }
 
