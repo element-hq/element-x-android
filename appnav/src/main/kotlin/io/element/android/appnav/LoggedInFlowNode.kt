@@ -476,7 +476,7 @@ class LoggedInFlowNode(
                     }
 
                     override fun navigateToEvent(roomId: RoomId, eventId: EventId) {
-                        sessionCoroutineScope.launch {
+                        lifecycleScope.launch {
                             attachRoom(
                                 roomIdOrAlias = roomId.toRoomIdOrAlias(),
                                 initialElement = RoomNavigationTarget.Root(eventId),
@@ -579,7 +579,7 @@ class LoggedInFlowNode(
 
                             // Navigate to the room if the text/media was shared to a single one
                             roomIds.singleOrNull()?.let { roomId ->
-                                sessionCoroutineScope.launch {
+                                lifecycleScope.launch {
                                     // Wait until the incoming share screen is removed
                                     backstack.elements.first { it.lastOrNull()?.key?.navTarget !is NavTarget.IncomingShare }
 
