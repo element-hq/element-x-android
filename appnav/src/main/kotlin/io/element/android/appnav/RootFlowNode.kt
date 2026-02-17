@@ -114,10 +114,8 @@ class RootFlowNode(
             matrixSessionCache.restoreWithSavedState(buildContext.savedStateMap)
             if (buildContext.savedStateMap != null) {
                 restoreSavedState(buildContext.savedStateMap)
-                observeNavState()
-            } else {
-                observeNavState()
             }
+            observeNavState()
         }
         super.onBuilt()
     }
