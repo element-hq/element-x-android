@@ -66,7 +66,6 @@ import io.element.android.features.share.api.ShareEntryPoint
 import io.element.android.features.startchat.api.StartChatEntryPoint
 import io.element.android.features.userprofile.api.UserProfileEntryPoint
 import io.element.android.features.verifysession.api.IncomingVerificationEntryPoint
-import io.element.android.libraries.androidutils.collections.takeExceptLast
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.callback
@@ -694,6 +693,15 @@ private class AttachRoomOperation(
     val roomTarget: LoggedInFlowNode.NavTarget.Room,
     val clearBackstack: Boolean,
 ) : BackStackOperation<LoggedInFlowNode.NavTarget> {
+    /**
+     * Returns a list containing last [count] elements that match [predicate] while preserving other elements.
+     */
+    private fun <T> List<T>.keepingLast(count: Int, predicate: (T) -> Boolean): List<T> {
+        val matchingIndices = indices.filter { predicate(this[it]) }
+        val indicesToRemove = matchingIndices.dropLast(count).toSet()
+        return filterIndexed { index, _ -> index !in indicesToRemove }
+    }
+
     override fun isApplicable(elements: NavElements<LoggedInFlowNode.NavTarget, BackStack.State>) = true
 
     override fun invoke(elements: BackStackElements<LoggedInFlowNode.NavTarget>): BackStackElements<LoggedInFlowNode.NavTarget> {
@@ -721,14 +729,9 @@ private class AttachRoomOperation(
             val roomElementCount = elements.count { it.key.navTarget is LoggedInFlowNode.NavTarget.Room }
 
             Timber.d("Current room nodes: $roomElementCount/$MAX_ROOM_NODE_COUNT")
-            val currentElements = if (roomElementCount + 1 > MAX_ROOM_NODE_COUNT) {
-                elements.takeExceptLast(MAX_ROOM_NODE_COUNT) { element ->
-                    element.key.navTarget is LoggedInFlowNode.NavTarget.Room
-                }
-                    // Then reverse the order again after removing the extra room nodes
-                    .asReversed()
-            } else {
-                elements
+            // Crate a new list keeping all the elements, but for Room ones just keep the last MAX_ROOM_NODE_COUNT
+            val currentElements = elements.keepingLast(MAX_ROOM_NODE_COUNT) { element ->
+                element.key.navTarget is LoggedInFlowNode.NavTarget.Room
             }
 
             // If the room already existed, remove it from the stack and add a new node at the end
