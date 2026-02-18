@@ -147,4 +147,12 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
+    UseNetworkConstraintsToFetchNotifications(
+        key = "feature.use_network_constraints_to_fetch_notifications",
+        title = "Fetch notifications with network connectivity",
+        description = "Only fetch events for push notifications when the device has internet connectivity. " +
+            "Enabling this can be problematic in air-gapped environments or while using a VPN.",
+        defaultValue = { true },
+        isFinished = false,
+    ),
 }

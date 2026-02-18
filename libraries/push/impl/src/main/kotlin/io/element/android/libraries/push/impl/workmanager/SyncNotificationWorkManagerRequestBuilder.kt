@@ -8,14 +8,20 @@
 
 package io.element.android.libraries.push.impl.workmanager
 
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.os.Build
 import androidx.work.BackoffPolicy
+import androidx.work.Constraints
+import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkRequest
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.push.NotificationEventRequest
 import io.element.android.libraries.workmanager.api.WorkManagerRequestBuilder
@@ -35,6 +41,7 @@ class SyncNotificationWorkManagerRequestBuilder(
     @Assisted private val notificationEventRequests: List<NotificationEventRequest>,
     private val workerDataConverter: SyncNotificationsWorkerDataConverter,
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
+    private val featureFlagService: FeatureFlagService,
 ) : WorkManagerRequestBuilder {
     @AssistedFactory
     interface Factory {
@@ -56,6 +63,19 @@ class SyncNotificationWorkManagerRequestBuilder(
                         // See https://developer.android.com/develop/background-work/background-tasks/persistent/getting-started/define-work#backwards-compat
                         if (buildVersionSdkIntProvider.isAtLeast(Build.VERSION_CODES.TIRAMISU)) {
                             setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+                        }
+
+                        if (featureFlagService.isFeatureEnabled(FeatureFlags.UseNetworkConstraintsToFetchNotifications)) {
+                            val networkRequest = NetworkRequest.Builder()
+                                .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+                                .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+                                .addTransportType(NetworkCapabilities.TRANSPORT_VPN)
+                                .addTransportType(NetworkCapabilities.TRANSPORT_ETHERNET)
+                                .removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)
+                                .removeCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+                                .build()
+
+                            setConstraints(Constraints.Builder().setRequiredNetworkRequest(networkRequest, NetworkType.NOT_REQUIRED).build())
                         }
                     }
                     .setBackoffCriteria(BackoffPolicy.LINEAR, 30.seconds.toJavaDuration())
