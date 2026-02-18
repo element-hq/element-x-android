@@ -9,6 +9,7 @@
 package io.element.android.libraries.push.impl.workmanager
 
 import android.os.Build
+import androidx.work.BackoffPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkRequest
@@ -22,6 +23,8 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import timber.log.Timber
 import java.security.InvalidParameterException
+import kotlin.time.Duration.Companion.seconds
+import kotlin.time.toJavaDuration
 
 class SyncNotificationWorkManagerRequest(
     private val sessionId: SessionId,
@@ -46,6 +49,7 @@ class SyncNotificationWorkManagerRequest(
                             setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
                         }
                     }
+                    .setBackoffCriteria(BackoffPolicy.LINEAR, 30.seconds.toJavaDuration())
                     .setTraceTag(workManagerTag(sessionId, WorkManagerRequestType.NOTIFICATION_SYNC))
                     // TODO investigate using this instead of the resolver queue
                     // .setInputMerger()
