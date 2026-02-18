@@ -45,4 +45,6 @@ class DefaultEnterpriseService : EnterpriseService {
     }
 
     override fun getNoisyNotificationChannelId(sessionId: SessionId): String? = null
+
+    override fun isInAirGappedEnvironment(): Boolean = false
 }

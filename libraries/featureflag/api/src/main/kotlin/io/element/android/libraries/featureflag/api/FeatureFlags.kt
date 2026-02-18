@@ -152,7 +152,7 @@ enum class FeatureFlags(
         title = "Fetch notifications with network connectivity",
         description = "Only fetch events for push notifications when the device has internet connectivity. " +
             "Enabling this can be problematic in air-gapped environments or while using a VPN.",
-        defaultValue = { true },
+        defaultValue = { meta -> !meta.isInAirGappedEnvironment },
         isFinished = false,
     ),
 }

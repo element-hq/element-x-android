@@ -40,6 +40,8 @@ interface EnterpriseService {
      */
     fun getNoisyNotificationChannelId(sessionId: SessionId): String?
 
+    fun isInAirGappedEnvironment(): Boolean
+
     companion object {
         const val ANY_ACCOUNT_PROVIDER = "*"
     }

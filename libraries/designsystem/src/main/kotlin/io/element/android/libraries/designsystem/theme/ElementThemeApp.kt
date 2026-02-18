@@ -41,6 +41,7 @@ val LocalBuildMeta = staticCompositionLocalOf {
         gitBranchName = "aBranch",
         flavorDescription = "aFlavor",
         flavorShortDescription = "aFlavorShort",
+        isInAirGappedEnvironment = false,
     )
 }
 

@@ -26,6 +26,7 @@ fun aBuildMeta(
     gitBranchName: String = "",
     flavorDescription: String = "",
     flavorShortDescription: String = "",
+    isInAirGappedEnvironment: Boolean = false,
 ) = BuildMeta(
     buildType = buildType,
     isDebuggable = isDebuggable,
@@ -41,4 +42,5 @@ fun aBuildMeta(
     gitBranchName = gitBranchName,
     flavorDescription = flavorDescription,
     flavorShortDescription = flavorShortDescription,
+    isInAirGappedEnvironment = isInAirGappedEnvironment,
 )
