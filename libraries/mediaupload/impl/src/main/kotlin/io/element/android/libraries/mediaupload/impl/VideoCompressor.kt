@@ -24,6 +24,7 @@ import androidx.media3.transformer.EditedMediaItem
 import androidx.media3.transformer.Effects
 import androidx.media3.transformer.ExportException
 import androidx.media3.transformer.ExportResult
+import androidx.media3.transformer.InAppMp4Muxer
 import androidx.media3.transformer.ProgressHolder
 import androidx.media3.transformer.TransformationRequest
 import androidx.media3.transformer.Transformer
@@ -88,6 +89,10 @@ class VideoCompressor(
         // If we need to resize the video, we also want to recalculate the bitrate
         val newBitrate = videoCompressorConfig.newBitRate
 
+        // Remove all video metadata
+        val removeMetadataMuxer = InAppMp4Muxer.Factory { metadataEntries ->
+            metadataEntries.removeAll { true }
+        }
         val inputMediaItem = MediaItem.fromUri(uri)
         val outputMediaItem = EditedMediaItem.Builder(inputMediaItem)
             .setFrameRate(newFrameRate)
@@ -109,6 +114,7 @@ class VideoCompressor(
             .setAudioMimeType(MimeTypes.AUDIO_AAC)
             .setPortraitEncodingEnabled(false)
             .setEncoderFactory(encoderFactory)
+            .setMuxerFactory(removeMetadataMuxer)
             .addListener(object : Transformer.Listener {
                 override fun onCompleted(composition: Composition, exportResult: ExportResult) {
                     trySend(VideoTranscodingEvent.Completed(tmpFile))
