@@ -31,7 +31,6 @@ import io.element.android.libraries.push.impl.notifications.NotificationResolver
 import io.element.android.libraries.workmanager.api.WorkManagerScheduler
 import io.element.android.libraries.workmanager.api.di.MetroWorkerFactory
 import io.element.android.libraries.workmanager.api.di.WorkerKey
-import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withContext
@@ -53,7 +52,7 @@ class FetchNotificationsWorker(
     private val syncOnNotifiableEvent: SyncOnNotifiableEvent,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val workerDataConverter: SyncNotificationsWorkerDataConverter,
-    private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
+    private val syncNotificationRequestFactory: SyncNotificationWorkManagerRequestBuilder.Factory,
 ) : CoroutineWorker(context, workerParams) {
     override suspend fun doWork(): Result = withContext(coroutineDispatchers.io) {
         Timber.tag(TAG).d("FetchNotificationsWorker started")
@@ -103,11 +102,9 @@ class FetchNotificationsWorker(
                 if (workerParams.runAttemptCount < MAX_RETRY_ATTEMPTS) {
                     Timber.tag(TAG).d("Re-scheduling ${requestsToRetry.size} failed notification requests for session $failedSessionId")
                     workManagerScheduler.submit(
-                        SyncNotificationWorkManagerRequestBuilder(
+                        syncNotificationRequestFactory.create(
                             sessionId = failedSessionId,
                             notificationEventRequests = requestsToRetry,
-                            workerDataConverter = workerDataConverter,
-                            buildVersionSdkIntProvider = buildVersionSdkIntProvider,
                         )
                     )
                 }

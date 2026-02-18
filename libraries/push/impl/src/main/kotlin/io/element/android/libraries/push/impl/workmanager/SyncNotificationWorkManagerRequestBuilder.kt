@@ -13,6 +13,9 @@ import androidx.work.BackoffPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkRequest
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.push.NotificationEventRequest
 import io.element.android.libraries.workmanager.api.WorkManagerRequestBuilder
@@ -26,12 +29,18 @@ import java.security.InvalidParameterException
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toJavaDuration
 
+@AssistedInject
 class SyncNotificationWorkManagerRequestBuilder(
-    private val sessionId: SessionId,
-    private val notificationEventRequests: List<NotificationEventRequest>,
+    @Assisted private val sessionId: SessionId,
+    @Assisted private val notificationEventRequests: List<NotificationEventRequest>,
     private val workerDataConverter: SyncNotificationsWorkerDataConverter,
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
 ) : WorkManagerRequestBuilder {
+    @AssistedFactory
+    interface Factory {
+        fun create(sessionId: SessionId, notificationEventRequests: List<NotificationEventRequest>): SyncNotificationWorkManagerRequestBuilder
+    }
+
     override fun build(): Result<List<WorkRequest>> {
         if (notificationEventRequests.isEmpty()) {
             return Result.failure(InvalidParameterException("notificationEventRequests cannot be empty"))

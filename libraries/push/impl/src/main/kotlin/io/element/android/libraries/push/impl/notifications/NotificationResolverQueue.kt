@@ -17,9 +17,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.push.api.push.NotificationEventRequest
 import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEvent
 import io.element.android.libraries.push.impl.workmanager.SyncNotificationWorkManagerRequestBuilder
-import io.element.android.libraries.push.impl.workmanager.SyncNotificationsWorkerDataConverter
 import io.element.android.libraries.workmanager.api.WorkManagerScheduler
-import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.Job
@@ -50,8 +48,7 @@ class DefaultNotificationResolverQueue(
     private val appCoroutineScope: CoroutineScope,
     private val workManagerScheduler: WorkManagerScheduler,
     private val featureFlagService: FeatureFlagService,
-    private val workerDataConverter: SyncNotificationsWorkerDataConverter,
-    private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
+    private val syncNotificationRequestFactory: SyncNotificationWorkManagerRequestBuilder.Factory,
 ) : NotificationResolverQueue {
     companion object {
         private const val BATCH_WINDOW_MS = 250L
@@ -99,11 +96,9 @@ class DefaultNotificationResolverQueue(
             if (featureFlagService.isFeatureEnabled(FeatureFlags.SyncNotificationsWithWorkManager)) {
                 for ((sessionId, requests) in groupedRequestsById) {
                     workManagerScheduler.submit(
-                        SyncNotificationWorkManagerRequestBuilder(
+                        syncNotificationRequestFactory.create(
                             sessionId = sessionId,
                             notificationEventRequests = requests,
-                            workerDataConverter = workerDataConverter,
-                            buildVersionSdkIntProvider = buildVersionSdkIntProvider,
                         )
                     )
                 }
