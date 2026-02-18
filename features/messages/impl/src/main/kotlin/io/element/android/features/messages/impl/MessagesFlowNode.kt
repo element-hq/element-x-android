@@ -30,7 +30,7 @@ import io.element.android.features.forward.api.ForwardEntryPoint
 import io.element.android.features.knockrequests.api.list.KnockRequestsListEntryPoint
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.LocationService
-import io.element.android.features.location.api.SendLocationEntryPoint
+import io.element.android.features.location.api.ShareLocationEntryPoint
 import io.element.android.features.location.api.ShowLocationEntryPoint
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.messages.impl.attachments.Attachment
@@ -102,7 +102,7 @@ class MessagesFlowNode(
     @Assisted plugins: List<Plugin>,
     private val roomListService: RoomListService,
     private val sessionId: SessionId,
-    private val sendLocationEntryPoint: SendLocationEntryPoint,
+    private val shareLocationEntryPoint: ShareLocationEntryPoint,
     private val showLocationEntryPoint: ShowLocationEntryPoint,
     private val createPollEntryPoint: CreatePollEntryPoint,
     private val elementCallEntryPoint: ElementCallEntryPoint,
@@ -374,7 +374,7 @@ class MessagesFlowNode(
                 createNode<ReportMessageNode>(buildContext, listOf(inputs))
             }
             is NavTarget.SendLocation -> {
-                sendLocationEntryPoint.createNode(
+                shareLocationEntryPoint.createNode(
                     parentNode = this,
                     buildContext = buildContext,
                     timelineMode = navTarget.timelineMode,

@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.location.impl.send
+package io.element.android.features.location.impl.share
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -56,25 +56,25 @@ import org.maplibre.android.camera.CameraPosition
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SendLocationView(
-    state: SendLocationState,
+fun ShareLocationView(
+    state: ShareLocationState,
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     LaunchedEffect(Unit) {
-        state.eventSink(SendLocationEvents.RequestPermissions)
+        state.eventSink(ShareLocationEvents.RequestPermissions)
     }
 
     when (state.permissionDialog) {
-        SendLocationState.Dialog.None -> Unit
-        SendLocationState.Dialog.PermissionDenied -> PermissionDeniedDialog(
-            onContinue = { state.eventSink(SendLocationEvents.OpenAppSettings) },
-            onDismiss = { state.eventSink(SendLocationEvents.DismissDialog) },
+        ShareLocationState.Dialog.None -> Unit
+        ShareLocationState.Dialog.PermissionDenied -> PermissionDeniedDialog(
+            onContinue = { state.eventSink(ShareLocationEvents.OpenAppSettings) },
+            onDismiss = { state.eventSink(ShareLocationEvents.DismissDialog) },
             appName = state.appName,
         )
-        SendLocationState.Dialog.PermissionRationale -> PermissionRationaleDialog(
-            onContinue = { state.eventSink(SendLocationEvents.RequestPermissions) },
-            onDismiss = { state.eventSink(SendLocationEvents.DismissDialog) },
+        ShareLocationState.Dialog.PermissionRationale -> PermissionRationaleDialog(
+            onContinue = { state.eventSink(ShareLocationEvents.RequestPermissions) },
+            onDismiss = { state.eventSink(ShareLocationEvents.DismissDialog) },
             appName = state.appName,
         )
     }
@@ -85,10 +85,10 @@ fun SendLocationView(
 
     LaunchedEffect(state.mode) {
         when (state.mode) {
-            SendLocationState.Mode.PinLocation -> {
+            ShareLocationState.Mode.PinLocation -> {
                 cameraPositionState.cameraMode = CameraMode.NONE
             }
-            SendLocationState.Mode.SenderLocation -> {
+            ShareLocationState.Mode.SenderLocation -> {
                 cameraPositionState.position = CameraPosition.Builder()
                     .zoom(MapDefaults.DEFAULT_ZOOM)
                     .build()
@@ -99,7 +99,7 @@ fun SendLocationView(
 
     LaunchedEffect(cameraPositionState.isMoving) {
         if (cameraPositionState.cameraMoveStartedReason == CameraMoveStartedReason.GESTURE) {
-            state.eventSink(SendLocationEvents.SwitchToPinLocationMode)
+            state.eventSink(ShareLocationEvents.SwitchToPinLocationMode)
         }
     }
 
@@ -114,8 +114,8 @@ fun SendLocationView(
                     Text(
                         stringResource(
                             when (state.mode) {
-                                SendLocationState.Mode.PinLocation -> CommonStrings.screen_share_this_location_action
-                                SendLocationState.Mode.SenderLocation -> CommonStrings.screen_share_my_location_action
+                                ShareLocationState.Mode.PinLocation -> CommonStrings.screen_share_this_location_action
+                                ShareLocationState.Mode.SenderLocation -> CommonStrings.screen_share_my_location_action
                             }
                         )
                     )
@@ -125,8 +125,8 @@ fun SendLocationView(
                     enabled = cameraPositionState.position.target != null
                 ) {
                     state.eventSink(
-                        SendLocationEvents.SendLocation(
-                            cameraPosition = SendLocationEvents.SendLocation.CameraPosition(
+                        ShareLocationEvents.ShareLocation(
+                            cameraPosition = ShareLocationEvents.ShareLocation.CameraPosition(
                                 lat = cameraPositionState.position.target!!.latitude,
                                 lon = cameraPositionState.position.target!!.longitude,
                                 zoom = cameraPositionState.position.zoom,
@@ -190,8 +190,8 @@ fun SendLocationView(
                 modifier = Modifier.centerBottomEdge(this),
             )
             LocationFloatingActionButton(
-                isMapCenteredOnUser = state.mode == SendLocationState.Mode.SenderLocation,
-                onClick = { state.eventSink(SendLocationEvents.SwitchToMyLocationMode) },
+                isMapCenteredOnUser = state.mode == ShareLocationState.Mode.SenderLocation,
+                onClick = { state.eventSink(ShareLocationEvents.SwitchToMyLocationMode) },
                 modifier = Modifier
                     .align(Alignment.BottomEnd)
                     .padding(end = 18.dp, bottom = 72.dp + navBarPadding),
@@ -202,10 +202,10 @@ fun SendLocationView(
 
 @PreviewsDayNight
 @Composable
-internal fun SendLocationViewPreview(
-    @PreviewParameter(SendLocationStateProvider::class) state: SendLocationState
+internal fun ShareLocationViewPreview(
+    @PreviewParameter(ShareLocationStateProvider::class) state: ShareLocationState
 ) = ElementPreview {
-    SendLocationView(
+    ShareLocationView(
         state = state,
         navigateUp = {},
     )

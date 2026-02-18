@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.location.impl.send
+package io.element.android.features.location.impl.share
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -38,7 +38,7 @@ import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.launch
 
 @AssistedInject
-class SendLocationPresenter(
+class ShareLocationPresenter(
     permissionsPresenterFactory: PermissionsPresenter.Factory,
     private val room: JoinedRoom,
     @Assisted private val timelineMode: Timeline.Mode,
@@ -46,60 +46,60 @@ class SendLocationPresenter(
     private val messageComposerContext: MessageComposerContext,
     private val locationActions: LocationActions,
     private val buildMeta: BuildMeta,
-) : Presenter<SendLocationState> {
+) : Presenter<ShareLocationState> {
     @AssistedFactory
     fun interface Factory {
-        fun create(timelineMode: Timeline.Mode): SendLocationPresenter
+        fun create(timelineMode: Timeline.Mode): ShareLocationPresenter
     }
 
     private val permissionsPresenter = permissionsPresenterFactory.create(MapDefaults.permissions)
 
     @Composable
-    override fun present(): SendLocationState {
+    override fun present(): ShareLocationState {
         val permissionsState: PermissionsState = permissionsPresenter.present()
-        var mode: SendLocationState.Mode by remember {
+        var mode: ShareLocationState.Mode by remember {
             mutableStateOf(
                 if (permissionsState.isAnyGranted) {
-                    SendLocationState.Mode.SenderLocation
+                    ShareLocationState.Mode.SenderLocation
                 } else {
-                    SendLocationState.Mode.PinLocation
+                    ShareLocationState.Mode.PinLocation
                 }
             )
         }
         val appName by remember { derivedStateOf { buildMeta.applicationName } }
-        var permissionDialog: SendLocationState.Dialog by remember {
-            mutableStateOf(SendLocationState.Dialog.None)
+        var permissionDialog: ShareLocationState.Dialog by remember {
+            mutableStateOf(ShareLocationState.Dialog.None)
         }
         val scope = rememberCoroutineScope()
 
         LaunchedEffect(permissionsState.permissions) {
             if (permissionsState.isAnyGranted) {
-                mode = SendLocationState.Mode.SenderLocation
-                permissionDialog = SendLocationState.Dialog.None
+                mode = ShareLocationState.Mode.SenderLocation
+                permissionDialog = ShareLocationState.Dialog.None
             }
         }
 
-        fun handleEvent(event: SendLocationEvents) {
+        fun handleEvent(event: ShareLocationEvents) {
             when (event) {
-                is SendLocationEvents.SendLocation -> scope.launch {
-                    sendLocation(event, mode)
+                is ShareLocationEvents.ShareLocation -> scope.launch {
+                    shareLocation(event, mode)
                 }
-                SendLocationEvents.SwitchToMyLocationMode -> when {
-                    permissionsState.isAnyGranted -> mode = SendLocationState.Mode.SenderLocation
-                    permissionsState.shouldShowRationale -> permissionDialog = SendLocationState.Dialog.PermissionRationale
-                    else -> permissionDialog = SendLocationState.Dialog.PermissionDenied
+                ShareLocationEvents.SwitchToMyLocationMode -> when {
+                    permissionsState.isAnyGranted -> mode = ShareLocationState.Mode.SenderLocation
+                    permissionsState.shouldShowRationale -> permissionDialog = ShareLocationState.Dialog.PermissionRationale
+                    else -> permissionDialog = ShareLocationState.Dialog.PermissionDenied
                 }
-                SendLocationEvents.SwitchToPinLocationMode -> mode = SendLocationState.Mode.PinLocation
-                SendLocationEvents.DismissDialog -> permissionDialog = SendLocationState.Dialog.None
-                SendLocationEvents.OpenAppSettings -> {
+                ShareLocationEvents.SwitchToPinLocationMode -> mode = ShareLocationState.Mode.PinLocation
+                ShareLocationEvents.DismissDialog -> permissionDialog = ShareLocationState.Dialog.None
+                ShareLocationEvents.OpenAppSettings -> {
                     locationActions.openSettings()
-                    permissionDialog = SendLocationState.Dialog.None
+                    permissionDialog = ShareLocationState.Dialog.None
                 }
-                SendLocationEvents.RequestPermissions -> permissionsState.eventSink(PermissionsEvents.RequestPermissions)
+                ShareLocationEvents.RequestPermissions -> permissionsState.eventSink(PermissionsEvents.RequestPermissions)
             }
         }
 
-        return SendLocationState(
+        return ShareLocationState(
             permissionDialog = permissionDialog,
             mode = mode,
             hasLocationPermission = permissionsState.isAnyGranted,
@@ -108,14 +108,14 @@ class SendLocationPresenter(
         )
     }
 
-    private suspend fun sendLocation(
-        event: SendLocationEvents.SendLocation,
-        mode: SendLocationState.Mode,
+    private suspend fun shareLocation(
+        event: ShareLocationEvents.ShareLocation,
+        mode: ShareLocationState.Mode,
     ) {
         val replyMode = messageComposerContext.composerMode as? MessageComposerMode.Reply
         val inReplyToEventId = replyMode?.eventId
         when (mode) {
-            SendLocationState.Mode.PinLocation -> {
+            ShareLocationState.Mode.PinLocation -> {
                 val geoUri = event.cameraPosition.toGeoUri()
                 getTimeline().flatMap {
                     it.sendLocation(
@@ -136,7 +136,7 @@ class SendLocationPresenter(
                     )
                 )
             }
-            SendLocationState.Mode.SenderLocation -> {
+            ShareLocationState.Mode.SenderLocation -> {
                 val geoUri = event.toGeoUri()
                 getTimeline().flatMap {
                     it.sendLocation(
@@ -168,8 +168,8 @@ class SendLocationPresenter(
     }
 }
 
-private fun SendLocationEvents.SendLocation.toGeoUri(): String = location?.toGeoUri() ?: cameraPosition.toGeoUri()
+private fun ShareLocationEvents.ShareLocation.toGeoUri(): String = location?.toGeoUri() ?: cameraPosition.toGeoUri()
 
-private fun SendLocationEvents.SendLocation.CameraPosition.toGeoUri(): String = "geo:$lat,$lon"
+private fun ShareLocationEvents.ShareLocation.CameraPosition.toGeoUri(): String = "geo:$lat,$lon"
 
 private fun generateBody(uri: String): String = "Location was shared at $uri"

@@ -6,26 +6,26 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.location.impl.send
+package io.element.android.features.location.impl.share
 
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.features.location.api.SendLocationEntryPoint
+import io.element.android.features.location.api.ShareLocationEntryPoint
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.matrix.api.timeline.Timeline
 
 @ContributesBinding(AppScope::class)
-class DefaultSendLocationEntryPoint : SendLocationEntryPoint {
+class DefaultShareLocationEntryPoint : ShareLocationEntryPoint {
     override fun createNode(
         parentNode: Node,
         buildContext: BuildContext,
         timelineMode: Timeline.Mode,
     ): Node {
-        return parentNode.createNode<SendLocationNode>(
+        return parentNode.createNode<ShareLocationNode>(
             buildContext = buildContext,
-            plugins = listOf(SendLocationNode.Inputs(timelineMode))
+            plugins = listOf(ShareLocationNode.Inputs(timelineMode))
         )
     }
 }

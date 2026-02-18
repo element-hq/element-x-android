@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.location.impl.send
+package io.element.android.features.location.impl.share
 
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
@@ -40,7 +40,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
-class SendLocationPresenterTest {
+class ShareLocationPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
 
@@ -50,9 +50,9 @@ class SendLocationPresenterTest {
     private val fakeLocationActions = FakeLocationActions()
     private val fakeBuildMeta = aBuildMeta(applicationName = "app name")
 
-    private fun createSendLocationPresenter(
+    private fun createShareLocationPresenter(
         joinedRoom: JoinedRoom = FakeJoinedRoom(),
-    ): SendLocationPresenter = SendLocationPresenter(
+    ): ShareLocationPresenter = ShareLocationPresenter(
         permissionsPresenterFactory = object : PermissionsPresenter.Factory {
             override fun create(permissions: List<String>): PermissionsPresenter = fakePermissionsPresenter
         },
@@ -66,7 +66,7 @@ class SendLocationPresenterTest {
 
     @Test
     fun `initial state with permissions granted`() = runTest {
-        val sendLocationPresenter = createSendLocationPresenter()
+        val shareLocationPresenter = createShareLocationPresenter()
         fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.AllGranted,
@@ -75,25 +75,25 @@ class SendLocationPresenterTest {
         )
 
         moleculeFlow(RecompositionMode.Immediate) {
-            sendLocationPresenter.present()
+            shareLocationPresenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.permissionDialog).isEqualTo(SendLocationState.Dialog.None)
-            assertThat(initialState.mode).isEqualTo(SendLocationState.Mode.SenderLocation)
+            assertThat(initialState.permissionDialog).isEqualTo(ShareLocationState.Dialog.None)
+            assertThat(initialState.mode).isEqualTo(ShareLocationState.Mode.SenderLocation)
             assertThat(initialState.hasLocationPermission).isTrue()
 
             // Swipe the map to switch mode
-            initialState.eventSink(SendLocationEvents.SwitchToPinLocationMode)
+            initialState.eventSink(ShareLocationEvents.SwitchToPinLocationMode)
             val myLocationState = awaitItem()
-            assertThat(myLocationState.permissionDialog).isEqualTo(SendLocationState.Dialog.None)
-            assertThat(myLocationState.mode).isEqualTo(SendLocationState.Mode.PinLocation)
+            assertThat(myLocationState.permissionDialog).isEqualTo(ShareLocationState.Dialog.None)
+            assertThat(myLocationState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
             assertThat(myLocationState.hasLocationPermission).isTrue()
         }
     }
 
     @Test
     fun `initial state with permissions partially granted`() = runTest {
-        val sendLocationPresenter = createSendLocationPresenter()
+        val shareLocationPresenter = createShareLocationPresenter()
         fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.SomeGranted,
@@ -102,25 +102,25 @@ class SendLocationPresenterTest {
         )
 
         moleculeFlow(RecompositionMode.Immediate) {
-            sendLocationPresenter.present()
+            shareLocationPresenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.permissionDialog).isEqualTo(SendLocationState.Dialog.None)
-            assertThat(initialState.mode).isEqualTo(SendLocationState.Mode.SenderLocation)
+            assertThat(initialState.permissionDialog).isEqualTo(ShareLocationState.Dialog.None)
+            assertThat(initialState.mode).isEqualTo(ShareLocationState.Mode.SenderLocation)
             assertThat(initialState.hasLocationPermission).isTrue()
 
             // Swipe the map to switch mode
-            initialState.eventSink(SendLocationEvents.SwitchToPinLocationMode)
+            initialState.eventSink(ShareLocationEvents.SwitchToPinLocationMode)
             val myLocationState = awaitItem()
-            assertThat(myLocationState.permissionDialog).isEqualTo(SendLocationState.Dialog.None)
-            assertThat(myLocationState.mode).isEqualTo(SendLocationState.Mode.PinLocation)
+            assertThat(myLocationState.permissionDialog).isEqualTo(ShareLocationState.Dialog.None)
+            assertThat(myLocationState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
             assertThat(myLocationState.hasLocationPermission).isTrue()
         }
     }
 
     @Test
     fun `initial state with permissions denied`() = runTest {
-        val sendLocationPresenter = createSendLocationPresenter()
+        val shareLocationPresenter = createShareLocationPresenter()
         fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
@@ -129,25 +129,25 @@ class SendLocationPresenterTest {
         )
 
         moleculeFlow(RecompositionMode.Immediate) {
-            sendLocationPresenter.present()
+            shareLocationPresenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.permissionDialog).isEqualTo(SendLocationState.Dialog.None)
-            assertThat(initialState.mode).isEqualTo(SendLocationState.Mode.PinLocation)
+            assertThat(initialState.permissionDialog).isEqualTo(ShareLocationState.Dialog.None)
+            assertThat(initialState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
             assertThat(initialState.hasLocationPermission).isFalse()
 
             // Click on the button to switch mode
-            initialState.eventSink(SendLocationEvents.SwitchToMyLocationMode)
+            initialState.eventSink(ShareLocationEvents.SwitchToMyLocationMode)
             val myLocationState = awaitItem()
-            assertThat(myLocationState.permissionDialog).isEqualTo(SendLocationState.Dialog.PermissionDenied)
-            assertThat(myLocationState.mode).isEqualTo(SendLocationState.Mode.PinLocation)
+            assertThat(myLocationState.permissionDialog).isEqualTo(ShareLocationState.Dialog.PermissionDenied)
+            assertThat(myLocationState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
             assertThat(myLocationState.hasLocationPermission).isFalse()
         }
     }
 
     @Test
     fun `initial state with permissions denied once`() = runTest {
-        val sendLocationPresenter = createSendLocationPresenter()
+        val shareLocationPresenter = createShareLocationPresenter()
         fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
@@ -156,25 +156,25 @@ class SendLocationPresenterTest {
         )
 
         moleculeFlow(RecompositionMode.Immediate) {
-            sendLocationPresenter.present()
+            shareLocationPresenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.permissionDialog).isEqualTo(SendLocationState.Dialog.None)
-            assertThat(initialState.mode).isEqualTo(SendLocationState.Mode.PinLocation)
+            assertThat(initialState.permissionDialog).isEqualTo(ShareLocationState.Dialog.None)
+            assertThat(initialState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
             assertThat(initialState.hasLocationPermission).isFalse()
 
             // Click on the button to switch mode
-            initialState.eventSink(SendLocationEvents.SwitchToMyLocationMode)
+            initialState.eventSink(ShareLocationEvents.SwitchToMyLocationMode)
             val myLocationState = awaitItem()
-            assertThat(myLocationState.permissionDialog).isEqualTo(SendLocationState.Dialog.PermissionRationale)
-            assertThat(myLocationState.mode).isEqualTo(SendLocationState.Mode.PinLocation)
+            assertThat(myLocationState.permissionDialog).isEqualTo(ShareLocationState.Dialog.PermissionRationale)
+            assertThat(myLocationState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
             assertThat(myLocationState.hasLocationPermission).isFalse()
         }
     }
 
     @Test
     fun `rationale dialog dismiss`() = runTest {
-        val sendLocationPresenter = createSendLocationPresenter()
+        val shareLocationPresenter = createShareLocationPresenter()
         fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
@@ -183,30 +183,30 @@ class SendLocationPresenterTest {
         )
 
         moleculeFlow(RecompositionMode.Immediate) {
-            sendLocationPresenter.present()
+            shareLocationPresenter.present()
         }.test {
             // Skip initial state
             val initialState = awaitItem()
 
             // Click on the button to switch mode
-            initialState.eventSink(SendLocationEvents.SwitchToMyLocationMode)
+            initialState.eventSink(ShareLocationEvents.SwitchToMyLocationMode)
             val myLocationState = awaitItem()
-            assertThat(myLocationState.permissionDialog).isEqualTo(SendLocationState.Dialog.PermissionRationale)
-            assertThat(myLocationState.mode).isEqualTo(SendLocationState.Mode.PinLocation)
+            assertThat(myLocationState.permissionDialog).isEqualTo(ShareLocationState.Dialog.PermissionRationale)
+            assertThat(myLocationState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
             assertThat(myLocationState.hasLocationPermission).isFalse()
 
             // Dismiss the dialog
-            myLocationState.eventSink(SendLocationEvents.DismissDialog)
+            myLocationState.eventSink(ShareLocationEvents.DismissDialog)
             val dialogDismissedState = awaitItem()
-            assertThat(dialogDismissedState.permissionDialog).isEqualTo(SendLocationState.Dialog.None)
-            assertThat(dialogDismissedState.mode).isEqualTo(SendLocationState.Mode.PinLocation)
+            assertThat(dialogDismissedState.permissionDialog).isEqualTo(ShareLocationState.Dialog.None)
+            assertThat(dialogDismissedState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
             assertThat(dialogDismissedState.hasLocationPermission).isFalse()
         }
     }
 
     @Test
     fun `rationale dialog continue`() = runTest {
-        val sendLocationPresenter = createSendLocationPresenter()
+        val shareLocationPresenter = createShareLocationPresenter()
         fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
@@ -215,27 +215,27 @@ class SendLocationPresenterTest {
         )
 
         moleculeFlow(RecompositionMode.Immediate) {
-            sendLocationPresenter.present()
+            shareLocationPresenter.present()
         }.test {
             // Skip initial state
             val initialState = awaitItem()
 
             // Click on the button to switch mode
-            initialState.eventSink(SendLocationEvents.SwitchToMyLocationMode)
+            initialState.eventSink(ShareLocationEvents.SwitchToMyLocationMode)
             val myLocationState = awaitItem()
-            assertThat(myLocationState.permissionDialog).isEqualTo(SendLocationState.Dialog.PermissionRationale)
-            assertThat(myLocationState.mode).isEqualTo(SendLocationState.Mode.PinLocation)
+            assertThat(myLocationState.permissionDialog).isEqualTo(ShareLocationState.Dialog.PermissionRationale)
+            assertThat(myLocationState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
             assertThat(myLocationState.hasLocationPermission).isFalse()
 
             // Continue the dialog sends permission request to the permissions presenter
-            myLocationState.eventSink(SendLocationEvents.RequestPermissions)
+            myLocationState.eventSink(ShareLocationEvents.RequestPermissions)
             assertThat(fakePermissionsPresenter.events.last()).isEqualTo(PermissionsEvents.RequestPermissions)
         }
     }
 
     @Test
     fun `permission denied dialog dismiss`() = runTest {
-        val sendLocationPresenter = createSendLocationPresenter()
+        val shareLocationPresenter = createShareLocationPresenter()
         fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
@@ -244,23 +244,23 @@ class SendLocationPresenterTest {
         )
 
         moleculeFlow(RecompositionMode.Immediate) {
-            sendLocationPresenter.present()
+            shareLocationPresenter.present()
         }.test {
             // Skip initial state
             val initialState = awaitItem()
 
             // Click on the button to switch mode
-            initialState.eventSink(SendLocationEvents.SwitchToMyLocationMode)
+            initialState.eventSink(ShareLocationEvents.SwitchToMyLocationMode)
             val myLocationState = awaitItem()
-            assertThat(myLocationState.permissionDialog).isEqualTo(SendLocationState.Dialog.PermissionDenied)
-            assertThat(myLocationState.mode).isEqualTo(SendLocationState.Mode.PinLocation)
+            assertThat(myLocationState.permissionDialog).isEqualTo(ShareLocationState.Dialog.PermissionDenied)
+            assertThat(myLocationState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
             assertThat(myLocationState.hasLocationPermission).isFalse()
 
             // Dismiss the dialog
-            myLocationState.eventSink(SendLocationEvents.DismissDialog)
+            myLocationState.eventSink(ShareLocationEvents.DismissDialog)
             val dialogDismissedState = awaitItem()
-            assertThat(dialogDismissedState.permissionDialog).isEqualTo(SendLocationState.Dialog.None)
-            assertThat(dialogDismissedState.mode).isEqualTo(SendLocationState.Mode.PinLocation)
+            assertThat(dialogDismissedState.permissionDialog).isEqualTo(ShareLocationState.Dialog.None)
+            assertThat(dialogDismissedState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
             assertThat(dialogDismissedState.hasLocationPermission).isFalse()
         }
     }
@@ -275,7 +275,7 @@ class SendLocationPresenterTest {
                 sendLocationLambda = sendLocationResult
             },
         )
-        val sendLocationPresenter = createSendLocationPresenter(joinedRoom)
+        val shareLocationPresenter = createShareLocationPresenter(joinedRoom)
         fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.AllGranted,
@@ -284,15 +284,15 @@ class SendLocationPresenterTest {
         )
 
         moleculeFlow(RecompositionMode.Immediate) {
-            sendLocationPresenter.present()
+            shareLocationPresenter.present()
         }.test {
             // Skip initial state
             val initialState = awaitItem()
 
             // Send location
             initialState.eventSink(
-                SendLocationEvents.SendLocation(
-                    cameraPosition = SendLocationEvents.SendLocation.CameraPosition(
+                ShareLocationEvents.ShareLocation(
+                    cameraPosition = ShareLocationEvents.ShareLocation.CameraPosition(
                         lat = 0.0,
                         lon = 1.0,
                         zoom = 2.0,
@@ -339,7 +339,7 @@ class SendLocationPresenterTest {
                 sendLocationLambda = sendLocationResult
             },
         )
-        val sendLocationPresenter = createSendLocationPresenter(joinedRoom)
+        val shareLocationPresenter = createShareLocationPresenter(joinedRoom)
         fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
@@ -348,15 +348,15 @@ class SendLocationPresenterTest {
         )
 
         moleculeFlow(RecompositionMode.Immediate) {
-            sendLocationPresenter.present()
+            shareLocationPresenter.present()
         }.test {
             // Skip initial state
             val initialState = awaitItem()
 
             // Send location
             initialState.eventSink(
-                SendLocationEvents.SendLocation(
-                    cameraPosition = SendLocationEvents.SendLocation.CameraPosition(
+                ShareLocationEvents.ShareLocation(
+                    cameraPosition = ShareLocationEvents.ShareLocation.CameraPosition(
                         lat = 0.0,
                         lon = 1.0,
                         zoom = 2.0,
@@ -403,7 +403,7 @@ class SendLocationPresenterTest {
                 sendLocationLambda = sendLocationResult
             },
         )
-        val sendLocationPresenter = createSendLocationPresenter(joinedRoom)
+        val shareLocationPresenter = createShareLocationPresenter(joinedRoom)
         fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
@@ -418,15 +418,15 @@ class SendLocationPresenterTest {
         }
 
         moleculeFlow(RecompositionMode.Immediate) {
-            sendLocationPresenter.present()
+            shareLocationPresenter.present()
         }.test {
             // Skip initial state
             val initialState = awaitItem()
 
             // Send location
             initialState.eventSink(
-                SendLocationEvents.SendLocation(
-                    cameraPosition = SendLocationEvents.SendLocation.CameraPosition(
+                ShareLocationEvents.ShareLocation(
+                    cameraPosition = ShareLocationEvents.ShareLocation.CameraPosition(
                         lat = 0.0,
                         lon = 1.0,
                         zoom = 2.0,
@@ -451,7 +451,7 @@ class SendLocationPresenterTest {
 
     @Test
     fun `open settings activity`() = runTest {
-        val sendLocationPresenter = createSendLocationPresenter()
+        val shareLocationPresenter = createShareLocationPresenter()
         fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
@@ -466,28 +466,28 @@ class SendLocationPresenterTest {
         }
 
         moleculeFlow(RecompositionMode.Immediate) {
-            sendLocationPresenter.present()
+            shareLocationPresenter.present()
         }.test {
             // Skip initial state
             val initialState = awaitItem()
 
-            initialState.eventSink(SendLocationEvents.SwitchToMyLocationMode)
+            initialState.eventSink(ShareLocationEvents.SwitchToMyLocationMode)
             val dialogShownState = awaitItem()
 
             // Open settings
-            dialogShownState.eventSink(SendLocationEvents.OpenAppSettings)
+            dialogShownState.eventSink(ShareLocationEvents.OpenAppSettings)
             val settingsOpenedState = awaitItem()
 
-            assertThat(settingsOpenedState.permissionDialog).isEqualTo(SendLocationState.Dialog.None)
+            assertThat(settingsOpenedState.permissionDialog).isEqualTo(ShareLocationState.Dialog.None)
             assertThat(fakeLocationActions.openSettingsInvocationsCount).isEqualTo(1)
         }
     }
 
     @Test
     fun `application name is in state`() = runTest {
-        val sendLocationPresenter = createSendLocationPresenter()
+        val shareLocationPresenter = createShareLocationPresenter()
         moleculeFlow(RecompositionMode.Immediate) {
-            sendLocationPresenter.present()
+            shareLocationPresenter.present()
         }.test {
             val initialState = awaitItem()
             assertThat(initialState.appName).isEqualTo("app name")

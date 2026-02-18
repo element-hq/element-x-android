@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.location.impl.send
+package io.element.android.features.location.impl.share
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bumble.appyx.core.modality.BuildContext
@@ -22,19 +22,19 @@ import io.element.android.tests.testutils.node.TestParentNode
 import org.junit.Rule
 import org.junit.Test
 
-class DefaultSendLocationEntryPointTest {
+class DefaultShareLocationEntryPointTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Test
     fun `test node builder`() {
-        val entryPoint = DefaultSendLocationEntryPoint()
+        val entryPoint = DefaultShareLocationEntryPoint()
         val parentNode = TestParentNode.create { buildContext, plugins ->
-            SendLocationNode(
+            ShareLocationNode(
                 buildContext = buildContext,
                 plugins = plugins,
                 presenterFactory = { timelineMode: Timeline.Mode ->
-                    SendLocationPresenter(
+                    ShareLocationPresenter(
                         permissionsPresenterFactory = { FakePermissionsPresenter() },
                         room = FakeJoinedRoom(),
                         timelineMode = timelineMode,
@@ -53,7 +53,7 @@ class DefaultSendLocationEntryPointTest {
             buildContext = BuildContext.root(null),
             timelineMode = timelineMode,
         )
-        assertThat(result).isInstanceOf(SendLocationNode::class.java)
-        assertThat(result.plugins).contains(SendLocationNode.Inputs(timelineMode))
+        assertThat(result).isInstanceOf(ShareLocationNode::class.java)
+        assertThat(result.plugins).contains(ShareLocationNode.Inputs(timelineMode))
     }
 }

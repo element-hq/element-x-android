@@ -6,7 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.location.impl.send
+package io.element.android.features.location.impl.share
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -26,10 +26,10 @@ import io.element.android.services.analytics.api.AnalyticsService
 
 @ContributesNode(RoomScope::class)
 @AssistedInject
-class SendLocationNode(
+class ShareLocationNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    presenterFactory: SendLocationPresenter.Factory,
+    presenterFactory: ShareLocationPresenter.Factory,
     analyticsService: AnalyticsService,
 ) : Node(buildContext, plugins = plugins) {
     data class Inputs(
@@ -48,7 +48,7 @@ class SendLocationNode(
 
     @Composable
     override fun View(modifier: Modifier) {
-        SendLocationView(
+        ShareLocationView(
             state = presenter.present(),
             modifier = modifier,
             navigateUp = ::navigateUp,

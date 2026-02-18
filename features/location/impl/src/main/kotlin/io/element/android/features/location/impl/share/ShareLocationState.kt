@@ -6,14 +6,14 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.location.impl.send
+package io.element.android.features.location.impl.share
 
-data class SendLocationState(
+data class ShareLocationState(
     val permissionDialog: Dialog,
     val mode: Mode,
     val hasLocationPermission: Boolean,
     val appName: String,
-    val eventSink: (SendLocationEvents) -> Unit,
+    val eventSink: (ShareLocationEvents) -> Unit,
 ) {
     sealed interface Mode {
         data object SenderLocation : Mode

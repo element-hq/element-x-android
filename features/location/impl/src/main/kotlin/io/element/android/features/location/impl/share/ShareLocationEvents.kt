@@ -6,15 +6,15 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.location.impl.send
+package io.element.android.features.location.impl.share
 
 import io.element.android.features.location.api.Location
 
-sealed interface SendLocationEvents {
-    data class SendLocation(
+sealed interface ShareLocationEvents {
+    data class ShareLocation(
         val cameraPosition: CameraPosition,
         val location: Location?,
-    ) : SendLocationEvents {
+    ) : ShareLocationEvents {
         data class CameraPosition(
             val lat: Double,
             val lon: Double,
@@ -22,9 +22,9 @@ sealed interface SendLocationEvents {
         )
     }
 
-    data object SwitchToMyLocationMode : SendLocationEvents
-    data object SwitchToPinLocationMode : SendLocationEvents
-    data object DismissDialog : SendLocationEvents
-    data object RequestPermissions : SendLocationEvents
-    data object OpenAppSettings : SendLocationEvents
+    data object SwitchToMyLocationMode : ShareLocationEvents
+    data object SwitchToPinLocationMode : ShareLocationEvents
+    data object DismissDialog : ShareLocationEvents
+    data object RequestPermissions : ShareLocationEvents
+    data object OpenAppSettings : ShareLocationEvents
 }
