@@ -9,6 +9,7 @@
 package io.element.android.features.location.impl.share
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
@@ -22,8 +23,13 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -40,7 +46,9 @@ import io.element.android.features.location.impl.common.PermissionDeniedDialog
 import io.element.android.features.location.impl.common.PermissionRationaleDialog
 import io.element.android.features.location.impl.common.ui.LocationFloatingActionButton
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.dialogs.ListDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
+import io.element.android.libraries.designsystem.components.list.RadioButtonListItem
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.BottomSheetScaffold
@@ -57,6 +65,7 @@ import io.element.android.libraries.maplibre.compose.MapLibreMap
 import io.element.android.libraries.maplibre.compose.rememberCameraPositionState
 import io.element.android.libraries.ui.strings.CommonStrings
 import org.maplibre.android.camera.CameraPosition
+import kotlin.time.Duration
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -69,7 +78,7 @@ fun ShareLocationView(
         state.eventSink(ShareLocationEvent.RequestPermissions)
     }
 
-    when (state.permissionDialog) {
+    when (state.dialogState) {
         ShareLocationState.Dialog.None -> Unit
         ShareLocationState.Dialog.PermissionDenied -> PermissionDeniedDialog(
             onContinue = { state.eventSink(ShareLocationEvent.OpenAppSettings) },
@@ -80,6 +89,13 @@ fun ShareLocationView(
             onContinue = { state.eventSink(ShareLocationEvent.RequestPermissions) },
             onDismiss = { state.eventSink(ShareLocationEvent.DismissDialog) },
             appName = state.appName,
+        )
+        ShareLocationState.Dialog.LiveLocationDuration -> LiveLocationDurationDialog(
+            onSelectDuration = { duration ->
+                state.eventSink(ShareLocationEvent.StartLiveLocationShare(duration))
+                navigateUp()
+            },
+            onDismiss = { state.eventSink(ShareLocationEvent.DismissDialog) },
         )
     }
 
@@ -226,7 +242,7 @@ private fun StaticLocationItem(
 
 @Composable
 private fun LiveLocationItem(
-    onClick: ()->Unit,
+    onClick: () -> Unit,
 ) {
     ListItem(
         headlineContent = {
@@ -240,6 +256,32 @@ private fun LiveLocationItem(
             tintColor = ElementTheme.colors.iconAccentPrimary,
         )
     )
+}
+
+@Composable
+private fun LiveLocationDurationDialog(
+    onSelectDuration: (Duration) -> Unit,
+    onDismiss: () -> Unit,
+) {
+    var selectedIndex by remember { mutableIntStateOf(0) }
+    ListDialog(
+        title = "Choose how long to share your live location.",
+        submitText = stringResource(CommonStrings.action_continue),
+        onSubmit = { onSelectDuration(LiveLocationDuration.entries[selectedIndex].duration) },
+        onDismissRequest = onDismiss,
+        applyPaddingToContents = false,
+        verticalArrangement = Arrangement.Top
+    ) {
+        itemsIndexed(LiveLocationDuration.entries) { index, duration ->
+            RadioButtonListItem(
+                headline = duration.label,
+                selected = index == selectedIndex,
+                onSelect = { selectedIndex = index },
+                compactLayout = true,
+                modifier = Modifier.padding(start = 8.dp)
+            )
+        }
+    }
 }
 
 @PreviewsDayNight

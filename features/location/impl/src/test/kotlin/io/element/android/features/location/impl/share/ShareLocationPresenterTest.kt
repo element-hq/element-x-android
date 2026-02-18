@@ -78,14 +78,14 @@ class ShareLocationPresenterTest {
             shareLocationPresenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.permissionDialog).isEqualTo(ShareLocationState.Dialog.None)
+            assertThat(initialState.dialogState).isEqualTo(ShareLocationState.Dialog.None)
             assertThat(initialState.mode).isEqualTo(ShareLocationState.Mode.SenderLocation)
             assertThat(initialState.hasLocationPermission).isTrue()
 
             // Swipe the map to switch mode
             initialState.eventSink(ShareLocationEvent.SwitchToPinLocationMode)
             val myLocationState = awaitItem()
-            assertThat(myLocationState.permissionDialog).isEqualTo(ShareLocationState.Dialog.None)
+            assertThat(myLocationState.dialogState).isEqualTo(ShareLocationState.Dialog.None)
             assertThat(myLocationState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
             assertThat(myLocationState.hasLocationPermission).isTrue()
         }
@@ -105,14 +105,14 @@ class ShareLocationPresenterTest {
             shareLocationPresenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.permissionDialog).isEqualTo(ShareLocationState.Dialog.None)
+            assertThat(initialState.dialogState).isEqualTo(ShareLocationState.Dialog.None)
             assertThat(initialState.mode).isEqualTo(ShareLocationState.Mode.SenderLocation)
             assertThat(initialState.hasLocationPermission).isTrue()
 
             // Swipe the map to switch mode
             initialState.eventSink(ShareLocationEvent.SwitchToPinLocationMode)
             val myLocationState = awaitItem()
-            assertThat(myLocationState.permissionDialog).isEqualTo(ShareLocationState.Dialog.None)
+            assertThat(myLocationState.dialogState).isEqualTo(ShareLocationState.Dialog.None)
             assertThat(myLocationState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
             assertThat(myLocationState.hasLocationPermission).isTrue()
         }
@@ -132,14 +132,14 @@ class ShareLocationPresenterTest {
             shareLocationPresenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.permissionDialog).isEqualTo(ShareLocationState.Dialog.None)
+            assertThat(initialState.dialogState).isEqualTo(ShareLocationState.Dialog.None)
             assertThat(initialState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
             assertThat(initialState.hasLocationPermission).isFalse()
 
             // Click on the button to switch mode
             initialState.eventSink(ShareLocationEvent.SwitchToMyLocationMode)
             val myLocationState = awaitItem()
-            assertThat(myLocationState.permissionDialog).isEqualTo(ShareLocationState.Dialog.PermissionDenied)
+            assertThat(myLocationState.dialogState).isEqualTo(ShareLocationState.Dialog.PermissionDenied)
             assertThat(myLocationState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
             assertThat(myLocationState.hasLocationPermission).isFalse()
         }
@@ -159,14 +159,14 @@ class ShareLocationPresenterTest {
             shareLocationPresenter.present()
         }.test {
             val initialState = awaitItem()
-            assertThat(initialState.permissionDialog).isEqualTo(ShareLocationState.Dialog.None)
+            assertThat(initialState.dialogState).isEqualTo(ShareLocationState.Dialog.None)
             assertThat(initialState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
             assertThat(initialState.hasLocationPermission).isFalse()
 
             // Click on the button to switch mode
             initialState.eventSink(ShareLocationEvent.SwitchToMyLocationMode)
             val myLocationState = awaitItem()
-            assertThat(myLocationState.permissionDialog).isEqualTo(ShareLocationState.Dialog.PermissionRationale)
+            assertThat(myLocationState.dialogState).isEqualTo(ShareLocationState.Dialog.PermissionRationale)
             assertThat(myLocationState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
             assertThat(myLocationState.hasLocationPermission).isFalse()
         }
@@ -191,14 +191,14 @@ class ShareLocationPresenterTest {
             // Click on the button to switch mode
             initialState.eventSink(ShareLocationEvent.SwitchToMyLocationMode)
             val myLocationState = awaitItem()
-            assertThat(myLocationState.permissionDialog).isEqualTo(ShareLocationState.Dialog.PermissionRationale)
+            assertThat(myLocationState.dialogState).isEqualTo(ShareLocationState.Dialog.PermissionRationale)
             assertThat(myLocationState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
             assertThat(myLocationState.hasLocationPermission).isFalse()
 
             // Dismiss the dialog
             myLocationState.eventSink(ShareLocationEvent.DismissDialog)
             val dialogDismissedState = awaitItem()
-            assertThat(dialogDismissedState.permissionDialog).isEqualTo(ShareLocationState.Dialog.None)
+            assertThat(dialogDismissedState.dialogState).isEqualTo(ShareLocationState.Dialog.None)
             assertThat(dialogDismissedState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
             assertThat(dialogDismissedState.hasLocationPermission).isFalse()
         }
@@ -223,7 +223,7 @@ class ShareLocationPresenterTest {
             // Click on the button to switch mode
             initialState.eventSink(ShareLocationEvent.SwitchToMyLocationMode)
             val myLocationState = awaitItem()
-            assertThat(myLocationState.permissionDialog).isEqualTo(ShareLocationState.Dialog.PermissionRationale)
+            assertThat(myLocationState.dialogState).isEqualTo(ShareLocationState.Dialog.PermissionRationale)
             assertThat(myLocationState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
             assertThat(myLocationState.hasLocationPermission).isFalse()
 
@@ -252,14 +252,14 @@ class ShareLocationPresenterTest {
             // Click on the button to switch mode
             initialState.eventSink(ShareLocationEvent.SwitchToMyLocationMode)
             val myLocationState = awaitItem()
-            assertThat(myLocationState.permissionDialog).isEqualTo(ShareLocationState.Dialog.PermissionDenied)
+            assertThat(myLocationState.dialogState).isEqualTo(ShareLocationState.Dialog.PermissionDenied)
             assertThat(myLocationState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
             assertThat(myLocationState.hasLocationPermission).isFalse()
 
             // Dismiss the dialog
             myLocationState.eventSink(ShareLocationEvent.DismissDialog)
             val dialogDismissedState = awaitItem()
-            assertThat(dialogDismissedState.permissionDialog).isEqualTo(ShareLocationState.Dialog.None)
+            assertThat(dialogDismissedState.dialogState).isEqualTo(ShareLocationState.Dialog.None)
             assertThat(dialogDismissedState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
             assertThat(dialogDismissedState.hasLocationPermission).isFalse()
         }
@@ -478,7 +478,7 @@ class ShareLocationPresenterTest {
             dialogShownState.eventSink(ShareLocationEvent.OpenAppSettings)
             val settingsOpenedState = awaitItem()
 
-            assertThat(settingsOpenedState.permissionDialog).isEqualTo(ShareLocationState.Dialog.None)
+            assertThat(settingsOpenedState.dialogState).isEqualTo(ShareLocationState.Dialog.None)
             assertThat(fakeLocationActions.openSettingsInvocationsCount).isEqualTo(1)
         }
     }

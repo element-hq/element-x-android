@@ -9,6 +9,7 @@
 package io.element.android.libraries.designsystem.components.dialogs
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Arrangement.HorizontalOrVertical
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
@@ -42,6 +43,7 @@ fun ListDialog(
     enabled: Boolean = true,
     applyPaddingToContents: Boolean = true,
     destructiveSubmit: Boolean = false,
+    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(16.dp),
     listItems: LazyListScope.() -> Unit,
 ) {
     val decoratedSubtitle: @Composable (() -> Unit)? = subtitle?.let {
@@ -67,6 +69,7 @@ fun ListDialog(
             listItems = listItems,
             applyPaddingToContents = applyPaddingToContents,
             destructiveSubmit = destructiveSubmit,
+            verticalArrangement = verticalArrangement,
         )
     }
 }
@@ -82,6 +85,7 @@ private fun ListDialogContent(
     enabled: Boolean,
     applyPaddingToContents: Boolean,
     destructiveSubmit: Boolean,
+    verticalArrangement: Arrangement.Vertical,
     subtitle: @Composable (() -> Unit)? = null,
 ) {
     SimpleAlertDialogContent(
@@ -99,7 +103,7 @@ private fun ListDialogContent(
         val horizontalPadding = if (applyPaddingToContents) 0.dp else 8.dp
         LazyColumn(
             modifier = Modifier.padding(horizontal = horizontalPadding),
-            verticalArrangement = Arrangement.spacedBy(16.dp),
+            verticalArrangement = verticalArrangement,
         ) { listItems() }
     }
 }
@@ -126,6 +130,7 @@ internal fun ListDialogContentPreview() {
                 enabled = true,
                 destructiveSubmit = false,
                 applyPaddingToContents = true,
+                verticalArrangement = Arrangement.spacedBy(16.dp),
             )
         }
     }

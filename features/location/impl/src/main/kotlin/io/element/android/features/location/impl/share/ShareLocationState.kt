@@ -9,7 +9,7 @@
 package io.element.android.features.location.impl.share
 
 data class ShareLocationState(
-    val permissionDialog: Dialog,
+    val dialogState: Dialog,
     val mode: Mode,
     val hasLocationPermission: Boolean,
     val appName: String,
@@ -25,5 +25,6 @@ data class ShareLocationState(
         data object None : Dialog
         data object PermissionRationale : Dialog
         data object PermissionDenied : Dialog
+        data object LiveLocationDuration : Dialog
     }
 }

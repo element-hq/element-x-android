@@ -9,6 +9,7 @@
 package io.element.android.features.location.impl.share
 
 import io.element.android.features.location.api.Location
+import kotlin.time.Duration
 
 sealed interface ShareLocationEvent {
     data class ShareStaticLocation(
@@ -22,7 +23,8 @@ sealed interface ShareLocationEvent {
         )
     }
 
-    data object SelectLiveLocationDuration: ShareLocationEvent
+    data object SelectLiveLocationDuration : ShareLocationEvent
+    data class StartLiveLocationShare(val duration: Duration) : ShareLocationEvent
 
     data object SwitchToMyLocationMode : ShareLocationEvent
     data object SwitchToPinLocationMode : ShareLocationEvent

@@ -74,7 +74,7 @@ class ShareLocationPresenter(
             featureFlagService.isFeatureEnabledFlow(FeatureFlags.LiveLocationSharing)
         }.collectAsState(false)
         val appName by remember { derivedStateOf { buildMeta.applicationName } }
-        var permissionDialog: ShareLocationState.Dialog by remember {
+        var dialogState: ShareLocationState.Dialog by remember {
             mutableStateOf(ShareLocationState.Dialog.None)
         }
         val scope = rememberCoroutineScope()
@@ -82,7 +82,7 @@ class ShareLocationPresenter(
         LaunchedEffect(permissionsState.permissions) {
             if (permissionsState.isAnyGranted) {
                 mode = ShareLocationState.Mode.SenderLocation
-                permissionDialog = ShareLocationState.Dialog.None
+                dialogState = ShareLocationState.Dialog.None
             }
         }
 
@@ -93,22 +93,30 @@ class ShareLocationPresenter(
                 }
                 ShareLocationEvent.SwitchToMyLocationMode -> when {
                     permissionsState.isAnyGranted -> mode = ShareLocationState.Mode.SenderLocation
-                    permissionsState.shouldShowRationale -> permissionDialog = ShareLocationState.Dialog.PermissionRationale
-                    else -> permissionDialog = ShareLocationState.Dialog.PermissionDenied
+                    permissionsState.shouldShowRationale -> dialogState = ShareLocationState.Dialog.PermissionRationale
+                    else -> dialogState = ShareLocationState.Dialog.PermissionDenied
                 }
                 ShareLocationEvent.SwitchToPinLocationMode -> mode = ShareLocationState.Mode.PinLocation
-                ShareLocationEvent.DismissDialog -> permissionDialog = ShareLocationState.Dialog.None
+                ShareLocationEvent.DismissDialog -> dialogState = ShareLocationState.Dialog.None
                 ShareLocationEvent.OpenAppSettings -> {
                     locationActions.openSettings()
-                    permissionDialog = ShareLocationState.Dialog.None
+                    dialogState = ShareLocationState.Dialog.None
                 }
                 ShareLocationEvent.RequestPermissions -> permissionsState.eventSink(PermissionsEvents.RequestPermissions)
-                ShareLocationEvent.SelectLiveLocationDuration -> Unit
+                ShareLocationEvent.SelectLiveLocationDuration -> dialogState = when {
+                    permissionsState.isAnyGranted -> ShareLocationState.Dialog.LiveLocationDuration
+                    permissionsState.shouldShowRationale -> ShareLocationState.Dialog.PermissionRationale
+                    else -> ShareLocationState.Dialog.PermissionDenied
+                }
+                is ShareLocationEvent.StartLiveLocationShare -> scope.launch {
+                    dialogState = ShareLocationState.Dialog.None
+                    //room.startLiveLocationShare(event.duration.inWholeMilliseconds)
+                }
             }
         }
 
         return ShareLocationState(
-            permissionDialog = permissionDialog,
+            dialogState = dialogState,
             mode = mode,
             hasLocationPermission = permissionsState.isAnyGranted,
             canShareLiveLocation = isLiveLocationSharingEnabled,

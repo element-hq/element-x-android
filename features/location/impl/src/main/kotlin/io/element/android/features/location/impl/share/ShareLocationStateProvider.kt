@@ -40,6 +40,12 @@ class ShareLocationStateProvider : PreviewParameterProvider<ShareLocationState> 
                 mode = ShareLocationState.Mode.SenderLocation,
                 hasLocationPermission = true,
             ),
+            aShareLocationState(
+                permissionDialog = ShareLocationState.Dialog.LiveLocationDuration,
+                mode = ShareLocationState.Mode.SenderLocation,
+                hasLocationPermission = true,
+                canShareLiveLocation = true,
+            ),
         )
 }
 
@@ -50,7 +56,7 @@ private fun aShareLocationState(
     canShareLiveLocation: Boolean = false,
 ): ShareLocationState {
     return ShareLocationState(
-        permissionDialog = permissionDialog,
+        dialogState = permissionDialog,
         mode = mode,
         hasLocationPermission = hasLocationPermission,
         canShareLiveLocation = canShareLiveLocation,
