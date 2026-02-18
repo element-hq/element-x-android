@@ -13,7 +13,8 @@ data class ShareLocationState(
     val mode: Mode,
     val hasLocationPermission: Boolean,
     val appName: String,
-    val eventSink: (ShareLocationEvents) -> Unit,
+    val canShareLiveLocation: Boolean,
+    val eventSink: (ShareLocationEvent) -> Unit,
 ) {
     sealed interface Mode {
         data object SenderLocation : Mode

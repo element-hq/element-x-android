@@ -47,11 +47,13 @@ private fun aShareLocationState(
     permissionDialog: ShareLocationState.Dialog,
     mode: ShareLocationState.Mode,
     hasLocationPermission: Boolean,
+    canShareLiveLocation: Boolean = false,
 ): ShareLocationState {
     return ShareLocationState(
         permissionDialog = permissionDialog,
         mode = mode,
         hasLocationPermission = hasLocationPermission,
+        canShareLiveLocation = canShareLiveLocation,
         appName = APP_NAME,
         eventSink = {}
     )

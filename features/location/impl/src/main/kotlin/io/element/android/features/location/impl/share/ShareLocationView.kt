@@ -141,6 +141,11 @@ fun ShareLocationView(
                 )
                 navigateUp()
             }
+            if(state.canShareLiveLocation){
+                LiveLocationItem {
+                    state.eventSink(ShareLocationEvent.SelectLiveLocationDuration)
+                }
+            }
             Spacer(modifier = Modifier.height(16.dp + navBarPadding))
         },
         modifier = modifier,

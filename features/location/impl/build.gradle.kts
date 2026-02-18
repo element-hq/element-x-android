@@ -39,10 +39,12 @@ dependencies {
     implementation(projects.services.analytics.api)
     implementation(libs.accompanist.permission)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.featureflag.api)
 
     testCommonDependencies(libs, true)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.testtags)
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.features.messages.test)
+    testImplementation(projects.libraries.featureflag.test)
 }

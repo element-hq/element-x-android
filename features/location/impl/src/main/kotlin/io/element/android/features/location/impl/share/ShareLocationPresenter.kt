@@ -10,6 +10,7 @@ package io.element.android.features.location.impl.share
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -29,6 +30,8 @@ import io.element.android.features.messages.api.MessageComposerContext
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.location.AssetType
@@ -46,6 +49,7 @@ class ShareLocationPresenter(
     private val messageComposerContext: MessageComposerContext,
     private val locationActions: LocationActions,
     private val buildMeta: BuildMeta,
+    private val featureFlagService: FeatureFlagService,
 ) : Presenter<ShareLocationState> {
     @AssistedFactory
     fun interface Factory {
@@ -66,6 +70,9 @@ class ShareLocationPresenter(
                 }
             )
         }
+        val isLiveLocationSharingEnabled by remember {
+            featureFlagService.isFeatureEnabledFlow(FeatureFlags.LiveLocationSharing)
+        }.collectAsState(false)
         val appName by remember { derivedStateOf { buildMeta.applicationName } }
         var permissionDialog: ShareLocationState.Dialog by remember {
             mutableStateOf(ShareLocationState.Dialog.None)
@@ -104,6 +111,7 @@ class ShareLocationPresenter(
             permissionDialog = permissionDialog,
             mode = mode,
             hasLocationPermission = permissionsState.isAnyGranted,
+            canShareLiveLocation = isLiveLocationSharingEnabled,
             appName = appName,
             eventSink = ::handleEvent,
         )
