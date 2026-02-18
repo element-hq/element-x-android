@@ -11,7 +11,7 @@ package io.element.android.libraries.workmanager.api
 import io.element.android.libraries.matrix.api.core.SessionId
 
 interface WorkManagerScheduler {
-    fun submit(workManagerRequest: WorkManagerRequest)
+    fun submit(workManagerRequestFactory: WorkManagerRequestFactory)
     fun hasPendingWork(sessionId: SessionId, requestType: WorkManagerRequestType): Boolean
     fun cancel(sessionId: SessionId)
 }

@@ -12,12 +12,12 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.AppCoroutineScope
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.push.api.push.GroupedNotificationEventRequest
 import io.element.android.libraries.push.api.push.NotificationEventRequest
 import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEvent
-import io.element.android.libraries.push.impl.workmanager.SyncNotificationWorkManagerRequest
-import io.element.android.libraries.push.impl.workmanager.SyncNotificationsWorkerDataConverter
+import io.element.android.libraries.push.impl.workmanager.GroupedSyncNotificationsWorkerDataConverter
+import io.element.android.libraries.push.impl.workmanager.SyncNotificationWorkManagerRequestFactory
 import io.element.android.libraries.workmanager.api.WorkManagerScheduler
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import kotlinx.coroutines.CoroutineScope
@@ -33,7 +33,7 @@ import timber.log.Timber
 import kotlin.time.Duration.Companion.milliseconds
 
 interface NotificationResolverQueue {
-    val results: SharedFlow<Pair<List<NotificationEventRequest>, Map<NotificationEventRequest, Result<ResolvedPushEvent>>>>
+    val results: SharedFlow<Pair<GroupedNotificationEventRequest, Map<EventId, Result<ResolvedPushEvent>>>>
     suspend fun enqueue(request: NotificationEventRequest)
 }
 
@@ -49,8 +49,7 @@ class DefaultNotificationResolverQueue(
     @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,
     private val workManagerScheduler: WorkManagerScheduler,
-    private val featureFlagService: FeatureFlagService,
-    private val workerDataConverter: SyncNotificationsWorkerDataConverter,
+    private val workerDataConverter: GroupedSyncNotificationsWorkerDataConverter,
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
 ) : NotificationResolverQueue {
     companion object {
@@ -65,7 +64,7 @@ class DefaultNotificationResolverQueue(
      * A flow that emits pairs of a list of notification event requests and a map of the resolved events.
      * The map contains the original request as the key and the resolved event as the value.
      */
-    override val results = MutableSharedFlow<Pair<List<NotificationEventRequest>, Map<NotificationEventRequest, Result<ResolvedPushEvent>>>>()
+    override val results = MutableSharedFlow<Pair<GroupedNotificationEventRequest, Map<EventId, Result<ResolvedPushEvent>>>>()
 
     /**
      * Enqueues a notification event request to be resolved.
@@ -96,29 +95,15 @@ class DefaultNotificationResolverQueue(
                 }
             }.groupBy { it.sessionId }
 
-            if (featureFlagService.isFeatureEnabled(FeatureFlags.SyncNotificationsWithWorkManager)) {
-                for ((sessionId, requests) in groupedRequestsById) {
-                    workManagerScheduler.submit(
-                        SyncNotificationWorkManagerRequest(
-                            sessionId = sessionId,
-                            notificationEventRequests = requests,
-                            workerDataConverter = workerDataConverter,
-                            buildVersionSdkIntProvider = buildVersionSdkIntProvider,
-                        )
+            for ((sessionId, requests) in groupedRequestsById) {
+                workManagerScheduler.submit(
+                    SyncNotificationWorkManagerRequestFactory(
+                        sessionId = sessionId,
+                        notificationEventRequests = requests,
+                        workerDataConverter = workerDataConverter,
+                        buildVersionSdkIntProvider = buildVersionSdkIntProvider,
                     )
-                }
-            } else {
-                val sessionIds = groupedRequestsById.keys
-                for (sessionId in sessionIds) {
-                    val requests = groupedRequestsById[sessionId].orEmpty()
-                    Timber.d("Fetching notifications for $sessionId: $requests. Pending requests: ${!requestQueue.isEmpty}")
-                    // Resolving the events in parallel should improve performance since each session id will query a different Client
-                    launch {
-                        // No need for a Mutex since the SDK already has one internally
-                        val notifications = notifiableEventResolver.resolveEvents(sessionId, requests).getOrNull().orEmpty()
-                        results.emit(requests to notifications)
-                    }
-                }
+                )
             }
         }
     }

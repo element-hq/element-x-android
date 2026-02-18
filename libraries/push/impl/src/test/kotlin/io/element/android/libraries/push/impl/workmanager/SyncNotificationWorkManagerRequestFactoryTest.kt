@@ -23,7 +23,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import kotlin.collections.first
 
-class SyncNotificationWorkManagerRequestTest {
+class SyncNotificationWorkManagerRequestFactoryTest {
     @Test
     fun `build - success API 33`() = runTest {
         val request = createSyncNotificationWorkManagerRequest(
@@ -32,7 +32,7 @@ class SyncNotificationWorkManagerRequestTest {
             sdkVersion = 33,
         )
 
-        val result = request.build()
+        val result = request.create()
         assertThat(result.isSuccess).isTrue()
         result.getOrNull()!!.first().run {
             assertThat(this).isInstanceOf(OneTimeWorkRequest::class.java)
@@ -51,7 +51,7 @@ class SyncNotificationWorkManagerRequestTest {
             sdkVersion = 32,
         )
 
-        val result = request.build()
+        val result = request.create()
         assertThat(result.isSuccess).isTrue()
         result.getOrNull()!!.first().run {
             assertThat(this).isInstanceOf(OneTimeWorkRequest::class.java)
@@ -69,7 +69,7 @@ class SyncNotificationWorkManagerRequestTest {
             notificationEventRequests = emptyList()
         )
 
-        val result = request.build()
+        val result = request.create()
         assertThat(result.isFailure).isTrue()
     }
 
@@ -78,9 +78,9 @@ class SyncNotificationWorkManagerRequestTest {
         val request = createSyncNotificationWorkManagerRequest(
             sessionId = A_SESSION_ID,
             notificationEventRequests = listOf(aNotificationEventRequest()),
-            workerDataConverter = SyncNotificationsWorkerDataConverter({ error("error during serialization") })
+            workerDataConverter = GroupedSyncNotificationsWorkerDataConverter({ error("error during serialization") })
         )
-        val result = request.build()
+        val result = request.create()
         assertThat(result.isFailure).isTrue()
     }
 }
@@ -88,9 +88,9 @@ class SyncNotificationWorkManagerRequestTest {
 private fun createSyncNotificationWorkManagerRequest(
     sessionId: SessionId,
     notificationEventRequests: List<NotificationEventRequest>,
-    workerDataConverter: SyncNotificationsWorkerDataConverter = SyncNotificationsWorkerDataConverter(DefaultJsonProvider()),
+    workerDataConverter: GroupedSyncNotificationsWorkerDataConverter = GroupedSyncNotificationsWorkerDataConverter(DefaultJsonProvider()),
     sdkVersion: Int = 33,
-) = SyncNotificationWorkManagerRequest(
+) = SyncNotificationWorkManagerRequestFactory(
     sessionId = sessionId,
     notificationEventRequests = notificationEventRequests,
     workerDataConverter = workerDataConverter,

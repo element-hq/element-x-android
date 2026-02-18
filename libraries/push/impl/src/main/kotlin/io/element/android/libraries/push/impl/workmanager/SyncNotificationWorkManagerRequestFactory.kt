@@ -14,7 +14,7 @@ import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkRequest
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.push.NotificationEventRequest
-import io.element.android.libraries.workmanager.api.WorkManagerRequest
+import io.element.android.libraries.workmanager.api.WorkManagerRequestFactory
 import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.workManagerTag
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
@@ -23,13 +23,13 @@ import kotlinx.serialization.Serializable
 import timber.log.Timber
 import java.security.InvalidParameterException
 
-class SyncNotificationWorkManagerRequest(
+class SyncNotificationWorkManagerRequestFactory(
     private val sessionId: SessionId,
     private val notificationEventRequests: List<NotificationEventRequest>,
-    private val workerDataConverter: SyncNotificationsWorkerDataConverter,
+    private val workerDataConverter: GroupedSyncNotificationsWorkerDataConverter,
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
-) : WorkManagerRequest {
-    override fun build(): Result<List<WorkRequest>> {
+) : WorkManagerRequestFactory {
+    override fun create(): Result<List<WorkRequest>> {
         if (notificationEventRequests.isEmpty()) {
             return Result.failure(InvalidParameterException("notificationEventRequests cannot be empty"))
         }
@@ -62,6 +62,16 @@ class SyncNotificationWorkManagerRequest(
         val roomId: String,
         @SerialName("event_id")
         val eventId: String,
+        @SerialName("provider_info")
+        val providerInfo: String,
+    )
+
+    @Serializable
+    data class GroupedData(
+        @SerialName("session_id")
+        val sessionId: String,
+        @SerialName("events_by_room")
+        val eventsByRoom: Map<String, List<String>>,
         @SerialName("provider_info")
         val providerInfo: String,
     )

@@ -47,14 +47,14 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableEven
 import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEvent
 import io.element.android.libraries.push.impl.test.DefaultTestPush
 import io.element.android.libraries.push.impl.troubleshoot.DiagnosticPushHandler
-import io.element.android.libraries.push.impl.workmanager.SyncNotificationsWorkerDataConverter
+import io.element.android.libraries.push.impl.workmanager.GroupedSyncNotificationsWorkerDataConverter
 import io.element.android.libraries.pushproviders.api.PushData
 import io.element.android.libraries.pushstore.api.UserPushStore
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStore
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStoreFactory
 import io.element.android.libraries.pushstore.test.userpushstore.clientsecret.FakePushClientSecret
-import io.element.android.libraries.workmanager.api.WorkManagerRequest
+import io.element.android.libraries.workmanager.api.WorkManagerRequestFactory
 import io.element.android.libraries.workmanager.test.FakeWorkManagerScheduler
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
@@ -156,7 +156,7 @@ class DefaultPushHandlerTest {
         )
 
         val featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.SyncNotificationsWithWorkManager.key to true))
-        val submitWorkLambda = lambdaRecorder<WorkManagerRequest, Unit> {}
+        val submitWorkLambda = lambdaRecorder<WorkManagerRequestFactory, Unit> {}
         val workManagerScheduler = FakeWorkManagerScheduler(submitLambda = submitWorkLambda)
 
         val defaultPushHandler = createDefaultPushHandler(
@@ -706,7 +706,7 @@ class DefaultPushHandlerTest {
                 appCoroutineScope = backgroundScope,
                 workManagerScheduler = workManagerScheduler,
                 featureFlagService = featureFlagService,
-                workerDataConverter = SyncNotificationsWorkerDataConverter(DefaultJsonProvider()),
+                workerDataConverter = GroupedSyncNotificationsWorkerDataConverter(DefaultJsonProvider()),
                 buildVersionSdkIntProvider = FakeBuildVersionSdkIntProvider(33),
             ),
             appCoroutineScope = backgroundScope,

@@ -16,11 +16,8 @@ import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.annotations.AppCoroutineScope
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.exception.NotificationResolverException
 import io.element.android.libraries.push.api.push.NotificationEventRequest
-import io.element.android.libraries.push.api.push.SyncOnNotifiableEvent
 import io.element.android.libraries.push.impl.history.PushHistoryService
 import io.element.android.libraries.push.impl.history.onDiagnosticPush
 import io.element.android.libraries.push.impl.history.onInvalidPushReceived
@@ -67,8 +64,6 @@ class DefaultPushHandler(
     @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,
     private val fallbackNotificationFactory: FallbackNotificationFactory,
-    private val syncOnNotifiableEvent: SyncOnNotifiableEvent,
-    private val featureFlagService: FeatureFlagService,
 ) : PushHandler {
     init {
         processPushEventResults()
@@ -79,64 +74,66 @@ class DefaultPushHandler(
      */
     private fun processPushEventResults() {
         resolverQueue.results
-            .map { (requests, resolvedEvents) ->
-                for (request in requests) {
-                    // Log the result of the push notification event
-                    val result = resolvedEvents[request]
-                    if (result == null) {
-                        pushHistoryService.onUnableToResolveEvent(
-                            providerInfo = request.providerInfo,
-                            eventId = request.eventId,
-                            roomId = request.roomId,
-                            sessionId = request.sessionId,
-                            reason = "Push not handled: no result found for request",
-                        )
-                    } else {
-                        result.fold(
-                            onSuccess = {
-                                if (it is ResolvedPushEvent.Event && it.notifiableEvent is FallbackNotifiableEvent) {
-                                    pushHistoryService.onUnableToResolveEvent(
-                                        providerInfo = request.providerInfo,
-                                        eventId = request.eventId,
-                                        roomId = request.roomId,
-                                        sessionId = request.sessionId,
-                                        reason = it.notifiableEvent.cause.orEmpty(),
-                                    )
-                                } else {
-                                    pushHistoryService.onSuccess(
-                                        providerInfo = request.providerInfo,
-                                        eventId = request.eventId,
-                                        roomId = request.roomId,
-                                        sessionId = request.sessionId,
-                                        comment = "Push handled successfully",
-                                    )
-                                }
-                            },
-                            onFailure = { exception ->
-                                if (exception is NotificationResolverException.EventFilteredOut) {
-                                    pushHistoryService.onSuccess(
-                                        providerInfo = request.providerInfo,
-                                        eventId = request.eventId,
-                                        roomId = request.roomId,
-                                        sessionId = request.sessionId,
-                                        comment = "Push handled successfully but notification was filtered out",
-                                    )
-                                } else {
-                                    val reason = when (exception) {
-                                        is NotificationResolverException.EventNotFound -> "Event not found"
-                                        else -> "Unknown error: ${exception.message}"
+            .map { (request, resolvedEvents) ->
+                for ((roomId, eventIds) in request.requestsByRoom) {
+                    for (eventId in eventIds) {
+                        // Log the result of the push notification event
+                        val result = resolvedEvents[eventId]
+                        if (result == null) {
+                            pushHistoryService.onUnableToResolveEvent(
+                                providerInfo = request.providerInfo,
+                                eventId = eventId,
+                                roomId = roomId,
+                                sessionId = request.sessionId,
+                                reason = "Push not handled: no result found for request",
+                            )
+                        } else {
+                            result.fold(
+                                onSuccess = {
+                                    if (it is ResolvedPushEvent.Event && it.notifiableEvent is FallbackNotifiableEvent) {
+                                        pushHistoryService.onUnableToResolveEvent(
+                                            providerInfo = request.providerInfo,
+                                            eventId = eventId,
+                                            roomId = roomId,
+                                            sessionId = request.sessionId,
+                                            reason = it.notifiableEvent.cause.orEmpty(),
+                                        )
+                                    } else {
+                                        pushHistoryService.onSuccess(
+                                            providerInfo = request.providerInfo,
+                                            eventId = eventId,
+                                            roomId = roomId,
+                                            sessionId = request.sessionId,
+                                            comment = "Push handled successfully",
+                                        )
                                     }
-                                    pushHistoryService.onUnableToResolveEvent(
-                                        providerInfo = request.providerInfo,
-                                        eventId = request.eventId,
-                                        roomId = request.roomId,
-                                        sessionId = request.sessionId,
-                                        reason = "$reason - Showing fallback notification",
-                                    )
-                                    mutableBatteryOptimizationStore.showBatteryOptimizationBanner()
+                                },
+                                onFailure = { exception ->
+                                    if (exception is NotificationResolverException.EventFilteredOut) {
+                                        pushHistoryService.onSuccess(
+                                            providerInfo = request.providerInfo,
+                                            eventId = eventId,
+                                            roomId = roomId,
+                                            sessionId = request.sessionId,
+                                            comment = "Push handled successfully but notification was filtered out",
+                                        )
+                                    } else {
+                                        val reason = when (exception) {
+                                            is NotificationResolverException.EventNotFound -> "Event not found"
+                                            else -> "Unknown error: ${exception.message}"
+                                        }
+                                        pushHistoryService.onUnableToResolveEvent(
+                                            providerInfo = request.providerInfo,
+                                            eventId = eventId,
+                                            roomId = roomId,
+                                            sessionId = request.sessionId,
+                                            reason = "$reason - Showing fallback notification",
+                                        )
+                                        mutableBatteryOptimizationStore.showBatteryOptimizationBanner()
+                                    }
                                 }
-                            }
-                        )
+                            )
+                        }
                     }
                 }
 
@@ -144,7 +141,7 @@ class DefaultPushHandler(
                 val redactions = mutableListOf<ResolvedPushEvent.Redaction>()
 
                 @Suppress("LoopWithTooManyJumpStatements")
-                for ((request, result) in resolvedEvents) {
+                for ((eventId, result) in resolvedEvents) {
                     val event = result.recover { exception ->
                         // If the event could not be resolved, we create a fallback notification
                         when (exception) {
@@ -157,8 +154,8 @@ class DefaultPushHandler(
                                 ResolvedPushEvent.Event(
                                     fallbackNotificationFactory.create(
                                         sessionId = request.sessionId,
-                                        roomId = request.roomId,
-                                        eventId = request.eventId,
+                                        roomId = request.requestsByRoom.entries.first { it.value.contains(eventId) }.key,
+                                        eventId = eventId,
                                         cause = exception.message,
                                     )
                                 )
@@ -199,10 +196,6 @@ class DefaultPushHandler(
                 // Finally, process other notifications (messages, invites, generic notifications, etc.)
                 if (nonRingingCallEvents.isNotEmpty()) {
                     onNotifiableEventReceived.onNotifiableEventsReceived(nonRingingCallEvents)
-                }
-
-                if (!featureFlagService.isFeatureEnabled(FeatureFlags.SyncNotificationsWithWorkManager)) {
-                    syncOnNotifiableEvent(requests)
                 }
             }
             .launchIn(appCoroutineScope)

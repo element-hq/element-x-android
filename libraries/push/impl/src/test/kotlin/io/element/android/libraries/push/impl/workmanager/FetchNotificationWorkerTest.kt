@@ -26,7 +26,7 @@ import io.element.android.libraries.push.impl.notifications.NotificationResolver
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEvent
 import io.element.android.libraries.push.test.notifications.FakeNotificationResolverQueue
-import io.element.android.libraries.workmanager.api.WorkManagerRequest
+import io.element.android.libraries.workmanager.api.WorkManagerRequestFactory
 import io.element.android.libraries.workmanager.api.di.MetroWorkerFactory
 import io.element.android.libraries.workmanager.test.FakeWorkManagerScheduler
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
@@ -130,7 +130,7 @@ class FetchNotificationWorkerTest {
 
     @Test
     fun `test - failing to resolve events re-schedules the work`() = runTest {
-        val submitWorkerLambda = lambdaRecorder<WorkManagerRequest, Unit> {}
+        val submitWorkerLambda = lambdaRecorder<WorkManagerRequestFactory, Unit> {}
         val scheduler = FakeWorkManagerScheduler(submitLambda = submitWorkerLambda)
 
         val resolver = FakeNotifiableEventResolver(
@@ -177,7 +177,7 @@ class FetchNotificationWorkerTest {
         workManagerScheduler = workManagerScheduler,
         syncOnNotifiableEvent = syncOnNotifiableEvent,
         coroutineDispatchers = testCoroutineDispatchers(),
-        workerDataConverter = SyncNotificationsWorkerDataConverter(DefaultJsonProvider()),
+        workerDataConverter = GroupedSyncNotificationsWorkerDataConverter(DefaultJsonProvider()),
         buildVersionSdkIntProvider = FakeBuildVersionSdkIntProvider(33),
     )
 

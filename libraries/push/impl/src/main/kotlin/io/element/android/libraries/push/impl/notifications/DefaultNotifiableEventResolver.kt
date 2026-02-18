@@ -50,6 +50,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageTy
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.ui.messages.toPlainText
+import io.element.android.libraries.push.api.push.GroupedNotificationEventRequest
 import io.element.android.libraries.push.api.push.NotificationEventRequest
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
@@ -67,7 +68,12 @@ private val loggerTag = LoggerTag("DefaultNotifiableEventResolver", LoggerTag.No
  * The results for each push notification will be a map of [NotificationEventRequest] to [Result] of [ResolvedPushEvent].
  * If the resolution of a specific event fails, the innermost [Result] will contain an exception.
  */
-typealias ResolvePushEventsResult = Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>
+typealias ResolvePushEventsResult = Result<Map<GroupedNotificationEventRequest, Result<ResolvedPushEvent>>>
+
+sealed interface ResolveGroupedNotificationsResult {
+    data class Success(val eventResults: Map<EventId, Result<ResolvedPushEvent>>) : ResolveGroupedNotificationsResult
+    data class Error(val throwable: Throwable) : ResolveGroupedNotificationsResult
+}
 
 /**
  * The notifiable event resolver is able to create a NotifiableEvent (view model for notifications) from an sdk Event.
@@ -77,9 +83,8 @@ typealias ResolvePushEventsResult = Result<Map<NotificationEventRequest, Result<
  */
 interface NotifiableEventResolver {
     suspend fun resolveEvents(
-        sessionId: SessionId,
-        notificationEventRequests: List<NotificationEventRequest>
-    ): ResolvePushEventsResult
+        groupedNotificationEventRequest: GroupedNotificationEventRequest,
+    ): ResolveGroupedNotificationsResult
 }
 
 @ContributesBinding(AppScope::class)
@@ -95,44 +100,40 @@ class DefaultNotifiableEventResolver(
     private val featureFlagService: FeatureFlagService,
 ) : NotifiableEventResolver {
     override suspend fun resolveEvents(
-        sessionId: SessionId,
-        notificationEventRequests: List<NotificationEventRequest>
-    ): ResolvePushEventsResult {
-        Timber.d("Queueing notifications: $notificationEventRequests")
-        val client = matrixClientProvider.getOrRestore(sessionId).getOrElse {
-            return Result.failure(it)
+        groupedNotificationEventRequest: GroupedNotificationEventRequest,
+    ): ResolveGroupedNotificationsResult {
+        Timber.d("Queueing notifications: $groupedNotificationEventRequest")
+        val client = matrixClientProvider.getOrRestore(groupedNotificationEventRequest.sessionId).getOrElse {
+            return ResolveGroupedNotificationsResult.Error(it)
         }
-        val ids = notificationEventRequests.groupBy { it.roomId }
-            .mapValues { (_, requests) ->
-                requests.map { it.eventId }
-            }
 
         // TODO this notificationData is not always valid at the moment, sometimes the Rust SDK can't fetch the matching event
-        val notificationsResult = client.notificationService.getNotifications(ids)
+        val notificationsResult = client.notificationService.getNotifications(groupedNotificationEventRequest.requestsByRoom)
 
         if (notificationsResult.isFailure) {
             val exception = notificationsResult.exceptionOrNull()
-            Timber.tag(loggerTag.value).e(exception, "Failed to get notifications for $ids")
-            return Result.failure(exception ?: NotificationResolverException.UnknownError("Unknown error while fetching notifications"))
+            Timber.tag(loggerTag.value).e(exception, "Failed to get notifications for ${groupedNotificationEventRequest.requestsByRoom}")
+            return ResolveGroupedNotificationsResult.Error(
+                exception ?: NotificationResolverException.UnknownError("Unknown error while fetching notifications")
+            )
         }
 
         // The null check is done above
         val notificationDataMap = notificationsResult.getOrNull()!!.mapValues { (_, notificationData) ->
             notificationData.flatMap { data ->
-                data.asNotifiableEvent(client, sessionId)
+                data.asNotifiableEvent(client, groupedNotificationEventRequest.sessionId)
             }
         }
 
-        return Result.success(
-            notificationEventRequests.associate { request ->
-                val notificationDataResult = notificationDataMap[request.eventId]
-                if (notificationDataResult == null) {
-                    request to Result.failure(NotificationResolverException.UnknownError("No notification data for ${request.roomId} - ${request.eventId}"))
-                } else {
-                    request to notificationDataResult
-                }
+        val results = groupedNotificationEventRequest.requestsByRoom.flatMap { (roomId, eventIds) ->
+            eventIds.map { eventId ->
+                val result = notificationDataMap[eventId]
+                    ?: Result.failure(NotificationResolverException.UnknownError("No notification data for $roomId - $eventId"))
+                eventId to result
             }
-        )
+        }.toMap()
+
+        return ResolveGroupedNotificationsResult.Success(results)
     }
 
     private suspend fun NotificationData.asNotifiableEvent(

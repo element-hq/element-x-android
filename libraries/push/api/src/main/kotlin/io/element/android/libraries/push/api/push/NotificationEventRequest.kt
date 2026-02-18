@@ -18,3 +18,9 @@ data class NotificationEventRequest(
     val eventId: EventId,
     val providerInfo: String,
 )
+
+data class GroupedNotificationEventRequest(
+    val sessionId: SessionId,
+    val requestsByRoom: Map<RoomId, List<EventId>>,
+    val providerInfo: String,
+)

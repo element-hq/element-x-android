@@ -14,7 +14,8 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClientProvider
-import io.element.android.libraries.push.api.push.NotificationEventRequest
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.push.SyncOnNotifiableEvent
 import io.element.android.services.appnavstate.api.AppForegroundStateService
 import kotlinx.coroutines.delay
@@ -29,27 +30,22 @@ class DefaultSyncOnNotifiableEvent(
     private val appForegroundStateService: AppForegroundStateService,
     private val dispatchers: CoroutineDispatchers,
 ) : SyncOnNotifiableEvent {
-    override suspend operator fun invoke(requests: List<NotificationEventRequest>) = withContext(dispatchers.io) {
+    override suspend operator fun invoke(sessionId: SessionId, roomIds: List<RoomId>) = withContext(dispatchers.io) {
         if (!featureFlagService.isFeatureEnabled(FeatureFlags.SyncOnPush)) {
             return@withContext
         }
 
         try {
-            val eventsBySession = requests.groupBy { it.sessionId }
-
             appForegroundStateService.updateIsSyncingNotificationEvent(true)
             Timber.d("Starting opportunistic room list sync | In foreground: ${appForegroundStateService.isInForeground.value}")
 
-            for ((sessionId, events) in eventsBySession) {
-                val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: continue
-                val roomIds = events.map { it.roomId }.distinct()
+            val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return@withContext
 
-                client.roomListService.subscribeToVisibleRooms(roomIds)
+            client.roomListService.subscribeToVisibleRooms(roomIds)
 
-                if (!appForegroundStateService.isInForeground.value) {
-                    // Give the sync some time to complete in background
-                    delay(10.seconds)
-                }
+            if (!appForegroundStateService.isInForeground.value) {
+                // Give the sync some time to complete in background
+                delay(10.seconds)
             }
         } finally {
             Timber.d("Finished opportunistic room list sync")

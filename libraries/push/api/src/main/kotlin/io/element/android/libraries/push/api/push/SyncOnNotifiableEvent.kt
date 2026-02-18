@@ -8,6 +8,9 @@
 
 package io.element.android.libraries.push.api.push
 
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+
 fun interface SyncOnNotifiableEvent {
-    suspend operator fun invoke(requests: List<NotificationEventRequest>)
+    suspend operator fun invoke(sessionId: SessionId, roomIds: List<RoomId>)
 }
