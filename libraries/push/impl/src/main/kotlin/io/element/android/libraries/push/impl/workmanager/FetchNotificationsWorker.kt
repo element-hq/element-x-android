@@ -39,9 +39,12 @@ import kotlinx.coroutines.withTimeoutOrNull
 import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 
+private const val MAX_RETRY_ATTEMPTS = 3
+private const val TAG = "FetchNotificationsWorker"
+
 @AssistedInject
 class FetchNotificationsWorker(
-    @Assisted workerParams: WorkerParameters,
+    @Assisted private val workerParams: WorkerParameters,
     @ApplicationContext private val context: Context,
     private val networkMonitor: NetworkMonitor,
     private val eventResolver: NotifiableEventResolver,
@@ -53,22 +56,27 @@ class FetchNotificationsWorker(
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
 ) : CoroutineWorker(context, workerParams) {
     override suspend fun doWork(): Result = withContext(coroutineDispatchers.io) {
-        Timber.d("FetchNotificationsWorker started")
+        Timber.tag(TAG).d("FetchNotificationsWorker started")
         val requests = workerDataConverter.deserialize(inputData) ?: return@withContext Result.failure()
         // Wait for network to be available, but not more than 10 seconds
         val hasNetwork = withTimeoutOrNull(10.seconds) {
             networkMonitor.connectivity.first { it == NetworkStatus.Connected }
         } != null
         if (!hasNetwork) {
-            Timber.w("No network, retrying later")
-            return@withContext Result.retry()
+            if (workerParams.runAttemptCount < MAX_RETRY_ATTEMPTS) {
+                Timber.tag(TAG).w("No network, retrying later")
+                return@withContext Result.retry()
+            } else {
+                Timber.tag(TAG).w("No network available and reached max retry attempts (${workerParams.runAttemptCount}/$MAX_RETRY_ATTEMPTS)")
+                return@withContext Result.failure()
+            }
         }
 
         val failedSyncForSessions = mutableMapOf<SessionId, Throwable>()
 
         val groupedRequests = requests.groupBy { it.sessionId }.toMutableMap()
         for ((sessionId, notificationRequests) in groupedRequests) {
-            Timber.d("Processing notification requests for session $sessionId")
+            Timber.tag(TAG).d("Processing notification requests for session $sessionId")
             eventResolver.resolveEvents(sessionId, notificationRequests)
                 .fold(
                     onSuccess = { result ->
@@ -87,24 +95,26 @@ class FetchNotificationsWorker(
             @Suppress("LoopWithTooManyJumpStatements")
             for ((failedSessionId, exception) in failedSyncForSessions) {
                 if (exception.cause is SessionRestorationException) {
-                    Timber.e(exception, "Session $failedSessionId could not be restored, not retrying notification fetching")
+                    Timber.tag(TAG).e(exception, "Session $failedSessionId could not be restored, not retrying notification fetching")
                     groupedRequests.remove(failedSessionId)
                     continue
                 }
                 val requestsToRetry = groupedRequests[failedSessionId] ?: continue
-                Timber.d("Re-scheduling ${requestsToRetry.size} failed notification requests for session $failedSessionId")
-                workManagerScheduler.submit(
-                    SyncNotificationWorkManagerRequest(
-                        sessionId = failedSessionId,
-                        notificationEventRequests = requestsToRetry,
-                        workerDataConverter = workerDataConverter,
-                        buildVersionSdkIntProvider = buildVersionSdkIntProvider,
+                if (workerParams.runAttemptCount < MAX_RETRY_ATTEMPTS) {
+                    Timber.tag(TAG).d("Re-scheduling ${requestsToRetry.size} failed notification requests for session $failedSessionId")
+                    workManagerScheduler.submit(
+                        SyncNotificationWorkManagerRequest(
+                            sessionId = failedSessionId,
+                            notificationEventRequests = requestsToRetry,
+                            workerDataConverter = workerDataConverter,
+                            buildVersionSdkIntProvider = buildVersionSdkIntProvider,
+                        )
                     )
-                )
+                }
             }
         }
 
-        Timber.d("Notifications processed successfully")
+        Timber.tag(TAG).d("Notifications processed successfully")
 
         performOpportunisticSyncIfNeeded(groupedRequests)
 
@@ -118,7 +128,7 @@ class FetchNotificationsWorker(
             runCatchingExceptions {
                 syncOnNotifiableEvent(notificationRequests)
             }.onFailure {
-                Timber.e(it, "Failed to sync on notifiable events for session $sessionId")
+                Timber.tag(TAG).e(it, "Failed to sync on notifiable events for session $sessionId")
             }
         }
     }
