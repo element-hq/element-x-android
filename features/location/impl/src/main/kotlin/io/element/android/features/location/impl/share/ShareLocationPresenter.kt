@@ -79,23 +79,24 @@ class ShareLocationPresenter(
             }
         }
 
-        fun handleEvent(event: ShareLocationEvents) {
+        fun handleEvent(event: ShareLocationEvent) {
             when (event) {
-                is ShareLocationEvents.ShareLocation -> scope.launch {
+                is ShareLocationEvent.ShareStaticLocation -> scope.launch {
                     shareLocation(event, mode)
                 }
-                ShareLocationEvents.SwitchToMyLocationMode -> when {
+                ShareLocationEvent.SwitchToMyLocationMode -> when {
                     permissionsState.isAnyGranted -> mode = ShareLocationState.Mode.SenderLocation
                     permissionsState.shouldShowRationale -> permissionDialog = ShareLocationState.Dialog.PermissionRationale
                     else -> permissionDialog = ShareLocationState.Dialog.PermissionDenied
                 }
-                ShareLocationEvents.SwitchToPinLocationMode -> mode = ShareLocationState.Mode.PinLocation
-                ShareLocationEvents.DismissDialog -> permissionDialog = ShareLocationState.Dialog.None
-                ShareLocationEvents.OpenAppSettings -> {
+                ShareLocationEvent.SwitchToPinLocationMode -> mode = ShareLocationState.Mode.PinLocation
+                ShareLocationEvent.DismissDialog -> permissionDialog = ShareLocationState.Dialog.None
+                ShareLocationEvent.OpenAppSettings -> {
                     locationActions.openSettings()
                     permissionDialog = ShareLocationState.Dialog.None
                 }
-                ShareLocationEvents.RequestPermissions -> permissionsState.eventSink(PermissionsEvents.RequestPermissions)
+                ShareLocationEvent.RequestPermissions -> permissionsState.eventSink(PermissionsEvents.RequestPermissions)
+                ShareLocationEvent.SelectLiveLocationDuration -> Unit
             }
         }
 
@@ -109,7 +110,7 @@ class ShareLocationPresenter(
     }
 
     private suspend fun shareLocation(
-        event: ShareLocationEvents.ShareLocation,
+        event: ShareLocationEvent.ShareStaticLocation,
         mode: ShareLocationState.Mode,
     ) {
         val replyMode = messageComposerContext.composerMode as? MessageComposerMode.Reply
@@ -168,8 +169,8 @@ class ShareLocationPresenter(
     }
 }
 
-private fun ShareLocationEvents.ShareLocation.toGeoUri(): String = location?.toGeoUri() ?: cameraPosition.toGeoUri()
+private fun ShareLocationEvent.ShareStaticLocation.toGeoUri(): String = location?.toGeoUri() ?: cameraPosition.toGeoUri()
 
-private fun ShareLocationEvents.ShareLocation.CameraPosition.toGeoUri(): String = "geo:$lat,$lon"
+private fun ShareLocationEvent.ShareStaticLocation.CameraPosition.toGeoUri(): String = "geo:$lat,$lon"
 
 private fun generateBody(uri: String): String = "Location was shared at $uri"

@@ -10,11 +10,11 @@ package io.element.android.features.location.impl.share
 
 import io.element.android.features.location.api.Location
 
-sealed interface ShareLocationEvents {
-    data class ShareLocation(
+sealed interface ShareLocationEvent {
+    data class ShareStaticLocation(
         val cameraPosition: CameraPosition,
         val location: Location?,
-    ) : ShareLocationEvents {
+    ) : ShareLocationEvent {
         data class CameraPosition(
             val lat: Double,
             val lon: Double,
@@ -22,9 +22,11 @@ sealed interface ShareLocationEvents {
         )
     }
 
-    data object SwitchToMyLocationMode : ShareLocationEvents
-    data object SwitchToPinLocationMode : ShareLocationEvents
-    data object DismissDialog : ShareLocationEvents
-    data object RequestPermissions : ShareLocationEvents
-    data object OpenAppSettings : ShareLocationEvents
+    data object SelectLiveLocationDuration: ShareLocationEvent
+
+    data object SwitchToMyLocationMode : ShareLocationEvent
+    data object SwitchToPinLocationMode : ShareLocationEvent
+    data object DismissDialog : ShareLocationEvent
+    data object RequestPermissions : ShareLocationEvent
+    data object OpenAppSettings : ShareLocationEvent
 }
