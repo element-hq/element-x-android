@@ -13,14 +13,14 @@ import androidx.work.PeriodicWorkRequest
 import androidx.work.WorkRequest
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.impl.workmanager.VacuumDatabaseWorker.Companion.SESSION_ID_PARAM
-import io.element.android.libraries.workmanager.api.WorkManagerRequest
+import io.element.android.libraries.workmanager.api.WorkManagerRequestBuilder
 import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.workManagerTag
 import java.util.concurrent.TimeUnit
 
-class PerformDatabaseVacuumWorkManagerRequest(
+class PerformDatabaseVacuumWorkManagerRequestBuilder(
     private val sessionId: SessionId,
-) : WorkManagerRequest {
+) : WorkManagerRequestBuilder {
     override fun build(): Result<List<WorkRequest>> {
         val data = Data.Builder().putString(SESSION_ID_PARAM, sessionId.value).build()
         val workRequest = PeriodicWorkRequest.Builder(

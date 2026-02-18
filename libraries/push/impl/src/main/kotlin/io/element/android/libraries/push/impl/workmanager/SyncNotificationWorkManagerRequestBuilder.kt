@@ -15,7 +15,7 @@ import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkRequest
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.push.NotificationEventRequest
-import io.element.android.libraries.workmanager.api.WorkManagerRequest
+import io.element.android.libraries.workmanager.api.WorkManagerRequestBuilder
 import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.workManagerTag
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
@@ -26,12 +26,12 @@ import java.security.InvalidParameterException
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toJavaDuration
 
-class SyncNotificationWorkManagerRequest(
+class SyncNotificationWorkManagerRequestBuilder(
     private val sessionId: SessionId,
     private val notificationEventRequests: List<NotificationEventRequest>,
     private val workerDataConverter: SyncNotificationsWorkerDataConverter,
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
-) : WorkManagerRequest {
+) : WorkManagerRequestBuilder {
     override fun build(): Result<List<WorkRequest>> {
         if (notificationEventRequests.isEmpty()) {
             return Result.failure(InvalidParameterException("notificationEventRequests cannot be empty"))

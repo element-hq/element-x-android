@@ -103,7 +103,7 @@ class FetchNotificationsWorker(
                 if (workerParams.runAttemptCount < MAX_RETRY_ATTEMPTS) {
                     Timber.tag(TAG).d("Re-scheduling ${requestsToRetry.size} failed notification requests for session $failedSessionId")
                     workManagerScheduler.submit(
-                        SyncNotificationWorkManagerRequest(
+                        SyncNotificationWorkManagerRequestBuilder(
                             sessionId = failedSessionId,
                             notificationEventRequests = requestsToRetry,
                             workerDataConverter = workerDataConverter,

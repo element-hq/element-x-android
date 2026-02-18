@@ -23,7 +23,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import kotlin.collections.first
 
-class SyncNotificationWorkManagerRequestTest {
+class SyncNotificationWorkManagerRequestBuilderTest {
     @Test
     fun `build - success API 33`() = runTest {
         val request = createSyncNotificationWorkManagerRequest(
@@ -90,7 +90,7 @@ private fun createSyncNotificationWorkManagerRequest(
     notificationEventRequests: List<NotificationEventRequest>,
     workerDataConverter: SyncNotificationsWorkerDataConverter = SyncNotificationsWorkerDataConverter(DefaultJsonProvider()),
     sdkVersion: Int = 33,
-) = SyncNotificationWorkManagerRequest(
+) = SyncNotificationWorkManagerRequestBuilder(
     sessionId = sessionId,
     notificationEventRequests = notificationEventRequests,
     workerDataConverter = workerDataConverter,

@@ -16,7 +16,7 @@ import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.sessionstorage.api.observer.SessionListener
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
-import io.element.android.libraries.workmanager.api.WorkManagerRequest
+import io.element.android.libraries.workmanager.api.WorkManagerRequestBuilder
 import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.WorkManagerScheduler
 import io.element.android.libraries.workmanager.api.workManagerTag
@@ -41,13 +41,13 @@ class DefaultWorkManagerScheduler(
         })
     }
 
-    override fun submit(workManagerRequest: WorkManagerRequest) {
-        workManagerRequest.build().fold(
+    override fun submit(workManagerRequestBuilder: WorkManagerRequestBuilder) {
+        workManagerRequestBuilder.build().fold(
             onSuccess = { workRequests ->
                 workManager.enqueue(workRequests)
             },
             onFailure = {
-                Timber.e(it, "Failed to build WorkManager request $workManagerRequest")
+                Timber.e(it, "Failed to build WorkManager request $workManagerRequestBuilder")
             }
         )
     }

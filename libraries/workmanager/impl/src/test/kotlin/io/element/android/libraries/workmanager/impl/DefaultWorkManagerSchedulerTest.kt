@@ -11,7 +11,7 @@ import androidx.work.WorkManager
 import androidx.work.WorkRequest
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.sessionstorage.test.observer.FakeSessionObserver
-import io.element.android.libraries.workmanager.api.WorkManagerRequest
+import io.element.android.libraries.workmanager.api.WorkManagerRequestBuilder
 import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.workManagerTag
 import io.mockk.every
@@ -55,7 +55,7 @@ class DefaultWorkManagerSchedulerTest {
             sessionObserver = FakeSessionObserver(),
         )
 
-        scheduler.submit(FakeWorkManagerRequest())
+        scheduler.submit(FakeWorkManagerRequestBuilder())
 
         verify { workManager.enqueue(any<List<WorkRequest>>()) }
     }
@@ -69,7 +69,7 @@ class DefaultWorkManagerSchedulerTest {
             sessionObserver = FakeSessionObserver(),
         )
 
-        scheduler.submit(FakeWorkManagerRequest(result = Result.failure(IllegalStateException("Test error"))))
+        scheduler.submit(FakeWorkManagerRequestBuilder(result = Result.failure(IllegalStateException("Test error"))))
 
         verify(exactly = 0) { workManager.enqueue(any<List<WorkRequest>>()) }
     }
@@ -88,7 +88,7 @@ class DefaultWorkManagerSchedulerTest {
         val mockSessionA = mockk<WorkRequest> {
             every { tags } returns setOf(tagToRemove)
         }
-        scheduler.submit(FakeWorkManagerRequest(result = Result.success(listOf(mockSessionA))))
+        scheduler.submit(FakeWorkManagerRequestBuilder(result = Result.success(listOf(mockSessionA))))
 
         scheduler.cancel(sessionId)
 
@@ -96,9 +96,9 @@ class DefaultWorkManagerSchedulerTest {
     }
 }
 
-private class FakeWorkManagerRequest(
+private class FakeWorkManagerRequestBuilder(
     private val result: Result<List<WorkRequest>> = Result.success(listOf()),
-) : WorkManagerRequest {
+) : WorkManagerRequestBuilder {
     override fun build(): Result<List<WorkRequest>> {
         return result
     }

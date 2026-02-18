@@ -10,6 +10,6 @@ package io.element.android.libraries.workmanager.api
 
 import androidx.work.WorkRequest
 
-interface WorkManagerRequest {
+interface WorkManagerRequestBuilder {
     fun build(): Result<List<WorkRequest>>
 }
