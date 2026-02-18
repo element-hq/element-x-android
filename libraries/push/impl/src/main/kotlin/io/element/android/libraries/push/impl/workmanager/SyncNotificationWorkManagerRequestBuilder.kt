@@ -41,7 +41,7 @@ class SyncNotificationWorkManagerRequestBuilder(
         fun create(sessionId: SessionId, notificationEventRequests: List<NotificationEventRequest>): SyncNotificationWorkManagerRequestBuilder
     }
 
-    override fun build(): Result<List<WorkRequest>> {
+    override suspend fun build(): Result<List<WorkRequest>> {
         if (notificationEventRequests.isEmpty()) {
             return Result.failure(InvalidParameterException("notificationEventRequests cannot be empty"))
         }

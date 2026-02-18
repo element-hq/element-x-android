@@ -41,7 +41,7 @@ class DefaultWorkManagerScheduler(
         })
     }
 
-    override fun submit(workManagerRequestBuilder: WorkManagerRequestBuilder) {
+    override suspend fun submit(workManagerRequestBuilder: WorkManagerRequestBuilder) {
         workManagerRequestBuilder.build().fold(
             onSuccess = { workRequests ->
                 workManager.enqueue(workRequests)

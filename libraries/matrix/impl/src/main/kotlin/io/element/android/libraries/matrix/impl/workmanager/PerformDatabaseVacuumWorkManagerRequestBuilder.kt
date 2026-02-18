@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit
 class PerformDatabaseVacuumWorkManagerRequestBuilder(
     private val sessionId: SessionId,
 ) : WorkManagerRequestBuilder {
-    override fun build(): Result<List<WorkRequest>> {
+    override suspend fun build(): Result<List<WorkRequest>> {
         val data = Data.Builder().putString(SESSION_ID_PARAM, sessionId.value).build()
         val workRequest = PeriodicWorkRequest.Builder(
             workerClass = VacuumDatabaseWorker::class,

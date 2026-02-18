@@ -99,7 +99,7 @@ class DefaultWorkManagerSchedulerTest {
 private class FakeWorkManagerRequestBuilder(
     private val result: Result<List<WorkRequest>> = Result.success(listOf()),
 ) : WorkManagerRequestBuilder {
-    override fun build(): Result<List<WorkRequest>> {
+    override suspend fun build(): Result<List<WorkRequest>> {
         return result
     }
 }
