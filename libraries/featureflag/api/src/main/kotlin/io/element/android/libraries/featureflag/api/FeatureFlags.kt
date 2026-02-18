@@ -147,4 +147,11 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
+    LiveLocationSharing(
+        key = "feature.liveLocationSharing",
+        title = "Live location sharing",
+        description = "Allow sharing live location in rooms.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
 }
