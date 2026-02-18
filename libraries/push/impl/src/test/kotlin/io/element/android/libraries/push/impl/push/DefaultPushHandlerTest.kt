@@ -14,7 +14,6 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.test.FakeElementCallEntryPoint
-import io.element.android.libraries.androidutils.json.DefaultJsonProvider
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
@@ -47,7 +46,7 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableEven
 import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEvent
 import io.element.android.libraries.push.impl.test.DefaultTestPush
 import io.element.android.libraries.push.impl.troubleshoot.DiagnosticPushHandler
-import io.element.android.libraries.push.impl.workmanager.SyncNotificationsWorkerDataConverter
+import io.element.android.libraries.push.test.workmanager.FakeSyncNotificationWorkManagerRequestBuilder
 import io.element.android.libraries.pushproviders.api.PushData
 import io.element.android.libraries.pushstore.api.UserPushStore
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
@@ -56,7 +55,6 @@ import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushSto
 import io.element.android.libraries.pushstore.test.userpushstore.clientsecret.FakePushClientSecret
 import io.element.android.libraries.workmanager.api.WorkManagerRequestBuilder
 import io.element.android.libraries.workmanager.test.FakeWorkManagerScheduler
-import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.lambdaError
@@ -706,8 +704,7 @@ class DefaultPushHandlerTest {
                 appCoroutineScope = backgroundScope,
                 workManagerScheduler = workManagerScheduler,
                 featureFlagService = featureFlagService,
-                workerDataConverter = SyncNotificationsWorkerDataConverter(DefaultJsonProvider()),
-                buildVersionSdkIntProvider = FakeBuildVersionSdkIntProvider(33),
+                syncNotificationRequestFactory = { _, _ -> FakeSyncNotificationWorkManagerRequestBuilder() }
             ),
             appCoroutineScope = backgroundScope,
             fallbackNotificationFactory = FallbackNotificationFactory(

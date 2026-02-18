@@ -26,10 +26,10 @@ import io.element.android.libraries.push.impl.notifications.NotificationResolver
 import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEvent
 import io.element.android.libraries.push.test.notifications.FakeNotificationResolverQueue
+import io.element.android.libraries.push.test.workmanager.FakeSyncNotificationWorkManagerRequestBuilder
 import io.element.android.libraries.workmanager.api.WorkManagerRequestBuilder
 import io.element.android.libraries.workmanager.api.di.MetroWorkerFactory
 import io.element.android.libraries.workmanager.test.FakeWorkManagerScheduler
-import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -178,7 +178,7 @@ class FetchNotificationWorkerTest {
         syncOnNotifiableEvent = syncOnNotifiableEvent,
         coroutineDispatchers = testCoroutineDispatchers(),
         workerDataConverter = SyncNotificationsWorkerDataConverter(DefaultJsonProvider()),
-        buildVersionSdkIntProvider = FakeBuildVersionSdkIntProvider(33),
+        syncNotificationRequestFactory = { _, _ -> FakeSyncNotificationWorkManagerRequestBuilder() }
     )
 
     private fun TestScope.createWorkerParams(

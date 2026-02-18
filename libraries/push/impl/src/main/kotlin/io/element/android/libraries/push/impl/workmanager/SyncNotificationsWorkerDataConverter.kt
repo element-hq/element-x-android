@@ -91,7 +91,7 @@ class SyncNotificationsWorkerDataConverter(
     fun deserialize(data: Data): List<NotificationEventRequest>? {
         val rawRequestsJson = data.getString(REQUESTS_KEY) ?: return null
         return runCatchingExceptions {
-            json().decodeFromString<List<SyncNotificationWorkManagerRequestBuilder.Data>>(rawRequestsJson).map { it.toRequest() }
+            json().decodeFromString<List<DefaultSyncNotificationWorkManagerRequestBuilder.Data>>(rawRequestsJson).map { it.toRequest() }
         }.fold(
             onSuccess = {
                 Timber.d("Deserialized ${it.size} requests")
@@ -110,8 +110,8 @@ class SyncNotificationsWorkerDataConverter(
     }
 }
 
-private fun NotificationEventRequest.toData(): SyncNotificationWorkManagerRequestBuilder.Data {
-    return SyncNotificationWorkManagerRequestBuilder.Data(
+private fun NotificationEventRequest.toData(): DefaultSyncNotificationWorkManagerRequestBuilder.Data {
+    return DefaultSyncNotificationWorkManagerRequestBuilder.Data(
         sessionId = sessionId.value,
         roomId = roomId.value,
         eventId = eventId.value,
@@ -119,7 +119,7 @@ private fun NotificationEventRequest.toData(): SyncNotificationWorkManagerReques
     )
 }
 
-private fun SyncNotificationWorkManagerRequestBuilder.Data.toRequest(): NotificationEventRequest {
+private fun DefaultSyncNotificationWorkManagerRequestBuilder.Data.toRequest(): NotificationEventRequest {
     return NotificationEventRequest(
         sessionId = SessionId(sessionId),
         roomId = RoomId(roomId),

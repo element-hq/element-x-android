@@ -12,6 +12,9 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.hasKeyWithValueOfType
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.androidutils.json.DefaultJsonProvider
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.push.api.push.NotificationEventRequest
@@ -23,7 +26,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import kotlin.collections.first
 
-class SyncNotificationWorkManagerRequestBuilderTest {
+class DefaultSyncNotificationWorkManagerRequestBuilderTest {
     @Test
     fun `build - success API 33`() = runTest {
         val request = createSyncNotificationWorkManagerRequest(
@@ -90,9 +93,11 @@ private fun createSyncNotificationWorkManagerRequest(
     notificationEventRequests: List<NotificationEventRequest>,
     workerDataConverter: SyncNotificationsWorkerDataConverter = SyncNotificationsWorkerDataConverter(DefaultJsonProvider()),
     sdkVersion: Int = 33,
-) = SyncNotificationWorkManagerRequestBuilder(
+    featureFlagService: FeatureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.UseNetworkConstraintsToFetchNotifications.key to false)),
+) = DefaultSyncNotificationWorkManagerRequestBuilder(
     sessionId = sessionId,
     notificationEventRequests = notificationEventRequests,
     workerDataConverter = workerDataConverter,
     buildVersionSdkIntProvider = FakeBuildVersionSdkIntProvider(sdkVersion),
+    featureFlagService = featureFlagService,
 )

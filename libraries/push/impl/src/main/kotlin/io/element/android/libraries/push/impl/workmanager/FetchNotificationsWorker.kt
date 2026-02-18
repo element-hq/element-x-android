@@ -26,6 +26,7 @@ import io.element.android.libraries.matrix.api.auth.SessionRestorationException
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.push.NotificationEventRequest
 import io.element.android.libraries.push.api.push.SyncOnNotifiableEvent
+import io.element.android.libraries.push.api.workmanager.SyncNotificationWorkManagerRequestBuilder
 import io.element.android.libraries.push.impl.notifications.NotifiableEventResolver
 import io.element.android.libraries.push.impl.notifications.NotificationResolverQueue
 import io.element.android.libraries.workmanager.api.WorkManagerScheduler

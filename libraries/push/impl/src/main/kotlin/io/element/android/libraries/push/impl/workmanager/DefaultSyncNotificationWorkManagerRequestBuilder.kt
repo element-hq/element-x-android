@@ -17,14 +17,16 @@ import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
 import androidx.work.WorkRequest
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.push.NotificationEventRequest
-import io.element.android.libraries.workmanager.api.WorkManagerRequestBuilder
+import io.element.android.libraries.push.api.workmanager.SyncNotificationWorkManagerRequestBuilder
 import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.workManagerTag
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
@@ -36,16 +38,20 @@ import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toJavaDuration
 
 @AssistedInject
-class SyncNotificationWorkManagerRequestBuilder(
+class DefaultSyncNotificationWorkManagerRequestBuilder(
     @Assisted private val sessionId: SessionId,
     @Assisted private val notificationEventRequests: List<NotificationEventRequest>,
     private val workerDataConverter: SyncNotificationsWorkerDataConverter,
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
     private val featureFlagService: FeatureFlagService,
-) : WorkManagerRequestBuilder {
+) : SyncNotificationWorkManagerRequestBuilder {
     @AssistedFactory
-    interface Factory {
-        fun create(sessionId: SessionId, notificationEventRequests: List<NotificationEventRequest>): SyncNotificationWorkManagerRequestBuilder
+    @ContributesBinding(AppScope::class)
+    fun interface Factory : SyncNotificationWorkManagerRequestBuilder.Factory {
+        override fun create(
+            sessionId: SessionId,
+            notificationEventRequests: List<NotificationEventRequest>
+        ): DefaultSyncNotificationWorkManagerRequestBuilder
     }
 
     override suspend fun build(): Result<List<WorkRequest>> {

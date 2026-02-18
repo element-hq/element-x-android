@@ -15,8 +15,8 @@ import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.push.api.push.NotificationEventRequest
+import io.element.android.libraries.push.api.workmanager.SyncNotificationWorkManagerRequestBuilder
 import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEvent
-import io.element.android.libraries.push.impl.workmanager.SyncNotificationWorkManagerRequestBuilder
 import io.element.android.libraries.workmanager.api.WorkManagerScheduler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
