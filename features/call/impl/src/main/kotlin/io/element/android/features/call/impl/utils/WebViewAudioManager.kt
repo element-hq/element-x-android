@@ -18,6 +18,7 @@ import android.webkit.JavascriptInterface
 import android.webkit.WebView
 import androidx.annotation.RequiresApi
 import androidx.core.content.getSystemService
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
@@ -385,10 +386,18 @@ class WebViewAudioManager(
         currentDeviceId = device?.id
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
             if (device != null) {
-                Timber.d("Setting communication device: ${device.id} - ${deviceName(device.type, device.productName.toString())}")
-                setCommunicationDevice(device)
+                runCatchingExceptions {
+                    Timber.d("Setting communication device: ${device.id} - ${deviceName(device.type, device.productName.toString())}")
+                    setCommunicationDevice(device)
+                }.onFailure {
+                    Timber.e(it, "Could not set communication device.")
+                }
             } else {
-                audioManager.clearCommunicationDevice()
+                runCatchingExceptions {
+                    clearCommunicationDevice()
+                }.onFailure {
+                    Timber.e(it, "Could not clear communication device.")
+                }
             }
         } else {
             // On Android 11 and lower, we don't have the concept of communication devices
