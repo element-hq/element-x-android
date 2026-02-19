@@ -77,7 +77,7 @@ jobs:
           sudo udevadm control --reload-rules
           sudo udevadm trigger --name-match=kvm
       - name: Install maestro
-        run: curl -fsSL "https://get.maestro.mobile.dev" | bash
+        run: curl -fsSL https://open.devicelab.dev/install/maestro-runner | bash
       - name: Run Maestro tests in emulator
         id: maestro_test
         uses: reactivecircus/android-emulator-runner@v2

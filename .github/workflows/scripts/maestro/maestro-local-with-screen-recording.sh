@@ -21,7 +21,7 @@ adb push .github/workflows/scripts/maestro/local-recording.sh /data/local/tmp/
 adb shell "chmod +x /data/local/tmp/local-recording.sh"
 adb shell "/data/local/tmp/local-recording.sh & echo \$! > /data/local/tmp/screenrecord_pid.txt" &
 set +e
-~/.maestro/bin/maestro test .maestro/allTests.yaml
+~/.maestro-runner/bin/maestro-runner test .maestro/allTests.yaml
 TEST_STATUS=$?
 echo "Test run completed with status $TEST_STATUS"
 
