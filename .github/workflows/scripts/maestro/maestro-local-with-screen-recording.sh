@@ -13,7 +13,7 @@
 echo "Disabling Chrome onboarding flow"
 adb shell am set-debug-app --persistent com.android.chrome
 adb shell 'echo "chrome --disable-fre --no-default-browser-check --no-first-run" > /data/local/tmp/chrome-command-line'
-adb shell am start -n com.android.chrome/com.google.android.apps.chrome.Main
+#adb shell am start -n com.android.chrome/com.google.android.apps.chrome.Main
 
 adb install -r $1
 echo "Starting the screen recording..."
