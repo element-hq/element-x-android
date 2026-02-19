@@ -11,7 +11,7 @@ appId: ${MAESTRO_APP_ID}
 - hideKeyboard
 - tapOn: "Continue"
 - retry:
-    maxRetries: 3
+    maxRetries: 5
     commands:
       - extendedWaitUntil:
           visible: "Device verified"
