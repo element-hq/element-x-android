@@ -13,16 +13,17 @@ appId: ${MAESTRO_APP_ID}
     commands:
       - extendedWaitUntil:
           visible:
-            id: "form-1"
+            css: "#form-1"
           timeout: 10000
 - tapOn:
-    id: "form-1"
+    css: "#form-1"
 - inputText: ${MAESTRO_USERNAME}
 - pressKey: Enter
 - tapOn:
-    id: "form-3"
+    css: "#form-3"
 - inputText: ${MAESTRO_PASSWORD}
 - pressKey: Enter
+- tapOn: "Continue"
 - tapOn: "Continue"
 ## Back to native world
 - runFlow: ../assertions/assertSessionVerificationDisplayed.yaml
