@@ -23,7 +23,7 @@ appId: ${MAESTRO_APP_ID}
     id: "form-3"
 - inputText: ${MAESTRO_PASSWORD}
 - pressKey: Enter
-- tapOn: "Continue"
+- hideKeyboard
 - tapOn: "Continue"
 ## Back to native world
 - runFlow: ../assertions/assertSessionVerificationDisplayed.yaml
