@@ -11,4 +11,5 @@ appId: ${MAESTRO_APP_ID}
 #- runFlow: call/call.yaml
 
 - back
+- back
 - runFlow: ../../assertions/assertHomeDisplayed.yaml
