@@ -13,14 +13,14 @@ appId: ${MAESTRO_APP_ID}
     commands:
       - extendedWaitUntil:
           visible:
-            css: "#form-1"
+            id: "form-1"
           timeout: 10000
 - tapOn:
-    css: "#form-1"
+    id: "form-1"
 - inputText: ${MAESTRO_USERNAME}
 - pressKey: Enter
 - tapOn:
-    css: "#form-3"
+    id: "form-3"
 - inputText: ${MAESTRO_PASSWORD}
 - pressKey: Enter
 - tapOn: "Continue"
