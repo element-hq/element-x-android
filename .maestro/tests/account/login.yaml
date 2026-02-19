@@ -23,7 +23,9 @@ appId: ${MAESTRO_APP_ID}
     id: "form-3"
 - inputText: ${MAESTRO_PASSWORD}
 - pressKey: Enter
-- hideKeyboard
+- extendedWaitUntil:
+    visible: "Continue to Element X dbg?"
+    timeout: 10000
 - tapOn: "Continue"
 ## Back to native world
 - runFlow: ../assertions/assertSessionVerificationDisplayed.yaml
