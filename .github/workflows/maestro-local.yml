@@ -105,7 +105,7 @@ jobs:
         with:
           name: test-results
           path: |
-            ~/.maestro/tests/**
+            ~/.maestro-runner/tests/**
           retention-days: 5
           overwrite: true
           if-no-files-found: error
@@ -116,7 +116,7 @@ jobs:
       - name: Update summary (failure)
         if: steps.maestro_test.outcome != 'success'
         run: |
-          LOG_FILE=$(find ~/.maestro/tests/ -name maestro.log)
+          LOG_FILE=$(find ~/.maestro-runner/tests/ -name maestro-runner.log)
           echo "Log file: $LOG_FILE"
           LOG_LINES="$(tail -n 30 $LOG_FILE)"
           echo "### :x: Maestro tests failed...

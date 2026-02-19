@@ -39,5 +39,5 @@ while [ ! -z $SCREENRECORD_PID ]; do
   SCREENRECORD_PID=$(adb shell ps | grep screenrecord | awk '{print $2}')
 done
 
-adb pull /data/local/tmp/recordings/ ~/.maestro/tests/
+adb pull /data/local/tmp/recordings/ ~/.maestro-runner/tests/
 exit $TEST_STATUS
