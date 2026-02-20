@@ -26,6 +26,7 @@ dependencies {
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.matrix.api)
+    implementation(projects.features.networkmonitor.api)
     implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.sessionStorage.api)
     implementation(projects.services.appnavstate.api)
