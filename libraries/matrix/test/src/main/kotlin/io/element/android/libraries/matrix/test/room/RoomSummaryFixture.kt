@@ -78,6 +78,7 @@ fun aRoomSummary(
     latestEvent: LatestEventValue = aRemoteLatestEvent(),
     roomVersion: String? = "11",
     privilegedCreatorRole: Boolean = false,
+    isLowPriority: Boolean = false,
 ) = RoomSummary(
     info = RoomInfo(
         id = roomId,
@@ -115,6 +116,7 @@ fun aRoomSummary(
         historyVisibility = historyVisibility,
         roomVersion = roomVersion,
         privilegedCreatorRole = privilegedCreatorRole,
+        isLowPriority = isLowPriority,
     ),
     latestEvent = latestEvent,
 )

@@ -59,6 +59,7 @@ internal fun aRustRoomInfo(
     roomVersion: String? = "11",
     privilegedCreatorsRole: Boolean = false,
     serviceMembers: List<String> = emptyList(),
+    isLowPriority: Boolean = false,
 ) = RoomInfo(
     id = id,
     displayName = displayName,
@@ -96,4 +97,5 @@ internal fun aRustRoomInfo(
     roomVersion = roomVersion,
     privilegedCreatorsRole = privilegedCreatorsRole,
     serviceMembers = serviceMembers,
+    isLowPriority = isLowPriority,
 )

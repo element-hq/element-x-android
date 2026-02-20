@@ -80,6 +80,7 @@ class RoomInfoMapperTest {
                     historyVisibility = RustRoomHistoryVisibility.Joined,
                     roomVersion = "12",
                     privilegedCreatorsRole = true,
+                    isLowPriority = true,
                 )
             )
         ).isEqualTo(
@@ -128,6 +129,7 @@ class RoomInfoMapperTest {
                 successorRoom = null,
                 roomVersion = "12",
                 privilegedCreatorRole = true,
+                isLowPriority = true,
             )
         )
     }
@@ -171,6 +173,7 @@ class RoomInfoMapperTest {
                     roomCreators = null,
                     roomVersion = "12",
                     privilegedCreatorsRole = true,
+                    isLowPriority = true,
                 )
             )
         ).isEqualTo(
@@ -213,6 +216,7 @@ class RoomInfoMapperTest {
                 historyVisibility = RoomHistoryVisibility.Joined,
                 roomVersion = "12",
                 privilegedCreatorRole = true,
+                isLowPriority = true,
             )
         )
     }
