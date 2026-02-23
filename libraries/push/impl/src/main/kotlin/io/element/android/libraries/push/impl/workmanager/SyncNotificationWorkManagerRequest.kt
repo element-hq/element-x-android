@@ -23,6 +23,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import timber.log.Timber
 import java.security.InvalidParameterException
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 import kotlin.time.toJavaDuration
 
@@ -31,6 +32,7 @@ class SyncNotificationWorkManagerRequest(
     private val notificationEventRequests: List<NotificationEventRequest>,
     private val workerDataConverter: SyncNotificationsWorkerDataConverter,
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
+    private val delay: Duration? = null,
 ) : WorkManagerRequest {
     override fun build(): Result<List<WorkRequest>> {
         if (notificationEventRequests.isEmpty()) {
@@ -47,6 +49,10 @@ class SyncNotificationWorkManagerRequest(
                         // See https://developer.android.com/develop/background-work/background-tasks/persistent/getting-started/define-work#backwards-compat
                         if (buildVersionSdkIntProvider.isAtLeast(Build.VERSION_CODES.TIRAMISU)) {
                             setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
+                        }
+
+                        if (delay != null) {
+                            setInitialDelay(delay.toJavaDuration())
                         }
                     }
                     .setBackoffCriteria(BackoffPolicy.LINEAR, 30.seconds.toJavaDuration())

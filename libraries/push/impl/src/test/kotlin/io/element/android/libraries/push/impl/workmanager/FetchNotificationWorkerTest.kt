@@ -125,7 +125,7 @@ class FetchNotificationWorkerTest {
         advanceTimeBy(10.seconds)
 
         // The process failed due to a timeout in getting the network connectivity, a retry is scheduled
-        assertThat(result).isEqualTo(ListenableWorker.Result.retry())
+        assertThat(result).isEqualTo(ListenableWorker.Result.failure())
     }
 
     @Test
@@ -166,7 +166,7 @@ class FetchNotificationWorkerTest {
         queue: NotificationResolverQueue = FakeNotificationResolverQueue(
             processingLambda = { Result.success(ResolvedPushEvent.Event(aNotifiableMessageEvent())) }
         ),
-        workManagerScheduler: FakeWorkManagerScheduler = FakeWorkManagerScheduler(),
+        workManagerScheduler: FakeWorkManagerScheduler = FakeWorkManagerScheduler(submitLambda = {}),
         syncOnNotifiableEvent: SyncOnNotifiableEvent = SyncOnNotifiableEvent {},
     ) = FetchNotificationsWorker(
         workerParams = createWorkerParams(workDataOf("requests" to input)),
