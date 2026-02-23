@@ -232,6 +232,34 @@ function createImageElement(fullFile, modifiedDayTime) {
     return img;
 }
 
+function updateUrlAndScrollTo(id) {
+    // If the current URL already contains the fragment id, remove it, otherwise add it
+    if (window.location.hash === id) {
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+    } else {
+        history.replaceState(null, '', `${window.location.pathname}${window.location.search}#${id}`);
+    }
+    const element = document.getElementById(id);
+    if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+    }
+    // Also copy the URL to the clipboard
+    navigator.clipboard.writeText(window.location.href);
+    // And show a message that the URL has been copied to the clipboard
+    // First check if there is already a message, if so, remove it, or the shadow will accumulate.
+    const existingMessage = document.querySelector('.copy-message');
+    if (existingMessage) {
+        document.body.removeChild(existingMessage);
+    }
+    const message = document.createElement('div');
+    message.className = 'copy-message';
+    message.textContent = 'URL copied to clipboard!';
+    document.body.appendChild(message);
+    setTimeout(() => {
+        document.body.removeChild(message);
+    }, 2000);
+}
+
 function addTable() {
   var linesCounter = 0;
   // Remove any previous table
@@ -265,6 +293,9 @@ function addTable() {
     }
     const tr = document.createElement('tr');
     tr.id = niceName + screenshotCounter;
+    tr.onclick = () => {
+        updateUrlAndScrollTo(tr.id);
+    }
     let hasTranslatedFiles = false;
     for (let languageIndex = 0; languageIndex < dataLanguages.length; languageIndex++) {
       if (visibleLanguages[languageIndex] == 0) {
@@ -305,6 +336,9 @@ function addTable() {
         currentHeaderValue = niceName;
         const trHead = document.createElement('tr');
         trHead.id = niceName;
+        trHead.onclick = () => {
+            updateUrlAndScrollTo(trHead.id);
+        }
         const tdHead = document.createElement('td');
         tdHead.colSpan = numVisibleLanguages;
         tdHead.className = "view-header";
