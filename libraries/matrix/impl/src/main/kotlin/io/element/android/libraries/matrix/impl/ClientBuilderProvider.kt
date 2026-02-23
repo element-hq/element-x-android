@@ -11,7 +11,6 @@ package io.element.android.libraries.matrix.impl
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import org.matrix.rustcomponents.sdk.ClientBuilder
-import org.matrix.rustcomponents.sdk.CrossProcessLockConfig
 
 interface ClientBuilderProvider {
     fun provide(): ClientBuilder
@@ -21,7 +20,5 @@ interface ClientBuilderProvider {
 class RustClientBuilderProvider : ClientBuilderProvider {
     override fun provide(): ClientBuilder {
         return ClientBuilder()
-            // Make sure all built clients use the single process cross-process lock config
-            .crossProcessLockConfig(CrossProcessLockConfig.SingleProcess)
     }
 }

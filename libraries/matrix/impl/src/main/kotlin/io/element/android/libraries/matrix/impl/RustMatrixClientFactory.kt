@@ -34,6 +34,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientBuilder
+import org.matrix.rustcomponents.sdk.CrossProcessLockConfig
 import org.matrix.rustcomponents.sdk.RequestConfig
 import org.matrix.rustcomponents.sdk.Session
 import org.matrix.rustcomponents.sdk.SlidingSyncVersion
@@ -173,6 +174,8 @@ class RustMatrixClientFactory(
                     maxRetryTime = null,
                 )
             )
+            // Make sure all built clients use the single process cross-process lock config
+            .crossProcessLockConfig(CrossProcessLockConfig.SingleProcess)
             .run {
                 // Apply sliding sync version settings
                 when (slidingSyncType) {
