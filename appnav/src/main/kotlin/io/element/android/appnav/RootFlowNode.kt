@@ -73,6 +73,7 @@ import io.element.android.services.analytics.api.watchers.AnalyticsColdStartWatc
 import io.element.android.services.appnavstate.api.ROOM_OPENED_FROM_NOTIFICATION
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -113,8 +114,10 @@ class RootFlowNode(
             matrixSessionCache.restoreWithSavedState(buildContext.savedStateMap)
             if (buildContext.savedStateMap != null) {
                 restoreSavedState(buildContext.savedStateMap)
+                observeNavState(true)
+            } else {
+                observeNavState(false)
             }
-            observeNavState()
         }
         super.onBuilt()
     }
@@ -125,30 +128,33 @@ class RootFlowNode(
         navStateFlowFactory.saveIntoSavedState(state)
     }
 
-    private fun observeNavState() {
-        navStateFlowFactory.create(buildContext.savedStateMap).distinctUntilChanged().onEach { navState ->
-            Timber.v("navState=$navState")
-            when (navState.loggedInState) {
-                is LoggedInState.LoggedIn -> {
-                    if (navState.loggedInState.isTokenValid) {
-                        val sessionId = SessionId(navState.loggedInState.sessionId)
-                        if (matrixSessionCache.getOrNull(sessionId) != null) {
-                            switchToLoggedInFlow(sessionId, navState.cacheIndex)
+    private fun observeNavState(skipFirst: Boolean) {
+        navStateFlowFactory.create(buildContext.savedStateMap)
+            .distinctUntilChanged()
+            .drop(if (skipFirst) 1 else 0)
+            .onEach { navState ->
+                Timber.v("navState=$navState")
+                when (navState.loggedInState) {
+                    is LoggedInState.LoggedIn -> {
+                        if (navState.loggedInState.isTokenValid) {
+                            val sessionId = SessionId(navState.loggedInState.sessionId)
+                            if (matrixSessionCache.getOrNull(sessionId) != null) {
+                                switchToLoggedInFlow(sessionId, navState.cacheIndex)
+                            } else {
+                                tryToRestoreLatestSession(
+                                    onSuccess = { sessionId -> switchToLoggedInFlow(sessionId, navState.cacheIndex) },
+                                    onFailure = { switchToNotLoggedInFlow(null) }
+                                )
+                            }
                         } else {
-                            tryToRestoreLatestSession(
-                                onSuccess = { sessionId -> switchToLoggedInFlow(sessionId, navState.cacheIndex) },
-                                onFailure = { switchToNotLoggedInFlow(null) }
-                            )
+                            switchToSignedOutFlow(SessionId(navState.loggedInState.sessionId))
                         }
-                    } else {
-                        switchToSignedOutFlow(SessionId(navState.loggedInState.sessionId))
+                    }
+                    LoggedInState.NotLoggedIn -> {
+                        switchToNotLoggedInFlow(null)
                     }
                 }
-                LoggedInState.NotLoggedIn -> {
-                    switchToNotLoggedInFlow(null)
-                }
-            }
-        }.launchIn(lifecycleScope)
+            }.launchIn(lifecycleScope)
     }
 
     /**
@@ -166,7 +172,6 @@ class RootFlowNode(
         // 'NavModel' is the key used for storing the nav model state data in the map in Appyx
         val savedElements = buildContext.savedStateMap?.get("NavModel") as? NavElements<NavTarget, BackStack.State>
         if (savedElements != null) {
-            Timber.d("restoreSavedElements: Saved elements found, restoring them.")
             backstack.accept(ReplaceAllOperation(savedElements))
         }
     }
