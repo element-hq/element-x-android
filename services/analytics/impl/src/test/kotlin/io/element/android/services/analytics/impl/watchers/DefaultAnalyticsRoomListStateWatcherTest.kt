@@ -8,13 +8,12 @@
 package io.element.android.services.analytics.impl.watchers
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.CatchUp
 import io.element.android.services.analytics.test.FakeAnalyticsService
-import io.element.android.services.appnavstate.api.AppNavigationState
-import io.element.android.services.appnavstate.api.NavigationState
-import io.element.android.services.appnavstate.test.FakeAppNavigationStateService
+import io.element.android.services.appnavstate.test.FakeAppForegroundStateService
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
@@ -26,13 +25,13 @@ import org.junit.Test
 class DefaultAnalyticsRoomListStateWatcherTest {
     @Test
     fun `Opening the app in a warm state tracks the time until the room list is synced`() = runTest {
-        val navigationStateService = FakeAppNavigationStateService()
+        val appForegroundStateService = FakeAppForegroundStateService()
         val roomListService = FakeRoomListService().apply {
             postState(RoomListService.State.Idle)
         }
         val analyticsService = FakeAnalyticsService()
         val watcher = createAnalyticsRoomListStateWatcher(
-            appNavigationStateService = navigationStateService,
+            appForegroundStateService = appForegroundStateService,
             roomListService = roomListService,
             analyticsService = analyticsService,
         )
@@ -43,9 +42,9 @@ class DefaultAnalyticsRoomListStateWatcherTest {
         runCurrent()
 
         // Make sure it's warm by changing its internal state
-        navigationStateService.emitNavigationState(AppNavigationState(navigationState = NavigationState.Root, isInForeground = false))
+        appForegroundStateService.givenIsInForeground(false)
         runCurrent()
-        navigationStateService.emitNavigationState(AppNavigationState(navigationState = NavigationState.Root, isInForeground = true))
+        appForegroundStateService.givenIsInForeground(true)
         runCurrent()
 
         // The transaction should be present now
@@ -63,15 +62,15 @@ class DefaultAnalyticsRoomListStateWatcherTest {
 
     @Test
     fun `Opening the app in a cold state does nothing`() = runTest {
-        val navigationStateService = FakeAppNavigationStateService(
-            initialAppNavigationState = AppNavigationState(NavigationState.Root, false)
+        val appForegroundStateService = FakeAppForegroundStateService(
+            initialForegroundValue = false
         )
         val roomListService = FakeRoomListService().apply {
             postState(RoomListService.State.Idle)
         }
         val analyticsService = FakeAnalyticsService()
         val watcher = createAnalyticsRoomListStateWatcher(
-            appNavigationStateService = navigationStateService,
+            appForegroundStateService = appForegroundStateService,
             roomListService = roomListService,
             analyticsService = analyticsService,
         )
@@ -93,13 +92,13 @@ class DefaultAnalyticsRoomListStateWatcherTest {
 
     @Test
     fun `The transaction won't be finished until the room list is synchronised`() = runTest {
-        val navigationStateService = FakeAppNavigationStateService()
+        val appForegroundStateService = FakeAppForegroundStateService()
         val roomListService = FakeRoomListService().apply {
             postState(RoomListService.State.Idle)
         }
         val analyticsService = FakeAnalyticsService()
         val watcher = createAnalyticsRoomListStateWatcher(
-            appNavigationStateService = navigationStateService,
+            appForegroundStateService = appForegroundStateService,
             roomListService = roomListService,
             analyticsService = analyticsService,
         )
@@ -110,9 +109,9 @@ class DefaultAnalyticsRoomListStateWatcherTest {
         runCurrent()
 
         // Make sure it's warm by changing its internal state
-        navigationStateService.emitNavigationState(AppNavigationState(navigationState = NavigationState.Root, isInForeground = false))
+        appForegroundStateService.givenIsInForeground(false)
         runCurrent()
-        navigationStateService.emitNavigationState(AppNavigationState(navigationState = NavigationState.Root, isInForeground = true))
+        appForegroundStateService.givenIsInForeground(true)
         runCurrent()
 
         // The transaction should be present now
@@ -128,13 +127,13 @@ class DefaultAnalyticsRoomListStateWatcherTest {
 
     @Test
     fun `Opening the app when the room list state was already Running does nothing`() = runTest {
-        val navigationStateService = FakeAppNavigationStateService()
+        val appForegroundStateService = FakeAppForegroundStateService()
         val roomListService = FakeRoomListService().apply {
             postState(RoomListService.State.Running)
         }
         val analyticsService = FakeAnalyticsService()
         val watcher = createAnalyticsRoomListStateWatcher(
-            appNavigationStateService = navigationStateService,
+            appForegroundStateService = appForegroundStateService,
             roomListService = roomListService,
             analyticsService = analyticsService,
         )
@@ -145,9 +144,9 @@ class DefaultAnalyticsRoomListStateWatcherTest {
         runCurrent()
 
         // Make sure it's warm by changing its internal state
-        navigationStateService.emitNavigationState(AppNavigationState(navigationState = NavigationState.Root, isInForeground = false))
+        appForegroundStateService.givenIsInForeground(false)
         runCurrent()
-        navigationStateService.emitNavigationState(AppNavigationState(navigationState = NavigationState.Root, isInForeground = true))
+        appForegroundStateService.givenIsInForeground(true)
         runCurrent()
 
         // The transaction was never added
@@ -157,14 +156,16 @@ class DefaultAnalyticsRoomListStateWatcherTest {
     }
 
     private fun TestScope.createAnalyticsRoomListStateWatcher(
-        appNavigationStateService: FakeAppNavigationStateService = FakeAppNavigationStateService(),
+        appForegroundStateService: FakeAppForegroundStateService = FakeAppForegroundStateService(),
         roomListService: FakeRoomListService = FakeRoomListService(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
+        networkMonitor: FakeNetworkMonitor = FakeNetworkMonitor(),
     ) = DefaultAnalyticsRoomListStateWatcher(
-        appNavigationStateService = appNavigationStateService,
+        appForegroundStateService = appForegroundStateService,
         roomListService = roomListService,
         analyticsService = analyticsService,
         sessionCoroutineScope = backgroundScope,
         dispatchers = testCoroutineDispatchers(),
+        networkMonitor = networkMonitor,
     )
 }

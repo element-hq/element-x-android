@@ -38,6 +38,7 @@ dependencies {
     testCommonDependencies(libs)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.sessionStorage.test)
+    testImplementation(projects.features.networkmonitor.test)
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.services.analyticsproviders.test)
     testImplementation(projects.services.appnavstate.test)
