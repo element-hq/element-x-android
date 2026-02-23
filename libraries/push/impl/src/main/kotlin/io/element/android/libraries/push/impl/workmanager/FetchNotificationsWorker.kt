@@ -19,7 +19,6 @@ import dev.zacsweers.metro.ContributesIntoMap
 import dev.zacsweers.metro.binding
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.auth.SessionRestorationException
@@ -38,7 +37,6 @@ import io.element.android.services.analytics.api.recordTransaction
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeoutOrNull
 import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
@@ -52,14 +50,13 @@ class FetchNotificationsWorker(
     private val queue: NotificationResolverQueue,
     private val workManagerScheduler: WorkManagerScheduler,
     private val syncOnNotifiableEvent: SyncOnNotifiableEvent,
-    private val coroutineDispatchers: CoroutineDispatchers,
     private val workerDataConverter: SyncNotificationsWorkerDataConverter,
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
     private val analyticsService: AnalyticsService,
 ) : CoroutineWorker(context, workerParams) {
-    override suspend fun doWork(): Result = withContext(coroutineDispatchers.io) {
+    override suspend fun doWork(): Result {
         Timber.d("FetchNotificationsWorker started")
-        val requests = workerDataConverter.deserialize(inputData) ?: return@withContext Result.failure()
+        val requests = workerDataConverter.deserialize(inputData) ?: return Result.failure()
         // Wait for network to be available, but not more than 10 seconds
         val hasNetwork = withTimeoutOrNull(10.seconds) {
             networkMonitor.connectivity.first { it == NetworkStatus.Connected }
@@ -73,7 +70,7 @@ class FetchNotificationsWorker(
                 // Since we're retrying, start a new transaction
                 analyticsService.startLongRunningTransaction(AnalyticsLongRunningTransaction.PushToWorkManager(eventId), parent)
             }
-            return@withContext Result.retry()
+            return Result.retry()
         }
 
         val pendingAnalyticTransactions = requests.mapNotNull { request ->
@@ -148,7 +145,7 @@ class FetchNotificationsWorker(
             performOpportunisticSyncIfNeeded(groupedRequests)
         }
 
-        Result.success()
+        return Result.success()
     }
 
     private suspend fun performOpportunisticSyncIfNeeded(
