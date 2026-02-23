@@ -11,6 +11,7 @@ package io.element.android.libraries.matrix.impl.fixtures.fakes
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.ClientSessionDelegate
+import org.matrix.rustcomponents.sdk.CrossProcessLockConfig
 import org.matrix.rustcomponents.sdk.NoHandle
 import org.matrix.rustcomponents.sdk.RequestConfig
 import org.matrix.rustcomponents.sdk.SlidingSyncVersionBuilder
@@ -45,5 +46,6 @@ class FakeFfiClientBuilder(
     override fun threadsEnabled(enabled: Boolean, threadSubscriptions: Boolean): ClientBuilder = this
     override fun sqliteStore(config: SqliteStoreBuilder): ClientBuilder = this
     override fun inMemoryStore(): ClientBuilder = this
+    override fun crossProcessLockConfig(crossProcessLockConfig: CrossProcessLockConfig): ClientBuilder = this
     override suspend fun build() = buildResult()
 }
