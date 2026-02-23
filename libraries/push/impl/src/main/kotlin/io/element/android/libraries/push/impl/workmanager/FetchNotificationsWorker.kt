@@ -58,9 +58,18 @@ class FetchNotificationsWorker(
         Timber.d("FetchNotificationsWorker started")
         val requests = workerDataConverter.deserialize(inputData) ?: return Result.failure()
         // Wait for network to be available, but not more than 10 seconds
+        val networkTimeoutSpans = requests.mapNotNull { request ->
+            val parent = analyticsService.getLongRunningTransaction(AnalyticsLongRunningTransaction.PushToWorkManager(request.eventId.value))
+            parent?.startChild("Waiting for network connectivity", "await_network")
+        }
         val hasNetwork = withTimeoutOrNull(10.seconds) {
             networkMonitor.connectivity.first { it == NetworkStatus.Connected }
         } != null
+
+        for (span in networkTimeoutSpans) {
+            span.finish()
+        }
+
         if (!hasNetwork) {
             Timber.w("No network, retrying later")
             for (request in requests) {
