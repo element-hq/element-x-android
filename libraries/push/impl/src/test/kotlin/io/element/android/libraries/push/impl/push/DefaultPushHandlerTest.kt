@@ -56,6 +56,7 @@ import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushSto
 import io.element.android.libraries.pushstore.test.userpushstore.clientsecret.FakePushClientSecret
 import io.element.android.libraries.workmanager.api.WorkManagerRequest
 import io.element.android.libraries.workmanager.test.FakeWorkManagerScheduler
+import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.lambda.any
@@ -683,6 +684,7 @@ class DefaultPushHandlerTest {
         syncOnNotifiableEvent: SyncOnNotifiableEvent = SyncOnNotifiableEvent {},
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.SyncNotificationsWithWorkManager.key to false)),
         workManagerScheduler: FakeWorkManagerScheduler = FakeWorkManagerScheduler(),
+        analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
     ): DefaultPushHandler {
         return DefaultPushHandler(
             onNotifiableEventReceived = FakeOnNotifiableEventReceived(onNotifiableEventsReceived),
@@ -715,6 +717,7 @@ class DefaultPushHandlerTest {
             ),
             syncOnNotifiableEvent = syncOnNotifiableEvent,
             featureFlagService = featureFlagService,
+            analyticsService = analyticsService,
         )
     }
 }

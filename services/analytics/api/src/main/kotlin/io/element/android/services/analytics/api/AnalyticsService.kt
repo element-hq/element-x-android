@@ -108,11 +108,12 @@ fun AnalyticsService.cancelLongRunningTransaction(
 fun AnalyticsService.finishLongRunningTransaction(
     longRunningTransaction: AnalyticsLongRunningTransaction,
     action: (AnalyticsTransaction) -> Unit = {},
-) {
-    removeLongRunningTransaction(longRunningTransaction)?.let {
+): Boolean {
+    return removeLongRunningTransaction(longRunningTransaction)?.let {
         action(it)
         it.finish()
-    }
+        true
+    } ?: false
 }
 
 inline fun <T> AnalyticsService.inBridgeSdkSpan(parentTraceId: String?, block: (AnalyticsSdkSpan) -> T): T {

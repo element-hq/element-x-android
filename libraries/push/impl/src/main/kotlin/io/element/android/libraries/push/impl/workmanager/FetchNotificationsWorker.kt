@@ -31,6 +31,10 @@ import io.element.android.libraries.push.impl.notifications.NotificationResolver
 import io.element.android.libraries.workmanager.api.WorkManagerScheduler
 import io.element.android.libraries.workmanager.api.di.MetroWorkerFactory
 import io.element.android.libraries.workmanager.api.di.WorkerKey
+import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
+import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.api.finishLongRunningTransaction
+import io.element.android.services.analytics.api.recordTransaction
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
@@ -51,6 +55,7 @@ class FetchNotificationsWorker(
     private val coroutineDispatchers: CoroutineDispatchers,
     private val workerDataConverter: SyncNotificationsWorkerDataConverter,
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
+    private val analyticsService: AnalyticsService,
 ) : CoroutineWorker(context, workerParams) {
     override suspend fun doWork(): Result = withContext(coroutineDispatchers.io) {
         Timber.d("FetchNotificationsWorker started")
@@ -61,8 +66,22 @@ class FetchNotificationsWorker(
         } != null
         if (!hasNetwork) {
             Timber.w("No network, retrying later")
+            for (request in requests) {
+                val eventId = request.eventId.value
+                analyticsService.finishLongRunningTransaction(AnalyticsLongRunningTransaction.PushToWorkManager(eventId))
+                val parent = analyticsService.getLongRunningTransaction(AnalyticsLongRunningTransaction.PushToNotification(eventId))
+                // Since we're retrying, start a new transaction
+                analyticsService.startLongRunningTransaction(AnalyticsLongRunningTransaction.PushToWorkManager(eventId), parent)
+            }
             return@withContext Result.retry()
         }
+
+        val pendingAnalyticTransactions = requests.mapNotNull { request ->
+            analyticsService.finishLongRunningTransaction(AnalyticsLongRunningTransaction.PushToWorkManager(request.eventId.value))
+            val parent = analyticsService.getLongRunningTransaction(AnalyticsLongRunningTransaction.PushToNotification(request.eventId.value))
+            val transactionName = "WorkManager to event fetched"
+            parent?.startChild(transactionName)?.let { request.eventId to it }
+        }.toMap()
 
         val failedSyncForSessions = mutableMapOf<SessionId, Throwable>()
 
@@ -72,10 +91,17 @@ class FetchNotificationsWorker(
             eventResolver.resolveEvents(sessionId, notificationRequests)
                 .fold(
                     onSuccess = { result ->
+                        for ((_, transaction) in pendingAnalyticTransactions) {
+                            transaction.finish()
+                        }
                         // Update the resolved results in the queue
                         (queue.results as MutableSharedFlow).emit(requests to result)
                     },
                     onFailure = {
+                        for ((_, transaction) in pendingAnalyticTransactions) {
+                            transaction.attachError(it)
+                            transaction.finish()
+                        }
                         failedSyncForSessions[sessionId] = it
                         Timber.e(it, "Failed to resolve notification events for session $sessionId")
                     }
@@ -92,6 +118,18 @@ class FetchNotificationsWorker(
                     continue
                 }
                 val requestsToRetry = groupedRequests[failedSessionId] ?: continue
+
+                for (request in requestsToRetry) {
+                    val failedTransaction = pendingAnalyticTransactions[request.eventId]
+                    failedTransaction?.attachError(exception)
+                    failedTransaction?.finish()
+
+                    val eventId = request.eventId.value
+                    val parent = analyticsService.getLongRunningTransaction(AnalyticsLongRunningTransaction.PushToNotification(eventId))
+                    // Since we're retrying, start a new transaction
+                    analyticsService.startLongRunningTransaction(AnalyticsLongRunningTransaction.PushToWorkManager(eventId), parent)
+                }
+
                 Timber.d("Re-scheduling ${requestsToRetry.size} failed notification requests for session $failedSessionId")
                 workManagerScheduler.submit(
                     SyncNotificationWorkManagerRequest(
@@ -106,7 +144,9 @@ class FetchNotificationsWorker(
 
         Timber.d("Notifications processed successfully")
 
-        performOpportunisticSyncIfNeeded(groupedRequests)
+        analyticsService.recordTransaction("Opportunistic sync", "opportunistic_sync") {
+            performOpportunisticSyncIfNeeded(groupedRequests)
+        }
 
         Result.success()
     }

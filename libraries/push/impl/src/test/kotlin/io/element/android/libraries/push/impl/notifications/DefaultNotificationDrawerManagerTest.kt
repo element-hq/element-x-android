@@ -40,6 +40,7 @@ import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.observer.FakeSessionObserver
+import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.appnavstate.api.AppNavigationState
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import io.element.android.services.appnavstate.test.FakeAppNavigationStateService
@@ -508,6 +509,7 @@ fun TestScope.createDefaultNotificationDrawerManager(
     sessionStore: SessionStore = InMemorySessionStore(),
     enterpriseService: EnterpriseService = FakeEnterpriseService(),
     sessionObserver: SessionObserver = FakeSessionObserver(),
+    analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
 ): DefaultNotificationDrawerManager {
     return DefaultNotificationDrawerManager(
         notificationDisplayer = notificationDisplayer,
@@ -521,6 +523,7 @@ fun TestScope.createDefaultNotificationDrawerManager(
             ),
             enterpriseService = enterpriseService,
             sessionStore = sessionStore,
+            analyticsService = analyticsService,
         ),
         appNavigationStateService = appNavigationStateService,
         coroutineScope = backgroundScope,

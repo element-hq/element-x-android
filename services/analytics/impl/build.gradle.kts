@@ -40,5 +40,6 @@ dependencies {
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.services.analyticsproviders.test)
     testImplementation(projects.services.appnavstate.test)
+    testImplementation(projects.features.networkmonitor.test)
     testImplementation(projects.services.toolbox.test)
 }

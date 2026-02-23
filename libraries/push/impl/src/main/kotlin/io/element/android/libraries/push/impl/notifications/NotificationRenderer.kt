@@ -25,6 +25,9 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableMess
 import io.element.android.libraries.push.impl.notifications.model.NotifiableRingingCallEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import io.element.android.libraries.sessionstorage.api.SessionStore
+import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
+import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.analytics.api.finishLongRunningTransaction
 import kotlinx.coroutines.flow.first
 import timber.log.Timber
 
@@ -36,6 +39,7 @@ class NotificationRenderer(
     private val notificationDataFactory: NotificationDataFactory,
     private val enterpriseService: EnterpriseService,
     private val sessionStore: SessionStore,
+    private val analyticsService: AnalyticsService,
 ) {
     suspend fun render(
         currentUser: MatrixUser,
@@ -123,6 +127,12 @@ class NotificationRenderer(
                 id = NotificationIdProvider.getSummaryNotificationId(currentUser.userId),
                 notification = summaryNotification.notification
             )
+        }
+
+        for (event in eventsToProcess) {
+            // Finish long-running transaction
+            val uploaded = analyticsService.finishLongRunningTransaction(AnalyticsLongRunningTransaction.PushToNotification(event.eventId.value))
+            Timber.d("Push-to-notification for event ${event.eventId} uploaded: $uploaded")
         }
     }
 }

@@ -37,6 +37,12 @@ object AnalyticsTransactions {
         operation = "ux",
         description = "Send to sent state in timeline",
     )
+
+    val pushToNotification = TransactionDefinition(
+        name = "Push to notification",
+        operation = "push_to_notification",
+        description = "Time from receiving a push notification until it's displayed",
+    )
 }
 
 data class TransactionDefinition(

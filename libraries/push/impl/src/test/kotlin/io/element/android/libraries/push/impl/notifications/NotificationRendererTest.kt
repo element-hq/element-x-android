@@ -29,6 +29,7 @@ import io.element.android.libraries.push.impl.notifications.fixtures.anInviteNot
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
+import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.test.runTest
@@ -122,9 +123,11 @@ fun createNotificationRenderer(
     notificationDataFactory: NotificationDataFactory = FakeNotificationDataFactory(),
     enterpriseService: EnterpriseService = FakeEnterpriseService(),
     sessionStore: SessionStore = InMemorySessionStore(),
+    analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
 ) = NotificationRenderer(
     notificationDisplayer = notificationDisplayer,
     notificationDataFactory = notificationDataFactory,
     enterpriseService = enterpriseService,
     sessionStore = sessionStore,
+    analyticsService = analyticsService,
 )

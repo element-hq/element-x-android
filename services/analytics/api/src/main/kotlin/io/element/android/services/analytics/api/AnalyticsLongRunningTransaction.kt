@@ -28,4 +28,6 @@ sealed class AnalyticsLongRunningTransaction(
     data object LoadJoinedRoomFlow : AnalyticsLongRunningTransaction("Load joined room UI", "ui.load")
     data object LoadMessagesUi : AnalyticsLongRunningTransaction("Load messages UI", "ui.load")
     data object DisplayFirstTimelineItems : AnalyticsLongRunningTransaction("Get and display first timeline items", null)
+    data class PushToNotification(val eventId: String) : AnalyticsLongRunningTransaction(AnalyticsTransactions.pushToNotification)
+    data class PushToWorkManager(val eventId: String) : AnalyticsLongRunningTransaction("Push to WorkManager")
 }
