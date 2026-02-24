@@ -29,7 +29,7 @@ const dataLanguages = screenshots[0];
 const urlParams = new URLSearchParams(window.location.search);
 
 // Get the wanted languages from the url params, or default to "de" and "fr", and ensure "en" is always there
-const wantedLanguages = (urlParams.get(URL_PARAM_LANGUAGES) ? urlParams.get(URL_PARAM_LANGUAGES).split(',') : ['de', 'fr']) + ["en"];
+const wantedLanguages = [...new Set((urlParams.get(URL_PARAM_LANGUAGES) ? urlParams.get(URL_PARAM_LANGUAGES).split(',') : ['de', 'fr']).concat('en'))];
 // Map dataLanguages to visibleLanguages, set to 1 if the language is in wantedLanguages, 0 otherwise
 let visibleLanguages = dataLanguages.map((language) => wantedLanguages.includes(language) ? 1 : 0);
 // Read width from the url params, and ensure it's a multiple of 25 and is between 75 and 500
@@ -45,7 +45,7 @@ if (width) {
     imageWidth = Math.max(MIN_WIDTH, Math.min(MAX_WIDTH, Math.round(width / WIDTH_STEP) * WIDTH_STEP));
 }
 // Read showAllScreenshots from the url params
-let showAllScreenshots = urlParams.get(URL_PARAM_ALL_SCREENSHOTS) === 1;
+let showAllScreenshots = urlParams.get(URL_PARAM_ALL_SCREENSHOTS) === "1";
 // Read the minimum date of modification from the url params
 let minModifiedDayTime = urlParams.get(URL_PARAM_IF_MODIFIED_AFTER);
 
@@ -81,17 +81,40 @@ function updatePageUrl() {
 function addForm() {
   // Insert the form into the div with id form_container
   const form = document.createElement('form');
-  const languageLabel = document.createElement('label');
-  languageLabel.textContent = 'Languages:';
-  form.appendChild(languageLabel);
-  // Add a check box per entry in the dataLanguages
+
+  const multiSelectDiv = document.createElement('div');
+  multiSelectDiv.className = 'multiselect';
+  form.appendChild(multiSelectDiv);
+
+  const selectBoxDiv = document.createElement('div');
+  selectBoxDiv.className = 'selectBox';
+  selectBoxDiv.onclick = () => {
+    const checkboxes = document.getElementById("checkboxes");
+    checkboxes.style.display = checkboxes.style.display === "block" ? "none" : "block";
+  };
+  multiSelectDiv.appendChild(selectBoxDiv);
+
+  const select = document.createElement('select');
+  const option = document.createElement('option');
+  option.textContent = "Select languages";
+  select.appendChild(option);
+  selectBoxDiv.appendChild(select);
+
+  const overSelectDiv = document.createElement('div');
+  overSelectDiv.className = 'overSelect';
+  selectBoxDiv.appendChild(overSelectDiv);
+
+  const checkboxesDiv = document.createElement('div');
+  checkboxesDiv.id = 'checkboxes';
+  multiSelectDiv.appendChild(checkboxesDiv);
+
   for (let i = 0; i < dataLanguages.length; i++){
     const label = document.createElement('label');
-    const text = document.createTextNode(dataLanguages[i]);
     const input = document.createElement('input');
     input.type = 'checkbox';
-    input.disabled = i == 0;
-    input.name = dataLanguages[i];
+    const language = dataLanguages[i];
+    input.disabled = language === "en";
+    input.name = language;
     input.checked = visibleLanguages[i] == 1;
     input.onchange = (e) => {
       if (e.target.checked) {
@@ -103,14 +126,12 @@ function addForm() {
       addTable();
     };
     label.appendChild(input);
-    label.appendChild(text);
-    form.appendChild(label);
+    label.appendChild(document.createTextNode(` ${language}`));
+    checkboxesDiv.appendChild(label);
   }
-  // Add a break line
-  form.appendChild(document.createElement('br'));
   // Add a label with the text "Width"
   const label = document.createElement('label');
-  label.textContent = 'Screenshots width:';
+  label.textContent = 'Width:';
   form.appendChild(label);
   // Add a input text to input the width of the image
   const widthInput = document.createElement('input');
@@ -128,7 +149,7 @@ function addForm() {
   form.appendChild(widthInput);
   // Add a label with the text "Show all screenshots"
   const label2 = document.createElement('label');
-  label2.textContent = 'Show all screenshots:';
+  label2.textContent = 'Show all:';
   label2.title = 'Show all screenshots, including those with no translated versions.';
   const input2 = document.createElement('input');
   input2.type = 'checkbox';
@@ -211,6 +232,34 @@ function createImageElement(fullFile, modifiedDayTime) {
     return img;
 }
 
+function updateUrlAndScrollTo(id) {
+    // If the current URL already contains the fragment id, remove it, otherwise add it
+    if (window.location.hash === id) {
+        history.replaceState(null, '', window.location.pathname + window.location.search);
+    } else {
+        history.replaceState(null, '', `${window.location.pathname}${window.location.search}#${id}`);
+    }
+    const element = document.getElementById(id);
+    if (element) {
+        element.scrollIntoView({ behavior: 'smooth' });
+    }
+    // Also copy the URL to the clipboard
+    navigator.clipboard.writeText(window.location.href);
+    // And show a message that the URL has been copied to the clipboard
+    // First check if there is already a message, if so, remove it, or the shadow will accumulate.
+    const existingMessage = document.querySelector('.copy-message');
+    if (existingMessage) {
+        document.body.removeChild(existingMessage);
+    }
+    const message = document.createElement('div');
+    message.className = 'copy-message';
+    message.textContent = 'URL copied to clipboard!';
+    document.body.appendChild(message);
+    setTimeout(() => {
+        document.body.removeChild(message);
+    }, 2000);
+}
+
 function addTable() {
   var linesCounter = 0;
   // Remove any previous table
@@ -244,6 +293,9 @@ function addTable() {
     }
     const tr = document.createElement('tr');
     tr.id = niceName + screenshotCounter;
+    tr.onclick = () => {
+        updateUrlAndScrollTo(tr.id);
+    }
     let hasTranslatedFiles = false;
     for (let languageIndex = 0; languageIndex < dataLanguages.length; languageIndex++) {
       if (visibleLanguages[languageIndex] == 0) {
@@ -284,6 +336,9 @@ function addTable() {
         currentHeaderValue = niceName;
         const trHead = document.createElement('tr');
         trHead.id = niceName;
+        trHead.onclick = () => {
+            updateUrlAndScrollTo(trHead.id);
+        }
         const tdHead = document.createElement('td');
         tdHead.colSpan = numVisibleLanguages;
         tdHead.className = "view-header";
