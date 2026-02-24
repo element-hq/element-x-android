@@ -124,6 +124,14 @@ class DefaultPushHandler(
                                         sessionId = request.sessionId,
                                         comment = "Push handled successfully but notification was filtered out",
                                     )
+                                } else if (exception is NotificationResolverException.EventRedacted) {
+                                    pushHistoryService.onSuccess(
+                                        providerInfo = request.providerInfo,
+                                        eventId = request.eventId,
+                                        roomId = request.roomId,
+                                        sessionId = request.sessionId,
+                                        comment = "Push handled successfully but event has been redacted",
+                                    )
                                 } else {
                                     val reason = when (exception) {
                                         is NotificationResolverException.EventNotFound -> "Event not found"
@@ -153,6 +161,10 @@ class DefaultPushHandler(
                         when (exception) {
                             is NotificationResolverException.EventFilteredOut -> {
                                 // Do nothing, we don't want to show a notification for filtered out events
+                                null
+                            }
+                            is NotificationResolverException.EventRedacted -> {
+                                // Do nothing, we don't want to show a notification for redacted events
                                 null
                             }
                             else -> {
