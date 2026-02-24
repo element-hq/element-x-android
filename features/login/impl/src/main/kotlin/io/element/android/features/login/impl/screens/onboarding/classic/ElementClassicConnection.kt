@@ -107,7 +107,7 @@ class DefaultElementClassicConnection(
                 if (context.bindService(intentService, serviceConnection, BIND_AUTO_CREATE)) {
                     Timber.tag(loggerTag.value).d("Binding returned true")
                 } else {
-                    // This happen when the app is not installed
+                    // This happens when the app is not installed
                     Timber.tag(loggerTag.value).d("Binding returned false")
                     mutableStateFlow.emit(ElementClassicConnectionState.ElementClassicNotFound)
                 }
