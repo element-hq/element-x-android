@@ -154,7 +154,8 @@ class RootFlowNode(
                         switchToNotLoggedInFlow(null)
                     }
                 }
-            }.launchIn(lifecycleScope)
+            }
+            .launchIn(lifecycleScope)
     }
 
     /**
