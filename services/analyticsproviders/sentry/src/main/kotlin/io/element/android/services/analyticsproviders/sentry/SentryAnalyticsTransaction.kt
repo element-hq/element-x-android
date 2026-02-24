@@ -14,7 +14,7 @@ import io.sentry.Sentry
 import io.sentry.SentryInstantDate
 import timber.log.Timber
 import kotlin.time.Duration
-import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.nanoseconds
 
 class SentryAnalyticsTransaction private constructor(span: ISpan) : AnalyticsTransaction {
     constructor(name: String, operation: String?, description: String? = null) : this(
@@ -24,7 +24,7 @@ class SentryAnalyticsTransaction private constructor(span: ISpan) : AnalyticsTra
 
     @Suppress("UnstableApiUsage")
     override val duration: Duration get() {
-        return (inner.finishDate ?: SentryInstantDate()).diff(inner.startDate).milliseconds
+        return (inner.finishDate ?: SentryInstantDate()).diff(inner.startDate).nanoseconds
     }
 
     override fun startChild(operation: String, description: String?): AnalyticsTransaction = SentryAnalyticsTransaction(
