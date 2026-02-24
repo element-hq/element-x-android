@@ -42,6 +42,8 @@ serialization_json = "1.10.0"
 coil = "3.3.0"
 # Rollback to 1.0.4, 1.0.5 has this issue: https://github.com/airbnb/Showkase/issues/420
 showkase = "1.0.5"
+# There is some custom logic in `RootFlowNode` that may break because it reuses some Appyx internal APIs.
+# When upgrading this version, check state restoration still works fine.
 appyx = "1.7.1"
 sqldelight = "2.2.1"
 wysiwyg = "2.41.1"
