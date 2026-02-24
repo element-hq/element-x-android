@@ -12,7 +12,6 @@ import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.coroutine.childScope
-import io.element.android.libraries.core.coroutine.withPreviousValue
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
@@ -23,6 +22,7 @@ import io.element.android.services.appnavstate.api.AppForegroundStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.cancelChildren
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
@@ -41,7 +41,7 @@ class DefaultAnalyticsRoomListStateWatcher(
 ) : AnalyticsRoomListStateWatcher {
     private val coroutineScope: CoroutineScope = sessionCoroutineScope.childScope(dispatchers.computation, "AnalyticsRoomListStateWatcher")
     private val isStarted = AtomicBoolean(false)
-    private val isWarmState = AtomicBoolean(false)
+    private val isNotInitialSync get() = roomListService.isInitialSyncDone
 
     override fun start() {
         if (isStarted.getAndSet(true)) {
@@ -51,30 +51,37 @@ class DefaultAnalyticsRoomListStateWatcher(
 
         val longRunningTransaction = AnalyticsLongRunningTransaction.CatchUp
 
+        val hasNetworkConnectivityFlow = networkMonitor.connectivity
+            .map { it == NetworkStatus.Connected }
+            .distinctUntilChanged()
+
         combine(
-            appForegroundStateService.isInForeground.withPreviousValue(),
-            networkMonitor.connectivity.map { it == NetworkStatus.Connected },
-        ) { (wasInForeground, isInForeground), hasNetworkConnectivity ->
-                if (isInForeground && hasNetworkConnectivity && roomListService.state.value != RoomListService.State.Running) {
+            appForegroundStateService.isInForeground,
+            hasNetworkConnectivityFlow,
+        ) { isInForeground, hasNetworkConnectivity ->
+            val canSync = isInForeground && hasNetworkConnectivity
+            val isNotSyncing = roomListService.state.value != RoomListService.State.Running
+                if (isNotInitialSync && canSync && isNotSyncing) {
+                    Timber.d("Catch-up transaction: starting")
                     analyticsService.startLongRunningTransaction(longRunningTransaction)
                 } else if (!isInForeground || !hasNetworkConnectivity) {
-                    analyticsService.removeLongRunningTransaction(longRunningTransaction)
-                }
-
-                if (wasInForeground == false && isInForeground) {
-                    isWarmState.set(true)
+                    analyticsService.removeLongRunningTransaction(longRunningTransaction)?.let {
+                        Timber.d("Catch-up transaction: stopping")
+                    }
                 }
             }
             .launchIn(coroutineScope)
 
         roomListService.state
             .onEach { state ->
-                if (state == RoomListService.State.Running && isWarmState.get()) {
+                if (state == RoomListService.State.Running && isNotInitialSync) {
                     val transaction = analyticsService.removeLongRunningTransaction(longRunningTransaction)
                     if (transaction != null && !transaction.isFinished()) {
-                        if (transaction.duration > 1.minutes) {
-                            Timber.d("Cancelling catch-up transaction, the elapsed time is too long, something probably went wrong while measuring")
+                        val duration = transaction.duration
+                        if (duration > 3.minutes) {
+                            Timber.d("Cancelling catch-up transaction, the elapsed time is too long ($duration), something probably went wrong while measuring")
                         } else {
+                            Timber.d("Catch-up transaction finished in $duration")
                             transaction.finish()
                         }
                     }
