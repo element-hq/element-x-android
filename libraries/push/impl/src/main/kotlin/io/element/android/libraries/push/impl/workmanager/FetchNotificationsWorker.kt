@@ -34,6 +34,7 @@ import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.api.finishLongRunningTransaction
 import io.element.android.services.analytics.api.recordTransaction
+import io.element.android.services.analyticsproviders.api.AnalyticsTransaction
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
@@ -57,28 +58,21 @@ class FetchNotificationsWorker(
     override suspend fun doWork(): Result {
         Timber.d("FetchNotificationsWorker started")
         val requests = workerDataConverter.deserialize(inputData) ?: return Result.failure()
-        // Wait for network to be available, but not more than 10 seconds
+
         val networkTimeoutSpans = requests.mapNotNull { request ->
             val parent = analyticsService.getLongRunningTransaction(AnalyticsLongRunningTransaction.PushToWorkManager(request.eventId.value))
             parent?.startChild("Waiting for network connectivity", "await_network")
         }
+
+        // Wait for network to be available, but not more than 10 seconds
         val hasNetwork = withTimeoutOrNull(10.seconds) {
             networkMonitor.connectivity.first { it == NetworkStatus.Connected }
         } != null
 
-        for (span in networkTimeoutSpans) {
-            span.finish()
-        }
+        networkTimeoutSpans.finish()
 
-        if (!hasNetwork) {
-            Timber.w("No network, retrying later")
-            for (request in requests) {
-                val eventId = request.eventId.value
-                analyticsService.finishLongRunningTransaction(AnalyticsLongRunningTransaction.PushToWorkManager(eventId))
-                val parent = analyticsService.getLongRunningTransaction(AnalyticsLongRunningTransaction.PushToNotification(eventId))
-                // Since we're retrying, start a new transaction
-                analyticsService.startLongRunningTransaction(AnalyticsLongRunningTransaction.PushToWorkManager(eventId), parent)
-            }
+        // If there is a problem with the updated network values, report it and retry if needed
+        if (reportConnectivityError(requests = requests, hasNetwork = hasNetwork, isNetworkBlocked = networkMonitor.isNetworkBlocked())) {
             return Result.retry()
         }
 
@@ -157,6 +151,25 @@ class FetchNotificationsWorker(
         return Result.success()
     }
 
+    private fun reportConnectivityError(requests: List<NotificationEventRequest>, hasNetwork: Boolean, isNetworkBlocked: Boolean): Boolean {
+        return if (!hasNetwork || isNetworkBlocked) {
+            for (request in requests) {
+                val eventId = request.eventId.value
+                analyticsService.finishLongRunningTransaction(AnalyticsLongRunningTransaction.PushToWorkManager(eventId)) {
+                    it.putExtraData("has_network_connection", hasNetwork.toString())
+                    it.putExtraData("is_network_blocked", isNetworkBlocked.toString())
+                }
+                val parent = analyticsService.getLongRunningTransaction(AnalyticsLongRunningTransaction.PushToNotification(eventId))
+                // Since we're retrying, start a new transaction
+                analyticsService.startLongRunningTransaction(AnalyticsLongRunningTransaction.PushToWorkManager(eventId), parent)
+            }
+            Timber.w("FetchNotificationsWorker will retry. Has network connectivity: $hasNetwork. Is network blocked: $isNetworkBlocked")
+            true
+        } else {
+            false
+        }
+    }
+
     private suspend fun performOpportunisticSyncIfNeeded(
         groupedRequests: Map<SessionId, List<NotificationEventRequest>>,
     ) {
@@ -174,3 +187,5 @@ class FetchNotificationsWorker(
     @AssistedFactory
     interface Factory : MetroWorkerFactory.WorkerInstanceFactory<FetchNotificationsWorker>
 }
+
+private fun <T : AnalyticsTransaction> Collection<T>.finish() = forEach { it.finish() }

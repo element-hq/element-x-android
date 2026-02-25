@@ -20,4 +20,9 @@ interface NetworkMonitor {
      * A flow containing the current network connectivity status.
      */
     val connectivity: StateFlow<NetworkStatus>
+
+    /**
+     * Checks if the active network is being blocked by Doze, even if it's available.
+     */
+    fun isNetworkBlocked(): Boolean
 }
