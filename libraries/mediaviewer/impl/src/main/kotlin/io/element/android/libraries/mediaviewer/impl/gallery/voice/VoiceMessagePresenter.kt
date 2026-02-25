@@ -41,7 +41,7 @@ class VoiceMessagePresenter(
 ) : Presenter<VoiceMessageState> {
     @AssistedFactory
     fun interface Factory : MediaItemPresenterFactory<MediaItem.Voice, VoiceMessageState> {
-        override fun create(content: MediaItem.Voice): VoiceMessagePresenter
+        override fun create(item: MediaItem.Voice): VoiceMessagePresenter
     }
 
     private val presenter = voiceMessagePresenterFactory.createVoiceMessagePresenter(

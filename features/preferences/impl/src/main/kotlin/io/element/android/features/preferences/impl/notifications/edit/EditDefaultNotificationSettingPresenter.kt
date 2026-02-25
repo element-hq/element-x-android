@@ -47,7 +47,7 @@ class EditDefaultNotificationSettingPresenter(
 ) : Presenter<EditDefaultNotificationSettingState> {
     @AssistedFactory
     interface Factory {
-        fun create(oneToOne: Boolean): EditDefaultNotificationSettingPresenter
+        fun create(isOneToOne: Boolean): EditDefaultNotificationSettingPresenter
     }
 
     private val collator = Collator.getInstance().apply {
