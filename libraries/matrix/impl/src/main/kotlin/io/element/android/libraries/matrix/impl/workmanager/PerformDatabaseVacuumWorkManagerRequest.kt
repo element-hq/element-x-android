@@ -32,7 +32,13 @@ class PerformDatabaseVacuumWorkManagerRequest(
             .addTag(workManagerTag(sessionId, WorkManagerRequestType.DB_VACUUM))
             .setInputData(data)
             // Only run when the device is idle to avoid impacting user experience
-            .setConstraints(Constraints.Builder().setRequiresDeviceIdle(true).build())
+            .setConstraints(
+                Constraints.Builder()
+                    .setRequiresDeviceIdle(true)
+                    // Vacuuming can duplicate the DB sizes in disk
+                    .setRequiresStorageNotLow(true)
+                    .build()
+            )
             .build()
 
         return Result.success(listOf(workRequest))
