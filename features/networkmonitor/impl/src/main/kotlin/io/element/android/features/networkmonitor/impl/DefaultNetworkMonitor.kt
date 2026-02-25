@@ -10,11 +10,9 @@
 
 package io.element.android.features.networkmonitor.impl
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
-import android.net.NetworkInfo
 import android.net.NetworkRequest
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
@@ -45,13 +43,9 @@ class DefaultNetworkMonitor(
     appCoroutineScope: CoroutineScope,
 ) : NetworkMonitor {
     private val connectivityManager: ConnectivityManager = context.getSystemService(ConnectivityManager::class.java)
+    private val blockedNetworkBlockedChecker = NetworkBlockedChecker(connectivityManager)
 
-    @Suppress("DEPRECATION")
-    @SuppressLint("MissingPermission")
-    override fun isNetworkBlocked(): Boolean {
-        // This call is deprecated, but it seems like it's the only reliable way to tell if doze has blocked network access
-        return connectivityManager.activeNetworkInfo?.detailedState == NetworkInfo.DetailedState.BLOCKED
-    }
+    override fun isNetworkBlocked(): Boolean = blockedNetworkBlockedChecker.isNetworkBlocked()
 
     override val connectivity: StateFlow<NetworkStatus> = callbackFlow {
 
