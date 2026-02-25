@@ -7,6 +7,8 @@
 
 package io.element.android.libraries.matrix.impl.storage
 
+import io.element.android.libraries.core.data.ByteUnit
+import io.element.android.libraries.core.data.megaBytes
 import io.element.android.libraries.matrix.impl.paths.SessionPaths
 import org.matrix.rustcomponents.sdk.ClientBuilder
 import org.matrix.rustcomponents.sdk.SqliteStoreBuilder as SdkSqliteStoreBuilder
@@ -17,12 +19,12 @@ interface SqliteStoreBuilder {
 }
 
 class RustSqliteStoreBuilder(
-    private val sessionPaths: SessionPaths,
+    sessionPaths: SessionPaths,
 ) : SqliteStoreBuilder {
     private var inner = SdkSqliteStoreBuilder(
         dataPath = sessionPaths.fileDirectory.absolutePath,
         cachePath = sessionPaths.cacheDirectory.absolutePath,
-    )
+    ).journalSizeLimit(25.megaBytes.into(ByteUnit.BYTES).toUInt())
 
     override fun passphrase(passphrase: String?): SqliteStoreBuilder {
         inner = inner.passphrase(passphrase)
