@@ -9,6 +9,9 @@
 package io.element.android.libraries.push.impl.workmanager
 
 import android.content.Context
+import android.os.Build
+import android.os.PowerManager
+import androidx.core.content.getSystemService
 import androidx.work.CoroutineWorker
 import androidx.work.WorkerParameters
 import dev.zacsweers.metro.AppScope
@@ -62,6 +65,21 @@ class FetchNotificationsWorker(
             val parent = analyticsService.getLongRunningTransaction(AnalyticsLongRunningTransaction.PushToWorkManager(request.eventId.value))
             parent?.startChild("Waiting for network connectivity", "await_network")
         }
+
+        val powerManager = context.getSystemService<PowerManager>()
+        val isLowPowerMode = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            powerManager?.isLowPowerStandbyEnabled == true
+        } else {
+            false
+        }
+
+        val exemptFromLowPowerStandby = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            powerManager?.isExemptFromLowPowerStandby == true
+        } else {
+            false
+        }
+        val isNetworkBlocked = isLowPowerMode && !exemptFromLowPowerStandby
+
         val hasNetwork = withTimeoutOrNull(10.seconds) {
             networkMonitor.connectivity.first { it == NetworkStatus.Connected }
         } != null
@@ -70,15 +88,18 @@ class FetchNotificationsWorker(
             span.finish()
         }
 
-        if (!hasNetwork) {
-            Timber.w("No network, retrying later")
+        if (!hasNetwork || isNetworkBlocked) {
             for (request in requests) {
                 val eventId = request.eventId.value
-                analyticsService.finishLongRunningTransaction(AnalyticsLongRunningTransaction.PushToWorkManager(eventId))
+                analyticsService.finishLongRunningTransaction(AnalyticsLongRunningTransaction.PushToWorkManager(eventId)) {
+                    it.putExtraData("has_network_connection", hasNetwork.toString())
+                    it.putExtraData("is_network_blocked", isNetworkBlocked.toString())
+                }
                 val parent = analyticsService.getLongRunningTransaction(AnalyticsLongRunningTransaction.PushToNotification(eventId))
                 // Since we're retrying, start a new transaction
                 analyticsService.startLongRunningTransaction(AnalyticsLongRunningTransaction.PushToWorkManager(eventId), parent)
             }
+            Timber.w("FetchNotificationsWorker will retry. Has network connectivity: $hasNetwork. Is network blocked: $isNetworkBlocked")
             return Result.retry()
         }
 
