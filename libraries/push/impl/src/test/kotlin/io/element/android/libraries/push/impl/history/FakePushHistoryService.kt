@@ -24,7 +24,7 @@ class FakePushHistoryService(
         String?
     ) -> Unit = { _, _, _, _, _, _, _ -> lambdaError() }
 ) : PushHistoryService {
-    override fun onPushReceived(
+    override fun onPushResult(
         providerInfo: String,
         eventId: EventId?,
         roomId: RoomId?,

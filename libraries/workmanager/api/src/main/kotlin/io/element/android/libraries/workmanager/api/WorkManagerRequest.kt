@@ -11,5 +11,5 @@ package io.element.android.libraries.workmanager.api
 import androidx.work.WorkRequest
 
 interface WorkManagerRequest {
-    fun build(): Result<List<WorkRequest>>
+    suspend fun build(): Result<List<WorkRequest>>
 }

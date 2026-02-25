@@ -11,13 +11,14 @@ package io.element.android.libraries.push.impl.history
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.push.impl.db.PushRequest
 
 interface PushHistoryService {
     /**
      * Create a new push history entry.
      * Do not use directly, prefer using the extension functions.
      */
-    fun onPushReceived(
+    fun onPushResult(
         providerInfo: String,
         eventId: EventId?,
         roomId: RoomId?,
@@ -26,12 +27,18 @@ interface PushHistoryService {
         includeDeviceState: Boolean,
         comment: String?,
     )
+
+    suspend fun enqueuePushRequest(pushRequest: PushRequest): Result<Unit>
+
+    suspend fun replacePushRequests(pushRequests: List<PushRequest>): Result<Unit>
+
+    suspend fun getPendingPushRequests(sessionId: SessionId): Result<List<PushRequest>>
 }
 
 fun PushHistoryService.onInvalidPushReceived(
     providerInfo: String,
     data: String,
-) = onPushReceived(
+) = onPushResult(
     providerInfo = providerInfo,
     eventId = null,
     roomId = null,
@@ -46,7 +53,7 @@ fun PushHistoryService.onUnableToRetrieveSession(
     eventId: EventId,
     roomId: RoomId,
     reason: String,
-) = onPushReceived(
+) = onPushResult(
     providerInfo = providerInfo,
     eventId = eventId,
     roomId = roomId,
@@ -62,7 +69,7 @@ fun PushHistoryService.onUnableToResolveEvent(
     roomId: RoomId,
     sessionId: SessionId,
     reason: String,
-) = onPushReceived(
+) = onPushResult(
     providerInfo = providerInfo,
     eventId = eventId,
     roomId = roomId,
@@ -78,7 +85,7 @@ fun PushHistoryService.onSuccess(
     roomId: RoomId,
     sessionId: SessionId,
     comment: String?,
-) = onPushReceived(
+) = onPushResult(
     providerInfo = providerInfo,
     eventId = eventId,
     roomId = roomId,
@@ -95,7 +102,7 @@ fun PushHistoryService.onSuccess(
 
 fun PushHistoryService.onDiagnosticPush(
     providerInfo: String,
-) = onPushReceived(
+) = onPushResult(
     providerInfo = providerInfo,
     eventId = null,
     roomId = null,

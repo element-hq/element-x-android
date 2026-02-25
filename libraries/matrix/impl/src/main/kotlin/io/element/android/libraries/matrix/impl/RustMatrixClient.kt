@@ -833,7 +833,7 @@ class RustMatrixClient(
 
         Timber.i("Scheduling periodic database vacuuming for session $sessionId")
         val request = PerformDatabaseVacuumWorkManagerRequest(sessionId)
-        workManagerScheduler.submit(request)
+        sessionCoroutineScope.launch { workManagerScheduler.submit(request) }
     }
 }
 

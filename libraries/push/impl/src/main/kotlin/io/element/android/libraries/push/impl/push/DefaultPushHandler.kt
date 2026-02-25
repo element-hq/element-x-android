@@ -21,6 +21,8 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.exception.NotificationResolverException
 import io.element.android.libraries.push.api.push.NotificationEventRequest
 import io.element.android.libraries.push.api.push.SyncOnNotifiableEvent
+import io.element.android.libraries.push.impl.db.PushRequest
+import io.element.android.libraries.push.impl.history.DefaultPushHistoryService
 import io.element.android.libraries.push.impl.history.PushHistoryService
 import io.element.android.libraries.push.impl.history.onDiagnosticPush
 import io.element.android.libraries.push.impl.history.onInvalidPushReceived
@@ -36,18 +38,27 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableRing
 import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEvent
 import io.element.android.libraries.push.impl.test.DefaultTestPush
 import io.element.android.libraries.push.impl.troubleshoot.DiagnosticPushHandler
+import io.element.android.libraries.push.impl.workmanager.SyncNotificationWorkManagerRequest
+import io.element.android.libraries.push.impl.workmanager.SyncPendingNotificationsWorkManagerRequest
 import io.element.android.libraries.pushproviders.api.PushData
 import io.element.android.libraries.pushproviders.api.PushHandler
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
+import io.element.android.libraries.workmanager.api.WorkManagerRequestType
+import io.element.android.libraries.workmanager.api.WorkManagerScheduler
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
 import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
+import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
+import kotlin.time.Instant
 
 private val loggerTag = LoggerTag("PushHandler", LoggerTag.PushLoggerTag)
 
@@ -72,6 +83,9 @@ class DefaultPushHandler(
     private val syncOnNotifiableEvent: SyncOnNotifiableEvent,
     private val featureFlagService: FeatureFlagService,
     private val analyticsService: AnalyticsService,
+    private val systemClock: SystemClock,
+    private val workManagerScheduler: WorkManagerScheduler,
+    private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
 ) : PushHandler {
     init {
         processPushEventResults()
@@ -244,6 +258,8 @@ class DefaultPushHandler(
         pushHistoryService.onInvalidPushReceived(providerInfo, data)
     }
 
+    private val submitWorkMutex = Mutex()
+
     /**
      * Internal receive method.
      *
@@ -270,15 +286,29 @@ class DefaultPushHandler(
                 return
             }
 
-            appCoroutineScope.launch {
-                val notificationEventRequest = NotificationEventRequest(
-                    sessionId = userId,
-                    roomId = pushData.roomId,
-                    eventId = pushData.eventId,
-                    providerInfo = providerInfo,
-                )
-                Timber.d("Queueing notification: $notificationEventRequest")
-                resolverQueue.enqueue(notificationEventRequest)
+            val pushRequest = PushRequest(
+                pushDate = systemClock.epochMillis(),
+                providerInfo = providerInfo,
+                eventId = pushData.eventId.value,
+                roomId = pushData.roomId.value,
+                sessionId = userId.value,
+                status = PushRequestStatus.PENDING.value,
+                retries = 0L,
+            )
+
+            Timber.d("Queueing notification: $pushRequest")
+            pushHistoryService.enqueuePushRequest(pushRequest)
+
+            submitWorkMutex.withLock {
+                if (!workManagerScheduler.hasPendingWork(userId, WorkManagerRequestType.NOTIFICATION_SYNC)) {
+                    Timber.d("No pending worker for push notifications found")
+                    workManagerScheduler.submit(
+                        SyncPendingNotificationsWorkManagerRequest(
+                            sessionId = userId,
+                            buildVersionSdkIntProvider = buildVersionSdkIntProvider,
+                        )
+                    )
+                }
             }
         } catch (e: Exception) {
             Timber.tag(loggerTag.value).e(e, "## handleInternal() failed")
@@ -300,4 +330,12 @@ class DefaultPushHandler(
             textContent = notifiableEvent.description,
         )
     }
+}
+
+enum class PushRequestStatus(val value: Long) {
+    PENDING(0),
+    PROCESSING(1),
+    SUCCESS(2),
+    FAILED_RECOVERABLE(3),
+    FAILED_UNRECOVERABLE(4),
 }

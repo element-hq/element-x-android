@@ -11,9 +11,12 @@ package io.element.android.libraries.push.impl.workmanager
 import android.os.Build
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
+import androidx.work.OverwritingInputMerger
 import androidx.work.WorkRequest
+import androidx.work.workDataOf
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.api.push.NotificationEventRequest
+import io.element.android.libraries.push.impl.history.PushHistoryService
 import io.element.android.libraries.workmanager.api.WorkManagerRequest
 import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.workManagerTag
@@ -23,21 +26,15 @@ import kotlinx.serialization.Serializable
 import timber.log.Timber
 import java.security.InvalidParameterException
 
-class SyncNotificationWorkManagerRequest(
+class SyncPendingNotificationsWorkManagerRequest(
     private val sessionId: SessionId,
-    private val notificationEventRequests: List<NotificationEventRequest>,
-    private val workerDataConverter: SyncNotificationsWorkerDataConverter,
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
 ) : WorkManagerRequest {
     override suspend fun build(): Result<List<WorkRequest>> {
-        if (notificationEventRequests.isEmpty()) {
-            return Result.failure(InvalidParameterException("notificationEventRequests cannot be empty"))
-        }
-        Timber.d("Scheduling ${notificationEventRequests.size} notification requests with WorkManager for $sessionId")
-        return workerDataConverter.serialize(notificationEventRequests).map { dataList ->
-            dataList.map { data ->
-                OneTimeWorkRequestBuilder<FetchNotificationsWorker>()
-                    .setInputData(data)
+        return Result.success(
+            listOf(
+                OneTimeWorkRequestBuilder<FetchPendingNotificationsWorker>()
+                    .setInputData(workDataOf("session_id" to sessionId.value))
                     .apply {
                         // Expedited workers aren't needed on Android 12 or lower:
                         // They force displaying a foreground sync notification for no good reason, since they sync almost immediately anyway
@@ -50,19 +47,7 @@ class SyncNotificationWorkManagerRequest(
                     // TODO investigate using this instead of the resolver queue
                     // .setInputMerger()
                     .build()
-            }
-        }
+            )
+        )
     }
-
-    @Serializable
-    data class Data(
-        @SerialName("session_id")
-        val sessionId: String,
-        @SerialName("room_id")
-        val roomId: String,
-        @SerialName("event_id")
-        val eventId: String,
-        @SerialName("provider_info")
-        val providerInfo: String,
-    )
 }
