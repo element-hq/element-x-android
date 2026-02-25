@@ -44,7 +44,7 @@ import kotlin.time.Duration.Companion.seconds
 
 @AssistedInject
 class FetchNotificationsWorker(
-    @Assisted workerParams: WorkerParameters,
+    @Assisted params: WorkerParameters,
     @ApplicationContext private val context: Context,
     private val networkMonitor: NetworkMonitor,
     private val eventResolver: NotifiableEventResolver,
@@ -54,7 +54,7 @@ class FetchNotificationsWorker(
     private val workerDataConverter: SyncNotificationsWorkerDataConverter,
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
     private val analyticsService: AnalyticsService,
-) : CoroutineWorker(context, workerParams) {
+) : CoroutineWorker(context, params) {
     override suspend fun doWork(): Result {
         Timber.d("FetchNotificationsWorker started")
         val requests = workerDataConverter.deserialize(inputData) ?: return Result.failure()

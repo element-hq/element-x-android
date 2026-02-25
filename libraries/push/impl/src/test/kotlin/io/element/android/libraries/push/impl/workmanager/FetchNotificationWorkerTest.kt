@@ -170,7 +170,7 @@ class FetchNotificationWorkerTest {
         syncOnNotifiableEvent: SyncOnNotifiableEvent = SyncOnNotifiableEvent {},
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
     ) = FetchNotificationsWorker(
-        workerParams = createWorkerParams(workDataOf("requests" to input)),
+        params = createWorkerParams(workDataOf("requests" to input)),
         context = InstrumentationRegistry.getInstrumentation().context,
         networkMonitor = networkMonitor,
         eventResolver = eventResolver,

@@ -76,7 +76,7 @@ class ConfigureRoomPresenter(
 ) : Presenter<ConfigureRoomState> {
     @AssistedFactory
     interface Factory {
-        fun create(isSpace: Boolean, parentSpaceId: RoomId?): ConfigureRoomPresenter
+        fun create(isSpace: Boolean, initialParentSpaceId: RoomId?): ConfigureRoomPresenter
     }
 
     private val cameraPermissionPresenter: PermissionsPresenter = permissionsPresenterFactory.create(android.Manifest.permission.CAMERA)
