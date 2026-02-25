@@ -49,6 +49,7 @@ class DefaultNetworkMonitor(
     @Suppress("DEPRECATION")
     @SuppressLint("MissingPermission")
     override fun isNetworkBlocked(): Boolean {
+        // This call is deprecated, but it seems like it's the only reliable way to tell if doze has blocked network access
         return connectivityManager.activeNetworkInfo?.detailedState == NetworkInfo.DetailedState.BLOCKED
     }
 
