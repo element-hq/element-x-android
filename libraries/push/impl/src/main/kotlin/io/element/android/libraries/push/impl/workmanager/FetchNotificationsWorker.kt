@@ -59,14 +59,6 @@ class FetchNotificationsWorker(
         Timber.d("FetchNotificationsWorker started")
         val requests = workerDataConverter.deserialize(inputData) ?: return Result.failure()
 
-        val isNetworkBlocked = networkMonitor.isNetworkBlocked()
-        val initialHasNetwork = networkMonitor.connectivity.value == NetworkStatus.Connected
-
-        // If the network access is blocked, report it and retry if needed
-        if (isNetworkBlocked && reportConnectivityError(requests = requests, hasNetwork = initialHasNetwork, isNetworkBlocked = true)) {
-            return Result.retry()
-        }
-
         val networkTimeoutSpans = requests.mapNotNull { request ->
             val parent = analyticsService.getLongRunningTransaction(AnalyticsLongRunningTransaction.PushToWorkManager(request.eventId.value))
             parent?.startChild("Waiting for network connectivity", "await_network")
@@ -80,7 +72,9 @@ class FetchNotificationsWorker(
         networkTimeoutSpans.finish()
 
         // If there is a problem with the updated network values, report it and retry if needed
-        if (reportConnectivityError(requests = requests, hasNetwork = hasNetwork, isNetworkBlocked = isNetworkBlocked)) return Result.retry()
+        if (reportConnectivityError(requests = requests, hasNetwork = hasNetwork, isNetworkBlocked = networkMonitor.isNetworkBlocked())) {
+            return Result.retry()
+        }
 
         val pendingAnalyticTransactions = requests.mapNotNull { request ->
             analyticsService.finishLongRunningTransaction(AnalyticsLongRunningTransaction.PushToWorkManager(request.eventId.value))
