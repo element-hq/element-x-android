@@ -147,10 +147,22 @@ class DefaultPushHandler(
     }
 }
 
+/**
+ * Represents the status of a [PushRequest].
+ */
 enum class PushRequestStatus(val value: Long) {
+    /**
+     * Either it was enqueued, and we never tried to fetch it, or it failed with a recoverable error.
+     */
     PENDING(0),
-    PROCESSING(1),
-    SUCCESS(2),
-    FAILED_RECOVERABLE(3),
-    FAILED_UNRECOVERABLE(4),
+
+    /**
+     * The event for the [PushRequest] was fetched successfully.
+     */
+    SUCCESS(1),
+
+    /**
+     * Fetching the event for the [PushRequest] failed with an unrecoverable error, and it won't be retried.
+     */
+    FAILED(2),
 }

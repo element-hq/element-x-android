@@ -117,7 +117,7 @@ class FetchPendingNotificationsWorker(
                         // Reset to pending so we can retry it later
                         updatedRequests.add(request.copy(status = PushRequestStatus.PENDING.value))
                     } else {
-                        updatedRequests.add(request.copy(status = PushRequestStatus.FAILED_UNRECOVERABLE.value))
+                        updatedRequests.add(request.copy(status = PushRequestStatus.FAILED.value))
                     }
                 }
             )
@@ -204,7 +204,7 @@ class FetchPendingNotificationsWorker(
         if (throwable.cause is SessionRestorationException) {
             Timber.e(throwable, "Session $sessionId could not be restored, not retrying notification fetching")
             pushHistoryService.replacePushRequests(requests.map { request ->
-                request.copy(status = PushRequestStatus.FAILED_UNRECOVERABLE.value)
+                request.copy(status = PushRequestStatus.FAILED.value)
             })
             return Result.failure()
         }
