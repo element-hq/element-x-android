@@ -10,17 +10,12 @@ package io.element.android.features.location.impl.share
 
 data class ShareLocationState(
     val dialogState: Dialog,
-    val mode: Mode,
+    val trackUserLocation: Boolean,
     val hasLocationPermission: Boolean,
     val appName: String,
     val canShareLiveLocation: Boolean,
     val eventSink: (ShareLocationEvent) -> Unit,
 ) {
-    sealed interface Mode {
-        data object SenderLocation : Mode
-        data object PinLocation : Mode
-    }
-
     sealed interface Dialog {
         data object None : Dialog
         data object PermissionRationale : Dialog

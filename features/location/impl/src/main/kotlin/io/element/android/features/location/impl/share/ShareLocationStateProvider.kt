@@ -17,32 +17,32 @@ class ShareLocationStateProvider : PreviewParameterProvider<ShareLocationState> 
         get() = sequenceOf(
             aShareLocationState(
                 permissionDialog = ShareLocationState.Dialog.None,
-                mode = ShareLocationState.Mode.PinLocation,
+                trackUserPosition = false,
                 hasLocationPermission = false,
             ),
             aShareLocationState(
                 permissionDialog = ShareLocationState.Dialog.PermissionDenied,
-                mode = ShareLocationState.Mode.PinLocation,
+                trackUserPosition = false,
                 hasLocationPermission = false,
             ),
             aShareLocationState(
                 permissionDialog = ShareLocationState.Dialog.PermissionRationale,
-                mode = ShareLocationState.Mode.PinLocation,
+                trackUserPosition = false,
                 hasLocationPermission = false,
             ),
             aShareLocationState(
                 permissionDialog = ShareLocationState.Dialog.None,
-                mode = ShareLocationState.Mode.PinLocation,
+                trackUserPosition = false,
                 hasLocationPermission = true,
             ),
             aShareLocationState(
                 permissionDialog = ShareLocationState.Dialog.None,
-                mode = ShareLocationState.Mode.SenderLocation,
+                trackUserPosition = true,
                 hasLocationPermission = true,
             ),
             aShareLocationState(
                 permissionDialog = ShareLocationState.Dialog.LiveLocationDuration,
-                mode = ShareLocationState.Mode.SenderLocation,
+                trackUserPosition = true,
                 hasLocationPermission = true,
                 canShareLiveLocation = true,
             ),
@@ -51,13 +51,13 @@ class ShareLocationStateProvider : PreviewParameterProvider<ShareLocationState> 
 
 private fun aShareLocationState(
     permissionDialog: ShareLocationState.Dialog,
-    mode: ShareLocationState.Mode,
+    trackUserPosition: Boolean,
     hasLocationPermission: Boolean,
     canShareLiveLocation: Boolean = false,
 ): ShareLocationState {
     return ShareLocationState(
         dialogState = permissionDialog,
-        mode = mode,
+        trackUserLocation = trackUserPosition,
         hasLocationPermission = hasLocationPermission,
         canShareLiveLocation = canShareLiveLocation,
         appName = APP_NAME,

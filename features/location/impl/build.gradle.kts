@@ -27,7 +27,7 @@ setupDependencyInjection()
 dependencies {
     api(projects.features.location.api)
     implementation(projects.features.messages.api)
-    implementation(projects.libraries.maplibreCompose)
+    implementation(libs.maplibre.compose)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.di)

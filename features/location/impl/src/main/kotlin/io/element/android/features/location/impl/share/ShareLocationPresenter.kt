@@ -61,15 +61,7 @@ class ShareLocationPresenter(
     @Composable
     override fun present(): ShareLocationState {
         val permissionsState: PermissionsState = permissionsPresenter.present()
-        var mode: ShareLocationState.Mode by remember {
-            mutableStateOf(
-                if (permissionsState.isAnyGranted) {
-                    ShareLocationState.Mode.SenderLocation
-                } else {
-                    ShareLocationState.Mode.PinLocation
-                }
-            )
-        }
+        var trackUserPosition: Boolean by remember { mutableStateOf(permissionsState.isAnyGranted) }
         val isLiveLocationSharingEnabled by remember {
             featureFlagService.isFeatureEnabledFlow(FeatureFlags.LiveLocationSharing)
         }.collectAsState(false)
@@ -81,7 +73,7 @@ class ShareLocationPresenter(
 
         LaunchedEffect(permissionsState.permissions) {
             if (permissionsState.isAnyGranted) {
-                mode = ShareLocationState.Mode.SenderLocation
+                trackUserPosition = true
                 dialogState = ShareLocationState.Dialog.None
             }
         }
@@ -89,21 +81,21 @@ class ShareLocationPresenter(
         fun handleEvent(event: ShareLocationEvent) {
             when (event) {
                 is ShareLocationEvent.ShareStaticLocation -> scope.launch {
-                    shareLocation(event, mode)
+                    shareStaticLocation(event)
                 }
-                ShareLocationEvent.SwitchToMyLocationMode -> when {
-                    permissionsState.isAnyGranted -> mode = ShareLocationState.Mode.SenderLocation
+                ShareLocationEvent.StartTrackingUserPosition -> when {
+                    permissionsState.isAnyGranted -> trackUserPosition = true
                     permissionsState.shouldShowRationale -> dialogState = ShareLocationState.Dialog.PermissionRationale
                     else -> dialogState = ShareLocationState.Dialog.PermissionDenied
                 }
-                ShareLocationEvent.SwitchToPinLocationMode -> mode = ShareLocationState.Mode.PinLocation
+                ShareLocationEvent.StopTrackingUserPosition -> trackUserPosition = false
                 ShareLocationEvent.DismissDialog -> dialogState = ShareLocationState.Dialog.None
                 ShareLocationEvent.OpenAppSettings -> {
                     locationActions.openSettings()
                     dialogState = ShareLocationState.Dialog.None
                 }
                 ShareLocationEvent.RequestPermissions -> permissionsState.eventSink(PermissionsEvents.RequestPermissions)
-                ShareLocationEvent.SelectLiveLocationDuration -> dialogState = when {
+                ShareLocationEvent.ShowLiveLocationDurationPicker -> dialogState = when {
                     permissionsState.isAnyGranted -> ShareLocationState.Dialog.LiveLocationDuration
                     permissionsState.shouldShowRationale -> ShareLocationState.Dialog.PermissionRationale
                     else -> ShareLocationState.Dialog.PermissionDenied
@@ -117,7 +109,7 @@ class ShareLocationPresenter(
 
         return ShareLocationState(
             dialogState = dialogState,
-            mode = mode,
+            trackUserLocation = trackUserPosition,
             hasLocationPermission = permissionsState.isAnyGranted,
             canShareLiveLocation = isLiveLocationSharingEnabled,
             appName = appName,
@@ -125,56 +117,28 @@ class ShareLocationPresenter(
         )
     }
 
-    private suspend fun shareLocation(
-        event: ShareLocationEvent.ShareStaticLocation,
-        mode: ShareLocationState.Mode,
-    ) {
+    private suspend fun shareStaticLocation(event: ShareLocationEvent.ShareStaticLocation) {
         val replyMode = messageComposerContext.composerMode as? MessageComposerMode.Reply
         val inReplyToEventId = replyMode?.eventId
-        when (mode) {
-            ShareLocationState.Mode.PinLocation -> {
-                val geoUri = event.cameraPosition.toGeoUri()
-                getTimeline().flatMap {
-                    it.sendLocation(
-                        body = generateBody(geoUri),
-                        geoUri = geoUri,
-                        description = null,
-                        zoomLevel = MapDefaults.DEFAULT_ZOOM.toInt(),
-                        assetType = AssetType.PIN,
-                        inReplyToEventId = inReplyToEventId,
-                    )
-                }
-                analyticsService.capture(
-                    Composer(
-                        inThread = messageComposerContext.composerMode.inThread,
-                        isEditing = messageComposerContext.composerMode.isEditing,
-                        isReply = messageComposerContext.composerMode.isReply,
-                        messageType = Composer.MessageType.LocationPin,
-                    )
-                )
-            }
-            ShareLocationState.Mode.SenderLocation -> {
-                val geoUri = event.toGeoUri()
-                getTimeline().flatMap {
-                    it.sendLocation(
-                        body = generateBody(geoUri),
-                        geoUri = geoUri,
-                        description = null,
-                        zoomLevel = MapDefaults.DEFAULT_ZOOM.toInt(),
-                        assetType = AssetType.SENDER,
-                        inReplyToEventId = inReplyToEventId,
-                    )
-                }
-                analyticsService.capture(
-                    Composer(
-                        inThread = messageComposerContext.composerMode.inThread,
-                        isEditing = messageComposerContext.composerMode.isEditing,
-                        isReply = messageComposerContext.composerMode.isReply,
-                        messageType = Composer.MessageType.LocationUser,
-                    )
-                )
-            }
+        val geoUri = event.location.toGeoUri()
+        getTimeline().flatMap {
+            it.sendLocation(
+                body = generateBody(geoUri),
+                geoUri = geoUri,
+                description = null,
+                zoomLevel = MapDefaults.DEFAULT_ZOOM.toInt(),
+                assetType = if (event.isPinned) AssetType.PIN else AssetType.SENDER,
+                inReplyToEventId = inReplyToEventId,
+            )
         }
+        analyticsService.capture(
+            Composer(
+                inThread = messageComposerContext.composerMode.inThread,
+                isEditing = messageComposerContext.composerMode.isEditing,
+                isReply = messageComposerContext.composerMode.isReply,
+                messageType = if (event.isPinned) Composer.MessageType.LocationPin else Composer.MessageType.LocationUser
+            )
+        )
     }
 
     private suspend fun getTimeline(): Result<Timeline> {
@@ -184,9 +148,5 @@ class ShareLocationPresenter(
         }
     }
 }
-
-private fun ShareLocationEvent.ShareStaticLocation.toGeoUri(): String = location?.toGeoUri() ?: cameraPosition.toGeoUri()
-
-private fun ShareLocationEvent.ShareStaticLocation.CameraPosition.toGeoUri(): String = "geo:$lat,$lon"
 
 private fun generateBody(uri: String): String = "Location was shared at $uri"

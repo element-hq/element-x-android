@@ -13,21 +13,15 @@ import kotlin.time.Duration
 
 sealed interface ShareLocationEvent {
     data class ShareStaticLocation(
-        val cameraPosition: CameraPosition,
-        val location: Location?,
-    ) : ShareLocationEvent {
-        data class CameraPosition(
-            val lat: Double,
-            val lon: Double,
-            val zoom: Double,
-        )
-    }
+        val location: Location,
+        val isPinned: Boolean,
+    ) : ShareLocationEvent
 
-    data object SelectLiveLocationDuration : ShareLocationEvent
+    data object ShowLiveLocationDurationPicker : ShareLocationEvent
     data class StartLiveLocationShare(val duration: Duration) : ShareLocationEvent
 
-    data object SwitchToMyLocationMode : ShareLocationEvent
-    data object SwitchToPinLocationMode : ShareLocationEvent
+    data object StartTrackingUserPosition : ShareLocationEvent
+    data object StopTrackingUserPosition : ShareLocationEvent
     data object DismissDialog : ShareLocationEvent
     data object RequestPermissions : ShareLocationEvent
     data object OpenAppSettings : ShareLocationEvent
