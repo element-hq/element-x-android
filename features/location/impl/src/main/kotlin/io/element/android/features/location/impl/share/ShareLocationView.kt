@@ -229,7 +229,7 @@ private fun ShareCurrentLocationItem(
         headlineContent = {
             Text(stringResource(CommonStrings.screen_share_my_location_action))
         },
-        modifier = Modifier.clickable(onClick = onClick),
+        onClick = onClick,
         leadingContent = ListItemContent.Icon(
             iconSource = IconSource.Vector(CompoundIcons.LocationNavigatorCentred())
         )
@@ -244,7 +244,7 @@ private fun SharePinLocationItem(
         headlineContent = {
             Text(stringResource(CommonStrings.screen_share_this_location_action))
         },
-        modifier = Modifier.clickable(onClick = onClick),
+        onClick = onClick,
         leadingContent = ListItemContent.Icon(
             iconSource = IconSource.Vector(CompoundIcons.LocationNavigator())
         )
@@ -259,9 +259,7 @@ private fun ShareLiveLocationItem(
         headlineContent = {
             Text("Share live location")
         },
-        modifier = Modifier.clickable(
-            onClick = onClick
-        ),
+        onClick = onClick,
         leadingContent = ListItemContent.Icon(
             iconSource = IconSource.Vector(CompoundIcons.LocationPinSolid()),
             tintColor = ElementTheme.colors.iconAccentPrimary,
