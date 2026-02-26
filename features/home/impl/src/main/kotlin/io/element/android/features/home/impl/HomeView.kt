@@ -21,19 +21,22 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.FabPosition
+import androidx.compose.material3.FloatingToolbarDefaults.ScreenOffset
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
@@ -58,15 +61,15 @@ import io.element.android.libraries.androidutils.throttler.FirstThrottler
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
+import io.element.android.libraries.designsystem.theme.components.HorizontalFloatingToolbar
+import io.element.android.libraries.designsystem.theme.components.HorizontalFloatingToolbarItem
+import io.element.android.libraries.designsystem.theme.components.HorizontalFloatingToolbarSeparator
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.NavigationBar
-import io.element.android.libraries.designsystem.theme.components.NavigationBarIcon
-import io.element.android.libraries.designsystem.theme.components.NavigationBarItem
-import io.element.android.libraries.designsystem.theme.components.NavigationBarText
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
 
 @Composable
@@ -185,12 +188,10 @@ private fun HomeScaffold(
                 onAccountSwitch = {
                     state.eventSink(HomeEvent.SwitchToAccount(it))
                 },
-                onCreateSpace = onCreateSpaceClick,
                 scrollBehavior = scrollBehavior,
                 displayFilters = state.displayRoomListFilters,
                 filtersState = roomListState.filtersState,
                 spaceFiltersState = roomListState.spaceFiltersState,
-                canCreateSpaces = state.homeSpacesState.canCreateSpaces,
                 canReportBug = state.canReportBug,
                 modifier = Modifier.hazeEffect(
                     state = hazeState,
@@ -198,7 +199,7 @@ private fun HomeScaffold(
                 )
             )
         },
-        bottomBar = {
+        floatingActionButton = {
             if (state.showNavigationBar) {
                 val coroutineScope = rememberCoroutineScope()
                 HomeBottomBar(
@@ -222,14 +223,29 @@ private fun HomeScaffold(
                             state.eventSink(HomeEvent.SelectHomeNavigationBarItem(item))
                         }
                     },
-                    modifier = Modifier.hazeEffect(
-                        state = hazeState,
-                        style = HazeMaterials.thick(),
-                    )
+                    floatingActionButton = when (state.currentHomeNavigationBarItem) {
+                        HomeNavigationBarItem.Chats -> {
+                            {
+                                HomeFloatingActionButton(onStartChatClick, CommonStrings.action_create_room)
+                            }
+                        }
+                        HomeNavigationBarItem.Spaces -> if (state.homeSpacesState.canCreateSpaces) {
+                            {
+                                HomeFloatingActionButton(onCreateSpaceClick, CommonStrings.action_create_space)
+                            }
+                        } else {
+                            // No FAB for spaces if we cannot create spaces
+                            null
+                        }
+                    },
                 )
             }
         },
+        floatingActionButtonPosition = FabPosition.Center,
         content = { padding ->
+            val contentPadding = PaddingValues(
+                bottom = 112.dp,
+            )
             when (state.currentHomeNavigationBarItem) {
                 HomeNavigationBarItem.Chats -> {
                     RoomListContentView(
@@ -243,15 +259,7 @@ private fun HomeScaffold(
                         onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
                         onRoomClick = ::onRoomClick,
                         onCreateRoomClick = onStartChatClick,
-                        contentPadding = PaddingValues(
-                            // FAB height is 56dp, bottom padding is 16dp, we add 8dp as extra margin -> 56+16+8 = 80,
-                            // and include provided bottom padding
-                            // Disable contentPadding due to navigation issue using the keyboard
-                            // See https://issuetracker.google.com/issues/436432313
-                            bottom = 80.dp,
-                            // bottom = 80.dp + padding.calculateBottomPadding(),
-                            // top = padding.calculateTopPadding()
-                        ),
+                        contentPadding = contentPadding,
                         modifier = Modifier
                             .padding(
                                 PaddingValues(
@@ -274,6 +282,7 @@ private fun HomeScaffold(
                             .padding(padding)
                             .consumeWindowInsets(padding)
                             .hazeSource(state = hazeState),
+                        contentPadding = contentPadding,
                         state = state.homeSpacesState,
                         lazyListState = spacesLazyListState,
                         onSpaceClick = { spaceId ->
@@ -286,49 +295,48 @@ private fun HomeScaffold(
                 }
             }
         },
-        floatingActionButton = {
-            if (state.displayActions) {
-                FloatingActionButton(
-                    onClick = onStartChatClick,
-                ) {
-                    Icon(
-                        imageVector = CompoundIcons.Plus(),
-                        contentDescription = stringResource(id = R.string.screen_roomlist_a11y_create_message),
-                    )
-                }
-            }
-        },
         snackbarHost = { SnackbarHost(snackbarHostState) },
     )
 }
 
 @Composable
+private fun HomeFloatingActionButton(
+    onClick: () -> Unit,
+    contentDescription: Int,
+    modifier: Modifier = Modifier,
+) {
+    FloatingActionButton(onClick = onClick, modifier = modifier) {
+        Icon(
+            imageVector = CompoundIcons.Plus(),
+            contentDescription = stringResource(id = contentDescription),
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
+@Composable
 private fun HomeBottomBar(
     currentHomeNavigationBarItem: HomeNavigationBarItem,
     onItemClick: (HomeNavigationBarItem) -> Unit,
     modifier: Modifier = Modifier,
+    floatingActionButton: (@Composable () -> Unit)?,
 ) {
-    NavigationBar(
-        containerColor = Color.Transparent,
+    HorizontalFloatingToolbar(
+        floatingActionButton = floatingActionButton,
         modifier = modifier
+            .padding(bottom = ScreenOffset)
+            .zIndex(1f),
     ) {
-        HomeNavigationBarItem.entries.forEach { item ->
+        HomeNavigationBarItem.entries.forEachIndexed { index, item ->
+            if (index > 0) {
+                HorizontalFloatingToolbarSeparator()
+            }
             val isSelected = currentHomeNavigationBarItem == item
-            NavigationBarItem(
-                selected = isSelected,
-                onClick = {
-                    onItemClick(item)
-                },
-                icon = {
-                    NavigationBarIcon(
-                        imageVector = item.icon(isSelected),
-                    )
-                },
-                label = {
-                    NavigationBarText(
-                        text = stringResource(item.labelRes),
-                    )
-                }
+            HorizontalFloatingToolbarItem(
+                icon = item.icon(isSelected),
+                tooltipLabel = stringResource(item.labelRes),
+                isSelected = isSelected,
+                onClick = { onItemClick(item) },
             )
         }
     }
