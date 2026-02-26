@@ -31,8 +31,6 @@ import io.element.android.libraries.push.impl.notifications.NotifiableEventResol
 import io.element.android.libraries.push.impl.notifications.NotificationResultProcessor
 import io.element.android.libraries.push.impl.push.PushRequestStatus
 import io.element.android.libraries.push.impl.push.SyncOnNotifiableEvent
-import io.element.android.libraries.workmanager.api.WorkManagerRequestType
-import io.element.android.libraries.workmanager.api.WorkManagerScheduler
 import io.element.android.libraries.workmanager.api.di.MetroWorkerFactory
 import io.element.android.libraries.workmanager.api.di.WorkerKey
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
@@ -40,7 +38,6 @@ import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.api.finishLongRunningTransaction
 import io.element.android.services.analytics.api.recordTransaction
 import io.element.android.services.analyticsproviders.api.AnalyticsTransaction
-import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withTimeoutOrNull
 import timber.log.Timber
@@ -53,9 +50,7 @@ class FetchPendingNotificationsWorker(
     private val pushHistoryService: PushHistoryService,
     private val networkMonitor: NetworkMonitor,
     private val eventResolver: NotifiableEventResolver,
-    private val workManagerScheduler: WorkManagerScheduler,
     private val syncOnNotifiableEvent: SyncOnNotifiableEvent,
-    private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
     private val resultProcessor: NotificationResultProcessor,
     private val analyticsService: AnalyticsService,
 ) : CoroutineWorker(context, params) {
@@ -69,25 +64,9 @@ class FetchPendingNotificationsWorker(
             return Result.success()
         }
 
+        checkNetworkConnection(requests)?.let { failure -> return failure }
+
         Timber.d("Fetching ${requests.size} push requests")
-
-        val networkTimeoutSpans = requests.mapNotNull { request ->
-            val parent = analyticsService.getLongRunningTransaction(AnalyticsLongRunningTransaction.PushToWorkManager(request.eventId))
-            parent?.startChild("Waiting for network connectivity", "await_network")
-        }
-
-        // Wait for network to be available, but not more than 10 seconds
-        val hasNetwork = withTimeoutOrNull(10.seconds) {
-            networkMonitor.connectivity.first { it == NetworkStatus.Connected }
-        } != null
-
-        networkTimeoutSpans.finish()
-
-        // If there is a problem with the updated network values, report it and retry if needed
-        if (reportConnectivityError(requests = requests, hasNetwork = hasNetwork, isNetworkBlocked = networkMonitor.isNetworkBlocked())) {
-            // TODO increase attempt count
-            return Result.retry()
-        }
 
         val pendingAnalyticTransactions = requests.mapNotNull { request ->
             analyticsService.finishLongRunningTransaction(AnalyticsLongRunningTransaction.PushToWorkManager(request.eventId))
@@ -95,8 +74,6 @@ class FetchPendingNotificationsWorker(
             val transactionName = "WorkManager to event fetched"
             parent?.startChild(transactionName)?.let { request.eventId to it }
         }.toMap()
-
-        var failedSyncForSession: Throwable? = null
 
         Timber.d("Processing notification requests for session $sessionId")
         val results = eventResolver.resolveEvents(sessionId, requests)
@@ -111,45 +88,10 @@ class FetchPendingNotificationsWorker(
                     results
                 },
                 onFailure = {
-                    for ((_, transaction) in pendingAnalyticTransactions) {
-                        transaction.attachError(it)
-                        transaction.finish()
-                    }
-                    failedSyncForSession = it
-                    Timber.e(it, "Failed to resolve notification events for session $sessionId")
-
-                    emptyMap()
+                    // This is a failure at the fetch notification setup, not a failure for a single fetch notification operation
+                    return handleSetupError(sessionId, requests, pendingAnalyticTransactions, it)
                 }
             )
-
-        // If there were failures for whole sessions, we retry all their requests
-        failedSyncForSession?.let { exception ->
-            @Suppress("LoopWithTooManyJumpStatements")
-            if (exception.cause is SessionRestorationException) {
-                Timber.e(exception, "Session $sessionId could not be restored, not retrying notification fetching")
-            }
-            for (request in requests) {
-                val failedTransaction = pendingAnalyticTransactions[request.eventId]
-                failedTransaction?.attachError(exception)
-                failedTransaction?.finish()
-
-                val eventId = request.eventId
-                val parent = analyticsService.getLongRunningTransaction(AnalyticsLongRunningTransaction.PushToNotification(eventId))
-                // Since we're retrying, start a new transaction
-                analyticsService.startLongRunningTransaction(AnalyticsLongRunningTransaction.PushToWorkManager(eventId), parent)
-            }
-
-            Timber.d("Re-scheduling ${requests.size} failed notification requests for session $sessionId")
-            // TODO: update attempts
-            if (!workManagerScheduler.hasPendingWork(sessionId, WorkManagerRequestType.NOTIFICATION_SYNC)) {
-                workManagerScheduler.submit(
-                    SyncPendingNotificationsWorkManagerRequestBuilder(
-                        sessionId = sessionId,
-                        buildVersionSdkIntProvider = buildVersionSdkIntProvider,
-                    )
-                )
-            }
-        }
 
         val updatedRequests = mutableListOf<PushRequest>()
         for (request in requests) {
@@ -158,6 +100,7 @@ class FetchPendingNotificationsWorker(
                 onSuccess = { updatedRequests.add(request.copy(status = PushRequestStatus.SUCCESS.value)) },
                 onFailure = { exception ->
                     if (exception is ClientException && exception.isNetworkError()) {
+                        // Reset to pending so we can retry it later
                         updatedRequests.add(request.copy(status = PushRequestStatus.PENDING.value))
                     } else {
                         updatedRequests.add(request.copy(status = PushRequestStatus.FAILED_UNRECOVERABLE.value))
@@ -174,7 +117,7 @@ class FetchPendingNotificationsWorker(
             performOpportunisticSyncIfNeeded(mapOf(sessionId to requests))
         }
 
-        return Result.success()
+        return if (updatedRequests.any { it.status == PushRequestStatus.PENDING.value }) Result.retry() else Result.success()
     }
 
     private suspend fun performOpportunisticSyncIfNeeded(
@@ -187,6 +130,30 @@ class FetchPendingNotificationsWorker(
                 Timber.e(it, "Failed to sync on notifiable events for session $sessionId")
             }
         }
+    }
+
+    private suspend fun checkNetworkConnection(requests: List<PushRequest>): Result? {
+        val networkTimeoutSpans = requests.mapNotNull { request ->
+            val parent = analyticsService.getLongRunningTransaction(AnalyticsLongRunningTransaction.PushToWorkManager(request.eventId))
+            parent?.startChild("Waiting for network connectivity", "await_network")
+        }
+
+        // Wait for network to be available, but not more than 10 seconds
+        val hasNetwork = withTimeoutOrNull(10.seconds) {
+            networkMonitor.connectivity.first { it == NetworkStatus.Connected }
+        } != null
+
+        networkTimeoutSpans.finish()
+
+        // If there is a problem with the updated network values, report it and retry if needed
+        if (reportConnectivityError(requests = requests, hasNetwork = hasNetwork, isNetworkBlocked = networkMonitor.isNetworkBlocked())) {
+            pushHistoryService.replacePushRequests(requests.map { request ->
+                request.copy(retries = request.retries + 1)
+            })
+            return Result.retry()
+        }
+
+        return null
     }
 
     private fun reportConnectivityError(requests: List<PushRequest>, hasNetwork: Boolean, isNetworkBlocked: Boolean): Boolean {
@@ -206,6 +173,47 @@ class FetchPendingNotificationsWorker(
         } else {
             false
         }
+    }
+
+    private suspend fun handleSetupError(
+        sessionId: SessionId,
+        requests: List<PushRequest>,
+        pendingAnalyticTransactions: Map<String, AnalyticsTransaction>,
+        throwable: Throwable,
+    ): Result {
+        for ((_, transaction) in pendingAnalyticTransactions) {
+            transaction.attachError(throwable)
+            transaction.finish()
+        }
+
+        // If there were failures on the setup step and they weren't recoverable, update the requests and fail
+        if (throwable.cause is SessionRestorationException) {
+            Timber.e(throwable, "Session $sessionId could not be restored, not retrying notification fetching")
+            pushHistoryService.replacePushRequests(requests.map { request ->
+                request.copy(status = PushRequestStatus.FAILED_UNRECOVERABLE.value)
+            })
+            return Result.failure()
+        }
+
+        // If the failure is recoverable, retry
+        for (request in requests) {
+            val failedTransaction = pendingAnalyticTransactions[request.eventId]
+            failedTransaction?.attachError(throwable)
+            failedTransaction?.finish()
+
+            val eventId = request.eventId
+            val parent = analyticsService.getLongRunningTransaction(AnalyticsLongRunningTransaction.PushToNotification(eventId))
+            // Since we're retrying, start a new transaction
+            analyticsService.startLongRunningTransaction(AnalyticsLongRunningTransaction.PushToWorkManager(eventId), parent)
+        }
+
+        Timber.d("Re-scheduling ${requests.size} failed notification requests for session $sessionId")
+
+        pushHistoryService.replacePushRequests(requests.map { request ->
+            request.copy(retries = request.retries + 1)
+        })
+
+        return Result.retry()
     }
 
     @ContributesIntoMap(AppScope::class, binding = binding<MetroWorkerFactory.WorkerInstanceFactory<*>>())
