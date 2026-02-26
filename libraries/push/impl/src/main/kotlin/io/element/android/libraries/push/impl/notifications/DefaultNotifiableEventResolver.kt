@@ -50,8 +50,8 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageTy
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.ui.messages.toPlainText
-import io.element.android.libraries.push.api.push.NotificationEventRequest
 import io.element.android.libraries.push.impl.R
+import io.element.android.libraries.push.impl.db.PushRequest
 import io.element.android.libraries.push.impl.notifications.model.InviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEvent
@@ -64,10 +64,10 @@ private val loggerTag = LoggerTag("DefaultNotifiableEventResolver", LoggerTag.No
 /**
  * Result of resolving a batch of push events.
  * The outermost [Result] indicates whether the setup to resolve the events was successful.
- * The results for each push notification will be a map of [NotificationEventRequest] to [Result] of [ResolvedPushEvent].
+ * The results for each push notification will be a map of [PushRequest] to [Result] of [ResolvedPushEvent].
  * If the resolution of a specific event fails, the innermost [Result] will contain an exception.
  */
-typealias ResolvePushEventsResult = Result<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>
+typealias ResolvePushEventsResult = Result<Map<PushRequest, Result<ResolvedPushEvent>>>
 
 /**
  * The notifiable event resolver is able to create a NotifiableEvent (view model for notifications) from an sdk Event.
@@ -78,7 +78,7 @@ typealias ResolvePushEventsResult = Result<Map<NotificationEventRequest, Result<
 interface NotifiableEventResolver {
     suspend fun resolveEvents(
         sessionId: SessionId,
-        notificationEventRequests: List<NotificationEventRequest>
+        notificationEventRequests: List<PushRequest>
     ): ResolvePushEventsResult
 }
 
@@ -96,15 +96,15 @@ class DefaultNotifiableEventResolver(
 ) : NotifiableEventResolver {
     override suspend fun resolveEvents(
         sessionId: SessionId,
-        notificationEventRequests: List<NotificationEventRequest>
+        notificationEventRequests: List<PushRequest>
     ): ResolvePushEventsResult {
         Timber.d("Queueing notifications: $notificationEventRequests")
         val client = matrixClientProvider.getOrRestore(sessionId).getOrElse {
             return Result.failure(it)
         }
-        val ids = notificationEventRequests.groupBy { it.roomId }
+        val ids = notificationEventRequests.groupBy { RoomId(it.roomId) }
             .mapValues { (_, requests) ->
-                requests.map { it.eventId }
+                requests.map { EventId(it.eventId) }
             }
 
         // TODO this notificationData is not always valid at the moment, sometimes the Rust SDK can't fetch the matching event
@@ -125,7 +125,7 @@ class DefaultNotifiableEventResolver(
 
         return Result.success(
             notificationEventRequests.associate { request ->
-                val notificationDataResult = notificationDataMap[request.eventId]
+                val notificationDataResult = notificationDataMap[EventId(request.eventId)]
                 if (notificationDataResult == null) {
                     request to Result.failure(NotificationResolverException.UnknownError("No notification data for ${request.roomId} - ${request.eventId}"))
                 } else {

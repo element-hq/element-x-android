@@ -15,9 +15,11 @@ import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.exception.NotificationResolverException
-import io.element.android.libraries.push.api.push.NotificationEventRequest
-import io.element.android.libraries.push.api.push.SyncOnNotifiableEvent
+import io.element.android.libraries.push.impl.db.PushRequest
 import io.element.android.libraries.push.impl.history.PushHistoryService
 import io.element.android.libraries.push.impl.history.onSuccess
 import io.element.android.libraries.push.impl.history.onUnableToResolveEvent
@@ -29,6 +31,7 @@ import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEv
 import io.element.android.libraries.push.impl.push.MutableBatteryOptimizationStore
 import io.element.android.libraries.push.impl.push.OnNotifiableEventReceived
 import io.element.android.libraries.push.impl.push.OnRedactedEventReceived
+import io.element.android.libraries.push.impl.push.SyncOnNotifiableEvent
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -56,10 +59,10 @@ class NotificationResultProcessor(
     private val notificationChannels: NotificationChannels,
     @AppCoroutineScope private val coroutineScope: CoroutineScope,
 ) {
-    private val resultFlow = MutableSharedFlow<Map<NotificationEventRequest, Result<ResolvedPushEvent>>>(extraBufferCapacity = Int.MAX_VALUE)
+    private val resultFlow = MutableSharedFlow<Map<PushRequest, Result<ResolvedPushEvent>>>(extraBufferCapacity = Int.MAX_VALUE)
     private var processJob: Job? = null
 
-    suspend fun emit(results: Map<NotificationEventRequest, Result<ResolvedPushEvent>>) {
+    suspend fun emit(results: Map<PushRequest, Result<ResolvedPushEvent>>) {
         resultFlow.emit(results)
     }
 
@@ -83,7 +86,7 @@ class NotificationResultProcessor(
         processJob = null
     }
 
-    private suspend fun processResults(results: Map<NotificationEventRequest, Result<ResolvedPushEvent>>) {
+    private suspend fun processResults(results: Map<PushRequest, Result<ResolvedPushEvent>>) {
         // TODO what happens with items that weren't reported back?
         for ((request, result) in results) {
             result.fold(
@@ -91,17 +94,17 @@ class NotificationResultProcessor(
                     if (it is ResolvedPushEvent.Event && it.notifiableEvent is FallbackNotifiableEvent) {
                         pushHistoryService.onUnableToResolveEvent(
                             providerInfo = request.providerInfo,
-                            eventId = request.eventId,
-                            roomId = request.roomId,
-                            sessionId = request.sessionId,
+                            eventId = EventId(request.eventId),
+                            roomId = RoomId(request.roomId),
+                            sessionId = SessionId(request.sessionId),
                             reason = it.notifiableEvent.cause.orEmpty(),
                         )
                     } else {
                         pushHistoryService.onSuccess(
                             providerInfo = request.providerInfo,
-                            eventId = request.eventId,
-                            roomId = request.roomId,
-                            sessionId = request.sessionId,
+                            eventId = EventId(request.eventId),
+                            roomId = RoomId(request.roomId),
+                            sessionId = SessionId(request.sessionId),
                             comment = "Push handled successfully",
                         )
                     }
@@ -110,9 +113,9 @@ class NotificationResultProcessor(
                     if (exception is NotificationResolverException.EventFilteredOut) {
                         pushHistoryService.onSuccess(
                             providerInfo = request.providerInfo,
-                            eventId = request.eventId,
-                            roomId = request.roomId,
-                            sessionId = request.sessionId,
+                            eventId = EventId(request.eventId),
+                            roomId = RoomId(request.roomId),
+                            sessionId = SessionId(request.sessionId),
                             comment = "Push handled successfully but notification was filtered out",
                         )
                     } else {
@@ -122,9 +125,9 @@ class NotificationResultProcessor(
                         }
                         pushHistoryService.onUnableToResolveEvent(
                             providerInfo = request.providerInfo,
-                            eventId = request.eventId,
-                            roomId = request.roomId,
-                            sessionId = request.sessionId,
+                            eventId = EventId(request.eventId),
+                            roomId = RoomId(request.roomId),
+                            sessionId = SessionId(request.sessionId),
                             reason = "$reason - Showing fallback notification",
                         )
                         batteryOptimizationStore.showBatteryOptimizationBanner()
@@ -149,9 +152,9 @@ class NotificationResultProcessor(
                         Timber.tag(TAG).e(exception, "Failed to resolve push event")
                         ResolvedPushEvent.Event(
                             fallbackNotificationFactory.create(
-                                sessionId = request.sessionId,
-                                roomId = request.roomId,
-                                eventId = request.eventId,
+                                sessionId = SessionId(request.sessionId),
+                                roomId = RoomId(request.roomId),
+                                eventId = EventId(request.eventId),
                                 cause = exception.message,
                             )
                         )

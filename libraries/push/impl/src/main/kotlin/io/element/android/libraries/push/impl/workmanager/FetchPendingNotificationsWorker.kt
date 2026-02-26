@@ -22,18 +22,15 @@ import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.auth.SessionRestorationException
-import io.element.android.libraries.matrix.api.core.EventId
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.matrix.api.exception.isNetworkError
-import io.element.android.libraries.push.api.push.NotificationEventRequest
-import io.element.android.libraries.push.api.push.SyncOnNotifiableEvent
 import io.element.android.libraries.push.impl.db.PushRequest
 import io.element.android.libraries.push.impl.history.PushHistoryService
 import io.element.android.libraries.push.impl.notifications.NotifiableEventResolver
 import io.element.android.libraries.push.impl.notifications.NotificationResultProcessor
 import io.element.android.libraries.push.impl.push.PushRequestStatus
+import io.element.android.libraries.push.impl.push.SyncOnNotifiableEvent
 import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.WorkManagerScheduler
 import io.element.android.libraries.workmanager.api.di.MetroWorkerFactory
@@ -86,10 +83,8 @@ class FetchPendingNotificationsWorker(
 
         networkTimeoutSpans.finish()
 
-        val mappedRequests = requests.map { it.map() }
-
         // If there is a problem with the updated network values, report it and retry if needed
-        if (reportConnectivityError(requests = mappedRequests, hasNetwork = hasNetwork, isNetworkBlocked = networkMonitor.isNetworkBlocked())) {
+        if (reportConnectivityError(requests = requests, hasNetwork = hasNetwork, isNetworkBlocked = networkMonitor.isNetworkBlocked())) {
             // TODO increase attempt count
             return Result.retry()
         }
@@ -104,7 +99,7 @@ class FetchPendingNotificationsWorker(
         var failedSyncForSession: Throwable? = null
 
         Timber.d("Processing notification requests for session $sessionId")
-        val results = eventResolver.resolveEvents(sessionId, mappedRequests)
+        val results = eventResolver.resolveEvents(sessionId, requests)
             .fold(
                 onSuccess = { results ->
                     for ((_, transaction) in pendingAnalyticTransactions) {
@@ -157,15 +152,15 @@ class FetchPendingNotificationsWorker(
         }
 
         val updatedRequests = mutableListOf<PushRequest>()
-        for (request in mappedRequests) {
+        for (request in requests) {
             val result = results[request] ?: continue
             result.fold(
-                onSuccess = { updatedRequests.add(request.toPushRequest(PushRequestStatus.SUCCESS)) },
+                onSuccess = { updatedRequests.add(request.copy(status = PushRequestStatus.SUCCESS.value)) },
                 onFailure = { exception ->
                     if (exception is ClientException && exception.isNetworkError()) {
-                        updatedRequests.add(request.toPushRequest(PushRequestStatus.PENDING))
+                        updatedRequests.add(request.copy(status = PushRequestStatus.PENDING.value))
                     } else {
-                        updatedRequests.add(request.toPushRequest(PushRequestStatus.FAILED_UNRECOVERABLE))
+                        updatedRequests.add(request.copy(status = PushRequestStatus.FAILED_UNRECOVERABLE.value))
                     }
                 }
             )
@@ -176,14 +171,14 @@ class FetchPendingNotificationsWorker(
         pushHistoryService.replacePushRequests(updatedRequests)
 
         analyticsService.recordTransaction("Opportunistic sync", "opportunistic_sync") {
-            performOpportunisticSyncIfNeeded(mapOf(sessionId to mappedRequests))
+            performOpportunisticSyncIfNeeded(mapOf(sessionId to requests))
         }
 
         return Result.success()
     }
 
     private suspend fun performOpportunisticSyncIfNeeded(
-        groupedRequests: Map<SessionId, List<NotificationEventRequest>>,
+        groupedRequests: Map<SessionId, List<PushRequest>>,
     ) {
         for ((sessionId, notificationRequests) in groupedRequests) {
             runCatchingExceptions {
@@ -194,10 +189,10 @@ class FetchPendingNotificationsWorker(
         }
     }
 
-    private fun reportConnectivityError(requests: List<NotificationEventRequest>, hasNetwork: Boolean, isNetworkBlocked: Boolean): Boolean {
+    private fun reportConnectivityError(requests: List<PushRequest>, hasNetwork: Boolean, isNetworkBlocked: Boolean): Boolean {
         return if (!hasNetwork || isNetworkBlocked) {
             for (request in requests) {
-                val eventId = request.eventId.value
+                val eventId = request.eventId
                 analyticsService.finishLongRunningTransaction(AnalyticsLongRunningTransaction.PushToWorkManager(eventId)) {
                     it.putExtraData("has_network_connection", hasNetwork.toString())
                     it.putExtraData("is_network_blocked", isNetworkBlocked.toString())
@@ -218,24 +213,5 @@ class FetchPendingNotificationsWorker(
     @AssistedFactory
     interface Factory : MetroWorkerFactory.WorkerInstanceFactory<FetchPendingNotificationsWorker>
 }
-
-private fun PushRequest.map(): NotificationEventRequest = NotificationEventRequest(
-    sessionId = SessionId(sessionId),
-    roomId = RoomId(roomId),
-    eventId = EventId(eventId),
-    providerInfo = providerInfo,
-)
-
-private fun NotificationEventRequest.toPushRequest(result: PushRequestStatus) = PushRequest(
-    // TODO replace NotificationEventRequest with PushRequest
-    pushDate = System.currentTimeMillis(),
-    providerInfo = providerInfo,
-    eventId = eventId.value,
-    roomId = roomId.value,
-    sessionId = sessionId.value,
-    status = result.value,
-    // TODO replace NotificationEventRequest with PushRequest and increment
-    retries = 0,
-)
 
 private fun <T : AnalyticsTransaction> Collection<T>.finish() = forEach { it.finish() }
