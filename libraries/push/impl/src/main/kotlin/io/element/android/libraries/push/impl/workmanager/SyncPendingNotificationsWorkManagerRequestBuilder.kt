@@ -26,7 +26,7 @@ class SyncPendingNotificationsWorkManagerRequestBuilder(
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
 ) : WorkManagerRequestBuilder {
     override suspend fun build(): Result<WorkManagerRequestWrapper> {
-        val type = WorkManagerWorkerType.Unique("sync_notifications", ExistingWorkPolicy.APPEND_OR_REPLACE)
+        val type = WorkManagerWorkerType.Unique("sync_notifications:$sessionId", ExistingWorkPolicy.APPEND_OR_REPLACE)
         val requests = listOf(
             OneTimeWorkRequestBuilder<FetchPendingNotificationsWorker>()
                 .setInputData(workDataOf("session_id" to sessionId.value))
