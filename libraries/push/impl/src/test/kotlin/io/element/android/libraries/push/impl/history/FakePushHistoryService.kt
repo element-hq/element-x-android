@@ -11,6 +11,7 @@ package io.element.android.libraries.push.impl.history
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.push.impl.db.PushRequest
 import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakePushHistoryService(
@@ -22,7 +23,10 @@ class FakePushHistoryService(
         Boolean,
         Boolean,
         String?
-    ) -> Unit = { _, _, _, _, _, _, _ -> lambdaError() }
+    ) -> Unit = { _, _, _, _, _, _, _ -> lambdaError() },
+    private val enqueuePushRequest: (PushRequest) -> Result<Unit> = { lambdaError() },
+    private val replacePushRequests: (List<PushRequest>) -> Result<Unit> = { lambdaError() },
+    private val getPendingPushRequests: (SessionId) -> Result<List<PushRequest>> = { lambdaError() },
 ) : PushHistoryService {
     override fun onPushResult(
         providerInfo: String,
@@ -42,5 +46,17 @@ class FakePushHistoryService(
             includeDeviceState,
             comment
         )
+    }
+
+    override suspend fun enqueuePushRequest(pushRequest: PushRequest): Result<Unit> {
+        return enqueuePushRequest.invoke(pushRequest)
+    }
+
+    override suspend fun replacePushRequests(pushRequests: List<PushRequest>): Result<Unit> {
+        return replacePushRequests.invoke(pushRequests)
+    }
+
+    override suspend fun getPendingPushRequests(sessionId: SessionId): Result<List<PushRequest>> {
+        return getPendingPushRequests.invoke(sessionId)
     }
 }

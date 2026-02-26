@@ -8,6 +8,7 @@
 package io.element.android.libraries.push.impl.notifications
 
 import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.features.call.api.CallType
@@ -44,9 +45,15 @@ import timber.log.Timber
 
 private const val TAG = "NotifResultProcessor"
 
-@Inject
+interface NotificationResultProcessor {
+    suspend fun emit(results: Map<PushRequest, Result<ResolvedPushEvent>>)
+    fun start()
+    fun stop()
+}
+
+@ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
-class NotificationResultProcessor(
+class DefaultNotificationResultProcessor(
     private val pushHistoryService: PushHistoryService,
     private val batteryOptimizationStore: MutableBatteryOptimizationStore,
     private val fallbackNotificationFactory: FallbackNotificationFactory,
@@ -58,15 +65,15 @@ class NotificationResultProcessor(
     private val elementCallEntryPoint: ElementCallEntryPoint,
     private val notificationChannels: NotificationChannels,
     @AppCoroutineScope private val coroutineScope: CoroutineScope,
-) {
+) : NotificationResultProcessor {
     private val resultFlow = MutableSharedFlow<Map<PushRequest, Result<ResolvedPushEvent>>>(extraBufferCapacity = Int.MAX_VALUE)
     private var processJob: Job? = null
 
-    suspend fun emit(results: Map<PushRequest, Result<ResolvedPushEvent>>) {
+    override suspend fun emit(results: Map<PushRequest, Result<ResolvedPushEvent>>) {
         resultFlow.emit(results)
     }
 
-    fun start() {
+    override fun start() {
         if (processJob?.isActive == true) {
             Timber.tag(TAG).w("Is already processing, not starting again")
             return
@@ -76,7 +83,7 @@ class NotificationResultProcessor(
             .launchIn(coroutineScope)
     }
 
-    fun stop() {
+    override fun stop() {
         if (processJob?.isActive != true) {
             Timber.tag(TAG).w("Is not processing, not stopping")
             return

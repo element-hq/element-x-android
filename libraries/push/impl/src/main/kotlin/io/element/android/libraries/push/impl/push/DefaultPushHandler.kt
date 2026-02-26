@@ -13,8 +13,6 @@ import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.push.impl.db.PushRequest
 import io.element.android.libraries.push.impl.history.PushHistoryService
 import io.element.android.libraries.push.impl.history.onDiagnosticPush
@@ -26,6 +24,7 @@ import io.element.android.libraries.push.impl.troubleshoot.DiagnosticPushHandler
 import io.element.android.libraries.push.impl.workmanager.SyncPendingNotificationsWorkManagerRequestBuilder
 import io.element.android.libraries.pushproviders.api.PushData
 import io.element.android.libraries.pushproviders.api.PushHandler
+import io.element.android.libraries.pushstore.api.UserPushStore
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.WorkManagerScheduler
@@ -33,6 +32,7 @@ import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
+import kotlinx.coroutines.flow.first
 import timber.log.Timber
 
 private val loggerTag = LoggerTag("PushHandler", LoggerTag.PushLoggerTag)
@@ -45,7 +45,7 @@ class DefaultPushHandler(
     private val buildMeta: BuildMeta,
     private val diagnosticPushHandler: DiagnosticPushHandler,
     private val pushHistoryService: PushHistoryService,
-    private val featureFlagService: FeatureFlagService,
+    private val userPushStore: UserPushStore,
     private val analyticsService: AnalyticsService,
     private val systemClock: SystemClock,
     private val workManagerScheduler: WorkManagerScheduler,
@@ -63,12 +63,15 @@ class DefaultPushHandler(
      * @param providerInfo the provider info.
      */
     override suspend fun handle(pushData: PushData, providerInfo: String) {
+        val areNotificationsEnabled = userPushStore.getNotificationEnabledForDevice().first()
+        if (!areNotificationsEnabled) {
+            Timber.w("Push notification received when push notifications are disabled.")
+            return
+        }
         // Start measuring how long it takes to display a notification from when the push is received
         Timber.d("Calculating push-to-notification for event ${pushData.eventId}")
         val parent = analyticsService.startLongRunningTransaction(AnalyticsLongRunningTransaction.PushToNotification(pushData.eventId.value))
-        if (featureFlagService.isFeatureEnabled(FeatureFlags.SyncNotificationsWithWorkManager)) {
-            analyticsService.startLongRunningTransaction(AnalyticsLongRunningTransaction.PushToWorkManager(pushData.eventId.value), parent)
-        }
+        analyticsService.startLongRunningTransaction(AnalyticsLongRunningTransaction.PushToWorkManager(pushData.eventId.value), parent)
 
         Timber.tag(loggerTag.value).d("## handling pushData: ${pushData.roomId}/${pushData.eventId}")
         if (buildMeta.lowPrivacyLoggingEnabled) {

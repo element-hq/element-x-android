@@ -19,7 +19,7 @@ class FakeWorkManagerScheduler(
     private val hasPendingWorkLambda: (SessionId, WorkManagerRequestType) -> Boolean = { _, _ -> false },
     private val cancelLambda: (SessionId) -> Unit = { lambdaError() },
 ) : WorkManagerScheduler {
-    override fun submit(workManagerRequestBuilder: WorkManagerRequestBuilder) {
+    override suspend fun submit(workManagerRequestBuilder: WorkManagerRequestBuilder) {
         submitLambda(workManagerRequestBuilder)
     }
 

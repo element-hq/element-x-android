@@ -26,7 +26,10 @@ class SyncPendingNotificationsWorkManagerRequestBuilder(
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
 ) : WorkManagerRequestBuilder {
     override suspend fun build(): Result<WorkManagerRequestWrapper> {
-        val type = WorkManagerWorkerType.Unique("sync_notifications:$sessionId", ExistingWorkPolicy.APPEND_OR_REPLACE)
+        val type = WorkManagerWorkerType.Unique(
+            name = workManagerTag(sessionId = sessionId, requestType = WorkManagerRequestType.NOTIFICATION_SYNC),
+            policy = ExistingWorkPolicy.APPEND_OR_REPLACE,
+        )
         val requests = listOf(
             OneTimeWorkRequestBuilder<FetchPendingNotificationsWorker>()
                 .setInputData(workDataOf("session_id" to sessionId.value))
@@ -38,7 +41,7 @@ class SyncPendingNotificationsWorkManagerRequestBuilder(
                         setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
                     }
                 }
-                .setTraceTag (workManagerTag(sessionId, WorkManagerRequestType.NOTIFICATION_SYNC))
+                .setTraceTag(workManagerTag(sessionId, WorkManagerRequestType.NOTIFICATION_SYNC))
                 // TODO investigate using this instead of the resolver queue
                 // .setInputMerger()
                 .build()
