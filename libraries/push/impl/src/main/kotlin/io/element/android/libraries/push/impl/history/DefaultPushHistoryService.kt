@@ -22,11 +22,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.impl.PushDatabase
 import io.element.android.libraries.push.impl.db.PushHistory
 import io.element.android.libraries.push.impl.db.PushRequest
-import io.element.android.libraries.push.impl.push.PushRequestStatus
 import io.element.android.services.toolbox.api.systemclock.SystemClock
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import java.util.concurrent.ConcurrentHashMap
 
 @ContributesBinding(AppScope::class)
 class DefaultPushHistoryService(
@@ -34,7 +30,6 @@ class DefaultPushHistoryService(
     private val systemClock: SystemClock,
     @ApplicationContext context: Context,
 ) : PushHistoryService {
-    private val fetchMutexes = ConcurrentHashMap<SessionId, Mutex>()
     private val powerManager = context.getSystemService<PowerManager>()
     private val packageName = context.packageName
 
@@ -54,15 +49,8 @@ class DefaultPushHistoryService(
 
     override suspend fun getPendingPushRequests(sessionId: SessionId): Result<List<PushRequest>> {
         return runCatchingExceptions {
-            val mutex = fetchMutexes.getOrPut(sessionId) { Mutex() }
-            mutex.withLock {
-                pushDatabase.transactionWithResult {
-                    val requests = pushDatabase.pushRequestQueries.selectAllPendingForSession(sessionId.value).executeAsList()
-                    for (request in requests) {
-                        pushDatabase.pushRequestQueries.insertPushRequest(request.copy(status = PushRequestStatus.PROCESSING.value))
-                    }
-                    requests
-                }
+            pushDatabase.transactionWithResult {
+                pushDatabase.pushRequestQueries.selectAllPendingForSession(sessionId.value).executeAsList()
             }
         }
     }

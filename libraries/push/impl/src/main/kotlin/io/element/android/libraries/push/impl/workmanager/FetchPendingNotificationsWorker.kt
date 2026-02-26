@@ -32,7 +32,7 @@ import io.element.android.libraries.push.api.push.SyncOnNotifiableEvent
 import io.element.android.libraries.push.impl.db.PushRequest
 import io.element.android.libraries.push.impl.history.PushHistoryService
 import io.element.android.libraries.push.impl.notifications.NotifiableEventResolver
-import io.element.android.libraries.push.impl.notifications.NotificationResolverQueue
+import io.element.android.libraries.push.impl.notifications.NotificationResultProcessor
 import io.element.android.libraries.push.impl.push.PushRequestStatus
 import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.WorkManagerScheduler
@@ -44,7 +44,6 @@ import io.element.android.services.analytics.api.finishLongRunningTransaction
 import io.element.android.services.analytics.api.recordTransaction
 import io.element.android.services.analyticsproviders.api.AnalyticsTransaction
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withTimeoutOrNull
 import timber.log.Timber
@@ -57,10 +56,10 @@ class FetchPendingNotificationsWorker(
     private val pushHistoryService: PushHistoryService,
     private val networkMonitor: NetworkMonitor,
     private val eventResolver: NotifiableEventResolver,
-    private val queue: NotificationResolverQueue,
     private val workManagerScheduler: WorkManagerScheduler,
     private val syncOnNotifiableEvent: SyncOnNotifiableEvent,
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
+    private val resultProcessor: NotificationResultProcessor,
     private val analyticsService: AnalyticsService,
 ) : CoroutineWorker(context, params) {
     override suspend fun doWork(): Result {
@@ -68,7 +67,10 @@ class FetchPendingNotificationsWorker(
         val sessionId = inputData.getString("session_id")?.let(::SessionId) ?: return Result.failure()
 
         val requests = pushHistoryService.getPendingPushRequests(sessionId).getOrNull() ?: return Result.failure()
-        if (requests.isEmpty()) return Result.success()
+        if (requests.isEmpty()) {
+            Timber.d("No pending notifications to fetch, returning early")
+            return Result.success()
+        }
 
         Timber.d("Fetching ${requests.size} push requests")
 
@@ -109,7 +111,7 @@ class FetchPendingNotificationsWorker(
                         transaction.finish()
                     }
                     // Update the resolved results in the queue
-                    (queue.results as MutableSharedFlow).emit(mappedRequests to results)
+                    resultProcessor.emit(results)
 
                     results
                 },
@@ -146,7 +148,7 @@ class FetchPendingNotificationsWorker(
             // TODO: update attempts
             if (!workManagerScheduler.hasPendingWork(sessionId, WorkManagerRequestType.NOTIFICATION_SYNC)) {
                 workManagerScheduler.submit(
-                    SyncPendingNotificationsWorkManagerRequest(
+                    SyncPendingNotificationsWorkManagerRequestBuilder(
                         sessionId = sessionId,
                         buildVersionSdkIntProvider = buildVersionSdkIntProvider,
                     )
@@ -154,18 +156,16 @@ class FetchPendingNotificationsWorker(
             }
         }
 
-        val recoverableFailures = mutableListOf<PushRequest>()
-        val unrecoverableFailures = mutableListOf<PushRequest>()
-        val successes = mutableListOf<PushRequest>()
+        val updatedRequests = mutableListOf<PushRequest>()
         for (request in mappedRequests) {
             val result = results[request] ?: continue
             result.fold(
-                onSuccess = { successes.add(request.toPushRequest(PushRequestStatus.SUCCESS)) },
+                onSuccess = { updatedRequests.add(request.toPushRequest(PushRequestStatus.SUCCESS)) },
                 onFailure = { exception ->
                     if (exception is ClientException && exception.isNetworkError()) {
-                        recoverableFailures.add(request.toPushRequest(PushRequestStatus.PENDING))
+                        updatedRequests.add(request.toPushRequest(PushRequestStatus.PENDING))
                     } else {
-                        unrecoverableFailures.add(request.toPushRequest(PushRequestStatus.FAILED_UNRECOVERABLE))
+                        updatedRequests.add(request.toPushRequest(PushRequestStatus.FAILED_UNRECOVERABLE))
                     }
                 }
             )
@@ -173,11 +173,7 @@ class FetchPendingNotificationsWorker(
 
         Timber.d("Notifications processed successfully")
 
-        pushHistoryService.run {
-            replacePushRequests(successes)
-            replacePushRequests(recoverableFailures)
-            replacePushRequests(unrecoverableFailures)
-        }
+        pushHistoryService.replacePushRequests(updatedRequests)
 
         analyticsService.recordTransaction("Opportunistic sync", "opportunistic_sync") {
             performOpportunisticSyncIfNeeded(mapOf(sessionId to mappedRequests))

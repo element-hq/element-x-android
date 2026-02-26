@@ -54,7 +54,7 @@ import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStore
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStoreFactory
 import io.element.android.libraries.pushstore.test.userpushstore.clientsecret.FakePushClientSecret
-import io.element.android.libraries.workmanager.api.WorkManagerRequest
+import io.element.android.libraries.workmanager.api.WorkManagerRequestBuilder
 import io.element.android.libraries.workmanager.test.FakeWorkManagerScheduler
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
@@ -157,7 +157,7 @@ class DefaultPushHandlerTest {
         )
 
         val featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.SyncNotificationsWithWorkManager.key to true))
-        val submitWorkLambda = lambdaRecorder<WorkManagerRequest, Unit> {}
+        val submitWorkLambda = lambdaRecorder<WorkManagerRequestBuilder, Unit> {}
         val workManagerScheduler = FakeWorkManagerScheduler(submitLambda = submitWorkLambda)
 
         val defaultPushHandler = createDefaultPushHandler(

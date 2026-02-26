@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.workmanager.impl
 
+import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkInfo
 import androidx.work.WorkManager
 import dev.zacsweers.metro.AppScope
@@ -16,9 +17,10 @@ import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.sessionstorage.api.observer.SessionListener
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
-import io.element.android.libraries.workmanager.api.WorkManagerRequest
+import io.element.android.libraries.workmanager.api.WorkManagerRequestBuilder
 import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.WorkManagerScheduler
+import io.element.android.libraries.workmanager.api.WorkManagerWorkerType
 import io.element.android.libraries.workmanager.api.workManagerTag
 import timber.log.Timber
 
@@ -41,13 +43,20 @@ class DefaultWorkManagerScheduler(
         })
     }
 
-    override suspend fun submit(workManagerRequest: WorkManagerRequest) {
-        workManagerRequest.build().fold(
-            onSuccess = { workRequests ->
-                workManager.enqueue(workRequests)
+    override suspend fun submit(workManagerRequestBuilder: WorkManagerRequestBuilder) {
+        workManagerRequestBuilder.build().fold(
+            onSuccess = { wrapper ->
+                when (wrapper.type) {
+                    WorkManagerWorkerType.Default -> workManager.enqueue(wrapper.requests)
+                    is WorkManagerWorkerType.Unique -> {
+                        val type = wrapper.type as WorkManagerWorkerType.Unique
+                        val requests = wrapper.requests.filterIsInstance<OneTimeWorkRequest>()
+                        workManager.enqueueUniqueWork(type.name, type.policy, requests)
+                    }
+                }
             },
             onFailure = {
-                Timber.e(it, "Failed to build WorkManager request $workManagerRequest")
+                Timber.e(it, "Failed to build WorkManager request $workManagerRequestBuilder")
             }
         )
     }
