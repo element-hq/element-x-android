@@ -18,7 +18,7 @@ import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
-import io.element.android.features.location.api.Location
+import io.element.android.features.location.api.ShowLocationMode
 import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.actions.LocationActions
 import io.element.android.features.location.impl.common.permissions.PermissionsEvents
@@ -29,15 +29,14 @@ import io.element.android.libraries.core.meta.BuildMeta
 
 @AssistedInject
 class ShowLocationPresenter(
-    @Assisted private val location: Location,
-    @Assisted private val description: String?,
+    @Assisted private val mode: ShowLocationMode,
     permissionsPresenterFactory: PermissionsPresenter.Factory,
     private val locationActions: LocationActions,
     private val buildMeta: BuildMeta,
 ) : Presenter<ShowLocationState> {
     @AssistedFactory
     fun interface Factory {
-        fun create(location: Location, description: String?): ShowLocationPresenter
+        fun create(mode: ShowLocationMode): ShowLocationPresenter
     }
 
     private val permissionsPresenter = permissionsPresenterFactory.create(MapDefaults.permissions)
@@ -59,7 +58,16 @@ class ShowLocationPresenter(
 
         fun handleEvent(event: ShowLocationEvents) {
             when (event) {
-                ShowLocationEvents.Share -> locationActions.share(location, description)
+                ShowLocationEvents.Share -> {
+                    when (mode) {
+                        is ShowLocationMode.Static -> {
+                            locationActions.share(mode.location, null)
+                        }
+                        ShowLocationMode.Live -> {
+                            // TODO: Handle sharing for live locations
+                        }
+                    }
+                }
                 is ShowLocationEvents.TrackMyLocation -> {
                     if (event.enabled) {
                         when {
@@ -82,8 +90,7 @@ class ShowLocationPresenter(
 
         return ShowLocationState(
             permissionDialog = permissionDialog,
-            location = location,
-            description = description,
+            mode = mode,
             hasLocationPermission = permissionsState.isAnyGranted,
             isTrackMyLocation = isTrackMyLocation,
             appName = appName,

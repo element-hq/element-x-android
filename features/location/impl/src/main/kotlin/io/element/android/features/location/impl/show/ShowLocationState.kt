@@ -8,12 +8,11 @@
 
 package io.element.android.features.location.impl.show
 
-import io.element.android.features.location.api.Location
+import io.element.android.features.location.api.ShowLocationMode
 
 data class ShowLocationState(
     val permissionDialog: Dialog,
-    val location: Location,
-    val description: String?,
+    val mode: ShowLocationMode,
     val hasLocationPermission: Boolean,
     val isTrackMyLocation: Boolean,
     val appName: String,

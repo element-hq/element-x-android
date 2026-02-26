@@ -10,6 +10,9 @@ package io.element.android.features.location.impl.show
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.location.api.Location
+import io.element.android.features.location.api.ShowLocationMode
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.location.AssetType
 
 private const val APP_NAME = "ApplicationName"
 
@@ -31,32 +34,47 @@ class ShowLocationStateProvider : PreviewParameterProvider<ShowLocationState> {
                 isTrackMyLocation = true,
             ),
             aShowLocationState(
-                description = "My favourite place!",
+                mode = aStaticLocationMode(senderName = "My favourite place!"),
             ),
             aShowLocationState(
-                description = "For some reason I decided to to write a small essay that wraps at just two lines!",
+                mode = aStaticLocationMode(
+                    senderName = "For some reason I decided to write a small essay that wraps at just two lines!"
+                ),
             ),
             aShowLocationState(
-                description = "For some reason I decided to write a small essay in the location description. " +
-                    "It is so long that it will wrap onto more than two lines!",
+                mode = ShowLocationMode.Live,
             ),
         )
 }
 
 fun aShowLocationState(
     permissionDialog: ShowLocationState.Dialog = ShowLocationState.Dialog.None,
-    location: Location = Location(1.23, 2.34, 4f),
-    description: String? = null,
+    mode: ShowLocationMode = aStaticLocationMode(),
     hasLocationPermission: Boolean = false,
     isTrackMyLocation: Boolean = false,
     appName: String = APP_NAME,
     eventSink: (ShowLocationEvents) -> Unit = {},
 ) = ShowLocationState(
     permissionDialog = permissionDialog,
-    location = location,
-    description = description,
+    mode = mode,
     hasLocationPermission = hasLocationPermission,
     isTrackMyLocation = isTrackMyLocation,
     appName = appName,
     eventSink = eventSink,
+)
+
+fun aStaticLocationMode(
+    location: Location = Location(1.23, 2.34, 4f),
+    senderName: String = "Alice",
+    senderId: UserId = UserId("@alice:matrix.org"),
+    senderAvatarUrl: String? = null,
+    timestamp: Long = System.currentTimeMillis(),
+    assetType: AssetType? = null,
+) = ShowLocationMode.Static(
+    location = location,
+    senderName = senderName,
+    senderId = senderId,
+    senderAvatarUrl = senderAvatarUrl,
+    timestamp = timestamp,
+    assetType = assetType,
 )

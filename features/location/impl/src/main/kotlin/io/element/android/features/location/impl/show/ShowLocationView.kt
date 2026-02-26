@@ -11,6 +11,9 @@ package io.element.android.features.location.impl.show
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.SheetValue
+import androidx.compose.material3.rememberBottomSheetScaffoldState
+import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -23,6 +26,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.compound.tokens.generated.TypographyTokens
+import io.element.android.features.location.api.ShowLocationMode
 import io.element.android.features.location.impl.R
 import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.PermissionDeniedDialog
@@ -74,12 +78,16 @@ fun ShowLocationView(
         )
     }
 
-    val cameraState = rememberCameraState(
-        firstPosition = CameraPosition(
-            target = Position(latitude = state.location.lat, longitude = state.location.lon),
+    val initialPosition = when (val mode = state.mode) {
+        is ShowLocationMode.Static -> CameraPosition(
+            target = Position(latitude = mode.location.lat, longitude = mode.location.lon),
             zoom = MapDefaults.DEFAULT_ZOOM
         )
-    )
+        ShowLocationMode.Live -> CameraPosition(
+            zoom = MapDefaults.DEFAULT_ZOOM
+        )
+    }
+    val cameraState = rememberCameraState(firstPosition = initialPosition)
     val locationProvider = if (state.hasLocationPermission) {
         rememberDefaultLocationProvider(
             updateInterval = 1.minutes,
@@ -96,10 +104,13 @@ fun ShowLocationView(
         }
     }
 
+    val scaffoldState = rememberBottomSheetScaffoldState(
+        bottomSheetState = rememberStandardBottomSheetState()
+    )
     MapBottomSheetScaffold(
+        scaffoldState = scaffoldState,
         cameraState = cameraState,
         modifier = modifier,
-        sheetPeekHeight = 80.dp,
         topBar = {
             TopAppBar(
                 titleStr = stringResource(CommonStrings.screen_view_location_title),
@@ -121,17 +132,22 @@ fun ShowLocationView(
             )
         },
         sheetContent = {
-            state.description?.let {
-                Text(
-                    text = it,
-                    textAlign = TextAlign.Center,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis,
-                    style = TypographyTokens.fontBodyMdRegular,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(8.dp),
-                )
+            when (val mode = state.mode) {
+                is ShowLocationMode.Static -> {
+                    Text(
+                        text = mode.senderName,
+                        textAlign = TextAlign.Center,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis,
+                        style = TypographyTokens.fontBodyMdRegular,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(8.dp),
+                    )
+                }
+                ShowLocationMode.Live -> {
+                    // TODO: Show list of active live location sharers
+                }
             }
         },
         mapContent = {
@@ -140,22 +156,29 @@ fun ShowLocationView(
                 locationState = userLocationState,
                 trackUserLocation = state.isTrackMyLocation
             )
-            val senderLocation = rememberGeoJsonSource(
-                data = GeoJsonData.Features(
-                    Point(
-                        Position(
-                            latitude = state.location.lat,
-                            longitude = state.location.lon
+            when (val mode = state.mode) {
+                is ShowLocationMode.Static -> {
+                    val senderLocation = rememberGeoJsonSource(
+                        data = GeoJsonData.Features(
+                            Point(
+                                Position(
+                                    latitude = mode.location.lat,
+                                    longitude = mode.location.lon
+                                )
+                            )
                         )
                     )
-                )
-            )
-            val marker = painterResource(R.drawable.pin_small)
-            SymbolLayer(
-                id = "sender_location",
-                source = senderLocation,
-                iconImage = image(marker)
-            )
+                    val marker = painterResource(R.drawable.pin_small)
+                    SymbolLayer(
+                        id = "sender_location",
+                        source = senderLocation,
+                        iconImage = image(marker)
+                    )
+                }
+                ShowLocationMode.Live -> {
+                    // TODO: Show pins for all active live location sharers
+                }
+            }
         },
         overlayContent = {
             LocationFloatingActionButton(

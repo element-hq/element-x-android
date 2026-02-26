@@ -9,11 +9,13 @@
 package io.element.android.features.messages.impl.timeline.model.event
 
 import io.element.android.features.location.api.Location
+import io.element.android.libraries.matrix.api.room.location.AssetType
 
 data class TimelineItemLocationContent(
     val body: String,
     val location: Location,
     val description: String? = null,
+    val assetType: AssetType? = null,
 ) : TimelineItemEventContent {
     override val type: String = "TimelineItemLocationContent"
 }

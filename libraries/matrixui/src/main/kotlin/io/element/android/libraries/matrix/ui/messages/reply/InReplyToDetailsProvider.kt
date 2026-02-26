@@ -71,7 +71,7 @@ open class InReplyToDetailsProvider : PreviewParameterProvider<InReplyToDetails>
             ),
             aMessageContent(
                 body = "Location",
-                type = LocationMessageType("Location", "geo:1,2", null),
+                type = LocationMessageType("Location", "geo:1,2", null, assetType = null),
             ),
             aMessageContent(
                 body = "Notice",

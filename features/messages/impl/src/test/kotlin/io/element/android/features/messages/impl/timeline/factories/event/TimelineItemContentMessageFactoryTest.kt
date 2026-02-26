@@ -41,6 +41,7 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.media.ThumbnailInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
+import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
@@ -98,8 +99,9 @@ class TimelineItemContentMessageFactoryTest {
     @Test
     fun `test create LocationMessageType not null`() = runTest {
         val sut = createTimelineItemContentMessageFactory()
+        val assetType = AssetType.SENDER
         val result = sut.create(
-            content = createMessageContent(type = LocationMessageType("body", "geo:1,2", "description")),
+            content = createMessageContent(type = LocationMessageType("body", "geo:1,2", "description", assetType)),
             senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )
@@ -107,6 +109,7 @@ class TimelineItemContentMessageFactoryTest {
             body = "body",
             location = Location(lat = 1.0, lon = 2.0, accuracy = 0.0F),
             description = "description",
+            assetType = assetType,
         )
         assertThat(result).isEqualTo(expected)
     }
@@ -115,7 +118,7 @@ class TimelineItemContentMessageFactoryTest {
     fun `test create LocationMessageType null`() = runTest {
         val sut = createTimelineItemContentMessageFactory()
         val result = sut.create(
-            content = createMessageContent(type = LocationMessageType("body", "", null)),
+            content = createMessageContent(type = LocationMessageType("body", "", null, null)),
             senderDisambiguatedDisplayName = "Bob",
             eventId = AN_EVENT_ID,
         )

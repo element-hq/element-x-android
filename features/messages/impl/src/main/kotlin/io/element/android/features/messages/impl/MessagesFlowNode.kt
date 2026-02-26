@@ -28,10 +28,10 @@ import io.element.android.features.call.api.CallType
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.forward.api.ForwardEntryPoint
 import io.element.android.features.knockrequests.api.list.KnockRequestsListEntryPoint
-import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.LocationService
 import io.element.android.features.location.api.ShareLocationEntryPoint
 import io.element.android.features.location.api.ShowLocationEntryPoint
+import io.element.android.features.location.api.ShowLocationMode
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewNode
@@ -75,6 +75,7 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.room.joinedRoomMembers
+import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
@@ -148,7 +149,7 @@ class MessagesFlowNode(
         data class AttachmentPreview(val timelineMode: Timeline.Mode, val attachment: Attachment, val inReplyToEventId: EventId?) : NavTarget
 
         @Parcelize
-        data class LocationViewer(val location: Location, val description: String?) : NavTarget
+        data class LocationViewer(val mode: ShowLocationMode) : NavTarget
 
         @Parcelize
         data class EventDebugInfo(val eventId: EventId?, val debugInfo: TimelineItemDebugInfo) : NavTarget
@@ -336,7 +337,7 @@ class MessagesFlowNode(
                 createNode<AttachmentsPreviewNode>(buildContext, listOf(inputs))
             }
             is NavTarget.LocationViewer -> {
-                val inputs = ShowLocationEntryPoint.Inputs(navTarget.location, navTarget.description)
+                val inputs = ShowLocationEntryPoint.Inputs(navTarget.mode)
                 showLocationEntryPoint.createNode(
                     parentNode = this,
                     buildContext = buildContext,
@@ -558,9 +559,16 @@ class MessagesFlowNode(
                 )
             }
             is TimelineItemLocationContent -> {
-                NavTarget.LocationViewer(
+                val mode = ShowLocationMode.Static(
                     location = event.content.location,
-                    description = event.content.description,
+                    senderName = event.safeSenderName,
+                    senderId = event.senderId,
+                    senderAvatarUrl = event.senderAvatar.url,
+                    timestamp = event.sentTimeMillis,
+                    assetType = event.content.assetType,
+                )
+                NavTarget.LocationViewer(
+                   mode = mode
                 ).takeIf { locationService.isServiceAvailable() }
             }
             else -> null
