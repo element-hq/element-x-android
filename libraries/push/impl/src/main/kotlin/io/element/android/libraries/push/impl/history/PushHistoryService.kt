@@ -12,8 +12,8 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.impl.db.PushRequest
-import kotlin.time.Instant
 import io.element.android.libraries.push.impl.push.PushRequestStatus
+import kotlin.time.Instant
 
 interface PushHistoryService {
     /**
