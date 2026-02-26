@@ -29,6 +29,7 @@ import io.element.android.libraries.push.impl.troubleshoot.DiagnosticPushHandler
 import io.element.android.libraries.pushproviders.api.PushData
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStore
+import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStoreFactory
 import io.element.android.libraries.pushstore.test.userpushstore.clientsecret.FakePushClientSecret
 import io.element.android.libraries.workmanager.api.WorkManagerRequestBuilder
 import io.element.android.libraries.workmanager.test.FakeWorkManagerScheduler
@@ -142,7 +143,7 @@ class DefaultPushHandlerTest {
             enqueuePushRequestResult.assertions()
                 .isNeverCalled()
             incrementPushCounterResult.assertions()
-                .isNeverCalled()
+                .isCalledOnce()
             onPushReceivedResult.assertions()
                 .isNeverCalled()
         }
@@ -228,7 +229,7 @@ class DefaultPushHandlerTest {
                     incrementPushCounterResult()
                 }
             },
-            userPushStore = userPushStore,
+            userPushStoreFactory = FakeUserPushStoreFactory { userPushStore },
             pushClientSecret = pushClientSecret,
             buildMeta = buildMeta,
             diagnosticPushHandler = diagnosticPushHandler,

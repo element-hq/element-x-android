@@ -24,7 +24,7 @@ import io.element.android.libraries.push.impl.troubleshoot.DiagnosticPushHandler
 import io.element.android.libraries.push.impl.workmanager.SyncPendingNotificationsWorkManagerRequestBuilder
 import io.element.android.libraries.pushproviders.api.PushData
 import io.element.android.libraries.pushproviders.api.PushHandler
-import io.element.android.libraries.pushstore.api.UserPushStore
+import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.WorkManagerScheduler
@@ -45,12 +45,12 @@ class DefaultPushHandler(
     private val buildMeta: BuildMeta,
     private val diagnosticPushHandler: DiagnosticPushHandler,
     private val pushHistoryService: PushHistoryService,
-    private val userPushStore: UserPushStore,
+    private val userPushStoreFactory: UserPushStoreFactory,
     private val analyticsService: AnalyticsService,
     private val systemClock: SystemClock,
     private val workManagerScheduler: WorkManagerScheduler,
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
-    private val resultProcessor: NotificationResultProcessor,
+    resultProcessor: NotificationResultProcessor,
 ) : PushHandler {
     init {
         resultProcessor.start()
@@ -63,11 +63,6 @@ class DefaultPushHandler(
      * @param providerInfo the provider info.
      */
     override suspend fun handle(pushData: PushData, providerInfo: String) {
-        val areNotificationsEnabled = userPushStore.getNotificationEnabledForDevice().first()
-        if (!areNotificationsEnabled) {
-            Timber.w("Push notification received when push notifications are disabled.")
-            return
-        }
         // Start measuring how long it takes to display a notification from when the push is received
         Timber.d("Calculating push-to-notification for event ${pushData.eventId}")
         val parent = analyticsService.startLongRunningTransaction(AnalyticsLongRunningTransaction.PushToNotification(pushData.eventId.value))
@@ -115,6 +110,12 @@ class DefaultPushHandler(
                     roomId = pushData.roomId,
                     reason = "Unable to get userId from client secret",
                 )
+                return
+            }
+
+            val areNotificationsEnabled = userPushStoreFactory.getOrCreate(userId).getNotificationEnabledForDevice().first()
+            if (!areNotificationsEnabled) {
+                Timber.w("Push notification received when push notifications are disabled.")
                 return
             }
 
