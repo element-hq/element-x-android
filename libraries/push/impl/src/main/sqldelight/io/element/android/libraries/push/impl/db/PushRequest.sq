@@ -12,7 +12,7 @@ CREATE TABLE PushRequest (
 CREATE INDEX PushRequestSessionAndStatus ON PushRequest (sessionId, status);
 
 selectAllPendingForSession:
-SELECT * FROM PushRequest WHERE status = 0 AND sessionId = ? ORDER BY pushDate ASC;
+SELECT * FROM PushRequest WHERE status = 0 AND sessionId = ? AND pushDate > ? ORDER BY pushDate ASC;
 
 insertPushRequest:
 INSERT OR REPLACE INTO PushRequest VALUES ?;

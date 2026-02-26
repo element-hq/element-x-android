@@ -38,10 +38,13 @@ import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.api.finishLongRunningTransaction
 import io.element.android.services.analytics.api.recordTransaction
 import io.element.android.services.analyticsproviders.api.AnalyticsTransaction
+import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.withTimeoutOrNull
 import timber.log.Timber
+import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
 
 @AssistedInject
 class FetchPendingNotificationsWorker(
@@ -53,6 +56,7 @@ class FetchPendingNotificationsWorker(
     private val syncOnNotifiableEvent: SyncOnNotifiableEvent,
     private val resultProcessor: NotificationResultProcessor,
     private val analyticsService: AnalyticsService,
+    private val systemClock: SystemClock,
 ) : CoroutineWorker(context, params) {
     override suspend fun doWork(): Result {
         Timber.d("FetchNotificationsWorker started")
@@ -61,7 +65,9 @@ class FetchPendingNotificationsWorker(
             inputData.getString("session_id")?.let(::SessionId)
         }.getOrNull() ?: return Result.failure()
 
-        val requests = pushHistoryService.getPendingPushRequests(sessionId).getOrNull() ?: return Result.failure()
+        // Fetch pending requests in the last 24 hours
+        val fetchSince = Instant.fromEpochMilliseconds(systemClock.epochMillis()).minus(1.days)
+        val requests = pushHistoryService.getPendingPushRequests(sessionId, fetchSince).getOrNull() ?: return Result.failure()
         if (requests.isEmpty()) {
             Timber.d("No pending notifications to fetch, returning early")
             return Result.success()

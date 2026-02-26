@@ -12,6 +12,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.impl.db.PushRequest
+import kotlin.time.Instant
 
 interface PushHistoryService {
     /**
@@ -32,7 +33,7 @@ interface PushHistoryService {
 
     suspend fun replacePushRequests(pushRequests: List<PushRequest>): Result<Unit>
 
-    suspend fun getPendingPushRequests(sessionId: SessionId): Result<List<PushRequest>>
+    suspend fun getPendingPushRequests(sessionId: SessionId, since: Instant?): Result<List<PushRequest>>
 }
 
 fun PushHistoryService.onInvalidPushReceived(

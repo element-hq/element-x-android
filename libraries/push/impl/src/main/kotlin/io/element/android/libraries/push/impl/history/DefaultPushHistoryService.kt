@@ -23,6 +23,7 @@ import io.element.android.libraries.push.impl.PushDatabase
 import io.element.android.libraries.push.impl.db.PushHistory
 import io.element.android.libraries.push.impl.db.PushRequest
 import io.element.android.services.toolbox.api.systemclock.SystemClock
+import kotlin.time.Instant
 
 @ContributesBinding(AppScope::class)
 class DefaultPushHistoryService(
@@ -47,10 +48,11 @@ class DefaultPushHistoryService(
         }
     }
 
-    override suspend fun getPendingPushRequests(sessionId: SessionId): Result<List<PushRequest>> {
+    override suspend fun getPendingPushRequests(sessionId: SessionId, since: Instant?): Result<List<PushRequest>> {
         return runCatchingExceptions {
             pushDatabase.transactionWithResult {
-                pushDatabase.pushRequestQueries.selectAllPendingForSession(sessionId.value).executeAsList()
+                val sinceTimeMillis = since?.toEpochMilliseconds() ?: 0
+                pushDatabase.pushRequestQueries.selectAllPendingForSession(sessionId.value, sinceTimeMillis).executeAsList()
             }
         }
     }

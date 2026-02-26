@@ -30,6 +30,7 @@ import io.element.android.libraries.push.impl.push.SyncOnNotifiableEvent
 import io.element.android.libraries.workmanager.api.WorkManagerRequestBuilder
 import io.element.android.libraries.workmanager.api.di.MetroWorkerFactory
 import io.element.android.services.analytics.test.FakeAnalyticsService
+import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
@@ -53,7 +54,7 @@ class FetchPendingNotificationWorkerTest {
         val emitResultLambda = lambdaRecorder<Map<PushRequest, Result<ResolvedPushEvent>>, Unit> {}
         val processor = FakeNotificationResultProcessor(emit = emitResultLambda)
         val pushHistoryService = FakePushHistoryService(
-            getPendingPushRequests = { Result.success(listOf(aPushRequest())) },
+            getPendingPushRequests = { _, _ -> Result.success(listOf(aPushRequest())) },
             replacePushRequests = { Result.success(Unit) },
         )
 
@@ -92,7 +93,7 @@ class FetchPendingNotificationWorkerTest {
         val emitResultLambda = lambdaRecorder<Map<PushRequest, Result<ResolvedPushEvent>>, Unit> {}
         val processor = FakeNotificationResultProcessor(emit = emitResultLambda)
         val pushHistoryService = FakePushHistoryService(
-            getPendingPushRequests = { Result.success(listOf(aPushRequest())) },
+            getPendingPushRequests = { _, _ -> Result.success(listOf(aPushRequest())) },
             replacePushRequests = { Result.success(Unit) },
         )
         val worker = createWorker(
@@ -116,7 +117,7 @@ class FetchPendingNotificationWorkerTest {
         val emitResultLambda = lambdaRecorder<Map<PushRequest, Result<ResolvedPushEvent>>, Unit> {}
         val processor = FakeNotificationResultProcessor(emit = emitResultLambda)
         val pushHistoryService = FakePushHistoryService(
-            getPendingPushRequests = { Result.success(listOf(aPushRequest())) },
+            getPendingPushRequests = { _, _ -> Result.success(listOf(aPushRequest())) },
             replacePushRequests = { Result.success(Unit) },
         )
 
@@ -146,7 +147,7 @@ class FetchPendingNotificationWorkerTest {
             val emitResultLambda = lambdaRecorder<Map<PushRequest, Result<ResolvedPushEvent>>, Unit> {}
             val processor = FakeNotificationResultProcessor(emit = emitResultLambda)
             val pushHistoryService = FakePushHistoryService(
-                getPendingPushRequests = { Result.success(listOf(pushRequest)) },
+                getPendingPushRequests = { _, _ -> Result.success(listOf(pushRequest)) },
                 replacePushRequests = { Result.success(Unit) },
             )
 
@@ -183,7 +184,7 @@ class FetchPendingNotificationWorkerTest {
             val emitResultLambda = lambdaRecorder<Map<PushRequest, Result<ResolvedPushEvent>>, Unit> {}
             val processor = FakeNotificationResultProcessor(emit = emitResultLambda)
             val pushHistoryService = FakePushHistoryService(
-                getPendingPushRequests = { Result.success(listOf(pushRequest)) },
+                getPendingPushRequests = { _, _ -> Result.success(listOf(pushRequest)) },
                 replacePushRequests = { Result.success(Unit) },
             )
 
@@ -220,6 +221,7 @@ class FetchPendingNotificationWorkerTest {
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
         pushHistoryService: FakePushHistoryService = FakePushHistoryService(),
         resultProcessor: FakeNotificationResultProcessor = FakeNotificationResultProcessor(),
+        systemClock: FakeSystemClock = FakeSystemClock(),
     ) = FetchPendingNotificationsWorker(
         params = createWorkerParams(workDataOf("session_id" to input)),
         context = InstrumentationRegistry.getInstrumentation().context,
@@ -229,6 +231,7 @@ class FetchPendingNotificationWorkerTest {
         analyticsService = analyticsService,
         pushHistoryService = pushHistoryService,
         resultProcessor = resultProcessor,
+        systemClock = systemClock,
     )
 
     private fun TestScope.createWorkerParams(
