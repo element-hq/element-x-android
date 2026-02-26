@@ -41,7 +41,7 @@ import io.element.android.features.location.impl.common.PermissionDeniedDialog
 import io.element.android.features.location.impl.common.PermissionRationaleDialog
 import io.element.android.features.location.impl.common.ui.LocationFloatingActionButton
 import io.element.android.features.location.impl.common.ui.MapBottomSheetScaffold
-import io.element.android.features.location.impl.common.ui.UserLocation
+import io.element.android.features.location.impl.common.ui.UserLocationPuck
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ListDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
@@ -143,7 +143,7 @@ fun ShareLocationView(
             )
         },
         mapContent = {
-            UserLocation(
+            UserLocationPuck(
                 cameraState = cameraState,
                 locationState = userLocationState,
                 trackUserLocation = state.trackUserLocation

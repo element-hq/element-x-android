@@ -8,9 +8,7 @@
 
 package io.element.android.features.location.impl.show
 
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -31,7 +29,7 @@ import io.element.android.features.location.impl.common.PermissionDeniedDialog
 import io.element.android.features.location.impl.common.PermissionRationaleDialog
 import io.element.android.features.location.impl.common.ui.LocationFloatingActionButton
 import io.element.android.features.location.impl.common.ui.MapBottomSheetScaffold
-import io.element.android.features.location.impl.common.ui.UserLocation
+import io.element.android.features.location.impl.common.ui.UserLocationPuck
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -137,7 +135,7 @@ fun ShowLocationView(
             }
         },
         mapContent = {
-            UserLocation(
+            UserLocationPuck(
                 cameraState = cameraState,
                 locationState = userLocationState,
                 trackUserLocation = state.isTrackMyLocation

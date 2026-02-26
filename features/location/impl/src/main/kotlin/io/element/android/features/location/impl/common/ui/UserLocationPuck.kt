@@ -18,7 +18,7 @@ import org.maplibre.compose.location.LocationTrackingEffect
 import org.maplibre.compose.location.UserLocationState
 
 @Composable
-fun UserLocation(
+fun UserLocationPuck(
     cameraState: CameraState,
     locationState: UserLocationState,
     trackUserLocation: Boolean,
