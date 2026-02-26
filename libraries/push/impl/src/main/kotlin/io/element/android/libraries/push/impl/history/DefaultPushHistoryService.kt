@@ -57,6 +57,13 @@ class DefaultPushHistoryService(
         }
     }
 
+    override suspend fun removeOldPushRequests(sessionId: SessionId): Result<Unit> {
+        return runCatchingExceptions {
+            val keepAmount = 100L
+            pushDatabase.pushRequestQueries.removeOldest(keepAmount)
+        }
+    }
+
     override fun onPushResult(
         providerInfo: String,
         eventId: EventId?,

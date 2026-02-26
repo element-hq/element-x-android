@@ -19,6 +19,7 @@ import com.google.common.truth.Truth.assertThat
 import com.google.common.util.concurrent.ListenableFuture
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.exception.ClientException
 import io.element.android.libraries.push.impl.db.PushRequest
 import io.element.android.libraries.push.impl.history.FakePushHistoryService
@@ -43,6 +44,7 @@ import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 import java.util.concurrent.TimeUnit
 import kotlin.time.Duration.Companion.seconds
+import kotlin.time.Instant
 
 @OptIn(ExperimentalCoroutinesApi::class)
 @RunWith(AndroidJUnit4::class)
@@ -53,9 +55,14 @@ class FetchPendingNotificationWorkerTest {
         val syncOnNotifiableEventLambda = SyncOnNotifiableEvent { synced = true }
         val emitResultLambda = lambdaRecorder<Map<PushRequest, Result<ResolvedPushEvent>>, Unit> {}
         val processor = FakeNotificationResultProcessor(emit = emitResultLambda)
+
+        val getPendingResultsLambda = lambdaRecorder<SessionId, Instant?, Result<List<PushRequest>>> { _, _ -> Result.success(listOf(aPushRequest())) }
+        val replacePushRequestsLambda = lambdaRecorder<List<PushRequest>, Result<Unit>> { Result.success(Unit) }
+        val removeOldPushRequestsLambda = lambdaRecorder<SessionId, Result<Unit>> { Result.success(Unit) }
         val pushHistoryService = FakePushHistoryService(
-            getPendingPushRequests = { _, _ -> Result.success(listOf(aPushRequest())) },
-            replacePushRequests = { Result.success(Unit) },
+            getPendingPushRequests = getPendingResultsLambda,
+            replacePushRequests = replacePushRequestsLambda,
+            removeOldPushRequests = removeOldPushRequestsLambda,
         )
 
         val worker = createWorker(
@@ -66,6 +73,11 @@ class FetchPendingNotificationWorkerTest {
         )
 
         val result = worker.doWork()
+
+        // The expected data is fetched and replaced from the service
+        getPendingResultsLambda.assertions().isCalledOnce()
+        replacePushRequestsLambda.assertions().isCalledOnce()
+        removeOldPushRequestsLambda.assertions().isCalledOnce()
 
         // The process finished successfully
         assertThat(result).isEqualTo(ListenableWorker.Result.success())
@@ -95,6 +107,7 @@ class FetchPendingNotificationWorkerTest {
         val pushHistoryService = FakePushHistoryService(
             getPendingPushRequests = { _, _ -> Result.success(listOf(aPushRequest())) },
             replacePushRequests = { Result.success(Unit) },
+            removeOldPushRequests = { Result.success(Unit) },
         )
         val worker = createWorker(
             input = "@alice:matrix.org",
@@ -119,6 +132,7 @@ class FetchPendingNotificationWorkerTest {
         val pushHistoryService = FakePushHistoryService(
             getPendingPushRequests = { _, _ -> Result.success(listOf(aPushRequest())) },
             replacePushRequests = { Result.success(Unit) },
+            removeOldPushRequests = { Result.success(Unit) },
         )
 
         val resolver = FakeNotifiableEventResolver(
@@ -149,6 +163,7 @@ class FetchPendingNotificationWorkerTest {
             val pushHistoryService = FakePushHistoryService(
                 getPendingPushRequests = { _, _ -> Result.success(listOf(pushRequest)) },
                 replacePushRequests = { Result.success(Unit) },
+                removeOldPushRequests = { Result.success(Unit) },
             )
 
             val resolver = FakeNotifiableEventResolver(
@@ -186,6 +201,7 @@ class FetchPendingNotificationWorkerTest {
             val pushHistoryService = FakePushHistoryService(
                 getPendingPushRequests = { _, _ -> Result.success(listOf(pushRequest)) },
                 replacePushRequests = { Result.success(Unit) },
+                removeOldPushRequests = { Result.success(Unit) },
             )
 
             val resolver = FakeNotifiableEventResolver(

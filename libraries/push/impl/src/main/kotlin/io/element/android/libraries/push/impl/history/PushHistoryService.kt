@@ -34,6 +34,8 @@ interface PushHistoryService {
     suspend fun replacePushRequests(pushRequests: List<PushRequest>): Result<Unit>
 
     suspend fun getPendingPushRequests(sessionId: SessionId, since: Instant?): Result<List<PushRequest>>
+
+    suspend fun removeOldPushRequests(sessionId: SessionId): Result<Unit>
 }
 
 fun PushHistoryService.onInvalidPushReceived(

@@ -68,6 +68,11 @@ class FetchPendingNotificationsWorker(
         // Fetch pending requests in the last 24 hours
         val fetchSince = Instant.fromEpochMilliseconds(systemClock.epochMillis()).minus(1.days)
         val requests = pushHistoryService.getPendingPushRequests(sessionId, fetchSince).getOrNull() ?: return Result.failure()
+
+        pushHistoryService.removeOldPushRequests(sessionId).onFailure {
+            Timber.e(it, "Could not remove outdated push requests")
+        }
+
         if (requests.isEmpty()) {
             Timber.d("No pending notifications to fetch, returning early")
             return Result.success()
