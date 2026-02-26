@@ -42,8 +42,6 @@ class SyncPendingNotificationsWorkManagerRequestBuilder(
                     }
                 }
                 .setTraceTag(workManagerTag(sessionId, WorkManagerRequestType.NOTIFICATION_SYNC))
-                // TODO investigate using this instead of the resolver queue
-                // .setInputMerger()
                 .build()
         )
         return Result.success(WorkManagerRequestWrapper(requests, type))
