@@ -56,7 +56,10 @@ class FetchPendingNotificationsWorker(
 ) : CoroutineWorker(context, params) {
     override suspend fun doWork(): Result {
         Timber.d("FetchNotificationsWorker started")
-        val sessionId = inputData.getString("session_id")?.let(::SessionId) ?: return Result.failure()
+        // RunCatching for test in debug mode
+        val sessionId = runCatchingExceptions {
+            inputData.getString("session_id")?.let(::SessionId)
+        }.getOrNull() ?: return Result.failure()
 
         val requests = pushHistoryService.getPendingPushRequests(sessionId).getOrNull() ?: return Result.failure()
         if (requests.isEmpty()) {
