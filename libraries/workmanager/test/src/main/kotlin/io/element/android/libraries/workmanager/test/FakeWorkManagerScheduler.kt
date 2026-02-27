@@ -17,7 +17,7 @@ import io.element.android.tests.testutils.lambda.lambdaError
 class FakeWorkManagerScheduler(
     private val submitLambda: (WorkManagerRequestBuilder) -> Unit = { lambdaError() },
     private val hasPendingWorkLambda: (SessionId, WorkManagerRequestType) -> Boolean = { _, _ -> false },
-    private val cancelLambda: (SessionId) -> Unit = { lambdaError() },
+    private val cancelLambda: (SessionId, WorkManagerRequestType?) -> Unit = { _, _ -> lambdaError() },
 ) : WorkManagerScheduler {
     override suspend fun submit(workManagerRequestBuilder: WorkManagerRequestBuilder) {
         submitLambda(workManagerRequestBuilder)
@@ -27,7 +27,7 @@ class FakeWorkManagerScheduler(
         return hasPendingWorkLambda(sessionId, requestType)
     }
 
-    override fun cancel(sessionId: SessionId) {
-        cancelLambda(sessionId)
+    override fun cancel(sessionId: SessionId, requestType: WorkManagerRequestType?) {
+        cancelLambda(sessionId, requestType)
     }
 }

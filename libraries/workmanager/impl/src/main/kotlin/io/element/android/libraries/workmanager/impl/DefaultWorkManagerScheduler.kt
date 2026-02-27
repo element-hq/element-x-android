@@ -75,10 +75,15 @@ class DefaultWorkManagerScheduler(
         }
     }
 
-    override fun cancel(sessionId: SessionId) {
+    override fun cancel(sessionId: SessionId, requestType: WorkManagerRequestType?) {
         Timber.d("Cancelling work for sessionId: $sessionId")
-        for (requestType in WorkManagerRequestType.entries) {
+
+        if (requestType != null) {
             workManager.cancelAllWorkByTag(workManagerTag(sessionId, requestType))
+        } else {
+            for (requestType in WorkManagerRequestType.entries) {
+                workManager.cancelAllWorkByTag(workManagerTag(sessionId, requestType))
+            }
         }
     }
 }
