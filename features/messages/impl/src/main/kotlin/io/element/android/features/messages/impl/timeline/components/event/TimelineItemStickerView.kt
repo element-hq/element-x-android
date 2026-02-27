@@ -19,7 +19,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
@@ -62,7 +61,6 @@ fun TimelineItemStickerView(
                 hideContent = hideMediaContent,
                 onShowClick = onShowClick,
             ) {
-                val resources = LocalResources.current
                 AsyncImage(
                     modifier = Modifier
                         .fillMaxSize()
