@@ -95,6 +95,14 @@ jobs:
             **/build/roborazzi/failures/
             **/build/reports/tests/*UnitTest/
 
+      - name: 🚫 Modify summary on error
+        if: failure()
+        run: |
+          echo "## Tests failed!\n\nHere's a list of failed tests:\n\n" >> $GITHUB_STEP_SUMMARY
+          for file in $(find . -type f -o -path "*/build/reports/tests/*UnitTest/*.xml"); do
+            python3 .github/workflows/scripts/parse_test_failures.py "$file" >> $GITHUB_STEP_SUMMARY
+          done
+
       # https://github.com/codecov/codecov-action
       - name: ☂️ Upload coverage reports to codecov
         uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
