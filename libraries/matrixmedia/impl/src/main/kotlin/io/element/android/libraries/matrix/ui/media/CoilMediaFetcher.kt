@@ -16,7 +16,6 @@ import coil3.fetch.SourceFetchResult
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.media.toFile
-import io.element.android.libraries.matrix.api.media.withCleanUrl
 import okio.Buffer
 import okio.FileSystem
 import okio.Path.Companion.toOkioPath
@@ -28,14 +27,10 @@ internal class CoilMediaFetcher(
     private val mediaData: MediaRequestData,
 ) : Fetcher {
     override suspend fun fetch(): FetchResult? {
-        val source = mediaData.source
-        val mediaSource = when {
-            source == null -> {
-                Timber.e("MediaData source is null")
-                return null
-            }
-            source.url.startsWith("mxc:") -> source.withCleanUrl()
-            else -> source
+        val mediaSource = mediaData.source
+        if (mediaSource == null) {
+            Timber.e("MediaData source is null")
+            return null
         }
         return when (val kind = mediaData.kind) {
             is MediaRequestData.Kind.Content -> fetchContent(mediaSource)
