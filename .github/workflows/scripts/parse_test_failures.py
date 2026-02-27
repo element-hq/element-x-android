@@ -3,6 +3,9 @@ import xml.etree.ElementTree as ET
 import sys
 import glob
 
+screenshot_test_failures = []
+output = []
+
 def parse_test_failures(xml_file):
     """Parse XML test results and print failures."""
     tree = ET.parse(xml_file)
@@ -16,7 +19,7 @@ def parse_test_failures(xml_file):
     is_screenshot_test = name.startswith('ui.Preview')
 
     if not is_screenshot_test:
-        print(f"## {name}")
+        output.append(f"## {name}")
 
     for testcase in root.findall('.//testcase'):
         failure = testcase.find('failure')
@@ -34,20 +37,18 @@ def parse_test_failures(xml_file):
                 failure_content = failure.text if failure.text else ''
 
                 # Print in the requested format
-                print(f"### {name}")
-                print("```")
-                print(failure_message)
-                print("```")
-                print("<details><summary>Stacktrace</summary>")
-                print(f"<pre><code>{failure_content}</code></pre>")
-                print("</details>")
-                print("\n\n")
-
-screenshot_test_failures = []
+                output.append(f"### {name}")
+                output.append("```")
+                output.append(failure_message)
+                output.append("```")
+                output.append("<details><summary>Stacktrace</summary>")
+                output.append(f"<pre><code>{failure_content}</code></pre>")
+                output.append("</details>")
+                output.append("\n")
 
 if __name__ == "__main__":
     if len(sys.argv) < 2:
-        print("Usage: parse_test_failures.py <file>", file=sys.stderr)
+        output.append("Usage: parse_test_failures.py <file>", file=sys.stderr)
         sys.exit(1)
 
     file = sys.argv[1]
@@ -60,7 +61,17 @@ if __name__ == "__main__":
             parse_test_failures(file)
 
     if screenshot_test_failures:
-        print("## Screenshot Test Failures")
+        output.append("## Screenshot Test Failures")
+        output.append("```")
         for failure in screenshot_test_failures:
-            print(f"- {failure}")
+            output.append(failure)
+        output.append("```")
 
+    text_output = '\n'.join(output)
+    # Trim output larger than 1MB to avoid GitHub Action log limits
+    while len(text_output.encode('utf-8')) > 1_040_000:
+        output.pop(-2)
+        output.append("## !!! Truncated output due to size limits. !!!")
+        text_output = '\n'.join(output)
+
+    print(text_output)
