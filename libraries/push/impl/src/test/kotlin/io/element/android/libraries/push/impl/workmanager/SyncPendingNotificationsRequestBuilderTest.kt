@@ -28,11 +28,11 @@ class SyncPendingNotificationsRequestBuilderTest {
             sdkVersion = 33,
         )
 
-        val result = request.build()
-        assertThat(result.isSuccess).isTrue()
-        result.getOrNull()!!.run {
-            assertThat(type).isInstanceOf(WorkManagerWorkerType.Unique::class.java)
-            requests.first().run {
+        val results = request.build()
+        assertThat(results.isSuccess).isTrue()
+        results.getOrNull()!!.first().let { result ->
+            assertThat(result.type).isInstanceOf(WorkManagerWorkerType.Unique::class.java)
+            result.request.run {
                 assertThat(this).isInstanceOf(OneTimeWorkRequest::class.java)
                 assertThat(workSpec.input.hasKeyWithValueOfType<String>(SyncPendingNotificationsRequestBuilder.SESSION_ID)).isTrue()
                 // True in API 33+
@@ -49,12 +49,12 @@ class SyncPendingNotificationsRequestBuilderTest {
             sdkVersion = 32,
         )
 
-        val result = request.build()
-        assertThat(result.isSuccess).isTrue()
+        val results = request.build()
+        assertThat(results.isSuccess).isTrue()
 
-        result.getOrNull()!!.run {
-            assertThat(type).isInstanceOf(WorkManagerWorkerType.Unique::class.java)
-            requests.first().run {
+        results.getOrNull()!!.first().let { result ->
+            assertThat(result.type).isInstanceOf(WorkManagerWorkerType.Unique::class.java)
+            result.request.run {
                 assertThat(this).isInstanceOf(OneTimeWorkRequest::class.java)
                 assertThat(workSpec.input.hasKeyWithValueOfType<String>(SyncPendingNotificationsRequestBuilder.SESSION_ID)).isTrue()
                 // False before API 33
