@@ -100,12 +100,8 @@ jobs:
         run: |
           echo """## Tests failed!
           
-          Here's a list of failed tests:
-          
           """ >> $GITHUB_STEP_SUMMARY
-          for file in $(find . -type f -path "*/build/test-results/*UnitTest/*.xml"); do
-            python3 .github/workflows/scripts/parse_test_failures.py "$file" >> $GITHUB_STEP_SUMMARY
-          done
+          python3 .github/workflows/scripts/parse_test_failures.py . >> $GITHUB_STEP_SUMMARY
           echo "---" >> $GITHUB_STEP_SUMMARY
 
       # https://github.com/codecov/codecov-action
