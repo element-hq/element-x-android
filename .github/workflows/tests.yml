@@ -98,10 +98,15 @@ jobs:
       - name: 🚫 Modify summary on error
         if: failure()
         run: |
-          echo "## Tests failed!\n\nHere's a list of failed tests:\n\n" >> $GITHUB_STEP_SUMMARY
-          for file in $(find . -type f -o -path "*/build/reports/tests/*UnitTest/*.xml"); do
+          echo """## Tests failed!
+          
+          Here's a list of failed tests:
+          
+          """ >> $GITHUB_STEP_SUMMARY
+          for file in $(find . -type f -path "*/build/test-results/*UnitTest/*.xml"); do
             python3 .github/workflows/scripts/parse_test_failures.py "$file" >> $GITHUB_STEP_SUMMARY
           done
+          echo "---" >> $GITHUB_STEP_SUMMARY
 
       # https://github.com/codecov/codecov-action
       - name: ☂️ Upload coverage reports to codecov
