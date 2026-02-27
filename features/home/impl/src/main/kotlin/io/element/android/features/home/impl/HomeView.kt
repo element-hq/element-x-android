@@ -239,9 +239,11 @@ private fun HomeScaffold(
                         }
                     },
                 )
+            } else {
+                HomeFloatingActionButton(onStartChatClick, CommonStrings.action_create_room)
             }
         },
-        floatingActionButtonPosition = FabPosition.Center,
+        floatingActionButtonPosition = if (state.showNavigationBar) FabPosition.Center else FabPosition.End,
         content = { padding ->
             val contentPadding = PaddingValues(
                 bottom = 112.dp,
