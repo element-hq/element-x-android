@@ -7,15 +7,21 @@
 
 package io.element.android.features.location.impl.common.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.navigationBarsPadding
-import androidx.compose.foundation.layout.safeDrawingPadding
+import androidx.compose.foundation.layout.navigationBars
+import androidx.compose.foundation.layout.only
+import androidx.compose.foundation.layout.safeContent
+import androidx.compose.foundation.layout.windowInsetsBottomHeight
+import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.BottomSheetScaffoldState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,6 +37,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -39,13 +46,13 @@ import io.element.android.features.location.api.internal.rememberTileStyleUrl
 import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.designsystem.theme.components.BottomSheetScaffold
-import kotlin.math.roundToInt
 import org.maplibre.compose.camera.CameraState
 import org.maplibre.compose.camera.rememberCameraState
 import org.maplibre.compose.map.MapOptions
 import org.maplibre.compose.map.MaplibreMap
 import org.maplibre.compose.style.BaseStyle
 import org.maplibre.compose.util.MaplibreComposable
+import kotlin.math.roundToInt
 
 /**
  * A reusable scaffold component for map views with a bottom sheet.
@@ -87,7 +94,8 @@ fun MapBottomSheetScaffold(
 ) {
     val density = LocalDensity.current
 
-    BoxWithConstraints(modifier = modifier.safeDrawingPadding()) {
+    val windowInsets = WindowInsets.safeContent.only(WindowInsetsSides.Horizontal)
+    BoxWithConstraints(modifier = modifier.windowInsetsPadding(windowInsets)) {
         val layoutHeightPx by rememberUpdatedState(constraints.maxHeight)
         val sheetPadding by remember {
             derivedStateOf {
@@ -101,12 +109,12 @@ fun MapBottomSheetScaffold(
         LaunchedEffect(sheetPadding) {
             cameraState.position = cameraState.position.copy(padding = sheetPadding)
         }
-
         BottomSheetScaffold(
+            modifier = Modifier,
             sheetPeekHeight = sheetPeekHeight,
             sheetContent = {
                 sheetContent()
-                Spacer(modifier = Modifier.navigationBarsPadding())
+                Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
             },
             scaffoldState = scaffoldState,
             sheetDragHandle = sheetDragHandle,
@@ -115,9 +123,10 @@ fun MapBottomSheetScaffold(
             topBar = topBar,
         ) {
             val ornamentOptions = mapOptions.ornamentOptions.copy(padding = sheetPadding)
-            Box {
+            val mapOptions = mapOptions.copy(ornamentOptions = ornamentOptions)
+            Box{
                 MaplibreMap(
-                    options = mapOptions.copy(ornamentOptions = ornamentOptions),
+                    options = mapOptions,
                     baseStyle = BaseStyle.Uri(rememberTileStyleUrl()),
                     modifier = Modifier.fillMaxSize(),
                     cameraState = cameraState,

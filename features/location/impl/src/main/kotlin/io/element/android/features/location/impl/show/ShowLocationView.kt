@@ -108,6 +108,7 @@ fun ShowLocationView(
         bottomSheetState = rememberStandardBottomSheetState()
     )
     MapBottomSheetScaffold(
+        sheetPeekHeight = 180.dp,
         scaffoldState = scaffoldState,
         cameraState = cameraState,
         modifier = modifier,
