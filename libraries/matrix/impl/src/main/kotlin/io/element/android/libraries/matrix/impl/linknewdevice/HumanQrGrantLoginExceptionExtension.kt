@@ -15,7 +15,11 @@ internal fun HumanQrGrantLoginException.map() = when (this) {
     is HumanQrGrantLoginException.InvalidCheckCode -> ErrorType.InvalidCheckCode(message.orEmpty())
     is HumanQrGrantLoginException.MissingSecretsBackup -> ErrorType.MissingSecretsBackup(message.orEmpty())
     is HumanQrGrantLoginException.NotFound -> ErrorType.NotFound(message.orEmpty())
-    is HumanQrGrantLoginException.UnableToCreateDevice -> ErrorType.UnableToCreateDevice(message.orEmpty())
+    is HumanQrGrantLoginException.Cancelled -> ErrorType.Cancelled(message.orEmpty())
+    is HumanQrGrantLoginException.ConnectionInsecure -> ErrorType.ConnectionInsecure(message.orEmpty())
+    is HumanQrGrantLoginException.DeviceNotFound -> ErrorType.DeviceNotFound(message.orEmpty())
+    is HumanQrGrantLoginException.Expired -> ErrorType.Expired(message.orEmpty())
+    is HumanQrGrantLoginException.OtherDeviceAlreadySignedIn -> ErrorType.OtherDeviceAlreadySignedIn(message.orEmpty())
     is HumanQrGrantLoginException.Unknown -> ErrorType.Unknown(message.orEmpty())
     is HumanQrGrantLoginException.UnsupportedProtocol -> ErrorType.UnsupportedProtocol(message.orEmpty())
 }
