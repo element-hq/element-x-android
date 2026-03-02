@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"添加表情符号：%1$s"</string>
+  <string name="a11y_address">"地址"</string>
   <string name="a11y_avatar">"头像"</string>
   <string name="a11y_collapse_message_text_field">"最小化消息文本框"</string>
   <string name="a11y_delete">"删除"</string>
@@ -26,8 +27,10 @@
   <string name="a11y_paused_voice_message">"语音消息，时长：%1$s，当前位置：%2$s"</string>
   <string name="a11y_pin_field">"PIN 字段"</string>
   <string name="a11y_play">"播放"</string>
+  <string name="a11y_playback_speed">"播放速度"</string>
   <string name="a11y_poll">"投票"</string>
   <string name="a11y_poll_end">"投票已结束"</string>
+  <string name="a11y_qr_code">"QR 码"</string>
   <string name="a11y_react_with">"使用 %1$s 回应"</string>
   <string name="a11y_react_with_other_emojis">"使用其他表情符号回应"</string>
   <string name="a11y_read_receipts_multiple">"%1$s 和 %2$s 已读"</string>
@@ -54,6 +57,7 @@
   <string name="a11y_your_avatar">"您的头像"</string>
   <string name="action_accept">"接受"</string>
   <string name="action_add_caption">"添加标题"</string>
+  <string name="action_add_existing_rooms">"添加现有聊天室"</string>
   <string name="action_add_to_timeline">"添加到时间线"</string>
   <string name="action_back">"返回"</string>
   <string name="action_call">"呼叫"</string>
@@ -73,6 +77,7 @@
   <string name="action_copy_text">"复制文本"</string>
   <string name="action_create">"创建"</string>
   <string name="action_create_room">"创建聊天室"</string>
+  <string name="action_create_space">"创建空间"</string>
   <string name="action_deactivate">"停用"</string>
   <string name="action_deactivate_account">"停用账户"</string>
   <string name="action_decline">"拒绝"</string>
@@ -89,6 +94,7 @@
   <string name="action_enable">"启用"</string>
   <string name="action_end_poll">"结束投票"</string>
   <string name="action_enter_pin">"输入 PIN"</string>
+  <string name="action_explore_public_spaces">"探索公共空间"</string>
   <string name="action_finish">"完成"</string>
   <string name="action_forgot_password">"忘记密码？"</string>
   <string name="action_forward">"转发"</string>
@@ -110,6 +116,7 @@
   <string name="action_load_more">"载入更多"</string>
   <string name="action_manage_account">"管理账户"</string>
   <string name="action_manage_devices">"管理设备"</string>
+  <string name="action_manage_rooms">"管理聊天室"</string>
   <string name="action_message">"发送消息给"</string>
   <string name="action_minimize">"最小化"</string>
   <string name="action_next">"下一步"</string>
@@ -159,6 +166,7 @@
   <string name="action_static_map_load">"点击以加载地图"</string>
   <string name="action_take_photo">"拍摄照片"</string>
   <string name="action_tap_for_options">"点按查看选项"</string>
+  <string name="action_translate">"翻译"</string>
   <string name="action_try_again">"再试一次"</string>
   <string name="action_unpin">"取消置顶"</string>
   <string name="action_view">"查看"</string>
@@ -188,6 +196,7 @@
   <string name="common_copied_to_clipboard">"已复制到剪贴板"</string>
   <string name="common_copyright">"版权"</string>
   <string name="common_creating_room">"正在创建聊天室…"</string>
+  <string name="common_creating_space">"正在创建空间……"</string>
   <string name="common_current_user_canceled_knock">"请求已取消"</string>
   <string name="common_current_user_left_room">"离开聊天室"</string>
   <string name="common_current_user_left_space">"离开空间"</string>
@@ -233,6 +242,7 @@
   <string name="common_light">"浅色"</string>
   <string name="common_line_copied_to_clipboard">"链接已复制到剪贴板"</string>
   <string name="common_link_copied_to_clipboard">"链接已复制到剪贴板"</string>
+  <string name="common_link_new_device">"关联新设备"</string>
   <string name="common_loading">"正在加载…"</string>
   <string name="common_loading_more">"正在加载更多……"</string>
   <plurals name="common_many_members">
@@ -243,10 +253,12 @@
   </plurals>
   <string name="common_message">"消息"</string>
   <string name="common_message_actions">"消息操作"</string>
+  <string name="common_message_failed_to_send">"消息发送失败"</string>
   <string name="common_message_layout">"消息布局"</string>
   <string name="common_message_removed">"消息已移除"</string>
   <string name="common_modern">"现代"</string>
   <string name="common_mute">"静音"</string>
+  <string name="common_name">"名称"</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"没有结果"</string>
   <string name="common_no_room_name">"无聊天室名"</string>
@@ -271,8 +283,10 @@
   </plurals>
   <string name="common_preparing">"正在准备…"</string>
   <string name="common_privacy_policy">"隐私政策"</string>
+  <string name="common_private">"私密"</string>
   <string name="common_private_room">"私有聊天室"</string>
   <string name="common_private_space">"私有空间"</string>
+  <string name="common_public">"公共"</string>
   <string name="common_public_room">"公共聊天室"</string>
   <string name="common_public_space">"公开空间"</string>
   <string name="common_reaction">"回应"</string>
@@ -280,6 +294,7 @@
   <string name="common_reason">"理由"</string>
   <string name="common_recovery_key">"恢复密钥"</string>
   <string name="common_refreshing">"正在刷新…"</string>
+  <string name="common_removing">"正在移除…"</string>
   <plurals name="common_replies">
     <item quantity="other">"%1$d 个回复"</item>
   </plurals>
@@ -288,6 +303,7 @@
   <string name="common_report_a_problem">"报告问题"</string>
   <string name="common_report_submitted">"报告已提交"</string>
   <string name="common_rich_text_editor">"富文本编辑器"</string>
+  <string name="common_role">"角色"</string>
   <string name="common_room">"聊天室"</string>
   <string name="common_room_name">"聊天室名称"</string>
   <string name="common_room_name_placeholder">"例如：您的项目名称"</string>
@@ -302,6 +318,9 @@
   <string name="common_security">"安全"</string>
   <string name="common_seen_by">"已读"</string>
   <string name="common_select_account">"选择账户"</string>
+  <plurals name="common_selected_count">
+    <item quantity="other">"%1$d 已选中"</item>
+  </plurals>
   <string name="common_send_to">"发送至"</string>
   <string name="common_sending">"正在发送…"</string>
   <string name="common_sending_failed">"发送失败"</string>
@@ -312,18 +331,22 @@
   <string name="common_server_url">"服务器 URL"</string>
   <string name="common_settings">"设置"</string>
   <string name="common_share_space">"共享空间"</string>
+  <string name="common_shared_history">"新成员可见历史记录"</string>
   <string name="common_shared_location">"共享位置"</string>
   <string name="common_shared_space">"共享空间"</string>
   <string name="common_signing_out">"正在登出"</string>
   <string name="common_something_went_wrong">"发生了一些错误"</string>
   <string name="common_something_went_wrong_message">"我们遇到了一个问题。请重试。"</string>
   <string name="common_space">"空间"</string>
+  <string name="common_space_members">"空间成员"</string>
+  <string name="common_space_topic_placeholder">"该空间的主题是什么？"</string>
   <plurals name="common_spaces">
     <item quantity="other">"%1$d 空间"</item>
   </plurals>
   <string name="common_starting_chat">"开始聊天…"</string>
   <string name="common_sticker">"贴纸"</string>
   <string name="common_success">"成功"</string>
+  <string name="common_suggested">"推荐"</string>
   <string name="common_suggestions">"建议"</string>
   <string name="common_syncing">"正在同步"</string>
   <string name="common_system">"系统"</string>
@@ -331,7 +354,7 @@
   <string name="common_third_party_notices">"第三方通知"</string>
   <string name="common_thread">"消息列"</string>
   <string name="common_topic">"主题"</string>
-  <string name="common_topic_placeholder">"这个聊天室是关于什么的？"</string>
+  <string name="common_topic_placeholder">"该聊天室的主题是什么？"</string>
   <string name="common_unable_to_decrypt">"无法解密"</string>
   <string name="common_unable_to_decrypt_insecure_device">"从不安全的设备发送"</string>
   <string name="common_unable_to_decrypt_no_access">"无权访问此消息"</string>
@@ -360,7 +383,11 @@
   <string name="common_voice_message">"语音消息"</string>
   <string name="common_waiting">"等待…"</string>
   <string name="common_waiting_for_decryption_key">"正在等待解密密钥"</string>
+  <string name="common_world_readable_history">"任何人都可查看历史记录"</string>
   <string name="common_you">"您"</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) 由于您当时不在聊天室内，系统已将消息共享给您。"</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s 由于您当时不在聊天室内，系统已将此消息共享给您。"</string>
+  <string name="crypto_history_visible">"本聊天室已配置为允许新成员阅读历史记录。%1$s"</string>
   <string name="crypto_identity_change_pin_violation">"%1$s的身份已重置。%2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"%1$s %2$s 的身份已重置。%3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
@@ -451,6 +478,7 @@
   <string name="screen_share_this_location_action">"分享这个位置"</string>
   <string name="screen_space_list_description">"您创建或加入的空间。"</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_empty_state_title">"创建空间以组织聊天室"</string>
   <string name="screen_space_list_parent_space">"%1$s空间"</string>
   <string name="screen_space_list_title">"空间"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"消息未发送，因为%1$s的已验证身份已被重置。"</string>

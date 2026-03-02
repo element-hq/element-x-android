@@ -60,6 +60,8 @@
   <string name="screen_qr_code_login_error_cancelled_title">"登录请求已取消"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"其它设备未接受请求"</string>
   <string name="screen_qr_code_login_error_declined_title">"登录被拒绝"</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_subtitle">"您无需额外操作。"</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_title">"您已在另一台设备登录。"</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"登录已过期. 请重试."</string>
   <string name="screen_qr_code_login_error_expired_title">"登录未及时完成"</string>
   <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"另一个设备不支持使用二维码登录 %s.

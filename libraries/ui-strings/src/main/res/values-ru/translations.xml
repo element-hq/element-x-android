@@ -95,6 +95,7 @@
   <string name="action_enable">"Включить"</string>
   <string name="action_end_poll">"Завершить опрос"</string>
   <string name="action_enter_pin">"Введите PIN-код"</string>
+  <string name="action_explore_public_spaces">"Просмотреть публичные пространства"</string>
   <string name="action_finish">"Завершить"</string>
   <string name="action_forgot_password">"Забыли пароль?"</string>
   <string name="action_forward">"Переслать"</string>
@@ -309,6 +310,7 @@
   <string name="common_report_a_problem">"Сообщить о проблеме"</string>
   <string name="common_report_submitted">"Отчет отправлен"</string>
   <string name="common_rich_text_editor">"Редактор форматированного текста"</string>
+  <string name="common_role">"Роль"</string>
   <string name="common_room">"Комната"</string>
   <string name="common_room_name">"Название комнаты"</string>
   <string name="common_room_name_placeholder">"например, название вашего проекта"</string>
@@ -340,12 +342,14 @@
   <string name="common_server_url">"Адрес сервера"</string>
   <string name="common_settings">"Настройки"</string>
   <string name="common_share_space">"Поделиться пространством"</string>
+  <string name="common_shared_history">"Новые участники видят историю"</string>
   <string name="common_shared_location">"Поделился местоположением"</string>
   <string name="common_shared_space">"Общее пространство"</string>
   <string name="common_signing_out">"Выход…"</string>
   <string name="common_something_went_wrong">"Что-то пошло не так"</string>
   <string name="common_something_went_wrong_message">"Мы столкнулись с проблемой. Пожалуйста, попробуйте еще раз."</string>
   <string name="common_space">"Пространство"</string>
+  <string name="common_space_members">"Участники пространства"</string>
   <string name="common_space_topic_placeholder">"О чём это пространство?"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d Пространство"</item>
@@ -393,6 +397,7 @@
   <string name="common_waiting">"Ожидание…"</string>
   <string name="common_waiting_for_decryption_key">"Ожидание ключа расшифровки"</string>
   <string name="common_you">"Вы"</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) поделился этим сообщением, поскольку вас не было в комнате, когда оно было отправлено."</string>
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s поделился этим сообщением, поскольку вас не было в комнате, когда оно было отправлено."</string>
   <string name="crypto_history_visible">"Эта комната оборудована таким образом, чтобы новые участники могли ознакомиться с историей. %1$s"</string>
   <string name="crypto_identity_change_pin_violation">"Идентификатор %1$s изменился. %2$s"</string>

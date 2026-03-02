@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_edit_room_address_room_address_section_footer">"你需要房间地址才能使其在目录中可见。"</string>
-  <string name="screen_edit_room_address_title">"房间地址"</string>
-  <string name="screen_security_and_privacy_add_room_address_action">"添加房间地址"</string>
-  <string name="screen_security_and_privacy_ask_to_join_option_description">"任何人都可以请求加入房间，但必须由管理员或版主接受请求。"</string>
+  <string name="screen_edit_room_address_room_address_section_footer">"您需要一个地址才能在公共目录中显示。"</string>
+  <string name="screen_edit_room_address_title">"编辑地址"</string>
+  <string name="screen_manage_authorized_spaces_header">"无需邀请即可加入的公共空间。"</string>
+  <string name="screen_manage_authorized_spaces_title">"管理空间"</string>
+  <string name="screen_manage_authorized_spaces_unknown_space">"（未知空间）"</string>
+  <string name="screen_manage_authorized_spaces_unknown_spaces_section_title">"您尚未加入的其他空间"</string>
+  <string name="screen_manage_authorized_spaces_your_spaces_section_title">"您的空间"</string>
+  <string name="screen_security_and_privacy_add_room_address_action">"添加地址"</string>
+  <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"授权空间内任何成员均可加入，其他人员需申请访问权限。"</string>
+  <string name="screen_security_and_privacy_ask_to_join_option_description">"所有用户均需申请访问权限。"</string>
   <string name="screen_security_and_privacy_ask_to_join_option_title">"请求加入"</string>
+  <string name="screen_security_and_privacy_ask_to_join_single_space_members_option_description">"%1$s 成员可自由加入，其他人员需申请访问权限。"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"是的，启用加密"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"一旦启用，就不能再禁用房间的加密功能。消息历史记录只能在房间成员被邀请或加入房间后才可见。
 除房间成员外，任何人都无法阅读信息。这可能会妨碍机器人和网桥正常工作。
@@ -13,23 +20,31 @@
   <string name="screen_security_and_privacy_encryption_section_footer">"加密一旦启用，就无法禁用。"</string>
   <string name="screen_security_and_privacy_encryption_section_header">"加密"</string>
   <string name="screen_security_and_privacy_encryption_toggle_title">"启用端到端加密"</string>
-  <string name="screen_security_and_privacy_room_access_anyone_option_description">"任何人都可以找到并加入"</string>
+  <string name="screen_security_and_privacy_room_access_anyone_option_description">"任何人都可以加入。"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"任何人"</string>
-  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"只有受邀者才能加入"</string>
-  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"仅限邀请"</string>
-  <string name="screen_security_and_privacy_room_access_section_header">"房间访问权限"</string>
+  <string name="screen_security_and_privacy_room_access_footer">"选择哪些空间的成员无需邀请即可加入本聊天室。%1$s"</string>
+  <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"管理空间"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"仅限受邀者加入。"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_title">"仅限受邀者"</string>
+  <string name="screen_security_and_privacy_room_access_section_header">"访问权限"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_multiple_parents_description">"任何位于已授权空间的成员均可加入。"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_single_parent_description">"%1$s 中的任何人都可加入。"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_title">"空间成员"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"目前不支持空间"</string>
-  <string name="screen_security_and_privacy_room_address_section_footer">"你需要房间地址才能使其在目录中可见。"</string>
-  <string name="screen_security_and_privacy_room_address_section_header">"房间地址"</string>
+  <string name="screen_security_and_privacy_room_address_section_footer">"您需要一个地址才能在公共目录中显示。"</string>
+  <string name="screen_security_and_privacy_room_address_section_header">"地址"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"允许通过搜索 %1$s 的公共房间目录来发现此房间"</string>
-  <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"在公共房间目录中可见"</string>
-  <string name="screen_security_and_privacy_room_history_anyone_option_title">"任何人"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_toggle_description">"通过公共目录搜索功能实现可被发现性。"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"在公共目录中可见"</string>
+  <string name="screen_security_and_privacy_room_history_anyone_option_title">"任何人（历史记录公开）"</string>
+  <string name="screen_security_and_privacy_room_history_section_footer">"更改不会影响之前的消息，只会影响新消息。%1$s"</string>
   <string name="screen_security_and_privacy_room_history_section_header">"谁可以读取历史记录"</string>
-  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"仅限被邀请的成员"</string>
-  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"仅自选择此选项以来的成员"</string>
+  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"自受邀以来的成员"</string>
+  <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"成员（完整历史记录）"</string>
   <string name="screen_security_and_privacy_room_publishing_section_footer">"房间地址是查找和访问房间的方式。这也确保你可以轻松地向他人分享房间。
 你可以选择在你服务器的公共房间目录中发布你的房间。"</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"房间发布"</string>
-  <string name="screen_security_and_privacy_room_visibility_section_header">"房间可见性"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_footer">"地址是查找和访问聊天室及空间的途径，同时确保您能轻松与他人共享。"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_header">"可见性"</string>
   <string name="screen_security_and_privacy_title">"安全与隐私"</string>
 </resources>

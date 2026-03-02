@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_space_announcement_item1">"Siz yaratgan yoki qo‘shilgan maydonlarni ko‘rish"</string>
+  <string name="screen_space_announcement_item2">"Maydonlarga takliflarni qabul qilish yoki rad etish"</string>
+  <string name="screen_space_announcement_item3">"Maydonlaringizga qo‘shilishingiz mumkin bo‘lgan xonalarni kashf eting"</string>
+  <string name="screen_space_announcement_item4">"Jamoat maydonlariga qo‘shilish"</string>
+  <string name="screen_space_announcement_item5">"Kirgan maydonlaringizni tark eting"</string>
+  <string name="screen_space_announcement_notice">"Maydonlarni filtrlash, yaratish va boshqarish tez orada amalga oshiriladi."</string>
+  <string name="screen_space_announcement_subtitle">"Maydonlar beta versiyasiga xush kelibsiz! Bu birinchi versiya bilan siz:"</string>
+  <string name="screen_space_announcement_title">"Maydonlar bilan tanishish"</string>
+</resources>

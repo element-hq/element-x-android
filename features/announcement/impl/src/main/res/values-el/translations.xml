@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_space_announcement_item1">"Δείτε τους χώρους που έχετε δημιουργήσει ή στους οποίους έχετε εγγραφεί"</string>
+  <string name="screen_space_announcement_item2">"Να αποδεχθείτε ή να απορρίψετε προσκλήσεις σε χώρους"</string>
+  <string name="screen_space_announcement_item3">"Να ανακαλύψτε όλες τις αίθουσες που μπορείτε να συμμετάσχετε στους χώρους σας"</string>
+  <string name="screen_space_announcement_item4">"Να συμμετάσχετε σε δημόσιους χώρους"</string>
+  <string name="screen_space_announcement_item5">"Να αποχωρήστε από χώρους στους οποίους έχετε συμμετάσχει"</string>
+  <string name="screen_space_announcement_notice">"Το φιλτράρισμα, η δημιουργία και η διαχείριση χώρων θα είναι σύντομα διαθέσιμα."</string>
+  <string name="screen_space_announcement_subtitle">"Καλώς ορίσατε στην δοκιμαστική έκδοση των Χώρων! Με αυτήν την πρώτη έκδοση μπορείτε:"</string>
+  <string name="screen_space_announcement_title">"Παρουσιάζοντας τους Χώρους"</string>
+</resources>

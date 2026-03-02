@@ -13,7 +13,12 @@
     <item quantity="one">"%d ειδοποίηση"</item>
     <item quantity="other">"%d ειδοποιήσεις"</item>
   </plurals>
+  <string name="notification_error_unified_push_unregistered_android">"Δεν ήταν δυνατή η εγγραφή του διανομέα ειδοποιήσεων UnifiedPush, επομένως δεν θα λαμβάνετε πλέον ειδοποιήσεις. Ελέγξτε τις ρυθμίσεις ειδοποιήσεων της εφαρμογής και την κατάσταση του διανομέα push."</string>
   <string name="notification_fallback_content">"Έχεις νέο(α) μήνυμα(τα)."</string>
+  <plurals name="notification_fallback_n_content">
+    <item quantity="one">"Έχετε %d νέο μήνυμα."</item>
+    <item quantity="other">"Έχετε %d νέα μηνύματα."</item>
+  </plurals>
   <string name="notification_incoming_call">"📹 Εισερχόμενη κλήση"</string>
   <string name="notification_inline_reply_failed">"** Αποτυχία αποστολής - παρακαλώ ανοίξτε την αίθουσα"</string>
   <string name="notification_invitation_action_join">"Συμμετοχή"</string>
@@ -37,7 +42,10 @@
   <string name="notification_room_invite_body_with_sender">"%1$s σας προσκάλεσε να συμμετάσχετε στην αίθουσα"</string>
   <string name="notification_sender_me">"Εγώ"</string>
   <string name="notification_sender_mention_reply">"Ο χρήστης %1$s αναφέρθηκε ή απάντησε"</string>
+  <string name="notification_space_invite_body">"Σας προσκάλεσε να συμμετάσχετε στον χώρο"</string>
+  <string name="notification_space_invite_body_with_sender">"%1$s σας προσκάλεσε να συμμετάσχετε στον χώρο"</string>
   <string name="notification_test_push_notification_content">"Βλέπεις την ειδοποίηση! Κάνε μου κλικ!"</string>
+  <string name="notification_thread_in_room">"Νήμα στο %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
@@ -54,10 +62,20 @@
   <string name="push_distributor_background_sync_android">"Συγχρονισμός στο παρασκήνιο"</string>
   <string name="push_distributor_firebase_android">"Υπηρεσίες Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Δεν βρέθηκαν έγκυρες υπηρεσίες Google Play. Οι ειδοποιήσεις ενδέχεται να μην λειτουργούν σωστά."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_description">"Έλεγχος αποκλεισμένων χρηστών"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_quick_fix">"Προβολή αποκλεισμένων χρηστών"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_result_none">"Δεν υπάρχουν αποκλεισμένοι χρήστες."</string>
+  <plurals name="troubleshoot_notifications_test_blocked_users_result_some">
+    <item quantity="one">"Αποκλείσατε τον χρήστη %1$d. Δεν θα λαμβάνετε ειδοποιήσεις για αυτόν τον χρήστη."</item>
+    <item quantity="other">"Αποκλείσατε τους χρήστες %1$d. Δεν θα λαμβάνετε ειδοποιήσεις για αυτούς τους χρήστες."</item>
+  </plurals>
   <string name="troubleshoot_notifications_test_blocked_users_title">"Αποκλεισμένοι χρήστες"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Λάβε το όνομα του τρέχοντος παρόχου."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Δεν έχουν επιλεγεί πάροχοι push."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found">"Τρέχων πάροχος push: %1$s και τρέχων διανομέας: %2$s. Αλλά ο διανομέας %3$s δεν βρέθηκε. Ίσως η εφαρμογή έχει απεγκατασταθεί;"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_no_distributor">"Τρέχων πάροχος push: %1$s, αλλά δεν έχουν ρυθμιστεί διανομείς."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Τρέχων πάροχος push: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success_with_distributor">"Τρέχων πάροχος push: %1$s (%2$s)"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Τρέχων πάροχος push"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Βεβαιώσου ότι η εφαρμογή διαθέτει τουλάχιστον έναν πάροχο push."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Δεν βρέθηκαν πάροχοι push."</string>

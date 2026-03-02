@@ -11,7 +11,11 @@
   <plurals name="notification_compat_summary_title">
     <item quantity="other">"%d 条通知"</item>
   </plurals>
+  <string name="notification_error_unified_push_unregistered_android">"统一推送通知分发器注册失败，您将无法再接收通知。请检查应用的通知设置及推送分发器的状态。"</string>
   <string name="notification_fallback_content">"您有新消息。"</string>
+  <plurals name="notification_fallback_n_content">
+    <item quantity="other">"您有 %d 条新消息。"</item>
+  </plurals>
   <string name="notification_incoming_call">"📹 来电"</string>
   <string name="notification_inline_reply_failed">"** 无法发送——请打开聊天室"</string>
   <string name="notification_invitation_action_join">"加入"</string>
@@ -33,6 +37,8 @@
   <string name="notification_room_invite_body_with_sender">"%1$s 邀请您加入房间"</string>
   <string name="notification_sender_me">"我"</string>
   <string name="notification_sender_mention_reply">"%1$s提及或回复"</string>
+  <string name="notification_space_invite_body">"已邀请您加入该空间"</string>
+  <string name="notification_space_invite_body_with_sender">"%1$s 邀请您加入该空间"</string>
   <string name="notification_test_push_notification_content">"您正在查看通知！点击我！"</string>
   <string name="notification_thread_in_room">"线程 %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s：%2$s"</string>

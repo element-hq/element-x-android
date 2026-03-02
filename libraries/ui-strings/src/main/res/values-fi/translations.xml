@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Lisää reaktio: %1$s"</string>
+  <string name="a11y_address">"Osoite"</string>
   <string name="a11y_avatar">"Avatar"</string>
   <string name="a11y_collapse_message_text_field">"Pienennä viestin tekstikenttä"</string>
   <string name="a11y_delete">"Poista"</string>
@@ -27,8 +28,10 @@
   <string name="a11y_paused_voice_message">"Ääniviesti, kesto: %1$s, nykyinen sijainti: %2$s"</string>
   <string name="a11y_pin_field">"PIN-kenttä"</string>
   <string name="a11y_play">"Toista"</string>
+  <string name="a11y_playback_speed">"Toistonopeus"</string>
   <string name="a11y_poll">"Kysely"</string>
   <string name="a11y_poll_end">"Päättynyt kysely"</string>
+  <string name="a11y_qr_code">"QR-koodi"</string>
   <string name="a11y_react_with">"Lisää reaktio: %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Reagoi muilla emojeilla"</string>
   <string name="a11y_read_receipts_multiple">"%1$s ja %2$s on lukenut viestin"</string>
@@ -56,6 +59,7 @@
   <string name="a11y_your_avatar">"Avatarisi"</string>
   <string name="action_accept">"Hyväksy"</string>
   <string name="action_add_caption">"Lisää kuvateksti"</string>
+  <string name="action_add_existing_rooms">"Lisää olemassa olevia huoneita"</string>
   <string name="action_add_to_timeline">"Lisää aikajanalle"</string>
   <string name="action_back">"Takaisin"</string>
   <string name="action_call">"Soita"</string>
@@ -75,6 +79,7 @@
   <string name="action_copy_text">"Kopioi teksti"</string>
   <string name="action_create">"Luo"</string>
   <string name="action_create_room">"Luo huone"</string>
+  <string name="action_create_space">"Luo tila"</string>
   <string name="action_deactivate">"Deaktivoi"</string>
   <string name="action_deactivate_account">"Deaktivoi tili"</string>
   <string name="action_decline">"Hylkää"</string>
@@ -91,6 +96,7 @@
   <string name="action_enable">"Ota käyttöön"</string>
   <string name="action_end_poll">"Lopeta kysely"</string>
   <string name="action_enter_pin">"Syötä PIN-koodi"</string>
+  <string name="action_explore_public_spaces">"Selaa julkisia tiloja"</string>
   <string name="action_finish">"Valmis"</string>
   <string name="action_forgot_password">"Unohditko salasanan?"</string>
   <string name="action_forward">"Välitä"</string>
@@ -150,6 +156,7 @@
   <string name="action_send_voice_message">"Lähetä ääniviesti"</string>
   <string name="action_share">"Jaa"</string>
   <string name="action_share_link">"Jaa linkki"</string>
+  <string name="action_share_live_location">"Jaa reaaliaikainen sijainti"</string>
   <string name="action_show">"Näytä"</string>
   <string name="action_sign_in_again">"Kirjaudu uudelleen"</string>
   <string name="action_signout">"Kirjaudu ulos"</string>
@@ -162,6 +169,7 @@
   <string name="action_static_map_load">"Lataa kartta napauttamalla"</string>
   <string name="action_take_photo">"Ota kuva"</string>
   <string name="action_tap_for_options">"Näytä vaihtoehdot napauttamalla"</string>
+  <string name="action_translate">"Käännä"</string>
   <string name="action_try_again">"Yritä uudelleen"</string>
   <string name="action_unpin">"Poista kiinnitys"</string>
   <string name="action_view">"Näytä"</string>
@@ -191,6 +199,7 @@
   <string name="common_copied_to_clipboard">"Kopioitu leikepöydälle"</string>
   <string name="common_copyright">"Tekijänoikeudet"</string>
   <string name="common_creating_room">"Luodaan huonetta…"</string>
+  <string name="common_creating_space">"Luodaan tilaa…"</string>
   <string name="common_current_user_canceled_knock">"Pyyntö peruutettu"</string>
   <string name="common_current_user_left_room">"Poistuit huoneesta"</string>
   <string name="common_current_user_left_space">"Poistuit tilasta"</string>
@@ -236,6 +245,7 @@ Syy: %1$s."</string>
   <string name="common_light">"Vaalea"</string>
   <string name="common_line_copied_to_clipboard">"Rivi kopioitu leikepöydälle"</string>
   <string name="common_link_copied_to_clipboard">"Linkki kopioitu leikepöydälle"</string>
+  <string name="common_link_new_device">"Yhdistä uusi laite"</string>
   <string name="common_loading">"Ladataan…"</string>
   <string name="common_loading_more">"Ladataan lisää…"</string>
   <plurals name="common_many_members">
@@ -248,10 +258,12 @@ Syy: %1$s."</string>
   </plurals>
   <string name="common_message">"Viesti"</string>
   <string name="common_message_actions">"Viestitoiminnot"</string>
+  <string name="common_message_failed_to_send">"Viestin lähettäminen epäonnistui"</string>
   <string name="common_message_layout">"Viestien asettelu"</string>
   <string name="common_message_removed">"Viesti poistettu"</string>
   <string name="common_modern">"Moderni"</string>
   <string name="common_mute">"Mykistä"</string>
+  <string name="common_name">"Nimi"</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Ei tuloksia"</string>
   <string name="common_no_room_name">"Nimetön huone"</string>
@@ -277,8 +289,10 @@ Syy: %1$s."</string>
   </plurals>
   <string name="common_preparing">"Valmistellaan…"</string>
   <string name="common_privacy_policy">"Tietosuojakäytäntö"</string>
+  <string name="common_private">"Yksityinen"</string>
   <string name="common_private_room">"Yksityinen huone"</string>
   <string name="common_private_space">"Yksityinen tila"</string>
+  <string name="common_public">"Julkinen"</string>
   <string name="common_public_room">"Julkinen huone"</string>
   <string name="common_public_space">"Julkinen tila"</string>
   <string name="common_reaction">"Reaktio"</string>
@@ -286,6 +300,7 @@ Syy: %1$s."</string>
   <string name="common_reason">"Syy"</string>
   <string name="common_recovery_key">"Palautusavain"</string>
   <string name="common_refreshing">"Päivitetään…"</string>
+  <string name="common_removing">"Poistetaan…"</string>
   <plurals name="common_replies">
     <item quantity="one">"%1$d vastaus"</item>
     <item quantity="other">"%1$d vastausta"</item>
@@ -295,6 +310,7 @@ Syy: %1$s."</string>
   <string name="common_report_a_problem">"Ilmoita ongelmasta"</string>
   <string name="common_report_submitted">"Ilmoitus lähetetty"</string>
   <string name="common_rich_text_editor">"Rikastettu tekstieditori"</string>
+  <string name="common_role">"Rooli"</string>
   <string name="common_room">"Huone"</string>
   <string name="common_room_name">"Huoneen nimi"</string>
   <string name="common_room_name_placeholder">"esim. projektisi nimi"</string>
@@ -310,6 +326,10 @@ Syy: %1$s."</string>
   <string name="common_security">"Turvallisuus"</string>
   <string name="common_seen_by">"Nähneet henkilöt"</string>
   <string name="common_select_account">"Valitse tili"</string>
+  <plurals name="common_selected_count">
+    <item quantity="one">"%1$d valittu"</item>
+    <item quantity="other">"%1$d valittu"</item>
+  </plurals>
   <string name="common_send_to">"Jaa"</string>
   <string name="common_sending">"Lähetetään…"</string>
   <string name="common_sending_failed">"Lähetys epäonnistui"</string>
@@ -320,12 +340,15 @@ Syy: %1$s."</string>
   <string name="common_server_url">"Palvelimen osoite"</string>
   <string name="common_settings">"Asetukset"</string>
   <string name="common_share_space">"Jaa tila"</string>
+  <string name="common_shared_history">"Uudet jäsenet näkevät historian"</string>
   <string name="common_shared_location">"Jaettu sijainti"</string>
   <string name="common_shared_space">"Jaettu tila"</string>
   <string name="common_signing_out">"Kirjaudutaan ulos"</string>
   <string name="common_something_went_wrong">"Jokin meni pieleen"</string>
   <string name="common_something_went_wrong_message">"Kohtasimme ongelman. Yritä uudelleen."</string>
   <string name="common_space">"Tila"</string>
+  <string name="common_space_members">"Tilan jäsenet"</string>
+  <string name="common_space_topic_placeholder">"Mistä tässä tilassa on kyse?"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d Tila"</item>
     <item quantity="other">"%1$d Tilaa"</item>
@@ -333,6 +356,7 @@ Syy: %1$s."</string>
   <string name="common_starting_chat">"Aloitetaan keskustelua…"</string>
   <string name="common_sticker">"Tarra"</string>
   <string name="common_success">"Onnistui"</string>
+  <string name="common_suggested">"Ehdotettu"</string>
   <string name="common_suggestions">"Ehdotukset"</string>
   <string name="common_syncing">"Synkronoidaan"</string>
   <string name="common_system">"Järjestelmän oletus"</string>
@@ -369,13 +393,18 @@ Syy: %1$s."</string>
   <string name="common_voice_message">"Ääniviesti"</string>
   <string name="common_waiting">"Odotetaan…"</string>
   <string name="common_waiting_for_decryption_key">"Odotetaan viestiä"</string>
+  <string name="common_world_readable_history">"Kuka tahansa voi nähdä historian"</string>
   <string name="common_you">"Sinä"</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) jakoi tämän viestin, koska et ollut huoneessa, kun se lähetettiin."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s jakoi tämän viestin, koska et ollut huoneessa, kun se lähetettiin."</string>
+  <string name="crypto_history_visible">"Tämä huone on määritetty niin, että uudet jäsenet voivat lukea historiaa. %1$s"</string>
   <string name="crypto_identity_change_pin_violation">"Käyttäjän %1$s identiteetti nollattiin. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Käyttäjän %1$s %2$s identiteetti nollattiin. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
   <string name="crypto_identity_change_profile_pin_violation">"Käyttäjän %1$s identiteetti nollattiin."</string>
   <string name="crypto_identity_change_verification_violation_new">"Käyttäjän %1$s %2$s identiteetti nollattiin. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Peruuta vahvistus"</string>
+  <string name="dialog_allow_access">"Anna käyttölupa"</string>
   <string name="dialog_confirm_link_message">"Linkki %1$s on viemässä sinua toiselle sivustolle %2$s
 
 Haluatko varmasti jatkaa?"</string>
@@ -461,6 +490,7 @@ Haluatko varmasti jatkaa?"</string>
   <string name="screen_share_this_location_action">"Jaa tämä sijainti"</string>
   <string name="screen_space_list_description">"Luomasi tai liittymäsi tilat."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_empty_state_title">"Luo tiloja huoneiden järjestämiseksi"</string>
   <string name="screen_space_list_parent_space">"%1$s tila"</string>
   <string name="screen_space_list_title">"Tilat"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Viestiä ei lähetetty, koska käyttäjän %1$s vahvistettu identiteetti nollattiin."</string>

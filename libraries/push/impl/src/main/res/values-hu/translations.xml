@@ -15,6 +15,10 @@
   </plurals>
   <string name="notification_error_unified_push_unregistered_android">"A UnifiedPush leküldéses értesítési terjesztő nem regisztrálható, ezért többé nem fog értesítéseket kapni. Ellenőrizze az alkalmazás értesítési beállításait és a leküldés értesítési terjesztő állapotát."</string>
   <string name="notification_fallback_content">"Értesítés"</string>
+  <plurals name="notification_fallback_n_content">
+    <item quantity="one">"Van %d új üzenete."</item>
+    <item quantity="other">"Van %d új üzenete."</item>
+  </plurals>
   <string name="notification_incoming_call">"📹 Bejövő hívás"</string>
   <string name="notification_inline_reply_failed">"** Nem sikerült elküldeni – nyissa meg a szobát"</string>
   <string name="notification_invitation_action_join">"Csatlakozás"</string>

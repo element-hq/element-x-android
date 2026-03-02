@@ -13,6 +13,9 @@
   <string name="screen_change_account_provider_other">"Άλλο"</string>
   <string name="screen_change_account_provider_subtitle">"Χρησιμοποίησε διαφορετικό πάροχο λογαριασμού, όπως τον δικό σου ιδιωτικό διακομιστή ή έναν εργασιακό λογαριασμό."</string>
   <string name="screen_change_account_provider_title">"Αλλαγή παρόχου λογαριασμού"</string>
+  <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
+  <string name="screen_change_server_error_element_pro_required_message">"Η εφαρμογή Element Pro απαιτείται στο %1$s. Παρακαλώ κατεβάστε την από το κατάστημα."</string>
+  <string name="screen_change_server_error_element_pro_required_title">"Απαιτείται το Element Pro"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Δεν μπορούσαμε να επικοινωνήσουμε με αυτόν τον οικιακό διακομιστή. Βεβαιώσου ότι έχεις εισαγάγει σωστά τη διεύθυνση URL του αρχικού διακομιστή. Εάν η διεύθυνση URL είναι σωστή, επικοινώνησε με τον διαχειριστή του κεντρικού διακομιστή για περαιτέρω βοήθεια."</string>
   <string name="screen_change_server_error_invalid_well_known">"Ο διακομιστής δεν είναι διαθέσιμος λόγω προβλήματος στο αρχείο .well-known:
 %1$s"</string>
@@ -34,6 +37,7 @@
   <string name="screen_login_subtitle">"Το Matrix είναι ένα ανοιχτό δίκτυο για ασφαλή, αποκεντρωμένη επικοινωνία."</string>
   <string name="screen_login_title">"Καλωσόρισες ξανά!"</string>
   <string name="screen_login_title_with_homeserver">"Συνδέσου στο %1$s"</string>
+  <string name="screen_onboarding_app_version">"Έκδοση %1$s"</string>
   <string name="screen_onboarding_sign_in_manually">"Σύνδεση χειροκίνητα"</string>
   <string name="screen_onboarding_sign_in_to">"Συνδέσου στο %1$s"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"Συνδέσου με κωδικό QR"</string>
@@ -56,6 +60,8 @@
   <string name="screen_qr_code_login_error_cancelled_title">"Το αίτημα σύνδεσης ακυρώθηκε"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"Η σύνδεση απορρίφθηκε στην άλλη συσκευή."</string>
   <string name="screen_qr_code_login_error_declined_title">"Η σύνδεση απορρίφθηκε"</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_subtitle">"Δεν χρειάζεται να κάνετε τίποτα άλλο."</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_title">"Η άλλη συσκευή σας είναι ήδη συνδεδεμένη"</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"Η είσοδος έληξε. Παρακαλώ προσπάθησε ξανά."</string>
   <string name="screen_qr_code_login_error_expired_title">"Η σύνδεση δεν ολοκληρώθηκε εγκαίρως"</string>
   <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"Η άλλη σου συσκευή δεν υποστηρίζει σύνδεση στο %s με κωδικό QR.

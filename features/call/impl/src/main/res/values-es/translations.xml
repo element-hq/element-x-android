@@ -3,5 +3,6 @@
   <string name="call_foreground_service_channel_title_android">"Llamada en curso"</string>
   <string name="call_foreground_service_message_android">"Pulsa para regresar a la llamada"</string>
   <string name="call_foreground_service_title_android">"☎️ Llamada en curso"</string>
+  <string name="call_invalid_audio_device_bluetooth_devices_disabled">"Element Call no soporta dispositivos de audio Bluetooth en esta versión de Android. Selecciona otro dispositivo de audio."</string>
   <string name="screen_incoming_call_subtitle_android">"Llamada de Element Call entrante"</string>
 </resources>

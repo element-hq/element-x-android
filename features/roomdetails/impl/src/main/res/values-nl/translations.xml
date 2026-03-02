@@ -45,6 +45,7 @@
   <string name="screen_room_details_invite_people_title">"Mensen uitnodigen"</string>
   <string name="screen_room_details_leave_conversation_title">"Gesprek verlaten"</string>
   <string name="screen_room_details_leave_room_title">"Kamer verlaten"</string>
+  <string name="screen_room_details_media_gallery_title">"Media en bestanden"</string>
   <string name="screen_room_details_notification_mode_custom">"Aangepast"</string>
   <string name="screen_room_details_notification_mode_default">"Standaard"</string>
   <string name="screen_room_details_notification_title">"Meldingen"</string>

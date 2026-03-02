@@ -1,18 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_add_reaction">"Tepki ekle:%1$s"</string>
   <string name="a11y_avatar">"Profil resmi"</string>
+  <string name="a11y_collapse_message_text_field">"Mesaj metin alanını küçült"</string>
   <string name="a11y_delete">"Sil"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d basamak girildi"</item>
     <item quantity="other">"%1$d basamak girildi"</item>
   </plurals>
+  <string name="a11y_edit_avatar">"Fotoğrafı düzenle"</string>
+  <string name="a11y_edit_room_address_hint">"Tam adres %1$s olacaktır"</string>
+  <string name="a11y_encryption_details">"Şifreleme ayrıntıları"</string>
+  <string name="a11y_expand_message_text_field">"Mesaj metin alanını genişlet"</string>
   <string name="a11y_hide_password">"Şifreyi gizle"</string>
   <string name="a11y_join_call">"Aramaya katıl"</string>
   <string name="a11y_jump_to_bottom">"Aşağıya atla"</string>
+  <string name="a11y_move_the_map_to_my_location">"Haritayı konumuma taşı"</string>
   <string name="a11y_notifications_mentions_only">"Yalnızca bahsetmeler"</string>
   <string name="a11y_notifications_muted">"Sessiz"</string>
+  <string name="a11y_notifications_new_mentions">"Yeni bahsetmeler"</string>
+  <string name="a11y_notifications_new_messages">"Yeni mesajlar"</string>
+  <string name="a11y_notifications_ongoing_call">"Devam eden arama"</string>
+  <string name="a11y_other_user_avatar">"Diğer kullanıcının avatarı"</string>
   <string name="a11y_page_n">"Sayfa %1$d"</string>
   <string name="a11y_pause">"Duraklat"</string>
+  <string name="a11y_paused_voice_message">"Sesli mesaj, süre: %1$s, geçerli konum: %2$s"</string>
   <string name="a11y_pin_field">"PIN alanı"</string>
   <string name="a11y_play">"Oynat"</string>
   <string name="a11y_poll">"Anket"</string>
@@ -27,13 +39,18 @@
   <string name="a11y_read_receipts_single">"Okuyan %1$s"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"Tümünü göstermek için dokunun"</string>
   <string name="a11y_remove_reaction">"Tepkimeyi kaldır %1$s"</string>
+  <string name="a11y_remove_reaction_with">"%1$s ile verilen tepkiyi kaldır"</string>
+  <string name="a11y_room_avatar">"Oda avatarı"</string>
   <string name="a11y_send_files">"Dosyaları gönder"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Zaman sınırlı işlem gerekli, doğrulamak için bir dakikanız var"</string>
   <string name="a11y_show_password">"Şifreyi göster"</string>
   <string name="a11y_start_call">"Bir arama başlatın"</string>
+  <string name="a11y_user_avatar">"Kullanıcı avatarı"</string>
   <string name="a11y_user_menu">"Kullanıcı menüsü"</string>
   <string name="a11y_view_details">"Ayrıntıları görüntüle"</string>
   <string name="a11y_voice_message_record">"Sesli mesajı kaydedin."</string>
   <string name="a11y_voice_message_stop_recording">"Kaydı durdur"</string>
+  <string name="a11y_your_avatar">"Fotoğrafın"</string>
   <string name="action_accept">"Kabul et"</string>
   <string name="action_add_caption">"Açıklama ekle"</string>
   <string name="action_add_to_timeline">"Zaman çizelgesine ekle"</string>
@@ -51,7 +68,7 @@
   <string name="action_copy">"Kopyala"</string>
   <string name="action_copy_caption">"Açıklamayı kopyala"</string>
   <string name="action_copy_link">"Bağlantıyı kopyala"</string>
-  <string name="action_copy_link_to_message">"Bağlantıyı mesaja kopyala"</string>
+  <string name="action_copy_link_to_message">"Mesaj bağlantısını kopyala"</string>
   <string name="action_copy_text">"Metni kopyala"</string>
   <string name="action_create">"Oluştur"</string>
   <string name="action_create_room">"Bir oda oluştur"</string>
@@ -59,6 +76,7 @@
   <string name="action_deactivate_account">"Hesabı devre dışı bırak"</string>
   <string name="action_decline">"Reddet"</string>
   <string name="action_delete_poll">"Anketi Sil"</string>
+  <string name="action_deselect_all">"Seçimi kaldır"</string>
   <string name="action_disable">"Devre dışı"</string>
   <string name="action_discard">"Vazgeç"</string>
   <string name="action_dismiss">"Kapat"</string>
@@ -70,12 +88,12 @@
   <string name="action_end_poll">"Anketi sonlandır"</string>
   <string name="action_enter_pin">"PIN girin"</string>
   <string name="action_forgot_password">"Parolanızı mı unuttunuz?"</string>
-  <string name="action_forward">"İleri"</string>
+  <string name="action_forward">"İlet"</string>
   <string name="action_go_back">"Geri dön"</string>
   <string name="action_ignore">"Yoksay"</string>
   <string name="action_invite">"Davet et"</string>
-  <string name="action_invite_friends">"İnsanları davet et"</string>
-  <string name="action_invite_friends_to_app">"İnsanları davet et %1$s"</string>
+  <string name="action_invite_friends">"Kişileri davet et"</string>
+  <string name="action_invite_friends_to_app">"Kişileri %1$s\'ye davet et"</string>
   <string name="action_invite_people_to_app">"İnsanları davet et %1$s"</string>
   <string name="action_invites_list">"Davetiyeler"</string>
   <string name="action_join">"Katıl"</string>
@@ -86,6 +104,7 @@
   <string name="action_load_more">"Daha fazla yükle"</string>
   <string name="action_manage_account">"Hesabı yönet"</string>
   <string name="action_manage_devices">"Cihazları yönet"</string>
+  <string name="action_manage_rooms">"Odaları yönet"</string>
   <string name="action_message">"Mesaj"</string>
   <string name="action_next">"Sonraki"</string>
   <string name="action_no">"Hayır"</string>
@@ -127,6 +146,7 @@
   <string name="action_static_map_load">"Haritayı yüklemek için dokunun"</string>
   <string name="action_take_photo">"Fotoğraf çek"</string>
   <string name="action_tap_for_options">"Seçenekler için dokunun"</string>
+  <string name="action_translate">"Çeviri"</string>
   <string name="action_try_again">"Tekrar deneyin"</string>
   <string name="action_unpin">"Sabitlemeyi kaldır"</string>
   <string name="action_view_in_timeline">"Zaman çizelgesinde görüntüle"</string>
@@ -137,6 +157,8 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"Yükseltme mevcut"</string>
   <string name="common_about">"Hakkında"</string>
   <string name="common_acceptable_use_policy">"Kabul edilebilir kullanım politikası"</string>
+  <string name="common_add_account">"Hesap ekle"</string>
+  <string name="common_add_another_account">"Başka bir hesap ekle"</string>
   <string name="common_adding_caption">"Açıklama ekleme"</string>
   <string name="common_advanced_settings">"Gelişmiş Ayarlar"</string>
   <string name="common_analytics">"Analizler"</string>
@@ -211,6 +233,7 @@ Neden: %1$s."</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Sonuç yok"</string>
   <string name="common_no_room_name">"Oda adı yok"</string>
+  <string name="common_no_space_name">"Alan adı yok"</string>
   <string name="common_not_encrypted">"Şifrelenmemiş"</string>
   <string name="common_offline">"Çevrimdışı"</string>
   <string name="common_open_source_licenses">"Açık kaynak lisansları"</string>
@@ -229,11 +252,15 @@ Neden: %1$s."</string>
     <item quantity="one">"%d oy"</item>
     <item quantity="other">"%d oy"</item>
   </plurals>
+  <string name="common_preparing">"Hazırlanıyor…"</string>
   <string name="common_privacy_policy">"Gizlilik Politikası"</string>
   <string name="common_private_room">"Özel oda"</string>
+  <string name="common_private_space">"Özel alan"</string>
   <string name="common_public_room">"Herkese açık oda"</string>
+  <string name="common_public_space">"Herkese açık alan"</string>
   <string name="common_reaction">"Tepki"</string>
   <string name="common_reactions">"Tepkiler"</string>
+  <string name="common_reason">"Neden"</string>
   <string name="common_recovery_key">"Kurtarma anahtarı"</string>
   <string name="common_refreshing">"Yenileniyor…"</string>
   <string name="common_replying_to">"Cevaplamak için %1$s"</string>
@@ -251,6 +278,7 @@ Neden: %1$s."</string>
   <string name="common_search_results">"Arama sonuçları"</string>
   <string name="common_security">"Güvenlik"</string>
   <string name="common_seen_by">"Tarafından görüldü"</string>
+  <string name="common_select_account">"Hesap seç"</string>
   <string name="common_send_to">"Şuraya gönder"</string>
   <string name="common_sending">"Gönderiliyor…"</string>
   <string name="common_sending_failed">"Gönderme başarısız oldu"</string>
@@ -261,6 +289,8 @@ Neden: %1$s."</string>
   <string name="common_shared_location">"Paylaşılan konum"</string>
   <string name="common_signing_out">"Oturumu kapatma"</string>
   <string name="common_something_went_wrong">"Bir şeyler ters gitti"</string>
+  <string name="common_something_went_wrong_message">"Bir sorunla karşılaştık. Lütfen tekrar deneyin."</string>
+  <string name="common_space_topic_placeholder">"Bu alan ne hakkında?"</string>
   <string name="common_starting_chat">"Sohbet başlatılıyor…"</string>
   <string name="common_sticker">"Çıkartma"</string>
   <string name="common_success">"Başarılı"</string>
@@ -291,6 +321,8 @@ Neden: %1$s."</string>
   <string name="common_verify_identity">"Kimliği doğrula"</string>
   <string name="common_verify_user">"Kullanıcıyı Doğrula"</string>
   <string name="common_video">"Video"</string>
+  <string name="common_video_quality_high">"Yüksek kalite"</string>
+  <string name="common_video_quality_high_description">"En iyi kalite ancak daha büyük dosya boyutu"</string>
   <string name="common_voice_message">"Sesli Mesaj"</string>
   <string name="common_waiting">"Bekleniyor…"</string>
   <string name="common_waiting_for_decryption_key">"Bu mesajı bekliyorum"</string>
@@ -305,6 +337,8 @@ Neden: %1$s."</string>
 
 Devam etmek istediğinizden emin misiniz?"</string>
   <string name="dialog_confirm_link_title">"Bu bağlantıyı tekrardan kontrol edin"</string>
+  <string name="dialog_default_video_quality_selector_subtitle">"Yüklediğiniz videoların varsayılan kaliteyi seçin."</string>
+  <string name="dialog_default_video_quality_selector_title">"Video yükleme kalitesi"</string>
   <string name="dialog_title_confirmation">"Onaylama"</string>
   <string name="dialog_title_error">"Hata"</string>
   <string name="dialog_title_success">"Başarılı"</string>
@@ -318,6 +352,7 @@ Devam etmek istediğinizden emin misiniz?"</string>
   <string name="error_failed_loading_messages">"Mesajlar yüklenemedi"</string>
   <string name="error_failed_locating_user">"%1$s konumunuza erişemedi. Lütfen daha sonra tekrar deneyin."</string>
   <string name="error_failed_uploading_voice_message">"Sesli mesajınız yüklenemedi."</string>
+  <string name="error_invalid_invite">"Oda artık mevcut değil veya davet artık geçerli değil."</string>
   <string name="error_message_not_found">"Mesaj bulunamadı"</string>
   <string name="error_missing_location_auth_android">"%1$s konumunuza erişim iznine sahip değil. Erişimi Ayarlar\'dan etkinleştirebilirsiniz."</string>
   <string name="error_missing_location_rationale_android">"%1$s konumunuza erişim iznine sahip değil. Aşağıdan erişimi etkinleştirin."</string>
@@ -349,8 +384,11 @@ Devam etmek istediğinizden emin misiniz?"</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"%1$s tüm cihazları doğrulamadığı için mesajınız gönderilmedi"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Bir veya daha fazla cihazınız doğrulanmamış. Mesajı yine de gönderebilir veya şimdilik iptal edip tüm cihazlarınızı doğruladıktan sonra tekrar deneyebilirsiniz."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Bir veya daha fazla cihazınızı doğrulamadığınız için mesajınız gönderilmedi"</string>
+  <string name="screen_room_change_role_administrators_or_owners_title">"Yöneticileri veya Sahipleri Düzenle"</string>
   <string name="screen_room_error_failed_processing_media">"Medya yüklenemedi, lütfen tekrar deneyin."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Kullanıcı ayrıntıları alınamadı"</string>
+  <string name="screen_room_grouped_state_events_expand">"Daha fazla"</string>
+  <string name="screen_room_grouped_state_events_reduce">"Daha az"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s / %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Sabitlenmiş mesajlar"</string>
   <string name="screen_room_pinned_banner_loading_description">"Mesaj yükleniyor…"</string>
@@ -362,6 +400,8 @@ Devam etmek istediğinizden emin misiniz?"</string>
   <string name="screen_share_open_google_maps">"Google Maps\'te aç"</string>
   <string name="screen_share_open_osm_maps">"OpenStreetMap\'te aç"</string>
   <string name="screen_share_this_location_action">"Bu konumu paylaş"</string>
+  <string name="screen_space_list_description">"Oluşturduğunuz veya katıldığınız alanlar."</string>
+  <string name="screen_space_list_title">"Alanlar"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"%1$s kullanıcısının doğrulanmış kimliği değiştiği için ileti gönderilmedi."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"%1$s tüm cihazları doğrulamadığı için mesaj gönderilmedi."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Bir veya daha fazla cihazınızı doğrulamadığınız için mesaj gönderilmedi."</string>
