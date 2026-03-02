@@ -49,7 +49,7 @@ fun ComposerAlertMolecule(
     content: AnnotatedString,
     onSubmitClick: () -> Unit,
     modifier: Modifier = Modifier,
-    level: ComposerAlertLevel = ComposerAlertLevel.Default,
+    level: ComposerAlertLevel = ComposerAlertLevel.Info,
     showIcon: Boolean = false,
     submitText: String = stringResource(CommonStrings.action_ok),
 ) {
@@ -57,14 +57,12 @@ fun ComposerAlertMolecule(
         modifier.fillMaxWidth()
     ) {
         val lineColor = when (level) {
-            ComposerAlertLevel.Default -> ElementTheme.colors.borderInfoSubtle
             ComposerAlertLevel.Info -> ElementTheme.colors.borderInfoSubtle
             ComposerAlertLevel.Critical -> ElementTheme.colors.borderCriticalSubtle
         }
 
         val textColor = when (level) {
-            ComposerAlertLevel.Default -> ElementTheme.colors.textPrimary
-            ComposerAlertLevel.Info -> ElementTheme.colors.textInfoPrimary
+            ComposerAlertLevel.Info -> ElementTheme.colors.textPrimary
             ComposerAlertLevel.Critical -> ElementTheme.colors.textCriticalPrimary
         }
 
@@ -75,10 +73,6 @@ fun ComposerAlertMolecule(
                 .background(lineColor)
         )
         val gradientColors = when (level) {
-            ComposerAlertLevel.Default -> listOf(
-                ElementTheme.colors.bgInfoSubtle,
-                ElementTheme.colors.bgInfoSubtle,
-            )
             ComposerAlertLevel.Info -> gradientInfoColors()
             ComposerAlertLevel.Critical -> gradientCriticalColors()
         }
@@ -100,12 +94,10 @@ fun ComposerAlertMolecule(
                         )
                     } else if (showIcon) {
                         val icon = when (level) {
-                            ComposerAlertLevel.Default -> CompoundIcons.Info()
                             ComposerAlertLevel.Info -> CompoundIcons.Info()
                             ComposerAlertLevel.Critical -> CompoundIcons.Error()
                         }
                         val iconTint = when (level) {
-                            ComposerAlertLevel.Default -> ElementTheme.colors.iconPrimary
                             ComposerAlertLevel.Info -> ElementTheme.colors.iconInfoPrimary
                             ComposerAlertLevel.Critical -> ElementTheme.colors.iconCriticalPrimary
                         }
@@ -135,7 +127,6 @@ fun ComposerAlertMolecule(
 }
 
 enum class ComposerAlertLevel {
-    Default,
     Info,
     Critical
 }
