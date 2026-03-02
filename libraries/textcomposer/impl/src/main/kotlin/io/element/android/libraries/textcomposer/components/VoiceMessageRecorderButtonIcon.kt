@@ -65,7 +65,7 @@ private fun StopButton(
     ) {
         Icon(
             modifier = Modifier.size(24.dp),
-            resourceId = CommonDrawables.ic_stop,
+            imageVector = CompoundIcons.StopSolid(),
             // Note: accessibility is managed in TextComposer.
             contentDescription = null,
             tint = ElementTheme.colors.iconOnSolidPrimary,
