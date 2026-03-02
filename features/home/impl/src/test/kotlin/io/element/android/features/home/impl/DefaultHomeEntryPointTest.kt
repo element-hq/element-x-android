@@ -11,6 +11,7 @@ package io.element.android.features.home.impl
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.bumble.appyx.core.modality.BuildContext
 import com.google.common.truth.Truth.assertThat
+import com.ibm.icu.impl.Assert
 import io.element.android.features.home.api.HomeEntryPoint
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -61,5 +62,15 @@ class DefaultHomeEntryPointTest {
         )
         assertThat(result).isInstanceOf(HomeFlowNode::class.java)
         assertThat(result.plugins).contains(callback)
+    }
+
+    @Test
+    fun testFailure() {
+        Assert.fail("test broke!")
+    }
+
+    @Test
+    fun testErrored() {
+        error("boom")
     }
 }
