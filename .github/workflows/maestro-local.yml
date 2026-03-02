@@ -126,7 +126,7 @@ jobs:
       - name: Update summary (success)
         if: steps.maestro_test.outcome == 'success'
         run: |
-          echo "### Maestro tests worked :rocket:!"
+          echo "### Maestro tests worked :rocket:!" >> $GITHUB_STEP_SUMMARY
       - name: Update summary (failure)
         if: steps.maestro_test.outcome != 'success'
         run: |
