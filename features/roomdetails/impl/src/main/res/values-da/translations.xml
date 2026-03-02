@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crypto_history_sharing_room_info_hidden_badge_content">"Nye medlemmer kan ikke se historikken"</string>
+  <string name="crypto_history_sharing_room_info_shared_badge_content">"Nye medlemmer ser historik"</string>
+  <string name="crypto_history_sharing_room_info_world_readable_badge_content">"Alle kan se historikken"</string>
   <string name="screen_edit_room_address_room_address_section_footer">"Du skal bruge en adresse for at gøre det synligt i det offentlige register."</string>
   <string name="screen_edit_room_address_title">"Redigér adresse"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Der opstod en fejl under opdatering af notifikationsindstillingen."</string>
@@ -150,6 +153,7 @@ Vi anbefaler ikke at aktivere kryptering for rum, som alle kan finde og deltage 
   <string name="screen_security_and_privacy_room_access_section_header">"Adgang"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_multiple_parents_description">"Alle i autoriserede grupper kan deltage."</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_single_parent_description">"Alle i %1$s kan deltage."</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_title">"Medlemmer af rummet"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Grupper understøttes ikke i øjeblikket"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Du skal bruge en adresse for at gøre det synligt i det offentlige register."</string>
   <string name="screen_security_and_privacy_room_address_section_header">"Adresse"</string>

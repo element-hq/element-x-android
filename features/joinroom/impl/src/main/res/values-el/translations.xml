@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_join_room_ban_by_message">"Αποκλειστήκατε από αυτή την αίθουσα από το χρήστη %1$s."</string>
-  <string name="screen_join_room_ban_message">"Σας απαγορεύτηκε η είσοδος σε αυτή την αίθουσα"</string>
+  <string name="screen_join_room_ban_by_message">"Αποκλειστήκατε από το χρήστη %1$s."</string>
+  <string name="screen_join_room_ban_message">"Σας επιβλήθηκε ένα ban"</string>
   <string name="screen_join_room_ban_reason">"Αιτία: %1$s."</string>
   <string name="screen_join_room_cancel_knock_action">"Ακύρωση αιτήματος"</string>
   <string name="screen_join_room_cancel_knock_alert_confirmation">"Ναι, ακύρωση"</string>
@@ -11,13 +11,15 @@
   <string name="screen_join_room_decline_and_block_alert_message">"Είστε βέβαιοι ότι θέλετε να απορρίψετε την πρόσκληση συμμετοχής σε αυτήν την αίθουσα; Αυτό θα εμποδίσει επίσης τον χρήστη %1$s να επικοινωνήσει μαζί σας ή να σας προσκαλέσει σε αίθουσες."</string>
   <string name="screen_join_room_decline_and_block_alert_title">"Απόρριψη πρόσκλησης και αποκλεισμός"</string>
   <string name="screen_join_room_decline_and_block_button_title">"Απόρριψη και αποκλεισμός"</string>
-  <string name="screen_join_room_fail_message">"Η συμμετοχή στην αίθουσα απέτυχε."</string>
-  <string name="screen_join_room_fail_reason">"Αυτή η αίθουσα είναι είτε μόνο για προσκεκλημένους είτε ενδέχεται να υπάρχουν περιορισμοί πρόσβασης σε επίπεδο χώρου."</string>
-  <string name="screen_join_room_forget_action">"Ξεχάστε αυτή την αίθουσα"</string>
-  <string name="screen_join_room_invite_required_message">"Χρειάζεστε πρόσκληση για να συμμετάσχετε σε αυτή την αίθουσα"</string>
+  <string name="screen_join_room_fail_message">"Η συμμετοχή απέτυχε"</string>
+  <string name="screen_join_room_fail_reason">"Πρέπει να λάβετε πρόσκληση για να συμμετάσχετε ή ενδέχεται να υπάρχουν περιορισμοί πρόσβασης."</string>
+  <string name="screen_join_room_forget_action">"Κατάργηση"</string>
+  <string name="screen_join_room_invite_required_message">"Χρειάζεστε πρόσκληση για να συμμετάσχετε"</string>
+  <string name="screen_join_room_invited_by">"Προσκεκλημένο από"</string>
   <string name="screen_join_room_join_action">"Συμμετοχή"</string>
   <string name="screen_join_room_join_restricted_message">"Ενδέχεται να χρειαστεί να προσκληθείτε ή να είστε μέλος ενός χώρου για να συμμετάσχετε."</string>
   <string name="screen_join_room_knock_action">"Χτύπα για συμμετοχή"</string>
+  <string name="screen_join_room_knock_message_characters_count">"Επιτρεπόμενοι χαρακτήρες %1$d από %2$d"</string>
   <string name="screen_join_room_knock_message_description">"Μήνυμα (προαιρετικό)"</string>
   <string name="screen_join_room_knock_sent_description">"Θα λάβετε πρόσκληση για να συμμετάσχετε στην αίθουσα, εάν το αίτημά σας γίνει αποδεκτό."</string>
   <string name="screen_join_room_knock_sent_title">"Το αίτημα συμμετοχής στάλθηκε"</string>

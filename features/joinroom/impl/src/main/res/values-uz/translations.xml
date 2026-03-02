@@ -15,6 +15,7 @@
   <string name="screen_join_room_fail_reason">"Bu xona faqat taklif etilganlar uchun yoki bu maydonga kirish huquqi cheklangan bo‘lishi mumkin."</string>
   <string name="screen_join_room_forget_action">"Bu xonani esdan chiqarish"</string>
   <string name="screen_join_room_invite_required_message">"Bu xonaga kirish uchun taklifnoma kerak"</string>
+  <string name="screen_join_room_invited_by">"Tomonidan taklif qilingan"</string>
   <string name="screen_join_room_join_action">"Qo\'shilish"</string>
   <string name="screen_join_room_join_restricted_message">"Qo‘shilish uchun sizga taklif kerak yoki siz maydonga a’zo bo‘lishingiz kerak."</string>
   <string name="screen_join_room_knock_action">"Qoʻshilish soʻrovini yuborish"</string>

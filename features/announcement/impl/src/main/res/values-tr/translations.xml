@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_space_announcement_item1">"Oluşturduğunuz veya katıldığınız alanları görüntüleyin"</string>
+  <string name="screen_space_announcement_item2">"Alan davetlerini kabul edin veya reddedin"</string>
+  <string name="screen_space_announcement_item3">"Alanlarınızdaki katılabileceğiniz odaları keşfedin"</string>
+  <string name="screen_space_announcement_item4">"Herkese açık alanlara katılın"</string>
+  <string name="screen_space_announcement_item5">"Katıldığınız alanlardan ayrılın"</string>
+  <string name="screen_space_announcement_notice">"Alanları filtreleme, oluşturma ve yönetme yakında geliyor."</string>
+  <string name="screen_space_announcement_subtitle">"Alanlar’ın beta sürümüne hoş geldiniz! Bu ilk sürümle şunları yapabilirsiniz:"</string>
+  <string name="screen_space_announcement_title">"Alanlar ile tanışın"</string>
+</resources>

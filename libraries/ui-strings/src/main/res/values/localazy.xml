@@ -156,6 +156,7 @@
   <string name="action_send_voice_message">"Send voice message"</string>
   <string name="action_share">"Share"</string>
   <string name="action_share_link">"Share link"</string>
+  <string name="action_share_live_location">"Share live location"</string>
   <string name="action_show">"Show"</string>
   <string name="action_sign_in_again">"Sign in again"</string>
   <string name="action_signout">"Sign out"</string>
@@ -403,6 +404,7 @@ Reason: %1$s."</string>
   <string name="crypto_identity_change_profile_pin_violation">"%1$s’s identity was reset."</string>
   <string name="crypto_identity_change_verification_violation_new">"%1$s’s %2$s identity was reset. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Withdraw verification"</string>
+  <string name="dialog_allow_access">"Allow access"</string>
   <string name="dialog_confirm_link_message">"The link %1$s is taking you to another site %2$s
 
 Are you sure you want to continue?"</string>

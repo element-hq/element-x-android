@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_create_room_action_create_room">"Yeni oda"</string>
-  <string name="screen_create_room_add_people_title">"İnsanları davet et"</string>
+  <string name="screen_create_room_add_people_title">"Kişileri davet et"</string>
   <string name="screen_create_room_error_creating_room">"Oda oluşturulurken bir hata oluştu"</string>
   <string name="screen_create_room_private_option_description">"Bu odaya yalnızca davet edilen kişiler erişebilir. Tüm mesajlar uçtan uca şifrelenir."</string>
   <string name="screen_create_room_public_option_description">"Bu odayı herkes bulabilir.

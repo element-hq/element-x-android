@@ -10,6 +10,7 @@ Buni xona sozlamalaridan istalgan vaqtda oʻzgartirishingiz mumkin."</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Qo‘shilishni so‘rang"</string>
   <string name="screen_create_room_room_access_section_public_option_description">"Bu xonaga istalgan kishi qo‘shilishi mumkin"</string>
   <string name="screen_create_room_room_address_section_footer">"Ushbu xona ommaviy xonalar ro‘yxatida ko‘rinishi uchun sizga xona manzili kerak bo‘ladi."</string>
+  <string name="screen_create_room_room_address_section_title">"Xona manzili"</string>
   <string name="screen_create_room_room_visibility_section_title">"Xonaning ko‘rinishi"</string>
   <string name="screen_create_room_topic_label">"Mavzu (ixtiyoriy)"</string>
 </resources>

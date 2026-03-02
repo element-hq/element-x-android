@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_leave_space_choose_owners_action">"Egalarni tanlang"</string>
+  <string name="screen_leave_space_last_admin_info">"%1$s(Admin)"</string>
+  <plurals name="screen_leave_space_submit">
+    <item quantity="one">"%1$d xona va maydonni tar etish"</item>
+    <item quantity="other">"%1$d ta xona va maydonni tar etish"</item>
+  </plurals>
+  <string name="screen_leave_space_subtitle">"Siz yagona administrator bo‘lmagan xonalardan chiqishni xohlasangiz, ularni tanlang:"</string>
+  <string name="screen_leave_space_subtitle_last_admin">" Ketishingizdan oldin bu maydon uchun boshqa administrator tayinlashingiz kerak."</string>
+  <string name="screen_leave_space_subtitle_only_last_admin">"Siz quyidagi xona(lar)dan olib tashlanmaysiz, chunki siz yagona administratorsiz:"</string>
+  <string name="screen_leave_space_title">"%1$s dan chiqasizmi?"</string>
+  <string name="screen_leave_space_title_last_admin">"Siz %1$s uchun yagona administratorsiz"</string>
+  <string name="screen_space_menu_action_members">"A’zolarni ko‘rish"</string>
+  <string name="screen_space_settings_leave_space">"Maydondan chiqish"</string>
   <string name="screen_space_settings_roles_and_permissions">"Rollar va ruxsatlar"</string>
   <string name="screen_space_settings_security_and_privacy">"Xavfsizlik va maxfiylik"</string>
 </resources>

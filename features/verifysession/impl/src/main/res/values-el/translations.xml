@@ -11,12 +11,12 @@
   <string name="screen_identity_use_another_device">"Χρήση άλλης συσκευής"</string>
   <string name="screen_identity_waiting_on_other_device">"Αναμονή σε άλλη συσκευή…"</string>
   <string name="screen_session_verification_cancelled_subtitle">"Κάτι δεν πάει καλά. Είτε το αίτημα έληξε είτε απορρίφθηκε."</string>
-  <string name="screen_session_verification_compare_emojis_subtitle">"Επιβεβαίωσε ότι τα παρακάτω emoji ταιριάζουν με αυτά που εμφανίζονται στην άλλη συνεδρία σου."</string>
+  <string name="screen_session_verification_compare_emojis_subtitle">"Επιβεβαιώστε ότι τα παρακάτω emoji ταιριάζουν με αυτά που εμφανίζονται στην άλλη συσκευή σας."</string>
   <string name="screen_session_verification_compare_emojis_title">"Σύγκριση emoji"</string>
   <string name="screen_session_verification_compare_emojis_user_subtitle">"Επιβεβαιώστε ότι τα παρακάτω emoji ταιριάζουν με αυτά που εμφανίζονται στη συσκευή του άλλου χρήστη."</string>
   <string name="screen_session_verification_compare_numbers_subtitle">"Επιβεβαίωσε ότι οι παρακάτω αριθμοί ταιριάζουν με αυτούς που εμφανίζονται στην άλλη συνεδρία σου."</string>
   <string name="screen_session_verification_compare_numbers_title">"Σύγκριση αριθμών"</string>
-  <string name="screen_session_verification_complete_subtitle">"Η νέα σου συνεδρία έχει πλέον επαληθευτεί. Έχει πρόσβαση στα κρυπτογραφημένα μηνύματά σας και άλλοι χρήστες θα το βλέπουν ως αξιόπιστο."</string>
+  <string name="screen_session_verification_complete_subtitle">"Τώρα μπορείτε να διαβάζετε ή να στέλνετε μηνύματα με ασφάλεια στην άλλη συσκευή σας."</string>
   <string name="screen_session_verification_complete_user_subtitle">"Τώρα μπορείτε να εμπιστευτείτε την ταυτότητα αυτού του χρήστη κατά την αποστολή ή τη λήψη μηνυμάτων."</string>
   <string name="screen_session_verification_device_verified">"Επαληθευμένη συσκευή"</string>
   <string name="screen_session_verification_enter_recovery_key">"Εισαγωγή κλειδιού ανάκτησης"</string>
@@ -33,7 +33,7 @@
   <string name="screen_session_verification_request_failure_title">"Αποτυχία επαλήθευσης"</string>
   <string name="screen_session_verification_request_footer">"Συνέχισε μόνο εάν ξεκίνησες εσύ αυτήν την επαλήθευση."</string>
   <string name="screen_session_verification_request_subtitle">"Επαλήθευσε την άλλη συσκευή για να διατηρήσεις το ιστορικό μηνυμάτων σου ασφαλές."</string>
-  <string name="screen_session_verification_request_success_subtitle">"Η νέα σου συνεδρία έχει πλέον επαληθευτεί. Έχει πρόσβαση στα κρυπτογραφημένα μηνύματά σας και άλλοι χρήστες θα το βλέπουν ως αξιόπιστο."</string>
+  <string name="screen_session_verification_request_success_subtitle">"Τώρα μπορείτε να διαβάζετε ή να στέλνετε μηνύματα με ασφάλεια στην άλλη συσκευή σας."</string>
   <string name="screen_session_verification_request_success_title">"Επαληθευμένη συσκευή"</string>
   <string name="screen_session_verification_request_title">"Ζητήθηκε επαλήθευση"</string>
   <string name="screen_session_verification_they_dont_match">"Δεν ταιριάζουν"</string>

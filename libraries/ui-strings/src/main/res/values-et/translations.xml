@@ -28,6 +28,7 @@
   <string name="a11y_paused_voice_message">"Häälsõnum, kestus:%1$s, praegune asukoht: %2$s"</string>
   <string name="a11y_pin_field">"PIN-koodi väli"</string>
   <string name="a11y_play">"Esita"</string>
+  <string name="a11y_playback_speed">"Taasesituse kiirus"</string>
   <string name="a11y_poll">"Küsitlus"</string>
   <string name="a11y_poll_end">"Lõppenud küsitlus"</string>
   <string name="a11y_qr_code">"QR-kood"</string>

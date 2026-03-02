@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Reactie toevoegen: %1$s"</string>
-  <string name="a11y_avatar">"Afbeelding"</string>
+  <string name="a11y_avatar">"Avatar"</string>
   <string name="a11y_delete">"Verwijderen"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d cijfer ingevoerd"</item>
     <item quantity="other">"%1$d cijfers ingevoerd"</item>
   </plurals>
-  <string name="a11y_edit_avatar">"Afbeelding bewerken"</string>
+  <string name="a11y_edit_avatar">"Avatar bewerken"</string>
   <string name="a11y_edit_room_address_hint">"Het volledige adres wordt %1$s"</string>
   <string name="a11y_hide_password">"Wachtwoord verbergen"</string>
   <string name="a11y_join_call">"Deelnemen aan gesprek"</string>
@@ -85,6 +85,7 @@
   <string name="action_enable">"Activeren"</string>
   <string name="action_end_poll">"Peiling beëindigen"</string>
   <string name="action_enter_pin">"Voer pincode in"</string>
+  <string name="action_explore_public_spaces">"Ontdek openbare spaces"</string>
   <string name="action_forgot_password">"Wachtwoord vergeten?"</string>
   <string name="action_forward">"Doorsturen"</string>
   <string name="action_go_back">"Terug"</string>
@@ -118,7 +119,7 @@
   <string name="action_remove_caption">"Bijschrift verwijderen"</string>
   <string name="action_remove_message">"Bericht verwijderen"</string>
   <string name="action_reply">"Antwoorden"</string>
-  <string name="action_reply_in_thread">"Antwoord in subchat"</string>
+  <string name="action_reply_in_thread">"Antwoord in gesprek"</string>
   <string name="action_report">"Melden"</string>
   <string name="action_report_bug">"Probleem melden"</string>
   <string name="action_report_content">"Inhoud melden"</string>
@@ -236,12 +237,18 @@ Reden: %1$s."</string>
     <item quantity="other">"%d stemmen"</item>
   </plurals>
   <string name="common_privacy_policy">"Privacybeleid"</string>
+  <string name="common_private">"Privé"</string>
   <string name="common_private_room">"Privé kamer"</string>
+  <string name="common_public">"Openbaar"</string>
   <string name="common_public_room">"Openbare kamer"</string>
   <string name="common_reaction">"Reactie"</string>
   <string name="common_reactions">"Reacties"</string>
   <string name="common_recovery_key">"Herstelsleutel"</string>
   <string name="common_refreshing">"Verversen…"</string>
+  <plurals name="common_replies">
+    <item quantity="one">"%1$d antwoord"</item>
+    <item quantity="other">"%1$d antwoorden"</item>
+  </plurals>
   <string name="common_replying_to">"Reageren op %1$s"</string>
   <string name="common_report_a_bug">"Een fout melden"</string>
   <string name="common_report_a_problem">"Meld een probleem"</string>
@@ -275,7 +282,7 @@ Reden: %1$s."</string>
   <string name="common_system">"Systeem"</string>
   <string name="common_text">"Tekst"</string>
   <string name="common_third_party_notices">"Kennisgevingen van derden"</string>
-  <string name="common_thread">"Subchat"</string>
+  <string name="common_thread">"Gesprek"</string>
   <string name="common_topic">"Onderwerp"</string>
   <string name="common_topic_placeholder">"Waar gaat deze kamer over?"</string>
   <string name="common_unable_to_decrypt">"Kan niet ontsleutelen"</string>

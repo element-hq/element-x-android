@@ -160,6 +160,7 @@
   <string name="action_static_map_load">"點擊以載入地圖"</string>
   <string name="action_take_photo">"拍照"</string>
   <string name="action_tap_for_options">"點擊以查看選項"</string>
+  <string name="action_translate">"翻譯"</string>
   <string name="action_try_again">"再試一次"</string>
   <string name="action_unpin">"取消釘選"</string>
   <string name="action_view">"檢視"</string>

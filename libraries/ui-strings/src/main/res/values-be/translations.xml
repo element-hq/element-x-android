@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="a11y_address">"Адрас"</string>
   <string name="a11y_avatar">"Аватар"</string>
   <string name="a11y_delete">"Выдаліць"</string>
   <plurals name="a11y_digits_entered">
@@ -18,6 +19,7 @@
   <string name="a11y_play">"Прайграць"</string>
   <string name="a11y_poll">"Апытанне"</string>
   <string name="a11y_poll_end">"Апытанне скончана"</string>
+  <string name="a11y_qr_code">"QR-код"</string>
   <string name="a11y_react_with">"Рэагаваць з %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Рэагаваць з іншымі эмодзі"</string>
   <string name="a11y_read_receipts_multiple">"Прачытана %1$s і %2$s"</string>
@@ -98,6 +100,7 @@
   <string name="action_remove">"Выдаліць"</string>
   <string name="action_reply">"Адказаць"</string>
   <string name="action_reply_in_thread">"Адказаць у гутаркі"</string>
+  <string name="action_report">"Паскардзіцца"</string>
   <string name="action_report_bug">"Паведаміць пра памылку"</string>
   <string name="action_report_content">"Паскардзіцца на змест"</string>
   <string name="action_reset">"Скінуць"</string>
@@ -106,6 +109,7 @@
   <string name="action_retry_decryption">"Паўтарыць расшыфроўку"</string>
   <string name="action_save">"Захаваць"</string>
   <string name="action_search">"Пошук"</string>
+  <string name="action_select_all">"Выбраць усё"</string>
   <string name="action_send">"Адправіць"</string>
   <string name="action_send_message">"Адправіць паведамленне"</string>
   <string name="action_share">"Падзяліцца"</string>
@@ -122,6 +126,7 @@
   <string name="action_static_map_load">"Націсніце, каб загрузіць карту"</string>
   <string name="action_take_photo">"Зрабіць фота"</string>
   <string name="action_tap_for_options">"Дакраніцеся, каб убачыць параметры"</string>
+  <string name="action_translate">"Перакласці"</string>
   <string name="action_try_again">"Паўтарыць спробу"</string>
   <string name="action_unpin">"Адмацаваць"</string>
   <string name="action_view_in_timeline">"Прагляд у хроніцы"</string>
@@ -319,6 +324,7 @@
   <string name="screen_share_open_google_maps">"Адкрыць у Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Адкрыць у OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Падзяліцеся гэтым месцазнаходжаннем"</string>
+  <string name="screen_space_list_title">"Прасторы"</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Паведамленне не адпраўлена таму што%1$s не праверыў усе прылады."</string>
   <string name="screen_view_location_title">"Месцазнаходжанне"</string>
   <string name="settings_version_number">"Версія: %1$s (%2$s)"</string>

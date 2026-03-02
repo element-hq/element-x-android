@@ -14,5 +14,7 @@
   <string name="screen_bug_report_include_screenshot">"Ekran tasvirini yuboring"</string>
   <string name="screen_bug_report_logs_description">"Har bir narsa to\'ri ishlayotganiga ishonch hosil qilish uchun xabaringizga jurnallar kiritiladi. Xabarni jurnallarsiz yuborish uchun ushbu sozlamani oʻchiring."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$soxirgi marta ishlatilganda qulab tushdi. Biz bilan nosozlik hisobotini baham ko\'rmoqchimisiz?"</string>
+  <string name="screen_bug_report_send_notification_settings_description">"Agar bildirishnomalar bilan bog‘liq muammolarga duch kelayotgan bo‘lsangiz, bildirishnomalarni yetkazish qoidalarini yuklash bizga asosiy sababni aniqlashda yordam beradi. Shuni yodda tutingki, bu qoidalarda shaxsiy ma’lumotlar, masalan, ko‘rsatiladigan ismingiz yoki bildirishnoma olishingiz kerak bo‘lgan kalit so‘zlar kabi ma’lumotlar bo‘lishi mumkin."</string>
+  <string name="screen_bug_report_send_notification_settings_title">"Bildirishnoma sozlamalarini yuborish"</string>
   <string name="screen_bug_report_view_logs">"Jurnallarni ko'rish"</string>
 </resources>
