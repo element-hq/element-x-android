@@ -95,6 +95,12 @@ jobs:
             **/build/roborazzi/failures/
             **/build/reports/tests/*UnitTest/
 
+      - name: Test Summary
+        uses: test-summary/action@v2
+        with:
+          paths: "**/build/test-results/*UnitTest/*.xml"
+        if: always()
+
       # https://github.com/codecov/codecov-action
       - name: ☂️ Upload coverage reports to codecov
         uses: codecov/codecov-action@671740ac38dd9b0130fbe1cec585b89eea48d3de # v5.5.2
