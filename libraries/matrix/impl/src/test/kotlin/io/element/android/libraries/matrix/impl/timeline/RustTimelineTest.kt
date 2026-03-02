@@ -32,7 +32,7 @@ import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.TimelineDiff
-import uniffi.matrix_sdk.RoomPaginationStatus
+import uniffi.matrix_sdk.PaginationStatus
 import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
 
 class RustTimelineTest {
@@ -68,10 +68,10 @@ class RustTimelineTest {
             // Start pagination
             sut.paginate(Timeline.PaginationDirection.BACKWARDS)
             // Simulate SDK starting pagination
-            inner.emitPaginationStatus(RoomPaginationStatus.Paginating)
+            inner.emitPaginationStatus(PaginationStatus.Paginating)
             // No new events received
             // Simulate SDK stopping pagination, more event to load
-            inner.emitPaginationStatus(RoomPaginationStatus.Idle(hitTimelineStart = false))
+            inner.emitPaginationStatus(PaginationStatus.Idle(hitTimelineStart = false))
             // expect an item to be emitted, with an updated timestamp
             with(awaitItem()) {
                 assertThat(size).isEqualTo(2)
