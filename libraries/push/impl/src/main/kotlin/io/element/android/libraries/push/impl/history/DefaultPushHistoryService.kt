@@ -14,13 +14,16 @@ import android.os.PowerManager
 import androidx.core.content.getSystemService
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.impl.PushDatabase
 import io.element.android.libraries.push.impl.db.PushHistory
+import io.element.android.libraries.push.impl.db.PushRequest
 import io.element.android.services.toolbox.api.systemclock.SystemClock
+import kotlin.time.Instant
 
 @ContributesBinding(AppScope::class)
 class DefaultPushHistoryService(
@@ -31,7 +34,37 @@ class DefaultPushHistoryService(
     private val powerManager = context.getSystemService<PowerManager>()
     private val packageName = context.packageName
 
-    override fun onPushReceived(
+    override suspend fun insertOrUpdatePushRequest(pushRequest: PushRequest): Result<Unit> {
+        return runCatchingExceptions { pushDatabase.pushRequestQueries.insertPushRequest(pushRequest).await() }
+    }
+
+    override suspend fun insertOrUpdatePushRequests(pushRequests: List<PushRequest>): Result<Unit> {
+        return runCatchingExceptions {
+            pushDatabase.transaction {
+                for (request in pushRequests) {
+                    pushDatabase.pushRequestQueries.insertPushRequest(request)
+                }
+            }
+        }
+    }
+
+    override suspend fun getPendingPushRequests(sessionId: SessionId, since: Instant?): Result<List<PushRequest>> {
+        return runCatchingExceptions {
+            pushDatabase.transactionWithResult {
+                val sinceTimeMillis = since?.toEpochMilliseconds() ?: 0
+                pushDatabase.pushRequestQueries.selectAllPendingForSession(sessionId.value, sinceTimeMillis).executeAsList()
+            }
+        }
+    }
+
+    override suspend fun removeOldPushRequests(sessionId: SessionId): Result<Unit> {
+        return runCatchingExceptions {
+            val keepAmount = 100L
+            pushDatabase.pushRequestQueries.removeOldest(keepAmount)
+        }
+    }
+
+    override fun onPushResult(
         providerInfo: String,
         eventId: EventId?,
         roomId: RoomId?,
