@@ -34,11 +34,11 @@ class DefaultPushHistoryService(
     private val powerManager = context.getSystemService<PowerManager>()
     private val packageName = context.packageName
 
-    override suspend fun enqueuePushRequest(pushRequest: PushRequest): Result<Unit> {
+    override suspend fun insertOrUpdatePushRequest(pushRequest: PushRequest): Result<Unit> {
         return runCatchingExceptions { pushDatabase.pushRequestQueries.insertPushRequest(pushRequest).await() }
     }
 
-    override suspend fun replacePushRequests(pushRequests: List<PushRequest>): Result<Unit> {
+    override suspend fun insertOrUpdatePushRequests(pushRequests: List<PushRequest>): Result<Unit> {
         return runCatchingExceptions {
             pushDatabase.transaction {
                 for (request in pushRequests) {

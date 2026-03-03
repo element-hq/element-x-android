@@ -125,7 +125,7 @@ class FetchPendingNotificationsWorker(
 
         Timber.d("Notifications processed successfully")
 
-        pushHistoryService.replacePushRequests(updatedRequests)
+        pushHistoryService.insertOrUpdatePushRequests(updatedRequests)
 
         analyticsService.recordTransaction("Opportunistic sync", "opportunistic_sync") {
             performOpportunisticSyncIfNeeded(mapOf(sessionId to requests))
@@ -161,7 +161,7 @@ class FetchPendingNotificationsWorker(
 
         // If there is a problem with the updated network values, report it and retry if needed
         if (reportConnectivityError(requests = requests, hasNetwork = hasNetwork, isNetworkBlocked = networkMonitor.isNetworkBlocked())) {
-            pushHistoryService.replacePushRequests(requests.map { request ->
+            pushHistoryService.insertOrUpdatePushRequests(requests.map { request ->
                 request.copy(retries = request.retries + 1)
             })
             return Result.retry()
@@ -203,7 +203,7 @@ class FetchPendingNotificationsWorker(
         // If there were failures on the setup step and they weren't recoverable, update the requests and fail
         if (throwable.cause is SessionRestorationException) {
             Timber.e(throwable, "Session $sessionId could not be restored, not retrying notification fetching")
-            pushHistoryService.replacePushRequests(requests.map { request ->
+            pushHistoryService.insertOrUpdatePushRequests(requests.map { request ->
                 request.copy(status = PushRequestStatus.FAILED.value)
             })
             return Result.failure()
@@ -223,7 +223,7 @@ class FetchPendingNotificationsWorker(
 
         Timber.d("Re-scheduling ${requests.size} failed notification requests for session $sessionId")
 
-        pushHistoryService.replacePushRequests(requests.map { request ->
+        pushHistoryService.insertOrUpdatePushRequests(requests.map { request ->
             request.copy(retries = request.retries + 1)
         })
 

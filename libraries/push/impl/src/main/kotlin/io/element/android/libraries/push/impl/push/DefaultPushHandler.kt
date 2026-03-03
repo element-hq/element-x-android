@@ -130,7 +130,7 @@ class DefaultPushHandler(
             )
 
             Timber.d("Queueing notification: $pushRequest")
-            pushHistoryService.enqueuePushRequest(pushRequest)
+            pushHistoryService.insertOrUpdatePushRequest(pushRequest)
 
             if (!workManagerScheduler.hasPendingWork(userId, WorkManagerRequestType.NOTIFICATION_SYNC)) {
                 Timber.d("No pending worker for push notifications found")

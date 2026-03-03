@@ -17,7 +17,7 @@ interface WorkManagerScheduler {
     suspend fun submit(workManagerRequestBuilder: WorkManagerRequestBuilder)
 
     /**
-     * Checks if there are any pending requests scheduled for the provieded [sessionId] and [requestType].
+     * Checks if there are any pending requests scheduled for the provided [sessionId] and [requestType].
      */
     fun hasPendingWork(sessionId: SessionId, requestType: WorkManagerRequestType): Boolean
 

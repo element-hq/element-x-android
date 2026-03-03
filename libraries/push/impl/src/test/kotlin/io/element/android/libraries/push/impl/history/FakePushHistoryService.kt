@@ -50,11 +50,11 @@ class FakePushHistoryService(
         )
     }
 
-    override suspend fun enqueuePushRequest(pushRequest: PushRequest): Result<Unit> {
+    override suspend fun insertOrUpdatePushRequest(pushRequest: PushRequest): Result<Unit> {
         return enqueuePushRequest.invoke(pushRequest)
     }
 
-    override suspend fun replacePushRequests(pushRequests: List<PushRequest>): Result<Unit> {
+    override suspend fun insertOrUpdatePushRequests(pushRequests: List<PushRequest>): Result<Unit> {
         return replacePushRequests.invoke(pushRequests)
     }
 

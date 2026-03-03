@@ -33,12 +33,12 @@ interface PushHistoryService {
     /**
      * Adds or replaces an existing [PushRequest] in the local database.
      */
-    suspend fun enqueuePushRequest(pushRequest: PushRequest): Result<Unit>
+    suspend fun insertOrUpdatePushRequest(pushRequest: PushRequest): Result<Unit>
 
     /**
      * Replace a list of [PushRequest] in the database.
      */
-    suspend fun replacePushRequests(pushRequests: List<PushRequest>): Result<Unit>
+    suspend fun insertOrUpdatePushRequests(pushRequests: List<PushRequest>): Result<Unit>
 
     /**
      * Gets [PushRequestStatus.PENDING] push requests from the local database for a [SessionId].

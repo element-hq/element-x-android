@@ -20,6 +20,5 @@ INSERT OR REPLACE INTO PushRequest VALUES ?;
 removeAll:
 DELETE FROM PushRequest;
 
--- add query to keep only the last x entries
 removeOldest:
 DELETE FROM PushRequest WHERE rowid NOT IN (SELECT rowid FROM PushRequest ORDER BY pushDate DESC LIMIT ?);
