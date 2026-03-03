@@ -44,6 +44,7 @@ import io.element.android.features.announcement.api.AnnouncementService
 import io.element.android.features.login.api.LoginParams
 import io.element.android.features.login.api.accesscontrol.AccountProviderAccessControl
 import io.element.android.features.rageshake.api.bugreport.BugReportEntryPoint
+import io.element.android.features.share.api.ShareIntentData
 import io.element.android.features.signedout.api.SignedOutEntryPoint
 import io.element.android.libraries.accountselect.api.AccountSelectEntryPoint
 import io.element.android.libraries.architecture.BackstackView
@@ -265,7 +266,7 @@ class RootFlowNode(
 
         @Parcelize data class AccountSelect(
             val currentSessionId: SessionId,
-            val intent: Intent?,
+            val shareIntentData: ShareIntentData?,
             val permalinkData: PermalinkData?,
         ) : NavTarget
 
@@ -357,8 +358,8 @@ class RootFlowNode(
                                 backstack.pop()
                             }
                             attachSession(sessionId).apply {
-                                if (navTarget.intent != null) {
-                                    attachIncomingShare(navTarget.intent)
+                                if (navTarget.shareIntentData != null) {
+                                    attachIncomingShare(navTarget.shareIntentData)
                                 } else if (navTarget.permalinkData != null) {
                                     attachPermalinkData(navTarget.permalinkData)
                                 }
@@ -392,7 +393,7 @@ class RootFlowNode(
             is ResolvedIntent.Login -> onLoginLink(resolvedIntent.params)
             is ResolvedIntent.Oidc -> onOidcAction(resolvedIntent.oidcAction)
             is ResolvedIntent.Permalink -> navigateTo(resolvedIntent.permalinkData)
-            is ResolvedIntent.IncomingShare -> onIncomingShare(resolvedIntent.intent)
+            is ResolvedIntent.IncomingShare -> onIncomingShare(resolvedIntent.shareIntentData)
         }
     }
 
@@ -423,7 +424,7 @@ class RootFlowNode(
         }
     }
 
-    private suspend fun onIncomingShare(intent: Intent) {
+    private suspend fun onIncomingShare(shareIntentData: ShareIntentData) {
         // Is there a session already?
         val latestSessionId = sessionStore.getLatestSessionId()
         if (latestSessionId == null) {
@@ -437,13 +438,13 @@ class RootFlowNode(
                 backstack.push(
                     NavTarget.AccountSelect(
                         currentSessionId = latestSessionId,
-                        intent = intent,
+                        shareIntentData = shareIntentData,
                         permalinkData = null,
                     )
                 )
             } else {
                 // Only one account, directly attach the incoming share node.
-                loggedInFlowNode.attachIncomingShare(intent)
+                loggedInFlowNode.attachIncomingShare(shareIntentData)
             }
         }
     }
@@ -467,7 +468,7 @@ class RootFlowNode(
                         backstack.push(
                             NavTarget.AccountSelect(
                                 currentSessionId = latestSessionId,
-                                intent = null,
+                                shareIntentData = null,
                                 permalinkData = permalinkData,
                             )
                         )
