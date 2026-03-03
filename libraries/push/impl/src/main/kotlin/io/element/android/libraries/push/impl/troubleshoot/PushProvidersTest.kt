@@ -8,8 +8,8 @@
 
 package io.element.android.libraries.push.impl.troubleshoot
 
-import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
+import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.push.impl.R
 import io.element.android.libraries.pushproviders.api.PushProvider
 import io.element.android.libraries.troubleshoot.api.test.NotificationTroubleshootTest
@@ -19,7 +19,7 @@ import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
-@ContributesIntoSet(AppScope::class)
+@ContributesIntoSet(SessionScope::class)
 class PushProvidersTest(
     pushProviders: Set<@JvmSuppressWildcards PushProvider>,
     private val stringProvider: StringProvider,
