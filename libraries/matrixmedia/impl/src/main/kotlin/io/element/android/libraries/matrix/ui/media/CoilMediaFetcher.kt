@@ -27,15 +27,15 @@ internal class CoilMediaFetcher(
     private val mediaData: MediaRequestData,
 ) : Fetcher {
     override suspend fun fetch(): FetchResult? {
-        val source = mediaData.source
-        if (source == null) {
+        val mediaSource = mediaData.source
+        if (mediaSource == null) {
             Timber.e("MediaData source is null")
             return null
         }
         return when (val kind = mediaData.kind) {
-            is MediaRequestData.Kind.Content -> fetchContent(source)
-            is MediaRequestData.Kind.Thumbnail -> fetchThumbnail(source, kind)
-            is MediaRequestData.Kind.File -> fetchFile(source, kind)
+            is MediaRequestData.Kind.Content -> fetchContent(mediaSource)
+            is MediaRequestData.Kind.Thumbnail -> fetchThumbnail(mediaSource, kind)
+            is MediaRequestData.Kind.File -> fetchFile(mediaSource, kind)
         }
     }
 

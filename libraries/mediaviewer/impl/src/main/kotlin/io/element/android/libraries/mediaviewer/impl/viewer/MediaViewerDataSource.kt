@@ -126,7 +126,7 @@ class MediaViewerDataSource(
             when (mediaItem) {
                 is MediaItem.DateSeparator -> Unit
                 is MediaItem.Event -> {
-                    val sourceUrl = mediaItem.mediaSource().url
+                    val sourceUrl = mediaItem.mediaSource().safeUrl
                     val localMedia = localMediaStates.getOrPut(sourceUrl) {
                         mutableStateOf(AsyncData.Uninitialized)
                     }
@@ -153,7 +153,7 @@ class MediaViewerDataSource(
     }.toImmutableList()
 
     fun clearLoadingError(data: MediaViewerPageData.MediaViewerData) {
-        localMediaStates[data.mediaSource.url]?.value = AsyncData.Uninitialized
+        localMediaStates[data.mediaSource.safeUrl]?.value = AsyncData.Uninitialized
     }
 
     suspend fun loadMore(direction: Timeline.PaginationDirection) {
@@ -162,7 +162,7 @@ class MediaViewerDataSource(
 
     suspend fun loadMedia(data: MediaViewerPageData.MediaViewerData) {
         Timber.d("loadMedia for ${data.eventId}")
-        val localMediaState = localMediaStates.getOrPut(data.mediaSource.url) {
+        val localMediaState = localMediaStates.getOrPut(data.mediaSource.safeUrl) {
             mutableStateOf(AsyncData.Uninitialized)
         }
         localMediaState.value = AsyncData.Loading()
