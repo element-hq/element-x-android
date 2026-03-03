@@ -189,9 +189,13 @@ class LinkNewDeviceFlowNode(
             is ErrorType.InvalidCheckCode -> ErrorScreenType.InsecureChannelDetected
             is ErrorType.MissingSecretsBackup -> ErrorScreenType.UnknownError
             is ErrorType.NotFound -> ErrorScreenType.Expired
-            is ErrorType.UnableToCreateDevice -> ErrorScreenType.UnknownError
+            is ErrorType.DeviceNotFound -> ErrorScreenType.UnknownError
             is ErrorType.Unknown -> ErrorScreenType.UnknownError
             is ErrorType.UnsupportedProtocol -> ErrorScreenType.UnknownError
+            is ErrorType.Cancelled -> ErrorScreenType.UnknownError
+            is ErrorType.ConnectionInsecure -> ErrorScreenType.InsecureChannelDetected
+            is ErrorType.Expired -> ErrorScreenType.Expired
+            is ErrorType.OtherDeviceAlreadySignedIn -> ErrorScreenType.UnknownError
         }
         // It is OK to push on backstack, since when user leaves the error screen, a new root will be set,
         // or the whole flow will be popped.
