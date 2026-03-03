@@ -16,7 +16,8 @@ import kotlinx.coroutines.flow.StateFlow
  * A test to troubleshoot notifications issues.
  * Each test has a state that can be observed to update the UI accordingly.
  *
- * **IMPORTANT**: classes implementing this should be scoped to [SessionScope], otherwise they won't be correctly injected.
+ * **IMPORTANT**: classes implementing this should be scoped to [SessionScope], otherwise Metro complains about these not being used:
+ * the component they're injected into is bound to [SessionScope] and so should these (https://github.com/ZacSweers/metro/issues/1932).
  */
 interface NotificationTroubleshootTest {
     val order: Int
