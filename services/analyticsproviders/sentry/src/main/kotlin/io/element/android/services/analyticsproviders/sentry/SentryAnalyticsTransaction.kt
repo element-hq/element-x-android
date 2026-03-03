@@ -11,13 +11,21 @@ import io.element.android.services.analyticsproviders.api.AnalyticsTransaction
 import io.sentry.ISpan
 import io.sentry.ITransaction
 import io.sentry.Sentry
+import io.sentry.SentryInstantDate
 import timber.log.Timber
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.nanoseconds
 
 class SentryAnalyticsTransaction private constructor(span: ISpan) : AnalyticsTransaction {
     constructor(name: String, operation: String?, description: String? = null) : this(
         Sentry.startTransaction(name, operation.orEmpty()).also { it.description = description }
     )
     private val inner = span
+
+    @Suppress("UnstableApiUsage")
+    override val duration: Duration get() {
+        return (inner.finishDate ?: SentryInstantDate()).diff(inner.startDate).nanoseconds
+    }
 
     override fun startChild(operation: String, description: String?): AnalyticsTransaction = SentryAnalyticsTransaction(
         inner.startChild(operation, description)
