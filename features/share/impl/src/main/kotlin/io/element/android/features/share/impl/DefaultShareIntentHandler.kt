@@ -18,6 +18,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.share.api.ShareIntentData
 import io.element.android.features.share.api.ShareIntentHandler
+import io.element.android.features.share.api.UriToShare
 import io.element.android.libraries.androidutils.compat.queryIntentActivitiesCompat
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeAny
@@ -70,7 +71,7 @@ class DefaultShareIntentHandler(
      * Use this function to retrieve files which are shared from another application or internally
      * by using android.intent.action.SEND or android.intent.action.SEND_MULTIPLE actions.
      */
-    private fun getIncomingUris(intent: Intent, fallbackMimeType: String): List<ShareIntentHandler.UriToShare> {
+    private fun getIncomingUris(intent: Intent, fallbackMimeType: String): List<UriToShare> {
         val uriList = mutableListOf<Uri>()
         if (intent.action == Intent.ACTION_SEND) {
             IntentCompat.getParcelableExtra(intent, Intent.EXTRA_STREAM, Uri::class.java)
@@ -99,7 +100,7 @@ class DefaultShareIntentHandler(
             // The value in fallbackMimeType can be wrong, especially if several uris were received
             // in the same intent (i.e. 'image/*'). We need to check the mime type of each uri.
             val mimeType = context.contentResolver.getType(uri) ?: fallbackMimeType
-            ShareIntentHandler.UriToShare(
+            UriToShare(
                 uri = uri,
                 mimeType = mimeType,
             )

@@ -8,17 +8,8 @@
 package io.element.android.features.share.api
 
 import android.content.Intent
-import android.net.Uri
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
 
 interface ShareIntentHandler {
-    @Parcelize
-    data class UriToShare(
-        val uri: Uri,
-        val mimeType: String,
-    ) : Parcelable
-
     /**
      * This methods aims to handle incoming share intents and parse its data.
      *

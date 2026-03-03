@@ -15,7 +15,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.share.api.OnSharedData
 import io.element.android.features.share.api.ShareIntentData
-import io.element.android.features.share.api.ShareIntentHandler
+import io.element.android.features.share.api.UriToShare
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -143,7 +143,7 @@ class SharePresenterTest {
             shareIntentData = ShareIntentData.Uris(
                 text = A_MESSAGE,
                 listOf(
-                    ShareIntentHandler.UriToShare(
+                    UriToShare(
                         uri = Uri.parse("content://image.jpg"),
                         mimeType = MimeTypes.Jpeg,
                     )

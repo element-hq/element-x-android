@@ -16,7 +16,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.login.api.LoginParams
 import io.element.android.features.login.test.FakeLoginIntentResolver
 import io.element.android.features.share.api.ShareIntentData
-import io.element.android.features.share.api.ShareIntentHandler
+import io.element.android.features.share.api.UriToShare
 import io.element.android.features.share.test.FakeShareIntentHandler
 import io.element.android.libraries.deeplink.api.DeeplinkData
 import io.element.android.libraries.matrix.api.core.UserId
@@ -258,7 +258,7 @@ class IntentResolverTest {
     @Test
     fun `test incoming share multiple`() {
         val fileUri = "content://com.example.app/file1.jpg".toUri()
-        val shareIntentData = ShareIntentData.Uris(text = "Hello", uris = listOf(ShareIntentHandler.UriToShare(fileUri, "image/jpg")))
+        val shareIntentData = ShareIntentData.Uris(text = "Hello", uris = listOf(UriToShare(fileUri, "image/jpg")))
         val sut = createIntentResolver(
             oidcIntentResolverResult = { null },
             onIncomingShareIntent = { shareIntentData },
