@@ -14,6 +14,8 @@ import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.poll.PollKind
+import io.element.android.libraries.matrix.api.room.location.AssetType
+import io.element.android.libraries.matrix.api.room.location.LiveLocationInfo
 import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
@@ -101,6 +103,15 @@ data class FailedToParseStateContent(
     val stateKey: String,
     val error: String
 ) : EventContent
+
+data class LiveLocationContent(
+    val body: String,
+    val isLive: Boolean,
+    val description: String?,
+    val timeout: Long,
+    val assetType: AssetType?,
+    val locations: List<LiveLocationInfo>,
+): EventContent
 
 data object LegacyCallInviteContent : EventContent
 

@@ -9,13 +9,55 @@
 package io.element.android.features.messages.impl.timeline.model.event
 
 import io.element.android.features.location.api.Location
+import io.element.android.libraries.designsystem.components.PinVariant
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
+import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
+import io.element.android.libraries.matrix.api.timeline.item.event.getDisplayName
 
 data class TimelineItemLocationContent(
     val body: String,
+    val senderId: UserId,
+    val senderProfile: ProfileDetails,
     val location: Location,
     val description: String? = null,
     val assetType: AssetType? = null,
+    val mode: Mode,
 ) : TimelineItemEventContent {
+
+    val pinVariant = when (mode) {
+        is Mode.Live -> {
+            if (mode.isActive) {
+                PinVariant.UserLocation(avatarData = senderAvatar(), isLive = true)
+            } else {
+                PinVariant.StaleLocation
+            }
+        }
+        Mode.Static -> {
+            when (assetType) {
+                AssetType.PIN -> PinVariant.PinnedLocation
+                AssetType.SENDER,
+                null -> PinVariant.UserLocation(avatarData = senderAvatar(), isLive = false)
+            }
+        }
+    }
+
+    private fun senderAvatar() = AvatarData(
+        senderId.value,
+        name = senderProfile.getDisplayName(),
+        url = senderProfile.getAvatarUrl(),
+        // Size is irrelevant as the PinMarker will override anyway.
+        size = AvatarSize.TimelineSender
+    )
+
+    sealed interface Mode {
+        data object Static : Mode
+        data class Live(val isActive: Boolean) : Mode
+    }
+
     override val type: String = "TimelineItemLocationContent"
 }
+
