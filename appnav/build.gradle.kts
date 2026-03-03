@@ -57,6 +57,7 @@ dependencies {
 
     testCommonDependencies(libs)
     testImplementation(projects.features.login.test)
+    testImplementation(projects.features.share.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.oidc.test)
     testImplementation(projects.libraries.preferences.test)
