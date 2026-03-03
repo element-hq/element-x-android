@@ -8,7 +8,6 @@
 
 package io.element.android.features.location.impl.share
 
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
@@ -28,7 +27,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -42,18 +40,20 @@ import io.element.android.features.location.impl.common.PermissionRationaleDialo
 import io.element.android.features.location.impl.common.ui.LocationFloatingActionButton
 import io.element.android.features.location.impl.common.ui.MapBottomSheetScaffold
 import io.element.android.features.location.impl.common.ui.UserLocationPuck
+import io.element.android.libraries.designsystem.components.LocationPinMarker
+import io.element.android.libraries.designsystem.components.PinVariant
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ListDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.list.RadioButtonListItem
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
-import io.element.android.libraries.designsystem.utils.CommonDrawables
+import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.CommonStrings
 import org.maplibre.compose.camera.CameraMoveReason
 import org.maplibre.compose.camera.CameraPosition
@@ -155,10 +155,13 @@ fun ShareLocationView(
                     .fillMaxSize()
                     .padding(sheetPadding)
             ) {
-                Icon(
-                    resourceId = CommonDrawables.pin,
-                    contentDescription = null,
-                    tint = Color.Unspecified,
+                val variant = if (state.trackUserLocation) {
+                    PinVariant.UserLocation(isLive = false, avatarData = state.currentUser.getAvatarData(AvatarSize.SelectedUser))
+                } else {
+                    PinVariant.PinnedLocation
+                }
+                LocationPinMarker(
+                    variant = variant,
                     modifier = Modifier.centerBottomEdge(this),
                 )
             }
