@@ -8,7 +8,10 @@
 
 package io.element.android.features.location.impl.share
 
+import io.element.android.libraries.matrix.api.user.MatrixUser
+
 data class ShareLocationState(
+    val currentUser: MatrixUser,
     val dialogState: Dialog,
     val trackUserLocation: Boolean,
     val hasLocationPermission: Boolean,

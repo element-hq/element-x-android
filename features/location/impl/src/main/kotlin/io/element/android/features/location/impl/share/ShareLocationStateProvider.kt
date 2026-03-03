@@ -9,6 +9,8 @@
 package io.element.android.features.location.impl.share
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.user.MatrixUser
 
 private const val APP_NAME = "ApplicationName"
 
@@ -50,12 +52,14 @@ class ShareLocationStateProvider : PreviewParameterProvider<ShareLocationState> 
 }
 
 private fun aShareLocationState(
+    currentUser: MatrixUser = MatrixUser(UserId("@user:matrix.org")),
     permissionDialog: ShareLocationState.Dialog,
     trackUserPosition: Boolean,
     hasLocationPermission: Boolean,
     canShareLiveLocation: Boolean = false,
 ): ShareLocationState {
     return ShareLocationState(
+        currentUser = currentUser,
         dialogState = permissionDialog,
         trackUserLocation = trackUserPosition,
         hasLocationPermission = hasLocationPermission,

@@ -32,10 +32,13 @@ import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.launch
@@ -50,6 +53,7 @@ class ShareLocationPresenter(
     private val locationActions: LocationActions,
     private val buildMeta: BuildMeta,
     private val featureFlagService: FeatureFlagService,
+    private val client: MatrixClient,
 ) : Presenter<ShareLocationState> {
     @AssistedFactory
     fun interface Factory {
@@ -69,6 +73,7 @@ class ShareLocationPresenter(
         var dialogState: ShareLocationState.Dialog by remember {
             mutableStateOf(ShareLocationState.Dialog.None)
         }
+        val currentUser by client.userProfile.collectAsState()
         val scope = rememberCoroutineScope()
 
         LaunchedEffect(permissionsState.permissions) {
@@ -108,6 +113,7 @@ class ShareLocationPresenter(
         }
 
         return ShareLocationState(
+            currentUser = currentUser,
             dialogState = dialogState,
             trackUserLocation = trackUserPosition,
             hasLocationPermission = permissionsState.isAnyGranted,
