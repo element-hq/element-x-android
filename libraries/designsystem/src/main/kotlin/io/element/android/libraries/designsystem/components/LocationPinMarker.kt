@@ -18,9 +18,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.Matrix
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
@@ -34,8 +33,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.avatar.avatarShape
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import kotlin.math.cos
-import kotlin.math.sin
 
 /**
  * Variants of location pin markers.
@@ -69,17 +66,13 @@ fun LocationPinMarker(
     Box(
         modifier = modifier.size(width = PIN_MARKER_WIDTH, height = PIN_MARKER_HEIGHT),
     ) {
-        // Draw the pin shape
-        Canvas(
-            modifier = Modifier.matchParentSize()
-        ) {
+        Canvas(modifier = Modifier.matchParentSize()) {
             drawPinShape(
                 fillColor = colors.fill,
                 strokeColor = colors.stroke,
                 strokeWidth = 1.dp.toPx(),
             )
         }
-
         val avatarSize = PIN_MARKER_WIDTH - CONTENT_OFFSET * 2
         val contentModifier = Modifier
             .align(Alignment.TopCenter)
@@ -143,8 +136,8 @@ private data class LocationPinColors(
                     avatarStoke = Color.Transparent,
                 )
                 PinVariant.StaleLocation -> LocationPinColors(
-                    fill = ElementTheme.colors.bgSubtlePrimary,
-                    stroke = ElementTheme.colors.borderInteractiveSecondary,
+                    fill = ElementTheme.colors.bgSubtleSecondary,
+                    stroke = ElementTheme.colors.iconDisabled,
                     dotColor = ElementTheme.colors.iconDisabled,
                     avatarStoke = Color.Transparent,
                 )
@@ -156,77 +149,44 @@ private data class LocationPinColors(
 /**
  * Draws a teardrop-shaped pin with smooth curves.
  *
- * Based on SVG reference with dimensions 40x48 (ratio 1:1.2).
- * Uses quadratic Bezier curves for smooth transitions from circle to tip.
+ * Based on SVG path with dimensions 40x48 (ratio 1:1.2).
+ * Scales automatically to fit the canvas size.
  */
 private fun DrawScope.drawPinShape(
     fillColor: Color,
     strokeColor: Color,
     strokeWidth: Float,
 ) {
-    val width = size.width
-    val height = size.height
-
-    val circleRadius = width / 2 - strokeWidth
-    val circleCenterX = width / 2
-    val circleCenterY = width / 2
-
-    // The tip at the bottom
-    val tipX = width / 2
-    val tipY = height - strokeWidth
-
-    // Angle from the bottom of circle where it transitions to curves (in degrees)
-    val transitionAngleDeg = 65f
-
-    val rightTransitionAngle = 90f - transitionAngleDeg
-    val leftTransitionAngle = 90f + transitionAngleDeg
-
-    // Calculate transition points on the circle
-    val rightTransitionX = circleCenterX + circleRadius * cos(Math.toRadians(rightTransitionAngle.toDouble())).toFloat()
-    val rightTransitionY = circleCenterY + circleRadius * sin(Math.toRadians(rightTransitionAngle.toDouble())).toFloat()
-    val leftTransitionX = circleCenterX + circleRadius * cos(Math.toRadians(leftTransitionAngle.toDouble())).toFloat()
-    val leftTransitionY = circleCenterY + circleRadius * sin(Math.toRadians(leftTransitionAngle.toDouble())).toFloat()
-
-    // Arc sweep: counter-clockwise over the top
-    val arcSweepAngle = -(360f - 2 * transitionAngleDeg)
-
-    // For cubic Bezier: tangent direction at transition points
-    // Shorter tangent for smoother transition from circle
-    val tangentLength = (tipY - leftTransitionY) * 0.45f
-
-    // Left side control points (from left transition to tip)
-    val leftTangentAngle = leftTransitionAngle - 90.0
-    val leftC1X = leftTransitionX + tangentLength * cos(Math.toRadians(leftTangentAngle)).toFloat()
-    val leftC1Y = leftTransitionY + tangentLength * sin(Math.toRadians(leftTangentAngle)).toFloat()
-    // C2 control points - horizontal approach creates rounded tip
-    val tipOffset = 20f
-    val leftC2X = tipX - tipOffset
-    val leftC2Y = tipY - strokeWidth
-    // Right side control points (from tip to right transition)
-    val rightTangentAngle = rightTransitionAngle + 90.0
-    val rightC1X = tipX + tipOffset
-    val rightC1Y = tipY - strokeWidth
-    val rightC2X = rightTransitionX + tangentLength * cos(Math.toRadians(rightTangentAngle)).toFloat()
-    val rightC2Y = rightTransitionY + tangentLength * sin(Math.toRadians(rightTangentAngle)).toFloat()
+    val svgWidth = 40f
+    val svgHeight = 48f
+    val inset = strokeWidth / 2
+    val scaleX = (size.width - strokeWidth) / svgWidth
+    val scaleY = (size.height - strokeWidth) / svgHeight
 
     val path = Path().apply {
-        moveTo(rightTransitionX, rightTransitionY)
-        arcTo(
-            rect = Rect(
-                center = Offset(circleCenterX, circleCenterY),
-                radius = circleRadius,
-            ),
-            startAngleDegrees = rightTransitionAngle,
-            sweepAngleDegrees = arcSweepAngle,
-            forceMoveTo = false,
-        )
-
-        // Cubic Bezier from left transition point to tip
-        cubicTo(leftC1X, leftC1Y, leftC2X, leftC2Y, tipX, tipY)
-        // Cubic Bezier from tip back to right transition point
-        cubicTo(rightC1X, rightC1Y, rightC2X, rightC2Y, rightTransitionX, rightTransitionY)
-
+        moveTo(20f, 48f)
+        cubicTo(19.4167f, 48f, 18.8333f, 47.8965f, 18.25f, 47.6895f)
+        cubicTo(17.6667f, 47.4825f, 17.1458f, 47.1721f, 16.6875f, 46.7581f)
+        cubicTo(13.9792f, 44.2743f, 11.5833f, 41.8525f, 9.5f, 39.4929f)
+        cubicTo(7.41667f, 37.1332f, 5.67708f, 34.8461f, 4.28125f, 32.6313f)
+        cubicTo(2.88542f, 30.4166f, 1.82292f, 28.2846f, 1.09375f, 26.2354f)
+        cubicTo(0.364583f, 24.1863f, 0f, 22.2303f, 0f, 20.3674f)
+        cubicTo(0f, 14.1578f, 2.01042f, 9.21087f, 6.03125f, 5.52652f)
+        cubicTo(10.0521f, 1.84217f, 14.7083f, 0f, 20f, 0f)
+        cubicTo(25.2917f, 0f, 29.9479f, 1.84217f, 33.9688f, 5.52652f)
+        cubicTo(37.9896f, 9.21087f, 40f, 14.1578f, 40f, 20.3674f)
+        cubicTo(40f, 22.2303f, 39.6354f, 24.1863f, 38.9062f, 26.2354f)
+        cubicTo(38.1771f, 28.2846f, 37.1146f, 30.4166f, 35.7188f, 32.6313f)
+        cubicTo(34.3229f, 34.8461f, 32.5833f, 37.1332f, 30.5f, 39.4929f)
+        cubicTo(28.4167f, 41.8525f, 26.0208f, 44.2743f, 23.3125f, 46.7581f)
+        cubicTo(22.8542f, 47.1721f, 22.3333f, 47.4825f, 21.75f, 47.6895f)
+        cubicTo(21.1667f, 47.8965f, 20.5833f, 48f, 20f, 48f)
         close()
+
+        transform(Matrix().apply {
+            scale(scaleX, scaleY)
+            translate(inset / scaleX, inset / scaleY)
+        })
     }
 
     drawPath(path = path, color = fillColor, style = Fill)
