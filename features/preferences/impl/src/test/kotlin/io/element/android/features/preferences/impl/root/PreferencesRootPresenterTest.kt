@@ -101,7 +101,7 @@ class PreferencesRootPresenterTest {
                     listOf(value(AccountManagementAction.DevicesList)),
                 )
             assertThat(finalState.accountManagementUrl).isEqualTo("Profile url")
-            assertThat(finalState.devicesManagementUrl).isEqualTo("SessionsList url")
+            assertThat(finalState.devicesManagementUrl).isEqualTo("DevicesList url")
         }
     }
 
