@@ -26,6 +26,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.designsystem.colors.gradientCriticalColors
+import io.element.android.libraries.designsystem.colors.gradientInfoColors
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
@@ -38,13 +40,16 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.CommonStrings
 
+/**
+ * Ref: https://www.figma.com/design/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?node-id=2392-6721
+ */
 @Composable
 fun ComposerAlertMolecule(
     avatar: AvatarData?,
     content: AnnotatedString,
     onSubmitClick: () -> Unit,
     modifier: Modifier = Modifier,
-    level: ComposerAlertLevel = ComposerAlertLevel.Default,
+    level: ComposerAlertLevel = ComposerAlertLevel.Info,
     showIcon: Boolean = false,
     submitText: String = stringResource(CommonStrings.action_ok),
 ) {
@@ -52,20 +57,12 @@ fun ComposerAlertMolecule(
         modifier.fillMaxWidth()
     ) {
         val lineColor = when (level) {
-            ComposerAlertLevel.Default -> ElementTheme.colors.borderInfoSubtle
             ComposerAlertLevel.Info -> ElementTheme.colors.borderInfoSubtle
             ComposerAlertLevel.Critical -> ElementTheme.colors.borderCriticalSubtle
         }
 
-        val startColor = when (level) {
-            ComposerAlertLevel.Default -> ElementTheme.colors.bgInfoSubtle
-            ComposerAlertLevel.Info -> ElementTheme.colors.bgInfoSubtle
-            ComposerAlertLevel.Critical -> ElementTheme.colors.bgCriticalSubtle
-        }
-
         val textColor = when (level) {
-            ComposerAlertLevel.Default -> ElementTheme.colors.textPrimary
-            ComposerAlertLevel.Info -> ElementTheme.colors.textInfoPrimary
+            ComposerAlertLevel.Info -> ElementTheme.colors.textPrimary
             ComposerAlertLevel.Critical -> ElementTheme.colors.textCriticalPrimary
         }
 
@@ -75,12 +72,13 @@ fun ComposerAlertMolecule(
                 .height(1.dp)
                 .background(lineColor)
         )
-        val brush = Brush.verticalGradient(
-            listOf(startColor, ElementTheme.colors.bgCanvasDefault),
-        )
+        val gradientColors = when (level) {
+            ComposerAlertLevel.Info -> gradientInfoColors()
+            ComposerAlertLevel.Critical -> gradientCriticalColors()
+        }
         Box(
             modifier = Modifier
-                .background(brush)
+                .background(Brush.verticalGradient(gradientColors))
                 .padding(start = 16.dp, end = 16.dp, top = 16.dp, bottom = 8.dp)
         ) {
             Column(
@@ -96,12 +94,10 @@ fun ComposerAlertMolecule(
                         )
                     } else if (showIcon) {
                         val icon = when (level) {
-                            ComposerAlertLevel.Default -> CompoundIcons.Info()
                             ComposerAlertLevel.Info -> CompoundIcons.Info()
                             ComposerAlertLevel.Critical -> CompoundIcons.Error()
                         }
                         val iconTint = when (level) {
-                            ComposerAlertLevel.Default -> ElementTheme.colors.iconPrimary
                             ComposerAlertLevel.Info -> ElementTheme.colors.iconInfoPrimary
                             ComposerAlertLevel.Critical -> ElementTheme.colors.iconCriticalPrimary
                         }
@@ -131,7 +127,6 @@ fun ComposerAlertMolecule(
 }
 
 enum class ComposerAlertLevel {
-    Default,
     Info,
     Critical
 }

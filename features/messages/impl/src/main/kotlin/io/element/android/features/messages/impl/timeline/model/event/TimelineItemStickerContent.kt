@@ -30,5 +30,5 @@ data class TimelineItemStickerContent(
 
     /* Stickers are supposed to be small images so
        we allow using the mediaSource (unless the url is empty) */
-    val preferredMediaSource = if (mediaSource.url.isEmpty()) thumbnailSource else mediaSource
+    val preferredMediaSource = if (mediaSource.safeUrl.isEmpty()) thumbnailSource else mediaSource
 }

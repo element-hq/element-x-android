@@ -7,7 +7,14 @@
 
 package io.element.android.services.analyticsproviders.api
 
+import kotlin.time.Duration
+
 interface AnalyticsTransaction {
+    /**
+     * The time elapsed since the transaction started until now if the transaction is ongoing or the time it finished.
+     */
+    val duration: Duration
+
     /**
      * Start a child span from this transaction.
      */
