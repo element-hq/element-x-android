@@ -66,7 +66,7 @@ internal fun MessagesViewTopBar(
     dmUserIdentityState: IdentityState?,
     sharedHistoryIcon: SharedHistoryIcon,
     onRoomDetailsClick: () -> Unit,
-    onJoinCallClick: (voiceIntent: Boolean) -> Unit,
+    onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {

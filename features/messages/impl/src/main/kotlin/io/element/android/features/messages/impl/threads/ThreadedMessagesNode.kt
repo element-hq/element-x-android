@@ -281,8 +281,8 @@ class ThreadedMessagesNode(
                     },
                     onSendLocationClick = callback::navigateToSendLocation,
                     onCreatePollClick = callback::navigateToCreatePoll,
-                    onJoinCallClick = { voiceIntent ->
-                        callback.navigateToRoomCall(room.roomId, voiceIntent)
+                    onJoinCallClick = { isAudioCall ->
+                        callback.navigateToRoomCall(room.roomId, isAudioCall)
                     },
                     onViewAllPinnedMessagesClick = {},
                     modifier = modifier,

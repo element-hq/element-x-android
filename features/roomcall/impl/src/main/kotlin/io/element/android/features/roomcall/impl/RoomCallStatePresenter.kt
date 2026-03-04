@@ -56,7 +56,8 @@ class RoomCallStatePresenter(
                         canJoinCall = canJoinCall,
                         isUserInTheCall = isUserInTheCall,
                         isUserLocallyInTheCall = isUserLocallyInTheCall,
-                        isVoiceIntent = false // TODO
+                        // TODO resolve intent while the call is ongoing
+                        isAudioCall = false
                     )
                     else -> RoomCallState.StandBy(canStartCall = canJoinCall)
                 }

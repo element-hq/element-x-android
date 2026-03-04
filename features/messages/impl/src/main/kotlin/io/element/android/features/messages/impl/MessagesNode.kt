@@ -125,7 +125,7 @@ class MessagesNode(
         fun navigateToSendLocation()
         fun navigateToCreatePoll()
         fun navigateToEditPoll(eventId: EventId)
-        fun navigateToRoomCall(roomId: RoomId, voiceIntent: Boolean)
+        fun navigateToRoomCall(roomId: RoomId, isAudioCall: Boolean)
         fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?)
         fun navigateToRoomDetails()
         fun navigateToPinnedMessagesList()

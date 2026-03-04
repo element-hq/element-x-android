@@ -304,7 +304,7 @@ class DefaultPushHandler(
             callType = CallType.RoomCall(
                 notifiableEvent.sessionId,
                 notifiableEvent.roomId,
-                voiceIntent = notifiableEvent.callIntent == CallIntent.AUDIO
+                isAudioCall = notifiableEvent.callIntent == CallIntent.AUDIO
             ),
             eventId = notifiableEvent.eventId,
             senderId = notifiableEvent.senderId,

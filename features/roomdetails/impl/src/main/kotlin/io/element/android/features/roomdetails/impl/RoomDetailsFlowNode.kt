@@ -228,7 +228,7 @@ class RoomDetailsFlowNode(
                         val inputs = CallType.RoomCall(
                             sessionId = room.sessionId,
                             roomId = room.roomId,
-                            voiceIntent = callIntent == CallIntent.AUDIO
+                            isAudioCall = callIntent == CallIntent.AUDIO
                         )
                         analyticsService.captureInteraction(Interaction.Name.MobileRoomCallButton)
                         elementCallEntryPoint.startCall(inputs)
@@ -291,7 +291,7 @@ class RoomDetailsFlowNode(
                             CallType.RoomCall(
                                 roomId = dmRoomId,
                                 sessionId = room.sessionId,
-                                voiceIntent = callIntent == CallIntent.AUDIO
+                                isAudioCall = callIntent == CallIntent.AUDIO
                             )
                         )
                     }

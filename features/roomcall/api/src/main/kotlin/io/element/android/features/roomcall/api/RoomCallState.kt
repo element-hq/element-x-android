@@ -23,7 +23,7 @@ sealed interface RoomCallState {
 
     data class OnGoing(
         val canJoinCall: Boolean,
-        val isVoiceIntent: Boolean,
+        val isAudioCall: Boolean,
         val isUserInTheCall: Boolean,
         val isUserLocallyInTheCall: Boolean,
     ) : RoomCallState

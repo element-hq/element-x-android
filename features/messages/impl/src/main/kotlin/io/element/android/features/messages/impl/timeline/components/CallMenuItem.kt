@@ -53,7 +53,7 @@ internal fun CallMenuItem(
         is RoomCallState.OnGoing -> {
             OnGoingCallMenuItem(
                 roomCallState = roomCallState,
-                onJoinCallClick = { onJoinCallClick(roomCallState.isVoiceIntent) },
+                onJoinCallClick = { onJoinCallClick(roomCallState.isAudioCall) },
                 modifier = modifier,
             )
         }
@@ -109,7 +109,7 @@ private fun OnGoingCallMenuItem(
         ) {
             Icon(
                 modifier = Modifier.size(20.dp),
-                imageVector = if (roomCallState.isVoiceIntent) {
+                imageVector = if (roomCallState.isAudioCall) {
                     CompoundIcons.VoiceCallSolid()
                 } else {
                     CompoundIcons.VideoCallSolid()

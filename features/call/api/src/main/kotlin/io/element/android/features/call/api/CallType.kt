@@ -26,10 +26,10 @@ sealed interface CallType : NodeInputs, Parcelable {
     data class RoomCall(
         val sessionId: SessionId,
         val roomId: RoomId,
-        val voiceIntent: Boolean
+        val isAudioCall: Boolean
     ) : CallType {
         override fun toString(): String {
-            return "RoomCall(sessionId=$sessionId, roomId=$roomId, voiceIntent=$voiceIntent)"
+            return "RoomCall(sessionId=$sessionId, roomId=$roomId, isAudioCall=$isAudioCall)"
         }
     }
 }

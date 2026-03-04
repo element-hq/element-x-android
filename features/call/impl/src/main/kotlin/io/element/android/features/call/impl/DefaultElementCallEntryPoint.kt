@@ -58,7 +58,7 @@ class DefaultElementCallEntryPoint(
             expirationTimestamp = expirationTimestamp,
             notificationChannelId = notificationChannelId,
             textContent = textContent,
-            audioOnly = callType.voiceIntent
+            audioOnly = callType.isAudioCall
         )
         activeCallManager.registerIncomingCall(notificationData = incomingCallNotificationData)
     }
