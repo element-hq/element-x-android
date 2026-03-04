@@ -14,7 +14,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 
-open class IncomingCallScreenProvider : PreviewParameterProvider<CallNotificationData> {
+open class CallNotificationDataProvider : PreviewParameterProvider<CallNotificationData> {
     override val values: Sequence<CallNotificationData>
         get() = sequenceOf(
             aIncomingCallScreenState(
