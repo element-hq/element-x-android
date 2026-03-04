@@ -10,8 +10,8 @@ This document explains how to install Element X Android from a Github Release.
   * [I already have the application on my phone](#i-already-have-the-application-on-my-phone)
 * [Installing from the App Bundle](#installing-from-the-app-bundle)
   * [Requirements](#requirements)
-  * [Steps](#steps)
-  * [I already have the application on my phone](#i-already-have-the-application-on-my-phone)
+  * [Steps](#steps-1)
+  * [I already have the application on my phone](#i-already-have-the-application-on-my-phone-1)
 
 <!--- END -->
 
