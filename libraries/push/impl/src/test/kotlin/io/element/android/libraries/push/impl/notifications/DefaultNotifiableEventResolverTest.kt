@@ -14,6 +14,7 @@ import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.exception.NotificationResolverException
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.NotificationData
 import io.element.android.libraries.matrix.api.notification.RtcNotificationType
@@ -739,6 +740,7 @@ class DefaultNotifiableEventResolverTest {
                         content = NotificationContent.MessageLike.RtcNotification(
                             A_USER_ID_2,
                             RtcNotificationType.NOTIFY,
+                            CallIntent.VIDEO,
                             0
                         ),
                     ))

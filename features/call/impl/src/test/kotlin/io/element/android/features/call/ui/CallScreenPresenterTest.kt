@@ -90,7 +90,7 @@ class CallScreenPresenterTest {
         val analyticsLambda = lambdaRecorder<MobileScreen.ScreenName, Unit> {}
         val joinedCallLambda = lambdaRecorder<CallType, Unit> {}
         val presenter = createCallScreenPresenter(
-            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
+            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID, false),
             widgetDriver = widgetDriver,
             widgetProvider = widgetProvider,
             screenTracker = FakeScreenTracker(analyticsLambda),
@@ -123,7 +123,7 @@ class CallScreenPresenterTest {
     fun `present - set message interceptor, send and receive messages`() = runTest {
         val widgetDriver = FakeMatrixWidgetDriver()
         val presenter = createCallScreenPresenter(
-            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
+            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID, false),
             widgetDriver = widgetDriver,
             screenTracker = FakeScreenTracker {},
         )
@@ -154,7 +154,7 @@ class CallScreenPresenterTest {
         val navigator = FakeCallScreenNavigator()
         val widgetDriver = FakeMatrixWidgetDriver()
         val presenter = createCallScreenPresenter(
-            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
+            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID, false),
             widgetDriver = widgetDriver,
             navigator = navigator,
             dispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
@@ -188,7 +188,7 @@ class CallScreenPresenterTest {
         val navigator = FakeCallScreenNavigator()
         val widgetDriver = FakeMatrixWidgetDriver()
         val presenter = createCallScreenPresenter(
-            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
+            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID, false),
             widgetDriver = widgetDriver,
             navigator = navigator,
             dispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
@@ -223,7 +223,7 @@ class CallScreenPresenterTest {
         val navigator = FakeCallScreenNavigator()
         val widgetDriver = FakeMatrixWidgetDriver()
         val presenter = createCallScreenPresenter(
-            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
+            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID, false),
             widgetDriver = widgetDriver,
             navigator = navigator,
             dispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
@@ -260,7 +260,7 @@ class CallScreenPresenterTest {
         val navigator = FakeCallScreenNavigator()
         val widgetDriver = FakeMatrixWidgetDriver()
         val presenter = createCallScreenPresenter(
-            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
+            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID, false),
             widgetDriver = widgetDriver,
             navigator = navigator,
             dispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
@@ -300,7 +300,7 @@ class CallScreenPresenterTest {
         val matrixClient = FakeMatrixClient(syncService = syncService)
         val appForegroundStateService = FakeAppForegroundStateService()
         val presenter = createCallScreenPresenter(
-            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
+            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID, false),
             widgetDriver = widgetDriver,
             navigator = navigator,
             dispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),

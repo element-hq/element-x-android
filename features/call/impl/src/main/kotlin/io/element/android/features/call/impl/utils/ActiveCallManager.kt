@@ -146,7 +146,6 @@ class DefaultActiveCallManager(
                 callType = CallType.RoomCall(
                     sessionId = notificationData.sessionId,
                     roomId = notificationData.roomId,
-                    // TODO
                     isAudioCall = notificationData.audioOnly,
                 ),
                 callState = CallState.Ringing(notificationData),
