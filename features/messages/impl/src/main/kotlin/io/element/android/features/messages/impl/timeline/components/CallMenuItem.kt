@@ -67,15 +67,18 @@ private fun StandByCallMenuItem(
     modifier: Modifier = Modifier,
 ) {
     Row(modifier = modifier) {
-        IconButton(
-            modifier = modifier,
-            onClick = { onJoinCallClick(true) },
-            enabled = roomCallState.canStartCall,
-        ) {
-            Icon(
-                imageVector = CompoundIcons.VoiceCallSolid(),
-                contentDescription = stringResource(CommonStrings.a11y_start_call),
-            )
+        // Only show voice call in DMs
+        if (roomCallState.isDM) {
+            IconButton(
+                modifier = modifier,
+                onClick = { onJoinCallClick(true) },
+                enabled = roomCallState.canStartCall,
+            ) {
+                Icon(
+                    imageVector = CompoundIcons.VoiceCallSolid(),
+                    contentDescription = stringResource(CommonStrings.a11y_start_call),
+                )
+            }
         }
         IconButton(
             modifier = modifier,

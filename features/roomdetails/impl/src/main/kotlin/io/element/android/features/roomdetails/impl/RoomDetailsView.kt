@@ -357,11 +357,14 @@ private fun MainActionsSection(
         }
         if (state.roomCallState.hasPermissionToJoin()) {
             // TODO Improve the view depending on all the cases here?
-            MainActionButton(
-                title = stringResource(CommonStrings.action_call),
-                imageVector = CompoundIcons.VoiceCall(),
-                onClick = { onCall(CallIntent.AUDIO) },
-            )
+            if (state.roomType is RoomDetailsType.Dm) {
+                // As per design, only show voice call in DM
+                MainActionButton(
+                    title = stringResource(CommonStrings.action_call),
+                    imageVector = CompoundIcons.VoiceCall(),
+                    onClick = { onCall(CallIntent.AUDIO) },
+                )
+            }
 
             MainActionButton(
                 title = stringResource(CommonStrings.common_video),

@@ -14,6 +14,7 @@ open class RoomCallStateProvider : PreviewParameterProvider<RoomCallState> {
     override val values: Sequence<RoomCallState> = sequenceOf(
         aStandByCallState(),
         aStandByCallState(canStartCall = false),
+        aStandByCallState(canStartCall = false, isDM = true),
         anOngoingCallState(),
         anOngoingCallState(canJoinCall = false),
         anOngoingCallState(canJoinCall = true, isUserInTheCall = true),
@@ -36,6 +37,8 @@ fun anOngoingCallState(
 
 fun aStandByCallState(
     canStartCall: Boolean = true,
+    isDM: Boolean = false,
 ) = RoomCallState.StandBy(
     canStartCall = canStartCall,
+    isDM
 )

@@ -32,6 +32,7 @@ import kotlinx.collections.immutable.ImmutableList
 data class MessagesState(
     val roomId: RoomId,
     val roomName: String?,
+    val isDm: Boolean,
     val roomAvatar: AvatarData,
     val heroes: ImmutableList<AvatarData>,
     val userEventPermissions: UserEventPermissions,
