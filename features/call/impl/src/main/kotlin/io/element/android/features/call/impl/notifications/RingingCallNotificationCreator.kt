@@ -69,6 +69,7 @@ class RingingCallNotificationCreator(
         timestamp: Long,
         expirationTimestamp: Long,
         textContent: String?,
+        audioOnly: Boolean,
     ): Notification? {
         val matrixClient = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return null
         val imageLoader = imageLoaderHolder.get(matrixClient)
@@ -88,8 +89,7 @@ class RingingCallNotificationCreator(
             .setImportant(true)
             .build()
 
-        // TODO
-        val answerIntent = IntentProvider.getPendingIntent(context, CallType.RoomCall(sessionId, roomId, voiceIntent = false))
+        val answerIntent = IntentProvider.getPendingIntent(context, CallType.RoomCall(sessionId, roomId, voiceIntent = audioOnly))
         val notificationData = CallNotificationData(
             sessionId = sessionId,
             roomId = roomId,
@@ -102,6 +102,7 @@ class RingingCallNotificationCreator(
             timestamp = timestamp,
             textContent = textContent,
             expirationTimestamp = expirationTimestamp,
+            audioOnly = audioOnly,
         )
 
         val declineIntent = PendingIntentCompat.getBroadcast(
@@ -128,7 +129,11 @@ class RingingCallNotificationCreator(
             .setSmallIcon(CommonDrawables.ic_notification)
             .setPriority(NotificationCompat.PRIORITY_MAX)
             .setCategory(NotificationCompat.CATEGORY_CALL)
-            .setStyle(NotificationCompat.CallStyle.forIncomingCall(caller, declineIntent, answerIntent).setIsVideo(true))
+            .setStyle(
+                NotificationCompat.CallStyle
+                    .forIncomingCall(caller, declineIntent, answerIntent)
+                    .setIsVideo(!audioOnly)
+            )
             .addPerson(caller)
             .setAutoCancel(true)
             .setWhen(timestamp)

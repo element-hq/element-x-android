@@ -19,6 +19,7 @@
     <item quantity="one">"You have %d new message."</item>
     <item quantity="other">"You have %d new messages."</item>
   </plurals>
+  <string name="notification_incoming_audio_call">"📞 Incoming call"</string>
   <string name="notification_incoming_call">"📹 Incoming call"</string>
   <string name="notification_inline_reply_failed">"** Failed to send - please open room"</string>
   <string name="notification_invitation_action_join">"Join"</string>

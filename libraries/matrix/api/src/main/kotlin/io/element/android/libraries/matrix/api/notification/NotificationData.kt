@@ -56,6 +56,7 @@ sealed interface NotificationContent {
         data class RtcNotification(
             val senderId: UserId,
             val type: RtcNotificationType,
+            val callIntent: CallIntent,
             val expirationTimestampMillis: Long
         ) : MessageLike
 
@@ -126,4 +127,9 @@ sealed interface NotificationContent {
 enum class RtcNotificationType {
     RING,
     NOTIFY
+}
+
+enum class CallIntent {
+    AUDIO,
+    VIDEO
 }

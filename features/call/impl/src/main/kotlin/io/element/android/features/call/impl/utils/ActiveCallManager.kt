@@ -147,7 +147,7 @@ class DefaultActiveCallManager(
                     sessionId = notificationData.sessionId,
                     roomId = notificationData.roomId,
                     // TODO
-                    voiceIntent = false,
+                    voiceIntent = notificationData.audioOnly,
                 ),
                 callState = CallState.Ringing(notificationData),
             )
@@ -275,6 +275,7 @@ class DefaultActiveCallManager(
             timestamp = notificationData.timestamp,
             textContent = notificationData.textContent,
             expirationTimestamp = notificationData.expirationTimestamp,
+            audioOnly = notificationData.audioOnly,
         ) ?: return
         runCatchingExceptions {
             notificationManagerCompat.notify(

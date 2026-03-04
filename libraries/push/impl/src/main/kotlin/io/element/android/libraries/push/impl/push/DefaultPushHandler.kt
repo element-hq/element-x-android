@@ -19,6 +19,7 @@ import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.exception.NotificationResolverException
+import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.push.api.push.NotificationEventRequest
 import io.element.android.libraries.push.api.push.SyncOnNotifiableEvent
 import io.element.android.libraries.push.impl.history.PushHistoryService
@@ -303,8 +304,7 @@ class DefaultPushHandler(
             callType = CallType.RoomCall(
                 notifiableEvent.sessionId,
                 notifiableEvent.roomId,
-                // TODO
-                voiceIntent = false
+                voiceIntent = notifiableEvent.callIntent == CallIntent.AUDIO
             ),
             eventId = notifiableEvent.eventId,
             senderId = notifiableEvent.senderId,

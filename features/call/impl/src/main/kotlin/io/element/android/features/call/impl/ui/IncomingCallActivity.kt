@@ -116,8 +116,7 @@ class IncomingCallActivity : AppCompatActivity() {
             CallType.RoomCall(
                 notificationData.sessionId,
                 notificationData.roomId,
-                // TODO
-                voiceIntent = false
+                voiceIntent = notificationData.audioOnly
             )
         )
     }
