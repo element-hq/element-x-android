@@ -1,12 +1,11 @@
 /*
- * Copyright (c) 2025 Element Creations Ltd.
- * Copyright 2023-2025 New Vector Ltd.
+ * Copyright (c) 2026 Element Creations Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.login.impl.screens.onboarding
+package io.element.android.features.login.impl.screens.classic.loginwithclassic
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -23,58 +22,48 @@ import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.matrix.api.auth.OidcDetails
+import io.element.android.libraries.matrix.api.core.UserId
 
 @ContributesNode(AppScope::class)
 @AssistedInject
-class OnBoardingNode(
+class LoginWithClassicNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
-    presenterFactory: OnBoardingPresenter.Factory,
-) : Node(
-    buildContext = buildContext,
-    plugins = plugins
-) {
+    presenterFactory: LoginWithClassicPresenter.Factory,
+) : Node(buildContext, plugins = plugins),
+    LoginWithClassicNavigator {
     interface Callback : Plugin {
-        fun navigateToSignUpFlow()
-        fun navigateToSignInFlow(mustChooseAccountProvider: Boolean)
-        fun navigateToQrCode()
-        fun navigateToBugReport()
+        fun navigateToOtherOptions()
         fun navigateToLoginPassword()
         fun navigateToOidc(oidcDetails: OidcDetails)
         fun navigateToCreateAccount(url: String)
-        fun onDone()
+        fun navigateToMissingKeyBackup()
     }
 
-    data class Params(
-        val accountProvider: String?,
-        val loginHint: String?,
-        val showBackButton: Boolean,
+    data class Inputs(
+        val userId: UserId,
     ) : NodeInputs
 
+    private val inputs: Inputs = inputs()
+    val presenter = presenterFactory.create(inputs.userId, this)
     private val callback: Callback = callback()
-    private val params = inputs<Params>()
 
-    private val presenter = presenterFactory.create(
-        params = params,
-    )
+    override fun navigateToMissingKeyBackup() {
+        callback.navigateToMissingKeyBackup()
+    }
 
     @Composable
     override fun View(modifier: Modifier) {
-        val state = presenter.present()
         val context = LocalContext.current
-
-        OnBoardingView(
+        val state = presenter.present()
+        LoginWithClassicView(
             state = state,
             modifier = modifier,
-            onSignIn = callback::navigateToSignInFlow,
-            onCreateAccount = callback::navigateToSignUpFlow,
-            onSignInWithQrCode = callback::navigateToQrCode,
-            onReportProblem = callback::navigateToBugReport,
+            onOtherOptionsClick = callback::navigateToOtherOptions,
             onOidcDetails = callback::navigateToOidc,
             onNeedLoginPassword = callback::navigateToLoginPassword,
             onLearnMoreClick = { openLearnMorePage(context) },
             onCreateAccountContinue = callback::navigateToCreateAccount,
-            onBackClick = callback::onDone,
         )
     }
 }

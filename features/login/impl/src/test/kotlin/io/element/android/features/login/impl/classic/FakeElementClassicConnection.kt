@@ -5,8 +5,9 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.login.impl.screens.onboarding.classic
+package io.element.android.features.login.impl.classic
 
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.tests.testutils.lambda.lambdaError
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -15,12 +16,14 @@ import kotlinx.coroutines.flow.asStateFlow
 class FakeElementClassicConnection(
     private val startResult: () -> Unit = { lambdaError() },
     private val stopResult: () -> Unit = { lambdaError() },
-    private val requestDataResult: () -> Unit = { lambdaError() },
+    private val requestSessionResult: () -> Unit = { lambdaError() },
+    private val requestAvatarResult: (UserId) -> Unit = { lambdaError() },
     initialState: ElementClassicConnectionState = ElementClassicConnectionState.Idle
 ) : ElementClassicConnection {
     override fun start() = startResult()
     override fun stop() = stopResult()
-    override fun requestData() = requestDataResult()
+    override fun requestSession() = requestSessionResult()
+    override fun requestAvatar(userId: UserId) = requestAvatarResult(userId)
     private val mutableStateFlow = MutableStateFlow(initialState)
     override val stateFlow: StateFlow<ElementClassicConnectionState> = mutableStateFlow.asStateFlow()
     suspend fun emitState(state: ElementClassicConnectionState) {

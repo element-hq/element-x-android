@@ -60,10 +60,19 @@ class LoginHelper(
     suspend fun submit(
         isAccountCreation: Boolean,
         homeserverUrl: String,
+        resolvedHomeserverUrl: String?,
         loginHint: String?,
     ) {
         suspend {
-            authenticationService.setHomeserver(homeserverUrl).map { matrixHomeServerDetails ->
+            authenticationService.setHomeserver(homeserverUrl).recoverCatching {
+                // No .well-known file?
+                // If the homeserver is not reachable, try using resolvedHomeserverUrl.
+                if (resolvedHomeserverUrl != null && resolvedHomeserverUrl != homeserverUrl) {
+                    authenticationService.setHomeserver(resolvedHomeserverUrl).getOrThrow()
+                } else {
+                    throw it
+                }
+            }.map { matrixHomeServerDetails ->
                 if (matrixHomeServerDetails.supportsOidcLogin) {
                     // Retrieve the details right now
                     val oidcPrompt = if (isAccountCreation) OidcPrompt.Create else OidcPrompt.Login

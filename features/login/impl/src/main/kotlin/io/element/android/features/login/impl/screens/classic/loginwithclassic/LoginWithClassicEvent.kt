@@ -5,11 +5,10 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.login.impl.screens.onboarding.classic
+package io.element.android.features.login.impl.screens.classic.loginwithclassic
 
 sealed interface LoginWithClassicEvent {
     data object RefreshData : LoginWithClassicEvent
-    data object StartLoginWithClassic : LoginWithClassicEvent
-    data object DoLoginWithClassic : LoginWithClassicEvent
-    data object CloseDialog : LoginWithClassicEvent
+    data object Submit : LoginWithClassicEvent
+    data object ClearError : LoginWithClassicEvent
 }

@@ -31,15 +31,10 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LifecycleEventEffect
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.login.LoginModeView
-import io.element.android.features.login.impl.screens.onboarding.classic.ConfirmingLoginWithElementClassic
-import io.element.android.features.login.impl.screens.onboarding.classic.LoginWithClassicEvent
-import io.element.android.features.login.impl.screens.onboarding.classic.LoginWithClassicState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.atomic.atoms.ElementLogoAtom
 import io.element.android.libraries.designsystem.atomic.atoms.ElementLogoAtomSize
@@ -47,11 +42,11 @@ import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMo
 import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
 import io.element.android.libraries.designsystem.atomic.pages.OnBoardingPage
 import io.element.android.libraries.designsystem.components.BigIcon
-import io.element.android.libraries.designsystem.components.async.AsyncActionView
-import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
@@ -114,45 +109,9 @@ fun OnBoardingView(
             state = state,
             loginView = loginView,
             buttons = buttons,
+            onBackClick = onBackClick,
         )
     }
-
-    LoginWithElementClassicView(
-        state = state.loginWithClassicState,
-    )
-}
-
-@Composable
-private fun LoginWithElementClassicView(
-    state: LoginWithClassicState,
-) {
-    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
-        state.eventSink(LoginWithClassicEvent.RefreshData)
-    }
-    AsyncActionView(
-        async = state.loginWithClassicAction,
-        confirmationDialog = { confirming ->
-            when (confirming) {
-                is ConfirmingLoginWithElementClassic -> {
-                    // TODO i18n
-                    ConfirmationDialog(
-                        title = "Sign in with Element Classic",
-                        content = "You are signing in as ${confirming.userId} on Element Classic." +
-                            " Your existing session on Element Classic will not be signed out. Do you want to continue?",
-                        submitText = stringResource(CommonStrings.action_continue),
-                        onSubmitClick = { state.eventSink(LoginWithClassicEvent.DoLoginWithClassic) },
-                        onDismiss = { state.eventSink(LoginWithClassicEvent.CloseDialog) },
-                    )
-                }
-            }
-        },
-        onErrorDismiss = {
-            state.eventSink(LoginWithClassicEvent.CloseDialog)
-        },
-        onSuccess = {
-            // noop, the view will be closed
-        }
-    )
 }
 
 @Composable
@@ -160,18 +119,36 @@ private fun AddFirstAccountScaffold(
     state: OnBoardingState,
     loginView: @Composable () -> Unit,
     buttons: @Composable () -> Unit,
+    onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     OnBoardingPage(
         modifier = modifier,
         renderBackground = state.onBoardingLogoResId == null,
         content = {
-            if (state.onBoardingLogoResId != null) {
-                OnBoardingLogo(
-                    onBoardingLogoResId = state.onBoardingLogoResId,
-                )
-            } else {
-                OnBoardingContent(state = state)
+            Box(
+                modifier = Modifier.fillMaxSize(),
+            ) {
+                if (state.onBoardingLogoResId != null) {
+                    OnBoardingLogo(
+                        onBoardingLogoResId = state.onBoardingLogoResId,
+                    )
+                } else {
+                    OnBoardingContent(state = state)
+                }
+                if (state.showBackButton) {
+                    // Add icon button to "navigate back"
+                    IconButton(
+                        onClick = onBackClick,
+                        modifier = Modifier
+                            .align(Alignment.TopEnd),
+                    ) {
+                        Icon(
+                            imageVector = CompoundIcons.Close(),
+                            contentDescription = stringResource(CommonStrings.action_cancel),
+                        )
+                    }
+                }
             }
             loginView()
         },
@@ -282,18 +259,6 @@ private fun OnBoardingButtons(
             R.string.screen_onboarding_sign_in_manually
         } else {
             CommonStrings.action_continue
-        }
-        if (state.loginWithClassicState.canLoginWithClassic) {
-            Button(
-                text = "Sign in with Element Classic",
-                leadingIcon = IconSource.Vector(CompoundIcons.Mobile()),
-                onClick = {
-                    state.loginWithClassicState.eventSink(
-                        LoginWithClassicEvent.StartLoginWithClassic
-                    )
-                },
-                modifier = Modifier.fillMaxWidth(),
-            )
         }
         if (state.canLoginWithQrCode) {
             Button(

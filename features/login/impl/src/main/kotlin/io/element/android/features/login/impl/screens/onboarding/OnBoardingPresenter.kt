@@ -26,7 +26,6 @@ import io.element.android.features.enterprise.api.canConnectToAnyHomeserver
 import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.login.LoginHelper
-import io.element.android.features.login.impl.screens.onboarding.classic.LoginWithClassicState
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
@@ -45,7 +44,6 @@ class OnBoardingPresenter(
     private val onBoardingLogoResIdProvider: OnBoardingLogoResIdProvider,
     private val sessionStore: SessionStore,
     private val accountProviderDataSource: AccountProviderDataSource,
-    private val loginWithClassicPresenter: Presenter<LoginWithClassicState>,
 ) : Presenter<OnBoardingState> {
     @AssistedFactory
     interface Factory {
@@ -101,8 +99,6 @@ class OnBoardingPresenter(
 
         val loginMode by loginHelper.collectLoginMode()
 
-        val loginWithClassicState = loginWithClassicPresenter.present()
-
         fun handleEvent(event: OnBoardingEvents) {
             when (event) {
                 is OnBoardingEvents.OnSignIn -> localCoroutineScope.launch {
@@ -111,6 +107,7 @@ class OnBoardingPresenter(
                     loginHelper.submit(
                         isAccountCreation = false,
                         homeserverUrl = event.defaultAccountProvider,
+                        resolvedHomeserverUrl = null,
                         loginHint = params.loginHint?.takeIf { forcedAccountProvider == null },
                     )
                 }
@@ -127,6 +124,7 @@ class OnBoardingPresenter(
 
         return OnBoardingState(
             isAddingAccount = isAddingAccount,
+            showBackButton = params.showBackButton,
             productionApplicationName = buildMeta.productionApplicationName,
             defaultAccountProvider = defaultAccountProvider,
             mustChooseAccountProvider = mustChooseAccountProvider,
@@ -136,7 +134,6 @@ class OnBoardingPresenter(
             loginMode = loginMode,
             version = buildMeta.versionName,
             onBoardingLogoResId = onBoardingLogoResId,
-            loginWithClassicState = loginWithClassicState,
             eventSink = ::handleEvent,
         )
     }
