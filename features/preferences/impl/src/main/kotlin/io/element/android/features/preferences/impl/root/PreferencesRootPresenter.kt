@@ -165,6 +165,6 @@ class PreferencesRootPresenter(
         devicesManagementUrl: MutableState<String?>,
     ) = launch {
         accountManagementUrl.value = matrixClient.getAccountManagementUrl(AccountManagementAction.Profile).getOrNull()
-        devicesManagementUrl.value = matrixClient.getAccountManagementUrl(AccountManagementAction.SessionsList).getOrNull()
+        devicesManagementUrl.value = matrixClient.getAccountManagementUrl(AccountManagementAction.DevicesList).getOrNull()
     }
 }

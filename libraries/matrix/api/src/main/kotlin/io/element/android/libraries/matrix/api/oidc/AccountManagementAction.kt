@@ -12,7 +12,7 @@ import io.element.android.libraries.matrix.api.core.DeviceId
 
 sealed interface AccountManagementAction {
     data object Profile : AccountManagementAction
-    data object SessionsList : AccountManagementAction
-    data class SessionView(val deviceId: DeviceId) : AccountManagementAction
-    data class SessionEnd(val deviceId: DeviceId) : AccountManagementAction
+    data object DevicesList : AccountManagementAction
+    data class DeviceView(val deviceId: DeviceId) : AccountManagementAction
+    data class DeviceDelete(val deviceId: DeviceId) : AccountManagementAction
 }
