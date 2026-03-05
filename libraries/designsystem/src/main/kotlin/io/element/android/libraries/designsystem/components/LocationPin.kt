@@ -53,12 +53,12 @@ private val DOT_RADIUS = 6.dp
 private val CONTENT_OFFSET = 5.dp
 
 /**
- * A location pin marker composable that supports multiple variants.
+ * A location pin composable that supports multiple variants.
  *
  * Based on Figma design: https://www.figma.com/design/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?node-id=4665-2890&m=dev
  */
 @Composable
-fun LocationPinMarker(
+fun LocationPin(
     variant: PinVariant,
     modifier: Modifier = Modifier,
 ) {
@@ -195,7 +195,7 @@ private fun DrawScope.drawPinShape(
 
 @PreviewsDayNight
 @Composable
-internal fun LocationPinMarkerPreview() = ElementPreview {
+internal fun LocationPinPreview() = ElementPreview {
     val sampleAvatarData = AvatarData(
         id = "@alice:matrix.org",
         name = "Alice",
@@ -208,18 +208,18 @@ internal fun LocationPinMarkerPreview() = ElementPreview {
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            LocationPinMarker(
+            LocationPin(
                 variant = PinVariant.UserLocation(avatarData = sampleAvatarData, isLive = false),
             )
-            LocationPinMarker(
+            LocationPin(
                 variant = PinVariant.UserLocation(avatarData = sampleAvatarData, isLive = true),
             )
         }
         Row(horizontalArrangement = Arrangement.spacedBy(16.dp)) {
-            LocationPinMarker(
+            LocationPin(
                 variant = PinVariant.PinnedLocation,
             )
-            LocationPinMarker(
+            LocationPin(
                 variant = PinVariant.StaleLocation,
             )
         }

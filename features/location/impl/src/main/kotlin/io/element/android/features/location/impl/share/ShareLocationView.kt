@@ -40,7 +40,7 @@ import io.element.android.features.location.impl.common.PermissionRationaleDialo
 import io.element.android.features.location.impl.common.ui.LocationFloatingActionButton
 import io.element.android.features.location.impl.common.ui.MapBottomSheetScaffold
 import io.element.android.features.location.impl.common.ui.UserLocationPuck
-import io.element.android.libraries.designsystem.components.LocationPinMarker
+import io.element.android.libraries.designsystem.components.LocationPin
 import io.element.android.libraries.designsystem.components.PinVariant
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -160,7 +160,7 @@ fun ShareLocationView(
                 } else {
                     PinVariant.PinnedLocation
                 }
-                LocationPinMarker(
+                LocationPin(
                     variant = variant,
                     modifier = Modifier.centerBottomEdge(this),
                 )
