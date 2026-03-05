@@ -14,7 +14,7 @@ import org.matrix.rustcomponents.sdk.TaskHandle
 import org.matrix.rustcomponents.sdk.Timeline
 import org.matrix.rustcomponents.sdk.TimelineDiff
 import org.matrix.rustcomponents.sdk.TimelineListener
-import uniffi.matrix_sdk.RoomPaginationStatus
+import uniffi.matrix_sdk.PaginationStatus
 
 class FakeFfiTimeline : Timeline(NoHandle) {
     private var listener: TimelineListener? = null
@@ -33,7 +33,7 @@ class FakeFfiTimeline : Timeline(NoHandle) {
         return FakeFfiTaskHandle()
     }
 
-    fun emitPaginationStatus(status: RoomPaginationStatus) {
+    fun emitPaginationStatus(status: PaginationStatus) {
         paginationStatusListener!!.onUpdate(status)
     }
 

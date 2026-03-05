@@ -44,6 +44,7 @@ dependencies {
     api(projects.features.share.api)
 
     testCommonDependencies(libs, true)
+    testImplementation(projects.features.share.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.mediaupload.test)
     testImplementation(projects.libraries.preferences.test)

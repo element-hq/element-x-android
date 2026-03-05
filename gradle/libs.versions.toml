@@ -51,10 +51,10 @@ telephoto = "0.18.0"
 haze = "1.7.2"
 
 # Dependency analysis
-dependencyAnalysis = "3.6.0"
+dependencyAnalysis = "3.6.1"
 
 # DI
-metro = "0.11.1"
+metro = "0.11.2"
 
 # Auto service
 autoservice = "1.1.1"
@@ -178,7 +178,7 @@ test_detekt_test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version
 # https://github.com/matrix-org/matrix-rust-components-kotlin/commits/main/sdk/sdk-android/src/main/kotlin/org/matrix/rustcomponents/sdk/matrix_sdk_ffi.kt
 # All new features should not be implemented in the pull request that upgrades the version, developers should
 # only fix API breaks and may add some TODOs.
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.03.0"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.03.1"
 
 # Others
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
@@ -220,7 +220,7 @@ color_picker = "io.mhssn:colorpicker:1.0.0"
 
 # Analytics
 posthog = "com.posthog:posthog-android:3.34.3"
-sentry = "io.sentry:sentry-android:8.33.0"
+sentry = "io.sentry:sentry-android:8.34.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.29.2"
 

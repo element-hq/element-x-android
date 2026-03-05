@@ -31,6 +31,7 @@ dependencies {
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.sessionStorage.api)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.workmanager.api)
 
     testCommonDependencies(libs)
     testImplementation(projects.libraries.matrix.test)

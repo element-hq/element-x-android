@@ -1,4 +1,4 @@
--- This file is not striclty necessary, since the first
+-- This file is not strictly necessary, since the first
 -- version of the DB is 1, so we will never migrate from 0
 
 CREATE TABLE SessionData (

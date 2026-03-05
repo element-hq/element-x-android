@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright (c) 2026 Element Creations Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
@@ -73,12 +73,10 @@ val compoundColorsLight = SemanticColors(
     gradientActionStop2 = LightColorTokens.colorGreen700,
     gradientActionStop3 = LightColorTokens.colorGreen900,
     gradientActionStop4 = LightColorTokens.colorGreen1100,
-    gradientInfoStop1 = LightColorTokens.colorAlphaBlue500,
-    gradientInfoStop2 = LightColorTokens.colorAlphaBlue400,
-    gradientInfoStop3 = LightColorTokens.colorAlphaBlue300,
-    gradientInfoStop4 = LightColorTokens.colorAlphaBlue200,
-    gradientInfoStop5 = LightColorTokens.colorAlphaBlue100,
-    gradientInfoStop6 = LightColorTokens.colorTransparent,
+    gradientCriticalStop1 = LightColorTokens.colorRed200,
+    gradientCriticalStop2 = LightColorTokens.colorThemeBg,
+    gradientInfoStop1 = LightColorTokens.colorBlue200,
+    gradientInfoStop2 = LightColorTokens.colorThemeBg,
     gradientSubtleStop1 = LightColorTokens.colorAlphaGreen500,
     gradientSubtleStop2 = LightColorTokens.colorAlphaGreen400,
     gradientSubtleStop3 = LightColorTokens.colorAlphaGreen300,

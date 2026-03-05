@@ -8,8 +8,8 @@
 
 package io.element.android.libraries.pushproviders.firebase.troubleshoot
 
-import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesIntoSet
+import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.pushproviders.firebase.FirebaseConfig
 import io.element.android.libraries.pushproviders.firebase.IsPlayServiceAvailable
 import io.element.android.libraries.pushproviders.firebase.R
@@ -21,7 +21,7 @@ import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.StateFlow
 
-@ContributesIntoSet(AppScope::class)
+@ContributesIntoSet(SessionScope::class)
 class FirebaseAvailabilityTest(
     private val isPlayServiceAvailable: IsPlayServiceAvailable,
     private val stringProvider: StringProvider,

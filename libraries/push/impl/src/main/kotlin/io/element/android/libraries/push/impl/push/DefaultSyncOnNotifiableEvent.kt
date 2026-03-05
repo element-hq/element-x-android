@@ -14,8 +14,9 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClientProvider
-import io.element.android.libraries.push.api.push.NotificationEventRequest
-import io.element.android.libraries.push.api.push.SyncOnNotifiableEvent
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.push.impl.db.PushRequest
 import io.element.android.services.appnavstate.api.AppForegroundStateService
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
@@ -29,7 +30,7 @@ class DefaultSyncOnNotifiableEvent(
     private val appForegroundStateService: AppForegroundStateService,
     private val dispatchers: CoroutineDispatchers,
 ) : SyncOnNotifiableEvent {
-    override suspend operator fun invoke(requests: List<NotificationEventRequest>) = withContext(dispatchers.io) {
+    override suspend operator fun invoke(requests: List<PushRequest>) = withContext(dispatchers.io) {
         if (!featureFlagService.isFeatureEnabled(FeatureFlags.SyncOnPush)) {
             return@withContext
         }
@@ -41,8 +42,8 @@ class DefaultSyncOnNotifiableEvent(
             Timber.d("Starting opportunistic room list sync | In foreground: ${appForegroundStateService.isInForeground.value}")
 
             for ((sessionId, events) in eventsBySession) {
-                val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: continue
-                val roomIds = events.map { it.roomId }.distinct()
+                val client = matrixClientProvider.getOrRestore(SessionId(sessionId)).getOrNull() ?: continue
+                val roomIds = events.map { RoomId(it.roomId) }.distinct()
 
                 client.roomListService.subscribeToVisibleRooms(roomIds)
 
