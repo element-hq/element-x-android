@@ -20,10 +20,10 @@ class AccountManagementActionKtTest {
         assertThat(AccountManagementAction.Profile.toRustAction())
             .isEqualTo(RustAccountManagementAction.Profile)
         assertThat(AccountManagementAction.SessionEnd(A_DEVICE_ID).toRustAction())
-            .isEqualTo(RustAccountManagementAction.SessionEnd(A_DEVICE_ID.value))
+            .isEqualTo(RustAccountManagementAction.DeviceDelete(A_DEVICE_ID.value))
         assertThat(AccountManagementAction.SessionView(A_DEVICE_ID).toRustAction())
-            .isEqualTo(RustAccountManagementAction.SessionView(A_DEVICE_ID.value))
+            .isEqualTo(RustAccountManagementAction.DeviceView(A_DEVICE_ID.value))
         assertThat(AccountManagementAction.SessionsList.toRustAction())
-            .isEqualTo(RustAccountManagementAction.SessionsList)
+            .isEqualTo(RustAccountManagementAction.DevicesList)
     }
 }
