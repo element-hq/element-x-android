@@ -28,7 +28,9 @@ jobs:
           github-token: ${{ secrets.ELEMENT_BOT_TOKEN }}
           labeled: X-Needs-Info
       - name: Print itemId
-        run: echo ${{ steps.addItem.outputs.itemId }}
+        run: echo ${STEPS_ADDITEM_OUTPUTS_ITEMID}
+        env:
+          STEPS_ADDITEM_OUTPUTS_ITEMID: ${{ steps.addItem.outputs.itemId }}
       - uses: kalgurn/update-project-item-status@31e54df46a2cdaef4f85c31ac839fbcd2fd7c3a2 # 0.0.3
         if: ${{ steps.addItem.outputs.itemId }}
         with:
