@@ -17,10 +17,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.Dp
 import coil3.compose.AsyncImagePainter
 import coil3.compose.SubcomposeAsyncImage
 import coil3.compose.SubcomposeAsyncImageContent
+import coil3.request.ImageRequest
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import timber.log.Timber
 
@@ -31,10 +33,16 @@ internal fun ImageAvatar(
     forcedAvatarSize: Dp?,
     modifier: Modifier = Modifier,
     contentDescription: String? = null,
+    configureRequest: (ImageRequest.Builder) -> ImageRequest.Builder = { it },
 ) {
     val size = forcedAvatarSize ?: avatarData.size.dp
+    val request = ImageRequest.Builder(LocalContext.current)
+        .data(avatarData)
+        .let(configureRequest)
+        .build()
+
     SubcomposeAsyncImage(
-        model = avatarData,
+        model = request,
         contentDescription = contentDescription,
         contentScale = ContentScale.Crop,
         modifier = modifier

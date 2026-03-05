@@ -25,12 +25,13 @@ import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Fill
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.unit.dp
+import coil3.request.allowHardware
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.avatar.avatarShape
+import io.element.android.libraries.designsystem.components.avatar.internal.ImageAvatar
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 
@@ -61,6 +62,7 @@ private val CONTENT_OFFSET = 5.dp
 fun LocationPin(
     variant: PinVariant,
     modifier: Modifier = Modifier,
+    allowHardwareBitmapRendering: Boolean = true,
 ) {
     val colors = LocationPinColors.fromVariant(variant)
     Box(
@@ -80,12 +82,16 @@ fun LocationPin(
 
         when (variant) {
             is PinVariant.UserLocation -> {
-                Avatar(
+                val avatarShape = AvatarType.User.avatarShape()
+                ImageAvatar(
                     avatarData = variant.avatarData,
                     forcedAvatarSize = avatarSize,
-                    avatarType = AvatarType.User,
+                    avatarShape = avatarShape,
                     modifier = contentModifier
-                        .border(width = 1.dp, color = colors.avatarStoke, shape = AvatarType.User.avatarShape()),
+                        .border(width = 1.dp, color = colors.avatarStoke, shape = avatarShape),
+                    configureRequest = { builder ->
+                        builder.allowHardware(allowHardwareBitmapRendering)
+                    }
                 )
             }
             PinVariant.PinnedLocation, PinVariant.StaleLocation -> {

@@ -182,7 +182,11 @@ private fun LocationPinMarkerLayer(
 @Composable
 private fun rememberLocationPinImage(variant: PinVariant): ImageBitmap {
     val bitmap = rememberMarkerBitmap(variant) {
-            LocationPin(variant = variant)
+        LocationPin(
+            variant = variant,
+            // Disable as it doesn't work with the rememberMarkerBitmap method
+            allowHardwareBitmapRendering = false
+        )
     }
     return bitmap.asImageBitmap()
 }
