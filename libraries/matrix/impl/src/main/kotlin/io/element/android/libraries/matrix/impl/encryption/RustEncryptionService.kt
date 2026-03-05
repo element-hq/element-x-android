@@ -214,7 +214,7 @@ class RustEncryptionService(
 
     override suspend fun recover(recoveryKey: String): Result<Unit> = withContext(dispatchers.io) {
         runCatchingExceptions {
-            service.recover(recoveryKey)
+            service.recoverAndFixBackup(recoveryKey)
         }.recoverCatching {
             when (it) {
                 // We ignore import errors because the user will be notified about them via the "Key storage out of sync" detection.
