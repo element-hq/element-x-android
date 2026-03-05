@@ -319,6 +319,13 @@ jobs:
         with:
           severity: warning
 
+  zizmor:
+    name: Run zizmor
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: zizmorcore/zizmor-action@0dce2577a4760a2749d8cfb7a84b7d5585ebcb7d # v0.5.0
+
   upload_reports:
     name: Project Check Suite
     runs-on: ubuntu-latest
