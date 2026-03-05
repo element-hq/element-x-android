@@ -7,6 +7,8 @@ on:
       - opened
       - reopened
 
+permissions: {}
+
 jobs:
   welcome:
     runs-on: ubuntu-latest

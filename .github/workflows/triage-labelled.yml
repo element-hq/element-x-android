@@ -4,6 +4,8 @@ on:
   issues:
     types: [labeled]
 
+permissions: {}
+
 jobs:
   move_element_x_issues:
     name: ElementX issues to ElementX project board

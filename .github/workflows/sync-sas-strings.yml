@@ -5,6 +5,8 @@ on:
     # At 00:00 on every Monday UTC
     - cron: '0 0 * * 1'
 
+permissions: {}
+
 jobs:
   sync-sas-strings:
     runs-on: ubuntu-latest

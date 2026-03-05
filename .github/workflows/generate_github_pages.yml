@@ -5,6 +5,8 @@ on:
     # At 00:00 on every Tuesday UTC
     - cron: '0 0 * * 2'
 
+permissions: {}
+
 jobs:
   generate-github-pages:
     runs-on: ubuntu-latest
