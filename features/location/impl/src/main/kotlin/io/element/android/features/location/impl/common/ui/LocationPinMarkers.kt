@@ -9,27 +9,20 @@ package io.element.android.features.location.impl.common.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.asImageBitmap
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.location.api.Location
-import io.element.android.libraries.designsystem.components.LocationPin
 import io.element.android.libraries.designsystem.components.PinVariant
+import io.element.android.libraries.designsystem.components.rememberLocationPinBitmap
 import kotlinx.serialization.json.JsonPrimitive
 import org.maplibre.compose.expressions.dsl.and
-import org.maplibre.compose.expressions.dsl.asNumber
 import org.maplibre.compose.expressions.dsl.asString
 import org.maplibre.compose.expressions.dsl.const
 import org.maplibre.compose.expressions.dsl.eq
 import org.maplibre.compose.expressions.dsl.feature
 import org.maplibre.compose.expressions.dsl.image
 import org.maplibre.compose.expressions.dsl.not
-import org.maplibre.compose.expressions.dsl.step
 import org.maplibre.compose.expressions.value.SymbolAnchor
-import org.maplibre.compose.expressions.value.SymbolPlacement
 import org.maplibre.compose.layers.CircleLayer
 import org.maplibre.compose.layers.SymbolLayer
 import org.maplibre.compose.sources.GeoJsonData
@@ -60,14 +53,12 @@ data class LocationMarkerData(
  * A composable that renders location markers on a MapLibre map with clustering support.
  *
  * Uses GeoJSON source with clustering enabled to group nearby markers.
- * Individual markers are rendered using [LocationPin] composable converted to bitmaps.
+ * Individual markers are rendered using Canvas-based pin rendering with Coil for avatar loading.
  * Clusters are rendered as circles with point counts.
  *
  * Must be used within a MaplibreMap content block.
  *
  * @param markers List of markers to display on the map
- * @param clusterRadius Radius of each cluster when clustering points (default 50)
- * @param clusterMaxZoom Maximum zoom level at which to cluster points (default 14)
  * @param onMarkerClick Callback when a marker is clicked
  * @param onClusterClick Callback when a cluster is clicked, provides cluster center position
  */
@@ -157,36 +148,23 @@ private fun LocationPinMarkerLayer(
     source: GeoJsonSource,
     onMarkerClick: ((LocationMarkerData) -> Unit)?,
 ) {
-    val imageBitmap = rememberLocationPinImage(marker.variant)
-    SymbolLayer(
-        id = "pin-marker-${marker.id}",
-        source = source,
-        filter = !feature.has("point_count") and (feature["id"].asString() eq const(marker.id)),
-        iconImage = image(imageBitmap),
-        iconAnchor = const(SymbolAnchor.Bottom),
-        iconAllowOverlap = const(true),
-        onClick = { features ->
-            if (features.isNotEmpty() && onMarkerClick != null) {
-                onMarkerClick(marker)
-                ClickResult.Consume
-            } else {
-                ClickResult.Pass
-            }
-        },
-    )
-}
-
-/**
- * Renders a LocationPin composable to an ImageBitmap for use in SymbolLayer.
- */
-@Composable
-private fun rememberLocationPinImage(variant: PinVariant): ImageBitmap {
-    val bitmap = rememberMarkerBitmap(variant) {
-        LocationPin(
-            variant = variant,
-            // Disable as it doesn't work with the rememberMarkerBitmap method
-            allowHardwareBitmapRendering = false
+    val imageBitmap = rememberLocationPinBitmap(marker.variant)
+    if (imageBitmap != null) {
+        SymbolLayer(
+            id = "pin-marker-${marker.id}",
+            source = source,
+            filter = !feature.has("point_count") and (feature["id"].asString() eq const(marker.id)),
+            iconImage = image(imageBitmap),
+            iconAnchor = const(SymbolAnchor.Bottom),
+            iconAllowOverlap = const(true),
+            onClick = { features ->
+                if (features.isNotEmpty() && onMarkerClick != null) {
+                    onMarkerClick(marker)
+                    ClickResult.Consume
+                } else {
+                    ClickResult.Pass
+                }
+            },
         )
     }
-    return bitmap.asImageBitmap()
 }

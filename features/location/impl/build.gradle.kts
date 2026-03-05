@@ -28,6 +28,7 @@ dependencies {
     api(projects.features.location.api)
     implementation(projects.features.messages.api)
     implementation(libs.maplibre.compose)
+    implementation(libs.coil)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.di)
