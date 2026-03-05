@@ -48,6 +48,7 @@
   <string name="a11y_session_verification_time_limited_action_required">"Time limited action required, you have one minute to verify"</string>
   <string name="a11y_show_password">"Show password"</string>
   <string name="a11y_start_call">"Start a call"</string>
+  <string name="a11y_start_voice_call">"Start a voice call"</string>
   <string name="a11y_tombstoned_room">"Tombstoned room"</string>
   <string name="a11y_user_avatar">"User avatar"</string>
   <string name="a11y_user_menu">"User menu"</string>

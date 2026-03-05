@@ -126,7 +126,6 @@ fun aMessagesState(
 ) = MessagesState(
     roomId = RoomId("!id:domain"),
     roomName = roomName,
-    isDm = false,
     roomAvatar = roomAvatar,
     heroes = persistentListOf(),
     userEventPermissions = userEventPermissions,

@@ -76,7 +76,7 @@ private fun StandByCallMenuItem(
             ) {
                 Icon(
                     imageVector = CompoundIcons.VoiceCallSolid(),
-                    contentDescription = stringResource(CommonStrings.a11y_start_call),
+                    contentDescription = stringResource(CommonStrings.a11y_start_voice_call),
                 )
             }
         }
