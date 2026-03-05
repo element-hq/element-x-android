@@ -18,6 +18,9 @@ jobs:
   build:
     name: Build APKs
     runs-on: ubuntu-latest
+    permissions:
+      # For NejcZdovc/comment-pr
+      pull-requests: write
     strategy:
       matrix:
         variant: [debug, release, nightly]
