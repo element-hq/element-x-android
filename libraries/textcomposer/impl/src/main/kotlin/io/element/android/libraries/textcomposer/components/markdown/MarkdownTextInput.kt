@@ -103,6 +103,9 @@ fun MarkdownTextInput(
                 }
                 addTextChangedListener { editable ->
                     onTyping(!editable.isNullOrEmpty())
+                    if (state.lineCount != lineCount) {
+                        post { bringPointIntoView(selectionStart) }
+                    }
                     state.text.update(editable, false)
                     state.lineCount = lineCount
 

@@ -19,11 +19,11 @@ class AccountManagementActionKtTest {
     fun `test AccountManagementAction to RustAccountManagementAction`() {
         assertThat(AccountManagementAction.Profile.toRustAction())
             .isEqualTo(RustAccountManagementAction.Profile)
-        assertThat(AccountManagementAction.SessionEnd(A_DEVICE_ID).toRustAction())
+        assertThat(AccountManagementAction.DeviceDelete(A_DEVICE_ID).toRustAction())
             .isEqualTo(RustAccountManagementAction.DeviceDelete(A_DEVICE_ID.value))
-        assertThat(AccountManagementAction.SessionView(A_DEVICE_ID).toRustAction())
+        assertThat(AccountManagementAction.DeviceView(A_DEVICE_ID).toRustAction())
             .isEqualTo(RustAccountManagementAction.DeviceView(A_DEVICE_ID.value))
-        assertThat(AccountManagementAction.SessionsList.toRustAction())
+        assertThat(AccountManagementAction.DevicesList.toRustAction())
             .isEqualTo(RustAccountManagementAction.DevicesList)
     }
 }
