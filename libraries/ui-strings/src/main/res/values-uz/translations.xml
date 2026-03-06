@@ -80,6 +80,7 @@
   <string name="action_decline">"Rad etish"</string>
   <string name="action_decline_and_block">"Rad etish va bloklash"</string>
   <string name="action_delete_poll">"So‘rovnomani o‘chirish"</string>
+  <string name="action_deselect_all">"Hammasini bekor qilish"</string>
   <string name="action_disable">"Oʻchirish"</string>
   <string name="action_discard">"Bekor qilish"</string>
   <string name="action_dismiss">"Bekor qilish"</string>
@@ -94,6 +95,8 @@
   <string name="action_forgot_password">"Parolni unutdingizmi?"</string>
   <string name="action_forward">"Oldinga"</string>
   <string name="action_go_back">"Ortga qaytish"</string>
+  <string name="action_go_to_roles_and_permissions">"Rollar va ruxsatlarga kirish"</string>
+  <string name="action_go_to_settings">"Sozlamalarga o‘tish"</string>
   <string name="action_ignore">"E’tiborsiz qoldirish"</string>
   <string name="action_invite">"Taklif qilish"</string>
   <string name="action_invite_friends">"Odamlarni taklif qiling"</string>
@@ -105,10 +108,13 @@
   <string name="action_leave">"Tark etish"</string>
   <string name="action_leave_conversation">"Suhbatni tark etish"</string>
   <string name="action_leave_room">"Xonani tark etish"</string>
+  <string name="action_leave_space">"Maydondan chiqish"</string>
   <string name="action_load_more">"Ko\'proq yuklash"</string>
   <string name="action_manage_account">"Hisobni boshqarish"</string>
   <string name="action_manage_devices">"Qurilmalarni boshqarish"</string>
+  <string name="action_manage_rooms">"Xonalarni boshqarish"</string>
   <string name="action_message">"Xabar"</string>
+  <string name="action_minimize">"Kichraytirmoq"</string>
   <string name="action_next">"Keyingisi"</string>
   <string name="action_no">"Yo\'q"</string>
   <string name="action_not_now">"Hozir emas"</string>
@@ -137,6 +143,7 @@
   <string name="action_retry_decryption">"Shifrni ochishni qayta urinish"</string>
   <string name="action_save">"Saqlash"</string>
   <string name="action_search">"Qidirmoq"</string>
+  <string name="action_select_all">"Barchasini tanlash"</string>
   <string name="action_send">"Yuborish"</string>
   <string name="action_send_edited_message">"Tahrirlangan xabarni yuboring"</string>
   <string name="action_send_message">"Xabar yuborish"</string>
@@ -176,6 +183,7 @@
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Siz sessiyadan chiqdingiz"</string>
   <string name="common_appearance">"Ko\'rinish"</string>
   <string name="common_audio">"Audio"</string>
+  <string name="common_beta">"Beta"</string>
   <string name="common_blocked_users">"Bloklangan foydalanuvchilar"</string>
   <string name="common_bubbles">"Pufakchalar"</string>
   <string name="common_call_started">"Qoʻngʻiroq boshlandi"</string>
@@ -185,6 +193,7 @@
   <string name="common_creating_room">"Xona yaratilmoqda…"</string>
   <string name="common_current_user_canceled_knock">"So\'rov bekor qilindi"</string>
   <string name="common_current_user_left_room">"Xonani tark etdi"</string>
+  <string name="common_current_user_left_space">"Tar etilgan maydon"</string>
   <string name="common_current_user_rejected_invite">"Taklif rad etildi"</string>
   <string name="common_dark">"Tungi"</string>
   <string name="common_decryption_error">"Shifrni ochish xatosi"</string>
@@ -223,9 +232,11 @@ Sababi:%1$s."</string>
   <string name="common_install_apk_android">"APK-ni o\'rnating"</string>
   <string name="common_invite_unknown_profile">"Ushbu Matrix identifikatori topilmadi, shuning uchun taklif qabul qilinmasligi mumkin."</string>
   <string name="common_leaving_room">"Xonadan chiqish"</string>
+  <string name="common_leaving_space">"Maydonni tark etish"</string>
   <string name="common_light">"Nur"</string>
   <string name="common_line_copied_to_clipboard">"Satr vaqtinchalik xotiraga nusxalandi"</string>
   <string name="common_link_copied_to_clipboard">"Havola vaqtinchalik xotiraga nusxalandi"</string>
+  <string name="common_link_new_device">"Yangi qurilmani ulang"</string>
   <string name="common_loading">"Yuklanmoqda…"</string>
   <string name="common_loading_more">"Batafsil yuklanmoqda…"</string>
   <plurals name="common_many_members">
@@ -238,13 +249,16 @@ Sababi:%1$s."</string>
   </plurals>
   <string name="common_message">"Xabar"</string>
   <string name="common_message_actions">"Xabar harakatlari"</string>
+  <string name="common_message_failed_to_send">"Xabar yuborilmadi"</string>
   <string name="common_message_layout">"Xabar tartibi"</string>
   <string name="common_message_removed">"Xabar ochirib tashlandi"</string>
   <string name="common_modern">"Zamonaviy"</string>
   <string name="common_mute">"Ovozsiz qilish"</string>
+  <string name="common_name">"Ism"</string>
   <string name="common_name_and_id">"%1$s(%2$s )"</string>
   <string name="common_no_results">"Natijalar yoʻq"</string>
   <string name="common_no_room_name">"Xona nomi yoʻq"</string>
+  <string name="common_no_space_name">"Maydon nomi yo\'q"</string>
   <string name="common_not_encrypted">"Shifrlanmagan"</string>
   <string name="common_offline">"Oflayn"</string>
   <string name="common_open_source_licenses">"Ochiq kodli litsenziyalar"</string>
@@ -308,14 +322,17 @@ Sababi:%1$s."</string>
   <string name="common_server_unreachable">"Serverga kirish imkonsiz"</string>
   <string name="common_server_url">"Server URL manzili"</string>
   <string name="common_settings">"Sozlamalar"</string>
+  <string name="common_share_space">"Maydonni ulashish"</string>
   <string name="common_shared_location">"Joylashuvi ulashildi"</string>
+  <string name="common_shared_space">"Umumiy maydon"</string>
   <string name="common_signing_out">"Chiqish"</string>
   <string name="common_something_went_wrong">"Nimadir xato ketdi"</string>
   <string name="common_something_went_wrong_message">"Muammoga duch keldik. Iltimos, qayta urinib koʻring."</string>
-  <string name="common_space">"Bo‘shliq"</string>
+  <string name="common_space">"Maydon"</string>
+  <string name="common_space_topic_placeholder">"Bu maydon nima haqida?"</string>
   <plurals name="common_spaces">
-    <item quantity="one">"%1$d Guruh"</item>
-    <item quantity="other">"%1$d Guruhlar"</item>
+    <item quantity="one">"%1$d Maydon"</item>
+    <item quantity="other">"%1$d ta maydon"</item>
   </plurals>
   <string name="common_starting_chat">"Chat boshlanmoqda…"</string>
   <string name="common_sticker">"Stiker"</string>
@@ -357,6 +374,7 @@ Sababi:%1$s."</string>
   <string name="common_waiting">"Kutilmoqda…"</string>
   <string name="common_waiting_for_decryption_key">"Ushbu xabarni kutilmoqda"</string>
   <string name="common_you">"Siz"</string>
+  <string name="crypto_history_visible">"Siz yuborgan xabarlar bu xonaga taklif qilingan yangi a’zolarga ulashiladi. %1$s"</string>
   <string name="crypto_identity_change_pin_violation">"%1$sning shaxsi qayta tiklandi.%2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"%1$sʼning %2$s shaxsiy ma’lumotlari qayta tiklandi.%3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s )"</string>
@@ -446,9 +464,10 @@ Davom etasizmi?"</string>
   <string name="screen_share_open_google_maps">"Google Mapsda oching"</string>
   <string name="screen_share_open_osm_maps">"OpenStreetMapda oching"</string>
   <string name="screen_share_this_location_action">"Bu joylashuvni ulashing"</string>
-  <string name="screen_space_list_description">"Siz yaratgan yoki qo‘shilgan guruhlar."</string>
+  <string name="screen_space_list_description">"Siz yaratgan yoki qo‘shilgan maydonlar."</string>
   <string name="screen_space_list_details">"%1$s•%2$s"</string>
-  <string name="screen_space_list_title">"Bo‘shliqlar"</string>
+  <string name="screen_space_list_parent_space">"%1$s ta maydon"</string>
+  <string name="screen_space_list_title">"Maydonlar"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Xabar yuborilmadi, chunki %1$sʼning tasdiqlangan identifikatori asliga qaytarildi."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Xabar yuborilmadi, chunki %1$s barcha qurilmalarni tasdiqlamagan."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Xabaringiz yuborilmadi, chunki siz bir yoki bir nechta qurilmangizni tasdiqlamagan ekansiz."</string>

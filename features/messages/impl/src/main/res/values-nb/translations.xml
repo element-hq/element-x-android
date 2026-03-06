@@ -35,7 +35,7 @@
   <string name="screen_room_attachment_source_camera_video">"Ta opp video"</string>
   <string name="screen_room_attachment_source_files">"Vedlegg"</string>
   <string name="screen_room_attachment_source_gallery">"Foto- og videobibliotek"</string>
-  <string name="screen_room_attachment_source_location">"Lokasjon"</string>
+  <string name="screen_room_attachment_source_location">"Posisjon"</string>
   <string name="screen_room_attachment_source_poll">"Avstemning"</string>
   <string name="screen_room_attachment_text_formatting">"Tekstformatering"</string>
   <string name="screen_room_encrypted_history_banner">"Meldingshistorikken er for øyeblikket ikke tilgjengelig."</string>

@@ -50,6 +50,7 @@ Du har ingen uleste meldinger!"</string>
   <string name="screen_roomlist_mark_as_read">"Marker som lest"</string>
   <string name="screen_roomlist_mark_as_unread">"Merk som ulest"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Dette rommet har blitt oppgradert"</string>
+  <string name="screen_roomlist_your_spaces">"Dine områder"</string>
   <string name="session_verification_banner_message">"Det ser ut til at du bruker en ny enhet. Bekreft med en annen enhet for å få tilgang til de krypterte meldingene dine."</string>
   <string name="session_verification_banner_title">"Bekreft at det er deg"</string>
 </resources>

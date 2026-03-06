@@ -7,7 +7,7 @@ on:
 
 # Enrich gradle.properties for CI/CD
 env:
-  GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx9g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError -XX:+UseG1GC -Dkotlin.daemon.jvm.options=-Xmx4g
+  GRADLE_OPTS: -Dorg.gradle.jvmargs=-Xmx8g -XX:MaxMetaspaceSize=512m -Dfile.encoding=UTF-8 -XX:+HeapDumpOnOutOfMemoryError -XX:+UseG1GC -Dkotlin.daemon.jvm.options=-Xmx4g
   CI_GRADLE_ARG_PROPERTIES: --stacktrace --no-daemon -Dsonar.gradle.skipCompile=true --no-configuration-cache
   ARCH: x86_64
   DEVICE: pixel_7_pro
@@ -57,7 +57,7 @@ jobs:
           ELEMENT_ANDROID_MAPTILER_LIGHT_MAP_ID: ${{ secrets.MAPTILER_LIGHT_MAP_ID }}
           ELEMENT_ANDROID_MAPTILER_DARK_MAP_ID: ${{ secrets.MAPTILER_DARK_MAP_ID }}
       - name: Upload APK as artifact
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: elementx-apk-maestro
           path: |
@@ -82,7 +82,7 @@ jobs:
           # https://github.com/actions/checkout/issues/881
           ref: ${{ github.ref }}
       - name: Download APK artifact from previous job
-        uses: actions/download-artifact@v7
+        uses: actions/download-artifact@v8
         with:
           name: elementx-apk-maestro
       - name: Enable KVM group perms
@@ -115,7 +115,7 @@ jobs:
           script: |
             .github/workflows/scripts/maestro/maestro-local-with-screen-recording.sh app-gplay-x86_64-debug.apk
       - name: Upload test results
-        uses: actions/upload-artifact@v6
+        uses: actions/upload-artifact@v7
         with:
           name: test-results
           path: |
@@ -126,7 +126,7 @@ jobs:
       - name: Update summary (success)
         if: steps.maestro_test.outcome == 'success'
         run: |
-          echo "### Maestro tests worked :rocket:!"
+          echo "### Maestro tests worked :rocket:!" >> $GITHUB_STEP_SUMMARY
       - name: Update summary (failure)
         if: steps.maestro_test.outcome != 'success'
         run: |

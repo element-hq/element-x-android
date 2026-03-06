@@ -144,8 +144,8 @@ Prerequisites:
   ```
 
 You can then build the Rust SDK by running the script
-[`tools/sdk/build_rust_sdk.sh`](../tools/sdk/build_rust_sdk.sh) and just answering
-the questions.
+[`tools/sdk/build-rust-sdk`](../tools/sdk/build-rust-sdk). Type
+`./tools/sdk/build-rust-sdk --help` for help.
 
 This will prompt you for the path to the Rust SDK, then build it and
 `matrix-rust-components-kotlin`, eventually producing an aar file at

@@ -91,7 +91,7 @@ class RustMediaLoader(
         return if (json != null) {
             RustMediaSource.fromJson(json)
         } else {
-            RustMediaSource.fromUrl(url)
+            RustMediaSource.fromUrl(safeUrl)
         }
     }
 }

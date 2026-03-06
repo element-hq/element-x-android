@@ -13,12 +13,19 @@
   <string name="screen_create_room_public_option_short_description">"Присоединиться может любой."</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Любой желающий может подать заявку на присоединение к комнате, но администратор или модератор должен будет принять запрос."</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Разрешить запрос на присоединение"</string>
+  <string name="screen_create_room_room_access_section_knocking_restricted_option_description">"Любой из %1$s может присоединиться, а всем остальным нужно запросить доступ."</string>
+  <string name="screen_create_room_room_access_section_knocking_restricted_option_title">"Подать заявку на вступление"</string>
   <string name="screen_create_room_room_access_section_private_option_description">"Присоединиться могут только приглашенные."</string>
   <string name="screen_create_room_room_access_section_public_option_description">"Присоединиться может любой желающий."</string>
+  <string name="screen_create_room_room_access_section_restricted_option_description">"Любой в %1$s может присоединиться."</string>
+  <string name="screen_create_room_room_access_section_restricted_option_title">"Стандарт"</string>
   <string name="screen_create_room_room_access_section_title">"Кто имеет доступ"</string>
   <string name="screen_create_room_room_address_section_footer">"Вам понадобится адрес комнаты, чтобы сделать ее видимой в каталоге."</string>
   <string name="screen_create_room_room_address_section_title">"Адрес"</string>
   <string name="screen_create_room_room_visibility_section_title">"Видимость комнаты"</string>
+  <string name="screen_create_room_space_selection_no_space_description">"(нет пространства)"</string>
+  <string name="screen_create_room_space_selection_no_space_title">"Главная"</string>
+  <string name="screen_create_room_space_selection_sheet_title">"Добавить в пространство"</string>
   <string name="screen_create_room_topic_label">"Тема (необязательно)"</string>
   <string name="screen_create_room_topic_placeholder">"Добавить описание…"</string>
 </resources>

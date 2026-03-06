@@ -71,7 +71,7 @@ import org.matrix.rustcomponents.sdk.UploadParameters
 import org.matrix.rustcomponents.sdk.UploadSource
 import org.matrix.rustcomponents.sdk.use
 import timber.log.Timber
-import uniffi.matrix_sdk.RoomPaginationStatus
+import uniffi.matrix_sdk.PaginationStatus
 import java.io.File
 import org.matrix.rustcomponents.sdk.EventOrTransactionId as RustEventOrTransactionId
 import org.matrix.rustcomponents.sdk.Timeline as InnerTimeline
@@ -147,8 +147,8 @@ class RustTimeline(
             .onEach { backPaginationStatus ->
                 updatePaginationStatus(Timeline.PaginationDirection.BACKWARDS) {
                     when (backPaginationStatus) {
-                        is RoomPaginationStatus.Idle -> it.copy(isPaginating = false, hasMoreToLoad = !backPaginationStatus.hitTimelineStart)
-                        is RoomPaginationStatus.Paginating -> it.copy(isPaginating = true, hasMoreToLoad = true)
+                        is PaginationStatus.Idle -> it.copy(isPaginating = false, hasMoreToLoad = !backPaginationStatus.hitTimelineStart)
+                        is PaginationStatus.Paginating -> it.copy(isPaginating = true, hasMoreToLoad = true)
                     }
                 }
             }

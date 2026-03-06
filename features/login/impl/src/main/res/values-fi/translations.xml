@@ -60,6 +60,8 @@
   <string name="screen_qr_code_login_error_cancelled_title">"Kirjautumispyyntö peruutettu"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"Kirjautuminen hylättiin toisella laitteella."</string>
   <string name="screen_qr_code_login_error_declined_title">"Kirjautuminen hylätty"</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_subtitle">"Sinun ei tarvitse tehdä mitään muuta."</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_title">"Toinen laitteesi on jo kirjautunut sisään"</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"Kirjautuminen vanhentui. Yritä uudelleen."</string>
   <string name="screen_qr_code_login_error_expired_title">"Kirjautumista ei suoritettu ajoissa"</string>
   <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"Toinen laitteesi ei tue kirjautumista %s -sovellukseen QR-koodilla.

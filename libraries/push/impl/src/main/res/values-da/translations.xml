@@ -15,6 +15,10 @@
   </plurals>
   <string name="notification_error_unified_push_unregistered_android">"UnifiedPush-push notification-distributøren kunne ikke registreres, så du vil ikke længere modtage notifikationer. Kontrollér appens notifikationsindstillinger og push-distributørens status."</string>
   <string name="notification_fallback_content">"Du har nye beskeder."</string>
+  <plurals name="notification_fallback_n_content">
+    <item quantity="one">"Du har %d ny besked."</item>
+    <item quantity="other">"Du har %d nye beskeder."</item>
+  </plurals>
   <string name="notification_incoming_call">"📹 Indgående opkald"</string>
   <string name="notification_inline_reply_failed">"** Kunne ikke sende - åbn venligst rummet"</string>
   <string name="notification_invitation_action_join">"Deltag"</string>

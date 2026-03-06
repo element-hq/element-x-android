@@ -1,3 +1,60 @@
+Changes in Element X v26.03.0
+=============================
+
+<!-- Release notes generated using configuration in .github/release.yml at v26.03.0 -->
+
+## What's Changed
+### ✨ Features
+* Let enterprise build be able to use a different notification channel for noisy notification. by @bmarty in https://github.com/element-hq/element-x-android/pull/6177
+### 🙌 Improvements
+* Notification fallback counter by @bmarty in https://github.com/element-hq/element-x-android/pull/6181
+* Sort audio device by device type before sending the list to Element Call by @bmarty in https://github.com/element-hq/element-x-android/pull/6160
+### 🐛 Bugfixes
+* Fix stack overflow when quickly going back on a `Space` screen by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6180
+* Rely on the SessionObserver to detect a sign out. by @bmarty in https://github.com/element-hq/element-x-android/pull/6182
+* When linkifying, adjust the `URLSpan`'s url too by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6188
+* Fix call button color and ensure call can always be declined from the notification by @bmarty in https://github.com/element-hq/element-x-android/pull/6195
+* Try to fix common issue with the top app bar by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6187
+* Limit the max number of opened rooms in the backstack by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6215
+* Remove all video metadata from externally shared videos by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6224
+* Remove `runBlocking` call to restore sessions when the app starts by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6193
+* Catch exceptions when changing the audio communication device by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6226
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/6207
+### 🧱 Build
+* Fix Maestro tests again by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6167
+* Add free disk space action to CI actions by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6212
+### 🚧 In development 🚧
+* Ensure that Element X can use the service from Element Classic. by @bmarty in https://github.com/element-hq/element-x-android/pull/6238
+### Dependency upgrades
+* fix(deps): update activity to v1.12.4 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6184
+* Update roborazzi to v1.59.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6179
+* Update dependency androidx.compose:compose-bom to v2026.02.00 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6172
+* Remove explicit dependency `androix.compose.material` by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6199
+* Update metro to v0.10.4 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6202
+* Update dependency org.matrix.rustcomponents:sdk-android to v26.2.16 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6211
+* Update dependency com.posthog:posthog-android to v3.32.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6210
+* Update dependency io.sentry:sentry-android to v8.33.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6223
+* Update dependency org.matrix.rustcomponents:sdk-android to v26.02.19 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6229
+* Update dependency org.unifiedpush.android:connector to v3.3.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6214
+* Update dependency com.posthog:posthog-android to v3.32.2 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6230
+* Update dependency io.github.zxing-cpp:android to v3 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6170
+* Update kotlin to v2.3.6 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6218
+* Update dependency org.matrix.rustcomponents:sdk-android to v26.03.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6242
+### Others
+* Remove `NavigationState.Space`. by @bmarty in https://github.com/element-hq/element-x-android/pull/6185
+* Fallback notification cleanup by @bmarty in https://github.com/element-hq/element-x-android/pull/6190
+* Use fade animation when replacing Placeholder by @ganfra in https://github.com/element-hq/element-x-android/pull/6216
+* request audio focus when recording voice messages by @vmfunc in https://github.com/element-hq/element-x-android/pull/6194
+* Disable the cross-process lock in the SDK by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6231
+* Improve element gallery header by @bmarty in https://github.com/element-hq/element-x-android/pull/6239
+* Add extra analytics for notification performance by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6237
+
+## New Contributors
+* @vmfunc made their first contribution in https://github.com/element-hq/element-x-android/pull/6194
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v26.02.0...v26.03.0
+
 Changes in Element X v26.02.0
 =============================
 

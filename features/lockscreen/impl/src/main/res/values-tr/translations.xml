@@ -15,9 +15,9 @@
   <string name="screen_app_lock_setup_biometric_unlock_subtitle">"%1$s kullanarak oturum açarken kendinize zaman kazandırın"</string>
   <string name="screen_app_lock_setup_choose_pin">"PIN Seç"</string>
   <string name="screen_app_lock_setup_confirm_pin">"PIN\'i onayla"</string>
-  <string name="screen_app_lock_setup_pin_context">"Sohbetlerinize ekstra güvenlik eklemek için %1$s kilitleyin.
+  <string name="screen_app_lock_setup_pin_context">"Sohbetlerinizi daha güvenli hale getirmek için %1$s uygulamasına bir kilit ekleyin.
 
-Hatırlanabilir bir şey seçin. Bu PIN\'i unutursanız, uygulamadan çıkış yaparsınız."</string>
+Uygulamayı her açtığınızda bu PIN’i girmeniz gerekecek. Bu PIN’i unutursanız, uygulamadan çıkış yapmanız gerekir."</string>
   <string name="screen_app_lock_setup_pin_forbidden_dialog_content">"Güvenlik nedeniyle bunu PIN kodunuz olarak seçemezsiniz"</string>
   <string name="screen_app_lock_setup_pin_forbidden_dialog_title">"Farklı bir PIN seçin"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Lütfen aynı PIN\'i iki kez girin"</string>

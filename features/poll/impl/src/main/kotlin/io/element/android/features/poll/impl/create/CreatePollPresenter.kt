@@ -50,7 +50,7 @@ class CreatePollPresenter(
     fun interface Factory {
         fun create(
             timelineMode: Timeline.Mode,
-            backNavigator: () -> Unit,
+            navigateUp: () -> Unit,
             mode: CreatePollMode
         ): CreatePollPresenter
     }

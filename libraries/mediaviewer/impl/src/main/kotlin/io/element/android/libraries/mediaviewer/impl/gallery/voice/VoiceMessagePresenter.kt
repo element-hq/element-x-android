@@ -37,7 +37,7 @@ interface VoiceMessagePresenterModule {
 @AssistedInject
 class VoiceMessagePresenter(
     voiceMessagePresenterFactory: VoiceMessagePresenterFactory,
-    @Assisted private val item: MediaItem.Voice,
+    @Assisted private val content: MediaItem.Voice,
 ) : Presenter<VoiceMessageState> {
     @AssistedFactory
     fun interface Factory : MediaItemPresenterFactory<MediaItem.Voice, VoiceMessageState> {
@@ -45,10 +45,10 @@ class VoiceMessagePresenter(
     }
 
     private val presenter = voiceMessagePresenterFactory.createVoiceMessagePresenter(
-        eventId = item.eventId,
-        mediaSource = item.mediaSource,
-        mimeType = item.mediaInfo.mimeType,
-        filename = item.mediaInfo.filename,
+        eventId = content.eventId,
+        mediaSource = content.mediaSource,
+        mimeType = content.mediaInfo.mimeType,
+        filename = content.mediaInfo.filename,
         // TODO Get the duration for the fallback?
         duration = Duration.ZERO,
     )

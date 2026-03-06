@@ -43,6 +43,9 @@ class DefaultNetworkMonitor(
     appCoroutineScope: CoroutineScope,
 ) : NetworkMonitor {
     private val connectivityManager: ConnectivityManager = context.getSystemService(ConnectivityManager::class.java)
+    private val blockedNetworkBlockedChecker = NetworkBlockedChecker(connectivityManager)
+
+    override fun isNetworkBlocked(): Boolean = blockedNetworkBlockedChecker.isNetworkBlocked()
 
     override val connectivity: StateFlow<NetworkStatus> = callbackFlow {
 

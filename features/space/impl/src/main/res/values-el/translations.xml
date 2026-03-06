@@ -1,5 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_leave_space_choose_owners_action">"Επιλέξτε ιδιοκτήτες"</string>
+  <string name="screen_leave_space_last_admin_info">"%1$s (Διαχειριστής)"</string>
+  <plurals name="screen_leave_space_submit">
+    <item quantity="one">"Αφήστε αίθουσα και χώρο του %1$d"</item>
+    <item quantity="other">"Αφήστε τις αίθουσες και τους χώρους του %1$d"</item>
+  </plurals>
+  <string name="screen_leave_space_subtitle">"Επιλέξτε τις αίθουσες από τις οποίες θέλετε να αποχωρήσετε και στα οποία δεν είστε ο μόνος διαχειριστής:"</string>
+  <string name="screen_leave_space_subtitle_last_admin">"Πρέπει να ορίσετε έναν άλλο διαχειριστή για αυτόν τον χώρο προτού μπορέσετε να αποχωρήσετε."</string>
+  <string name="screen_leave_space_subtitle_last_owner">"Είστε ο μοναδικός ιδιοκτήτης του %1$s. Πρέπει να μεταβιβάσετε την ιδιοκτησία σε κάποιον άλλο πριν φύγετε."</string>
+  <string name="screen_leave_space_subtitle_only_last_admin">"Δεν θα αφαιρεθείτε από την ακόλουθη αίθουσα(ες) επειδή είστε ο μόνος διαχειριστής:"</string>
+  <string name="screen_leave_space_title">"Αποχώρηση από %1$s ;"</string>
+  <string name="screen_leave_space_title_last_admin">"Είστε ο μόνος διαχειριστής για %1$s"</string>
+  <string name="screen_leave_space_title_last_owner">"Μεταβίβαση ιδιοκτησίας"</string>
+  <string name="screen_space_add_room_action">"Αίθουσα"</string>
+  <string name="screen_space_add_rooms_room_access_description">"Η προσθήκη μιας αίθουσας δεν θα επηρεάσει την πρόσβαση στην αίθουσα. Για να αλλάξετε την πρόσβαση, μεταβείτε στις Ρυθμίσεις αίθουσας &gt; Ασφάλεια και απόρρητο."</string>
+  <string name="screen_space_empty_state_title">"Προσθέστε την πρώτη σας αίθουσα"</string>
+  <string name="screen_space_menu_action_members">"Προβολή μελών"</string>
+  <string name="screen_space_remove_rooms_confirmation_content">"Η κατάργηση μιας αίθουσας δεν θα επηρεάσει την πρόσβαση σε αυτή. Για να αλλάξετε την πρόσβαση, μεταβείτε στις Πληροφορίες αίθουσας &gt; Απόρρητο και ασφάλεια."</string>
+  <plurals name="screen_space_remove_rooms_confirmation_title">
+    <item quantity="one">"Αφαιρείται η %1$d αίθουσα από %2$s"</item>
+    <item quantity="other">"Αφαιρούνται οι %1$d αίθουσες από %2$s"</item>
+  </plurals>
+  <string name="screen_space_settings_leave_space">"Αποχώρηση από τον χώρο"</string>
   <string name="screen_space_settings_roles_and_permissions">"Ρόλοι και δικαιώματα"</string>
   <string name="screen_space_settings_security_and_privacy">"Ασφάλεια &amp; απόρρητο"</string>
 </resources>

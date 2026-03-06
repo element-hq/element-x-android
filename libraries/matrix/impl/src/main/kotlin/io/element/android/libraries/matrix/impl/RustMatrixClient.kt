@@ -83,7 +83,7 @@ import io.element.android.libraries.matrix.impl.util.SessionPathsProvider
 import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import io.element.android.libraries.matrix.impl.verification.RustSessionVerificationService
-import io.element.android.libraries.matrix.impl.workmanager.PerformDatabaseVacuumWorkManagerRequest
+import io.element.android.libraries.matrix.impl.workmanager.PerformDatabaseVacuumRequestBuilder
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.WorkManagerScheduler
@@ -832,8 +832,8 @@ class RustMatrixClient(
         if (workManagerScheduler.hasPendingWork(sessionId, WorkManagerRequestType.DB_VACUUM)) return
 
         Timber.i("Scheduling periodic database vacuuming for session $sessionId")
-        val request = PerformDatabaseVacuumWorkManagerRequest(sessionId)
-        workManagerScheduler.submit(request)
+        val request = PerformDatabaseVacuumRequestBuilder(sessionId)
+        sessionCoroutineScope.launch { workManagerScheduler.submit(request) }
     }
 }
 

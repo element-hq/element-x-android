@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Reakció hozzáadása: %1$s"</string>
+  <string name="a11y_address">"Cím"</string>
   <string name="a11y_avatar">"Profilkép"</string>
   <string name="a11y_collapse_message_text_field">"Üzenet szövegmezőjének minimalizálása"</string>
   <string name="a11y_delete">"Törlés"</string>
@@ -27,8 +28,10 @@
   <string name="a11y_paused_voice_message">"Hangüzenet, időtartam:%1$s, jelenlegi pozíció:%2$s"</string>
   <string name="a11y_pin_field">"PIN-mező"</string>
   <string name="a11y_play">"Lejátszás"</string>
+  <string name="a11y_playback_speed">"Lejátszási sebesség"</string>
   <string name="a11y_poll">"Szavazás"</string>
   <string name="a11y_poll_end">"Befejezett szavazás"</string>
+  <string name="a11y_qr_code">"QR-kód"</string>
   <string name="a11y_react_with">"Reagálás a következővel: %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Reagálás más emodzsikkal"</string>
   <string name="a11y_read_receipts_multiple">"Olvasta: %1$s és %2$s"</string>
@@ -285,8 +288,10 @@ Ok: %1$s."</string>
   </plurals>
   <string name="common_preparing">"Előkészítés…"</string>
   <string name="common_privacy_policy">"Adatvédelmi nyilatkozat"</string>
+  <string name="common_private">"Privát"</string>
   <string name="common_private_room">"Privát szoba"</string>
   <string name="common_private_space">"Privát tér"</string>
+  <string name="common_public">"Nyilvános"</string>
   <string name="common_public_room">"Nyilvános szoba"</string>
   <string name="common_public_space">"Nyilvános tér"</string>
   <string name="common_reaction">"Reakció"</string>
@@ -340,6 +345,7 @@ Ok: %1$s."</string>
   <string name="common_something_went_wrong">"Valamilyen hiba történt"</string>
   <string name="common_something_went_wrong_message">"Problémába ütköztünk. Próbálja újra."</string>
   <string name="common_space">"Tér"</string>
+  <string name="common_space_members">"A tér tagjai"</string>
   <string name="common_space_topic_placeholder">"Miről szól ez a tér?"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d tér"</item>
@@ -384,7 +390,8 @@ Ok: %1$s."</string>
   <string name="common_video_quality_standard_description">"A minőség és a feltöltési sebesség egyensúlya."</string>
   <string name="common_voice_message">"Hangüzenet"</string>
   <string name="common_waiting">"Várakozás…"</string>
-  <string name="common_waiting_for_decryption_key">"Várakozás a visszafejtési kulcsra"</string>
+  <string name="common_waiting_for_decryption_key">"Várakozás erre az üzenetre"</string>
+  <string name="common_world_readable_history">"Bárki láthatja az előzményeket"</string>
   <string name="common_you">"Ön"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) megosztotta ezt az üzenetet, mivel Ön nem volt a szobában, amikor elküldték."</string>
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s megosztotta ezt az üzenetet, mivel Ön nem volt a szobában, amikor elküldték."</string>

@@ -10,6 +10,7 @@
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL noto‘g‘ri, iltimos, protokol (http/https) va to‘g‘ri manzilni kiritganingizga ishonch hosil qiling."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Xonaga taklif so‘rovlarida avatarlarni berkitish"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Vaqt jadvalida mediaga razm solishlarni berkitish"</string>
+  <string name="screen_advanced_settings_labs">"Laboratoriyalar"</string>
   <string name="screen_advanced_settings_media_compression_description">"Rasm va videolarni tezroq yuklang va trafik sarfini kamaytiring"</string>
   <string name="screen_advanced_settings_media_compression_title">"Media sifatini yaxshilash"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderatsiya va xavfsizlik"</string>
@@ -43,6 +44,11 @@
   <string name="screen_edit_profile_error_title">"Profilni yangilab bo‘lmadi"</string>
   <string name="screen_edit_profile_title">"Profilni tahrirlash"</string>
   <string name="screen_edit_profile_updating_details">"Profil yangilanmoqda…"</string>
+  <string name="screen_labs_enable_threads">"Mavzu javoblarini yoqish"</string>
+  <string name="screen_labs_enable_threads_description">"Ushbu oʻzgartirishni qoʻllash uchun ilova qayta ishga tushadi."</string>
+  <string name="screen_labs_header_description">"Ishlab chiqarishdagi eng so‘nggi g‘oyalarimizni sinab ko‘ring. Bu xususiyatlar hali yakuniy emas; ular beqaror bo‘lishi va o‘zgarishi mumkin."</string>
+  <string name="screen_labs_header_title">"Tajribani his qilyapsizmi?"</string>
+  <string name="screen_labs_title">"Laboratoriyalar"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Qo\'shimcha sozlamalar"</string>
   <string name="screen_notification_settings_calls_label">"Audio va video qo\'ng\'iroqlar"</string>
   <string name="screen_notification_settings_configuration_mismatch">"Konfiguratsiya mos kelmasligi"</string>

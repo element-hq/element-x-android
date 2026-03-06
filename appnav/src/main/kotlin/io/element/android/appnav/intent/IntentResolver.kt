@@ -12,6 +12,8 @@ import android.content.Intent
 import dev.zacsweers.metro.Inject
 import io.element.android.features.login.api.LoginIntentResolver
 import io.element.android.features.login.api.LoginParams
+import io.element.android.features.share.api.ShareIntentData
+import io.element.android.features.share.api.ShareIntentHandler
 import io.element.android.libraries.deeplink.api.DeeplinkData
 import io.element.android.libraries.deeplink.api.DeeplinkParser
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
@@ -25,7 +27,7 @@ sealed interface ResolvedIntent {
     data class Oidc(val oidcAction: OidcAction) : ResolvedIntent
     data class Permalink(val permalinkData: PermalinkData) : ResolvedIntent
     data class Login(val params: LoginParams) : ResolvedIntent
-    data class IncomingShare(val intent: Intent) : ResolvedIntent
+    data class IncomingShare(val shareIntentData: ShareIntentData) : ResolvedIntent
 }
 
 @Inject
@@ -34,6 +36,7 @@ class IntentResolver(
     private val loginIntentResolver: LoginIntentResolver,
     private val oidcIntentResolver: OidcIntentResolver,
     private val permalinkParser: PermalinkParser,
+    private val shareIntentHandler: ShareIntentHandler,
 ) {
     fun resolve(intent: Intent): ResolvedIntent? {
         if (intent.canBeIgnored()) return null
@@ -62,7 +65,8 @@ class IntentResolver(
         if (permalinkData != null) return ResolvedIntent.Permalink(permalinkData)
 
         if (intent.action == Intent.ACTION_SEND || intent.action == Intent.ACTION_SEND_MULTIPLE) {
-            return ResolvedIntent.IncomingShare(intent)
+            val data = shareIntentHandler.handleIncomingShareIntent(intent) ?: return null
+            return ResolvedIntent.IncomingShare(data)
         }
 
         // Unknown intent

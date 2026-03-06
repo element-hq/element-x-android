@@ -8,10 +8,14 @@
   </plurals>
   <string name="screen_leave_space_subtitle">"Vælg de rum, du vil forlade, som du ikke er den eneste administrator for:"</string>
   <string name="screen_leave_space_subtitle_last_admin">"Du skal tildele en anden administrator til denne gruppe, før du kan forlade den."</string>
+  <string name="screen_leave_space_subtitle_last_owner">"Du er den eneste ejer af %1$s Du skal overføre ejerskabet til en anden, før du forlader rummet."</string>
   <string name="screen_leave_space_subtitle_only_last_admin">"Du vil ikke blive fjernet fra følgende rum, fordi du er den eneste administrator:"</string>
   <string name="screen_leave_space_title">"Forlad %1$s?"</string>
   <string name="screen_leave_space_title_last_admin">"Du er den eneste administrator for %1$s"</string>
+  <string name="screen_leave_space_title_last_owner">"Overfør ejerskab"</string>
+  <string name="screen_space_add_room_action">"Rum"</string>
   <string name="screen_space_add_rooms_room_access_description">"Tilføjelse af et rum påvirker ikke adgangen til rummet. For at ændre adgangen, gå til Rumindstillinger &gt; Sikkerhed og privatliv."</string>
+  <string name="screen_space_empty_state_title">"Tilføj dit første rum"</string>
   <string name="screen_space_menu_action_members">"Vis medlemmer"</string>
   <string name="screen_space_remove_rooms_confirmation_content">"Fjernelse af et rum påvirker ikke adgangen til rummet. For at ændre adgangen, gå til Rum-info &gt; Privatliv og sikkerhed."</string>
   <plurals name="screen_space_remove_rooms_confirmation_title">

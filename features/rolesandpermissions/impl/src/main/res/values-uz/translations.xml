@@ -1,18 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_room_change_permissions_administrators">"Faqat adminlar"</string>
+  <string name="screen_room_change_permissions_administrators">"Admin"</string>
   <string name="screen_room_change_permissions_ban_people">"Odamlarni taqiqlash"</string>
+  <string name="screen_room_change_permissions_change_settings">"Sozlamalarni o‘zgartirish"</string>
   <string name="screen_room_change_permissions_delete_messages">"Xabarlarni olib tashlash"</string>
+  <string name="screen_room_change_permissions_everyone">"A\'zo"</string>
   <string name="screen_room_change_permissions_invite_people">"Odamlarni taklif qiling va qo‘shilish so‘rovlarini qabul qiling"</string>
+  <string name="screen_room_change_permissions_manage_space">"Maydonni boshqarish"</string>
+  <string name="screen_room_change_permissions_manage_space_rooms">"Xonalarni boshqarish"</string>
   <string name="screen_room_change_permissions_member_moderation">"A’zolarni boshqarish"</string>
   <string name="screen_room_change_permissions_messages_and_content">"Xabarlar va kontent"</string>
-  <string name="screen_room_change_permissions_moderators">"Adminlar va moderatorlar"</string>
-  <string name="screen_room_change_permissions_remove_people">"Odamlarni olib tashlash va qoʻshilish soʻrovlarini rad etish"</string>
+  <string name="screen_room_change_permissions_moderators">"Moderator"</string>
+  <string name="screen_room_change_permissions_remove_people">"Odamlarni olib tashlash"</string>
   <string name="screen_room_change_permissions_room_avatar">"Xona avatarini oʻzgartirish"</string>
   <string name="screen_room_change_permissions_room_details">"Tafsilotlarni tahrirlash"</string>
   <string name="screen_room_change_permissions_room_name">"Xona nomini oʻzgartirish"</string>
   <string name="screen_room_change_permissions_room_topic">"Xona mavzusini almashtirish"</string>
   <string name="screen_room_change_permissions_send_messages">"Xabarlar yuborish"</string>
+  <string name="screen_room_change_permissions_title">"Ruxsatlar"</string>
   <string name="screen_room_change_role_administrators_title">"Administratorlarni tahrirlash"</string>
   <string name="screen_room_change_role_confirm_add_admin_description">"Bu amalni bekor qila olmaysiz. Siz foydalanuvchini o‘zingiz bilan bir xil quvvat darajasiga ega bo‘lishga undayapsiz."</string>
   <string name="screen_room_change_role_confirm_add_admin_title">"Admin qo‘shilsinmi?"</string>
@@ -32,7 +37,13 @@
   <string name="screen_room_change_role_section_users">"Azolar"</string>
   <string name="screen_room_change_role_unsaved_changes_description">"Sizda saqlanmagan oʻzgarishlar bor"</string>
   <string name="screen_room_change_role_unsaved_changes_title">"O‘zgartirishlarni saqlaysizmi?"</string>
-  <string name="screen_room_member_list_banned_empty">"Bu xonada taqiqlangan foydalanuvchilar yoʻq."</string>
+  <string name="screen_room_member_list_banned_empty">"Taqiqlangan foydalanuvchilar yoʻq."</string>
+  <plurals name="screen_room_member_list_banned_header_title">
+    <item quantity="one">"%1$dTaqiqlangan"</item>
+    <item quantity="other">"%1$dTaqiqlangan"</item>
+  </plurals>
+  <string name="screen_room_member_list_empty_search_subtitle">"Imloni tekshiring yoki yangi qidiruvni sinang"</string>
+  <string name="screen_room_member_list_empty_search_title">"%1$s – hech narsa topilmadi"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$dodam"</item>
     <item quantity="other">"%1$dodamlar"</item>
@@ -44,8 +55,13 @@
   <string name="screen_room_member_list_manage_member_unban_title">"Xonadan taqiqni olib tashlash"</string>
   <string name="screen_room_member_list_mode_banned">"Taqiqlangan"</string>
   <string name="screen_room_member_list_mode_members">"Azolar"</string>
-  <string name="screen_room_member_list_role_administrator">"Faqat adminlar"</string>
-  <string name="screen_room_member_list_role_moderator">"Adminlar va moderatorlar"</string>
+  <plurals name="screen_room_member_list_pending_header_title">
+    <item quantity="one">"%1$d Taklif qilingan"</item>
+    <item quantity="other">"%1$d Taklif qilingan"</item>
+  </plurals>
+  <string name="screen_room_member_list_pending_status">"Jarayonda"</string>
+  <string name="screen_room_member_list_role_administrator">"Admin"</string>
+  <string name="screen_room_member_list_role_moderator">"Moderator"</string>
   <string name="screen_room_member_list_role_owner">"Egasi"</string>
   <string name="screen_room_member_list_room_members_header_title">"Xona a\'zolari"</string>
   <string name="screen_room_member_list_unbanning_user">"Taqiqni bekor qilish %1$s"</string>
@@ -58,10 +74,12 @@
   <string name="screen_room_roles_and_permissions_messages_and_content">"Xabarlar va kontent"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderatorlar"</string>
   <string name="screen_room_roles_and_permissions_owners">"Egalari"</string>
+  <string name="screen_room_roles_and_permissions_permissions_header">"Ruxsatlar"</string>
   <string name="screen_room_roles_and_permissions_reset">"Ruxsatlarni tiklash"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"Ruxsatlarni asliga qaytargach, joriy sozlamalarni yoʻqotasiz."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"Ruxsatlar asliga qaytarilsinmi?"</string>
   <string name="screen_room_roles_and_permissions_roles_header">"Rollar"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Xona tafsilotlari"</string>
+  <string name="screen_room_roles_and_permissions_space_details">"Maydon tafsilotlari"</string>
   <string name="screen_room_roles_and_permissions_title">"Rollar va ruxsatlar"</string>
 </resources>

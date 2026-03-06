@@ -34,6 +34,7 @@
   <string name="screen_login_subtitle">"Matrix es una red abierta para una comunicación segura y descentralizada."</string>
   <string name="screen_login_title">"¡Hola de nuevo!"</string>
   <string name="screen_login_title_with_homeserver">"Iniciar sesión en %1$s"</string>
+  <string name="screen_onboarding_app_version">"Versión %1$s"</string>
   <string name="screen_onboarding_sign_in_manually">"Iniciar sesión manualmente"</string>
   <string name="screen_onboarding_sign_in_to">"Iniciar sesión en %1$s"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"Iniciar sesión con un código QR"</string>

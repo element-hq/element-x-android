@@ -22,7 +22,7 @@ camera = "1.5.3"
 work = "2.11.1"
 
 # Compose
-compose_bom = "2026.02.00"
+compose_bom = "2026.02.01"
 
 # Coroutines
 coroutines = "1.10.2"
@@ -39,7 +39,7 @@ datetime = "0.7.1"
 serialization_json = "1.10.0"
 
 #other
-coil = "3.3.0"
+coil = "3.4.0"
 # Rollback to 1.0.4, 1.0.5 has this issue: https://github.com/airbnb/Showkase/issues/420
 showkase = "1.0.5"
 # There is some custom logic in `RootFlowNode` that may break because it reuses some Appyx internal APIs.
@@ -51,10 +51,10 @@ telephoto = "0.18.0"
 haze = "1.7.2"
 
 # Dependency analysis
-dependencyAnalysis = "3.5.1"
+dependencyAnalysis = "3.6.1"
 
 # DI
-metro = "0.10.4"
+metro = "0.11.2"
 
 # Auto service
 autoservice = "1.1.1"
@@ -80,7 +80,7 @@ kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlin
 kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 ksp_gradle_plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:34.9.0"
+google_firebase_bom = "com.google.firebase:firebase-bom:34.10.0"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 ksp_plugin = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
@@ -120,7 +120,7 @@ androidx_preference = "androidx.preference:preference:1.2.1"
 androidx_webkit = "androidx.webkit:webkit:1.15.0"
 
 androidx_compose_bom = { module = "androidx.compose:compose-bom", version.ref = "compose_bom" }
-androidx_compose_material3 = { module = "androidx.compose.material3:material3" }
+androidx_compose_material3 = { module = "androidx.compose.material3:material3", version = '1.5.0-alpha11' }
 androidx_compose_material3_windowsizeclass = { module = "androidx.compose.material3:material3-window-size-class" }
 androidx_compose_material3_adaptive = "androidx.compose.material3:material3-adaptive-android:1.0.0-alpha06"
 androidx_compose_ui = { module = "androidx.compose.ui:ui" }
@@ -178,7 +178,7 @@ test_detekt_test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version
 # https://github.com/matrix-org/matrix-rust-components-kotlin/commits/main/sdk/sdk-android/src/main/kotlin/org/matrix/rustcomponents/sdk/matrix_sdk_ffi.kt
 # All new features should not be implemented in the pull request that upgrades the version, developers should
 # only fix API breaks and may add some TODOs.
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.03.0"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.03.05"
 
 # Others
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
@@ -202,7 +202,7 @@ sqldelight-driver-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
 sqlcipher = "net.zetetic:sqlcipher-android:4.13.0"
 sqlite = "androidx.sqlite:sqlite-ktx:2.6.2"
-unifiedpush = "org.unifiedpush.android:connector:3.3.1"
+unifiedpush = "org.unifiedpush.android:connector:3.3.2"
 vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
 telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "telephoto" }
@@ -219,8 +219,8 @@ haze_materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = 
 color_picker = "io.mhssn:colorpicker:1.0.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.32.2"
-sentry = "io.sentry:sentry-android:8.33.0"
+posthog = "com.posthog:posthog-android:3.34.3"
+sentry = "io.sentry:sentry-android:8.34.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.29.2"
 
@@ -232,7 +232,7 @@ sigpwned_emoji4j = "com.sigpwned:emoji4j-core:16.0.0"
 metro_runtime = { module = "dev.zacsweers.metro:runtime", version.ref = "metro" }
 
 # Element Call
-element_call_embedded = "io.element.android:element-call-embedded:0.16.3"
+element_call_embedded = "io.element.android:element-call-embedded:0.17.0"
 
 # Auto services
 google_autoservice = { module = "com.google.auto.service:auto-service", version.ref = "autoservice" }
@@ -258,7 +258,7 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 # Note: used in DependencyInjectionExtensions.kt
 metro = { id = "dev.zacsweers.metro", version.ref = "metro" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
-ktlint = "org.jlleitschuh.gradle.ktlint:14.0.1"
+ktlint = "org.jlleitschuh.gradle.ktlint:14.1.0"
 dependencygraph = "com.savvasdalkitsis.module-dependency-graph:0.12"
 dependencycheck = "org.owasp.dependencycheck:12.2.0"
 dependencyanalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }

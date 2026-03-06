@@ -98,10 +98,10 @@ class PreferencesRootPresenterTest {
             accountManagementUrlResult.assertions().isCalledExactly(2)
                 .withSequence(
                     listOf(value(AccountManagementAction.Profile)),
-                    listOf(value(AccountManagementAction.SessionsList)),
+                    listOf(value(AccountManagementAction.DevicesList)),
                 )
             assertThat(finalState.accountManagementUrl).isEqualTo("Profile url")
-            assertThat(finalState.devicesManagementUrl).isEqualTo("SessionsList url")
+            assertThat(finalState.devicesManagementUrl).isEqualTo("DevicesList url")
         }
     }
 

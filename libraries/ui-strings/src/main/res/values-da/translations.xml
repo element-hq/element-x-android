@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Tilføj reaktion: %1$s"</string>
+  <string name="a11y_address">"Adresse"</string>
   <string name="a11y_avatar">"Avatar"</string>
   <string name="a11y_collapse_message_text_field">"Minimér tekstfeltet for beskeder"</string>
   <string name="a11y_delete">"Slet"</string>
@@ -27,8 +28,10 @@
   <string name="a11y_paused_voice_message">"Talebesked, varighed: %1$s, aktuel position: %2$s"</string>
   <string name="a11y_pin_field">"PIN-felt"</string>
   <string name="a11y_play">"Afspil"</string>
+  <string name="a11y_playback_speed">"Afspilningshastighed"</string>
   <string name="a11y_poll">"Afstemning"</string>
   <string name="a11y_poll_end">"Afsluttet afstemning"</string>
+  <string name="a11y_qr_code">"QR-kode"</string>
   <string name="a11y_react_with">"Reager med%1$s"</string>
   <string name="a11y_react_with_other_emojis">"Reager med andre emojis"</string>
   <string name="a11y_read_receipts_multiple">"Læs af %1$s og %2$s"</string>
@@ -285,8 +288,10 @@
   </plurals>
   <string name="common_preparing">"Forbereder…"</string>
   <string name="common_privacy_policy">"Privatlivspolitik"</string>
+  <string name="common_private">"Privat"</string>
   <string name="common_private_room">"Privat rum"</string>
   <string name="common_private_space">"Privat gruppe"</string>
+  <string name="common_public">"Offentlig"</string>
   <string name="common_public_room">"Offentligt rum"</string>
   <string name="common_public_space">"Offentlig gruppe"</string>
   <string name="common_reaction">"Reaktion"</string>
@@ -303,6 +308,7 @@
   <string name="common_report_a_problem">"Anmeld et problem"</string>
   <string name="common_report_submitted">"Anmeldelsen er indsendt"</string>
   <string name="common_rich_text_editor">"Rich text editor"</string>
+  <string name="common_role">"Rolle"</string>
   <string name="common_room">"Rum"</string>
   <string name="common_room_name">"Navn på rum"</string>
   <string name="common_room_name_placeholder">"f.eks. navnet på dit projekt"</string>
@@ -332,12 +338,14 @@
   <string name="common_server_url">"Server URL"</string>
   <string name="common_settings">"Indstillinger"</string>
   <string name="common_share_space">"Del gruppe"</string>
+  <string name="common_shared_history">"Nye medlemmer ser historik"</string>
   <string name="common_shared_location">"Delt placering"</string>
   <string name="common_shared_space">"Delt gruppe"</string>
   <string name="common_signing_out">"Logger ud"</string>
   <string name="common_something_went_wrong">"Noget gik galt"</string>
   <string name="common_something_went_wrong_message">"Vi stødte på et problem. Prøv venligst igen."</string>
   <string name="common_space">"Gruppe"</string>
+  <string name="common_space_members">"Medlemmer af rummet"</string>
   <string name="common_space_topic_placeholder">"Hvad handler denne gruppe om?"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d Gruppe"</item>
@@ -383,6 +391,7 @@
   <string name="common_voice_message">"Talebesked"</string>
   <string name="common_waiting">"Venter…"</string>
   <string name="common_waiting_for_decryption_key">"Venter på denne besked"</string>
+  <string name="common_world_readable_history">"Alle kan se historikken"</string>
   <string name="common_you">"Dig"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s(%2$s ) har delt denne besked siden du ikke var i rummet da den blev sendt."</string>
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s delte denne besked, siden du ikke var i rummet da den blev sendt."</string>

@@ -20,6 +20,7 @@
   <string name="screen_room_change_role_administrators_title">"Yöneticileri Düzenle"</string>
   <string name="screen_room_change_role_confirm_add_admin_description">"Bu eylemi geri alamazsınız. Kullanıcıyı sizinle aynı güç seviyesine sahip olacak şekilde terfi ettiriyorsunuz."</string>
   <string name="screen_room_change_role_confirm_add_admin_title">"Yönetici Ekle?"</string>
+  <string name="screen_room_change_role_confirm_change_owners_description">"Bu işlemi geri alamazsınız. Sahipliği seçilen kullanıcılara devrediyorsunuz. Ayrıldıktan sonra bu işlem kalıcı olacaktır."</string>
   <string name="screen_room_change_role_confirm_demote_self_action">"Rütbe Düşür"</string>
   <string name="screen_room_change_role_confirm_demote_self_description">"Rütbenizi düşürdüğünüz için bu değişikliği geri alamazsınız, eğer odadaki son ayrıcalıklı kullanıcı sizseniz ayrıcalıkları yeniden kazanmanız mümkün olmayacaktır."</string>
   <string name="screen_room_change_role_confirm_demote_self_title">"Rütbeni düşür?"</string>
@@ -44,7 +45,7 @@
   <string name="screen_room_details_error_loading_notification_settings">"Bildirim ayarları yüklenirken bir hata oluştu."</string>
   <string name="screen_room_details_error_muting">"Bu odayı sessize alma başarısız oldu, lütfen tekrar deneyin."</string>
   <string name="screen_room_details_error_unmuting">"Bu odanın sesi açılamadı, lütfen tekrar deneyin."</string>
-  <string name="screen_room_details_invite_people_title">"İnsanları davet et"</string>
+  <string name="screen_room_details_invite_people_title">"Kişileri davet et"</string>
   <string name="screen_room_details_leave_conversation_title">"Sohbeti bırak"</string>
   <string name="screen_room_details_leave_room_title">"Odadan ayrıl"</string>
   <string name="screen_room_details_media_gallery_title">"Medya ve dosyalar"</string>
@@ -62,6 +63,8 @@
   <string name="screen_room_details_topic_title">"Konu"</string>
   <string name="screen_room_details_updating_room">"Oda güncelleniyor…"</string>
   <string name="screen_room_member_list_banned_empty">"Bu odada yasaklı kullanıcı yok."</string>
+  <string name="screen_room_member_list_empty_search_subtitle">"Metni kontrol edin ya da yeni bir arama yapmayı deneyin."</string>
+  <string name="screen_room_member_list_empty_search_title">"“%1$s” için sonuç bulunamadı"</string>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="one">"%1$d kişi"</item>
     <item quantity="other">"%1$d kişi"</item>
@@ -72,6 +75,11 @@
   <string name="screen_room_member_list_manage_member_unban_message">"Davet edildikleri takdirde bu odaya tekrar katılabileceklerdir."</string>
   <string name="screen_room_member_list_mode_banned">"Yasaklandı"</string>
   <string name="screen_room_member_list_mode_members">"Üyeler"</string>
+  <plurals name="screen_room_member_list_pending_header_title">
+    <item quantity="one">"%1$d Davetli"</item>
+    <item quantity="other">"%1$d Davetli"</item>
+  </plurals>
+  <string name="screen_room_member_list_pending_status">"Beklemede"</string>
   <string name="screen_room_member_list_role_administrator">"Yalnızca yöneticiler"</string>
   <string name="screen_room_member_list_role_moderator">"Yöneticiler ve moderatörler"</string>
   <string name="screen_room_member_list_room_members_header_title">"Oda üyeleri"</string>
@@ -97,6 +105,7 @@
   <string name="screen_room_roles_and_permissions_member_moderation">"Üye moderasyonu"</string>
   <string name="screen_room_roles_and_permissions_messages_and_content">"Mesajlar ve içerik"</string>
   <string name="screen_room_roles_and_permissions_moderators">"Moderatörler"</string>
+  <string name="screen_room_roles_and_permissions_permissions_header">"İzinler"</string>
   <string name="screen_room_roles_and_permissions_reset">"İzinleri sıfırla"</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_description">"İzinleri sıfırladığınızda, mevcut ayarları kaybedersiniz."</string>
   <string name="screen_room_roles_and_permissions_reset_confirm_title">"İzinleri sıfırla?"</string>
@@ -104,8 +113,10 @@
   <string name="screen_room_roles_and_permissions_room_details">"Oda bilgileri"</string>
   <string name="screen_room_roles_and_permissions_title">"Roller ve izinler"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Oda adresi ekle"</string>
+  <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Yetkilendirilmiş alanlardaki herkes katılabilir, diğer herkes erişim talep etmelidir."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Herkes odaya katılma isteğinde bulunabilir ancak bir yönetici veya moderatörün isteği kabul etmesi gerekir."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_title">"Katılma isteği gönder"</string>
+  <string name="screen_security_and_privacy_ask_to_join_single_space_members_option_description">"%1$s alanındaki herkes katılabilir, diğer herkes erişim talep etmelidir."</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Evet, şifrelemeyi etkinleştir"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_description">"Etkinleştirildikten sonra, bir oda için şifreleme devre dışı bırakılamaz, Mesaj geçmişi yalnızca davet edildiklerinden veya odaya katıldıklarından beri oda üyeleri için görünür olacaktır.
 Oda üyeleri dışında hiç kimse mesajları okuyamayacaktır. Bu, botların ve köprülerin düzgün çalışmasını engelleyebilir.
@@ -116,21 +127,28 @@ Herkesin bulabileceği ve katılabileceği odalar için şifrelemenin etkinleşt
   <string name="screen_security_and_privacy_encryption_toggle_title">"Uçtan uca şifrelemeyi etkinleştir"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_description">"Herkes bulabilir ve katılabilir"</string>
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"Herkes"</string>
+  <string name="screen_security_and_privacy_room_access_footer">"Davetsiz olarak bu odaya katılabilecek alan üyelerini seçin. %1$s"</string>
+  <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"Alanları yönet"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_description">"İnsanlar yalnızca davet edildiklerinde katılabilirler"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"Yalnızca davet"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"Oda Erişimi"</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_multiple_parents_description">"Yetkilendirilmiş alanlardaki herkes katılabilir."</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_single_parent_description">"%1$s alanındaki herkes katılabilir."</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Alanlar şu anda desteklenmiyor"</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Dizinde görünür hale getirmek için bir oda adresine ihtiyacınız olacak."</string>
   <string name="screen_security_and_privacy_room_address_section_header">"Oda adresi"</string>
   <string name="screen_security_and_privacy_room_directory_visibility_section_footer">"Bu odanın %1$s genel oda dizininde arama yapılarak bulunmasına izin verin"</string>
+  <string name="screen_security_and_privacy_room_directory_visibility_toggle_description">"Genel dizinde arama yapılarak bulunmasına izin ver."</string>
   <string name="screen_security_and_privacy_room_directory_visibility_toggle_title">"Genel oda dizininde görünür"</string>
   <string name="screen_security_and_privacy_room_history_anyone_option_title">"Herkes"</string>
+  <string name="screen_security_and_privacy_room_history_section_footer">"Değişiklikler geçmiş mesajları etkilemez, yalnızca yeni mesajlar için geçerlidir. %1$s"</string>
   <string name="screen_security_and_privacy_room_history_section_header">"Geçmişi kimler okuyabilir ?"</string>
-  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Sadece üyeler (davet edildiklerinden beri)"</string>
+  <string name="screen_security_and_privacy_room_history_since_invite_option_title">"Sadece üyeler (davet edildiklerinden itibaren)"</string>
   <string name="screen_security_and_privacy_room_history_since_selecting_option_title">"Bu seçeneği seçtiğinden beri yalnızca üyeler"</string>
   <string name="screen_security_and_privacy_room_publishing_section_footer">"Oda adresleri, odaları bulmanın ve odalara erişmenin yoludur. Bu aynı zamanda odanızı başkalarıyla kolayca paylaşabilmenizi sağlar.
 Odanızı ana sunucunuzun genel oda dizininde yayınlamayı seçebilirsiniz."</string>
   <string name="screen_security_and_privacy_room_publishing_section_header">"Oda yayınlama"</string>
+  <string name="screen_security_and_privacy_room_visibility_section_footer">"Adresler, oda ve alanları bulmak ve erişmek için kullanılır. Ayrıca bunları başkalarıyla kolayca paylaşabilmenizi sağlar."</string>
   <string name="screen_security_and_privacy_room_visibility_section_header">"Oda görünürlüğü"</string>
   <string name="screen_security_and_privacy_title">"Güvenlik ve gizlilik"</string>
 </resources>
