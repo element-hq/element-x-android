@@ -8,8 +8,10 @@
 
 package io.element.android.features.location.impl.show
 
+import io.element.android.features.location.api.Location
+
 sealed interface ShowLocationEvents {
-    data object Share : ShowLocationEvents
+    data class Share(val location: Location) : ShowLocationEvents
     data class TrackMyLocation(val enabled: Boolean) : ShowLocationEvents
     data object DismissDialog : ShowLocationEvents
     data object RequestPermissions : ShowLocationEvents

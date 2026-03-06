@@ -8,13 +8,16 @@
 
 package io.element.android.features.location.impl.show
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -25,10 +28,13 @@ import io.element.android.features.location.api.ShowLocationMode
 import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.PermissionDeniedDialog
 import io.element.android.features.location.impl.common.PermissionRationaleDialog
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.location.impl.common.ui.LocationFloatingActionButton
 import io.element.android.features.location.impl.common.ui.LocationPinMarkers
+import io.element.android.features.location.impl.common.ui.LocationShareRow
 import io.element.android.features.location.impl.common.ui.MapBottomSheetScaffold
 import io.element.android.features.location.impl.common.ui.UserLocationPuck
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -36,6 +42,7 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.coroutines.launch
 import org.maplibre.compose.camera.CameraMoveReason
 import org.maplibre.compose.camera.CameraPosition
 import org.maplibre.compose.camera.rememberCameraState
@@ -72,9 +79,7 @@ fun ShowLocationView(
             target = Position(latitude = mode.location.lat, longitude = mode.location.lon),
             zoom = MapDefaults.DEFAULT_ZOOM
         )
-        ShowLocationMode.Live -> CameraPosition(
-            zoom = MapDefaults.DEFAULT_ZOOM
-        )
+        ShowLocationMode.Live -> MapDefaults.centerCameraPosition
     }
     val cameraState = rememberCameraState(firstPosition = initialPosition)
     val locationProvider = if (state.hasLocationPermission) {
@@ -94,9 +99,22 @@ fun ShowLocationView(
     }
 
     val scaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = rememberStandardBottomSheetState(initialValue = SheetValue.PartiallyExpanded)
+        bottomSheetState = rememberStandardBottomSheetState(initialValue =
+            if(state.isSheetDraggable) {
+                SheetValue.PartiallyExpanded
+            }else {
+                SheetValue.Expanded
+            }
+        )
     )
     MapBottomSheetScaffold(
+        //sheetPeekHeight = 180.dp,
+        sheetDragHandle = if(state.isSheetDraggable) {
+            {BottomSheetDefaults.DragHandle()}
+        } else {
+            null
+        },
+        sheetSwipeEnabled = state.isSheetDraggable,
         scaffoldState = scaffoldState,
         cameraState = cameraState,
         modifier = modifier,
@@ -108,17 +126,29 @@ fun ShowLocationView(
                         onClick = onBackClick,
                     )
                 },
-                actions = {
-                    IconButton(
-                        onClick = { state.eventSink(ShowLocationEvents.Share) }
-                    ) {
-                        Icon(
-                            imageVector = CompoundIcons.ShareAndroid(),
-                            contentDescription = stringResource(CommonStrings.action_share),
-                        )
-                    }
-                }
             )
+        },
+        sheetContent = { sheetPaddings ->
+            val coroutineScope = rememberCoroutineScope()
+            Text(
+                text = "On the map",
+                style = ElementTheme.typography.fontBodyLgMedium,
+                color = ElementTheme.colors.textPrimary,
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+            )
+            state.locationShares.forEach { locationShare ->
+                LocationShareRow(
+                    item = locationShare,
+                    onShareClick = { state.eventSink(ShowLocationEvents.Share(locationShare.location)) },
+                    modifier = Modifier.clickable {
+                        state.eventSink(ShowLocationEvents.TrackMyLocation(false))
+                        val position = CameraPosition(padding = sheetPaddings, target = Position(locationShare.location.lon, locationShare.location.lat), zoom = MapDefaults.DEFAULT_ZOOM)
+                        coroutineScope.launch {
+                            cameraState.animateTo(finalPosition = position)
+                        }
+                    }
+                )
+            }
         },
         mapContent = {
             UserLocationPuck(

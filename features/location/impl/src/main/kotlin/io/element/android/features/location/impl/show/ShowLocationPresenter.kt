@@ -27,6 +27,8 @@ import io.element.android.features.location.impl.common.permissions.PermissionsS
 import io.element.android.features.location.impl.common.ui.LocationMarkerData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.dateformatter.api.DateFormatter
+import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.designsystem.components.PinVariant
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -38,6 +40,7 @@ class ShowLocationPresenter(
     permissionsPresenterFactory: PermissionsPresenter.Factory,
     private val locationActions: LocationActions,
     private val buildMeta: BuildMeta,
+    private val dateFormatter: DateFormatter,
 ) : Presenter<ShowLocationState> {
     @AssistedFactory
     fun interface Factory {
@@ -63,15 +66,8 @@ class ShowLocationPresenter(
 
         fun handleEvent(event: ShowLocationEvents) {
             when (event) {
-                ShowLocationEvents.Share -> {
-                    when (mode) {
-                        is ShowLocationMode.Static -> {
-                            locationActions.share(mode.location, null)
-                        }
-                        ShowLocationMode.Live -> {
-                            // TODO: Handle sharing for live locations
-                        }
-                    }
+                is ShowLocationEvents.Share -> {
+                    locationActions.share(event.location, null)
                 }
                 is ShowLocationEvents.TrackMyLocation -> {
                     if (event.enabled) {
@@ -121,10 +117,37 @@ class ShowLocationPresenter(
             }
         }
 
+        val locationShares = remember(mode) {
+            when (mode) {
+                is ShowLocationMode.Static -> {
+                    val relativeTime = dateFormatter.format(timestamp = mode.timestamp, mode = DateFormatterMode.Full, useRelative = true)
+                    val formattedTimestamp = "Shared $relativeTime"
+                    listOf(
+                        LocationShareItem(
+                            userId = mode.senderId,
+                            displayName = mode.senderName,
+                            avatarData = AvatarData(
+                                id = mode.senderId.value,
+                                name = mode.senderName,
+                                url = mode.senderAvatarUrl,
+                                size = AvatarSize.UserListItem,
+                            ),
+                            formattedTimestamp = formattedTimestamp,
+                            isLive = false,
+                            assetType = mode.assetType,
+                            location = mode.location,
+                        )
+                    )
+                }
+                ShowLocationMode.Live -> emptyList()
+            }
+        }
+
         return ShowLocationState(
             permissionDialog = permissionDialog,
             mode = mode,
             markers = markers,
+            locationShares = locationShares,
             hasLocationPermission = permissionsState.isAnyGranted,
             isTrackMyLocation = isTrackMyLocation,
             appName = appName,

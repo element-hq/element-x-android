@@ -88,7 +88,7 @@ fun MapBottomSheetScaffold(
     sheetSwipeEnabled: Boolean = true,
     topBar: (@Composable () -> Unit)? = null,
     snackbarHost: @Composable (SnackbarHostState) -> Unit = { SnackbarHost(it) },
-    sheetContent: @Composable ColumnScope.() -> Unit = {},
+    sheetContent: @Composable ColumnScope.(PaddingValues) -> Unit = {},
     mapContent: @Composable @MaplibreComposable () -> Unit = {},
     overlayContent: @Composable BoxScope.(sheetPadding: PaddingValues) -> Unit = {},
 ) {
@@ -113,7 +113,7 @@ fun MapBottomSheetScaffold(
             modifier = Modifier,
             sheetPeekHeight = sheetPeekHeight,
             sheetContent = {
-                sheetContent()
+                sheetContent(sheetPadding)
                 Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
             },
             scaffoldState = scaffoldState,

@@ -55,6 +55,7 @@ fun aShowLocationState(
     permissionDialog: ShowLocationState.Dialog = ShowLocationState.Dialog.None,
     mode: ShowLocationMode = aStaticLocationMode(),
     markers: List<LocationMarkerData>? = null,
+    locationSharers: List<LocationShareItem>? = null,
     hasLocationPermission: Boolean = false,
     isTrackMyLocation: Boolean = false,
     appName: String = APP_NAME,
@@ -82,10 +83,30 @@ fun aShowLocationState(
         )
         ShowLocationMode.Live -> emptyList()
     }
+    val effectiveLocationSharers = locationSharers ?: when (mode) {
+        is ShowLocationMode.Static -> listOf(
+            LocationShareItem(
+                userId = mode.senderId,
+                displayName = mode.senderName,
+                avatarData = AvatarData(
+                    id = mode.senderId.value,
+                    name = mode.senderName,
+                    url = mode.senderAvatarUrl,
+                    size = AvatarSize.UserListItem,
+                ),
+                formattedTimestamp = "Shared 1 min ago",
+                isLive = false,
+                assetType = mode.assetType,
+                location = mode.location,
+            )
+        )
+        ShowLocationMode.Live -> emptyList()
+    }
     return ShowLocationState(
         permissionDialog = permissionDialog,
         mode = mode,
         markers = effectiveMarkers,
+        locationShares = effectiveLocationSharers,
         hasLocationPermission = hasLocationPermission,
         isTrackMyLocation = isTrackMyLocation,
         appName = appName,

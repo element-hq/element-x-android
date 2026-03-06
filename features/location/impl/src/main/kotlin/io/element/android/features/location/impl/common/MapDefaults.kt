@@ -10,10 +10,12 @@ package io.element.android.features.location.impl.common
 
 import android.Manifest
 import androidx.compose.ui.Alignment
+import org.maplibre.compose.camera.CameraPosition
 import org.maplibre.compose.map.GestureOptions
 import org.maplibre.compose.map.MapOptions
 import org.maplibre.compose.map.OrnamentOptions
 import org.maplibre.compose.map.RenderOptions
+import org.maplibre.spatialk.geojson.Position
 
 /**
  * Common configuration values for the map.
@@ -64,13 +66,12 @@ object MapDefaults {
             pulseColor = Color.Black,
         )
 
-    val centerCameraPosition = CameraPosition.Builder()
-        .target(LatLng(49.843, 9.902056))
-        .zoom(2.7)
-        .build()
-
      */
 
+    val centerCameraPosition = CameraPosition(
+        target = Position(49.843, 9.902056),
+        zoom = 2.7,
+    )
     const val DEFAULT_ZOOM = 15.0
 
     val permissions = listOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)

@@ -8,21 +8,39 @@
 
 package io.element.android.features.location.impl.show
 
+import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.ShowLocationMode
 import io.element.android.features.location.impl.common.ui.LocationMarkerData
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.location.AssetType
 
 data class ShowLocationState(
     val permissionDialog: Dialog,
     val mode: ShowLocationMode,
     val markers: List<LocationMarkerData>,
+    val locationShares: List<LocationShareItem>,
     val hasLocationPermission: Boolean,
     val isTrackMyLocation: Boolean,
     val appName: String,
     val eventSink: (ShowLocationEvents) -> Unit,
 ) {
+
+    val isSheetDraggable = locationShares.any { item -> item.isLive }
+
     sealed interface Dialog {
         data object None : Dialog
         data object PermissionRationale : Dialog
         data object PermissionDenied : Dialog
     }
 }
+
+data class LocationShareItem(
+    val userId: UserId,
+    val displayName: String,
+    val avatarData: AvatarData,
+    val formattedTimestamp: String,
+    val location: Location,
+    val isLive: Boolean,
+    val assetType: AssetType?,
+)
