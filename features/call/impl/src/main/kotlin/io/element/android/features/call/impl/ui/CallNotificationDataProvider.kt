@@ -17,16 +17,16 @@ import io.element.android.libraries.matrix.api.core.UserId
 open class CallNotificationDataProvider : PreviewParameterProvider<CallNotificationData> {
     override val values: Sequence<CallNotificationData>
         get() = sequenceOf(
-            aIncomingCallScreenState(
+            aCallNotificationData(
                 audioOnly = false
             ),
-            aIncomingCallScreenState(
+            aCallNotificationData(
                 audioOnly = true
             ),
         )
 }
 
-internal fun aIncomingCallScreenState(
+internal fun aCallNotificationData(
     audioOnly: Boolean
 ): CallNotificationData {
     return CallNotificationData(
