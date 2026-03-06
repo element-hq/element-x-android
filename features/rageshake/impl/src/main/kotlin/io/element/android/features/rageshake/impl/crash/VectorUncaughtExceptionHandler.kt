@@ -8,9 +8,9 @@
 
 package io.element.android.features.rageshake.impl.crash
 
-import io.element.android.libraries.architecture.appyx.LAST_NAV_STATE
 import android.os.Build
 import android.os.TransactionTooLargeException
+import io.element.android.libraries.architecture.appyx.lastCapturedNavState
 import io.element.android.libraries.core.data.tryOrNull
 import timber.log.Timber
 import java.io.PrintWriter
@@ -66,8 +66,8 @@ class VectorUncaughtExceptionHandler(
 
             if (throwable is RuntimeException && throwable.cause is TransactionTooLargeException) {
                 pw.append('\n')
-                pw.append(LAST_NAV_STATE)
-                Timber.v(LAST_NAV_STATE)
+                pw.append(lastCapturedNavState)
+                Timber.v(lastCapturedNavState)
             }
 
             append(sw.buffer.toString())

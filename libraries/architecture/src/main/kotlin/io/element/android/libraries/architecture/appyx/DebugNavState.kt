@@ -10,9 +10,9 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.mapSaver
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.bumble.appyx.core.integration.NodeFactory
 import com.bumble.appyx.core.integrationpoint.IntegrationPoint
 import com.bumble.appyx.core.modality.BuildContext
@@ -20,7 +20,6 @@ import com.bumble.appyx.core.navigation.NavElement
 import com.bumble.appyx.core.navigation.NavKey
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.node.build
-import com.bumble.appyx.core.state.MutableSavedStateMap
 import com.bumble.appyx.core.state.SavedStateMap
 import com.bumble.appyx.utils.customisations.NodeCustomisationDirectory
 import com.bumble.appyx.utils.customisations.NodeCustomisationDirectoryImpl
@@ -33,7 +32,11 @@ import timber.log.Timber
  * Please see LICENSE files in the repository root for full details.
  */
 
-var LAST_NAV_STATE: String = "No nav state captured yet"
+/**
+ * Contains the last captured navigation state in a human-readable format, which can be attached to crash reports to help
+ * with debugging `TransactionTooLargeException` crashes.
+ */
+var lastCapturedNavState: String = "No nav state captured yet"
 
 private data class NodeEntry(
     val navKey: Any?,
@@ -106,7 +109,6 @@ private fun <N : Node> rememberNode(
     customisations: NodeCustomisationDirectory,
     integrationPoint: IntegrationPoint,
 ): State<N> {
-
     fun createNode(savedStateMap: SavedStateMap?): N =
         factory
             .create(
@@ -118,8 +120,9 @@ private fun <N : Node> rememberNode(
             .apply { this.integrationPoint = integrationPoint }
             .build()
 
-    // This is deprecated because using the custom key would not make this unique, but we workaround that by using the currentCompositeKeyHashCode
+    // This is deprecated because using the custom key would not make this unique, but we work around that by using the currentCompositeKeyHashCode
     // as part of the key, which should be unique for each call site of rememberNode.
+    @Suppress("DEPRECATION")
     return rememberSaveable(
         inputs = arrayOf(),
         key = "$key:$currentCompositeKeyHashCode",
@@ -140,7 +143,7 @@ private fun <N : Node> rememberNode(
                 }
                 Timber.d("Saving nav state: $copy")
                 // Store the last nav state in a global variable so that it can be attached to crash reports if the app crashes before the next save happens.
-                LAST_NAV_STATE = copy.toString()
+                lastCapturedNavState = copy.toString()
                 result
             },
             restore = { state -> createNode(savedStateMap = state) },
