@@ -229,8 +229,11 @@ class JoinedRustRoom(
             is CreateTimelineParams.Threaded -> DateDividerMode.DAILY
         }
 
-        // Track read receipts only for focused timeline for performance optimization
-        val trackReadReceipts = createTimelineParams is CreateTimelineParams.Focused
+        // Track read receipts only for focused and threaded timelines for performance optimization
+        val trackReadReceipts = when (createTimelineParams) {
+            is CreateTimelineParams.Focused, is CreateTimelineParams.Threaded -> true
+            is CreateTimelineParams.MediaOnly, is CreateTimelineParams.MediaOnlyFocused, CreateTimelineParams.PinnedOnly -> false
+        }
 
         runCatchingExceptions {
             innerRoom.timelineWithConfiguration(
