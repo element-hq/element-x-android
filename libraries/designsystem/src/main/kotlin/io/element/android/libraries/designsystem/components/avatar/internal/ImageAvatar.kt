@@ -33,16 +33,10 @@ internal fun ImageAvatar(
     forcedAvatarSize: Dp?,
     modifier: Modifier = Modifier,
     contentDescription: String? = null,
-    configureRequest: (ImageRequest.Builder) -> ImageRequest.Builder = { it },
 ) {
     val size = forcedAvatarSize ?: avatarData.size.dp
-    val request = ImageRequest.Builder(LocalContext.current)
-        .data(avatarData)
-        .let(configureRequest)
-        .build()
-
     SubcomposeAsyncImage(
-        model = request,
+        model = avatarData,
         contentDescription = contentDescription,
         contentScale = ContentScale.Crop,
         modifier = modifier

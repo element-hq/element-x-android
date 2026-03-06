@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -35,7 +36,10 @@ import androidx.compose.ui.unit.dp
 import androidx.core.graphics.createBitmap
 import androidx.core.graphics.withSave
 import coil3.Image
+import coil3.ImageLoader
 import coil3.SingletonImageLoader
+import coil3.asImage
+import coil3.memory.MemoryCache
 import coil3.request.ImageRequest
 import coil3.request.allowHardware
 import coil3.toBitmap
@@ -45,6 +49,13 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+
+private val PIN_WIDTH = 42.dp
+private val PIN_HEIGHT = PIN_WIDTH * 1.2f
+private val AVATAR_SIZE = PIN_WIDTH - 10.dp
+private val CONTENT_OFFSET = 5.dp
+private val DOT_RADIUS = 6.dp
+private val STROKE_WIDTH = 1.dp
 
 /**
  * Variants of location pin markers.
@@ -86,20 +97,22 @@ fun LocationPin(
 fun rememberLocationPinBitmap(variant: PinVariant): ImageBitmap? {
     val context = LocalContext.current
     val density = LocalDensity.current
+    val imageLoader = SingletonImageLoader.get(context)
     val colors = pinColors(variant)
-    return produceState<ImageBitmap?>(initialValue = null, variant, colors) {
-        val renderer = LocationPinRenderer(context, density)
-        val bitmap = renderer.renderPin(variant, colors)
-        value = bitmap.asImageBitmap()
+    val cacheKey = rememberCacheKey(variant)
+    return produceState<ImageBitmap?>(initialValue = null, cacheKey) {
+        val memoryCacheKey = MemoryCache.Key(cacheKey)
+        val cached = imageLoader.memoryCache?.get(memoryCacheKey)
+        if (cached != null) {
+            value = cached.image.toBitmap().asImageBitmap()
+        } else {
+            val dimensions = PinDimensions(density)
+            val bitmap = LocationPinRenderer.renderPin(variant, colors, dimensions, context, imageLoader)
+            imageLoader.memoryCache?.set(memoryCacheKey, MemoryCache.Value(bitmap.asImage()))
+            value = bitmap.asImageBitmap()
+        }
     }.value
 }
-
-private val PIN_WIDTH = 42.dp
-private val PIN_HEIGHT = PIN_WIDTH * 1.2f
-private val AVATAR_SIZE = PIN_WIDTH - 10.dp
-private val CONTENT_OFFSET = 5.dp
-private val DOT_RADIUS = 6.dp
-private val STROKE_WIDTH = 1.dp
 
 @Composable
 private fun pinColors(variant: PinVariant): PinColors {
@@ -148,7 +161,7 @@ private fun pinColors(variant: PinVariant): PinColors {
 /**
  * Color configuration for rendering a location pin.
  */
-data class PinColors(
+private data class PinColors(
     val fill: Color,
     val stroke: Color,
     val dot: Color,
@@ -158,20 +171,37 @@ data class PinColors(
 )
 
 /**
- * Renders location pins to bitmaps using Canvas operations.
- * Uses Coil for avatar loading with proper memory management.
+ * Pre-calculated pixel dimensions for rendering a location pin.
  */
-class LocationPinRenderer(
-    private val context: Context,
-    private val density: Density,
-) {
-    // Dimensions in pixels
-    private val pinWidthPx = with(density) { PIN_WIDTH.toPx() }
-    private val pinHeightPx = with(density) { PIN_HEIGHT.toPx() }
-    private val avatarSizePx = with(density) { AVATAR_SIZE.toPx() }
-    private val avatarOffsetPx = with(density) { CONTENT_OFFSET.toPx() }
-    private val dotRadiusPx = with(density) { DOT_RADIUS.toPx() }
-    private val strokeWidthPx = with(density) { STROKE_WIDTH.toPx() }
+private class PinDimensions(density: Density) {
+    val pinWidth = with(density) { PIN_WIDTH.toPx() }
+    val pinHeight = with(density) { PIN_HEIGHT.toPx() }
+    val avatarSize: Float = with(density) { AVATAR_SIZE.toPx() }
+    val avatarOffset: Float = with(density) { CONTENT_OFFSET.toPx() }
+    val dotRadius: Float = with(density) { DOT_RADIUS.toPx() }
+    val strokeWidth: Float = with(density) { STROKE_WIDTH.toPx() }
+}
+
+/**
+ * Renders location pins to bitmaps using Canvas operations.
+ * Uses Coil for avatar loading.
+ * Paint objects are shared across all renders.
+ */
+private object LocationPinRenderer {
+    // Shared Paint objects to avoid allocations
+    private val fillPaint = Paint().apply {
+        style = Paint.Style.FILL
+        isAntiAlias = true
+    }
+    private val strokePaint = Paint().apply {
+        style = Paint.Style.STROKE
+        isAntiAlias = true
+    }
+    private val textPaint = Paint().apply {
+        textAlign = Paint.Align.CENTER
+        isAntiAlias = true
+        isFakeBoldText = true
+    }
 
     /**
      * Renders a pin variant to bitmap. Suspending for async avatar loading.
@@ -179,56 +209,50 @@ class LocationPinRenderer(
     suspend fun renderPin(
         variant: PinVariant,
         colors: PinColors,
+        dimensions: PinDimensions,
+        context: Context,
+        imageLoader: ImageLoader,
     ): Bitmap {
-        val bitmap = createBitmap(pinWidthPx.toInt(), pinHeightPx.toInt())
+        val bitmap = createBitmap(dimensions.pinWidth.toInt(), dimensions.pinHeight.toInt())
         val canvas = Canvas(bitmap)
-        // Draw pin shape (fill + stroke)
-        canvas.drawPinShape(colors.fill, colors.stroke)
+        canvas.drawPinShape(colors.fill, colors.stroke, dimensions)
         when (variant) {
             is PinVariant.UserLocation -> {
-                val avatarImage = loadAvatarImage(variant.avatarData)
+                val avatarImage = loadAvatarImage(variant.avatarData, context, imageLoader)
                 canvas.drawAvatar(
                     avatarImage = avatarImage,
                     avatarData = variant.avatarData,
                     borderColor = colors.avatarStroke,
                     backgroundColor = colors.avatarBackground,
-                    foregroundColor = colors.avatarForeground
+                    foregroundColor = colors.avatarForeground,
+                    dimensions = dimensions,
                 )
             }
             PinVariant.PinnedLocation,
-            PinVariant.StaleLocation -> canvas.drawDot(colors.dot)
+            PinVariant.StaleLocation -> canvas.drawDot(colors.dot, dimensions)
         }
         return bitmap
     }
 
-    private fun Canvas.drawPinShape(fillColor: Color, strokeColor: Color) {
-        val path = createPinPath()
-        // Fill
-        drawPath(path, Paint().apply {
-            color = fillColor.toArgb()
-            style = Paint.Style.FILL
-            isAntiAlias = true
-        })
-        // Stroke
-        drawPath(path, Paint().apply {
-            color = strokeColor.toArgb()
-            style = Paint.Style.STROKE
-            strokeWidth = strokeWidthPx
-            isAntiAlias = true
-        })
+    private fun Canvas.drawPinShape(fillColor: Color, strokeColor: Color, dimensions: PinDimensions) {
+        val path = createPinPath(dimensions)
+        fillPaint.color = fillColor.toArgb()
+        drawPath(path, fillPaint)
+        strokePaint.color = strokeColor.toArgb()
+        strokePaint.strokeWidth = dimensions.strokeWidth
+        drawPath(path, strokePaint)
     }
 
     /**
-     * Creates the teardrop-shaped pin path.
+     * Updates the teardrop-shaped pin path to match dimensions.
      * Based on SVG path with dimensions 40x48 (ratio 1:1.2).
-     * Scales automatically to fit the actual size.
      */
-    private fun createPinPath(): Path {
+    private fun createPinPath(dimensions: PinDimensions): Path {
         val svgWidth = 40f
         val svgHeight = 48f
-        val inset = strokeWidthPx / 2
-        val scaleX = (pinWidthPx - strokeWidthPx) / svgWidth
-        val scaleY = (pinHeightPx - strokeWidthPx) / svgHeight
+        val inset = dimensions.strokeWidth / 2
+        val scaleX = (dimensions.pinWidth - dimensions.strokeWidth) / svgWidth
+        val scaleY = (dimensions.pinHeight - dimensions.strokeWidth) / svgHeight
 
         val path = Path().apply {
             moveTo(20f, 48f)
@@ -250,7 +274,6 @@ class LocationPinRenderer(
             cubicTo(21.1667f, 47.8965f, 20.5833f, 48f, 20f, 48f)
             close()
         }
-        // Scale and translate the path
         val matrix = Matrix().apply {
             setScale(scaleX, scaleY)
             postTranslate(inset, inset)
@@ -259,15 +282,16 @@ class LocationPinRenderer(
         return path
     }
 
-    private suspend fun loadAvatarImage(avatarData: AvatarData): Image? {
-        val imageLoader = SingletonImageLoader.get(context)
+    private suspend fun loadAvatarImage(
+        avatarData: AvatarData,
+        context: Context,
+        imageLoader: ImageLoader,
+    ): Image? {
         val request = ImageRequest.Builder(context)
             .data(avatarData)
-            .size(avatarSizePx.toInt())
             // Disable hardware rendering for Canvas
             .allowHardware(false)
             .build()
-
         return imageLoader.execute(request).image
     }
 
@@ -277,29 +301,34 @@ class LocationPinRenderer(
         borderColor: Color,
         backgroundColor: Color,
         foregroundColor: Color,
+        dimensions: PinDimensions,
     ) {
-        val centerX = pinWidthPx / 2
-        val avatarY = avatarOffsetPx
-        val avatarRadius = avatarSizePx / 2
+        val centerX = dimensions.pinWidth / 2
+        val avatarY = dimensions.avatarOffset
+        val avatarRadius = dimensions.avatarSize / 2
 
         withSave {
-            val clipPath = Path().apply {
-                addCircle(centerX, avatarY + avatarRadius, avatarRadius, Path.Direction.CW)
-            }
-            clipPath(clipPath)
             if (avatarImage != null) {
-                // Draw the loaded avatar image
+                val bitmap = avatarImage.toBitmap()
+                // Calculate centered square crop (ContentScale.Crop behavior)
+                val srcSize = minOf(bitmap.width, bitmap.height)
+                val srcX = (bitmap.width - srcSize) / 2
+                val srcY = (bitmap.height - srcSize) / 2
+                val srcRect = Rect(srcX, srcY, srcX + srcSize, srcY + srcSize)
                 val destRect = RectF(
                     centerX - avatarRadius,
                     avatarY,
                     centerX + avatarRadius,
-                    avatarY + avatarSizePx
+                    avatarY + dimensions.avatarSize
                 )
-                drawBitmap(avatarImage.toBitmap(), null, destRect, null)
+                val clipPath = Path().apply {
+                    addCircle(centerX, avatarY + avatarRadius, avatarRadius, Path.Direction.CW)
+                }
+                clipPath(clipPath)
+                drawBitmap(bitmap, srcRect, destRect, null)
             } else {
-                // Fallback: draw initial letter circle
                 drawInitialLetterAvatar(
-                    avatarData = avatarData,
+                    initialLetter = avatarData.initialLetter,
                     centerX = centerX,
                     centerY = avatarY + avatarRadius,
                     radius = avatarRadius,
@@ -308,56 +337,35 @@ class LocationPinRenderer(
                 )
             }
         }
-        val paintBorder = Paint().apply {
-            color = borderColor.toArgb()
-            style = Paint.Style.STROKE
-            strokeWidth = strokeWidthPx
-            isAntiAlias = true
-        }
-        drawCircle(centerX, avatarY + avatarRadius, avatarRadius, paintBorder)
+        strokePaint.color = borderColor.toArgb()
+        strokePaint.strokeWidth = dimensions.strokeWidth
+        drawCircle(centerX, avatarY + avatarRadius, avatarRadius, strokePaint)
     }
 
     private fun Canvas.drawInitialLetterAvatar(
-        avatarData: AvatarData,
+        initialLetter: String,
         centerX: Float,
         centerY: Float,
         radius: Float,
         foreground: Int,
         background: Int,
     ) {
-        // Draw background circle
-        drawCircle(centerX, centerY, radius, Paint().apply {
-            color = background
-            style = Paint.Style.FILL
-            isAntiAlias = true
-        })
-        // Draw initial letter
-        val textPaint = Paint().apply {
-            color = foreground
-            textSize = radius * 1.2f
-            textAlign = Paint.Align.CENTER
-            isAntiAlias = true
-            isFakeBoldText = true
-        }
-        // Center text vertically
+        fillPaint.color = background
+        drawCircle(centerX, centerY, radius, fillPaint)
+        textPaint.color = foreground
+        textPaint.textSize = radius * 1.2f
         val textBounds = Rect()
-        textPaint.getTextBounds(avatarData.initialLetter, 0, 1, textBounds)
+        textPaint.getTextBounds(initialLetter, 0, 1, textBounds)
         val textY = centerY + textBounds.height() / 2f
-        drawText(avatarData.initialLetter, centerX, textY, textPaint)
+        drawText(initialLetter, centerX, textY, textPaint)
     }
 
-    private fun Canvas.drawDot(dotColor: Color) {
+    private fun Canvas.drawDot(dotColor: Color, dimensions: PinDimensions) {
         if (dotColor == Color.Transparent) return
-
-        val centerX = pinWidthPx / 2
-        // Position dot in the center of the circular part of the pin
-        val centerY = avatarOffsetPx + avatarSizePx / 2
-
-        drawCircle(centerX, centerY, dotRadiusPx, Paint().apply {
-            color = dotColor.toArgb()
-            style = Paint.Style.FILL
-            isAntiAlias = true
-        })
+        val centerX = dimensions.pinWidth / 2
+        val centerY = dimensions.avatarOffset + dimensions.avatarSize / 2
+        fillPaint.color = dotColor.toArgb()
+        drawCircle(centerX, centerY, dimensions.dotRadius, fillPaint)
     }
 }
 
@@ -391,5 +399,19 @@ internal fun LocationPinPreview() = ElementPreview {
                 variant = PinVariant.StaleLocation,
             )
         }
+    }
+}
+
+@Composable
+private fun rememberCacheKey(variant: PinVariant): String {
+    val isLightTheme = ElementTheme.isLightTheme
+    val density = LocalDensity.current.density
+    return remember(isLightTheme, density, variant) {
+        val pinVariant = when (variant) {
+            PinVariant.PinnedLocation -> "pin_pinned"
+            PinVariant.StaleLocation -> "pin_stale"
+            is PinVariant.UserLocation -> "pin_user_${variant.avatarData.id}_${variant.isLive}"
+        }
+        "${pinVariant}_{$isLightTheme}_{$density}"
     }
 }
