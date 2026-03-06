@@ -24,8 +24,13 @@ import io.element.android.features.location.impl.common.actions.LocationActions
 import io.element.android.features.location.impl.common.permissions.PermissionsEvents
 import io.element.android.features.location.impl.common.permissions.PermissionsPresenter
 import io.element.android.features.location.impl.common.permissions.PermissionsState
+import io.element.android.features.location.impl.common.ui.LocationMarkerData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.designsystem.components.PinVariant
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.matrix.api.room.location.AssetType
 
 @AssistedInject
 class ShowLocationPresenter(
@@ -88,9 +93,38 @@ class ShowLocationPresenter(
             }
         }
 
+        val markers = remember(mode) {
+            when (mode) {
+                is ShowLocationMode.Static -> {
+                    val pinVariant = if (mode.assetType == AssetType.PIN) {
+                        PinVariant.PinnedLocation
+                    } else {
+                        PinVariant.UserLocation(
+                            avatarData = AvatarData(
+                                id = mode.senderId.value,
+                                name = mode.senderName,
+                                url = mode.senderAvatarUrl,
+                                size = AvatarSize.UserListItem,
+                            ),
+                            isLive = false,
+                        )
+                    }
+                    listOf(
+                        LocationMarkerData(
+                            id = mode.senderId.value,
+                            location = mode.location,
+                            variant = pinVariant,
+                        )
+                    )
+                }
+                ShowLocationMode.Live -> emptyList()
+            }
+        }
+
         return ShowLocationState(
             permissionDialog = permissionDialog,
             mode = mode,
+            markers = markers,
             hasLocationPermission = permissionsState.isAnyGranted,
             isTrackMyLocation = isTrackMyLocation,
             appName = appName,

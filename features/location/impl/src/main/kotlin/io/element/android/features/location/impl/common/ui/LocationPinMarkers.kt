@@ -36,6 +36,8 @@ import org.maplibre.spatialk.geojson.Point
 import org.maplibre.spatialk.geojson.Position
 import org.maplibre.spatialk.geojson.toJson
 
+private const val LOCATION_MARKER_ID = "LOCATION_MARKER_ID"
+
 /**
  * Data class representing a marker on the map.
  *
@@ -81,7 +83,7 @@ fun LocationPinMarkers(
                 id = JsonPrimitive(marker.id),
                 geometry = Point(Position(marker.location.lon, marker.location.lat)),
                 properties = mapOf(
-                    "id" to JsonPrimitive(marker.id),
+                    LOCATION_MARKER_ID to JsonPrimitive(marker.id),
                 )
             )
         }
@@ -153,7 +155,7 @@ private fun LocationPinMarkerLayer(
         SymbolLayer(
             id = "pin-marker-${marker.id}",
             source = source,
-            filter = !feature.has("point_count") and (feature["id"].asString() eq const(marker.id)),
+            filter = !feature.has("point_count") and (feature[LOCATION_MARKER_ID].asString() eq const(marker.id)),
             iconImage = image(imageBitmap),
             iconAnchor = const(SymbolAnchor.Bottom),
             iconAllowOverlap = const(true),
