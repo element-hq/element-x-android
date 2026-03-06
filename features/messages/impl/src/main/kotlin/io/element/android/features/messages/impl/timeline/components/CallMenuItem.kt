@@ -36,7 +36,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 internal fun CallMenuItem(
     roomCallState: RoomCallState,
-    onJoinCallClick: (voiceOnly: Boolean) -> Unit,
+    onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     when (roomCallState) {
@@ -63,7 +63,7 @@ internal fun CallMenuItem(
 @Composable
 private fun StandByCallMenuItem(
     roomCallState: RoomCallState.StandBy,
-    onJoinCallClick: (voiceOnly: Boolean) -> Unit,
+    onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(modifier = modifier) {

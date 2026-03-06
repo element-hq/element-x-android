@@ -35,7 +35,7 @@ class DefaultCallWidgetSettingsProvider(
         widgetId: String,
         encrypted: Boolean,
         direct: Boolean,
-        voiceOnly: Boolean,
+        isAudioCall: Boolean,
         hasActiveCall: Boolean
     ): MatrixWidgetSettings {
         val isAnalyticsEnabled = analyticsService.userConsentFlow.first()
@@ -60,11 +60,11 @@ class DefaultCallWidgetSettingsProvider(
 //            skipLobby = null,
             intent = when {
                 direct && hasActiveCall -> {
-                    if (voiceOnly) CallIntent.JOIN_EXISTING_DM_VOICE else CallIntent.JOIN_EXISTING_DM
+                    if (isAudioCall) CallIntent.JOIN_EXISTING_DM_VOICE else CallIntent.JOIN_EXISTING_DM
                 }
                 hasActiveCall -> CallIntent.JOIN_EXISTING
                 direct -> {
-                    if (voiceOnly) CallIntent.START_CALL_DM_VOICE else CallIntent.START_CALL_DM
+                    if (isAudioCall) CallIntent.START_CALL_DM_VOICE else CallIntent.START_CALL_DM
                 }
                 else -> CallIntent.START_CALL
             }.also {

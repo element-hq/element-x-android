@@ -28,10 +28,10 @@ class FakeCallWidgetSettingsProvider(
         widgetId: String,
         encrypted: Boolean,
         direct: Boolean,
-        voiceOnly: Boolean,
+        isAudioCall: Boolean,
         hasActiveCall: Boolean
     ): MatrixWidgetSettings {
         providedBaseUrls += baseUrl
-        return provideFn(baseUrl, widgetId, encrypted, direct, voiceOnly, hasActiveCall)
+        return provideFn(baseUrl, widgetId, encrypted, direct, isAudioCall, hasActiveCall)
     }
 }

@@ -279,8 +279,8 @@ class MessagesNode(
                 },
                 onSendLocationClick = callback::navigateToSendLocation,
                 onCreatePollClick = callback::navigateToCreatePoll,
-                onJoinCallClick = { voiceOnly ->
-                    callback.navigateToRoomCall(room.roomId, voiceOnly)
+                onJoinCallClick = { isAudioCall ->
+                    callback.navigateToRoomCall(room.roomId, isAudioCall)
                 },
                 onViewAllPinnedMessagesClick = callback::navigateToPinnedMessagesList,
                 modifier = modifier,

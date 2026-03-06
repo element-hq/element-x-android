@@ -23,7 +23,7 @@ class FakeCallWidgetProvider(
     override suspend fun getWidget(
         sessionId: SessionId,
         roomId: RoomId,
-        voiceOnly: Boolean,
+        isAudioCall: Boolean,
         clientId: String,
         languageTag: String?,
         theme: String?

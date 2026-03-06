@@ -489,11 +489,11 @@ class MessagesFlowNode(
                         backstack.push(NavTarget.EditPoll(Timeline.Mode.Thread(navTarget.threadRootId), eventId))
                     }
 
-                    override fun navigateToRoomCall(roomId: RoomId, voiceOnly: Boolean) {
+                    override fun navigateToRoomCall(roomId: RoomId, isAudioCall: Boolean) {
                         val callType = CallType.RoomCall(
                             sessionId = sessionId,
                             roomId = roomId,
-                            isAudioCall = voiceOnly
+                            isAudioCall = isAudioCall
                         )
                         analyticsService.captureInteraction(Interaction.Name.MobileRoomCallButton)
                         elementCallEntryPoint.startCall(callType)
