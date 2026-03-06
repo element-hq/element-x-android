@@ -70,7 +70,6 @@ private fun StandByCallMenuItem(
         // Only show voice call in DMs
         if (roomCallState.isDM) {
             IconButton(
-                modifier = modifier,
                 onClick = { onJoinCallClick(true) },
                 enabled = roomCallState.canStartCall,
             ) {
@@ -81,7 +80,6 @@ private fun StandByCallMenuItem(
             }
         }
         IconButton(
-            modifier = modifier,
             onClick = { onJoinCallClick(false) },
             enabled = roomCallState.canStartCall,
         ) {
