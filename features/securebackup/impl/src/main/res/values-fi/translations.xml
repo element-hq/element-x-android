@@ -9,7 +9,7 @@
   <string name="screen_chat_backup_key_storage_toggle_title">"Salli avainten säilytys"</string>
   <string name="screen_chat_backup_recovery_action_change">"Vaihda palautusavain"</string>
   <string name="screen_chat_backup_recovery_action_change_description">"Palauta kryptografinen identiteettisi ja viestihistoriasi palautusavaimella, jos olet menettänyt kaikki nykyiset laitteesi."</string>
-  <string name="screen_chat_backup_recovery_action_confirm">"Syötä palautusavain"</string>
+  <string name="screen_chat_backup_recovery_action_confirm">"Anna palautusavain"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Avainten säilytys ei ole tällä hetkellä synkronoitu."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Ota palautus käyttöön"</string>
   <string name="screen_chat_backup_recovery_action_setup_description">"Pääset käsiksi salattuihin viesteihisi, jos menetät kaikki laitteesi tai olet kirjautunut ulos %1$s -sovelluksesta kaikkialla."</string>
@@ -43,10 +43,10 @@
   <string name="screen_recovery_key_confirm_error_content">"Yritä uudelleen vahvistaaksesi pääsyn avainten säilytykseen."</string>
   <string name="screen_recovery_key_confirm_error_title">"Väärä palautusavain"</string>
   <string name="screen_recovery_key_confirm_key_description">"Jos sinulla on turva-avain tai turvalause, sekin toimii."</string>
-  <string name="screen_recovery_key_confirm_key_placeholder">"Syötä…"</string>
+  <string name="screen_recovery_key_confirm_key_placeholder">"Kirjoita…"</string>
   <string name="screen_recovery_key_confirm_lost_recovery_key">"Hukkasitko palautusavaimesi?"</string>
   <string name="screen_recovery_key_confirm_success">"Palautusavain vahvistettu"</string>
-  <string name="screen_recovery_key_confirm_title">"Syötä palautusavaimesi"</string>
+  <string name="screen_recovery_key_confirm_title">"Anna palautusavaimesi"</string>
   <string name="screen_recovery_key_copied_to_clipboard">"Palautusavain kopioitu"</string>
   <string name="screen_recovery_key_generating_key">"Luodaan…"</string>
   <string name="screen_recovery_key_save_action">"Tallenna palautusavain"</string>
@@ -64,7 +64,7 @@
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"Tätä prosessia ei voi peruuttaa."</string>
   <string name="screen_reset_encryption_confirmation_alert_title">"Haluatko varmasti nollata identiteettisi?"</string>
   <string name="screen_reset_encryption_password_error">"Tapahtui tuntematon virhe. Tarkista, että tilisi salasana on oikein ja yritä uudelleen."</string>
-  <string name="screen_reset_encryption_password_placeholder">"Syötä…"</string>
+  <string name="screen_reset_encryption_password_placeholder">"Kirjoita…"</string>
   <string name="screen_reset_encryption_password_subtitle">"Vahvista, että haluat nollata identiteettisi."</string>
   <string name="screen_reset_encryption_password_title">"Kirjoita tilisi salasana jatkaaksesi"</string>
 </resources>

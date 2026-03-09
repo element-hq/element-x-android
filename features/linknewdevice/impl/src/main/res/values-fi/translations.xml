@@ -6,7 +6,7 @@
   <string name="screen_link_new_device_desktop_submit">"Valmis skannaamaan"</string>
   <string name="screen_link_new_device_desktop_title">"Avaa %1$s pöytätietokoneella saadaksesi QR-koodin"</string>
   <string name="screen_link_new_device_enter_number_error_numbers_do_not_match">"Numerot eivät täsmää"</string>
-  <string name="screen_link_new_device_enter_number_notice">"Syötä 2-numeroinen koodi"</string>
+  <string name="screen_link_new_device_enter_number_notice">"Kirjoita 2-numeroinen koodi"</string>
   <string name="screen_link_new_device_enter_number_subtitle">"Tämä varmistaa, että yhteys toiseen laitteeseesi on turvallinen."</string>
   <string name="screen_link_new_device_enter_number_title">"Kirjoita toisessa laitteessa näkyvä numero"</string>
   <string name="screen_link_new_device_error_app_not_supported_subtitle">"Palveluntarjoajasi ei tue %1$s -sovellusta"</string>

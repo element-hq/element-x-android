@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_account_provider_change">"Keisti paskyros teikėją"</string>
+  <string name="screen_account_provider_form_hint">"Pagrindinio serverio adresas"</string>
+  <string name="screen_account_provider_form_notice">"Įveskite paieškos terminą arba domeno adresą."</string>
   <string name="screen_account_provider_form_subtitle">"Ieškokite bendrovės, bendruomenės arba privataus serverio."</string>
   <string name="screen_account_provider_form_title">"Rasti paskyros teikėją"</string>
   <string name="screen_account_provider_signin_subtitle">"Čia bus saugomi Jūsų pokalbiai - panašiai kaip el. pašto paslaugų teikėjas saugo Jūsų el. laiškus."</string>

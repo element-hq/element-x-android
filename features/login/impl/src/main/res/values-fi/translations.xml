@@ -33,7 +33,7 @@
   <string name="screen_login_error_invalid_user_id">"Tämä ei ole kelvollinen käyttäjätunnus. Odotettu muoto: \'@käyttäjä:kotipalvelin.fi\'"</string>
   <string name="screen_login_error_refresh_tokens">"Tämä palvelin on määritetty käyttämään refresh tokeneja. Näitä ei tueta salasanapohjaisen kirjautumisen kanssa."</string>
   <string name="screen_login_error_unsupported_authentication">"Valitsemasi kotipalvelin ei tue salasana- tai OIDC-kirjautumista. Ota yhteyttä palvelimesi ylläpitäjään tai valitse toinen kotipalvelin."</string>
-  <string name="screen_login_form_header">"Syötä tietosi"</string>
+  <string name="screen_login_form_header">"Anna tietosi"</string>
   <string name="screen_login_subtitle">"Matrix on avoin verkko turvallista, hajautettua viestintää varten."</string>
   <string name="screen_login_title">"Tervetuloa takaisin!"</string>
   <string name="screen_login_title_with_homeserver">"Kirjaudu sisään %1$s -palvelimelle"</string>

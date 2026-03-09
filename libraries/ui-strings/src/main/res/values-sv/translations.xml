@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Lägg till reaktion: %1$s"</string>
   <string name="a11y_avatar">"Avatar"</string>
+  <string name="a11y_collapse_message_text_field">"Krymp meddelandetextfältet"</string>
   <string name="a11y_delete">"Radera"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="one">"%1$d siffra angiven"</item>
@@ -10,6 +11,7 @@
   <string name="a11y_edit_avatar">"Redigera avatar"</string>
   <string name="a11y_edit_room_address_hint">"Den fullständiga adressen kommer att vara %1$s"</string>
   <string name="a11y_encryption_details">"Krypteringsdetaljer"</string>
+  <string name="a11y_expand_message_text_field">"Expandera meddelandetextfältet"</string>
   <string name="a11y_hide_password">"Dölj lösenord"</string>
   <string name="a11y_join_call">"Anslut till samtal"</string>
   <string name="a11y_jump_to_bottom">"Hoppa till botten"</string>
@@ -40,7 +42,7 @@
   <string name="a11y_remove_reaction_with">"Ta bort reaktion med %1$s"</string>
   <string name="a11y_room_avatar">"Rumsavatar"</string>
   <string name="a11y_send_files">"Skicka filer"</string>
-  <string name="a11y_session_verification_time_limited_action_required">"Tidsbegränsad åtgärd krävs"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"Tidsbegränsad åtgärd krävs, du har en minut på dig att verifiera"</string>
   <string name="a11y_show_password">"Visa lösenord"</string>
   <string name="a11y_start_call">"Starta ett samtal"</string>
   <string name="a11y_tombstoned_room">"Gravstensmärkt rum"</string>
@@ -103,6 +105,7 @@
   <string name="action_leave">"Lämna"</string>
   <string name="action_leave_conversation">"Lämna konversation"</string>
   <string name="action_leave_room">"Lämna rum"</string>
+  <string name="action_leave_space">"Lämna utrymmet"</string>
   <string name="action_load_more">"Ladda mer"</string>
   <string name="action_manage_account">"Hantera konto"</string>
   <string name="action_manage_devices">"Hantera enheter"</string>
@@ -164,6 +167,8 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"Uppgradering tillgänglig"</string>
   <string name="common_about">"Om"</string>
   <string name="common_acceptable_use_policy">"Policy för godtagbar användning"</string>
+  <string name="common_add_account">"Lägg till ett konto"</string>
+  <string name="common_add_another_account">"Lägg till ytterligare ett konto"</string>
   <string name="common_adding_caption">"Lägga till bildtext"</string>
   <string name="common_advanced_settings">"Avancerade inställningar"</string>
   <string name="common_an_image">"en bild"</string>
@@ -184,6 +189,7 @@
   <string name="common_current_user_rejected_invite">"Inbjudan avvisad"</string>
   <string name="common_dark">"Mörkt"</string>
   <string name="common_decryption_error">"Avkrypteringsfel"</string>
+  <string name="common_description">"Beskrivning"</string>
   <string name="common_developer_options">"Utvecklaralternativ"</string>
   <string name="common_device_id">"Enhets-ID"</string>
   <string name="common_direct_chat">"Direktchatt"</string>
@@ -293,12 +299,14 @@ Anledning:%1$s."</string>
   <string name="common_search_results">"Sökresultat"</string>
   <string name="common_security">"Säkerhet"</string>
   <string name="common_seen_by">"Sett av"</string>
+  <string name="common_select_account">"Välj ett konto"</string>
   <string name="common_send_to">"Skicka till"</string>
   <string name="common_sending">"Skickar …"</string>
   <string name="common_sending_failed">"Misslyckades att skicka"</string>
   <string name="common_sent">"Skickat"</string>
   <string name="common_sentence_delimiter">". "</string>
   <string name="common_server_not_supported">"Servern stöds inte"</string>
+  <string name="common_server_unreachable">"Servern kan inte nås"</string>
   <string name="common_server_url">"Server-URL"</string>
   <string name="common_settings">"Inställningar"</string>
   <string name="common_shared_location">"Delade plats"</string>
@@ -376,6 +384,8 @@ Anledning:%1$s."</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Den maximala tillåtna filstorleken är: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Välj kvaliteten på videon du vill ladda upp."</string>
   <string name="dialog_video_quality_selector_title">"Välj videouppladdningskvalitet"</string>
+  <string name="emoji_picker_search_placeholder">"Sök emojier"</string>
+  <string name="error_account_already_logged_in">"Du är redan inloggad på den här enheten som %1$s."</string>
   <string name="error_account_creation_not_possible">"Din hemserver måste uppgraderas för att stödja Matrix Authentication Service och skapande av konto."</string>
   <string name="error_failed_creating_the_permalink">"Misslyckades att skapa permalänken"</string>
   <string name="error_failed_loading_map">"%1$s kunde inte ladda kartan. Vänligen försök igen senare."</string>
@@ -436,7 +446,7 @@ Anledning:%1$s."</string>
   <string name="screen_share_open_apple_maps">"Öppna i Apple Maps"</string>
   <string name="screen_share_open_google_maps">"Öppna i Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Öppna i OpenStreetMap"</string>
-  <string name="screen_share_this_location_action">"Dela den här platsen"</string>
+  <string name="screen_share_this_location_action">"Dela fäst plats"</string>
   <string name="screen_space_list_description">"Utrymmen som du har skapat eller gått med i."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_title">"Utrymmen"</string>

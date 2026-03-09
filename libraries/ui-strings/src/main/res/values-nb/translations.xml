@@ -27,6 +27,7 @@
   <string name="a11y_pause">"Setter på pause"</string>
   <string name="a11y_paused_voice_message">"Talemelding, lengde: %1$s, nåværende posisjon: %2$s"</string>
   <string name="a11y_pin_field">"PIN-felt"</string>
+  <string name="a11y_pinned_location">"Festet lokasjon"</string>
   <string name="a11y_play">"Spill av"</string>
   <string name="a11y_playback_speed">"Avspillingshastighet"</string>
   <string name="a11y_poll">"Avstemning"</string>
@@ -45,9 +46,11 @@
   <string name="a11y_remove_reaction_with">"Fjern reaksjonen med %1$s"</string>
   <string name="a11y_room_avatar">"Romavatar"</string>
   <string name="a11y_send_files">"Sende filer"</string>
+  <string name="a11y_sender_location">"Avsenderens lokasjon"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Tidsbegrenset handling kreves, du har ett minutt på deg til å verifisere"</string>
   <string name="a11y_show_password">"Vis passord"</string>
   <string name="a11y_start_call">"Start en samtale"</string>
+  <string name="a11y_start_voice_call">"Start et taleanrop"</string>
   <string name="a11y_tombstoned_room">"Deaktivert rom"</string>
   <string name="a11y_user_avatar">"Brukeravatar"</string>
   <string name="a11y_user_menu">"Brukermeny"</string>
@@ -272,6 +275,7 @@
   <string name="common_offline">"Frakoblet"</string>
   <string name="common_open_source_licenses">"Åpen kildekode-lisenser"</string>
   <string name="common_or">"eller"</string>
+  <string name="common_other_options">"Andre alternativer"</string>
   <string name="common_password">"Passord"</string>
   <string name="common_people">"Personer"</string>
   <string name="common_permalink">"Permalenke"</string>
@@ -393,6 +397,8 @@
   <string name="common_waiting_for_decryption_key">"Venter på denne meldingen"</string>
   <string name="common_world_readable_history">"Alle kan se historikk"</string>
   <string name="common_you">"Du"</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s(%2$s ) delte denne meldingen siden du ikke var i rommet da den ble sendt."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s delte denne meldingen siden du ikke var i rommet da den ble sendt."</string>
   <string name="crypto_history_visible">"Dette rommet er konfigurert slik at nye medlemmer kan lese historikken.%1$s"</string>
   <string name="crypto_identity_change_pin_violation">"%1$s\'s identitet ble tilbakestilt. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"%1$ss %2$s-identitet ble tilbakestilt. %3$s"</string>
@@ -449,6 +455,7 @@ Er du sikker på at du vil fortsette?"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Fjern %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Innstillinger"</string>
   <string name="screen_media_picker_error_failed_selection">"Kunne ikke velge medium, prøv igjen."</string>
+  <string name="screen_onboarding_welcome_back">"Velkommen tilbake"</string>
   <string name="screen_pinned_timeline_empty_state_description">"Trykk på en melding og velg “%1$s” for å inkludere her."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Fest viktige meldinger slik at de lett kan ses"</string>
   <plurals name="screen_pinned_timeline_screen_title">
@@ -483,12 +490,14 @@ Er du sikker på at du vil fortsette?"</string>
   <string name="screen_share_open_apple_maps">"Åpne i Apple Maps"</string>
   <string name="screen_share_open_google_maps">"Åpne i Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Åpne i OpenStreetMap"</string>
-  <string name="screen_share_this_location_action">"Del denne posisjonen"</string>
+  <string name="screen_share_this_location_action">"Del valgt lokasjon"</string>
   <string name="screen_space_list_description">"Områder du har opprettet eller blitt med i."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_empty_state_title">"Opprett område for å organisere rom"</string>
   <string name="screen_space_list_parent_space">"%1$s område"</string>
   <string name="screen_space_list_title">"Områder"</string>
+  <string name="screen_static_location_sheet_timestamp_description">"Delt %1$s"</string>
+  <string name="screen_static_location_sheet_title">"På kartet"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Meldingen ble ikke sendt fordi %1$ss verifiserte identitet er tilbakestilt."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Meldingen ble ikke sendt fordi %1$s ikke har verifisert alle enheter."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Meldingen ble ikke sendt fordi du ikke har verifisert en eller flere av enhetene dine."</string>

@@ -19,7 +19,7 @@
   <string name="screen_session_verification_complete_subtitle">"Nyt voit lukea tai lähettää viestejä turvallisesti toisella laitteellasi."</string>
   <string name="screen_session_verification_complete_user_subtitle">"Nyt voit luottaa tämän käyttäjän identiteettiin, kun lähetät tai vastaanotat viestejä."</string>
   <string name="screen_session_verification_device_verified">"Laite vahvistettu"</string>
-  <string name="screen_session_verification_enter_recovery_key">"Syötä palautusavain"</string>
+  <string name="screen_session_verification_enter_recovery_key">"Anna palautusavain"</string>
   <string name="screen_session_verification_failed_subtitle">"Joko pyyntö aikakatkaistiin, pyyntö hylättiin tai vahvistus ei täsmännyt."</string>
   <string name="screen_session_verification_open_existing_session_subtitle">"Vahvista, että se olet sinä, jotta näet aiemmat salatut viestisi."</string>
   <string name="screen_session_verification_open_existing_session_title">"Avaa laite, jossa olet jo kirjautuneena"</string>
