@@ -27,6 +27,7 @@
   <string name="a11y_pause">"Pause"</string>
   <string name="a11y_paused_voice_message">"Voice message, duration: %1$s, current position: %2$s"</string>
   <string name="a11y_pin_field">"PIN field"</string>
+  <string name="a11y_pinned_location">"Pinned location"</string>
   <string name="a11y_play">"Play"</string>
   <string name="a11y_playback_speed">"Playback speed"</string>
   <string name="a11y_poll">"Poll"</string>
@@ -45,9 +46,11 @@
   <string name="a11y_remove_reaction_with">"Remove reaction with %1$s"</string>
   <string name="a11y_room_avatar">"Room avatar"</string>
   <string name="a11y_send_files">"Send files"</string>
+  <string name="a11y_sender_location">"Sender location"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Time limited action required, you have one minute to verify"</string>
   <string name="a11y_show_password">"Show password"</string>
   <string name="a11y_start_call">"Start a call"</string>
+  <string name="a11y_start_voice_call">"Start a voice call"</string>
   <string name="a11y_tombstoned_room">"Tombstoned room"</string>
   <string name="a11y_user_avatar">"User avatar"</string>
   <string name="a11y_user_menu">"User menu"</string>
@@ -272,6 +275,7 @@ Reason: %1$s."</string>
   <string name="common_offline">"Offline"</string>
   <string name="common_open_source_licenses">"Open source licenses"</string>
   <string name="common_or">"or"</string>
+  <string name="common_other_options">"Other options"</string>
   <string name="common_password">"Password"</string>
   <string name="common_people">"People"</string>
   <string name="common_permalink">"Permalink"</string>
@@ -453,6 +457,7 @@ Are you sure you want to continue?"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Remove %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Settings"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
+  <string name="screen_onboarding_welcome_back">"Welcome back"</string>
   <string name="screen_pinned_timeline_empty_state_description">"Press on a message and choose “%1$s” to include here."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Pin important messages so that they can be easily discovered"</string>
   <plurals name="screen_pinned_timeline_screen_title">
@@ -487,12 +492,14 @@ Are you sure you want to continue?"</string>
   <string name="screen_share_open_apple_maps">"Open in Apple Maps"</string>
   <string name="screen_share_open_google_maps">"Open in Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Open in OpenStreetMap"</string>
-  <string name="screen_share_this_location_action">"Share this location"</string>
+  <string name="screen_share_this_location_action">"Share selected location"</string>
   <string name="screen_space_list_description">"Spaces you have created or joined."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_empty_state_title">"Create spaces to organize rooms"</string>
   <string name="screen_space_list_parent_space">"%1$s space"</string>
   <string name="screen_space_list_title">"Spaces"</string>
+  <string name="screen_static_location_sheet_timestamp_description">"Shared %1$s"</string>
+  <string name="screen_static_location_sheet_title">"On the map"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Message not sent because %1$s’s verified identity was reset."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Message not sent because %1$s has not verified all devices."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Message not sent because you have not verified one or more of your devices."</string>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_room_change_permissions_room_details">"Redaguoti kambarį"</string>
+  <string name="screen_room_change_permissions_room_details">"Redaguoti informaciją"</string>
   <string name="screen_room_details_add_topic_title">"Pridėti temą"</string>
-  <string name="screen_room_details_edit_room_title">"Redaguoti kambarį"</string>
+  <string name="screen_room_details_edit_room_title">"Redaguoti informaciją"</string>
   <string name="screen_room_details_edition_error">"Įvyko nežinoma klaida ir informacijos pakeisti nepavyko."</string>
   <string name="screen_room_details_edition_error_title">"Nepavyko atnaujinti kambario"</string>
   <string name="screen_room_details_encryption_enabled_subtitle">"Žinutės yra užrakintos. Tik Jūs ir gavėjai turite unikalius raktus joms atrakinti."</string>

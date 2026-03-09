@@ -19,8 +19,13 @@
   <string name="screen_room_attachment_source_camera_video">"Įrašyti vaizdo įrašą"</string>
   <string name="screen_room_attachment_source_files">"Priedas"</string>
   <string name="screen_room_attachment_source_gallery">"Nuotraukų ir vaizdo įrašų biblioteka"</string>
+  <string name="screen_room_invite_again_alert_message">"Ar norėtumėte juos pakviesti atgal?"</string>
+  <string name="screen_room_invite_again_alert_title">"Šiame pokalbyje esate vieni."</string>
+  <string name="screen_room_retry_send_menu_send_again_action">"Siųsti vėl"</string>
+  <string name="screen_room_retry_send_menu_title">"Jūsų žinutė nepavyko išsiųsti."</string>
   <string name="screen_room_timeline_beginning_of_room">"Tai yra %1$s pradžia."</string>
   <string name="screen_room_timeline_beginning_of_room_no_name">"Tai yra šio pokalbio pradžia."</string>
+  <string name="screen_room_timeline_no_permission_to_post">"Neturite leidimą skelbti šiame kambaryje."</string>
   <string name="screen_room_timeline_read_marker_title">"Naujų"</string>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d kambario pakeitimas"</item>

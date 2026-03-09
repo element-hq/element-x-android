@@ -156,6 +156,7 @@
   <string name="action_send_voice_message">"Hangüzenet küldése"</string>
   <string name="action_share">"Megosztás"</string>
   <string name="action_share_link">"Hivatkozás megosztása"</string>
+  <string name="action_share_live_location">"Valós idejű hely megosztása"</string>
   <string name="action_show">"Megjelenítés"</string>
   <string name="action_sign_in_again">"Jelentkezzen be újra"</string>
   <string name="action_signout">"Kijelentkezés"</string>
@@ -402,6 +403,7 @@ Ok: %1$s."</string>
   <string name="crypto_identity_change_profile_pin_violation">"%1$s személyazonossága megváltozott."</string>
   <string name="crypto_identity_change_verification_violation_new">"%1$s (%2$s) ellenőrzött személyazonossága megváltozott. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Ellenőrzés visszavonása"</string>
+  <string name="dialog_allow_access">"Hozzáférés engedélyezése"</string>
   <string name="dialog_confirm_link_message">"A(z) %1$s hivatkozás átviszi egy másik webhelyre: %2$s
 
 Biztos, hogy folytatja?"</string>

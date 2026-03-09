@@ -15,6 +15,7 @@ Du kan endre dette når som helst i rominnstillingene."</string>
   <string name="screen_create_room_public_option_title">"Offentlig"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Alle kan be om å få bli med, men en administrator eller moderator må godta forespørselen."</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Be om å bli med"</string>
+  <string name="screen_create_room_room_access_section_knocking_restricted_option_description">"Alle i %1$s kan bli med, mens alle andre må be om tilgang."</string>
   <string name="screen_create_room_room_access_section_knocking_restricted_option_title">"Be om å få bli med"</string>
   <string name="screen_create_room_room_access_section_private_option_description">"Bare inviterte personer kan bli med."</string>
   <string name="screen_create_room_room_access_section_private_option_title">"Privat"</string>
@@ -27,6 +28,7 @@ Du kan endre dette når som helst i rominnstillingene."</string>
   <string name="screen_create_room_room_address_section_title">"Adresse"</string>
   <string name="screen_create_room_room_visibility_section_title">"Romsynlighet"</string>
   <string name="screen_create_room_space_selection_no_space_description">"(ingen område)"</string>
+  <string name="screen_create_room_space_selection_no_space_option">"Skal ikke legges til et område"</string>
   <string name="screen_create_room_space_selection_no_space_title">"Ingen områder valgt"</string>
   <string name="screen_create_room_space_selection_sheet_title">"Legg til området"</string>
   <string name="screen_create_room_topic_label">"Emne (valgfritt)"</string>
