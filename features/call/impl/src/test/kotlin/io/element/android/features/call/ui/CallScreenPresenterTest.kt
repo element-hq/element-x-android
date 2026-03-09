@@ -39,6 +39,7 @@ import io.element.android.services.toolbox.api.systemclock.SystemClock
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.test
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancelAndJoin
@@ -67,9 +68,7 @@ class CallScreenPresenterTest {
             screenTracker = FakeScreenTracker(analyticsLambda),
             activeCallManager = FakeActiveCallManager(joinedCallResult = joinedCallLambda),
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             // Wait until the URL is loaded
             advanceTimeBy(1.seconds)
             skipItems(2)
@@ -96,9 +95,7 @@ class CallScreenPresenterTest {
             screenTracker = FakeScreenTracker(analyticsLambda),
             activeCallManager = FakeActiveCallManager(joinedCallResult = joinedCallLambda),
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             // Wait until the URL is loaded
             advanceTimeBy(1.seconds)
             skipItems(1)
@@ -128,9 +125,7 @@ class CallScreenPresenterTest {
             screenTracker = FakeScreenTracker {},
         )
         val messageInterceptor = FakeWidgetMessageInterceptor()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             // Give it time to load the URL and WidgetDriver
             advanceTimeBy(1.seconds)
 
@@ -161,9 +156,7 @@ class CallScreenPresenterTest {
             screenTracker = FakeScreenTracker {},
         )
         val messageInterceptor = FakeWidgetMessageInterceptor()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
 
             // Give it time to load the URL and WidgetDriver
@@ -195,9 +188,7 @@ class CallScreenPresenterTest {
             screenTracker = FakeScreenTracker {},
         )
         val messageInterceptor = FakeWidgetMessageInterceptor()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             val initialState = awaitItem()
 
             // Give it time to load the URL and WidgetDriver
@@ -230,9 +221,7 @@ class CallScreenPresenterTest {
             screenTracker = FakeScreenTracker {},
         )
         val messageInterceptor = FakeWidgetMessageInterceptor()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             // Give it time to load the URL and WidgetDriver
             advanceTimeBy(1.seconds)
             skipItems(2)
@@ -310,9 +299,7 @@ class CallScreenPresenterTest {
             callType = CallType.ExternalUrl("https://call.element.io"),
             activeCallManager = FakeActiveCallManager(),
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             // Wait until the URL is loaded
             advanceTimeBy(1.seconds)
             skipItems(2)
@@ -329,9 +316,7 @@ class CallScreenPresenterTest {
             callType = CallType.ExternalUrl("https://call.element.io"),
             activeCallManager = FakeActiveCallManager(),
         )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             // Wait until the URL is loaded
             skipItems(1)
             val initialState = awaitItem()
