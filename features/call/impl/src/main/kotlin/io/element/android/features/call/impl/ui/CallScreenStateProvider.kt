@@ -27,7 +27,7 @@ internal fun aCallScreenState(
     userAgent: String = "",
     isCallActive: Boolean = true,
     isInWidgetMode: Boolean = false,
-    eventSink: (CallScreenEvents) -> Unit = {},
+    eventSink: (CallScreenEvent) -> Unit = {},
 ): CallScreenState {
     return CallScreenState(
         urlState = urlState,

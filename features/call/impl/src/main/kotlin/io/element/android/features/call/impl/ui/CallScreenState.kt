@@ -16,5 +16,5 @@ data class CallScreenState(
     val userAgent: String,
     val isCallActive: Boolean,
     val isInWidgetMode: Boolean,
-    val eventSink: (CallScreenEvents) -> Unit,
+    val eventSink: (CallScreenEvent) -> Unit,
 )

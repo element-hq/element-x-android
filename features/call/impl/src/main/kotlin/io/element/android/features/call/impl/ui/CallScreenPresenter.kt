@@ -150,9 +150,9 @@ class CallScreenPresenter(
             }
         }
 
-        fun handleEvent(event: CallScreenEvents) {
+        fun handleEvent(event: CallScreenEvent) {
             when (event) {
-                is CallScreenEvents.Hangup -> {
+                is CallScreenEvent.Hangup -> {
                     val widgetId = callWidgetDriver.value?.id
                     val interceptor = messageInterceptor.value
                     if (widgetId != null && interceptor != null && isWidgetLoaded) {
@@ -172,10 +172,10 @@ class CallScreenPresenter(
                         }
                     }
                 }
-                is CallScreenEvents.SetupMessageChannels -> {
+                is CallScreenEvent.SetupMessageChannels -> {
                     messageInterceptor.value = event.widgetMessageInterceptor
                 }
-                is CallScreenEvents.OnWebViewError -> {
+                is CallScreenEvent.OnWebViewError -> {
                     if (!ignoreWebViewError) {
                         webViewError = event.description.orEmpty()
                     }

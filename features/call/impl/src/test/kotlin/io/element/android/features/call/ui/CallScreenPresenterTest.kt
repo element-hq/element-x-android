@@ -14,7 +14,7 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.features.call.api.CallType
-import io.element.android.features.call.impl.ui.CallScreenEvents
+import io.element.android.features.call.impl.ui.CallScreenEvent
 import io.element.android.features.call.impl.ui.CallScreenNavigator
 import io.element.android.features.call.impl.ui.CallScreenPresenter
 import io.element.android.features.call.impl.utils.WidgetMessageSerializer
@@ -130,7 +130,7 @@ class CallScreenPresenterTest {
             advanceTimeBy(1.seconds)
 
             val initialState = awaitItem()
-            initialState.eventSink(CallScreenEvents.SetupMessageChannels(messageInterceptor))
+            initialState.eventSink(CallScreenEvent.SetupMessageChannels(messageInterceptor))
 
             // And incoming message from the Widget Driver is passed to the WebView
             widgetDriver.givenIncomingMessage("A message")
@@ -162,9 +162,9 @@ class CallScreenPresenterTest {
             // Give it time to load the URL and WidgetDriver
             advanceTimeBy(1.seconds)
 
-            initialState.eventSink(CallScreenEvents.SetupMessageChannels(messageInterceptor))
+            initialState.eventSink(CallScreenEvent.SetupMessageChannels(messageInterceptor))
 
-            initialState.eventSink(CallScreenEvents.Hangup)
+            initialState.eventSink(CallScreenEvent.Hangup)
 
             // Let background coroutines run and the widget drive be received
             runCurrent()
@@ -194,7 +194,7 @@ class CallScreenPresenterTest {
             // Give it time to load the URL and WidgetDriver
             advanceTimeBy(1.seconds)
 
-            initialState.eventSink(CallScreenEvents.SetupMessageChannels(messageInterceptor))
+            initialState.eventSink(CallScreenEvent.SetupMessageChannels(messageInterceptor))
 
             messageInterceptor.givenInterceptedMessage("""{"action":"io.element.close","api":"fromWidget","widgetId":"1","requestId":"1"}""")
 
@@ -227,7 +227,7 @@ class CallScreenPresenterTest {
             skipItems(2)
             val initialState = awaitItem()
             assertThat(initialState.isCallActive).isFalse()
-            initialState.eventSink(CallScreenEvents.SetupMessageChannels(messageInterceptor))
+            initialState.eventSink(CallScreenEvent.SetupMessageChannels(messageInterceptor))
             messageInterceptor.givenInterceptedMessage(
                 """
                     {
@@ -304,7 +304,7 @@ class CallScreenPresenterTest {
             advanceTimeBy(1.seconds)
             skipItems(2)
             val initialState = awaitItem()
-            initialState.eventSink(CallScreenEvents.OnWebViewError("A Webview error"))
+            initialState.eventSink(CallScreenEvent.OnWebViewError("A Webview error"))
             val finalState = awaitItem()
             assertThat(finalState.webViewError).isEqualTo("A Webview error")
         }
@@ -322,11 +322,11 @@ class CallScreenPresenterTest {
             val initialState = awaitItem()
 
             val messageInterceptor = FakeWidgetMessageInterceptor()
-            initialState.eventSink(CallScreenEvents.SetupMessageChannels(messageInterceptor))
+            initialState.eventSink(CallScreenEvent.SetupMessageChannels(messageInterceptor))
             // Emit a message
             messageInterceptor.givenInterceptedMessage("A message")
             // WebView emits an error, but it will be ignored
-            initialState.eventSink(CallScreenEvents.OnWebViewError("A Webview error"))
+            initialState.eventSink(CallScreenEvent.OnWebViewError("A Webview error"))
             val finalState = awaitItem()
             assertThat(finalState.webViewError).isNull()
 
