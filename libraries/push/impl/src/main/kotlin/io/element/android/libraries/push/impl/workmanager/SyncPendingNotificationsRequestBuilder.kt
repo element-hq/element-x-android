@@ -23,6 +23,8 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.enterprise.api.EnterpriseService
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.impl.workmanager.SyncPendingNotificationsRequestBuilder.Companion.SESSION_ID
 import io.element.android.libraries.workmanager.api.WorkManagerRequestBuilder
@@ -49,6 +51,7 @@ class DefaultSyncPendingNotificationsRequestBuilder(
     @Assisted private val sessionId: SessionId,
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
     private val enterpriseService: EnterpriseService,
+    private val featureFlagService: FeatureFlagService,
 ) : SyncPendingNotificationsRequestBuilder {
     @AssistedFactory
     @ContributesBinding(AppScope::class)
@@ -77,7 +80,7 @@ class DefaultSyncPendingNotificationsRequestBuilder(
         if (enterpriseService.isInAirGappedEnvironment().first()) {
             Timber.d("In an air-gapped environment, not adding NET_CAPABILITY_VALIDATED to the network request")
             networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
-        } else {
+        } else if (featureFlagService.isFeatureEnabled(FeatureFlags.ValidateNetworkWhenSchedulingNotificationFetching)) {
             Timber.d("Not in an air-gapped environment, adding NET_CAPABILITY_VALIDATED to the network request")
             networkRequestBuilder.addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
         }

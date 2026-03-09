@@ -14,6 +14,8 @@ import androidx.work.OneTimeWorkRequest
 import androidx.work.hasKeyWithValueOfType
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.enterprise.test.FakeEnterpriseService
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.workmanager.api.WorkManagerRequestType
@@ -111,14 +113,39 @@ class DefaultSyncPendingNotificationsRequestBuilderTest {
             }
         }
     }
+
+    @Test
+    fun `build - does not have NET_CAPABILITY_VALIDATED constraint if feature flag is disabled`() = runTest {
+        val request = createSyncPendingNotificationsRequestBuilder(
+            sessionId = A_SESSION_ID,
+            sdkVersion = 33,
+            isInAirGapEnvironment = false,
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(
+                FeatureFlags.ValidateNetworkWhenSchedulingNotificationFetching.key to false
+            )),
+        )
+
+        val results = request.build()
+        assertThat(results.isSuccess).isTrue()
+        results.getOrNull()!!.first().let { result ->
+            result.request.run {
+                assertThat(workSpec.hasConstraints()).isTrue()
+                val networkRequest = workSpec.constraints.requiredNetworkRequest
+                assertThat(networkRequest).isNotNull()
+                assertThat(networkRequest!!.capabilities.contains(NetworkCapabilities.NET_CAPABILITY_VALIDATED)).isFalse()
+            }
+        }
+    }
 }
 
 private fun createSyncPendingNotificationsRequestBuilder(
     sessionId: SessionId,
     sdkVersion: Int = 33,
     isInAirGapEnvironment: Boolean = false,
+    featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
 ) = DefaultSyncPendingNotificationsRequestBuilder(
     sessionId = sessionId,
     buildVersionSdkIntProvider = FakeBuildVersionSdkIntProvider(sdkVersion),
     enterpriseService = FakeEnterpriseService(isInAirGappedEnvironmentResult = { flowOf(isInAirGapEnvironment) }),
+    featureFlagService = featureFlagService,
 )
