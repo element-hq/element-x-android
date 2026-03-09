@@ -53,6 +53,7 @@ import io.element.android.features.messages.impl.timeline.components.receipt.aRe
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetEvent
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
@@ -71,6 +72,7 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.assertNoNodeWithText
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
+import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBack
 import io.element.android.tests.testutils.setSafeContent
 import kotlinx.collections.immutable.persistentListOf
@@ -122,13 +124,30 @@ class MessagesViewTest {
         val state = aMessagesState(
             eventSink = eventsRecorder
         )
-        ensureCalledOnce { callback ->
+        ensureCalledOnceWithParam(false) { callback ->
             rule.setMessagesView(
                 state = state,
                 onJoinCallClick = callback,
             )
             val joinCallContentDescription = rule.activity.getString(CommonStrings.a11y_start_call)
             rule.onNodeWithContentDescription(joinCallContentDescription).performClick()
+        }
+    }
+
+    @Test
+    fun `clicking on join voice call invoke expected callback`() {
+        val eventsRecorder = EventsRecorder<MessagesEvent>(expectEvents = false)
+        val state = aMessagesState(
+            eventSink = eventsRecorder,
+            roomCallState = aStandByCallState(isDM = true)
+        )
+        ensureCalledOnceWithParam(true) { callback ->
+            rule.setMessagesView(
+                state = state,
+                onJoinCallClick = callback,
+            )
+            val joinVoiceCallContentDescription = rule.activity.getString(CommonStrings.a11y_start_voice_call)
+            rule.onNodeWithContentDescription(joinVoiceCallContentDescription).performClick()
         }
     }
 
@@ -609,7 +628,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMessa
     onLinkClick: (String, Boolean) -> Unit = EnsureNeverCalledWithTwoParams(),
     onSendLocationClick: () -> Unit = EnsureNeverCalled(),
     onCreatePollClick: () -> Unit = EnsureNeverCalled(),
-    onJoinCallClick: () -> Unit = EnsureNeverCalled(),
+    onJoinCallClick: (Boolean) -> Unit = EnsureNeverCalledWithParam(),
     onViewAllPinnedMessagesClick: () -> Unit = EnsureNeverCalled(),
 ) {
     setSafeContent {

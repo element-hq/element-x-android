@@ -18,6 +18,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.button.MainActionButton
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
@@ -26,11 +29,13 @@ fun UserProfileMainActionsSection(
     canCall: Boolean,
     onShareUser: () -> Unit,
     onStartDM: () -> Unit,
-    onCall: () -> Unit,
+    onCall: (CallIntent) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
-        modifier.fillMaxWidth().padding(horizontal = 16.dp),
+        modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
         horizontalArrangement = Arrangement.SpaceEvenly,
     ) {
         if (!isCurrentUser) {
@@ -43,8 +48,14 @@ fun UserProfileMainActionsSection(
         if (canCall) {
             MainActionButton(
                 title = stringResource(CommonStrings.action_call),
+                imageVector = CompoundIcons.VoiceCall(),
+                onClick = { onCall(CallIntent.AUDIO) },
+            )
+
+            MainActionButton(
+                title = stringResource(CommonStrings.common_video),
                 imageVector = CompoundIcons.VideoCall(),
-                onClick = onCall,
+                onClick = { onCall(CallIntent.VIDEO) },
             )
         }
         MainActionButton(
@@ -53,4 +64,16 @@ fun UserProfileMainActionsSection(
             onClick = onShareUser
         )
     }
+}
+
+@PreviewsDayNight()
+@Composable
+internal fun UserProfileMainActionsSectionPreview() = ElementPreview {
+    UserProfileMainActionsSection(
+        isCurrentUser = false,
+        canCall = true,
+        onShareUser = { },
+        onStartDM = { },
+        onCall = { }
+    )
 }

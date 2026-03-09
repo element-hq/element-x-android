@@ -37,7 +37,7 @@ class DefaultElementCallEntryPointTest {
     @Test
     fun `startCall - starts ElementCallActivity setup with the needed extras`() = runTest {
         val entryPoint = createEntryPoint()
-        entryPoint.startCall(CallType.RoomCall(A_SESSION_ID, A_ROOM_ID))
+        entryPoint.startCall(CallType.RoomCall(A_SESSION_ID, A_ROOM_ID, isAudioCall = false))
 
         val expectedIntent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, ElementCallActivity::class.java)
         val intent = shadowOf(RuntimeEnvironment.getApplication()).nextStartedActivity
@@ -53,7 +53,7 @@ class DefaultElementCallEntryPointTest {
         val entryPoint = createEntryPoint(activeCallManager = activeCallManager)
 
         entryPoint.handleIncomingCall(
-            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID),
+            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID, isAudioCall = false),
             eventId = AN_EVENT_ID,
             senderId = A_USER_ID_2,
             roomName = "roomName",

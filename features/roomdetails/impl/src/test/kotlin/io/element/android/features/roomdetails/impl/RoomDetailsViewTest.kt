@@ -18,6 +18,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.userprofile.shared.aUserProfileState
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.testtags.TestTags
@@ -121,7 +122,25 @@ class RoomDetailsViewTest {
 
     @Test
     fun `click on call invokes expected callback`() {
-        ensureCalledOnce { callback ->
+        ensureCalledOnceWithParam(CallIntent.AUDIO) { callback ->
+            rule.setRoomDetailView(
+                state = aRoomDetailsState(
+                    eventSink = EventsRecorder(expectEvents = false),
+                    canInvite = true,
+                    roomType = RoomDetailsType.Dm(
+                        aRoomMember(UserId("@me:local.org")),
+                        aRoomMember(UserId("@other:local.org"))
+                    ),
+                ),
+                onJoinCallClick = callback,
+            )
+            rule.clickOn(CommonStrings.action_call)
+        }
+    }
+
+    @Test
+    fun `click on video call invokes expected callback`() {
+        ensureCalledOnceWithParam(CallIntent.VIDEO) { callback ->
             rule.setRoomDetailView(
                 state = aRoomDetailsState(
                     eventSink = EventsRecorder(expectEvents = false),
@@ -129,7 +148,7 @@ class RoomDetailsViewTest {
                 ),
                 onJoinCallClick = callback,
             )
-            rule.clickOn(CommonStrings.action_call)
+            rule.clickOn(CommonStrings.common_video)
         }
     }
 
@@ -343,7 +362,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setRoomD
     openPollHistory: () -> Unit = EnsureNeverCalled(),
     openMediaGallery: () -> Unit = EnsureNeverCalled(),
     openAdminSettings: () -> Unit = EnsureNeverCalled(),
-    onJoinCallClick: () -> Unit = EnsureNeverCalled(),
+    onJoinCallClick: (CallIntent) -> Unit = EnsureNeverCalledWithParam(),
     onPinnedMessagesClick: () -> Unit = EnsureNeverCalled(),
     onKnockRequestsClick: () -> Unit = EnsureNeverCalled(),
     onSecurityAndPrivacyClick: () -> Unit = EnsureNeverCalled(),

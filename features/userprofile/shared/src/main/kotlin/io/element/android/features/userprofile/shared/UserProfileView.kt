@@ -43,6 +43,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.ui.components.CreateDmConfirmationBottomSheet
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -52,7 +53,7 @@ fun UserProfileView(
     state: UserProfileState,
     onShareUser: () -> Unit,
     onOpenDm: (RoomId) -> Unit,
-    onStartCall: (RoomId) -> Unit,
+    onStartCall: (RoomId, CallIntent) -> Unit,
     goBack: () -> Unit,
     openAvatarPreview: (username: String, url: String) -> Unit,
     onVerifyClick: (UserId) -> Unit,
@@ -90,7 +91,7 @@ fun UserProfileView(
                 canCall = state.canCall,
                 onShareUser = onShareUser,
                 onStartDM = { state.eventSink(UserProfileEvents.StartDM) },
-                onCall = { state.dmRoomId?.let { onStartCall(it) } }
+                onCall = { intent -> state.dmRoomId?.let { onStartCall(it, intent) } }
             )
             Spacer(modifier = Modifier.height(26.dp))
             if (!state.isCurrentUser) {
@@ -151,7 +152,7 @@ internal fun UserProfileViewPreview(
         onShareUser = {},
         goBack = {},
         onOpenDm = {},
-        onStartCall = {},
+        onStartCall = { _, _ -> },
         openAvatarPreview = { _, _ -> },
         onVerifyClick = {},
     )

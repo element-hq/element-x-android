@@ -55,6 +55,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
+import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.verification.VerificationRequest
@@ -223,10 +224,11 @@ class RoomDetailsFlowNode(
                         backstack.push(NavTarget.RoomMemberDetails(userId))
                     }
 
-                    override fun navigateToRoomCall() {
+                    override fun navigateToRoomCall(callIntent: CallIntent) {
                         val inputs = CallType.RoomCall(
                             sessionId = room.sessionId,
                             roomId = room.roomId,
+                            isAudioCall = callIntent == CallIntent.AUDIO
                         )
                         analyticsService.captureInteraction(Interaction.Name.MobileRoomCallButton)
                         elementCallEntryPoint.startCall(inputs)
@@ -284,8 +286,14 @@ class RoomDetailsFlowNode(
                         callback.navigateToRoom(roomId, emptyList())
                     }
 
-                    override fun startCall(dmRoomId: RoomId) {
-                        elementCallEntryPoint.startCall(CallType.RoomCall(roomId = dmRoomId, sessionId = room.sessionId))
+                    override fun startCall(dmRoomId: RoomId, callIntent: CallIntent) {
+                        elementCallEntryPoint.startCall(
+                            CallType.RoomCall(
+                                roomId = dmRoomId,
+                                sessionId = room.sessionId,
+                                isAudioCall = callIntent == CallIntent.AUDIO
+                            )
+                        )
                     }
 
                     override fun startVerifyUserFlow(userId: UserId) {

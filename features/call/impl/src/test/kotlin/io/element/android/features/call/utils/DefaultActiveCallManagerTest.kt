@@ -80,6 +80,7 @@ class DefaultActiveCallManagerTest {
                 callType = CallType.RoomCall(
                     sessionId = callNotificationData.sessionId,
                     roomId = callNotificationData.roomId,
+                    isAudioCall = false,
                 ),
                 callState = CallState.Ringing(callNotificationData)
             )
@@ -89,6 +90,28 @@ class DefaultActiveCallManagerTest {
 
         assertThat(manager.activeWakeLock?.isHeld).isTrue()
         verify { notificationManagerCompat.notify(notificationId, any()) }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `registerIncomingCall - sets the incoming audio call as active`() = runTest {
+        setupShadowPowerManager()
+        val notificationManagerCompat = mockk<NotificationManagerCompat>(relaxed = true)
+        val manager = createActiveCallManager(notificationManagerCompat = notificationManagerCompat)
+
+        val callNotificationData = aCallNotificationData(audioOnly = true)
+        manager.registerIncomingCall(callNotificationData)
+
+        assertThat(manager.activeCall.value).isEqualTo(
+            ActiveCall(
+                callType = CallType.RoomCall(
+                    sessionId = callNotificationData.sessionId,
+                    roomId = callNotificationData.roomId,
+                    isAudioCall = true,
+                ),
+                callState = CallState.Ringing(callNotificationData)
+            )
+        )
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -165,7 +188,7 @@ class DefaultActiveCallManagerTest {
         assertThat(manager.activeCall.value).isNotNull()
         assertThat(manager.activeWakeLock?.isHeld).isTrue()
 
-        manager.hangUpCall(CallType.RoomCall(notificationData.sessionId, notificationData.roomId))
+        manager.hangUpCall(CallType.RoomCall(notificationData.sessionId, notificationData.roomId, false))
         assertThat(manager.activeCall.value).isNull()
         assertThat(manager.activeWakeLock?.isHeld).isFalse()
 
@@ -192,7 +215,7 @@ class DefaultActiveCallManagerTest {
         val notificationData = aCallNotificationData(roomId = A_ROOM_ID)
         manager.registerIncomingCall(notificationData)
 
-        manager.hangUpCall(CallType.RoomCall(notificationData.sessionId, notificationData.roomId))
+        manager.hangUpCall(CallType.RoomCall(notificationData.sessionId, notificationData.roomId, false))
 
         coVerify {
             room.declineCall(notificationEventId = notificationData.eventId)
@@ -219,7 +242,7 @@ class DefaultActiveCallManagerTest {
         val notificationData = aCallNotificationData(roomId = A_ROOM_ID)
         // Do not register the incoming call, so the manager doesn't know about it
         manager.hangUpCall(
-            callType = CallType.RoomCall(notificationData.sessionId, notificationData.roomId),
+            callType = CallType.RoomCall(notificationData.sessionId, notificationData.roomId, false),
             notificationData = notificationData,
         )
         coVerify {
@@ -321,12 +344,13 @@ class DefaultActiveCallManagerTest {
         val manager = createActiveCallManager(notificationManagerCompat = notificationManagerCompat)
         assertThat(manager.activeCall.value).isNull()
 
-        manager.joinedCall(CallType.RoomCall(A_SESSION_ID, A_ROOM_ID))
+        manager.joinedCall(CallType.RoomCall(A_SESSION_ID, A_ROOM_ID, true))
         assertThat(manager.activeCall.value).isEqualTo(
             ActiveCall(
                 callType = CallType.RoomCall(
                     sessionId = A_SESSION_ID,
                     roomId = A_ROOM_ID,
+                    isAudioCall = true,
                 ),
                 callState = CallState.InCall,
             )
@@ -429,6 +453,7 @@ class DefaultActiveCallManagerTest {
                 callType = CallType.RoomCall(
                     sessionId = callNotificationData.sessionId,
                     roomId = callNotificationData.roomId,
+                    isAudioCall = false,
                 ),
                 callState = CallState.Ringing(callNotificationData)
             )
