@@ -13,7 +13,13 @@ import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
 import androidx.work.workDataOf
+import dev.zacsweers.metro.AppScope
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
+import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.push.impl.workmanager.SyncPendingNotificationsRequestBuilder.Companion.SESSION_ID
 import io.element.android.libraries.workmanager.api.WorkManagerRequestBuilder
 import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.WorkManagerRequestWrapper
@@ -21,12 +27,25 @@ import io.element.android.libraries.workmanager.api.WorkManagerWorkerType
 import io.element.android.libraries.workmanager.api.workManagerTag
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 
-class SyncPendingNotificationsRequestBuilder(
-    private val sessionId: SessionId,
-    private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
-) : WorkManagerRequestBuilder {
+interface SyncPendingNotificationsRequestBuilder : WorkManagerRequestBuilder {
+    interface Factory {
+        fun create(sessionId: SessionId): SyncPendingNotificationsRequestBuilder
+    }
+
     companion object {
         const val SESSION_ID = "session_id"
+    }
+}
+
+@AssistedInject
+class DefaultSyncPendingNotificationsRequestBuilder(
+    @Assisted private val sessionId: SessionId,
+    private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
+) : SyncPendingNotificationsRequestBuilder {
+    @AssistedFactory
+    @ContributesBinding(AppScope::class)
+    interface Factory : SyncPendingNotificationsRequestBuilder.Factory {
+        override fun create(sessionId: SessionId): DefaultSyncPendingNotificationsRequestBuilder
     }
 
     override suspend fun build(): Result<List<WorkManagerRequestWrapper>> {

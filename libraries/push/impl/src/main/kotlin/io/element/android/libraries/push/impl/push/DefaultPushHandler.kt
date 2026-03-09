@@ -30,7 +30,6 @@ import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.WorkManagerScheduler
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
 import io.element.android.services.analytics.api.AnalyticsService
-import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.flow.first
 import timber.log.Timber
@@ -49,7 +48,7 @@ class DefaultPushHandler(
     private val analyticsService: AnalyticsService,
     private val systemClock: SystemClock,
     private val workManagerScheduler: WorkManagerScheduler,
-    private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
+    private val syncPendingNotificationsRequestFactory: SyncPendingNotificationsRequestBuilder.Factory,
     resultProcessor: NotificationResultProcessor,
 ) : PushHandler {
     init {
@@ -134,12 +133,7 @@ class DefaultPushHandler(
 
             if (!workManagerScheduler.hasPendingWork(userId, WorkManagerRequestType.NOTIFICATION_SYNC)) {
                 Timber.d("No pending worker for push notifications found")
-                workManagerScheduler.submit(
-                    SyncPendingNotificationsRequestBuilder(
-                        sessionId = userId,
-                        buildVersionSdkIntProvider = buildVersionSdkIntProvider,
-                    )
-                )
+                workManagerScheduler.submit(syncPendingNotificationsRequestFactory.create(userId))
             }
         } catch (e: Exception) {
             Timber.tag(loggerTag.value).e(e, "## handleInternal() failed")
