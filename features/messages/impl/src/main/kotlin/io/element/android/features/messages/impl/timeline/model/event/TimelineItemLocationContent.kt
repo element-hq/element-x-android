@@ -40,6 +40,7 @@ data class TimelineItemLocationContent(
             when (assetType) {
                 AssetType.PIN -> PinVariant.PinnedLocation
                 AssetType.SENDER,
+                AssetType.UNKNOWN,
                 null -> PinVariant.UserLocation(avatarData = senderAvatar(), isLive = false)
             }
         }
