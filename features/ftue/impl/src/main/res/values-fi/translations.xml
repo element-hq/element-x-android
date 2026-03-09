@@ -12,5 +12,5 @@
   <string name="screen_identity_waiting_on_other_device">"Odotetaan toista laitetta…"</string>
   <string name="screen_notification_optin_subtitle">"Voit muuttaa asetuksia myöhemmin."</string>
   <string name="screen_notification_optin_title">"Salli ilmoitukset ja älä koskaan missaa viestejä"</string>
-  <string name="screen_session_verification_enter_recovery_key">"Syötä palautusavain"</string>
+  <string name="screen_session_verification_enter_recovery_key">"Anna palautusavain"</string>
 </resources>
