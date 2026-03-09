@@ -8,8 +8,12 @@
 
 package io.element.android.libraries.push.impl.workmanager
 
+import android.net.NetworkCapabilities
+import android.net.NetworkRequest
 import android.os.Build
+import androidx.work.Constraints
 import androidx.work.ExistingWorkPolicy
+import androidx.work.NetworkType
 import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.OutOfQuotaPolicy
 import androidx.work.workDataOf
@@ -27,6 +31,8 @@ import io.element.android.libraries.workmanager.api.WorkManagerRequestWrapper
 import io.element.android.libraries.workmanager.api.WorkManagerWorkerType
 import io.element.android.libraries.workmanager.api.workManagerTag
 import io.element.android.services.toolbox.api.sdk.BuildVersionSdkIntProvider
+import kotlinx.coroutines.flow.first
+import timber.log.Timber
 
 interface SyncPendingNotificationsRequestBuilder : WorkManagerRequestBuilder {
     interface Factory {
@@ -55,6 +61,31 @@ class DefaultSyncPendingNotificationsRequestBuilder(
             name = workManagerTag(sessionId = sessionId, requestType = WorkManagerRequestType.NOTIFICATION_SYNC),
             policy = ExistingWorkPolicy.APPEND_OR_REPLACE,
         )
+
+        val networkRequestBuilder = NetworkRequest.Builder()
+            // Allow any kind of network that can have internet connectivity.
+            .addTransportType(NetworkCapabilities.TRANSPORT_CELLULAR)
+            .addTransportType(NetworkCapabilities.TRANSPORT_WIFI)
+            .addTransportType(NetworkCapabilities.TRANSPORT_VPN)
+            .addTransportType(NetworkCapabilities.TRANSPORT_ETHERNET)
+            // By default, the network request will require the device to not be in VPN, but since some customers use a VPN to connect to their homeserver,
+            // we need to allow VPN networks.
+            .removeCapability(NetworkCapabilities.NET_CAPABILITY_NOT_VPN)
+
+        // If we're in an air-gapped environment, we shouldn't validate internet connectivity, as the checker will fail and the worker won't run at all.
+        // Note this will always be false for FOSS, since the feature is only enabled in Element Pro.
+        if (enterpriseService.isInAirGappedEnvironment().first()) {
+            Timber.d("In an air-gapped environment, not adding NET_CAPABILITY_VALIDATED to the network request")
+            networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+        } else {
+            Timber.d("Not in an air-gapped environment, adding NET_CAPABILITY_VALIDATED to the network request")
+            networkRequestBuilder.addCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+        }
+
+        val networkConstraints = Constraints.Builder()
+            .setRequiredNetworkRequest(networkRequestBuilder.build(), NetworkType.NOT_REQUIRED)
+            .build()
+
         val request = OneTimeWorkRequestBuilder<FetchPendingNotificationsWorker>()
             .setInputData(workDataOf(SESSION_ID to sessionId.value))
             .apply {
@@ -65,8 +96,10 @@ class DefaultSyncPendingNotificationsRequestBuilder(
                     setExpedited(OutOfQuotaPolicy.RUN_AS_NON_EXPEDITED_WORK_REQUEST)
                 }
             }
+            .setConstraints(networkConstraints)
             .setTraceTag(workManagerTag(sessionId, WorkManagerRequestType.NOTIFICATION_SYNC))
             .build()
+
         return Result.success(listOf(WorkManagerRequestWrapper(request, type)))
     }
 }
