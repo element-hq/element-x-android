@@ -40,6 +40,12 @@ interface EnterpriseService {
      */
     fun getNoisyNotificationChannelId(sessionId: SessionId): String?
 
+    /**
+     * Checks if the app is running in an air-gapped environment. An air-gapped environment is an environment that is not connected to the internet,
+     * and where the app can only communicate with a limited set of servers.
+     */
+    fun isInAirGappedEnvironment(): Flow<Boolean>
+
     companion object {
         const val ANY_ACCOUNT_PROVIDER = "*"
     }

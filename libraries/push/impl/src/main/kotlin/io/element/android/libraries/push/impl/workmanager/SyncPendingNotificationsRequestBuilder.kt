@@ -18,6 +18,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.impl.workmanager.SyncPendingNotificationsRequestBuilder.Companion.SESSION_ID
 import io.element.android.libraries.workmanager.api.WorkManagerRequestBuilder
@@ -41,6 +42,7 @@ interface SyncPendingNotificationsRequestBuilder : WorkManagerRequestBuilder {
 class DefaultSyncPendingNotificationsRequestBuilder(
     @Assisted private val sessionId: SessionId,
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
+    private val enterpriseService: EnterpriseService,
 ) : SyncPendingNotificationsRequestBuilder {
     @AssistedFactory
     @ContributesBinding(AppScope::class)

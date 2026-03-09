@@ -30,6 +30,7 @@ class FakeEnterpriseService(
     private val firebasePushGatewayResult: () -> String? = { lambdaError() },
     private val unifiedPushDefaultPushGatewayResult: () -> String? = { lambdaError() },
     private val getNoisyNotificationChannelIdResult: (SessionId?) -> String? = { lambdaError() },
+    private val isInAirGappedEnvironmentResult: () -> Flow<Boolean> = { lambdaError() },
 ) : EnterpriseService {
     private val brandColorState = MutableStateFlow(initialBrandColor)
     private val semanticColorsState = MutableStateFlow(initialSemanticColors)
@@ -73,5 +74,9 @@ class FakeEnterpriseService(
 
     override fun getNoisyNotificationChannelId(sessionId: SessionId): String? {
         return getNoisyNotificationChannelIdResult(sessionId)
+    }
+
+    override fun isInAirGappedEnvironment(): Flow<Boolean> {
+        return isInAirGappedEnvironmentResult()
     }
 }
