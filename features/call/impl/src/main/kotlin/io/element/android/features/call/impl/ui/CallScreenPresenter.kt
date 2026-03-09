@@ -148,21 +148,6 @@ class CallScreenPresenter(
                     }
                     .launchIn(this)
             }
-
-            if (callType is CallType.RoomCall) {
-                // Note: For external calls isWidgetLoaded will always be false
-                LaunchedEffect(Unit) {
-                    // Wait for the call to be joined, if it takes too long, we display an error
-                    delay(10.seconds)
-
-                    if (!isWidgetLoaded) {
-                        Timber.w("The call took too long to load. Displaying an error before exiting.")
-
-                        // This will display a simple 'Sorry, an error occurred' dialog and force the user to exit the call
-                        webViewError = ""
-                    }
-                }
-            }
         }
 
         fun handleEvent(event: CallScreenEvents) {
