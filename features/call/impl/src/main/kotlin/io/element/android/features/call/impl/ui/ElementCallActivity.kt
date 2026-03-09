@@ -39,7 +39,7 @@ import io.element.android.features.call.api.CallType
 import io.element.android.features.call.api.CallType.ExternalUrl
 import io.element.android.features.call.impl.DefaultElementCallEntryPoint
 import io.element.android.features.call.impl.di.CallBindings
-import io.element.android.features.call.impl.pip.PictureInPictureEvents
+import io.element.android.features.call.impl.pip.PictureInPictureEvent
 import io.element.android.features.call.impl.pip.PictureInPicturePresenter
 import io.element.android.features.call.impl.pip.PictureInPictureState
 import io.element.android.features.call.impl.pip.PipView
@@ -160,7 +160,7 @@ class ElementCallActivity :
                 if (requestPermissionCallback != null) {
                     Timber.tag(loggerTag.value).w("Ignoring onUserLeaveHint event because user is asked to grant permissions")
                 } else {
-                    pipEventSink(PictureInPictureEvents.EnterPictureInPicture)
+                    pipEventSink(PictureInPictureEvent.EnterPictureInPicture)
                 }
             }
             addOnUserLeaveHintListener(listener)
@@ -170,7 +170,7 @@ class ElementCallActivity :
         }
         DisposableEffect(Unit) {
             val onPictureInPictureModeChangedListener = Consumer { _: PictureInPictureModeChangedInfo ->
-                pipEventSink(PictureInPictureEvents.OnPictureInPictureModeChanged(isInPictureInPictureMode))
+                pipEventSink(PictureInPictureEvent.OnPictureInPictureModeChanged(isInPictureInPictureMode))
                 if (!isInPictureInPictureMode && !lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
                     Timber.tag(loggerTag.value).d("Exiting PiP mode: Hangup the call")
                     eventSink?.invoke(CallScreenEvents.Hangup)
