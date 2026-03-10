@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Přidat reakci: %1$s"</string>
+  <string name="a11y_address">"Adresa"</string>
   <string name="a11y_avatar">"Profilový obrázek"</string>
   <string name="a11y_collapse_message_text_field">"Minimalizovat textové pole zprávy"</string>
   <string name="a11y_delete">"Smazat"</string>
@@ -28,8 +29,10 @@
   <string name="a11y_paused_voice_message">"Hlasová zpráva, délka: %1$s, aktuální pozice: %2$s"</string>
   <string name="a11y_pin_field">"Pole pro PIN"</string>
   <string name="a11y_play">"Přehrát"</string>
+  <string name="a11y_playback_speed">"Rychlost přehrávání"</string>
   <string name="a11y_poll">"Hlasování"</string>
   <string name="a11y_poll_end">"Hlasování ukončeno"</string>
+  <string name="a11y_qr_code">"QR kód"</string>
   <string name="a11y_react_with">"Reagovat s %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Reagovat s dalšími emoji"</string>
   <string name="a11y_read_receipts_multiple">"%1$s a %2$s přečetli"</string>
@@ -155,6 +158,7 @@
   <string name="action_send_voice_message">"Odeslat hlasovou zprávu"</string>
   <string name="action_share">"Sdílet"</string>
   <string name="action_share_link">"Sdílet odkaz"</string>
+  <string name="action_share_live_location">"Sdílet aktuální polohu"</string>
   <string name="action_show">"Zobrazit"</string>
   <string name="action_sign_in_again">"Přihlásit se znovu"</string>
   <string name="action_signout">"Odhlásit se"</string>
@@ -407,6 +411,7 @@ Důvod: %1$s."</string>
   <string name="crypto_identity_change_profile_pin_violation">"Identita uživatele %1$s se změnila."</string>
   <string name="crypto_identity_change_verification_violation_new">"Identita uživatele %1$s %2$s se změnila. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Zrušit ověření"</string>
+  <string name="dialog_allow_access">"Povolit přístup"</string>
   <string name="dialog_confirm_link_message">"Odkaz %1$s vás přesměruje na jinou stránku %2$s
 
 Opravdu chcete pokračovat?"</string>

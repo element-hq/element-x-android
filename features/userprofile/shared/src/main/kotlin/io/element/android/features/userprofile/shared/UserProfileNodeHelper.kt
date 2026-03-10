@@ -14,6 +14,7 @@ import io.element.android.libraries.androidutils.system.startSharePlainTextInten
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.permalink.PermalinkBuilder
 import io.element.android.libraries.ui.strings.CommonStrings
 import timber.log.Timber
@@ -24,7 +25,7 @@ class UserProfileNodeHelper(
     interface Callback : NodeInputs {
         fun navigateToAvatarPreview(username: String, avatarUrl: String)
         fun navigateToRoom(roomId: RoomId)
-        fun startCall(dmRoomId: RoomId)
+        fun startCall(dmRoomId: RoomId, callIntent: CallIntent)
         fun startVerifyUserFlow(userId: UserId)
     }
 

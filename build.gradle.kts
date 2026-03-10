@@ -175,10 +175,21 @@ tasks.register("runQualityChecks") {
         tasks.findByName("ktlintCheck")?.let { dependsOn(it) }
         // tasks.findByName("buildHealth")?.let { dependsOn(it) }
     }
-    dependsOn(":app:knitCheck")
-
+    dependsOn("checkDocs")
     // Make sure all checks run even if some fail
     gradle.startParameter.isContinueOnFailure = true
+}
+
+// Register Markdown documentation check task.
+tasks.register("checkDocs", Exec::class.java) {
+    inputs.files("./*.md", "docs/**/*.md")
+    commandLine("python3", "tools/docs/generate_toc.py", "--verify", *inputs.files.map { it.path }.toTypedArray())
+}
+
+// Register Markdown documentation TOC generation task.
+tasks.register("generateDocsToc", Exec::class.java) {
+    inputs.files("./*.md", "docs/**/*.md")
+    commandLine("python3", "tools/docs/generate_toc.py", *inputs.files.map { it.path }.toTypedArray())
 }
 
 // Make sure to delete old screenshots before recording new ones

@@ -26,7 +26,6 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import com.bumble.appyx.core.integration.NodeHost
 import com.bumble.appyx.core.integrationpoint.NodeActivity
 import com.bumble.appyx.core.plugin.NodeReadyObserver
 import io.element.android.compound.colors.SemanticColorsLightDark
@@ -35,6 +34,7 @@ import io.element.android.features.lockscreen.api.LockScreenEntryPoint
 import io.element.android.features.lockscreen.api.LockScreenLockState
 import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.features.lockscreen.api.handleSecureFlag
+import io.element.android.libraries.architecture.appyx.DebugNavStateNodeHost
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.designsystem.theme.ElementThemeApp
@@ -100,7 +100,9 @@ class MainActivity : NodeActivity() {
 
     @Composable
     private fun MainNodeHost() {
-        NodeHost(integrationPoint = appyxV1IntegrationPoint) {
+        // TODO this is a temporary helper to capture the nav state in a more readable format for crash reports
+        // Revert to `NodeHost` once this is fixed
+        DebugNavStateNodeHost(integrationPoint = appyxV1IntegrationPoint) {
             MainNode(
                 it,
                 plugins = listOf(
@@ -110,7 +112,7 @@ class MainActivity : NodeActivity() {
                             mainNode = node
                             mainNode.handleIntent(intent)
                         }
-                    }
+                    },
                 ),
                 context = applicationContext
             )

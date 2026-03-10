@@ -19,6 +19,7 @@
     <item quantity="one">"Sinulla on %d uusi viesti."</item>
     <item quantity="other">"Sinulla on %d uutta viestiä."</item>
   </plurals>
+  <string name="notification_incoming_audio_call">"📞 Saapuva puhelu"</string>
   <string name="notification_incoming_call">"📹 Saapuva puhelu"</string>
   <string name="notification_inline_reply_failed">"** Lähetys epäonnistui - avaa huone"</string>
   <string name="notification_invitation_action_join">"Liity"</string>

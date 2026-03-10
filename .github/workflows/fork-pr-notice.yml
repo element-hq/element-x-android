@@ -2,10 +2,12 @@ name: Community PR notice
 
 on:
   workflow_dispatch:
-  pull_request_target:
+  pull_request_target: # zizmor: ignore[dangerous-triggers]
     types:
       - opened
       - reopened
+
+permissions: {}
 
 jobs:
   welcome:
@@ -15,7 +17,7 @@ jobs:
     if: github.event.pull_request.base.repo.full_name != github.event.pull_request.head.repo.full_name
     steps:
       - name: Add auto-generated commit warning
-        uses: actions/github-script@v8
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8.0.0
         with:
           script: |
             github.rest.issues.createComment({

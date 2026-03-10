@@ -28,6 +28,7 @@
     <item quantity="other">"%d naujų žinučių"</item>
   </plurals>
   <string name="notification_room_action_quick_reply">"Sparčiai atsakyti"</string>
+  <string name="notification_room_invite_body">"Pakvietė jus jungtis prie kambario"</string>
   <string name="notification_sender_me">"Aš"</string>
   <string name="notification_test_push_notification_content">"Jūs žiūrite pranešimą! Spustelėkite mane!"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>

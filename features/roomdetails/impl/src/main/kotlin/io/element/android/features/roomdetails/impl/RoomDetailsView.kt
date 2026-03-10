@@ -79,6 +79,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbar
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.getBestName
@@ -105,7 +106,7 @@ fun RoomDetailsView(
     openPollHistory: () -> Unit,
     openMediaGallery: () -> Unit,
     openAdminSettings: () -> Unit,
-    onJoinCallClick: () -> Unit,
+    onJoinCallClick: (CallIntent) -> Unit,
     onPinnedMessagesClick: () -> Unit,
     onKnockRequestsClick: () -> Unit,
     onSecurityAndPrivacyClick: () -> Unit,
@@ -327,7 +328,7 @@ private fun MainActionsSection(
     state: RoomDetailsState,
     onShareRoom: () -> Unit,
     onInvitePeople: () -> Unit,
-    onCall: () -> Unit,
+    onCall: (callIntent: CallIntent) -> Unit,
 ) {
     Row(
         modifier = Modifier
@@ -356,10 +357,19 @@ private fun MainActionsSection(
         }
         if (state.roomCallState.hasPermissionToJoin()) {
             // TODO Improve the view depending on all the cases here?
+            if (state.roomType is RoomDetailsType.Dm) {
+                // As per design, only show voice call in DM
+                MainActionButton(
+                    title = stringResource(CommonStrings.action_call),
+                    imageVector = CompoundIcons.VoiceCall(),
+                    onClick = { onCall(CallIntent.AUDIO) },
+                )
+            }
+
             MainActionButton(
-                title = stringResource(CommonStrings.action_call),
+                title = stringResource(CommonStrings.common_video),
                 imageVector = CompoundIcons.VideoCall(),
-                onClick = onCall,
+                onClick = { onCall(CallIntent.VIDEO) },
             )
         }
         if (state.roomType is RoomDetailsType.Room) {

@@ -21,6 +21,7 @@ import io.element.android.features.enterprise.api.SessionEnterpriseService
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.powerlevels.canCall
 import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
 
@@ -56,8 +57,13 @@ class RoomCallStatePresenter(
                         canJoinCall = canJoinCall,
                         isUserInTheCall = isUserInTheCall,
                         isUserLocallyInTheCall = isUserLocallyInTheCall,
+                        // TODO resolve intent while the call is ongoing
+                        isAudioCall = false
                     )
-                    else -> RoomCallState.StandBy(canStartCall = canJoinCall)
+                    else -> RoomCallState.StandBy(
+                        canStartCall = canJoinCall,
+                        isDM = roomInfo.isDm
+                    )
                 }
             }
         }

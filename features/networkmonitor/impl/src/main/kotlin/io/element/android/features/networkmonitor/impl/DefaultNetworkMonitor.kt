@@ -13,18 +13,21 @@ package io.element.android.features.networkmonitor.impl
 import android.content.Context
 import android.net.ConnectivityManager
 import android.net.Network
+import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.di.annotations.ApplicationContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.channels.trySendBlocking
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.callbackFlow
@@ -39,13 +42,13 @@ import java.util.concurrent.atomic.AtomicInteger
 @SingleIn(AppScope::class)
 class DefaultNetworkMonitor(
     @ApplicationContext context: Context,
-    @AppCoroutineScope
-    appCoroutineScope: CoroutineScope,
+    @AppCoroutineScope appCoroutineScope: CoroutineScope,
+    private val buildMeta: BuildMeta,
 ) : NetworkMonitor {
     private val connectivityManager: ConnectivityManager = context.getSystemService(ConnectivityManager::class.java)
-    private val blockedNetworkBlockedChecker = NetworkBlockedChecker(connectivityManager)
 
-    override fun isNetworkBlocked(): Boolean = blockedNetworkBlockedChecker.isNetworkBlocked()
+    override val isNetworkBlocked = MutableStateFlow(NetworkBlockedChecker(connectivityManager).isNetworkBlocked())
+    override val isInAirGappedEnvironment = MutableStateFlow(false)
 
     override val connectivity: StateFlow<NetworkStatus> = callbackFlow {
 
@@ -60,6 +63,27 @@ class DefaultNetworkMonitor(
             override fun onLost(network: Network) {
                 if (activeNetworksCount.decrementAndGet() == 0) {
                     trySendBlocking(NetworkStatus.Disconnected)
+                }
+            }
+
+            override fun onBlockedStatusChanged(network: Network, blocked: Boolean) {
+                Timber.d("Network ${network.networkHandle} blocked status changed: $blocked.")
+                if (network.networkHandle == connectivityManager.activeNetwork?.networkHandle) {
+                    // If the network is blocked, it means that Doze is preventing the app from using the network, even if it's available.
+                    isNetworkBlocked.value = blocked
+                }
+            }
+
+            override fun onCapabilitiesChanged(network: Network, networkCapabilities: NetworkCapabilities) {
+                if (!buildMeta.isEnterpriseBuild) {
+                    // The air-gapped environment detection is only relevant for the enterprise build.
+                    return
+                }
+
+                if (network.networkHandle == connectivityManager.activeNetwork?.networkHandle) {
+                    // If the network doesn't have the NET_CAPABILITY_VALIDATED capability, it means that the network is not able to reach the internet
+                    // (according to Google), which is a common case in air-gapped environments.
+                    isInAirGappedEnvironment.value = !networkCapabilities.capabilities.contains(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
                 }
             }
 

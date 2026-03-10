@@ -134,6 +134,9 @@ class TimelineEventContentMapper(
                 }
                 is TimelineItemContent.CallInvite -> LegacyCallInviteContent
                 is TimelineItemContent.RtcNotification -> CallNotifyContent
+                is TimelineItemContent.LiveLocation -> {
+                    UnknownContent
+                }
             }
         }
     }
