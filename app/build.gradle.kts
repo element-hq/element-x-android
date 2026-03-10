@@ -33,7 +33,6 @@ plugins {
     alias(libs.plugins.kotlin.android)
     // When using precompiled plugins, we need to apply the firebase plugin like this
     id(libs.plugins.firebaseAppDistribution.get().pluginId)
-    alias(libs.plugins.knit)
     id("kotlin-parcelize")
     alias(libs.plugins.licensee)
     alias(libs.plugins.kotlin.serialization)
@@ -248,26 +247,6 @@ androidComponents {
 
     val reportingExtension: ReportingExtension = project.extensions.getByType(ReportingExtension::class.java)
     configureLicensesTasks(reportingExtension)
-}
-
-// Knit
-apply {
-    plugin("kotlinx-knit")
-}
-
-knit {
-    files = fileTree(project.rootDir) {
-        include(
-            "**/*.md",
-            "**/*.kt",
-            "*/*.kts",
-        )
-        exclude(
-            "**/build/**",
-            "*/.gradle/**",
-            "**/CHANGES.md",
-        )
-    }
 }
 
 setupDependencyInjection()

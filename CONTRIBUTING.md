@@ -16,7 +16,7 @@
   * [Code quality](#code-quality)
     * [detekt](#detekt)
     * [ktlint](#ktlint)
-    * [knit](#knit)
+    * [checkDocs](#checkdocs)
     * [lint](#lint)
   * [Unit tests](#unit-tests)
     * [konsist](#konsist)
@@ -123,13 +123,13 @@ Note that you can run
 
 For ktlint to fix some detected errors for you (you still have to check and commit the fix of course)
 
-#### knit
+#### checkDocs
 
-[knit](https://github.com/Kotlin/kotlinx-knit) is a tool which checks markdown files on the project. Also it generates/updates the table of content (toc) of the markdown files.
+`checkDocs` is a Gradle task which checks markdown files on the project to ensure their table of contents is up to date. It uses `tools/docs/generate_toc.py --verify` under the hood, and has a counterpart `generateDocsToc` task which runs `tools/docs/generate_toc.py` to update the table of contents of markdown files.
 
 So everytime the toc should be updated, just run
 <pre>
-./gradlew knit
+./gradlew generateDocsToc
 </pre>
 
 and commit the changes.
@@ -137,7 +137,7 @@ and commit the changes.
 The CI will check that markdown files are up to date by running
 
 <pre>
-./gradlew knitCheck
+./gradlew checkDocs
 </pre>
 
 #### lint
