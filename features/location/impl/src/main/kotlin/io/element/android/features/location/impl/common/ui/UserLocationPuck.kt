@@ -8,14 +8,20 @@
 package io.element.android.features.location.impl.common.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import org.maplibre.compose.camera.CameraState
+import org.maplibre.compose.location.DesiredAccuracy
 import org.maplibre.compose.location.LocationPuck
 import org.maplibre.compose.location.LocationPuckColors
 import org.maplibre.compose.location.LocationPuckSizes
 import org.maplibre.compose.location.LocationTrackingEffect
 import org.maplibre.compose.location.UserLocationState
+import org.maplibre.compose.location.rememberAndroidLocationProvider
+import org.maplibre.compose.location.rememberNullLocationProvider
+import org.maplibre.compose.location.rememberUserLocationState
+import kotlin.time.Duration.Companion.minutes
 
 @Composable
 fun UserLocationPuck(
@@ -49,4 +55,19 @@ fun UserLocationPuck(
             )
         )
     }
+}
+
+@Composable
+fun rememberUserLocationState(hasLocationPermission: Boolean): UserLocationState {
+    val isPreview = LocalInspectionMode.current
+    val locationProvider = if (isPreview || !hasLocationPermission) {
+        rememberNullLocationProvider()
+    } else {
+        rememberAndroidLocationProvider(
+            updateInterval = 1.minutes,
+            desiredAccuracy = DesiredAccuracy.Balanced,
+            minDistanceMeters = 50f,
+        )
+    }
+    return rememberUserLocationState(locationProvider)
 }

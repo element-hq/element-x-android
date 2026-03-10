@@ -36,6 +36,7 @@ import io.element.android.features.location.impl.common.ui.LocationPinMarkers
 import io.element.android.features.location.impl.common.ui.LocationShareRow
 import io.element.android.features.location.impl.common.ui.MapBottomSheetScaffold
 import io.element.android.features.location.impl.common.ui.UserLocationPuck
+import io.element.android.features.location.impl.common.ui.rememberUserLocationState
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -46,12 +47,7 @@ import kotlinx.coroutines.launch
 import org.maplibre.compose.camera.CameraMoveReason
 import org.maplibre.compose.camera.CameraPosition
 import org.maplibre.compose.camera.rememberCameraState
-import org.maplibre.compose.location.DesiredAccuracy
-import org.maplibre.compose.location.rememberDefaultLocationProvider
-import org.maplibre.compose.location.rememberNullLocationProvider
-import org.maplibre.compose.location.rememberUserLocationState
 import org.maplibre.spatialk.geojson.Position
-import kotlin.time.Duration.Companion.minutes
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -86,16 +82,7 @@ fun ShowLocationView(
         ShowLocationMode.Live -> MapDefaults.centerCameraPosition
     }
     val cameraState = rememberCameraState(firstPosition = initialPosition)
-    val locationProvider = if (state.hasLocationPermission) {
-        rememberDefaultLocationProvider(
-            updateInterval = 1.minutes,
-            desiredAccuracy = DesiredAccuracy.Balanced,
-            minDistanceMeters = 50.0,
-        )
-    } else {
-        rememberNullLocationProvider()
-    }
-    val userLocationState = rememberUserLocationState(locationProvider)
+    val userLocationState = rememberUserLocationState(state.hasLocationPermission)
     LaunchedEffect(cameraState.isCameraMoving) {
         if (cameraState.moveReason == CameraMoveReason.GESTURE) {
             state.eventSink(ShowLocationEvents.TrackMyLocation(false))
