@@ -37,7 +37,7 @@ import kotlinx.coroutines.flow.first
 import timber.log.Timber
 
 interface SyncPendingNotificationsRequestBuilder : WorkManagerRequestBuilder {
-    interface Factory {
+    fun interface Factory {
         fun create(sessionId: SessionId): SyncPendingNotificationsRequestBuilder
     }
 

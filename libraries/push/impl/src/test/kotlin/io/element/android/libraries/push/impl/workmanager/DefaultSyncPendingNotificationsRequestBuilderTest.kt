@@ -12,7 +12,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.work.OneTimeWorkRequest
 import androidx.work.hasKeyWithValueOfType
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.enterprise.test.FakeEnterpriseService
+import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -21,7 +21,6 @@ import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.WorkManagerWorkerType
 import io.element.android.libraries.workmanager.api.workManagerTag
 import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
-import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -145,6 +144,6 @@ private fun createSyncPendingNotificationsRequestBuilder(
 ) = DefaultSyncPendingNotificationsRequestBuilder(
     sessionId = sessionId,
     buildVersionSdkIntProvider = FakeBuildVersionSdkIntProvider(sdkVersion),
-    enterpriseService = FakeEnterpriseService(isInAirGappedEnvironmentResult = { flowOf(isInAirGapEnvironment) }),
+    networkMonitor = FakeNetworkMonitor().apply { givenIsInAirGappedEnvironment(isInAirGapEnvironment) },
     featureFlagService = featureFlagService,
 )

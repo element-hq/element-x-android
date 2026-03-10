@@ -27,13 +27,13 @@ import io.element.android.libraries.push.impl.notifications.FakeNotificationResu
 import io.element.android.libraries.push.impl.test.DefaultTestPush
 import io.element.android.libraries.push.impl.troubleshoot.DiagnosticPushHandler
 import io.element.android.libraries.push.impl.workmanager.SyncPendingNotificationsRequestBuilder
+import io.element.android.libraries.push.test.workmanager.FakeSyncPendingNotificationsRequestBuilder
 import io.element.android.libraries.pushproviders.api.PushData
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStore
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStoreFactory
 import io.element.android.libraries.pushstore.test.userpushstore.clientsecret.FakePushClientSecret
 import io.element.android.libraries.workmanager.api.WorkManagerRequestBuilder
-import io.element.android.libraries.workmanager.api.WorkManagerRequestWrapper
 import io.element.android.libraries.workmanager.test.FakeWorkManagerScheduler
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
@@ -239,14 +239,8 @@ class DefaultPushHandlerTest {
             systemClock = systemClock,
             workManagerScheduler = workManagerScheduler,
             resultProcessor = resultProcessor,
-            syncPendingNotificationsRequestFactory = object : SyncPendingNotificationsRequestBuilder.Factory {
-                override fun create(sessionId: SessionId): SyncPendingNotificationsRequestBuilder {
-                    return object : SyncPendingNotificationsRequestBuilder {
-                        override suspend fun build(): Result<List<WorkManagerRequestWrapper>> {
-                            return Result.success(emptyList())
-                        }
-                    }
-                }
+            syncPendingNotificationsRequestFactory = SyncPendingNotificationsRequestBuilder.Factory {
+                FakeSyncPendingNotificationsRequestBuilder()
             }
         )
     }
