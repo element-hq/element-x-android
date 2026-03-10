@@ -26,6 +26,8 @@ import io.element.android.libraries.push.impl.history.PushHistoryService
 import io.element.android.libraries.push.impl.notifications.FakeNotificationResultProcessor
 import io.element.android.libraries.push.impl.test.DefaultTestPush
 import io.element.android.libraries.push.impl.troubleshoot.DiagnosticPushHandler
+import io.element.android.libraries.push.impl.workmanager.SyncPendingNotificationsRequestBuilder
+import io.element.android.libraries.push.test.workmanager.FakeSyncPendingNotificationsRequestBuilder
 import io.element.android.libraries.pushproviders.api.PushData
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStore
@@ -34,7 +36,6 @@ import io.element.android.libraries.pushstore.test.userpushstore.clientsecret.Fa
 import io.element.android.libraries.workmanager.api.WorkManagerRequestBuilder
 import io.element.android.libraries.workmanager.test.FakeWorkManagerScheduler
 import io.element.android.services.analytics.test.FakeAnalyticsService
-import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvider
 import io.element.android.services.toolbox.test.systemclock.FakeSystemClock
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -216,7 +217,6 @@ class DefaultPushHandlerTest {
         workManagerScheduler: FakeWorkManagerScheduler = FakeWorkManagerScheduler(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
         systemClock: FakeSystemClock = FakeSystemClock(),
-        buildVersionSdkIntProvider: FakeBuildVersionSdkIntProvider = FakeBuildVersionSdkIntProvider(33),
         resultProcessor: FakeNotificationResultProcessor = FakeNotificationResultProcessor(
             emit = { Result.success(Unit) },
             start = {},
@@ -238,8 +238,10 @@ class DefaultPushHandlerTest {
             analyticsService = analyticsService,
             systemClock = systemClock,
             workManagerScheduler = workManagerScheduler,
-            buildVersionSdkIntProvider = buildVersionSdkIntProvider,
             resultProcessor = resultProcessor,
+            syncPendingNotificationsRequestFactory = SyncPendingNotificationsRequestBuilder.Factory {
+                FakeSyncPendingNotificationsRequestBuilder()
+            }
         )
     }
 }

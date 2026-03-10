@@ -160,7 +160,8 @@ class FetchPendingNotificationsWorker(
         networkTimeoutSpans.finish()
 
         // If there is a problem with the updated network values, report it and retry if needed
-        if (reportConnectivityError(requests = requests, hasNetwork = hasNetwork, isNetworkBlocked = networkMonitor.isNetworkBlocked())) {
+        val isNetworkBlocked = networkMonitor.isNetworkBlocked.first()
+        if (reportConnectivityError(requests = requests, hasNetwork = hasNetwork, isNetworkBlocked = isNetworkBlocked)) {
             pushHistoryService.insertOrUpdatePushRequests(requests.map { request ->
                 request.copy(retries = request.retries + 1)
             })

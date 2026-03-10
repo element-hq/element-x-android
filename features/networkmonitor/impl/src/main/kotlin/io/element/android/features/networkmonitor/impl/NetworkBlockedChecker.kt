@@ -14,10 +14,10 @@ import android.net.ConnectivityManager
 import android.net.NetworkInfo
 
 /**
- * Helper to check if the active network in [ConnectivityManager] is blocked.
+ * Helper to synchronously check if the active network in [ConnectivityManager] is blocked.
  *
  * This is extracted to its own class because it uses deprecated APIs (but the only ones that are reliable)
- * and we don't want to suppress deprecations everywhere.
+ * and we don't want to suppress deprecations everywhere in the file this would be called.
  */
 class NetworkBlockedChecker(
     private val connectivityManager: ConnectivityManager,

@@ -14,8 +14,16 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 class FakeNetworkMonitor(
     initialStatus: NetworkStatus = NetworkStatus.Connected,
-    private val isNetworkBlockedLambda: () -> Boolean = { false },
 ) : NetworkMonitor {
     override val connectivity = MutableStateFlow(initialStatus)
-    override fun isNetworkBlocked(): Boolean = isNetworkBlockedLambda()
+    override val isNetworkBlocked = MutableStateFlow(false)
+    override val isInAirGappedEnvironment = MutableStateFlow(false)
+
+    fun givenNetworkBlocked(isBlocked: Boolean) {
+        isNetworkBlocked.value = isBlocked
+    }
+
+    fun givenIsInAirGappedEnvironment(isInAirGapped: Boolean) {
+        isInAirGappedEnvironment.value = isInAirGapped
+    }
 }
