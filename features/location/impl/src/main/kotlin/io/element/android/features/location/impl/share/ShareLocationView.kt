@@ -38,6 +38,7 @@ import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.PermissionDeniedDialog
 import io.element.android.features.location.impl.common.PermissionRationaleDialog
 import io.element.android.features.location.impl.common.ui.LocationFloatingActionButton
+import io.element.android.features.location.impl.common.ui.LocationServiceDisabledDialog
 import io.element.android.features.location.impl.common.ui.MapBottomSheetScaffold
 import io.element.android.features.location.impl.common.ui.UserLocationPuck
 import io.element.android.libraries.designsystem.components.LocationPin
@@ -89,6 +90,10 @@ fun ShareLocationView(
             onContinue = { state.eventSink(ShareLocationEvent.RequestPermissions) },
             onDismiss = { state.eventSink(ShareLocationEvent.DismissDialog) },
             appName = state.appName,
+        )
+        ShareLocationState.Dialog.LocationServiceDisabled -> LocationServiceDisabledDialog(
+            onContinue = { state.eventSink(ShareLocationEvent.OpenLocationSettings) },
+            onDismiss = { state.eventSink(ShareLocationEvent.DismissDialog) },
         )
         ShareLocationState.Dialog.LiveLocationDuration -> LiveLocationDurationDialog(
             onSelectDuration = { duration ->

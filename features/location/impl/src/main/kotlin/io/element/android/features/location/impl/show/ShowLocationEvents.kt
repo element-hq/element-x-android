@@ -16,4 +16,5 @@ sealed interface ShowLocationEvents {
     data object DismissDialog : ShowLocationEvents
     data object RequestPermissions : ShowLocationEvents
     data object OpenAppSettings : ShowLocationEvents
+    data object OpenLocationSettings : ShowLocationEvents
 }

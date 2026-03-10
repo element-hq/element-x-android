@@ -33,12 +33,10 @@ import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.coroutines.launch
@@ -89,7 +87,13 @@ class ShareLocationPresenter(
                     shareStaticLocation(event)
                 }
                 ShareLocationEvent.StartTrackingUserPosition -> when {
-                    permissionsState.isAnyGranted -> trackUserPosition = true
+                    permissionsState.isAnyGranted -> {
+                        if (!locationActions.isLocationEnabled()) {
+                            dialogState = ShareLocationState.Dialog.LocationServiceDisabled
+                        } else {
+                            trackUserPosition = true
+                        }
+                    }
                     permissionsState.shouldShowRationale -> dialogState = ShareLocationState.Dialog.PermissionRationale
                     else -> dialogState = ShareLocationState.Dialog.PermissionDenied
                 }
@@ -99,9 +103,19 @@ class ShareLocationPresenter(
                     locationActions.openSettings()
                     dialogState = ShareLocationState.Dialog.None
                 }
+                ShareLocationEvent.OpenLocationSettings -> {
+                    locationActions.openLocationSettings()
+                    dialogState = ShareLocationState.Dialog.None
+                }
                 ShareLocationEvent.RequestPermissions -> permissionsState.eventSink(PermissionsEvents.RequestPermissions)
                 ShareLocationEvent.ShowLiveLocationDurationPicker -> dialogState = when {
-                    permissionsState.isAnyGranted -> ShareLocationState.Dialog.LiveLocationDuration
+                    permissionsState.isAnyGranted -> {
+                        if (!locationActions.isLocationEnabled()) {
+                            ShareLocationState.Dialog.LocationServiceDisabled
+                        } else {
+                            ShareLocationState.Dialog.LiveLocationDuration
+                        }
+                    }
                     permissionsState.shouldShowRationale -> ShareLocationState.Dialog.PermissionRationale
                     else -> ShareLocationState.Dialog.PermissionDenied
                 }

@@ -9,6 +9,8 @@
 package io.element.android.features.location.impl.show
 
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,23 +25,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.location.api.ShowLocationMode
+import io.element.android.features.location.impl.common.ui.LocationServiceDisabledDialog
 import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.PermissionDeniedDialog
 import io.element.android.features.location.impl.common.PermissionRationaleDialog
-import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.location.impl.common.ui.LocationFloatingActionButton
 import io.element.android.features.location.impl.common.ui.LocationPinMarkers
 import io.element.android.features.location.impl.common.ui.LocationShareRow
 import io.element.android.features.location.impl.common.ui.MapBottomSheetScaffold
 import io.element.android.features.location.impl.common.ui.UserLocationPuck
-import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.IconButton
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.launch
@@ -72,6 +72,10 @@ fun ShowLocationView(
             onDismiss = { state.eventSink(ShowLocationEvents.DismissDialog) },
             appName = state.appName,
         )
+        ShowLocationState.Dialog.LocationServiceDisabled -> LocationServiceDisabledDialog(
+            onContinue = { state.eventSink(ShowLocationEvents.OpenLocationSettings) },
+            onDismiss = { state.eventSink(ShowLocationEvents.DismissDialog) },
+        )
     }
 
     val initialPosition = when (val mode = state.mode) {
@@ -99,18 +103,18 @@ fun ShowLocationView(
     }
 
     val scaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = rememberStandardBottomSheetState(initialValue =
-            if(state.isSheetDraggable) {
-                SheetValue.PartiallyExpanded
-            }else {
-                SheetValue.Expanded
-            }
+        bottomSheetState = rememberStandardBottomSheetState(
+            initialValue =
+                if (state.isSheetDraggable) {
+                    SheetValue.PartiallyExpanded
+                } else {
+                    SheetValue.Expanded
+                }
         )
     )
     MapBottomSheetScaffold(
-        //sheetPeekHeight = 180.dp,
-        sheetDragHandle = if(state.isSheetDraggable) {
-            {BottomSheetDefaults.DragHandle()}
+        sheetDragHandle = if (state.isSheetDraggable) {
+            { BottomSheetDefaults.DragHandle() }
         } else {
             null
         },
@@ -130,8 +134,9 @@ fun ShowLocationView(
         },
         sheetContent = { sheetPaddings ->
             val coroutineScope = rememberCoroutineScope()
+            Spacer(Modifier.height(20.dp))
             Text(
-                text = "On the map",
+                text = stringResource(CommonStrings.screen_static_location_sheet_title),
                 style = ElementTheme.typography.fontBodyLgMedium,
                 color = ElementTheme.colors.textPrimary,
                 modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -142,7 +147,11 @@ fun ShowLocationView(
                     onShareClick = { state.eventSink(ShowLocationEvents.Share(locationShare.location)) },
                     modifier = Modifier.clickable {
                         state.eventSink(ShowLocationEvents.TrackMyLocation(false))
-                        val position = CameraPosition(padding = sheetPaddings, target = Position(locationShare.location.lon, locationShare.location.lat), zoom = MapDefaults.DEFAULT_ZOOM)
+                        val position = CameraPosition(
+                            padding = sheetPaddings,
+                            target = Position(locationShare.location.lon, locationShare.location.lat),
+                            zoom = MapDefaults.DEFAULT_ZOOM
+                        )
                         coroutineScope.launch {
                             cameraState.animateTo(finalPosition = position)
                         }

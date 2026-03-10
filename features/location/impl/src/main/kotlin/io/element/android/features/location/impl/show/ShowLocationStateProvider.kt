@@ -31,6 +31,10 @@ class ShowLocationStateProvider : PreviewParameterProvider<ShowLocationState> {
                 permissionDialog = ShowLocationState.Dialog.PermissionRationale,
             ),
             aShowLocationState(
+                permissionDialog = ShowLocationState.Dialog.LocationServiceDisabled,
+                hasLocationPermission = true,
+            ),
+            aShowLocationState(
                 hasLocationPermission = true,
             ),
             aShowLocationState(

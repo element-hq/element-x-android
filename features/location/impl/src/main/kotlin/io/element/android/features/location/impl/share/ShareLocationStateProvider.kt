@@ -33,6 +33,11 @@ class ShareLocationStateProvider : PreviewParameterProvider<ShareLocationState> 
                 hasLocationPermission = false,
             ),
             aShareLocationState(
+                permissionDialog = ShareLocationState.Dialog.LocationServiceDisabled,
+                trackUserPosition = false,
+                hasLocationPermission = true,
+            ),
+            aShareLocationState(
                 permissionDialog = ShareLocationState.Dialog.None,
                 trackUserPosition = false,
                 hasLocationPermission = true,

@@ -10,7 +10,9 @@ package io.element.android.features.location.impl.common.actions
 
 import io.element.android.features.location.api.Location
 
-class FakeLocationActions : LocationActions {
+class FakeLocationActions(
+    private var isLocationEnabled: Boolean = true,
+) : LocationActions {
     var sharedLocation: Location? = null
         private set
 
@@ -20,6 +22,9 @@ class FakeLocationActions : LocationActions {
     var openSettingsInvocationsCount = 0
         private set
 
+    var openLocationSettingsInvocationsCount = 0
+        private set
+
     override fun share(location: Location, label: String?) {
         sharedLocation = location
         sharedLabel = label
@@ -27,5 +32,17 @@ class FakeLocationActions : LocationActions {
 
     override fun openSettings() {
         openSettingsInvocationsCount++
+    }
+
+    override fun isLocationEnabled(): Boolean {
+        return isLocationEnabled
+    }
+
+    override fun openLocationSettings() {
+        openLocationSettingsInvocationsCount++
+    }
+
+    fun givenLocationEnabled(enabled: Boolean) {
+        isLocationEnabled = enabled
     }
 }

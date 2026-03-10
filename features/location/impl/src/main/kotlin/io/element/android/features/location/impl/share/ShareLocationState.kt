@@ -23,6 +23,7 @@ data class ShareLocationState(
         data object None : Dialog
         data object PermissionRationale : Dialog
         data object PermissionDenied : Dialog
+        data object LocationServiceDisabled : Dialog
         data object LiveLocationDuration : Dialog
     }
 }

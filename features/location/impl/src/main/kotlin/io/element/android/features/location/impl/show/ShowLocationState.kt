@@ -32,6 +32,7 @@ data class ShowLocationState(
         data object None : Dialog
         data object PermissionRationale : Dialog
         data object PermissionDenied : Dialog
+        data object LocationServiceDisabled : Dialog
     }
 }
 

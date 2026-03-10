@@ -72,7 +72,13 @@ class ShowLocationPresenter(
                 is ShowLocationEvents.TrackMyLocation -> {
                     if (event.enabled) {
                         when {
-                            permissionsState.isAnyGranted -> isTrackMyLocation = true
+                            permissionsState.isAnyGranted -> {
+                                if (!locationActions.isLocationEnabled()) {
+                                    permissionDialog = ShowLocationState.Dialog.LocationServiceDisabled
+                                } else {
+                                    isTrackMyLocation = true
+                                }
+                            }
                             permissionsState.shouldShowRationale -> permissionDialog = ShowLocationState.Dialog.PermissionRationale
                             else -> permissionDialog = ShowLocationState.Dialog.PermissionDenied
                         }
@@ -83,6 +89,10 @@ class ShowLocationPresenter(
                 ShowLocationEvents.DismissDialog -> permissionDialog = ShowLocationState.Dialog.None
                 ShowLocationEvents.OpenAppSettings -> {
                     locationActions.openSettings()
+                    permissionDialog = ShowLocationState.Dialog.None
+                }
+                ShowLocationEvents.OpenLocationSettings -> {
+                    locationActions.openLocationSettings()
                     permissionDialog = ShowLocationState.Dialog.None
                 }
                 ShowLocationEvents.RequestPermissions -> permissionsState.eventSink(PermissionsEvents.RequestPermissions)
