@@ -22,7 +22,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.features.enterprise.api.EnterpriseService
+import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -50,7 +50,7 @@ interface SyncPendingNotificationsRequestBuilder : WorkManagerRequestBuilder {
 class DefaultSyncPendingNotificationsRequestBuilder(
     @Assisted private val sessionId: SessionId,
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
-    private val enterpriseService: EnterpriseService,
+    private val networkMonitor: NetworkMonitor,
     private val featureFlagService: FeatureFlagService,
 ) : SyncPendingNotificationsRequestBuilder {
     @AssistedFactory
@@ -77,7 +77,7 @@ class DefaultSyncPendingNotificationsRequestBuilder(
 
         // If we're in an air-gapped environment, we shouldn't validate internet connectivity, as the checker will fail and the worker won't run at all.
         // Note this will always be false for FOSS, since the feature is only enabled in Element Pro.
-        if (enterpriseService.isInAirGappedEnvironment().first()) {
+        if (networkMonitor.isInAirGappedEnvironment.first()) {
             Timber.d("In an air-gapped environment, not adding NET_CAPABILITY_VALIDATED to the network request")
             networkRequestBuilder.removeCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
         } else if (featureFlagService.isFeatureEnabled(FeatureFlags.ValidateNetworkWhenSchedulingNotificationFetching)) {
