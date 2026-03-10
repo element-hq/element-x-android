@@ -1,3 +1,36 @@
+Changes in Element X v26.03.3
+=============================
+
+<!-- Release notes generated using configuration in .github/release.yml at v26.03.3 -->
+
+## What's Changed
+### ✨ Features
+* Support for Voice Call only (no video), parity with web by @BillCarsonFr in https://github.com/element-hq/element-x-android/pull/5995
+### 🐛 Bugfixes
+* Fix read receipts not appearing in threaded timelines by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6297
+* Try fixing index OOB issues in `Editable.checkSuggestionNeeded` by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6303
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/6302
+### 🧱 Build
+* Add zizmorcore/zizmor-action by @bmarty in https://github.com/element-hq/element-x-android/pull/6286
+* Add use existing branch confirmation and progress for file download by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6294
+* Replace `knit` with `generate_toc.py` script by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6279
+### Dependency upgrades
+* Update plugin sonarqube to v7.2.3.7755 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6283
+* Update dependency io.sentry:sentry-android to v8.34.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6289
+* Update dependency org.matrix.rustcomponents:sdk-android to v26.03.6 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6292
+* Update dependency com.posthog:posthog-android to v3.35.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6293
+* Update zizmorcore/zizmor-action action to v0.5.2 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6299
+* fix(deps): update dependency org.maplibre.gl:android-sdk to v13 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6277
+* fix(deps): update dependency org.matrix.rustcomponents:sdk-android to v26.03.09 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6307
+* fix(deps): update dependency org.matrix.rustcomponents:sdk-android to v26.03.11 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6310
+### Others
+* Add code to help debugging the saved nav state graph by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6295
+* Add network constraints for fetching notifications with `WorkManager` by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6305
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v26.03.2...v26.03.3
+
 Changes in Element X v26.03.2
 =============================
 
