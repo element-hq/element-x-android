@@ -47,7 +47,7 @@ class DefaultNetworkMonitor(
 ) : NetworkMonitor {
     private val connectivityManager: ConnectivityManager = context.getSystemService(ConnectivityManager::class.java)
 
-    override val isNetworkBlocked = MutableStateFlow(false)
+    override val isNetworkBlocked = MutableStateFlow(NetworkBlockedChecker(connectivityManager).isNetworkBlocked())
     override val isInAirGappedEnvironment = MutableStateFlow(false)
 
     override val connectivity: StateFlow<NetworkStatus> = callbackFlow {
