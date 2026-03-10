@@ -27,8 +27,8 @@ interface NetworkMonitor {
     val isNetworkBlocked: StateFlow<Boolean>
 
     /**
-    * A flow indicating whether the app is running in an air-gapped environment.
+     * A flow indicating whether the app is running in an air-gapped environment.
      * An air-gapped environment is an environment that is not connected to the internet, and where the app can only communicate with a limited set of servers.
-    */
+     */
     val isInAirGappedEnvironment: StateFlow<Boolean>
 }
