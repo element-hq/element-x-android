@@ -1,14 +1,14 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
-    "config:recommended"
+    "config:recommended",
   ],
   "labels": [
-    "PR-Dependencies"
+    "PR-Dependencies",
   ],
   "ignoreDeps": [
     "string:app_name",
-    "gradle"
+    "gradle",
   ],
   "packageRules": [
     {
@@ -16,15 +16,16 @@
       "matchPackageNames": [
         "/^org.jetbrains.kotlin/",
         "/^com.google.devtools.ksp/",
-        "/^androidx.compose.compiler/"
-      ]
+        "/^androidx.compose.compiler/",
+      ],
     },
     {
       "versioning": "semver",
       "matchPackageNames": [
         "/^org.maplibre/",
-        "/^org.jetbrains.kotlinx:kotlinx-datetime/"
-      ]
-    }
-  ]
+        "/^org.jetbrains.kotlinx:kotlinx-datetime/",
+      ],
+    },
+  ],
 }
+
