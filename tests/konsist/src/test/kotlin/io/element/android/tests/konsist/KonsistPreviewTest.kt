@@ -61,7 +61,8 @@ class KonsistPreviewTest {
             .functions()
             .withAllAnnotationsOf(PreviewsDayNight::class)
             .assertTrue {
-                it.text.contains("ElementPreview")
+                it.text.contains("ElementPreview") ||
+                    it.text.contains("ElementTimelineItemPreview")
             }
     }
 
