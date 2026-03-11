@@ -24,10 +24,12 @@ import io.element.android.services.toolbox.test.sdk.FakeBuildVersionSdkIntProvid
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 class DefaultSyncPendingNotificationsRequestBuilderTest {
     @Test
+    @Config(sdk = [33])
     fun `build - success API 33`() = runTest {
         val request = createSyncPendingNotificationsRequestBuilder(
             sessionId = A_SESSION_ID,
@@ -41,6 +43,7 @@ class DefaultSyncPendingNotificationsRequestBuilderTest {
             result.request.run {
                 assertThat(this).isInstanceOf(OneTimeWorkRequest::class.java)
                 assertThat(workSpec.input.hasKeyWithValueOfType<String>(SyncPendingNotificationsRequestBuilder.SESSION_ID)).isTrue()
+                assertThat(workSpec.input.hasKeyWithValueOfType<String>(SyncPendingNotificationsRequestBuilder.WAKELOCK_KEY)).isTrue()
                 assertThat(workSpec.hasConstraints()).isTrue()
                 // True in API 33+
                 assertThat(workSpec.expedited).isTrue()
@@ -50,6 +53,7 @@ class DefaultSyncPendingNotificationsRequestBuilderTest {
     }
 
     @Test
+    @Config(sdk = [32])
     fun `build - success API 32 and lower`() = runTest {
         val request = createSyncPendingNotificationsRequestBuilder(
             sessionId = A_SESSION_ID,
@@ -64,6 +68,7 @@ class DefaultSyncPendingNotificationsRequestBuilderTest {
             result.request.run {
                 assertThat(this).isInstanceOf(OneTimeWorkRequest::class.java)
                 assertThat(workSpec.input.hasKeyWithValueOfType<String>(SyncPendingNotificationsRequestBuilder.SESSION_ID)).isTrue()
+                assertThat(workSpec.input.hasKeyWithValueOfType<String>(SyncPendingNotificationsRequestBuilder.WAKELOCK_KEY)).isTrue()
                 assertThat(workSpec.hasConstraints()).isTrue()
                 // False before API 33
                 assertThat(workSpec.expedited).isFalse()
@@ -73,6 +78,7 @@ class DefaultSyncPendingNotificationsRequestBuilderTest {
     }
 
     @Test
+    @Config(sdk = [33])
     fun `build - has NET_CAPABILITY_VALIDATED constraint if not in air-gapped env`() = runTest {
         val request = createSyncPendingNotificationsRequestBuilder(
             sessionId = A_SESSION_ID,
@@ -93,6 +99,7 @@ class DefaultSyncPendingNotificationsRequestBuilderTest {
     }
 
     @Test
+    @Config(sdk = [33])
     fun `build - does not have NET_CAPABILITY_VALIDATED constraint if in air-gapped env`() = runTest {
         val request = createSyncPendingNotificationsRequestBuilder(
             sessionId = A_SESSION_ID,
@@ -113,6 +120,7 @@ class DefaultSyncPendingNotificationsRequestBuilderTest {
     }
 
     @Test
+    @Config(sdk = [33])
     fun `build - does not have NET_CAPABILITY_VALIDATED constraint if feature flag is disabled`() = runTest {
         val request = createSyncPendingNotificationsRequestBuilder(
             sessionId = A_SESSION_ID,
@@ -141,9 +149,11 @@ private fun createSyncPendingNotificationsRequestBuilder(
     sdkVersion: Int = 33,
     isInAirGapEnvironment: Boolean = false,
     featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
+    wakeLockKey: String = "a_wake_lock_key",
 ) = DefaultSyncPendingNotificationsRequestBuilder(
     sessionId = sessionId,
     buildVersionSdkIntProvider = FakeBuildVersionSdkIntProvider(sdkVersion),
     networkMonitor = FakeNetworkMonitor().apply { givenIsInAirGappedEnvironment(isInAirGapEnvironment) },
     featureFlagService = featureFlagService,
+    wakeLockKey = wakeLockKey,
 )
