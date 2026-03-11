@@ -14,6 +14,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.annotations.AppCoroutineScope
+import io.element.android.libraries.push.api.push.PushHandlingWakeLock
 import io.element.android.libraries.pushproviders.api.PushHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -25,6 +26,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     @Inject lateinit var firebaseNewTokenHandler: FirebaseNewTokenHandler
     @Inject lateinit var pushParser: FirebasePushParser
     @Inject lateinit var pushHandler: PushHandler
+    @Inject lateinit var pushHandlingWakeLock: PushHandlingWakeLock
     @AppCoroutineScope
     @Inject lateinit var coroutineScope: CoroutineScope
 
@@ -42,8 +44,12 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         Timber.tag(loggerTag.value).w("New Firebase message. Priority: ${message.priority}/${message.originalPriority}")
+        val pushData = pushParser.parse(message.data)
+
+        // Acquire wakelock to ensure the device stays awake while we handle the push and schedule and run the work
+        pushData?.clientSecret?.let { pushHandlingWakeLock.lock(it) }
+
         coroutineScope.launch {
-            val pushData = pushParser.parse(message.data)
             if (pushData == null) {
                 Timber.tag(loggerTag.value).w("Invalid data received from Firebase")
                 pushHandler.handleInvalid(
