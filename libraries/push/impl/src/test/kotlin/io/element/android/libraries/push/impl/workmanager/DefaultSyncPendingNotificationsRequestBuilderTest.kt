@@ -26,10 +26,10 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
+@Config(sdk = [33])
 @RunWith(AndroidJUnit4::class)
 class DefaultSyncPendingNotificationsRequestBuilderTest {
     @Test
-    @Config(sdk = [33])
     fun `build - success API 33`() = runTest {
         val request = createSyncPendingNotificationsRequestBuilder(
             sessionId = A_SESSION_ID,
@@ -53,7 +53,6 @@ class DefaultSyncPendingNotificationsRequestBuilderTest {
     }
 
     @Test
-    @Config(sdk = [32])
     fun `build - success API 32 and lower`() = runTest {
         val request = createSyncPendingNotificationsRequestBuilder(
             sessionId = A_SESSION_ID,
@@ -78,7 +77,6 @@ class DefaultSyncPendingNotificationsRequestBuilderTest {
     }
 
     @Test
-    @Config(sdk = [33])
     fun `build - has NET_CAPABILITY_VALIDATED constraint if not in air-gapped env`() = runTest {
         val request = createSyncPendingNotificationsRequestBuilder(
             sessionId = A_SESSION_ID,
@@ -99,7 +97,6 @@ class DefaultSyncPendingNotificationsRequestBuilderTest {
     }
 
     @Test
-    @Config(sdk = [33])
     fun `build - does not have NET_CAPABILITY_VALIDATED constraint if in air-gapped env`() = runTest {
         val request = createSyncPendingNotificationsRequestBuilder(
             sessionId = A_SESSION_ID,
@@ -120,7 +117,6 @@ class DefaultSyncPendingNotificationsRequestBuilderTest {
     }
 
     @Test
-    @Config(sdk = [33])
     fun `build - does not have NET_CAPABILITY_VALIDATED constraint if feature flag is disabled`() = runTest {
         val request = createSyncPendingNotificationsRequestBuilder(
             sessionId = A_SESSION_ID,
