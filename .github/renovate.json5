@@ -26,6 +26,15 @@
         "/^org.jetbrains.kotlinx:kotlinx-datetime/",
       ],
     },
+    {
+      // Limit PostHog Android upgrade to one PR per month, the first day of the month
+      "matchPackageNames": [
+        "com.posthog:posthog-android",
+      ],
+      "schedule": [
+          "* * 1 * *",
+      ]
+    },
   ],
 }
 
