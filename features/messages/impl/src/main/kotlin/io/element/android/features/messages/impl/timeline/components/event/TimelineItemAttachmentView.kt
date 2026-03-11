@@ -9,18 +9,16 @@
 package io.element.android.features.messages.impl.timeline.components.event
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -73,17 +71,17 @@ private fun TimelineItemAttachmentHeaderView(
     val spacing = 8.dp
     Row(
         modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.spacedBy(spacing),
     ) {
         Box(
             modifier = Modifier
                 .size(iconSize)
-                .clip(CircleShape)
-                .background(ElementTheme.colors.bgCanvasDefault),
+                .background(ElementTheme.colors.bgCanvasDefault, RoundedCornerShape(4.dp)),
             contentAlignment = Alignment.Center,
         ) {
             icon()
         }
-        Spacer(Modifier.width(spacing))
         Column {
             Text(
                 text = filename,
