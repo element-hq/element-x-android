@@ -178,7 +178,7 @@ test_detekt_test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version
 # https://github.com/matrix-org/matrix-rust-components-kotlin/commits/main/sdk/sdk-android/src/main/kotlin/org/matrix/rustcomponents/sdk/matrix_sdk_ffi.kt
 # All new features should not be implemented in the pull request that upgrades the version, developers should
 # only fix API breaks and may add some TODOs.
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.03.6"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.03.11"
 
 # Others
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
@@ -220,7 +220,7 @@ haze_materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = 
 color_picker = "io.mhssn:colorpicker:1.0.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.35.0"
+posthog = "com.posthog:posthog-android:3.37.0"
 sentry = "io.sentry:sentry-android:8.34.1"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.29.2"
@@ -267,7 +267,6 @@ paparazzi = "app.cash.paparazzi:2.0.0-alpha04"
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 firebaseAppDistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebaseAppDistribution" }
-knit = { id = "org.jetbrains.kotlinx.knit", version = "0.5.1" }
 sonarqube = "org.sonarqube:7.2.3.7755"
 licensee = "app.cash.licensee:1.14.1"
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
