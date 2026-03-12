@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.location.impl.common.MapDefaults
 import org.maplibre.compose.camera.CameraState
 import org.maplibre.compose.location.DesiredAccuracy
 import org.maplibre.compose.location.LocationPuck
@@ -33,7 +34,12 @@ fun UserLocationPuck(
         locationState = locationState,
         enabled = trackUserLocation,
     ) {
-        cameraState.updateFromLocation()
+        val finalPosition = cameraState.position.copy(
+            target = currentLocation.position,
+            bearing = currentLocation.bearing ?: cameraState.position.bearing,
+            zoom = cameraState.position.zoom.coerceAtLeast(MapDefaults.DEFAULT_ZOOM)
+        )
+        cameraState.animateTo(finalPosition)
     }
     val location = locationState.location
     if (location != null) {
