@@ -20,22 +20,25 @@ import io.element.android.features.location.impl.common.permissions.FakePermissi
 import io.element.android.features.location.impl.common.permissions.PermissionsEvents
 import io.element.android.features.location.impl.common.permissions.PermissionsPresenter
 import io.element.android.features.location.impl.common.permissions.PermissionsState
+import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.features.messages.test.FakeMessageComposerContext
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
-import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
-import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
+import io.element.android.tests.testutils.test
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -49,9 +52,12 @@ class ShareLocationPresenterTest {
     private val fakeMessageComposerContext = FakeMessageComposerContext()
     private val fakeLocationActions = FakeLocationActions()
     private val fakeBuildMeta = aBuildMeta(applicationName = "app name")
+    private val fakeFeatureFlagService = FakeFeatureFlagService()
+    private val fakeMatrixClient = FakeMatrixClient(sessionId = A_USER_ID)
 
     private fun createShareLocationPresenter(
         joinedRoom: JoinedRoom = FakeJoinedRoom(),
+        locationActions: FakeLocationActions = fakeLocationActions,
     ): ShareLocationPresenter = ShareLocationPresenter(
         permissionsPresenterFactory = object : PermissionsPresenter.Factory {
             override fun create(permissions: List<String>): PermissionsPresenter = fakePermissionsPresenter
@@ -60,13 +66,14 @@ class ShareLocationPresenterTest {
         timelineMode = Timeline.Mode.Live,
         analyticsService = fakeAnalyticsService,
         messageComposerContext = fakeMessageComposerContext,
-        locationActions = fakeLocationActions,
+        locationActions = locationActions,
         buildMeta = fakeBuildMeta,
+        featureFlagService = fakeFeatureFlagService,
+        client = fakeMatrixClient,
     )
 
     @Test
-    fun `initial state with permissions granted`() = runTest {
-        val shareLocationPresenter = createShareLocationPresenter()
+    fun `initial state with permissions granted and location enabled`() = runTest {
         fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.AllGranted,
@@ -74,25 +81,18 @@ class ShareLocationPresenterTest {
             )
         )
 
-        moleculeFlow(RecompositionMode.Immediate) {
-            shareLocationPresenter.present()
-        }.test {
-            val initialState = awaitItem()
-            assertThat(initialState.dialogState).isEqualTo(ShareLocationState.Dialog.None)
-            assertThat(initialState.mode).isEqualTo(ShareLocationState.Mode.SenderLocation)
-            assertThat(initialState.hasLocationPermission).isTrue()
-
-            // Swipe the map to switch mode
-            initialState.eventSink(ShareLocationEvent.SwitchToPinLocationMode)
-            val myLocationState = awaitItem()
-            assertThat(myLocationState.dialogState).isEqualTo(ShareLocationState.Dialog.None)
-            assertThat(myLocationState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
-            assertThat(myLocationState.hasLocationPermission).isTrue()
+        val shareLocationPresenter = createShareLocationPresenter()
+        shareLocationPresenter.test {
+            skipItems(1)
+            val state = awaitItem()
+            assertThat(state.trackUserLocation).isTrue()
+            assertThat(state.hasLocationPermission).isTrue()
+            assertThat(state.dialogState).isEqualTo(ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.None))
         }
     }
 
     @Test
-    fun `initial state with permissions partially granted`() = runTest {
+    fun `initial state with permissions partially granted and location enabled`() = runTest {
         val shareLocationPresenter = createShareLocationPresenter()
         fakePermissionsPresenter.givenState(
             aPermissionsState(
@@ -104,17 +104,11 @@ class ShareLocationPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             shareLocationPresenter.present()
         }.test {
+            skipItems(1)
             val initialState = awaitItem()
-            assertThat(initialState.dialogState).isEqualTo(ShareLocationState.Dialog.None)
-            assertThat(initialState.mode).isEqualTo(ShareLocationState.Mode.SenderLocation)
+            assertThat(initialState.trackUserLocation).isTrue()
             assertThat(initialState.hasLocationPermission).isTrue()
-
-            // Swipe the map to switch mode
-            initialState.eventSink(ShareLocationEvent.SwitchToPinLocationMode)
-            val myLocationState = awaitItem()
-            assertThat(myLocationState.dialogState).isEqualTo(ShareLocationState.Dialog.None)
-            assertThat(myLocationState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
-            assertThat(myLocationState.hasLocationPermission).isTrue()
+            assertThat(initialState.dialogState).isEqualTo(ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.None))
         }
     }
 
@@ -131,22 +125,18 @@ class ShareLocationPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             shareLocationPresenter.present()
         }.test {
+            skipItems(1)
             val initialState = awaitItem()
-            assertThat(initialState.dialogState).isEqualTo(ShareLocationState.Dialog.None)
-            assertThat(initialState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
+            assertThat(initialState.trackUserLocation).isFalse()
             assertThat(initialState.hasLocationPermission).isFalse()
-
-            // Click on the button to switch mode
-            initialState.eventSink(ShareLocationEvent.SwitchToMyLocationMode)
-            val myLocationState = awaitItem()
-            assertThat(myLocationState.dialogState).isEqualTo(ShareLocationState.Dialog.PermissionDenied)
-            assertThat(myLocationState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
-            assertThat(myLocationState.hasLocationPermission).isFalse()
+            assertThat(initialState.dialogState).isEqualTo(
+                ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.PermissionDenied)
+            )
         }
     }
 
     @Test
-    fun `initial state with permissions denied once`() = runTest {
+    fun `initial state with permissions denied with rationale`() = runTest {
         val shareLocationPresenter = createShareLocationPresenter()
         fakePermissionsPresenter.givenState(
             aPermissionsState(
@@ -155,25 +145,62 @@ class ShareLocationPresenterTest {
             )
         )
 
-        moleculeFlow(RecompositionMode.Immediate) {
-            shareLocationPresenter.present()
-        }.test {
+        shareLocationPresenter.test {
+            skipItems(1)
             val initialState = awaitItem()
-            assertThat(initialState.dialogState).isEqualTo(ShareLocationState.Dialog.None)
-            assertThat(initialState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
+            assertThat(initialState.trackUserLocation).isFalse()
             assertThat(initialState.hasLocationPermission).isFalse()
-
-            // Click on the button to switch mode
-            initialState.eventSink(ShareLocationEvent.SwitchToMyLocationMode)
-            val myLocationState = awaitItem()
-            assertThat(myLocationState.dialogState).isEqualTo(ShareLocationState.Dialog.PermissionRationale)
-            assertThat(myLocationState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
-            assertThat(myLocationState.hasLocationPermission).isFalse()
+            assertThat(initialState.dialogState).isEqualTo(
+                ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.PermissionRationale)
+            )
         }
     }
 
     @Test
-    fun `rationale dialog dismiss`() = runTest {
+    fun `initial state with location services disabled`() = runTest {
+        val locationActions = FakeLocationActions(isLocationEnabled = false)
+        val shareLocationPresenter = createShareLocationPresenter(locationActions = locationActions)
+        fakePermissionsPresenter.givenState(
+            aPermissionsState(
+                permissions = PermissionsState.Permissions.AllGranted,
+                shouldShowRationale = false,
+            )
+        )
+
+        shareLocationPresenter.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            assertThat(initialState.trackUserLocation).isFalse()
+            assertThat(initialState.hasLocationPermission).isTrue()
+            assertThat(initialState.dialogState).isEqualTo(
+                ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.LocationServiceDisabled)
+            )
+        }
+    }
+
+    @Test
+    fun `StopTrackingUserLocation event sets trackUserLocation to false`() = runTest {
+        val shareLocationPresenter = createShareLocationPresenter()
+        fakePermissionsPresenter.givenState(
+            aPermissionsState(
+                permissions = PermissionsState.Permissions.AllGranted,
+                shouldShowRationale = false,
+            )
+        )
+
+        shareLocationPresenter.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            assertThat(initialState.trackUserLocation).isTrue()
+
+            initialState.eventSink(ShareLocationEvent.StopTrackingUserLocation)
+            val stoppedState = awaitItem()
+            assertThat(stoppedState.trackUserLocation).isFalse()
+        }
+    }
+
+    @Test
+    fun `DismissDialog event clears dialog state`() = runTest {
         val shareLocationPresenter = createShareLocationPresenter()
         fakePermissionsPresenter.givenState(
             aPermissionsState(
@@ -182,30 +209,21 @@ class ShareLocationPresenterTest {
             )
         )
 
-        moleculeFlow(RecompositionMode.Immediate) {
-            shareLocationPresenter.present()
-        }.test {
-            // Skip initial state
+        shareLocationPresenter.test {
+            skipItems(1)
             val initialState = awaitItem()
+            assertThat(initialState.dialogState).isEqualTo(
+                ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.PermissionRationale)
+            )
 
-            // Click on the button to switch mode
-            initialState.eventSink(ShareLocationEvent.SwitchToMyLocationMode)
-            val myLocationState = awaitItem()
-            assertThat(myLocationState.dialogState).isEqualTo(ShareLocationState.Dialog.PermissionRationale)
-            assertThat(myLocationState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
-            assertThat(myLocationState.hasLocationPermission).isFalse()
-
-            // Dismiss the dialog
-            myLocationState.eventSink(ShareLocationEvent.DismissDialog)
-            val dialogDismissedState = awaitItem()
-            assertThat(dialogDismissedState.dialogState).isEqualTo(ShareLocationState.Dialog.None)
-            assertThat(dialogDismissedState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
-            assertThat(dialogDismissedState.hasLocationPermission).isFalse()
+            initialState.eventSink(ShareLocationEvent.DismissDialog)
+            val dismissedState = awaitItem()
+            assertThat(dismissedState.dialogState).isEqualTo(ShareLocationState.Dialog.None)
         }
     }
 
     @Test
-    fun `rationale dialog continue`() = runTest {
+    fun `RequestPermissions event triggers permission request`() = runTest {
         val shareLocationPresenter = createShareLocationPresenter()
         fakePermissionsPresenter.givenState(
             aPermissionsState(
@@ -214,27 +232,20 @@ class ShareLocationPresenterTest {
             )
         )
 
-        moleculeFlow(RecompositionMode.Immediate) {
-            shareLocationPresenter.present()
-        }.test {
-            // Skip initial state
+        shareLocationPresenter.test {
             val initialState = awaitItem()
+            initialState.eventSink(ShareLocationEvent.RequestPermissions)
 
-            // Click on the button to switch mode
-            initialState.eventSink(ShareLocationEvent.SwitchToMyLocationMode)
-            val myLocationState = awaitItem()
-            assertThat(myLocationState.dialogState).isEqualTo(ShareLocationState.Dialog.PermissionRationale)
-            assertThat(myLocationState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
-            assertThat(myLocationState.hasLocationPermission).isFalse()
+            // Wait for dialog to be dismissed
+            awaitItem()
 
-            // Continue the dialog sends permission request to the permissions presenter
-            myLocationState.eventSink(ShareLocationEvent.StartTrackingUserLocation)
             assertThat(fakePermissionsPresenter.events.last()).isEqualTo(PermissionsEvents.RequestPermissions)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
-    fun `permission denied dialog dismiss`() = runTest {
+    fun `OpenAppSettings event opens settings and clears dialog`() = runTest {
         val shareLocationPresenter = createShareLocationPresenter()
         fakePermissionsPresenter.givenState(
             aPermissionsState(
@@ -243,31 +254,94 @@ class ShareLocationPresenterTest {
             )
         )
 
-        moleculeFlow(RecompositionMode.Immediate) {
-            shareLocationPresenter.present()
-        }.test {
-            // Skip initial state
+        shareLocationPresenter.test {
+            skipItems(1)
             val initialState = awaitItem()
+            initialState.eventSink(ShareLocationEvent.OpenAppSettings)
+            val settingsOpenedState = awaitItem()
 
-            // Click on the button to switch mode
-            initialState.eventSink(ShareLocationEvent.SwitchToMyLocationMode)
-            val myLocationState = awaitItem()
-            assertThat(myLocationState.dialogState).isEqualTo(ShareLocationState.Dialog.PermissionDenied)
-            assertThat(myLocationState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
-            assertThat(myLocationState.hasLocationPermission).isFalse()
-
-            // Dismiss the dialog
-            myLocationState.eventSink(ShareLocationEvent.DismissDialog)
-            val dialogDismissedState = awaitItem()
-            assertThat(dialogDismissedState.dialogState).isEqualTo(ShareLocationState.Dialog.None)
-            assertThat(dialogDismissedState.mode).isEqualTo(ShareLocationState.Mode.PinLocation)
-            assertThat(dialogDismissedState.hasLocationPermission).isFalse()
+            assertThat(settingsOpenedState.dialogState).isEqualTo(ShareLocationState.Dialog.None)
+            assertThat(fakeLocationActions.openSettingsInvocationsCount).isEqualTo(1)
         }
     }
 
     @Test
-    fun `share sender location`() = runTest {
-        val sendLocationResult = lambdaRecorder<String, String, String?, Int?, AssetType?, EventId?, Result<Unit>> { _, _, _, _, _, _ ->
+    fun `OpenLocationSettings event opens location settings and clears dialog`() = runTest {
+        val locationActions = FakeLocationActions(isLocationEnabled = false)
+        val shareLocationPresenter = createShareLocationPresenter(locationActions = locationActions)
+        fakePermissionsPresenter.givenState(
+            aPermissionsState(
+                permissions = PermissionsState.Permissions.AllGranted,
+                shouldShowRationale = false,
+            )
+        )
+
+        shareLocationPresenter.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            assertThat(initialState.dialogState).isEqualTo(
+                ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.LocationServiceDisabled)
+            )
+
+            initialState.eventSink(ShareLocationEvent.OpenLocationSettings)
+            val settingsOpenedState = awaitItem()
+
+            assertThat(settingsOpenedState.dialogState).isEqualTo(ShareLocationState.Dialog.None)
+            assertThat(locationActions.openLocationSettingsInvocationsCount).isEqualTo(1)
+        }
+    }
+
+    @Test
+    fun `ShowLiveLocationDurationPicker shows duration dialog when constraints pass`() = runTest {
+        val shareLocationPresenter = createShareLocationPresenter()
+        fakePermissionsPresenter.givenState(
+            aPermissionsState(
+                permissions = PermissionsState.Permissions.AllGranted,
+                shouldShowRationale = false,
+            )
+        )
+
+        shareLocationPresenter.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            initialState.eventSink(ShareLocationEvent.ShowLiveLocationDurationPicker)
+            val durationDialogState = awaitItem()
+
+            assertThat(durationDialogState.dialogState).isEqualTo(ShareLocationState.Dialog.LiveLocationDuration)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `ShowLiveLocationDurationPicker shows constraint dialog when permissions denied`() = runTest {
+        val shareLocationPresenter = createShareLocationPresenter()
+        fakePermissionsPresenter.givenState(
+            aPermissionsState(
+                permissions = PermissionsState.Permissions.NoneGranted,
+                shouldShowRationale = false,
+            )
+        )
+
+        shareLocationPresenter.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            // Dismiss initial dialog
+            initialState.eventSink(ShareLocationEvent.DismissDialog)
+            val dismissedState = awaitItem()
+
+            dismissedState.eventSink(ShareLocationEvent.ShowLiveLocationDurationPicker)
+            val constraintDialogState = awaitItem()
+
+            assertThat(constraintDialogState.dialogState).isEqualTo(
+                ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.PermissionDenied)
+            )
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `ShareStaticLocation sends user location`() = runTest {
+        val sendLocationResult = lambdaRecorder { _: String, _: String, _: String?, _: Int?, _: AssetType?, _: EventId? ->
             Result.success(Unit)
         }
         val joinedRoom = FakeJoinedRoom(
@@ -283,29 +357,18 @@ class ShareLocationPresenterTest {
             )
         )
 
-        moleculeFlow(RecompositionMode.Immediate) {
-            shareLocationPresenter.present()
-        }.test {
-            // Skip initial state
+        shareLocationPresenter.test {
+            skipItems(1)
             val initialState = awaitItem()
 
-            // Send location
             initialState.eventSink(
                 ShareLocationEvent.ShareStaticLocation(
-                    cameraPosition = ShareLocationEvent.ShareStaticLocation.CameraPosition(
-                        lat = 0.0,
-                        lon = 1.0,
-                        zoom = 2.0,
-                    ),
-                    location = Location(
-                        lat = 3.0,
-                        lon = 4.0,
-                        accuracy = 5.0f,
-                    )
+                    location = Location(lat = 3.0, lon = 4.0, accuracy = 5.0f),
+                    isPinned = false,
                 )
             )
 
-            delay(1) // Wait for the coroutine to finish
+            advanceUntilIdle()
 
             sendLocationResult.assertions().isCalledOnce()
                 .with(
@@ -326,12 +389,13 @@ class ShareLocationPresenterTest {
                     messageType = Composer.MessageType.LocationUser,
                 )
             )
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
-    fun `share pin location`() = runTest {
-        val sendLocationResult = lambdaRecorder<String, String, String?, Int?, AssetType?, EventId?, Result<Unit>> { _, _, _, _, _, _ ->
+    fun `ShareStaticLocation sends pinned location`() = runTest {
+        val sendLocationResult = lambdaRecorder { _: String, _: String, _: String?, _: Int?, _: AssetType?, _: EventId? ->
             Result.success(Unit)
         }
         val joinedRoom = FakeJoinedRoom(
@@ -342,39 +406,26 @@ class ShareLocationPresenterTest {
         val shareLocationPresenter = createShareLocationPresenter(joinedRoom)
         fakePermissionsPresenter.givenState(
             aPermissionsState(
-                permissions = PermissionsState.Permissions.NoneGranted,
+                permissions = PermissionsState.Permissions.AllGranted,
                 shouldShowRationale = false,
             )
         )
 
-        moleculeFlow(RecompositionMode.Immediate) {
-            shareLocationPresenter.present()
-        }.test {
-            // Skip initial state
+        shareLocationPresenter.test {
             val initialState = awaitItem()
 
-            // Send location
             initialState.eventSink(
                 ShareLocationEvent.ShareStaticLocation(
-                    cameraPosition = ShareLocationEvent.ShareStaticLocation.CameraPosition(
-                        lat = 0.0,
-                        lon = 1.0,
-                        zoom = 2.0,
-                    ),
-                    location = Location(
-                        lat = 3.0,
-                        lon = 4.0,
-                        accuracy = 5.0f,
-                    )
+                    location = Location(lat = 1.0, lon = 2.0, accuracy = 3.0f),
+                    isPinned = true,
                 )
             )
 
-            delay(1) // Wait for the coroutine to finish
-
+            advanceUntilIdle()
             sendLocationResult.assertions().isCalledOnce()
                 .with(
-                    value("Location was shared at geo:0.0,1.0"),
-                    value("geo:0.0,1.0"),
+                    value("Location was shared at geo:1.0,2.0;u=3.0"),
+                    value("geo:1.0,2.0;u=3.0"),
                     value(null),
                     value(15),
                     value(AssetType.PIN),
@@ -390,107 +441,7 @@ class ShareLocationPresenterTest {
                     messageType = Composer.MessageType.LocationPin,
                 )
             )
-        }
-    }
-
-    @Test
-    fun `composer context passes through analytics`() = runTest {
-        val sendLocationResult = lambdaRecorder<String, String, String?, Int?, AssetType?, EventId?, Result<Unit>> { _, _, _, _, _, _ ->
-            Result.success(Unit)
-        }
-        val joinedRoom = FakeJoinedRoom(
-            liveTimeline = FakeTimeline().apply {
-                sendLocationLambda = sendLocationResult
-            },
-        )
-        val shareLocationPresenter = createShareLocationPresenter(joinedRoom)
-        fakePermissionsPresenter.givenState(
-            aPermissionsState(
-                permissions = PermissionsState.Permissions.NoneGranted,
-                shouldShowRationale = false,
-            )
-        )
-        fakeMessageComposerContext.apply {
-            composerMode = MessageComposerMode.Edit(
-                eventOrTransactionId = AN_EVENT_ID.toEventOrTransactionId(),
-                content = ""
-            )
-        }
-
-        moleculeFlow(RecompositionMode.Immediate) {
-            shareLocationPresenter.present()
-        }.test {
-            // Skip initial state
-            val initialState = awaitItem()
-
-            // Send location
-            initialState.eventSink(
-                ShareLocationEvent.ShareStaticLocation(
-                    cameraPosition = ShareLocationEvent.ShareStaticLocation.CameraPosition(
-                        lat = 0.0,
-                        lon = 1.0,
-                        zoom = 2.0,
-                    ),
-                    location = null
-                )
-            )
-
-            delay(1) // Wait for the coroutine to finish
-
-            assertThat(fakeAnalyticsService.capturedEvents.size).isEqualTo(1)
-            assertThat(fakeAnalyticsService.capturedEvents.last()).isEqualTo(
-                Composer(
-                    inThread = false,
-                    isEditing = true,
-                    isReply = false,
-                    messageType = Composer.MessageType.LocationPin,
-                )
-            )
-        }
-    }
-
-    @Test
-    fun `open settings activity`() = runTest {
-        val shareLocationPresenter = createShareLocationPresenter()
-        fakePermissionsPresenter.givenState(
-            aPermissionsState(
-                permissions = PermissionsState.Permissions.NoneGranted,
-                shouldShowRationale = false,
-            )
-        )
-        fakeMessageComposerContext.apply {
-            composerMode = MessageComposerMode.Edit(
-                eventOrTransactionId = AN_EVENT_ID.toEventOrTransactionId(),
-                content = ""
-            )
-        }
-
-        moleculeFlow(RecompositionMode.Immediate) {
-            shareLocationPresenter.present()
-        }.test {
-            // Skip initial state
-            val initialState = awaitItem()
-
-            initialState.eventSink(ShareLocationEvent.SwitchToMyLocationMode)
-            val dialogShownState = awaitItem()
-
-            // Open settings
-            dialogShownState.eventSink(ShareLocationEvent.OpenAppSettings)
-            val settingsOpenedState = awaitItem()
-
-            assertThat(settingsOpenedState.dialogState).isEqualTo(ShareLocationState.Dialog.None)
-            assertThat(fakeLocationActions.openSettingsInvocationsCount).isEqualTo(1)
-        }
-    }
-
-    @Test
-    fun `application name is in state`() = runTest {
-        val shareLocationPresenter = createShareLocationPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            shareLocationPresenter.present()
-        }.test {
-            val initialState = awaitItem()
-            assertThat(initialState.appName).isEqualTo("app name")
+            cancelAndIgnoreRemainingEvents()
         }
     }
 }

@@ -57,12 +57,14 @@ class ShareLocationStateProvider : PreviewParameterProvider<ShareLocationState> 
         )
 }
 
-private fun aShareLocationState(
+fun aShareLocationState(
     currentUser: MatrixUser = MatrixUser(UserId("@user:matrix.org")),
-    dialogState: ShareLocationState.Dialog,
-    trackUserPosition: Boolean,
-    hasLocationPermission: Boolean,
+    dialogState: ShareLocationState.Dialog = ShareLocationState.Dialog.None,
+    trackUserPosition: Boolean = false,
+    hasLocationPermission: Boolean = false,
     canShareLiveLocation: Boolean = false,
+    appName: String = APP_NAME,
+    eventSink: (ShareLocationEvent) -> Unit = {},
 ): ShareLocationState {
     return ShareLocationState(
         currentUser = currentUser,
@@ -70,7 +72,7 @@ private fun aShareLocationState(
         trackUserLocation = trackUserPosition,
         hasLocationPermission = hasLocationPermission,
         canShareLiveLocation = canShareLiveLocation,
-        appName = APP_NAME,
-        eventSink = {}
+        appName = appName,
+        eventSink = eventSink
     )
 }
