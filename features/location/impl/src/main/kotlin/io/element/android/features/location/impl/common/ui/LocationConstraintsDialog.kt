@@ -45,7 +45,7 @@ fun LocationConstraintsDialog(
             cancelText = stringResource(CommonStrings.action_cancel),
         )
         LocationConstraintsDialogState.LocationServiceDisabled -> ConfirmationDialog(
-            content = "Please enable your GPS to access location-based features.",
+            content = stringResource(CommonStrings.error_location_service_disabled_android),
             onSubmitClick = onOpenLocationSettings,
             onDismiss = onDismiss,
             submitText = stringResource(CommonStrings.action_continue),
