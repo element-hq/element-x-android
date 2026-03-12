@@ -19,8 +19,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.location.api.ShowLocationMode
-import io.element.android.features.location.impl.common.LocationConstraintsCheckResult
-import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
+import io.element.android.features.location.impl.common.LocationConstraintsCheck
 import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.actions.LocationActions
 import io.element.android.features.location.impl.common.checkLocationConstraints
@@ -28,6 +27,7 @@ import io.element.android.features.location.impl.common.permissions.PermissionsE
 import io.element.android.features.location.impl.common.permissions.PermissionsPresenter
 import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.features.location.impl.common.toDialogState
+import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.features.location.impl.common.ui.LocationMarkerData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
@@ -76,7 +76,7 @@ class ShowLocationPresenter(
                 is ShowLocationEvents.TrackMyLocation -> {
                     if (event.enabled) {
                         val locationConstraints = checkLocationConstraints(permissionsState, locationActions)
-                        isTrackMyLocation = locationConstraints is LocationConstraintsCheckResult.Success
+                        isTrackMyLocation = locationConstraints is LocationConstraintsCheck.Success
                         dialogState = locationConstraints.toDialogState()
                     } else {
                         isTrackMyLocation = false

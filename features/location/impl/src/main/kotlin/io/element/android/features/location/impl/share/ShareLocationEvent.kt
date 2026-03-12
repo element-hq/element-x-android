@@ -24,7 +24,7 @@ sealed interface ShareLocationEvent {
     data object StopTrackingUserLocation : ShareLocationEvent
     data object DismissDialog : ShareLocationEvent
 
-    data object RequestPermissions: ShareLocationEvent
+    data object RequestPermissions : ShareLocationEvent
     data object OpenAppSettings : ShareLocationEvent
     data object OpenLocationSettings : ShareLocationEvent
 }

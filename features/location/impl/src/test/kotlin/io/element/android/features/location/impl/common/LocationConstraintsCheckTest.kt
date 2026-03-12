@@ -23,7 +23,7 @@ class LocationConstraintsCheckTest {
 
         val result = checkLocationConstraints(permissionsState, locationActions)
 
-        assertThat(result).isEqualTo(LocationConstraintsCheckResult.Success)
+        assertThat(result).isEqualTo(LocationConstraintsCheck.Success)
     }
 
     @Test
@@ -35,7 +35,7 @@ class LocationConstraintsCheckTest {
 
         val result = checkLocationConstraints(permissionsState, locationActions)
 
-        assertThat(result).isEqualTo(LocationConstraintsCheckResult.Success)
+        assertThat(result).isEqualTo(LocationConstraintsCheck.Success)
     }
 
     @Test
@@ -47,7 +47,7 @@ class LocationConstraintsCheckTest {
 
         val result = checkLocationConstraints(permissionsState, locationActions)
 
-        assertThat(result).isEqualTo(LocationConstraintsCheckResult.LocationServiceDisabled)
+        assertThat(result).isEqualTo(LocationConstraintsCheck.LocationServiceDisabled)
     }
 
     @Test
@@ -60,7 +60,7 @@ class LocationConstraintsCheckTest {
 
         val result = checkLocationConstraints(permissionsState, locationActions)
 
-        assertThat(result).isEqualTo(LocationConstraintsCheckResult.PermissionRationale)
+        assertThat(result).isEqualTo(LocationConstraintsCheck.PermissionRationale)
     }
 
     @Test
@@ -73,7 +73,6 @@ class LocationConstraintsCheckTest {
 
         val result = checkLocationConstraints(permissionsState, locationActions)
 
-        assertThat(result).isEqualTo(LocationConstraintsCheckResult.PermissionDenied)
+        assertThat(result).isEqualTo(LocationConstraintsCheck.PermissionDenied)
     }
-
 }

@@ -21,7 +21,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.Composer
-import io.element.android.features.location.impl.common.LocationConstraintsCheckResult
+import io.element.android.features.location.impl.common.LocationConstraintsCheck
 import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.actions.LocationActions
 import io.element.android.features.location.impl.common.checkLocationConstraints
@@ -81,7 +81,7 @@ class ShareLocationPresenter(
         fun checkLocationConstraints() {
             val locationConstraints = checkLocationConstraints(permissionsState, locationActions)
             dialogState = Constraints(locationConstraints.toDialogState())
-            trackUserPosition = locationConstraints is LocationConstraintsCheckResult.Success
+            trackUserPosition = locationConstraints is LocationConstraintsCheck.Success
         }
 
         LaunchedEffect(permissionsState.permissions) { checkLocationConstraints() }
@@ -104,7 +104,7 @@ class ShareLocationPresenter(
                 }
                 ShareLocationEvent.ShowLiveLocationDurationPicker -> {
                     val constraintsResult = checkLocationConstraints(permissionsState, locationActions)
-                    dialogState = if (constraintsResult is LocationConstraintsCheckResult.Success) {
+                    dialogState = if (constraintsResult is LocationConstraintsCheck.Success) {
                         ShareLocationState.Dialog.LiveLocationDuration
                     } else {
                         Constraints(constraintsResult.toDialogState())
@@ -112,7 +112,7 @@ class ShareLocationPresenter(
                 }
                 is ShareLocationEvent.StartLiveLocationShare -> scope.launch {
                     dialogState = ShareLocationState.Dialog.None
-                    //room.startLiveLocationShare(event.duration.inWholeMilliseconds)
+                    // room.startLiveLocationShare(event.duration.inWholeMilliseconds)
                 }
                 ShareLocationEvent.RequestPermissions -> {
                     dialogState = ShareLocationState.Dialog.None

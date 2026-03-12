@@ -77,8 +77,8 @@ fun LocationShareRow(
                         tint = ElementTheme.colors.iconAccentPrimary,
                         modifier = Modifier.size(16.dp),
                     )
-                }else {
-                    val icon = if(item.assetType == AssetType.PIN) CompoundIcons.LocationNavigator() else CompoundIcons.LocationNavigatorCentred()
+                } else {
+                    val icon = if (item.assetType == AssetType.PIN) CompoundIcons.LocationNavigator() else CompoundIcons.LocationNavigatorCentred()
                     Icon(
                         imageVector = icon,
                         contentDescription = null,
@@ -122,7 +122,7 @@ internal fun LocationShareRowPreview() = ElementPreview {
                 formattedTimestamp = "Shared 1 min ago",
                 assetType = AssetType.SENDER,
                 isLive = true,
-                location = Location(0.0,0.0)
+                location = Location(0.0, 0.0)
             ),
             onShareClick = {},
         )
@@ -139,7 +139,7 @@ internal fun LocationShareRowPreview() = ElementPreview {
                 assetType = AssetType.PIN,
                 formattedTimestamp = "Shared 5 hours ago",
                 isLive = false,
-                location = Location(0.0,0.0)
+                location = Location(0.0, 0.0)
             ),
             onShareClick = {},
         )

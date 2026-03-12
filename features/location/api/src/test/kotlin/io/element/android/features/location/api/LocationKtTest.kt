@@ -79,4 +79,3 @@ internal class LocationKtTest {
             .isEqualTo("geo:1.0,2.0;u=3.0")
     }
 }
-

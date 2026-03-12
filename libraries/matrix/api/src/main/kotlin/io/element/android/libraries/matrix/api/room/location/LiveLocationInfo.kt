@@ -12,4 +12,3 @@ data class LiveLocationInfo(
     val geoUri: String,
     val timestamp: Long,
 )
-

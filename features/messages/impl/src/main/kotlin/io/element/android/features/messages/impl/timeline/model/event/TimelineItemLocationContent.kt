@@ -27,7 +27,6 @@ data class TimelineItemLocationContent(
     val assetType: AssetType? = null,
     val mode: Mode,
 ) : TimelineItemEventContent {
-
     val pinVariant = when (mode) {
         is Mode.Live -> {
             if (mode.isActive) {
@@ -61,4 +60,3 @@ data class TimelineItemLocationContent(
 
     override val type: String = "TimelineItemLocationContent"
 }
-

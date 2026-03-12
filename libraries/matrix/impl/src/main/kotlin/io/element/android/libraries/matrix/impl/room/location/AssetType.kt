@@ -17,7 +17,7 @@ fun AssetType.into(): RustAssetType = when (this) {
     AssetType.UNKNOWN -> RustAssetType.UNKNOWN
 }
 
-fun RustAssetType.into(): AssetType = when(this){
+fun RustAssetType.into(): AssetType = when (this) {
     RustAssetType.SENDER -> AssetType.SENDER
     RustAssetType.PIN -> AssetType.PIN
     RustAssetType.UNKNOWN -> AssetType.UNKNOWN

@@ -111,7 +111,7 @@ data class LiveLocationContent(
     val timeout: Long,
     val assetType: AssetType?,
     val locations: List<LiveLocationInfo>,
-): EventContent
+) : EventContent
 
 data object LegacyCallInviteContent : EventContent
 

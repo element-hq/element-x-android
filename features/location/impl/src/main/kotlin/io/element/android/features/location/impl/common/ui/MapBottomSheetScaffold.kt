@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright (c) 2026 Element Creations Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
@@ -7,7 +7,6 @@
 
 package io.element.android.features.location.impl.common.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -37,7 +36,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -124,7 +122,7 @@ fun MapBottomSheetScaffold(
         ) {
             val ornamentOptions = mapOptions.ornamentOptions.copy(padding = sheetPadding)
             val mapOptions = mapOptions.copy(ornamentOptions = ornamentOptions)
-            Box{
+            Box {
                 MaplibreMap(
                     options = mapOptions,
                     baseStyle = BaseStyle.Uri(rememberTileStyleUrl()),
