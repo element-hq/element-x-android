@@ -30,7 +30,7 @@ class FakeLocationActions(
         sharedLabel = label
     }
 
-    override fun openSettings() {
+    override fun openAppSettings() {
         openSettingsInvocationsCount++
     }
 

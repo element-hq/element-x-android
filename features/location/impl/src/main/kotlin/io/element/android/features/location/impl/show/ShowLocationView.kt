@@ -27,10 +27,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.location.api.ShowLocationMode
-import io.element.android.features.location.impl.common.ui.LocationServiceDisabledDialog
+import io.element.android.features.location.impl.common.ui.LocationConstraintsDialog
 import io.element.android.features.location.impl.common.MapDefaults
-import io.element.android.features.location.impl.common.PermissionDeniedDialog
-import io.element.android.features.location.impl.common.PermissionRationaleDialog
 import io.element.android.features.location.impl.common.ui.LocationFloatingActionButton
 import io.element.android.features.location.impl.common.ui.LocationPinMarkers
 import io.element.android.features.location.impl.common.ui.LocationShareRow
@@ -56,30 +54,21 @@ fun ShowLocationView(
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    when (state.permissionDialog) {
-        ShowLocationState.Dialog.None -> Unit
-        ShowLocationState.Dialog.PermissionDenied -> PermissionDeniedDialog(
-            onContinue = { state.eventSink(ShowLocationEvents.OpenAppSettings) },
-            onDismiss = { state.eventSink(ShowLocationEvents.DismissDialog) },
-            appName = state.appName,
-        )
-        ShowLocationState.Dialog.PermissionRationale -> PermissionRationaleDialog(
-            onContinue = { state.eventSink(ShowLocationEvents.RequestPermissions) },
-            onDismiss = { state.eventSink(ShowLocationEvents.DismissDialog) },
-            appName = state.appName,
-        )
-        ShowLocationState.Dialog.LocationServiceDisabled -> LocationServiceDisabledDialog(
-            onContinue = { state.eventSink(ShowLocationEvents.OpenLocationSettings) },
-            onDismiss = { state.eventSink(ShowLocationEvents.DismissDialog) },
-        )
-    }
+    LocationConstraintsDialog(
+        state = state.dialogState,
+        appName = state.appName,
+        onRequestPermissions = { state.eventSink(ShowLocationEvents.RequestPermissions) },
+        onOpenAppSettings = { state.eventSink(ShowLocationEvents.OpenAppSettings) },
+        onOpenLocationSettings = { state.eventSink(ShowLocationEvents.OpenLocationSettings) },
+        onDismiss = { state.eventSink(ShowLocationEvents.DismissDialog) },
+    )
 
     val initialPosition = when (val mode = state.mode) {
         is ShowLocationMode.Static -> CameraPosition(
             target = Position(latitude = mode.location.lat, longitude = mode.location.lon),
             zoom = MapDefaults.DEFAULT_ZOOM
         )
-        ShowLocationMode.Live -> MapDefaults.centerCameraPosition
+        ShowLocationMode.Live -> MapDefaults.defaultCameraPosition
     }
     val cameraState = rememberCameraState(firstPosition = initialPosition)
     val userLocationState = rememberUserLocationState(state.hasLocationPermission)

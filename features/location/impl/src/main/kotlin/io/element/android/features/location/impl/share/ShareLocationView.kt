@@ -35,10 +35,8 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.internal.centerBottomEdge
 import io.element.android.features.location.impl.common.MapDefaults
-import io.element.android.features.location.impl.common.PermissionDeniedDialog
-import io.element.android.features.location.impl.common.PermissionRationaleDialog
+import io.element.android.features.location.impl.common.ui.LocationConstraintsDialog
 import io.element.android.features.location.impl.common.ui.LocationFloatingActionButton
-import io.element.android.features.location.impl.common.ui.LocationServiceDisabledDialog
 import io.element.android.features.location.impl.common.ui.MapBottomSheetScaffold
 import io.element.android.features.location.impl.common.ui.UserLocationPuck
 import io.element.android.features.location.impl.common.ui.rememberUserLocationState
@@ -58,7 +56,6 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.CommonStrings
 import org.maplibre.compose.camera.CameraMoveReason
-import org.maplibre.compose.camera.CameraPosition
 import org.maplibre.compose.camera.CameraState
 import org.maplibre.compose.camera.rememberCameraState
 import org.maplibre.compose.location.UserLocationState
@@ -71,24 +68,14 @@ fun ShareLocationView(
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LaunchedEffect(Unit) {
-        state.eventSink(ShareLocationEvent.RequestPermissions)
-    }
-
-    when (state.dialogState) {
+    when (val dialogState = state.dialogState) {
         ShareLocationState.Dialog.None -> Unit
-        ShareLocationState.Dialog.PermissionDenied -> PermissionDeniedDialog(
-            onContinue = { state.eventSink(ShareLocationEvent.OpenAppSettings) },
-            onDismiss = { state.eventSink(ShareLocationEvent.DismissDialog) },
+        is ShareLocationState.Dialog.Constraints -> LocationConstraintsDialog(
+            state = dialogState.state,
             appName = state.appName,
-        )
-        ShareLocationState.Dialog.PermissionRationale -> PermissionRationaleDialog(
-            onContinue = { state.eventSink(ShareLocationEvent.RequestPermissions) },
-            onDismiss = { state.eventSink(ShareLocationEvent.DismissDialog) },
-            appName = state.appName,
-        )
-        ShareLocationState.Dialog.LocationServiceDisabled -> LocationServiceDisabledDialog(
-            onContinue = { state.eventSink(ShareLocationEvent.OpenLocationSettings) },
+            onRequestPermissions = { state.eventSink(ShareLocationEvent.RequestPermissions) },
+            onOpenAppSettings = { state.eventSink(ShareLocationEvent.OpenAppSettings) },
+            onOpenLocationSettings = { state.eventSink(ShareLocationEvent.OpenLocationSettings) },
             onDismiss = { state.eventSink(ShareLocationEvent.DismissDialog) },
         )
         ShareLocationState.Dialog.LiveLocationDuration -> LiveLocationDurationDialog(
@@ -103,12 +90,12 @@ fun ShareLocationView(
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberStandardBottomSheetState(initialValue = SheetValue.Expanded)
     )
-    val cameraState = rememberCameraState(firstPosition = CameraPosition(zoom = MapDefaults.DEFAULT_ZOOM))
+    val cameraState = rememberCameraState(firstPosition = MapDefaults.defaultCameraPosition)
     val userLocationState = rememberUserLocationState(state.hasLocationPermission)
 
     LaunchedEffect(cameraState.isCameraMoving) {
         if (cameraState.moveReason == CameraMoveReason.GESTURE) {
-            state.eventSink(ShareLocationEvent.StopTrackingUserPosition)
+            state.eventSink(ShareLocationEvent.StopTrackingUserLocation)
         }
     }
 
@@ -159,7 +146,7 @@ fun ShareLocationView(
             }
             LocationFloatingActionButton(
                 isMapCenteredOnUser = state.trackUserLocation,
-                onClick = { state.eventSink(ShareLocationEvent.StartTrackingUserPosition) },
+                onClick = { state.eventSink(ShareLocationEvent.StartTrackingUserLocation) },
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(all = 16.dp),
@@ -176,39 +163,34 @@ private fun BottomSheetContent(
     navigateUp: () -> Unit,
 ) {
     Spacer(Modifier.height(20.dp))
-    SharePinLocationItem(
-        onClick = {
-            val positionTarget = cameraState.position.target
+    val userLocation = userLocationState.location
+    if (state.trackUserLocation && userLocation != null) {
+        ShareCurrentLocationItem {
             state.eventSink(
                 ShareLocationEvent.ShareStaticLocation(
-                    location = Location(lat = positionTarget.latitude, lon = positionTarget.longitude),
-                    isPinned = true
+                    location = Location(
+                        lat = userLocation.position.latitude,
+                        lon = userLocation.position.longitude
+                    ),
+                    isPinned = false
                 )
             )
             navigateUp()
         }
-    )
-    ShareCurrentLocationItem(
-        onClick = {
-            val userLocation = userLocationState.location
-            if (state.hasLocationPermission) {
-                if (userLocation == null) {
-                    //
-                } else {
-                    state.eventSink(
-                        ShareLocationEvent.ShareStaticLocation(
-                            location = Location(
-                                lat = userLocation.position.latitude,
-                                lon = userLocation.position.longitude
-                            ),
-                            isPinned = false
-                        )
+    } else {
+        SharePinLocationItem(
+            onClick = {
+                val positionTarget = cameraState.position.target
+                state.eventSink(
+                    ShareLocationEvent.ShareStaticLocation(
+                        location = Location(lat = positionTarget.latitude, lon = positionTarget.longitude),
+                        isPinned = true
                     )
-                    navigateUp()
-                }
+                )
+                navigateUp()
             }
-        }
-    )
+        )
+    }
     if (state.canShareLiveLocation) {
         ShareLiveLocationItem {
             state.eventSink(ShareLocationEvent.ShowLiveLocationDurationPicker)

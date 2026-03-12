@@ -11,6 +11,7 @@ package io.element.android.features.location.impl.show
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.ShowLocationMode
+import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.features.location.impl.common.ui.LocationMarkerData
 import io.element.android.libraries.designsystem.components.PinVariant
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -25,13 +26,13 @@ class ShowLocationStateProvider : PreviewParameterProvider<ShowLocationState> {
         get() = sequenceOf(
             aShowLocationState(),
             aShowLocationState(
-                permissionDialog = ShowLocationState.Dialog.PermissionDenied,
+                constraintsDialogState = LocationConstraintsDialogState.PermissionDenied,
             ),
             aShowLocationState(
-                permissionDialog = ShowLocationState.Dialog.PermissionRationale,
+                constraintsDialogState = LocationConstraintsDialogState.PermissionRationale,
             ),
             aShowLocationState(
-                permissionDialog = ShowLocationState.Dialog.LocationServiceDisabled,
+                constraintsDialogState = LocationConstraintsDialogState.LocationServiceDisabled,
                 hasLocationPermission = true,
             ),
             aShowLocationState(
@@ -41,22 +42,11 @@ class ShowLocationStateProvider : PreviewParameterProvider<ShowLocationState> {
                 hasLocationPermission = true,
                 isTrackMyLocation = true,
             ),
-            aShowLocationState(
-                mode = aStaticLocationMode(senderName = "My favourite place!"),
-            ),
-            aShowLocationState(
-                mode = aStaticLocationMode(
-                    senderName = "For some reason I decided to write a small essay that wraps at just two lines!"
-                ),
-            ),
-            aShowLocationState(
-                mode = ShowLocationMode.Live,
-            ),
         )
 }
 
 fun aShowLocationState(
-    permissionDialog: ShowLocationState.Dialog = ShowLocationState.Dialog.None,
+    constraintsDialogState: LocationConstraintsDialogState = LocationConstraintsDialogState.None,
     mode: ShowLocationMode = aStaticLocationMode(),
     markers: List<LocationMarkerData>? = null,
     locationSharers: List<LocationShareItem>? = null,
@@ -107,7 +97,7 @@ fun aShowLocationState(
         ShowLocationMode.Live -> emptyList()
     }
     return ShowLocationState(
-        permissionDialog = permissionDialog,
+        dialogState = constraintsDialogState,
         mode = mode,
         markers = effectiveMarkers,
         locationShares = effectiveLocationSharers,

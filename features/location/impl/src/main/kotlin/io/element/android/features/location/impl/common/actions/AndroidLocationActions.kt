@@ -43,7 +43,7 @@ class AndroidLocationActions(
         }
     }
 
-    override fun openSettings() {
+    override fun openAppSettings() {
         context.openAppSettingsPage()
     }
 

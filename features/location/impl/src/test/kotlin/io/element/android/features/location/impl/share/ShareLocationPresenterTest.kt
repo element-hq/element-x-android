@@ -228,7 +228,7 @@ class ShareLocationPresenterTest {
             assertThat(myLocationState.hasLocationPermission).isFalse()
 
             // Continue the dialog sends permission request to the permissions presenter
-            myLocationState.eventSink(ShareLocationEvent.RequestPermissions)
+            myLocationState.eventSink(ShareLocationEvent.StartTrackingUserLocation)
             assertThat(fakePermissionsPresenter.events.last()).isEqualTo(PermissionsEvents.RequestPermissions)
         }
     }

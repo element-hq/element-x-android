@@ -14,7 +14,9 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.location.impl.common.actions.FakeLocationActions
 import io.element.android.features.location.impl.common.permissions.FakePermissionsPresenter
 import io.element.android.features.messages.test.FakeMessageComposerContext
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.services.analytics.test.FakeAnalyticsService
@@ -42,6 +44,8 @@ class DefaultShareLocationEntryPointTest {
                         messageComposerContext = FakeMessageComposerContext(),
                         locationActions = FakeLocationActions(),
                         buildMeta = aBuildMeta(),
+                        featureFlagService = FakeFeatureFlagService(),
+                        client = FakeMatrixClient(),
                     )
                 },
                 analyticsService = FakeAnalyticsService(),

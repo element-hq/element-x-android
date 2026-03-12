@@ -10,13 +10,14 @@ package io.element.android.features.location.impl.show
 
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.ShowLocationMode
+import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.features.location.impl.common.ui.LocationMarkerData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.location.AssetType
 
 data class ShowLocationState(
-    val permissionDialog: Dialog,
+    val dialogState: LocationConstraintsDialogState,
     val mode: ShowLocationMode,
     val markers: List<LocationMarkerData>,
     val locationShares: List<LocationShareItem>,
@@ -25,15 +26,7 @@ data class ShowLocationState(
     val appName: String,
     val eventSink: (ShowLocationEvents) -> Unit,
 ) {
-
     val isSheetDraggable = locationShares.any { item -> item.isLive }
-
-    sealed interface Dialog {
-        data object None : Dialog
-        data object PermissionRationale : Dialog
-        data object PermissionDenied : Dialog
-        data object LocationServiceDisabled : Dialog
-    }
 }
 
 data class LocationShareItem(

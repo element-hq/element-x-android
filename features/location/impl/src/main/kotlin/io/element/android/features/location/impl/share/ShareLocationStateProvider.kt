@@ -9,6 +9,7 @@
 package io.element.android.features.location.impl.share
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 
@@ -18,37 +19,37 @@ class ShareLocationStateProvider : PreviewParameterProvider<ShareLocationState> 
     override val values: Sequence<ShareLocationState>
         get() = sequenceOf(
             aShareLocationState(
-                permissionDialog = ShareLocationState.Dialog.None,
+                dialogState = ShareLocationState.Dialog.None,
                 trackUserPosition = false,
                 hasLocationPermission = false,
             ),
             aShareLocationState(
-                permissionDialog = ShareLocationState.Dialog.PermissionDenied,
+                dialogState = ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.PermissionDenied),
                 trackUserPosition = false,
                 hasLocationPermission = false,
             ),
             aShareLocationState(
-                permissionDialog = ShareLocationState.Dialog.PermissionRationale,
+                dialogState = ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.PermissionRationale),
                 trackUserPosition = false,
                 hasLocationPermission = false,
             ),
             aShareLocationState(
-                permissionDialog = ShareLocationState.Dialog.LocationServiceDisabled,
+                dialogState = ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.LocationServiceDisabled),
                 trackUserPosition = false,
                 hasLocationPermission = true,
             ),
             aShareLocationState(
-                permissionDialog = ShareLocationState.Dialog.None,
+                dialogState = ShareLocationState.Dialog.None,
                 trackUserPosition = false,
                 hasLocationPermission = true,
             ),
             aShareLocationState(
-                permissionDialog = ShareLocationState.Dialog.None,
+                dialogState = ShareLocationState.Dialog.None,
                 trackUserPosition = true,
                 hasLocationPermission = true,
             ),
             aShareLocationState(
-                permissionDialog = ShareLocationState.Dialog.LiveLocationDuration,
+                dialogState = ShareLocationState.Dialog.LiveLocationDuration,
                 trackUserPosition = true,
                 hasLocationPermission = true,
                 canShareLiveLocation = true,
@@ -58,14 +59,14 @@ class ShareLocationStateProvider : PreviewParameterProvider<ShareLocationState> 
 
 private fun aShareLocationState(
     currentUser: MatrixUser = MatrixUser(UserId("@user:matrix.org")),
-    permissionDialog: ShareLocationState.Dialog,
+    dialogState: ShareLocationState.Dialog,
     trackUserPosition: Boolean,
     hasLocationPermission: Boolean,
     canShareLiveLocation: Boolean = false,
 ): ShareLocationState {
     return ShareLocationState(
         currentUser = currentUser,
-        dialogState = permissionDialog,
+        dialogState = dialogState,
         trackUserLocation = trackUserPosition,
         hasLocationPermission = hasLocationPermission,
         canShareLiveLocation = canShareLiveLocation,

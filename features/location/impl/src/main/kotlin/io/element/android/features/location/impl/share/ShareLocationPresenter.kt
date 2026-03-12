@@ -21,11 +21,15 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.Composer
+import io.element.android.features.location.impl.common.LocationConstraintsCheckResult
 import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.actions.LocationActions
+import io.element.android.features.location.impl.common.checkLocationConstraints
 import io.element.android.features.location.impl.common.permissions.PermissionsEvents
 import io.element.android.features.location.impl.common.permissions.PermissionsPresenter
 import io.element.android.features.location.impl.common.permissions.PermissionsState
+import io.element.android.features.location.impl.common.toDialogState
+import io.element.android.features.location.impl.share.ShareLocationState.Dialog.Constraints
 import io.element.android.features.messages.api.MessageComposerContext
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.extensions.flatMap
@@ -63,7 +67,7 @@ class ShareLocationPresenter(
     @Composable
     override fun present(): ShareLocationState {
         val permissionsState: PermissionsState = permissionsPresenter.present()
-        var trackUserPosition: Boolean by remember { mutableStateOf(permissionsState.isAnyGranted) }
+        var trackUserPosition: Boolean by remember { mutableStateOf(permissionsState.isAnyGranted && locationActions.isLocationEnabled()) }
         val isLiveLocationSharingEnabled by remember {
             featureFlagService.isFeatureEnabledFlow(FeatureFlags.LiveLocationSharing)
         }.collectAsState(false)
@@ -74,54 +78,45 @@ class ShareLocationPresenter(
         val currentUser by client.userProfile.collectAsState()
         val scope = rememberCoroutineScope()
 
-        LaunchedEffect(permissionsState.permissions) {
-            if (permissionsState.isAnyGranted) {
-                trackUserPosition = true
-                dialogState = ShareLocationState.Dialog.None
-            }
+        fun checkLocationConstraints() {
+            val locationConstraints = checkLocationConstraints(permissionsState, locationActions)
+            dialogState = Constraints(locationConstraints.toDialogState())
+            trackUserPosition = locationConstraints is LocationConstraintsCheckResult.Success
         }
+
+        LaunchedEffect(permissionsState.permissions) { checkLocationConstraints() }
 
         fun handleEvent(event: ShareLocationEvent) {
             when (event) {
                 is ShareLocationEvent.ShareStaticLocation -> scope.launch {
                     shareStaticLocation(event)
                 }
-                ShareLocationEvent.StartTrackingUserPosition -> when {
-                    permissionsState.isAnyGranted -> {
-                        if (!locationActions.isLocationEnabled()) {
-                            dialogState = ShareLocationState.Dialog.LocationServiceDisabled
-                        } else {
-                            trackUserPosition = true
-                        }
-                    }
-                    permissionsState.shouldShowRationale -> dialogState = ShareLocationState.Dialog.PermissionRationale
-                    else -> dialogState = ShareLocationState.Dialog.PermissionDenied
-                }
-                ShareLocationEvent.StopTrackingUserPosition -> trackUserPosition = false
+                ShareLocationEvent.StartTrackingUserLocation -> checkLocationConstraints()
+                ShareLocationEvent.StopTrackingUserLocation -> trackUserPosition = false
                 ShareLocationEvent.DismissDialog -> dialogState = ShareLocationState.Dialog.None
                 ShareLocationEvent.OpenAppSettings -> {
-                    locationActions.openSettings()
+                    locationActions.openAppSettings()
                     dialogState = ShareLocationState.Dialog.None
                 }
                 ShareLocationEvent.OpenLocationSettings -> {
                     locationActions.openLocationSettings()
                     dialogState = ShareLocationState.Dialog.None
                 }
-                ShareLocationEvent.RequestPermissions -> permissionsState.eventSink(PermissionsEvents.RequestPermissions)
-                ShareLocationEvent.ShowLiveLocationDurationPicker -> dialogState = when {
-                    permissionsState.isAnyGranted -> {
-                        if (!locationActions.isLocationEnabled()) {
-                            ShareLocationState.Dialog.LocationServiceDisabled
-                        } else {
-                            ShareLocationState.Dialog.LiveLocationDuration
-                        }
+                ShareLocationEvent.ShowLiveLocationDurationPicker -> {
+                    val constraintsResult = checkLocationConstraints(permissionsState, locationActions)
+                    dialogState = if (constraintsResult is LocationConstraintsCheckResult.Success) {
+                        ShareLocationState.Dialog.LiveLocationDuration
+                    } else {
+                        Constraints(constraintsResult.toDialogState())
                     }
-                    permissionsState.shouldShowRationale -> ShareLocationState.Dialog.PermissionRationale
-                    else -> ShareLocationState.Dialog.PermissionDenied
                 }
                 is ShareLocationEvent.StartLiveLocationShare -> scope.launch {
                     dialogState = ShareLocationState.Dialog.None
                     //room.startLiveLocationShare(event.duration.inWholeMilliseconds)
+                }
+                ShareLocationEvent.RequestPermissions -> {
+                    dialogState = ShareLocationState.Dialog.None
+                    permissionsState.eventSink(PermissionsEvents.RequestPermissions)
                 }
             }
         }

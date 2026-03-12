@@ -34,43 +34,9 @@ object MapDefaults {
         )
     )
 
-    /*
-    val uiSettings: MapUiSettings
-        @Composable
-        @ReadOnlyComposable
-        get() = MapUiSettings(
-            compassEnabled = false,
-            rotationGesturesEnabled = false,
-            scrollGesturesEnabled = true,
-            tiltGesturesEnabled = false,
-            zoomGesturesEnabled = true,
-            logoGravity = Gravity.TOP,
-            attributionGravity = Gravity.TOP,
-            attributionTintColor = ElementTheme.colors.iconPrimary
-        )
-
-    val symbolManagerSettings: MapSymbolManagerSettings
-        get() = MapSymbolManagerSettings(
-            iconAllowOverlap = true
-        )
-
-    val locationSettings: MapLocationSettings
-        get() = MapLocationSettings(
-            locationEnabled = false,
-            backgroundTintColor = Color.White,
-            foregroundTintColor = Color.Black,
-            backgroundStaleTintColor = Color.White,
-            foregroundStaleTintColor = Color.Black,
-            accuracyColor = Color.Black,
-            pulseEnabled = true,
-            pulseColor = Color.Black,
-        )
-
-     */
-
-    val centerCameraPosition = CameraPosition(
-        target = Position(49.843, 9.902056),
-        zoom = 2.7,
+    val defaultCameraPosition = CameraPosition(
+        target = Position(0.0, 0.0),
+        zoom = 0.0,
     )
     const val DEFAULT_ZOOM = 15.0
 

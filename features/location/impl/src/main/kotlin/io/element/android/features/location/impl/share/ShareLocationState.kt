@@ -8,6 +8,7 @@
 
 package io.element.android.features.location.impl.share
 
+import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.libraries.matrix.api.user.MatrixUser
 
 data class ShareLocationState(
@@ -21,9 +22,7 @@ data class ShareLocationState(
 ) {
     sealed interface Dialog {
         data object None : Dialog
-        data object PermissionRationale : Dialog
-        data object PermissionDenied : Dialog
-        data object LocationServiceDisabled : Dialog
+        data class Constraints(val state: LocationConstraintsDialogState) : Dialog
         data object LiveLocationDuration : Dialog
     }
 }
