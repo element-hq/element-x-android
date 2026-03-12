@@ -8,11 +8,13 @@
 
 package io.element.android.features.location.impl.share
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetValue
 import androidx.compose.material3.rememberBottomSheetScaffoldState
@@ -20,9 +22,12 @@ import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -36,11 +41,14 @@ import io.element.android.features.location.impl.common.ui.LocationFloatingActio
 import io.element.android.features.location.impl.common.ui.MapBottomSheetScaffold
 import io.element.android.features.location.impl.common.ui.UserLocationPuck
 import io.element.android.features.location.impl.common.ui.rememberUserLocationState
+import io.element.android.libraries.androidutils.system.toast
 import io.element.android.libraries.designsystem.components.LocationPin
 import io.element.android.libraries.designsystem.components.PinVariant
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.dialogs.ListDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
+import io.element.android.libraries.designsystem.components.list.RadioButtonListItem
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.IconSource
@@ -62,6 +70,7 @@ fun ShareLocationView(
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
     when (val dialogState = state.dialogState) {
         ShareLocationState.Dialog.None -> Unit
         is ShareLocationState.Dialog.Constraints -> LocationConstraintsDialog(
@@ -75,6 +84,7 @@ fun ShareLocationView(
         ShareLocationState.Dialog.LiveLocationDuration -> LiveLocationDurationDialog(
             onSelectDuration = { duration ->
                 state.eventSink(ShareLocationEvent.StartLiveLocationShare(duration))
+                context.toast("Not implemented yet!")
                 navigateUp()
             },
             onDismiss = { state.eventSink(ShareLocationEvent.DismissDialog) },
@@ -129,7 +139,7 @@ fun ShareLocationView(
                     .padding(sheetPadding)
             ) {
                 val variant = if (state.trackUserLocation) {
-                    PinVariant.UserLocation(isLive = false, avatarData = state.currentUser.getAvatarData(AvatarSize.SelectedUser))
+                    PinVariant.UserLocation(isLive = false, avatarData = state.currentUser.getAvatarData(AvatarSize.LocationPin))
                 } else {
                     PinVariant.PinnedLocation
                 }
@@ -243,7 +253,6 @@ private fun LiveLocationDurationDialog(
     onSelectDuration: (Duration) -> Unit,
     onDismiss: () -> Unit,
 ) {
-    /*
     var selectedIndex by remember { mutableIntStateOf(0) }
     ListDialog(
         title = "Choose how long to share your live location.",
@@ -263,7 +272,6 @@ private fun LiveLocationDurationDialog(
             )
         }
     }
-     */
 }
 
 @PreviewsDayNight

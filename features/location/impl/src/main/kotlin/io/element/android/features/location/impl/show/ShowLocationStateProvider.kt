@@ -68,7 +68,7 @@ fun aShowLocationState(
                             id = mode.senderId.value,
                             name = mode.senderName,
                             url = mode.senderAvatarUrl,
-                            size = AvatarSize.UserListItem,
+                            size = AvatarSize.LocationPin,
                         ),
                         isLive = true,
                     )

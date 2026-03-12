@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -60,6 +61,7 @@ private val STROKE_WIDTH = 1.dp
 /**
  * Variants of location pin markers.
  */
+@Immutable
 sealed interface PinVariant {
     data class UserLocation(
         val avatarData: AvatarData,

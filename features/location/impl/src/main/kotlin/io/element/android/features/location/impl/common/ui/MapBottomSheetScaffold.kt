@@ -60,15 +60,16 @@ import kotlin.math.roundToInt
  * - Updating camera position padding based on sheet height
  * - Rendering the MaplibreMap with proper ornament positioning
  *
- * @param cameraState The camera state for the map
- * @param topBar The top app bar content
- * @param sheetContent The content to display in the bottom sheet
  * @param modifier Modifier for the root layout
  * @param scaffoldState State for the bottom sheet scaffold
+ * @param cameraState The camera state for the map
+ * @param mapOptions The options to configure the map
  * @param sheetPeekHeight The height of the sheet when collapsed
  * @param sheetDragHandle Optional drag handle for the sheet
  * @param sheetSwipeEnabled Whether the sheet can be swiped
+ * @param topBar The top app bar content
  * @param snackbarHost The snackbar host content
+ * @param sheetContent The content to display in the bottom sheet
  * @param mapContent The content inside the MaplibreMap (layers, location pucks, etc.)
  * @param overlayContent Content to overlay on top of the map (FAB, pin icons, etc.)
  */

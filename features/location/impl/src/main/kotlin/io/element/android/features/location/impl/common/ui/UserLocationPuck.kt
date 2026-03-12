@@ -7,6 +7,7 @@
 
 package io.element.android.features.location.impl.common.ui
 
+import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.dp
@@ -63,6 +64,7 @@ fun UserLocationPuck(
     }
 }
 
+@SuppressLint("MissingPermission")
 @Composable
 fun rememberUserLocationState(hasLocationPermission: Boolean): UserLocationState {
     val isPreview = LocalInspectionMode.current

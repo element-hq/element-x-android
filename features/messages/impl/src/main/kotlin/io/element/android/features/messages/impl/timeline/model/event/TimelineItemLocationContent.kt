@@ -49,8 +49,7 @@ data class TimelineItemLocationContent(
         senderId.value,
         name = senderProfile.getDisplayName(),
         url = senderProfile.getAvatarUrl(),
-        // Size is irrelevant as the PinMarker will override anyway.
-        size = AvatarSize.TimelineSender
+        size = AvatarSize.LocationPin
     )
 
     sealed interface Mode {

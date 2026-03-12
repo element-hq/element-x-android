@@ -15,6 +15,7 @@ import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
+import android.os.Build
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
@@ -83,7 +84,9 @@ class DefaultNetworkMonitor(
                 if (network.networkHandle == connectivityManager.activeNetwork?.networkHandle) {
                     // If the network doesn't have the NET_CAPABILITY_VALIDATED capability, it means that the network is not able to reach the internet
                     // (according to Google), which is a common case in air-gapped environments.
-                    isInAirGappedEnvironment.value = !networkCapabilities.capabilities.contains(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+                        isInAirGappedEnvironment.value = !networkCapabilities.capabilities.contains(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
+                    }
                 }
             }
 

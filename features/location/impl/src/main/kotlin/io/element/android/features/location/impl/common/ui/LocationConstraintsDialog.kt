@@ -8,16 +8,10 @@
 package io.element.android.features.location.impl.common.ui
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.Immutable
 import androidx.compose.ui.res.stringResource
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.ui.strings.CommonStrings
-
-sealed interface LocationConstraintsDialogState {
-    data object None : LocationConstraintsDialogState
-    data object PermissionRationale : LocationConstraintsDialogState
-    data object PermissionDenied : LocationConstraintsDialogState
-    data object LocationServiceDisabled : LocationConstraintsDialogState
-}
 
 @Composable
 fun LocationConstraintsDialog(
@@ -52,4 +46,12 @@ fun LocationConstraintsDialog(
             cancelText = stringResource(CommonStrings.action_cancel),
         )
     }
+}
+
+@Immutable
+sealed interface LocationConstraintsDialogState {
+    data object None : LocationConstraintsDialogState
+    data object PermissionRationale : LocationConstraintsDialogState
+    data object PermissionDenied : LocationConstraintsDialogState
+    data object LocationServiceDisabled : LocationConstraintsDialogState
 }

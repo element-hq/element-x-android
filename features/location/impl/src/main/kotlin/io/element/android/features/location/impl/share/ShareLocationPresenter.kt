@@ -126,7 +126,7 @@ class ShareLocationPresenter(
             dialogState = dialogState,
             trackUserLocation = trackUserPosition,
             hasLocationPermission = permissionsState.isAnyGranted,
-            canShareLiveLocation = false,
+            canShareLiveLocation = isLiveLocationSharingEnabled,
             appName = appName,
             eventSink = ::handleEvent,
         )
