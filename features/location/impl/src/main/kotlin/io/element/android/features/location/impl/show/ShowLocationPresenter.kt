@@ -68,12 +68,12 @@ class ShowLocationPresenter(
             }
         }
 
-        fun handleEvent(event: ShowLocationEvents) {
+        fun handleEvent(event: ShowLocationEvent) {
             when (event) {
-                is ShowLocationEvents.Share -> {
+                is ShowLocationEvent.Share -> {
                     locationActions.share(event.location, null)
                 }
-                is ShowLocationEvents.TrackMyLocation -> {
+                is ShowLocationEvent.TrackMyLocation -> {
                     if (event.enabled) {
                         val locationConstraints = checkLocationConstraints(permissionsState, locationActions)
                         isTrackMyLocation = locationConstraints is LocationConstraintsCheck.Success
@@ -82,16 +82,16 @@ class ShowLocationPresenter(
                         isTrackMyLocation = false
                     }
                 }
-                ShowLocationEvents.DismissDialog -> dialogState = LocationConstraintsDialogState.None
-                ShowLocationEvents.OpenAppSettings -> {
+                ShowLocationEvent.DismissDialog -> dialogState = LocationConstraintsDialogState.None
+                ShowLocationEvent.OpenAppSettings -> {
                     locationActions.openAppSettings()
                     dialogState = LocationConstraintsDialogState.None
                 }
-                ShowLocationEvents.OpenLocationSettings -> {
+                ShowLocationEvent.OpenLocationSettings -> {
                     locationActions.openLocationSettings()
                     dialogState = LocationConstraintsDialogState.None
                 }
-                ShowLocationEvents.RequestPermissions -> permissionsState.eventSink(PermissionsEvents.RequestPermissions)
+                ShowLocationEvent.RequestPermissions -> permissionsState.eventSink(PermissionsEvents.RequestPermissions)
             }
         }
 

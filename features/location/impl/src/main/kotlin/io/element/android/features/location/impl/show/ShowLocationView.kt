@@ -57,10 +57,10 @@ fun ShowLocationView(
     LocationConstraintsDialog(
         state = state.dialogState,
         appName = state.appName,
-        onRequestPermissions = { state.eventSink(ShowLocationEvents.RequestPermissions) },
-        onOpenAppSettings = { state.eventSink(ShowLocationEvents.OpenAppSettings) },
-        onOpenLocationSettings = { state.eventSink(ShowLocationEvents.OpenLocationSettings) },
-        onDismiss = { state.eventSink(ShowLocationEvents.DismissDialog) },
+        onRequestPermissions = { state.eventSink(ShowLocationEvent.RequestPermissions) },
+        onOpenAppSettings = { state.eventSink(ShowLocationEvent.OpenAppSettings) },
+        onOpenLocationSettings = { state.eventSink(ShowLocationEvent.OpenLocationSettings) },
+        onDismiss = { state.eventSink(ShowLocationEvent.DismissDialog) },
     )
 
     val initialPosition = when (val mode = state.mode) {
@@ -74,7 +74,7 @@ fun ShowLocationView(
     val userLocationState = rememberUserLocationState(state.hasLocationPermission)
     LaunchedEffect(cameraState.isCameraMoving) {
         if (cameraState.moveReason == CameraMoveReason.GESTURE) {
-            state.eventSink(ShowLocationEvents.TrackMyLocation(false))
+            state.eventSink(ShowLocationEvent.TrackMyLocation(false))
         }
     }
 
@@ -120,9 +120,9 @@ fun ShowLocationView(
             state.locationShares.forEach { locationShare ->
                 LocationShareRow(
                     item = locationShare,
-                    onShareClick = { state.eventSink(ShowLocationEvents.Share(locationShare.location)) },
+                    onShareClick = { state.eventSink(ShowLocationEvent.Share(locationShare.location)) },
                     modifier = Modifier.clickable {
-                        state.eventSink(ShowLocationEvents.TrackMyLocation(false))
+                        state.eventSink(ShowLocationEvent.TrackMyLocation(false))
                         val position = CameraPosition(
                             padding = sheetPaddings,
                             target = Position(locationShare.location.lon, locationShare.location.lat),
@@ -146,7 +146,7 @@ fun ShowLocationView(
         overlayContent = {
             LocationFloatingActionButton(
                 isMapCenteredOnUser = state.isTrackMyLocation,
-                onClick = { state.eventSink(ShowLocationEvents.TrackMyLocation(true)) },
+                onClick = { state.eventSink(ShowLocationEvent.TrackMyLocation(true)) },
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .padding(all = 16.dp),

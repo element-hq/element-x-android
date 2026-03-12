@@ -121,7 +121,7 @@ class ShowLocationPresenterTest {
         val presenter = createShowLocationPresenter()
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink(ShowLocationEvents.Share(location))
+            initialState.eventSink(ShowLocationEvent.Share(location))
 
             assertThat(fakeLocationActions.sharedLocation).isEqualTo(location)
         }
@@ -137,7 +137,7 @@ class ShowLocationPresenterTest {
             assertThat(initialState.hasLocationPermission).isTrue()
             assertThat(initialState.isTrackMyLocation).isFalse()
 
-            initialState.eventSink(ShowLocationEvents.TrackMyLocation(true))
+            initialState.eventSink(ShowLocationEvent.TrackMyLocation(true))
             val trackMyLocationState = awaitItem()
 
             delay(1)
@@ -146,7 +146,7 @@ class ShowLocationPresenterTest {
             assertThat(trackMyLocationState.isTrackMyLocation).isTrue()
 
             // Swipe the map to switch mode
-            initialState.eventSink(ShowLocationEvents.TrackMyLocation(false))
+            initialState.eventSink(ShowLocationEvent.TrackMyLocation(false))
             val trackLocationDisabledState = awaitItem()
             assertThat(trackLocationDisabledState.dialogState).isEqualTo(LocationConstraintsDialogState.None)
             assertThat(trackLocationDisabledState.isTrackMyLocation).isFalse()
@@ -169,14 +169,14 @@ class ShowLocationPresenterTest {
             val initialState = awaitItem()
 
             // Click on the button to switch mode
-            initialState.eventSink(ShowLocationEvents.TrackMyLocation(true))
+            initialState.eventSink(ShowLocationEvent.TrackMyLocation(true))
             val trackLocationState = awaitItem()
             assertThat(trackLocationState.dialogState).isEqualTo(LocationConstraintsDialogState.PermissionRationale)
             assertThat(trackLocationState.isTrackMyLocation).isFalse()
             assertThat(trackLocationState.hasLocationPermission).isFalse()
 
             // Dismiss the dialog
-            initialState.eventSink(ShowLocationEvents.DismissDialog)
+            initialState.eventSink(ShowLocationEvent.DismissDialog)
             val dialogDismissedState = awaitItem()
             assertThat(dialogDismissedState.dialogState).isEqualTo(LocationConstraintsDialogState.None)
             assertThat(dialogDismissedState.isTrackMyLocation).isFalse()
@@ -198,14 +198,14 @@ class ShowLocationPresenterTest {
             val initialState = awaitItem()
 
             // Click on the button to switch mode
-            initialState.eventSink(ShowLocationEvents.TrackMyLocation(true))
+            initialState.eventSink(ShowLocationEvent.TrackMyLocation(true))
             val trackLocationState = awaitItem()
             assertThat(trackLocationState.dialogState).isEqualTo(LocationConstraintsDialogState.PermissionRationale)
             assertThat(trackLocationState.isTrackMyLocation).isFalse()
             assertThat(trackLocationState.hasLocationPermission).isFalse()
 
             // Continue the dialog sends permission request to the permissions presenter
-            trackLocationState.eventSink(ShowLocationEvents.RequestPermissions)
+            trackLocationState.eventSink(ShowLocationEvent.RequestPermissions)
             assertThat(fakePermissionsPresenter.events.last()).isEqualTo(PermissionsEvents.RequestPermissions)
         }
     }
@@ -225,14 +225,14 @@ class ShowLocationPresenterTest {
             val initialState = awaitItem()
 
             // Click on the button to switch mode
-            initialState.eventSink(ShowLocationEvents.TrackMyLocation(true))
+            initialState.eventSink(ShowLocationEvent.TrackMyLocation(true))
             val trackLocationState = awaitItem()
             assertThat(trackLocationState.dialogState).isEqualTo(LocationConstraintsDialogState.PermissionDenied)
             assertThat(trackLocationState.isTrackMyLocation).isFalse()
             assertThat(trackLocationState.hasLocationPermission).isFalse()
 
             // Dismiss the dialog
-            initialState.eventSink(ShowLocationEvents.DismissDialog)
+            initialState.eventSink(ShowLocationEvent.DismissDialog)
             val dialogDismissedState = awaitItem()
             assertThat(dialogDismissedState.dialogState).isEqualTo(LocationConstraintsDialogState.None)
             assertThat(dialogDismissedState.isTrackMyLocation).isFalse()
@@ -254,11 +254,11 @@ class ShowLocationPresenterTest {
             // Skip initial state
             val initialState = awaitItem()
 
-            initialState.eventSink(ShowLocationEvents.TrackMyLocation(true))
+            initialState.eventSink(ShowLocationEvent.TrackMyLocation(true))
             val dialogShownState = awaitItem()
 
             // Open settings
-            dialogShownState.eventSink(ShowLocationEvents.OpenAppSettings)
+            dialogShownState.eventSink(ShowLocationEvent.OpenAppSettings)
             val settingsOpenedState = awaitItem()
 
             assertThat(settingsOpenedState.dialogState).isEqualTo(LocationConstraintsDialogState.None)
@@ -287,7 +287,7 @@ class ShowLocationPresenterTest {
             assertThat(initialState.hasLocationPermission).isTrue()
 
             // Try to track location when location services are disabled
-            initialState.eventSink(ShowLocationEvents.TrackMyLocation(true))
+            initialState.eventSink(ShowLocationEvent.TrackMyLocation(true))
             val dialogShownState = awaitItem()
 
             assertThat(dialogShownState.dialogState).isEqualTo(LocationConstraintsDialogState.LocationServiceDisabled)
@@ -304,12 +304,12 @@ class ShowLocationPresenterTest {
         presenter.test {
             val initialState = awaitItem()
 
-            initialState.eventSink(ShowLocationEvents.TrackMyLocation(true))
+            initialState.eventSink(ShowLocationEvent.TrackMyLocation(true))
             val dialogShownState = awaitItem()
             assertThat(dialogShownState.dialogState).isEqualTo(LocationConstraintsDialogState.LocationServiceDisabled)
 
             // Open location settings
-            dialogShownState.eventSink(ShowLocationEvents.OpenLocationSettings)
+            dialogShownState.eventSink(ShowLocationEvent.OpenLocationSettings)
             val settingsOpenedState = awaitItem()
 
             assertThat(settingsOpenedState.dialogState).isEqualTo(LocationConstraintsDialogState.None)

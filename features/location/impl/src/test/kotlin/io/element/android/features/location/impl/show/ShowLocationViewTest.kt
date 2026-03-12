@@ -37,7 +37,7 @@ class ShowLocationViewTest {
 
     @Test
     fun `test back action`() {
-        val eventsRecorder = EventsRecorder<ShowLocationEvents>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<ShowLocationEvent>(expectEvents = false)
         ensureCalledOnce { callback ->
             rule.setShowLocationView(
                 state = aShowLocationState(
@@ -51,7 +51,7 @@ class ShowLocationViewTest {
 
     @Test
     fun `test share action`() {
-        val eventsRecorder = EventsRecorder<ShowLocationEvents>()
+        val eventsRecorder = EventsRecorder<ShowLocationEvent>()
         rule.setShowLocationView(
             aShowLocationState(
                 eventSink = eventsRecorder
@@ -61,12 +61,12 @@ class ShowLocationViewTest {
         val shareContentDescription = rule.activity.getString(CommonStrings.action_share)
         rule.onNodeWithContentDescription(shareContentDescription).performClick()
         // The default aStaticLocationMode uses Location(1.23, 2.34, 4f)
-        eventsRecorder.assertSingle(ShowLocationEvents.Share(Location(1.23, 2.34, 4f)))
+        eventsRecorder.assertSingle(ShowLocationEvent.Share(Location(1.23, 2.34, 4f)))
     }
 
     @Test
     fun `test fab click`() {
-        val eventsRecorder = EventsRecorder<ShowLocationEvents>()
+        val eventsRecorder = EventsRecorder<ShowLocationEvent>()
         rule.setShowLocationView(
             aShowLocationState(
                 eventSink = eventsRecorder
@@ -74,12 +74,12 @@ class ShowLocationViewTest {
             onBackClick = EnsureNeverCalled(),
         )
         rule.onNodeWithTag(TestTags.floatingActionButton.value).performClick()
-        eventsRecorder.assertSingle(ShowLocationEvents.TrackMyLocation(true))
+        eventsRecorder.assertSingle(ShowLocationEvent.TrackMyLocation(true))
     }
 
     @Test
     fun `when permission denied is displayed user can open the settings`() {
-        val eventsRecorder = EventsRecorder<ShowLocationEvents>()
+        val eventsRecorder = EventsRecorder<ShowLocationEvent>()
         rule.setShowLocationView(
             aShowLocationState(
                 constraintsDialogState = LocationConstraintsDialogState.PermissionDenied,
@@ -88,12 +88,12 @@ class ShowLocationViewTest {
             onBackClick = EnsureNeverCalled(),
         )
         rule.clickOn(CommonStrings.action_continue)
-        eventsRecorder.assertSingle(ShowLocationEvents.OpenAppSettings)
+        eventsRecorder.assertSingle(ShowLocationEvent.OpenAppSettings)
     }
 
     @Test
     fun `when permission denied is displayed user can close the dialog`() {
-        val eventsRecorder = EventsRecorder<ShowLocationEvents>()
+        val eventsRecorder = EventsRecorder<ShowLocationEvent>()
         rule.setShowLocationView(
             aShowLocationState(
                 constraintsDialogState = LocationConstraintsDialogState.PermissionDenied,
@@ -102,12 +102,12 @@ class ShowLocationViewTest {
             onBackClick = EnsureNeverCalled(),
         )
         rule.clickOn(CommonStrings.action_cancel)
-        eventsRecorder.assertSingle(ShowLocationEvents.DismissDialog)
+        eventsRecorder.assertSingle(ShowLocationEvent.DismissDialog)
     }
 
     @Test
     fun `when permission rationale is displayed user can request permissions`() {
-        val eventsRecorder = EventsRecorder<ShowLocationEvents>()
+        val eventsRecorder = EventsRecorder<ShowLocationEvent>()
         rule.setShowLocationView(
             aShowLocationState(
                 constraintsDialogState = LocationConstraintsDialogState.PermissionRationale,
@@ -116,12 +116,12 @@ class ShowLocationViewTest {
             onBackClick = EnsureNeverCalled(),
         )
         rule.clickOn(CommonStrings.action_continue)
-        eventsRecorder.assertSingle(ShowLocationEvents.RequestPermissions)
+        eventsRecorder.assertSingle(ShowLocationEvent.RequestPermissions)
     }
 
     @Test
     fun `when permission rationale is displayed user can close the dialog`() {
-        val eventsRecorder = EventsRecorder<ShowLocationEvents>()
+        val eventsRecorder = EventsRecorder<ShowLocationEvent>()
         rule.setShowLocationView(
             aShowLocationState(
                 constraintsDialogState = LocationConstraintsDialogState.PermissionRationale,
@@ -130,7 +130,7 @@ class ShowLocationViewTest {
             onBackClick = EnsureNeverCalled(),
         )
         rule.clickOn(CommonStrings.action_cancel)
-        eventsRecorder.assertSingle(ShowLocationEvents.DismissDialog)
+        eventsRecorder.assertSingle(ShowLocationEvent.DismissDialog)
     }
 }
 

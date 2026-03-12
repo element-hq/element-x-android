@@ -53,7 +53,7 @@ fun aShowLocationState(
     hasLocationPermission: Boolean = false,
     isTrackMyLocation: Boolean = false,
     appName: String = APP_NAME,
-    eventSink: (ShowLocationEvents) -> Unit = {},
+    eventSink: (ShowLocationEvent) -> Unit = {},
 ): ShowLocationState {
     val effectiveMarkers = markers ?: when (mode) {
         is ShowLocationMode.Static -> listOf(

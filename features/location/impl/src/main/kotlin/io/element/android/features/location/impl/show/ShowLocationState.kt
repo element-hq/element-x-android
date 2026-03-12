@@ -24,7 +24,7 @@ data class ShowLocationState(
     val hasLocationPermission: Boolean,
     val isTrackMyLocation: Boolean,
     val appName: String,
-    val eventSink: (ShowLocationEvents) -> Unit,
+    val eventSink: (ShowLocationEvent) -> Unit,
 ) {
     val isSheetDraggable = locationShares.any { item -> item.isLive }
 }
