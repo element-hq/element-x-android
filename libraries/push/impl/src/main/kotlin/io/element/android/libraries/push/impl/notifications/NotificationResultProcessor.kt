@@ -19,6 +19,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.exception.NotificationResolverException
+import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.push.impl.db.PushRequest
 import io.element.android.libraries.push.impl.history.PushHistoryService
 import io.element.android.libraries.push.impl.history.onSuccess
@@ -223,7 +224,11 @@ class DefaultNotificationResultProcessor(
     private suspend fun handleRingingCallEvent(notifiableEvent: NotifiableRingingCallEvent) {
         Timber.i("## handleInternal() : Incoming call.")
         elementCallEntryPoint.handleIncomingCall(
-            callType = CallType.RoomCall(notifiableEvent.sessionId, notifiableEvent.roomId),
+            callType = CallType.RoomCall(
+                notifiableEvent.sessionId,
+                notifiableEvent.roomId,
+                isAudioCall = notifiableEvent.callIntent == CallIntent.AUDIO
+            ),
             eventId = notifiableEvent.eventId,
             senderId = notifiableEvent.senderId,
             roomName = notifiableEvent.roomName,

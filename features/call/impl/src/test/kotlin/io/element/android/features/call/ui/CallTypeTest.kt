@@ -27,6 +27,7 @@ class CallTypeTest {
             CallType.RoomCall(
                 sessionId = A_SESSION_ID,
                 roomId = A_ROOM_ID,
+                isAudioCall = false,
             ).getSessionId()
         ).isEqualTo(A_SESSION_ID)
     }
@@ -38,7 +39,7 @@ class CallTypeTest {
 
     @Test
     fun `RoomCall stringification does not contain the URL`() {
-        assertThat(CallType.RoomCall(A_SESSION_ID, A_ROOM_ID).toString())
-            .isEqualTo("RoomCall(sessionId=$A_SESSION_ID, roomId=$A_ROOM_ID)")
+        assertThat(CallType.RoomCall(A_SESSION_ID, A_ROOM_ID, false).toString())
+            .isEqualTo("RoomCall(sessionId=$A_SESSION_ID, roomId=$A_ROOM_ID, isAudioCall=false)")
     }
 }

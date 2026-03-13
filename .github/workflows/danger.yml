@@ -2,6 +2,8 @@ name: Danger CI
 
 on: [pull_request, merge_group]
 
+permissions: {}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -9,7 +11,9 @@ jobs:
     # Skip in forks, it doesn't work even with the fallback token
     if: ${{ github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == 'element-hq/element-x-android' }}
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
       - name: Add SSH private keys for submodule repositories
         uses: webfactory/ssh-agent@a6f90b1f127823b31d4d4a8d96047790581349bd # v0.9.1
         with:

@@ -95,7 +95,7 @@
   <string name="action_edit_poll">"Muokkaa kyselyä"</string>
   <string name="action_enable">"Ota käyttöön"</string>
   <string name="action_end_poll">"Lopeta kysely"</string>
-  <string name="action_enter_pin">"Syötä PIN-koodi"</string>
+  <string name="action_enter_pin">"Anna PIN-koodi"</string>
   <string name="action_explore_public_spaces">"Selaa julkisia tiloja"</string>
   <string name="action_finish">"Valmis"</string>
   <string name="action_forgot_password">"Unohditko salasanan?"</string>
@@ -220,7 +220,7 @@
   <string name="common_empty_file">"Tyhjä tiedosto"</string>
   <string name="common_encryption">"Salaus"</string>
   <string name="common_encryption_enabled">"Salaus käytössä"</string>
-  <string name="common_enter_your_pin">"Syötä PIN-koodisi"</string>
+  <string name="common_enter_your_pin">"Anna PIN-koodisi"</string>
   <string name="common_error">"Virhe"</string>
   <string name="common_error_registering_pusher_android">"Tapahtui virhe. Et välttämättä saa ilmoituksia uusista viesteistä. Tee ilmoitusten vianmääritys asetuksista.
 
@@ -272,6 +272,7 @@ Syy: %1$s."</string>
   <string name="common_offline">"Ei yhteyttä"</string>
   <string name="common_open_source_licenses">"Avoimen lähdekoodin lisenssit"</string>
   <string name="common_or">"tai"</string>
+  <string name="common_other_options">"Muut vaihtoehdot"</string>
   <string name="common_password">"Salasana"</string>
   <string name="common_people">"Ihmiset"</string>
   <string name="common_permalink">"Pysyvä linkki"</string>
@@ -453,6 +454,7 @@ Haluatko varmasti jatkaa?"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Poista %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Asetukset"</string>
   <string name="screen_media_picker_error_failed_selection">"Median valinta epäonnistui, yritä uudelleen."</string>
+  <string name="screen_onboarding_welcome_back">"Tervetuloa takaisin"</string>
   <string name="screen_pinned_timeline_empty_state_description">"Paina viestiä ja valitse “%1$s” lisätäksesi sen tänne."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Kiinnitä tärkeät viestit, jotta ne löytyvät helposti."</string>
   <plurals name="screen_pinned_timeline_screen_title">

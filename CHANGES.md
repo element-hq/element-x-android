@@ -1,3 +1,89 @@
+Changes in Element X v26.03.3
+=============================
+
+<!-- Release notes generated using configuration in .github/release.yml at v26.03.3 -->
+
+## What's Changed
+### ✨ Features
+* Support for Voice Call only (no video), parity with web by @BillCarsonFr in https://github.com/element-hq/element-x-android/pull/5995
+### 🐛 Bugfixes
+* Fix read receipts not appearing in threaded timelines by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6297
+* Try fixing index OOB issues in `Editable.checkSuggestionNeeded` by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6303
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/6302
+### 🧱 Build
+* Add zizmorcore/zizmor-action by @bmarty in https://github.com/element-hq/element-x-android/pull/6286
+* Add use existing branch confirmation and progress for file download by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6294
+* Replace `knit` with `generate_toc.py` script by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6279
+### Dependency upgrades
+* Update plugin sonarqube to v7.2.3.7755 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6283
+* Update dependency io.sentry:sentry-android to v8.34.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6289
+* Update dependency org.matrix.rustcomponents:sdk-android to v26.03.6 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6292
+* Update dependency com.posthog:posthog-android to v3.35.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6293
+* Update zizmorcore/zizmor-action action to v0.5.2 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6299
+* fix(deps): update dependency org.maplibre.gl:android-sdk to v13 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6277
+* fix(deps): update dependency org.matrix.rustcomponents:sdk-android to v26.03.09 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6307
+* fix(deps): update dependency org.matrix.rustcomponents:sdk-android to v26.03.11 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6310
+### Others
+* Add code to help debugging the saved nav state graph by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6295
+* Add network constraints for fetching notifications with `WorkManager` by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6305
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v26.03.2...v26.03.3
+
+Changes in Element X v26.03.2
+=============================
+
+## Hotfix release
+
+This release is out of our normal release cycle because we detected an important issue that could happen when instantiating the cryptographic DB and would result in the room sync not working.
+
+## What's Changed
+### 🙌 Improvements
+* Floating toolbar by @bmarty in https://github.com/element-hq/element-x-android/pull/6147
+### 🐛 Bugfixes
+* Ensure that redacted event from encrypted room does not trigger a fallback notification by @bmarty in https://github.com/element-hq/element-x-android/pull/6241
+* Add `MediaSource.safeUrl` for removing invalid fragment part from URLs by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6035
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/6269
+### 🧱 Build
+* Fix nightly CI issues by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6263
+* CI: Add failed tests to summary by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6271
+* Make 'room list catch-up' analytics transaction network aware by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6233
+* Adjust the build-rust-sdk script to allow non-interactive use by @andybalaam in https://github.com/element-hq/element-x-android/pull/6281
+### Dependency upgrades
+* Update metro to v0.11.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6245
+* Update dependency com.posthog:posthog-android to v3.34.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6251
+* Update metro to v0.11.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6255
+* Update coil to v3.4.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6243
+* Update dependency io.element.android:element-call-embedded to v0.17.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6244
+* Update dependency com.posthog:posthog-android to v3.34.2 - autoclosed by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6254
+* Update dependencyAnalysis to v3.6.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6256
+* Update GitHub Artifact Actions (major) by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6260
+* Update dependency com.google.firebase:firebase-bom to v34.10.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6262
+* Update dependency androidx.compose:compose-bom to v2026.02.01 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6267
+* Update dependency com.posthog:posthog-android to v3.34.3 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6272
+* Update metro to v0.11.2 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6270
+* Update dependencyAnalysis to v3.6.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6259
+* Sync compound tokens https://github.com/element-hq/compound-design-tokens/releases/tag/v6.10.1 by @bmarty in https://github.com/element-hq/element-x-android/pull/6273
+* Update dependency io.sentry:sentry-android to v8.34.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6280
+* Update dependency org.matrix.rustcomponents:sdk-android to v26.03.4 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6282
+* Update dependency org.matrix.rustcomponents:sdk-android to v26.03.05 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6287
+* Update plugin ktlint to v14.1.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6288
+* Update dependency org.unifiedpush.android:connector to v3.3.2 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6285
+### Others
+* Add some DB optimizations by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6249
+* Check if network access if blocked when fetching notifications by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6247
+* Bottom bar iteration by @bmarty in https://github.com/element-hq/element-x-android/pull/6264
+* Use `ShareIntentHandler` early to avoid distributing the whole intent by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6274
+* Simplify push notification flow by using locally stored values for pending pushes by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6258
+* Fix typed text becoming invisible when composing long messages by @timurgilfanov in https://github.com/element-hq/element-x-android/pull/6284
+
+## New Contributors
+* @timurgilfanov made their first contribution in https://github.com/element-hq/element-x-android/pull/6284
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v26.03.0...v26.03.2
+
 Changes in Element X v26.03.0
 =============================
 

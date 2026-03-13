@@ -23,6 +23,7 @@ import io.element.android.features.userprofile.shared.aUserProfileState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
@@ -105,7 +106,7 @@ class UserProfileViewTest {
 
     @Test
     fun `on Call clicked - the expected callback is called`() = runTest {
-        ensureCalledOnceWithParam(A_ROOM_ID) { callback ->
+        ensureCalledOnceWithTwoParams(A_ROOM_ID, CallIntent.AUDIO) { callback ->
             rule.setUserProfileView(
                 state = aUserProfileState(
                     dmRoomId = A_ROOM_ID,
@@ -114,6 +115,20 @@ class UserProfileViewTest {
                 onStartCall = callback,
             )
             rule.clickOn(CommonStrings.action_call)
+        }
+    }
+
+    @Test
+    fun `on Video Call clicked - the expected callback is called`() = runTest {
+        ensureCalledOnceWithTwoParams(A_ROOM_ID, CallIntent.VIDEO) { callback ->
+            rule.setUserProfileView(
+                state = aUserProfileState(
+                    dmRoomId = A_ROOM_ID,
+                    canCall = true,
+                ),
+                onStartCall = callback,
+            )
+            rule.clickOn(CommonStrings.common_video)
         }
     }
 
@@ -216,7 +231,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setUserP
     ),
     onShareUser: () -> Unit = EnsureNeverCalled(),
     onDmStarted: (RoomId) -> Unit = EnsureNeverCalledWithParam(),
-    onStartCall: (RoomId) -> Unit = EnsureNeverCalledWithParam(),
+    onStartCall: (RoomId, CallIntent) -> Unit = EnsureNeverCalledWithTwoParams(),
     onVerifyClick: (UserId) -> Unit = EnsureNeverCalledWithParam(),
     goBack: () -> Unit = EnsureNeverCalled(),
     openAvatarPreview: (String, String) -> Unit = EnsureNeverCalledWithTwoParams(),

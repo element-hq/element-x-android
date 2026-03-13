@@ -17,6 +17,11 @@
   </plurals>
   <string name="notification_error_unified_push_unregistered_android">"Distributor oznámení UnifiedPush se nepodařilo zaregistrovat, takže již nebudete dostávat oznámení. Zkontrolujte nastavení oznámení v aplikaci a stav distributora push oznámění."</string>
   <string name="notification_fallback_content">"Oznámení"</string>
+  <plurals name="notification_fallback_n_content">
+    <item quantity="one">"Máte %d novou zprávu."</item>
+    <item quantity="few">"Máte %d nové zprávy."</item>
+    <item quantity="other">"Máte %d nových zpráv."</item>
+  </plurals>
   <string name="notification_incoming_call">"📹 Příchozí hovor"</string>
   <string name="notification_inline_reply_failed">"** Nepodařilo se odeslat - otevřete prosím místnost"</string>
   <string name="notification_invitation_action_join">"Vstoupit"</string>

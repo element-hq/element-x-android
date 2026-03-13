@@ -11,6 +11,7 @@ package io.element.android.libraries.matrix.impl.notification
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.notification.NotificationContent
 import io.element.android.libraries.matrix.api.notification.RtcNotificationType
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberMapper
@@ -20,6 +21,7 @@ import org.matrix.rustcomponents.sdk.StateEventContent
 import org.matrix.rustcomponents.sdk.TimelineEvent
 import org.matrix.rustcomponents.sdk.TimelineEventContent
 import org.matrix.rustcomponents.sdk.use
+import org.matrix.rustcomponents.sdk.RtcCallIntent as SdkRtcCallIntent
 import org.matrix.rustcomponents.sdk.RtcNotificationType as SdkRtcNotificationType
 
 class TimelineEventToNotificationContentMapper {
@@ -83,6 +85,7 @@ private fun MessageLikeEventContent.toContent(senderId: UserId): NotificationCon
             is MessageLikeEventContent.RtcNotification -> NotificationContent.MessageLike.RtcNotification(
                 senderId = senderId,
                 type = notificationType.map(),
+                callIntent = callIntent.map(),
                 expirationTimestampMillis = expirationTs.toLong()
             )
             MessageLikeEventContent.KeyVerificationAccept -> NotificationContent.MessageLike.KeyVerificationAccept
@@ -110,4 +113,9 @@ private fun MessageLikeEventContent.toContent(senderId: UserId): NotificationCon
 private fun SdkRtcNotificationType.map(): RtcNotificationType = when (this) {
     SdkRtcNotificationType.NOTIFICATION -> RtcNotificationType.NOTIFY
     SdkRtcNotificationType.RING -> RtcNotificationType.RING
+}
+
+private fun SdkRtcCallIntent?.map(): CallIntent = when (this) {
+    SdkRtcCallIntent.AUDIO -> CallIntent.AUDIO
+    else -> CallIntent.VIDEO
 }

@@ -4,7 +4,7 @@
   <string name="screen_link_new_device_desktop_step1">"%1$s uygulamasını bir dizüstü veya masaüstü bilgisayarda açın"</string>
   <string name="screen_link_new_device_desktop_step3">"QR kodunu bu cihazla tarayın"</string>
   <string name="screen_link_new_device_desktop_submit">"Taramaya hazır"</string>
-  <string name="screen_link_new_device_desktop_title">"QR kodu almak için %1$s uygulamasını masaüstü bilgisayarda açın%1$s%1$s"</string>
+  <string name="screen_link_new_device_desktop_title">"QR kodu almak için %1$s uygulamasını masaüstü bilgisayarda açın"</string>
   <string name="screen_link_new_device_enter_number_error_numbers_do_not_match">"Sayılar uyuşmuyor"</string>
   <string name="screen_link_new_device_enter_number_notice">"2 haneli kodu girin"</string>
   <string name="screen_link_new_device_enter_number_subtitle">"Bu işlem, diğer cihazla olan bağlantının güvenli olduğunu doğrular."</string>

@@ -32,6 +32,7 @@ class DefaultCallWidgetProvider(
     override suspend fun getWidget(
         sessionId: SessionId,
         roomId: RoomId,
+        isAudioCall: Boolean,
         clientId: String,
         languageTag: String?,
         theme: String?,
@@ -50,6 +51,7 @@ class DefaultCallWidgetProvider(
             baseUrl = baseUrl,
             encrypted = isEncrypted,
             direct = room.isDm(),
+            isAudioCall = isAudioCall,
             hasActiveCall = roomInfo.hasRoomCall,
         )
         val callUrl = room.generateWidgetWebViewUrl(
