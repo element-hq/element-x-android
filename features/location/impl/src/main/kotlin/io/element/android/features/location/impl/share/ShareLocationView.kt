@@ -6,6 +6,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:Suppress("COMPOSE_APPLIER_CALL_MISMATCH")
+
 package io.element.android.features.location.impl.share
 
 import androidx.compose.foundation.layout.Arrangement
