@@ -25,6 +25,7 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -60,12 +61,13 @@ fun TimelineItemUrlPreviewView(
                 onClick = { onClick(link) },
                 onLongClick = { onLongClick(link) },
             )
+            .semantics(mergeDescendants = true) {}
     ) {
         preview.imageUrl?.let { imageUrl ->
             previewImageModel(imageUrl)?.let { imageModel ->
                 AsyncImage(
                     model = imageModel,
-                    contentDescription = preview.title ?: preview.hostName,
+                    contentDescription = null,
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
                         .fillMaxWidth()
