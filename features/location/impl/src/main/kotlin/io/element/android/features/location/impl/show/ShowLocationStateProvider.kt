@@ -10,7 +10,6 @@ package io.element.android.features.location.impl.show
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.location.api.Location
-import io.element.android.features.location.api.ShowLocationMode
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.features.location.impl.common.ui.LocationMarkerData
 import io.element.android.libraries.designsystem.components.PinVariant
@@ -18,6 +17,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import kotlinx.collections.immutable.toImmutableList
 
 private const val APP_NAME = "ApplicationName"
 
@@ -45,62 +45,23 @@ class ShowLocationStateProvider : PreviewParameterProvider<ShowLocationState> {
         )
 }
 
+private val defaultLocation = Location(1.23, 2.34, 4f)
+private val defaultSenderId = UserId("@alice:matrix.org")
+private const val defaultSenderName = "Alice"
+
 fun aShowLocationState(
     constraintsDialogState: LocationConstraintsDialogState = LocationConstraintsDialogState.None,
-    mode: ShowLocationMode = aStaticLocationMode(),
-    markers: List<LocationMarkerData>? = null,
-    locationSharers: List<LocationShareItem>? = null,
+    markers: List<LocationMarkerData> = listOf(aLocationMarkerData()),
+    locationShares: List<LocationShareItem> = listOf(aLocationShareItem()),
     hasLocationPermission: Boolean = false,
     isTrackMyLocation: Boolean = false,
     appName: String = APP_NAME,
     eventSink: (ShowLocationEvent) -> Unit = {},
 ): ShowLocationState {
-    val effectiveMarkers = markers ?: when (mode) {
-        is ShowLocationMode.Static -> listOf(
-            LocationMarkerData(
-                id = mode.senderId.value,
-                location = mode.location,
-                variant = if (mode.assetType == AssetType.PIN) {
-                    PinVariant.PinnedLocation
-                } else {
-                    PinVariant.UserLocation(
-                        avatarData = AvatarData(
-                            id = mode.senderId.value,
-                            name = mode.senderName,
-                            url = mode.senderAvatarUrl,
-                            size = AvatarSize.LocationPin,
-                        ),
-                        isLive = true,
-                    )
-                }
-            )
-        )
-        ShowLocationMode.Live -> emptyList()
-    }
-    val effectiveLocationSharers = locationSharers ?: when (mode) {
-        is ShowLocationMode.Static -> listOf(
-            LocationShareItem(
-                userId = mode.senderId,
-                displayName = mode.senderName,
-                avatarData = AvatarData(
-                    id = mode.senderId.value,
-                    name = mode.senderName,
-                    url = mode.senderAvatarUrl,
-                    size = AvatarSize.UserListItem,
-                ),
-                formattedTimestamp = "Shared 1 min ago",
-                isLive = false,
-                assetType = mode.assetType,
-                location = mode.location,
-            )
-        )
-        ShowLocationMode.Live -> emptyList()
-    }
     return ShowLocationState(
         dialogState = constraintsDialogState,
-        mode = mode,
-        markers = effectiveMarkers,
-        locationShares = effectiveLocationSharers,
+        markers = markers.toImmutableList(),
+        locationShares = locationShares.toImmutableList(),
         hasLocationPermission = hasLocationPermission,
         isTrackMyLocation = isTrackMyLocation,
         appName = appName,
@@ -108,18 +69,43 @@ fun aShowLocationState(
     )
 }
 
-fun aStaticLocationMode(
-    location: Location = Location(1.23, 2.34, 4f),
-    senderName: String = "Alice",
-    senderId: UserId = UserId("@alice:matrix.org"),
-    senderAvatarUrl: String? = null,
-    timestamp: Long = System.currentTimeMillis(),
-    assetType: AssetType? = null,
-) = ShowLocationMode.Static(
+fun aLocationMarkerData(
+    id: String = defaultSenderId.value,
+    location: Location = defaultLocation,
+    variant: PinVariant = PinVariant.UserLocation(
+        avatarData = AvatarData(
+            id = defaultSenderId.value,
+            name = defaultSenderName,
+            url = null,
+            size = AvatarSize.LocationPin,
+        ),
+        isLive = false,
+    ),
+) = LocationMarkerData(
+    id = id,
     location = location,
-    senderName = senderName,
-    senderId = senderId,
-    senderAvatarUrl = senderAvatarUrl,
-    timestamp = timestamp,
+    variant = variant,
+)
+
+fun aLocationShareItem(
+    userId: UserId = defaultSenderId,
+    displayName: String = defaultSenderName,
+    avatarData: AvatarData = AvatarData(
+        id = defaultSenderId.value,
+        name = defaultSenderName,
+        url = null,
+        size = AvatarSize.UserListItem,
+    ),
+    formattedTimestamp: String = "Shared 1 min ago",
+    location: Location = defaultLocation,
+    isLive: Boolean = false,
+    assetType: AssetType? = null,
+) = LocationShareItem(
+    userId = userId,
+    displayName = displayName,
+    avatarData = avatarData,
+    formattedTimestamp = formattedTimestamp,
+    location = location,
+    isLive = isLive,
     assetType = assetType,
 )

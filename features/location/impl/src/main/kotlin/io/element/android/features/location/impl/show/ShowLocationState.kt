@@ -9,18 +9,17 @@
 package io.element.android.features.location.impl.show
 
 import io.element.android.features.location.api.Location
-import io.element.android.features.location.api.ShowLocationMode
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.features.location.impl.common.ui.LocationMarkerData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import kotlinx.collections.immutable.ImmutableList
 
 data class ShowLocationState(
     val dialogState: LocationConstraintsDialogState,
-    val mode: ShowLocationMode,
-    val markers: List<LocationMarkerData>,
-    val locationShares: List<LocationShareItem>,
+    val markers: ImmutableList<LocationMarkerData>,
+    val locationShares: ImmutableList<LocationShareItem>,
     val hasLocationPermission: Boolean,
     val isTrackMyLocation: Boolean,
     val appName: String,

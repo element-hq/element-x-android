@@ -6,6 +6,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:Suppress("COMPOSE_APPLIER_CALL_MISMATCH")
+
 package io.element.android.features.location.impl.show
 
 import androidx.compose.foundation.clickable
@@ -19,6 +21,7 @@ import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,7 +29,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.features.location.api.ShowLocationMode
 import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialog
 import io.element.android.features.location.impl.common.ui.LocationFloatingActionButton
@@ -63,12 +65,16 @@ fun ShowLocationView(
         onDismiss = { state.eventSink(ShowLocationEvent.DismissDialog) },
     )
 
-    val initialPosition = when (val mode = state.mode) {
-        is ShowLocationMode.Static -> CameraPosition(
-            target = Position(latitude = mode.location.lat, longitude = mode.location.lon),
-            zoom = MapDefaults.DEFAULT_ZOOM
-        )
-        ShowLocationMode.Live -> MapDefaults.defaultCameraPosition
+    val initialPosition = remember {
+        if (state.markers.isEmpty()) {
+            MapDefaults.defaultCameraPosition
+        } else {
+            val firstLocation = state.markers.first().location
+            CameraPosition(
+                target = Position(latitude = firstLocation.lat, longitude = firstLocation.lon),
+                zoom = MapDefaults.DEFAULT_ZOOM
+            )
+        }
     }
     val cameraState = rememberCameraState(firstPosition = initialPosition)
     val userLocationState = rememberUserLocationState(state.hasLocationPermission)

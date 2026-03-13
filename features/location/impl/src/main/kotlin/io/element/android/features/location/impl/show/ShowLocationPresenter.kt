@@ -37,6 +37,7 @@ import io.element.android.libraries.designsystem.components.PinVariant
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import kotlinx.collections.immutable.persistentListOf
 
 @AssistedInject
 class ShowLocationPresenter(
@@ -95,7 +96,7 @@ class ShowLocationPresenter(
             }
         }
 
-        val markers = remember(mode) {
+        val markers = remember {
             when (mode) {
                 is ShowLocationMode.Static -> {
                     val pinVariant = if (mode.assetType == AssetType.PIN) {
@@ -111,7 +112,7 @@ class ShowLocationPresenter(
                             isLive = false,
                         )
                     }
-                    listOf(
+                    persistentListOf(
                         LocationMarkerData(
                             id = mode.senderId.value,
                             location = mode.location,
@@ -119,16 +120,16 @@ class ShowLocationPresenter(
                         )
                     )
                 }
-                ShowLocationMode.Live -> emptyList()
+                ShowLocationMode.Live -> persistentListOf()
             }
         }
 
-        val locationShares = remember(mode) {
+        val locationShares = remember {
             when (mode) {
                 is ShowLocationMode.Static -> {
                     val relativeTime = dateFormatter.format(timestamp = mode.timestamp, mode = DateFormatterMode.Full, useRelative = true)
                     val formattedTimestamp = "Shared $relativeTime"
-                    listOf(
+                    persistentListOf(
                         LocationShareItem(
                             userId = mode.senderId,
                             displayName = mode.senderName,
@@ -145,13 +146,12 @@ class ShowLocationPresenter(
                         )
                     )
                 }
-                ShowLocationMode.Live -> emptyList()
+                ShowLocationMode.Live -> persistentListOf()
             }
         }
 
         return ShowLocationState(
             dialogState = dialogState,
-            mode = mode,
             markers = markers,
             locationShares = locationShares,
             hasLocationPermission = permissionsState.isAnyGranted,
