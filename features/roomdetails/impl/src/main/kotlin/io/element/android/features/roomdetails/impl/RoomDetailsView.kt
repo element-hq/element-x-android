@@ -200,6 +200,13 @@ fun RoomDetailsView(
                     }
                 )
 
+                UrlPreviewItem(
+                    isEnabled = state.isUrlPreviewEnabled,
+                    onCheckedChange = {
+                        state.eventSink(RoomDetailsEvent.SetUrlPreviewEnabled(it))
+                    }
+                )
+
                 if (state.canShowSecurityAndPrivacy) {
                     SecurityAndPrivacyItem(
                         onClick = onSecurityAndPrivacyClick
@@ -620,6 +627,20 @@ private fun FavoriteItem(
         title = stringResource(id = textResId),
         isChecked = isFavorite,
         onCheckedChange = onFavoriteChanges
+    )
+}
+
+@Composable
+private fun UrlPreviewItem(
+    isEnabled: Boolean,
+    onCheckedChange: (Boolean) -> Unit,
+) {
+    PreferenceSwitch(
+        icon = CompoundIcons.Link(),
+        title = stringResource(R.string.screen_room_details_url_preview_title),
+        subtitle = stringResource(R.string.screen_room_details_url_preview_subtitle),
+        isChecked = isEnabled,
+        onCheckedChange = onCheckedChange,
     )
 }
 

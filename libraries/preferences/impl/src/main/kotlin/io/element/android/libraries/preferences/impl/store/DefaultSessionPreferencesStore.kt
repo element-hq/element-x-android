@@ -94,6 +94,9 @@ class DefaultSessionPreferencesStore(
     override fun getVideoCompressionPreset(): Flow<VideoCompressionPreset> = get(compressMediaPreset) { VideoCompressionPreset.STANDARD.name }
         .map { tryOrNull { VideoCompressionPreset.valueOf(it) } ?: VideoCompressionPreset.STANDARD }
 
+    override suspend fun setRoomUrlPreviewEnabled(roomId: String, enabled: Boolean) = update(roomUrlPreviewKey(roomId), enabled)
+    override fun isRoomUrlPreviewEnabled(roomId: String): Flow<Boolean> = get(roomUrlPreviewKey(roomId)) { false }
+
     override suspend fun clear() {
         dataStoreFile.safeDelete()
     }
@@ -105,4 +108,6 @@ class DefaultSessionPreferencesStore(
     private fun <T> get(key: Preferences.Key<T>, default: () -> T): Flow<T> {
         return store.data.map { prefs -> prefs[key] ?: default() }
     }
+
+    private fun roomUrlPreviewKey(roomId: String) = booleanPreferencesKey("roomUrlPreview_${roomId.hash().take(16)}")
 }

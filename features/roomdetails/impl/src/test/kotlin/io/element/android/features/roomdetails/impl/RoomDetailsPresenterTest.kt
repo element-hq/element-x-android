@@ -34,6 +34,7 @@ import io.element.android.libraries.matrix.api.room.powerlevels.RoomPermissions
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
+import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_TOPIC
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
@@ -45,6 +46,7 @@ import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
+import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.EventsRecorder
@@ -87,7 +89,8 @@ class RoomDetailsPresenterTest {
         ),
         encryptionService: FakeEncryptionService = FakeEncryptionService(),
         clipboardHelper: ClipboardHelper = FakeClipboardHelper(),
-        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore()
+        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
+        sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
     ): RoomDetailsPresenter {
         val matrixClient = FakeMatrixClient(notificationSettingsService = notificationSettingsService)
         val roomMemberDetailsPresenterFactory = object : RoomMemberDetailsPresenter.Factory {
@@ -115,6 +118,7 @@ class RoomDetailsPresenterTest {
             analyticsService = analyticsService,
             clipboardHelper = clipboardHelper,
             appPreferencesStore = appPreferencesStore,
+            sessionPreferencesStore = sessionPreferencesStore,
         )
     }
 
@@ -135,6 +139,39 @@ class RoomDetailsPresenterTest {
             assertThat(initialState.canShowSecurityAndPrivacy).isFalse()
             assertThat(initialState.showDebugInfo).isFalse()
 
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - initial state includes room url preview preference`() = runTest {
+        val sessionPreferencesStore = InMemorySessionPreferencesStore().apply {
+            setRoomUrlPreviewEnabled(A_ROOM_ID.value, true)
+        }
+        val presenter = createRoomDetailsPresenter(
+            sessionPreferencesStore = sessionPreferencesStore,
+        )
+        presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
+            val updatedState = consumeItemsUntilPredicate { it.isUrlPreviewEnabled }.last()
+            assertThat(updatedState.isUrlPreviewEnabled).isTrue()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - set url preview event updates session preferences`() = runTest {
+        val sessionPreferencesStore = InMemorySessionPreferencesStore()
+        val presenter = createRoomDetailsPresenter(
+            sessionPreferencesStore = sessionPreferencesStore,
+        )
+        presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
+            val initialState = awaitItem()
+            assertThat(initialState.isUrlPreviewEnabled).isFalse()
+
+            initialState.eventSink(RoomDetailsEvent.SetUrlPreviewEnabled(true))
+
+            val updatedState = consumeItemsUntilPredicate { it.isUrlPreviewEnabled }.last()
+            assertThat(updatedState.isUrlPreviewEnabled).isTrue()
             cancelAndIgnoreRemainingEvents()
         }
     }

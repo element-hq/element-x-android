@@ -12,6 +12,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
+import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -103,6 +104,22 @@ class RoomDetailsViewTest {
             )
             rule.clickOn(R.string.screen_room_details_notification_title)
         }
+    }
+
+    @Config(qualifiers = "h1024dp")
+    @Test
+    fun `click on url preview emits expected event`() {
+        val eventsRecorder = EventsRecorder<RoomDetailsEvent>()
+        rule.setRoomDetailView(
+            state = aRoomDetailsState(
+                eventSink = eventsRecorder,
+                isUrlPreviewEnabled = false,
+            ),
+        )
+
+        rule.onNodeWithText(rule.activity.getString(R.string.screen_room_details_url_preview_title)).performClick()
+
+        eventsRecorder.assertSingle(RoomDetailsEvent.SetUrlPreviewEnabled(true))
     }
 
     @Test

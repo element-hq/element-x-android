@@ -43,6 +43,8 @@ import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.urlpreview.LocalUrlPreviewService
+import io.element.android.features.messages.impl.urlpreview.UrlPreviewService
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.androidutils.system.openUrlInExternalApp
 import io.element.android.libraries.architecture.NodeInputs
@@ -83,6 +85,7 @@ class ThreadedMessagesNode(
     private val presenterFactory: MessagesPresenter.Factory,
     private val actionListPresenterFactory: ActionListPresenter.Factory,
     private val timelineItemPresenterFactories: TimelineItemPresenterFactories,
+    private val urlPreviewService: UrlPreviewService,
     private val mediaPlayer: MediaPlayer,
     private val permalinkParser: PermalinkParser,
     private val appNavigationStateService: AppNavigationStateService,
@@ -241,6 +244,7 @@ class ThreadedMessagesNode(
         val isDark = ElementTheme.isLightTheme.not()
         CompositionLocalProvider(
             LocalTimelineItemPresenterFactories provides timelineItemPresenterFactories,
+            LocalUrlPreviewService provides urlPreviewService,
         ) {
             // Only display the actual UI and lifecycle logic if the presenter is loaded
             presenter?.present()?.let { state ->
