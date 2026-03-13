@@ -28,15 +28,12 @@ import io.element.android.features.location.impl.common.permissions.PermissionsP
 import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.features.location.impl.common.toDialogState
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
-import io.element.android.features.location.impl.common.ui.LocationMarkerData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
-import io.element.android.libraries.designsystem.components.PinVariant
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.collections.immutable.persistentListOf
@@ -99,34 +96,6 @@ class ShowLocationPresenter(
             }
         }
 
-        val markers = remember {
-            when (mode) {
-                is ShowLocationMode.Static -> {
-                    val pinVariant = if (mode.assetType == AssetType.PIN) {
-                        PinVariant.PinnedLocation
-                    } else {
-                        PinVariant.UserLocation(
-                            avatarData = AvatarData(
-                                id = mode.senderId.value,
-                                name = mode.senderName,
-                                url = mode.senderAvatarUrl,
-                                size = AvatarSize.UserListItem,
-                            ),
-                            isLive = false,
-                        )
-                    }
-                    persistentListOf(
-                        LocationMarkerData(
-                            id = mode.senderId.value,
-                            location = mode.location,
-                            variant = pinVariant,
-                        )
-                    )
-                }
-                ShowLocationMode.Live -> persistentListOf()
-            }
-        }
-
         val locationShares = remember {
             when (mode) {
                 is ShowLocationMode.Static -> {
@@ -146,9 +115,9 @@ class ShowLocationPresenter(
                                 size = AvatarSize.UserListItem,
                             ),
                             formattedTimestamp = formattedTimestamp,
+                            location = mode.location,
                             isLive = false,
                             assetType = mode.assetType,
-                            location = mode.location,
                         )
                     )
                 }
@@ -158,7 +127,6 @@ class ShowLocationPresenter(
 
         return ShowLocationState(
             dialogState = dialogState,
-            markers = markers,
             locationShares = locationShares,
             hasLocationPermission = permissionsState.isAnyGranted,
             isTrackMyLocation = isTrackMyLocation,

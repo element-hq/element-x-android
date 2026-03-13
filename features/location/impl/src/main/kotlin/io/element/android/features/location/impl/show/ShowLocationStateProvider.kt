@@ -11,15 +11,11 @@ package io.element.android.features.location.impl.show
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
-import io.element.android.features.location.impl.common.ui.LocationMarkerData
-import io.element.android.libraries.designsystem.components.PinVariant
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import kotlinx.collections.immutable.toImmutableList
-
-private const val APP_NAME = "ApplicationName"
 
 class ShowLocationStateProvider : PreviewParameterProvider<ShowLocationState> {
     override val values: Sequence<ShowLocationState>
@@ -45,13 +41,10 @@ class ShowLocationStateProvider : PreviewParameterProvider<ShowLocationState> {
         )
 }
 
-private val defaultLocation = Location(1.23, 2.34, 4f)
-private val defaultSenderId = UserId("@alice:matrix.org")
-private const val defaultSenderName = "Alice"
+private const val APP_NAME = "ApplicationName"
 
 fun aShowLocationState(
     constraintsDialogState: LocationConstraintsDialogState = LocationConstraintsDialogState.None,
-    markers: List<LocationMarkerData> = listOf(aLocationMarkerData()),
     locationShares: List<LocationShareItem> = listOf(aLocationShareItem()),
     hasLocationPermission: Boolean = false,
     isTrackMyLocation: Boolean = false,
@@ -60,7 +53,6 @@ fun aShowLocationState(
 ): ShowLocationState {
     return ShowLocationState(
         dialogState = constraintsDialogState,
-        markers = markers.toImmutableList(),
         locationShares = locationShares.toImmutableList(),
         hasLocationPermission = hasLocationPermission,
         isTrackMyLocation = isTrackMyLocation,
@@ -69,35 +61,17 @@ fun aShowLocationState(
     )
 }
 
-fun aLocationMarkerData(
-    id: String = defaultSenderId.value,
-    location: Location = defaultLocation,
-    variant: PinVariant = PinVariant.UserLocation(
-        avatarData = AvatarData(
-            id = defaultSenderId.value,
-            name = defaultSenderName,
-            url = null,
-            size = AvatarSize.LocationPin,
-        ),
-        isLive = false,
-    ),
-) = LocationMarkerData(
-    id = id,
-    location = location,
-    variant = variant,
-)
-
 fun aLocationShareItem(
-    userId: UserId = defaultSenderId,
-    displayName: String = defaultSenderName,
+    userId: UserId = UserId("@alice:matrix.org"),
+    displayName: String = "Alice",
     avatarData: AvatarData = AvatarData(
-        id = defaultSenderId.value,
-        name = defaultSenderName,
+        id = userId.value,
+        name = displayName,
         url = null,
         size = AvatarSize.UserListItem,
     ),
     formattedTimestamp: String = "Shared 1 min ago",
-    location: Location = defaultLocation,
+    location: Location = Location(1.23, 2.34, 4f),
     isLive: Boolean = false,
     assetType: AssetType? = null,
 ) = LocationShareItem(

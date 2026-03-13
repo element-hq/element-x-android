@@ -78,7 +78,11 @@ fun LocationShareRow(
                         modifier = Modifier.size(16.dp),
                     )
                 } else {
-                    val icon = if (item.assetType == AssetType.PIN) CompoundIcons.LocationNavigator() else CompoundIcons.LocationNavigatorCentred()
+                    val icon = if (item.assetType == AssetType.PIN) {
+                        CompoundIcons.LocationNavigator()
+                    } else {
+                        CompoundIcons.LocationNavigatorCentred()
+                    }
                     Icon(
                         imageVector = icon,
                         contentDescription = null,
@@ -120,8 +124,8 @@ internal fun LocationShareRowPreview() = ElementPreview {
                     size = AvatarSize.UserListItem,
                 ),
                 formattedTimestamp = "Shared 1 min ago",
-                assetType = AssetType.SENDER,
                 isLive = true,
+                assetType = AssetType.SENDER,
                 location = Location(0.0, 0.0)
             ),
             onShareClick = {},
@@ -136,9 +140,9 @@ internal fun LocationShareRowPreview() = ElementPreview {
                     url = null,
                     size = AvatarSize.UserListItem,
                 ),
+                isLive = false,
                 assetType = AssetType.PIN,
                 formattedTimestamp = "Shared 5 hours ago",
-                isLive = false,
                 location = Location(0.0, 0.0)
             ),
             onShareClick = {},

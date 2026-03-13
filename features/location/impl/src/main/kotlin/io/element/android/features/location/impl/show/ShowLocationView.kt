@@ -66,10 +66,10 @@ fun ShowLocationView(
     )
 
     val initialPosition = remember {
-        if (state.markers.isEmpty()) {
+        if (state.locationShares.isEmpty()) {
             MapDefaults.defaultCameraPosition
         } else {
-            val firstLocation = state.markers.first().location
+            val firstLocation = state.locationShares.first().location
             CameraPosition(
                 target = Position(latitude = firstLocation.lat, longitude = firstLocation.lon),
                 zoom = MapDefaults.DEFAULT_ZOOM
@@ -147,7 +147,10 @@ fun ShowLocationView(
                 locationState = userLocationState,
                 trackUserLocation = state.isTrackMyLocation
             )
-            LocationPinMarkers(state.markers)
+            val markers = remember(state.locationShares) {
+                state.locationShares.map { it.toMarkerData() }
+            }
+            LocationPinMarkers(markers)
         },
         overlayContent = {
             LocationFloatingActionButton(
