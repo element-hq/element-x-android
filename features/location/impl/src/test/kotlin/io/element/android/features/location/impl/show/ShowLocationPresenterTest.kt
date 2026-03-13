@@ -23,6 +23,7 @@ import io.element.android.features.location.impl.common.ui.LocationConstraintsDi
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.test.core.aBuildMeta
+import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.delay
@@ -56,6 +57,7 @@ class ShowLocationPresenterTest {
         locationActions = locationActions,
         buildMeta = fakeBuildMeta,
         dateFormatter = fakeDateFormatter,
+        stringProvider = FakeStringProvider()
     )
 
     @Test

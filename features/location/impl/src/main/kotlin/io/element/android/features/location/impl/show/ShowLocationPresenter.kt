@@ -37,6 +37,8 @@ import io.element.android.libraries.designsystem.components.PinVariant
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.collections.immutable.persistentListOf
 
 @AssistedInject
@@ -46,6 +48,7 @@ class ShowLocationPresenter(
     private val locationActions: LocationActions,
     private val buildMeta: BuildMeta,
     private val dateFormatter: DateFormatter,
+    private val stringProvider: StringProvider,
 ) : Presenter<ShowLocationState> {
     @AssistedFactory
     fun interface Factory {
@@ -128,7 +131,10 @@ class ShowLocationPresenter(
             when (mode) {
                 is ShowLocationMode.Static -> {
                     val relativeTime = dateFormatter.format(timestamp = mode.timestamp, mode = DateFormatterMode.Full, useRelative = true)
-                    val formattedTimestamp = "Shared $relativeTime"
+                    val formattedTimestamp = stringProvider.getString(
+                        CommonStrings.screen_static_location_sheet_timestamp_description,
+                        relativeTime
+                    )
                     persistentListOf(
                         LocationShareItem(
                             userId = mode.senderId,
