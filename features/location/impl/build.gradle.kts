@@ -45,7 +45,7 @@ dependencies {
 
     testCommonDependencies(libs, true)
     testImplementation(projects.libraries.matrix.test)
-    implementation(projects.libraries.dateformatter.test)
+    testImplementation(projects.libraries.dateformatter.test)
     testImplementation(projects.libraries.testtags)
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.features.messages.test)
