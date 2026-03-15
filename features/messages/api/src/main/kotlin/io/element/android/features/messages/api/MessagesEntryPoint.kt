@@ -26,6 +26,7 @@ interface MessagesEntryPoint : FeatureEntryPoint {
         @Parcelize
         data class Messages(
             val focusedEventId: EventId?,
+            val openMediaForEventId: EventId? = null,
         ) : InitialTarget
 
         @Parcelize

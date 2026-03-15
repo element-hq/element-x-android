@@ -26,6 +26,8 @@ data class MediaViewerState(
     val snackbarMessage: SnackbarMessage?,
     val canShowInfo: Boolean,
     val mediaBottomSheetState: MediaBottomSheetState,
+    val sessionId: String,
+    val roomId: String,
     val eventSink: (MediaViewerEvents) -> Unit,
 )
 

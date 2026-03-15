@@ -22,6 +22,10 @@ open class MediaPlayerControllerStateProvider : PreviewParameterProvider<MediaPl
         aMediaPlayerControllerState(
             canMute = false,
         ),
+        aMediaPlayerControllerState(
+            isPlaying = true,
+            progressInMillis = 30_000,
+        ),
     )
 }
 

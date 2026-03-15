@@ -25,7 +25,6 @@ import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.viewfolder.api.TextFileViewer
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.inputs
-import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
@@ -53,7 +52,6 @@ class MediaViewerNode(
     systemClock: SystemClock,
     pagerKeysHandler: PagerKeysHandler,
     private val textFileViewer: TextFileViewer,
-    private val audioFocus: AudioFocus,
     private val sessionId: SessionId,
     private val enterpriseService: EnterpriseService,
 ) : Node(buildContext, plugins = plugins),
@@ -140,7 +138,6 @@ class MediaViewerNode(
                 state = state,
                 textFileViewer = textFileViewer,
                 modifier = modifier,
-                audioFocus = audioFocus,
                 onBackClick = callback::onDone,
             )
         }
