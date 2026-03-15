@@ -15,15 +15,18 @@ import io.element.android.wysiwyg.compose.RichTextEditorState
 @Immutable
 sealed interface TextEditorState {
     val isRoomEncrypted: Boolean?
+    val isRoomPublic: Boolean?
 
     data class Markdown(
         val state: MarkdownTextEditorState,
         override val isRoomEncrypted: Boolean?,
+        override val isRoomPublic: Boolean? = null,
     ) : TextEditorState
 
     data class Rich(
         val richTextEditorState: RichTextEditorState,
         override val isRoomEncrypted: Boolean?,
+        override val isRoomPublic: Boolean? = null,
     ) : TextEditorState
 
     fun messageHtml(): String? = when (this) {

@@ -212,9 +212,9 @@ class MessageComposerPresenter(
 
         val textEditorState by rememberUpdatedState(
             if (showTextFormatting) {
-                TextEditorState.Rich(richTextEditorState, roomInfo.isEncrypted == true)
+                TextEditorState.Rich(richTextEditorState, roomInfo.isEncrypted == true, roomInfo.isPublic == true)
             } else {
-                TextEditorState.Markdown(markdownTextEditorState, roomInfo.isEncrypted == true)
+                TextEditorState.Markdown(markdownTextEditorState, roomInfo.isEncrypted == true, roomInfo.isPublic == true)
             }
         )
 

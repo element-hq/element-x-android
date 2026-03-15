@@ -14,6 +14,7 @@ fun aTextEditorStateMarkdown(
     initialText: String? = "",
     initialFocus: Boolean = false,
     isRoomEncrypted: Boolean? = null,
+    isRoomPublic: Boolean? = null,
 ): TextEditorState {
     return TextEditorState.Markdown(
         aMarkdownTextEditorState(
@@ -21,6 +22,7 @@ fun aTextEditorStateMarkdown(
             initialFocus = initialFocus,
         ),
         isRoomEncrypted = isRoomEncrypted,
+        isRoomPublic = isRoomPublic,
     )
 }
 
@@ -40,6 +42,7 @@ fun aTextEditorStateRich(
     initialMarkdown: String = initialText,
     initialFocus: Boolean = false,
     isRoomEncrypted: Boolean? = null,
+    isRoomPublic: Boolean? = null,
 ): TextEditorState {
     return TextEditorState.Rich(
         aRichTextEditorState(
@@ -49,6 +52,7 @@ fun aTextEditorStateRich(
             initialFocus = initialFocus,
         ),
         isRoomEncrypted = isRoomEncrypted,
+        isRoomPublic = isRoomPublic,
     )
 }
 

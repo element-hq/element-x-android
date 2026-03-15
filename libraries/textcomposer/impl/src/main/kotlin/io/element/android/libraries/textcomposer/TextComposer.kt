@@ -373,6 +373,7 @@ fun TextComposer(
         TextFormattingLayout(
             modifier = layoutModifier,
             isRoomEncrypted = state.isRoomEncrypted,
+            isRoomPublic = state.isRoomPublic,
             textInput = textInput,
             dismissTextFormattingButton = {
                 IconColorButton(
@@ -390,6 +391,7 @@ fun TextComposer(
             composerMode = composerMode,
             voiceMessageState = voiceMessageState,
             isRoomEncrypted = state.isRoomEncrypted,
+            isRoomPublic = state.isRoomPublic,
             modifier = layoutModifier,
             textInput = textInput,
             endButtonParams = endButtonParams,
@@ -431,6 +433,7 @@ private fun StandardLayout(
     composerMode: MessageComposerMode,
     voiceMessageState: VoiceMessageState,
     isRoomEncrypted: Boolean?,
+    isRoomPublic: Boolean?,
     textInput: @Composable () -> Unit,
     voiceRecording: @Composable () -> Unit,
     endButtonParams: EndButtonParams,
@@ -440,7 +443,7 @@ private fun StandardLayout(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
-        if (isRoomEncrypted == false) {
+        if (isRoomEncrypted == false && isRoomPublic == false) {
             Spacer(Modifier.height(16.dp))
             NotEncryptedBadge()
             Spacer(Modifier.height(4.dp))
@@ -549,6 +552,7 @@ private fun NotEncryptedBadge() {
 @Composable
 private fun TextFormattingLayout(
     isRoomEncrypted: Boolean?,
+    isRoomPublic: Boolean?,
     textInput: @Composable () -> Unit,
     dismissTextFormattingButton: @Composable () -> Unit,
     textFormatting: @Composable () -> Unit,
@@ -559,7 +563,7 @@ private fun TextFormattingLayout(
         modifier = modifier.padding(vertical = 4.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        if (isRoomEncrypted == false) {
+        if (isRoomEncrypted == false && isRoomPublic == false) {
             NotEncryptedBadge()
             Spacer(Modifier.height(8.dp))
         }
