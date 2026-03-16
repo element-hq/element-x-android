@@ -50,5 +50,5 @@
   <string name="screen_session_verification_waiting_subtitle">"Μόλις γίνει αποδεκτό, θα μπορείτε να συνεχίσετε με την επαλήθευση."</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Αποδέξου το αίτημα για να ξεκινήσεις τη διαδικασία επαλήθευσης στην άλλη συνεδρία σου για να συνεχίσεις."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Αναμονή για αποδοχή αιτήματος"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Αποσύνδεση…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Αφαίρεση συσκευής…"</string>
 </resources>

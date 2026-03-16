@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_chat_backup_key_backup_action_disable">"Απενεργοποίηση αντιγράφων ασφαλείας"</string>
   <string name="screen_chat_backup_key_backup_action_enable">"Ενεργοποίηση αντιγράφων ασφαλείας"</string>
-  <string name="screen_chat_backup_key_backup_description">"Αυτό θα σας επιτρέψει να δείτε το ιστορικό συνομιλιών σας σε οποιεσδήποτε νέες συσκευές και είναι απαραίτητο για τη δημιουργία αντιγράφων ασφαλείας των συνομιλιών και της ψηφιακής ταυτότητας. %1$@."</string>
+  <string name="screen_chat_backup_key_backup_description">"Αυτό θα σας επιτρέψει να δείτε το ιστορικό συνομιλιών σας σε οποιεσδήποτε νέες συσκευές και είναι απαραίτητο για τη δημιουργία αντιγράφων ασφαλείας των συνομιλιών και της ψηφιακής ταυτότητας. %1$s ."</string>
   <string name="screen_chat_backup_key_backup_title">"Χώρος αποθήκευσης κλειδιού"</string>
   <string name="screen_chat_backup_key_storage_disabled_error">"Ο χώρος αποθήκευσης κλειδιών πρέπει να είναι ενεργοποιημένος για να δημιουργήσετε αντίγραφα ασφαλείας των συνομιλιών σας."</string>
   <string name="screen_chat_backup_key_storage_toggle_description">"Μεταφόρτωση κλειδιών από αυτήν τη συσκευή"</string>
@@ -24,11 +24,11 @@
   <string name="screen_encryption_reset_bullet_1">"Τα στοιχεία του λογαριασμού σου, οι επαφές, οι προτιμήσεις και η λίστα συνομιλιών θα διατηρηθούν"</string>
   <string name="screen_encryption_reset_bullet_2">"Θα χάσεις το υπάρχον ιστορικό μηνυμάτων σου"</string>
   <string name="screen_encryption_reset_bullet_3">"Θα χρειαστεί να επαληθεύσεις ξανά όλες τις υπάρχουσες συσκευές και επαφές σου"</string>
-  <string name="screen_encryption_reset_footer">"Επαναφέρετε την ψηφιακή σας ταυτότητα μόνο εάν δεν έχετε πρόσβαση σε άλλη συνδεδεμένη συσκευή και έχετε χάσει το κλειδί ανάκτησης."</string>
+  <string name="screen_encryption_reset_footer">"Επαναφέρετε την ψηφιακή σας ταυτότητα μόνο εάν δεν έχετε πρόσβαση σε άλλη επαληθευμένη συσκευή και δεν έχετε το κλειδί ανάκτησης."</string>
   <string name="screen_encryption_reset_title">"Δεν μπορείτε να επιβεβαιώσετε; Θα χρειαστεί να επαναφέρετε την ψηφιακή σας ταυτότητα."</string>
-  <string name="screen_key_backup_disable_confirmation_action_turn_off">"Απενεργοποίηση"</string>
-  <string name="screen_key_backup_disable_confirmation_description">"Θα χάσεις τα κρυπτογραφημένα μηνύματά σου εάν αποσυνδεθείς από όλες τις συσκευές."</string>
-  <string name="screen_key_backup_disable_confirmation_title">"Σίγουρα θες να απενεργοποιήσεις τα αντίγραφα ασφαλείας;"</string>
+  <string name="screen_key_backup_disable_confirmation_action_turn_off">"Διαγραφή"</string>
+  <string name="screen_key_backup_disable_confirmation_description">"Θα χάσετε το κρυπτογραφημένο ιστορικό συνομιλιών σας και θα πρέπει να επαναφέρετε την ψηφιακή σας ταυτότητα εάν αφαιρέσετε όλες τις συσκευές σας."</string>
+  <string name="screen_key_backup_disable_confirmation_title">"Είστε βέβαιοι ότι θέλετε να διαγράψετε τον χώρο αποθήκευσης κλειδιών;"</string>
   <string name="screen_key_backup_disable_description">"Η διαγραφή του χώρου αποθήκευσης κλειδιών θα καταργήσει την ψηφιακή σας ταυτότητα και τα κλειδιά μηνυμάτων από τον διακομιστή και θα απενεργοποιήσει τις ακόλουθες λειτουργίες ασφαλείας:"</string>
   <string name="screen_key_backup_disable_description_point_1">"Να μην έχεις κρυπτογραφημένο ιστορικό μηνυμάτων στις νέες συσκευές"</string>
   <string name="screen_key_backup_disable_description_point_2">"Χάσεις την πρόσβαση στα κρυπτογραφημένα μηνύματά σου εάν είσαι αποσυνδεδεμένος από %1$s παντού"</string>

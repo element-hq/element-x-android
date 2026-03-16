@@ -26,9 +26,9 @@
   <string name="screen_encryption_reset_bullet_3">"You will need to verify all your existing devices and contacts again"</string>
   <string name="screen_encryption_reset_footer">"Only reset your digital identity if you don\'t have access to another verified device and you don\'t have your recovery key."</string>
   <string name="screen_encryption_reset_title">"Can\'t confirm? You’ll need to reset your digital identity."</string>
-  <string name="screen_key_backup_disable_confirmation_action_turn_off">"Turn off"</string>
-  <string name="screen_key_backup_disable_confirmation_description">"You will lose your encrypted messages if you are signed out of all devices."</string>
-  <string name="screen_key_backup_disable_confirmation_title">"Are you sure you want to turn off backup?"</string>
+  <string name="screen_key_backup_disable_confirmation_action_turn_off">"Delete"</string>
+  <string name="screen_key_backup_disable_confirmation_description">"You will lose your encrypted chat history and need to reset your digital identity if you remove all your devices."</string>
+  <string name="screen_key_backup_disable_confirmation_title">"Are you sure you want to delete key storage?"</string>
   <string name="screen_key_backup_disable_description">"Deleting key storage will remove your digital identity and message keys from the server and turn off the following security features:"</string>
   <string name="screen_key_backup_disable_description_point_1">"You will not have encrypted message history on new devices"</string>
   <string name="screen_key_backup_disable_description_point_2">"You will lose access to your encrypted messages if you are signed out of %1$s everywhere"</string>

@@ -14,5 +14,4 @@
   <string name="screen_signout_recovery_disabled_subtitle">"آپ اپنے آخری جلسے سے خارج ہونے والے ہیں۔ اگر آپ ابھی خارج ہوجاتے ہیں تو آپ اپنے مرموز کردہ پیغامات تک رسائی سے محروم ہو جائیں گے۔"</string>
   <string name="screen_signout_recovery_disabled_title">"بازیابی غیر مرتب"</string>
   <string name="screen_signout_save_recovery_key_subtitle">"آپ اپنے آخری جلسے سے خارج ہونے والے ہیں۔ اگر آپ ابھی خارج ہوجاتے ہیں تو ہوسکتا ہے کہ آپ اپنے مرموز کردہ پیغامات تک رسائی سے محروم ہو جائیں گے۔"</string>
-  <string name="screen_signout_save_recovery_key_title">"کیا آپ نے اپنی بازیابی کی کلید محفوظ کی ہے؟"</string>
 </resources>

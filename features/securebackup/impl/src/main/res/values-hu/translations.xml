@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_chat_backup_key_backup_action_disable">"Biztonsági mentés kikapcsolása"</string>
   <string name="screen_chat_backup_key_backup_action_enable">"Biztonsági mentés bekapcsolása"</string>
-  <string name="screen_chat_backup_key_backup_description">"Ez lehetővé teszi az üzenetelőzmények megtekintését bármely új eszközön, és szükséges a csevegések és a digitális személyazonossága biztonsági mentéséhez. %1$@."</string>
+  <string name="screen_chat_backup_key_backup_description">"Ez lehetővé teszi az üzenetelőzmények megtekintését bármely új eszközön, és szükséges a csevegések és a digitális személyazonossága biztonsági mentéséhez. %1$s."</string>
   <string name="screen_chat_backup_key_backup_title">"Kulcstároló"</string>
   <string name="screen_chat_backup_key_storage_disabled_error">"A csevegések biztonsági mentéséhez be kell kapcsolni a kulcstárolást."</string>
   <string name="screen_chat_backup_key_storage_toggle_description">"Kulcsok feltöltése erről az eszközről"</string>

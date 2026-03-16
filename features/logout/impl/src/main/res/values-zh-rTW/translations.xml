@@ -14,5 +14,4 @@
   <string name="screen_signout_recovery_disabled_subtitle">"您將要登出上一次作業階段。若您現在登出，將會失去對加密訊息的存取權。"</string>
   <string name="screen_signout_recovery_disabled_title">"未設定復原金鑰"</string>
   <string name="screen_signout_save_recovery_key_subtitle">"您將要登出上一次作業階段。若您現在登出，將會失去對加密訊息的存取權。"</string>
-  <string name="screen_signout_save_recovery_key_title">"您儲存復原金鑰了嗎？"</string>
 </resources>

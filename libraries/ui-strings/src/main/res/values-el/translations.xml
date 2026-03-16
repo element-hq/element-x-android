@@ -162,8 +162,8 @@
   <string name="action_share_live_location">"Κοινοποίηση ζωντανής τοποθεσίας"</string>
   <string name="action_show">"Εμφάνιση"</string>
   <string name="action_sign_in_again">"Συνδέσου ξανά"</string>
-  <string name="action_signout">"Αποσύνδεση"</string>
-  <string name="action_signout_anyway">"Αποσύνδεση ούτως ή άλλως"</string>
+  <string name="action_signout">"Κατάργηση αυτής της συσκευής"</string>
+  <string name="action_signout_anyway">"Κατάργηση αυτής της συσκευής ούτως ή άλλως"</string>
   <string name="action_skip">"Παράλειψη"</string>
   <string name="action_start">"Εκκίνηση"</string>
   <string name="action_start_chat">"Έναρξη συνομιλίας"</string>
@@ -190,6 +190,7 @@
   <string name="common_advanced_settings">"Ρυθμίσεις για προχωρημένους"</string>
   <string name="common_an_image">"μια εικόνα"</string>
   <string name="common_analytics">"Στατιστικά στοιχεία"</string>
+  <string name="common_android_fetching_notifications_title">"Συγχρονισμός ειδοποιήσεων…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Αποχωρήσατε από την αίθουσα"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Αποσυνδεθήκατε από την περίοδο λειτουργίας"</string>
   <string name="common_appearance">"Εμφάνιση"</string>
@@ -347,7 +348,7 @@
   <string name="common_shared_history">"Τα νέα μέλη βλέπουν το ιστορικό"</string>
   <string name="common_shared_location">"Κοινόχρηστη τοποθεσία"</string>
   <string name="common_shared_space">"Κοινόχρηστος χώρος"</string>
-  <string name="common_signing_out">"Αποσύνδεση"</string>
+  <string name="common_signing_out">"Αφαίρεση συσκευής"</string>
   <string name="common_something_went_wrong">"Κάτι πήγε στραβά"</string>
   <string name="common_something_went_wrong_message">"Αντιμετωπίσαμε ένα πρόβλημα. Παρακαλώ προσπαθήστε ξανά."</string>
   <string name="common_space">"Χώρος"</string>
