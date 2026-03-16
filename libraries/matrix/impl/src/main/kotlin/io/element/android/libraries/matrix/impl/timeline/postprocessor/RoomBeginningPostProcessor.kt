@@ -13,26 +13,40 @@ import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
 
 /**
  * This timeline post-processor removes the room creation event and the self-join event from the timeline for DMs
- * or add the RoomBeginning item.
+ * or add the RoomBeginning item. For public rooms, it also removes membership and profile change events.
  */
 class RoomBeginningPostProcessor(private val mode: Timeline.Mode) {
     fun process(
         items: List<MatrixTimelineItem>,
         isDm: Boolean,
         roomCreator: UserId?,
+        isPublic: Boolean?,
         hasMoreToLoadBackwards: Boolean,
     ): List<MatrixTimelineItem> {
         return when {
             items.isEmpty() -> items
             mode == Timeline.Mode.PinnedEvents -> items
+            isPublic == true -> filterPublicRoomEvents(items)
             isDm -> processForDM(items, roomCreator)
             hasMoreToLoadBackwards -> items
             else -> processForRoom(items)
+        }
+    }
+
+    private fun filterPublicRoomEvents(items: List<MatrixTimelineItem>): List<MatrixTimelineItem> {
+        return items.filter { item ->
+            val eventContent = (item as? MatrixTimelineItem.Event)?.event?.content
+            when (eventContent) {
+                is RoomMembershipContent -> false
+                is ProfileChangeContent -> false
+                else -> true
+            }
         }
     }
 
