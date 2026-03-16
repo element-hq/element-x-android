@@ -26,12 +26,8 @@ import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.drawOutline
-import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.graphics.layer.drawLayer
-import androidx.compose.ui.graphics.layer.setOutline
+import androidx.compose.ui.graphics.layer.CompositingStrategy
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -51,6 +47,7 @@ import io.element.android.libraries.designsystem.theme.messageFromMeBackground
 import io.element.android.libraries.designsystem.theme.messageFromOtherBackground
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
+import io.element.android.libraries.ui.utils.graphics.drawInLayer
 import io.element.android.libraries.ui.utils.time.isTalkbackActive
 
 private val BUBBLE_RADIUS = 12.dp
@@ -88,39 +85,36 @@ fun MessageEventBubble(
     val yOffsetPx = -(NEGATIVE_MARGIN_FOR_BUBBLE + avatarRadius).toPx()
     BoxWithConstraints(
         modifier = modifier
-            .graphicsLayer {
-                compositingStrategy = CompositingStrategy.Offscreen
-            }
             .drawWithCache {
-                // Calculate the outline of the background
+                // Calculate the outline of the background and cache it
                 val outline = bubbleShape.createOutline(size, layoutDirection, this)
+
                 onDrawWithContent {
-                    // Draw the background
-                    drawOutline(outline, backgroundBubbleColor)
-
-                    // Draw the content in a layer to be able to clip it with the same outline
+                    // Draw the contents in a layer to be able to clip them with the same outline
                     // For some reason, doing this clipping outside a layer messes up with the touch events
-                    obtainGraphicsLayer().run {
-                        compositingStrategy = androidx.compose.ui.graphics.layer.CompositingStrategy.Offscreen
-                        setOutline(outline)
-                        clip = true
-                        record {
-                            this@onDrawWithContent.drawContent()
-                        }
-                        drawLayer(this)
-                    }
+                    drawInLayer(
+                        composingStrategy = CompositingStrategy.Offscreen,
+                        outline = outline,
+                        clip = true,
+                    ) {
+                        // Draw the background first, so that it's behind the content
+                        drawRect(backgroundBubbleColor)
 
-                    // And then clip the top start corner if needed to make room for the avatar
-                    if (cutTopStart) {
-                        drawCircle(
-                            color = Color.Black,
-                            center = Offset(
-                                x = if (layoutDirection == LayoutDirection.Rtl) size.width else 0f,
-                                y = yOffsetPx,
-                            ),
-                            radius = radiusPx,
-                            blendMode = BlendMode.Clear,
-                        )
+                        // Then draw the content on top of it
+                        drawContent()
+
+                        // And then clip the top start corner if needed to make room for the avatar
+                        if (cutTopStart) {
+                            drawCircle(
+                                color = Color.Black,
+                                center = Offset(
+                                    x = if (layoutDirection == LayoutDirection.Rtl) size.width else 0f,
+                                    y = yOffsetPx,
+                                ),
+                                radius = radiusPx,
+                                blendMode = BlendMode.Clear,
+                            )
+                        }
                     }
                 }
             },
