@@ -7,25 +7,16 @@
  */
 
 /**
- * This will generate the plugin "io.element.android-library", used in android library without compose modules.
+ * This will generate the plugin "io.element.jvm-library", used in pure JVM libraries.
  */
-import extension.androidConfig
-import extension.commonDependencies
 import extension.setupKover
 import org.gradle.accessors.dm.LibrariesForLibs
 
 val libs = the<LibrariesForLibs>()
 plugins {
-    id("com.android.library")
-    id("kotlin-android")
+    id("org.jetbrains.kotlin.jvm")
     id("com.autonomousapps.dependency-analysis")
-}
-
-android {
-    androidConfig(project)
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-    }
+    id("com.android.lint")
 }
 
 kotlin {
@@ -35,8 +26,3 @@ kotlin {
 }
 
 setupKover()
-
-dependencies {
-    commonDependencies(libs)
-    coreLibraryDesugaring(libs.android.desugar)
-}
