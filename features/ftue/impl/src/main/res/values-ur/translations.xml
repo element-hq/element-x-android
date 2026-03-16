@@ -12,5 +12,4 @@
   <string name="screen_identity_waiting_on_other_device">"دوسرے آلہ پر منتظر…"</string>
   <string name="screen_notification_optin_subtitle">"آپ بعد میں اپنی ترتیبات تبدیل کر سکتے ہیں۔"</string>
   <string name="screen_notification_optin_title">"اطلاعات کی اجازت دیں اور کبھی بھی کسی پیغام سے محروم نہ ہوں۔"</string>
-  <string name="screen_session_verification_enter_recovery_key">"بازیابی کلید درج کریں"</string>
 </resources>

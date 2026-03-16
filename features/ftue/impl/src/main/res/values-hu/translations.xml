@@ -12,5 +12,4 @@
   <string name="screen_identity_waiting_on_other_device">"Várakozás a másik eszközre…"</string>
   <string name="screen_notification_optin_subtitle">"A beállításokat később is módosíthatja."</string>
   <string name="screen_notification_optin_title">"Értesítések engedélyezése, hogy soha ne maradjon le egyetlen üzenetről sem"</string>
-  <string name="screen_session_verification_enter_recovery_key">"Adja meg a helyreállítási kulcsot"</string>
 </resources>

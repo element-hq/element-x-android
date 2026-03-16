@@ -12,5 +12,4 @@
   <string name="screen_identity_waiting_on_other_device">"Boshqa qurilmada kutilmoqda…"</string>
   <string name="screen_notification_optin_subtitle">"Sozlamalaringizni keyinroq o\'zgartirishingiz mumkin."</string>
   <string name="screen_notification_optin_title">"Bildirishnomalarga ruxsat bering va hech qachon xabarni o\'tkazib yubormang"</string>
-  <string name="screen_session_verification_enter_recovery_key">"Tiklash kalitini kiriting"</string>
 </resources>
