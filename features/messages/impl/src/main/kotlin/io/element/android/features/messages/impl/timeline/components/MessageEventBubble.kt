@@ -101,6 +101,7 @@ fun MessageEventBubble(
                     // Draw the content in a layer to be able to clip it with the same outline
                     // For some reason, doing this clipping outside a layer messes up with the touch events
                     obtainGraphicsLayer().run {
+                        compositingStrategy = androidx.compose.ui.graphics.layer.CompositingStrategy.Offscreen
                         setOutline(outline)
                         clip = true
                         record {
