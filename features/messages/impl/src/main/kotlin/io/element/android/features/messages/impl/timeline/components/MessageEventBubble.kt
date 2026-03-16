@@ -30,6 +30,8 @@ import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.graphics.layer.drawLayer
+import androidx.compose.ui.graphics.layer.setOutline
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -95,8 +97,18 @@ fun MessageEventBubble(
                 onDrawWithContent {
                     // Draw the background
                     drawOutline(outline, backgroundBubbleColor)
-                    // Then the contents
-                    drawContent()
+
+                    // Draw the content in a layer to be able to clip it with the same outline
+                    // For some reason, doing this clipping outside a layer messes up with the touch events
+                    obtainGraphicsLayer().run {
+                        setOutline(outline)
+                        clip = true
+                        record {
+                            this@onDrawWithContent.drawContent()
+                        }
+                        drawLayer(this)
+                    }
+
                     // And then clip the top start corner if needed to make room for the avatar
                     if (cutTopStart) {
                         drawCircle(
