@@ -8,15 +8,13 @@
 package io.element.android.libraries.push.impl.push
 
 import android.content.Context
-import android.os.PowerManager
-import androidx.core.content.getSystemService
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.push.api.push.PushHandlingWakeLock
 import timber.log.Timber
-import java.util.concurrent.ConcurrentHashMap
+import java.util.concurrent.atomic.AtomicInteger
 import kotlin.time.Duration
 
 @ContributesBinding(AppScope::class)
@@ -24,30 +22,24 @@ import kotlin.time.Duration
 class DefaultPushHandlingWakeLock(
     @ApplicationContext private val context: Context,
 ) : PushHandlingWakeLock {
-    private val wakeLocks = ConcurrentHashMap<String, PowerManager.WakeLock>()
+    private val count = AtomicInteger(0)
 
-    override fun lock(key: String, time: Duration) {
-        Timber.d("Acquiring wakelock for push handling, key: $key.")
-        // Get or create a wakelock for this instance to ensure the device stays awake while we handle the push and schedule and run the work
-        val wakeLock = wakeLocks.getOrPut(key) {
-            val powerManager = context.getSystemService<PowerManager>()!!
-            powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, tag(key)).apply {
-                setReferenceCounted(false)
-            }
-        }
+    override fun lock(time: Duration) {
+        Timber.d("Acquiring wakelock for push handling, starting service.")
+        FetchPushForegroundService.startIfNeeded(context)
 
-        if (wakeLock.isHeld) {
-            // If the wakelock is already held, we need to release it before acquiring it again with a new timeout
-            wakeLock.release()
-        }
-
-        wakeLock.acquire(time.inWholeMilliseconds)
+        count.incrementAndGet()
     }
 
-    override fun unlock(key: String) {
-        Timber.d("Releasing wakelock used for push handling, key: $key.")
-        wakeLocks[key]?.release()
+    override fun unlock() {
+        Timber.d("Releasing wakelock used for push handling.")
+        FetchPushForegroundService.stop(context)
+        if (count.decrementAndGet() <= 0) {
+            Timber.d("No more wakelock needed for push handling, stopping service.")
+            count.set(0)
+        } else {
+            Timber.d("Wakelock still needed for push handling, restarting service | count: ${count.get()}.")
+            FetchPushForegroundService.startIfNeeded(context)
+        }
     }
-
-    private fun tag(key: String) = "push:wakelock:$key"
 }

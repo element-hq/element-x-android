@@ -142,7 +142,7 @@ class DefaultPushHandler(
 
             if (!workManagerScheduler.hasPendingWork(userId, WorkManagerRequestType.NOTIFICATION_SYNC)) {
                 Timber.d("No pending worker for push notifications found")
-                workManagerScheduler.submit(syncPendingNotificationsRequestFactory.create(userId, pushData.clientSecret))
+                workManagerScheduler.submit(syncPendingNotificationsRequestFactory.create(userId))
             }
         } catch (e: Exception) {
             Timber.tag(loggerTag.value).e(e, "## handleInternal() failed")

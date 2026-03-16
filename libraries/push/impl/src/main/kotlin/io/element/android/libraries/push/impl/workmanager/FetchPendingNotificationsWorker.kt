@@ -67,7 +67,7 @@ class FetchPendingNotificationsWorker(
             inputData.getString(SyncPendingNotificationsRequestBuilder.SESSION_ID)?.let(::SessionId)
         }.getOrNull() ?: return Result.failure()
 
-        val wakeLockKey = inputData.getString(SyncPendingNotificationsRequestBuilder.WAKELOCK_KEY)
+        pushHandlingWakeLock.unlock()
 
         // Fetch pending requests in the last 24 hours
         val fetchSince = Instant.fromEpochMilliseconds(systemClock.epochMillis()).minus(1.days)
@@ -82,10 +82,7 @@ class FetchPendingNotificationsWorker(
             return Result.success()
         }
 
-        checkNetworkConnection(requests)?.let { failure ->
-            wakeLockKey?.let { pushHandlingWakeLock.unlock(it) }
-            return failure
-        }
+        checkNetworkConnection(requests)?.let { failure -> return failure }
 
         Timber.d("Fetching ${requests.size} push requests")
 
@@ -110,9 +107,7 @@ class FetchPendingNotificationsWorker(
                 },
                 onFailure = { throwable ->
                     // This is a failure at the fetch notification setup, not a failure for a single fetch notification operation
-                    return handleSetupError(sessionId, requests, pendingAnalyticTransactions, throwable).also {
-                        wakeLockKey?.let { pushHandlingWakeLock.unlock(it) }
-                    }
+                    return handleSetupError(sessionId, requests, pendingAnalyticTransactions, throwable)
                 }
             )
 
@@ -139,9 +134,6 @@ class FetchPendingNotificationsWorker(
         analyticsService.recordTransaction("Opportunistic sync", "opportunistic_sync") {
             performOpportunisticSyncIfNeeded(mapOf(sessionId to requests))
         }
-
-        // Unlock the associated wakelock ahead of time
-        wakeLockKey?.let { pushHandlingWakeLock.unlock(it) }
 
         return if (updatedRequests.any { it.status == PushRequestStatus.PENDING.value }) Result.retry() else Result.success()
     }

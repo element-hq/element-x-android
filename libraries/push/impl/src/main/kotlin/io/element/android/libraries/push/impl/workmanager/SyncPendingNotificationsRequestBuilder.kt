@@ -27,7 +27,6 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.push.impl.workmanager.SyncPendingNotificationsRequestBuilder.Companion.SESSION_ID
-import io.element.android.libraries.push.impl.workmanager.SyncPendingNotificationsRequestBuilder.Companion.WAKELOCK_KEY
 import io.element.android.libraries.workmanager.api.WorkManagerRequestBuilder
 import io.element.android.libraries.workmanager.api.WorkManagerRequestType
 import io.element.android.libraries.workmanager.api.WorkManagerRequestWrapper
@@ -39,19 +38,17 @@ import timber.log.Timber
 
 interface SyncPendingNotificationsRequestBuilder : WorkManagerRequestBuilder {
     fun interface Factory {
-        fun create(sessionId: SessionId, wakeLockKey: String): SyncPendingNotificationsRequestBuilder
+        fun create(sessionId: SessionId): SyncPendingNotificationsRequestBuilder
     }
 
     companion object {
         const val SESSION_ID = "session_id"
-        const val WAKELOCK_KEY = "wakelock_key"
     }
 }
 
 @AssistedInject
 class DefaultSyncPendingNotificationsRequestBuilder(
     @Assisted private val sessionId: SessionId,
-    @Assisted private val wakeLockKey: String,
     private val buildVersionSdkIntProvider: BuildVersionSdkIntProvider,
     private val networkMonitor: NetworkMonitor,
     private val featureFlagService: FeatureFlagService,
@@ -59,7 +56,7 @@ class DefaultSyncPendingNotificationsRequestBuilder(
     @AssistedFactory
     @ContributesBinding(AppScope::class)
     interface Factory : SyncPendingNotificationsRequestBuilder.Factory {
-        override fun create(sessionId: SessionId, wakeLockKey: String): DefaultSyncPendingNotificationsRequestBuilder
+        override fun create(sessionId: SessionId): DefaultSyncPendingNotificationsRequestBuilder
     }
 
     override suspend fun build(): Result<List<WorkManagerRequestWrapper>> {
@@ -93,7 +90,7 @@ class DefaultSyncPendingNotificationsRequestBuilder(
             .build()
 
         val request = OneTimeWorkRequestBuilder<FetchPendingNotificationsWorker>()
-            .setInputData(workDataOf(SESSION_ID to sessionId.value, WAKELOCK_KEY to wakeLockKey))
+            .setInputData(workDataOf(SESSION_ID to sessionId.value))
             .apply {
                 // Expedited workers aren't needed on Android 12 or lower:
                 // They force displaying a foreground sync notification for no good reason, since they sync almost immediately anyway

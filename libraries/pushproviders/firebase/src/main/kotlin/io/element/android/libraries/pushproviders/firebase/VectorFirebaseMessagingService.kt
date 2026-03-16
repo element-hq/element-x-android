@@ -44,12 +44,12 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         Timber.tag(loggerTag.value).w("New Firebase message. Priority: ${message.priority}/${message.originalPriority}")
-        val pushData = pushParser.parse(message.data)
 
         // Acquire wakelock to ensure the device stays awake while we handle the push and schedule and run the work
-        pushData?.clientSecret?.let { pushHandlingWakeLock.lock(it) }
+        pushHandlingWakeLock.lock()
 
         coroutineScope.launch {
+            val pushData = pushParser.parse(message.data)
             if (pushData == null) {
                 Timber.tag(loggerTag.value).w("Invalid data received from Firebase")
                 pushHandler.handleInvalid(

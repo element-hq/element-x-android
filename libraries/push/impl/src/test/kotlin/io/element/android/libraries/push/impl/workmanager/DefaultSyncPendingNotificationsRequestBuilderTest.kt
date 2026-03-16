@@ -43,7 +43,6 @@ class DefaultSyncPendingNotificationsRequestBuilderTest {
             result.request.run {
                 assertThat(this).isInstanceOf(OneTimeWorkRequest::class.java)
                 assertThat(workSpec.input.hasKeyWithValueOfType<String>(SyncPendingNotificationsRequestBuilder.SESSION_ID)).isTrue()
-                assertThat(workSpec.input.hasKeyWithValueOfType<String>(SyncPendingNotificationsRequestBuilder.WAKELOCK_KEY)).isTrue()
                 assertThat(workSpec.hasConstraints()).isTrue()
                 // True in API 33+
                 assertThat(workSpec.expedited).isTrue()
@@ -67,7 +66,6 @@ class DefaultSyncPendingNotificationsRequestBuilderTest {
             result.request.run {
                 assertThat(this).isInstanceOf(OneTimeWorkRequest::class.java)
                 assertThat(workSpec.input.hasKeyWithValueOfType<String>(SyncPendingNotificationsRequestBuilder.SESSION_ID)).isTrue()
-                assertThat(workSpec.input.hasKeyWithValueOfType<String>(SyncPendingNotificationsRequestBuilder.WAKELOCK_KEY)).isTrue()
                 assertThat(workSpec.hasConstraints()).isTrue()
                 // False before API 33
                 assertThat(workSpec.expedited).isFalse()
@@ -145,11 +143,9 @@ private fun createSyncPendingNotificationsRequestBuilder(
     sdkVersion: Int = 33,
     isInAirGapEnvironment: Boolean = false,
     featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
-    wakeLockKey: String = "a_wake_lock_key",
 ) = DefaultSyncPendingNotificationsRequestBuilder(
     sessionId = sessionId,
     buildVersionSdkIntProvider = FakeBuildVersionSdkIntProvider(sdkVersion),
     networkMonitor = FakeNetworkMonitor().apply { givenIsInAirGappedEnvironment(isInAirGapEnvironment) },
     featureFlagService = featureFlagService,
-    wakeLockKey = wakeLockKey,
 )

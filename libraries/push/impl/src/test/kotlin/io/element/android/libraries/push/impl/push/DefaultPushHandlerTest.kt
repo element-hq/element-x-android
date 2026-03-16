@@ -244,7 +244,7 @@ class DefaultPushHandlerTest {
             systemClock = systemClock,
             workManagerScheduler = workManagerScheduler,
             resultProcessor = resultProcessor,
-            syncPendingNotificationsRequestFactory = SyncPendingNotificationsRequestBuilder.Factory { _, _ ->
+            syncPendingNotificationsRequestFactory = SyncPendingNotificationsRequestBuilder.Factory {
                 FakeSyncPendingNotificationsRequestBuilder()
             }
         )

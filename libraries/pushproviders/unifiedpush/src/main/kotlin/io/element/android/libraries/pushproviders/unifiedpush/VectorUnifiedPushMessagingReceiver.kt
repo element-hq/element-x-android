@@ -60,7 +60,7 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
      */
     override fun onMessage(context: Context, message: PushMessage, instance: String) {
         // Acquire wakelock to ensure the device stays awake while we handle the push and schedule and run the work
-        pushHandlingWakeLock.lock(instance)
+        pushHandlingWakeLock.lock()
 
         Timber.tag(loggerTag.value).d("New message, decrypted: ${message.decrypted}")
         coroutineScope.launch {

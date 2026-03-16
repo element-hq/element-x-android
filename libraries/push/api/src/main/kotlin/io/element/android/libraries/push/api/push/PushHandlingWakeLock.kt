@@ -15,12 +15,12 @@ import kotlin.time.Duration.Companion.minutes
  */
 interface PushHandlingWakeLock {
     /**
-     * Acquire a wakelock for the given [key]. The wakelock will be held for the given [time] or until [unlock] is called, whichever happens first.
+     * Acquire a wakelock. The wakelock will be held for the given [time] or until [unlock] is called, whichever happens first.
      */
-    fun lock(key: String, time: Duration = 1.minutes)
+    fun lock(time: Duration = 1.minutes)
 
     /**
-     * Release the wakelock associated with the given [key]. If no wakelock is associated with the key, this method does nothing.
+     * Release the wakelock. If no wakelock is associated with the key, this method does nothing.
      */
-    fun unlock(key: String)
+    fun unlock()
 }
