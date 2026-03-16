@@ -35,7 +35,7 @@
   <string name="screen_room_attachment_source_camera_video">"Εγγραφή βίντεο"</string>
   <string name="screen_room_attachment_source_files">"Επισύναψη"</string>
   <string name="screen_room_attachment_source_gallery">"Βιβλιοθήκη Φωτογραφιών &amp; Βίντεο"</string>
-  <string name="screen_room_attachment_source_location">"Τοποθεσία"</string>
+  <string name="screen_room_attachment_source_location">"Κοινή χρήση τοποθεσίας"</string>
   <string name="screen_room_attachment_source_poll">"Δημοσκόπηση"</string>
   <string name="screen_room_attachment_text_formatting">"Μορφοποίηση Κειμένου"</string>
   <string name="screen_room_encrypted_history_banner">"Το ιστορικό μηνυμάτων δεν είναι διαθέσιμο προς το παρόν."</string>

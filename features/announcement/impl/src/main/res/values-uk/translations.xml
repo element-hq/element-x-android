@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_space_announcement_item3">"Знаходьте у своїх просторах кімнати, до яких можна приєднатися"</string>
+  <string name="screen_space_announcement_notice">"Фільтрування, створення та керування просторами стане доступним найближчим часом."</string>
+  <string name="screen_space_announcement_subtitle">"Ласкаво просимо до бета-версії Просторів! У цій першій версії ви можете:"</string>
+  <string name="screen_space_announcement_title">"Представляємо Простори"</string>
+</resources>

@@ -9,13 +9,13 @@
   <string name="screen_media_browser_list_loading_media">"Загрузка медиа…"</string>
   <string name="screen_media_browser_list_mode_files">"Файлы"</string>
   <string name="screen_media_browser_list_mode_media">"Медиа"</string>
-  <string name="screen_media_browser_media_empty_state_subtitle">"Здесь будут показаны изображения и видео, загруженные в данную комнату."</string>
-  <string name="screen_media_browser_media_empty_state_title">"Пока что нет загруженных медиафайлов"</string>
+  <string name="screen_media_browser_media_empty_state_subtitle">"Здесь будут показаны изображения и видео из данной комнаты."</string>
+  <string name="screen_media_browser_media_empty_state_title">"Пока что нет загруженных медиа"</string>
   <string name="screen_media_browser_title">"Медиа и файлы"</string>
   <string name="screen_media_details_file_format">"Формат файла"</string>
   <string name="screen_media_details_filename">"Имя файла"</string>
-  <string name="screen_media_details_no_more_files_to_show">"Больше нет файлов для показа"</string>
-  <string name="screen_media_details_no_more_media_to_show">"Больше нет медиа для показа"</string>
+  <string name="screen_media_details_no_more_files_to_show">"Больше нет файлов для отображения"</string>
+  <string name="screen_media_details_no_more_media_to_show">"Больше нет медиа для отображения"</string>
   <string name="screen_media_details_uploaded_by">"Загружено"</string>
-  <string name="screen_media_details_uploaded_on">"Загружено на"</string>
+  <string name="screen_media_details_uploaded_on">"Загружено"</string>
 </resources>

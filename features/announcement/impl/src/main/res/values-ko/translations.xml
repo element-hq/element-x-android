@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_space_announcement_item1">"직접 만들거나 참여 중인 스페이스 보기"</string>
+  <string name="screen_space_announcement_item2">"스페이스 초대 수락 또는 거절"</string>
+  <string name="screen_space_announcement_item3">"참여 가능한 스페이스 내 모든 방 탐색"</string>
+  <string name="screen_space_announcement_item4">"공개 스페이스 참여"</string>
+  <string name="screen_space_announcement_item5">"참여 중인 스페이스 나가기"</string>
+  <string name="screen_space_announcement_notice">"스페이스 필터링, 생성 및 관리 기능이 곧 추가될 예정입니다."</string>
+  <string name="screen_space_announcement_subtitle">"스페이스 베타 버전에 오신 것을 환영합니다! 이번 첫 번째 버전에서는 다음과 같은 기능을 이용하실 수 있습니다.:"</string>
+  <string name="screen_space_announcement_title">"스페이스 소개"</string>
+</resources>

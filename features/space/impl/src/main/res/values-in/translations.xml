@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_leave_space_choose_owners_action">"Pilih Pemilik"</string>
+  <string name="screen_leave_space_subtitle">"Pilih room yang ingin Anda tinggalkan di mana Anda bukan satu-satunya administrator:"</string>
+  <string name="screen_leave_space_title">"Keluar dari %1$s?"</string>
+  <string name="screen_space_settings_leave_space">"Tinggalkan space"</string>
   <string name="screen_space_settings_roles_and_permissions">"Peran dan perizinan"</string>
   <string name="screen_space_settings_security_and_privacy">"Keamanan &amp; privasi"</string>
 </resources>

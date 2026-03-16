@@ -60,6 +60,8 @@
   <string name="screen_qr_code_login_error_cancelled_title">"Запит на вхід скасовано"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"Вхід був відхилений на іншому пристрої."</string>
   <string name="screen_qr_code_login_error_declined_title">"Вхід відхилено"</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_subtitle">"Вам більше нічого не потрібно робити."</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_title">"На вашому іншому пристрої вже виконано вхід"</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"Термін входу сплив. Будь ласка, спробуйте ще раз."</string>
   <string name="screen_qr_code_login_error_expired_title">"Вхід не було завершено вчасно"</string>
   <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"Ваш інший пристрій не підтримує вхід у %s за допомогою QR-коду.

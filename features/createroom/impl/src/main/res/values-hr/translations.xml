@@ -3,6 +3,7 @@
   <string name="screen_create_room_action_create_room">"Nova soba"</string>
   <string name="screen_create_room_add_people_title">"Pozovi osobe"</string>
   <string name="screen_create_room_error_creating_room">"Došlo je do pogreške prilikom stvaranja sobe"</string>
+  <string name="screen_create_room_new_room_title">"Nova soba"</string>
   <string name="screen_create_room_private_option_description">"Samo pozvane osobe mogu pristupiti ovoj sobi. Sve su poruke sveobuhvatno šifrirane."</string>
   <string name="screen_create_room_public_option_description">"Svatko može pronaći ovu sobu.
 To možete u svakom trenutku promijeniti u postavkama sobe."</string>
