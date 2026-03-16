@@ -22,14 +22,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.graphics.drawOutline
 import androidx.compose.ui.graphics.graphicsLayer
-import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -78,32 +78,37 @@ fun MessageEventBubble(
             .onKeyboardContextMenuAction(onLongClick)
     }
 
+    val cutTopStart = state.cutTopStart
     // Ignore state.isHighlighted for now, we need a design decision on it.
     val backgroundBubbleColor = MessageEventBubbleDefaults.backgroundBubbleColor(state.isMine)
     val bubbleShape = remember(state) { MessageEventBubbleDefaults.shape(state.cutTopStart, state.groupPosition, state.isMine) }
     val radiusPx = (avatarRadius + SENDER_AVATAR_BORDER_WIDTH).toPx()
     val yOffsetPx = -(NEGATIVE_MARGIN_FOR_BUBBLE + avatarRadius).toPx()
-    val isRtl = LocalLayoutDirection.current == LayoutDirection.Rtl
     BoxWithConstraints(
         modifier = modifier
             .graphicsLayer {
-                shape = bubbleShape
-                clip = true
                 compositingStrategy = CompositingStrategy.Offscreen
             }
-            .drawWithContent {
-                drawRect(backgroundBubbleColor)
-                drawContent()
-                if (state.cutTopStart) {
-                    drawCircle(
-                        color = Color.Black,
-                        center = Offset(
-                            x = if (isRtl) size.width else 0f,
-                            y = yOffsetPx,
-                        ),
-                        radius = radiusPx,
-                        blendMode = BlendMode.Clear,
-                    )
+            .drawWithCache {
+                // Calculate the outline of the background
+                val outline = bubbleShape.createOutline(size, layoutDirection, this)
+                onDrawWithContent {
+                    // Draw the background
+                    drawOutline(outline, backgroundBubbleColor)
+                    // Then the contents
+                    drawContent()
+                    // And then clip the top start corner if needed to make room for the avatar
+                    if (cutTopStart) {
+                        drawCircle(
+                            color = Color.Black,
+                            center = Offset(
+                                x = if (layoutDirection == LayoutDirection.Rtl) size.width else 0f,
+                                y = yOffsetPx,
+                            ),
+                            radius = radiusPx,
+                            blendMode = BlendMode.Clear,
+                        )
+                    }
                 }
             },
         // Need to set the contentAlignment again (it's already set in TimelineItemEventRow), for the case
