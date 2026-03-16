@@ -125,7 +125,7 @@ private fun ChooseSelfVerificationModeButtons(
                 if (state.buttonsState.data.canEnterRecoveryKey) {
                     Button(
                         modifier = Modifier.fillMaxWidth(),
-                        text = stringResource(R.string.screen_session_verification_enter_recovery_key),
+                        text = stringResource(R.string.screen_identity_confirmation_use_recovery_key),
                         onClick = onUseRecoveryKey,
                     )
                 }
