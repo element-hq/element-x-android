@@ -19,6 +19,7 @@
     <item quantity="one">"Du har %d ny besked."</item>
     <item quantity="other">"Du har %d nye beskeder."</item>
   </plurals>
+  <string name="notification_incoming_audio_call">"📞 Indgående opkald"</string>
   <string name="notification_incoming_call">"📹 Indgående opkald"</string>
   <string name="notification_inline_reply_failed">"** Kunne ikke sende - åbn venligst rummet"</string>
   <string name="notification_invitation_action_join">"Deltag"</string>
@@ -42,8 +43,8 @@
   <string name="notification_room_invite_body_with_sender">"%1$s inviterede dig til at deltage i rummet"</string>
   <string name="notification_sender_me">"Mig"</string>
   <string name="notification_sender_mention_reply">"%1$s nævnt eller besvaret"</string>
-  <string name="notification_space_invite_body">"Inviterede dig til at deltage i gruppen"</string>
-  <string name="notification_space_invite_body_with_sender">"%1$s inviterede dig til at deltage i gruppen"</string>
+  <string name="notification_space_invite_body">"Inviterede dig til at deltage i klyngen"</string>
+  <string name="notification_space_invite_body_with_sender">"%1$s inviterede dig til at deltage i klyngen"</string>
   <string name="notification_test_push_notification_content">"Du ser notifikationen! Klik på mig!"</string>
   <string name="notification_thread_in_room">"Tråd i %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>

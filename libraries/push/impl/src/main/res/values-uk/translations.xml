@@ -41,7 +41,9 @@
   <string name="notification_room_invite_body_with_sender">"%1$s запросив вас приєднатися до кімнати"</string>
   <string name="notification_sender_me">"Я"</string>
   <string name="notification_sender_mention_reply">"%1$s згадували або відповідали"</string>
+  <string name="notification_space_invite_body_with_sender">"%1$s запрошує вас приєднатися до простору"</string>
   <string name="notification_test_push_notification_content">"Ви переглядаєте сповіщення! Натисніть тут!"</string>
+  <string name="notification_thread_in_room">"Гілка в %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
@@ -60,10 +62,14 @@
   <string name="push_distributor_background_sync_android">"Фонова синхронізація"</string>
   <string name="push_distributor_firebase_android">"Сервіси Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Не знайдено дійсних сервісів Google Play. Сповіщення можуть не працювати належним чином."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_quick_fix">"Переглянути заблокованих користувачів"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_result_none">"Немає заблокованих користувачів"</string>
   <string name="troubleshoot_notifications_test_blocked_users_title">"Заблоковані користувачі"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Отримує назву поточного постачальника."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Постачальників push-сповіщень не вибрано."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_no_distributor">"Поточний постачальник push-сповіщень: %1$s, але дистриб\'юторів не налаштовано."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Поточний постачальник: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success_with_distributor">"Поточний постачальник push-сповіщень: %1$s (%2$s)"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_title">"Поточний постачальник push-сповіщень"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"Переконайтеся, що застосунок має принаймні одного постачальника push-сповіщень."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Не знайдено постачальників push-сповіщень."</string>

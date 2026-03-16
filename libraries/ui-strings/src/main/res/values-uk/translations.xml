@@ -58,6 +58,7 @@
   <string name="a11y_your_avatar">"Ваш аватар"</string>
   <string name="action_accept">"Прийняти"</string>
   <string name="action_add_caption">"Додати підпис"</string>
+  <string name="action_add_existing_rooms">"Додати наявні кімнати"</string>
   <string name="action_add_to_timeline">"Додати до стрічки"</string>
   <string name="action_back">"Назад"</string>
   <string name="action_call">"Зателефонувати"</string>
@@ -77,11 +78,13 @@
   <string name="action_copy_text">"Скопіювати текст"</string>
   <string name="action_create">"Створити"</string>
   <string name="action_create_room">"Створити кімнату"</string>
+  <string name="action_create_space">"Створити простір"</string>
   <string name="action_deactivate">"Деактивувати"</string>
   <string name="action_deactivate_account">"Деактивувати обліковий запис"</string>
   <string name="action_decline">"Відхилити"</string>
   <string name="action_decline_and_block">"Відхилити та заблокувати"</string>
   <string name="action_delete_poll">"Видалити опитування"</string>
+  <string name="action_deselect_all">"Скасувати вибір усіх"</string>
   <string name="action_disable">"Вимкнути"</string>
   <string name="action_discard">"Відкинути"</string>
   <string name="action_dismiss">"Відхилити"</string>
@@ -96,6 +99,8 @@
   <string name="action_forgot_password">"Забули пароль?"</string>
   <string name="action_forward">"Переслати"</string>
   <string name="action_go_back">"Повернутися"</string>
+  <string name="action_go_to_roles_and_permissions">"Перейти до ролей і дозволів"</string>
+  <string name="action_go_to_settings">"Перейти до налаштувань"</string>
   <string name="action_ignore">"Ігнорувати"</string>
   <string name="action_invite">"Запросити"</string>
   <string name="action_invite_friends">"Запросити людей"</string>
@@ -107,10 +112,13 @@
   <string name="action_leave">"Вийти"</string>
   <string name="action_leave_conversation">"Залишити розмову"</string>
   <string name="action_leave_room">"Вийти з кімнати"</string>
+  <string name="action_leave_space">"Вийти з простору"</string>
   <string name="action_load_more">"Завантажити ще"</string>
   <string name="action_manage_account">"Керування обліковим записом"</string>
   <string name="action_manage_devices">"Керування пристроями"</string>
+  <string name="action_manage_rooms">"Керувати кімнатами"</string>
   <string name="action_message">"Написати"</string>
+  <string name="action_minimize">"Згорнути"</string>
   <string name="action_next">"Далі"</string>
   <string name="action_no">"Ні"</string>
   <string name="action_not_now">"Не зараз"</string>
@@ -139,6 +147,7 @@
   <string name="action_retry_decryption">"Повторити спробу розшифрування"</string>
   <string name="action_save">"Зберегти"</string>
   <string name="action_search">"Шукати"</string>
+  <string name="action_select_all">"Вибрати все"</string>
   <string name="action_send">"Надіслати"</string>
   <string name="action_send_edited_message">"Надіслати змінене повідомлення"</string>
   <string name="action_send_message">"Надіслати повідомлення"</string>
@@ -157,6 +166,7 @@
   <string name="action_static_map_load">"Натисніть, щоб завантажити мапу"</string>
   <string name="action_take_photo">"Зробити фото"</string>
   <string name="action_tap_for_options">"Торкніться, щоб переглянути параметри"</string>
+  <string name="action_translate">"Перекласти"</string>
   <string name="action_try_again">"Спробуйте ще раз"</string>
   <string name="action_unpin">"Відкріпити"</string>
   <string name="action_view">"Переглянути"</string>
@@ -178,6 +188,7 @@
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Ви вийшли з сеансу"</string>
   <string name="common_appearance">"Тема"</string>
   <string name="common_audio">"Аудіо"</string>
+  <string name="common_beta">"Бета-версія"</string>
   <string name="common_blocked_users">"Заблоковані користувачі"</string>
   <string name="common_bubbles">"Бульбашки"</string>
   <string name="common_call_started">"Виклик розпочато"</string>
@@ -185,11 +196,13 @@
   <string name="common_copied_to_clipboard">"Скопійовано до буферу обміну"</string>
   <string name="common_copyright">"Авторське право"</string>
   <string name="common_creating_room">"Створення кімнати…"</string>
+  <string name="common_creating_space">"Створення простору…"</string>
   <string name="common_current_user_canceled_knock">"Запит скасовано"</string>
   <string name="common_current_user_left_room">"Виходить з кімнати"</string>
   <string name="common_current_user_rejected_invite">"Запрошення відхилено"</string>
   <string name="common_dark">"Темна"</string>
   <string name="common_decryption_error">"Помилка розшифрування"</string>
+  <string name="common_description">"Опис"</string>
   <string name="common_developer_options">"Налаштування розробника"</string>
   <string name="common_device_id">"Ідентифікатор пристрою"</string>
   <string name="common_direct_chat">"Особиста бесіда"</string>
@@ -224,9 +237,11 @@
   <string name="common_install_apk_android">"Встановити APK"</string>
   <string name="common_invite_unknown_profile">"Цей Matrix-ID не знайдено, тому запрошення може не бути отримано."</string>
   <string name="common_leaving_room">"Вихід з кімнати"</string>
+  <string name="common_leaving_space">"Вихід з простору"</string>
   <string name="common_light">"Світла"</string>
   <string name="common_line_copied_to_clipboard">"Рядок скопійовано до буфера обміну"</string>
   <string name="common_link_copied_to_clipboard">"Посилання скопійовано в буфер обміну"</string>
+  <string name="common_link_new_device">"Під\'єднати новий пристрій"</string>
   <string name="common_loading">"Завантаження"</string>
   <string name="common_loading_more">"Завантаження наступних…"</string>
   <plurals name="common_many_members">
@@ -241,13 +256,16 @@
   </plurals>
   <string name="common_message">"Повідомлення"</string>
   <string name="common_message_actions">"Дії з повідомленнями"</string>
+  <string name="common_message_failed_to_send">"Не вдалося надіслати повідомлення"</string>
   <string name="common_message_layout">"Макет повідомлень"</string>
   <string name="common_message_removed">"Повідомлення вилучено"</string>
   <string name="common_modern">"Модерн"</string>
   <string name="common_mute">"Вимкнути звук"</string>
+  <string name="common_name">"Назва"</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Немає результатів"</string>
   <string name="common_no_room_name">"Немає назви кімнати"</string>
+  <string name="common_no_space_name">"Без назви простору"</string>
   <string name="common_not_encrypted">"Не зашифровано"</string>
   <string name="common_offline">"Не в мережі"</string>
   <string name="common_open_source_licenses">"Ліцензії відкритого коду"</string>
@@ -279,6 +297,7 @@
   <string name="common_reason">"Причина"</string>
   <string name="common_recovery_key">"Ключ відновлення"</string>
   <string name="common_refreshing">"Оновлення…"</string>
+  <string name="common_removing">"Вилучення…"</string>
   <plurals name="common_replies">
     <item quantity="one">"%1$d відповідь"</item>
     <item quantity="few">"%1$d відповіді"</item>
@@ -289,9 +308,10 @@
   <string name="common_report_a_problem">"Повідомити про проблему"</string>
   <string name="common_report_submitted">"Звіт подано"</string>
   <string name="common_rich_text_editor">"Багатоформатний текстовий редактор"</string>
+  <string name="common_role">"Роль"</string>
   <string name="common_room">"Кімната"</string>
   <string name="common_room_name">"Назва кімнати"</string>
-  <string name="common_room_name_placeholder">"напр., назва вашого проєкту"</string>
+  <string name="common_room_name_placeholder">"наприклад, назва вашого проєкту"</string>
   <plurals name="common_rooms">
     <item quantity="one">"%1$d кімната"</item>
     <item quantity="few">"%1$d кімнати"</item>
@@ -311,13 +331,16 @@
   <string name="common_sent">"Надіслано"</string>
   <string name="common_sentence_delimiter">". "</string>
   <string name="common_server_not_supported">"Сервер не підтримується"</string>
+  <string name="common_server_unreachable">"Сервер недоступний"</string>
   <string name="common_server_url">"URL-адреса сервера"</string>
   <string name="common_settings">"Налаштування"</string>
+  <string name="common_shared_history">"Нові учасники бачать історію"</string>
   <string name="common_shared_location">"Поширене розташування"</string>
   <string name="common_signing_out">"Вихід"</string>
   <string name="common_something_went_wrong">"Щось пішло не так"</string>
   <string name="common_something_went_wrong_message">"Ми зіткнулися з проблемою. Будь ласка, повторіть спробу."</string>
   <string name="common_space">"Простір"</string>
+  <string name="common_space_topic_placeholder">"Про що цей простір?"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d простір"</item>
     <item quantity="few">"%1$d простори"</item>
@@ -362,6 +385,7 @@
   <string name="common_voice_message">"Голосове повідомлення"</string>
   <string name="common_waiting">"Очікування…"</string>
   <string name="common_waiting_for_decryption_key">"Чекаємо на це повідомлення"</string>
+  <string name="common_world_readable_history">"Будь-хто може переглянути історію"</string>
   <string name="common_you">"Ви"</string>
   <string name="crypto_identity_change_pin_violation">"Ідентичність %1$s скинуто. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Ідентичність %1$s %2$s скинуто. %3$s"</string>
@@ -389,7 +413,7 @@
   <string name="dialog_video_quality_selector_subtitle_file_size">"Максимально дозволений розмір файлу: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Виберіть якість відео, яке ви хочете вивантажити."</string>
   <string name="dialog_video_quality_selector_title">"Виберіть якість вивантажуваного відео"</string>
-  <string name="emoji_picker_search_placeholder">"Пошук емодзі"</string>
+  <string name="emoji_picker_search_placeholder">"Пошук емоджі"</string>
   <string name="error_account_already_logged_in">"Ви вже ввійшли на цьому пристрої як %1$s."</string>
   <string name="error_account_creation_not_possible">"Ваш домашній сервер потрібно оновити, щоб він підтримував службу автентифікації Matrix і створення облікових записів."</string>
   <string name="error_failed_creating_the_permalink">"Не вдалося створити постійне посилання"</string>
@@ -455,6 +479,7 @@
   <string name="screen_share_this_location_action">"Поділитися цим місцем перебування"</string>
   <string name="screen_space_list_description">"Простори, які ви створили або до яких приєдналися."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_parent_space">"Простір %1$s"</string>
   <string name="screen_space_list_title">"Простори"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Повідомлення не надіслано, оскільки підтверджену особистість %1$s скинуто."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Повідомлення не надіслано, оскільки %1$s перевірив не всі пристрої."</string>

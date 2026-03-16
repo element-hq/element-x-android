@@ -2,6 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_bug_report_attach_screenshot">"Pridėti ekrano nuotrauką"</string>
   <string name="screen_bug_report_contact_me">"Jei turite papildomų klausimų, galite susisiekti su manimi."</string>
+  <string name="screen_bug_report_contact_me_title">"Susisiekti su manimi"</string>
   <string name="screen_bug_report_edit_screenshot">"Redaguoti ekrano nuotrauką"</string>
   <string name="screen_bug_report_editor_description">"Apibūdinkite problemą. Ką padarėte? Ko tikėjotės? Kas iš tikrųjų įvyko? Pateikite kuo daugiau detalių."</string>
   <string name="screen_bug_report_editor_placeholder">"Apibūdinkite problemą…"</string>

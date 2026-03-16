@@ -34,6 +34,9 @@
   <string name="screen_notification_settings_additional_settings_section_title">"Допълнителни настройки"</string>
   <string name="screen_notification_settings_calls_label">"Аудио и видео разговори"</string>
   <string name="screen_notification_settings_configuration_mismatch">"Несъответствие в конфигурацията"</string>
+  <string name="screen_notification_settings_configuration_mismatch_description">"Опростихме настройките за известия, за да улесним намирането на опции. Някои персонализирани настройки, които сте избрали в миналото, не се показват тук, но те все още са активни.
+
+Ако продължите, някои от настройките ви може да се променят."</string>
   <string name="screen_notification_settings_direct_chats">"Директни чатове"</string>
   <string name="screen_notification_settings_edit_custom_settings_section_title">"Персонализирана настройка за чат"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Възникна грешка при обновяването на настройките за известия."</string>
@@ -47,6 +50,7 @@
   <string name="screen_notification_settings_invite_for_me_label">"Покани"</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Вашият сървър не поддържа тази опция в шифровани стаи, може да не получавате известия в някои стаи."</string>
   <string name="screen_notification_settings_mentions_section_title">"Споменавания"</string>
+  <string name="screen_notification_settings_mode_all">"Всички"</string>
   <string name="screen_notification_settings_mode_mentions">"Споменавания"</string>
   <string name="screen_notification_settings_notification_section_title">"Да бъда известяван за"</string>
   <string name="screen_notification_settings_room_mention_label">"Известяване за @room"</string>

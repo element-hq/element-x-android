@@ -397,7 +397,7 @@
   <string name="common_waiting_for_decryption_key">"Venter på denne meldingen"</string>
   <string name="common_world_readable_history">"Alle kan se historikk"</string>
   <string name="common_you">"Du"</string>
-  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s(%2$s ) delte denne meldingen siden du ikke var i rommet da den ble sendt."</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) delte denne meldingen siden du ikke var i rommet da den ble sendt."</string>
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s delte denne meldingen siden du ikke var i rommet da den ble sendt."</string>
   <string name="crypto_history_visible">"Dette rommet er konfigurert slik at nye medlemmer kan lese historikken.%1$s"</string>
   <string name="crypto_identity_change_pin_violation">"%1$s\'s identitet ble tilbakestilt. %2$s"</string>

@@ -10,6 +10,7 @@
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL이 잘못되었습니다. 프로토콜(http/https)과 올바른 주소를 포함했는지 확인하세요."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"방 초대 요청에서 아바타 숨기기"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"타임라인에서 미디어 미리 보기 숨기기"</string>
+  <string name="screen_advanced_settings_labs">"실험실"</string>
   <string name="screen_advanced_settings_media_compression_description">"사진과 동영상을 더 빠르게 업로드하고 데이터 사용량을 줄이세요"</string>
   <string name="screen_advanced_settings_media_compression_title">"미디어 품질 최적화"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"중재와 안전"</string>
@@ -44,6 +45,11 @@
   <string name="screen_edit_profile_error_title">"프로필을 업데이트할 수 없음"</string>
   <string name="screen_edit_profile_title">"프로필 수정"</string>
   <string name="screen_edit_profile_updating_details">"프로필 업데이트 중…"</string>
+  <string name="screen_labs_enable_threads">"스레드 답글 활성화"</string>
+  <string name="screen_labs_enable_threads_description">"이 변경 사항을 적용하려면 앱을 다시 시작해야 합니다."</string>
+  <string name="screen_labs_header_description">"개발 중인 최신 아이디어들을 미리 체험해 보세요. 이 기능들은 아직 완성되지 않았으므로 불안정할 수 있으며, 언제든 변경될 수 있습니다."</string>
+  <string name="screen_labs_header_title">"새로운 것을 시도해보고 싶으신가요?"</string>
+  <string name="screen_labs_title">"실험실"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"추가 설정"</string>
   <string name="screen_notification_settings_calls_label">"음성 및 동영상 통화"</string>
   <string name="screen_notification_settings_configuration_mismatch">"구성 불일치"</string>
