@@ -57,7 +57,7 @@ class ChooseSessionVerificationModeViewTest {
     fun `clicking on enter recovery key calls the callback`() {
         ensureCalledOnce { callback ->
             rule.setChooseSelfVerificationModeView(
-                aChooseSelfVerificationModeState(AsyncData.Success(aButtonsState(canEnterRecoveryKey = true))),
+                aChooseSelfVerificationModeState(AsyncData.Success(aButtonsState(canUseRecoveryKey = true))),
                 onEnterRecoveryKey = callback,
             )
             rule.clickOn(R.string.screen_identity_confirmation_use_recovery_key)

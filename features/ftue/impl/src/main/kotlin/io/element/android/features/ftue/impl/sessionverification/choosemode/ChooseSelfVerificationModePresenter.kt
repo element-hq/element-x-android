@@ -30,7 +30,7 @@ class ChooseSelfVerificationModePresenter(
     @Composable
     override fun present(): ChooseSelfVerificationModeState {
         val hasDevicesToVerifyAgainst by encryptionService.hasDevicesToVerifyAgainst.collectAsState()
-        val canEnterRecoveryKey by encryptionService.recoveryStateStateFlow
+        val canUseRecoveryKey by encryptionService.recoveryStateStateFlow
             .mapState { recoveryState ->
                 when (recoveryState) {
                     RecoveryState.WAITING_FOR_SYNC,
@@ -44,14 +44,14 @@ class ChooseSelfVerificationModePresenter(
         val buttonsState by remember {
             derivedStateOf {
                 val canUseAnotherDevice = hasDevicesToVerifyAgainst.dataOrNull()
-                val canEnterRecoveryKey = canEnterRecoveryKey.dataOrNull()
-                if (canUseAnotherDevice == null || canEnterRecoveryKey == null) {
+                val canUseRecoveryKey = canUseRecoveryKey.dataOrNull()
+                if (canUseAnotherDevice == null || canUseRecoveryKey == null) {
                     AsyncData.Loading()
                 } else {
                     AsyncData.Success(
                         ChooseSelfVerificationModeState.ButtonsState(
                             canUseAnotherDevice = canUseAnotherDevice,
-                            canEnterRecoveryKey = canEnterRecoveryKey,
+                            canUseRecoveryKey = canUseRecoveryKey,
                         )
                     )
                 }
