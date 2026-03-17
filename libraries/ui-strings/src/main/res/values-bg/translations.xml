@@ -275,7 +275,7 @@
   <string name="common_third_party_notices">"Уведомления от трети страни"</string>
   <string name="common_thread">"Нишка"</string>
   <string name="common_topic">"Тема"</string>
-  <string name="common_topic_placeholder">"За какво се отнася тази стая?"</string>
+  <string name="common_topic_placeholder">"За какво е тази стая?"</string>
   <string name="common_unable_to_decrypt">"Не може да се разшифрова"</string>
   <string name="common_unable_to_decrypt_no_access">"Нямате достъп до това съобщение"</string>
   <string name="common_unable_to_invite_message">"Поканите не можаха да бъдат изпратени до един или повече потребители."</string>

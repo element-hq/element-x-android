@@ -3,5 +3,5 @@
   <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"Отправить приглашение"</string>
   <string name="screen_bottom_sheet_create_dm_message">"Хотите начать чат с %1$s?"</string>
   <string name="screen_bottom_sheet_create_dm_title">"Отправить приглашение?"</string>
-  <string name="screen_invites_invited_you">"%1$s (%2$s) пригласил вас"</string>
+  <string name="screen_invites_invited_you">"%1$s (%2$s) пригласил(а) вас"</string>
 </resources>

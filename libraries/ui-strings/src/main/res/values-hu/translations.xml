@@ -27,6 +27,7 @@
   <string name="a11y_pause">"Szüneteltetés"</string>
   <string name="a11y_paused_voice_message">"Hangüzenet, időtartam:%1$s, jelenlegi pozíció:%2$s"</string>
   <string name="a11y_pin_field">"PIN-mező"</string>
+  <string name="a11y_pinned_location">"Rögzített hely"</string>
   <string name="a11y_play">"Lejátszás"</string>
   <string name="a11y_playback_speed">"Lejátszási sebesség"</string>
   <string name="a11y_poll">"Szavazás"</string>
@@ -45,9 +46,11 @@
   <string name="a11y_remove_reaction_with">"Reakció eltávolítása: %1$s"</string>
   <string name="a11y_room_avatar">"Szoba profilképe"</string>
   <string name="a11y_send_files">"Fájlküldés"</string>
+  <string name="a11y_sender_location">"Felhasználó tartózkodási helye"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Időkorlátos művelet szükséges, egy perce van az ellenőrzésre"</string>
   <string name="a11y_show_password">"Jelszó megjelenítése"</string>
   <string name="a11y_start_call">"Hanghívás indítása"</string>
+  <string name="a11y_start_voice_call">"Hanghívás indítása"</string>
   <string name="a11y_tombstoned_room">"Elévült szoba"</string>
   <string name="a11y_user_avatar">"Felhasználói profilkép"</string>
   <string name="a11y_user_menu">"Felhasználói menü"</string>
@@ -272,6 +275,7 @@ Ok: %1$s."</string>
   <string name="common_offline">"Kapcsolat nélkül"</string>
   <string name="common_open_source_licenses">"Nyílt forráskódú licencek"</string>
   <string name="common_or">"vagy"</string>
+  <string name="common_other_options">"További lehetőségek"</string>
   <string name="common_password">"Jelszó"</string>
   <string name="common_people">"Emberek"</string>
   <string name="common_permalink">"Állandó hivatkozás"</string>
@@ -367,7 +371,7 @@ Ok: %1$s."</string>
   <string name="common_unable_to_decrypt">"Nem lehet visszafejteni"</string>
   <string name="common_unable_to_decrypt_insecure_device">"Nem biztonságos eszközről küldve"</string>
   <string name="common_unable_to_decrypt_no_access">"Nincs hozzáférése ehhez az üzenethez"</string>
-  <string name="common_unable_to_decrypt_verification_violation">"A feladó ellenőrzött személyazonossága megváltozott"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"A feladó ellenőrzött digitális személyazonossága alaphelyzetbe lett állítva"</string>
   <string name="common_unable_to_invite_message">"Nem sikerült meghívót küldeni egy vagy több felhasználónak."</string>
   <string name="common_unable_to_invite_title">"Nem sikerült elküldeni a meghívót (meghívókat)"</string>
   <string name="common_unlock">"Feloldás"</string>
@@ -397,11 +401,11 @@ Ok: %1$s."</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) megosztotta ezt az üzenetet, mivel Ön nem volt a szobában, amikor elküldték."</string>
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s megosztotta ezt az üzenetet, mivel Ön nem volt a szobában, amikor elküldték."</string>
   <string name="crypto_history_visible">"Az elküldött üzenetek megosztásra kerülnek a szobába meghívott új tagokkal.%1$s"</string>
-  <string name="crypto_identity_change_pin_violation">"%1$s személyazonossága megváltozott. %2$s"</string>
-  <string name="crypto_identity_change_pin_violation_new">"%1$s (%2$s) személyazonossága megváltozott. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation">"%1$s digitális személyazonossága alaphelyzetbe lett állítva. %2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"%1$s (%2$s) digitális személyazonossága alaphelyzetbe lett állítva. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
-  <string name="crypto_identity_change_profile_pin_violation">"%1$s személyazonossága megváltozott."</string>
-  <string name="crypto_identity_change_verification_violation_new">"%1$s (%2$s) ellenőrzött személyazonossága megváltozott. %3$s"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"%1$s digitális személyazonossága alaphelyzetbe lett állítva."</string>
+  <string name="crypto_identity_change_verification_violation_new">"%1$s (%2$s) digitális személyazonossága alaphelyzetbe lett állítva. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Ellenőrzés visszavonása"</string>
   <string name="dialog_allow_access">"Hozzáférés engedélyezése"</string>
   <string name="dialog_confirm_link_message">"A(z) %1$s hivatkozás átviszi egy másik webhelyre: %2$s
@@ -433,6 +437,7 @@ Biztos, hogy folytatja?"</string>
   <string name="error_failed_locating_user">"Az %1$s nem tudta elérni a tartózkodási helyét. Próbálja újra később."</string>
   <string name="error_failed_uploading_voice_message">"Nem sikerült feltölteni a hangüzenetét."</string>
   <string name="error_invalid_invite">"A szoba már nem létezik, vagy a meghívó már nem érvényes."</string>
+  <string name="error_location_service_disabled_android">"Engedélyezze a GPS-t a helyalapú funkciók eléréséhez."</string>
   <string name="error_message_not_found">"Az üzenet nem található"</string>
   <string name="error_missing_location_auth_android">"Az %1$snek nincs engedélye, hogy hozzáférjen a tartózkodási helyéhez. Ezt a beállításokban engedélyezheti."</string>
   <string name="error_missing_location_rationale_android">"Az %1$snek nincs engedélye, hogy hozzáférjen a tartózkodási helyéhez. Engedélyezze alább az elérését."</string>
@@ -452,6 +457,7 @@ Biztos, hogy folytatja?"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Eltávolítás: %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Beállítások"</string>
   <string name="screen_media_picker_error_failed_selection">"Nem sikerült kiválasztani a médiát, próbálja újra."</string>
+  <string name="screen_onboarding_welcome_back">"Üdvözöljük újra!"</string>
   <string name="screen_pinned_timeline_empty_state_description">"Nyomjon hosszan az üzenetre, és válassza a „%1$s” lehetőséget, hogy itt szerepeljen."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Tűzze ki a fontos üzeneteket, hogy könnyen felfedezhetők legyenek"</string>
   <plurals name="screen_pinned_timeline_screen_title">
@@ -459,11 +465,11 @@ Biztos, hogy folytatja?"</string>
     <item quantity="other">"%1$d kitűzött üzenet"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Kitűzött üzenetek"</string>
-  <string name="screen_reset_identity_confirmation_subtitle">"Arra készül, hogy belépjen a(z) %1$s fiókjába, hogy visszaállítsa a személyazonosságát. Ezután vissza fog térni az alkalmazásba."</string>
-  <string name="screen_reset_identity_confirmation_title">"Nem tudja megerősíteni? Ugorjon a fiókjához, és állítsa vissza a személyazonosságát."</string>
+  <string name="screen_reset_identity_confirmation_subtitle">"Arra készül, hogy belépjen a(z) %1$s fiókjába, hogy alaphelyzetbe állítsa a digitális személyazonosságát. Ezután vissza fog térni az alkalmazásba."</string>
+  <string name="screen_reset_identity_confirmation_title">"Nem tudja megerősíteni? Ugorjon a fiókjához, és állítsa alaphelyzetbe a digitális személyazonosságát."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Ellenőrzés visszavonása és elküldés"</string>
   <string name="screen_resolve_send_failure_changed_identity_subtitle">"Visszavonhatja az ellenőrzést, és ennek ellenére elküldheti ezt az üzenetet, vagy egyelőre törölheti, és %1$s újbóli ellenőrzése után újra megpróbálhatja."</string>
-  <string name="screen_resolve_send_failure_changed_identity_title">"Az üzenete nem lett elküldve, mert %1$s személyazonossága megváltozott."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Az üzenete nem lett elküldve, mert %1$s digitális személyazonossága alaphelyzetbe lett állítva."</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Üzenet elküldése mindenképp"</string>
   <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s egy vagy több ellenőrizetlen eszközt használ. Így is elküldheti az üzenetet, vagy megszakíthatja most, és megpróbálhatja újra, miután %2$s ellenőrizte az összes eszközét."</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Az üzenet nem lett elküldve, mert %1$s nem ellenőrizte az összes eszközét"</string>
@@ -486,13 +492,16 @@ Biztos, hogy folytatja?"</string>
   <string name="screen_share_open_apple_maps">"Megnyitás az Apple Mapsben"</string>
   <string name="screen_share_open_google_maps">"Megnyitás a Google Mapsben"</string>
   <string name="screen_share_open_osm_maps">"Megnyitás az OpenStreetMapen"</string>
-  <string name="screen_share_this_location_action">"E hely megosztása"</string>
+  <string name="screen_share_this_location_action">"Kiválasztott hely megosztása"</string>
+  <string name="screen_sharing_location_option_sheet_title">"Megosztási beállítások"</string>
   <string name="screen_space_list_description">"Létrehozott vagy olyan terek, melyekhez csatlakozott."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_empty_state_title">"Terek létrehozása a szobák rendszerezéséhez"</string>
   <string name="screen_space_list_parent_space">"%1$s tér"</string>
   <string name="screen_space_list_title">"Terek"</string>
-  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Az üzenet nem lett elküldve, mert %1$s ellenőrzött személyazonossága megváltozott."</string>
+  <string name="screen_static_location_sheet_timestamp_description">"Megosztva %1$s"</string>
+  <string name="screen_static_location_sheet_title">"A térképen"</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Az üzenet nem lett elküldve, mert %1$s ellenőrzött digitális személyazonossága alaphelyzetbe lett állítva."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Az üzenet nem lett elküldve, mert %1$s nem ellenőrizte az összes eszközét."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Az üzenet nem lett elküldve, mert egy vagy több eszközét nem ellenőrizte."</string>
   <string name="screen_view_location_title">"Hely"</string>
@@ -502,5 +511,5 @@ Biztos, hogy folytatja?"</string>
   <string name="timeline_decryption_failure_historical_event_unverified_device">"Ellenőriznie kell ezt az eszközt a korábbi üzenetekhez való hozzáféréshez"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Nincs hozzáférése ehhez az üzenethez"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Nem sikerült visszafejteni az üzenetet"</string>
-  <string name="timeline_decryption_failure_withheld_unverified">"Ez az üzenet azért lett blokkolva, mert vagy nem ellenőrizte az eszközt, vagy a feladónak ellenőriznie kell az Ön személyazonosságát."</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Ez az üzenet azért lett blokkolva, mert vagy nem ellenőrizte az eszközt, vagy a feladónak ellenőriznie kell az Ön digitális személyazonosságát."</string>
 </resources>

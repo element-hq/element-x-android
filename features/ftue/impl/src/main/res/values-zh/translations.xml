@@ -12,5 +12,4 @@
   <string name="screen_identity_waiting_on_other_device">"正在等待其他设备……"</string>
   <string name="screen_notification_optin_subtitle">"您可以稍后更改设置。"</string>
   <string name="screen_notification_optin_title">"允许通知，绝不错过任何消息"</string>
-  <string name="screen_session_verification_enter_recovery_key">"输入恢复密钥"</string>
 </resources>

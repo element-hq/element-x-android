@@ -2,8 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"Δεν μπορείς να επιβεβαιώσεις;"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"Δημιουργία νέου κλειδιού ανάκτησης"</string>
-  <string name="screen_identity_confirmation_subtitle">"Επαλήθευσε αυτήν τη συσκευή για να ρυθμίσεις την ασφαλή επικοινωνία."</string>
-  <string name="screen_identity_confirmation_title">"Επιβεβαίωσε ότι είσαι εσύ"</string>
+  <string name="screen_identity_confirmation_subtitle">"Επιλέξτε τον τρόπο επαλήθευσης για να ρυθμίσετε την ασφαλή ανταλλαγή μηνυμάτων."</string>
+  <string name="screen_identity_confirmation_title">"Επιβεβαιώστε την ψηφιακή σας ταυτότητα"</string>
   <string name="screen_identity_confirmation_use_another_device">"Χρήση άλλης συσκευής"</string>
   <string name="screen_identity_confirmation_use_recovery_key">"Χρήση κλειδιού ανάκτησης"</string>
   <string name="screen_identity_confirmed_subtitle">"Τώρα μπορείς να διαβάζεις ή να στέλνεις μηνύματα με ασφάλεια και επίσης μπορεί να εμπιστευτεί αυτήν τη συσκευή οποιοσδήποτε με τον οποίο συνομιλείς."</string>
@@ -17,7 +17,7 @@
   <string name="screen_session_verification_compare_numbers_subtitle">"Επιβεβαίωσε ότι οι παρακάτω αριθμοί ταιριάζουν με αυτούς που εμφανίζονται στην άλλη συνεδρία σου."</string>
   <string name="screen_session_verification_compare_numbers_title">"Σύγκριση αριθμών"</string>
   <string name="screen_session_verification_complete_subtitle">"Τώρα μπορείτε να διαβάζετε ή να στέλνετε μηνύματα με ασφάλεια στην άλλη συσκευή σας."</string>
-  <string name="screen_session_verification_complete_user_subtitle">"Τώρα μπορείτε να εμπιστευτείτε την ταυτότητα αυτού του χρήστη κατά την αποστολή ή τη λήψη μηνυμάτων."</string>
+  <string name="screen_session_verification_complete_user_subtitle">"Τώρα μπορείτε να εμπιστευτείτε την ψηφιακή ταυτότητα αυτού του χρήστη κατά την αποστολή ή λήψη μηνυμάτων."</string>
   <string name="screen_session_verification_device_verified">"Επαληθευμένη συσκευή"</string>
   <string name="screen_session_verification_enter_recovery_key">"Εισαγωγή κλειδιού ανάκτησης"</string>
   <string name="screen_session_verification_failed_subtitle">"Είτε το αίτημα έληξε είτε απορρίφθηκε είτε υπήρξε αναντιστοιχία επαλήθευσης."</string>
@@ -42,7 +42,7 @@
   <string name="screen_session_verification_use_another_device_title">"Άνοιξε την εφαρμογή σε άλλη επαληθευμένη συσκευή"</string>
   <string name="screen_session_verification_user_initiator_subtitle">"Για επιπλέον ασφάλεια, επαληθεύστε αυτόν το χρήστη συγκρίνοντας ένα σύνολο emoji στις συσκευές σας. Κάντε το αυτό χρησιμοποιώντας έναν αξιόπιστο τρόπο επικοινωνίας."</string>
   <string name="screen_session_verification_user_initiator_title">"Επαλήθευση αυτού του χρήστη;"</string>
-  <string name="screen_session_verification_user_responder_subtitle">"Για επιπλέον ασφάλεια, ένας άλλος χρήστης θέλει να επαληθεύσει την ταυτότητά σας. Θα σας εμφανιστεί μια σειρά από emojis για να τα συγκρίνετε."</string>
+  <string name="screen_session_verification_user_responder_subtitle">"Για επιπλέον ασφάλεια, ένας άλλος χρήστης θέλει να επαληθεύσει την ψηφιακή σας ταυτότητα. Θα σας εμφανιστεί ένα σύνολο emoji για σύγκριση."</string>
   <string name="screen_session_verification_waiting_another_device_subtitle">"Πρόκειται να δεις ένα αναδυόμενο παράθυρο στην άλλη συσκευή. Ξεκίνα την επαλήθευση από εκεί τώρα."</string>
   <string name="screen_session_verification_waiting_another_device_title">"Έναρξη επαλήθευσης στην άλλη συσκευή"</string>
   <string name="screen_session_verification_waiting_other_device_title">"Έναρξη επαλήθευσης στην άλλη συσκευή"</string>
@@ -50,5 +50,5 @@
   <string name="screen_session_verification_waiting_subtitle">"Μόλις γίνει αποδεκτό, θα μπορείτε να συνεχίσετε με την επαλήθευση."</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Αποδέξου το αίτημα για να ξεκινήσεις τη διαδικασία επαλήθευσης στην άλλη συνεδρία σου για να συνεχίσεις."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Αναμονή για αποδοχή αιτήματος"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Αποσύνδεση…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Αφαίρεση συσκευής…"</string>
 </resources>
