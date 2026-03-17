@@ -74,3 +74,6 @@
 
 # Keep Metro classes
 -keep,allowoptimization,allowshrinking class dev.zacsweers.metro.** { *; }
+
+# Rustls Platform Verifier
+-keep, includedescriptorclasses class org.rustls.platformverifier.** { *; }
