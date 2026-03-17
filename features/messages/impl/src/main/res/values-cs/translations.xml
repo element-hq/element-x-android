@@ -35,7 +35,7 @@
   <string name="screen_room_attachment_source_camera_video">"Natočit video"</string>
   <string name="screen_room_attachment_source_files">"Příloha"</string>
   <string name="screen_room_attachment_source_gallery">"Knihovna fotografií a videí"</string>
-  <string name="screen_room_attachment_source_location">"Poloha"</string>
+  <string name="screen_room_attachment_source_location">"Sdílejte polohu"</string>
   <string name="screen_room_attachment_source_poll">"Hlasování"</string>
   <string name="screen_room_attachment_text_formatting">"Formátování textu"</string>
   <string name="screen_room_encrypted_history_banner">"Historie zpráv je momentálně v této místnosti nedostupná"</string>

@@ -60,6 +60,8 @@
   <string name="screen_qr_code_login_error_cancelled_title">"로그인 요청이 취소되었습니다"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"다른 기기에서 로그인이 거부되었습니다."</string>
   <string name="screen_qr_code_login_error_declined_title">"로그인 거부됨"</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_subtitle">"더 이상 수행할 작업이 없습니다."</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_title">"다른 기기에서 이미 로그인되어 있습니다."</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"로그인이 만료되었습니다. 다시 시도해 주세요."</string>
   <string name="screen_qr_code_login_error_expired_title">"로그인 시간이 초과되었습니다."</string>
   <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"다른 기기에서는 QR 코드로 %s 에 로그인할 수 없습니다.

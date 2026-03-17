@@ -11,6 +11,7 @@
  */
 import extension.androidConfig
 import extension.commonDependencies
+import extension.setupKover
 import org.gradle.accessors.dm.LibrariesForLibs
 
 val libs = the<LibrariesForLibs>()
@@ -32,6 +33,8 @@ kotlin {
         languageVersion = Versions.javaLanguageVersion
     }
 }
+
+setupKover()
 
 dependencies {
     commonDependencies(libs)

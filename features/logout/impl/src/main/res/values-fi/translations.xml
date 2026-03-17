@@ -14,5 +14,4 @@
   <string name="screen_signout_recovery_disabled_subtitle">"Olet kirjautumassa ulos viimeisestä istunnostasi. Jos kirjaudut ulos nyt, menetät pääsyn salattuihin viesteihisi."</string>
   <string name="screen_signout_recovery_disabled_title">"Palautus ei ole käytössä"</string>
   <string name="screen_signout_save_recovery_key_subtitle">"Olet kirjautumassa ulos viimeisestä istunnostasi. Jos kirjaudut ulos nyt, saatat menettää pääsyn salattuihin viesteihisi."</string>
-  <string name="screen_signout_save_recovery_key_title">"Oletko tallentanut palautusavaimesi?"</string>
 </resources>

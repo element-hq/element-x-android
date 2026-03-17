@@ -17,22 +17,22 @@ class ChooseSelfVerificationModeStateProvider :
     override val values = sequenceOf(
         aChooseSelfVerificationModeState(
             buttonsState = AsyncData.Success(
-                aButtonsState(canUseAnotherDevice = false, canEnterRecoveryKey = true),
+                aButtonsState(canUseAnotherDevice = false, canUseRecoveryKey = true),
             ),
         ),
         aChooseSelfVerificationModeState(
             buttonsState = AsyncData.Success(
-                aButtonsState(canUseAnotherDevice = false, canEnterRecoveryKey = false),
+                aButtonsState(canUseAnotherDevice = false, canUseRecoveryKey = false),
             ),
         ),
         aChooseSelfVerificationModeState(
             buttonsState = AsyncData.Success(
-                aButtonsState(canUseAnotherDevice = true, canEnterRecoveryKey = true),
+                aButtonsState(canUseAnotherDevice = true, canUseRecoveryKey = true),
             ),
         ),
         aChooseSelfVerificationModeState(
             buttonsState = AsyncData.Success(
-                aButtonsState(canUseAnotherDevice = true, canEnterRecoveryKey = false),
+                aButtonsState(canUseAnotherDevice = true, canUseRecoveryKey = false),
             ),
         ),
         aChooseSelfVerificationModeState(
@@ -51,8 +51,8 @@ fun aChooseSelfVerificationModeState(
 
 fun aButtonsState(
     canUseAnotherDevice: Boolean = true,
-    canEnterRecoveryKey: Boolean = true,
+    canUseRecoveryKey: Boolean = true,
 ) = ChooseSelfVerificationModeState.ButtonsState(
     canUseAnotherDevice = canUseAnotherDevice,
-    canEnterRecoveryKey = canEnterRecoveryKey,
+    canUseRecoveryKey = canUseRecoveryKey,
 )

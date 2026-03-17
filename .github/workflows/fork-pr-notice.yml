@@ -12,6 +12,9 @@ permissions: {}
 jobs:
   welcome:
     runs-on: ubuntu-latest
+    permissions:
+      # Require to comment the PR.
+      pull-requests: write
     name: Welcome comment
     # Only display it if base repo (upstream) is different from HEAD repo (possibly a fork)
     if: github.event.pull_request.base.repo.full_name != github.event.pull_request.head.repo.full_name

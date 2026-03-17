@@ -9,7 +9,10 @@
   <string name="screen_room_details_encryption_enabled_title">"Įjungtas žinučių šifravimas"</string>
   <string name="screen_room_details_invite_people_title">"Pakviesti žmonių"</string>
   <string name="screen_room_details_leave_conversation_title">"Palikti pokalbį"</string>
-  <string name="screen_room_details_leave_room_title">"Palikti kambarį"</string>
+  <string name="screen_room_details_leave_room_title">"Išeiti iš kambario"</string>
+  <string name="screen_room_details_notification_mode_custom">"Pasirinktinis"</string>
+  <string name="screen_room_details_notification_mode_default">"Numatytasis"</string>
+  <string name="screen_room_details_notification_title">"Pranešimai"</string>
   <string name="screen_room_details_security_title">"Saugumas"</string>
   <string name="screen_room_details_share_room_title">"Bendrinti kambarį"</string>
   <string name="screen_room_details_topic_title">"Tema"</string>

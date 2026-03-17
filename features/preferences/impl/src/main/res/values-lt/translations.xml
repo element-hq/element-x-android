@@ -4,4 +4,6 @@
   <string name="screen_blocked_users_unblock_alert_action">"Atblokuoti"</string>
   <string name="screen_blocked_users_unblock_alert_description">"Vėl galėsite matyti visas iš jų gautas žinutes."</string>
   <string name="screen_blocked_users_unblock_alert_title">"Atblokuoti vartotoją"</string>
+  <string name="screen_notification_settings_system_notifications_action_required_content_link">"sistemos nustatymai"</string>
+  <string name="screen_notification_settings_title">"Pranešimai"</string>
 </resources>

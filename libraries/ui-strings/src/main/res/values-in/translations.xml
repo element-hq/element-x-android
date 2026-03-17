@@ -2,13 +2,19 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Tambahkan reaksi: %1$s"</string>
   <string name="a11y_avatar">"Avatar"</string>
+  <string name="a11y_collapse_message_text_field">"Minimalkan bidang teks message"</string>
   <string name="a11y_delete">"Hapus"</string>
   <plurals name="a11y_digits_entered">
     <item quantity="other">"%1$d digit dimasukkan"</item>
   </plurals>
+  <string name="a11y_edit_avatar">"Sunting Avatar"</string>
+  <string name="a11y_edit_room_address_hint">"Alamat lengkapnya adalah%1$s"</string>
+  <string name="a11y_encryption_details">"Detail enkripsi"</string>
+  <string name="a11y_expand_message_text_field">"Perluas kolom teks pesan"</string>
   <string name="a11y_hide_password">"Sembunyikan kata sandi"</string>
   <string name="a11y_join_call">"Bergabung dalam panggilan"</string>
   <string name="a11y_jump_to_bottom">"Lompat ke bawah"</string>
+  <string name="a11y_move_the_map_to_my_location">"Geser peta ke lokasi saya"</string>
   <string name="a11y_notifications_mentions_only">"Hanya sebutan"</string>
   <string name="a11y_notifications_muted">"Dibisukan"</string>
   <string name="a11y_notifications_new_mentions">"Sebutan baru"</string>
@@ -37,6 +43,7 @@
   <string name="a11y_session_verification_time_limited_action_required">"Tindakan terbatas waktu diperlukan, Anda memiliki satu menit untuk memverifikasi"</string>
   <string name="a11y_show_password">"Tampilkan kata sandi"</string>
   <string name="a11y_start_call">"Mulai panggilan"</string>
+  <string name="a11y_tombstoned_room">"Ruangan yang ditandai"</string>
   <string name="a11y_user_avatar">"Avatar pengguna"</string>
   <string name="a11y_user_menu">"Menu pengguna"</string>
   <string name="a11y_view_avatar">"Lihat avatar"</string>
@@ -65,7 +72,7 @@
   <string name="action_copy_link_to_message">"Salin tautan ke pesan"</string>
   <string name="action_copy_text">"Salin teks"</string>
   <string name="action_create">"Buat"</string>
-  <string name="action_create_room">"Buat ruangan"</string>
+  <string name="action_create_room">"Buat room"</string>
   <string name="action_deactivate">"Nonaktifkan"</string>
   <string name="action_deactivate_account">"Nonaktifkan akun"</string>
   <string name="action_decline">"Tolak"</string>
@@ -81,6 +88,7 @@
   <string name="action_enable">"Aktifkan"</string>
   <string name="action_end_poll">"Akhiri jajak pendapat"</string>
   <string name="action_enter_pin">"Masukkan PIN"</string>
+  <string name="action_finish">"Selesai"</string>
   <string name="action_forgot_password">"Lupa kata sandi?"</string>
   <string name="action_forward">"Teruskan"</string>
   <string name="action_go_back">"Kembali"</string>
@@ -95,6 +103,7 @@
   <string name="action_leave">"Tinggalkan"</string>
   <string name="action_leave_conversation">"Tinggalkan percakapan"</string>
   <string name="action_leave_room">"Tinggalkan ruangan"</string>
+  <string name="action_leave_space">"Tinggalkan space"</string>
   <string name="action_load_more">"Muat lainnya"</string>
   <string name="action_manage_account">"Kelola akun"</string>
   <string name="action_manage_devices">"Kelola perangkat"</string>
@@ -156,11 +165,14 @@
   <string name="banner_migrate_to_native_sliding_sync_title">"Peningkatan tersedia"</string>
   <string name="common_about">"Tentang"</string>
   <string name="common_acceptable_use_policy">"Kebijakan penggunaan wajar"</string>
+  <string name="common_add_account">"Tambahkan akun"</string>
+  <string name="common_add_another_account">"Tambahkan akun lainnya"</string>
   <string name="common_adding_caption">"Menambahkan keterangan"</string>
   <string name="common_advanced_settings">"Pengaturan tingkat lanjut"</string>
   <string name="common_an_image">"sebuah gambar"</string>
   <string name="common_analytics">"Analitik"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Anda keluar dari ruangan"</string>
+  <string name="common_android_shortcuts_remove_reason_session_logged_out">"Anda telah keluar dari sesi."</string>
   <string name="common_appearance">"Penampilan"</string>
   <string name="common_audio">"Audio"</string>
   <string name="common_blocked_users">"Pengguna yang diblokir"</string>
@@ -175,6 +187,7 @@
   <string name="common_current_user_rejected_invite">"Undangan ditolak"</string>
   <string name="common_dark">"Gelap"</string>
   <string name="common_decryption_error">"Kesalahan dekripsi"</string>
+  <string name="common_description">"Deskripsi"</string>
   <string name="common_developer_options">"Opsi pengembang"</string>
   <string name="common_device_id">"ID Perangkat"</string>
   <string name="common_direct_chat">"Obrolan langsung"</string>
@@ -247,9 +260,12 @@ Alasan: %1$s."</string>
   <plurals name="common_poll_votes_count">
     <item quantity="other">"%d suara"</item>
   </plurals>
+  <string name="common_preparing">"Menyiapkan…"</string>
   <string name="common_privacy_policy">"Kebijakan privasi"</string>
   <string name="common_private_room">"Ruangan pribadi"</string>
+  <string name="common_private_space">"Space pribadi"</string>
   <string name="common_public_room">"Ruangan publik"</string>
+  <string name="common_public_space">"Space publik"</string>
   <string name="common_reaction">"Reaksi"</string>
   <string name="common_reactions">"Reaksi"</string>
   <string name="common_reason">"Alasan"</string>
@@ -273,18 +289,21 @@ Alasan: %1$s."</string>
   <string name="common_search_results">"Hasil pencarian"</string>
   <string name="common_security">"Keamanan"</string>
   <string name="common_seen_by">"Dilihat oleh"</string>
+  <string name="common_select_account">"Pilih akun"</string>
   <string name="common_send_to">"Kirim ke"</string>
   <string name="common_sending">"Mengirim…"</string>
   <string name="common_sending_failed">"Pengiriman gagal"</string>
   <string name="common_sent">"Terkirim"</string>
   <string name="common_sentence_delimiter">". "</string>
   <string name="common_server_not_supported">"Server tidak didukung"</string>
+  <string name="common_server_unreachable">"Server tidak dapat dijangkau"</string>
   <string name="common_server_url">"URL Server"</string>
   <string name="common_settings">"Pengaturan"</string>
   <string name="common_shared_location">"Lokasi terbagi"</string>
   <string name="common_signing_out">"Mengeluarkan dari akun"</string>
   <string name="common_something_went_wrong">"Ada yang salah"</string>
   <string name="common_something_went_wrong_message">"Kami mengalami masalah. Silakan coba lagi."</string>
+  <string name="common_space">"Space"</string>
   <string name="common_starting_chat">"Memulai obrolan…"</string>
   <string name="common_sticker">"Stiker"</string>
   <string name="common_success">"Berhasil"</string>
@@ -295,7 +314,7 @@ Alasan: %1$s."</string>
   <string name="common_third_party_notices">"Pemberitahuan pihak ketiga"</string>
   <string name="common_thread">"Utas"</string>
   <string name="common_topic">"Topik"</string>
-  <string name="common_topic_placeholder">"Tentang apa ruangan ini?"</string>
+  <string name="common_topic_placeholder">"Apa yang dibahas di room ini?"</string>
   <string name="common_unable_to_decrypt">"Tidak dapat mendekripsi"</string>
   <string name="common_unable_to_decrypt_insecure_device">"Dikirim dari perangkat yang tidak aman"</string>
   <string name="common_unable_to_decrypt_no_access">"Anda tidak memiliki akses ke pesan ini"</string>
@@ -315,6 +334,12 @@ Alasan: %1$s."</string>
   <string name="common_verify_identity">"Verifikasi identitas"</string>
   <string name="common_verify_user">"Verifikasi pengguna"</string>
   <string name="common_video">"Video"</string>
+  <string name="common_video_quality_high">"Kualitas Tinggi"</string>
+  <string name="common_video_quality_high_description">"Kualitas terbaik tetapi ukuran file lebih besar"</string>
+  <string name="common_video_quality_low">"Kualitas Rendah"</string>
+  <string name="common_video_quality_low_description">"Kecepatan unggah tercepat dan ukuran file terkecil"</string>
+  <string name="common_video_quality_standard">"Kualitas standar"</string>
+  <string name="common_video_quality_standard_description">"Keseimbangan antara kualitas dan kecepatan unggah"</string>
   <string name="common_voice_message">"Pesan suara"</string>
   <string name="common_waiting">"Menunggu…"</string>
   <string name="common_waiting_for_decryption_key">"Menunggu pesan ini"</string>
@@ -329,6 +354,10 @@ Alasan: %1$s."</string>
 
 Apakah Anda yakin ingin melanjutkan?"</string>
   <string name="dialog_confirm_link_title">"Periksa kembali tautan ini"</string>
+  <string name="dialog_default_video_quality_selector_subtitle">"Pilih kualitas default untuk video yang Anda unggah."</string>
+  <string name="dialog_default_video_quality_selector_title">"Kualitas unggahan video"</string>
+  <string name="dialog_file_too_large_to_upload_subtitle">"Ukuran file maksimum yang diizinkan adalah: %1$s"</string>
+  <string name="dialog_file_too_large_to_upload_title">"Ukuran file terlalu besar untuk diunggah"</string>
   <string name="dialog_room_reported">"Ruangan dilaporkan"</string>
   <string name="dialog_room_reported_and_left">"Dilaporkan dan ruangan ditinggalkan"</string>
   <string name="dialog_title_confirmation">"Konfirmasi"</string>
@@ -338,6 +367,11 @@ Apakah Anda yakin ingin melanjutkan?"</string>
   <string name="dialog_unsaved_changes_description">"Anda memiliki perubahan yang belum disimpan."</string>
   <string name="dialog_unsaved_changes_description_android">"Perubahan Anda belum disimpan. Apakah Anda yakin ingin kembali?"</string>
   <string name="dialog_unsaved_changes_title">"Simpan perubahan?"</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">"Ukuran file maksimum yang diizinkan adalah: %1$s"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Pilih kualitas video yang ingin Anda unggah."</string>
+  <string name="dialog_video_quality_selector_title">"Pilih kualitas unggahan video"</string>
+  <string name="emoji_picker_search_placeholder">"Cari emoji"</string>
+  <string name="error_account_already_logged_in">"Anda sudah masuk ke akun di perangkat ini sebagai%1$s ."</string>
   <string name="error_account_creation_not_possible">"Homeserver Anda perlu ditingkatkan untuk mendukung Matrix Authentication Service dan pembuatan akun."</string>
   <string name="error_failed_creating_the_permalink">"Gagal membuat tautan permanen"</string>
   <string name="error_failed_loading_map">"%1$s tidak dapat memuat peta. Silakan coba lagi nanti."</string>
@@ -358,6 +392,7 @@ Apakah Anda yakin ingin melanjutkan?"</string>
   <string name="invite_friends_text">"Hai, bicaralah dengan saya di %1$s: %2$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake untuk melaporkan kutu"</string>
+  <string name="screen_bug_report_a11y_screenshot">"Tangkapan layar"</string>
   <string name="screen_create_poll_option_accessibility_label">"%1$s: %2$s"</string>
   <string name="screen_create_poll_options_section_title">"Opsi"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Hapus %1$s"</string>
@@ -379,6 +414,7 @@ Apakah Anda yakin ingin melanjutkan?"</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Pesan Anda tidak terkirim karena %1$s belum memverifikasi semua perangkat"</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_subtitle">"Satu atau beberapa perangkat Anda tidak terverifikasi. Anda tetap dapat mengirim pesan, atau Anda dapat membatalkannya dan mencoba lagi nanti setelah Anda memverifikasi semua perangkat."</string>
   <string name="screen_resolve_send_failure_you_unsigned_device_title">"Pesan Anda tidak terkirim karena Anda belum memverifikasi satu atau beberapa perangkat Anda"</string>
+  <string name="screen_room_change_role_administrators_or_owners_title">"Edit Admin atau Pemilik"</string>
   <string name="screen_room_error_failed_processing_media">"Gagal memproses media untuk diunggah, silakan coba lagi."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Tidak dapat mengambil detail pengguna"</string>
   <string name="screen_room_event_pill">"Pesan dalam %1$s"</string>
@@ -396,6 +432,9 @@ Apakah Anda yakin ingin melanjutkan?"</string>
   <string name="screen_share_open_google_maps">"Buka di Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Buka di OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Bagikan lokasi ini"</string>
+  <string name="screen_space_list_description">"Space yang Anda buat atau ikuti."</string>
+  <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_title">"Space"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Pesan tidak terkirim karena identitas terverifikasi %1$s telah diatur ulang."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Pesan tidak terkirim karena %1$s belum memverifikasi semua perangkat."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Pesan tidak terkirim karena Anda belum memverifikasi satu atau beberapa perangkat Anda."</string>

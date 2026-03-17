@@ -15,6 +15,7 @@ import com.google.firebase.messaging.RemoteMessage
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SECRET
+import io.element.android.libraries.push.test.push.FakePushHandlingWakeLock
 import io.element.android.libraries.push.test.test.FakePushHandler
 import io.element.android.libraries.pushproviders.api.PushData
 import io.element.android.libraries.pushproviders.api.PushHandler
@@ -93,12 +94,14 @@ class VectorFirebaseMessagingServiceTest {
     private fun TestScope.createVectorFirebaseMessagingService(
         firebaseNewTokenHandler: FirebaseNewTokenHandler = FakeFirebaseNewTokenHandler(),
         pushHandler: PushHandler = FakePushHandler(),
+        pushHandlingWakeLock: FakePushHandlingWakeLock = FakePushHandlingWakeLock(),
     ): VectorFirebaseMessagingService {
         return VectorFirebaseMessagingService().apply {
             this.firebaseNewTokenHandler = firebaseNewTokenHandler
             this.pushParser = FirebasePushParser()
             this.pushHandler = pushHandler
             this.coroutineScope = this@createVectorFirebaseMessagingService
+            this.pushHandlingWakeLock = pushHandlingWakeLock
         }
     }
 }

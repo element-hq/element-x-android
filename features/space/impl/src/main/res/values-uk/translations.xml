@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_leave_space_choose_owners_action">"Оберіть власників"</string>
+  <string name="screen_leave_space_last_admin_info">"%1$s (Адміністратор)"</string>
+  <string name="screen_leave_space_subtitle">"Виберіть кімнати, з яких ви хочете вийти, і в них ви не єдиний адміністратор:"</string>
+  <string name="screen_leave_space_subtitle_last_admin">"Перш ніж ви зможете вийти, вам потрібно призначити іншого адміністратора для цього простору."</string>
+  <string name="screen_leave_space_subtitle_only_last_admin">"Вас не буде видалено з цих кімнат, оскільки ви єдиний адміністратор:"</string>
+  <string name="screen_leave_space_title">"Вийти з %1$s?"</string>
+  <string name="screen_leave_space_title_last_admin">"Ви єдиний адміністратор у %1$s"</string>
+  <string name="screen_space_add_room_action">"Кімната"</string>
+  <string name="screen_space_empty_state_title">"Додайте свою першу кімнату"</string>
+  <string name="screen_space_menu_action_members">"Переглянути учасників"</string>
+  <string name="screen_space_settings_leave_space">"Вийти з простору"</string>
   <string name="screen_space_settings_roles_and_permissions">"Ролі та дозволи"</string>
   <string name="screen_space_settings_security_and_privacy">"Безпека й приватність"</string>
 </resources>

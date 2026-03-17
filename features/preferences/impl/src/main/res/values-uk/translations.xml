@@ -10,6 +10,7 @@
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Неправильна URL-адреса. Переконайтеся, що ви вказали протокол (http/https) та правильну адресу."</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Сховати аватари у запитах на запрошення до кімнат"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Сховати попередній перегляд медіа у стрічці"</string>
+  <string name="screen_advanced_settings_labs">"Лабораторії"</string>
   <string name="screen_advanced_settings_media_compression_description">"Швидше завантажуйте фотографії та відео та зменшуйте використання даних"</string>
   <string name="screen_advanced_settings_media_compression_title">"Оптимізуйте медіаякість"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Модерування й безпека"</string>
@@ -43,6 +44,11 @@
   <string name="screen_edit_profile_error_title">"Неможливо оновити профіль"</string>
   <string name="screen_edit_profile_title">"Редагувати профіль"</string>
   <string name="screen_edit_profile_updating_details">"Оновлення профілю…"</string>
+  <string name="screen_labs_enable_threads">"Увімкнути відповіді в гілках"</string>
+  <string name="screen_labs_enable_threads_description">"Застосунок перезапуститься, щоб застосувати цю зміну."</string>
+  <string name="screen_labs_header_description">"Випробуйте наші останні ідеї, що перебувають на стадії розробки. Ці функції ще не остаточні; вони можуть бути нестабільними та змінюватися."</string>
+  <string name="screen_labs_header_title">"Хочете поекспериментувати?"</string>
+  <string name="screen_labs_title">"Лабораторії"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Додаткові налаштування"</string>
   <string name="screen_notification_settings_calls_label">"Аудіо та відеодзвінки"</string>
   <string name="screen_notification_settings_configuration_mismatch">"Невідповідність конфігурації"</string>
