@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="screen_media_upload_preview_rotate">Rotate</string>
+  <string name="a11y_media_upload_preview_rotation_degrees">%1$d degrees</string>
+</resources>

@@ -11,6 +11,7 @@ package io.element.android.features.messages.impl.attachments.preview
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.core.net.toUri
 import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.attachments.preview.imageeditor.AttachmentImageEditorState
 import io.element.android.features.messages.impl.attachments.video.MediaOptimizationSelectorState
 import io.element.android.features.messages.impl.attachments.video.VideoUploadEstimation
 import io.element.android.libraries.architecture.AsyncData
@@ -42,6 +43,7 @@ open class AttachmentsPreviewStateProvider : PreviewParameterProvider<Attachment
             anAttachmentsPreviewState(sendActionState = SendActionState.Sending.ReadyToUpload(aMediaUploadInfo())),
             anAttachmentsPreviewState(sendActionState = SendActionState.Sending.Uploading(aMediaUploadInfo())),
             anAttachmentsPreviewState(sendActionState = SendActionState.Failure(RuntimeException("error"), aMediaUploadInfo())),
+            anAttachmentsPreviewState(imageEditorState = AttachmentImageEditorState(LocalMedia("file://path".toUri(), anImageMediaInfo()))),
             anAttachmentsPreviewState(displayFileTooLargeError = true),
             anAttachmentsPreviewState(
                 mediaInfo = aVideoMediaInfo(),
@@ -64,12 +66,17 @@ fun anAttachmentsPreviewState(
     mediaInfo: MediaInfo = anImageMediaInfo(),
     textEditorState: TextEditorState = aTextEditorStateMarkdown(),
     sendActionState: SendActionState = SendActionState.Idle,
+    imageEditorState: AttachmentImageEditorState? = null,
     mediaOptimizationSelectorState: MediaOptimizationSelectorState = aMediaOptimisationSelectorState(),
     displayFileTooLargeError: Boolean = false,
 ) = AttachmentsPreviewState(
     attachment = Attachment.Media(
         localMedia = LocalMedia("file://path".toUri(), mediaInfo),
     ),
+    imageEditorState = imageEditorState,
+    canEditImage = true,
+    isApplyingImageEdits = false,
+    displayImageEditError = false,
     sendActionState = sendActionState,
     textEditorState = textEditorState,
     mediaOptimizationSelectorState = mediaOptimizationSelectorState,

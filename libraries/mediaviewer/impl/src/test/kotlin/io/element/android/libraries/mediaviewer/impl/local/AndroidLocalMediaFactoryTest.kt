@@ -8,7 +8,9 @@
 
 package io.element.android.libraries.mediaviewer.impl.local
 
+import android.graphics.Bitmap
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.androidutils.file.getMimeType
 import io.element.android.libraries.androidutils.filesize.FakeFileSizeFormatter
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.media.MediaFile
@@ -18,6 +20,8 @@ import io.element.android.libraries.matrix.test.media.FakeMediaFile
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.anImageMediaInfo
 import io.element.android.libraries.mediaviewer.test.util.FileExtensionExtractorWithoutValidation
+import java.io.File
+import java.io.FileOutputStream
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
@@ -25,6 +29,8 @@ import org.robolectric.RuntimeEnvironment
 
 @RunWith(RobolectricTestRunner::class)
 class AndroidLocalMediaFactoryTest {
+    private val context = RuntimeEnvironment.getApplication()
+
     @Test
     fun `test AndroidLocalMediaFactory`() {
         val sut = createAndroidLocalMediaFactory()
@@ -58,13 +64,34 @@ class AndroidLocalMediaFactoryTest {
         )
     }
 
+    @Test
+    fun `createFromUri detects image mime type from content when picker mime type is generic`() {
+        val imageFile = File(context.cacheDir, "picked-media").apply {
+            FileOutputStream(this).use { outputStream ->
+                Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+                    .compress(Bitmap.CompressFormat.PNG, 100, outputStream)
+            }
+        }
+
+        val result = createAndroidLocalMediaFactory().createFromUri(
+            uri = imageFile.toURI().toString().let(android.net.Uri::parse),
+            mimeType = MimeTypes.OctetStream,
+            name = imageFile.name,
+            formattedFileSize = null,
+        )
+
+        assertThat(context.getMimeType(result.uri)).isNull()
+        assertThat(result.info.mimeType).isEqualTo(MimeTypes.Png)
+        assertThat(result.info.fileExtension).isEmpty()
+    }
+
     private fun aMediaFile(): MediaFile {
         return FakeMediaFile("aPath")
     }
 
     private fun createAndroidLocalMediaFactory(): AndroidLocalMediaFactory {
         return AndroidLocalMediaFactory(
-            RuntimeEnvironment.getApplication(),
+            context,
             FakeFileSizeFormatter(),
             FileExtensionExtractorWithoutValidation()
         )

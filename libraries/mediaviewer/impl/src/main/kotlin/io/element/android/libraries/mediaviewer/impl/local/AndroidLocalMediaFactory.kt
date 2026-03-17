@@ -9,7 +9,9 @@
 package io.element.android.libraries.mediaviewer.impl.local
 
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.net.Uri
+import android.webkit.MimeTypeMap
 import androidx.core.net.toUri
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
@@ -85,8 +87,12 @@ class AndroidLocalMediaFactory(
         waveform: List<Float>?,
         duration: String?,
     ): LocalMedia {
-        val resolvedMimeType = mimeType ?: context.getMimeType(uri) ?: MimeTypes.OctetStream
         val fileName = name ?: context.getFileName(uri) ?: ""
+        val resolvedMimeType = resolveMimeType(
+            uri = uri,
+            mimeType = mimeType,
+            fileName = fileName,
+        )
         val fileSize = context.getFileSize(uri)
         val calculatedFormattedFileSize = formattedFileSize ?: fileSizeFormatter.format(fileSize)
         val fileExtension = fileExtensionExtractor.extractFromName(fileName)
@@ -108,5 +114,37 @@ class AndroidLocalMediaFactory(
                 duration = duration,
             )
         )
+    }
+
+    private fun resolveMimeType(
+        uri: Uri,
+        mimeType: String?,
+        fileName: String,
+    ): String {
+        val explicitMimeType = mimeType.takeUnless { it.isNullOrBlank() || it == MimeTypes.OctetStream }
+        if (explicitMimeType != null) return explicitMimeType
+
+        val resolverMimeType = context.getMimeType(uri).takeUnless { it.isNullOrBlank() || it == MimeTypes.OctetStream }
+        if (resolverMimeType != null) return resolverMimeType
+
+        val decodedImageMimeType = decodeImageMimeType(uri)
+        if (decodedImageMimeType != null) return decodedImageMimeType
+
+        val extensionMimeType = MimeTypeMap.getSingleton().getMimeTypeFromExtension(
+            fileExtensionExtractor.extractFromName(fileName)
+        )
+        if (!extensionMimeType.isNullOrBlank()) return extensionMimeType
+
+        return MimeTypes.OctetStream
+    }
+
+    private fun decodeImageMimeType(uri: Uri): String? {
+        return runCatching {
+            context.contentResolver.openInputStream(uri)?.use { inputStream ->
+                val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+                BitmapFactory.decodeStream(inputStream, null, options)
+                options.outMimeType
+            }
+        }.getOrNull()
     }
 }
