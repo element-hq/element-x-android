@@ -24,12 +24,11 @@ open class TimelineItemLocationContentProvider : PreviewParameterProvider<Timeli
 }
 
 fun aTimelineItemLocationContent(
-    body: String = "",
     senderId: UserId = UserId("@sender:matrix.org"),
     senderProfile: ProfileDetails = aProfileDetailsReady(),
+    description: String? = null,
     mode: TimelineItemLocationContent.Mode = TimelineItemLocationContent.Mode.Static,
 ) = TimelineItemLocationContent(
-    body = body,
     location = Location(
         lat = 52.2445,
         lon = 0.7186,
@@ -37,5 +36,6 @@ fun aTimelineItemLocationContent(
     ),
     senderId = senderId,
     senderProfile = senderProfile,
+    description = description,
     mode = mode
 )

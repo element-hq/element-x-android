@@ -105,7 +105,6 @@ data class FailedToParseStateContent(
 ) : EventContent
 
 data class LiveLocationContent(
-    val body: String,
     val isLive: Boolean,
     val description: String?,
     val timeout: Long,

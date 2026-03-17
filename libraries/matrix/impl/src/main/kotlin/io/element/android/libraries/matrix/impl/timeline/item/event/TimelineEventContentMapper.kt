@@ -11,6 +11,7 @@ package io.element.android.libraries.matrix.impl.timeline.item.event
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.location.LiveLocationInfo
 import io.element.android.libraries.matrix.api.timeline.item.EmbeddedEventInfo
 import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.ThreadSummary
@@ -19,6 +20,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.LegacyCallInviteContent
+import io.element.android.libraries.matrix.api.timeline.item.event.LiveLocationContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
@@ -33,8 +35,10 @@ import io.element.android.libraries.matrix.api.timeline.item.event.UtdCause
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.poll.map
 import io.element.android.libraries.matrix.impl.room.join.map
+import io.element.android.libraries.matrix.impl.room.location.into
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
+import org.matrix.rustcomponents.sdk.BeaconInfo
 import org.matrix.rustcomponents.sdk.EmbeddedEventDetails
 import org.matrix.rustcomponents.sdk.MsgLikeContent
 import org.matrix.rustcomponents.sdk.MsgLikeKind
@@ -108,8 +112,13 @@ class TimelineEventContentMapper(
                             )
                         }
                         is MsgLikeKind.LiveLocation -> {
-                            // Live location messages are a special kind of message that we want to treat as unknown content for now
-                             UnknownContent
+                            LiveLocationContent(
+                                isLive = kind.content.isLive,
+                                description = kind.content.description,
+                                timeout = kind.content.timeoutMs.toLong(),
+                                assetType = kind.content.assetType.into(),
+                                locations = kind.content.locations.map { location -> location.map() }
+                            )
                         }
                         is MsgLikeKind.Other -> UnknownContent
                     }
@@ -259,4 +268,12 @@ private fun RustEncryptedMessage.map(): UnableToDecryptContent.Data {
         is RustEncryptedMessage.OlmV1Curve25519AesSha2 -> UnableToDecryptContent.Data.OlmV1Curve25519AesSha2(senderKey)
         RustEncryptedMessage.Unknown -> UnableToDecryptContent.Data.Unknown
     }
+}
+
+private fun BeaconInfo.map(): LiveLocationInfo {
+    return LiveLocationInfo(
+        description = description,
+        geoUri = geoUri,
+        timestamp = ts.toLong(),
+    )
 }

@@ -150,7 +150,6 @@ class TimelineItemContentMessageFactory(
                     )
                 } else {
                     TimelineItemLocationContent(
-                        body = body,
                         location = location,
                         description = messageType.description,
                         senderId = senderId,

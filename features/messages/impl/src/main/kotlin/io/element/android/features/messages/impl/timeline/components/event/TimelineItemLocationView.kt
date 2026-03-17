@@ -33,7 +33,7 @@ fun TimelineItemLocationView(
         lat = content.location.lat,
         lon = content.location.lon,
         zoom = 15.0,
-        contentDescription = content.body
+        contentDescription = content.description
     )
 }
 

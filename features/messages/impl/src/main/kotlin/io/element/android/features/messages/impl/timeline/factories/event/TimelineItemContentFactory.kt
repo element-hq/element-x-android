@@ -105,7 +105,6 @@ class TimelineItemContentFactory(
                 }.lastOrNull()
                 if (lastKnownLocation != null) {
                     TimelineItemLocationContent(
-                        body = itemContent.body.trimEnd(),
                         description = itemContent.description?.trimEnd(),
                         assetType = itemContent.assetType,
                         senderId = sender,

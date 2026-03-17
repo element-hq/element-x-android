@@ -19,7 +19,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisplayName
 
 data class TimelineItemLocationContent(
-    val body: String,
     val senderId: UserId,
     val senderProfile: ProfileDetails,
     val location: Location,
