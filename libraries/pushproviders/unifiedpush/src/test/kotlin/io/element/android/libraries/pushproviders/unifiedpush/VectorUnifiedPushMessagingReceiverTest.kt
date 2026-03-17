@@ -18,6 +18,7 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SECRET
+import io.element.android.libraries.push.test.push.FakePushHandlingWakeLock
 import io.element.android.libraries.push.test.test.FakePushHandler
 import io.element.android.libraries.pushproviders.api.PushData
 import io.element.android.libraries.pushproviders.api.PushHandler
@@ -44,7 +45,7 @@ class VectorUnifiedPushMessagingReceiverTest {
     @Test
     fun `onReceive does the binding`() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().context
-        val vectorUnifiedPushMessagingReceiver = createVectorUnifiedPushMessagingReceiver()
+        val vectorUnifiedPushMessagingReceiver = VectorUnifiedPushMessagingReceiver()
         // The binding is not found in the test env.
         assertThrows(IllegalStateException::class.java) {
             vectorUnifiedPushMessagingReceiver.onReceive(context, Intent())
@@ -208,6 +209,7 @@ class VectorUnifiedPushMessagingReceiverTest {
         unifiedPushNewGatewayHandler: UnifiedPushNewGatewayHandler = FakeUnifiedPushNewGatewayHandler(),
         endpointRegistrationHandler: EndpointRegistrationHandler = EndpointRegistrationHandler(),
         removedGatewayHandler: UnifiedPushRemovedGatewayHandler = UnifiedPushRemovedGatewayHandler { lambdaError() },
+        pushHandlingWakeLock: FakePushHandlingWakeLock = FakePushHandlingWakeLock(),
     ): VectorUnifiedPushMessagingReceiver {
         return VectorUnifiedPushMessagingReceiver().apply {
             this.pushParser = unifiedPushParser
@@ -220,6 +222,7 @@ class VectorUnifiedPushMessagingReceiverTest {
             this.removedGatewayHandler = removedGatewayHandler
             this.endpointRegistrationHandler = endpointRegistrationHandler
             this.coroutineScope = this@createVectorUnifiedPushMessagingReceiver
+            this.pushHandlingWakeLock = pushHandlingWakeLock
         }
     }
 }

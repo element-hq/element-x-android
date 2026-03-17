@@ -31,7 +31,10 @@ import io.element.android.libraries.workmanager.api.WorkManagerScheduler
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.toolbox.api.systemclock.SystemClock
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.currentCoroutineContext
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 private val loggerTag = LoggerTag("PushHandler", LoggerTag.PushLoggerTag)
@@ -71,7 +74,12 @@ class DefaultPushHandler(
         if (buildMeta.lowPrivacyLoggingEnabled) {
             Timber.tag(loggerTag.value).d("## pushData: $pushData")
         }
-        incrementPushDataStore.incrementPushCounter()
+
+        // Update the push counter without blocking the coroutine execution, as it is not critical to be updated before handling the push
+        CoroutineScope(currentCoroutineContext()).launch {
+            incrementPushDataStore.incrementPushCounter()
+        }
+
         // Diagnostic Push
         if (pushData.eventId == DefaultTestPush.TEST_EVENT_ID) {
             pushHistoryService.onDiagnosticPush(providerInfo)
@@ -130,6 +138,7 @@ class DefaultPushHandler(
 
             Timber.d("Queueing notification: $pushRequest")
             pushHistoryService.insertOrUpdatePushRequest(pushRequest)
+            Timber.d("Queueing notification finished")
 
             if (!workManagerScheduler.hasPendingWork(userId, WorkManagerRequestType.NOTIFICATION_SYNC)) {
                 Timber.d("No pending worker for push notifications found")
