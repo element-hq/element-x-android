@@ -12,5 +12,4 @@
   <string name="screen_identity_waiting_on_other_device">"Bitte warten bis das andere Gerät bereit ist."</string>
   <string name="screen_notification_optin_subtitle">"Du kannst deine Einstellungen später ändern."</string>
   <string name="screen_notification_optin_title">"Erlaube Benachrichtigungen und verpasse keine Nachricht"</string>
-  <string name="screen_session_verification_enter_recovery_key">"Wiederherstellungsschlüssel eingeben"</string>
 </resources>

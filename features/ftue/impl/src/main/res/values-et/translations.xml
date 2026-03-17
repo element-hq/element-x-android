@@ -12,5 +12,4 @@
   <string name="screen_identity_waiting_on_other_device">"Ootame teise seadme järgi…"</string>
   <string name="screen_notification_optin_subtitle">"Sa võid seadistusi hiljem alati muuta."</string>
   <string name="screen_notification_optin_title">"Luba teavitused ja kunagi ei jää sul sõnumid märkamata"</string>
-  <string name="screen_session_verification_enter_recovery_key">"Sisesta taastevõti"</string>
 </resources>

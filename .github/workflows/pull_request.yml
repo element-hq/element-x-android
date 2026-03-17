@@ -54,6 +54,9 @@ jobs:
   close-if-fork-develop:
     name: Forbid develop branch fork contributions
     runs-on: ubuntu-latest
+    permissions:
+      # Require to comment and close the PR.
+      pull-requests: write
     if: >
       github.event.action == 'opened' &&
       github.event.pull_request.head.ref == 'develop' &&

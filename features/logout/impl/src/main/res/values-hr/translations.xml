@@ -14,5 +14,4 @@
   <string name="screen_signout_recovery_disabled_subtitle">"Odjavit ćete se iz svoje posljednje sesije. Ako se sada odjavite, nećete moći pristupiti svojim šifriranim porukama."</string>
   <string name="screen_signout_recovery_disabled_title">"Oporavak nije postavljen"</string>
   <string name="screen_signout_save_recovery_key_subtitle">"Odjavit ćete se iz svoje posljednje sesije. Ako se sada odjavite, možda nećete moći pristupiti svojim šifriranim porukama."</string>
-  <string name="screen_signout_save_recovery_key_title">"Jeste li spremili svoj ključ za oporavak?"</string>
 </resources>

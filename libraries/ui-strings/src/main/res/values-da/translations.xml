@@ -27,6 +27,7 @@
   <string name="a11y_pause">"Pausér"</string>
   <string name="a11y_paused_voice_message">"Talebesked, varighed: %1$s, aktuel position: %2$s"</string>
   <string name="a11y_pin_field">"PIN-felt"</string>
+  <string name="a11y_pinned_location">"Fastgjort placering"</string>
   <string name="a11y_play">"Afspil"</string>
   <string name="a11y_playback_speed">"Afspilningshastighed"</string>
   <string name="a11y_poll">"Afstemning"</string>
@@ -45,9 +46,11 @@
   <string name="a11y_remove_reaction_with">"Fjern reaktion med %1$s"</string>
   <string name="a11y_room_avatar">"Avatar for rummet"</string>
   <string name="a11y_send_files">"Send filer"</string>
+  <string name="a11y_sender_location">"Afsenderens placering"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Tidsbegrænset handling påkrævet, du har et minut til at bekræfte"</string>
   <string name="a11y_show_password">"Vis adgangskode"</string>
   <string name="a11y_start_call">"Start et opkald"</string>
+  <string name="a11y_start_voice_call">"Start et taleopkald"</string>
   <string name="a11y_tombstoned_room">"Deaktiveret rum"</string>
   <string name="a11y_user_avatar">"Avatar for bruger"</string>
   <string name="a11y_user_menu">"Brugermenu"</string>
@@ -79,7 +82,7 @@
   <string name="action_copy_text">"Kopiér tekst"</string>
   <string name="action_create">"Opret"</string>
   <string name="action_create_room">"Opret et rum"</string>
-  <string name="action_create_space">"Opret en gruppe"</string>
+  <string name="action_create_space">"Opret en klynge"</string>
   <string name="action_deactivate">"Deaktiver"</string>
   <string name="action_deactivate_account">"Deaktiver konto"</string>
   <string name="action_decline">"Afvis"</string>
@@ -96,7 +99,7 @@
   <string name="action_enable">"Slå til"</string>
   <string name="action_end_poll">"Afslut afstemning"</string>
   <string name="action_enter_pin">"Indtast PIN-kode"</string>
-  <string name="action_explore_public_spaces">"Udforsk offentlige grupper"</string>
+  <string name="action_explore_public_spaces">"Udforsk offentlige klynger"</string>
   <string name="action_finish">"Afslut"</string>
   <string name="action_forgot_password">"Har du glemt din adgangskode?"</string>
   <string name="action_forward">"Videresend"</string>
@@ -114,7 +117,7 @@
   <string name="action_leave">"Forlad"</string>
   <string name="action_leave_conversation">"Forlad samtalen"</string>
   <string name="action_leave_room">"Forlad rum"</string>
-  <string name="action_leave_space">"Forlad gruppe"</string>
+  <string name="action_leave_space">"Forlad klynge"</string>
   <string name="action_load_more">"Indlæs mere"</string>
   <string name="action_manage_account">"Administrer konto"</string>
   <string name="action_manage_devices">"Administrer enheder"</string>
@@ -156,6 +159,7 @@
   <string name="action_send_voice_message">"Send talebesked"</string>
   <string name="action_share">"Del"</string>
   <string name="action_share_link">"Del link"</string>
+  <string name="action_share_live_location">"Del liveplacering"</string>
   <string name="action_show">"Vis"</string>
   <string name="action_sign_in_again">"Log ind igen"</string>
   <string name="action_signout">"Log ud"</string>
@@ -198,10 +202,10 @@
   <string name="common_copied_to_clipboard">"Kopieret til udklipsholder"</string>
   <string name="common_copyright">"Ophavsret"</string>
   <string name="common_creating_room">"Opretter rum…"</string>
-  <string name="common_creating_space">"Opretter gruppe…"</string>
+  <string name="common_creating_space">"Opretter klynge…"</string>
   <string name="common_current_user_canceled_knock">"Anmodning annulleret"</string>
   <string name="common_current_user_left_room">"Forlod rummet"</string>
-  <string name="common_current_user_left_space">"Forlod gruppe"</string>
+  <string name="common_current_user_left_space">"Forlod klynge"</string>
   <string name="common_current_user_rejected_invite">"Invitationen blev afvist"</string>
   <string name="common_dark">"Mørkt tema"</string>
   <string name="common_decryption_error">"Fejl under dekryptering"</string>
@@ -240,7 +244,7 @@
   <string name="common_install_apk_android">"Installer APK"</string>
   <string name="common_invite_unknown_profile">"Dette Matrix-ID kan ikke findes, så invitationen modtages muligvis ikke."</string>
   <string name="common_leaving_room">"Forlader rummet"</string>
-  <string name="common_leaving_space">"Forlader gruppe"</string>
+  <string name="common_leaving_space">"Forlader klynge"</string>
   <string name="common_light">"Lyst tema"</string>
   <string name="common_line_copied_to_clipboard">"Linje kopieret til udklipsholder"</string>
   <string name="common_link_copied_to_clipboard">"Linket er kopieret til udklipsholderen"</string>
@@ -266,11 +270,12 @@
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Ingen resultater"</string>
   <string name="common_no_room_name">"Intet rumnavn"</string>
-  <string name="common_no_space_name">"Intet gruppenavn"</string>
+  <string name="common_no_space_name">"Intet klyngenavn"</string>
   <string name="common_not_encrypted">"Ikke krypteret"</string>
   <string name="common_offline">"Offline"</string>
   <string name="common_open_source_licenses">"Open Source-licenser"</string>
   <string name="common_or">"eller"</string>
+  <string name="common_other_options">"Andre indstillinger"</string>
   <string name="common_password">"Adgangskode"</string>
   <string name="common_people">"Brugere"</string>
   <string name="common_permalink">"Permalink"</string>
@@ -290,10 +295,10 @@
   <string name="common_privacy_policy">"Privatlivspolitik"</string>
   <string name="common_private">"Privat"</string>
   <string name="common_private_room">"Privat rum"</string>
-  <string name="common_private_space">"Privat gruppe"</string>
+  <string name="common_private_space">"Privat klynge"</string>
   <string name="common_public">"Offentlig"</string>
   <string name="common_public_room">"Offentligt rum"</string>
-  <string name="common_public_space">"Offentlig gruppe"</string>
+  <string name="common_public_space">"Offentlig klynge"</string>
   <string name="common_reaction">"Reaktion"</string>
   <string name="common_reactions">"Reaktioner"</string>
   <string name="common_reason">"Årsag"</string>
@@ -337,19 +342,19 @@
   <string name="common_server_unreachable">"Serveren er ikke tilgængelig"</string>
   <string name="common_server_url">"Server URL"</string>
   <string name="common_settings">"Indstillinger"</string>
-  <string name="common_share_space">"Del gruppe"</string>
+  <string name="common_share_space">"Del klynge"</string>
   <string name="common_shared_history">"Nye medlemmer ser historik"</string>
   <string name="common_shared_location">"Delt placering"</string>
-  <string name="common_shared_space">"Delt gruppe"</string>
+  <string name="common_shared_space">"Delt klynge"</string>
   <string name="common_signing_out">"Logger ud"</string>
   <string name="common_something_went_wrong">"Noget gik galt"</string>
   <string name="common_something_went_wrong_message">"Vi stødte på et problem. Prøv venligst igen."</string>
-  <string name="common_space">"Gruppe"</string>
+  <string name="common_space">"Klynge"</string>
   <string name="common_space_members">"Medlemmer af rummet"</string>
-  <string name="common_space_topic_placeholder">"Hvad handler denne gruppe om?"</string>
+  <string name="common_space_topic_placeholder">"Hvad handler denne klynge om?"</string>
   <plurals name="common_spaces">
-    <item quantity="one">"%1$d Gruppe"</item>
-    <item quantity="other">"%1$d Grupper"</item>
+    <item quantity="one">"%1$d Klynge"</item>
+    <item quantity="other">"%1$d Klynger"</item>
   </plurals>
   <string name="common_starting_chat">"Starter samtale…"</string>
   <string name="common_sticker">"Klistermærke"</string>
@@ -402,6 +407,7 @@
   <string name="crypto_identity_change_profile_pin_violation">"%1$ss identitet blev nulstillet."</string>
   <string name="crypto_identity_change_verification_violation_new">"%1$ss %2$s identitet blev nulstillet. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Tilbagetræk verifikation"</string>
+  <string name="dialog_allow_access">"Tillad adgang"</string>
   <string name="dialog_confirm_link_message">"Linket %1$s fører dig til et andet websted %2$s
 
 Er du sikker på, at du vil fortsætte?"</string>
@@ -450,6 +456,7 @@ Er du sikker på, at du vil fortsætte?"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Fjern %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Indstillinger"</string>
   <string name="screen_media_picker_error_failed_selection">"Det lykkedes ikke at vælge medie. Prøv igen."</string>
+  <string name="screen_onboarding_welcome_back">"Velkommen tilbage"</string>
   <string name="screen_pinned_timeline_empty_state_description">"Tryk på en besked og vælg \"%1$s\" for at inkludere den her."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Fastgør vigtige beskeder, så de let kan opdages"</string>
   <plurals name="screen_pinned_timeline_screen_title">
@@ -484,12 +491,15 @@ Er du sikker på, at du vil fortsætte?"</string>
   <string name="screen_share_open_apple_maps">"Åbn i Apple Maps"</string>
   <string name="screen_share_open_google_maps">"Åbn i Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Åbn i OpenStreetMap"</string>
-  <string name="screen_share_this_location_action">"Del denne lokation"</string>
-  <string name="screen_space_list_description">"Grupper, du har oprettet eller deltager i"</string>
+  <string name="screen_share_this_location_action">"Del den valgte placering"</string>
+  <string name="screen_sharing_location_option_sheet_title">"Indstillinger for deling"</string>
+  <string name="screen_space_list_description">"Klynger, du har oprettet eller deltager i"</string>
   <string name="screen_space_list_details">"%1$s•%2$s"</string>
-  <string name="screen_space_list_empty_state_title">"Opret grupper til at organisere rum"</string>
-  <string name="screen_space_list_parent_space">"%1$s gruppe"</string>
-  <string name="screen_space_list_title">"Grupper"</string>
+  <string name="screen_space_list_empty_state_title">"Opret klynger til at organisere rum i"</string>
+  <string name="screen_space_list_parent_space">"%1$s klynge"</string>
+  <string name="screen_space_list_title">"Klynger"</string>
+  <string name="screen_static_location_sheet_timestamp_description">"Delt %1$s"</string>
+  <string name="screen_static_location_sheet_title">"På kortet"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Beskeden blev ikke sendt fordi %1$s s bekræftede identitet blev nulstillet."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Meddelelsen er ikke sendt, fordi %1$s ikke har bekræftet alle enheder."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Beskeden er ikke sendt, fordi du ikke har verificeret en eller flere af dine enheder."</string>

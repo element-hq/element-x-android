@@ -15,5 +15,5 @@
   <string name="screen_session_verification_they_match">"Jie sutampa"</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Kitoje sesijoje priimkite prašymą pradėti tikrinimo procesą, kad galėtumėte tęsti."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Laukiama prašymo priėmimo"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Atsijungiama…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Šalinamas įrenginys…"</string>
 </resources>

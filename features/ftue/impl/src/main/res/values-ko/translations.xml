@@ -12,5 +12,4 @@
   <string name="screen_identity_waiting_on_other_device">"다른 기기에서 대기 중…"</string>
   <string name="screen_notification_optin_subtitle">"나중에 설정을 변경할 수 있습니다."</string>
   <string name="screen_notification_optin_title">"알림을 허용하고 메시지를 놓치지 마세요."</string>
-  <string name="screen_session_verification_enter_recovery_key">"복구 키를 입력하세요"</string>
 </resources>

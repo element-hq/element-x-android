@@ -35,7 +35,7 @@
   <string name="screen_room_attachment_source_camera_video">"Videó rögzítése"</string>
   <string name="screen_room_attachment_source_files">"Melléklet"</string>
   <string name="screen_room_attachment_source_gallery">"Fénykép- és videótár"</string>
-  <string name="screen_room_attachment_source_location">"Hely"</string>
+  <string name="screen_room_attachment_source_location">"Hely megosztása"</string>
   <string name="screen_room_attachment_source_poll">"Szavazás"</string>
   <string name="screen_room_attachment_text_formatting">"Szövegformázás"</string>
   <string name="screen_room_encrypted_history_banner">"Az üzenetelőzmények jelenleg nem érhetők el."</string>

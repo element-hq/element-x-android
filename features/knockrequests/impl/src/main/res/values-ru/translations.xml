@@ -3,22 +3,22 @@
   <string name="screen_knock_requests_list_accept_all_alert_confirm_button_title">"Да, принять все"</string>
   <string name="screen_knock_requests_list_accept_all_alert_description">"Вы действительно хотите принять все заявки на присоединение?"</string>
   <string name="screen_knock_requests_list_accept_all_alert_title">"Принять все запросы"</string>
-  <string name="screen_knock_requests_list_accept_all_button_title">"Принять всё"</string>
-  <string name="screen_knock_requests_list_accept_all_failed_alert_description">"Мы не смогли принять все запросы. Хотите попробовать еще раз?"</string>
+  <string name="screen_knock_requests_list_accept_all_button_title">"Принять все"</string>
+  <string name="screen_knock_requests_list_accept_all_failed_alert_description">"Мы не смогли принять все запросы. Попробовать еще раз?"</string>
   <string name="screen_knock_requests_list_accept_all_failed_alert_title">"Не удалось принять все запросы"</string>
   <string name="screen_knock_requests_list_accept_all_loading_title">"Принять все заявки на присоединение"</string>
   <string name="screen_knock_requests_list_accept_failed_alert_description">"Мы не смогли принять этот запрос. Хотите попробовать еще раз?"</string>
   <string name="screen_knock_requests_list_accept_failed_alert_title">"Не удалось принять запрос"</string>
   <string name="screen_knock_requests_list_accept_loading_title">"Принятие заявки на присоединение"</string>
   <string name="screen_knock_requests_list_ban_alert_confirm_button_title">"Да, отклонить и запретить"</string>
-  <string name="screen_knock_requests_list_ban_alert_description">"Вы уверены, что хотите отклонить и запретить %1$s? Этот пользователь больше не сможет запросить доступ к этой комнате."</string>
+  <string name="screen_knock_requests_list_ban_alert_description">"Вы уверены, что хотите отклонить и запретить %1$s? Этот пользователь больше не сможет запрашивать доступ к этой комнате."</string>
   <string name="screen_knock_requests_list_ban_alert_title">"Отклонить и запретить доступ"</string>
   <string name="screen_knock_requests_list_ban_loading_title">"Отклонение и запрет доступа"</string>
   <string name="screen_knock_requests_list_decline_alert_confirm_button_title">"Да, отклонить"</string>
-  <string name="screen_knock_requests_list_decline_alert_description">"Вы уверены, что хотите отклонить %1$s запрос на присоединение к этой комнате?"</string>
+  <string name="screen_knock_requests_list_decline_alert_description">"Вы уверены, что хотите отклонить запрос %1$s на присоединение к этой комнате?"</string>
   <string name="screen_knock_requests_list_decline_alert_title">"Отклонить доступ"</string>
   <string name="screen_knock_requests_list_decline_and_ban_action_title">"Отклонить и запретить"</string>
-  <string name="screen_knock_requests_list_decline_failed_alert_description">"Мы не смогли отклонить этот запрос. Хотите попробовать еще раз?"</string>
+  <string name="screen_knock_requests_list_decline_failed_alert_description">"Мы не смогли отклонить этот запрос. Попробовать еще раз?"</string>
   <string name="screen_knock_requests_list_decline_failed_alert_title">"Не удалось отклонить запрос"</string>
   <string name="screen_knock_requests_list_decline_loading_title">"Отклонение заявки на присоединение"</string>
   <string name="screen_knock_requests_list_empty_state_description">"Вы сможете увидеть запрос, когда кто-то попросит присоединиться к комнате."</string>
@@ -33,5 +33,5 @@
   <string name="screen_room_multiple_knock_requests_view_all_button_title">"Показать все"</string>
   <string name="screen_room_single_knock_request_accept_button_title">"Разрешить"</string>
   <string name="screen_room_single_knock_request_title">"%1$s хочет присоединиться к этой комнате"</string>
-  <string name="screen_room_single_knock_request_view_button_title">"Просмотр"</string>
+  <string name="screen_room_single_knock_request_view_button_title">"Просмотреть"</string>
 </resources>

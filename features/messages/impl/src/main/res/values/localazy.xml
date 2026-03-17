@@ -35,7 +35,7 @@
   <string name="screen_room_attachment_source_camera_video">"Record video"</string>
   <string name="screen_room_attachment_source_files">"Attachment"</string>
   <string name="screen_room_attachment_source_gallery">"Photo &amp; Video Library"</string>
-  <string name="screen_room_attachment_source_location">"Location"</string>
+  <string name="screen_room_attachment_source_location">"Share location"</string>
   <string name="screen_room_attachment_source_poll">"Poll"</string>
   <string name="screen_room_attachment_text_formatting">"Text Formatting"</string>
   <string name="screen_room_encrypted_history_banner">"Message history is currently unavailable."</string>

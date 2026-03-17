@@ -12,17 +12,17 @@ firebaseAppDistribution = "5.2.1"
 
 # AndroidX
 core = "1.17.0"
-datastore = "1.2.0"
+datastore = "1.2.1"
 constraintlayout = "2.2.1"
 constraintlayout_compose = "1.1.1"
 lifecycle = "2.10.0"
-activity = "1.12.4"
+activity = "1.13.0"
 media3 = "1.9.2"
 camera = "1.5.3"
 work = "2.11.1"
 
 # Compose
-compose_bom = "2026.02.01"
+compose_bom = "2026.03.00"
 
 # Coroutines
 coroutines = "1.10.2"
@@ -220,7 +220,7 @@ color_picker = "io.mhssn:colorpicker:1.0.0"
 
 # Analytics
 posthog = "com.posthog:posthog-android:3.37.0"
-sentry = "io.sentry:sentry-android:8.34.1"
+sentry = "io.sentry:sentry-android:8.35.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.33.2"
 
