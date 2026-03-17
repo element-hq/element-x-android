@@ -11,8 +11,8 @@ package io.element.android.libraries.mediaupload.impl
 import android.content.Context
 import android.net.Uri
 import android.os.Build
-import androidx.exifinterface.media.ExifInterface
 import androidx.core.net.toUri
+import androidx.exifinterface.media.ExifInterface
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
