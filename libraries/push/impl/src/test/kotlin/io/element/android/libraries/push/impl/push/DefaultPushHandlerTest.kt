@@ -42,6 +42,7 @@ import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import kotlin.time.Duration.Companion.milliseconds
@@ -173,6 +174,10 @@ class DefaultPushHandlerTest {
                 workManagerScheduler = workManagerScheduler,
             )
             defaultPushHandler.handle(aPushData, A_PUSHER_INFO)
+
+            // Give it enough time to increment the push counter
+            runCurrent()
+
             submitWorkLambda.assertions()
                 .isNeverCalled()
             incrementPushCounterResult.assertions()
