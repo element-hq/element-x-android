@@ -73,3 +73,24 @@ _(nothing yet)_
 - mautrix bridges: https://docs.mau.fi/bridges/
 - MSC4171: https://github.com/matrix-org/matrix-spec-proposals/blob/tulir/service-members/proposals/4171-service-members.md
 - SchildiChat Next (fork reference): https://github.com/SchildiChat/schildichat-android-next
+
+---
+
+## Local Development Notes
+
+### Installing builds on emulator
+Always use `adb install -r` to preserve app data (session, login state):
+```bash
+export PATH=$PATH:~/Library/Android/sdk/platform-tools
+adb install -r app/build/outputs/apk/fdroid/debug/app-fdroid-universal-debug.apk
+adb shell am start -n "app.ravel.android.debug/app.ravel.android.MainActivity"
+```
+
+Never use `adb uninstall` + `adb install` — that wipes the session and forces re-login.
+
+### Build command
+```bash
+JAVA_HOME=$(/usr/libexec/java_home -v 21) \
+ANDROID_HOME=~/Library/Android/sdk \
+./gradlew assembleFdroidDebug --no-daemon --no-configuration-cache
+```
