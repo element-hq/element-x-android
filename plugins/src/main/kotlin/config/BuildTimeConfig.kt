@@ -33,6 +33,6 @@ object BuildTimeConfig {
     val BUG_REPORT_URL: String? = null
     val BUG_REPORT_APP_NAME: String? = null
 
-    const val PUSH_CONFIG_INCLUDE_FIREBASE = true
+    const val PUSH_CONFIG_INCLUDE_FIREBASE = false
     const val PUSH_CONFIG_INCLUDE_UNIFIED_PUSH = true
 }
