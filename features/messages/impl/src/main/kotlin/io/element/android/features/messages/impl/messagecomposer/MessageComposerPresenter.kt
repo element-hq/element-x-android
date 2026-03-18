@@ -706,14 +706,14 @@ class MessageComposerPresenter(
                     val draft = createDraftFromState(markdownTextEditorState, richTextEditorState)
                     updateDraft(draft, isVolatile = true).join()
                 }
-                setText(newComposerMode.content, markdownTextEditorState, richTextEditorState)
+                setText(newComposerMode.content, markdownTextEditorState, richTextEditorState, requestFocus = true)
             }
             is MessageComposerMode.EditCaption -> {
                 if (currentComposerMode.isEditing.not()) {
                     val draft = createDraftFromState(markdownTextEditorState, richTextEditorState)
                     updateDraft(draft, isVolatile = true).join()
                 }
-                setText(newComposerMode.content, markdownTextEditorState, richTextEditorState)
+                setText(newComposerMode.content, markdownTextEditorState, richTextEditorState, requestFocus = true)
             }
             else -> {
                 // When coming from edit, just clear the composer as it'd be weird to reset a volatile draft in this scenario.
