@@ -10,6 +10,8 @@ package io.element.android.features.home.impl.datasource
 
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
+import io.element.android.features.home.impl.bridge.BridgeEnrichmentService
+import io.element.android.features.home.impl.bridge.BridgeTypeCache
 import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.libraries.androidutils.diff.DiffCacheUpdater
 import io.element.android.libraries.androidutils.diff.MutableListDiffCache
@@ -35,6 +37,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -60,10 +63,13 @@ class RoomListDataSource(
     private val sessionCoroutineScope: CoroutineScope,
     private val dateTimeObserver: DateTimeObserver,
     private val analyticsService: AnalyticsService,
+    private val bridgeEnrichmentService: BridgeEnrichmentService,
+    private val bridgeTypeCache: BridgeTypeCache,
 ) {
     init {
         observeNotificationSettings()
         observeDateTimeChanges()
+        observeBridgeTypeCache()
     }
 
     private val roomList = roomListService.createRoomList(
@@ -145,11 +151,27 @@ class RoomListDataSource(
             .launchIn(sessionCoroutineScope)
     }
 
+    private fun observeBridgeTypeCache() {
+        bridgeTypeCache.cacheFlow
+            .drop(1) // skip initial empty map
+            .onEach { rebuildAllRoomSummaries() }
+            .launchIn(sessionCoroutineScope)
+    }
+
     private suspend fun replaceWith(roomSummaries: List<RoomSummary>) = withContext(coroutineDispatchers.computation) {
         lock.withLock {
             diffCacheUpdater.updateWith(roomSummaries)
             buildAndEmitAllRooms(roomSummaries)
         }
+        triggerBridgeEnrichment()
+    }
+
+    private fun triggerBridgeEnrichment() {
+        val summaries = _roomSummariesFlow.replayCache.firstOrNull() ?: return
+        val roomIdsToEnrich = summaries
+            .filter { it.bridgeType == null }
+            .map { it.roomId }
+        bridgeEnrichmentService.enrich(roomIdsToEnrich, sessionCoroutineScope)
     }
 
     private suspend fun buildAndEmitAllRooms(roomSummaries: List<RoomSummary>, useCache: Boolean = true) {

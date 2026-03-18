@@ -10,6 +10,7 @@ package io.element.android.features.home.impl.datasource
 
 import dev.zacsweers.metro.Inject
 import io.element.android.features.home.impl.bridge.BridgeDetector
+import io.element.android.features.home.impl.bridge.BridgeTypeCache
 import io.element.android.features.home.impl.model.LatestEvent
 import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.features.home.impl.model.RoomSummaryDisplayType
@@ -30,11 +31,16 @@ import kotlinx.collections.immutable.toImmutableList
 class RoomListRoomSummaryFactory(
     private val dateFormatter: DateFormatter,
     private val roomLatestEventFormatter: RoomLatestEventFormatter,
+    private val bridgeTypeCache: BridgeTypeCache,
 ) {
     fun create(roomSummary: RoomSummary): RoomListRoomSummary {
         val roomInfo = roomSummary.info
         val avatarData = roomInfo.getAvatarData(size = AvatarSize.RoomListItem)
-        val bridgeType = BridgeDetector.detect(roomInfo.heroes.map { it.userId.value })
+        val bridgeType = bridgeTypeCache.get(roomSummary.roomId)
+            ?: BridgeDetector.detect(
+                userIds = roomInfo.heroes.map { it.userId.value },
+                canonicalAlias = roomInfo.canonicalAlias?.value,
+            )
         return RoomListRoomSummary(
             id = roomSummary.roomId.value,
             roomId = roomSummary.roomId,

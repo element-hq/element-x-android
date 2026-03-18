@@ -231,7 +231,7 @@ private fun NameAndTimestampRow(
             verticalAlignment = Alignment.CenterVertically,
         ) {
             // Bridge icon
-            if (bridgeType != null) {
+            if (bridgeType != null && bridgeType != BridgeType.NONE) {
                 val iconRes = when (bridgeType) {
                     BridgeType.WHATSAPP -> R.drawable.ic_bridge_whatsapp
                     BridgeType.SIGNAL -> R.drawable.ic_bridge_signal
@@ -243,6 +243,7 @@ private fun NameAndTimestampRow(
                     BridgeType.GOOGLE_CHAT -> R.drawable.ic_bridge_gchat
                     BridgeType.GOOGLE_MESSAGES -> R.drawable.ic_bridge_gmessages
                     BridgeType.GENERIC -> R.drawable.ic_bridge_generic
+                    BridgeType.NONE -> R.drawable.ic_bridge_generic // unreachable
                 }
                 Image(
                     painter = painterResource(id = iconRes),

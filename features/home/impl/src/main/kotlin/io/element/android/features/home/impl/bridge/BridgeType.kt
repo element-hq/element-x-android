@@ -8,6 +8,7 @@
 package io.element.android.features.home.impl.bridge
 
 enum class BridgeType {
+    NONE,           // sentinel: checked, confirmed not a bridge room
     WHATSAPP,
     SIGNAL,
     DISCORD,
