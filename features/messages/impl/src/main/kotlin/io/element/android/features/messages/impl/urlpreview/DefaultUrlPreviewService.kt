@@ -12,6 +12,7 @@ import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.androidutils.json.JsonProvider
+import io.element.android.libraries.core.extensions.mapCatchingExceptions
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.exception.ClientException
@@ -69,7 +70,7 @@ class DefaultUrlPreviewService @Inject constructor(
         for (endpointUrl in buildPreviewEndpoints(homeserverUrl, url, accessToken)) {
             val response = matrixClient.getUrl(endpointUrl)
             if (response.isSuccess) {
-                return response.mapCatching { body ->
+                return response.mapCatchingExceptions { body ->
                     parsePreviewResponse(url, body.decodeToString())
                 }
             }

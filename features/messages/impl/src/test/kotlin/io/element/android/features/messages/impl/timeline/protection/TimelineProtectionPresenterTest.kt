@@ -9,10 +9,10 @@
 package io.element.android.features.messages.impl.timeline.protection
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.media.MediaPreviewConfig
 import io.element.android.libraries.matrix.api.media.MediaPreviewService
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
-import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.test.AN_EVENT_ID

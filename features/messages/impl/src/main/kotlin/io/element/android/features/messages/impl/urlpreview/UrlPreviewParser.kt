@@ -11,6 +11,7 @@ package io.element.android.features.messages.impl.urlpreview
 import android.text.Spanned
 import android.text.style.URLSpan
 import androidx.core.text.toSpannable
+import io.element.android.libraries.core.data.tryOrNull
 import org.jsoup.nodes.Document
 import java.net.URI
 
@@ -28,13 +29,11 @@ internal fun findFirstPreviewableUrl(
 }
 
 internal fun isPreviewableUrl(url: String): Boolean {
-    return runCatching { URI(url).scheme?.lowercase() }
-        .getOrNull() in setOf("http", "https")
+    return tryOrNull { URI(url).scheme?.lowercase() } in setOf("http", "https")
 }
 
 internal fun hostNameFromUrl(url: String): String {
-    return runCatching { URI(url).host.orEmpty().removePrefix("www.") }
-        .getOrNull()
+    return tryOrNull { URI(url).host.orEmpty().removePrefix("www.") }
         ?.takeIf { it.isNotBlank() }
         ?: url
 }
