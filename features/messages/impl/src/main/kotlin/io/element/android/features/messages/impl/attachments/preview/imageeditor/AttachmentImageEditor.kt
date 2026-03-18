@@ -16,22 +16,22 @@ import androidx.exifinterface.media.ExifInterface
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.Inject
+import io.element.android.features.messages.impl.attachments.preview.resolvedImageMimeType
 import io.element.android.libraries.androidutils.bitmap.rotateToExifMetadataOrientation
 import io.element.android.libraries.androidutils.bitmap.writeBitmap
 import io.element.android.libraries.androidutils.file.createTmpFile
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeAnimatedImage
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeImage
-import io.element.android.libraries.core.extensions.runCatchingExceptions
-import io.element.android.features.messages.impl.attachments.preview.resolvedImageMimeType
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import kotlinx.coroutines.withContext
 import java.io.File
 import kotlin.math.roundToInt
 
-private const val EditedMediaDirName = "edited-media"
+private const val EDITED_MEDIA_DIR_NAME = "edited-media"
 
 interface AttachmentImageEditor {
     suspend fun canEdit(localMedia: LocalMedia): Boolean
@@ -98,7 +98,9 @@ class DefaultAttachmentImageEditor(
                 imageWidth = rotatedBitmap.width,
                 imageHeight = rotatedBitmap.height,
             )
-            val croppedBitmap = if (cropRect.left == 0 && cropRect.top == 0 && cropRect.width() == rotatedBitmap.width && cropRect.height() == rotatedBitmap.height) {
+            val isCropUnchanged = cropRect.left == 0 && cropRect.top == 0 &&
+                cropRect.width() == rotatedBitmap.width && cropRect.height() == rotatedBitmap.height
+            val croppedBitmap = if (isCropUnchanged) {
                 rotatedBitmap
             } else {
                 Bitmap.createBitmap(
@@ -113,7 +115,7 @@ class DefaultAttachmentImageEditor(
                 rotatedBitmap.recycle()
             }
 
-            val editedMediaDir = File(context.cacheDir, EditedMediaDirName).apply { mkdirs() }
+            val editedMediaDir = File(context.cacheDir, EDITED_MEDIA_DIR_NAME).apply { mkdirs() }
             val outputFile = context.createTmpFile(baseDir = editedMediaDir, extension = compressFileExtension(exportedMimeType))
             outputFile.writeBitmap(
                 bitmap = croppedBitmap,
@@ -142,7 +144,7 @@ internal fun exportedMimeTypeFor(sourceMimeType: String?): String {
 }
 
 private fun Bitmap.rotateQuarterTurns(quarterTurns: Int): Bitmap {
-    val normalizedTurns = ((quarterTurns % 4) + 4) % 4
+    val normalizedTurns = (quarterTurns % 4 + 4) % 4
     if (normalizedTurns == 0) return this
     val matrix = Matrix().apply {
         postRotate(normalizedTurns * 90f)

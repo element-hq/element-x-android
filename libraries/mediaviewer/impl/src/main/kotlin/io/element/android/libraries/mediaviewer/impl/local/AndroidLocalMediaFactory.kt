@@ -19,6 +19,7 @@ import io.element.android.libraries.androidutils.file.getFileName
 import io.element.android.libraries.androidutils.file.getFileSize
 import io.element.android.libraries.androidutils.file.getMimeType
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
+import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.core.UserId
@@ -139,12 +140,12 @@ class AndroidLocalMediaFactory(
     }
 
     private fun decodeImageMimeType(uri: Uri): String? {
-        return runCatching {
+        return tryOrNull {
             context.contentResolver.openInputStream(uri)?.use { inputStream ->
                 val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
                 BitmapFactory.decodeStream(inputStream, null, options)
                 options.outMimeType
             }
-        }.getOrNull()
+        }
     }
 }

@@ -25,7 +25,7 @@ data class AttachmentImageEdits(
     val rotationQuarterTurns: Int = 0,
 ) {
     val normalizedRotationQuarterTurns: Int
-        get() = ((rotationQuarterTurns % 4) + 4) % 4
+        get() = (rotationQuarterTurns % 4 + 4) % 4
 
     val rotationDegrees: Int
         get() = normalizedRotationQuarterTurns * 90

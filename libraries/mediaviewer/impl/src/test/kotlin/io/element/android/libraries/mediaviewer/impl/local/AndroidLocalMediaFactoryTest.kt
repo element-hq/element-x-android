@@ -20,12 +20,12 @@ import io.element.android.libraries.matrix.test.media.FakeMediaFile
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.anImageMediaInfo
 import io.element.android.libraries.mediaviewer.test.util.FileExtensionExtractorWithoutValidation
-import java.io.File
-import java.io.FileOutputStream
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.RuntimeEnvironment
+import java.io.File
+import java.io.FileOutputStream
 
 @RunWith(RobolectricTestRunner::class)
 class AndroidLocalMediaFactoryTest {
