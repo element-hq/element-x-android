@@ -41,6 +41,18 @@ jobs:
       - name: Configure Gradle
         uses: gradle/actions/setup-gradle@v4
 
+      - name: Inject version from git tag
+        if: startsWith(github.ref, 'refs/tags/')
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"   # strip leading 'v', e.g. v0.1.1 -> 0.1.1
+          MAJOR=$(echo $TAG | cut -d. -f1)
+          MINOR=$(echo $TAG | cut -d. -f2)
+          PATCH=$(echo $TAG | cut -d. -f3)
+          sed -i "s/^private const val versionMajor = .*/private const val versionMajor = $MAJOR/" plugins/src/main/kotlin/Versions.kt
+          sed -i "s/^private const val versionMinor = .*/private const val versionMinor = $MINOR/" plugins/src/main/kotlin/Versions.kt
+          sed -i "s/^private const val versionPatch = .*/private const val versionPatch = $PATCH/" plugins/src/main/kotlin/Versions.kt
+          echo "Injected version $MAJOR.$MINOR.$PATCH"
+
       - name: Build APKs
         run: ./gradlew assembleFdroidRelease --stacktrace --no-daemon --no-configuration-cache
 
