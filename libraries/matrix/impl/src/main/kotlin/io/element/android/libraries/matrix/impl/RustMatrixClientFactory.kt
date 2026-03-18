@@ -188,6 +188,8 @@ class RustMatrixClientFactory(
                 // Workaround for non-nullable proxy parameter in the SDK, since each call to the ClientBuilder returns a new reference we need to keep
                 proxyProvider.provides()?.let { proxy(it) } ?: this
             }
+            // TODO Re-enable after fixing rustls
+            .disableSslVerification()
     }
 }
 
