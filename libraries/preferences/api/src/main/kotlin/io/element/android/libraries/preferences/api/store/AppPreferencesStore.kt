@@ -14,6 +14,9 @@ import io.element.android.libraries.matrix.api.tracing.TraceLogPack
 import kotlinx.coroutines.flow.Flow
 
 interface AppPreferencesStore {
+    suspend fun setTimelineLayoutMode(mode: TimelineLayoutMode)
+    fun getTimelineLayoutModeFlow(): Flow<TimelineLayoutMode>
+
     suspend fun setDeveloperModeEnabled(enabled: Boolean)
     fun isDeveloperModeEnabledFlow(): Flow<Boolean>
 

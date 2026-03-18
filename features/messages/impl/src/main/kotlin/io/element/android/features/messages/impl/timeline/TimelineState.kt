@@ -19,6 +19,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.preferences.api.store.TimelineLayoutMode
 import kotlinx.collections.immutable.ImmutableList
 import kotlin.time.Duration
 
@@ -81,4 +82,5 @@ data class TimelineRoomInfo(
     val pinnedEventIds: ImmutableList<EventId>,
     val typingNotificationState: TypingNotificationState,
     val predecessorRoom: PredecessorRoom?,
+    val timelineLayoutMode: TimelineLayoutMode = TimelineLayoutMode.Bubble,
 )

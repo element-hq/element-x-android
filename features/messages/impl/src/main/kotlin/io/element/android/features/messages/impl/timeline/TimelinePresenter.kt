@@ -54,7 +54,9 @@ import io.element.android.libraries.matrix.api.room.roomMembers
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
+import io.element.android.libraries.preferences.api.store.TimelineLayoutMode
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.DisplayFirstTimelineItems
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.NotificationToMessage
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.OpenRoom
@@ -86,6 +88,7 @@ class TimelinePresenter(
     private val redactedVoiceMessageManager: RedactedVoiceMessageManager,
     private val sendPollResponseAction: SendPollResponseAction,
     private val endPollAction: EndPollAction,
+    private val appPreferencesStore: AppPreferencesStore,
     private val sessionPreferencesStore: SessionPreferencesStore,
     @Assisted private val timelineController: TimelineController,
     private val timelineItemIndexer: TimelineItemIndexer = TimelineItemIndexer(),
@@ -285,7 +288,10 @@ class TimelinePresenter(
         val userEventPermissions by room.permissionsAsState(UserEventPermissions.DEFAULT) { perms ->
             perms.userEventPermissions()
         }
-        val timelineRoomInfo by remember(typingNotificationState, roomCallState, roomInfo) {
+        val timelineLayoutMode by remember {
+            appPreferencesStore.getTimelineLayoutModeFlow()
+        }.collectAsState(initial = TimelineLayoutMode.Bubble)
+        val timelineRoomInfo by remember(typingNotificationState, roomCallState, roomInfo, timelineLayoutMode) {
             derivedStateOf {
                 TimelineRoomInfo(
                     name = roomInfo.name,
@@ -296,6 +302,7 @@ class TimelinePresenter(
                     pinnedEventIds = roomInfo.pinnedEventIds,
                     typingNotificationState = typingNotificationState,
                     predecessorRoom = room.predecessorRoom(),
+                    timelineLayoutMode = timelineLayoutMode,
                 )
             }
         }

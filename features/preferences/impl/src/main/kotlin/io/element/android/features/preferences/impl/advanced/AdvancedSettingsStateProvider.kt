@@ -11,6 +11,7 @@ package io.element.android.features.preferences.impl.advanced
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
+import io.element.android.libraries.preferences.api.store.TimelineLayoutMode
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 
 open class AdvancedSettingsStateProvider : PreviewParameterProvider<AdvancedSettingsState> {
@@ -28,6 +29,8 @@ open class AdvancedSettingsStateProvider : PreviewParameterProvider<AdvancedSett
                 compressImages = true,
                 videoPreset = VideoCompressionPreset.HIGH,
             )),
+            aAdvancedSettingsState(timelineLayoutMode = TimelineLayoutMode.Bubble),
+            aAdvancedSettingsState(timelineLayoutMode = TimelineLayoutMode.Modern),
         )
 }
 
@@ -36,6 +39,7 @@ fun aAdvancedSettingsState(
     isSharePresenceEnabled: Boolean = false,
     mediaOptimizationState: MediaOptimizationState = MediaOptimizationState.AllMedia(isEnabled = false),
     theme: ThemeOption = ThemeOption.System,
+    timelineLayoutMode: TimelineLayoutMode? = null,
     hideInviteAvatars: Boolean = false,
     timelineMediaPreviewValue: MediaPreviewValue = MediaPreviewValue.On,
     setTimelineMediaPreviewAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
@@ -46,6 +50,7 @@ fun aAdvancedSettingsState(
     isSharePresenceEnabled = isSharePresenceEnabled,
     mediaOptimizationState = mediaOptimizationState,
     theme = theme,
+    timelineLayoutMode = timelineLayoutMode,
     mediaPreviewConfigState = MediaPreviewConfigState(
         hideInviteAvatars = hideInviteAvatars,
         timelineMediaPreviewValue = timelineMediaPreviewValue,

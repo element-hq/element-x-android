@@ -59,6 +59,8 @@ import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
+import io.element.android.libraries.preferences.api.store.TimelineLayoutMode
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
@@ -105,6 +107,24 @@ class TimelinePresenterTest {
             assertThat(initialState.newEventState).isEqualTo(NewEventState.None)
             assertThat(initialState.focusedEventId).isNull()
             assertThat(initialState.focusRequestState).isEqualTo(FocusRequestState.None)
+        }
+    }
+
+    @Test
+    fun `present - timeline layout mode flows into TimelineRoomInfo`() = runTest {
+        val appPreferencesStore = InMemoryAppPreferencesStore(
+            timelineLayoutMode = TimelineLayoutMode.Bubble,
+        )
+        val presenter = createTimelinePresenter(appPreferencesStore = appPreferencesStore)
+        presenter.test {
+            val initialState = awaitFirstItem()
+            assertThat(initialState.timelineRoomInfo.timelineLayoutMode).isEqualTo(TimelineLayoutMode.Bubble)
+
+            appPreferencesStore.setTimelineLayoutMode(TimelineLayoutMode.Modern)
+            val updatedState = consumeItemsUntilPredicate {
+                it.timelineRoomInfo.timelineLayoutMode == TimelineLayoutMode.Modern
+            }.last()
+            assertThat(updatedState.timelineRoomInfo.timelineLayoutMode).isEqualTo(TimelineLayoutMode.Modern)
         }
     }
 
@@ -1009,6 +1029,7 @@ class TimelinePresenterTest {
         messagesNavigator: FakeMessagesNavigator = FakeMessagesNavigator(),
         endPollAction: EndPollAction = FakeEndPollAction(),
         sendPollResponseAction: SendPollResponseAction = FakeSendPollResponseAction(),
+        appPreferencesStore: InMemoryAppPreferencesStore = InMemoryAppPreferencesStore(),
         sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
         timelineItemIndexer: TimelineItemIndexer = TimelineItemIndexer(),
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
@@ -1022,6 +1043,7 @@ class TimelinePresenterTest {
             redactedVoiceMessageManager = redactedVoiceMessageManager,
             endPollAction = endPollAction,
             sendPollResponseAction = sendPollResponseAction,
+            appPreferencesStore = appPreferencesStore,
             sessionPreferencesStore = sessionPreferencesStore,
             timelineItemIndexer = timelineItemIndexer,
             timelineController = TimelineController(room, timeline),

@@ -12,6 +12,7 @@ import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.matrix.api.tracing.LogLevel
 import io.element.android.libraries.matrix.api.tracing.TraceLogPack
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.api.store.TimelineLayoutMode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 
@@ -23,6 +24,7 @@ class InMemoryAppPreferencesStore(
     theme: String? = null,
     logLevel: LogLevel = LogLevel.INFO,
     traceLockPacks: Set<TraceLogPack> = emptySet(),
+    timelineLayoutMode: TimelineLayoutMode = TimelineLayoutMode.Bubble,
 ) : AppPreferencesStore {
     private val isDeveloperModeEnabled = MutableStateFlow(isDeveloperModeEnabled)
     private val customElementCallBaseUrl = MutableStateFlow(customElementCallBaseUrl)
@@ -31,6 +33,15 @@ class InMemoryAppPreferencesStore(
     private val tracingLogPacks = MutableStateFlow(traceLockPacks)
     private val hideInviteAvatars = MutableStateFlow(hideInviteAvatars)
     private val timelineMediaPreviewValue = MutableStateFlow(timelineMediaPreviewValue)
+    private val timelineLayoutMode = MutableStateFlow(timelineLayoutMode)
+
+    override suspend fun setTimelineLayoutMode(mode: TimelineLayoutMode) {
+        timelineLayoutMode.value = mode
+    }
+
+    override fun getTimelineLayoutModeFlow(): Flow<TimelineLayoutMode> {
+        return timelineLayoutMode
+    }
 
     override suspend fun setDeveloperModeEnabled(enabled: Boolean) {
         isDeveloperModeEnabled.value = enabled

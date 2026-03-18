@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.tracing.LogLevel
 import io.element.android.libraries.matrix.api.tracing.TraceLogPack
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
+import io.element.android.libraries.preferences.api.store.TimelineLayoutMode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
@@ -30,6 +31,7 @@ private val hideInviteAvatarsKey = booleanPreferencesKey("hideInviteAvatars")
 private val timelineMediaPreviewValueKey = stringPreferencesKey("timelineMediaPreviewValue")
 private val logLevelKey = stringPreferencesKey("logLevel")
 private val traceLogPacksKey = stringPreferencesKey("traceLogPacks")
+private val timelineLayoutModeKey = stringPreferencesKey("timelineLayoutMode")
 
 @ContributesBinding(AppScope::class)
 class DefaultAppPreferencesStore(
@@ -37,6 +39,18 @@ class DefaultAppPreferencesStore(
     preferenceDataStoreFactory: PreferenceDataStoreFactory,
 ) : AppPreferencesStore {
     private val store = preferenceDataStoreFactory.create("elementx_preferences")
+
+    override suspend fun setTimelineLayoutMode(mode: TimelineLayoutMode) {
+        store.edit { prefs ->
+            prefs[timelineLayoutModeKey] = mode.name
+        }
+    }
+
+    override fun getTimelineLayoutModeFlow(): Flow<TimelineLayoutMode> {
+        return store.data.map { prefs ->
+            prefs[timelineLayoutModeKey]?.let { TimelineLayoutMode.valueOf(it) } ?: TimelineLayoutMode.Bubble
+        }
+    }
 
     override suspend fun setDeveloperModeEnabled(enabled: Boolean) {
         store.edit { prefs ->

@@ -9,6 +9,7 @@
 package io.element.android.features.preferences.impl.advanced
 
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
+import io.element.android.libraries.preferences.api.store.TimelineLayoutMode
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 
 sealed interface AdvancedSettingsEvents {
@@ -20,4 +21,5 @@ sealed interface AdvancedSettingsEvents {
     data class SetTheme(val theme: ThemeOption) : AdvancedSettingsEvents
     data class SetTimelineMediaPreviewValue(val value: MediaPreviewValue) : AdvancedSettingsEvents
     data class SetHideInviteAvatars(val value: Boolean) : AdvancedSettingsEvents
+    data class SetTimelineLayoutMode(val mode: TimelineLayoutMode) : AdvancedSettingsEvents
 }

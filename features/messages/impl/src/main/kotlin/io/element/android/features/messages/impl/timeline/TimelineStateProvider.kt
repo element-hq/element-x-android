@@ -35,6 +35,7 @@ import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.preferences.api.store.TimelineLayoutMode
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
@@ -257,6 +258,7 @@ internal fun aTimelineRoomInfo(
     pinnedEventIds: List<EventId> = emptyList(),
     typingNotificationState: TypingNotificationState = aTypingNotificationState(),
     predecessorRoom: PredecessorRoom? = null,
+    timelineLayoutMode: TimelineLayoutMode = TimelineLayoutMode.Bubble,
 ) = TimelineRoomInfo(
     isDm = isDm,
     name = name,
@@ -266,4 +268,5 @@ internal fun aTimelineRoomInfo(
     pinnedEventIds = pinnedEventIds.toImmutableList(),
     typingNotificationState = typingNotificationState,
     predecessorRoom = predecessorRoom,
+    timelineLayoutMode = timelineLayoutMode,
 )

@@ -16,6 +16,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
+import io.element.android.libraries.preferences.api.store.TimelineLayoutMode
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
@@ -40,6 +41,7 @@ class AdvancedSettingsPresenterTest {
                 assertThat(isSharePresenceEnabled).isTrue()
                 assertThat(mediaOptimizationState).isNull()
                 assertThat(theme).isEqualTo(ThemeOption.System)
+                assertThat(timelineLayoutMode).isNull()
                 assertThat(mediaPreviewConfigState.hideInviteAvatars).isFalse()
                 assertThat(mediaPreviewConfigState.timelineMediaPreviewValue).isEqualTo(MediaPreviewValue.On)
                 assertThat(mediaPreviewConfigState.setHideInviteAvatarsAction).isEqualTo(AsyncAction.Uninitialized)
@@ -292,6 +294,51 @@ class AdvancedSettingsPresenterTest {
             with(awaitItem()) {
                 assertThat(mediaPreviewConfigState.setHideInviteAvatarsAction).isEqualTo(AsyncAction.Loading)
                 assertThat(mediaPreviewConfigState.setTimelineMediaPreviewAction).isEqualTo(AsyncAction.Success(Unit))
+            }
+        }
+    }
+
+    @Test
+    fun `present - timeline layout mode hidden when feature flag disabled`() = runTest {
+        val presenter = createAdvancedSettingsPresenter()
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            // Skip until the initial data is loaded
+            skipItems(1)
+
+            with(awaitItem()) {
+                assertThat(timelineLayoutMode).isNull()
+            }
+        }
+    }
+
+    @Test
+    fun `present - timeline layout mode visible and changeable when feature flag enabled`() = runTest {
+        val featureFlagService = FakeFeatureFlagService().apply {
+            setFeatureEnabled(FeatureFlags.ModernLayout, true)
+        }
+        val appPreferencesStore = InMemoryAppPreferencesStore()
+        val presenter = createAdvancedSettingsPresenter(
+            appPreferencesStore = appPreferencesStore,
+            featureFlagService = featureFlagService,
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            // Skip until the initial data is loaded
+            skipItems(1)
+
+            with(awaitItem()) {
+                assertThat(timelineLayoutMode).isEqualTo(TimelineLayoutMode.Bubble)
+                eventSink(AdvancedSettingsEvents.SetTimelineLayoutMode(TimelineLayoutMode.Modern))
+            }
+            with(awaitItem()) {
+                assertThat(timelineLayoutMode).isEqualTo(TimelineLayoutMode.Modern)
+                eventSink(AdvancedSettingsEvents.SetTimelineLayoutMode(TimelineLayoutMode.Bubble))
+            }
+            with(awaitItem()) {
+                assertThat(timelineLayoutMode).isEqualTo(TimelineLayoutMode.Bubble)
             }
         }
     }

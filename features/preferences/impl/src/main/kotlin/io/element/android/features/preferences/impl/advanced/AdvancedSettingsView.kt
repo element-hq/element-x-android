@@ -42,6 +42,7 @@ import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
+import io.element.android.libraries.preferences.api.store.TimelineLayoutMode
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.compose.LocalAnalyticsService
@@ -79,6 +80,16 @@ fun AdvancedSettingsView(
                 state.eventSink(AdvancedSettingsEvents.SetTheme(themeOption))
             }
         )
+        if (state.timelineLayoutMode != null) {
+            PreferenceDropdown(
+                title = stringResource(id = R.string.screen_advanced_settings_timeline_layout),
+                selectedOption = TimelineLayoutOption.from(state.timelineLayoutMode),
+                options = TimelineLayoutOption.entries.toImmutableList(),
+                onSelectOption = { layoutOption ->
+                    state.eventSink(AdvancedSettingsEvents.SetTimelineLayoutMode(layoutOption.toTimelineLayoutMode()))
+                }
+            )
+        }
         ListItem(
             headlineContent = {
                 Text(text = stringResource(id = CommonStrings.action_view_source))

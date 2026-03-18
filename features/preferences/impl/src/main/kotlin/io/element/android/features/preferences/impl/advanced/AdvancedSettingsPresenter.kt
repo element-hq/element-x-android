@@ -23,6 +23,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
+import io.element.android.libraries.preferences.api.store.TimelineLayoutMode
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
@@ -50,6 +51,14 @@ class AdvancedSettingsPresenter(
         }.collectAsState(initial = Theme.System)
 
         val mediaPreviewConfigState = mediaPreviewConfigStateStore.state()
+
+        val isModernLayoutEnabled by produceState<Boolean?>(null) {
+            value = featureFlagService.isFeatureEnabled(FeatureFlags.ModernLayout)
+        }
+
+        val timelineLayoutMode by remember {
+            appPreferencesStore.getTimelineLayoutModeFlow()
+        }.collectAsState(initial = TimelineLayoutMode.Bubble)
 
         val themeOption by remember {
             derivedStateOf {
@@ -109,6 +118,9 @@ class AdvancedSettingsPresenter(
                 is AdvancedSettingsEvents.SetVideoUploadQuality -> sessionCoroutineScope.launch {
                     sessionPreferencesStore.setVideoCompressionPreset(event.videoPreset)
                 }
+                is AdvancedSettingsEvents.SetTimelineLayoutMode -> sessionCoroutineScope.launch {
+                    appPreferencesStore.setTimelineLayoutMode(event.mode)
+                }
             }
         }
 
@@ -117,6 +129,7 @@ class AdvancedSettingsPresenter(
             isSharePresenceEnabled = isSharePresenceEnabled,
             mediaOptimizationState = mediaOptimizationState,
             theme = themeOption,
+            timelineLayoutMode = if (isModernLayoutEnabled == true) timelineLayoutMode else null,
             mediaPreviewConfigState = mediaPreviewConfigState,
             eventSink = ::handleEvent,
         )

@@ -100,6 +100,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toThreadId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.EmbeddedEventInfo
+import io.element.android.libraries.preferences.api.store.TimelineLayoutMode
 import io.element.android.libraries.matrix.api.timeline.item.ThreadSummary
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
@@ -267,8 +268,11 @@ fun TimelineItemEventRow(
         }
 
         if (displayThreadSummaries && timelineMode !is Timeline.Mode.Thread && event.threadInfo is TimelineItemThreadInfo.ThreadRoot) {
+            val isModernLayout = timelineRoomInfo.timelineLayoutMode == TimelineLayoutMode.Modern
             ThreadSummaryView(
-                modifier = if (event.isMine) {
+                modifier = if (isModernLayout) {
+                    if (timelineRoomInfo.isDm) Modifier.padding(start = 16.dp) else Modifier.padding(start = 60.dp)
+                } else if (event.isMine) {
                     Modifier.align(Alignment.End).padding(end = 16.dp)
                 } else {
                     if (timelineRoomInfo.isDm) Modifier else Modifier.padding(start = 16.dp)
@@ -414,6 +418,27 @@ private fun TimelineItemEventRowContent(
     modifier: Modifier = Modifier,
     eventContentView: @Composable (Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit,
 ) {
+    if (timelineRoomInfo.timelineLayoutMode == TimelineLayoutMode.Modern) {
+        TimelineItemEventRowModernContent(
+            event = event,
+            timelineMode = timelineMode,
+            timelineProtectionState = timelineProtectionState,
+            timelineRoomInfo = timelineRoomInfo,
+            interactionSource = interactionSource,
+            onContentClick = onContentClick,
+            onLongClick = onLongClick,
+            inReplyToClick = inReplyToClick,
+            onUserDataClick = onUserDataClick,
+            onReactionClick = onReactionClick,
+            onReactionLongClick = onReactionLongClick,
+            onMoreReactionsClick = onMoreReactionsClick,
+            eventSink = eventSink,
+            modifier = modifier,
+            eventContentView = eventContentView,
+        )
+        return
+    }
+
     fun ConstrainScope.linkStartOrEnd(event: TimelineItem.Event) = if (event.isMine) {
         end.linkTo(parent.end)
     } else {

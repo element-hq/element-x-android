@@ -147,6 +147,14 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
+    ModernLayout(
+        key = "feature.modern_layout",
+        title = "Modern layout",
+        description = "Non-bubble layout for the message timeline",
+        defaultValue = { false },
+        isFinished = false,
+        isInLabs = true,
+    ),
     ValidateNetworkWhenSchedulingNotificationFetching(
         key = "feature.validate_network_when_scheduling_notification_fetching",
         title = "validate internet connectivity when scheduling notification fetching",

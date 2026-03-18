@@ -11,7 +11,9 @@ package io.element.android.features.preferences.impl.advanced
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.res.stringResource
+import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.designsystem.components.preferences.DropdownOption
+import io.element.android.libraries.preferences.api.store.TimelineLayoutMode
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -20,6 +22,7 @@ data class AdvancedSettingsState(
     val isSharePresenceEnabled: Boolean,
     val mediaOptimizationState: MediaOptimizationState?,
     val theme: ThemeOption,
+    val timelineLayoutMode: TimelineLayoutMode?,
     val mediaPreviewConfigState: MediaPreviewConfigState,
     val eventSink: (AdvancedSettingsEvents) -> Unit
 )
@@ -34,6 +37,31 @@ sealed interface MediaOptimizationState {
     val shouldCompressImages: Boolean get() = when (this) {
         is AllMedia -> isEnabled
         is Split -> compressImages
+    }
+}
+
+enum class TimelineLayoutOption : DropdownOption {
+    Bubble {
+        @Composable
+        @ReadOnlyComposable
+        override fun getText(): String = stringResource(R.string.screen_advanced_settings_timeline_layout_bubble)
+    },
+    Modern {
+        @Composable
+        @ReadOnlyComposable
+        override fun getText(): String = stringResource(R.string.screen_advanced_settings_timeline_layout_modern)
+    };
+
+    fun toTimelineLayoutMode(): TimelineLayoutMode = when (this) {
+        Bubble -> TimelineLayoutMode.Bubble
+        Modern -> TimelineLayoutMode.Modern
+    }
+
+    companion object {
+        fun from(mode: TimelineLayoutMode): TimelineLayoutOption = when (mode) {
+            TimelineLayoutMode.Bubble -> Bubble
+            TimelineLayoutMode.Modern -> Modern
+        }
     }
 }
 
