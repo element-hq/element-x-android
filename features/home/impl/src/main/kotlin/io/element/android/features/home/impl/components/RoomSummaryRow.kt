@@ -8,6 +8,7 @@
 
 package io.element.android.features.home.impl.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -30,6 +31,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontStyle
@@ -40,6 +42,7 @@ import androidx.compose.ui.zIndex
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.home.impl.R
+import io.element.android.features.home.impl.bridge.BridgeType
 import io.element.android.features.home.impl.model.LatestEvent
 import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.features.home.impl.model.RoomListRoomSummaryProvider
@@ -123,7 +126,8 @@ internal fun RoomSummaryRow(
                     NameAndTimestampRow(
                         name = room.name,
                         timestamp = room.timestamp,
-                        isHighlighted = room.isHighlighted
+                        isHighlighted = room.isHighlighted,
+                        bridgeType = room.bridgeType,
                     )
                     MessagePreviewAndIndicatorRow(room = room)
                 }
@@ -215,7 +219,8 @@ private fun NameAndTimestampRow(
     name: String?,
     timestamp: String?,
     isHighlighted: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    bridgeType: BridgeType? = null,
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -225,6 +230,27 @@ private fun NameAndTimestampRow(
             modifier = Modifier.weight(1f),
             verticalAlignment = Alignment.CenterVertically,
         ) {
+            // Bridge icon
+            if (bridgeType != null) {
+                val iconRes = when (bridgeType) {
+                    BridgeType.WHATSAPP -> R.drawable.ic_bridge_whatsapp
+                    BridgeType.SIGNAL -> R.drawable.ic_bridge_signal
+                    BridgeType.DISCORD -> R.drawable.ic_bridge_discord
+                    BridgeType.TELEGRAM -> R.drawable.ic_bridge_telegram
+                    BridgeType.META -> R.drawable.ic_bridge_meta
+                    BridgeType.IMESSAGE -> R.drawable.ic_bridge_imessage
+                    BridgeType.SLACK -> R.drawable.ic_bridge_slack
+                    BridgeType.GOOGLE_CHAT -> R.drawable.ic_bridge_gchat
+                    BridgeType.GENERIC -> R.drawable.ic_bridge_generic
+                }
+                Image(
+                    painter = painterResource(id = iconRes),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(16.dp)
+                        .padding(end = 4.dp)
+                )
+            }
             // Name
             Text(
                 style = ElementTheme.typography.fontBodyLgMedium,

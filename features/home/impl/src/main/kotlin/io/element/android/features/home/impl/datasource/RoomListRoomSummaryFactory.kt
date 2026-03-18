@@ -9,6 +9,7 @@
 package io.element.android.features.home.impl.datasource
 
 import dev.zacsweers.metro.Inject
+import io.element.android.features.home.impl.bridge.BridgeDetector
 import io.element.android.features.home.impl.model.LatestEvent
 import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.features.home.impl.model.RoomSummaryDisplayType
@@ -33,6 +34,7 @@ class RoomListRoomSummaryFactory(
     fun create(roomSummary: RoomSummary): RoomListRoomSummary {
         val roomInfo = roomSummary.info
         val avatarData = roomInfo.getAvatarData(size = AvatarSize.RoomListItem)
+        val bridgeType = BridgeDetector.detect(roomInfo.heroes.map { it.userId.value })
         return RoomListRoomSummary(
             id = roomSummary.roomId.value,
             roomId = roomSummary.roomId,
@@ -71,6 +73,7 @@ class RoomListRoomSummaryFactory(
             }.toImmutableList(),
             isTombstoned = roomInfo.successorRoom != null,
             isSpace = roomInfo.isSpace,
+            bridgeType = bridgeType,
         )
     }
 
