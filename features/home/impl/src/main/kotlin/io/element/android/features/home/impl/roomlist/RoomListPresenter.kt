@@ -272,6 +272,7 @@ class RoomListPresenter(
             isFavorite = event.roomSummary.isFavorite,
             hasNewContent = event.roomSummary.hasNewContent,
             displayClearRoomCacheAction = appPreferencesStore.isDeveloperModeEnabledFlow().first(),
+            roomSummary = event.roomSummary,
         )
         contextMenuState.value = initialState
 

@@ -11,13 +11,19 @@ package io.element.android.features.home.impl.roomlist
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.home.impl.R
@@ -41,40 +47,49 @@ fun RoomListContextMenu(
     onRoomSettingsClick: (roomId: RoomId) -> Unit,
     onReportRoomClick: (roomId: RoomId) -> Unit
 ) {
-    ModalBottomSheet(
-        onDismissRequest = { eventSink(RoomListEvent.HideContextMenu) },
-    ) {
-        RoomListModalBottomSheetContent(
-            contextMenu = contextMenu,
-            canReportRoom = canReportRoom,
-            onRoomMarkReadClick = {
-                eventSink(RoomListEvent.HideContextMenu)
-                eventSink(RoomListEvent.MarkAsRead(contextMenu.roomId))
-            },
-            onRoomMarkUnreadClick = {
-                eventSink(RoomListEvent.HideContextMenu)
-                eventSink(RoomListEvent.MarkAsUnread(contextMenu.roomId))
-            },
-            onRoomSettingsClick = {
-                eventSink(RoomListEvent.HideContextMenu)
-                onRoomSettingsClick(contextMenu.roomId)
-            },
-            onLeaveRoomClick = {
-                eventSink(RoomListEvent.HideContextMenu)
-                eventSink(RoomListEvent.LeaveRoom(contextMenu.roomId, needsConfirmation = true))
-            },
-            onFavoriteChange = { isFavorite ->
-                eventSink(RoomListEvent.SetRoomIsFavorite(contextMenu.roomId, isFavorite))
-            },
-            onClearCacheRoomClick = {
-                eventSink(RoomListEvent.HideContextMenu)
-                eventSink(RoomListEvent.ClearCacheOfRoom(contextMenu.roomId))
-            },
-            onReportRoomClick = {
-                eventSink(RoomListEvent.HideContextMenu)
-                onReportRoomClick(contextMenu.roomId)
-            },
-        )
+    var showRoomDetails by remember { mutableStateOf(false) }
+
+    if (showRoomDetails && contextMenu.roomSummary != null) {
+        ModalBottomSheet(onDismissRequest = { showRoomDetails = false }) {
+            RoomDebugDetailsSheet(contextMenu.roomSummary)
+        }
+    } else {
+        ModalBottomSheet(
+            onDismissRequest = { eventSink(RoomListEvent.HideContextMenu) },
+        ) {
+            RoomListModalBottomSheetContent(
+                contextMenu = contextMenu,
+                canReportRoom = canReportRoom,
+                onRoomMarkReadClick = {
+                    eventSink(RoomListEvent.HideContextMenu)
+                    eventSink(RoomListEvent.MarkAsRead(contextMenu.roomId))
+                },
+                onRoomMarkUnreadClick = {
+                    eventSink(RoomListEvent.HideContextMenu)
+                    eventSink(RoomListEvent.MarkAsUnread(contextMenu.roomId))
+                },
+                onRoomSettingsClick = {
+                    eventSink(RoomListEvent.HideContextMenu)
+                    onRoomSettingsClick(contextMenu.roomId)
+                },
+                onLeaveRoomClick = {
+                    eventSink(RoomListEvent.HideContextMenu)
+                    eventSink(RoomListEvent.LeaveRoom(contextMenu.roomId, needsConfirmation = true))
+                },
+                onFavoriteChange = { isFavorite ->
+                    eventSink(RoomListEvent.SetRoomIsFavorite(contextMenu.roomId, isFavorite))
+                },
+                onClearCacheRoomClick = {
+                    eventSink(RoomListEvent.HideContextMenu)
+                    eventSink(RoomListEvent.ClearCacheOfRoom(contextMenu.roomId))
+                },
+                onReportRoomClick = {
+                    eventSink(RoomListEvent.HideContextMenu)
+                    onReportRoomClick(contextMenu.roomId)
+                },
+                onShowRoomDetailsClick = { showRoomDetails = true },
+            )
+        }
     }
 }
 
@@ -89,6 +104,7 @@ private fun RoomListModalBottomSheetContent(
     onRoomMarkUnreadClick: () -> Unit,
     onClearCacheRoomClick: () -> Unit,
     onReportRoomClick: () -> Unit,
+    onShowRoomDetailsClick: () -> Unit = {},
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -200,6 +216,16 @@ private fun RoomListModalBottomSheetContent(
         if (contextMenu.displayClearRoomCacheAction) {
             ListItem(
                 headlineContent = {
+                    Text(text = "Show room details")
+                },
+                modifier = Modifier.clickable { onShowRoomDetailsClick() },
+                leadingContent = ListItemContent.Icon(
+                    iconSource = IconSource.Vector(CompoundIcons.Info())
+                ),
+                style = ListItemStyle.Primary,
+            )
+            ListItem(
+                headlineContent = {
                     Text(text = "Clear cache for this room")
                 },
                 modifier = Modifier.clickable { onClearCacheRoomClick() },
@@ -207,6 +233,38 @@ private fun RoomListModalBottomSheetContent(
                     iconSource = IconSource.Vector(CompoundIcons.Delete())
                 ),
                 style = ListItemStyle.Primary,
+            )
+        }
+    }
+}
+
+@Composable
+private fun RoomDebugDetailsSheet(room: io.element.android.features.home.impl.model.RoomListRoomSummary) {
+    val rows = buildList {
+        add("Room ID" to room.roomId.value)
+        add("Name" to (room.name ?: "null"))
+        add("Canonical alias" to (room.canonicalAlias?.value ?: "null"))
+        add("isDM" to room.isDm.toString())
+        add("isSpace" to room.isSpace.toString())
+        add("Bridge type" to (room.bridgeType?.name ?: "none"))
+        add("Heroes (${room.heroes.size})" to room.heroes.joinToString("\n") { it.id })
+    }
+    Column(modifier = androidx.compose.ui.Modifier.fillMaxWidth().padding(16.dp)) {
+        Text(
+            text = "Room Details",
+            style = io.element.android.compound.theme.ElementTheme.typography.fontBodyLgMedium,
+            modifier = androidx.compose.ui.Modifier.padding(bottom = 12.dp),
+        )
+        rows.forEach { (label, value) ->
+            Text(
+                text = label,
+                style = io.element.android.compound.theme.ElementTheme.typography.fontBodySmMedium,
+                color = io.element.android.compound.theme.ElementTheme.colors.textSecondary,
+            )
+            Text(
+                text = value,
+                style = io.element.android.compound.theme.ElementTheme.typography.fontBodyMdRegular,
+                modifier = androidx.compose.ui.Modifier.padding(bottom = 8.dp),
             )
         }
     }
