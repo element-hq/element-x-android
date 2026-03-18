@@ -11,4 +11,6 @@ package io.element.android.features.home.impl.filters
 sealed interface RoomListFiltersEvent {
     data class ToggleFilter(val filter: RoomListFilter) : RoomListFiltersEvent
     data object ClearSelectedFilters : RoomListFiltersEvent
+    data object ShowFilters : RoomListFiltersEvent
+    data object HideFilters : RoomListFiltersEvent
 }

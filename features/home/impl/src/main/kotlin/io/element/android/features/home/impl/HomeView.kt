@@ -26,8 +26,10 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalLayoutDirection
@@ -158,8 +160,13 @@ private fun HomeScaffold(
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
     val roomListState: RoomListState = state.roomListState
 
-    BackHandler(enabled = state.isBackHandlerEnabled) {
-        if (state.currentHomeNavigationBarItem != HomeNavigationBarItem.Chats) {
+    val isShowingFilters = roomListState.spaceFiltersState is SpaceFiltersState.Selecting
+
+    BackHandler(enabled = state.isBackHandlerEnabled || isShowingFilters) {
+        if (isShowingFilters) {
+            val spaceState = roomListState.spaceFiltersState
+            spaceState.eventSink(SpaceFiltersEvent.Selecting.Cancel)
+        } else if (state.currentHomeNavigationBarItem != HomeNavigationBarItem.Chats) {
             state.eventSink(HomeEvent.SelectHomeNavigationBarItem(HomeNavigationBarItem.Chats))
         } else {
             val spaceFiltersState = state.roomListState.spaceFiltersState
@@ -187,10 +194,8 @@ private fun HomeScaffold(
                 onAccountSwitch = {
                     state.eventSink(HomeEvent.SwitchToAccount(it))
                 },
-                scrollBehavior = scrollBehavior,
-                displayFilters = state.displayRoomListFilters,
-                filtersState = roomListState.filtersState,
                 spaceFiltersState = roomListState.spaceFiltersState,
+                roomFiltersState = roomListState.filtersState,
                 canReportBug = state.canReportBug,
                 modifier = Modifier.hazeEffect(
                     state = hazeState,
@@ -274,7 +279,10 @@ private fun HomeScaffold(
                             .consumeWindowInsets(padding)
                             .hazeSource(state = hazeState)
                     )
-                    SpaceFiltersView(roomListState.spaceFiltersState)
+                    SpaceFiltersView(
+                        state = roomListState.spaceFiltersState,
+                        roomFiltersState = roomListState.filtersState,
+                    )
                 }
                 HomeNavigationBarItem.Spaces -> {
                     HomeSpacesView(

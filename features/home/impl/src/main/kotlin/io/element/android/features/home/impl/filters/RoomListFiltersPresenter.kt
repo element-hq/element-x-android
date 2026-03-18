@@ -30,6 +30,12 @@ class RoomListFiltersPresenter(
                 is RoomListFiltersEvent.ToggleFilter -> {
                     filterSelectionStrategy.toggle(event.filter)
                 }
+                RoomListFiltersEvent.ShowFilters -> {
+                    // Visibility is handled at a higher level
+                }
+                RoomListFiltersEvent.HideFilters -> {
+                    // Visibility is handled at a higher level
+                }
             }
         }
 
