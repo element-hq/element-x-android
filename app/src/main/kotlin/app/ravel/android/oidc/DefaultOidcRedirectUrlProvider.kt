@@ -12,7 +12,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.matrix.api.auth.OidcRedirectUrlProvider
 import io.element.android.services.toolbox.api.strings.StringProvider
-import io.element.android.x.R
+import app.ravel.android.R
 
 @ContributesBinding(AppScope::class)
 class DefaultOidcRedirectUrlProvider(
