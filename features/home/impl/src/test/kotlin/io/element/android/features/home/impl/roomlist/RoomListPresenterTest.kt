@@ -682,6 +682,11 @@ class RoomListPresenterTest {
             sessionCoroutineScope = backgroundScope,
             dateTimeObserver = FakeDateTimeObserver(),
             analyticsService = FakeAnalyticsService(),
+            bridgeEnrichmentService = io.element.android.features.home.impl.bridge.BridgeEnrichmentService(
+                client = client,
+                cache = io.element.android.features.home.impl.bridge.BridgeTypeCache(),
+            ),
+            bridgeTypeCache = io.element.android.features.home.impl.bridge.BridgeTypeCache(),
         ),
         searchPresenter = searchPresenter,
         sessionPreferencesStore = sessionPreferencesStore,

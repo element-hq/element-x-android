@@ -8,6 +8,7 @@
 
 package io.element.android.features.home.impl.datasource
 
+import io.element.android.features.home.impl.bridge.BridgeTypeCache
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.eventformatter.api.RoomLatestEventFormatter
@@ -16,7 +17,9 @@ import io.element.android.libraries.eventformatter.test.FakeRoomLatestEventForma
 fun aRoomListRoomSummaryFactory(
     dateFormatter: DateFormatter = FakeDateFormatter { _, _, _ -> "Today" },
     roomLatestEventFormatter: RoomLatestEventFormatter = FakeRoomLatestEventFormatter(),
+    bridgeTypeCache: BridgeTypeCache = BridgeTypeCache(),
 ) = RoomListRoomSummaryFactory(
     dateFormatter = dateFormatter,
     roomLatestEventFormatter = roomLatestEventFormatter,
+    bridgeTypeCache = bridgeTypeCache,
 )
