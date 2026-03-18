@@ -330,4 +330,15 @@ object LightColorTokens {
     val colorYellow700 = Color(0xffdea200)
     val colorYellow800 = Color(0xffbe7a00)
     val colorYellow900 = Color(0xff9f5b00)
+
+    // Ravel brand purple tokens (same values as dark — purple works on both)
+    val colorRavelAccentRest = Color(0xff6348ea)
+    val colorRavelAccentHovered = Color(0xff7a62ef)
+    val colorRavelAccentPressed = Color(0xff4f39c7)
+    val colorRavelAccentSubtle = Color(0xffe8e4fc)    // light tint for light mode
+    val colorRavelAccentMuted = Color(0xffd0c9f9)
+    val colorRavelGradient1 = Color(0xff7a62ef)
+    val colorRavelGradient2 = Color(0xff6348ea)
+    val colorRavelGradient3 = Color(0xff4f39c7)
+    val colorRavelGradient4 = Color(0xff2d228a)
 }

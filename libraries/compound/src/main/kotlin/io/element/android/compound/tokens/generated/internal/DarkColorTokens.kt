@@ -330,4 +330,15 @@ object DarkColorTokens {
     val colorYellow700 = Color(0xff7c3e02)
     val colorYellow800 = Color(0xff9d5b00)
     val colorYellow900 = Color(0xffbc7a00)
+
+    // Ravel brand purple tokens
+    val colorRavelAccentRest = Color(0xff6348ea)      // Majorelle Blue
+    val colorRavelAccentHovered = Color(0xff7a62ef)   // lighter
+    val colorRavelAccentPressed = Color(0xff4f39c7)   // darker
+    val colorRavelAccentSubtle = Color(0xff1c145d)    // Deep Twilight
+    val colorRavelAccentMuted = Color(0xff151048)     // Dark Amethyst 2
+    val colorRavelGradient1 = Color(0xff7a62ef)
+    val colorRavelGradient2 = Color(0xff6348ea)
+    val colorRavelGradient3 = Color(0xff4f39c7)
+    val colorRavelGradient4 = Color(0xff100e3a)
 }
