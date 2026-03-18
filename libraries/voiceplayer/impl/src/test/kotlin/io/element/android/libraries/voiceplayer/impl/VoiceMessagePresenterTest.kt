@@ -19,6 +19,7 @@ import io.element.android.libraries.voiceplayer.api.VoiceMessageState
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.test
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -256,7 +257,9 @@ fun TestScope.createVoiceMessagePresenter(
         eventId = eventId,
         mediaSource = mediaSource,
         mimeType = mimeType,
-        filename = filename
+        filename = filename,
+        voiceMessageAudioManager = null,
+        sessionCoroutineScope = CoroutineScope(coroutineContext)
     ),
     voicePlayerStore = voicePlayerStore,
     eventId = eventId,

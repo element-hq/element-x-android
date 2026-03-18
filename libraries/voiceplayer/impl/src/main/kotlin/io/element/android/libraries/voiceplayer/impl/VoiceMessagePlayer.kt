@@ -12,9 +12,12 @@ import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.extensions.mapCatchingExceptions
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
+import io.element.android.libraries.voiceplayer.api.VoiceMessageAudioManager
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.combine
@@ -52,6 +55,11 @@ interface VoiceMessagePlayer {
      * The current state of this player.
      */
     val state: Flow<State>
+
+    /**
+     * Clean up resources when the player is no longer needed.
+     */
+    fun close()
 
     /**
      * Acquires control of the underlying [MediaPlayer] and prepares it
@@ -122,11 +130,17 @@ class DefaultVoiceMessagePlayer(
     mediaSource: MediaSource,
     mimeType: String?,
     filename: String?,
+    private val voiceMessageAudioManager: VoiceMessageAudioManager?,
+    @SessionCoroutineScope
+    private val sessionCoroutineScope: CoroutineScope,
 ) : VoiceMessagePlayer {
     @ContributesBinding(RoomScope::class) // Scoped types can't use @Inject.
     class Factory(
         private val mediaPlayer: MediaPlayer,
         private val voiceMessageMediaRepoFactory: VoiceMessageMediaRepo.Factory,
+        private val voiceMessageAudioManager: VoiceMessageAudioManager?,
+        @SessionCoroutineScope
+        private val sessionCoroutineScope: CoroutineScope,
     ) : VoiceMessagePlayer.Factory {
         override fun create(
             eventId: EventId?,
@@ -140,6 +154,8 @@ class DefaultVoiceMessagePlayer(
             mediaSource = mediaSource,
             mimeType = mimeType,
             filename = filename,
+            voiceMessageAudioManager = voiceMessageAudioManager,
+            sessionCoroutineScope = sessionCoroutineScope,
         )
     }
 
@@ -158,6 +174,10 @@ class DefaultVoiceMessagePlayer(
             duration = null
         )
     )
+
+    override fun close() {
+        voiceMessageAudioManager?.stopRouting()
+    }
 
     override val state: Flow<VoiceMessagePlayer.State> = combine(mediaPlayer.state, internalState) { mediaPlayerState, internalState ->
         if (mediaPlayerState.isMyTrack) {
@@ -204,6 +224,7 @@ class DefaultVoiceMessagePlayer(
 
     override fun play() {
         if (inControl()) {
+            voiceMessageAudioManager?.startRouting()
             mediaPlayer.play()
         }
     }
@@ -211,6 +232,7 @@ class DefaultVoiceMessagePlayer(
     override fun pause() {
         if (inControl()) {
             mediaPlayer.pause()
+            voiceMessageAudioManager?.stopRouting()
         }
     }
 
