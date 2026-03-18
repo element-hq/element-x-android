@@ -241,6 +241,7 @@ private fun NameAndTimestampRow(
                     BridgeType.IMESSAGE -> R.drawable.ic_bridge_imessage
                     BridgeType.SLACK -> R.drawable.ic_bridge_slack
                     BridgeType.GOOGLE_CHAT -> R.drawable.ic_bridge_gchat
+                    BridgeType.GOOGLE_MESSAGES -> R.drawable.ic_bridge_gmessages
                     BridgeType.GENERIC -> R.drawable.ic_bridge_generic
                 }
                 Image(

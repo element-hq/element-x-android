@@ -16,5 +16,6 @@ enum class BridgeType {
     IMESSAGE,
     SLACK,
     GOOGLE_CHAT,
+    GOOGLE_MESSAGES, // RCS via mautrix-gmessages
     GENERIC,    // unknown bridge bot — fallback icon
 }

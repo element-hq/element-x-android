@@ -29,6 +29,7 @@ object BridgeDetector {
         localPart.contains("facebook") || localPart.contains("messenger") || localPart.contains("instagram") || localPart.contains("meta") -> BridgeType.META
         localPart.contains("imessage") || localPart.contains("apple") -> BridgeType.IMESSAGE
         localPart.contains("slack") -> BridgeType.SLACK
+        localPart.contains("gmessage") || localPart.contains("rcs") -> BridgeType.GOOGLE_MESSAGES
         localPart.contains("gchat") || localPart.contains("googlechat") || localPart.contains("google") -> BridgeType.GOOGLE_CHAT
         localPart.endsWith("bot") -> BridgeType.GENERIC
         else -> null
