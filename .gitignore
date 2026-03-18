@@ -115,3 +115,6 @@ lint/tmp/
 .DS_Store
 
 checkouts/**
+
+# Ravel keystore
+ravel.keystore
