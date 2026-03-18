@@ -34,7 +34,7 @@ id("kotlin-parcelize")
 }
 
 android {
-    namespace = "io.element.android.x"
+    namespace = "app.ravel.android"
 
     defaultConfig {
         applicationId = BuildTimeConfig.APPLICATION_ID
