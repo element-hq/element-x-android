@@ -49,6 +49,9 @@ class AdvancedSettingsPresenter(
         val isUrlPreviewEnabled by remember {
             sessionPreferencesStore.isUrlPreviewEnabled()
         }.collectAsState(initial = false)
+        val isDynamicColorEnabled by remember {
+            appPreferencesStore.isDynamicColorEnabledFlow()
+        }.collectAsState(initial = true)
         val theme = remember {
             appPreferencesStore.getThemeFlow().mapToTheme()
         }.collectAsState(initial = Theme.System)
@@ -106,6 +109,9 @@ class AdvancedSettingsPresenter(
                 is AdvancedSettingsEvents.SetCompressMedia -> sessionCoroutineScope.launch {
                     sessionPreferencesStore.setOptimizeImages(event.compress)
                 }
+                is AdvancedSettingsEvents.SetDynamicColorEnabled -> sessionCoroutineScope.launch {
+                    appPreferencesStore.setDynamicColorEnabled(event.enabled)
+                }
                 is AdvancedSettingsEvents.SetTheme -> sessionCoroutineScope.launch {
                     when (event.theme) {
                         ThemeOption.System -> appPreferencesStore.setTheme(Theme.System.name)
@@ -134,6 +140,7 @@ class AdvancedSettingsPresenter(
             isDeveloperModeEnabled = isDeveloperModeEnabled,
             isSharePresenceEnabled = isSharePresenceEnabled,
             isUrlPreviewEnabled = isUrlPreviewEnabled,
+            isDynamicColorEnabled = isDynamicColorEnabled,
             mediaOptimizationState = mediaOptimizationState,
             theme = themeOption,
             timelineLayoutMode = if (isModernLayoutEnabled == true) timelineLayoutMode else null,

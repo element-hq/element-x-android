@@ -14,4 +14,6 @@
   -->
   <string name="screen_advanced_settings_url_preview_title">"Show link previews"</string>
   <string name="screen_advanced_settings_url_preview_description">"Show link previews in all rooms where link previews are enabled"</string>
+  <string name="screen_advanced_settings_dynamic_color_title">"Material You colors"</string>
+  <string name="screen_advanced_settings_dynamic_color_description">"Use colors from your wallpaper to theme the app"</string>
 </resources>

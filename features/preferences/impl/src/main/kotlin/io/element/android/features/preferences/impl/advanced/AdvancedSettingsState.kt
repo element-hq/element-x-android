@@ -21,6 +21,7 @@ data class AdvancedSettingsState(
     val isDeveloperModeEnabled: Boolean,
     val isSharePresenceEnabled: Boolean,
     val isUrlPreviewEnabled: Boolean,
+    val isDynamicColorEnabled: Boolean,
     val mediaOptimizationState: MediaOptimizationState?,
     val theme: ThemeOption,
     val timelineLayoutMode: TimelineLayoutMode?,

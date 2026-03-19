@@ -63,6 +63,10 @@ fun ElementThemeApp(
         appPreferencesStore.getThemeFlow().mapToTheme()
     }
         .collectAsState(initial = Theme.System)
+    val dynamicColor by remember {
+        appPreferencesStore.isDynamicColorEnabledFlow()
+    }
+        .collectAsState(initial = true)
     LaunchedEffect(theme) {
         AppCompatDelegate.setDefaultNightMode(
             when (theme) {
@@ -77,6 +81,7 @@ fun ElementThemeApp(
     ) {
         ElementTheme(
             darkTheme = theme.isDark(),
+            dynamicColor = dynamicColor,
             content = content,
             compoundLight = compoundLight,
             compoundDark = compoundDark,

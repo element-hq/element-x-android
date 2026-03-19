@@ -32,6 +32,7 @@ private val timelineMediaPreviewValueKey = stringPreferencesKey("timelineMediaPr
 private val logLevelKey = stringPreferencesKey("logLevel")
 private val traceLogPacksKey = stringPreferencesKey("traceLogPacks")
 private val timelineLayoutModeKey = stringPreferencesKey("timelineLayoutMode")
+private val dynamicColorKey = booleanPreferencesKey("dynamicColor")
 
 @ContributesBinding(AppScope::class)
 class DefaultAppPreferencesStore(
@@ -92,6 +93,18 @@ class DefaultAppPreferencesStore(
     override fun getThemeFlow(): Flow<String?> {
         return store.data.map { prefs ->
             prefs[themeKey]
+        }
+    }
+
+    override suspend fun setDynamicColorEnabled(enabled: Boolean) {
+        store.edit { prefs ->
+            prefs[dynamicColorKey] = enabled
+        }
+    }
+
+    override fun isDynamicColorEnabledFlow(): Flow<Boolean> {
+        return store.data.map { prefs ->
+            prefs[dynamicColorKey] ?: true // Enabled by default
         }
     }
 
