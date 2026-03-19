@@ -48,7 +48,11 @@ export JAVA_HOME
 # Build Gradle tasks for each changed module
 KTLINT_TASKS=$(echo "$MODULES" | sed 's/$/:ktlintCheck/' | tr '\n' ' ')
 # :app has product flavors so lintDebug is ambiguous; use lintGplayDebug instead
-LINT_TASKS=$(echo "$MODULES" | sed 's|^:app$|:app:lintGplayDebug|; t; s/$/:lintDebug/' | tr '\n' ' ')
+LINT_TASKS=$(echo "$MODULES" | while read -r m; do
+    if [ "$m" = ":app" ]; then echo ":app:lintGplayDebug"
+    else echo "${m}:lintDebug"
+    fi
+done | tr '\n' ' ')
 
 echo ""
 echo "▶ ktlintCheck..."
