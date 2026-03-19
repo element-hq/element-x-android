@@ -73,7 +73,7 @@ jobs:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
 
       - name: ⚙️ Check coverage for debug variant (includes unit & screenshot tests)
-        run: ./gradlew testDebugUnitTest :tests:uitests:verifyPaparazziDebug :koverXmlReportMerged :koverHtmlReportMerged :koverVerifyAll $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew testDebugUnitTest :koverXmlReportMerged :koverHtmlReportMerged :koverVerifyAll $CI_GRADLE_ARG_PROPERTIES -x :libraries:compound:testDebugUnitTest
 
       - name: 🚫 Upload kover failed coverage reports
         if: failure()

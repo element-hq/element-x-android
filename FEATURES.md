@@ -30,6 +30,22 @@ git merge upstream/develop
 
 ---
 
+## Tracking — Upstream Dependencies
+
+### 🔲 m.bridge state event detection (bridge icons improvement)
+**Status:** Blocked on Matrix Rust SDK FFI  
+**Filed:** 2026-03-18
+
+Currently bridge type detection uses member list inspection (heuristic). mautrix sets an `m.bridge` state event on every bridged room with exact protocol info, but the Rust SDK doesn't expose arbitrary state event fetching via FFI yet.
+
+**Monitor:**
+- https://github.com/matrix-org/matrix-rust-sdk/issues — search `state event` or `getStateEvent`
+- https://github.com/element-hq/element-x-android/issues — they'll add it when they need it
+
+**When available:** Replace `BridgeEnrichmentService.getMembers()` heuristic with `room.getStateEvent("m.bridge", "")` and parse `content.protocol.id`. See `features/home/impl/.../bridge/BridgeEnrichmentService.kt`.
+
+---
+
 ## Active Divergences
 
 ### 1. MSC4171 — Bridge Service Members / isDM() Fix
@@ -73,3 +89,24 @@ _(nothing yet)_
 - mautrix bridges: https://docs.mau.fi/bridges/
 - MSC4171: https://github.com/matrix-org/matrix-spec-proposals/blob/tulir/service-members/proposals/4171-service-members.md
 - SchildiChat Next (fork reference): https://github.com/SchildiChat/schildichat-android-next
+
+---
+
+## Local Development Notes
+
+### Installing builds on emulator
+Always use `adb install -r` to preserve app data (session, login state):
+```bash
+export PATH=$PATH:~/Library/Android/sdk/platform-tools
+adb install -r app/build/outputs/apk/fdroid/debug/app-fdroid-universal-debug.apk
+adb shell am start -n "app.ravel.android.debug/app.ravel.android.MainActivity"
+```
+
+Never use `adb uninstall` + `adb install` — that wipes the session and forces re-login.
+
+### Build command
+```bash
+JAVA_HOME=$(/usr/libexec/java_home -v 21) \
+ANDROID_HOME=~/Library/Android/sdk \
+./gradlew assembleFdroidDebug --no-daemon --no-configuration-cache
+```

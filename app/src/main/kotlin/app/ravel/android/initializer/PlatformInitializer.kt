@@ -11,11 +11,11 @@ package app.ravel.android.initializer
 import android.content.Context
 import android.system.Os
 import androidx.startup.Initializer
+import app.ravel.android.di.AppBindings
 import io.element.android.features.rageshake.api.logs.createWriteToFilesConfiguration
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.tracing.TracingConfiguration
-import app.ravel.android.di.AppBindings
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber

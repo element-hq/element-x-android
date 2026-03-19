@@ -26,6 +26,8 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
+import app.ravel.android.di.AppBindings
+import app.ravel.android.intent.SafeUriHandler
 import com.bumble.appyx.core.integrationpoint.NodeActivity
 import com.bumble.appyx.core.plugin.NodeReadyObserver
 import io.element.android.compound.colors.SemanticColorsLightDark
@@ -40,8 +42,6 @@ import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.designsystem.theme.ElementThemeApp
 import io.element.android.libraries.designsystem.utils.snackbar.LocalSnackbarDispatcher
 import io.element.android.services.analytics.compose.LocalAnalyticsService
-import app.ravel.android.di.AppBindings
-import app.ravel.android.intent.SafeUriHandler
 import kotlinx.coroutines.launch
 import timber.log.Timber
 

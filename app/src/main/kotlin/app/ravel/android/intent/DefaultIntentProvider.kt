@@ -12,6 +12,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.core.net.toUri
+import app.ravel.android.MainActivity
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.deeplink.api.DeepLinkCreator
@@ -21,7 +22,6 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.push.impl.intent.IntentProvider
-import app.ravel.android.MainActivity
 
 @ContributesBinding(AppScope::class)
 class DefaultIntentProvider(

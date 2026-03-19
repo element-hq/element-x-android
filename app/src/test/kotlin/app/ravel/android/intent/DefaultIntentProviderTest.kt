@@ -8,10 +8,11 @@
 
 @file:Suppress("SameParameterValue")
 
-package io.element.android.x.intent
+package app.ravel.android.intent
 
 import android.content.Context
 import android.content.Intent
+import app.ravel.android.MainActivity
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.deeplink.api.DeepLinkCreator
 import io.element.android.libraries.matrix.api.core.EventId
@@ -24,7 +25,6 @@ import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
-import io.element.android.x.MainActivity
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
