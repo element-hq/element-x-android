@@ -312,12 +312,13 @@ private fun ThreadSummaryView(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val bubbleShape = MaterialTheme.shapes.small
     BoxWithConstraints(modifier = modifier) {
         Row(
             modifier = Modifier
                 .then(if (!isOutgoing) Modifier.padding(start = 16.dp) else Modifier)
                 .graphicsLayer {
-                    shape = MaterialTheme.shapes.small
+                    shape = bubbleShape
                     clip = true
                 }
                 .background(MessageEventBubbleDefaults.backgroundBubbleColor(isOutgoing))
