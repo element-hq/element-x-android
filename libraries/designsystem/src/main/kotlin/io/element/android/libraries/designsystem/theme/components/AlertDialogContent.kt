@@ -397,7 +397,7 @@ internal object DialogContentDefaults {
     val containerColor: Color
         @Composable
         @ReadOnlyComposable
-        get() = ElementTheme.colors.bgCanvasDefault
+        get() = ElementTheme.materialColors.surfaceContainerHigh
 
     val textContentColor: Color
         @Composable

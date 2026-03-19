@@ -48,7 +48,7 @@ fun ModalBottomSheet(
     modifier: Modifier = Modifier,
     sheetState: SheetState = rememberModalBottomSheetState(),
     shape: Shape = BottomSheetDefaults.ExpandedShape,
-    containerColor: Color = ElementTheme.materialColors.surface,
+    containerColor: Color = ElementTheme.materialColors.surfaceContainerLow,
     contentColor: Color = contentColorFor(containerColor),
     tonalElevation: Dp = if (ElementTheme.isLightTheme) 0.dp else BottomSheetDefaults.Elevation,
     scrimColor: Color = BottomSheetDefaults.ScrimColor,

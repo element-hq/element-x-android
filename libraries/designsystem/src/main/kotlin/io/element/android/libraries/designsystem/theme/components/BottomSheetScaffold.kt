@@ -32,7 +32,7 @@ fun BottomSheetScaffold(
     scaffoldState: BottomSheetScaffoldState = rememberBottomSheetScaffoldState(),
     sheetPeekHeight: Dp = BottomSheetDefaults.SheetPeekHeight,
     sheetShape: Shape = BottomSheetDefaults.ExpandedShape,
-    sheetContainerColor: Color = ElementTheme.materialColors.surface,
+    sheetContainerColor: Color = ElementTheme.materialColors.surfaceContainerLow,
     sheetContentColor: Color = contentColorFor(sheetContainerColor),
     sheetTonalElevation: Dp = BottomSheetDefaults.Elevation,
     sheetShadowElevation: Dp = BottomSheetDefaults.Elevation,
