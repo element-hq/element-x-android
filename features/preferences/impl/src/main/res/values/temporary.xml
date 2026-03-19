@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <!-- Please add these strings to Localazy:
+       screen_advanced_settings_timeline_layout
+       screen_advanced_settings_timeline_layout_bubble
+       screen_advanced_settings_timeline_layout_modern
+  -->
+  <string name="screen_advanced_settings_timeline_layout">"Timeline style"</string>
+  <string name="screen_advanced_settings_timeline_layout_bubble">"Bubble"</string>
+  <string name="screen_advanced_settings_timeline_layout_modern">"Modern"</string>
+</resources>

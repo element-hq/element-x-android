@@ -18,6 +18,8 @@ import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -44,4 +46,10 @@ internal fun TimelineThreadDecoration(
             modifier = Modifier.clearAndSetSemantics { }
         )
     }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineThreadDecorationPreview() = ElementPreview {
+    TimelineThreadDecoration()
 }

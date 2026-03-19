@@ -13,7 +13,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.aTimelineRoomInfo
+import io.element.android.features.messages.impl.timeline.components.receipt.aReadReceiptData
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
+import io.element.android.features.messages.impl.timeline.model.TimelineItemReadReceipts
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -22,8 +24,6 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetailsProvider
-import io.element.android.features.messages.impl.timeline.components.receipt.aReadReceiptData
-import io.element.android.features.messages.impl.timeline.model.TimelineItemReadReceipts
 import io.element.android.libraries.preferences.api.store.TimelineLayoutMode
 import kotlinx.collections.immutable.toImmutableList
 
