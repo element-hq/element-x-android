@@ -12,10 +12,4 @@
     <!-- Must be equal to LightColorTokens.colorThemeBg -->
     <color name="splashscreen_bg_light">#FF0c0c2d</color>
 
-    <!-- Ravel brand palette -->
-    <color name="ravel_majorelle_blue">#FF6348ea</color>
-    <color name="ravel_prussian_blue">#FF0c0c2d</color>
-    <color name="ravel_dark_amethyst">#FF100e3a</color>
-    <color name="ravel_deep_twilight">#FF1c145d</color>
-    <color name="ravel_dark_amethyst_2">#FF151048</color>
 </resources>
