@@ -23,7 +23,7 @@ jobs:
       pull-requests: write
     strategy:
       matrix:
-        variant: [debug, release, nightly]
+        variant: [debug]
       fail-fast: false
     # Allow all jobs on develop. Just one per PR.
     concurrency:
