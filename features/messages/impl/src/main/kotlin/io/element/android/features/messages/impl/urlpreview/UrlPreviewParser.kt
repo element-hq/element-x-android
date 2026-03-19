@@ -39,7 +39,7 @@ internal fun hostNameFromUrl(url: String): String {
 }
 
 private fun CharSequence.extractUrlSpans(): List<String> {
-    val spanned = this as? Spanned ?: toSpannable() ?: return emptyList()
+    val spanned = this as? Spanned ?: toSpannable()
     return spanned.getSpans(0, spanned.length, URLSpan::class.java)
         .orEmpty()
         .sortedBy { spanned.getSpanStart(it) }

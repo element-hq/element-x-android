@@ -9,7 +9,6 @@
 package io.element.android.features.messages.impl.urlpreview
 
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.androidutils.json.JsonProvider
 import io.element.android.libraries.core.extensions.mapCatchingExceptions
@@ -25,11 +24,10 @@ import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
 import java.net.URI
 import java.net.URLEncoder
-import java.nio.charset.StandardCharsets
 
 @ContributesBinding(SessionScope::class)
 @SingleIn(SessionScope::class)
-class DefaultUrlPreviewService @Inject constructor(
+class DefaultUrlPreviewService(
     private val matrixClient: MatrixClient,
     private val sessionStore: SessionStore,
     private val json: JsonProvider,
@@ -108,8 +106,8 @@ class DefaultUrlPreviewService @Inject constructor(
 }
 
 private fun buildPreviewEndpoints(homeserverUrl: String, url: String, accessToken: String): List<String> {
-    val encodedUrl = URLEncoder.encode(url, StandardCharsets.UTF_8)
-    val encodedAccessToken = URLEncoder.encode(accessToken, StandardCharsets.UTF_8)
+    val encodedUrl = URLEncoder.encode(url, "UTF-8")
+    val encodedAccessToken = URLEncoder.encode(accessToken, "UTF-8")
     val normalizedBase = if (homeserverUrl.endsWith("/")) homeserverUrl else "$homeserverUrl/"
     val baseUri = URI(normalizedBase)
     return listOf(
