@@ -21,7 +21,10 @@
     <issue id="IconXmlAndPng" severity="error" />
     <issue id="IconDipSize" severity="error" />
     <issue id="IconDuplicatesConfig" severity="error" />
-    <issue id="IconDuplicates" severity="error" />
+    <issue id="IconDuplicates" severity="error">
+        <!-- ic_launcher_monochrome uses same asset as ic_launcher until a proper monochrome icon is designed (tracked in issue #3) -->
+        <ignore path="**/ic_launcher_monochrome.webp" />
+    </issue>
     <issue id="IconExpectedSize" severity="error">
         <ignore path="**/ic_launcher_monochrome.webp" />
     </issue>
