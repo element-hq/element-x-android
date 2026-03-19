@@ -60,7 +60,7 @@ internal fun MonochromeIconPreview() {
             .background(Color(0xFF2F3133)),
     ) {
         Image(
-            painter = painterResource(id = R.mipmap.ic_launcher_monochrome),
+            painter = painterResource(id = R.mipmap.ic_launcher_foreground),
             colorFilter = ColorFilter.tint(Color(0xFFC3E0F6)),
             contentDescription = null
         )
