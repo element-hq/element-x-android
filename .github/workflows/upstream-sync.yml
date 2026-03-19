@@ -16,9 +16,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout full history
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
+          persist-credentials: false
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Configure git identity
@@ -76,23 +77,25 @@ jobs:
 
       - name: Push sync branch
         if: steps.check.outputs.has_changes == 'true'
+        env:
+          SYNC_BRANCH: ${{ steps.merge.outputs.branch }}
         run: |
           set -e
-          git push origin "${{ steps.merge.outputs.branch }}"
+          git push origin "$SYNC_BRANCH"
 
       - name: Build PR body
         if: steps.check.outputs.has_changes == 'true'
         id: body
+        env:
+          MERGE_BASE: ${{ steps.check.outputs.merge_base }}
+          SYNC_DATE: ${{ steps.merge.outputs.date }}
+          HAS_CONFLICTS: ${{ steps.merge.outputs.has_conflicts }}
         run: |
           set -e
-          MERGE_BASE="${{ steps.check.outputs.merge_base }}"
-          DATE="${{ steps.merge.outputs.date }}"
-          HAS_CONFLICTS="${{ steps.merge.outputs.has_conflicts }}"
-
           {
             echo "body<<PREOF"
 
-            echo "## 📥 Upstream Sync — ${DATE}"
+            echo "## 📥 Upstream Sync — ${SYNC_DATE}"
             echo ""
             echo "Automated merge of \`element-hq/element-x-android\` develop into Ravel develop."
             echo ""
@@ -146,13 +149,16 @@ jobs:
 
       - name: Open pull request
         if: steps.check.outputs.has_changes == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SYNC_BRANCH: ${{ steps.merge.outputs.branch }}
+          SYNC_DATE: ${{ steps.merge.outputs.date }}
+          PR_BODY: ${{ steps.body.outputs.body }}
         run: |
           set -e
           gh pr create \
             --base develop \
-            --head "${{ steps.merge.outputs.branch }}" \
-            --title "chore: upstream sync ${{ steps.merge.outputs.date }}" \
+            --head "$SYNC_BRANCH" \
+            --title "chore: upstream sync ${SYNC_DATE}" \
             --label "upstream-sync" \
-            --body "${{ steps.body.outputs.body }}"
-        env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+            --body "$PR_BODY"
