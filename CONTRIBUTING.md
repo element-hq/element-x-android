@@ -15,6 +15,7 @@
   * [Changelog](#changelog)
   * [Code quality](#code-quality)
     * [detekt](#detekt)
+    * [Git hooks](#git-hooks)
     * [ktlint](#ktlint)
     * [checkDocs](#checkdocs)
     * [lint](#lint)
