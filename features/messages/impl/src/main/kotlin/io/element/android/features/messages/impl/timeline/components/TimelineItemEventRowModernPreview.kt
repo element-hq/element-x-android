@@ -72,6 +72,15 @@ internal fun TimelineItemEventRowModernMinePreview() = ElementPreview {
             ),
             timelineRoomInfo = modernRoomInfo,
         )
+        // Own message, middle in group (no avatar/name shown)
+        ATimelineItemEventRow(
+            event = aTimelineItemEvent(
+                isMine = true,
+                content = aTimelineItemTextContent(body = "Middle message, no avatar or name."),
+                groupPosition = TimelineItemGroupPosition.Middle,
+            ),
+            timelineRoomInfo = modernRoomInfo,
+        )
         ATimelineItemEventRow(
             event = aTimelineItemEvent(
                 isMine = true,
