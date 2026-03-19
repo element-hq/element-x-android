@@ -228,6 +228,7 @@ class RoomListPresenterTest {
                             isFavorite = false,
                             hasNewContent = false,
                             displayClearRoomCacheAction = false,
+                            roomSummary = summary,
                         )
                     )
             }
@@ -245,6 +246,7 @@ class RoomListPresenterTest {
                             isFavorite = true,
                             hasNewContent = false,
                             displayClearRoomCacheAction = false,
+                            roomSummary = summary,
                         )
                     )
             }
@@ -273,6 +275,7 @@ class RoomListPresenterTest {
                             // true here.
                             hasNewContent = false,
                             displayClearRoomCacheAction = true,
+                            roomSummary = summary,
                         )
                     )
             }
@@ -301,6 +304,7 @@ class RoomListPresenterTest {
                         isFavorite = false,
                         hasNewContent = false,
                         displayClearRoomCacheAction = false,
+                        roomSummary = summary,
                     )
                 )
 
