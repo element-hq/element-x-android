@@ -246,9 +246,14 @@ private fun LazyListScope.roomMemberListSectionItems(
     members: ImmutableList<RoomMemberWithIdentityState>?,
     onMemberSelected: (RoomMember) -> Unit,
 ) {
-    items(members.orEmpty()) { matrixUser ->
+    items(
+        items = members.orEmpty(),
+        key = { it.roomMember.userId.value },
+    ) { matrixUser ->
         RoomMemberListItem(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .animateItem()
+                .fillMaxWidth(),
             roomMemberWithIdentity = matrixUser,
             onClick = { onMemberSelected(matrixUser.roomMember) }
         )

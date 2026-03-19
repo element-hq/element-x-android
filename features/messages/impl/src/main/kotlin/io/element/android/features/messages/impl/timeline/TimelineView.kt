@@ -164,6 +164,7 @@ fun TimelineView(
                     key = { timelineItem -> timelineItem.identifier() },
                 ) { timelineItem ->
                     TimelineItemRow(
+                        modifier = Modifier.animateItem(),
                         timelineItem = timelineItem,
                         timelineMode = state.timelineMode,
                         timelineRoomInfo = state.timelineRoomInfo,

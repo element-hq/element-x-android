@@ -41,6 +41,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.compose.material3.minimumInteractiveComponentSize
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.home.impl.R
@@ -146,6 +147,7 @@ private fun RoomListClearFiltersButton(
 ) {
     Box(
         modifier = modifier
+            .minimumInteractiveComponentSize()
             .clip(CircleShape)
             .background(ElementTheme.colors.bgActionPrimaryRest)
             .clickable(onClick = onClick)
