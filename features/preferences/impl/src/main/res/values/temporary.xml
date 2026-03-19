@@ -8,4 +8,10 @@
   <string name="screen_advanced_settings_timeline_layout">"Timeline style"</string>
   <string name="screen_advanced_settings_timeline_layout_bubble">"Bubble"</string>
   <string name="screen_advanced_settings_timeline_layout_modern">"Modern"</string>
+  <!-- Please add these strings to Localazy:
+       screen_advanced_settings_url_preview_title
+       screen_advanced_settings_url_preview_description
+  -->
+  <string name="screen_advanced_settings_url_preview_title">"Show link previews"</string>
+  <string name="screen_advanced_settings_url_preview_description">"Show link previews in all rooms where link previews are enabled"</string>
 </resources>

@@ -46,6 +46,9 @@ class AdvancedSettingsPresenter(
         val isSharePresenceEnabled by remember {
             sessionPreferencesStore.isSharePresenceEnabled()
         }.collectAsState(initial = true)
+        val isUrlPreviewEnabled by remember {
+            sessionPreferencesStore.isUrlPreviewEnabled()
+        }.collectAsState(initial = false)
         val theme = remember {
             appPreferencesStore.getThemeFlow().mapToTheme()
         }.collectAsState(initial = Theme.System)
@@ -121,12 +124,16 @@ class AdvancedSettingsPresenter(
                 is AdvancedSettingsEvents.SetTimelineLayoutMode -> sessionCoroutineScope.launch {
                     appPreferencesStore.setTimelineLayoutMode(event.mode)
                 }
+                is AdvancedSettingsEvents.SetUrlPreviewEnabled -> sessionCoroutineScope.launch {
+                    sessionPreferencesStore.setUrlPreviewEnabled(event.enabled)
+                }
             }
         }
 
         return AdvancedSettingsState(
             isDeveloperModeEnabled = isDeveloperModeEnabled,
             isSharePresenceEnabled = isSharePresenceEnabled,
+            isUrlPreviewEnabled = isUrlPreviewEnabled,
             mediaOptimizationState = mediaOptimizationState,
             theme = themeOption,
             timelineLayoutMode = if (isModernLayoutEnabled == true) timelineLayoutMode else null,

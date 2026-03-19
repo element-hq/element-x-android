@@ -22,4 +22,5 @@ sealed interface AdvancedSettingsEvents {
     data class SetTimelineMediaPreviewValue(val value: MediaPreviewValue) : AdvancedSettingsEvents
     data class SetHideInviteAvatars(val value: Boolean) : AdvancedSettingsEvents
     data class SetTimelineLayoutMode(val mode: TimelineLayoutMode) : AdvancedSettingsEvents
+    data class SetUrlPreviewEnabled(val enabled: Boolean) : AdvancedSettingsEvents
 }

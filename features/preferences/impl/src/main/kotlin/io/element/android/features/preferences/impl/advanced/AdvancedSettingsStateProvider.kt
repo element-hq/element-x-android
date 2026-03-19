@@ -20,6 +20,7 @@ open class AdvancedSettingsStateProvider : PreviewParameterProvider<AdvancedSett
             aAdvancedSettingsState(),
             aAdvancedSettingsState(isDeveloperModeEnabled = true),
             aAdvancedSettingsState(isSharePresenceEnabled = true),
+            aAdvancedSettingsState(isUrlPreviewEnabled = true),
             aAdvancedSettingsState(mediaOptimizationState = MediaOptimizationState.AllMedia(isEnabled = true)),
             aAdvancedSettingsState(hideInviteAvatars = true),
             aAdvancedSettingsState(timelineMediaPreviewValue = MediaPreviewValue.Off),
@@ -37,6 +38,7 @@ open class AdvancedSettingsStateProvider : PreviewParameterProvider<AdvancedSett
 fun aAdvancedSettingsState(
     isDeveloperModeEnabled: Boolean = false,
     isSharePresenceEnabled: Boolean = false,
+    isUrlPreviewEnabled: Boolean = false,
     mediaOptimizationState: MediaOptimizationState = MediaOptimizationState.AllMedia(isEnabled = false),
     theme: ThemeOption = ThemeOption.System,
     timelineLayoutMode: TimelineLayoutMode? = null,
@@ -48,6 +50,7 @@ fun aAdvancedSettingsState(
 ) = AdvancedSettingsState(
     isDeveloperModeEnabled = isDeveloperModeEnabled,
     isSharePresenceEnabled = isSharePresenceEnabled,
+    isUrlPreviewEnabled = isUrlPreviewEnabled,
     mediaOptimizationState = mediaOptimizationState,
     theme = theme,
     timelineLayoutMode = timelineLayoutMode,

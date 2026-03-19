@@ -38,6 +38,9 @@ class TimelineProtectionPresenter(
             mediaPreviewService.mediaPreviewConfigFlow.mapState { config -> config.mediaPreviewValue }
         }.collectAsState()
         val roomInfo = room.roomInfoFlow.collectAsState()
+        val isGlobalUrlPreviewEnabled by remember {
+            sessionPreferencesStore.isUrlPreviewEnabled()
+        }.collectAsState(initial = false)
         val isRoomUrlPreviewEnabled by remember(room.roomId) {
             sessionPreferencesStore.isRoomUrlPreviewEnabled(room.roomId.value)
         }.collectAsState(initial = false)
@@ -53,7 +56,7 @@ class TimelineProtectionPresenter(
         }
         val showUrlPreviews by remember {
             derivedStateOf {
-                mediaPreviewValue.value.isPreviewEnabled(roomInfo.value.joinRule) && isRoomUrlPreviewEnabled
+                mediaPreviewValue.value.isPreviewEnabled(roomInfo.value.joinRule) && isGlobalUrlPreviewEnabled && isRoomUrlPreviewEnabled
             }
         }
 

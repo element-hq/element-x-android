@@ -47,6 +47,7 @@ class DefaultSessionPreferencesStore(
     private val skipSessionVerification = booleanPreferencesKey("skipSessionVerification")
     private val compressImages = booleanPreferencesKey("compressMedia")
     private val compressMediaPreset = stringPreferencesKey("compressMediaPreset")
+    private val urlPreviewEnabledKey = booleanPreferencesKey("urlPreviewEnabled")
 
     private val dataStoreFile = storeFile(context, sessionId)
     private val store = PreferenceDataStoreFactory.create(
@@ -93,6 +94,9 @@ class DefaultSessionPreferencesStore(
     override suspend fun setVideoCompressionPreset(preset: VideoCompressionPreset) = update(compressMediaPreset, preset.name)
     override fun getVideoCompressionPreset(): Flow<VideoCompressionPreset> = get(compressMediaPreset) { VideoCompressionPreset.STANDARD.name }
         .map { tryOrNull { VideoCompressionPreset.valueOf(it) } ?: VideoCompressionPreset.STANDARD }
+
+    override suspend fun setUrlPreviewEnabled(enabled: Boolean) = update(urlPreviewEnabledKey, enabled)
+    override fun isUrlPreviewEnabled(): Flow<Boolean> = get(urlPreviewEnabledKey) { false }
 
     override suspend fun setRoomUrlPreviewEnabled(roomId: String, enabled: Boolean) = update(roomUrlPreviewKey(roomId), enabled)
     override fun isRoomUrlPreviewEnabled(roomId: String): Flow<Boolean> = get(roomUrlPreviewKey(roomId)) { false }
