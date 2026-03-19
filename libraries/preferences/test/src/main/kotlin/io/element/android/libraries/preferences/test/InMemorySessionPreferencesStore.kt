@@ -31,6 +31,7 @@ class InMemorySessionPreferencesStore(
     private val isSessionVerificationSkipped = MutableStateFlow(isSessionVerificationSkipped)
     private val doesCompressMedia = MutableStateFlow(doesCompressMedia)
     private val videoCompressionPreset = MutableStateFlow(videoCompressionPreset)
+    private val roomUrlPreviewEnabled = mutableMapOf<String, MutableStateFlow<Boolean>>()
     var clearCallCount = 0
         private set
 
@@ -84,8 +85,17 @@ class InMemorySessionPreferencesStore(
         return videoCompressionPreset
     }
 
+    override suspend fun setRoomUrlPreviewEnabled(roomId: String, enabled: Boolean) {
+        roomUrlPreviewEnabled.getOrPut(roomId) { MutableStateFlow(false) }.emit(enabled)
+    }
+
+    override fun isRoomUrlPreviewEnabled(roomId: String): Flow<Boolean> {
+        return roomUrlPreviewEnabled.getOrPut(roomId) { MutableStateFlow(false) }
+    }
+
     override suspend fun clear() {
         clearCallCount++
         isSendPublicReadReceiptsEnabled.tryEmit(true)
+        roomUrlPreviewEnabled.clear()
     }
 }

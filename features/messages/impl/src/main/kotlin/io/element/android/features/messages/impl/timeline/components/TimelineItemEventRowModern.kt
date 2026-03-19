@@ -135,7 +135,7 @@ internal fun TimelineItemEventRowModernContent(
                     .weight(1f)
                     .combinedClickable(
                         interactionSource = interactionSource,
-                        indication = ripple(),
+                        indication = remember { ripple() },
                         onClick = onContentClick,
                         onLongClick = onLongClick,
                     ),

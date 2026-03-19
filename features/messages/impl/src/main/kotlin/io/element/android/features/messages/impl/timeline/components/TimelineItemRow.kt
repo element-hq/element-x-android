@@ -80,6 +80,7 @@ internal fun TimelineItemRow(
             TimelineItemEventContentView(
                 content = event.content,
                 hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId),
+                showUrlPreviews = timelineProtectionState.showUrlPreviews,
                 onShowContentClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
                 onContentClick = { onContentClick(event) },
                 onLongClick = { onLongClick(event) },
