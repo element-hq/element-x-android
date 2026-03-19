@@ -11,14 +11,14 @@ package app.ravel.android
 import android.app.Application
 import androidx.startup.AppInitializer
 import androidx.work.Configuration
-import dev.zacsweers.metro.createGraphFactory
-import io.element.android.libraries.di.DependencyInjectionGraphOwner
-import io.element.android.libraries.workmanager.api.di.MetroWorkerFactory
 import app.ravel.android.di.AppGraph
 import app.ravel.android.info.logApplicationInfo
 import app.ravel.android.initializer.CacheCleanerInitializer
 import app.ravel.android.initializer.CrashInitializer
 import app.ravel.android.initializer.PlatformInitializer
+import dev.zacsweers.metro.createGraphFactory
+import io.element.android.libraries.di.DependencyInjectionGraphOwner
+import io.element.android.libraries.workmanager.api.di.MetroWorkerFactory
 
 class ElementXApplication : Application(), DependencyInjectionGraphOwner, Configuration.Provider {
     override val graph: AppGraph = createGraphFactory<AppGraph.Factory>().create(this)
