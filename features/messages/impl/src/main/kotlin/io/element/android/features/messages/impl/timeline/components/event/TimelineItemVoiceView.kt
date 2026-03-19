@@ -38,6 +38,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import androidx.compose.material3.minimumInteractiveComponentSize
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
@@ -244,6 +245,7 @@ private fun CustomIconButton(
     IconButton(
         onClick = onClick,
         modifier = Modifier
+            .minimumInteractiveComponentSize()
             .background(color = ElementTheme.colors.bgCanvasDefault, shape = CircleShape)
             .size(36.dp),
         enabled = enabled,

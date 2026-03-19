@@ -28,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.material3.minimumInteractiveComponentSize
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -108,7 +109,7 @@ private fun EditingModeView(
             contentDescription = stringResource(CommonStrings.action_close),
             tint = ElementTheme.colors.iconSecondary,
             modifier = Modifier
-                .padding(top = 8.dp, bottom = 8.dp, start = 16.dp, end = 12.dp)
+                .minimumInteractiveComponentSize()
                 .size(16.dp)
                 .clickable(
                     enabled = true,
@@ -143,7 +144,7 @@ private fun ReplyToModeView(
             contentDescription = stringResource(CommonStrings.action_close),
             tint = ElementTheme.colors.iconSecondary,
             modifier = Modifier
-                .padding(end = 4.dp, top = 4.dp, start = 8.dp, bottom = 16.dp)
+                .minimumInteractiveComponentSize()
                 .size(16.dp)
                 .clickable(
                     enabled = true,

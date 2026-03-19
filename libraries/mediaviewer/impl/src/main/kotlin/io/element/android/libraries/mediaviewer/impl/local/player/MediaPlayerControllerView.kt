@@ -33,6 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.material3.minimumInteractiveComponentSize
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.audio.api.AudioFocus
@@ -98,6 +99,7 @@ fun MediaPlayerControllerView(
                 }
                 Box(
                     modifier = Modifier
+                        .minimumInteractiveComponentSize()
                         .size(36.dp)
                         .background(
                             color = bgColor,

@@ -38,6 +38,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.material3.minimumInteractiveComponentSize
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -126,6 +127,7 @@ fun SelectedItem(
             Surface(
                 color = ElementTheme.colors.bgActionPrimaryRest,
                 modifier = Modifier
+                    .minimumInteractiveComponentSize()
                     .clip(CircleShape)
                     .size(20.dp)
                     .align(Alignment.TopEnd)

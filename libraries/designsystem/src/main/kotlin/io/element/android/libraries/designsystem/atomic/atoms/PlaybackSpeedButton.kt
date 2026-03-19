@@ -20,6 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import androidx.compose.material3.minimumInteractiveComponentSize
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -41,6 +42,7 @@ fun PlaybackSpeedButton(
     }
     Box(
         modifier = modifier
+            .minimumInteractiveComponentSize()
             .clip(MaterialTheme.shapes.medium)
             .background(
                 color = ElementTheme.colors.bgCanvasDefault,
