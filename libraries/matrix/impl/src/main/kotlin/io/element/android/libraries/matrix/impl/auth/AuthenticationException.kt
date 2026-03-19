@@ -22,7 +22,10 @@ fun Throwable.mapAuthenticationException(): AuthenticationException {
             is ClientBuildException.Sdk -> AuthenticationException.Generic(message)
             is ClientBuildException.ServerUnreachable -> AuthenticationException.ServerUnreachable(message)
             is ClientBuildException.SlidingSync -> AuthenticationException.Generic(message)
-            is ClientBuildException.WellKnownDeserializationException -> AuthenticationException.Generic(message)
+            is ClientBuildException.WellKnownDeserializationException -> {
+                // Can happen if the .well-known URL has a redirection to an HTML page for instance
+                AuthenticationException.InvalidServerName(message)
+            }
             is ClientBuildException.WellKnownLookupFailed -> AuthenticationException.Generic(message)
             is ClientBuildException.EventCache -> AuthenticationException.Generic(message)
         }
