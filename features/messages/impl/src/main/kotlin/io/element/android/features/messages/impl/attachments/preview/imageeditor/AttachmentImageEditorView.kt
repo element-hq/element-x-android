@@ -44,6 +44,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
@@ -81,8 +82,9 @@ fun AttachmentImageEditorView(
     modifier: Modifier = Modifier,
 ) {
     val rotateContentDescription = stringResource(R.string.screen_media_upload_preview_rotate)
-    val rotationStateDescription = stringResource(
-        R.string.a11y_media_upload_preview_rotation_degrees,
+    val rotationStateDescription = pluralStringResource(
+        R.plurals.a11y_media_upload_preview_rotation_degrees,
+        state.edits.rotationDegrees,
         state.edits.rotationDegrees,
     )
     val rotateButtonBackground = ElementTheme.colors.bgSubtlePrimary
@@ -508,6 +510,7 @@ internal fun AttachmentImageEditorViewPreview() = ElementPreview {
                 uri = "file://preview-image".toUri(),
                 info = anImageMediaInfo(),
             ),
+            edits = AttachmentImageEdits(),
         ),
         onCropRectChange = {},
         onRotateClick = {},

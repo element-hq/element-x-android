@@ -15,7 +15,6 @@ import android.net.Uri
 import androidx.exifinterface.media.ExifInterface
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.features.messages.impl.attachments.preview.resolvedImageMimeType
 import io.element.android.libraries.androidutils.bitmap.rotateToExifMetadataOrientation
 import io.element.android.libraries.androidutils.bitmap.writeBitmap
@@ -48,7 +47,6 @@ data class EditedLocalMedia(
 )
 
 @ContributesBinding(AppScope::class)
-@Inject
 class DefaultAttachmentImageEditor(
     @ApplicationContext private val context: Context,
     private val dispatchers: CoroutineDispatchers,
