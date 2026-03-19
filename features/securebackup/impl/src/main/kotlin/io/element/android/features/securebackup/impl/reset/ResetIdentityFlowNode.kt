@@ -126,8 +126,12 @@ class ResetIdentityFlowNode(
                                 Timber.d("No reset handle return, the reset is done.")
                             }
                             is IdentityOidcResetHandle -> {
+                                Timber.d("Launching reset confirmation in MAS")
                                 activity.openUrlInChromeCustomTab(null, darkTheme, handle.url)
+
+                                Timber.d("Starting resetOidc")
                                 resetJob = launch { handle.resetOidc() }
+                                resetJob?.invokeOnCompletion { Timber.d("resetOidc ended") }
                             }
                             is IdentityPasswordResetHandle -> backstack.push(NavTarget.ResetPassword)
                         }
