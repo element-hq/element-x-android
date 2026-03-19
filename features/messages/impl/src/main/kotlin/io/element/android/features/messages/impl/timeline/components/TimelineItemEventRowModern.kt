@@ -11,6 +11,7 @@ import android.annotation.SuppressLint
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -87,6 +88,15 @@ internal fun TimelineItemEventRowModernContent(
     modifier: Modifier = Modifier,
     eventContentView: @Composable (Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit,
 ) {
+    // In Modern layout, show avatar+name for ALL senders (including own) at group boundaries,
+    // matching Element Classic behavior. The Bubble-only `showSenderInformation` excludes isMine.
+    val showSenderInfo = event.groupPosition.isNew()
+
+    // Avatar column width: 32dp avatar + 8dp gap = 40dp
+    val avatarColumnWidth = 40.dp
+    // Content indent from screen edge: 16dp padding + 40dp avatar column = 56dp
+    val contentIndent = 16.dp + avatarColumnWidth
+
     Column(
         modifier = modifier.fillMaxWidth(),
     ) {
@@ -99,13 +109,14 @@ internal fun TimelineItemEventRowModernContent(
             if (!timelineRoomInfo.isDm) {
                 Box(
                     modifier = Modifier
-                        .width(44.dp)
+                        .width(avatarColumnWidth)
                         .padding(top = 2.dp),
                     contentAlignment = Alignment.TopStart,
                 ) {
-                    if (event.showSenderInformation) {
+                    if (showSenderInfo) {
                         Avatar(
                             modifier = Modifier
+                                .minimumInteractiveComponentSize()
                                 .testTag(TestTags.timelineItemSenderAvatar)
                                 .clip(CircleShape)
                                 .clickable(onClick = onUserDataClick),
@@ -127,27 +138,38 @@ internal fun TimelineItemEventRowModernContent(
                         onLongClick = onLongClick,
                     ),
             ) {
-                // Sender name
-                if (event.showSenderInformation && !timelineRoomInfo.isDm) {
+                // Sender name + timestamp on same row (matching Classic Modern layout)
+                if (showSenderInfo && !timelineRoomInfo.isDm) {
                     val avatarColors = AvatarColorsProvider.provide(event.senderAvatar.id)
-                    SenderName(
-                        modifier = Modifier
-                            .testTag(TestTags.timelineItemSenderName)
-                            .clearAndSetSemantics { hideFromAccessibility() }
-                            .padding(bottom = 2.dp),
-                        senderId = event.senderId,
-                        senderProfile = event.senderProfile,
-                        senderNameMode = SenderNameMode.Timeline(avatarColors.foreground),
-                    )
+                    Row(
+                        modifier = Modifier.padding(bottom = 2.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        SenderName(
+                            modifier = Modifier
+                                .testTag(TestTags.timelineItemSenderName)
+                                .weight(1f)
+                                .clearAndSetSemantics { hideFromAccessibility() },
+                            senderId = event.senderId,
+                            senderProfile = event.senderProfile,
+                            senderNameMode = SenderNameMode.Timeline(avatarColors.foreground),
+                        )
+                        TimelineEventTimestampView(
+                            event = event,
+                            eventSink = eventSink,
+                            modifier = Modifier.padding(start = 8.dp),
+                        )
+                    }
                 }
 
-                // Message content with timestamp
+                // Message content with timestamp (for non-header messages, timestamp stays in content)
                 ModernMessageContent(
                     event = event,
                     timelineMode = timelineMode,
                     timelineProtectionState = timelineProtectionState,
                     onMessageLongClick = onLongClick,
                     inReplyToClick = inReplyToClick,
+                    showTimestampInContent = !showSenderInfo || timelineRoomInfo.isDm,
                     eventSink = eventSink,
                     eventContentView = eventContentView,
                 )
@@ -162,7 +184,7 @@ internal fun TimelineItemEventRowModernContent(
                 contentDescription = stringResource(CommonStrings.common_pinned),
                 tint = ElementTheme.colors.iconTertiary,
                 modifier = Modifier
-                    .padding(start = if (timelineRoomInfo.isDm) 16.dp else 60.dp, top = 2.dp)
+                    .padding(start = if (timelineRoomInfo.isDm) 16.dp else contentIndent, top = 2.dp)
                     .size(16.dp),
             )
         }
@@ -179,7 +201,7 @@ internal fun TimelineItemEventRowModernContent(
                 modifier = Modifier
                     .zIndex(1f)
                     .padding(
-                        start = if (timelineRoomInfo.isDm) 16.dp else 60.dp,
+                        start = if (timelineRoomInfo.isDm) 16.dp else contentIndent,
                         end = 16.dp,
                         top = 4.dp,
                     )
@@ -196,14 +218,13 @@ private fun ModernMessageContent(
     timelineProtectionState: TimelineProtectionState,
     onMessageLongClick: () -> Unit,
     inReplyToClick: () -> Unit,
+    showTimestampInContent: Boolean,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     @SuppressLint("ModifierParameter")
     @Suppress("ModifierNaming")
     contentModifier: Modifier = Modifier,
     eventContentView: @Composable (Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit,
 ) {
-    fun onTimestampLongClick() = onMessageLongClick()
-
     @Composable
     fun ThreadDecoration(
         modifier: Modifier = Modifier
@@ -283,7 +304,7 @@ private fun ModernMessageContent(
 
     @Composable
     fun CommonLayout(
-        timestampPosition: TimestampPosition,
+        timestampPosition: TimestampPosition?,
         showThreadDecoration: Boolean,
         inReplyToDetails: InReplyToDetails?,
         modifier: Modifier = Modifier,
@@ -297,18 +318,23 @@ private fun ModernMessageContent(
             }
         }
         val contentWithTimestamp = @Composable {
-            WithTimestampLayout(
-                timestampPosition = timestampPosition,
-                eventSink = eventSink,
-                canShrinkContent = canShrinkContent,
-                modifier = Modifier.semantics(mergeDescendants = false) {
-                    isTraversalGroup = true
-                    traversalIndex = -1f
-                },
-                content = { onContentLayoutChange ->
-                    eventContentView(contentModifier, onContentLayoutChange)
-                }
-            )
+            if (timestampPosition != null) {
+                WithTimestampLayout(
+                    timestampPosition = timestampPosition,
+                    eventSink = eventSink,
+                    canShrinkContent = canShrinkContent,
+                    modifier = Modifier.semantics(mergeDescendants = false) {
+                        isTraversalGroup = true
+                        traversalIndex = -1f
+                    },
+                    content = { onContentLayoutChange ->
+                        eventContentView(contentModifier, onContentLayoutChange)
+                    }
+                )
+            } else {
+                // Timestamp already shown in sender name header row
+                eventContentView(contentModifier) {}
+            }
         }
 
         val inReplyTo = @Composable { inReplyTo: InReplyToDetails ->
@@ -341,7 +367,7 @@ private fun ModernMessageContent(
         }
     }
 
-    // In modern mode, media gets Overlay timestamp, text gets Aligned, polls get Below
+    // For media types, always show timestamp in content. For text, only show if not in header.
     val timestampPosition = when (event.content) {
         is TimelineItemImageContent -> if (event.content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
         is TimelineItemVideoContent -> if (event.content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
@@ -350,9 +376,15 @@ private fun ModernMessageContent(
         is TimelineItemPollContent -> TimestampPosition.Below
         else -> TimestampPosition.Aligned
     }
+    // When timestamp is shown in the sender name header, skip it in content for text-like messages
+    val effectiveTimestampPosition = if (!showTimestampInContent && timestampPosition == TimestampPosition.Aligned) {
+        null // No timestamp in content
+    } else {
+        timestampPosition
+    }
     CommonLayout(
         showThreadDecoration = timelineMode !is Timeline.Mode.Thread && event.threadInfo is TimelineItemThreadInfo.ThreadResponse,
-        timestampPosition = timestampPosition,
+        timestampPosition = effectiveTimestampPosition,
         inReplyToDetails = event.inReplyTo,
         canShrinkContent = event.content is TimelineItemVoiceContent,
         modifier = contentModifier,

@@ -271,7 +271,7 @@ fun TimelineItemEventRow(
             val isModernLayout = timelineRoomInfo.timelineLayoutMode == TimelineLayoutMode.Modern
             ThreadSummaryView(
                 modifier = if (isModernLayout) {
-                    if (timelineRoomInfo.isDm) Modifier.padding(start = 16.dp) else Modifier.padding(start = 60.dp)
+                    if (timelineRoomInfo.isDm) Modifier.padding(start = 16.dp) else Modifier.padding(start = 56.dp)
                 } else if (event.isMine) {
                     Modifier.align(Alignment.End).padding(end = 16.dp)
                 } else {

@@ -9,13 +9,17 @@ package io.element.android.features.messages.impl.timeline.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
+import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.aTimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
+import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetailsProvider
 import io.element.android.libraries.preferences.api.store.TimelineLayoutMode
 
 @PreviewsDayNight
@@ -116,6 +120,66 @@ internal fun TimelineItemEventRowModernImagePreview() = ElementPreview {
             event = aTimelineItemEvent(
                 isMine = false,
                 content = aTimelineItemImageContent(aspectRatio = 2.5f),
+                groupPosition = TimelineItemGroupPosition.First,
+            ),
+            timelineRoomInfo = modernRoomInfo,
+        )
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineItemEventRowModernWithReplyPreview(
+    @PreviewParameter(InReplyToDetailsProvider::class) inReplyToDetails: InReplyToDetails,
+) = ElementPreview {
+    val modernRoomInfo = aTimelineRoomInfo(timelineLayoutMode = TimelineLayoutMode.Modern)
+    Column {
+        ATimelineItemEventRow(
+            event = aTimelineItemEvent(
+                isMine = false,
+                content = aTimelineItemTextContent(body = "A reply in modern layout."),
+                inReplyTo = inReplyToDetails,
+                timelineItemReactions = aTimelineItemReactions(count = 0),
+                groupPosition = TimelineItemGroupPosition.First,
+            ),
+            timelineRoomInfo = modernRoomInfo,
+        )
+        ATimelineItemEventRow(
+            event = aTimelineItemEvent(
+                isMine = true,
+                content = aTimelineItemTextContent(body = "My reply in modern layout."),
+                inReplyTo = inReplyToDetails,
+                timelineItemReactions = aTimelineItemReactions(count = 0),
+                groupPosition = TimelineItemGroupPosition.First,
+            ),
+            timelineRoomInfo = modernRoomInfo,
+        )
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineItemEventRowModernWithReactionsPreview() = ElementPreview {
+    val modernRoomInfo = aTimelineRoomInfo(timelineLayoutMode = TimelineLayoutMode.Modern)
+    Column {
+        ATimelineItemEventRow(
+            event = aTimelineItemEvent(
+                isMine = false,
+                content = aTimelineItemTextContent(
+                    body = "A message with many reactions in modern layout."
+                ),
+                timelineItemReactions = aTimelineItemReactions(count = 12),
+                groupPosition = TimelineItemGroupPosition.First,
+            ),
+            timelineRoomInfo = modernRoomInfo,
+        )
+        ATimelineItemEventRow(
+            event = aTimelineItemEvent(
+                isMine = true,
+                content = aTimelineItemTextContent(
+                    body = "My message with reactions in modern layout."
+                ),
+                timelineItemReactions = aTimelineItemReactions(count = 8),
                 groupPosition = TimelineItemGroupPosition.First,
             ),
             timelineRoomInfo = modernRoomInfo,
