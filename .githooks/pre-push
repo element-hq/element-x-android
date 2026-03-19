@@ -47,11 +47,15 @@ export JAVA_HOME
 
 # Build Gradle tasks for each changed module
 KTLINT_TASKS=$(echo "$MODULES" | sed 's/$/:ktlintCheck/' | tr '\n' ' ')
-# :app has product flavors so lintDebug is ambiguous; use lintGplayDebug instead
+
+# Set ANDROID_HOME if not already set
+export ANDROID_HOME="${ANDROID_HOME:-$HOME/Library/Android/sdk}"
+
+# Build lint tasks; skip :app (flavored, covered by CI) and non-Android modules
 LINT_TASKS=$(echo "$MODULES" | while read -r m; do
-    if [ "$m" = ":app" ]; then echo ":app:lintGplayDebug"
-    else echo "${m}:lintDebug"
-    fi
+    # Skip the root app module — it uses product flavors and is slow; CI covers it
+    [ "$m" = ":app" ] && continue
+    echo "${m}:lintDebug"
 done | tr '\n' ' ')
 
 echo ""
