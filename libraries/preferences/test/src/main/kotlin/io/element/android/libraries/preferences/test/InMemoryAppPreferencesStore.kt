@@ -23,6 +23,7 @@ class InMemoryAppPreferencesStore(
     timelineMediaPreviewValue: MediaPreviewValue? = null,
     theme: String? = null,
     isDynamicColorEnabled: Boolean = true,
+    isHighContrastEnabled: Boolean = false,
     logLevel: LogLevel = LogLevel.INFO,
     traceLockPacks: Set<TraceLogPack> = emptySet(),
     timelineLayoutMode: TimelineLayoutMode = TimelineLayoutMode.Bubble,
@@ -31,6 +32,7 @@ class InMemoryAppPreferencesStore(
     private val customElementCallBaseUrl = MutableStateFlow(customElementCallBaseUrl)
     private val theme = MutableStateFlow(theme)
     private val isDynamicColorEnabled = MutableStateFlow(isDynamicColorEnabled)
+    private val isHighContrastEnabled = MutableStateFlow(isHighContrastEnabled)
     private val logLevel = MutableStateFlow(logLevel)
     private val tracingLogPacks = MutableStateFlow(traceLockPacks)
     private val hideInviteAvatars = MutableStateFlow(hideInviteAvatars)
@@ -75,6 +77,14 @@ class InMemoryAppPreferencesStore(
 
     override fun isDynamicColorEnabledFlow(): Flow<Boolean> {
         return isDynamicColorEnabled
+    }
+
+    override suspend fun setHighContrastEnabled(enabled: Boolean) {
+        isHighContrastEnabled.value = enabled
+    }
+
+    override fun isHighContrastEnabledFlow(): Flow<Boolean> {
+        return isHighContrastEnabled
     }
 
     @Deprecated("Use MediaPreviewService instead. Kept only for migration.")

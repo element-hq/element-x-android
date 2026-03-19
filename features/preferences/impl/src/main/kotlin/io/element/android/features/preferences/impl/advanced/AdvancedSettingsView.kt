@@ -95,6 +95,18 @@ fun AdvancedSettingsView(
                 onClick = { state.eventSink(AdvancedSettingsEvents.SetDynamicColorEnabled(!state.isDynamicColorEnabled)) }
             )
         }
+        ListItem(
+            headlineContent = {
+                Text(text = stringResource(id = R.string.screen_advanced_settings_high_contrast_title))
+            },
+            supportingContent = {
+                Text(text = stringResource(id = R.string.screen_advanced_settings_high_contrast_description))
+            },
+            trailingContent = ListItemContent.Switch(
+                checked = state.isHighContrastEnabled,
+            ),
+            onClick = { state.eventSink(AdvancedSettingsEvents.SetHighContrastEnabled(!state.isHighContrastEnabled)) }
+        )
         if (state.timelineLayoutMode != null) {
             PreferenceDropdown(
                 title = stringResource(id = R.string.screen_advanced_settings_timeline_layout),
