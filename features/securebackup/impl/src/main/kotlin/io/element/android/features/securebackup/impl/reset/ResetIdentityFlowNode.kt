@@ -16,8 +16,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.window.DialogProperties
-import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -43,6 +41,8 @@ import io.element.android.libraries.matrix.api.encryption.IdentityPasswordResetH
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
@@ -81,15 +81,9 @@ class ResetIdentityFlowNode(
     override fun onBuilt() {
         super.onBuilt()
 
-        lifecycle.addObserver(object : DefaultLifecycleObserver {
-            override fun onStart(owner: LifecycleOwner) {
-                sessionCoroutineScope.launch {
-                    resetIdentityFlowManager.whenResetIsDone {
-                        callback.onDone()
-                    }
-                }
-            }
-        })
+        resetIdentityFlowManager.whenResetIsDone {
+            callback.onDone()
+        }
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
@@ -113,7 +107,13 @@ class ResetIdentityFlowNode(
     }
 
     private fun CoroutineScope.startReset() = launch {
+        // Instead of cancelling the reset job on every ON_START, we can do it before starting a new attempt
+        cancelResetJob()
         resetIdentityFlowManager.getResetHandle()
+            // We're only interested in the success/failure case, and we need this flow to stop by itself
+            // since each call to `startReset` will create a new one
+            .filter { it.isSuccess() || it.isFailure() }
+            .take(1)
             .collectLatest { state ->
                 when (state) {
                     is AsyncData.Failure -> {
@@ -128,7 +128,6 @@ class ResetIdentityFlowNode(
                             is IdentityOidcResetHandle -> {
                                 Timber.d("Launching reset confirmation in MAS")
                                 activity.openUrlInChromeCustomTab(null, darkTheme, handle.url)
-
                                 Timber.d("Starting resetOidc")
                                 resetJob = launch { handle.resetOidc() }
                                 resetJob?.invokeOnCompletion { Timber.d("resetOidc ended") }
@@ -138,7 +137,18 @@ class ResetIdentityFlowNode(
                     }
                     else -> Unit
                 }
-            }
+        }
+    }
+
+    override fun performUpNavigation(): Boolean {
+        val navigatesUp = super.performUpNavigation()
+
+        // This intercepts the back navigation so we only cancel this job when the user actually navigates up
+        if (navigatesUp) {
+            sessionCoroutineScope.launch { cancelResetJob() }
+        }
+
+        return navigatesUp
     }
 
     private suspend fun cancelResetJob() {
