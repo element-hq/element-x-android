@@ -63,7 +63,7 @@ fun OnboardingBackground() {
                     from = Offset(size.width / 2f, 0f),
                     to = Offset(size.width / 2f, size.height * 2f),
                     colors = listOf(
-                        ElementTheme.materialColors.scrim,
+                        scrimColor,
                         Color.Transparent,
                     )
                 )
