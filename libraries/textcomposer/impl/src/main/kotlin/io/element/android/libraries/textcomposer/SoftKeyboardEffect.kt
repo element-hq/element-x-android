@@ -41,11 +41,16 @@ internal fun <T> SoftKeyboardEffect(
             // Await window focus in case returning from a dialog
             view.awaitWindowFocus()
 
-            // Show the keyboard, temporarily using the root view for focus
-            view.showKeyboard(andRequestFocus = true)
-
-            // Refocus to the correct view
+            // First, focus the correct editor view
             latestOnRequestFocus()
+
+            // Show keyboard on the focused editor view rather than the root view,
+            // as some devices require showSoftInput on the actual input view.
+            // Using post to run after the current focus pass completes.
+            view.post {
+                val focusedView = view.findFocus() ?: view
+                focusedView.showKeyboard()
+            }
         }
     }
 }
