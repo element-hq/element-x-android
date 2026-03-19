@@ -1,0 +1,164 @@
+name: Upstream Sync
+
+on:
+  schedule:
+    # Every Monday at 8:00 UTC
+    - cron: "0 8 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout full history
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configure git identity
+        run: |
+          set -e
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Add upstream remote and fetch
+        run: |
+          set -e
+          git remote add upstream https://github.com/element-hq/element-x-android.git || true
+          git fetch upstream develop
+          git fetch origin develop
+
+      - name: Check for new upstream commits
+        id: check
+        run: |
+          set -e
+          MERGE_BASE=$(git merge-base origin/develop upstream/develop)
+          UPSTREAM_HEAD=$(git rev-parse upstream/develop)
+
+          if [ "$MERGE_BASE" = "$UPSTREAM_HEAD" ]; then
+            echo "No new upstream commits since last sync."
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+          else
+            COMMIT_COUNT=$(git rev-list --count "$MERGE_BASE".."$UPSTREAM_HEAD")
+            echo "Found $COMMIT_COUNT new upstream commit(s)."
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+            echo "merge_base=$MERGE_BASE" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create sync branch and merge
+        if: steps.check.outputs.has_changes == 'true'
+        id: merge
+        run: |
+          set -e
+          DATE=$(date +%Y-%m-%d)
+          BRANCH="sync/upstream-${DATE}"
+          echo "branch=$BRANCH" >> "$GITHUB_OUTPUT"
+          echo "date=$DATE" >> "$GITHUB_OUTPUT"
+
+          git checkout -b "$BRANCH" origin/develop
+
+          if git merge upstream/develop --no-edit; then
+            echo "has_conflicts=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_conflicts=true" >> "$GITHUB_OUTPUT"
+            # Capture conflicted files before committing
+            git diff --name-only --diff-filter=U > /tmp/conflicted_files.txt
+            # Commit the conflict markers so the branch is pushable
+            git add -A
+            git commit --no-edit -m "chore: merge upstream/develop with conflicts (${DATE})"
+          fi
+
+      - name: Push sync branch
+        if: steps.check.outputs.has_changes == 'true'
+        env:
+          SYNC_BRANCH: ${{ steps.merge.outputs.branch }}
+        run: |
+          set -e
+          git push origin "$SYNC_BRANCH"
+
+      - name: Build PR body
+        if: steps.check.outputs.has_changes == 'true'
+        id: body
+        env:
+          MERGE_BASE: ${{ steps.check.outputs.merge_base }}
+          SYNC_DATE: ${{ steps.merge.outputs.date }}
+          HAS_CONFLICTS: ${{ steps.merge.outputs.has_conflicts }}
+        run: |
+          set -e
+          {
+            echo "body<<PREOF"
+
+            echo "## 📥 Upstream Sync — ${SYNC_DATE}"
+            echo ""
+            echo "Automated merge of \`element-hq/element-x-android\` develop into Ravel develop."
+            echo ""
+
+            echo "### 🔄 New Upstream Commits"
+            echo ""
+            echo '```'
+            git log --oneline "${MERGE_BASE}..upstream/develop" | head -50
+            echo '```'
+            echo ""
+
+            if [ "$HAS_CONFLICTS" = "true" ]; then
+              echo "### ⚠️ Merge Conflicts"
+              echo ""
+              echo "The following files have **unresolved conflict markers** and must be fixed before merging:"
+              echo ""
+              while IFS= read -r f; do
+                echo "- \`$f\`"
+              done < /tmp/conflicted_files.txt
+              echo ""
+            else
+              echo "### ✅ Merge was clean — no conflicts."
+              echo ""
+            fi
+
+            echo "### 📋 Ravel Divergences to Review"
+            echo ""
+            echo "Check the following files/areas for upstream changes that may conflict with Ravel customizations:"
+            echo ""
+            echo "- \`FEATURES.md\` — upstream sync strategy & divergence tracker"
+            echo "- \`app/src/main/res/values/colors.xml\` — Ravel brand colors"
+            echo "- Package name references (\`app.ravel.android\`)"
+            echo "- \`plugins/src/main/kotlin/config/BuildTimeConfig.kt\` — build configuration"
+            echo "- \`plugins/src/main/kotlin/Versions.kt\` — dependency versions"
+            echo ""
+            echo "> **📖 Reviewers:** Consult [\`FEATURES.md\`](../blob/develop/FEATURES.md) before merging to ensure all Ravel divergences are preserved."
+            echo ""
+            echo "---"
+            echo "_Generated by the [upstream-sync workflow](../blob/develop/.github/workflows/upstream-sync.yml). See [docs/upstream-sync.md](../blob/develop/docs/upstream-sync.md) for details._"
+
+            echo "PREOF"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Ensure upstream-sync label exists
+        if: steps.check.outputs.has_changes == 'true'
+        run: |
+          set -e
+          gh label create upstream-sync --description "Automated upstream sync PR" --color "1d76db" || true
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Open pull request
+        if: steps.check.outputs.has_changes == 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SYNC_BRANCH: ${{ steps.merge.outputs.branch }}
+          SYNC_DATE: ${{ steps.merge.outputs.date }}
+          PR_BODY: ${{ steps.body.outputs.body }}
+        run: |
+          set -e
+          gh pr create \
+            --base develop \
+            --head "$SYNC_BRANCH" \
+            --title "chore: upstream sync ${SYNC_DATE}" \
+            --label "upstream-sync" \
+            --body "$PR_BODY"
