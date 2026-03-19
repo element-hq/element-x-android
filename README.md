@@ -14,10 +14,32 @@ Compared to the previous-generation [Element Classic](https://github.com/element
 
 [<img src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png" alt="Get it on Google Play" height="80">](https://play.google.com/store/apps/details?id=io.element.android.x)[<img src="https://fdroid.gitlab.io/artwork/badge/get-it-on.png" alt="Get it on F-Droid" height="80">](https://f-droid.org/packages/io.element.android.x)
 
+## Fork Changes
+
+This fork ([ceearrbee/element-x-android](https://github.com/ceearrbee/element-x-android)) includes the following changes on top of upstream [element-hq/element-x-android](https://github.com/element-hq/element-x-android):
+
+### Modern (Non-Bubble) Layout Mode
+
+A new timeline layout option that displays messages without chat bubbles, similar to classic IRC/Matrix clients. Includes sender name display, overlay timestamps, proper grouping logic, and accessibility support.
+
+- [`94cb5af8`](https://github.com/ceearrbee/element-x-android/commit/94cb5af8b078f597473eb409731f0cee15d323d4) feat: Add Modern (non-bubble) layout mode for the message timeline
+- [`d97edd1a`](https://github.com/ceearrbee/element-x-android/commit/d97edd1a050df74359acc5d8639b4887ff6d3e75) fix: Modern layout review fixes — avatar touch target, dead code, previews
+- [`52bcc621`](https://github.com/ceearrbee/element-x-android/commit/52bcc6213af65652f2086c6c091acbb8e9af8619) fix: Modern layout overlay timestamp background and import ordering
+- [`a1219bd8`](https://github.com/ceearrbee/element-x-android/commit/a1219bd8af5d6137068fde2ac9188cdcd804bac0) fix: Add middle-of-group own sender preview for modern layout
+- [`2786550d`](https://github.com/ceearrbee/element-x-android/commit/2786550df4811be1ffd5e004fc34e47ca981767b) fix: Modern layout production readiness — ripple, tests, previews, docs
+- [`7a72c108`](https://github.com/ceearrbee/element-x-android/commit/7a72c108935a91d40ee67ad42401f3818b2b3292) fix: Review round 6 — import ordering, thread preview, localazy compliance
+
+### URL Previews & Image Crop/Rotate Editor
+
+Adds link preview cards for URLs shared in the timeline, plus an image crop and rotate editor for media.
+
+- [`b5947792`](https://github.com/ceearrbee/element-x-android/commit/b59477921baf9a88685f95e39b05b777717c5873) feat: Add URL previews, image crop/rotate editor, and modern layout perf fix
+
 ## Table of contents
 
 <!--- TOC -->
 
+* [Fork Changes](#fork-changes)
 * [Screenshots](#screenshots)
 * [Translations](#translations)
 * [Rust SDK](#rust-sdk)
