@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.graphicsLayer
 
+// Color.White used as alpha mask for DstIn blending — represents "fully opaque", not the color white
 @Composable
 fun horizontalFadingEdgesBrush(
     showLeft: Boolean,

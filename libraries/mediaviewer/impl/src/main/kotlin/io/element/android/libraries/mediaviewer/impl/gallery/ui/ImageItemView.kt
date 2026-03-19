@@ -20,11 +20,11 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -53,7 +53,7 @@ fun ImageItemView(
         AsyncImage(
             modifier = Modifier
                 .fillMaxWidth()
-                .then(if (isLoaded) Modifier.background(Color.White) else Modifier),
+                .then(if (isLoaded) Modifier.background(ElementTheme.colors.bgCanvasDefault) else Modifier),
             model = image.thumbnailMediaRequestData,
             contentScale = ContentScale.Crop,
             alignment = Alignment.Center,
