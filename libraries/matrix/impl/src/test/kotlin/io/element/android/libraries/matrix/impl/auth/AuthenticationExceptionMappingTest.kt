@@ -31,6 +31,13 @@ class AuthenticationExceptionMappingTest {
     }
 
     @Test
+    fun `mapping a WellKnownDeserializationException returns a InvalidServerName AuthenticationException`() {
+        val exception = ClientBuildException.WellKnownDeserializationException("WellKnown Deserialization")
+        val mappedException = exception.mapAuthenticationException()
+        assertThat(mappedException).isException<AuthenticationException.InvalidServerName>("WellKnown Deserialization")
+    }
+
+    @Test
     fun `mapping specific exceptions map to their kotlin counterparts`() {
         assertThat(ClientBuildException.Generic("Unknown error").mapAuthenticationException())
             .isException<AuthenticationException.Generic>("Unknown error")
@@ -50,8 +57,6 @@ class AuthenticationExceptionMappingTest {
             .isException<AuthenticationException.ServerUnreachable>("Server unreachable")
         assertThat(ClientBuildException.SlidingSync("Sliding Sync").mapAuthenticationException())
             .isException<AuthenticationException.Generic>("Sliding Sync")
-        assertThat(ClientBuildException.WellKnownDeserializationException("WellKnown Deserialization").mapAuthenticationException())
-            .isException<AuthenticationException.Generic>("WellKnown Deserialization")
         assertThat(ClientBuildException.WellKnownLookupFailed("WellKnown Lookup Failed").mapAuthenticationException())
             .isException<AuthenticationException.Generic>("WellKnown Lookup Failed")
         assertThat(ClientBuildException.EventCache("EventCache error").mapAuthenticationException())
