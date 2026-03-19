@@ -11,6 +11,7 @@
   * [Rust SDK](#rust-sdk)
     * [Matrix Rust Component Kotlin](#matrix-rust-component-kotlin)
     * [Building the SDK locally](#building-the-sdk-locally)
+    * [rustls and platform verifier](#rustls-and-platform-verifier)
   * [The Android project](#the-android-project)
   * [Application](#application)
     * [Jetpack Compose](#jetpack-compose)
@@ -159,6 +160,19 @@ Troubleshooting:
    `JAVA_HOME` and, if building via Android Studio, "File | Settings | Build, Execution, Deployment | Build Tools | Gradle | Gradle JDK".
 
 You can switch back to using the published version of the SDK by deleting `libraries/rustsdk/matrix-rust-sdk.aar`.
+
+#### rustls and platform verifier
+
+The SDK uses [rustls](https://github.com/rustls/rustls) for TLS, which is a pure Rust implementation of TLS. In turn, this means we have to add the
+`rustls-platform-verifier` library to our project, which provides platform-specific TLS certificate verification for rustls. This library uses the Android NDK's
+`TrustManager` to verify TLS certificates on Android.
+
+Though it's meant to be used through convoluted way of downloading the dependency, locating it in the
+cargo folder and using that path as a local maven repo as described [here](https://github.com/rustls/rustls-platform-verifier#android), we have
+added a script (`tools/sdk/update-rustls`) to download, unpack and add this AAR file locally to the `:libraries:matrix:impl` module instead.
+
+When should we run this script? Whenever we update the `rustls` dependency in the Rust SDK, we should check if the version of `rustls-platform-verifier`
+has changed as well, and if so, run this script to update the AAR file in our project. The SDK team should ping us when this happens.
 
 ### The Android project
 
