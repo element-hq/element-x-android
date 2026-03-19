@@ -22,20 +22,20 @@ import kotlinx.coroutines.flow.asStateFlow
 @Inject
 @SingleIn(SessionScope::class)
 class BridgeTypeCache {
-    private val _cache = MutableStateFlow<Map<RoomId, BridgeType>>(emptyMap())
-    val cacheFlow: StateFlow<Map<RoomId, BridgeType>> = _cache.asStateFlow()
+    private val cacheState = MutableStateFlow<Map<RoomId, BridgeType>>(emptyMap())
+    val cacheFlow: StateFlow<Map<RoomId, BridgeType>> = cacheState.asStateFlow()
 
-    fun get(roomId: RoomId): BridgeType? = _cache.value[roomId]
+    fun get(roomId: RoomId): BridgeType? = cacheState.value[roomId]
 
     fun put(roomId: RoomId, bridgeType: BridgeType) {
-        _cache.value = _cache.value + (roomId to bridgeType)
+        cacheState.value = cacheState.value + (roomId to bridgeType)
     }
 
     fun markChecked(roomId: RoomId) {
-        if (!_cache.value.containsKey(roomId)) {
-            _cache.value = _cache.value + (roomId to BridgeType.NONE)
+        if (!cacheState.value.containsKey(roomId)) {
+            cacheState.value = cacheState.value + (roomId to BridgeType.NONE)
         }
     }
 
-    fun contains(roomId: RoomId): Boolean = _cache.value.containsKey(roomId)
+    fun contains(roomId: RoomId): Boolean = cacheState.value.containsKey(roomId)
 }
