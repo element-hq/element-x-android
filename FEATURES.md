@@ -19,10 +19,11 @@ Ravel is a Matrix client for people, not power users. Built on Element X Android
 ## Upstream Sync Strategy
 
 - Remote `upstream` tracks `element-hq/element-x-android`
-- Periodically fetch upstream and rebase/merge to get Matrix Rust SDK updates
+- A **weekly GitHub Actions workflow** (`.github/workflows/upstream-sync.yml`) automatically opens a sync PR every Monday at 8:00 UTC targeting `develop`
 - Customizations should be isolated to their own modules where possible to minimize merge conflicts
+- See [`docs/upstream-sync.md`](docs/upstream-sync.md) for the full sync guide, conflict resolution tips, and manual sync instructions
 
-To fetch upstream changes:
+To fetch upstream changes manually:
 ```bash
 git fetch upstream
 git merge upstream/develop
