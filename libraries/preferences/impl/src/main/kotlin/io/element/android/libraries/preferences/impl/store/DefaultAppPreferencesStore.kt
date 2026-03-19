@@ -48,7 +48,9 @@ class DefaultAppPreferencesStore(
 
     override fun getTimelineLayoutModeFlow(): Flow<TimelineLayoutMode> {
         return store.data.map { prefs ->
-            prefs[timelineLayoutModeKey]?.let { TimelineLayoutMode.valueOf(it) } ?: TimelineLayoutMode.Bubble
+            prefs[timelineLayoutModeKey]?.let {
+                runCatching { TimelineLayoutMode.valueOf(it) }.getOrNull()
+            } ?: TimelineLayoutMode.Bubble
         }
     }
 

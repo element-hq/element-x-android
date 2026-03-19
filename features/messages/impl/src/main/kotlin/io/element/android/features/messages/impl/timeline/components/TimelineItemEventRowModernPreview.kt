@@ -18,9 +18,14 @@ import io.element.android.features.messages.impl.timeline.model.event.aTimelineI
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetailsProvider
+import io.element.android.features.messages.impl.timeline.components.receipt.aReadReceiptData
+import io.element.android.features.messages.impl.timeline.model.TimelineItemReadReceipts
 import io.element.android.libraries.preferences.api.store.TimelineLayoutMode
+import kotlinx.collections.immutable.toImmutableList
 
 @PreviewsDayNight
 @Composable
@@ -189,6 +194,63 @@ internal fun TimelineItemEventRowModernWithReactionsPreview() = ElementPreview {
                     body = "My message with reactions in modern layout."
                 ),
                 timelineItemReactions = aTimelineItemReactions(count = 8),
+                groupPosition = TimelineItemGroupPosition.First,
+            ),
+            timelineRoomInfo = modernRoomInfo,
+        )
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineItemEventRowModernPinnedPreview() = ElementPreview {
+    val eventId = EventId("\$pinnedEvent")
+    val modernRoomInfo = aTimelineRoomInfo(
+        timelineLayoutMode = TimelineLayoutMode.Modern,
+        pinnedEventIds = listOf(eventId),
+    )
+    Column {
+        ATimelineItemEventRow(
+            event = aTimelineItemEvent(
+                eventId = eventId,
+                isMine = false,
+                content = aTimelineItemTextContent(body = "A pinned message in modern layout."),
+                groupPosition = TimelineItemGroupPosition.First,
+            ),
+            timelineRoomInfo = modernRoomInfo,
+        )
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineItemEventRowModernWithReadReceiptsPreview() = ElementPreview {
+    val modernRoomInfo = aTimelineRoomInfo(timelineLayoutMode = TimelineLayoutMode.Modern)
+    ATimelineItemEventRow(
+        event = aTimelineItemEvent(
+            isMine = true,
+            content = aTimelineItemTextContent(body = "Message with read receipts."),
+            groupPosition = TimelineItemGroupPosition.First,
+            readReceiptState = TimelineItemReadReceipts(
+                receipts = List(3) { aReadReceiptData(index = it) }.toImmutableList(),
+            ),
+        ),
+        timelineRoomInfo = modernRoomInfo,
+        renderReadReceipts = true,
+        isLastOutgoingMessage = true,
+    )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineItemEventRowModernSendFailurePreview() = ElementPreview {
+    val modernRoomInfo = aTimelineRoomInfo(timelineLayoutMode = TimelineLayoutMode.Modern)
+    Column {
+        ATimelineItemEventRow(
+            event = aTimelineItemEvent(
+                isMine = true,
+                content = aTimelineItemTextContent(body = "A message that failed to send."),
+                sendState = LocalEventSendState.Failed.Unknown("Connection error"),
                 groupPosition = TimelineItemGroupPosition.First,
             ),
             timelineRoomInfo = modernRoomInfo,

@@ -12,12 +12,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.material3.ripple
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -59,7 +59,6 @@ import io.element.android.libraries.designsystem.components.EqualWidthColumn
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToView
@@ -91,6 +90,8 @@ internal fun TimelineItemEventRowModernContent(
 ) {
     // In Modern layout, show avatar+name for ALL senders (including own) at group boundaries,
     // matching Element Classic behavior. The Bubble-only `showSenderInformation` excludes isMine.
+    // Grouping is by sender continuity (same as bubble layout and Element Classic).
+    // No time-based threshold — consecutive messages from same sender are always grouped.
     val showSenderInfo = event.groupPosition.isNew()
 
     // Avatar column width: 32dp avatar + 8dp gap = 40dp
@@ -134,7 +135,7 @@ internal fun TimelineItemEventRowModernContent(
                     .weight(1f)
                     .combinedClickable(
                         interactionSource = interactionSource,
-                        indication = null,
+                        indication = ripple(),
                         onClick = onContentClick,
                         onLongClick = onLongClick,
                     ),
@@ -227,30 +228,6 @@ private fun ModernMessageContent(
     eventContentView: @Composable (Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit,
 ) {
     @Composable
-    fun ThreadDecoration(
-        modifier: Modifier = Modifier
-    ) {
-        Row(
-            modifier = modifier,
-            horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.Start),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Icon(
-                modifier = Modifier.height(14.dp),
-                imageVector = CompoundIcons.Threads(),
-                contentDescription = null,
-                tint = ElementTheme.colors.iconSecondary,
-            )
-            Text(
-                text = stringResource(CommonStrings.common_thread),
-                style = ElementTheme.typography.fontBodyXsRegular,
-                color = ElementTheme.colors.textPrimary,
-                modifier = Modifier.clearAndSetSemantics { }
-            )
-        }
-    }
-
-    @Composable
     fun WithTimestampLayout(
         timestampPosition: TimestampPosition,
         eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
@@ -318,7 +295,7 @@ private fun ModernMessageContent(
 
         val threadDecoration = @Composable {
             if (showThreadDecoration) {
-                ThreadDecoration(modifier = Modifier.padding(top = 4.dp))
+                TimelineThreadDecoration(modifier = Modifier.padding(top = 4.dp))
             }
         }
         val contentWithTimestamp = @Composable {

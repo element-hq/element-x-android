@@ -622,30 +622,6 @@ private fun MessageEventBubbleContent(
     fun onTimestampLongClick() = onMessageLongClick()
 
     @Composable
-    fun ThreadDecoration(
-        modifier: Modifier = Modifier
-    ) {
-        Row(
-            modifier = modifier,
-            horizontalArrangement = Arrangement.spacedBy(4.dp, Alignment.Start),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Icon(
-                modifier = Modifier.height(14.dp),
-                imageVector = CompoundIcons.Threads(),
-                contentDescription = null,
-                tint = ElementTheme.colors.iconSecondary,
-            )
-            Text(
-                text = stringResource(CommonStrings.common_thread),
-                style = ElementTheme.typography.fontBodyXsRegular,
-                color = ElementTheme.colors.textPrimary,
-                modifier = Modifier.clearAndSetSemantics { }
-            )
-        }
-    }
-
-    @Composable
     fun WithTimestampLayout(
         timestampPosition: TimestampPosition,
         eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
@@ -736,7 +712,7 @@ private fun MessageEventBubbleContent(
 
         val threadDecoration = @Composable {
             if (showThreadDecoration) {
-                ThreadDecoration(modifier = Modifier.padding(top = 8.dp, start = 12.dp, end = 12.dp))
+                TimelineThreadDecoration(modifier = Modifier.padding(top = 8.dp, start = 12.dp, end = 12.dp))
             }
         }
         val contentWithTimestamp = @Composable {
