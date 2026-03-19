@@ -8,15 +8,15 @@
 package io.element.android.features.home.impl.bridge
 
 enum class BridgeType {
-    NONE,           // sentinel: checked, confirmed not a bridge room
+    NONE, // sentinel: checked, confirmed not a bridge room
     WHATSAPP,
     SIGNAL,
     DISCORD,
     TELEGRAM,
-    META,       // Facebook Messenger / Instagram
+    META, // Facebook Messenger / Instagram
     IMESSAGE,
     SLACK,
     GOOGLE_CHAT,
     GOOGLE_MESSAGES, // RCS via mautrix-gmessages
-    GENERIC,    // unknown bridge bot — fallback icon
+    GENERIC, // unknown bridge bot — fallback icon
 }

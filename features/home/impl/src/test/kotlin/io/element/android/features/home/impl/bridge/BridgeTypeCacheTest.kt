@@ -12,7 +12,6 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import org.junit.Test
 
 class BridgeTypeCacheTest {
-
     private val roomId = RoomId("!room1:matrix.org")
     private val roomId2 = RoomId("!room2:matrix.org")
 

@@ -9,8 +9,8 @@
 package io.element.android.features.home.impl.model
 
 import androidx.compose.runtime.Immutable
-import io.element.android.features.invite.api.InviteData
 import io.element.android.features.home.impl.bridge.BridgeType
+import io.element.android.features.invite.api.InviteData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
