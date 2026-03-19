@@ -83,20 +83,11 @@ class ResetIdentityFlowNode(
 
         lifecycle.addObserver(object : DefaultLifecycleObserver {
             override fun onStart(owner: LifecycleOwner) {
-                // If the custom tab / Web browser was opened, we need to cancel the reset job
-                // when we come back to the node if the reset wasn't successful
                 sessionCoroutineScope.launch {
-                    cancelResetJob()
-
                     resetIdentityFlowManager.whenResetIsDone {
                         callback.onDone()
                     }
                 }
-            }
-
-            override fun onDestroy(owner: LifecycleOwner) {
-                // Make sure we cancel the reset job when the node is destroyed, just in case
-                sessionCoroutineScope.launch { cancelResetJob() }
             }
         })
     }
