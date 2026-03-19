@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -247,7 +248,7 @@ private fun ModernMessageContent(
                         modifier = Modifier
                             // Outer padding
                             .padding(horizontal = 4.dp, vertical = 4.dp)
-                            .background(ElementTheme.colors.bgSubtleSecondary, RoundedCornerShape(10.0.dp))
+                            .background(ElementTheme.colors.bgSubtleSecondary, MaterialTheme.shapes.small)
                             .align(Alignment.BottomEnd)
                             // Inner padding
                             .padding(horizontal = 4.dp, vertical = 2.dp)
@@ -321,7 +322,7 @@ private fun ModernMessageContent(
         val inReplyTo = @Composable { inReplyTo: InReplyToDetails ->
             val inReplyToModifier = Modifier
                 .padding(top = if (showThreadDecoration) 0.dp else 4.dp)
-                .clip(RoundedCornerShape(6.dp))
+                .clip(MaterialTheme.shapes.extraSmall)
 
             val talkbackCompatModifier = if (isTalkbackActive()) {
                 inReplyToModifier.zIndex(1f)

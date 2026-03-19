@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -83,7 +84,7 @@ internal fun FormattingOption(
             modifier = Modifier
                 .size(36.dp)
                 .align(Alignment.Center)
-                .background(backgroundColor, shape = RoundedCornerShape(8.dp))
+                .background(backgroundColor, shape = MaterialTheme.shapes.small)
         ) {
             Icon(
                 modifier = Modifier

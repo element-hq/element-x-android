@@ -24,6 +24,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -228,7 +229,7 @@ private fun ExoPlayerMediaAudioView(
                 } else {
                     AndroidView(
                         modifier = Modifier
-                            .clip(shape = RoundedCornerShape(12.dp))
+                            .clip(shape = MaterialTheme.shapes.medium)
                             .clipToBounds()
                             .width(240.dp),
                         factory = {

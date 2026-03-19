@@ -30,6 +30,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.movableContentOf
@@ -316,7 +317,7 @@ private fun ThreadSummaryView(
             modifier = Modifier
                 .then(if (!isOutgoing) Modifier.padding(start = 16.dp) else Modifier)
                 .graphicsLayer {
-                    shape = RoundedCornerShape(8.dp)
+                    shape = MaterialTheme.shapes.small
                     clip = true
                 }
                 .background(MessageEventBubbleDefaults.backgroundBubbleColor(isOutgoing))
@@ -576,7 +577,7 @@ private fun MessageSenderInformation(
     val avatarColors = AvatarColorsProvider.provide(senderAvatar.id)
     Row(
         modifier = modifier
-            // Add external clickable modifier with no indicator so the touch target is larger than just the display name
+            // Decorative clickable: extends touch target beyond display name; inner Avatar has its own ripple
             .clickable(onClick = onClick, enabled = true, interactionSource = remember { MutableInteractionSource() }, indication = null)
             .clearAndSetSemantics {
                 hideFromAccessibility()
@@ -593,7 +594,7 @@ private fun MessageSenderInformation(
         SenderName(
             modifier = Modifier
                 .testTag(TestTags.timelineItemSenderName)
-                .clip(RoundedCornerShape(6.dp))
+                .clip(MaterialTheme.shapes.extraSmall)
                 .clickable(onClick = onClick)
                 .padding(horizontal = 4.dp),
             senderId = senderId,
@@ -642,7 +643,7 @@ private fun MessageEventBubbleContent(
                         modifier = Modifier
                             // Outer padding
                             .padding(horizontal = 4.dp, vertical = 4.dp)
-                            .background(ElementTheme.colors.bgSubtleSecondary, RoundedCornerShape(10.0.dp))
+                            .background(ElementTheme.colors.bgSubtleSecondary, MaterialTheme.shapes.small)
                             .align(Alignment.BottomEnd)
                             // Inner padding
                             .padding(horizontal = 4.dp, vertical = 2.dp)
@@ -704,7 +705,7 @@ private fun MessageEventBubbleContent(
                 if (inReplyToDetails == null) {
                     Modifier
                 } else {
-                    Modifier.clip(RoundedCornerShape(10.dp))
+                    Modifier.clip(MaterialTheme.shapes.small)
                 }
             }
             ContentPadding.CaptionedMedia ->
@@ -735,7 +736,7 @@ private fun MessageEventBubbleContent(
             val topPadding = if (showThreadDecoration) 0.dp else 8.dp
             val inReplyToModifier = Modifier
                 .padding(top = topPadding, start = 8.dp, end = 8.dp)
-                .clip(RoundedCornerShape(6.dp))
+                .clip(MaterialTheme.shapes.extraSmall)
 
             val talkbackCompatModifier = if (isTalkbackActive()) {
                 // Use z-index to make the replied to text being read after the message

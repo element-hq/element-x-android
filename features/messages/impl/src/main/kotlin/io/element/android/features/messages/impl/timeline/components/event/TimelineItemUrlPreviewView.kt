@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
@@ -55,7 +56,7 @@ fun TimelineItemUrlPreviewView(
                     Modifier.widthIn(max = 296.dp)
                 }
             )
-            .clip(RoundedCornerShape(12.dp))
+            .clip(MaterialTheme.shapes.medium)
             .background(ElementTheme.colors.bgSubtleSecondary)
             .combinedClickable(
                 onClick = { onClick(link) },

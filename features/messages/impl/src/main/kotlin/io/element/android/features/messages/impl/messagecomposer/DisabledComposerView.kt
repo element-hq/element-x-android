@@ -22,6 +22,7 @@ import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -58,8 +59,8 @@ internal fun DisabledComposerView(
 
         Box(
             modifier = Modifier
-                .clip(RoundedCornerShape(21.dp))
-                .border(0.5.dp, borderColor, RoundedCornerShape(21.dp))
+                .clip(MaterialTheme.shapes.large)
+                .border(0.5.dp, borderColor, MaterialTheme.shapes.large)
                 .background(color = bgColor)
                 .size(42.dp)
                 .requiredHeightIn(min = 42.dp)

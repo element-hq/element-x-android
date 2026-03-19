@@ -155,7 +155,7 @@ private fun CopyableText(
     val clipboardManager = remember { requireNotNull(context.getSystemService<ClipboardManager>()) }
     Box(
         modifier
-            .clip(RoundedCornerShape(4.dp))
+            .clip(MaterialTheme.shapes.extraSmall)
             .background(ElementTheme.materialColors.surfaceVariant)
             .padding(6.dp)
             .clickable { clipboardManager.setPrimaryClip(ClipData.newPlainText("JSON", text)) }

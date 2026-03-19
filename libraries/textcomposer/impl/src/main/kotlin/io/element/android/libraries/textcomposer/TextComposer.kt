@@ -159,7 +159,8 @@ fun TextComposer(
                         modifier = Modifier
                             .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
-                                indication = null,
+                                // Decorative clickable: focus trigger for text input, not a button
+                            indication = null,
                             ) {
                                 coroutineScope.launch {
                                     state.requestFocus()

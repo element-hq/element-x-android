@@ -9,6 +9,7 @@
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -31,7 +32,7 @@ fun Snackbar(
     action: ButtonVisuals? = null,
     dismissAction: ButtonVisuals? = null,
     actionOnNewLine: Boolean = false,
-    shape: Shape = RoundedCornerShape(8.dp),
+    shape: Shape = MaterialTheme.shapes.small,
     containerColor: Color = SnackbarDefaults.color,
     contentColor: Color = ElementTheme.materialColors.inverseOnSurface,
     actionContentColor: Color = actionContentColor(),
@@ -57,7 +58,7 @@ fun Snackbar(
     action: @Composable (() -> Unit)? = null,
     dismissAction: @Composable (() -> Unit)? = null,
     actionOnNewLine: Boolean = false,
-    shape: Shape = RoundedCornerShape(8.dp),
+    shape: Shape = MaterialTheme.shapes.small,
     containerColor: Color = SnackbarDefaults.color,
     contentColor: Color = ElementTheme.materialColors.inverseOnSurface,
     actionContentColor: Color = actionContentColor(),

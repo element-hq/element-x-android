@@ -189,6 +189,7 @@ private fun BoxScope.OverlayEditButton(
             .size(editButtonSize)
             .offset(x = editButtonSize * 0.266f)
             .clip(CircleShape)
+            // Decorative clickable: small overlay edit button, ripple would obscure the icon
             .clickable(interactionSource = interactionSource, onClick = onClick, indication = null)
             .background(ElementTheme.colors.bgCanvasDefault)
             .border(BorderStroke(1.dp, ElementTheme.colors.borderInteractiveSecondary), shape = CircleShape),

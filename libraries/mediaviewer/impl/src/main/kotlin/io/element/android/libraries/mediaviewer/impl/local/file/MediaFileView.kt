@@ -61,6 +61,7 @@ fun MediaFileView(
             .clickable(
                 onClick = onClick,
                 interactionSource = interactionSource,
+                // Decorative clickable: media file area, ripple handled by child content
                 indication = null
             ),
         contentAlignment = Alignment.Center

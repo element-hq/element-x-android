@@ -18,7 +18,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.toggleable
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -38,8 +38,6 @@ import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
 
-private val CORNER_RADIUS = 8.dp
-
 @Composable
 fun GroupHeaderView(
     text: String,
@@ -50,7 +48,7 @@ fun GroupHeaderView(
 ) {
     // Ignore isHighlighted for now, we need a design decision on it.
     val backgroundColor = Color.Transparent
-    val shape = RoundedCornerShape(CORNER_RADIUS)
+    val shape = MaterialTheme.shapes.small
 
     Box(
         modifier = modifier

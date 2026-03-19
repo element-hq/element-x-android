@@ -119,7 +119,7 @@ private fun ProgressDialogContent(
         modifier = modifier
             .background(
                 color = ElementTheme.materialColors.surfaceVariant,
-                shape = RoundedCornerShape(8.dp)
+                shape = MaterialTheme.shapes.small
             )
     ) {
         Column(

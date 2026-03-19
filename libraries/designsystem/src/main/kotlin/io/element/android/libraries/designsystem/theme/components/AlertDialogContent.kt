@@ -148,7 +148,7 @@ internal fun SimpleAlertDialogContent(
         },
         subtitle = subtitle,
         content = content,
-        shape = DialogContentDefaults.shape,
+        shape = MaterialTheme.shapes.medium,
         containerColor = DialogContentDefaults.containerColor,
         iconContentColor = DialogContentDefaults.iconContentColor,
         titleContentColor = DialogContentDefaults.titleContentColor,

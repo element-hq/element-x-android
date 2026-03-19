@@ -27,6 +27,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -418,7 +419,7 @@ private fun SpaceViewTopBar(
             BackButton(onClick = onBackClick)
         },
         title = {
-            val roundedCornerShape = RoundedCornerShape(8.dp)
+            val roundedCornerShape = MaterialTheme.shapes.small
             SpaceAvatarAndNameRow(
                 name = spaceInfo.name,
                 avatarData = spaceInfo.getAvatarData(AvatarSize.TimelineRoom),

@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -102,7 +103,7 @@ private fun Digits(code: String) {
             Text(
                 modifier = Modifier
                     .padding(horizontal = 6.dp, vertical = 4.dp)
-                    .clip(RoundedCornerShape(4.dp))
+                    .clip(MaterialTheme.shapes.extraSmall)
                     .background(ElementTheme.colors.bgActionSecondaryPressed)
                     .padding(horizontal = 16.dp, vertical = 17.dp),
                 text = it.toString()
