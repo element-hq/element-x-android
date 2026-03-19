@@ -583,8 +583,8 @@ private fun TopicSection(
                 text = roomTopic.topic,
                 modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 8.dp, bottom = 12.dp),
                 interactionSource = remember { MutableInteractionSource() },
-                style = MaterialTheme.typography.bodyMedium.copy(
-                    color = MaterialTheme.colorScheme.tertiary,
+                style = ElementTheme.typography.fontBodyMdRegular.copy(
+                    color = ElementTheme.colors.textSecondary,
                 ),
             )
         }

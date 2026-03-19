@@ -10,7 +10,6 @@ package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBarDefaults
 import androidx.compose.material3.contentColorFor
 import androidx.compose.runtime.Composable
@@ -27,7 +26,7 @@ import io.element.android.libraries.designsystem.preview.PreviewGroup
 fun NavigationBar(
     modifier: Modifier = Modifier,
     containerColor: Color = ElementNavigationBarDefaults.containerColor,
-    contentColor: Color = MaterialTheme.colorScheme.contentColorFor(containerColor),
+    contentColor: Color = ElementTheme.materialColors.contentColorFor(containerColor),
     tonalElevation: Dp = ElementNavigationBarDefaults.tonalElevation,
     windowInsets: WindowInsets = ElementNavigationBarDefaults.windowInsets,
     content: @Composable RowScope.() -> Unit

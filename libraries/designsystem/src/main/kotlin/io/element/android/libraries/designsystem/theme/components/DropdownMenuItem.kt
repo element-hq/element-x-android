@@ -12,7 +12,6 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.material3.LocalTextStyle
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MenuDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -39,7 +38,7 @@ fun DropdownMenuItem(
 ) {
     androidx.compose.material3.DropdownMenuItem(
         text = {
-            CompositionLocalProvider(LocalTextStyle provides MaterialTheme.typography.bodyLarge) {
+            CompositionLocalProvider(LocalTextStyle provides ElementTheme.typography.fontBodyLgRegular) {
                 text()
             }
         },

@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
@@ -27,7 +26,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.annotations.CoreColorToken
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.internal.DarkColorTokens
+import io.element.android.compound.tokens.generated.internal.LightColorTokens
 import io.element.android.libraries.androidutils.system.copyToClipboard
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -48,7 +50,7 @@ internal fun FileContent(
                 Text(
                     text = stringResource(CommonStrings.common_empty_file),
                     textAlign = TextAlign.Center,
-                    color = MaterialTheme.colorScheme.tertiary,
+                    color = ElementTheme.colors.textSecondary,
                     modifier = Modifier.fillMaxWidth()
                 )
             }
@@ -148,7 +150,19 @@ private fun String.toColor(colorationMode: ColorationMode): Color {
     }
 }
 
-private val colorDebug = Color(0xFF299999)
-private val colorInfo = Color(0xFFABC023)
-private val colorWarning = Color(0xFFBBB529)
-private val colorError = Color(0xFFFF6B68)
+// Syntax highlighting colors for log viewer — using Compound core color tokens
+@OptIn(CoreColorToken::class)
+private val colorDebug: Color
+    @Composable get() = if (ElementTheme.isLightTheme) LightColorTokens.colorCyan900 else DarkColorTokens.colorCyan900
+
+@OptIn(CoreColorToken::class)
+private val colorInfo: Color
+    @Composable get() = if (ElementTheme.isLightTheme) LightColorTokens.colorGreen900 else DarkColorTokens.colorGreen900
+
+@OptIn(CoreColorToken::class)
+private val colorWarning: Color
+    @Composable get() = if (ElementTheme.isLightTheme) LightColorTokens.colorYellow900 else DarkColorTokens.colorYellow900
+
+@OptIn(CoreColorToken::class)
+private val colorError: Color
+    @Composable get() = if (ElementTheme.isLightTheme) LightColorTokens.colorRed900 else DarkColorTokens.colorRed900

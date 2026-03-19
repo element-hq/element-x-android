@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -130,7 +129,7 @@ private fun ReplyToModeView(
     Row(
         modifier
             .clip(RoundedCornerShape(13.dp))
-            .background(MaterialTheme.colorScheme.surface)
+            .background(ElementTheme.materialColors.surface)
             .padding(4.dp)
     ) {
         InReplyToView(

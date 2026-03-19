@@ -289,6 +289,8 @@ private fun CropOverlay(
     val latestCropRect by rememberUpdatedState(cropRect)
     val borderColor = ElementTheme.colors.textPrimary
     val guideColor = ElementTheme.colors.textSecondary
+    // M3 state layer: semi-transparent overlay for crop dimming
+    val overlayColor = ElementTheme.materialColors.scrim.copy(alpha = 0.48f)
 
     Canvas(
         modifier = Modifier
@@ -326,8 +328,6 @@ private fun CropOverlay(
         val cropTop = cropRect.top * size.height
         val cropRight = cropRect.right * size.width
         val cropBottom = cropRect.bottom * size.height
-        val overlayColor = Color.Black.copy(alpha = 0.48f)
-
         drawRect(
             color = overlayColor,
             topLeft = Offset.Zero,

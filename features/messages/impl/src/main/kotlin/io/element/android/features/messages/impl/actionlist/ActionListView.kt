@@ -488,7 +488,7 @@ private fun EmojiButton(
     ) {
         Text(
             emoji,
-            style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = 24.dp.toSp(), color = Color.White),
+            style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = 24.dp.toSp(), color = ElementTheme.colors.textOnSolidPrimary),
         )
     }
 }

@@ -90,7 +90,7 @@ fun TimelineItemImageView(
                 AsyncImage(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .then(if (isLoaded) Modifier.background(Color.White) else Modifier)
+                        .then(if (isLoaded) Modifier.background(ElementTheme.colors.bgCanvasDefault) else Modifier)
                         .then(
                             if (!isTalkbackActive() && onContentClick != null) {
                                 Modifier

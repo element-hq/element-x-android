@@ -19,7 +19,6 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -28,6 +27,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.components.async.AsyncLoading
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.SearchBar
@@ -79,7 +79,7 @@ fun SearchUserBar(
                 }
 
                 val appBarContainerColor by animateColorAsState(
-                    targetValue = MaterialTheme.colorScheme.surfaceColorAtElevation(elevation.value),
+                    targetValue = ElementTheme.materialColors.surfaceColorAtElevation(elevation.value),
                     animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
                 )
 

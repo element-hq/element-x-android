@@ -96,7 +96,8 @@ fun MessageEventBubble(
                 drawContent()
                 if (state.cutTopStart) {
                     drawCircle(
-                        color = Color.Black,
+                        // Color is irrelevant: BlendMode.Clear erases destination pixels
+                        color = Color.Transparent,
                         center = Offset(
                             x = if (isRtl) size.width else 0f,
                             y = yOffsetPx,

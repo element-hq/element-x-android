@@ -557,7 +557,7 @@ private fun CantSendMessageBanner() {
         Text(
             text = stringResource(id = R.string.screen_room_timeline_no_permission_to_post),
             color = ElementTheme.colors.textSecondary,
-            style = MaterialTheme.typography.bodyMedium,
+            style = ElementTheme.typography.fontBodyMdRegular,
             textAlign = TextAlign.Center,
             fontStyle = FontStyle.Italic,
         )

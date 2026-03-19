@@ -24,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.BiasAbsoluteAlignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextAlign
@@ -84,7 +83,7 @@ fun SunsetPage(
                         }
                         Spacer(modifier = Modifier.height(18.dp))
                         Text(
-                            text = withColoredPeriod(title),
+                            text = withColoredPeriod(title, ElementTheme.colors.textActionAccent),
                             style = ElementTheme.typography.fontHeadingXlBold,
                             textAlign = TextAlign.Center,
                             color = ElementTheme.colors.textPrimary,
@@ -119,8 +118,7 @@ private fun SunsetBackground() {
         val bottomBackgroundColor = if (ElementTheme.isLightTheme) {
             LightColorTokens.colorThemeBg
         } else {
-            // The dark background color doesn't 100% match the image, so we use a custom color
-            Color(0xFF121418)
+            DarkColorTokens.colorThemeBg
         }
         Box(
             modifier = Modifier

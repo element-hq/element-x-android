@@ -156,7 +156,7 @@ private fun CopyableText(
     Box(
         modifier
             .clip(RoundedCornerShape(4.dp))
-            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .background(ElementTheme.materialColors.surfaceVariant)
             .padding(6.dp)
             .clickable { clipboardManager.setPrimaryClip(ClipData.newPlainText("JSON", text)) }
     ) {

@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -85,13 +84,13 @@ private fun ReplyToReadyContent(
     }
     Row(
         modifier
-            .background(MaterialTheme.colorScheme.surface)
+            .background(ElementTheme.materialColors.surface)
             .padding(paddings)
     ) {
         if (metadata is InReplyToMetadata.Thumbnail) {
             AttachmentThumbnail(
                 info = metadata.attachmentThumbnailInfo,
-                backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+                backgroundColor = ElementTheme.materialColors.surfaceVariant,
                 modifier = Modifier
                     .size(36.dp)
                     .clip(RoundedCornerShape(4.dp))
@@ -125,7 +124,7 @@ private fun ReplyToLoadingContent(
     val paddings = PaddingValues(horizontal = 12.dp, vertical = 4.dp)
     Row(
         modifier
-            .background(MaterialTheme.colorScheme.surface)
+            .background(ElementTheme.materialColors.surface)
             .padding(paddings)
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -143,7 +142,7 @@ private fun ReplyToErrorContent(
     val paddings = PaddingValues(horizontal = 12.dp, vertical = 4.dp)
     Row(
         modifier
-            .background(MaterialTheme.colorScheme.surface)
+            .background(ElementTheme.materialColors.surface)
             .padding(paddings)
     ) {
         Text(

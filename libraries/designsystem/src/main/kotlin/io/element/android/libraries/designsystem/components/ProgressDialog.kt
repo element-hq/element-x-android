@@ -118,7 +118,7 @@ private fun ProgressDialogContent(
         contentAlignment = Alignment.Center,
         modifier = modifier
             .background(
-                color = MaterialTheme.colorScheme.surfaceVariant,
+                color = ElementTheme.materialColors.surfaceVariant,
                 shape = RoundedCornerShape(8.dp)
             )
     ) {

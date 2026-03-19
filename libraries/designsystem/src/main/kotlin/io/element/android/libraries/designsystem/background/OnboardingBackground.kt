@@ -39,7 +39,9 @@ fun OnboardingBackground() {
             .fillMaxSize()
             .background(ElementTheme.colors.bgCanvasDefault)
     ) {
-        val isLightTheme = ElementTheme.isLightTheme
+        val gradientColor1 = ElementTheme.colors.gradientActionStop1
+        val gradientColor2 = ElementTheme.colors.gradientInfoStop1
+        val scrimColor = ElementTheme.materialColors.scrim
         Canvas(
             modifier = Modifier
                 .fillMaxWidth()
@@ -51,8 +53,8 @@ fun OnboardingBackground() {
                     from = Offset(0f, size.height / 2f),
                     to = Offset(size.width, size.height / 2f),
                     colors = listOf(
-                        Color(0xFF0DBDA8),
-                        if (isLightTheme) Color(0xC90D5CBD) else Color(0xFF0D5CBD),
+                        gradientColor1,
+                        gradientColor2,
                     )
                 )
             )
@@ -61,8 +63,8 @@ fun OnboardingBackground() {
                     from = Offset(size.width / 2f, 0f),
                     to = Offset(size.width / 2f, size.height * 2f),
                     colors = listOf(
-                        Color(0xFF000000),
-                        Color(0x00000000),
+                        ElementTheme.materialColors.scrim,
+                        Color.Transparent,
                     )
                 )
             )

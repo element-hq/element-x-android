@@ -12,7 +12,6 @@ import android.Manifest
 import android.view.Gravity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
-import androidx.compose.ui.graphics.Color
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.maplibre.compose.MapLocationSettings
 import io.element.android.libraries.maplibre.compose.MapSymbolManagerSettings
@@ -44,15 +43,17 @@ object MapDefaults {
         )
 
     val locationSettings: MapLocationSettings
+        @Composable
+        @ReadOnlyComposable
         get() = MapLocationSettings(
             locationEnabled = false,
-            backgroundTintColor = Color.White,
-            foregroundTintColor = Color.Black,
-            backgroundStaleTintColor = Color.White,
-            foregroundStaleTintColor = Color.Black,
-            accuracyColor = Color.Black,
+            backgroundTintColor = ElementTheme.colors.bgCanvasDefault,
+            foregroundTintColor = ElementTheme.colors.iconPrimary,
+            backgroundStaleTintColor = ElementTheme.colors.bgCanvasDefault,
+            foregroundStaleTintColor = ElementTheme.colors.iconPrimary,
+            accuracyColor = ElementTheme.colors.iconPrimary,
             pulseEnabled = true,
-            pulseColor = Color.Black,
+            pulseColor = ElementTheme.colors.iconPrimary,
         )
 
     val centerCameraPosition = CameraPosition.Builder()

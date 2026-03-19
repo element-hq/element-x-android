@@ -87,7 +87,8 @@ fun AvatarRow(
                                     size.width - avatarSizePx * (overlapRatio - 0.5f)
                                 }
                                 drawCircle(
-                                    color = Color.Black,
+                                    // Color is irrelevant: BlendMode.Clear erases destination pixels
+                                    color = Color.Transparent,
                                     center = Offset(
                                         x = xOffset,
                                         y = size.height / 2,

@@ -104,7 +104,7 @@ fun TimelineItemVideoView(
                 AsyncImage(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .then(if (isLoaded) Modifier.background(Color.White) else Modifier)
+                        .then(if (isLoaded) Modifier.background(ElementTheme.colors.bgCanvasDefault) else Modifier)
                         .then(
                             if (!isTalkbackActive && onContentClick != null) {
                                 Modifier
@@ -137,7 +137,7 @@ fun TimelineItemVideoView(
                     Image(
                         imageVector = CompoundIcons.PlaySolid(),
                         contentDescription = stringResource(id = CommonStrings.a11y_play),
-                        colorFilter = ColorFilter.tint(Color.White),
+                        colorFilter = ColorFilter.tint(ElementTheme.colors.iconOnSolidPrimary),
                         modifier = Modifier.semantics { hideFromAccessibility() }
                     )
                 }

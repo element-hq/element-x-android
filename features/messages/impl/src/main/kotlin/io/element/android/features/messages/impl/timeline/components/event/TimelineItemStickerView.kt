@@ -27,6 +27,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContentProvider
 import io.element.android.features.messages.impl.timeline.protection.ProtectedView
@@ -67,7 +68,7 @@ fun TimelineItemStickerView(
                 AsyncImage(
                     modifier = Modifier
                         .fillMaxSize()
-                        .then(if (isLoaded) Modifier.background(Color.White) else Modifier)
+                        .then(if (isLoaded) Modifier.background(ElementTheme.colors.bgCanvasDefault) else Modifier)
                         .then(
                             if (onContentClick != null) {
                                 Modifier
