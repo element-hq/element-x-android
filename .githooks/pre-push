@@ -1,0 +1,71 @@
+#!/usr/bin/env bash
+# Pre-push hook: run ktlintCheck and lint on modules with changed files.
+# Skip with: git push --no-verify
+
+set -euo pipefail
+
+REPO_ROOT="$(git rev-parse --show-toplevel)"
+cd "$REPO_ROOT"
+
+# Find changed files vs origin/develop (or HEAD if no remote yet)
+REMOTE_BRANCH="origin/develop"
+if git rev-parse --verify "$REMOTE_BRANCH" &>/dev/null; then
+    CHANGED=$(git diff --name-only "$REMOTE_BRANCH"...HEAD)
+else
+    CHANGED=$(git diff --name-only HEAD~1...HEAD 2>/dev/null || git diff --name-only --cached)
+fi
+
+if [ -z "$CHANGED" ]; then
+    echo "pre-push: no changed files, skipping checks."
+    exit 0
+fi
+
+# Derive unique Gradle module paths from changed .kt/.kts/.xml files
+MODULES=$(echo "$CHANGED" | grep -E '\.(kt|kts|xml)$' | awk -F'/' '
+{
+    # Walk up to find the module: path segment before src/
+    for (i=1; i<=NF; i++) {
+        if ($i == "src") {
+            path = ""
+            for (j=1; j<i; j++) path = (path == "" ? $j : path "/" $j)
+            print ":" path
+            break
+        }
+    }
+}' | sed "s|/|:|g" | sort -u)
+
+if [ -z "$MODULES" ]; then
+    echo "pre-push: no Kotlin/XML changes, skipping checks."
+    exit 0
+fi
+
+echo "pre-push: checking modules:"
+echo "$MODULES" | sed 's/^/  /'
+
+JAVA_HOME=$(/usr/libexec/java_home -v 21 2>/dev/null || echo "$JAVA_HOME")
+export JAVA_HOME
+
+# Build Gradle tasks for each changed module
+KTLINT_TASKS=$(echo "$MODULES" | sed 's/$/:ktlintCheck/' | tr '\n' ' ')
+LINT_TASKS=$(echo "$MODULES" | sed 's/$/:lintDebug/' | tr '\n' ' ')
+
+echo ""
+echo "▶ ktlintCheck..."
+if ! ./gradlew $KTLINT_TASKS --continue --no-configuration-cache -q 2>&1; then
+    echo ""
+    echo "✗ ktlint failed. Run './gradlew ktlintFormat' to auto-fix, then re-stage."
+    exit 1
+fi
+echo "✓ ktlint passed"
+
+echo ""
+echo "▶ lintDebug (changed modules only)..."
+if ! ./gradlew $LINT_TASKS --continue --no-configuration-cache -q 2>&1; then
+    echo ""
+    echo "✗ lint failed. Check the reports above."
+    exit 1
+fi
+echo "✓ lint passed"
+
+echo ""
+echo "✓ All pre-push checks passed."

@@ -109,6 +109,16 @@ Some separate commands can also be run, see below.
 ./gradlew detekt
 </pre>
 
+#### Git hooks
+
+A pre-push hook is included in `.githooks/` that automatically runs `ktlintCheck` and `lintDebug` on any modules you've changed before pushing. Activate it once after cloning:
+
+<pre>
+git config core.hooksPath .githooks
+</pre>
+
+If ktlint fails, auto-fix with `./gradlew ktlintFormat`, then re-stage and push. Skip the hook for a specific push with `git push --no-verify`.
+
 #### ktlint
 
 <pre>
