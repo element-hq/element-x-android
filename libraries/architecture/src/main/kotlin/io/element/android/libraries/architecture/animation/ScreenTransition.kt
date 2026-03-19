@@ -8,16 +8,20 @@
 
 package io.element.android.libraries.architecture.animation
 
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
 import com.bumble.appyx.core.navigation.transition.ModifierTransitionHandler
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.transitionhandler.rememberBackstackSlider
 
+/**
+ * M3 shared-axis horizontal transition for screen navigation.
+ * Uses emphasized decelerate easing (400ms) per M3 motion spec.
+ */
 @Composable
 fun <NavTarget> rememberDefaultTransitionHandler(): ModifierTransitionHandler<NavTarget, BackStack.State> {
     return rememberBackstackSlider(
-        transitionSpec = { spring(stiffness = Spring.StiffnessMediumLow) },
+        transitionSpec = { tween(durationMillis = 400, easing = FastOutSlowInEasing) },
     )
 }
