@@ -77,4 +77,13 @@ fi
 echo "✓ lint passed"
 
 echo ""
+echo "▶ checkDocs (markdown TOC)..."
+if ! ./gradlew checkDocs --no-configuration-cache -q 2>&1; then
+    echo ""
+    echo "✗ Doc check failed. Run './gradlew generateDocsToc' to update TOC, then re-stage."
+    exit 1
+fi
+echo "✓ docs passed"
+
+echo ""
 echo "✓ All pre-push checks passed."
