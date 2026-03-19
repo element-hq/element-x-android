@@ -44,6 +44,7 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.material3.minimumInteractiveComponentSize
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.login.impl.R
@@ -210,7 +211,7 @@ private fun LoginForm(
             singleLine = true,
             trailingIcon = if (loginFieldState.isNotEmpty()) {
                 {
-                    Box(Modifier.clickable {
+                    Box(Modifier.minimumInteractiveComponentSize().clickable {
                         loginFieldState = ""
                         eventSink(LoginPasswordEvents.SetLogin(""))
                     }) {
@@ -253,7 +254,7 @@ private fun LoginForm(
                     if (passwordVisible) CompoundIcons.VisibilityOn() else CompoundIcons.VisibilityOff()
                 val description =
                     if (passwordVisible) stringResource(CommonStrings.a11y_hide_password) else stringResource(CommonStrings.a11y_show_password)
-                Box(Modifier.clickable { passwordVisible = !passwordVisible }) {
+                Box(Modifier.minimumInteractiveComponentSize().clickable { passwordVisible = !passwordVisible }) {
                     Icon(
                         imageVector = image,
                         contentDescription = description,

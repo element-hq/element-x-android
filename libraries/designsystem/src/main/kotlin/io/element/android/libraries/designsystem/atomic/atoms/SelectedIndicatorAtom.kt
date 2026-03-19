@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.unit.dp
+import androidx.compose.material3.minimumInteractiveComponentSize
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -32,7 +33,7 @@ fun SelectedIndicatorAtom(
 ) {
     if (checked) {
         Icon(
-            modifier = modifier.toggleable(
+            modifier = modifier.minimumInteractiveComponentSize().toggleable(
                 value = true,
                 role = Role.Checkbox,
                 enabled = enabled,
