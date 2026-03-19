@@ -33,6 +33,7 @@ import io.element.android.compound.tokens.generated.SemanticColors
 import io.element.android.compound.tokens.generated.TypographyTokens
 import io.element.android.compound.tokens.generated.compoundColorsDark
 import io.element.android.compound.tokens.generated.compoundColorsLight
+import androidx.compose.material3.ColorScheme
 
 /**
  * Inspired from https://medium.com/@lucasyujideveloper/54cbcbde1ace
@@ -103,7 +104,7 @@ fun ElementTheme(
     typography: Typography = compoundTypography,
     content: @Composable () -> Unit,
 ) {
-    val currentCompoundColor = when {
+    val baseCompoundColor = when {
         darkTheme -> compoundDark
         else -> compoundLight
     }
@@ -115,6 +116,14 @@ fun ElementTheme(
         }
         darkTheme -> materialColorsDark
         else -> materialColorsLight
+    }
+
+    // When dynamic color is active, adapt key Compound semantic tokens from the
+    // system-derived M3 ColorScheme so ElementTheme.colors reflects wallpaper colors.
+    val currentCompoundColor = if (dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+        baseCompoundColor.withDynamicColors(colorScheme)
+    } else {
+        baseCompoundColor
     }
 
     val statusBarColorScheme = if (dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -158,3 +167,60 @@ fun ElementTheme(
         )
     }
 }
+
+/**
+ * Adapt key Compound semantic colors from a dynamic M3 ColorScheme (Material You).
+ * This maps the wallpaper-derived palette onto the most visible Compound tokens
+ * while preserving brand-specific tokens (decorative, gradient, badge colors).
+ */
+private fun SemanticColors.withDynamicColors(scheme: ColorScheme): SemanticColors = copy(
+    // Primary action backgrounds → M3 primary
+    bgActionPrimaryRest = scheme.primary,
+    bgActionPrimaryHovered = scheme.primary,
+    bgActionPrimaryPressed = scheme.primary,
+    bgActionPrimaryDisabled = scheme.onSurface.copy(alpha = 0.12f),
+    // Accent backgrounds → M3 primary
+    bgAccentRest = scheme.primary,
+    bgAccentHovered = scheme.primary,
+    bgAccentPressed = scheme.primary,
+    bgAccentSelected = scheme.primary,
+    // Canvas/surface backgrounds → M3 surface
+    bgCanvasDefault = scheme.surface,
+    bgCanvasDefaultLevel1 = scheme.surfaceContainerLow,
+    bgCanvasDisabled = scheme.onSurface.copy(alpha = 0.12f),
+    // Subtle backgrounds → M3 surface variants
+    bgSubtlePrimary = scheme.surfaceContainerHigh,
+    bgSubtleSecondary = scheme.surfaceContainerLow,
+    // Secondary/tertiary actions → M3 secondary
+    bgActionSecondaryRest = scheme.surfaceContainerHighest,
+    bgActionSecondaryHovered = scheme.surfaceContainerHighest,
+    bgActionSecondaryPressed = scheme.surfaceContainerHighest,
+    bgActionTertiaryRest = scheme.surfaceContainerLow,
+    bgActionTertiaryHovered = scheme.surfaceContainerLow,
+    bgActionTertiarySelected = scheme.secondaryContainer,
+    // Text colors → M3 on* roles
+    textPrimary = scheme.onSurface,
+    textSecondary = scheme.onSurfaceVariant,
+    textOnSolidPrimary = scheme.onPrimary,
+    textDisabled = scheme.onSurface.copy(alpha = 0.38f),
+    textActionPrimary = scheme.primary,
+    textActionAccent = scheme.primary,
+    textLinkExternal = scheme.primary,
+    // Icon colors → M3 on* roles
+    iconPrimary = scheme.onSurface,
+    iconSecondary = scheme.onSurfaceVariant,
+    iconTertiary = scheme.onSurfaceVariant,
+    iconQuaternary = scheme.outline,
+    iconOnSolidPrimary = scheme.onPrimary,
+    iconAccentPrimary = scheme.primary,
+    iconAccentTertiary = scheme.tertiary,
+    iconDisabled = scheme.onSurface.copy(alpha = 0.38f),
+    // Border colors → M3 outline roles
+    borderInteractivePrimary = scheme.outline,
+    borderInteractiveHovered = scheme.primary,
+    borderInteractiveSecondary = scheme.outlineVariant,
+    borderDisabled = scheme.onSurface.copy(alpha = 0.12f),
+    borderFocused = scheme.primary,
+    // Critical/error colors stay from Compound (brand-critical, shouldn't change)
+    // Decorative/gradient colors stay from Compound (brand-specific)
+)
