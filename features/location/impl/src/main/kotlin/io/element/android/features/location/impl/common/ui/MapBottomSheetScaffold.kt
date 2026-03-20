@@ -18,7 +18,7 @@ import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
-import androidx.compose.foundation.layout.safeContent
+import androidx.compose.foundation.layout.safeDrawing
 import androidx.compose.foundation.layout.windowInsetsBottomHeight
 import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.material3.BottomSheetDefaults
@@ -93,7 +93,7 @@ fun MapBottomSheetScaffold(
 ) {
     val density = LocalDensity.current
 
-    val windowInsets = WindowInsets.safeContent.only(WindowInsetsSides.Horizontal)
+    val windowInsets = WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal)
     BoxWithConstraints(modifier = modifier.windowInsetsPadding(windowInsets)) {
         val layoutHeightPx by rememberUpdatedState(constraints.maxHeight)
         val sheetPadding by remember {
