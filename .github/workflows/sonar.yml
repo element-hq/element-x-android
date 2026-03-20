@@ -54,7 +54,7 @@ jobs:
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Build debug code and test fixtures
-        run: ./gradlew assembleDebug createFullJarDebugTestFixtures :app:createFullJarGplayDebugTestFixtures $CI_GRADLE_ARG_PROPERTIES
+        run: ./gradlew assembleGplayDebug createFullJarDebugTestFixtures :app:createFullJarGplayDebugTestFixtures $CI_GRADLE_ARG_PROPERTIES
       - name: 🔊 Publish results to Sonar
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
