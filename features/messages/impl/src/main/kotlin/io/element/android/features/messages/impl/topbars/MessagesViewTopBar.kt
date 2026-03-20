@@ -45,6 +45,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
@@ -65,8 +66,10 @@ internal fun MessagesViewTopBar(
     roomCallState: RoomCallState,
     dmUserIdentityState: IdentityState?,
     sharedHistoryIcon: SharedHistoryIcon,
+    canSearchMessages: Boolean = false,
     onRoomDetailsClick: () -> Unit,
     onJoinCallClick: (isAudioCall: Boolean) -> Unit,
+    onSearchClick: () -> Unit = {},
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -127,6 +130,14 @@ internal fun MessagesViewTopBar(
             }
         },
         actions = {
+            if (canSearchMessages && !isTombstoned) {
+                IconButton(onClick = onSearchClick) {
+                    Icon(
+                        imageVector = CompoundIcons.Search(),
+                        contentDescription = stringResource(CommonStrings.action_search),
+                    )
+                }
+            }
             CallMenuItem(
                 roomCallState = roomCallState,
                 onJoinCallClick = onJoinCallClick,

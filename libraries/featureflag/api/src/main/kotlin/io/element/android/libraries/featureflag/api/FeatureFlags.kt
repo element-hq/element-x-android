@@ -147,6 +147,13 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
+    RoomMessageSearch(
+        key = "feature.roomMessageSearch",
+        title = "Room message search",
+        description = "Search messages within a room",
+        defaultValue = { false },
+        isFinished = false,
+    ),
     ValidateNetworkWhenSchedulingNotificationFetching(
         key = "feature.validate_network_when_scheduling_notification_fetching",
         title = "validate internet connectivity when scheduling notification fetching",

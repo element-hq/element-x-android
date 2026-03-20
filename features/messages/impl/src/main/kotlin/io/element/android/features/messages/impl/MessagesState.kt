@@ -56,6 +56,7 @@ data class MessagesState(
     val roomMemberModerationState: RoomMemberModerationState,
     /** Type of "shared history" icon to show in the top bar. */
     val topBarSharedHistoryIcon: SharedHistoryIcon,
+    val canSearchMessages: Boolean,
     val successorRoom: SuccessorRoom?,
     val eventSink: (MessagesEvent) -> Unit
 ) {

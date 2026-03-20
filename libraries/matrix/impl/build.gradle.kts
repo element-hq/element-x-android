@@ -41,6 +41,8 @@ dependencies {
     implementation(projects.libraries.core)
     implementation("net.java.dev.jna:jna:5.18.1@aar")
     implementation(libs.androidx.datastore.preferences)
+    implementation(platform(libs.network.okhttp.bom))
+    implementation(libs.network.okhttp)
     implementation(libs.serialization.json)
     implementation(libs.kotlinx.collections.immutable)
 

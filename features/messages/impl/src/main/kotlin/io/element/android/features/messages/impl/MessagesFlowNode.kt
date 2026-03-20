@@ -293,6 +293,10 @@ class MessagesFlowNode(
                     override fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?) {
                         backstack.push(NavTarget.Thread(threadRootId, focusedEventId))
                     }
+
+                    override fun navigateToSearchMessages() {
+                        callback.navigateToSearchMessages()
+                    }
                 }
                 val inputs = MessagesNode.Inputs(focusedEventId = navTarget.focusedEventId)
                 createNode<MessagesNode>(buildContext, listOf(callback, inputs))

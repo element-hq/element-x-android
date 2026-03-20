@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_room_message_search_type_to_search">Type to search messages</string>
+    <string name="screen_room_message_search_encrypted_room">Search is not available in encrypted rooms</string>
+</resources>
