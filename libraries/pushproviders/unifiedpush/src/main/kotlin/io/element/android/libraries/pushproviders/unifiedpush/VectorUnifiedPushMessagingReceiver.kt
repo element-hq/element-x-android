@@ -71,11 +71,17 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
                     providerInfo = "${UnifiedPushConfig.NAME} - $instance",
                     data = String(message.content),
                 )
+                pushHandlingWakeLock.unlock()
             } else {
-                pushHandler.handle(
+                val handled = pushHandler.handle(
                     pushData = pushData,
                     providerInfo = "${UnifiedPushConfig.NAME} - $instance",
                 )
+
+                // If we failed to handle the push, we should release the wakelock early to avoid keeping the device awake for too long.
+                if (!handled) {
+                    pushHandlingWakeLock.unlock()
+                }
             }
         }
     }
