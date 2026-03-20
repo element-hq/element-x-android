@@ -38,7 +38,9 @@ object BridgeDetector {
         localPart.contains("imessage") || localPart.contains("apple") -> BridgeType.IMESSAGE
         localPart.contains("slack") -> BridgeType.SLACK
         localPart.contains("gmessage") || localPart.contains("rcs") -> BridgeType.GOOGLE_MESSAGES
-        localPart.contains("gchat") || localPart.contains("googlechat") || localPart.contains("google") -> BridgeType.GOOGLE_CHAT
+        // Note: check specific Google products before the generic "google" catch-all to avoid false positives
+        localPart.contains("gchat") || localPart.contains("googlechat") -> BridgeType.GOOGLE_CHAT
+        localPart.contains("matrix") -> BridgeType.MATRIX
         localPart.endsWith("bot") -> BridgeType.GENERIC
         else -> null
     }
@@ -53,6 +55,7 @@ object BridgeDetector {
         "slack" -> BridgeType.SLACK
         "gmessages", "gmessage", "rcs" -> BridgeType.GOOGLE_MESSAGES
         "gchat", "googlechat" -> BridgeType.GOOGLE_CHAT
+        "matrix" -> BridgeType.MATRIX
         else -> null
     }
 }

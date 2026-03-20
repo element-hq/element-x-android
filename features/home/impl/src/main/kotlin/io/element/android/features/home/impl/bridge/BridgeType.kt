@@ -18,5 +18,6 @@ enum class BridgeType {
     SLACK,
     GOOGLE_CHAT,
     GOOGLE_MESSAGES, // RCS via mautrix-gmessages
+    MATRIX, // native Matrix room (no bridge)
     GENERIC, // unknown bridge bot — fallback icon
 }

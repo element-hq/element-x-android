@@ -67,6 +67,18 @@ class BridgeDetectorTest {
     }
 
     @Test
+    fun `detects Matrix from hero user ID`() {
+        assertThat(BridgeDetector.detect(listOf("@matrixbot:matrix.org"))).isEqualTo(BridgeType.MATRIX)
+        assertThat(BridgeDetector.detect(listOf("@matrix_appservice:example.com"))).isEqualTo(BridgeType.MATRIX)
+    }
+
+    @Test
+    fun `does not false-positive google catch-all for regular Google user IDs`() {
+        // Previously "google" was a greedy catch-all; ensure only explicit gchat/googlechat patterns match
+        assertThat(BridgeDetector.detect(listOf("@googlebot:matrix.org"))).isEqualTo(BridgeType.GENERIC)
+    }
+
+    @Test
     fun `detects generic bridge from unknown bot user ID`() {
         assertThat(BridgeDetector.detect(listOf("@someunknownbot:matrix.org"))).isEqualTo(BridgeType.GENERIC)
     }
@@ -128,6 +140,11 @@ class BridgeDetectorTest {
     @Test
     fun `detects Google Messages from canonical alias`() {
         assertThat(BridgeDetector.detect(emptyList(), "#gmessages_15551234567:example.com")).isEqualTo(BridgeType.GOOGLE_MESSAGES)
+    }
+
+    @Test
+    fun `detects Matrix from canonical alias`() {
+        assertThat(BridgeDetector.detect(emptyList(), "#matrix_room_123:example.com")).isEqualTo(BridgeType.MATRIX)
     }
 
     @Test
