@@ -145,16 +145,16 @@ class ResetIdentityFlowNode(
 
         // This intercepts the back navigation so we only cancel this job when the user actually navigates up
         if (navigatesUp) {
-            sessionCoroutineScope.launch { cancelResetJob() }
+            sessionCoroutineScope.launch { resetIdentityFlowManager.cancel() }
+            cancelResetJob()
         }
 
         return navigatesUp
     }
 
-    private suspend fun cancelResetJob() {
+    private fun cancelResetJob() {
         resetJob?.cancel()
         resetJob = null
-        resetIdentityFlowManager.cancel()
     }
 
     @Composable
