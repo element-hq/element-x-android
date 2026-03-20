@@ -48,6 +48,13 @@ fun SemanticColors.toMaterialColorSchemeLight(): ColorScheme = lightColorScheme(
     onErrorContainer = textCriticalPrimary,
     outline = borderInteractivePrimary,
     outlineVariant = LightColorTokens.colorAlphaGray400,
+    surfaceContainerLowest = bgCanvasDefault,
+    surfaceContainerLow = bgSubtleSecondary,
+    surfaceContainer = bgSubtleSecondaryLevel0,
+    surfaceContainerHigh = bgSubtlePrimary,
+    surfaceContainerHighest = bgActionSecondaryRest,
+    surfaceDim = LightColorTokens.colorGray300,
+    surfaceBright = bgCanvasDefault,
     // Note: for dark it will be colorGray300
     scrim = LightColorTokens.colorGray1400,
 )

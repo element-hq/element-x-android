@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.ProvideTextStyle
@@ -149,7 +148,7 @@ internal fun SimpleAlertDialogContent(
         },
         subtitle = subtitle,
         content = content,
-        shape = MaterialTheme.shapes.medium,
+        shape = DialogContentDefaults.shape,
         containerColor = DialogContentDefaults.containerColor,
         iconContentColor = DialogContentDefaults.iconContentColor,
         titleContentColor = DialogContentDefaults.titleContentColor,
@@ -386,7 +385,10 @@ internal fun DialogPreview(content: @Composable () -> Unit) {
 
 internal object DialogContentDefaults {
     private val externalPaddingDp = 24.dp
-    val shape = RoundedCornerShape(12.dp)
+    val shape: Shape
+        @Composable
+        @ReadOnlyComposable
+        get() = MaterialTheme.shapes.extraLarge
     val externalPadding = PaddingValues(all = externalPaddingDp)
     val externalHorizontalPadding = PaddingValues(horizontal = externalPaddingDp)
     val externalVerticalPadding = PaddingValues(vertical = externalPaddingDp)

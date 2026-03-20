@@ -24,6 +24,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Text
 
+@Suppress("DEPRECATION") // Functional divider for read marker — intentional
 @Composable
 internal fun TimelineItemReadMarkerView(
     modifier: Modifier = Modifier
@@ -44,7 +45,7 @@ internal fun TimelineItemReadMarkerView(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 2.dp),
-            color = ElementTheme.colors.textActionAccent,
+            color = ElementTheme.colors.borderAccentSubtle,
         )
     }
 }

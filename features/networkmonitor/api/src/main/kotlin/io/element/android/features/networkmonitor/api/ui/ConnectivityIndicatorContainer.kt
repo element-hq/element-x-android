@@ -10,13 +10,8 @@ package io.element.android.features.networkmonitor.api.ui
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
+import io.element.android.libraries.designsystem.animation.M3Motion
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
@@ -52,17 +47,14 @@ fun ConnectivityIndicatorContainer(
         val target = if (isIndicatorVisible.targetState) statusBarTopPadding else 0.dp
         val topWindowInset by animateDpAsState(
             targetValue = target,
-            animationSpec = spring(
-                stiffness = Spring.StiffnessMediumLow,
-                visibilityThreshold = 1.dp,
-            ),
+            animationSpec = M3Motion.defaultValueSpec(),
             label = "insets-animation",
         )
         // Display the network indicator with an animation
         AnimatedVisibility(
             visibleState = isIndicatorVisible,
-            enter = fadeIn() + expandVertically(),
-            exit = fadeOut() + shrinkVertically(),
+            enter = M3Motion.enterTransition,
+            exit = M3Motion.exitTransition,
         ) {
             ConnectivityIndicator(verticalPadding = INDICATOR_VERTICAL_PADDING)
         }

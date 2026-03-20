@@ -29,7 +29,7 @@ import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.LinearProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.WavyLinearProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.progressIndicatorTrackColor
@@ -154,7 +154,7 @@ private fun Content(
     ) {
         when (state.backupUploadState) {
             is BackupUploadState.Uploading -> {
-                LinearProgressIndicator(
+                WavyLinearProgressIndicator(
                     modifier = Modifier.fillMaxWidth(),
                     progress = { state.backupUploadState.backedUpCount.toFloat() / state.backupUploadState.totalCount.toFloat() },
                     trackColor = ElementTheme.colors.progressIndicatorTrackColor,
@@ -166,7 +166,7 @@ private fun Content(
                 )
             }
             BackupUploadState.Waiting -> {
-                LinearProgressIndicator(
+                WavyLinearProgressIndicator(
                     modifier = Modifier.fillMaxWidth(),
                     trackColor = ElementTheme.colors.progressIndicatorTrackColor,
                 )

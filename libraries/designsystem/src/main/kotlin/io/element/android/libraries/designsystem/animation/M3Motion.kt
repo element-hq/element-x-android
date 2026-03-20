@@ -9,80 +9,119 @@ package io.element.android.libraries.designsystem.animation
 
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.core.EaseInBack
-import androidx.compose.animation.core.EaseOutBack
 import androidx.compose.animation.core.FastOutSlowInEasing
-import androidx.compose.animation.core.LinearOutSlowInEasing
+import androidx.compose.animation.core.FiniteAnimationSpec
 import androidx.compose.animation.core.snap
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntSize
 import io.element.android.libraries.androidutils.system.areAnimationsEnabled
 
 /**
- * Material 3 motion utilities for consistent animation behavior across the app.
+ * Material 3 Expressive motion utilities powered by [MaterialTheme.motionScheme].
  *
- * M3 motion uses emphasized easing for enter/exit and standard easing for in-place changes.
+ * Spring-physics based animations replace the previous tween-based constants.
+ * All transitions respect the system "Remove animations" accessibility setting.
  */
 object M3Motion {
-    // M3 duration tokens
-    const val DURATION_SHORT = 150
-    const val DURATION_MEDIUM = 300
-    const val DURATION_LONG = 500
-    const val DURATION_EXTRA_LONG = 700
-
-    // M3 enter transition: fade + slide from bottom
+    /**
+     * M3 Expressive enter transition: fade + slide from bottom using MotionScheme springs.
+     */
     val enterTransition: EnterTransition
-        get() = fadeIn(
-            animationSpec = tween(
-                durationMillis = DURATION_MEDIUM,
-                easing = LinearOutSlowInEasing
+        @OptIn(ExperimentalMaterial3ExpressiveApi::class)
+        @Composable
+        get() {
+            if (isReduceMotionEnabled) {
+                return fadeIn(animationSpec = snap())
+            }
+            val spatialSpec = MaterialTheme.motionScheme.defaultSpatialSpec<IntOffset>()
+            val effectsSpec = MaterialTheme.motionScheme.defaultEffectsSpec<Float>()
+            return fadeIn(animationSpec = effectsSpec) + slideInVertically(
+                animationSpec = spatialSpec,
+                initialOffsetY = { it / 8 }
             )
-        ) + slideInVertically(
-            animationSpec = tween(
-                durationMillis = DURATION_MEDIUM,
-                easing = LinearOutSlowInEasing
-            ),
-            initialOffsetY = { it / 8 }
-        )
+        }
 
-    // M3 exit transition: fade + slide to bottom
+    /**
+     * M3 Expressive exit transition: fade + slide to bottom using MotionScheme springs.
+     */
     val exitTransition: ExitTransition
-        get() = fadeOut(
-            animationSpec = tween(
-                durationMillis = DURATION_SHORT,
-                easing = FastOutSlowInEasing
+        @OptIn(ExperimentalMaterial3ExpressiveApi::class)
+        @Composable
+        get() {
+            if (isReduceMotionEnabled) {
+                return fadeOut(animationSpec = snap())
+            }
+            val spatialSpec = MaterialTheme.motionScheme.defaultSpatialSpec<IntOffset>()
+            val effectsSpec = MaterialTheme.motionScheme.defaultEffectsSpec<Float>()
+            return fadeOut(animationSpec = effectsSpec) + slideOutVertically(
+                animationSpec = spatialSpec,
+                targetOffsetY = { it / 8 }
             )
-        ) + slideOutVertically(
-            animationSpec = tween(
-                durationMillis = DURATION_SHORT,
-                easing = FastOutSlowInEasing
-            ),
-            targetOffsetY = { it / 8 }
-        )
+        }
 
-    // Simple fade enter (for less prominent elements)
+    /**
+     * Simple fade enter using MotionScheme effects spec.
+     */
     val fadeEnter: EnterTransition
-        get() = fadeIn(
-            animationSpec = tween(
-                durationMillis = DURATION_SHORT,
-                easing = LinearOutSlowInEasing
-            )
-        )
+        @OptIn(ExperimentalMaterial3ExpressiveApi::class)
+        @Composable
+        get() {
+            if (isReduceMotionEnabled) {
+                return fadeIn(animationSpec = snap())
+            }
+            return fadeIn(animationSpec = MaterialTheme.motionScheme.defaultEffectsSpec())
+        }
 
-    // Simple fade exit
+    /**
+     * Lightweight animation spec for list item animations (animateItem).
+     * Uses tween instead of spring to avoid per-frame spring solver overhead during scrolling.
+     * Respects the system "Remove animations" accessibility setting.
+     */
+    @Composable
+    @ReadOnlyComposable
+    fun <T> listItemSpec(): FiniteAnimationSpec<T> =
+        if (isReduceMotionEnabled) snap() else tween(durationMillis = 200, easing = FastOutSlowInEasing)
+
+    /**
+     * For animate*AsState calls (color, float, dp). Uses MotionScheme effects spec (spring-physics).
+     * Respects the system "Remove animations" accessibility setting.
+     */
+    @OptIn(ExperimentalMaterial3ExpressiveApi::class)
+    @Composable
+    fun <T> defaultValueSpec(): FiniteAnimationSpec<T> =
+        if (isReduceMotionEnabled) snap() else MaterialTheme.motionScheme.fastEffectsSpec()
+
+    /**
+     * For animateContentSize. Uses MotionScheme spatial spec (spring-physics).
+     * Respects the system "Remove animations" accessibility setting.
+     */
+    @OptIn(ExperimentalMaterial3ExpressiveApi::class)
+    @Composable
+    fun defaultContentSizeSpec(): FiniteAnimationSpec<IntSize> =
+        if (isReduceMotionEnabled) snap() else MaterialTheme.motionScheme.defaultSpatialSpec()
+
+    /**
+     * Simple fade exit using MotionScheme effects spec.
+     */
     val fadeExit: ExitTransition
-        get() = fadeOut(
-            animationSpec = tween(
-                durationMillis = DURATION_SHORT,
-                easing = FastOutSlowInEasing
-            )
-        )
+        @OptIn(ExperimentalMaterial3ExpressiveApi::class)
+        @Composable
+        get() {
+            if (isReduceMotionEnabled) {
+                return fadeOut(animationSpec = snap())
+            }
+            return fadeOut(animationSpec = MaterialTheme.motionScheme.defaultEffectsSpec())
+        }
 }
 
 /**

@@ -50,7 +50,7 @@ import io.element.android.features.securebackup.impl.tools.RecoveryKeyVisualTran
 import io.element.android.libraries.designsystem.modifiers.clickableIfNotNull
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.ElementLoadingIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextField
@@ -132,13 +132,13 @@ private fun RecoveryKeyStaticContent(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 if (state.inProgress) {
-                    CircularProgressIndicator(
+                    ElementLoadingIndicator(
                         modifier = Modifier
                             .progressSemantics()
                             .padding(end = 8.dp)
                             .size(16.dp),
                         color = ElementTheme.colors.textPrimary,
-                        strokeWidth = 1.5.dp,
+                        size = 16.dp,
                     )
                 }
                 Text(

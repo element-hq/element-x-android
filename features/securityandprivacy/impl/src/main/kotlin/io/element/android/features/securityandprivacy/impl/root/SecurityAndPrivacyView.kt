@@ -47,7 +47,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
 import io.element.android.libraries.designsystem.text.stringWithLink
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.ElementLoadingIndicator
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -344,11 +344,11 @@ private fun RoomAddressSection(
             trailingContent = when (isVisibleInRoomDirectory) {
                 is AsyncData.Uninitialized, is AsyncData.Loading -> {
                     ListItemContent.Custom {
-                        CircularProgressIndicator(
+                        ElementLoadingIndicator(
                             modifier = Modifier
                                 .progressSemantics()
                                 .size(20.dp),
-                            strokeWidth = 2.dp
+                            size = 20.dp,
                         )
                     }
                 }

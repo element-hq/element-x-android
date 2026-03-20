@@ -187,7 +187,7 @@ private fun RoomSummaryScaffoldRow(
             .fillMaxWidth()
             .heightIn(min = minHeight)
             .then(clickModifier)
-            .padding(horizontal = 16.dp, vertical = 11.dp)
+            .padding(horizontal = 16.dp, vertical = 12.dp)
             .height(IntrinsicSize.Min),
     ) {
         Avatar(

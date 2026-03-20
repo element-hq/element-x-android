@@ -43,11 +43,7 @@ fun NavigationBar(
 
 object ElementNavigationBarDefaults {
     val containerColor: Color
-        @Composable get() = if (ElementTheme.isLightTheme) {
-            ElementTheme.colors.bgSubtlePrimary
-        } else {
-            ElementTheme.colors.textOnSolidPrimary
-        }
+        @Composable get() = ElementTheme.colors.bgSubtlePrimary
 
     val tonalElevation: Dp = NavigationBarDefaults.Elevation
 

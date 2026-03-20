@@ -59,8 +59,7 @@ import io.element.android.libraries.designsystem.preview.DAY_MODE_NAME
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.NIGHT_MODE_NAME
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
+import io.element.android.libraries.designsystem.theme.components.ElementLoadingIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.IconColorButton
@@ -264,8 +263,9 @@ fun TextComposer(
                             endButtonContentDescriptionResId = CommonStrings.common_sending,
                             endButtonClick = {},
                             endButtonContent = @Composable {
-                                CircularProgressIndicator(
+                                ElementLoadingIndicator(
                                     modifier = Modifier.size(24.dp),
+                                    size = 24.dp,
                                 )
                             }
                         )
@@ -969,7 +969,7 @@ private fun <T> PreviewColumn(
 ) {
     Column {
         items.forEach { item ->
-            HorizontalDivider()
+            Spacer(Modifier.height(8.dp))
             Box(
                 modifier = Modifier.height(IntrinsicSize.Min)
             ) {

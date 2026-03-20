@@ -9,8 +9,7 @@
 package io.element.android.features.knockrequests.impl.banner
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkVertically
+import io.element.android.libraries.designsystem.animation.M3Motion
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -65,8 +64,8 @@ fun KnockRequestsBannerView(
     Box(modifier = modifier) {
         AnimatedVisibility(
             visible = state.isVisible,
-            enter = expandVertically(),
-            exit = shrinkVertically(),
+            enter = M3Motion.enterTransition,
+            exit = M3Motion.exitTransition,
         ) {
             Surface(
                 shape = MaterialTheme.shapes.small,

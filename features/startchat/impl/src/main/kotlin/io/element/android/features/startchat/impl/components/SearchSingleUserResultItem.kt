@@ -15,7 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.matrix.ui.components.UnresolvedUserRow
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
@@ -51,7 +50,6 @@ internal fun SearchSingleUserResultItemPreview() = ElementThemedPreview {
             searchResult = UserSearchResult(aMatrixUser(), isUnresolved = false),
             onClick = {},
         )
-        HorizontalDivider()
         SearchSingleUserResultItem(
             searchResult = UserSearchResult(aMatrixUser(), isUnresolved = true),
             onClick = {},

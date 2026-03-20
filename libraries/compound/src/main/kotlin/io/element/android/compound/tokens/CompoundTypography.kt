@@ -75,10 +75,44 @@ internal val compoundBodySmMedium = TypographyTokens.fontBodySmMedium
 @ShowkaseTypography(name = "M3 Label Small", group = "Compound")
 internal val compoundBodyXsMedium = TypographyTokens.fontBodyXsMedium
 
+// M3 Expressive display styles — needed for hero text on onboarding, empty states, etc.
+@ShowkaseTypography(name = "M3 Display Large", group = "Compound")
+internal val defaultDisplayLarge = TextStyle(
+    fontFamily = FontFamily.Default,
+    fontWeight = FontWeight.Normal,
+    fontSize = 57.sp,
+    lineHeight = 64.sp,
+    letterSpacing = (-0.25).sp,
+    platformStyle = PlatformTextStyle(includeFontPadding = false),
+    lineHeightStyle = LineHeightStyle(LineHeightStyle.Alignment.Center, LineHeightStyle.Trim.None)
+)
+
+@ShowkaseTypography(name = "M3 Display Medium", group = "Compound")
+internal val defaultDisplayMedium = TextStyle(
+    fontFamily = FontFamily.Default,
+    fontWeight = FontWeight.Normal,
+    fontSize = 45.sp,
+    lineHeight = 52.sp,
+    letterSpacing = 0.sp,
+    platformStyle = PlatformTextStyle(includeFontPadding = false),
+    lineHeightStyle = LineHeightStyle(LineHeightStyle.Alignment.Center, LineHeightStyle.Trim.None)
+)
+
+@ShowkaseTypography(name = "M3 Display Small", group = "Compound")
+internal val defaultDisplaySmall = TextStyle(
+    fontFamily = FontFamily.Default,
+    fontWeight = FontWeight.Normal,
+    fontSize = 36.sp,
+    lineHeight = 44.sp,
+    letterSpacing = 0.sp,
+    platformStyle = PlatformTextStyle(includeFontPadding = false),
+    lineHeightStyle = LineHeightStyle(LineHeightStyle.Alignment.Center, LineHeightStyle.Trim.None)
+)
+
 internal val compoundTypography = Typography(
-    // displayLarge = , 57px (Material) size. We have no equivalent
-    // displayMedium = , 45px (Material) size. We have no equivalent
-    // displaySmall = , 36px (Material) size. We have no equivalent
+    displayLarge = defaultDisplayLarge,
+    displayMedium = defaultDisplayMedium,
+    displaySmall = defaultDisplaySmall,
     headlineLarge = compoundHeadingXlRegular,
     headlineMedium = compoundHeadingLgRegular,
     headlineSmall = defaultHeadlineSmall,

@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.matrix.ui.components.CheckableUserRow
 import io.element.android.libraries.matrix.ui.components.CheckableUserRowData
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
@@ -61,7 +60,6 @@ internal fun SearchMultipleUsersResultItemPreview() = ElementThemedPreview {
             isUserSelected = false,
             onCheckedChange = {}
         )
-        HorizontalDivider()
         SearchMultipleUsersResultItem(
             searchResult = UserSearchResult(
                 aMatrixUser(),
@@ -70,7 +68,6 @@ internal fun SearchMultipleUsersResultItemPreview() = ElementThemedPreview {
             isUserSelected = true,
             onCheckedChange = {}
         )
-        HorizontalDivider()
         SearchMultipleUsersResultItem(
             searchResult = UserSearchResult(
                 aMatrixUser(),
@@ -79,7 +76,6 @@ internal fun SearchMultipleUsersResultItemPreview() = ElementThemedPreview {
             isUserSelected = false,
             onCheckedChange = {}
         )
-        HorizontalDivider()
         SearchMultipleUsersResultItem(
             searchResult = UserSearchResult(
                 aMatrixUser(),

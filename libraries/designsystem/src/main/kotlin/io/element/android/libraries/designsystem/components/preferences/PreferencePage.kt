@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
@@ -28,6 +30,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -112,21 +115,21 @@ internal fun PreferencePagePreview() = ElementPreview {
         PreferenceCategory(
             title = "Category title",
         ) {
-            PreferenceDivider()
+            Spacer(Modifier.height(8.dp))
             PreferenceSwitch(
                 title = "Switch",
                 icon = CompoundIcons.Threads(),
                 isChecked = true,
                 onCheckedChange = {},
             )
-            PreferenceDivider()
+            Spacer(Modifier.height(8.dp))
             PreferenceCheckbox(
                 title = "Checkbox",
                 icon = CompoundIcons.Notifications(),
                 isChecked = true,
                 onCheckedChange = {},
             )
-            PreferenceDivider()
+            Spacer(Modifier.height(8.dp))
             PreferenceSlide(
                 title = "Slide",
                 summary = "Summary",

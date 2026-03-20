@@ -34,7 +34,7 @@ import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.ElementLoadingIndicator
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
@@ -126,7 +126,7 @@ private fun RoomAliasResolverContent(
         subtitle = {
             if (isLoading) {
                 Spacer(Modifier.height(8.dp))
-                CircularProgressIndicator()
+                ElementLoadingIndicator(size = 32.dp)
             }
         }
     )

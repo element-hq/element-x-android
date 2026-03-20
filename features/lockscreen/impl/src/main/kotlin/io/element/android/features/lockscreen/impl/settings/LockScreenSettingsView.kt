@@ -15,7 +15,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.features.lockscreen.impl.R
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
-import io.element.android.libraries.designsystem.components.preferences.PreferenceDivider
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -43,7 +45,7 @@ fun LockScreenSettingsView(
                 },
                 onClick = onChangePinClick,
             )
-            PreferenceDivider()
+            Spacer(Modifier.height(16.dp))
             if (state.showRemovePinOption) {
                 ListItem(
                     headlineContent = {
@@ -56,7 +58,7 @@ fun LockScreenSettingsView(
                 )
             }
             if (state.showToggleBiometric) {
-                PreferenceDivider()
+                Spacer(Modifier.height(16.dp))
                 PreferenceSwitch(
                     title = stringResource(id = R.string.screen_app_lock_settings_enable_biometric_unlock),
                     isChecked = state.isBiometricEnabled,

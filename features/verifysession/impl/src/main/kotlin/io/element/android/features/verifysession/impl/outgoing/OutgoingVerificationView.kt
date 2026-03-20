@@ -42,7 +42,7 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.ElementLoadingIndicator
 import io.element.android.libraries.designsystem.theme.components.InvisibleButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
@@ -85,7 +85,7 @@ fun OutgoingVerificationView(
             modifier = Modifier.fillMaxSize(),
             contentAlignment = Alignment.Center,
         ) {
-            CircularProgressIndicator()
+            ElementLoadingIndicator()
         }
     } else {
         HeaderFooterPage(

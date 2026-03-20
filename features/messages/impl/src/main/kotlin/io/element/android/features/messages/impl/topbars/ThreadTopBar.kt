@@ -10,7 +10,9 @@ package io.element.android.features.messages.impl.topbars
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -31,7 +33,6 @@ import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
@@ -112,15 +113,15 @@ internal fun ThreadTopBarPreview() = ElementPreview {
     )
     Column {
         AThreadTopBar()
-        HorizontalDivider()
+        Spacer(Modifier.height(8.dp))
         AThreadTopBar(
             heroes = aMatrixUserList().map { it.getAvatarData(AvatarSize.TimelineRoom) }.toImmutableList(),
         )
-        HorizontalDivider()
+        Spacer(Modifier.height(8.dp))
         AThreadTopBar(
             roomName = null,
         )
-        HorizontalDivider()
+        Spacer(Modifier.height(8.dp))
         AThreadTopBar(
             roomAvatarData = anAvatarData(
                 name = "Room name",
@@ -128,7 +129,7 @@ internal fun ThreadTopBarPreview() = ElementPreview {
                 size = AvatarSize.TimelineRoom,
             ),
         )
-        HorizontalDivider()
+        Spacer(Modifier.height(8.dp))
         AThreadTopBar(
             isTombstoned = true,
         )

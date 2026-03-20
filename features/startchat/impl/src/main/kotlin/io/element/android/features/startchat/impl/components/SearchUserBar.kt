@@ -9,8 +9,6 @@
 package io.element.android.features.startchat.impl.components
 
 import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,6 +17,8 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import io.element.android.libraries.designsystem.animation.M3Motion
 import androidx.compose.material3.surfaceColorAtElevation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -29,7 +29,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.libraries.designsystem.components.async.AsyncLoading
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -80,7 +79,7 @@ fun SearchUserBar(
 
                 val appBarContainerColor by animateColorAsState(
                     targetValue = ElementTheme.materialColors.surfaceColorAtElevation(elevation.value),
-                    animationSpec = spring(stiffness = Spring.StiffnessMediumLow)
+                    animationSpec = M3Motion.defaultValueSpec()
                 )
 
                 SelectedUsersRowList(
@@ -114,9 +113,6 @@ fun SearchUserBar(
                                 }
                             }
                         )
-                        if (index < users.lastIndex) {
-                            HorizontalDivider()
-                        }
                     }
                 } else {
                     itemsIndexed(users) { index, searchResult ->
@@ -125,9 +121,6 @@ fun SearchUserBar(
                             searchResult = searchResult,
                             onClick = { onUserSelect(searchResult.matrixUser) }
                         )
-                        if (index < users.lastIndex) {
-                            HorizontalDivider()
-                        }
                     }
                 }
             }

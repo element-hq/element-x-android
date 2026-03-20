@@ -14,9 +14,13 @@ import androidx.activity.SystemBarStyle
 import androidx.activity.compose.LocalActivity
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ColorScheme
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MotionScheme
+import androidx.compose.material3.Shapes
 import androidx.compose.material3.Typography
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -28,12 +32,12 @@ import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.compoundTypography
 import io.element.android.compound.tokens.generated.SemanticColors
 import io.element.android.compound.tokens.generated.TypographyTokens
 import io.element.android.compound.tokens.generated.compoundColorsDark
 import io.element.android.compound.tokens.generated.compoundColorsLight
-import androidx.compose.material3.ColorScheme
 
 /**
  * Inspired from https://medium.com/@lucasyujideveloper/54cbcbde1ace
@@ -72,6 +76,15 @@ object ElementTheme {
         get() = LocalCompoundColors.current.isLight
 }
 
+// M3 Expressive shape scale — larger corners than M3 defaults
+private val ElementShapes = Shapes(
+    extraSmall = RoundedCornerShape(8.dp),
+    small = RoundedCornerShape(12.dp),
+    medium = RoundedCornerShape(16.dp),
+    large = RoundedCornerShape(20.dp),
+    extraLarge = RoundedCornerShape(28.dp),
+)
+
 // Global variables (application level)
 internal val LocalCompoundColors = staticCompositionLocalOf { compoundColorsLight }
 
@@ -90,6 +103,7 @@ internal val LocalCompoundColors = staticCompositionLocalOf { compoundColorsLigh
  * @param typography the Material 3 [Typography] tokens to use. It'll use [compoundTypography] by default.
  * @param content the content to apply the theme to.
  */
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun ElementTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -163,6 +177,8 @@ fun ElementTheme(
         MaterialTheme(
             colorScheme = colorScheme,
             typography = typography,
+            shapes = ElementShapes,
+            motionScheme = MotionScheme.expressive(),
             content = content
         )
     }
@@ -221,6 +237,35 @@ private fun SemanticColors.withDynamicColors(scheme: ColorScheme): SemanticColor
     borderInteractiveSecondary = scheme.outlineVariant,
     borderDisabled = scheme.onSurface.copy(alpha = 0.12f),
     borderFocused = scheme.primary,
-    // Critical/error colors stay from Compound (brand-critical, shouldn't change)
-    // Decorative/gradient colors stay from Compound (brand-specific)
+    // Additional subtle/alpha tokens
+    bgSubtleSecondaryLevel0 = scheme.surfaceContainer,
+    borderAccentSubtle = scheme.primary.copy(alpha = 0.38f),
+    iconPrimaryAlpha = scheme.onSurface.copy(alpha = 0.9f),
+    iconSecondaryAlpha = scheme.onSurfaceVariant.copy(alpha = 0.7f),
+    // Critical/error colors → M3 error roles
+    bgCriticalPrimary = scheme.error,
+    bgCriticalSubtle = scheme.errorContainer,
+    textCriticalPrimary = scheme.error,
+    iconCriticalPrimary = scheme.error,
+    borderCriticalPrimary = scheme.error,
+    // Info colors → M3 tertiary (closest semantic match)
+    bgInfoSubtle = scheme.tertiaryContainer,
+    textInfoPrimary = scheme.tertiary,
+    iconInfoPrimary = scheme.tertiary,
+    borderInfoSubtle = scheme.tertiary.copy(alpha = 0.38f),
+    // Success colors → M3 tertiary variant
+    bgSuccessSubtle = scheme.tertiaryContainer,
+    textSuccessPrimary = scheme.tertiary,
+    iconSuccessPrimary = scheme.tertiary,
+    borderSuccessSubtle = scheme.tertiary.copy(alpha = 0.38f),
+    // Additional alpha icon tokens
+    iconTertiaryAlpha = scheme.onSurfaceVariant.copy(alpha = 0.5f),
+    iconQuaternaryAlpha = scheme.outline.copy(alpha = 0.5f),
+    // Subtle gradient → dynamic primary (replaces hardcoded green when Material You is active)
+    gradientSubtleStop1 = scheme.primary.copy(alpha = 0.16f),
+    gradientSubtleStop2 = scheme.primary.copy(alpha = 0.12f),
+    gradientSubtleStop3 = scheme.primary.copy(alpha = 0.08f),
+    gradientSubtleStop4 = scheme.primary.copy(alpha = 0.05f),
+    gradientSubtleStop5 = scheme.primary.copy(alpha = 0.02f),
+    gradientSubtleStop6 = Color.Transparent,
 )

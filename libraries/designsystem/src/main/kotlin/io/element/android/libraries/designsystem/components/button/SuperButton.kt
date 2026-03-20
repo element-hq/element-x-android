@@ -15,6 +15,8 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LocalContentColor
@@ -42,7 +44,6 @@ import io.element.android.libraries.designsystem.colors.gradientActionColors
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.lowHorizontalPaddingValue
 
 @Composable
@@ -154,7 +155,7 @@ internal fun SuperButtonPreview() {
                 Text("Super button!")
             }
 
-            HorizontalDivider()
+            Spacer(Modifier.height(8.dp))
 
             SuperButton(
                 modifier = Modifier.padding(10.dp),

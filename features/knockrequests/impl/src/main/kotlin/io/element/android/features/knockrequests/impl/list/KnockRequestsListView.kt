@@ -9,6 +9,7 @@
 package io.element.android.features.knockrequests.impl.list
 
 import androidx.compose.animation.animateContentSize
+import io.element.android.libraries.designsystem.animation.M3Motion
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -65,8 +66,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
+import io.element.android.libraries.designsystem.theme.components.ElementLoadingIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -142,7 +142,7 @@ private fun KnockRequestsListContent(
                     verticalArrangement = spacedBy(16.dp),
                     modifier = Modifier.align(Alignment.Center)
                 ) {
-                    CircularProgressIndicator(color = ElementTheme.colors.iconPrimary)
+                    ElementLoadingIndicator(color = ElementTheme.colors.iconPrimary)
                     Text(
                         text = stringResource(R.string.screen_knock_requests_list_initial_loading_title),
                         style = ElementTheme.typography.fontBodyLgRegular,
@@ -296,9 +296,6 @@ private fun KnockRequestsList(
                 onDeclineClick = onDeclineClick,
                 onBanClick = onBanClick,
             )
-            if (index != knockRequests.size - 1) {
-                HorizontalDivider()
-            }
         }
     }
 }
@@ -366,7 +363,7 @@ private fun KnockRequestItem(
                 Row(
                     verticalAlignment = Alignment.Top,
                     modifier = Modifier
-                        .animateContentSize()
+                        .animateContentSize(animationSpec = M3Motion.defaultContentSizeSpec())
                         .clickable(enabled = isExpandable) { isExpanded = !isExpanded }
                 ) {
                     Text(

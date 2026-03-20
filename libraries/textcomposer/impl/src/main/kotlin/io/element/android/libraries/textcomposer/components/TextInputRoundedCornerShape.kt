@@ -9,7 +9,7 @@
 package io.element.android.libraries.textcomposer.components
 
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.tween
+import io.element.android.libraries.designsystem.animation.M3Motion
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
@@ -19,8 +19,8 @@ import io.element.android.libraries.textcomposer.model.MessageComposerMode
 internal fun textInputRoundedCornerShape(
     composerMode: MessageComposerMode,
 ): RoundedCornerShape {
-    val roundCornerSmall = 20.dp
-    val roundCornerLarge = 21.dp
+    val roundCornerSmall = 28.dp
+    val roundCornerLarge = 28.dp
 
     val roundedCornerSize = if (composerMode is MessageComposerMode.Special) {
         roundCornerSmall
@@ -30,9 +30,7 @@ internal fun textInputRoundedCornerShape(
 
     val roundedCornerSizeState = animateDpAsState(
         targetValue = roundedCornerSize,
-        animationSpec = tween(
-            durationMillis = 100,
-        ),
+        animationSpec = M3Motion.defaultValueSpec(),
         label = "roundedCornerSizeAnimation"
     )
     return RoundedCornerShape(roundedCornerSizeState.value)

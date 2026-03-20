@@ -234,6 +234,13 @@ subprojects {
                     )
                 )
             }
+            freeCompilerArgs.addAll(
+                listOf(
+                    "-P",
+                    "plugin:androidx.compose.compiler.plugins.kotlin:stabilityConfigurationPath=" +
+                        "${rootProject.projectDir.absolutePath}/compose_stability_config.conf"
+                )
+            )
             if (project.findProperty("composeCompilerMetrics") == "true") {
                 freeCompilerArgs.addAll(
                     listOf(

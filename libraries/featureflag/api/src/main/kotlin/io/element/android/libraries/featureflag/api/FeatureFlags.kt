@@ -163,4 +163,11 @@ enum class FeatureFlags(
         defaultValue = { true },
         isFinished = false,
     ),
+    M3Expressive(
+        key = "feature.m3_expressive",
+        title = "Material 3 Expressive",
+        description = "Enable M3 Expressive UI: spring physics, shape morphing, new loading indicators",
+        defaultValue = { it.buildType != BuildType.RELEASE },
+        isFinished = false,
+    ),
 }

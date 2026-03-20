@@ -36,7 +36,7 @@ import io.element.android.libraries.designsystem.R
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.withColoredPeriod
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.ElementLoadingIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
 
 @Composable
@@ -73,10 +73,10 @@ fun SunsetPage(
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
                         if (isLoading) {
-                            CircularProgressIndicator(
+                            ElementLoadingIndicator(
                                 modifier = Modifier.size(24.dp),
-                                strokeWidth = 2.dp,
-                                color = ElementTheme.colors.iconPrimary
+                                size = 24.dp,
+                                color = ElementTheme.colors.iconPrimary,
                             )
                         } else {
                             Spacer(modifier = Modifier.height(24.dp))

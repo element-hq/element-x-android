@@ -10,8 +10,7 @@ package io.element.android.features.rolesandpermissions.impl.roles
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import io.element.android.libraries.designsystem.animation.M3Motion
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -53,7 +52,6 @@ import io.element.android.libraries.designsystem.components.dialogs.SaveChangesD
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Checkbox
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
@@ -87,7 +85,7 @@ fun ChangeRolesView(
                 .fillMaxSize()
                 .systemBarsPadding(),
             topBar = {
-                AnimatedVisibility(visible = !state.isSearchActive) {
+                AnimatedVisibility(visible = !state.isSearchActive, enter = M3Motion.fadeEnter, exit = M3Motion.fadeExit) {
                     TopAppBar(
                         titleStr = when (state.role) {
                             is RoomMember.Role.Owner -> stringResource(R.string.screen_room_change_role_owners_title)
@@ -135,8 +133,8 @@ fun ChangeRolesView(
                 }
                 AnimatedVisibility(
                     visible = !state.isSearchActive,
-                    enter = fadeIn(),
-                    exit = fadeOut()
+                    enter = M3Motion.fadeEnter,
+                    exit = M3Motion.fadeExit
                 ) {
                     Column {
                         SearchResultsList(
@@ -318,17 +316,14 @@ private fun ListMemberItem(
             )
         }
     }
-    Column {
-        MemberRow(
-            modifier = Modifier.clickable(enabled = canToggle, onClick = { onToggleSelection(roomMember) }),
-            avatarData = roomMember.getAvatarData(size = AvatarSize.UserListItem),
-            name = roomMember.getBestName(),
-            userId = roomMember.userId.value.takeIf { roomMember.displayName?.isNotBlank() == true },
-            isPending = roomMember.membership == RoomMembershipState.INVITE,
-            trailingContent = trailingContent,
-        )
-        HorizontalDivider()
-    }
+    MemberRow(
+        modifier = Modifier.clickable(enabled = canToggle, onClick = { onToggleSelection(roomMember) }),
+        avatarData = roomMember.getAvatarData(size = AvatarSize.UserListItem),
+        name = roomMember.getBestName(),
+        userId = roomMember.userId.value.takeIf { roomMember.displayName?.isNotBlank() == true },
+        isPending = roomMember.membership == RoomMembershipState.INVITE,
+        trailingContent = trailingContent,
+    )
 }
 
 @Composable

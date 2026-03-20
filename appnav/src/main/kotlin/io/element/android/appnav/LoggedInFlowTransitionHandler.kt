@@ -7,17 +7,20 @@
 
 package io.element.android.appnav
 
-import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.Transition
-import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.snap
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import com.bumble.appyx.core.navigation.transition.ModifierTransitionHandler
 import com.bumble.appyx.core.navigation.transition.TransitionDescriptor
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.transitionhandler.rememberBackstackFader
 import com.bumble.appyx.navmodel.backstack.transitionhandler.rememberBackstackSlider
+import io.element.android.libraries.designsystem.animation.isReduceMotionEnabled
 
 /**
  * A TransitionHandler that uses fade transition when Placeholder is being removed,
@@ -42,16 +45,24 @@ class LoggedInFlowTransitionHandler(
     }
 }
 
+@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun rememberLoggedInFlowTransitionHandler(
     backstack: BackStack<LoggedInFlowNode.NavTarget>,
 ): ModifierTransitionHandler<LoggedInFlowNode.NavTarget, BackStack.State> {
-    val slider = rememberBackstackSlider<LoggedInFlowNode.NavTarget>(
-        transitionSpec = { spring(stiffness = Spring.StiffnessMediumLow) },
-    )
-    val fader = rememberBackstackFader<LoggedInFlowNode.NavTarget>(
-        transitionSpec = { spring(stiffness = Spring.StiffnessMediumLow) },
-    )
+    val reduceMotion = isReduceMotionEnabled
+    val slider = if (reduceMotion) {
+        rememberBackstackSlider<LoggedInFlowNode.NavTarget>(transitionSpec = { snap() })
+    } else {
+        val effectsSliderSpec = MaterialTheme.motionScheme.defaultEffectsSpec<Offset>()
+        rememberBackstackSlider<LoggedInFlowNode.NavTarget>(transitionSpec = { effectsSliderSpec })
+    }
+    val fader = if (reduceMotion) {
+        rememberBackstackFader<LoggedInFlowNode.NavTarget>(transitionSpec = { snap() })
+    } else {
+        val effectsSpec = MaterialTheme.motionScheme.defaultEffectsSpec<Float>()
+        rememberBackstackFader<LoggedInFlowNode.NavTarget>(transitionSpec = { effectsSpec })
+    }
     return remember(backstack, slider, fader) {
         LoggedInFlowTransitionHandler(backstack, slider, fader)
     }

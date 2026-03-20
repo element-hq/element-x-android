@@ -33,9 +33,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -200,6 +202,14 @@ fun TimelineItemEventRow(
         inReplyToClick(inReplyToEventId)
     }
 
+    // Memoize reaction lambdas keyed on event.id to avoid recreating on every scroll frame
+    val currentOnReactionClick by rememberUpdatedState(onReactionClick)
+    val currentOnReactionLongClick by rememberUpdatedState(onReactionLongClick)
+    val currentOnMoreReactionsClick by rememberUpdatedState(onMoreReactionsClick)
+    val onReactionClickMemo = remember(event.id) { { emoji: String -> currentOnReactionClick(emoji, event) } }
+    val onReactionLongClickMemo = remember(event.id) { { emoji: String -> currentOnReactionLongClick(emoji, event) } }
+    val onMoreReactionsClickMemo = remember(event.id) { { _: TimelineItem.Event -> currentOnMoreReactionsClick(event) } }
+
     Column(modifier = modifier.fillMaxWidth()) {
         if (event.groupPosition.isNew()) {
             Spacer(modifier = Modifier.height(16.dp))
@@ -227,9 +237,9 @@ fun TimelineItemEventRow(
                         onLongClick = onLongClick,
                         inReplyToClick = ::inReplyToClick,
                         onUserDataClick = ::onUserDataClick,
-                        onReactionClick = { emoji -> onReactionClick(emoji, event) },
-                        onReactionLongClick = { emoji -> onReactionLongClick(emoji, event) },
-                        onMoreReactionsClick = { onMoreReactionsClick(event) },
+                        onReactionClick = onReactionClickMemo,
+                        onReactionLongClick = onReactionLongClickMemo,
+                        onMoreReactionsClick = onMoreReactionsClickMemo,
                         modifier = Modifier
                             .absoluteOffset { IntOffset(x = offset.roundToInt(), y = 0) }
                             .draggable(
@@ -261,9 +271,9 @@ fun TimelineItemEventRow(
                 onLongClick = onLongClick,
                 inReplyToClick = ::inReplyToClick,
                 onUserDataClick = ::onUserDataClick,
-                onReactionClick = { emoji -> onReactionClick(emoji, event) },
-                onReactionLongClick = { emoji -> onReactionLongClick(emoji, event) },
-                onMoreReactionsClick = { onMoreReactionsClick(event) },
+                onReactionClick = onReactionClickMemo,
+                onReactionLongClick = onReactionLongClickMemo,
+                onMoreReactionsClick = onMoreReactionsClickMemo,
                 eventSink = eventSink,
                 eventContentView = eventContentView,
             )

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -44,10 +45,9 @@ import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.matrix.ui.model.getAvatarData
@@ -172,6 +172,7 @@ private fun RoomAvatarAndNameRow(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @PreviewsDayNight
 @Composable
 internal fun MessagesViewTopBarPreview() = ElementPreview {
@@ -201,17 +202,17 @@ internal fun MessagesViewTopBarPreview() = ElementPreview {
     )
     Column {
         AMessagesViewTopBar()
-        HorizontalDivider()
+        Spacer(Modifier.height(8.dp))
         AMessagesViewTopBar(
             heroes = aMatrixUserList().map { it.getAvatarData(AvatarSize.TimelineRoom) }.toImmutableList(),
             roomCallState = anOngoingCallState(),
         )
-        HorizontalDivider()
+        Spacer(Modifier.height(8.dp))
         AMessagesViewTopBar(
             roomName = null,
             roomCallState = anOngoingCallState(canJoinCall = false),
         )
-        HorizontalDivider()
+        Spacer(Modifier.height(8.dp))
         AMessagesViewTopBar(
             roomName = "A DM with a very very very long name",
             roomAvatar = anAvatarData(
@@ -221,19 +222,19 @@ internal fun MessagesViewTopBarPreview() = ElementPreview {
             roomCallState = aStandByCallState(canStartCall = false),
             dmUserIdentityState = IdentityState.Verified
         )
-        HorizontalDivider()
+        Spacer(Modifier.height(8.dp))
         AMessagesViewTopBar(
             roomName = "A DM with a very very very long name",
             isTombstoned = true,
             dmUserIdentityState = IdentityState.VerificationViolation
         )
-        HorizontalDivider()
+        Spacer(Modifier.height(8.dp))
         AMessagesViewTopBar(
             roomName = "A DM with shared history",
             dmUserIdentityState = IdentityState.Verified,
             sharedHistoryIcon = SharedHistoryIcon.SHARED,
         )
-        HorizontalDivider()
+        Spacer(Modifier.height(8.dp))
         AMessagesViewTopBar(
             roomName = "A room with world_readable history",
             sharedHistoryIcon = SharedHistoryIcon.WORLD_READABLE,

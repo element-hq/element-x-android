@@ -21,7 +21,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.features.api.MigrationState
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.ElementLoadingIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -38,7 +38,7 @@ fun MigrationView(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(8.dp),
         ) {
-            CircularProgressIndicator()
+            ElementLoadingIndicator()
             if (migrationState.migrationAction.isLoading()) {
                 Text(text = stringResource(id = CommonStrings.common_please_wait))
             }

@@ -9,8 +9,7 @@
 package io.element.android.libraries.mediaviewer.impl.local.player
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import io.element.android.libraries.designsystem.animation.M3Motion
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -78,8 +77,8 @@ fun MediaPlayerControllerView(
     AnimatedVisibility(
         visible = state.isVisible,
         modifier = modifier,
-        enter = fadeIn(),
-        exit = fadeOut(),
+        enter = M3Motion.fadeEnter,
+        exit = M3Motion.fadeExit,
     ) {
         Box(
             modifier = Modifier

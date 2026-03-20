@@ -23,7 +23,7 @@ import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.designsystem.components.dialogs.RetryDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.ElementLoadingIndicator
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.ListItemStyle
@@ -71,11 +71,11 @@ private fun PreferenceBlockUser(
     eventSink: (UserProfileEvents) -> Unit,
 ) {
     val loadingCurrentValue = @Composable { _: Boolean ->
-        CircularProgressIndicator(
+        ElementLoadingIndicator(
             modifier = Modifier
                 .progressSemantics()
                 .size(20.dp),
-            strokeWidth = 2.dp
+            size = 20.dp,
         )
     }
     if (isBlocked.orFalse()) {

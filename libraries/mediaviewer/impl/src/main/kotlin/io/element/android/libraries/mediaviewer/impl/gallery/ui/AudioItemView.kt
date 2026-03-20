@@ -35,7 +35,6 @@ import io.element.android.libraries.core.extensions.withBrackets
 import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
@@ -65,7 +64,6 @@ fun AudioItemView(
         } else {
             Spacer(modifier = Modifier.height(20.dp))
         }
-        HorizontalDivider()
     }
 }
 

@@ -232,7 +232,7 @@ private fun TextFieldContainer(
     content: @Composable () -> Unit
 ) {
     Surface(
-        shape = MaterialTheme.shapes.extraSmall,
+        shape = MaterialTheme.shapes.small,
         border = if (readOnly) {
             null
         } else {

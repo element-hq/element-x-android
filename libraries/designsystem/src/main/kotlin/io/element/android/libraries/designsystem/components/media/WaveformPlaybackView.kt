@@ -36,6 +36,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.designsystem.animation.M3Motion
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import kotlinx.collections.immutable.ImmutableList
@@ -82,7 +83,11 @@ fun WaveformPlaybackView(
             seekProgress.value ?: playbackProgress
         }
     }
-    val progressAnimated = animateFloatAsState(targetValue = progress, label = "progressAnimation")
+    val progressAnimated = animateFloatAsState(
+        targetValue = progress,
+        animationSpec = M3Motion.defaultValueSpec(),
+        label = "progressAnimation",
+    )
     val amplitudeDisplayCount by remember(canvasSize, lineWidth, linePadding) {
         derivedStateOf {
             (canvasSize.width.value / (lineWidth.value + linePadding.value)).toInt()

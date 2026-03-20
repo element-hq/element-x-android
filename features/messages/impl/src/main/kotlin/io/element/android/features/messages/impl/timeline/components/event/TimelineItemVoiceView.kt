@@ -48,7 +48,7 @@ import io.element.android.libraries.designsystem.atomic.atoms.PlaybackSpeedButto
 import io.element.android.libraries.designsystem.components.media.WaveformPlaybackView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.ElementLoadingIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -220,12 +220,12 @@ private fun ProgressButton(
         enabled = false,
     ) {
         if (canDisplay) {
-            CircularProgressIndicator(
+            ElementLoadingIndicator(
                 modifier = Modifier
                     .padding(2.dp)
                     .size(16.dp),
                 color = ElementTheme.colors.iconSecondary,
-                strokeWidth = 2.dp,
+                size = 16.dp,
             )
         } else {
             ControlIcon(

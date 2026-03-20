@@ -54,7 +54,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.testtags.TestTags
@@ -338,7 +337,6 @@ private fun PreviewContent() {
     ) {
         Text("Pick image")
         AvatarPickerView(AvatarPickerState.Pick(buttonSize = 48.dp, externalPadding = PaddingValues(6.dp)), onClick = {})
-        HorizontalDivider()
 
         Text("User avatar")
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
@@ -376,7 +374,6 @@ private fun PreviewContent() {
                 )
             }
         }
-        HorizontalDivider()
 
         Text("Room avatar")
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
@@ -414,7 +411,6 @@ private fun PreviewContent() {
                 )
             }
         }
-        HorizontalDivider()
 
         Text("Space avatar")
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {

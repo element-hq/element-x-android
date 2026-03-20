@@ -45,6 +45,8 @@ dependencies {
     implementation(projects.features.login.api)
 
     implementation(libs.coil)
+    implementation(libs.androidx.compose.material3.adaptive)
+    implementation(libs.androidx.compose.material3.windowsizeclass)
 
     implementation(projects.features.announcement.api)
     implementation(projects.features.ftue.api)

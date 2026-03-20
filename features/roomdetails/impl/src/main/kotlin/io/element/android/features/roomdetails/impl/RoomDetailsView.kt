@@ -63,7 +63,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.ElementLoadingIndicator
 import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
 import io.element.android.libraries.designsystem.theme.components.Icon
@@ -710,7 +710,7 @@ private fun PinnedMessagesItem(
         trailingContent =
             if (pinnedMessagesCount == null) {
                 ListItemContent.Custom {
-                    CircularProgressIndicator(strokeWidth = 2.dp, modifier = Modifier.size(24.dp))
+                    ElementLoadingIndicator(size = 24.dp, modifier = Modifier.size(24.dp))
                 }
             } else {
                 ListItemContent.Text(pinnedMessagesCount.toString())

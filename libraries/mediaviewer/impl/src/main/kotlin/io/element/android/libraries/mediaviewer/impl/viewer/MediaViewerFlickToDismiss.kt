@@ -9,6 +9,7 @@
 package io.element.android.libraries.mediaviewer.impl.viewer
 
 import androidx.compose.animation.core.animateFloatAsState
+import io.element.android.libraries.designsystem.animation.M3Motion
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.runtime.Composable
@@ -91,6 +92,7 @@ private fun DismissFlickEffects(
 @Composable
 private fun backgroundColorFor(flickState: FlickToDismissState): Color {
     val animatedAlpha by animateFloatAsState(
+        animationSpec = M3Motion.defaultValueSpec(),
         targetValue = when (flickState.gestureState) {
             is FlickToDismissState.GestureState.Dismissed,
             is FlickToDismissState.GestureState.Dismissing -> 0f

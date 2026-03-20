@@ -11,6 +11,8 @@ package io.element.android.libraries.designsystem.theme.components
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MenuDefaults
 import androidx.compose.runtime.Composable
@@ -76,7 +78,7 @@ internal fun DropdownMenuItemPreview() = ElementThemedPreview {
             onClick = {},
             trailingIcon = { Icon(imageVector = CompoundIcons.ChevronRight(), contentDescription = null) },
         )
-        HorizontalDivider()
+        Spacer(Modifier.height(8.dp))
         DropdownMenuItem(
             text = { Text(text = "Item") },
             onClick = {},
@@ -95,7 +97,7 @@ internal fun DropdownMenuItemPreview() = ElementThemedPreview {
             leadingIcon = { Icon(imageVector = CompoundIcons.ChatProblem(), contentDescription = null) },
             trailingIcon = { Icon(imageVector = CompoundIcons.ChevronRight(), contentDescription = null) },
         )
-        HorizontalDivider()
+        Spacer(Modifier.height(8.dp))
         DropdownMenuItem(
             text = { Text(text = "Multiline\nItem") },
             onClick = {},

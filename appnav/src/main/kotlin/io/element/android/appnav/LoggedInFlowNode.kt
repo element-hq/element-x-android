@@ -39,6 +39,7 @@ import com.bumble.appyx.navmodel.backstack.operation.singleTop
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
+import io.element.android.appnav.adaptive.AdaptiveLoggedInView
 import io.element.android.appnav.loggedin.LoggedInNode
 import io.element.android.appnav.loggedin.MediaPreviewConfigMigration
 import io.element.android.appnav.loggedin.SendQueues
@@ -676,13 +677,35 @@ class LoggedInFlowNode(
                 isOnline = isOnline,
                 modifier = modifier,
             ) { contentModifier ->
-                Box(modifier = contentModifier) {
-                    val ftueState by ftueService.state.collectAsState()
-                    BackstackView(transitionHandler = rememberLoggedInFlowTransitionHandler(backstack))
-                    if (ftueState is FtueState.Complete) {
-                        PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)
-                    }
-                }
+                AdaptiveLoggedInView(
+                    singlePane = { singlePaneModifier ->
+                        Box(modifier = singlePaneModifier) {
+                            val ftueState by ftueService.state.collectAsState()
+                            BackstackView(transitionHandler = rememberLoggedInFlowTransitionHandler(backstack))
+                            if (ftueState is FtueState.Complete) {
+                                PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)
+                            }
+                        }
+                    },
+                    listPane = { listModifier ->
+                        // On expanded screens, the list pane shows the BackstackView
+                        // (which starts at Home). Future: render Home as PermanentChild here.
+                        Box(modifier = listModifier) {
+                            BackstackView(transitionHandler = rememberLoggedInFlowTransitionHandler(backstack))
+                        }
+                    },
+                    detailPane = { detailModifier ->
+                        // On expanded screens, the detail pane shows permanent children.
+                        // Future: render the active Room/Settings child here.
+                        Box(modifier = detailModifier) {
+                            val ftueState by ftueService.state.collectAsState()
+                            if (ftueState is FtueState.Complete) {
+                                PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)
+                            }
+                        }
+                    },
+                    modifier = contentModifier,
+                )
             }
         }
     }

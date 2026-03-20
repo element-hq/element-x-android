@@ -34,7 +34,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
@@ -90,10 +89,6 @@ fun HomeSpacesView(
                 }
             }
 
-            item {
-                HorizontalDivider()
-            }
-
             itemsIndexed(
                 items = state.spaceRooms,
                 key = { _, spaceRoom -> spaceRoom.roomId }
@@ -110,9 +105,6 @@ fun HomeSpacesView(
                         // TODO
                     },
                 )
-                if (index != state.spaceRooms.lastIndex) {
-                    HorizontalDivider()
-                }
             }
         }
     }

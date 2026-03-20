@@ -11,6 +11,8 @@ package io.element.android.features.preferences.impl.root
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -33,7 +35,6 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.ListItemStyle
@@ -136,10 +137,7 @@ private fun ColumnScope.MultiAccountSection(
     state: PreferencesRootState,
     onAddAccountClick: () -> Unit,
 ) {
-    HorizontalDivider(
-        thickness = 8.dp,
-        color = ElementTheme.colors.bgSubtleSecondary,
-    )
+    Spacer(Modifier.height(8.dp))
     state.otherSessions.forEach { matrixUser ->
         MatrixUserRow(
             modifier = Modifier.clickable {
@@ -148,7 +146,7 @@ private fun ColumnScope.MultiAccountSection(
             matrixUser = matrixUser,
             avatarSize = AvatarSize.AccountItem,
         )
-        HorizontalDivider()
+        Spacer(Modifier.height(16.dp))
     }
     ListItem(
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Plus())),
@@ -157,10 +155,7 @@ private fun ColumnScope.MultiAccountSection(
         },
         onClick = onAddAccountClick,
     )
-    HorizontalDivider(
-        thickness = 8.dp,
-        color = ElementTheme.colors.bgSubtleSecondary,
-    )
+    Spacer(Modifier.height(8.dp))
 }
 
 @Composable
@@ -188,7 +183,7 @@ private fun ColumnScope.ManageAppSection(
             onClick = onSecureBackupClick,
         )
     }
-    HorizontalDivider()
+    Spacer(Modifier.height(16.dp))
 }
 
 @Composable
@@ -232,7 +227,7 @@ private fun ColumnScope.ManageAccountSection(
     }
 
     if (state.accountManagementUrl != null || state.devicesManagementUrl != null || state.showBlockedUsersItem) {
-        HorizontalDivider()
+        Spacer(Modifier.height(16.dp))
     }
 }
 

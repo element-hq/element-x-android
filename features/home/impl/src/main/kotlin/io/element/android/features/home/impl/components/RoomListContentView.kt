@@ -50,7 +50,6 @@ import io.element.android.features.home.impl.spacefilters.anUnselectedSpaceFilte
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.OnVisibleRangeChangeEffect
@@ -122,7 +121,7 @@ private fun SkeletonView(
             item {
                 RoomSummaryPlaceholderRow()
                 if (index != count - 1) {
-                    HorizontalDivider()
+                    Spacer(Modifier.height(2.dp))
                 }
             }
         }
@@ -277,7 +276,7 @@ private fun RoomsViewList(
                 eventSink = eventSink,
             )
             if (index != state.summaries.lastIndex) {
-                HorizontalDivider()
+                Spacer(Modifier.height(2.dp))
             }
         }
     }

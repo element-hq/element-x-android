@@ -27,7 +27,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.ElementLoadingIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -87,7 +87,7 @@ fun DependencyLicensesListView(
                                 .fillMaxWidth()
                                 .padding(top = 64.dp)
                         ) {
-                            CircularProgressIndicator(
+                            ElementLoadingIndicator(
                                 modifier = Modifier.align(Alignment.Center)
                             )
                         }

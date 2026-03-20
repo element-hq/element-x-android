@@ -9,7 +9,6 @@
 package io.element.android.features.messages.impl.timeline.components.event
 
 import android.text.SpannedString
-import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -30,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -88,10 +88,11 @@ fun TimelineItemImageView(
                 onShowClick = onShowContentClick,
             ) {
                 var isLoaded by remember { mutableStateOf(false) }
+                val bgColor = ElementTheme.colors.bgCanvasDefault
                 AsyncImage(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .then(if (isLoaded) Modifier.background(ElementTheme.colors.bgCanvasDefault) else Modifier)
+                        .drawBehind { if (isLoaded) drawRect(bgColor) }
                         .then(
                             if (!isTalkbackActive() && onContentClick != null) {
                                 Modifier

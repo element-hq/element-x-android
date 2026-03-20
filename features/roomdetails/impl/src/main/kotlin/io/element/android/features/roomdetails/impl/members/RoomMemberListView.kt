@@ -36,6 +36,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.roomdetails.impl.R
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.designsystem.animation.M3Motion
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -43,7 +44,7 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.LinearProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.WavyLinearProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.SearchField
 import io.element.android.libraries.designsystem.theme.components.SegmentedButton
@@ -117,7 +118,7 @@ private fun RoomMemberList(
     LazyColumn(modifier = Modifier.fillMaxWidth(), state = rememberLazyListState()) {
         stickyHeader {
             Column {
-                AnimatedVisibility(visible = showBannedSection) {
+                AnimatedVisibility(visible = showBannedSection, enter = M3Motion.enterTransition, exit = M3Motion.exitTransition) {
                     val segmentedButtonTitles = persistentListOf(
                         stringResource(id = R.string.screen_room_member_list_mode_members),
                         stringResource(id = R.string.screen_room_member_list_mode_banned),
@@ -139,8 +140,8 @@ private fun RoomMemberList(
                         }
                     }
                 }
-                AnimatedVisibility(visible = roomMembersData.isLoading()) {
-                    LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+                AnimatedVisibility(visible = roomMembersData.isLoading(), enter = M3Motion.fadeEnter, exit = M3Motion.fadeExit) {
+                    WavyLinearProgressIndicator(modifier = Modifier.fillMaxWidth())
                 }
             }
         }
@@ -252,7 +253,11 @@ private fun LazyListScope.roomMemberListSectionItems(
     ) { matrixUser ->
         RoomMemberListItem(
             modifier = Modifier
-                .animateItem()
+                .animateItem(
+                    fadeInSpec = M3Motion.listItemSpec(),
+                    placementSpec = M3Motion.listItemSpec(),
+                    fadeOutSpec = M3Motion.listItemSpec(),
+                )
                 .fillMaxWidth(),
             roomMemberWithIdentity = matrixUser,
             onClick = { onMemberSelected(matrixUser.roomMember) }

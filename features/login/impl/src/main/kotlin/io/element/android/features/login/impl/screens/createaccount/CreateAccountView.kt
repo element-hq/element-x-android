@@ -90,6 +90,7 @@ fun CreateAccountView(
                 enter = fadeIn(initialAlpha = 1f),
                 exit = fadeOut(),
             ) {
+                @Suppress("DEPRECATION") // Intentionally flat — thin 2.dp WebView progress bar
                 LinearProgressIndicator(
                     modifier = Modifier
                         .fillMaxWidth()

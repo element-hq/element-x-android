@@ -15,13 +15,16 @@ import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 
+@Deprecated("M3 Expressive: use Spacer(Modifier.height(16.dp)) instead")
 @Composable
 fun PreferenceDivider(
     modifier: Modifier = Modifier,
 ) {
+    @Suppress("DEPRECATION")
     HorizontalDivider(modifier = modifier)
 }
 
+@Suppress("DEPRECATION")
 @Preview(group = PreviewGroup.Preferences)
 @Composable
 internal fun PreferenceDividerPreview() = ElementThemedPreview {

@@ -99,7 +99,7 @@ class DefaultSessionPreferencesStore(
     override fun isUrlPreviewEnabled(): Flow<Boolean> = get(urlPreviewEnabledKey) { false }
 
     override suspend fun setRoomUrlPreviewEnabled(roomId: String, enabled: Boolean) = update(roomUrlPreviewKey(roomId), enabled)
-    override fun isRoomUrlPreviewEnabled(roomId: String): Flow<Boolean> = get(roomUrlPreviewKey(roomId)) { false }
+    override fun isRoomUrlPreviewEnabled(roomId: String): Flow<Boolean> = get(roomUrlPreviewKey(roomId)) { true }
 
     override suspend fun clear() {
         dataStoreFile.safeDelete()

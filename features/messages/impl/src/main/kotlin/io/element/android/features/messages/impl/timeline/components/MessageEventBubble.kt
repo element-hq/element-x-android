@@ -51,7 +51,7 @@ import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.utils.time.isTalkbackActive
 
-private val BUBBLE_RADIUS = 12.dp
+private val BUBBLE_RADIUS = 20.dp
 private val avatarRadius = AvatarSize.TimelineSender.dp / 2
 
 private val MIN_BUBBLE_WIDTH = 80.dp
@@ -89,7 +89,11 @@ fun MessageEventBubble(
             .graphicsLayer {
                 shape = bubbleShape
                 clip = true
-                compositingStrategy = CompositingStrategy.Offscreen
+                compositingStrategy = if (state.cutTopStart) {
+                    CompositingStrategy.Offscreen
+                } else {
+                    CompositingStrategy.Auto
+                }
             }
             .drawWithContent {
                 drawRect(backgroundBubbleColor)

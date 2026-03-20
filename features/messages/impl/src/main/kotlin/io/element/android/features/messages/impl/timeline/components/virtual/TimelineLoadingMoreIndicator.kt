@@ -20,8 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
-import io.element.android.libraries.designsystem.theme.components.LinearProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.ElementLoadingIndicator
+import io.element.android.libraries.designsystem.theme.components.WavyLinearProgressIndicator
 import io.element.android.libraries.matrix.api.timeline.Timeline
 
 @Composable
@@ -35,7 +35,7 @@ internal fun TimelineLoadingMoreIndicator(
     ) {
         when (direction) {
             Timeline.PaginationDirection.FORWARDS -> {
-                LinearProgressIndicator(
+                WavyLinearProgressIndicator(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 2.dp)
@@ -43,9 +43,9 @@ internal fun TimelineLoadingMoreIndicator(
                 )
             }
             Timeline.PaginationDirection.BACKWARDS -> {
-                CircularProgressIndicator(
-                    strokeWidth = 2.dp,
-                    modifier = Modifier.padding(vertical = 8.dp)
+                ElementLoadingIndicator(
+                    size = 32.dp,
+                    modifier = Modifier.padding(vertical = 8.dp),
                 )
             }
         }

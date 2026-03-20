@@ -10,8 +10,7 @@ package io.element.android.features.home.impl.search
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import io.element.android.libraries.designsystem.animation.M3Motion
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -66,8 +65,8 @@ internal fun RoomListSearchView(
 
     AnimatedVisibility(
         visible = state.isSearchActive,
-        enter = fadeIn(),
-        exit = fadeOut(),
+        enter = M3Motion.fadeEnter,
+        exit = M3Motion.fadeExit,
     ) {
         Column(modifier = modifier) {
             RoomListSearchContent(

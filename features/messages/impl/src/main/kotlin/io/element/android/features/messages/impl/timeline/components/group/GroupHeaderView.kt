@@ -9,7 +9,6 @@
 package io.element.android.features.messages.impl.timeline.components.group
 
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -19,6 +18,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material3.MaterialTheme
+import io.element.android.libraries.designsystem.animation.M3Motion
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -82,10 +82,7 @@ fun GroupHeaderView(
                 )
                 val rotation: Float by animateFloatAsState(
                     targetValue = if (isExpanded) 90f else 0f,
-                    animationSpec = tween(
-                        delayMillis = 0,
-                        durationMillis = 300,
-                    ),
+                    animationSpec = M3Motion.defaultValueSpec(),
                     label = "chevron"
                 )
                 Icon(

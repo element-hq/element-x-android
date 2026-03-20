@@ -9,6 +9,7 @@
 package io.element.android.features.messages.impl.pinned.banner
 
 import androidx.compose.animation.AnimatedVisibility
+import io.element.android.libraries.designsystem.animation.M3Motion
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement.spacedBy
@@ -234,7 +235,7 @@ private fun PinnedMessageItem(
     val countMessage = stringResource(id = CommonStrings.screen_room_pinned_banner_indicator, index + 1, totalCount)
     val fullCountMessage = stringResource(id = CommonStrings.screen_room_pinned_banner_indicator_description, countMessage)
     Column(modifier = modifier) {
-        AnimatedVisibility(totalCount > 1) {
+        AnimatedVisibility(totalCount > 1, enter = M3Motion.fadeEnter, exit = M3Motion.fadeExit) {
             Text(
                 text = annotatedTextWithBold(
                     text = fullCountMessage,

@@ -130,6 +130,7 @@ internal fun PollAnswerView(
                 }
             }
             Spacer(modifier = Modifier.height(10.dp))
+            @Suppress("DEPRECATION") // Intentionally flat (not wavy) for poll result bars
             LinearProgressIndicator(
                 modifier = Modifier.fillMaxWidth(),
                 color = if (answerItem.isWinner) ElementTheme.colors.textSuccessPrimary else answerItem.isEnabled.toEnabledColor(),

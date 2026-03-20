@@ -44,7 +44,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.SearchBar
@@ -154,16 +153,13 @@ fun RoomSelectView(
                         )
                     }
                     items(summaries, key = { it.roomId.value }) { roomSummary ->
-                        Column {
-                            RoomSummaryView(
-                                roomSummary,
-                                isSelected = state.selectedRooms.any { it.roomId == roomSummary.roomId },
-                                onSelection = { roomSummary ->
-                                    state.eventSink(RoomSelectEvents.SetSelectedRoom(roomSummary))
-                                }
-                            )
-                            HorizontalDivider(modifier = Modifier.fillMaxWidth())
-                        }
+                        RoomSummaryView(
+                            roomSummary,
+                            isSelected = state.selectedRooms.any { it.roomId == roomSummary.roomId },
+                            onSelection = { roomSummary ->
+                                state.eventSink(RoomSelectEvents.SetSelectedRoom(roomSummary))
+                            }
+                        )
                     }
                 }
             }
@@ -179,16 +175,13 @@ fun RoomSelectView(
                 if (state.resultState is SearchBarResultState.Results) {
                     LazyColumn(state = lazyListState) {
                         items(state.resultState.results, key = { it.roomId.value }) { roomSummary ->
-                            Column {
-                                RoomSummaryView(
-                                    roomSummary,
-                                    isSelected = state.selectedRooms.any { it.roomId == roomSummary.roomId },
-                                    onSelection = { roomSummary ->
-                                        state.eventSink(RoomSelectEvents.SetSelectedRoom(roomSummary))
-                                    }
-                                )
-                                HorizontalDivider(modifier = Modifier.fillMaxWidth())
-                            }
+                            RoomSummaryView(
+                                roomSummary,
+                                isSelected = state.selectedRooms.any { it.roomId == roomSummary.roomId },
+                                onSelection = { roomSummary ->
+                                    state.eventSink(RoomSelectEvents.SetSelectedRoom(roomSummary))
+                                }
+                            )
                         }
                     }
                 }

@@ -21,6 +21,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 
+@Deprecated("M3 Expressive: use Spacer or surface color contrast instead of dividers")
 @Composable
 fun HorizontalDivider(
     modifier: Modifier = Modifier,
@@ -38,6 +39,7 @@ object ElementDividerDefaults {
     val thickness = 0.5.dp
 }
 
+@Suppress("DEPRECATION")
 @Preview(group = PreviewGroup.Dividers)
 @Composable
 internal fun HorizontalDividerPreview() = ElementThemedPreview {

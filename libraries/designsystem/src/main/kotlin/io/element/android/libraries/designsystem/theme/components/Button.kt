@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ButtonColors
@@ -219,12 +220,13 @@ private fun ButtonInternal(
     ) {
         when {
             showProgress -> {
-                CircularProgressIndicator(
+                ElementLoadingIndicator(
                     modifier = Modifier
                         .progressSemantics()
-                        .size(20.dp),
+                        .size(20.dp)
+                        .wrapContentSize(Alignment.Center),
                     color = LocalContentColor.current,
-                    strokeWidth = 2.dp,
+                    size = 20.dp,
                 )
                 Spacer(modifier = Modifier.width(8.dp))
             }
@@ -251,7 +253,7 @@ private fun ButtonSize.toMinHeight() = when (this) {
     ButtonSize.Small -> 32.dp
     ButtonSize.Medium,
     ButtonSize.MediumLowPadding -> 40.dp
-    ButtonSize.Large,
+    ButtonSize.Large -> 56.dp
     ButtonSize.LargeLowPadding -> 48.dp
 }
 

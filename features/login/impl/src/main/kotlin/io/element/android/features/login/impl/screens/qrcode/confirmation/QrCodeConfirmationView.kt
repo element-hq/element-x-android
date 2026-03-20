@@ -36,7 +36,7 @@ import io.element.android.libraries.designsystem.atomic.pages.FlowStepPage
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.ElementLoadingIndicator
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -119,11 +119,11 @@ private fun WaitingForOtherDevice() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        CircularProgressIndicator(
+        ElementLoadingIndicator(
             modifier = Modifier
                 .size(20.dp)
                 .padding(2.dp),
-            strokeWidth = 2.dp,
+            size = 20.dp,
         )
         Text(
             text = stringResource(R.string.screen_qr_code_login_verify_code_loading),

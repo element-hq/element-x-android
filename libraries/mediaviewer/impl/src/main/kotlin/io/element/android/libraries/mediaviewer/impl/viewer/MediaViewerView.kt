@@ -10,10 +10,9 @@
 
 package io.element.android.libraries.mediaviewer.impl.viewer
 
-import androidx.activity.compose.BackHandler
+import androidx.activity.compose.PredictiveBackHandler
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import io.element.android.libraries.designsystem.animation.M3Motion
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,7 +24,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.LinearProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.WavyLinearProgressIndicator
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -104,7 +103,14 @@ fun MediaViewerView(
 
     val defaultBottomPaddingInPixels = if (LocalInspectionMode.current) 303 else 0
     val currentData = state.listData.getOrNull(state.currentIndex)
-    BackHandler { onBackClick() }
+    PredictiveBackHandler { progress ->
+        try {
+            progress.collect { }
+            onBackClick()
+        } catch (_: kotlin.coroutines.cancellation.CancellationException) {
+            // Gesture cancelled — no action needed
+        }
+    }
     Scaffold(
         modifier,
         containerColor = Color.Transparent,
@@ -173,7 +179,7 @@ fun MediaViewerView(
                             isUserSelected = (state.listData[page] as? MediaViewerPageData.MediaViewerData)?.eventId == state.initiallySelectedEventId,
                         )
                         // Bottom bar
-                        AnimatedVisibility(visible = showOverlay, enter = fadeIn(), exit = fadeOut()) {
+                        AnimatedVisibility(visible = showOverlay, enter = M3Motion.fadeEnter, exit = M3Motion.fadeExit) {
                             Box(
                                 modifier = Modifier
                                     .fillMaxSize()
@@ -192,7 +198,7 @@ fun MediaViewerView(
             }
         }
         // Top bar
-        AnimatedVisibility(visible = showOverlay, enter = fadeIn(), exit = fadeOut()) {
+        AnimatedVisibility(visible = showOverlay, enter = M3Motion.fadeEnter, exit = M3Motion.fadeExit) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
@@ -366,7 +372,7 @@ private fun MediaViewerPage(
                 }
             }
             if (showProgress) {
-                LinearProgressIndicator(
+                WavyLinearProgressIndicator(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(2.dp)
@@ -519,6 +525,7 @@ private fun MediaViewerTopBar(
     )
 }
 
+@Suppress("DEPRECATION") // Structural divider for video caption — intentional
 @Composable
 private fun MediaViewerBottomBar(
     caption: String?,

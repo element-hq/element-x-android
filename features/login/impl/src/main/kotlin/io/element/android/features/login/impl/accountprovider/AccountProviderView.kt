@@ -28,7 +28,6 @@ import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtom
 import io.element.android.libraries.designsystem.atomic.atoms.RoundedIconAtomSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 
@@ -47,7 +46,6 @@ fun AccountProviderView(
             .fillMaxWidth()
             .clickable { onClick() }
     ) {
-        HorizontalDivider()
         Column(
             modifier = Modifier
                 .fillMaxWidth()
