@@ -1,0 +1,35 @@
+#!/usr/bin/env bash
+
+# Copyright (c) 2026 Element Creations Ltd.
+#
+# SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+# Please see LICENSE files in the repository root for full details.
+
+set -e
+set -u
+
+VERSION=${1:-}
+if [ -n "$VERSION" ]; then
+  PACKAGE=rustls-platform-verifier-android==$VERSION
+else
+  PACKAGE=rustls-platform-verifier-android
+fi
+
+cargo install cargo-download
+mkdir -p tmp/rustls-platform-verifier-android
+cargo download $PACKAGE > tmp/rustls-platform-verifier-android/rustls-platform-verifier-android.gz
+ROOT=$(git rev-parse --show-toplevel)
+
+cd tmp/rustls-platform-verifier-android
+
+echo "Extracting rustls-platform-verifier-android.aar from \`rustls-platform-verifier-android.gz\`"
+
+tar -xzvf rustls-platform-verifier-android.gz &> /dev/null
+DIR=$(find . -type d -name "rustls-platform-verifier-android-*")
+AAR=$(find $DIR -type f -name "*.aar")
+cp $AAR $ROOT/libraries/matrix/impl/libs/rustls-platform-verifier-android.aar
+cd $ROOT
+rm -r tmp/rustls-platform-verifier-android
+
+echo "Updated rustls-platform-verifier-android.aar using \`$(basename $AAR)\`" > libraries/matrix/impl/libs/rustls-platform-verifier-android.aar.version
+cat libraries/matrix/impl/libs/rustls-platform-verifier-android.aar.version
