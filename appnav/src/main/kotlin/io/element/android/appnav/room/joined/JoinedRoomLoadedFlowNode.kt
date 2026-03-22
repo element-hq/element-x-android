@@ -191,8 +191,8 @@ class JoinedRoomLoadedFlowNode(
             NavTarget.SearchMessages -> {
                 val searchCallback = object : RoomMessageSearchEntryPoint.Callback {
                     override fun onSearchResultClick(eventId: EventId) {
-                        backstack.pop()  // Remove SearchMessages
-                        backstack.replace(NavTarget.Messages(focusedEventId = eventId))  // Replace original Messages
+                        backstack.pop() // Remove SearchMessages
+                        backstack.replace(NavTarget.Messages(focusedEventId = eventId)) // Replace original Messages
                     }
                 }
                 roomMessageSearchEntryPoint.createNode(this, buildContext, searchCallback)
