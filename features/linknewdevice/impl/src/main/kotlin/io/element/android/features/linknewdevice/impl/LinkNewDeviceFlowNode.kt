@@ -196,6 +196,7 @@ class LinkNewDeviceFlowNode(
             is ErrorType.ConnectionInsecure -> ErrorScreenType.InsecureChannelDetected
             is ErrorType.Expired -> ErrorScreenType.Expired
             is ErrorType.OtherDeviceAlreadySignedIn -> ErrorScreenType.UnknownError
+            is ErrorType.UnsupportedQrCodeType -> ErrorScreenType.UnknownError
         }
         // It is OK to push on backstack, since when user leaves the error screen, a new root will be set,
         // or the whole flow will be popped.

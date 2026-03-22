@@ -1,4 +1,12 @@
-<!-- Please read [CONTRIBUTING.md](https://github.com/element-hq/element-x-android/blob/develop/CONTRIBUTING.md) before submitting your pull request -->
+<!-- 
+
+Please read [CONTRIBUTING.md](https://github.com/element-hq/element-x-android/blob/develop/CONTRIBUTING.md) before submitting your pull request.
+
+Are you adding a new feature? Keep in mind that it needs to be added to [the iOS client](https://github.com/element-hq/element-x-ios) too, unless it's related to an Android OS only behaviour.
+
+**IMPORTANT:** if you are adding new screens or modifying existing ones, this needs acceptance from the product and design teams before being merged. For this, it's better to start with a [feature request issue](https://github.com/element-hq/element-x-android/issues/new?template=enhancement.yml) describing the change you want to make and the motivation behind it instead of directly creating a pull request. This will allow the product and design teams to give feedback on the change before you start working on it, and avoid you doing work that might end up being rejected.
+
+-->
  
 ## Content
 
