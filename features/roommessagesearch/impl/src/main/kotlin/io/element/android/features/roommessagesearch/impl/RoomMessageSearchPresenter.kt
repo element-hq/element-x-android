@@ -47,7 +47,7 @@ class RoomMessageSearchPresenter(
         var accumulatedItems by remember { mutableStateOf<ImmutableList<SearchResultItemState>>(persistentListOf()) }
         var nextBatchToken by remember { mutableStateOf<String?>(null) }
         var highlights by remember { mutableStateOf<ImmutableList<String>>(persistentListOf()) }
-        var loadMoreRequested by remember { mutableStateOf(false) }
+        var loadMoreCounter by remember { mutableStateOf(0) }
         var retryRequested by remember { mutableStateOf(false) }
 
         val roomInfo by room.roomInfoFlow.collectAsState()
@@ -93,9 +93,8 @@ class RoomMessageSearchPresenter(
             )
         }
 
-        LaunchedEffect(loadMoreRequested) {
-            if (!loadMoreRequested) return@LaunchedEffect
-            loadMoreRequested = false
+        LaunchedEffect(loadMoreCounter) {
+            if (loadMoreCounter == 0) return@LaunchedEffect
             val currentToken = nextBatchToken ?: return@LaunchedEffect
             performSearch(
                 query = query,
@@ -158,7 +157,7 @@ class RoomMessageSearchPresenter(
                     query = event.query
                 }
                 RoomMessageSearchEvents.LoadMore -> {
-                    loadMoreRequested = true
+                    loadMoreCounter++
                 }
                 RoomMessageSearchEvents.RetrySearch -> {
                     retryRequested = true

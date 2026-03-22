@@ -291,7 +291,8 @@ private fun SearchResultsList(
         }
     }
 
-    LaunchedEffect(shouldLoadMore) {
+    // Use items count as an additional key so the effect re-triggers after new items load
+    LaunchedEffect(shouldLoadMore, results.items.size) {
         if (shouldLoadMore) {
             onLoadMore()
         }
