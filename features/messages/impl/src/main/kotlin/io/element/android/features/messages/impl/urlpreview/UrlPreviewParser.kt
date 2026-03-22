@@ -10,7 +10,6 @@ package io.element.android.features.messages.impl.urlpreview
 
 import android.text.Spanned
 import android.text.style.URLSpan
-import androidx.core.text.toSpannable
 import io.element.android.libraries.core.data.tryOrNull
 import org.jsoup.nodes.Document
 import java.net.URI
@@ -39,7 +38,7 @@ internal fun hostNameFromUrl(url: String): String {
 }
 
 private fun CharSequence.extractUrlSpans(): List<String> {
-    val spanned = this as? Spanned ?: toSpannable()
+    val spanned = this as? Spanned ?: return emptyList()
     return spanned.getSpans(0, spanned.length, URLSpan::class.java)
         .orEmpty()
         .sortedBy { spanned.getSpanStart(it) }
