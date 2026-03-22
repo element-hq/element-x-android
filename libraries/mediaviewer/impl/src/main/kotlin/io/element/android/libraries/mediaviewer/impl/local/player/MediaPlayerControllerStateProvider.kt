@@ -34,6 +34,7 @@ private fun aMediaPlayerControllerState(
     durationInMillis: Long = 83_000,
     canMute: Boolean = true,
     isMuted: Boolean = false,
+    seekingToMillis: Long? = null,
 ) = MediaPlayerControllerState(
     isVisible = isVisible,
     isPlaying = isPlaying,
@@ -42,4 +43,5 @@ private fun aMediaPlayerControllerState(
     durationInMillis = durationInMillis,
     canMute = canMute,
     isMuted = isMuted,
+    seekingToMillis = seekingToMillis,
 )

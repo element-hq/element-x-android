@@ -108,6 +108,7 @@ private fun ExoPlayerMediaVideoView(
                 durationInMillis = 0,
                 canMute = true,
                 isMuted = false,
+                seekingToMillis = null,
             )
         )
     }
@@ -225,6 +226,9 @@ private fun ExoPlayerMediaVideoView(
             },
             onSeekChange = {
                 autoHideController++
+                mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                    seekingToMillis = it.toLong(),
+                )
                 exoPlayer.seekToEnsurePlaying(it.toLong())
             },
             onToggleMute = {
@@ -242,15 +246,21 @@ private fun ExoPlayerMediaVideoView(
     LaunchedEffect(exoPlayer.isPlaying) {
         if (exoPlayer.isPlaying) {
             while (true) {
+                val position = exoPlayer.currentPosition
+                val seekingTo = mediaPlayerControllerState.seekingToMillis
                 mediaPlayerControllerState = mediaPlayerControllerState.copy(
-                    progressInMillis = exoPlayer.currentPosition,
+                    progressInMillis = position,
+                    seekingToMillis = if (seekingTo != null && position >= seekingTo) null else seekingTo,
                 )
                 delay(200)
             }
         } else {
             // Ensure we render the final state
+            val position = exoPlayer.currentPosition
+            val seekingTo = mediaPlayerControllerState.seekingToMillis
             mediaPlayerControllerState = mediaPlayerControllerState.copy(
-                progressInMillis = exoPlayer.currentPosition,
+                progressInMillis = position,
+                seekingToMillis = if (seekingTo != null && position >= seekingTo) null else seekingTo,
             )
         }
     }
