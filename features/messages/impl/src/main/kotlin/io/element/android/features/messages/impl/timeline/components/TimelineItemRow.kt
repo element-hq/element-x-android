@@ -18,7 +18,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.isTraversalGroup
@@ -38,7 +37,6 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
-import io.element.android.libraries.designsystem.colors.gradientSubtleColors
 import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -221,25 +219,23 @@ internal fun TimelineItemRow(
 private fun Modifier.focusedEvent(
     focusedEventOffset: Dp,
 ): Modifier {
-    val highlightedLineColor = ElementTheme.colors.borderAccentSubtle
-    val gradientColors = gradientSubtleColors()
+    val accentColor = ElementTheme.colors.borderAccentSubtle
+    val backgroundColor = ElementTheme.colors.bgSubtleSecondary
     val verticalOffset = focusedEventOffset.toPx()
-    val verticalRatio = 0.7f
+    val accentBarWidth = 3.dp.toPx()
     return drawWithCache {
-        val brush = Brush.verticalGradient(
-            colors = gradientColors,
-            endY = size.height * verticalRatio,
-        )
         onDrawBehind {
+            // Full-height subtle background
             drawRect(
-                brush,
+                color = backgroundColor,
                 topLeft = Offset(0f, verticalOffset),
-                size = Size(size.width, size.height * verticalRatio)
+                size = Size(size.width, size.height - verticalOffset),
             )
-            drawLine(
-                highlightedLineColor,
-                start = Offset(0f, verticalOffset),
-                end = Offset(size.width, verticalOffset)
+            // Left accent bar
+            drawRect(
+                color = accentColor,
+                topLeft = Offset(0f, verticalOffset),
+                size = Size(accentBarWidth, size.height - verticalOffset),
             )
         }
     }.padding(top = 4.dp)

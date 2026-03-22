@@ -21,6 +21,7 @@ import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
+import com.bumble.appyx.navmodel.backstack.operation.replace
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
@@ -190,8 +191,8 @@ class JoinedRoomLoadedFlowNode(
             NavTarget.SearchMessages -> {
                 val searchCallback = object : RoomMessageSearchEntryPoint.Callback {
                     override fun onSearchResultClick(eventId: EventId) {
-                        backstack.pop()
-                        backstack.push(NavTarget.Messages(focusedEventId = eventId))
+                        backstack.pop()  // Remove SearchMessages
+                        backstack.replace(NavTarget.Messages(focusedEventId = eventId))  // Replace original Messages
                     }
                 }
                 roomMessageSearchEntryPoint.createNode(this, buildContext, searchCallback)

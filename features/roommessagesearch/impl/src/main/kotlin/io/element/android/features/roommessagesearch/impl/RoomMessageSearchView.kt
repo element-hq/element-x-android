@@ -7,6 +7,7 @@
 
 package io.element.android.features.roommessagesearch.impl
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -17,21 +18,34 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.isImeVisible
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -40,8 +54,11 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.androidutils.ui.showKeyboard
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.designsystem.atomic.atoms.PlaceholderAtom
 import io.element.android.libraries.designsystem.components.avatar.Avatar
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -54,10 +71,11 @@ import io.element.android.libraries.designsystem.theme.components.SearchField
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.theme.placeholderBackground
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.ui.strings.CommonStrings
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun RoomMessageSearchView(
     state: RoomMessageSearchState,
@@ -66,8 +84,36 @@ fun RoomMessageSearchView(
     modifier: Modifier = Modifier,
 ) {
     val searchFieldState = remember { TextFieldState() }
+    val focusRequester = remember { FocusRequester() }
+    val view = LocalView.current
 
     if (!state.isEncryptedRoom) {
+        var imeHasBeenVisible by remember { mutableStateOf(false) }
+        var imeRetried by remember { mutableStateOf(false) }
+        val imeVisible = WindowInsets.isImeVisible
+
+        // Request focus and show keyboard on first composition
+        LaunchedEffect(Unit) {
+            focusRequester.requestFocus()
+            view.post {
+                val focusedView = view.findFocus() ?: view
+                focusedView.showKeyboard()
+            }
+        }
+
+        // If the keyboard was shown then dismissed (e.g. by navigation transition), re-show it once
+        LaunchedEffect(imeVisible) {
+            if (imeVisible) {
+                imeHasBeenVisible = true
+            } else if (imeHasBeenVisible && !imeRetried) {
+                imeRetried = true
+                view.post {
+                    val focusedView = view.findFocus() ?: view
+                    focusedView.showKeyboard()
+                }
+            }
+        }
+
         LaunchedEffect(Unit) {
             snapshotFlow { searchFieldState.text.toString() }
                 .collect { text ->
@@ -97,6 +143,7 @@ fun RoomMessageSearchView(
                     state = searchFieldState,
                     placeholder = stringResource(CommonStrings.action_search),
                     modifier = Modifier
+                        .focusRequester(focusRequester)
                         .fillMaxWidth()
                         .padding(horizontal = 16.dp, vertical = 8.dp),
                 )
@@ -123,7 +170,7 @@ private fun EncryptedRoomBanner(
     ) {
         Icon(
             imageVector = CompoundIcons.Lock(),
-            contentDescription = null,
+            contentDescription = stringResource(R.string.screen_room_message_search_encrypted_room),
             tint = ElementTheme.colors.iconSecondary,
         )
         Spacer(Modifier.width(8.dp))
@@ -149,11 +196,10 @@ private fun SearchContent(
             )
         }
         is AsyncData.Loading -> {
-            Box(
-                modifier = modifier.fillMaxSize(),
-                contentAlignment = Alignment.Center,
-            ) {
-                CircularProgressIndicator()
+            LazyColumn(modifier = modifier.fillMaxSize()) {
+                items(7) {
+                    SearchResultPlaceholderItem()
+                }
             }
         }
         is AsyncData.Failure -> {
@@ -208,11 +254,17 @@ private fun ResultCountBanner(
             Spacer(Modifier.width(8.dp))
             Text(
                 text = buildAnnotatedString {
-                    append("$count results found for \"")
-                    val start = length
-                    append(query)
-                    addStyle(SpanStyle(fontWeight = FontWeight.Bold), start, length)
-                    append("\"")
+                    val formatted = pluralStringResource(
+                        R.plurals.screen_room_message_search_results_found,
+                        count.toInt(),
+                        count,
+                        query,
+                    )
+                    append(formatted)
+                    val queryStart = formatted.indexOf(query)
+                    if (queryStart >= 0) {
+                        addStyle(SpanStyle(fontWeight = FontWeight.Bold), queryStart, queryStart + query.length)
+                    }
                 },
                 style = ElementTheme.typography.fontBodySmRegular,
                 color = ElementTheme.colors.textSecondary,
@@ -258,6 +310,7 @@ private fun SearchResultsList(
                 highlights = highlights,
                 onClick = { onSearchResultClick(item.eventId) },
             )
+            HorizontalDivider(modifier = Modifier.padding(start = 60.dp))
         }
         if (results.hasMore) {
             item {
@@ -284,6 +337,15 @@ private fun SearchResultItem(
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .semantics(mergeDescendants = true) {
+                contentDescription = buildString {
+                    append(item.senderName ?: item.senderId.value)
+                    append(", ")
+                    append(item.body)
+                    append(", ")
+                    append(item.formattedDate)
+                }
+            }
             .clickable(onClick = onClick)
             .padding(horizontal = 16.dp, vertical = 12.dp),
         verticalAlignment = Alignment.Top,
@@ -316,6 +378,41 @@ private fun SearchResultItem(
                 text = item.body,
                 highlights = highlights,
             )
+        }
+    }
+}
+
+@Composable
+private fun SearchResultPlaceholderItem(
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.Top,
+    ) {
+        Box(
+            modifier = Modifier
+                .size(AvatarSize.TimelineSender.dp)
+                .background(
+                    color = ElementTheme.colors.placeholderBackground,
+                    shape = CircleShape,
+                )
+        )
+        Spacer(Modifier.width(12.dp))
+        Column(modifier = Modifier.weight(1f)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                PlaceholderAtom(width = 80.dp, height = 8.dp)
+                PlaceholderAtom(width = 40.dp, height = 6.dp)
+            }
+            Spacer(Modifier.height(6.dp))
+            PlaceholderAtom(width = 200.dp, height = 7.dp)
+            Spacer(Modifier.height(4.dp))
+            PlaceholderAtom(width = 140.dp, height = 7.dp)
         }
     }
 }
