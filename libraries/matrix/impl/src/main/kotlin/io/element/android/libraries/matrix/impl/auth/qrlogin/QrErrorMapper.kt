@@ -46,5 +46,6 @@ object QrErrorMapper {
         is RustHumanQrLoginException.SlidingSyncNotAvailable -> QrLoginException.SlidingSyncNotAvailable
         is RustHumanQrLoginException.CheckCodeAlreadySent -> QrLoginException.CheckCodeAlreadySent
         is RustHumanQrLoginException.CheckCodeCannotBeSent -> QrLoginException.CheckCodeCannotBeSent
+        is RustHumanQrLoginException.UnsupportedQrCodeType -> QrLoginException.UnsupportedQrCodeType
     }
 }
