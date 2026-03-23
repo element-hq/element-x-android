@@ -45,7 +45,7 @@ showkase = "1.0.5"
 # There is some custom logic in `RootFlowNode` that may break because it reuses some Appyx internal APIs.
 # When upgrading this version, check state restoration still works fine.
 appyx = "1.7.1"
-sqldelight = "2.3.1"
+sqldelight = "2.3.2"
 wysiwyg = "2.41.1"
 telephoto = "0.18.0"
 haze = "1.7.2"
