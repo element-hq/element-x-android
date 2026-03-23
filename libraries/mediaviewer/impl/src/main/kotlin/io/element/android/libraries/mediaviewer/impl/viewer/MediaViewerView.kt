@@ -142,9 +142,6 @@ fun MediaViewerView(
                 }
                 is MediaViewerPageData.MediaViewerData -> {
                     var bottomPaddingInPixels by remember { mutableIntStateOf(defaultBottomPaddingInPixels) }
-                    LaunchedEffect(Unit) {
-                        state.eventSink(MediaViewerEvents.LoadMedia(dataForPage))
-                    }
                     Box(
                         modifier = Modifier.fillMaxSize()
                     ) {
@@ -152,6 +149,18 @@ fun MediaViewerView(
                             // This 'item provider' lambda will be called when the data source changes with an outdated `settlePage` value
                             // So we need to update this value only when the `settledPage` value changes. It seems like a bug that needs to be fixed in Compose.
                             page == pagerState.settledPage
+                        }
+                        var hasLoadedOnce by remember { mutableStateOf(false) }
+                        LaunchedEffect(isDisplayed) {
+                            if (isDisplayed) {
+                                if (!hasLoadedOnce) {
+                                    hasLoadedOnce = true
+                                    state.eventSink(MediaViewerEvents.LoadMedia(dataForPage))
+                                } else {
+                                    delay(300)
+                                    state.eventSink(MediaViewerEvents.LoadMedia(dataForPage))
+                                }
+                            }
                         }
                         MediaViewerPage(
                             isDisplayed = isDisplayed,
