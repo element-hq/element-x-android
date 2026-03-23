@@ -56,6 +56,7 @@ class AdvancedSettingsPresenter(
                 when (theme.value) {
                     Theme.System -> ThemeOption.System
                     Theme.Dark -> ThemeOption.Dark
+                    Theme.Black -> ThemeOption.Black
                     Theme.Light -> ThemeOption.Light
                 }
             }
@@ -98,6 +99,7 @@ class AdvancedSettingsPresenter(
                     when (event.theme) {
                         ThemeOption.System -> appPreferencesStore.setTheme(Theme.System.name)
                         ThemeOption.Dark -> appPreferencesStore.setTheme(Theme.Dark.name)
+                        ThemeOption.Black -> appPreferencesStore.setTheme(Theme.Black.name)
                         ThemeOption.Light -> appPreferencesStore.setTheme(Theme.Light.name)
                     }
                 }

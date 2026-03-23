@@ -36,11 +36,15 @@ internal fun MaterialTextPreview() = Row(
 ) {
     MaterialPreview(
         modifier = Modifier.weight(1f),
-        darkTheme = false,
+        theme = Theme.Light,
     )
     MaterialPreview(
         modifier = Modifier.weight(1f),
-        darkTheme = true,
+        theme = Theme.Dark,
+    )
+    MaterialPreview(
+        modifier = Modifier.weight(1f),
+        theme = Theme.Black,
     )
 }
 
@@ -52,7 +56,7 @@ private data class Model(
 
 @Composable
 private fun MaterialPreview(
-    darkTheme: Boolean,
+    theme: Theme,
     modifier: Modifier = Modifier,
 ) = Column(modifier = modifier) {
     Text(
@@ -60,13 +64,13 @@ private fun MaterialPreview(
             .fillMaxWidth()
             .padding(8.dp),
         textAlign = TextAlign.Center,
-        text = if (darkTheme) "Dark" else "Light",
+        text = theme.name,
         color = Color.Black,
         fontSize = 18.sp,
         fontWeight = FontWeight.Bold,
     )
     ElementTheme(
-        darkTheme = darkTheme,
+        theme = theme,
     ) {
         Column(
             modifier = Modifier.fillMaxSize()

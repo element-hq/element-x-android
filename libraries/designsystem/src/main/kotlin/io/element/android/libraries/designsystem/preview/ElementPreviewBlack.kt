@@ -12,12 +12,12 @@ import androidx.compose.runtime.Composable
 import io.element.android.compound.theme.Theme
 
 @Composable
-fun ElementPreviewLight(
+fun ElementPreviewBlack(
     showBackground: Boolean = true,
     content: @Composable () -> Unit
 ) {
     ElementPreview(
-        theme = Theme.Light,
+        theme = Theme.Black,
         showBackground = showBackground,
         content = content
     )

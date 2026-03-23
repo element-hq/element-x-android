@@ -18,7 +18,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.staticCompositionLocalOf
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.theme.Theme
-import io.element.android.compound.theme.isDark
 import io.element.android.compound.theme.mapToTheme
 import io.element.android.compound.tokens.generated.SemanticColors
 import io.element.android.libraries.core.meta.BuildMeta
@@ -68,7 +67,7 @@ fun ElementThemeApp(
             when (theme) {
                 Theme.System -> AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
                 Theme.Light -> AppCompatDelegate.MODE_NIGHT_NO
-                Theme.Dark -> AppCompatDelegate.MODE_NIGHT_YES
+                Theme.Dark, Theme.Black -> AppCompatDelegate.MODE_NIGHT_YES
             }
         )
     }
@@ -76,7 +75,7 @@ fun ElementThemeApp(
         LocalBuildMeta provides buildMeta,
     ) {
         ElementTheme(
-            darkTheme = theme.isDark(),
+            theme = theme,
             content = content,
             compoundLight = compoundLight,
             compoundDark = compoundDark,

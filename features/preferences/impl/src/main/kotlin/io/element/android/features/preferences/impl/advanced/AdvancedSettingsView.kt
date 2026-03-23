@@ -29,6 +29,7 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.preview.ElementPreviewBlack
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -323,6 +324,11 @@ internal fun AdvancedSettingsViewLightPreview(@PreviewParameter(AdvancedSettings
 @Composable
 internal fun AdvancedSettingsViewDarkPreview(@PreviewParameter(AdvancedSettingsStateProvider::class) state: AdvancedSettingsState) =
     ElementPreviewDark { ContentToPreview(state) }
+
+@PreviewWithLargeHeight
+@Composable
+internal fun AdvancedSettingsViewBlackPreview(@PreviewParameter(AdvancedSettingsStateProvider::class) state: AdvancedSettingsState) =
+    ElementPreviewBlack { ContentToPreview(state) }
 
 @ExcludeFromCoverage
 @Composable

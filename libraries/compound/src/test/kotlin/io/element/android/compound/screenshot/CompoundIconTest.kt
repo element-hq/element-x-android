@@ -19,6 +19,7 @@ import io.element.android.compound.previews.IconsCompoundPreviewRtl
 import io.element.android.compound.previews.IconsPreview
 import io.element.android.compound.screenshot.utils.screenshotFile
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.theme.Theme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import kotlinx.collections.immutable.toImmutableList
 import org.junit.Test
@@ -56,7 +57,7 @@ class CompoundIconTest {
             val content: List<@Composable ColumnScope.() -> Unit> = CompoundIcons.all.map {
                 @Composable { Icon(imageVector = it, contentDescription = null) }
             }
-            ElementTheme(darkTheme = true) {
+            ElementTheme(theme = Theme.Dark) {
                 IconsPreview(
                     title = "Compound Vector Icons",
                     content = content.toImmutableList()

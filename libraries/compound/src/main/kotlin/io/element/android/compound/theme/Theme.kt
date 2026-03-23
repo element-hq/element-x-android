@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.map
 enum class Theme {
     System,
     Dark,
+    Black,
     Light,
 }
 
@@ -23,7 +24,7 @@ enum class Theme {
 fun Theme.isDark(): Boolean {
     return when (this) {
         Theme.System -> isSystemInDarkTheme()
-        Theme.Dark -> true
+        Theme.Dark, Theme.Black -> true
         Theme.Light -> false
     }
 }
