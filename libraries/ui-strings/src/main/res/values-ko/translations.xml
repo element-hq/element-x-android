@@ -43,7 +43,7 @@
   <string name="a11y_remove_reaction_with">"%1$s 반응을 제거하세요"</string>
   <string name="a11y_room_avatar">"방 아바타"</string>
   <string name="a11y_send_files">"파일 보내기"</string>
-  <string name="a11y_session_verification_time_limited_action_required">"시간 제한 조치가 필요합니다"</string>
+  <string name="a11y_session_verification_time_limited_action_required">"제한 시간 내 인증이 필요합니다.1분 안에 확인해 주세요."</string>
   <string name="a11y_show_password">"비밀번호 표시"</string>
   <string name="a11y_start_call">"통화 시작"</string>
   <string name="a11y_tombstoned_room">"묘비 방"</string>
@@ -157,8 +157,8 @@
   <string name="action_share_live_location">"실시간 위치 공유"</string>
   <string name="action_show">"표시"</string>
   <string name="action_sign_in_again">"다시 로그인"</string>
-  <string name="action_signout">"로그아웃"</string>
-  <string name="action_signout_anyway">"무시하고 로그아웃"</string>
+  <string name="action_signout">"이 기기 로그아웃"</string>
+  <string name="action_signout_anyway">"무시하고 이 기기 제거"</string>
   <string name="action_skip">"건너뛰기"</string>
   <string name="action_start">"시작"</string>
   <string name="action_start_chat">"채팅 시작"</string>
@@ -335,7 +335,7 @@
   <string name="common_shared_history">"새 멤버에게 대화 기록 공개"</string>
   <string name="common_shared_location">"공유된 위치"</string>
   <string name="common_shared_space">"공유된 스페이스"</string>
-  <string name="common_signing_out">"로그아웃"</string>
+  <string name="common_signing_out">"기기 제거"</string>
   <string name="common_something_went_wrong">"뭔가 잘못됐어요"</string>
   <string name="common_something_went_wrong_message">"문제가 발생했습니다. 다시 시도해 주세요."</string>
   <string name="common_space">"스페이스"</string>
@@ -452,8 +452,8 @@
     <item quantity="other">"%1$d 고정된 메시지"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"고정된 메세지"</string>
-  <string name="screen_reset_identity_confirmation_subtitle">"%1$s 계정으로 이동하여 신원을 재설정하시게 됩니다. 이후 앱으로 돌아가게 됩니다."</string>
-  <string name="screen_reset_identity_confirmation_title">"확인할 수 없으신가요? 계정으로 이동하여 신원을 재설정하세요."</string>
+  <string name="screen_reset_identity_confirmation_subtitle">"디지털 신원을 재설정하기 위해 %1$s 계정 페이지로 이동합니다. 재설정을 마친 후 다시 앱으로 돌아오게 됩니다."</string>
+  <string name="screen_reset_identity_confirmation_title">"확인할 수 없나요? 계정 설정으로 이동하여 디지털 신원을 재설정하세요."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"인증 철회 및 전송"</string>
   <string name="screen_resolve_send_failure_changed_identity_subtitle">"확인 절차를 철회하고 이 메시지를 보내거나, 지금 취소하고 나중에 %1$s 을 확인한 후 다시 시도할 수 있습니다."</string>
   <string name="screen_resolve_send_failure_changed_identity_title">"%1$s의 인증된 신원이 재설정되어 귀하의 메시지가 전송되지 않았습니다."</string>
@@ -479,7 +479,7 @@
   <string name="screen_share_open_apple_maps">"Apple Maps에서 열기"</string>
   <string name="screen_share_open_google_maps">"Google Maps에서 열기"</string>
   <string name="screen_share_open_osm_maps">"OpenStreetMap에서 열기"</string>
-  <string name="screen_share_this_location_action">"이 위치 공유"</string>
+  <string name="screen_share_this_location_action">"선택한 위치 공유"</string>
   <string name="screen_space_list_description">"당신이 스페이스를 만들거나 가입했습니다."</string>
   <string name="screen_space_list_details">"%1$s•%2$s"</string>
   <string name="screen_space_list_empty_state_title">"스페이스를 생성하여 방을 체계적으로 관리해 보세요."</string>

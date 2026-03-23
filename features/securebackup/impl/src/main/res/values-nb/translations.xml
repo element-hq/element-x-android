@@ -12,7 +12,6 @@
   <string name="screen_chat_backup_recovery_action_confirm">"Skriv inn gjenopprettingsnøkkel"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Nøkkellagringen din er for øyeblikket ikke synkronisert."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Hent gjenopprettingsnøkkel"</string>
-  <string name="screen_chat_backup_recovery_action_setup_description">"Få tilgang til de krypterte meldingene dine hvis du mister alle enhetene dine eller blir logget ut av %1$s overalt."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Åpne %1$s på en datamaskin"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Logg på kontoen din igjen"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Når du blir bedt om å verifisere din enhet, velger du %1$s"</string>
