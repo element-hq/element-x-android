@@ -40,9 +40,7 @@ import io.element.android.libraries.matrix.api.encryption.IdentityOidcResetHandl
 import io.element.android.libraries.matrix.api.encryption.IdentityPasswordResetHandle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.take
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
@@ -109,34 +107,33 @@ class ResetIdentityFlowNode(
     private fun CoroutineScope.startReset() = launch {
         // Instead of cancelling the reset job on every ON_START, we can do it before starting a new attempt
         cancelResetJob()
-        resetIdentityFlowManager.getResetHandle()
+
+        val handleResult = resetIdentityFlowManager.getResetHandle()
             // We're only interested in the success/failure case, and we need this flow to stop by itself
             // since each call to `startReset` will create a new one
-            .filter { it.isSuccess() || it.isFailure() }
-            .take(1)
-            .collectLatest { state ->
-                when (state) {
-                    is AsyncData.Failure -> {
-                        cancelResetJob()
-                        Timber.e(state.error, "Could not load the reset identity handle.")
+            .first { it.isSuccess() || it.isFailure() }
+
+        when (handleResult) {
+            is AsyncData.Failure -> {
+                cancelResetJob()
+                Timber.e(handleResult.error, "Could not load the reset identity handle.")
+            }
+            is AsyncData.Success -> {
+                when (val handle = handleResult.data) {
+                    null -> {
+                        Timber.d("No reset handle return, the reset is done.")
                     }
-                    is AsyncData.Success -> {
-                        when (val handle = state.data) {
-                            null -> {
-                                Timber.d("No reset handle return, the reset is done.")
-                            }
-                            is IdentityOidcResetHandle -> {
-                                Timber.d("Launching reset confirmation in MAS")
-                                activity.openUrlInChromeCustomTab(null, darkTheme, handle.url)
-                                Timber.d("Starting resetOidc")
-                                resetJob = launch { handle.resetOidc() }
-                                resetJob?.invokeOnCompletion { Timber.d("resetOidc ended") }
-                            }
-                            is IdentityPasswordResetHandle -> backstack.push(NavTarget.ResetPassword)
-                        }
+                    is IdentityOidcResetHandle -> {
+                        Timber.d("Launching reset confirmation in MAS")
+                        activity.openUrlInChromeCustomTab(null, darkTheme, handle.url)
+                        Timber.d("Starting resetOidc")
+                        resetJob = launch { handle.resetOidc() }
+                        resetJob?.invokeOnCompletion { Timber.d("resetOidc ended") }
                     }
-                    else -> Unit
+                    is IdentityPasswordResetHandle -> backstack.push(NavTarget.ResetPassword)
                 }
+            }
+            else -> Unit
         }
     }
 
