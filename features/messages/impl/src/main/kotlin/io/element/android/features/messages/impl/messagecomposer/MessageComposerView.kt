@@ -81,14 +81,6 @@ internal fun MessageComposerView(
         voiceMessageState.eventSink(VoiceMessageComposerEvent.RecorderEvent(press))
     }
 
-    val onSendVoiceMessage = {
-        voiceMessageState.eventSink(VoiceMessageComposerEvent.SendVoiceMessage)
-    }
-
-    val onDeleteVoiceMessage = {
-        voiceMessageState.eventSink(VoiceMessageComposerEvent.DeleteVoiceMessage)
-    }
-
     val onVoicePlayerEvent = { event: VoiceMessagePlayerEvent ->
         voiceMessageState.eventSink(VoiceMessageComposerEvent.PlayerEvent(event))
     }
@@ -106,8 +98,6 @@ internal fun MessageComposerView(
         onDismissTextFormatting = ::onDismissTextFormatting,
         onVoiceRecorderEvent = onVoiceRecorderEvent,
         onVoicePlayerEvent = onVoicePlayerEvent,
-        onSendVoiceMessage = onSendVoiceMessage,
-        onDeleteVoiceMessage = onDeleteVoiceMessage,
         onReceiveSuggestion = ::onSuggestionReceived,
         resolveMentionDisplay = state.resolveMentionDisplay,
         resolveAtRoomMentionDisplay = state.resolveAtRoomMentionDisplay,

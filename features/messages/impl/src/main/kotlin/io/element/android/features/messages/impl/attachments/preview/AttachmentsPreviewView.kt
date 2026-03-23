@@ -373,8 +373,6 @@ private fun AttachmentsPreviewBottomActions(
         onDismissTextFormatting = {},
         onVoiceRecorderEvent = {},
         onVoicePlayerEvent = {},
-        onSendVoiceMessage = {},
-        onDeleteVoiceMessage = {},
         onReceiveSuggestion = {},
         resolveMentionDisplay = { _, _ -> TextDisplay.Plain },
         resolveAtRoomMentionDisplay = { TextDisplay.Plain },

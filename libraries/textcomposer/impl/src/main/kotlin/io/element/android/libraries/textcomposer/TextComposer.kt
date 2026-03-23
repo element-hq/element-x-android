@@ -13,6 +13,8 @@ import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -39,7 +41,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.input.pointer.changedToUp
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.positionChange
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -50,7 +57,9 @@ import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Popup
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.androidutils.ui.showKeyboard
@@ -59,7 +68,6 @@ import io.element.android.libraries.designsystem.preview.DAY_MODE_NAME
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.NIGHT_MODE_NAME
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
@@ -75,12 +83,14 @@ import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.textcomposer.components.SendButtonIcon
 import io.element.android.libraries.textcomposer.components.TextFormatting
 import io.element.android.libraries.textcomposer.components.VoiceMessageDeleteButtonIcon
-import io.element.android.libraries.textcomposer.components.VoiceMessagePreview
+import io.element.android.libraries.textcomposer.components.VoiceMessageLockIndicator
 import io.element.android.libraries.textcomposer.components.VoiceMessageRecorderButtonIcon
-import io.element.android.libraries.textcomposer.components.VoiceMessageRecording
+import io.element.android.libraries.textcomposer.components.VoiceMessageRecordingHold
+import io.element.android.libraries.textcomposer.components.VoiceMessageRecordingLocked
 import io.element.android.libraries.textcomposer.components.markdown.MarkdownTextInput
 import io.element.android.libraries.textcomposer.components.textInputRoundedCornerShape
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
+import io.element.android.libraries.textcomposer.model.RecordingMode
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.TextEditorState
 import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
@@ -110,8 +120,6 @@ fun TextComposer(
     onDismissTextFormatting: () -> Unit,
     onVoiceRecorderEvent: (VoiceMessageRecorderEvent) -> Unit,
     onVoicePlayerEvent: (VoiceMessagePlayerEvent) -> Unit,
-    onSendVoiceMessage: () -> Unit,
-    onDeleteVoiceMessage: () -> Unit,
     onError: (Throwable) -> Unit,
     onTyping: (Boolean) -> Unit,
     onReceiveSuggestion: (Suggestion?) -> Unit,
@@ -124,18 +132,6 @@ fun TextComposer(
     val markdown = when (state) {
         is TextEditorState.Markdown -> state.state.text.value()
         is TextEditorState.Rich -> state.richTextEditorState.messageMarkdown
-    }
-
-    val onPlayVoiceMessageClick = {
-        onVoicePlayerEvent(VoiceMessagePlayerEvent.Play)
-    }
-
-    val onPauseVoiceMessageClick = {
-        onVoicePlayerEvent(VoiceMessagePlayerEvent.Pause)
-    }
-
-    val onSeekVoiceMessage = { position: Float ->
-        onVoicePlayerEvent(VoiceMessagePlayerEvent.Seek(position))
     }
 
     val layoutModifier = modifier
@@ -246,40 +242,23 @@ fun TextComposer(
                             )
                         }
                     )
-                    is VoiceMessageState.Recording -> EndButtonParams(
-                        endButtonContentDescriptionResId = CommonStrings.a11y_voice_message_stop_recording,
-                        endButtonClick = {
-                            performHapticFeedback()
-                            onVoiceRecorderEvent.invoke(VoiceMessageRecorderEvent.Stop)
-                        },
-                        endButtonContent = @Composable {
-                            VoiceMessageRecorderButtonIcon(
-                                isRecording = true,
-                            )
-                        }
-                    )
-                    is VoiceMessageState.Preview -> if (voiceMessageState.isSending) {
-                        EndButtonParams(
-                            endButtonContentDescriptionResId = CommonStrings.common_sending,
+                    is VoiceMessageState.Recording -> when (voiceMessageState.mode) {
+                        RecordingMode.Hold -> EndButtonParams(
+                            endButtonContentDescriptionResId = CommonStrings.a11y_voice_message_stop_recording,
                             endButtonClick = {},
                             endButtonContent = @Composable {
-                                CircularProgressIndicator(
-                                    modifier = Modifier.size(24.dp),
+                                VoiceMessageRecorderButtonIcon(
+                                    isRecording = true,
                                 )
                             }
                         )
-                    } else {
-                        EndButtonParams(
-                            endButtonContentDescriptionResId = CommonStrings.action_send_voice_message,
-                            endButtonClick = {
-                                onSendVoiceMessage()
-                            },
+                        RecordingMode.Locked -> EndButtonParams(
+                            endButtonContentDescriptionResId = CommonStrings.a11y_voice_message_stop_recording,
+                            endButtonClick = {},
                             endButtonContent = @Composable {
-                                SendButtonIcon(
-                                    canSendMessage = true,
-                                    isEditing = composerMode.isEditing,
-                                )
-                            },
+                                // Locked mode has its own send button in the recording UI
+                                Spacer(Modifier.size(24.dp))
+                            }
                         )
                     }
                 }
@@ -347,23 +326,36 @@ fun TextComposer(
 
     val voiceRecording = @Composable {
         when (voiceMessageState) {
-            is VoiceMessageState.Preview ->
-                VoiceMessagePreview(
-                    isInteractive = !voiceMessageState.isSending,
-                    isPlaying = voiceMessageState.isPlaying,
-                    showCursor = voiceMessageState.showCursor,
-                    waveform = voiceMessageState.waveform,
-                    playbackProgress = voiceMessageState.playbackProgress,
-                    time = voiceMessageState.time,
-                    onPlayClick = onPlayVoiceMessageClick,
-                    onPauseClick = onPauseVoiceMessageClick,
-                    onSeek = onSeekVoiceMessage,
-                )
-            is VoiceMessageState.Recording ->
-                VoiceMessageRecording(
-                    levels = voiceMessageState.levels,
+            is VoiceMessageState.Recording -> when (voiceMessageState.mode) {
+                RecordingMode.Hold -> VoiceMessageRecordingHold(
                     duration = voiceMessageState.duration,
                 )
+                RecordingMode.Locked -> VoiceMessageRecordingLocked(
+                    duration = voiceMessageState.duration,
+                    levels = voiceMessageState.levels,
+                    isPaused = voiceMessageState.isPaused,
+                    isPlayingBack = voiceMessageState.isPlayingBack,
+                    isPlaying = voiceMessageState.isPlaying,
+                    playbackProgress = voiceMessageState.playbackProgress,
+                    playbackTime = voiceMessageState.playbackTime,
+                    waveform = voiceMessageState.waveform,
+                    onDeleteClick = { onVoiceRecorderEvent(VoiceMessageRecorderEvent.Cancel) },
+                    onPauseClick = { onVoiceRecorderEvent(VoiceMessageRecorderEvent.Pause) },
+                    onResumeClick = { onVoiceRecorderEvent(VoiceMessageRecorderEvent.Resume) },
+                    onPlayClick = {
+                        if (voiceMessageState.isPlayingBack) {
+                            // Resume playback after pause
+                            onVoicePlayerEvent(VoiceMessagePlayerEvent.Play)
+                        } else {
+                            // First time play: stop recorder and enter playback review
+                            onVoiceRecorderEvent(VoiceMessageRecorderEvent.StopAndPreview)
+                        }
+                    },
+                    onPausePlaybackClick = { onVoicePlayerEvent(VoiceMessagePlayerEvent.Pause) },
+                    onSeek = { position -> onVoicePlayerEvent(VoiceMessagePlayerEvent.Seek(position)) },
+                    onSendClick = { onVoiceRecorderEvent(VoiceMessageRecorderEvent.StopAndSend) },
+                )
+            }
             VoiceMessageState.Idle -> {}
         }
     }
@@ -395,7 +387,6 @@ fun TextComposer(
             endButtonParams = endButtonParams,
             voiceRecording = voiceRecording,
             onAddAttachment = onAddAttachment,
-            onDeleteVoiceMessage = onDeleteVoiceMessage,
             onVoiceRecorderEvent = onVoiceRecorderEvent,
         )
     }
@@ -435,91 +426,205 @@ private fun StandardLayout(
     voiceRecording: @Composable () -> Unit,
     endButtonParams: EndButtonParams,
     onAddAttachment: () -> Unit,
-    onDeleteVoiceMessage: () -> Unit,
     onVoiceRecorderEvent: (VoiceMessageRecorderEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val density = LocalDensity.current
+    val lockThresholdPx = with(density) { 80.dp.toPx() }
+    val cancelThresholdPx = with(density) { 100.dp.toPx() }
+    val tapTimeThresholdMs = 200L
+    val hapticFeedback = LocalHapticFeedback.current
+
+    // Use rememberUpdatedState so the pointerInput coroutine always sees current values
+    val currentVoiceMessageState by rememberUpdatedState(voiceMessageState)
+    val currentOnVoiceRecorderEvent by rememberUpdatedState(onVoiceRecorderEvent)
+    val currentEndButtonClick by rememberUpdatedState(endButtonParams.endButtonClick)
+    val currentEndButtonDescResId by rememberUpdatedState(endButtonParams.endButtonContentDescriptionResId)
+
     Column(modifier = modifier) {
         if (isRoomEncrypted == false) {
             Spacer(Modifier.height(16.dp))
             NotEncryptedBadge()
             Spacer(Modifier.height(4.dp))
         }
-        Row(verticalAlignment = Alignment.Bottom) {
-            when (composerMode) {
-                is MessageComposerMode.Attachment -> {
-                    Spacer(modifier = Modifier.width(12.dp))
-                }
-                is MessageComposerMode.EditCaption -> {
-                    Spacer(modifier = Modifier.width(19.dp))
-                }
-                else -> {
-                    val endPadding = if (voiceMessageState is VoiceMessageState.Idle) 0.dp else 3.dp
-                    // To avoid loosing keyboard focus, the IconButton has to be defined here and has to be always enabled.
-                    IconButton(
-                        modifier = Modifier
-                            .padding(top = 5.dp, bottom = 5.dp, start = 3.dp, end = endPadding)
-                            .size(48.dp),
-                        onClick = {
-                            if (voiceMessageState is VoiceMessageState.Idle) {
-                                onAddAttachment()
-                            } else {
-                                when (voiceMessageState) {
-                                    is VoiceMessageState.Preview -> if (!voiceMessageState.isSending) {
-                                        onDeleteVoiceMessage()
+        Box {
+            Row(verticalAlignment = Alignment.Bottom) {
+                when (composerMode) {
+                    is MessageComposerMode.Attachment -> {
+                        Spacer(modifier = Modifier.width(12.dp))
+                    }
+                    is MessageComposerMode.EditCaption -> {
+                        Spacer(modifier = Modifier.width(19.dp))
+                    }
+                    else -> {
+                        val endPadding = if (voiceMessageState is VoiceMessageState.Idle) 0.dp else 3.dp
+                        IconButton(
+                            modifier = Modifier
+                                .padding(top = 5.dp, bottom = 5.dp, start = 3.dp, end = endPadding)
+                                .size(48.dp),
+                            onClick = {
+                                if (voiceMessageState is VoiceMessageState.Idle) {
+                                    onAddAttachment()
+                                } else {
+                                    if (voiceMessageState is VoiceMessageState.Recording) {
+                                        when (voiceMessageState.mode) {
+                                            RecordingMode.Hold ->
+                                                onVoiceRecorderEvent(VoiceMessageRecorderEvent.Cancel)
+                                            RecordingMode.Locked -> {} // Locked UI handles its own delete
+                                        }
                                     }
-                                    is VoiceMessageState.Recording ->
-                                        onVoiceRecorderEvent(VoiceMessageRecorderEvent.Cancel)
                                 }
-                            }
-                        },
-                    ) {
-                        if (voiceMessageState is VoiceMessageState.Idle) {
-                            Icon(
-                                modifier = Modifier
-                                    .clip(CircleShape)
-                                    .size(30.dp)
-                                    .background(ElementTheme.colors.iconPrimary)
-                                    .padding(3.dp),
-                                imageVector = CompoundIcons.Plus(),
-                                contentDescription = stringResource(R.string.rich_text_editor_a11y_add_attachment),
-                                tint = ElementTheme.colors.iconOnSolidPrimary
-                            )
-                        } else {
-                            when (voiceMessageState) {
-                                is VoiceMessageState.Preview ->
-                                    VoiceMessageDeleteButtonIcon(enabled = !voiceMessageState.isSending)
-                                is VoiceMessageState.Recording ->
-                                    VoiceMessageDeleteButtonIcon(enabled = true)
+                            },
+                        ) {
+                            if (voiceMessageState is VoiceMessageState.Idle) {
+                                Icon(
+                                    modifier = Modifier
+                                        .clip(CircleShape)
+                                        .size(30.dp)
+                                        .background(ElementTheme.colors.iconPrimary)
+                                        .padding(3.dp),
+                                    imageVector = CompoundIcons.Plus(),
+                                    contentDescription = stringResource(R.string.rich_text_editor_a11y_add_attachment),
+                                    tint = ElementTheme.colors.iconOnSolidPrimary
+                                )
+                            } else if (voiceMessageState is VoiceMessageState.Recording) {
+                                when (voiceMessageState.mode) {
+                                    RecordingMode.Hold ->
+                                        VoiceMessageDeleteButtonIcon(enabled = true)
+                                    RecordingMode.Locked ->
+                                        Spacer(Modifier.size(24.dp)) // Locked UI handles its own delete
+                                }
                             }
                         }
                     }
                 }
-            }
-            Box(
-                modifier = Modifier
-                    .padding(bottom = 8.dp, top = 8.dp)
-                    .weight(1f)
-            ) {
-                if (voiceMessageState is VoiceMessageState.Idle) {
-                    textInput()
-                } else {
-                    voiceRecording()
+                Box(
+                    modifier = Modifier
+                        .padding(bottom = 8.dp, top = 8.dp)
+                        .weight(1f)
+                ) {
+                    if (voiceMessageState is VoiceMessageState.Idle) {
+                        textInput()
+                    } else {
+                        voiceRecording()
+                    }
+                }
+                // Stable Box with unconditional pointerInput — manual drag tracking loop.
+                val endButtonContentDescription = stringResource(endButtonParams.endButtonContentDescriptionResId)
+                Box(
+                    modifier = Modifier
+                        .padding(bottom = 5.dp, top = 5.dp, end = 6.dp, start = 6.dp)
+                        .size(48.dp)
+                        .clearAndSetSemantics {
+                            contentDescription = endButtonContentDescription
+                            onClick(null, null)
+                        }
+                        .pointerInput(Unit) {
+                            awaitEachGesture {
+                                awaitFirstDown(requireUnconsumed = false)
+                                val state = currentVoiceMessageState
+
+                                // Voice gesture only when idle AND button is the mic, or actively holding
+                                val isVoiceGesture = state is VoiceMessageState.Idle &&
+                                    currentEndButtonDescResId == CommonStrings.a11y_voice_message_record ||
+                                    state is VoiceMessageState.Recording && state.mode == RecordingMode.Hold
+
+                                if (!isVoiceGesture) {
+                                    // Non-voice: wait for up and simulate click
+                                    try {
+                                        @Suppress("LoopWithTooManyJumpStatements")
+                                        while (true) {
+                                            val event = awaitPointerEvent()
+                                            val change = event.changes.firstOrNull() ?: break
+                                            if (change.changedToUp()) {
+                                                currentEndButtonClick()
+                                                break
+                                            }
+                                        }
+                                    } catch (_: Exception) {
+                                        // gesture cancelled
+                                    }
+                                    return@awaitEachGesture
+                                }
+
+                                val downTime = System.currentTimeMillis()
+                                hapticFeedback.performHapticFeedback(HapticFeedbackType.LongPress)
+
+                                if (state is VoiceMessageState.Idle) {
+                                    currentOnVoiceRecorderEvent(VoiceMessageRecorderEvent.Start)
+                                }
+
+                                // Manual drag tracking loop — survives layout changes
+                                var totalDrag = Offset.Zero
+                                var handled = false
+
+                                try {
+                                    @Suppress("LoopWithTooManyJumpStatements")
+                                    while (true) {
+                                        val event = awaitPointerEvent()
+                                        val change = event.changes.firstOrNull() ?: break
+
+                                        if (change.changedToUp()) {
+                                            // Finger released
+                                            break
+                                        }
+
+                                        if (change.pressed) {
+                                            totalDrag += change.positionChange()
+                                            change.consume()
+
+                                            // Check thresholds in real-time during drag
+                                            if (totalDrag.y < -lockThresholdPx) {
+                                                currentOnVoiceRecorderEvent(VoiceMessageRecorderEvent.Lock)
+                                                handled = true
+                                                break
+                                            }
+                                            if (totalDrag.x < -cancelThresholdPx) {
+                                                currentOnVoiceRecorderEvent(VoiceMessageRecorderEvent.Cancel)
+                                                handled = true
+                                                break
+                                            }
+                                        }
+                                    }
+                                } catch (_: Exception) {
+                                    // Gesture cancelled by system
+                                    if (!handled) {
+                                        currentOnVoiceRecorderEvent(VoiceMessageRecorderEvent.Cancel)
+                                    }
+                                    return@awaitEachGesture
+                                }
+
+                                if (!handled) {
+                                    val elapsed = System.currentTimeMillis() - downTime
+                                    if (elapsed < tapTimeThresholdMs) {
+                                        currentOnVoiceRecorderEvent(VoiceMessageRecorderEvent.Lock)
+                                    } else {
+                                        currentOnVoiceRecorderEvent(VoiceMessageRecorderEvent.StopAndSend)
+                                    }
+                                }
+                            }
+                        },
+                    contentAlignment = Alignment.Center,
+                ) {
+                    endButtonParams.endButtonContent()
+
+                    // Lock indicator: Popup renders in a separate window layer,
+                    // bypassing all parent clipping (Compose equivalent of CSS position:absolute)
+                    if (voiceMessageState is VoiceMessageState.Recording &&
+                        voiceMessageState.mode == RecordingMode.Hold
+                    ) {
+                        Popup(
+                            alignment = Alignment.TopCenter,
+                            offset = IntOffset(
+                                x = 0,
+                                y = with(density) { (-90).dp.roundToPx() },
+                            ),
+                        ) {
+                            VoiceMessageLockIndicator()
+                        }
+                    }
                 }
             }
-            // To avoid loosing keyboard focus, the IconButton has to be defined here and has to be always enabled.
-            val endButtonContentDescription = stringResource(endButtonParams.endButtonContentDescriptionResId)
-            IconButton(
-                modifier = Modifier
-                    .padding(bottom = 5.dp, top = 5.dp, end = 6.dp, start = 6.dp)
-                    .size(48.dp)
-                    .clearAndSetSemantics {
-                        contentDescription = endButtonContentDescription
-                        onClick(null, null)
-                    },
-                onClick = endButtonParams.endButtonClick,
-                content = endButtonParams.endButtonContent,
-            )
         }
     }
 }
@@ -660,8 +765,7 @@ private fun TextInputBox(
 
 private fun VoiceMessageState.endButtonKey() = when (this) {
     is VoiceMessageState.Idle -> "Idle"
-    is VoiceMessageState.Preview -> "Preview_$isSending"
-    is VoiceMessageState.Recording -> "Recording"
+    is VoiceMessageState.Recording -> "Recording_${mode}_$isPaused"
 }
 
 private fun aTextEditorStateMarkdownList(isRoomEncrypted: Boolean? = null) = persistentListOf(
@@ -884,30 +988,6 @@ internal fun TextComposerVoicePreview() = ElementPreview {
                 duration = 61.seconds,
                 levels = WaveFormSamples.realisticWaveForm,
             ),
-            VoiceMessageState.Preview(
-                isSending = false,
-                isPlaying = false,
-                showCursor = false,
-                waveform = WaveFormSamples.realisticWaveForm,
-                time = 0.seconds,
-                playbackProgress = 0.0f,
-            ),
-            VoiceMessageState.Preview(
-                isSending = false,
-                isPlaying = true,
-                showCursor = true,
-                waveform = WaveFormSamples.realisticWaveForm,
-                time = 3.seconds,
-                playbackProgress = 0.2f,
-            ),
-            VoiceMessageState.Preview(
-                isSending = true,
-                isPlaying = false,
-                showCursor = false,
-                waveform = WaveFormSamples.realisticWaveForm,
-                time = 61.seconds,
-                playbackProgress = 0.0f,
-            ),
         )
     ) { voiceMessageState ->
         ATextComposer(
@@ -926,30 +1006,6 @@ internal fun TextComposerVoiceNotEncryptedPreview() = ElementPreview {
             VoiceMessageState.Recording(
                 duration = 61.seconds,
                 levels = WaveFormSamples.realisticWaveForm,
-            ),
-            VoiceMessageState.Preview(
-                isSending = false,
-                isPlaying = false,
-                showCursor = false,
-                waveform = WaveFormSamples.realisticWaveForm,
-                time = 0.seconds,
-                playbackProgress = 0.0f
-            ),
-            VoiceMessageState.Preview(
-                isSending = false,
-                isPlaying = true,
-                showCursor = true,
-                waveform = WaveFormSamples.realisticWaveForm,
-                time = 3.seconds,
-                playbackProgress = 0.2f
-            ),
-            VoiceMessageState.Preview(
-                isSending = true,
-                isPlaying = false,
-                showCursor = false,
-                waveform = WaveFormSamples.realisticWaveForm,
-                time = 61.seconds,
-                playbackProgress = 0.0f
             ),
         )
     ) { voiceMessageState ->
@@ -997,8 +1053,6 @@ private fun ATextComposer(
         onDismissTextFormatting = {},
         onVoiceRecorderEvent = {},
         onVoicePlayerEvent = {},
-        onSendVoiceMessage = {},
-        onDeleteVoiceMessage = {},
         onError = {},
         onTyping = {},
         onReceiveSuggestion = {},

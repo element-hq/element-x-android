@@ -161,6 +161,8 @@ class KonsistPreviewTest {
         "UserAvatarColorsPreview",
         "UserProfileHeaderSectionWithVerificationViolationPreview",
         "VoiceItemViewPlayPreview",
+        "VoiceMessageRecordingLockedPausedPreview",
+        "VoiceMessageRecordingLockedPlaybackPreview",
     )
 
     @Test
