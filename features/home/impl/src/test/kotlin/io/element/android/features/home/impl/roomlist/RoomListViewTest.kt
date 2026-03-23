@@ -56,7 +56,6 @@ class RoomListViewTest {
 
         eventsRecorder.assertList(
             listOf(
-                RoomListEvent.UpdateVisibleRange(IntRange.EMPTY),
                 RoomListEvent.UpdateVisibleRange(0..5),
             )
         )
