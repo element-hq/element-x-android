@@ -38,6 +38,7 @@ import io.element.android.libraries.permissions.test.FakePermissionsPresenter
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
+import io.element.android.libraries.textcomposer.model.RecordingMode
 import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageRecorderEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageState
@@ -46,6 +47,7 @@ import io.element.android.libraries.voicerecorder.api.VoiceRecorder
 import io.element.android.libraries.voicerecorder.test.FakeVoiceRecorder
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.consumeItemsUntilTimeout
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.test
 import kotlinx.collections.immutable.toImmutableList
@@ -56,9 +58,9 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import java.io.File
-import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
+@Suppress("LargeClass")
 class DefaultVoiceMessageComposerPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
@@ -157,14 +159,16 @@ class DefaultVoiceMessageComposerPresenterTest {
 
             awaitItem().apply {
                 assertThat(keepScreenOn).isTrue()
-                eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Stop))
+                eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.StopAndSend))
             }
 
-            val finalState = awaitItem().apply {
+            advanceUntilIdle()
+
+            val finalState = consumeItemsUntilTimeout().last().apply {
                 assertThat(keepScreenOn).isFalse()
             }
 
-            testPauseAndDestroy(finalState)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -177,8 +181,9 @@ class DefaultVoiceMessageComposerPresenterTest {
             requestAudioFocusResult.assertions().isCalledOnce()
             releaseAudioFocusResult.assertions().isNeverCalled()
 
-            recordingState.eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Stop))
-            awaitItem()
+            recordingState.eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.StopAndSend))
+            advanceUntilIdle()
+            consumeItemsUntilTimeout().last()
             releaseAudioFocusResult.assertions().isCalledOnce()
 
             cancelAndIgnoreRemainingEvents()
@@ -215,8 +220,12 @@ class DefaultVoiceMessageComposerPresenterTest {
             onFocusLost?.invoke()
             advanceUntilIdle()
 
-            val finalState = awaitItem()
-            assertThat(finalState.voiceMessageState).isEqualTo(aPreviewState())
+            val finalState = consumeItemsUntilTimeout().last()
+            val voiceState = finalState.voiceMessageState
+            assertThat(voiceState).isInstanceOf(VoiceMessageState.Recording::class.java)
+            val recordingState = voiceState as VoiceMessageState.Recording
+            assertThat(recordingState.isPlayingBack).isTrue()
+            assertThat(recordingState.mode).isEqualTo(RecordingMode.Locked)
             voiceRecorder.assertCalls(started = 1, stopped = 1)
 
             cancelAndIgnoreRemainingEvents()
@@ -237,17 +246,25 @@ class DefaultVoiceMessageComposerPresenterTest {
     }
 
     @Test
-    fun `present - finish recording`() = runTest {
+    fun `present - stop and preview recording`() = runTest {
         val presenter = createDefaultVoiceMessageComposerPresenter()
         presenter.test {
             awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
-            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Stop))
+            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.StopAndPreview))
 
-            val finalState = awaitItem()
-            assertThat(finalState.voiceMessageState).isEqualTo(aPreviewState())
+            advanceUntilIdle()
+
+            val finalState = consumeItemsUntilTimeout().last()
+            val voiceState = finalState.voiceMessageState
+            assertThat(voiceState).isInstanceOf(VoiceMessageState.Recording::class.java)
+            val recordingState = voiceState as VoiceMessageState.Recording
+            assertThat(recordingState.isPlayingBack).isTrue()
+            assertThat(recordingState.mode).isEqualTo(RecordingMode.Locked)
+            // StopAndPreview auto-plays
+            assertThat(recordingState.isPlaying).isTrue()
             voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 0)
 
-            testPauseAndDestroy(finalState)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -273,31 +290,42 @@ class DefaultVoiceMessageComposerPresenterTest {
         val presenter = createDefaultVoiceMessageComposerPresenter()
         presenter.test {
             awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
-            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Stop))
-            awaitItem().eventSink(VoiceMessageComposerEvent.PlayerEvent(VoiceMessagePlayerEvent.Play))
-            val finalState = awaitItem().also {
-                assertThat(it.voiceMessageState).isEqualTo(aPlayingState())
-            }
+            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.StopAndPreview))
+
+            advanceUntilIdle()
+
+            // StopAndPreview auto-plays, so the state should already be playing
+            val finalState = consumeItemsUntilTimeout().last()
+            val voiceState = finalState.voiceMessageState as VoiceMessageState.Recording
+            assertThat(voiceState.isPlayingBack).isTrue()
+            assertThat(voiceState.isPlaying).isTrue()
             voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 0)
 
-            testPauseAndDestroy(finalState)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
-    fun `present - pause recording`() = runTest {
+    fun `present - pause playback`() = runTest {
         val presenter = createDefaultVoiceMessageComposerPresenter()
         presenter.test {
             awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
-            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Stop))
-            awaitItem().eventSink(VoiceMessageComposerEvent.PlayerEvent(VoiceMessagePlayerEvent.Play))
-            awaitItem().eventSink(VoiceMessageComposerEvent.PlayerEvent(VoiceMessagePlayerEvent.Pause))
-            val finalState = awaitItem().also {
-                assertThat(it.voiceMessageState).isEqualTo(aPausedState())
-            }
+            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.StopAndPreview))
+
+            advanceUntilIdle()
+
+            val playingState = consumeItemsUntilTimeout().last()
+            assertThat((playingState.voiceMessageState as VoiceMessageState.Recording).isPlaying).isTrue()
+
+            playingState.eventSink(VoiceMessageComposerEvent.PlayerEvent(VoiceMessagePlayerEvent.Pause))
+
+            val finalState = awaitItem()
+            val voiceState = finalState.voiceMessageState as VoiceMessageState.Recording
+            assertThat(voiceState.isPlayingBack).isTrue()
+            assertThat(voiceState.isPlaying).isFalse()
             voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 0)
 
-            testPauseAndDestroy(finalState)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -306,23 +334,24 @@ class DefaultVoiceMessageComposerPresenterTest {
         val presenter = createDefaultVoiceMessageComposerPresenter()
         presenter.test {
             awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
-            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Stop))
-            awaitItem().eventSink(VoiceMessageComposerEvent.PlayerEvent(VoiceMessagePlayerEvent.Seek(0.5f)))
-            awaitItem().apply {
-                assertThat(voiceMessageState).isEqualTo(aPreviewState(playbackProgress = 0.5f, time = 0.seconds, showCursor = true))
-            }
-            awaitItem().apply {
-                assertThat(voiceMessageState).isEqualTo(aPreviewState(playbackProgress = 0.5f, time = 5.seconds, showCursor = true))
-                eventSink(VoiceMessageComposerEvent.PlayerEvent(VoiceMessagePlayerEvent.Seek(0.2f)))
-            }
-            awaitItem().apply {
-                assertThat(voiceMessageState).isEqualTo(aPreviewState(playbackProgress = 0.2f, time = 5.seconds, showCursor = true))
-            }
-            val finalState = awaitItem().apply {
-                assertThat(voiceMessageState).isEqualTo(aPreviewState(playbackProgress = 0.2f, time = 2.seconds, showCursor = true))
-            }
+            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.StopAndPreview))
 
-            testPauseAndDestroy(finalState)
+            advanceUntilIdle()
+
+            val playbackState = consumeItemsUntilTimeout().last()
+            assertThat((playbackState.voiceMessageState as VoiceMessageState.Recording).isPlayingBack).isTrue()
+
+            playbackState.eventSink(VoiceMessageComposerEvent.PlayerEvent(VoiceMessagePlayerEvent.Seek(0.5f)))
+
+            advanceUntilIdle()
+
+            val seekedState = consumeItemsUntilTimeout().last()
+            val voiceState = seekedState.voiceMessageState as VoiceMessageState.Recording
+            assertThat(voiceState.isPlayingBack).isTrue()
+            assertThat(voiceState.playbackProgress).isEqualTo(0.5f)
+            assertThat(voiceState.playbackTime).isEqualTo(5.seconds)
+
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -331,10 +360,16 @@ class DefaultVoiceMessageComposerPresenterTest {
         val presenter = createDefaultVoiceMessageComposerPresenter()
         presenter.test {
             awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
-            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Stop))
-            awaitItem().eventSink(VoiceMessageComposerEvent.DeleteVoiceMessage)
+            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.StopAndPreview))
 
-            val finalState = awaitItem()
+            advanceUntilIdle()
+
+            val playbackState = consumeItemsUntilTimeout().last()
+            playbackState.eventSink(VoiceMessageComposerEvent.DeleteVoiceMessage)
+
+            advanceUntilIdle()
+
+            val finalState = consumeItemsUntilTimeout().last()
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
             voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 1)
 
@@ -347,14 +382,19 @@ class DefaultVoiceMessageComposerPresenterTest {
         val presenter = createDefaultVoiceMessageComposerPresenter()
         presenter.test {
             awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
-            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Stop))
-            awaitItem().eventSink(VoiceMessageComposerEvent.PlayerEvent(VoiceMessagePlayerEvent.Play))
-            awaitItem().eventSink(VoiceMessageComposerEvent.DeleteVoiceMessage)
-            awaitItem().apply {
-                assertThat(voiceMessageState).isEqualTo(aPausedState())
-            }
+            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.StopAndPreview))
 
-            val finalState = awaitItem()
+            advanceUntilIdle()
+
+            // StopAndPreview auto-plays
+            val playingState = consumeItemsUntilTimeout().last()
+            assertThat((playingState.voiceMessageState as VoiceMessageState.Recording).isPlaying).isTrue()
+
+            playingState.eventSink(VoiceMessageComposerEvent.DeleteVoiceMessage)
+
+            advanceUntilIdle()
+
+            val finalState = consumeItemsUntilTimeout().last()
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
             voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 1)
 
@@ -367,10 +407,16 @@ class DefaultVoiceMessageComposerPresenterTest {
         val presenter = createDefaultVoiceMessageComposerPresenter()
         presenter.test {
             awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
-            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Stop))
-            awaitItem().eventSink(VoiceMessageComposerEvent.SendVoiceMessage)
-            assertThat(awaitItem().voiceMessageState).isEqualTo(aPreviewState().toSendingState())
-            val finalState = awaitItem()
+            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.StopAndPreview))
+
+            advanceUntilIdle()
+
+            val playbackState = consumeItemsUntilTimeout().last()
+            playbackState.eventSink(VoiceMessageComposerEvent.SendVoiceMessage)
+
+            advanceUntilIdle()
+
+            val finalState = consumeItemsUntilTimeout().last()
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
             sendVoiceMessageResult.assertions().isCalledOnce()
             voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 1)
@@ -386,23 +432,28 @@ class DefaultVoiceMessageComposerPresenterTest {
             // Send a normal voice message
             messageComposerContext.composerMode = MessageComposerMode.Normal
             awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
-            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Stop))
-            awaitItem().eventSink(VoiceMessageComposerEvent.SendVoiceMessage)
-            skipItems(1) // Sending state
+            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.StopAndPreview))
             advanceUntilIdle()
+            consumeItemsUntilTimeout().last().eventSink(VoiceMessageComposerEvent.SendVoiceMessage)
+            advanceUntilIdle()
+
             // Now reply with a voice message
             messageComposerContext.composerMode = aReplyMode()
-            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
-            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Stop))
-            awaitItem().eventSink(VoiceMessageComposerEvent.SendVoiceMessage)
-            val finalState = awaitItem() // Sending state
+            consumeItemsUntilTimeout().last().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
+            advanceUntilIdle()
+            consumeItemsUntilTimeout().last().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.StopAndPreview))
+            advanceUntilIdle()
+            consumeItemsUntilTimeout().last().eventSink(VoiceMessageComposerEvent.SendVoiceMessage)
+            advanceUntilIdle()
+
+            consumeItemsUntilTimeout().last()
 
             assertThat(analyticsService.capturedEvents).containsExactly(
                 aVoiceMessageComposerEvent(isReply = false),
                 aVoiceMessageComposerEvent(isReply = true)
             )
 
-            testPauseAndDestroy(finalState)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -411,18 +462,24 @@ class DefaultVoiceMessageComposerPresenterTest {
         val presenter = createDefaultVoiceMessageComposerPresenter()
         presenter.test {
             awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
-            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Stop))
-            awaitItem().eventSink(VoiceMessageComposerEvent.PlayerEvent(VoiceMessagePlayerEvent.Play))
-            awaitItem().eventSink(VoiceMessageComposerEvent.SendVoiceMessage)
-            assertThat(awaitItem().voiceMessageState).isEqualTo(aPlayingState().toSendingState())
-            skipItems(1) // Duplicate sending state
+            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.StopAndPreview))
 
-            val finalState = awaitItem()
+            advanceUntilIdle()
+
+            // StopAndPreview auto-plays
+            val playingState = consumeItemsUntilTimeout().last()
+            assertThat((playingState.voiceMessageState as VoiceMessageState.Recording).isPlaying).isTrue()
+
+            playingState.eventSink(VoiceMessageComposerEvent.SendVoiceMessage)
+
+            advanceUntilIdle()
+
+            val finalState = consumeItemsUntilTimeout().last()
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
             sendVoiceMessageResult.assertions().isCalledOnce()
             voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 1)
 
-            testPauseAndDestroy(finalState)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -431,19 +488,24 @@ class DefaultVoiceMessageComposerPresenterTest {
         val presenter = createDefaultVoiceMessageComposerPresenter()
         presenter.test {
             awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
-            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Stop))
-            awaitItem().run {
+            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.StopAndPreview))
+
+            advanceUntilIdle()
+
+            val playbackState = consumeItemsUntilTimeout().last()
+            playbackState.run {
                 eventSink(VoiceMessageComposerEvent.SendVoiceMessage)
                 eventSink(VoiceMessageComposerEvent.SendVoiceMessage)
             }
-            assertThat(awaitItem().voiceMessageState).isEqualTo(aPreviewState().toSendingState())
 
-            val finalState = awaitItem()
+            advanceUntilIdle()
+
+            val finalState = consumeItemsUntilTimeout().last()
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
             sendVoiceMessageResult.assertions().isCalledOnce()
             voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 1)
 
-            testPauseAndDestroy(finalState)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -454,19 +516,23 @@ class DefaultVoiceMessageComposerPresenterTest {
         val presenter = createDefaultVoiceMessageComposerPresenter()
         presenter.test {
             awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
-            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Stop))
-            awaitItem().apply {
-                assertThat(voiceMessageState).isEqualTo(aPreviewState())
-                eventSink(VoiceMessageComposerEvent.SendVoiceMessage)
-            }
+            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.StopAndPreview))
 
-            val finalState = awaitItem()
-            assertThat(finalState.voiceMessageState).isEqualTo(aPreviewState(isSending = true))
+            advanceUntilIdle()
+
+            val playbackState = consumeItemsUntilTimeout().last()
+            assertThat((playbackState.voiceMessageState as VoiceMessageState.Recording).isPlayingBack).isTrue()
+
+            playbackState.eventSink(VoiceMessageComposerEvent.SendVoiceMessage)
+
+            advanceUntilIdle()
+
+            val finalState = consumeItemsUntilTimeout().last()
             sendVoiceMessageResult.assertions().isNeverCalled()
             assertThat(analyticsService.trackedErrors).isEmpty()
             voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 0)
 
-            testPauseAndDestroy(finalState)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -477,19 +543,26 @@ class DefaultVoiceMessageComposerPresenterTest {
         presenter.test {
             mediaPreProcessor.givenResult(Result.failure(Exception()))
             awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
-            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Stop))
-            val previewState = awaitItem()
+            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.StopAndPreview))
 
-            previewState.eventSink(VoiceMessageComposerEvent.SendVoiceMessage)
-            assertThat(awaitItem().voiceMessageState).isEqualTo(aPreviewState().toSendingState())
+            advanceUntilIdle()
 
-            ensureAllEventsConsumed()
-            assertThat(previewState.voiceMessageState).isEqualTo(aPreviewState())
+            val playbackState = consumeItemsUntilTimeout().last()
+            playbackState.eventSink(VoiceMessageComposerEvent.SendVoiceMessage)
+
+            advanceUntilIdle()
+
+            // Sending failed, but state is still in playback review
+            val failedState = consumeItemsUntilTimeout().last()
             sendVoiceMessageResult.assertions().isNeverCalled()
 
+            // Retry with working preprocessor
             mediaPreProcessor.givenAudioResult()
-            previewState.eventSink(VoiceMessageComposerEvent.SendVoiceMessage)
-            val finalState = awaitItem()
+            failedState.eventSink(VoiceMessageComposerEvent.SendVoiceMessage)
+
+            advanceUntilIdle()
+
+            val finalState = consumeItemsUntilTimeout().last()
             assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
             sendVoiceMessageResult.assertions().isCalledOnce()
             voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 1)
@@ -505,29 +578,26 @@ class DefaultVoiceMessageComposerPresenterTest {
             // Let sending fail due to media preprocessing error
             mediaPreProcessor.givenResult(Result.failure(Exception()))
             awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
-            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Stop))
-            awaitItem().eventSink(VoiceMessageComposerEvent.SendVoiceMessage)
+            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.StopAndPreview))
 
-            assertThat(awaitItem().voiceMessageState).isEqualTo(aPreviewState().toSendingState())
+            advanceUntilIdle()
 
-            awaitItem().apply {
-                assertThat(voiceMessageState).isEqualTo(aPreviewState().toSendingState())
-                assertThat(showSendFailureDialog).isTrue()
-            }
+            val playbackState = consumeItemsUntilTimeout().last()
+            playbackState.eventSink(VoiceMessageComposerEvent.SendVoiceMessage)
 
-            awaitItem().apply {
-                assertThat(voiceMessageState).isEqualTo(aPreviewState())
-                assertThat(showSendFailureDialog).isTrue()
-                eventSink(VoiceMessageComposerEvent.DismissSendFailureDialog)
-            }
+            advanceUntilIdle()
 
-            val finalState = awaitItem().apply {
-                assertThat(voiceMessageState).isEqualTo(aPreviewState())
-                assertThat(showSendFailureDialog).isFalse()
-            }
+            // Find the state with the failure dialog shown
+            val dialogState = consumeItemsUntilTimeout().last()
+            assertThat(dialogState.showSendFailureDialog).isTrue()
+
+            dialogState.eventSink(VoiceMessageComposerEvent.DismissSendFailureDialog)
+
+            val finalState = awaitItem()
+            assertThat(finalState.showSendFailureDialog).isFalse()
 
             sendVoiceMessageResult.assertions().isNeverCalled()
-            testPauseAndDestroy(finalState)
+            cancelAndIgnoreRemainingEvents()
         }
     }
 
@@ -580,17 +650,18 @@ class DefaultVoiceMessageComposerPresenterTest {
             initialState.eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
             assertThat(awaitItem().voiceMessageState).isEqualTo(VoiceMessageState.Idle)
 
-            initialState.eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Stop))
-            voiceRecorder.assertCalls(stopped = 1)
+            // Clear pendingEvent so permission grant doesn't auto-start recording
+            initialState.eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Cancel))
+            voiceRecorder.assertCalls(stopped = 1, deleted = 1)
 
             permissionsPresenter.setPermissionGranted()
 
-            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
+            consumeItemsUntilTimeout().last().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
             advanceUntilIdle()
 
-            val finalState = expectMostRecentItem()
-            assertThat(finalState.voiceMessageState).isEqualTo(RECORDING_STATE)
-            voiceRecorder.assertCalls(stopped = 1, started = 1)
+            val finalState = consumeItemsUntilTimeout().last()
+            assertThat(finalState.voiceMessageState).isInstanceOf(VoiceMessageState.Recording::class.java)
+            voiceRecorder.assertCalls(stopped = 1, started = 1, deleted = 1)
 
             testPauseAndDestroy(finalState)
         }
@@ -622,7 +693,7 @@ class DefaultVoiceMessageComposerPresenterTest {
             permissionsPresenter.setPermissionGranted()
             advanceUntilIdle()
 
-            val finalState = expectMostRecentItem()
+            val finalState = consumeItemsUntilTimeout().last()
             assertThat(finalState.voiceMessageState).isEqualTo(RECORDING_STATE)
             voiceRecorder.assertCalls(started = 1)
 
@@ -668,44 +739,77 @@ class DefaultVoiceMessageComposerPresenterTest {
         }
     }
 
+    @Test
+    fun `present - lock recording transitions to locked mode`() = runTest {
+        val presenter = createDefaultVoiceMessageComposerPresenter()
+        presenter.test {
+            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
+            val recordingState = awaitItem()
+            assertThat(recordingState.voiceMessageState).isInstanceOf(VoiceMessageState.Recording::class.java)
+            assertThat((recordingState.voiceMessageState as VoiceMessageState.Recording).mode).isEqualTo(RecordingMode.Hold)
+
+            recordingState.eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Lock))
+            val lockedState = awaitItem()
+            assertThat(lockedState.voiceMessageState).isInstanceOf(VoiceMessageState.Recording::class.java)
+            assertThat((lockedState.voiceMessageState as VoiceMessageState.Recording).mode).isEqualTo(RecordingMode.Locked)
+
+            voiceRecorder.assertCalls(started = 1)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - pause and resume recording`() = runTest {
+        val presenter = createDefaultVoiceMessageComposerPresenter()
+        presenter.test {
+            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
+            val recordingState = awaitItem()
+
+            // Pause
+            recordingState.eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Pause))
+            val pausedState = awaitItem()
+            assertThat(pausedState.voiceMessageState).isInstanceOf(VoiceMessageState.Recording::class.java)
+            assertThat((pausedState.voiceMessageState as VoiceMessageState.Recording).isPaused).isTrue()
+
+            // Resume
+            pausedState.eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Resume))
+            val resumedState = awaitItem()
+            assertThat(resumedState.voiceMessageState).isInstanceOf(VoiceMessageState.Recording::class.java)
+            assertThat((resumedState.voiceMessageState as VoiceMessageState.Recording).isPaused).isFalse()
+
+            voiceRecorder.assertCalls(started = 1, paused = 1, resumed = 1)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - stop and send in hold mode`() = runTest {
+        val presenter = createDefaultVoiceMessageComposerPresenter()
+        presenter.test {
+            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
+            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.StopAndSend))
+
+            advanceUntilIdle()
+
+            // Recording should stop and send — ends up back at Idle after send
+            val finalState = consumeItemsUntilTimeout().last()
+            assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
+            voiceRecorder.assertCalls(started = 1, stopped = 1, deleted = 1)
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
     private suspend fun TurbineTestContext<VoiceMessageComposerState>.testPauseAndDestroy(
         mostRecentState: VoiceMessageComposerState,
     ) {
         mostRecentState.eventSink(
             VoiceMessageComposerEvent.LifecycleEvent(event = Lifecycle.Event.ON_PAUSE)
         )
-
-        val onPauseState = when (val state = mostRecentState.voiceMessageState) {
-            VoiceMessageState.Idle -> mostRecentState
-            is VoiceMessageState.Recording -> {
-                // If recorder was active, it stops
-                awaitItem().apply {
-                    assertThat(voiceMessageState).isEqualTo(aPreviewState())
-                }
-            }
-            is VoiceMessageState.Preview -> when (state.isPlaying) {
-                // If the preview was playing, it pauses
-                true -> awaitItem().apply {
-                    assertThat(voiceMessageState).isEqualTo(aPausedState())
-                }
-                false -> mostRecentState
-            }
-        }
-
-        onPauseState.eventSink(
+        mostRecentState.eventSink(
             VoiceMessageComposerEvent.LifecycleEvent(event = Lifecycle.Event.ON_DESTROY)
         )
-
-        when (val state = onPauseState.voiceMessageState) {
-            VoiceMessageState.Idle ->
-                ensureAllEventsConsumed()
-            is VoiceMessageState.Recording ->
-                assertThat(awaitItem().voiceMessageState).isEqualTo(VoiceMessageState.Idle)
-            is VoiceMessageState.Preview -> when (state.isSending) {
-                true -> ensureAllEventsConsumed()
-                false -> assertThat(awaitItem().voiceMessageState).isEqualTo(VoiceMessageState.Idle)
-            }
-        }
+        cancelAndIgnoreRemainingEvents()
     }
 
     private fun TestScope.createDefaultVoiceMessageComposerPresenter(
@@ -739,42 +843,6 @@ class DefaultVoiceMessageComposerPresenterTest {
             initialState = initialPermissionState
         )
     }
-
-    private fun aPreviewState(
-        isPlaying: Boolean = false,
-        playbackProgress: Float = 0f,
-        isSending: Boolean = false,
-        time: Duration = RECORDING_DURATION,
-        showCursor: Boolean = false,
-        waveform: List<Float> = voiceRecorder.waveform,
-    ) = VoiceMessageState.Preview(
-        isPlaying = isPlaying,
-        playbackProgress = playbackProgress,
-        isSending = isSending,
-        time = time,
-        showCursor = showCursor,
-        waveform = waveform.toImmutableList(),
-    )
-
-    private fun aPlayingState() =
-        aPreviewState(
-            isPlaying = true,
-            playbackProgress = 0.1f,
-            showCursor = true,
-            time = RECORDING_DURATION,
-        )
-
-    private fun aPausedState() =
-        aPlayingState()
-            .copy(isPlaying = false)
-
-    private fun VoiceMessageState.Preview.toSendingState() =
-        copy(
-            isPlaying = false,
-            isSending = true,
-            showCursor = false,
-            time = RECORDING_DURATION,
-        )
 }
 
 private fun aVoiceMessageComposerEvent(
