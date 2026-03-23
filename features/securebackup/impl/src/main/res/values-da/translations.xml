@@ -12,7 +12,6 @@
   <string name="screen_chat_backup_recovery_action_confirm">"Indtast gendannelsesnøgle"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Din nøglelagring er i øjeblikket ikke synkroniseret."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Opsæt gendannelse"</string>
-  <string name="screen_chat_backup_recovery_action_setup_description">"Få adgang til dine krypterede meddelelser, hvis du mister alle dine enheder eller er logget ud af %1$s overalt."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Åbn %1$s på en stationær enhed"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Log ind på din konto igen"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Når du bliver bedt om at verificere din enhed, skal du vælge %1$s"</string>

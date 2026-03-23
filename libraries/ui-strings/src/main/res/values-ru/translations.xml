@@ -164,8 +164,8 @@
   <string name="action_share_live_location">"Поделиться местоположением в реальном времени"</string>
   <string name="action_show">"Показать"</string>
   <string name="action_sign_in_again">"Повторить вход"</string>
-  <string name="action_signout">"Выйти"</string>
-  <string name="action_signout_anyway">"Всё равно выйти"</string>
+  <string name="action_signout">"Удалить это устройство"</string>
+  <string name="action_signout_anyway">"Все равно удалить это устройство"</string>
   <string name="action_skip">"Пропустить"</string>
   <string name="action_start">"Начать"</string>
   <string name="action_start_chat">"Начать чат"</string>
@@ -192,6 +192,7 @@
   <string name="common_advanced_settings">"Расширенные настройки"</string>
   <string name="common_an_image">"изображение"</string>
   <string name="common_analytics">"Аналитика"</string>
+  <string name="common_android_fetching_notifications_title">"Синхронизация уведомлений…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Вы покинули комнату"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Вы вышли из сессии"</string>
   <string name="common_appearance">"Внешний вид"</string>
@@ -251,6 +252,8 @@
   <string name="common_line_copied_to_clipboard">"Строка скопирована в буфер обмена"</string>
   <string name="common_link_copied_to_clipboard">"Ссылка скопирована в буфер обмена"</string>
   <string name="common_link_new_device">"Привязать новое устройство"</string>
+  <string name="common_live_location">"Местоположение в реальном времени"</string>
+  <string name="common_live_location_ended">"Трансляция местоположения завершена"</string>
   <string name="common_loading">"Загрузка…"</string>
   <string name="common_loading_more">"Загрузить больше…"</string>
   <plurals name="common_many_members">
@@ -353,9 +356,10 @@
   <string name="common_settings">"Настройки"</string>
   <string name="common_share_space">"Поделиться пространством"</string>
   <string name="common_shared_history">"Новые участники видят историю"</string>
+  <string name="common_shared_live_location">"Доступ к трансляции местоположения"</string>
   <string name="common_shared_location">"Поделился местоположением"</string>
   <string name="common_shared_space">"Общее пространство"</string>
-  <string name="common_signing_out">"Выход…"</string>
+  <string name="common_signing_out">"Удаление устройства"</string>
   <string name="common_something_went_wrong">"Что-то пошло не так"</string>
   <string name="common_something_went_wrong_message">"Мы столкнулись с проблемой. Пожалуйста, попробуйте еще раз."</string>
   <string name="common_space">"Пространство"</string>
@@ -406,13 +410,14 @@
   <string name="common_voice_message">"Голосовое сообщение"</string>
   <string name="common_waiting">"Ожидание…"</string>
   <string name="common_waiting_for_decryption_key">"Ожидание ключа расшифровки"</string>
+  <string name="common_waiting_live_location">"Ожидание трансляции местоположения…"</string>
   <string name="common_world_readable_history">"Любой может видеть историю"</string>
   <string name="common_you">"Вы"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) поделился этим сообщением, поскольку вас не было в комнате, когда оно было отправлено."</string>
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s поделился этим сообщением, поскольку вас не было в комнате, когда оно было отправлено."</string>
   <string name="crypto_history_visible">"Эта комната настроена так, что новые участники могут видеть историю. %1$s"</string>
   <string name="crypto_identity_change_pin_violation">"Личность %1$s была сброшена. %2$s"</string>
-  <string name="crypto_identity_change_pin_violation_new">"Личность %1$s %2$s была изменена. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"Личность %1$s %2$s была сброшена. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
   <string name="crypto_identity_change_profile_pin_violation">"Личность %1$s была сброшена."</string>
   <string name="crypto_identity_change_verification_violation_new">"Личность %1$s %2$s была сброшена. %3$s"</string>
@@ -447,6 +452,7 @@
   <string name="error_failed_locating_user">"%1$s не удалось получить доступ к вашему местоположению. Пожалуйста, повторите попытку позже."</string>
   <string name="error_failed_uploading_voice_message">"Не удалось загрузить голосовое сообщение."</string>
   <string name="error_invalid_invite">"Комната не существует или приглашение недействительно."</string>
+  <string name="error_location_service_disabled_android">"Включите геолокацию для доступа к её функциям."</string>
   <string name="error_message_not_found">"Сообщение не найдено"</string>
   <string name="error_missing_location_auth_android">"У %1$s нет разрешения на доступ к вашему местоположению. Вы можете разрешить доступ в Настройках."</string>
   <string name="error_missing_location_rationale_android">"У %1$s нет разрешения на доступ к вашему местоположению. Разрешите доступ ниже."</string>
@@ -503,6 +509,7 @@
   <string name="screen_share_open_google_maps">"Открыть в Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Открыть в OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Поделиться выбранным местоположением"</string>
+  <string name="screen_sharing_location_option_sheet_title">"Параметры общего доступа"</string>
   <string name="screen_space_list_description">"Пространства, которые вы создали или к которым присоединились."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_empty_state_title">"Создайте пространства для организации комнат"</string>

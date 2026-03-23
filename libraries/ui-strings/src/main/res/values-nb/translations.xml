@@ -162,8 +162,8 @@
   <string name="action_share_live_location">"Del posisjon i sanntid"</string>
   <string name="action_show">"Vis"</string>
   <string name="action_sign_in_again">"Logg på igjen"</string>
-  <string name="action_signout">"Logg ut"</string>
-  <string name="action_signout_anyway">"Logg ut likevel"</string>
+  <string name="action_signout">"Fjern denne enheten"</string>
+  <string name="action_signout_anyway">"Fjern denne enheten likevel"</string>
   <string name="action_skip">"Hopp over"</string>
   <string name="action_start">"Start"</string>
   <string name="action_start_chat">"Start chat"</string>
@@ -345,7 +345,7 @@
   <string name="common_shared_history">"Nye medlemmer ser historikk"</string>
   <string name="common_shared_location">"Delt posisjon"</string>
   <string name="common_shared_space">"Delt område"</string>
-  <string name="common_signing_out">"Logger av"</string>
+  <string name="common_signing_out">"Fjerner enheten"</string>
   <string name="common_something_went_wrong">"Noe gikk galt"</string>
   <string name="common_something_went_wrong_message">"Vi har støtt på et problem. Vennligst prøv igjen."</string>
   <string name="common_space">"Område"</string>

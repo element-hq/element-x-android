@@ -3,7 +3,7 @@
   <string name="screen_identity_confirmation_cannot_confirm">"Kan du ikke bekrefte?"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"Opprett en ny gjenopprettingsnøkkel"</string>
   <string name="screen_identity_confirmation_subtitle">"Verifiser denne enheten for å sette opp sikker meldingsutveksling."</string>
-  <string name="screen_identity_confirmation_title">"Bekreft identiteten din"</string>
+  <string name="screen_identity_confirmation_title">"Bekreft din digitale identitet"</string>
   <string name="screen_identity_confirmation_use_another_device">"Bruk en annen enhet"</string>
   <string name="screen_identity_confirmation_use_recovery_key">"Bruk gjenopprettingsnøkkel"</string>
   <string name="screen_identity_confirmed_subtitle">"Nå kan du lese eller sende meldinger på en sikker måte, og alle du chatter med kan også stole på denne enheten."</string>
@@ -50,5 +50,5 @@
   <string name="screen_session_verification_waiting_subtitle">"Når du er akseptert, kan du fortsette med verifiseringen."</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Godta forespørselen om å starte bekreftelsesprosessen i den andre sesjonen for å fortsette."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Venter på å godta forespørselen"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Logger ut…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Fjerner enheten …"</string>
 </resources>

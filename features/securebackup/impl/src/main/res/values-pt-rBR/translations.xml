@@ -12,7 +12,6 @@
   <string name="screen_chat_backup_recovery_action_confirm">"Digitar chave de recuperação"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Seu armazenamento de chaves está fora de sincronia no momento."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Configurar a recuperação"</string>
-  <string name="screen_chat_backup_recovery_action_setup_description">"Tenha acesso às suas mensagens criptografadas se você perder todos os seus dispositivos ou for desconectado do %1$s em todos os dispositivos."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Abra o %1$s em um computador"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Entre na sua conta novamente"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Ao ser solicitado para verificar o seu dispositivo, selecione %1$s"</string>

@@ -12,7 +12,6 @@
   <string name="screen_chat_backup_recovery_action_confirm">"Unesi ključ za oporavak"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Vaša pohrana ključeva trenutačno nije sinkronizirana."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Postavljanje oporavka"</string>
-  <string name="screen_chat_backup_recovery_action_setup_description">"Pristupite svojim šifriranim porukama ako se odjavite iz aplikacije s%1$s sa svih uređaja ili ih izgubite."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Otvorite %1$s na stolnom uređaju"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Ponovno se prijavite na svoj račun"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Kada se od vas zatraži da potvrdite svoj uređaj, odaberite %1$s"</string>
