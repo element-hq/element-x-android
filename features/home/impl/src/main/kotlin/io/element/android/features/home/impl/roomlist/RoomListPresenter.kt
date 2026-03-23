@@ -42,6 +42,8 @@ import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteE
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
+import io.element.android.features.sharing.api.SharingRoomInfo
+import io.element.android.features.sharing.api.SharingShortcutsManager
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
@@ -90,6 +92,7 @@ class RoomListPresenter(
     private val announcementService: AnnouncementService,
     private val coldStartWatcher: AnalyticsColdStartWatcher,
     private val spaceFiltersPresenter: Presenter<SpaceFiltersState>,
+    private val sharingShortcutsManager: SharingShortcutsManager,
 ) : Presenter<RoomListState> {
     private val encryptionService = client.encryptionService
 
@@ -104,6 +107,23 @@ class RoomListPresenter(
 
         LaunchedEffect(Unit) {
             roomListDataSource.launchIn(this)
+        }
+
+        LaunchedEffect(Unit) {
+            roomListDataSource.roomSummariesFlow
+                .map { it.take(5) }
+                .distinctUntilChanged()
+                .collect { topRooms ->
+                    val shortcuts = topRooms.map { summary ->
+                        SharingRoomInfo(
+                            sessionId = client.sessionId,
+                            roomId = summary.roomId,
+                            displayName = summary.name ?: summary.roomId.value,
+                            avatarUrl = summary.avatarData.url
+                        )
+                    }
+                    sharingShortcutsManager.publishShortcutsForRooms(shortcuts)
+                }
         }
 
         var securityBannerDismissed by rememberSaveable { mutableStateOf(false) }

@@ -45,6 +45,7 @@ import io.element.android.features.login.api.LoginParams
 import io.element.android.features.login.api.accesscontrol.AccountProviderAccessControl
 import io.element.android.features.rageshake.api.bugreport.BugReportEntryPoint
 import io.element.android.features.share.api.ShareIntentData
+import io.element.android.features.sharing.api.SharingConstants
 import io.element.android.features.signedout.api.SignedOutEntryPoint
 import io.element.android.libraries.accountselect.api.AccountSelectEntryPoint
 import io.element.android.libraries.architecture.BackstackView
@@ -425,7 +426,14 @@ class RootFlowNode(
     }
 
     private suspend fun onIncomingShare(shareIntentData: ShareIntentData) {
-        // Is there a session already?
+        val sessionIdFromIntent = shareIntentData.intent.getStringExtra(SharingConstants.EXTRA_SHARE_TARGET_SESSION_ID)?.let(::SessionId)
+
+        if (sessionIdFromIntent != null && sessionStore.getSession(sessionIdFromIntent.value) != null) {
+            val loggedInFlowNode = attachSession(sessionIdFromIntent)
+            loggedInFlowNode.attachIncomingShare(shareIntentData)
+            return
+        }
+
         val latestSessionId = sessionStore.getLatestSessionId()
         if (latestSessionId == null) {
             // No session, open login

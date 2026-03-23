@@ -13,5 +13,6 @@ import io.element.android.libraries.matrix.api.core.RoomId
 
 data class ShareState(
     val shareAction: AsyncAction<List<RoomId>>,
+    val isDirectShare: Boolean,
     val eventSink: (ShareEvents) -> Unit
 )
