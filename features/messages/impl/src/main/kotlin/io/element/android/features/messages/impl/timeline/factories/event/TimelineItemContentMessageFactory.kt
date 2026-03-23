@@ -26,6 +26,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.utils.TextPillificationHelper
+import io.element.android.features.messages.impl.utils.replaceNestedBulletsWithOutlines
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.androidutils.text.safeLinkify
 import io.element.android.libraries.core.mimetype.MimeTypes
@@ -281,6 +282,7 @@ class TimelineItemContentMessageFactory(
     private fun parseHtml(document: Document): CharSequence? {
         return htmlConverterProvider.provide()
             .fromDocumentToSpans(document)
+            .replaceNestedBulletsWithOutlines()
             .let { textPillificationHelper.pillify(it) }
             .safeLinkify()
     }
