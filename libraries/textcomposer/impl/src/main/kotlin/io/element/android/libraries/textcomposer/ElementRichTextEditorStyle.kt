@@ -50,6 +50,9 @@ object ElementRichTextEditorStyle {
         val codeCornerRadius = 4.dp
         val codeBorderWidth = 1.dp
         return RichTextEditorDefaults.style(
+            bulletList = RichTextEditorDefaults.bulletListStyle(
+                bulletGapWidth = 8.dp,
+            ),
             text = RichTextEditorDefaults.textStyle(
                 color = LocalTextStyle.current.color.takeIf { it.isSpecified } ?: LocalContentColor.current,
                 fontStyle = LocalTextStyle.current.fontStyle,
