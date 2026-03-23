@@ -55,11 +55,11 @@ class DefaultVoiceRecorderTest {
             assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Idle)
 
             voiceRecorder.startRecord()
-            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(0.seconds, listOf(1.0f)))
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(0.seconds, listOf(1.0f), file = File(FILE_PATH)))
             timeSource += 1.seconds
-            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(1.seconds, listOf()))
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(1.seconds, listOf(), file = File(FILE_PATH)))
             timeSource += 1.seconds
-            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(2.seconds, listOf(1.0f, 1.0f)))
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(2.seconds, listOf(1.0f, 1.0f), file = File(FILE_PATH)))
         }
     }
 
@@ -70,9 +70,9 @@ class DefaultVoiceRecorderTest {
             assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Idle)
 
             voiceRecorder.startRecord()
-            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(0.minutes, listOf(1.0f)))
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(0.minutes, listOf(1.0f), file = File(FILE_PATH)))
             timeSource += VoiceMessageConfig.maxVoiceMessageDuration
-            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(VoiceMessageConfig.maxVoiceMessageDuration, listOf()))
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(VoiceMessageConfig.maxVoiceMessageDuration, listOf(), file = File(FILE_PATH)))
             timeSource += 1.milliseconds
 
             assertThat(awaitItem()).isEqualTo(
@@ -106,6 +106,83 @@ class DefaultVoiceRecorderTest {
                 )
             )
             assertThat(fakeFileSystem.files[File(FILE_PATH)]).isEqualTo(ENCODED_DATA)
+        }
+    }
+
+    @Test
+    fun `when paused, it emits recording state with isPaused true`() = runTest {
+        val voiceRecorder = createDefaultVoiceRecorder()
+        voiceRecorder.state.test {
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Idle)
+
+            voiceRecorder.startRecord()
+            // Consume the initial recording emissions from audio data
+            skipItems(3)
+
+            voiceRecorder.pauseRecord()
+            val pausedState = awaitItem()
+            assertThat(pausedState).isInstanceOf(VoiceRecorderState.Recording::class.java)
+            assertThat((pausedState as VoiceRecorderState.Recording).isPaused).isTrue()
+            assertThat(pausedState.file).isEqualTo(File(FILE_PATH))
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `when resumed after pause, it emits recording state with isPaused false`() = runTest {
+        val voiceRecorder = createDefaultVoiceRecorder()
+        voiceRecorder.state.test {
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Idle)
+
+            voiceRecorder.startRecord()
+            skipItems(3)
+
+            voiceRecorder.pauseRecord()
+            val pausedState = awaitItem()
+            assertThat((pausedState as VoiceRecorderState.Recording).isPaused).isTrue()
+
+            voiceRecorder.resumeRecord()
+            val resumedState = awaitItem()
+            assertThat(resumedState).isInstanceOf(VoiceRecorderState.Recording::class.java)
+            assertThat((resumedState as VoiceRecorderState.Recording).isPaused).isFalse()
+            assertThat(resumedState.file).isEqualTo(File(FILE_PATH))
+
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `when paused, elapsed time does not include paused duration`() = runTest {
+        val voiceRecorder = createDefaultVoiceRecorder()
+        voiceRecorder.state.test {
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Idle)
+
+            voiceRecorder.startRecord()
+            // First audio item emitted at elapsed 0s
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(0.seconds, listOf(1.0f), file = File(FILE_PATH)))
+            timeSource += 2.seconds
+            // Second audio item (Error) emitted at elapsed 2s
+            assertThat(awaitItem()).isEqualTo(VoiceRecorderState.Recording(2.seconds, listOf(), file = File(FILE_PATH)))
+            // Third audio item emitted at elapsed 2s (no time advanced)
+            skipItems(1)
+
+            // Pause and advance time — this paused time should not count
+            voiceRecorder.pauseRecord()
+            awaitItem() // isPaused = true
+            timeSource += 5.seconds
+
+            voiceRecorder.resumeRecord()
+            awaitItem() // isPaused = false
+
+            // Stop recording — duration should be based on last recorded elapsed time (2s),
+            // not wall time (7s), because paused time is excluded
+            voiceRecorder.stopRecord()
+            val finishedState = awaitItem()
+            assertThat(finishedState).isInstanceOf(VoiceRecorderState.Finished::class.java)
+            assertThat((finishedState as VoiceRecorderState.Finished).duration).isEqualTo(2.seconds)
+
+            cancelAndIgnoreRemainingEvents()
         }
     }
 

@@ -35,6 +35,8 @@ class FakeVoiceRecorder(
     private var startedCount = 0
     private var stoppedCount = 0
     private var deletedCount = 0
+    private var pausedCount = 0
+    private var resumedCount = 0
 
     var waveform: List<Float> = listOf(0f, 1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f, 9f, 8f, 7f, 6f, 5f, 4f, 3f, 2f, 1f, 0f)
     override suspend fun startRecord() {
@@ -52,6 +54,18 @@ class FakeVoiceRecorder(
             _state.emit(VoiceRecorderState.Recording(startedAt.elapsedNow(), levels.take(i)))
             yield()
         }
+    }
+
+    override suspend fun pauseRecord() {
+        pausedCount++
+        val currentState = state.value as? VoiceRecorderState.Recording ?: return
+        _state.emit(currentState.copy(isPaused = true))
+    }
+
+    override suspend fun resumeRecord() {
+        resumedCount++
+        val currentState = state.value as? VoiceRecorderState.Recording ?: return
+        _state.emit(currentState.copy(isPaused = false))
     }
 
     override suspend fun stopRecord(
@@ -89,10 +103,14 @@ class FakeVoiceRecorder(
         started: Int = 0,
         stopped: Int = 0,
         deleted: Int = 0,
+        paused: Int = 0,
+        resumed: Int = 0,
     ) {
         assertThat(startedCount).isEqualTo(started)
         assertThat(stoppedCount).isEqualTo(stopped)
         assertThat(deletedCount).isEqualTo(deleted)
+        assertThat(pausedCount).isEqualTo(paused)
+        assertThat(resumedCount).isEqualTo(resumed)
     }
 
     fun givenThrowsSecurityException(exception: SecurityException) {

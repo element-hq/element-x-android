@@ -24,10 +24,14 @@ sealed interface VoiceRecorderState {
      *
      * @property elapsedTime The elapsed time since the recording started.
      * @property levels The current audio levels of the recording as a fraction of 1. All values are between 0 and 1.
+     * @property isPaused Whether the recording is currently paused.
+     * @property file The recording file, if available.
      */
     data class Recording(
         val elapsedTime: Duration,
         val levels: List<Float>,
+        val isPaused: Boolean = false,
+        val file: File? = null,
     ) : VoiceRecorderState
 
     /**
