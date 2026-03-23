@@ -120,6 +120,7 @@
   <string name="action_leave_space">"Leave space"</string>
   <string name="action_load_more">"Load more"</string>
   <string name="action_manage_account">"Manage account"</string>
+  <string name="action_manage_account_and_devices">"Manage account &amp; devices"</string>
   <string name="action_manage_devices">"Manage devices"</string>
   <string name="action_manage_rooms">"Manage rooms"</string>
   <string name="action_message">"Message"</string>
@@ -170,6 +171,7 @@
   <string name="action_start_over">"Start over"</string>
   <string name="action_start_verification">"Start verification"</string>
   <string name="action_static_map_load">"Tap to load map"</string>
+  <string name="action_stop">"Stop"</string>
   <string name="action_take_photo">"Take photo"</string>
   <string name="action_tap_for_options">"Tap for options"</string>
   <string name="action_translate">"Translate"</string>
@@ -224,6 +226,7 @@
   <string name="common_empty_file">"Empty file"</string>
   <string name="common_encryption">"Encryption"</string>
   <string name="common_encryption_enabled">"Encryption enabled"</string>
+  <string name="common_ends_at">"Ends at %1$s"</string>
   <string name="common_enter_your_pin">"Enter your PIN"</string>
   <string name="common_error">"Error"</string>
   <string name="common_error_registering_pusher_android">"An error occurred, you may not receive notifications for new messages. Please troubleshoot notifications from the settings.
@@ -250,6 +253,8 @@ Reason: %1$s."</string>
   <string name="common_line_copied_to_clipboard">"Line copied to clipboard"</string>
   <string name="common_link_copied_to_clipboard">"Link copied to clipboard"</string>
   <string name="common_link_new_device">"Link new device"</string>
+  <string name="common_live_location">"Live location"</string>
+  <string name="common_live_location_ended">"Live location ended"</string>
   <string name="common_loading">"Loading…"</string>
   <string name="common_loading_more">"Loading more…"</string>
   <plurals name="common_many_members">
@@ -346,6 +351,7 @@ Reason: %1$s."</string>
   <string name="common_settings">"Settings"</string>
   <string name="common_share_space">"Share space"</string>
   <string name="common_shared_history">"New members see history"</string>
+  <string name="common_shared_live_location">"Shared live location"</string>
   <string name="common_shared_location">"Shared location"</string>
   <string name="common_shared_space">"Shared space"</string>
   <string name="common_signing_out">"Removing device"</string>
@@ -398,6 +404,7 @@ Reason: %1$s."</string>
   <string name="common_voice_message">"Voice message"</string>
   <string name="common_waiting">"Waiting…"</string>
   <string name="common_waiting_for_decryption_key">"Waiting for this message"</string>
+  <string name="common_waiting_live_location">"Waiting for live location…"</string>
   <string name="common_world_readable_history">"Anyone can see history"</string>
   <string name="common_you">"You"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) shared this message since you were not in the room when it was sent."</string>
@@ -489,6 +496,7 @@ Are you sure you want to continue?"</string>
   <string name="screen_room_pinned_banner_loading_description">"Loading message…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"View All"</string>
   <string name="screen_room_title">"Chat"</string>
+  <string name="screen_share_location_live_location_duration_picker_title">"Choose how long to share your live location."</string>
   <string name="screen_share_location_title">"Share location"</string>
   <string name="screen_share_my_location_action">"Share my location"</string>
   <string name="screen_share_open_apple_maps">"Open in Apple Maps"</string>
