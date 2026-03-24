@@ -97,16 +97,18 @@ class DefaultVoiceRecorder(
             audioRecorder.record { audio ->
                 yield()
 
-                val elapsedTime = startedAt.elapsedNow() - totalPausedDuration
+                // When paused, discard audio data but keep AudioRecord running
+                if (isPaused.get()) {
+                    return@record
+                }
+
+                val elapsedTime = lock.withLock {
+                    startedAt.elapsedNow() - totalPausedDuration
+                }
 
                 if (elapsedTime > VoiceMessageConfig.maxVoiceMessageDuration) {
                     Timber.w("Voice message time limit reached")
                     stopRecord(false)
-                    return@record
-                }
-
-                // When paused, discard audio data but keep AudioRecord running
-                if (isPaused.get()) {
                     return@record
                 }
 
@@ -131,20 +133,24 @@ class DefaultVoiceRecorder(
 
     override suspend fun pauseRecord() {
         Timber.i("Voice recorder paused")
-        isPaused.set(true)
-        pauseStartMark = timeSource.markNow()
         val currentState = state.value as? VoiceRecorderState.Recording ?: return
+        lock.withLock {
+            isPaused.set(true)
+            pauseStartMark = timeSource.markNow()
+        }
         _state.emit(currentState.copy(isPaused = true))
     }
 
     override suspend fun resumeRecord() {
         Timber.i("Voice recorder resumed")
-        pauseStartMark?.let { mark ->
-            totalPausedDuration += mark.elapsedNow()
-        }
-        pauseStartMark = null
-        isPaused.set(false)
         val currentState = state.value as? VoiceRecorderState.Recording ?: return
+        lock.withLock {
+            pauseStartMark?.let { mark ->
+                totalPausedDuration += mark.elapsedNow()
+            }
+            pauseStartMark = null
+            isPaused.set(false)
+        }
         _state.emit(currentState.copy(isPaused = false))
     }
 
@@ -157,13 +163,15 @@ class DefaultVoiceRecorder(
         cancelled: Boolean
     ) {
         // If paused, account for the final paused segment
-        if (isPaused.get()) {
-            pauseStartMark?.let { mark ->
-                totalPausedDuration += mark.elapsedNow()
+        lock.withLock {
+            if (isPaused.get()) {
+                pauseStartMark?.let { mark ->
+                    totalPausedDuration += mark.elapsedNow()
+                }
             }
+            isPaused.set(false)
+            pauseStartMark = null
         }
-        isPaused.set(false)
-        pauseStartMark = null
 
         recordingJob?.cancel()?.also {
             Timber.i("Voice recorder stopped recording")
