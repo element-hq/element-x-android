@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -76,7 +77,7 @@ fun TextField(
     BasicTextField(
         value = value,
         onValueChange = onValueChange,
-        modifier = modifier,
+        modifier = modifier.minimumInteractiveComponentSize(),
         textStyle = textFieldStyle(enabled),
         interactionSource = interactionSource,
         enabled = enabled,
@@ -132,7 +133,7 @@ fun TextField(
     BasicTextField(
         value = value,
         onValueChange = onValueChange,
-        modifier = modifier,
+        modifier = modifier.minimumInteractiveComponentSize(),
         textStyle = textFieldStyle(enabled),
         interactionSource = interactionSource,
         enabled = enabled,

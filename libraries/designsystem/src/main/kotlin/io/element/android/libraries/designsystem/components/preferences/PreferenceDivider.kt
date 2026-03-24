@@ -8,23 +8,22 @@
 
 package io.element.android.libraries.designsystem.components.preferences
 
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import io.element.android.compound.theme.ElementSpacing
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 
-@Deprecated("M3 Expressive: use Spacer(Modifier.height(16.dp)) instead")
 @Composable
 fun PreferenceDivider(
     modifier: Modifier = Modifier,
 ) {
-    @Suppress("DEPRECATION")
-    HorizontalDivider(modifier = modifier)
+    Spacer(modifier = modifier.height(ElementSpacing.l))
 }
 
-@Suppress("DEPRECATION")
 @Preview(group = PreviewGroup.Preferences)
 @Composable
 internal fun PreferenceDividerPreview() = ElementThemedPreview {

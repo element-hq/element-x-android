@@ -59,6 +59,7 @@ fun ElementThemeApp(
     compoundLight: SemanticColors,
     compoundDark: SemanticColors,
     buildMeta: BuildMeta,
+    useExpressiveMotion: Boolean = true,
     content: @Composable () -> Unit,
 ) {
     val theme by remember {
@@ -91,6 +92,7 @@ fun ElementThemeApp(
         ElementTheme(
             darkTheme = theme.isDark(),
             dynamicColor = dynamicColor,
+            useExpressiveMotion = useExpressiveMotion,
             content = content,
             compoundLight = effectiveCompoundLight,
             compoundDark = effectiveCompoundDark,

@@ -37,7 +37,7 @@ import io.element.android.libraries.designsystem.components.async.AsyncActionVie
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.LinearProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.WavyLinearProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -90,8 +90,7 @@ fun CreateAccountView(
                 enter = fadeIn(initialAlpha = 1f),
                 exit = fadeOut(),
             ) {
-                @Suppress("DEPRECATION") // Intentionally flat — thin 2.dp WebView progress bar
-                LinearProgressIndicator(
+                WavyLinearProgressIndicator(
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(2.dp),

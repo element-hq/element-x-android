@@ -94,6 +94,9 @@ import io.element.android.libraries.push.api.notifications.conversations.Notific
 import io.element.android.libraries.ui.common.nodes.emptyNode
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
 import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import androidx.compose.runtime.produceState
 import io.element.android.services.analytics.api.watchers.AnalyticsRoomListStateWatcher
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
@@ -146,6 +149,7 @@ class LoggedInFlowNode(
     private val enterpriseService: EnterpriseService,
     private val appPreferencesStore: AppPreferencesStore,
     private val buildMeta: BuildMeta,
+    private val featureFlagService: FeatureFlagService,
     snackbarDispatcher: SnackbarDispatcher,
     private val analyticsService: AnalyticsService,
     private val analyticsRoomListStateWatcher: AnalyticsRoomListStateWatcher,
@@ -666,11 +670,15 @@ class LoggedInFlowNode(
         val colors by remember {
             enterpriseService.semanticColorsFlow(sessionId = matrixClient.sessionId)
         }.collectAsState(SemanticColorsLightDark.default)
+        val useExpressiveMotion by produceState(true) {
+            value = featureFlagService.isFeatureEnabled(FeatureFlags.M3Expressive)
+        }
         ElementThemeApp(
             appPreferencesStore = appPreferencesStore,
             compoundLight = colors.light,
             compoundDark = colors.dark,
             buildMeta = buildMeta,
+            useExpressiveMotion = useExpressiveMotion,
         ) {
             val isOnline by syncService.isOnline.collectAsState()
             ConnectivityIndicatorContainer(

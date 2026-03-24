@@ -8,9 +8,12 @@
 
 package io.element.android.features.messages.impl.timeline.components.virtual
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement.spacedBy
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -21,10 +24,8 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.R
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Text
 
-@Suppress("DEPRECATION") // Functional divider for read marker — intentional
 @Composable
 internal fun TimelineItemReadMarkerView(
     modifier: Modifier = Modifier
@@ -41,11 +42,12 @@ internal fun TimelineItemReadMarkerView(
             style = ElementTheme.typography.fontBodySmMedium,
             color = ElementTheme.colors.textActionAccent,
         )
-        HorizontalDivider(
+        Spacer(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 2.dp),
-            color = ElementTheme.colors.borderAccentSubtle,
+                .padding(horizontal = 2.dp)
+                .height(1.dp)
+                .background(ElementTheme.colors.borderAccentSubtle),
         )
     }
 }

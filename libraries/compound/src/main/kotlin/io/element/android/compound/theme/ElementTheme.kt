@@ -68,6 +68,11 @@ object ElementTheme {
     val typography: TypographyTokens = TypographyTokens
 
     /**
+     * M3-aligned spacing scale. Use instead of hardcoded dp values for consistent layout.
+     */
+    val spacing: ElementSpacing = ElementSpacing
+
+    /**
      * Returns whether the theme version used is the light or the dark one.
      */
     val isLightTheme: Boolean
@@ -111,6 +116,7 @@ fun ElementTheme(
     lightStatusBar: Boolean = !darkTheme,
     // true to enable MaterialYou
     dynamicColor: Boolean = false,
+    useExpressiveMotion: Boolean = true,
     compoundLight: SemanticColors = compoundColorsLight,
     compoundDark: SemanticColors = compoundColorsDark,
     materialColorsLight: ColorScheme = compoundLight.toMaterialColorScheme(),
@@ -178,7 +184,7 @@ fun ElementTheme(
             colorScheme = colorScheme,
             typography = typography,
             shapes = ElementShapes,
-            motionScheme = MotionScheme.expressive(),
+            motionScheme = if (useExpressiveMotion) MotionScheme.expressive() else MotionScheme.standard(),
             content = content
         )
     }
