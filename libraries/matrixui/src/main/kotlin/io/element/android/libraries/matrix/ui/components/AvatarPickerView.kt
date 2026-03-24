@@ -195,7 +195,7 @@ private fun BoxScope.OverlayEditButton(
         contentAlignment = Alignment.Center,
     ) {
         Icon(
-            modifier = Modifier.size(editButtonSize * 24 / 30f),
+            modifier = Modifier.size(editButtonSize * 20 / 30f),
             imageVector = CompoundIcons.Edit(),
             contentDescription = null,
         )
