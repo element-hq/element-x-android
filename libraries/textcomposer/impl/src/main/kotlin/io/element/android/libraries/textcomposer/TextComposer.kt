@@ -41,6 +41,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -400,6 +401,7 @@ fun TextComposer(
             onAddAttachment = onAddAttachment,
             onDeleteVoiceMessage = onDeleteVoiceMessage,
             onVoiceRecorderEvent = onVoiceRecorderEvent,
+            onResetComposerMode = onResetComposerMode,
         )
     }
 
@@ -408,6 +410,14 @@ fun TextComposer(
     }
 
     SoftKeyboardEffect(showTextFormatting, onRequestFocus) { it }
+
+    // Dismiss keyboard when voice recording starts
+    val keyboardController = LocalSoftwareKeyboardController.current
+    LaunchedEffect(voiceMessageState) {
+        if (voiceMessageState !is VoiceMessageState.Idle) {
+            keyboardController?.hide()
+        }
+    }
 
     val latestOnReceiveSuggestion by rememberUpdatedState(onReceiveSuggestion)
     if (state is TextEditorState.Rich) {
@@ -440,6 +450,7 @@ private fun StandardLayout(
     onAddAttachment: () -> Unit,
     onDeleteVoiceMessage: () -> Unit,
     onVoiceRecorderEvent: (VoiceMessageRecorderEvent) -> Unit,
+    onResetComposerMode: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -506,6 +517,14 @@ private fun StandardLayout(
             ) {
                 if (voiceMessageState is VoiceMessageState.Idle) {
                     textInput()
+                } else if (composerMode is MessageComposerMode.Special) {
+                    TextInputBox(
+                        composerMode = composerMode,
+                        onResetComposerMode = onResetComposerMode,
+                        isTextEmpty = true,
+                    ) {
+                        voiceRecording()
+                    }
                 } else {
                     voiceRecording()
                 }
