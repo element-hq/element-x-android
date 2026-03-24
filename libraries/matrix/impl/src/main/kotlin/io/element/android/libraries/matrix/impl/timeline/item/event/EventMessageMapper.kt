@@ -117,7 +117,7 @@ class EventMessageMapper {
                 body = type.content.body,
                 geoUri = type.content.geoUri,
                 description = type.content.description,
-                assetType = type.content.asset?.into()
+                assetType = type.content.asset.into()
             )
         }
         is MessageType.Other -> {
