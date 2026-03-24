@@ -24,6 +24,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -93,6 +96,7 @@ import io.element.android.services.analyticsproviders.api.trackers.captureIntera
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun RoomDetailsView(
     state: RoomDetailsState,
@@ -116,13 +120,15 @@ fun RoomDetailsView(
     leaveRoomView: @Composable () -> Unit,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
+    val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
     Scaffold(
-        modifier = modifier,
+        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             RoomDetailsTopBar(
                 goBack = goBack,
                 showEdit = state.canEdit,
-                onActionClick = onActionClick
+                onActionClick = onActionClick,
+                scrollBehavior = scrollBehavior,
             )
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -300,12 +306,14 @@ private fun RoomDetailsTopBar(
     goBack: () -> Unit,
     onActionClick: (RoomDetailsAction) -> Unit,
     showEdit: Boolean,
+    scrollBehavior: androidx.compose.material3.TopAppBarScrollBehavior? = null,
 ) {
     var showMenu by remember { mutableStateOf(false) }
 
     TopAppBar(
         title = { },
         navigationIcon = { BackButton(onClick = goBack) },
+        scrollBehavior = scrollBehavior,
         actions = {
             if (showEdit) {
                 IconButton(onClick = { showMenu = !showMenu }) {
