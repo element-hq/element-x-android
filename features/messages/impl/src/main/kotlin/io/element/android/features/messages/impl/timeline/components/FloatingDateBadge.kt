@@ -121,7 +121,7 @@ internal fun FloatingDateBadge(
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(16.dp),
-        color = ElementTheme.colors.bgSubtleSecondary.copy(alpha = 0.85f),
+        color = ElementTheme.colors.bgCanvasDefault.copy(alpha = 0.85f),
     ) {
         Text(
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
