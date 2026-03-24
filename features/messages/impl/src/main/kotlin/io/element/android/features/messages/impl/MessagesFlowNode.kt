@@ -39,6 +39,7 @@ import io.element.android.features.messages.impl.pinned.DefaultPinnedEventsTimel
 import io.element.android.features.messages.impl.pinned.list.PinnedMessagesListNode
 import io.element.android.features.messages.impl.report.ReportMessageNode
 import io.element.android.features.messages.impl.threads.ThreadedMessagesNode
+import io.element.android.features.messages.impl.threads.ThreadsListNode
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.debug.EventDebugInfoNode
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -178,6 +179,9 @@ class MessagesFlowNode(
         data object KnockRequestsList : NavTarget
 
         @Parcelize
+        data object ThreadsList : NavTarget
+
+        @Parcelize
         data class Thread(val threadRootId: ThreadId, val focusedEventId: EventId?) : NavTarget
     }
 
@@ -288,6 +292,10 @@ class MessagesFlowNode(
 
                     override fun navigateToKnockRequestsList() {
                         backstack.push(NavTarget.KnockRequestsList)
+                    }
+
+                    override fun navigateToThreadsList() {
+                        backstack.push(NavTarget.ThreadsList)
                     }
 
                     override fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?) {
@@ -433,6 +441,14 @@ class MessagesFlowNode(
             }
             NavTarget.KnockRequestsList -> {
                 knockRequestsListEntryPoint.createNode(this, buildContext)
+            }
+            NavTarget.ThreadsList -> {
+                val callback = object : ThreadsListNode.Callback {
+                    override fun onThreadClick(eventId: EventId) {
+                        backstack.push(NavTarget.Thread(threadRootId = ThreadId(eventId.value), focusedEventId = null))
+                    }
+                }
+                createNode<ThreadsListNode>(buildContext, plugins = listOf(callback))
             }
             is NavTarget.Thread -> {
                 val inputs = ThreadedMessagesNode.Inputs(

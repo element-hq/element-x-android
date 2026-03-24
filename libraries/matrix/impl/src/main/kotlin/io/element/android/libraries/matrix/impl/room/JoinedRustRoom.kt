@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.api.room.knock.KnockRequest
 import io.element.android.libraries.matrix.api.room.location.LiveLocationShare
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsValues
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
+import io.element.android.libraries.matrix.api.room.threads.ThreadListItemData
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -65,6 +66,8 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.withContext
+import org.matrix.rustcomponents.sdk.IncludeThreads
+import org.matrix.rustcomponents.sdk.ListThreadsOptions
 import org.matrix.rustcomponents.sdk.DateDividerMode
 import org.matrix.rustcomponents.sdk.IdentityStatusChangeListener
 import org.matrix.rustcomponents.sdk.KnockRequestsListener
@@ -500,6 +503,26 @@ class JoinedRustRoom(
                     trySend(update.map())
                 }
             })
+        }
+    }
+
+    override suspend fun loadThreadList(): Result<List<ThreadListItemData>> = withContext(roomDispatcher) {
+        runCatchingExceptions {
+            val options = ListThreadsOptions(includeThreads = IncludeThreads.ALL, from = null, limit = 50uL)
+            val threadList = innerRoom.loadThreadList(options)
+            threadList.items.map { item ->
+                val displayName = when (val profile = item.senderProfile) {
+                    is org.matrix.rustcomponents.sdk.ProfileDetails.Ready -> profile.displayName
+                    else -> null
+                }
+                ThreadListItemData(
+                    rootEventId = EventId(item.rootEventId),
+                    timestamp = item.timestamp.toLong(),
+                    senderDisplayName = displayName,
+                    senderId = UserId(item.sender),
+                    lastMessagePreview = null,
+                )
+            }
         }
     }
 

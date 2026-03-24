@@ -133,6 +133,7 @@ class MessagesNode(
         fun navigateToRoomDetails()
         fun navigateToPinnedMessagesList()
         fun navigateToKnockRequestsList()
+        fun navigateToThreadsList()
     }
 
     override fun onBuilt() {
@@ -287,6 +288,7 @@ class MessagesNode(
                     callback.navigateToRoomCall(room.roomId, isAudioCall)
                 },
                 onViewAllPinnedMessagesClick = callback::navigateToPinnedMessagesList,
+                onShowThreadsListClick = callback::navigateToThreadsList,
                 modifier = modifier,
                 knockRequestsBannerView = {
                     knockRequestsBannerRenderer.View(

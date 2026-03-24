@@ -85,7 +85,6 @@ import io.element.android.features.messages.impl.timeline.components.receipt.bot
 import io.element.android.features.messages.impl.timeline.components.receipt.bottomsheet.ReadReceiptBottomSheetEvent
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
-import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.topbars.MessagesViewTopBar
@@ -121,7 +120,6 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.textcomposer.model.TextEditorState
-import io.element.android.libraries.matrix.api.core.toThreadId
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.link.Link
 import kotlinx.collections.immutable.persistentListOf
@@ -140,6 +138,7 @@ fun MessagesView(
     onCreatePollClick: () -> Unit,
     onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     onViewAllPinnedMessagesClick: () -> Unit,
+    onShowThreadsListClick: () -> Unit = {},
     modifier: Modifier = Modifier,
     forceJumpToBottomVisibility: Boolean = false,
     knockRequestsBannerView: @Composable () -> Unit,
@@ -284,18 +283,7 @@ fun MessagesView(
                             onRoomDetailsClick = { hidingKeyboard { onRoomDetailsClick() } },
                         ) {
                             if (state.showThreadsButton) {
-                                IconButton(onClick = {
-                                    // Navigate to the most recent thread root in the loaded timeline
-                                    val threadRoot = state.timelineState.timelineItems
-                                        .asSequence()
-                                        .filterIsInstance<TimelineItem.Event>()
-                                        .firstOrNull { it.threadInfo is TimelineItemThreadInfo.ThreadRoot }
-                                    threadRoot?.eventId?.let { eventId ->
-                                        state.timelineState.eventSink(
-                                            TimelineEvent.OpenThread(eventId.toThreadId(), null)
-                                        )
-                                    }
-                                }) {
+                                IconButton(onClick = onShowThreadsListClick) {
                                     Icon(
                                         imageVector = CompoundIcons.ThreadsSolid(),
                                         contentDescription = stringResource(CommonStrings.common_thread),
