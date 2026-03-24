@@ -109,24 +109,22 @@ internal fun TimelineItemEventRowModernContent(
                 .fillMaxWidth(),
         ) {
             // Avatar column
-            if (!timelineRoomInfo.isDm) {
-                Box(
-                    modifier = Modifier
-                        .width(avatarColumnWidth)
-                        .padding(top = 2.dp),
-                    contentAlignment = Alignment.TopStart,
-                ) {
-                    if (showSenderInfo) {
-                        Avatar(
-                            modifier = Modifier
-                                .minimumInteractiveComponentSize()
-                                .testTag(TestTags.timelineItemSenderAvatar)
-                                .clip(CircleShape)
-                                .clickable(onClick = onUserDataClick),
-                            avatarData = event.senderAvatar,
-                            avatarType = AvatarType.User,
-                        )
-                    }
+            Box(
+                modifier = Modifier
+                    .width(avatarColumnWidth)
+                    .padding(top = 2.dp),
+                contentAlignment = Alignment.TopStart,
+            ) {
+                if (showSenderInfo) {
+                    Avatar(
+                        modifier = Modifier
+                            .minimumInteractiveComponentSize()
+                            .testTag(TestTags.timelineItemSenderAvatar)
+                            .clip(CircleShape)
+                            .clickable(onClick = onUserDataClick),
+                        avatarData = event.senderAvatar,
+                        avatarType = AvatarType.User,
+                    )
                 }
             }
 
@@ -142,7 +140,7 @@ internal fun TimelineItemEventRowModernContent(
                     ),
             ) {
                 // Sender name + timestamp on same row (matching Classic Modern layout)
-                if (showSenderInfo && !timelineRoomInfo.isDm) {
+                if (showSenderInfo) {
                     val avatarColors = AvatarColorsProvider.provide(event.senderAvatar.id)
                     Row(
                         modifier = Modifier.padding(bottom = 2.dp),

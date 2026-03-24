@@ -121,7 +121,7 @@ private fun SkeletonView(
             item {
                 RoomSummaryPlaceholderRow()
                 if (index != count - 1) {
-                    Spacer(Modifier.height(2.dp))
+                    Spacer(Modifier.height(4.dp))
                 }
             }
         }
@@ -276,7 +276,7 @@ private fun RoomsViewList(
                 eventSink = eventSink,
             )
             if (index != state.summaries.lastIndex) {
-                Spacer(Modifier.height(2.dp))
+                Spacer(Modifier.height(4.dp))
             }
         }
     }

@@ -471,7 +471,7 @@ private fun TimelineItemEventRowContent(
         ) = createRefs()
 
         // Sender
-        if (event.showSenderInformation && !timelineRoomInfo.isDm) {
+        if (event.showSenderInformation) {
             MessageSenderInformation(
                 event.senderId,
                 event.senderProfile,
