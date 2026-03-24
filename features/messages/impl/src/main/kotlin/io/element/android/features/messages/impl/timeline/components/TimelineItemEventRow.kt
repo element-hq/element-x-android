@@ -470,8 +470,9 @@ private fun TimelineItemEventRowContent(
             pinIcon,
         ) = createRefs()
 
-        // Sender
-        if (event.showSenderInformation) {
+        // Sender — in DMs, show both sender names at group boundaries
+        val showSender = if (timelineRoomInfo.isDm) event.groupPosition.isNew() else event.showSenderInformation
+        if (showSender) {
             MessageSenderInformation(
                 event.senderId,
                 event.senderProfile,
