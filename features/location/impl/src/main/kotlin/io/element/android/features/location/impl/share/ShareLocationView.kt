@@ -37,6 +37,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.internal.centerBottomEdge
+import io.element.android.features.location.impl.R
 import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialog
 import io.element.android.features.location.impl.common.ui.LocationFloatingActionButton
@@ -242,7 +243,7 @@ private fun ShareLiveLocationItem(
 ) {
     ListItem(
         headlineContent = {
-            Text("Share live location")
+            Text(stringResource(CommonStrings.action_share_live_location))
         },
         onClick = onClick,
         leadingContent = ListItemContent.Icon(
@@ -260,7 +261,7 @@ private fun LiveLocationDurationDialog(
 ) {
     var selectedIndex by remember { mutableIntStateOf(0) }
     ListDialog(
-        title = "Choose how long to share your live location.",
+        title = stringResource(R.string.screen_share_location_live_location_duration_picker_title),
         submitText = stringResource(CommonStrings.action_continue),
         onSubmit = { onSelectDuration(durations[selectedIndex].duration) },
         onDismissRequest = onDismiss,
