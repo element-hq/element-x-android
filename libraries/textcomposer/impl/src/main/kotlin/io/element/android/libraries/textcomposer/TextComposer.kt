@@ -412,13 +412,13 @@ fun TextComposer(
 }
 
 /** Vertical drag distance (dp) to lock the recording in place. */
-private val VoiceGestureLockThreshold = 80.dp
+private val VOICE_GESTURE_LOCK_THRESHOLD = 80.dp
 
 /** Horizontal drag distance (dp) to cancel the recording. */
-private val VoiceGestureCancelThreshold = 100.dp
+private val VOICE_GESTURE_CANCEL_THRESHOLD = 100.dp
 
 /** Max press duration (ms) to treat a touch as a quick-tap (lock) rather than a hold-release (send). */
-private const val VoiceGestureTapTimeThresholdMs = 200L
+private const val VOICE_GESTURE_TAP_TIME_THRESHOLD_MS = 200L
 
 private data class EndButtonParams(
     val endButtonContentDescriptionResId: Int,
@@ -439,8 +439,8 @@ private fun StandardLayout(
     modifier: Modifier = Modifier,
 ) {
     val density = LocalDensity.current
-    val lockThresholdPx = with(density) { VoiceGestureLockThreshold.toPx() }
-    val cancelThresholdPx = with(density) { VoiceGestureCancelThreshold.toPx() }
+    val lockThresholdPx = with(density) { VOICE_GESTURE_LOCK_THRESHOLD.toPx() }
+    val cancelThresholdPx = with(density) { VOICE_GESTURE_CANCEL_THRESHOLD.toPx() }
     val hapticFeedback = LocalHapticFeedback.current
 
     // Use rememberUpdatedState so the pointerInput coroutine always sees current values
@@ -533,9 +533,9 @@ private fun StandardLayout(
                                 val state = currentVoiceMessageState
 
                                 // Voice gesture only when idle AND button is the mic, or actively holding
-                                val isVoiceGesture = (state is VoiceMessageState.Idle &&
-                                    currentEndButtonDescResId == CommonStrings.a11y_voice_message_record) ||
-                                    (state is VoiceMessageState.Recording && state.mode == RecordingMode.Hold)
+                                val isVoiceGesture = state is VoiceMessageState.Idle &&
+                                    currentEndButtonDescResId == CommonStrings.a11y_voice_message_record ||
+                                    state is VoiceMessageState.Recording && state.mode == RecordingMode.Hold
 
                                 if (!isVoiceGesture) {
                                     // Non-voice: wait for up and simulate click
@@ -611,7 +611,7 @@ private fun StandardLayout(
 
                                 if (!handled) {
                                     val elapsed = System.currentTimeMillis() - downTime
-                                    if (elapsed < VoiceGestureTapTimeThresholdMs) {
+                                    if (elapsed < VOICE_GESTURE_TAP_TIME_THRESHOLD_MS) {
                                         currentOnVoiceRecorderEvent(VoiceMessageRecorderEvent.Lock)
                                     } else {
                                         currentOnVoiceRecorderEvent(VoiceMessageRecorderEvent.StopAndSend)
