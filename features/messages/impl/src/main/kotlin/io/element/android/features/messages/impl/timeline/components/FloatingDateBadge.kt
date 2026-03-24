@@ -36,7 +36,6 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlin.time.Duration.Companion.milliseconds
 
 @Composable
@@ -86,7 +85,6 @@ internal fun BoxScope.FloatingDateBadgeOverlay(
 
     LaunchedEffect(Unit) {
         snapshotFlow { lazyListState.isScrollInProgress }
-            .distinctUntilChanged()
             .collectLatest { isScrolling ->
                 if (isScrolling) {
                     isBadgeVisible = true
