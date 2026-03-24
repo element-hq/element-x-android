@@ -126,7 +126,7 @@ internal fun FloatingDateBadge(
         Text(
             modifier = Modifier.padding(horizontal = 12.dp, vertical = 4.dp),
             text = dateText,
-            style = ElementTheme.typography.fontBodySmMedium,
+            style = ElementTheme.typography.fontBodyMdMedium,
             color = ElementTheme.colors.textPrimary,
         )
     }
