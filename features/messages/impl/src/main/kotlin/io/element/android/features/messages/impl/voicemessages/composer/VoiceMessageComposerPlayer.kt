@@ -76,6 +76,9 @@ class VoiceMessageComposerPlayer(
             mediaId = mediaPath,
             mimeType = MIME_TYPE,
         )
+        // Always reset to 1x — the shared MediaPlayer may retain the speed
+        // from a previously played timeline voice message.
+        mediaPlayer.setPlaybackSpeed(1f)
     }
 
     /**
