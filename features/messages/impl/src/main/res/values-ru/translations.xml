@@ -7,12 +7,12 @@
   <string name="crypto_event_authenticity_unknown_device">"Зашифровано неизвестным или удаленным устройством."</string>
   <string name="crypto_event_authenticity_unsigned_device">"Зашифровано устройством, не проверенным его владельцем."</string>
   <string name="crypto_event_authenticity_unverified_identity">"Зашифровано непроверенным пользователем."</string>
-  <string name="emoji_picker_category_activity">"Деятельность"</string>
+  <string name="emoji_picker_category_activity">"Активности"</string>
   <string name="emoji_picker_category_flags">"Флаги"</string>
   <string name="emoji_picker_category_foods">"Еда и напитки"</string>
   <string name="emoji_picker_category_nature">"Животные и природа"</string>
   <string name="emoji_picker_category_objects">"Объекты"</string>
-  <string name="emoji_picker_category_people">"Улыбки и люди"</string>
+  <string name="emoji_picker_category_people">"Эмодзи и люди"</string>
   <string name="emoji_picker_category_places">"Путешествия и места"</string>
   <string name="emoji_picker_category_recent">"Недавние эмодзи"</string>
   <string name="emoji_picker_category_symbols">"Символы"</string>
@@ -23,19 +23,19 @@
   <string name="screen_media_upload_preview_error_failed_sending">"Не удалось загрузить медиафайлы, попробуйте еще раз."</string>
   <string name="screen_media_upload_preview_error_too_large_message">"Максимальный размер файла: %1$s."</string>
   <string name="screen_media_upload_preview_error_too_large_title">"Файл слишком большой для загрузки."</string>
-  <string name="screen_media_upload_preview_item_count">"Элемент %1$d из %2$d"</string>
+  <string name="screen_media_upload_preview_item_count">"%1$d из %2$d"</string>
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Оптимизировать качество изображения"</string>
   <string name="screen_media_upload_preview_processing">"Обработка…"</string>
   <string name="screen_report_content_block_user">"Заблокировать пользователя"</string>
   <string name="screen_report_content_block_user_hint">"Отметьте, хотите ли вы скрыть все текущие и будущие сообщения от этого пользователя"</string>
   <string name="screen_report_content_explanation">"Это сообщение будет передано администратору вашего домашнего сервера. Они не смогут прочитать зашифрованные сообщения."</string>
-  <string name="screen_report_content_hint">"Причина, по которой вы пожаловались на этот контент"</string>
+  <string name="screen_report_content_hint">"Причина жалобы"</string>
   <string name="screen_room_attachment_source_camera">"Камера"</string>
   <string name="screen_room_attachment_source_camera_photo">"Сделать фото"</string>
   <string name="screen_room_attachment_source_camera_video">"Записать видео"</string>
   <string name="screen_room_attachment_source_files">"Вложение"</string>
   <string name="screen_room_attachment_source_gallery">"Фото и видео"</string>
-  <string name="screen_room_attachment_source_location">"Местоположение"</string>
+  <string name="screen_room_attachment_source_location">"Поделиться местоположением"</string>
   <string name="screen_room_attachment_source_poll">"Опрос"</string>
   <string name="screen_room_attachment_text_formatting">"Форматирование текста"</string>
   <string name="screen_room_encrypted_history_banner">"В настоящее время история сообщений недоступна в этой комнате."</string>
@@ -46,13 +46,13 @@
   <string name="screen_room_mentions_at_room_title">"Все"</string>
   <string name="screen_room_retry_send_menu_send_again_action">"Отправить снова"</string>
   <string name="screen_room_retry_send_menu_title">"Не удалось отправить ваше сообщение"</string>
-  <string name="screen_room_timeline_add_reaction">"Добавить эмодзи"</string>
+  <string name="screen_room_timeline_add_reaction">"Добавить реакцию"</string>
   <string name="screen_room_timeline_beginning_of_room">"Это начало %1$s."</string>
-  <string name="screen_room_timeline_beginning_of_room_no_name">"Это начало разговора."</string>
-  <string name="screen_room_timeline_legacy_call">"Неподдерживаемый вызов. уточните, может ли звонящий использовать новое приложение Element X."</string>
+  <string name="screen_room_timeline_beginning_of_room_no_name">"Это начало беседы."</string>
+  <string name="screen_room_timeline_legacy_call">"Звонок не поддерживается. Собеседник должен использовать новое приложение Element X."</string>
   <string name="screen_room_timeline_less_reactions">"Показать меньше"</string>
   <string name="screen_room_timeline_message_copied">"Сообщение скопировано"</string>
-  <string name="screen_room_timeline_no_permission_to_post">"У вас нет разрешения публиковать сообщения в этой комнате"</string>
+  <string name="screen_room_timeline_no_permission_to_post">"Вы не можете писать сообщения в этой комнате"</string>
   <plurals name="screen_room_timeline_reaction_a11y">
     <item quantity="one">"%1$d участник отреагировал %2$s"</item>
     <item quantity="few">"%1$d участника отреагировало %2$s"</item>
@@ -63,11 +63,11 @@
     <item quantity="few">"Вы и %1$d участника отреагировали %2$s"</item>
     <item quantity="many">"Вы и %1$d участников отреагировали %2$s"</item>
   </plurals>
-  <string name="screen_room_timeline_reaction_you_a11y">"Вы отреагировали %1$s"</string>
+  <string name="screen_room_timeline_reaction_you_a11y">"Вы отреагировали: %1$s"</string>
   <string name="screen_room_timeline_reactions_show_less">"Показать меньше"</string>
   <string name="screen_room_timeline_reactions_show_more">"Показать больше"</string>
   <string name="screen_room_timeline_reactions_show_reactions_summary">"Показать сводку реакций"</string>
-  <string name="screen_room_timeline_read_marker_title">"Новый"</string>
+  <string name="screen_room_timeline_read_marker_title">"Новое"</string>
   <plurals name="screen_room_timeline_state_changes">
     <item quantity="one">"%1$d изменение в комнате"</item>
     <item quantity="few">"%1$d изменения в комнате"</item>
@@ -75,7 +75,7 @@
   </plurals>
   <string name="screen_room_timeline_tombstoned_room_action">"Перейти в новую комнату"</string>
   <string name="screen_room_timeline_tombstoned_room_message">"Эта комната была заменена и больше не активна"</string>
-  <string name="screen_room_timeline_upgraded_room_action">"Посмотреть старые сообщения"</string>
+  <string name="screen_room_timeline_upgraded_room_action">"Просмотреть старые сообщения"</string>
   <string name="screen_room_timeline_upgraded_room_message">"Эта комната является продолжением другой комнаты"</string>
   <plurals name="screen_room_typing_many_members">
     <item quantity="one">"%1$s, %2$s и %3$d"</item>
@@ -83,9 +83,9 @@
     <item quantity="many">"%1$s, %2$s и другие %3$d"</item>
   </plurals>
   <plurals name="screen_room_typing_notification">
-    <item quantity="one">"%1$s набирает сообщение"</item>
-    <item quantity="few">"%1$s набирают сообщения"</item>
-    <item quantity="many">"%1$s набирают сообщения"</item>
+    <item quantity="one">"%1$s печатает"</item>
+    <item quantity="few">"%1$s печатают"</item>
+    <item quantity="many">"%1$s печатают"</item>
   </plurals>
   <string name="screen_room_typing_two_members">"%1$s и %2$s"</string>
 </resources>

@@ -3,11 +3,11 @@
   <string name="screen_leave_space_choose_owners_action">"Vælg ejere"</string>
   <string name="screen_leave_space_last_admin_info">"%1$s (Admin)"</string>
   <plurals name="screen_leave_space_submit">
-    <item quantity="one">"Forlad %1$d rum og gruppe"</item>
-    <item quantity="other">"Forlad %1$d rum og Grupper"</item>
+    <item quantity="one">"Forlad %1$d rum og klynge"</item>
+    <item quantity="other">"Forlad %1$d rum og Klynger"</item>
   </plurals>
   <string name="screen_leave_space_subtitle">"Vælg de rum, du vil forlade, som du ikke er den eneste administrator for:"</string>
-  <string name="screen_leave_space_subtitle_last_admin">"Du skal tildele en anden administrator til denne gruppe, før du kan forlade den."</string>
+  <string name="screen_leave_space_subtitle_last_admin">"Du skal tildele en anden administrator til denne klynge, før du kan forlade den."</string>
   <string name="screen_leave_space_subtitle_last_owner">"Du er den eneste ejer af %1$s Du skal overføre ejerskabet til en anden, før du forlader rummet."</string>
   <string name="screen_leave_space_subtitle_only_last_admin">"Du vil ikke blive fjernet fra følgende rum, fordi du er den eneste administrator:"</string>
   <string name="screen_leave_space_title">"Forlad %1$s?"</string>
@@ -22,7 +22,7 @@
     <item quantity="one">"Fjern %1$d rum fra %2$s"</item>
     <item quantity="other">"Fjern %1$d rum fra %2$s"</item>
   </plurals>
-  <string name="screen_space_settings_leave_space">"Forlad gruppe"</string>
+  <string name="screen_space_settings_leave_space">"Forlad klynge"</string>
   <string name="screen_space_settings_roles_and_permissions">"Roller og tilladelser"</string>
   <string name="screen_space_settings_security_and_privacy">"Sikkerhed og privatliv"</string>
 </resources>

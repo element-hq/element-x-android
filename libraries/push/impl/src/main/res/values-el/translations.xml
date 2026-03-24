@@ -19,6 +19,7 @@
     <item quantity="one">"Έχετε %d νέο μήνυμα."</item>
     <item quantity="other">"Έχετε %d νέα μηνύματα."</item>
   </plurals>
+  <string name="notification_incoming_audio_call">"📞 Εισερχόμενη κλήση"</string>
   <string name="notification_incoming_call">"📹 Εισερχόμενη κλήση"</string>
   <string name="notification_inline_reply_failed">"** Αποτυχία αποστολής - παρακαλώ ανοίξτε την αίθουσα"</string>
   <string name="notification_invitation_action_join">"Συμμετοχή"</string>

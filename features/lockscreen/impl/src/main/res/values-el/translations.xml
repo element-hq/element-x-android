@@ -23,7 +23,7 @@
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Παρακαλώ εισήγαγε το ίδιο PIN δύο φορές"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"Τα PIN δεν ταιριάζουν"</string>
   <string name="screen_app_lock_signout_alert_message">"Θα χρειαστεί να συνδεθείς ξανά και να δημιουργήσεις ένα νέο PIN για να προχωρήσεις"</string>
-  <string name="screen_app_lock_signout_alert_title">"Έχεις αποσυνδεθεί"</string>
+  <string name="screen_app_lock_signout_alert_title">"Αυτή η συσκευή καταργείται"</string>
   <plurals name="screen_app_lock_subtitle">
     <item quantity="one">"Έχετε %1$d προσπάθεια να ξεκλειδώσετε"</item>
     <item quantity="other">"Έχετε %1$d προσπάθειες να ξεκλειδώσετε"</item>
@@ -34,5 +34,5 @@
   </plurals>
   <string name="screen_app_lock_use_biometric_android">"Χρήση βιομετρικών"</string>
   <string name="screen_app_lock_use_pin_android">"Χρήση PIN"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Αποσύνδεση…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Αφαίρεση συσκευής…"</string>
 </resources>

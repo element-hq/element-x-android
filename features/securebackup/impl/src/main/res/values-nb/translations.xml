@@ -11,8 +11,7 @@
   <string name="screen_chat_backup_recovery_action_change_description">"Gjenopprett din kryptografiske identitet og meldingshistorikk med en gjenopprettingsnøkkel hvis du har mistet alle dine brukte enheter."</string>
   <string name="screen_chat_backup_recovery_action_confirm">"Skriv inn gjenopprettingsnøkkel"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Nøkkellagringen din er for øyeblikket ikke synkronisert."</string>
-  <string name="screen_chat_backup_recovery_action_setup">"Konfigurer gjenoppretting"</string>
-  <string name="screen_chat_backup_recovery_action_setup_description">"Få tilgang til de krypterte meldingene dine hvis du mister alle enhetene dine eller blir logget ut av %1$s overalt."</string>
+  <string name="screen_chat_backup_recovery_action_setup">"Hent gjenopprettingsnøkkel"</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Åpne %1$s på en datamaskin"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Logg på kontoen din igjen"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Når du blir bedt om å verifisere din enhet, velger du %1$s"</string>
@@ -26,9 +25,9 @@
   <string name="screen_encryption_reset_bullet_3">"Du må verifisere alle eksisterende enheter og kontakter på nytt"</string>
   <string name="screen_encryption_reset_footer">"Tilbakestill identiteten din bare hvis du ikke har tilgang til en annen pålogget enhet og du har mistet gjenopprettingsnøkkelen."</string>
   <string name="screen_encryption_reset_title">"Kan du ikke bekrefte? Du må tilbakestille identiteten din."</string>
-  <string name="screen_key_backup_disable_confirmation_action_turn_off">"Slå av"</string>
+  <string name="screen_key_backup_disable_confirmation_action_turn_off">"Slett"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Du mister de krypterte meldingene dine hvis du er logget ut av alle enheter."</string>
-  <string name="screen_key_backup_disable_confirmation_title">"Er du sikker på at du vil slå av sikkerhetskopiering?"</string>
+  <string name="screen_key_backup_disable_confirmation_title">"Er du sikker på at du vil slette nøkkellagringen?"</string>
   <string name="screen_key_backup_disable_description">"Sletting av nøkkellagring vil fjerne din kryptografiske identitet og meldingsnøkler fra serveren og deaktivere følgende sikkerhetsfunksjoner:"</string>
   <string name="screen_key_backup_disable_description_point_1">"Du vil ikke ha kryptert meldingshistorikk på nye enheter"</string>
   <string name="screen_key_backup_disable_description_point_2">"Du mister tilgangen til de krypterte meldingene dine hvis du er logget ut av %1$s overalt"</string>
@@ -59,7 +58,7 @@
   <string name="screen_recovery_key_setup_generate_key">"Generer gjenopprettingsnøkkelen din"</string>
   <string name="screen_recovery_key_setup_generate_key_description">"Ikke del dette med noen!"</string>
   <string name="screen_recovery_key_setup_success">"Gjenopprettingsoppsett vellykket"</string>
-  <string name="screen_recovery_key_setup_title">"Konfigurer gjenoppretting"</string>
+  <string name="screen_recovery_key_setup_title">"Hent gjenopprettingsnøkkel"</string>
   <string name="screen_reset_encryption_confirmation_alert_action">"Ja, tilbakestill nå"</string>
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"Denne prosessen kan ikke angres."</string>
   <string name="screen_reset_encryption_confirmation_alert_title">"Er du sikker på at du vil tilbakestille identiteten din?"</string>

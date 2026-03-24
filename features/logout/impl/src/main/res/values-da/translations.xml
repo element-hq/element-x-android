@@ -14,5 +14,4 @@
   <string name="screen_signout_recovery_disabled_subtitle">"Du er ved at logge ud af din sidste session. Hvis du logger af nu, mister du adgangen til dine krypterede meddelelser."</string>
   <string name="screen_signout_recovery_disabled_title">"Gendannelse er ikke konfigureret"</string>
   <string name="screen_signout_save_recovery_key_subtitle">"Du er ved at logge ud af din sidste session. Hvis du logger af nu, kan du miste adgangen til dine krypterede meddelelser."</string>
-  <string name="screen_signout_save_recovery_key_title">"Har du gemt din gendannelsesnøgle?"</string>
 </resources>

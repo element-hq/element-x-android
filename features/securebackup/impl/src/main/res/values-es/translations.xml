@@ -12,7 +12,6 @@
   <string name="screen_chat_backup_recovery_action_confirm">"Introduce la clave de recuperación"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Tu almacén de claves no está sincronizado actualmente."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Configurar la recuperación"</string>
-  <string name="screen_chat_backup_recovery_action_setup_description">"Accede a tus mensajes cifrados si pierdes todos tus dispositivos o cierras sesión de %1$s en cualquier lugar."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Abre %1$s en un dispositivo de escritorio"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Vuelve a iniciar sesión en tu cuenta"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Cuando se te pida que verifiques tu dispositivo, selecciona %1$s"</string>

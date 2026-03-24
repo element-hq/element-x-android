@@ -78,8 +78,8 @@
   <string name="screen_room_member_list_empty_search_subtitle">"Imloni tekshiring yoki yangi qidiruvni sinang"</string>
   <string name="screen_room_member_list_empty_search_title">"%1$s – hech narsa topilmadi"</string>
   <plurals name="screen_room_member_list_header_title">
-    <item quantity="one">"%1$dodam"</item>
-    <item quantity="other">"%1$dodamlar"</item>
+    <item quantity="one">"%1$d odam"</item>
+    <item quantity="other">"%1$d odamlar"</item>
   </plurals>
   <string name="screen_room_member_list_manage_member_remove_confirmation_ban">"Xonadan chetlashtirish"</string>
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"Faqat aʻzoni olib tashlash"</string>

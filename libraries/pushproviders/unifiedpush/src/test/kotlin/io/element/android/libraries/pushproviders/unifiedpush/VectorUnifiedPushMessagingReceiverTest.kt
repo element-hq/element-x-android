@@ -18,6 +18,7 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SECRET
+import io.element.android.libraries.push.test.push.FakePushHandlingWakeLock
 import io.element.android.libraries.push.test.test.FakePushHandler
 import io.element.android.libraries.pushproviders.api.PushData
 import io.element.android.libraries.pushproviders.api.PushHandler
@@ -38,13 +39,14 @@ import org.unifiedpush.android.connector.FailedReason
 import org.unifiedpush.android.connector.data.PublicKeySet
 import org.unifiedpush.android.connector.data.PushEndpoint
 import org.unifiedpush.android.connector.data.PushMessage
+import kotlin.time.Duration
 
 @RunWith(RobolectricTestRunner::class)
 class VectorUnifiedPushMessagingReceiverTest {
     @Test
     fun `onReceive does the binding`() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().context
-        val vectorUnifiedPushMessagingReceiver = createVectorUnifiedPushMessagingReceiver()
+        val vectorUnifiedPushMessagingReceiver = VectorUnifiedPushMessagingReceiver()
         // The binding is not found in the test env.
         assertThrows(IllegalStateException::class.java) {
             vectorUnifiedPushMessagingReceiver.onReceive(context, Intent())
@@ -75,7 +77,7 @@ class VectorUnifiedPushMessagingReceiverTest {
     @Test
     fun `onMessage valid invokes the push handler`() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().context
-        val pushHandlerResult = lambdaRecorder<PushData, String, Unit> { _, _ -> }
+        val pushHandlerResult = lambdaRecorder<PushData, String, Boolean> { _, _ -> true }
         val vectorUnifiedPushMessagingReceiver = createVectorUnifiedPushMessagingReceiver(
             pushHandler = FakePushHandler(
                 handleResult = pushHandlerResult
@@ -98,6 +100,60 @@ class VectorUnifiedPushMessagingReceiverTest {
                     UnifiedPushConfig.NAME + " - " + A_SECRET
                 )
             )
+    }
+
+    @Test
+    fun `pushHandler returning true locks the wake lock but does not unlock it so it continues to run`() = runTest {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val pushHandlerResult = lambdaRecorder<PushData, String, Boolean> { _, _ -> true }
+        val lockLambda = lambdaRecorder<Duration, Unit> { _ -> }
+        val unlockLambda = lambdaRecorder<Unit> { }
+        val vectorUnifiedPushMessagingReceiver = createVectorUnifiedPushMessagingReceiver(
+            pushHandler = FakePushHandler(
+                handleResult = pushHandlerResult
+            ),
+            pushHandlingWakeLock = FakePushHandlingWakeLock(
+                lock = lockLambda,
+                unlock = unlockLambda,
+            ),
+        )
+        vectorUnifiedPushMessagingReceiver.onMessage(context, aPushMessage(), A_SECRET)
+
+        // The wakelock should be locked but not unlocked, so it should continue to run
+        lockLambda.assertions().isCalledOnce()
+        unlockLambda.assertions().isNeverCalled()
+
+        advanceUntilIdle()
+
+        // After waiting for any possible timeout, the lock is still locked
+        unlockLambda.assertions().isNeverCalled()
+    }
+
+    @Test
+    fun `pushHandler returning false locks and unlocks the wakelock early`() = runTest {
+        val context = InstrumentationRegistry.getInstrumentation().context
+        val pushHandlerResult = lambdaRecorder<PushData, String, Boolean> { _, _ -> false }
+        val lockLambda = lambdaRecorder<Duration, Unit> { _ -> }
+        val unlockLambda = lambdaRecorder<Unit> { }
+        val vectorUnifiedPushMessagingReceiver = createVectorUnifiedPushMessagingReceiver(
+            pushHandler = FakePushHandler(
+                handleResult = pushHandlerResult
+            ),
+            pushHandlingWakeLock = FakePushHandlingWakeLock(
+                lock = lockLambda,
+                unlock = unlockLambda,
+            ),
+        )
+        vectorUnifiedPushMessagingReceiver.onMessage(context, aPushMessage(), A_SECRET)
+
+        // The wakelock should be locked but not unlocked, so it should continue to run
+        lockLambda.assertions().isCalledOnce()
+        unlockLambda.assertions().isNeverCalled()
+
+        advanceUntilIdle()
+
+        // After waiting for a bit, the lock should have been unlocked since the handler returned false
+        unlockLambda.assertions().isCalledOnce()
     }
 
     @Test
@@ -208,6 +264,7 @@ class VectorUnifiedPushMessagingReceiverTest {
         unifiedPushNewGatewayHandler: UnifiedPushNewGatewayHandler = FakeUnifiedPushNewGatewayHandler(),
         endpointRegistrationHandler: EndpointRegistrationHandler = EndpointRegistrationHandler(),
         removedGatewayHandler: UnifiedPushRemovedGatewayHandler = UnifiedPushRemovedGatewayHandler { lambdaError() },
+        pushHandlingWakeLock: FakePushHandlingWakeLock = FakePushHandlingWakeLock(),
     ): VectorUnifiedPushMessagingReceiver {
         return VectorUnifiedPushMessagingReceiver().apply {
             this.pushParser = unifiedPushParser
@@ -220,6 +277,7 @@ class VectorUnifiedPushMessagingReceiverTest {
             this.removedGatewayHandler = removedGatewayHandler
             this.endpointRegistrationHandler = endpointRegistrationHandler
             this.coroutineScope = this@createVectorUnifiedPushMessagingReceiver
+            this.pushHandlingWakeLock = pushHandlingWakeLock
         }
     }
 }

@@ -21,10 +21,8 @@ import extension.allFeaturesImpl
 import extension.allLibrariesImpl
 import extension.allServicesImpl
 import extension.buildConfigFieldStr
-import extension.koverDependencies
 import extension.locales
 import extension.setupDependencyInjection
-import extension.setupKover
 import extension.testCommonDependencies
 import java.util.Locale
 
@@ -39,8 +37,6 @@ plugins {
     // To be able to update the firebase.xml files, uncomment and build the project
     // alias(libs.plugins.gms.google.services)
 }
-
-setupKover()
 
 android {
     namespace = "io.element.android.x"
@@ -295,8 +291,6 @@ dependencies {
     testCommonDependencies(libs)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.services.toolbox.test)
-
-    koverDependencies()
 }
 
 tasks.withType<GenerateBuildConfig>().configureEach {

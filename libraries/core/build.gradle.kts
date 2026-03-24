@@ -6,20 +6,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 plugins {
-    id("java-library")
-    id("com.android.lint")
-    alias(libs.plugins.kotlin.jvm)
-}
-
-java {
-    sourceCompatibility = Versions.javaVersion
-    targetCompatibility = Versions.javaVersion
-}
-
-kotlin {
-    jvmToolchain {
-        languageVersion = Versions.javaLanguageVersion
-    }
+    id("io.element.jvm-library")
 }
 
 dependencies {

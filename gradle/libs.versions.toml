@@ -12,17 +12,17 @@ firebaseAppDistribution = "5.2.1"
 
 # AndroidX
 core = "1.17.0"
-datastore = "1.2.0"
+datastore = "1.2.1"
 constraintlayout = "2.2.1"
 constraintlayout_compose = "1.1.1"
 lifecycle = "2.10.0"
-activity = "1.12.4"
-media3 = "1.9.2"
+activity = "1.13.0"
+media3 = "1.9.3"
 camera = "1.5.3"
 work = "2.11.1"
 
 # Compose
-compose_bom = "2026.02.01"
+compose_bom = "2026.03.00"
 
 # Coroutines
 coroutines = "1.10.2"
@@ -45,7 +45,7 @@ showkase = "1.0.5"
 # There is some custom logic in `RootFlowNode` that may break because it reuses some Appyx internal APIs.
 # When upgrading this version, check state restoration still works fine.
 appyx = "1.7.1"
-sqldelight = "2.2.1"
+sqldelight = "2.3.1"
 wysiwyg = "2.41.1"
 telephoto = "0.18.0"
 haze = "1.7.2"
@@ -178,7 +178,7 @@ test_detekt_test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version
 # https://github.com/matrix-org/matrix-rust-components-kotlin/commits/main/sdk/sdk-android/src/main/kotlin/org/matrix/rustcomponents/sdk/matrix_sdk_ffi.kt
 # All new features should not be implemented in the pull request that upgrades the version, developers should
 # only fix API breaks and may add some TODOs.
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.03.11"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.03.19"
 
 # Others
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
@@ -207,7 +207,7 @@ vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
 telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "telephoto" }
 statemachine = "com.freeletics.flowredux:compose:1.2.2"
-maplibre = "org.maplibre.gl:android-sdk:13.0.0"
+maplibre = "org.maplibre.gl:android-sdk:13.0.1"
 maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:3.0.2"
 maplibre_compose = "org.maplibre.compose:maplibre-compose:0.12.1"
 maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:3.0.2"
@@ -221,9 +221,9 @@ color_picker = "io.mhssn:colorpicker:1.0.0"
 
 # Analytics
 posthog = "com.posthog:posthog-android:3.37.0"
-sentry = "io.sentry:sentry-android:8.34.1"
+sentry = "io.sentry:sentry-android:8.35.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
-matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.29.2"
+matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.33.2"
 
 # Emojibase
 matrix_emojibase_bindings = "io.element.android:emojibase-bindings:1.5.0"
@@ -259,7 +259,7 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 # Note: used in DependencyInjectionExtensions.kt
 metro = { id = "dev.zacsweers.metro", version.ref = "metro" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
-ktlint = "org.jlleitschuh.gradle.ktlint:14.1.0"
+ktlint = "org.jlleitschuh.gradle.ktlint:14.2.0"
 dependencygraph = "com.savvasdalkitsis.module-dependency-graph:0.12"
 dependencycheck = "org.owasp.dependencycheck:12.2.0"
 dependencyanalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }

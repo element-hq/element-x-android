@@ -2,8 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"확인할 수 없나요?"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"새로운 복구 키 만들기"</string>
-  <string name="screen_identity_confirmation_subtitle">"보안 메시징을 설정하려면 이 장치를 확인하세요."</string>
-  <string name="screen_identity_confirmation_title">"본인 확인"</string>
+  <string name="screen_identity_confirmation_subtitle">"보안 메시징 설정을 위해 인증 방법을 선택해 주세요."</string>
+  <string name="screen_identity_confirmation_title">"디지털 신원 확인"</string>
   <string name="screen_identity_confirmation_use_another_device">"다른 기기 사용"</string>
   <string name="screen_identity_confirmation_use_recovery_key">"복구 키 사용"</string>
   <string name="screen_identity_confirmed_subtitle">"이제 메시지를 안전하게 읽거나 보낼 수 있으며, 채팅 상대도 이 기기를 신뢰할 수 있습니다."</string>
@@ -16,7 +16,7 @@
   <string name="screen_session_verification_compare_emojis_user_subtitle">"아래 이모티콘이 다른 사용자의 기기에 표시된 이모티콘과 동일한지 확인하십시오."</string>
   <string name="screen_session_verification_compare_numbers_subtitle">"아래 숫자가 다른 세션에 표시된 숫자와 일치하는지 확인하세요."</string>
   <string name="screen_session_verification_compare_numbers_title">"숫자 비교"</string>
-  <string name="screen_session_verification_complete_subtitle">"새로운 세션이 확인되었습니다. 이 세션은 귀하의 암호화된 메시지에 액세스할 수 있으며, 다른 사용자는 이 세션을 신뢰할 수 있는 세션으로 인식합니다."</string>
+  <string name="screen_session_verification_complete_subtitle">"이제 다른 기기에서도 안전하게 메시지를 읽거나 보낼 수 있습니다."</string>
   <string name="screen_session_verification_complete_user_subtitle">"이제 메시지를 보내거나 받을 때 이 사용자의 신원을 신뢰할 수 있습니다."</string>
   <string name="screen_session_verification_device_verified">"기기 검증됨"</string>
   <string name="screen_session_verification_enter_recovery_key">"복구 키를 입력하세요"</string>
@@ -33,7 +33,7 @@
   <string name="screen_session_verification_request_failure_title">"검증 실패"</string>
   <string name="screen_session_verification_request_footer">"본인이 이 검증을 시작한 경우에만 계속 진행하세요."</string>
   <string name="screen_session_verification_request_subtitle">"다른 기기를 확인하여 메시지 기록을 안전하게 보호하세요."</string>
-  <string name="screen_session_verification_request_success_subtitle">"새로운 세션이 확인되었습니다. 이 세션은 귀하의 암호화된 메시지에 액세스할 수 있으며, 다른 사용자는 이 세션을 신뢰할 수 있는 세션으로 인식합니다."</string>
+  <string name="screen_session_verification_request_success_subtitle">"이제 다른 기기에서도 안전하게 메시지를 읽거나 보낼 수 있습니다."</string>
   <string name="screen_session_verification_request_success_title">"기기 검증됨"</string>
   <string name="screen_session_verification_request_title">"검증 요청"</string>
   <string name="screen_session_verification_they_dont_match">"일치하지 않습니다"</string>
@@ -50,5 +50,5 @@
   <string name="screen_session_verification_waiting_subtitle">"승인 후에는 검증 과정을 계속 진행할 수 있습니다."</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"계속하려면 다른 세션에서 검증 과정을 시작하라는 요청을 수락하세요."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"요청 수락을 기다리는 중"</string>
-  <string name="screen_signout_in_progress_dialog_content">"로그아웃 중…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"기기를 제거하는 중…"</string>
 </resources>

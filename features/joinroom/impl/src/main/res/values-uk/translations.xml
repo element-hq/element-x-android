@@ -11,10 +11,10 @@
   <string name="screen_join_room_decline_and_block_alert_message">"Ви впевнені, що хочете відхилити запрошення приєднатися до цієї кімнати? Це також завадить %1$s зв\'язатися з вами або запрошувати вас в кімнати."</string>
   <string name="screen_join_room_decline_and_block_alert_title">"Відхилити запрошення та заблокувати"</string>
   <string name="screen_join_room_decline_and_block_button_title">"Відхилити та заблокувати"</string>
-  <string name="screen_join_room_fail_message">"Не вдалося приєднатися до кімнати."</string>
-  <string name="screen_join_room_fail_reason">"Ця кімната доступна лише за запрошенням або на рівні простору можуть бути обмеження доступу."</string>
-  <string name="screen_join_room_forget_action">"Забути цю кімнату"</string>
-  <string name="screen_join_room_invite_required_message">"Вам потрібне запрошення, щоб приєднатися до цієї кімнати"</string>
+  <string name="screen_join_room_fail_message">"Не вдалося приєднатися"</string>
+  <string name="screen_join_room_fail_reason">"Вам потрібно отримати запрошення, щоб приєднатися, інакше доступ може бути обмежений."</string>
+  <string name="screen_join_room_forget_action">"Забути"</string>
+  <string name="screen_join_room_invite_required_message">"Вам потрібне запрошення, щоб приєднатися"</string>
   <string name="screen_join_room_join_action">"Доєднатися"</string>
   <string name="screen_join_room_join_restricted_message">"Можливо, вам знадобиться отримати запрошення або стати учасником простору, щоб приєднатися."</string>
   <string name="screen_join_room_knock_action">"Постукати, щоб приєднатися"</string>

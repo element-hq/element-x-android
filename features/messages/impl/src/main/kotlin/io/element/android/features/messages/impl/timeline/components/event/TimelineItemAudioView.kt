@@ -18,7 +18,6 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContentProvider
-import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
 
@@ -49,7 +48,7 @@ fun TimelineItemAudioView(
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemAudioViewPreview(@PreviewParameter(TimelineItemAudioContentProvider::class) content: TimelineItemAudioContent) =
-    ElementPreview {
+    ElementTimelineItemPreview {
         TimelineItemAudioView(
             content,
             onContentLayoutChange = {},

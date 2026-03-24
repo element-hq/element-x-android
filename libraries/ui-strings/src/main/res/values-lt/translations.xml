@@ -35,13 +35,13 @@
   <string name="action_forward">"Persiųsti"</string>
   <string name="action_invite">"Kviesti"</string>
   <string name="action_invite_friends">"Pakviesti žmonių"</string>
-  <string name="action_invite_friends_to_app">"Kviesti žmones į %1$s"</string>
+  <string name="action_invite_friends_to_app">"Kviesti žmones į „%1$s“"</string>
   <string name="action_invite_people_to_app">"Kviesti žmones į „%1$s“"</string>
   <string name="action_invites_list">"Kvietimai"</string>
   <string name="action_learn_more">"Sužinoti daugiau"</string>
   <string name="action_leave">"Išeiti"</string>
   <string name="action_leave_conversation">"Palikti pokalbį"</string>
-  <string name="action_leave_room">"Palikti kambarį"</string>
+  <string name="action_leave_room">"Išeiti iš kambario"</string>
   <string name="action_load_more">"Įkelti daugiau"</string>
   <string name="action_next">"Tolesnis"</string>
   <string name="action_no">"Ne"</string>
@@ -50,6 +50,7 @@
   <string name="action_open_with">"Atverti su"</string>
   <string name="action_quick_reply">"Sparčiai atsakyti"</string>
   <string name="action_quote">"Cituoti"</string>
+  <string name="action_react">"Reaguoti"</string>
   <string name="action_remove">"Šalinti"</string>
   <string name="action_reply">"Atsakyti"</string>
   <string name="action_report_bug">"Pranešti apie riktą"</string>
@@ -86,7 +87,7 @@
   <string name="common_decryption_error">"Iššifravimo klaida"</string>
   <string name="common_developer_options">"Kūrėjo nustatymai"</string>
   <string name="common_direct_chat">"Asmeninis pokalbis"</string>
-  <string name="common_edited_suffix">"(taisyta)"</string>
+  <string name="common_edited_suffix">"(redaguota)"</string>
   <string name="common_editing">"Taisymas"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption_enabled">"Šifravimas įjungtas"</string>
@@ -114,10 +115,16 @@
   <string name="common_offline">"Neprisijungta"</string>
   <string name="common_password">"Slaptažodis"</string>
   <string name="common_people">"Žmonės"</string>
-  <string name="common_permalink">"Nuolatinė nuoroda"</string>
+  <string name="common_permalink">"Pastovi nuoroda"</string>
+  <plurals name="common_poll_votes_count">
+    <item quantity="one">"%d balsas"</item>
+    <item quantity="few">"%d balsai"</item>
+    <item quantity="other">"%d balsų"</item>
+  </plurals>
   <string name="common_privacy_policy">"Privatumo politika"</string>
   <string name="common_private_room">"Privatus kambarys"</string>
   <string name="common_reactions">"Reakcijos"</string>
+  <string name="common_refreshing">"Atnaujinama…"</string>
   <string name="common_replying_to">"Atsakant %1$s"</string>
   <string name="common_report_a_bug">"Pranešti apie klaidą"</string>
   <string name="common_report_submitted">"Skundas pateiktas"</string>
@@ -130,6 +137,7 @@
   <string name="common_server_not_supported">"Serveris nepalaikomas"</string>
   <string name="common_server_url">"Serverio URL"</string>
   <string name="common_settings">"Nustatymai"</string>
+  <string name="common_shared_location">"Bendrinta vieta"</string>
   <string name="common_signing_out">"Atsijungiama"</string>
   <string name="common_starting_chat">"Pradedamas pokalbis…"</string>
   <string name="common_sticker">"Lipdukas"</string>
@@ -144,7 +152,7 @@
   <string name="common_unable_to_invite_title">"Nepavyko išsiųsti kvietimo (-ų)"</string>
   <string name="common_unmute">"Atšaukti nutildymą"</string>
   <string name="common_unsupported_event">"Nepalaikomas įvykis"</string>
-  <string name="common_username">"Vartotojo vardas"</string>
+  <string name="common_username">"Naudotojo vardas"</string>
   <string name="common_verification_cancelled">"Patvirtinimas atšauktas"</string>
   <string name="common_verification_complete">"Patvirtinimas baigtas"</string>
   <string name="common_video">"Vaizdo įrašas"</string>
@@ -164,6 +172,13 @@
   <string name="screen_media_picker_error_failed_selection">"Nepavyko pasirinkti laikmenos, pabandykite dar kartą."</string>
   <string name="screen_room_error_failed_processing_media">"Nepavyko apdoroti įkeliamos laikmenos, bandykite dar kartą."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nepavyko gauti naudotojo išsamios informacijos."</string>
+  <string name="screen_share_location_title">"Bendrinti vietą"</string>
+  <string name="screen_share_my_location_action">"Bendrinti mano vietą"</string>
+  <string name="screen_share_open_apple_maps">"Atverti programoje „Apple Maps“"</string>
+  <string name="screen_share_open_google_maps">"Atverti „Google“ žemėlapiuose"</string>
+  <string name="screen_share_open_osm_maps">"Atverti programoje „OpenStreetMap“"</string>
+  <string name="screen_share_this_location_action">"Bendrinti pasirinktą vietą"</string>
+  <string name="screen_view_location_title">"Vieta"</string>
   <string name="settings_version_number">"Versija: %1$s (%2$s)"</string>
   <string name="test_language_identifier">"lt"</string>
 </resources>
