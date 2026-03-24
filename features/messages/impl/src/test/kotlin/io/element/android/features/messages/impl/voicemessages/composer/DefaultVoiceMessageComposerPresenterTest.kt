@@ -24,6 +24,7 @@ import io.element.android.libraries.audio.api.AudioFocusRequester
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.media.FakeMediaUploadHandler
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
@@ -46,7 +47,9 @@ import io.element.android.libraries.voicerecorder.api.VoiceRecorder
 import io.element.android.libraries.voicerecorder.test.FakeVoiceRecorder
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -59,6 +62,7 @@ import java.io.File
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.seconds
 
+@Suppress("LargeClass")
 class DefaultVoiceMessageComposerPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
@@ -401,6 +405,38 @@ class DefaultVoiceMessageComposerPresenterTest {
                 aVoiceMessageComposerEvent(isReply = false),
                 aVoiceMessageComposerEvent(isReply = true)
             )
+
+            testPauseAndDestroy(finalState)
+        }
+    }
+
+    @Test
+    fun `present - send voice message passes reply event ID only when in reply mode`() = runTest {
+        val presenter = createDefaultVoiceMessageComposerPresenter()
+        presenter.test {
+            // Send without reply - should pass null
+            messageComposerContext.composerMode = MessageComposerMode.Normal
+            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
+            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Stop))
+            awaitItem().eventSink(VoiceMessageComposerEvent.SendVoiceMessage)
+            skipItems(1) // Sending state
+            advanceUntilIdle()
+
+            sendVoiceMessageResult.assertions().isCalledOnce()
+                .with(any(), any(), any(), value(null))
+
+            // Send as reply - should pass event ID
+            messageComposerContext.composerMode = aReplyMode()
+            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
+            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Stop))
+            awaitItem().eventSink(VoiceMessageComposerEvent.SendVoiceMessage)
+            val finalState = awaitItem() // Sending state
+
+            sendVoiceMessageResult.assertions().isCalledExactly(2)
+                .withSequence(
+                    listOf(any(), any(), any(), value(null)),
+                    listOf(any(), any(), any(), value(AN_EVENT_ID)),
+                )
 
             testPauseAndDestroy(finalState)
         }
