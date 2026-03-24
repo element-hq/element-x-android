@@ -98,6 +98,9 @@ import kotlinx.coroutines.launch
 import uniffi.wysiwyg_composer.MenuAction
 import kotlin.time.Duration.Companion.seconds
 
+/**
+ * https://www.figma.com/design/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?node-id=2012-39036
+ */
 @Composable
 fun TextComposer(
     state: TextEditorState,

@@ -42,7 +42,7 @@ private fun StartButton(
 ) {
     Icon(
         modifier = modifier.size(24.dp),
-        imageVector = CompoundIcons.MicOn(),
+        imageVector = CompoundIcons.MicOnSolid(),
         // Note: accessibility is managed in TextComposer.
         contentDescription = null,
         tint = ElementTheme.colors.iconSecondary,
