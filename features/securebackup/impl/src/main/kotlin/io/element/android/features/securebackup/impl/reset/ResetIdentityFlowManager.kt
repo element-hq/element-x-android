@@ -11,15 +11,13 @@ package io.element.android.features.securebackup.impl.reset
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
+import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.IdentityResetHandle
-import io.element.android.libraries.matrix.api.verification.SessionVerificationService
-import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
@@ -27,7 +25,6 @@ import kotlinx.coroutines.launch
 class ResetIdentityFlowManager(
     private val encryptionService: EncryptionService,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
-    private val sessionVerificationService: SessionVerificationService,
 ) {
     private val resetHandleFlow: MutableStateFlow<AsyncData<IdentityResetHandle?>> = MutableStateFlow(AsyncData.Uninitialized)
     val currentHandleFlow: StateFlow<AsyncData<IdentityResetHandle?>> = resetHandleFlow
@@ -35,7 +32,7 @@ class ResetIdentityFlowManager(
 
     fun whenResetIsDone(block: () -> Unit) {
         whenResetIsDoneWaitingJob = sessionCoroutineScope.launch {
-            sessionVerificationService.sessionVerifiedStatus.filterIsInstance<SessionVerifiedStatus.Verified>().first()
+            encryptionService.backupStateStateFlow.first { it == BackupState.ENABLED }
             block()
         }
     }

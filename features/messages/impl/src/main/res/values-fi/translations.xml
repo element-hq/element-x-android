@@ -35,7 +35,7 @@
   <string name="screen_room_attachment_source_camera_video">"Nauhoita video"</string>
   <string name="screen_room_attachment_source_files">"Liite"</string>
   <string name="screen_room_attachment_source_gallery">"Kuva- ja videokirjasto"</string>
-  <string name="screen_room_attachment_source_location">"Sijainti"</string>
+  <string name="screen_room_attachment_source_location">"Jaa sijainti"</string>
   <string name="screen_room_attachment_source_poll">"Kysely"</string>
   <string name="screen_room_attachment_text_formatting">"Tekstin muotoilu"</string>
   <string name="screen_room_encrypted_history_banner">"Viestihistoria ei ole tällä hetkellä saatavilla"</string>
