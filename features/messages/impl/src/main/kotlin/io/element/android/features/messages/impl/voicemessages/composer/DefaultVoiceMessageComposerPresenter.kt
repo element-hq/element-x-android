@@ -88,6 +88,7 @@ class DefaultVoiceMessageComposerPresenter(
         var recordingMode by remember { mutableStateOf(RecordingMode.Hold) }
         var skipPreview by remember { mutableStateOf(false) }
         var isPlayingBack by remember { mutableStateOf(false) }
+        var isStartingOrRecording by remember { mutableStateOf(false) }
 
         LaunchedEffect(recorderState) {
             val recording = recorderState as? VoiceRecorderState.Finished
@@ -154,6 +155,7 @@ class DefaultVoiceMessageComposerPresenter(
                 }
             }.invokeOnCompletion {
                 isSending = false
+                isStartingOrRecording = false
             }
         }
 
@@ -161,7 +163,9 @@ class DefaultVoiceMessageComposerPresenter(
             pendingEvent = null
             when (event) {
                 VoiceMessageRecorderEvent.Start -> {
+                    if (isStartingOrRecording) return
                     Timber.v("Voice message record started (hold mode)")
+                    isStartingOrRecording = true
                     recordingMode = RecordingMode.Hold
                     when {
                         permissionState.permissionGranted -> {
@@ -202,12 +206,14 @@ class DefaultVoiceMessageComposerPresenter(
                             }
                         } finally {
                             skipPreview = false
+                            isStartingOrRecording = false
                         }
                     }
                 }
                 VoiceMessageRecorderEvent.Cancel -> {
                     Timber.v("Voice message cancel")
                     isPlayingBack = false
+                    isStartingOrRecording = false
                     player.pause()
                     localCoroutineScope.cancelRecording()
                 }
@@ -222,6 +228,7 @@ class DefaultVoiceMessageComposerPresenter(
                 VoiceMessageRecorderEvent.StopAndPreview -> {
                     Timber.v("Voice message stop for in-place playback review")
                     isPlayingBack = true
+                    isStartingOrRecording = false
                     sessionCoroutineScope.launch {
                         voiceRecorder.stopRecord()
                         audioFocus.releaseAudioFocus()
@@ -252,10 +259,12 @@ class DefaultVoiceMessageComposerPresenter(
                     sendVoiceMessage()
                 }
                 VoiceMessageComposerEvent.DeleteVoiceMessage -> {
+                    isStartingOrRecording = false
                     player.pause()
                     localCoroutineScope.deleteRecording()
                 }
                 VoiceMessageComposerEvent.DismissPermissionsRationale -> {
+                    isStartingOrRecording = false
                     permissionState.eventSink(PermissionsEvent.CloseDialog)
                 }
                 VoiceMessageComposerEvent.AcceptPermissionRationale -> {

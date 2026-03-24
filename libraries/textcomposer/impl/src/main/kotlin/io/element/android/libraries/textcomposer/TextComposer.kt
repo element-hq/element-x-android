@@ -569,6 +569,13 @@ private fun StandardLayout(
                                             break
                                         }
 
+                                        if (!change.pressed) {
+                                            // Pointer cancelled (e.g., finger left screen, system gesture intercepted)
+                                            currentOnVoiceRecorderEvent(VoiceMessageRecorderEvent.Cancel)
+                                            handled = true
+                                            break
+                                        }
+
                                         if (change.pressed) {
                                             totalDrag += change.positionChange()
                                             change.consume()
