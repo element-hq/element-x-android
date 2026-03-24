@@ -454,6 +454,7 @@ private fun TimelineItemEventRowContent(
         val bubbleState = BubbleState(
             groupPosition = event.groupPosition,
             isMine = event.isMine,
+            displayBackground = event.content !is TimelineItemStickerContent,
             timelineRoomInfo = timelineRoomInfo,
         )
         MessageEventBubble(
