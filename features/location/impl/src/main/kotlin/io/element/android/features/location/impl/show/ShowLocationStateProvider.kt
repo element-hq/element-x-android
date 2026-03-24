@@ -10,18 +10,26 @@ package io.element.android.features.location.impl.show
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.location.api.Location
-
-private const val APP_NAME = "ApplicationName"
+import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.location.AssetType
+import kotlinx.collections.immutable.toImmutableList
 
 class ShowLocationStateProvider : PreviewParameterProvider<ShowLocationState> {
     override val values: Sequence<ShowLocationState>
         get() = sequenceOf(
             aShowLocationState(),
             aShowLocationState(
-                permissionDialog = ShowLocationState.Dialog.PermissionDenied,
+                constraintsDialogState = LocationConstraintsDialogState.PermissionDenied,
             ),
             aShowLocationState(
-                permissionDialog = ShowLocationState.Dialog.PermissionRationale,
+                constraintsDialogState = LocationConstraintsDialogState.PermissionRationale,
+            ),
+            aShowLocationState(
+                constraintsDialogState = LocationConstraintsDialogState.LocationServiceDisabled,
+                hasLocationPermission = true,
             ),
             aShowLocationState(
                 hasLocationPermission = true,
@@ -30,33 +38,48 @@ class ShowLocationStateProvider : PreviewParameterProvider<ShowLocationState> {
                 hasLocationPermission = true,
                 isTrackMyLocation = true,
             ),
-            aShowLocationState(
-                description = "My favourite place!",
-            ),
-            aShowLocationState(
-                description = "For some reason I decided to to write a small essay that wraps at just two lines!",
-            ),
-            aShowLocationState(
-                description = "For some reason I decided to write a small essay in the location description. " +
-                    "It is so long that it will wrap onto more than two lines!",
-            ),
         )
 }
 
+private const val APP_NAME = "ApplicationName"
+
 fun aShowLocationState(
-    permissionDialog: ShowLocationState.Dialog = ShowLocationState.Dialog.None,
-    location: Location = Location(1.23, 2.34, 4f),
-    description: String? = null,
+    constraintsDialogState: LocationConstraintsDialogState = LocationConstraintsDialogState.None,
+    locationShares: List<LocationShareItem> = listOf(aLocationShareItem()),
     hasLocationPermission: Boolean = false,
     isTrackMyLocation: Boolean = false,
     appName: String = APP_NAME,
-    eventSink: (ShowLocationEvents) -> Unit = {},
-) = ShowLocationState(
-    permissionDialog = permissionDialog,
+    eventSink: (ShowLocationEvent) -> Unit = {},
+): ShowLocationState {
+    return ShowLocationState(
+        dialogState = constraintsDialogState,
+        locationShares = locationShares.toImmutableList(),
+        hasLocationPermission = hasLocationPermission,
+        isTrackMyLocation = isTrackMyLocation,
+        appName = appName,
+        eventSink = eventSink,
+    )
+}
+
+fun aLocationShareItem(
+    userId: UserId = UserId("@alice:matrix.org"),
+    displayName: String = "Alice",
+    avatarData: AvatarData = AvatarData(
+        id = userId.value,
+        name = displayName,
+        url = null,
+        size = AvatarSize.UserListItem,
+    ),
+    formattedTimestamp: String = "Shared 1 min ago",
+    location: Location = Location(1.23, 2.34, 4f),
+    isLive: Boolean = false,
+    assetType: AssetType? = null,
+) = LocationShareItem(
+    userId = userId,
+    displayName = displayName,
+    avatarData = avatarData,
+    formattedTimestamp = formattedTimestamp,
     location = location,
-    description = description,
-    hasLocationPermission = hasLocationPermission,
-    isTrackMyLocation = isTrackMyLocation,
-    appName = appName,
-    eventSink = eventSink,
+    isLive = isLive,
+    assetType = assetType,
 )

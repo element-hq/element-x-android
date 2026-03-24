@@ -13,10 +13,14 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.ShowLocationEntryPoint
+import io.element.android.features.location.api.ShowLocationMode
 import io.element.android.features.location.impl.common.actions.FakeLocationActions
 import io.element.android.features.location.impl.common.permissions.FakePermissionsPresenter
+import io.element.android.libraries.dateformatter.test.FakeDateFormatter
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.services.analytics.test.FakeAnalyticsService
+import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.tests.testutils.node.TestParentNode
 import org.junit.Rule
 import org.junit.Test
@@ -32,21 +36,28 @@ class DefaultShowLocationEntryPointTest {
             ShowLocationNode(
                 buildContext = buildContext,
                 plugins = plugins,
-                presenterFactory = { location: Location, description: String? ->
-                    ShowLocationPresenter(
+                presenterFactory = object : ShowLocationPresenter.Factory {
+                    override fun create(mode: ShowLocationMode) = ShowLocationPresenter(
+                        mode = mode,
                         permissionsPresenterFactory = { FakePermissionsPresenter() },
                         locationActions = FakeLocationActions(),
                         buildMeta = aBuildMeta(),
-                        location = location,
-                        description = description,
+                        dateFormatter = FakeDateFormatter(),
+                        stringProvider = FakeStringProvider()
                     )
                 },
                 analyticsService = FakeAnalyticsService(),
             )
         }
         val inputs = ShowLocationEntryPoint.Inputs(
-            location = Location(37.4219983, -122.084, 10f),
-            description = "My location",
+            mode = ShowLocationMode.Static(
+                location = Location(37.4219983, -122.084, 10f),
+                senderName = "Alice",
+                senderId = UserId("@alice:matrix.org"),
+                senderAvatarUrl = null,
+                timestamp = System.currentTimeMillis(),
+                assetType = null,
+            ),
         )
         val result = entryPoint.createNode(
             parentNode = parentNode,

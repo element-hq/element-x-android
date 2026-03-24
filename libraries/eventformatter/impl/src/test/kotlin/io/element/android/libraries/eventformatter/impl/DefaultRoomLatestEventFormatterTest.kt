@@ -190,7 +190,7 @@ class DefaultRoomLatestEventFormatterTest {
             ImageMessageType(body, null, null, MediaSource("url"), null),
             StickerMessageType(body, null, null, MediaSource("url"), null),
             FileMessageType(body, null, null, MediaSource("url"), null),
-            LocationMessageType(body, "geo:1,2", null),
+            LocationMessageType(body, "geo:1,2", null, null),
             NoticeMessageType(body, null),
             EmoteMessageType(body, null),
             OtherMessageType(msgType = "a_type", body = body),

@@ -9,7 +9,7 @@
 package io.element.android.features.location.impl.common.ui
 
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -30,13 +30,11 @@ internal fun LocationFloatingActionButton(
     modifier: Modifier = Modifier,
 ) {
     FloatingActionButton(
-        shape = FloatingActionButtonDefaults.smallShape,
+        shape = CircleShape,
         containerColor = ElementTheme.colors.bgCanvasDefault,
         contentColor = ElementTheme.colors.iconPrimary,
         onClick = onClick,
-        modifier = modifier
-            // Note: design is 40dp, but min is 48 for accessibility.
-            .size(48.dp),
+        modifier = modifier.size(48.dp),
     ) {
         val iconImage = if (isMapCenteredOnUser) {
             CompoundIcons.LocationNavigatorCentred()

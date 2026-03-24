@@ -11,7 +11,6 @@ package io.element.android.libraries.matrix.ui.components
 import android.os.Parcelable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -24,7 +23,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.libraries.designsystem.components.PinIcon
 import io.element.android.libraries.designsystem.components.blurhash.BlurHashAsyncImage
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -97,16 +95,10 @@ fun AttachmentThumbnail(
                     )
                 }
                 AttachmentThumbnailType.Location -> {
-                    PinIcon(
-                        modifier = Modifier.fillMaxSize()
-                    )
-                    /*
-                    // For coherency across the app, we should us this instead. Waiting for design decision.
                     Icon(
-                        resourceId = R.drawable.ic_september_location,
+                        imageVector = CompoundIcons.LocationPin(),
                         contentDescription = info.textContent,
                     )
-                     */
                 }
                 AttachmentThumbnailType.Poll -> {
                     Icon(
