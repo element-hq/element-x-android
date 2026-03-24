@@ -10,6 +10,7 @@ package io.element.android.features.location.impl.share
 
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import kotlinx.collections.immutable.ImmutableList
 
 data class ShareLocationState(
     val currentUser: MatrixUser,
@@ -23,6 +24,6 @@ data class ShareLocationState(
     sealed interface Dialog {
         data object None : Dialog
         data class Constraints(val state: LocationConstraintsDialogState) : Dialog
-        data object LiveLocationDuration : Dialog
+        data class LiveLocationDurations(val durations: ImmutableList<LiveLocationDuration>) : Dialog
     }
 }

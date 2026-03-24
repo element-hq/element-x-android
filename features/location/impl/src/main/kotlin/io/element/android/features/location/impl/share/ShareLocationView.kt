@@ -59,6 +59,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.ImmutableList
 import org.maplibre.compose.camera.CameraMoveReason
 import org.maplibre.compose.camera.CameraState
 import org.maplibre.compose.camera.rememberCameraState
@@ -83,7 +84,8 @@ fun ShareLocationView(
             onOpenLocationSettings = { state.eventSink(ShareLocationEvent.OpenLocationSettings) },
             onDismiss = { state.eventSink(ShareLocationEvent.DismissDialog) },
         )
-        ShareLocationState.Dialog.LiveLocationDuration -> LiveLocationDurationDialog(
+        is ShareLocationState.Dialog.LiveLocationDurations -> LiveLocationDurationDialog(
+            durations = dialogState.durations,
             onSelectDuration = { duration ->
                 state.eventSink(ShareLocationEvent.StartLiveLocationShare(duration))
                 context.toast("Not implemented yet!")
@@ -252,6 +254,7 @@ private fun ShareLiveLocationItem(
 
 @Composable
 private fun LiveLocationDurationDialog(
+    durations: ImmutableList<LiveLocationDuration>,
     onSelectDuration: (Duration) -> Unit,
     onDismiss: () -> Unit,
 ) {
@@ -259,14 +262,14 @@ private fun LiveLocationDurationDialog(
     ListDialog(
         title = "Choose how long to share your live location.",
         submitText = stringResource(CommonStrings.action_continue),
-        onSubmit = { onSelectDuration(LiveLocationDuration.entries[selectedIndex].duration) },
+        onSubmit = { onSelectDuration(durations[selectedIndex].duration) },
         onDismissRequest = onDismiss,
         applyPaddingToContents = false,
         verticalArrangement = Arrangement.Top
     ) {
-        itemsIndexed(LiveLocationDuration.entries) { index, duration ->
+        itemsIndexed(durations) { index, duration ->
             RadioButtonListItem(
-                headline = duration.label,
+                headline = duration.formatted,
                 selected = index == selectedIndex,
                 onSelect = { selectedIndex = index },
                 compactLayout = true,

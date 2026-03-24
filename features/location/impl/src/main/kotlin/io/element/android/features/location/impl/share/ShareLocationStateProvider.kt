@@ -12,6 +12,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import kotlinx.collections.immutable.persistentListOf
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
 
 private const val APP_NAME = "ApplicationName"
 
@@ -49,7 +52,13 @@ class ShareLocationStateProvider : PreviewParameterProvider<ShareLocationState> 
                 hasLocationPermission = true,
             ),
             aShareLocationState(
-                dialogState = ShareLocationState.Dialog.LiveLocationDuration,
+                dialogState = ShareLocationState.Dialog.LiveLocationDurations(
+                    persistentListOf(
+                        LiveLocationDuration(15.minutes, "15 minutes"),
+                        LiveLocationDuration(1.hours, "1 hour"),
+                        LiveLocationDuration(8.hours, "8 hours"),
+                    )
+                ),
                 trackUserPosition = true,
                 hasLocationPermission = true,
                 canShareLiveLocation = true,

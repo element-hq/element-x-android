@@ -8,14 +8,8 @@
 package io.element.android.features.location.impl.share
 
 import kotlin.time.Duration
-import kotlin.time.Duration.Companion.hours
-import kotlin.time.Duration.Companion.minutes
 
-enum class LiveLocationDuration(
+data class LiveLocationDuration(
     val duration: Duration,
-    val label: String,
-) {
-    FifteenMinutes(15.minutes, "15 minutes"),
-    OneHour(1.hours, "1 hour"),
-    EightHours(8.hours, "8 hours")
-}
+    val formatted: String
+)

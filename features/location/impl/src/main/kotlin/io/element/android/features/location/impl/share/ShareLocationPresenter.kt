@@ -34,6 +34,7 @@ import io.element.android.features.messages.api.MessageComposerContext
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.meta.BuildMeta
+import io.element.android.libraries.dateformatter.api.DurationFormatter
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -43,7 +44,12 @@ import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.services.analytics.api.AnalyticsService
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
+
+private val LIVE_LOCATION_DURATIONS = listOf(15.minutes, 1.hours, 8.hours)
 
 @AssistedInject
 class ShareLocationPresenter(
@@ -56,6 +62,7 @@ class ShareLocationPresenter(
     private val buildMeta: BuildMeta,
     private val featureFlagService: FeatureFlagService,
     private val client: MatrixClient,
+    private val durationFormatter: DurationFormatter,
 ) : Presenter<ShareLocationState> {
     @AssistedFactory
     fun interface Factory {
@@ -105,7 +112,10 @@ class ShareLocationPresenter(
                 ShareLocationEvent.ShowLiveLocationDurationPicker -> {
                     val constraintsResult = checkLocationConstraints(permissionsState, locationActions)
                     dialogState = if (constraintsResult is LocationConstraintsCheck.Success) {
-                        ShareLocationState.Dialog.LiveLocationDuration
+                        val durations = LIVE_LOCATION_DURATIONS.map {
+                            LiveLocationDuration(duration = it, formatted = durationFormatter.format(it))
+                        }
+                        ShareLocationState.Dialog.LiveLocationDurations(durations.toImmutableList())
                     } else {
                         Constraints(constraintsResult.toDialogState())
                     }

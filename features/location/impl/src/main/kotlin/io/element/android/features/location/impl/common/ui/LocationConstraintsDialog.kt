@@ -29,21 +29,18 @@ fun LocationConstraintsDialog(
             onSubmitClick = onRequestPermissions,
             onDismiss = onDismiss,
             submitText = stringResource(CommonStrings.action_continue),
-            cancelText = stringResource(CommonStrings.action_cancel),
         )
         LocationConstraintsDialogState.PermissionDenied -> ConfirmationDialog(
             content = stringResource(CommonStrings.error_missing_location_auth_android, appName),
             onSubmitClick = onOpenAppSettings,
             onDismiss = onDismiss,
             submitText = stringResource(CommonStrings.action_continue),
-            cancelText = stringResource(CommonStrings.action_cancel),
         )
         LocationConstraintsDialogState.LocationServiceDisabled -> ConfirmationDialog(
             content = stringResource(CommonStrings.error_location_service_disabled_android),
             onSubmitClick = onOpenLocationSettings,
             onDismiss = onDismiss,
             submitText = stringResource(CommonStrings.action_continue),
-            cancelText = stringResource(CommonStrings.action_cancel),
         )
     }
 }

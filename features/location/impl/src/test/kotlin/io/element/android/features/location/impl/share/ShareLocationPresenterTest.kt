@@ -18,10 +18,10 @@ import io.element.android.features.location.impl.aPermissionsState
 import io.element.android.features.location.impl.common.actions.FakeLocationActions
 import io.element.android.features.location.impl.common.permissions.FakePermissionsPresenter
 import io.element.android.features.location.impl.common.permissions.PermissionsEvents
-import io.element.android.features.location.impl.common.permissions.PermissionsPresenter
 import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.features.messages.test.FakeMessageComposerContext
+import io.element.android.libraries.dateformatter.test.FakeDurationFormatter
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -54,13 +54,13 @@ class ShareLocationPresenterTest {
     private val fakeFeatureFlagService = FakeFeatureFlagService()
     private val fakeMatrixClient = FakeMatrixClient(sessionId = A_USER_ID)
 
+    private val durationFormatter = FakeDurationFormatter()
+
     private fun createShareLocationPresenter(
         joinedRoom: JoinedRoom = FakeJoinedRoom(),
         locationActions: FakeLocationActions = fakeLocationActions,
     ): ShareLocationPresenter = ShareLocationPresenter(
-        permissionsPresenterFactory = object : PermissionsPresenter.Factory {
-            override fun create(permissions: List<String>): PermissionsPresenter = fakePermissionsPresenter
-        },
+        permissionsPresenterFactory = { fakePermissionsPresenter },
         room = joinedRoom,
         timelineMode = Timeline.Mode.Live,
         analyticsService = fakeAnalyticsService,
@@ -69,6 +69,7 @@ class ShareLocationPresenterTest {
         buildMeta = fakeBuildMeta,
         featureFlagService = fakeFeatureFlagService,
         client = fakeMatrixClient,
+        durationFormatter = durationFormatter,
     )
 
     @Test
@@ -306,7 +307,7 @@ class ShareLocationPresenterTest {
             initialState.eventSink(ShareLocationEvent.ShowLiveLocationDurationPicker)
             val durationDialogState = awaitItem()
 
-            assertThat(durationDialogState.dialogState).isEqualTo(ShareLocationState.Dialog.LiveLocationDuration)
+            assertThat(durationDialogState.dialogState).isInstanceOf(ShareLocationState.Dialog.LiveLocationDurations::class.java)
             cancelAndIgnoreRemainingEvents()
         }
     }
