@@ -28,6 +28,8 @@ import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FabPosition
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
 import androidx.compose.material3.TopAppBarDefaults
@@ -265,53 +267,56 @@ private fun HomeScaffold(
             )
         },
         floatingActionButton = {
-            if (state.showNavigationBar) {
-                val coroutineScope = rememberCoroutineScope()
-                HomeBottomBar(
-                    currentHomeNavigationBarItem = state.currentHomeNavigationBarItem,
-                    onItemClick = { item ->
-                        // scroll to top if selecting the same item
-                        if (item == state.currentHomeNavigationBarItem) {
-                            val lazyListStateTarget = when (item) {
-                                HomeNavigationBarItem.Chats -> roomsLazyListState
-                                HomeNavigationBarItem.Spaces -> spacesLazyListState
-                            }
-                            coroutineScope.launch {
-                                if (lazyListStateTarget.firstVisibleItemIndex > 10) {
-                                    lazyListStateTarget.scrollToItem(10)
-                                }
-                                // Also reset the scrollBehavior height offset as it's not triggered by programmatic scrolls
-                                scrollBehavior.state.heightOffset = 0f
-                                lazyListStateTarget.animateScrollToItem(0)
-                            }
-                        } else {
-                            state.eventSink(HomeEvent.SelectHomeNavigationBarItem(item))
-                        }
-                    },
-                    floatingActionButton = when (state.currentHomeNavigationBarItem) {
-                        HomeNavigationBarItem.Chats -> {
-                            {
-                                HomeFloatingActionButton(onStartChatClick, CommonStrings.action_create_room)
-                            }
-                        }
-                        HomeNavigationBarItem.Spaces -> if (state.homeSpacesState.canCreateSpaces) {
-                            {
-                                HomeFloatingActionButton(onCreateSpaceClick, CommonStrings.action_create_space)
-                            }
-                        } else {
-                            // No FAB for spaces if we cannot create spaces
-                            null
-                        }
-                    },
-                )
-            } else {
-                HomeFloatingActionButton(onStartChatClick, CommonStrings.action_create_room)
+            val fabContentDescription = when (state.currentHomeNavigationBarItem) {
+                HomeNavigationBarItem.Chats -> CommonStrings.action_create_room
+                HomeNavigationBarItem.Spaces -> if (state.homeSpacesState.canCreateSpaces) {
+                    CommonStrings.action_create_space
+                } else null
+            }
+            val fabOnClick = when (state.currentHomeNavigationBarItem) {
+                HomeNavigationBarItem.Chats -> onStartChatClick
+                HomeNavigationBarItem.Spaces -> onCreateSpaceClick
+            }
+            if (fabContentDescription != null) {
+                HomeFloatingActionButton(fabOnClick, fabContentDescription)
             }
         },
         floatingActionButtonPosition = FabPosition.End,
+        bottomBar = {
+            if (state.showNavigationBar) {
+                val coroutineScope = rememberCoroutineScope()
+                NavigationBar {
+                    HomeNavigationBarItem.entries.forEach { item ->
+                        val isSelected = state.currentHomeNavigationBarItem == item
+                        NavigationBarItem(
+                            selected = isSelected,
+                            onClick = {
+                                if (isSelected) {
+                                    val lazyListStateTarget = when (item) {
+                                        HomeNavigationBarItem.Chats -> roomsLazyListState
+                                        HomeNavigationBarItem.Spaces -> spacesLazyListState
+                                    }
+                                    coroutineScope.launch {
+                                        if (lazyListStateTarget.firstVisibleItemIndex > 10) {
+                                            lazyListStateTarget.scrollToItem(10)
+                                        }
+                                        scrollBehavior.state.heightOffset = 0f
+                                        lazyListStateTarget.animateScrollToItem(0)
+                                    }
+                                } else {
+                                    state.eventSink(HomeEvent.SelectHomeNavigationBarItem(item))
+                                }
+                            },
+                            icon = { Icon(imageVector = item.icon(isSelected), contentDescription = null) },
+                            label = { Text(text = stringResource(item.labelRes)) },
+                        )
+                    }
+                }
+            }
+        },
         content = { padding ->
             val contentPadding = PaddingValues(
-                bottom = 96.dp,
+                bottom = 16.dp,
             )
             when (state.currentHomeNavigationBarItem) {
                 HomeNavigationBarItem.Chats -> {
@@ -381,33 +386,6 @@ private fun HomeFloatingActionButton(
     }
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
-@Composable
-private fun HomeBottomBar(
-    currentHomeNavigationBarItem: HomeNavigationBarItem,
-    onItemClick: (HomeNavigationBarItem) -> Unit,
-    modifier: Modifier = Modifier,
-    floatingActionButton: (@Composable () -> Unit)?,
-) {
-    HorizontalFloatingToolbar(
-        floatingActionButton = floatingActionButton,
-        modifier = modifier
-            .zIndex(1f),
-    ) {
-        HomeNavigationBarItem.entries.forEachIndexed { index, item ->
-            if (index > 0) {
-                HorizontalFloatingToolbarSeparator()
-            }
-            val isSelected = currentHomeNavigationBarItem == item
-            HorizontalFloatingToolbarItem(
-                icon = item.icon(isSelected),
-                tooltipLabel = stringResource(item.labelRes),
-                isSelected = isSelected,
-                onClick = { onItemClick(item) },
-            )
-        }
-    }
-}
 
 internal fun RoomListRoomSummary.contentType() = displayType.ordinal
 
