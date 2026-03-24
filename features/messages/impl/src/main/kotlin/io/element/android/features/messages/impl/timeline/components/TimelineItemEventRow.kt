@@ -269,7 +269,9 @@ fun TimelineItemEventRow(
         if (displayThreadSummaries && timelineMode !is Timeline.Mode.Thread && event.threadInfo is TimelineItemThreadInfo.ThreadRoot) {
             ThreadSummaryView(
                 modifier = if (event.isMine) {
-                    Modifier.align(Alignment.End).padding(end = 16.dp)
+                    Modifier
+                        .align(Alignment.End)
+                        .padding(end = 16.dp)
                 } else {
                     if (timelineRoomInfo.isDm) Modifier else Modifier.padding(start = 16.dp)
                 }.padding(top = 2.dp),
@@ -674,6 +676,7 @@ private fun MessageEventBubbleContent(
                             .padding(horizontal = 8.dp, vertical = 4.dp)
                     )
                 }
+            TimestampPosition.Hidden -> Box(modifier) { content {} }
         }
     }
 
@@ -763,11 +766,11 @@ private fun MessageEventBubbleContent(
         }
     }
 
-    val timestampPosition = when (event.content) {
-        is TimelineItemImageContent -> if (event.content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
-        is TimelineItemVideoContent -> if (event.content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
-        is TimelineItemStickerContent,
-        is TimelineItemLocationContent -> TimestampPosition.Overlay
+    val timestampPosition = when (val content = event.content) {
+        is TimelineItemImageContent -> if (content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
+        is TimelineItemVideoContent -> if (content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
+        is TimelineItemStickerContent -> TimestampPosition.Overlay
+        is TimelineItemLocationContent -> if (content.hideTimestamp) TimestampPosition.Hidden else TimestampPosition.Overlay
         is TimelineItemPollContent -> TimestampPosition.Below
         else -> TimestampPosition.Default
     }
@@ -833,25 +836,27 @@ internal fun TimelineItemEventRowWithThreadSummaryPreview() = ElementPreview {
                     groupPosition = TimelineItemGroupPosition.First,
                     threadInfo = TimelineItemThreadInfo.ThreadRoot(
                         latestEventText = "This is the latest message in the thread",
-                        summary = ThreadSummary(AsyncData.Success(
-                            EmbeddedEventInfo(
-                                eventOrTransactionId = EventOrTransactionId.Event(EventId("\$event-id")),
-                                content = MessageContent(
-                                    body = "This is the latest message in the thread",
-                                    inReplyTo = null,
-                                    isEdited = false,
-                                    threadInfo = null,
-                                    type = TextMessageType("This is the latest message in the thread", null)
-                                ),
-                                senderId = UserId("@user:id"),
-                                senderProfile = ProfileDetails.Ready(
-                                    displayName = "Alice",
-                                    avatarUrl = null,
-                                    displayNameAmbiguous = false,
-                                ),
-                                timestamp = 0L,
-                            )
-                        ), numberOfReplies = 20L)
+                        summary = ThreadSummary(
+                            AsyncData.Success(
+                                EmbeddedEventInfo(
+                                    eventOrTransactionId = EventOrTransactionId.Event(EventId("\$event-id")),
+                                    content = MessageContent(
+                                        body = "This is the latest message in the thread",
+                                        inReplyTo = null,
+                                        isEdited = false,
+                                        threadInfo = null,
+                                        type = TextMessageType("This is the latest message in the thread", null)
+                                    ),
+                                    senderId = UserId("@user:id"),
+                                    senderProfile = ProfileDetails.Ready(
+                                        displayName = "Alice",
+                                        avatarUrl = null,
+                                        displayNameAmbiguous = false,
+                                    ),
+                                    timestamp = 0L,
+                                )
+                            ), numberOfReplies = 20L
+                        )
                     )
                 ),
                 displayThreadSummaries = true,

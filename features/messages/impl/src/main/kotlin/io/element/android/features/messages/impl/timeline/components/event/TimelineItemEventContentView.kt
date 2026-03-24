@@ -73,6 +73,7 @@ fun TimelineItemEventContentView(
         )
         is TimelineItemLocationContent -> TimelineItemLocationView(
             content = content,
+            onStopLiveLocationClick = { eventSink(TimelineEvent.StopLiveLocationShare) },
             modifier = modifier
         )
         is TimelineItemImageContent -> TimelineItemImageView(

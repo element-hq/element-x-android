@@ -15,6 +15,8 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRtcNotificationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
+import io.element.android.libraries.dateformatter.api.DateFormatter
+import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -103,18 +105,18 @@ class TimelineItemContentFactory(
                 val lastKnownLocation = itemContent.locations.mapNotNull { beacon ->
                     Location.fromGeoUri(beacon.geoUri)
                 }.lastOrNull()
-                if (lastKnownLocation != null) {
-                    TimelineItemLocationContent(
-                        description = itemContent.description?.trimEnd(),
-                        assetType = itemContent.assetType,
-                        senderId = sender,
-                        senderProfile = senderProfile,
-                        location = lastKnownLocation,
-                        mode = TimelineItemLocationContent.Mode.Live(isActive = itemContent.isLive)
-                    )
-                } else {
-                    TimelineItemUnknownContent
-                }
+                // Always create content - location can be null for "loading/waiting" state
+                TimelineItemLocationContent(
+                    description = itemContent.description?.trimEnd(),
+                    assetType = itemContent.assetType,
+                    senderId = sender,
+                    senderProfile = senderProfile,
+                    mode = TimelineItemLocationContent.Mode.Live(
+                        lastKnownLocation = lastKnownLocation,
+                        isActive = itemContent.isLive,
+                        endsAt = "",
+                    ),
+                )
             }
         }
     }

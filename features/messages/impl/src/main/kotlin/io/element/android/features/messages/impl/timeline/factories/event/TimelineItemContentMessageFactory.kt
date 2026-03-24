@@ -150,12 +150,11 @@ class TimelineItemContentMessageFactory(
                     )
                 } else {
                     TimelineItemLocationContent(
-                        location = location,
                         description = messageType.description,
                         senderId = senderId,
                         senderProfile = senderProfile,
                         assetType = messageType.assetType,
-                        mode = TimelineItemLocationContent.Mode.Static
+                        mode = TimelineItemLocationContent.Mode.Static(location = location)
                     )
                 }
             }

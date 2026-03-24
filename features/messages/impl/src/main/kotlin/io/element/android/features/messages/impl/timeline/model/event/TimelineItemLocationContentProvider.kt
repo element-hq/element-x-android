@@ -18,8 +18,35 @@ open class TimelineItemLocationContentProvider : PreviewParameterProvider<Timeli
     override val values: Sequence<TimelineItemLocationContent>
         get() = sequenceOf(
             aTimelineItemLocationContent(),
-            aTimelineItemLocationContent(mode = TimelineItemLocationContent.Mode.Live(isActive = true)),
-            aTimelineItemLocationContent(mode = TimelineItemLocationContent.Mode.Live(isActive = false)),
+            aTimelineItemLocationContent(
+                mode = TimelineItemLocationContent.Mode.Live(
+                    isActive = true,
+                    endsAt = "Ends at 12:34",
+                    canStop = true,
+                    lastKnownLocation = aLocation()
+                ),
+            ),
+            aTimelineItemLocationContent(
+                mode = TimelineItemLocationContent.Mode.Live(
+                    isActive = true,
+                    endsAt = "Ends at 12:34",
+                    lastKnownLocation = aLocation()
+                ),
+            ),
+            aTimelineItemLocationContent(
+                mode = TimelineItemLocationContent.Mode.Live(
+                    isActive = true,
+                    endsAt = "Ends at 12:34",
+                    lastKnownLocation = null
+                ),
+            ),
+            aTimelineItemLocationContent(
+                mode = TimelineItemLocationContent.Mode.Live(
+                    isActive = false,
+                    endsAt = "",
+                    lastKnownLocation = aLocation()
+                ),
+            ),
         )
 }
 
@@ -27,15 +54,16 @@ fun aTimelineItemLocationContent(
     senderId: UserId = UserId("@sender:matrix.org"),
     senderProfile: ProfileDetails = aProfileDetailsReady(),
     description: String? = null,
-    mode: TimelineItemLocationContent.Mode = TimelineItemLocationContent.Mode.Static,
+    mode: TimelineItemLocationContent.Mode = TimelineItemLocationContent.Mode.Static(aLocation()),
 ) = TimelineItemLocationContent(
-    location = Location(
-        lat = 52.2445,
-        lon = 0.7186,
-        accuracy = 5000f,
-    ),
     senderId = senderId,
     senderProfile = senderProfile,
     description = description,
-    mode = mode
+    mode = mode,
+)
+
+fun aLocation() = Location(
+    lat = 52.2445,
+    lon = 0.7186,
+    accuracy = 5000f,
 )

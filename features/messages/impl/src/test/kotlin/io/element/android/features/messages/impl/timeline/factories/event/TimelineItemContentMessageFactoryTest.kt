@@ -110,7 +110,6 @@ class TimelineItemContentMessageFactoryTest {
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemLocationContent(
-            body = "body",
             location = Location(lat = 1.0, lon = 2.0, accuracy = null),
             description = "description",
             assetType = assetType,

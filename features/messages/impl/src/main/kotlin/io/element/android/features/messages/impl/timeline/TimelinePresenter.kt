@@ -197,6 +197,7 @@ class TimelinePresenter(
                 is TimelineEvent.EditPoll -> {
                     navigator.navigateToEditPoll(event.pollStartId)
                 }
+                is TimelineEvent.StopLiveLocationShare -> Unit
                 is TimelineEvent.FocusOnEvent -> sessionCoroutineScope.launch {
                     focusRequestState.value = FocusRequestState.Requested(event.eventId, event.debounce)
                     delay(event.debounce)

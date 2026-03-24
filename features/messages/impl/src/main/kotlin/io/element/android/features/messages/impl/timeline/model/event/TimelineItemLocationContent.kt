@@ -21,12 +21,23 @@ import io.element.android.libraries.matrix.api.timeline.item.event.getDisplayNam
 data class TimelineItemLocationContent(
     val senderId: UserId,
     val senderProfile: ProfileDetails,
-    val location: Location,
     val description: String? = null,
     val assetType: AssetType? = null,
     val mode: Mode,
 ) : TimelineItemEventContent {
-    val pinVariant = when (mode) {
+
+    val hideTimestamp = mode is Mode.Live && mode.canStop
+
+    val location = when (mode) {
+        is Mode.Live -> mode.lastKnownLocation
+        is Mode.Static -> mode.location
+    }
+
+    /**
+     * The pin variant to display on the map.
+     * Returns a default variant when location is null (map will show loading placeholder anyway).
+     */
+    val pinVariant: PinVariant = when (mode) {
         is Mode.Live -> {
             if (mode.isActive) {
                 PinVariant.UserLocation(avatarData = senderAvatar(), isLive = true)
@@ -34,7 +45,7 @@ data class TimelineItemLocationContent(
                 PinVariant.StaleLocation
             }
         }
-        Mode.Static -> {
+        is Mode.Static -> {
             when (assetType) {
                 AssetType.PIN -> PinVariant.PinnedLocation
                 AssetType.SENDER,
@@ -52,8 +63,18 @@ data class TimelineItemLocationContent(
     )
 
     sealed interface Mode {
-        data object Static : Mode
-        data class Live(val isActive: Boolean) : Mode
+        data class Static(
+            val location: Location,
+        ) : Mode
+
+        data class Live(
+            val lastKnownLocation: Location?,
+            val isActive: Boolean,
+            val endsAt: String,
+            val canStop: Boolean = false
+        ) : Mode {
+            val isLoading = lastKnownLocation == null && isActive
+        }
     }
 
     override val type: String = "TimelineItemLocationContent"
