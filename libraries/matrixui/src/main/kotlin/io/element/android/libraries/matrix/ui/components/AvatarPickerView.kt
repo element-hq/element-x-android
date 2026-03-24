@@ -113,7 +113,7 @@ fun AvatarPickerView(
                     },
                     y = size.height - editIconRadius.toPx(),
                 ),
-                radius = editIconRadius.toPx() * 1.2f,
+                radius = editIconRadius.toPx() * 1.35f,
                 blendMode = BlendMode.Clear,
             )
         }
@@ -143,7 +143,7 @@ fun AvatarPickerView(
                 )
                 if (enabled) {
                     OverlayEditButton(
-                        editButtonSize = state.avatarData.size.dp * 0.44f,
+                        editButtonSize = state.avatarData.size.dp * 30 / 64f,
                         onClick = onClick,
                         interactionSource = interactionSource
                     )
@@ -195,7 +195,7 @@ private fun BoxScope.OverlayEditButton(
         contentAlignment = Alignment.Center,
     ) {
         Icon(
-            modifier = Modifier.size(editButtonSize * 0.66f),
+            modifier = Modifier.size(editButtonSize * 24 / 30f),
             imageVector = CompoundIcons.Edit(),
             contentDescription = null,
         )

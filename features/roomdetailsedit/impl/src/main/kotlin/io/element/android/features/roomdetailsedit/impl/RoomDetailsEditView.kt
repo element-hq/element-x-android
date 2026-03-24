@@ -51,6 +51,9 @@ import io.element.android.libraries.matrix.ui.components.AvatarPickerView
 import io.element.android.libraries.permissions.api.PermissionsView
 import io.element.android.libraries.ui.strings.CommonStrings
 
+/**
+ * https://www.figma.com/design/pDlJZGBsri47FNTXMnEdXB/Compound-Android-Templates?node-id=2204-37063
+ */
 @Composable
 fun RoomDetailsEditView(
     state: RoomDetailsEditState,
