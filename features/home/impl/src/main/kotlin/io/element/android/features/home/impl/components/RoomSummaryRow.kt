@@ -8,7 +8,10 @@
 
 package io.element.android.features.home.impl.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
@@ -36,6 +39,8 @@ import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.zIndex
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -358,10 +363,19 @@ private fun MessagePreviewAndIndicatorRow(
             }
             if (room.hasNewContent) {
                 val contentDescription = stringResource(CommonStrings.a11y_notifications_new_messages)
-                UnreadIndicatorAtom(
-                    color = tint,
-                    contentDescription = contentDescription,
-                )
+                val count = room.numberOfUnreadNotifications.coerceAtLeast(room.numberOfUnreadMessages)
+                if (count > 0) {
+                    UnreadCountBadge(
+                        count = count,
+                        color = tint,
+                        contentDescription = contentDescription,
+                    )
+                } else {
+                    UnreadIndicatorAtom(
+                        color = tint,
+                        contentDescription = contentDescription,
+                    )
+                }
             }
         }
     }
@@ -425,6 +439,33 @@ private fun MentionIndicatorAtom() {
         imageVector = CompoundIcons.Mention(),
         tint = ElementTheme.colors.unreadIndicator,
     )
+}
+
+@Composable
+private fun UnreadCountBadge(
+    count: Long,
+    color: Color,
+    contentDescription: String? = null,
+) {
+    val label = if (count > 99) "99+" else count.toString()
+    Box(
+        modifier = Modifier
+            .semantics {
+                contentDescription?.let { this.contentDescription = it }
+            }
+            .heightIn(min = 16.dp)
+            .defaultMinSize(minWidth = 16.dp)
+            .background(color, shape = CircleShape)
+            .padding(horizontal = 4.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = label,
+            style = ElementTheme.typography.fontBodyXsRegular,
+            color = ElementTheme.colors.textOnSolidPrimary,
+            maxLines = 1,
+        )
+    }
 }
 
 @PreviewsDayNight
