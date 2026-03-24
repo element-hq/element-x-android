@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -125,6 +126,17 @@ private fun ThreadsListLoaded(
                         text = thread.senderDisplayName ?: thread.senderId.value,
                         style = ElementTheme.typography.fontBodyLgMedium,
                     )
+                },
+                supportingContent = thread.lastMessagePreview?.let { preview ->
+                    {
+                        Text(
+                            text = preview,
+                            maxLines = 2,
+                            overflow = TextOverflow.Ellipsis,
+                            style = ElementTheme.typography.fontBodySmRegular,
+                            color = ElementTheme.colors.textSecondary,
+                        )
+                    }
                 },
                 trailingContent = ListItemContent.Text(formatTimestamp(thread.timestamp)),
                 onClick = { onThreadClick(thread.rootEventId) },
