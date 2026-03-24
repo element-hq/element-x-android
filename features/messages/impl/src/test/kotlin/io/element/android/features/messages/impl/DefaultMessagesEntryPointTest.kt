@@ -17,7 +17,7 @@ import io.element.android.features.call.test.FakeElementCallEntryPoint
 import io.element.android.features.forward.test.FakeForwardEntryPoint
 import io.element.android.features.knockrequests.test.FakeKnockRequestsListEntryPoint
 import io.element.android.features.location.test.FakeLocationService
-import io.element.android.features.location.test.FakeSendLocationEntryPoint
+import io.element.android.features.location.test.FakeShareLocationEntryPoint
 import io.element.android.features.location.test.FakeShowLocationEntryPoint
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.messages.impl.pinned.banner.createPinnedEventsTimelineProvider
@@ -62,7 +62,7 @@ class DefaultMessagesEntryPointTest {
                 plugins = plugins,
                 roomListService = FakeRoomListService(),
                 sessionId = A_SESSION_ID,
-                sendLocationEntryPoint = FakeSendLocationEntryPoint(),
+                shareLocationEntryPoint = FakeShareLocationEntryPoint(),
                 showLocationEntryPoint = FakeShowLocationEntryPoint(),
                 createPollEntryPoint = FakeCreatePollEntryPoint(),
                 elementCallEntryPoint = FakeElementCallEntryPoint(),

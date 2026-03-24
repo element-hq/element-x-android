@@ -14,6 +14,7 @@ import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteS
 import io.element.android.features.invite.api.acceptdecline.anAcceptDeclineInviteState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.room.CallIntentConsensus
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
@@ -137,6 +138,7 @@ private fun aSpaceInfo(
         roomVersion = "11",
         privilegedCreatorRole = false,
         isLowPriority = false,
+        activeCallIntentConsensus = CallIntentConsensus.None,
     )
 }
 

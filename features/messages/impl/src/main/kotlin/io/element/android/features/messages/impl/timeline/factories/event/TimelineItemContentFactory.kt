@@ -9,8 +9,10 @@
 package io.element.android.features.messages.impl.timeline.factories.event
 
 import dev.zacsweers.metro.Inject
+import io.element.android.features.location.api.Location
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRtcNotificationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.libraries.matrix.api.core.EventId
@@ -22,6 +24,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EventTimeline
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.LegacyCallInviteContent
+import io.element.android.libraries.matrix.api.timeline.item.event.LiveLocationContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
@@ -70,10 +73,10 @@ class TimelineItemContentFactory(
             is FailedToParseMessageLikeContent -> failedToParseMessageFactory.create(itemContent)
             is FailedToParseStateContent -> failedToParseStateFactory.create(itemContent)
             is MessageContent -> {
-                val senderDisambiguatedDisplayName = senderProfile.getDisambiguatedDisplayName(sender)
                 messageFactory.create(
+                    senderId = sender,
+                    senderProfile = senderProfile,
                     content = itemContent,
-                    senderDisambiguatedDisplayName = senderDisambiguatedDisplayName,
                     eventId = eventId,
                 )
             }
@@ -96,6 +99,24 @@ class TimelineItemContentFactory(
             is UnableToDecryptContent -> utdFactory.create(itemContent)
             is CallNotifyContent -> TimelineItemRtcNotificationContent()
             is UnknownContent -> TimelineItemUnknownContent
+            is LiveLocationContent -> {
+                val lastKnownLocation = itemContent.locations.mapNotNull { beacon ->
+                    Location.fromGeoUri(beacon.geoUri)
+                }.lastOrNull()
+                if (lastKnownLocation != null) {
+                    TimelineItemLocationContent(
+                        body = itemContent.body.trimEnd(),
+                        description = itemContent.description?.trimEnd(),
+                        assetType = itemContent.assetType,
+                        senderId = sender,
+                        senderProfile = senderProfile,
+                        location = lastKnownLocation,
+                        mode = TimelineItemLocationContent.Mode.Live(isActive = itemContent.isLive)
+                    )
+                } else {
+                    TimelineItemUnknownContent
+                }
+            }
         }
     }
 }

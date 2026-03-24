@@ -53,6 +53,9 @@ import io.element.android.libraries.matrix.ui.components.AvatarPickerView
 import io.element.android.libraries.permissions.api.PermissionsView
 import io.element.android.libraries.ui.strings.CommonStrings
 
+/**
+ * https://www.figma.com/design/pDlJZGBsri47FNTXMnEdXB/Compound-Android-Templates?node-id=3182-36115&t=U1vS3px9HzlzWYd7-4
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun EditUserProfileView(
@@ -125,7 +128,7 @@ fun EditUserProfileView(
                 style = ElementTheme.typography.fontBodyLgRegular,
                 textAlign = TextAlign.Center,
             )
-            Spacer(modifier = Modifier.height(40.dp))
+            Spacer(modifier = Modifier.height(32.dp))
             TextField(
                 label = stringResource(R.string.screen_edit_profile_display_name),
                 value = state.displayName,

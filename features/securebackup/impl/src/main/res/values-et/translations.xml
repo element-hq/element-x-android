@@ -12,7 +12,6 @@
   <string name="screen_chat_backup_recovery_action_confirm">"Sisesta taastevõti"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Sinu krüptovõtmete varundus pole hetkel enam sünkroonis."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Seadista andmete taastamine"</string>
-  <string name="screen_chat_backup_recovery_action_setup_description">"Säilita ligipääs oma krüptitud sõnumitele ka siis, kui sa kaotad kõik oma seadmed ja/või logid kõikjal välja rakendusest %1$s."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Ava %1$s töölauaga seadmes"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Logi uuesti sisse oma kasutajakontole"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Kui sul palutakse seadet verifitseerida, vali %1$s"</string>

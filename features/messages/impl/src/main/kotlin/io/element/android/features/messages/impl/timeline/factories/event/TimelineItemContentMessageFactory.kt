@@ -30,6 +30,7 @@ import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.androidutils.text.safeLinkify
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
@@ -39,10 +40,12 @@ import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessa
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.NoticeMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.StickerMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.matrix.ui.messages.toHtmlDocument
 import io.element.android.libraries.mediaviewer.api.util.FileExtensionExtractor
 import kotlinx.collections.immutable.persistentListOf
@@ -65,11 +68,13 @@ class TimelineItemContentMessageFactory(
 ) {
     fun create(
         content: MessageContent,
-        senderDisambiguatedDisplayName: String,
+        senderId: UserId,
+        senderProfile: ProfileDetails,
         eventId: EventId?,
     ): TimelineItemEventContent {
         return when (val messageType = content.type) {
             is EmoteMessageType -> {
+                val senderDisambiguatedDisplayName = senderProfile.getDisambiguatedDisplayName(senderId)
                 val emoteBody = "* $senderDisambiguatedDisplayName ${messageType.body.trimEnd()}"
                 val dom = messageType.formatted?.toHtmlDocument(
                     permalinkParser = permalinkParser,
@@ -135,8 +140,8 @@ class TimelineItemContentMessageFactory(
             }
             is LocationMessageType -> {
                 val location = Location.fromGeoUri(messageType.geoUri)
+                val body = messageType.body.trimEnd()
                 if (location == null) {
-                    val body = messageType.body.trimEnd()
                     TimelineItemTextContent(
                         body = body,
                         htmlDocument = null,
@@ -145,9 +150,13 @@ class TimelineItemContentMessageFactory(
                     )
                 } else {
                     TimelineItemLocationContent(
-                        body = messageType.body.trimEnd(),
+                        body = body,
                         location = location,
-                        description = messageType.description
+                        description = messageType.description,
+                        senderId = senderId,
+                        senderProfile = senderProfile,
+                        assetType = messageType.assetType,
+                        mode = TimelineItemLocationContent.Mode.Static
                     )
                 }
             }

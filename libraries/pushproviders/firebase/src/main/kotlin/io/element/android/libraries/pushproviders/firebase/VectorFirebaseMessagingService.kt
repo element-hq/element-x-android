@@ -58,11 +58,17 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                         "$it: ${message.data[it]}"
                     },
                 )
+                pushHandlingWakeLock.unlock()
             } else {
-                pushHandler.handle(
+                val handled = pushHandler.handle(
                     pushData = pushData,
                     providerInfo = FirebaseConfig.NAME,
                 )
+
+                // If we failed to handle the push, we should release the wakelock early to avoid keeping the device awake for too long.
+                if (!handled) {
+                    pushHandlingWakeLock.unlock()
+                }
             }
         }
     }

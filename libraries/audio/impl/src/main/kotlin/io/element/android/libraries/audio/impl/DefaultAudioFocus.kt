@@ -39,10 +39,17 @@ class DefaultAudioFocus(
                 AudioManager.AUDIOFOCUS_GAIN -> {
                     // Do nothing
                 }
-                AudioManager.AUDIOFOCUS_LOSS,
+                AudioManager.AUDIOFOCUS_LOSS -> {
+                    // Permanent focus loss (e.g., phone call) — always stop/pause.
+                    onFocusLost()
+                }
                 AudioManager.AUDIOFOCUS_LOSS_TRANSIENT,
                 AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK -> {
-                    onFocusLost()
+                    // For recording, ignore transient focus losses (e.g., notification sounds).
+                    // The AudioRecord API keeps capturing regardless.
+                    if (requester != AudioFocusRequester.RecordVoiceMessage) {
+                        onFocusLost()
+                    }
                 }
             }
         }
@@ -51,7 +58,12 @@ class DefaultAudioFocus(
             val audioAttributes = AudioAttributes.Builder()
                 .setUsage(requester.toAudioUsage())
                 .build()
-            val request = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+            val focusGain = if (requester == AudioFocusRequester.RecordVoiceMessage) {
+                AudioManager.AUDIOFOCUS_GAIN_TRANSIENT_EXCLUSIVE
+            } else {
+                AudioManager.AUDIOFOCUS_GAIN
+            }
+            val request = AudioFocusRequest.Builder(focusGain)
                 .setAudioAttributes(audioAttributes)
                 .setOnAudioFocusChangeListener(listener)
                 .setWillPauseWhenDucked(requester.willPausedWhenDucked())

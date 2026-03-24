@@ -12,7 +12,7 @@
   <string name="screen_chat_backup_recovery_action_confirm">"Enter recovery key"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Your key storage is currently out of sync."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Get recovery key"</string>
-  <string name="screen_chat_backup_recovery_action_setup_description">"Get access to your encrypted messages if you lose all your devices or are signed out of %1$s everywhere."</string>
+  <string name="screen_chat_backup_recovery_action_setup_description">"Your chats are automatically backed up with end-to-end encryption. To restore this backup and retain your digital identity when you lose access to all your devices, you will need your recovery key."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Open %1$s in a desktop device"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Sign into your account again"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"When asked to verify your device, select %1$s"</string>

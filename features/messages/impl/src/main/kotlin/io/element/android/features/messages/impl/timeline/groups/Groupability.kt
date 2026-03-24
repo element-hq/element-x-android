@@ -31,6 +31,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.CallNotifyCon
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.LegacyCallInviteContent
+import io.element.android.libraries.matrix.api.timeline.item.event.LiveLocationContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
 import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
@@ -81,7 +82,8 @@ internal fun MatrixTimelineItem.Event.canBeDisplayedInBubbleBlock(): Boolean {
         RedactedContent,
         is StickerContent,
         is PollContent,
-        is UnableToDecryptContent -> true
+        is UnableToDecryptContent,
+        is LiveLocationContent -> true
         // Can't be grouped
         is FailedToParseStateContent,
         is ProfileChangeContent,

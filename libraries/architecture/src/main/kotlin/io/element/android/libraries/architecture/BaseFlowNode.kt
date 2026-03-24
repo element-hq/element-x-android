@@ -14,7 +14,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.Modifier
 import com.bumble.appyx.core.children.ChildEntry
-import com.bumble.appyx.core.composable.Children
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.navigation.model.combined.plus
 import com.bumble.appyx.core.navigation.model.permanent.PermanentNavModel
@@ -24,7 +23,9 @@ import com.bumble.appyx.core.node.ParentNode
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.transitionhandler.rememberBackstackFader
+import com.bumble.appyx.navmodel.backstack.transitionhandler.rememberBackstackSlider
 import io.element.android.libraries.architecture.animation.rememberDefaultTransitionHandler
+import io.element.android.libraries.architecture.appyx.SafeChildren
 import io.element.android.libraries.architecture.overlay.Overlay
 
 /**
@@ -62,9 +63,9 @@ inline fun <reified NavTarget : Any> BaseFlowNode<NavTarget>.BackstackView(
     modifier: Modifier = Modifier,
     transitionHandler: TransitionHandler<NavTarget, BackStack.State> = rememberDefaultTransitionHandler(),
 ) {
-    Children(
-        modifier = modifier,
+    SafeChildren(
         navModel = backstack,
+        modifier = modifier,
         transitionHandler = transitionHandler,
     )
 }
@@ -74,9 +75,9 @@ inline fun <reified NavTarget : Any> BaseFlowNode<NavTarget>.OverlayView(
     modifier: Modifier = Modifier,
     transitionHandler: TransitionHandler<NavTarget, BackStack.State> = rememberBackstackFader(),
 ) {
-    Children(
-        modifier = modifier,
+    SafeChildren(
         navModel = overlay,
+        modifier = modifier,
         transitionHandler = transitionHandler,
     )
 }

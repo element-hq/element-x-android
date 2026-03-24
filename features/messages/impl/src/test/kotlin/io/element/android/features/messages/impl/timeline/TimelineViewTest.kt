@@ -38,6 +38,7 @@ import io.element.android.tests.testutils.setSafeContent
 import io.element.android.wysiwyg.link.Link
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
@@ -141,6 +142,10 @@ class TimelineViewTest {
         eventsRecorder.assertSingle(TimelineEvent.HideShieldDialog)
     }
 
+    @Ignore(
+        "performScrollToIndex in compose tests no longer sets LazyListState.isScrollInProgress to true, so the LoadMore event is not emitted." +
+        "This needs to be reworked to use a different approach to check the LoadMore event was emitted."
+    )
     @Test
     fun `scrolling near to the start of the loaded items triggers a pre-fetch`() {
         val eventsRecorder = EventsRecorder<TimelineEvent>()

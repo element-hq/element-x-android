@@ -123,6 +123,8 @@ fun Project.setupKover() {
                         "io.element.android.libraries.designsystem.theme.components.bottomsheet.*",
                         // Konsist code to make test fails
                         "io.element.android.tests.konsist.failures",
+                        // Copied from Appyx
+                        "io.element.android.libraries.architecture.appyx.SafeChildrenTransitionScope",
                     )
                     annotatedBy(
                         "androidx.compose.ui.tooling.preview.Preview",

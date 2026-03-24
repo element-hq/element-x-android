@@ -12,7 +12,6 @@
   <string name="screen_chat_backup_recovery_action_confirm">"Inserisci la chiave di recupero"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"L\'archiviazione delle chiavi non è sincronizzata."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Configura il recupero"</string>
-  <string name="screen_chat_backup_recovery_action_setup_description">"Ottieni l\'accesso ai tuoi messaggi criptati nel caso perdi tutti i dispositivi o vieni disconnesso da %1$s su tutti i dispositivi."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Apri %1$s in un dispositivo desktop"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Accedi nuovamente al tuo account"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Quando ti viene chiesto di verificare il tuo dispositivo, seleziona %1$s"</string>

@@ -339,7 +339,7 @@ class DefaultNotifiableEventResolverTest {
                     AN_EVENT_ID to Result.success(aNotificationData(
                         content = NotificationContent.MessageLike.RoomMessage(
                             senderId = A_USER_ID_2,
-                            messageType = LocationMessageType("Location", "geo:1,2", null),
+                            messageType = LocationMessageType("Location", "geo:1,2", null, null),
                         ),
                     ))
                 )

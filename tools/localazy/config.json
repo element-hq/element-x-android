@@ -409,6 +409,13 @@
         "screen\\.security_and_privacy\\..*",
         "screen\\.manage_authorized_spaces\\..*"
       ]
+    },
+    {
+      "name" : ":features:location:impl",
+      "includeRegex" : [
+        "screen\\.share_location\\..*",
+        "screen\\.view_location\\..*"
+      ]
     }
   ]
 }

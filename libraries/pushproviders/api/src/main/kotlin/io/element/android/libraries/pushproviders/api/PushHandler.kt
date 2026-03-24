@@ -9,11 +9,21 @@
 package io.element.android.libraries.pushproviders.api
 
 interface PushHandler {
+    /**
+     * Handle a push received from the provider.
+     *
+     * @param pushData the data of the push, containing the client secret and the push content.
+     * @param providerInfo an identifier of the provider that sent the push, for logging and debugging purposes.
+     * @return `true` if the push was handled successfully and is now enqueued for processing, false otherwise.
+     */
     suspend fun handle(
         pushData: PushData,
         providerInfo: String,
-    )
+    ): Boolean
 
+    /**
+     * Handle an invalid push received from the provider.
+     */
     suspend fun handleInvalid(
         providerInfo: String,
         data: String,

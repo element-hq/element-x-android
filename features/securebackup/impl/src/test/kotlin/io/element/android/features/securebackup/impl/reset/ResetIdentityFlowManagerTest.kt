@@ -11,11 +11,10 @@ package io.element.android.features.securebackup.impl.reset
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.matrix.api.encryption.BackupState
 import io.element.android.libraries.matrix.api.encryption.IdentityResetHandle
-import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
 import io.element.android.libraries.matrix.test.encryption.FakeIdentityPasswordResetHandle
-import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
@@ -104,9 +103,9 @@ class ResetIdentityFlowManagerTest {
 
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
-    fun `whenResetIsDone - will trigger the lambda when verification status is verified`() = runTest {
-        val verificationService = FakeSessionVerificationService()
-        val flowManager = createFlowManager(sessionVerificationService = verificationService)
+    fun `whenResetIsDone - will trigger the lambda when key backup is enabled`() = runTest {
+        val encryptionService = FakeEncryptionService()
+        val flowManager = createFlowManager(encryptionService = encryptionService)
         var isDone = false
 
         flowManager.whenResetIsDone {
@@ -115,25 +114,31 @@ class ResetIdentityFlowManagerTest {
 
         assertThat(isDone).isFalse()
 
-        verificationService.emitVerifiedStatus(SessionVerifiedStatus.Unknown)
+        encryptionService.emitBackupState(BackupState.UNKNOWN)
         advanceUntilIdle()
         assertThat(isDone).isFalse()
 
-        verificationService.emitVerifiedStatus(SessionVerifiedStatus.NotVerified)
+        encryptionService.emitBackupState(BackupState.DISABLING)
         advanceUntilIdle()
         assertThat(isDone).isFalse()
 
-        verificationService.emitVerifiedStatus(SessionVerifiedStatus.Verified)
+        encryptionService.emitBackupState(BackupState.WAITING_FOR_SYNC)
+        advanceUntilIdle()
+        assertThat(isDone).isFalse()
+
+        encryptionService.emitBackupState(BackupState.ENABLING)
+        advanceUntilIdle()
+        assertThat(isDone).isFalse()
+
+        encryptionService.emitBackupState(BackupState.ENABLED)
         advanceUntilIdle()
         assertThat(isDone).isTrue()
     }
 
     private fun TestScope.createFlowManager(
         encryptionService: FakeEncryptionService = FakeEncryptionService(),
-        sessionVerificationService: FakeSessionVerificationService = FakeSessionVerificationService(),
     ) = ResetIdentityFlowManager(
         encryptionService = encryptionService,
         sessionCoroutineScope = this,
-        sessionVerificationService = sessionVerificationService,
     )
 }

@@ -122,6 +122,7 @@ private fun ExoPlayerMediaAudioView(
                 durationInMillis = 0,
                 canMute = false,
                 isMuted = false,
+                seekingToMillis = null,
             )
         )
     }
@@ -172,15 +173,21 @@ private fun ExoPlayerMediaAudioView(
     LaunchedEffect(exoPlayer.isPlaying) {
         if (exoPlayer.isPlaying) {
             while (true) {
+                val position = exoPlayer.currentPosition
+                val seekingTo = mediaPlayerControllerState.seekingToMillis
                 mediaPlayerControllerState = mediaPlayerControllerState.copy(
-                    progressInMillis = exoPlayer.currentPosition,
+                    progressInMillis = position,
+                    seekingToMillis = if (seekingTo != null && position >= seekingTo) null else seekingTo,
                 )
                 delay(200)
             }
         } else {
             // Ensure we render the final state
+            val position = exoPlayer.currentPosition
+            val seekingTo = mediaPlayerControllerState.seekingToMillis
             mediaPlayerControllerState = mediaPlayerControllerState.copy(
-                progressInMillis = exoPlayer.currentPosition,
+                progressInMillis = position,
+                seekingToMillis = if (seekingTo != null && position >= seekingTo) null else seekingTo,
             )
         }
     }
@@ -295,6 +302,9 @@ private fun ExoPlayerMediaAudioView(
                 exoPlayer.togglePlay()
             },
             onSeekChange = {
+                mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                    seekingToMillis = it.toLong(),
+                )
                 exoPlayer.seekToEnsurePlaying(it.toLong())
             },
             onToggleMute = {

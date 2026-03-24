@@ -12,7 +12,6 @@
   <string name="screen_chat_backup_recovery_action_confirm">"Введіть ключ відновлення"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Сховище ключів наразі не синхронізовано."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Налаштувати відновлення"</string>
-  <string name="screen_chat_backup_recovery_action_setup_description">"Отримайте доступ до своїх зашифрованих повідомлень, якщо ви втратите всі свої пристрої або вийшли з %1$s на всіх пристроях."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Відкрийте %1$s на комп\'ютері"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Увійдіть до вашого облікового запису знову"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Коли вас попросять підтвердити пристрій, виберіть %1$s"</string>

@@ -71,7 +71,7 @@ open class InReplyToDetailsProvider : PreviewParameterProvider<InReplyToDetails>
             ),
             aMessageContent(
                 body = "Location",
-                type = LocationMessageType("Location", "geo:1,2", null),
+                type = LocationMessageType("Location", "geo:1,2", null, assetType = null),
             ),
             aMessageContent(
                 body = "Notice",
@@ -152,13 +152,13 @@ private fun aInReplyToDetails(
     eventId = EventId("\$event"),
     eventContent = eventContent,
     senderId = UserId("@Sender:domain"),
-    senderProfile = aProfileTimelineDetailsReady(
+    senderProfile = aProfileDetailsReady(
         displayNameAmbiguous = displayNameAmbiguous,
     ),
     textContent = (eventContent as? MessageContent)?.body.orEmpty(),
 )
 
-fun aProfileTimelineDetailsReady(
+fun aProfileDetailsReady(
     displayName: String? = "Sender",
     displayNameAmbiguous: Boolean = false,
     avatarUrl: String? = null,

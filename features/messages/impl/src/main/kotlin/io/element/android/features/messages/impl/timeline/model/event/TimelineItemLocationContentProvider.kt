@@ -10,21 +10,32 @@ package io.element.android.features.messages.impl.timeline.model.event
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.location.api.Location
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
+import io.element.android.libraries.matrix.ui.messages.reply.aProfileDetailsReady
 
 open class TimelineItemLocationContentProvider : PreviewParameterProvider<TimelineItemLocationContent> {
     override val values: Sequence<TimelineItemLocationContent>
         get() = sequenceOf(
             aTimelineItemLocationContent(),
-            aTimelineItemLocationContent("This is a description!"),
+            aTimelineItemLocationContent(mode = TimelineItemLocationContent.Mode.Live(isActive = true)),
+            aTimelineItemLocationContent(mode = TimelineItemLocationContent.Mode.Live(isActive = false)),
         )
 }
 
-fun aTimelineItemLocationContent(description: String? = null) = TimelineItemLocationContent(
-    body = "User location geo:52.2445,0.7186;u=5000",
+fun aTimelineItemLocationContent(
+    body: String = "",
+    senderId: UserId = UserId("@sender:matrix.org"),
+    senderProfile: ProfileDetails = aProfileDetailsReady(),
+    mode: TimelineItemLocationContent.Mode = TimelineItemLocationContent.Mode.Static,
+) = TimelineItemLocationContent(
+    body = body,
     location = Location(
         lat = 52.2445,
         lon = 0.7186,
         accuracy = 5000f,
     ),
-    description = description,
+    senderId = senderId,
+    senderProfile = senderProfile,
+    mode = mode
 )

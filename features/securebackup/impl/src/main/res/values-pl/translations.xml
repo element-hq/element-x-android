@@ -12,7 +12,6 @@
   <string name="screen_chat_backup_recovery_action_confirm">"Wprowadź klucz przywracania"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Magazyn kluczy nie jest zsynchronizowany."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Skonfiguruj przywracanie"</string>
-  <string name="screen_chat_backup_recovery_action_setup_description">"Uzyskaj dostęp do swoich wiadomości szyfrowanych, jeśli utracisz wszystkie swoje urządzenia lub zostaniesz wylogowany z %1$s."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Otwórz %1$s na urządzeniu stacjonarnym"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Zaloguj się ponownie na swoje konto"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Gdy pojawi się prośba o weryfikację urządzenia, wybierz %1$s"</string>

@@ -12,7 +12,6 @@
   <string name="screen_chat_backup_recovery_action_confirm">"Wiederherstellungsschlüssel eingeben"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Dein Schlüssel ist derzeit nicht synchronisiert."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Wiederherstellung einrichten"</string>
-  <string name="screen_chat_backup_recovery_action_setup_description">"Erhalte Zugriff auf deine verschlüsselten Nachrichten, wenn du alle deine Geräte verloren hast oder überall von %1$s abgemeldet bist."</string>
   <string name="screen_create_new_recovery_key_list_item_1">
     "Öffne "
     <b>"%1$s"</b>
