@@ -8,8 +8,10 @@
 
 package io.element.android.libraries.designsystem.atomic.atoms
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.Badge
@@ -43,6 +45,12 @@ object MatrixBadgeAtom {
             Type.Negative -> ElementTheme.colors.bgCriticalSubtle
             Type.Info -> ElementTheme.colors.bgBadgeInfo
         }
+        val borderStroke = when (data.type) {
+            Type.Positive -> null
+            Type.Neutral -> BorderStroke(1.dp, ElementTheme.colors.borderInteractiveSecondary)
+            Type.Negative -> null
+            Type.Info -> null
+        }
         val textColor = when (data.type) {
             Type.Positive -> ElementTheme.colors.textBadgeAccent
             Type.Neutral -> ElementTheme.colors.textPrimary
@@ -61,6 +69,7 @@ object MatrixBadgeAtom {
             backgroundColor = backgroundColor,
             iconColor = iconColor,
             textColor = textColor,
+            borderStroke = borderStroke,
         )
     }
 }
