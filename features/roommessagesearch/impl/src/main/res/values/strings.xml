@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_room_message_search_type_to_search">Type to search messages</string>
+    <string name="screen_room_message_search_encrypted_room">Search is not available in encrypted rooms</string>
+    <plurals name="screen_room_message_search_results_found">
+        <item quantity="one">%1$d result found for \"%2$s\"</item>
+        <item quantity="other">%1$d results found for \"%2$s\"</item>
+    </plurals>
+</resources>

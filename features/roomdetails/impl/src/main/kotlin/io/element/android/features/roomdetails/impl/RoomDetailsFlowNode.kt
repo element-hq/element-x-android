@@ -388,6 +388,8 @@ class RoomDetailsFlowNode(
                     override fun navigateToRoom(roomId: RoomId) {
                         callback.navigateToRoom(roomId, emptyList())
                     }
+
+                    override fun navigateToSearchMessages() = Unit
                 }
                 return messagesEntryPoint.createNode(
                     parentNode = this,

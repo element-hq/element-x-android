@@ -205,6 +205,7 @@ class MessagesPresenter(
         val dmRoomMember by room.getDirectRoomMember(membersState)
         val roomMemberIdentityStateChanges = identityChangeState.roomMemberIdentityStateChanges
 
+        val canSearchMessages by featureFlagService.isFeatureEnabledFlow(FeatureFlags.RoomMessageSearch).collectAsState(initial = false)
         val isKeyShareOnInviteEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.EnableKeyShareOnInvite).collectAsState(initial = false)
         // The top bar should show a "history" icon if:
         //   * History sharing is enabled,
@@ -294,6 +295,7 @@ class MessagesPresenter(
             pinnedMessagesBannerState = pinnedMessagesBannerState,
             dmUserVerificationState = dmUserVerificationState,
             roomMemberModerationState = roomMemberModerationState,
+            canSearchMessages = canSearchMessages,
             topBarSharedHistoryIcon = topBarSharedHistoryIcon,
             successorRoom = roomInfo.successorRoom,
             eventSink = ::handleEvent,

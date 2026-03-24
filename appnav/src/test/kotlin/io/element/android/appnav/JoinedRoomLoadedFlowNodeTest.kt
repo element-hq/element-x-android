@@ -29,6 +29,7 @@ import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.messages.api.pinned.PinnedEventsTimelineProvider
 import io.element.android.features.messages.test.pinned.FakePinnedEventsTimelineProvider
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
+import io.element.android.features.roommessagesearch.api.RoomMessageSearchEntryPoint
 import io.element.android.features.space.api.SpaceEntryPoint
 import io.element.android.libraries.architecture.childNode
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -109,6 +110,14 @@ class JoinedRoomLoadedFlowNodeTest {
         }
     }
 
+    private class FakeRoomMessageSearchEntryPoint : RoomMessageSearchEntryPoint {
+        override fun createNode(
+            parentNode: Node,
+            buildContext: BuildContext,
+            callback: RoomMessageSearchEntryPoint.Callback,
+        ) = node(buildContext) {}
+    }
+
     private class FakeSpaceEntryPoint : SpaceEntryPoint {
         var nodeId: String? = null
 
@@ -128,6 +137,7 @@ class JoinedRoomLoadedFlowNodeTest {
         roomDetailsEntryPoint: RoomDetailsEntryPoint = FakeRoomDetailsEntryPoint(),
         spaceEntryPoint: SpaceEntryPoint = FakeSpaceEntryPoint(),
         forwardEntryPoint: ForwardEntryPoint = FakeForwardEntryPoint(),
+        roomMessageSearchEntryPoint: RoomMessageSearchEntryPoint = FakeRoomMessageSearchEntryPoint(),
         activeRoomsHolder: ActiveRoomsHolder = DefaultActiveRoomsHolder(),
         matrixClient: FakeMatrixClient = FakeMatrixClient(),
     ) = JoinedRoomLoadedFlowNode(
@@ -135,6 +145,7 @@ class JoinedRoomLoadedFlowNodeTest {
         plugins = plugins,
         messagesEntryPoint = messagesEntryPoint,
         roomDetailsEntryPoint = roomDetailsEntryPoint,
+        roomMessageSearchEntryPoint = roomMessageSearchEntryPoint,
         spaceEntryPoint = spaceEntryPoint,
         forwardEntryPoint = forwardEntryPoint,
         appNavigationStateService = FakeAppNavigationStateService(),

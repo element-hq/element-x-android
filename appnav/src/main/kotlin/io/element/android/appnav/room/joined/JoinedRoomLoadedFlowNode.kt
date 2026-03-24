@@ -21,6 +21,7 @@ import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
+import com.bumble.appyx.navmodel.backstack.operation.replace
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
@@ -30,6 +31,7 @@ import io.element.android.appnav.room.RoomNavigationTarget
 import io.element.android.features.forward.api.ForwardEntryPoint
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.roomdetails.api.RoomDetailsEntryPoint
+import io.element.android.features.roommessagesearch.api.RoomMessageSearchEntryPoint
 import io.element.android.features.space.api.SpaceEntryPoint
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
@@ -64,6 +66,7 @@ class JoinedRoomLoadedFlowNode(
     @Assisted plugins: List<Plugin>,
     private val messagesEntryPoint: MessagesEntryPoint,
     private val roomDetailsEntryPoint: RoomDetailsEntryPoint,
+    private val roomMessageSearchEntryPoint: RoomMessageSearchEntryPoint,
     private val spaceEntryPoint: SpaceEntryPoint,
     private val forwardEntryPoint: ForwardEntryPoint,
     private val appNavigationStateService: AppNavigationStateService,
@@ -185,6 +188,15 @@ class JoinedRoomLoadedFlowNode(
             NavTarget.Space -> {
                 createSpaceNode(buildContext)
             }
+            NavTarget.SearchMessages -> {
+                val searchCallback = object : RoomMessageSearchEntryPoint.Callback {
+                    override fun onSearchResultClick(eventId: EventId) {
+                        backstack.pop() // Remove SearchMessages
+                        backstack.replace(NavTarget.Messages(focusedEventId = eventId)) // Replace original Messages
+                    }
+                }
+                roomMessageSearchEntryPoint.createNode(this, buildContext, searchCallback)
+            }
             is NavTarget.ForwardEvent -> {
                 val timelineProvider = if (navTarget.fromPinnedEvents) {
                     (graph as TimelineBindings).pinnedEventsTimelineProvider
@@ -252,6 +264,10 @@ class JoinedRoomLoadedFlowNode(
             override fun navigateToRoom(roomId: RoomId) {
                 callback.navigateToRoom(roomId, emptyList())
             }
+
+            override fun navigateToSearchMessages() {
+                backstack.push(NavTarget.SearchMessages)
+            }
         }
         val params = MessagesEntryPoint.Params(
             MessagesEntryPoint.InitialTarget.Messages(navTarget.focusedEventId)
@@ -287,6 +303,9 @@ class JoinedRoomLoadedFlowNode(
 
         @Parcelize
         data object RoomNotificationSettings : NavTarget
+
+        @Parcelize
+        data object SearchMessages : NavTarget
     }
 
     suspend fun attachThread(threadId: ThreadId, focusedEventId: EventId?) {
