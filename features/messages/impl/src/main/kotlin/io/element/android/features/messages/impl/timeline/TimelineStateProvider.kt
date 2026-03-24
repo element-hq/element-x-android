@@ -39,7 +39,7 @@ import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugIn
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
-import io.element.android.libraries.matrix.ui.messages.reply.aProfileTimelineDetailsReady
+import io.element.android.libraries.matrix.ui.messages.reply.aProfileDetailsReady
 import io.element.android.libraries.preferences.api.store.TimelineLayoutMode
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
@@ -167,7 +167,7 @@ internal fun aTimelineItemEvent(
         isMine = isMine,
         isEditable = isEditable,
         canBeRepliedTo = canBeRepliedTo,
-        senderProfile = aProfileTimelineDetailsReady(
+        senderProfile = aProfileDetailsReady(
             displayName = senderDisplayName,
             displayNameAmbiguous = displayNameAmbiguous,
         ),

@@ -126,7 +126,7 @@ fun MediaPlayerControllerView(
                     modifier = Modifier
                         .widthIn(min = 48.dp)
                         .padding(horizontal = 8.dp),
-                    text = state.progressInMillis.toHumanReadableDuration(),
+                    text = state.displayProgressInMillis.toHumanReadableDuration(),
                     textAlign = TextAlign.Center,
                     color = ElementTheme.colors.textPrimary,
                     style = ElementTheme.typography.fontBodyXsMedium,
@@ -135,7 +135,9 @@ fun MediaPlayerControllerView(
                 Slider(
                     modifier = Modifier.weight(1f),
                     valueRange = 0f..state.durationInMillis.toFloat(),
-                    value = lastSelectedValue.takeIf { it >= 0 } ?: state.progressInMillis.toFloat(),
+                    value = lastSelectedValue.takeIf { it >= 0 }
+                        ?: state.seekingToMillis?.toFloat()
+                        ?: state.progressInMillis.toFloat(),
                     onValueChange = {
                         lastSelectedValue = it
                     },

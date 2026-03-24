@@ -25,6 +25,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParse
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.LegacyCallInviteContent
+import io.element.android.libraries.matrix.api.timeline.item.event.LiveLocationContent
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageType
@@ -113,6 +114,10 @@ class DefaultRoomLatestEventFormatter(
             }
             is FailedToParseMessageLikeContent, is FailedToParseStateContent, is UnknownContent -> {
                 val message = sp.getString(CommonStrings.common_unsupported_event)
+                message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
+            }
+            is LiveLocationContent -> {
+                val message = sp.getString(CommonStrings.common_shared_location)
                 message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is LegacyCallInviteContent -> sp.getString(CommonStrings.common_unsupported_call)

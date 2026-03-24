@@ -12,7 +12,6 @@
   <string name="screen_chat_backup_recovery_action_confirm">"輸入復原金鑰"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"您的金鑰儲存空間目前並未同步。"</string>
   <string name="screen_chat_backup_recovery_action_setup">"設定復原"</string>
-  <string name="screen_chat_backup_recovery_action_setup_description">"若您遺失所有裝置，或是徹底登出了 %1$s，就可以存取您的加密訊息。"</string>
   <string name="screen_create_new_recovery_key_list_item_1">"在桌上型裝置中開啟 %1$s"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"再次登入您的帳號"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"當要求驗證您的裝置時，請選取 %1$s"</string>

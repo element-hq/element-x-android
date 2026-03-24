@@ -12,7 +12,6 @@
   <string name="screen_chat_backup_recovery_action_confirm">"Introduceți cheia de recuperare"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Backup-ul pentru chat nu este sincronizat în prezent."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Configurați recuperarea"</string>
-  <string name="screen_chat_backup_recovery_action_setup_description">"Obțineți acces la mesajele dumneavoastră criptate dacă vă pierdeți toate dispozitivele sau sunteți deconectat de la %1$s peste tot."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Deschideți %1$s pe un dispozitiv desktop"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Conectați-vă din nou la contul dumneavoastră"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Când vi se cere să vă verificați dispozitivul, selectați%1$s"</string>

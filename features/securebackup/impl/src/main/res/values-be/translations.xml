@@ -8,7 +8,6 @@
   <string name="screen_chat_backup_recovery_action_confirm">"Увядзіце ключ аднаўлення"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Ваша сховішча ключоў зараз не сінхранізавана."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Наладзьце аднаўленне"</string>
-  <string name="screen_chat_backup_recovery_action_setup_description">"Атрымайце доступ да зашыфраваных паведамленняў, калі вы страціце ўсе свае прылады або выйдзеце з сістэмы %1$s усюды."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Адкрыйце %1$s на настольнай прыладзе"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Увайдзіце ў свой уліковы запіс яшчэ раз"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Калі будзе прапанавана пацвердзіць вашу прыладу, выберыце %1$s"</string>

@@ -12,7 +12,6 @@
   <string name="screen_chat_backup_recovery_action_confirm">"Tiklash kalitini kiriting"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Kalit xotirasi hozirda sinxronlanmagan."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Qayta tiklashni sozlang"</string>
-  <string name="screen_chat_backup_recovery_action_setup_description">"Agar barcha qurilmalaringizni yo‘qotib qo‘ysangiz yoki tizimdan chiqqan bo‘lsangiz, shifrlangan xabarlaringizga ruxsat oling%1$s hamma joyda."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"%1$s ni kompyuterda oching"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Hisobingizga qaytadan kiring"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Qurilmangizni tasdiqlash soʻralganda, %1$s ni tanlang"</string>

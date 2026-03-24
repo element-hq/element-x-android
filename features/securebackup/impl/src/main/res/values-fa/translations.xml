@@ -10,7 +10,6 @@
   <string name="screen_chat_backup_recovery_action_confirm">"ورود کلید بازیابی"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"ذخیره‌ساز کلیدتان از هم‌گام بودن در آمده."</string>
   <string name="screen_chat_backup_recovery_action_setup">"برپایی بازیابی"</string>
-  <string name="screen_chat_backup_recovery_action_setup_description">"اگر همه دستگاه‌هایتان را گم کردید یا از سیستم خارج شدید، به پیام‌های رمزگذاری‌شده‌تان دسترسی پیدا کنید%1$s همه جا."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"گشودن %1$s در افزارهٔ میزکار"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"ورود دوباره به حسابتان"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"گزینش %1$s هنگام درخواست تأیید افزاره‌تان"</string>

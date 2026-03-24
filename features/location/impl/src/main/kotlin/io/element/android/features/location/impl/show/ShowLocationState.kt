@@ -9,19 +9,47 @@
 package io.element.android.features.location.impl.show
 
 import io.element.android.features.location.api.Location
+import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
+import io.element.android.features.location.impl.common.ui.LocationMarkerData
+import io.element.android.libraries.designsystem.components.PinVariant
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.location.AssetType
+import kotlinx.collections.immutable.ImmutableList
 
 data class ShowLocationState(
-    val permissionDialog: Dialog,
-    val location: Location,
-    val description: String?,
+    val dialogState: LocationConstraintsDialogState,
+    val locationShares: ImmutableList<LocationShareItem>,
     val hasLocationPermission: Boolean,
     val isTrackMyLocation: Boolean,
     val appName: String,
-    val eventSink: (ShowLocationEvents) -> Unit,
+    val eventSink: (ShowLocationEvent) -> Unit,
 ) {
-    sealed interface Dialog {
-        data object None : Dialog
-        data object PermissionRationale : Dialog
-        data object PermissionDenied : Dialog
+    val isSheetDraggable = locationShares.any { item -> item.isLive }
+}
+
+data class LocationShareItem(
+    val userId: UserId,
+    val displayName: String,
+    val avatarData: AvatarData,
+    val formattedTimestamp: String,
+    val location: Location,
+    val isLive: Boolean,
+    val assetType: AssetType?,
+)
+
+fun LocationShareItem.toMarkerData(): LocationMarkerData {
+    val pinVariant = if (assetType == AssetType.PIN) {
+        PinVariant.PinnedLocation
+    } else {
+        PinVariant.UserLocation(
+            avatarData = avatarData,
+            isLive = isLive,
+        )
     }
+    return LocationMarkerData(
+        id = userId.value,
+        location = location,
+        variant = pinVariant,
+    )
 }

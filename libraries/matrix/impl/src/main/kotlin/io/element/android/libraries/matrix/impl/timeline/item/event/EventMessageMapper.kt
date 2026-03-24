@@ -24,6 +24,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageTy
 import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.impl.media.map
+import io.element.android.libraries.matrix.impl.room.location.into
 import io.element.android.libraries.matrix.impl.timeline.reply.InReplyToMapper
 import org.matrix.rustcomponents.sdk.InReplyToDetails
 import org.matrix.rustcomponents.sdk.MessageType
@@ -112,7 +113,12 @@ class EventMessageMapper {
             )
         }
         is RustMessageType.Location -> {
-            LocationMessageType(type.content.body, type.content.geoUri, type.content.description)
+            LocationMessageType(
+                body = type.content.body,
+                geoUri = type.content.geoUri,
+                description = type.content.description,
+                assetType = type.content.asset.into()
+            )
         }
         is MessageType.Other -> {
             OtherMessageType(type.msgtype, type.body)

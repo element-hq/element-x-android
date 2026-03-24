@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -54,14 +55,14 @@ fun CreateDmConfirmationBottomSheet(
     ModalBottomSheet(
         modifier = modifier,
         onDismissRequest = onDismiss,
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .padding(top = 24.dp, bottom = 16.dp, start = 16.dp, end = 16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Spacer(modifier = Modifier.height(24.dp))
             Avatar(
                 avatarData = matrixUser.getAvatarData(AvatarSize.DmCreationConfirmation),
                 avatarType = AvatarType.User,
@@ -93,7 +94,6 @@ fun CreateDmConfirmationBottomSheet(
                 onClick = onDismiss,
                 text = stringResource(CommonStrings.action_cancel),
             )
-            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }

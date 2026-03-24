@@ -18,6 +18,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParse
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.LegacyCallInviteContent
+import io.element.android.libraries.matrix.api.timeline.item.event.LiveLocationContent
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.libraries.matrix.api.timeline.item.event.PollContent
@@ -32,6 +33,8 @@ import io.element.android.libraries.matrix.api.timeline.item.event.VideoMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.VoiceMessageType
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailInfo
 import io.element.android.libraries.matrix.ui.components.AttachmentThumbnailType
+import io.element.android.libraries.matrix.ui.messages.reply.InReplyToMetadata.Text
+import io.element.android.libraries.matrix.ui.messages.reply.InReplyToMetadata.Thumbnail
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Immutable
@@ -60,7 +63,7 @@ internal sealed interface InReplyToMetadata {
 @Composable
 internal fun InReplyToDetails.Ready.metadata(hideImage: Boolean): InReplyToMetadata? = when (eventContent) {
     is MessageContent -> when (val type = eventContent.type) {
-        is ImageMessageType -> InReplyToMetadata.Thumbnail(
+        is ImageMessageType -> Thumbnail(
             AttachmentThumbnailInfo(
                 thumbnailSource = (type.info?.thumbnailSource ?: type.source).takeUnless { hideImage },
                 textContent = eventContent.body,
@@ -68,7 +71,7 @@ internal fun InReplyToDetails.Ready.metadata(hideImage: Boolean): InReplyToMetad
                 blurHash = type.info?.blurhash,
             )
         )
-        is VideoMessageType -> InReplyToMetadata.Thumbnail(
+        is VideoMessageType -> Thumbnail(
             AttachmentThumbnailInfo(
                 thumbnailSource = type.info?.thumbnailSource?.takeUnless { hideImage },
                 textContent = eventContent.body,
@@ -76,34 +79,34 @@ internal fun InReplyToDetails.Ready.metadata(hideImage: Boolean): InReplyToMetad
                 blurHash = type.info?.blurhash,
             )
         )
-        is FileMessageType -> InReplyToMetadata.Thumbnail(
+        is FileMessageType -> Thumbnail(
             AttachmentThumbnailInfo(
                 thumbnailSource = type.info?.thumbnailSource?.takeUnless { hideImage },
                 textContent = eventContent.body,
                 type = AttachmentThumbnailType.File,
             )
         )
-        is LocationMessageType -> InReplyToMetadata.Thumbnail(
+        is LocationMessageType -> Thumbnail(
             AttachmentThumbnailInfo(
                 textContent = stringResource(CommonStrings.common_shared_location),
                 type = AttachmentThumbnailType.Location,
             )
         )
-        is AudioMessageType -> InReplyToMetadata.Thumbnail(
+        is AudioMessageType -> Thumbnail(
             AttachmentThumbnailInfo(
                 textContent = eventContent.body,
                 type = AttachmentThumbnailType.Audio,
             )
         )
-        is VoiceMessageType -> InReplyToMetadata.Thumbnail(
+        is VoiceMessageType -> Thumbnail(
             AttachmentThumbnailInfo(
                 textContent = stringResource(CommonStrings.common_voice_message),
                 type = AttachmentThumbnailType.Voice,
             )
         )
-        else -> InReplyToMetadata.Text(textContent ?: eventContent.body)
+        else -> Text(textContent ?: eventContent.body)
     }
-    is StickerContent -> InReplyToMetadata.Thumbnail(
+    is StickerContent -> Thumbnail(
         AttachmentThumbnailInfo(
             thumbnailSource = eventContent.source.takeUnless { hideImage },
             textContent = eventContent.body,
@@ -111,7 +114,7 @@ internal fun InReplyToDetails.Ready.metadata(hideImage: Boolean): InReplyToMetad
             blurHash = eventContent.info.blurhash,
         )
     )
-    is PollContent -> InReplyToMetadata.Thumbnail(
+    is PollContent -> Thumbnail(
         AttachmentThumbnailInfo(
             textContent = eventContent.question,
             type = AttachmentThumbnailType.Poll,
@@ -127,5 +130,6 @@ internal fun InReplyToDetails.Ready.metadata(hideImage: Boolean): InReplyToMetad
     UnknownContent,
     is LegacyCallInviteContent,
     is CallNotifyContent,
+    is LiveLocationContent,
     null -> null
 }

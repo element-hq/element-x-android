@@ -63,6 +63,10 @@ class ChangeRolesViewTest {
             ),
         )
         rule.pressBackKey()
+
+        // Advance time to let the event be processed, as the search toggle might have some delay (e.g. for the animation)
+        rule.mainClock.advanceTimeBy(1)
+
         eventsRecorder.assertSingle(ChangeRolesEvent.ToggleSearchActive)
     }
 

@@ -64,7 +64,7 @@ class DefaultPushHandler(
      * @param pushData the data received in the push.
      * @param providerInfo the provider info.
      */
-    override suspend fun handle(pushData: PushData, providerInfo: String) {
+    override suspend fun handle(pushData: PushData, providerInfo: String): Boolean {
         // Start measuring how long it takes to display a notification from when the push is received
         Timber.d("Calculating push-to-notification for event ${pushData.eventId}")
         val parent = analyticsService.startLongRunningTransaction(AnalyticsLongRunningTransaction.PushToNotification(pushData.eventId.value))
@@ -81,9 +81,10 @@ class DefaultPushHandler(
         }
 
         // Diagnostic Push
-        if (pushData.eventId == DefaultTestPush.TEST_EVENT_ID) {
+        return if (pushData.eventId == DefaultTestPush.TEST_EVENT_ID) {
             pushHistoryService.onDiagnosticPush(providerInfo)
             diagnosticPushHandler.handlePush()
+            false
         } else {
             handleInternal(pushData, providerInfo)
         }
@@ -100,7 +101,7 @@ class DefaultPushHandler(
      * @param pushData Object containing message data.
      * @param providerInfo the provider info.
      */
-    private suspend fun handleInternal(pushData: PushData, providerInfo: String) {
+    private suspend fun handleInternal(pushData: PushData, providerInfo: String): Boolean {
         try {
             if (buildMeta.lowPrivacyLoggingEnabled) {
                 Timber.tag(loggerTag.value).d("## handleInternal() : $pushData")
@@ -117,13 +118,13 @@ class DefaultPushHandler(
                     roomId = pushData.roomId,
                     reason = "Unable to get userId from client secret",
                 )
-                return
+                return false
             }
 
             val areNotificationsEnabled = userPushStoreFactory.getOrCreate(userId).getNotificationEnabledForDevice().first()
             if (!areNotificationsEnabled) {
                 Timber.w("Push notification received when push notifications are disabled.")
-                return
+                return false
             }
 
             val pushRequest = PushRequest(
@@ -144,8 +145,11 @@ class DefaultPushHandler(
                 Timber.d("No pending worker for push notifications found")
                 workManagerScheduler.submit(syncPendingNotificationsRequestFactory.create(userId))
             }
+
+            return true
         } catch (e: Exception) {
             Timber.tag(loggerTag.value).e(e, "## handleInternal() failed")
+            return false
         }
     }
 }

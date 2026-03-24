@@ -355,6 +355,7 @@ class InReplyToMetadataKtTest {
                             body = "body",
                             geoUri = "geo:3.0,4.0;u=5.0",
                             description = null,
+                            assetType = null
                         )
                     )
                 ).metadata(hideImage = false)

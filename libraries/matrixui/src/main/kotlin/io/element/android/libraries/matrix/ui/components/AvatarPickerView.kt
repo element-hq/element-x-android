@@ -61,8 +61,16 @@ import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
 
+private val editIconContainerSize = 30.dp
+private val editIconContainerRadius = editIconContainerSize / 2
+private val editIconContainerPadding = 4.dp
+private val editIconSize = 20.dp
+private val editIconOffset = 8.dp
+
 /**
- * Avatar picker view, based on https://www.figma.com/design/kcnHxunG1LDWXsJhaNuiHz/ER-145--Spaces-on-Element-X?node-id=5918-97417&t=JYDQysgjS33AZb74-4
+ * Avatar picker view.
+ *
+ * https://www.figma.com/design/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?node-id=1949-1384
  *
  * It takes a [state], which can be [AvatarPickerState.Pick] for displaying the 'pick avatar' button, or [AvatarPickerState.Selected] when an avatar has
  * already been selected.
@@ -96,7 +104,6 @@ fun AvatarPickerView(
 
     fun eraseBackgroundModifier(
         parentWidth: Dp,
-        editIconRadius: Dp,
     ) = Modifier
         .graphicsLayer {
             compositingStrategy = CompositingStrategy.Offscreen
@@ -107,13 +114,13 @@ fun AvatarPickerView(
                 color = Color.Black,
                 center = Offset(
                     x = if (layoutDirection == LayoutDirection.Ltr) {
-                        parentWidth.toPx() - editIconRadius.toPx() * 0.48f
+                        (parentWidth - editIconContainerRadius + editIconOffset).toPx()
                     } else {
-                        editIconRadius.toPx() * 0.48f
+                        (editIconContainerRadius - editIconOffset).toPx()
                     },
-                    y = size.height - editIconRadius.toPx(),
+                    y = size.height - editIconContainerRadius.toPx(),
                 ),
-                radius = editIconRadius.toPx() * 1.2f,
+                radius = (editIconContainerRadius + editIconContainerPadding).toPx(),
                 blendMode = BlendMode.Clear,
             )
         }
@@ -132,7 +139,7 @@ fun AvatarPickerView(
         is AvatarPickerState.Selected -> {
             Box(modifier = modifier) {
                 val backgroundModifier = if (enabled) {
-                    eraseBackgroundModifier(state.avatarData.size.dp, state.avatarData.size.dp * 0.225f)
+                    eraseBackgroundModifier(state.avatarData.size.dp)
                 } else {
                     Modifier
                 }
@@ -143,7 +150,6 @@ fun AvatarPickerView(
                 )
                 if (enabled) {
                     OverlayEditButton(
-                        editButtonSize = state.avatarData.size.dp * 0.44f,
                         onClick = onClick,
                         interactionSource = interactionSource
                     )
@@ -179,15 +185,14 @@ private fun PickButton(
 
 @Composable
 private fun BoxScope.OverlayEditButton(
-    editButtonSize: Dp,
     onClick: () -> Unit,
     interactionSource: MutableInteractionSource
 ) {
     Box(
         modifier = Modifier
             .align(Alignment.BottomEnd)
-            .size(editButtonSize)
-            .offset(x = editButtonSize * 0.266f)
+            .size(editIconContainerSize)
+            .offset(x = editIconOffset)
             .clip(CircleShape)
             .clickable(interactionSource = interactionSource, onClick = onClick, indication = null)
             .background(ElementTheme.colors.bgCanvasDefault)
@@ -195,7 +200,7 @@ private fun BoxScope.OverlayEditButton(
         contentAlignment = Alignment.Center,
     ) {
         Icon(
-            modifier = Modifier.size(editButtonSize * 0.66f),
+            modifier = Modifier.size(editIconSize),
             imageVector = CompoundIcons.Edit(),
             contentDescription = null,
         )
@@ -234,97 +239,45 @@ internal fun AvatarPickerViewRtlPreview() = CompositionLocalProvider(
 @PreviewsDayNight
 @Composable
 internal fun AvatarPickerSizesPreview() = ElementPreview {
-    Column {
-        Row {
-            AvatarPickerView(AvatarPickerState.Pick(buttonSize = 24.dp, externalPadding = PaddingValues(6.dp)), onClick = {})
-            AvatarPickerView(AvatarPickerState.Pick(buttonSize = 32.dp, externalPadding = PaddingValues(6.dp)), onClick = {})
-            AvatarPickerView(AvatarPickerState.Pick(buttonSize = 48.dp, externalPadding = PaddingValues(6.dp)), onClick = {})
-            AvatarPickerView(AvatarPickerState.Pick(buttonSize = 64.dp, externalPadding = PaddingValues(6.dp)), onClick = {})
-            AvatarPickerView(AvatarPickerState.Pick(buttonSize = 96.dp, externalPadding = PaddingValues(6.dp)), onClick = {})
+    // Size used across the codebase
+    val sizes = listOf(
+        AvatarSize.EditRoomDetails,
+        AvatarSize.EditProfileDetails,
+    )
+    Column(
+        modifier = Modifier.padding(12.dp)
+    ) {
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            sizes.forEach {
+                AvatarPickerView(
+                    state = AvatarPickerState.Pick(buttonSize = it.dp, externalPadding = PaddingValues(6.dp)),
+                    onClick = {},
+                )
+            }
         }
-        Row {
-            AvatarPickerView(
-                AvatarPickerState.Selected(
-                    avatarData = AvatarData("@user:example.com", "User", "content://test", size = AvatarSize.TimelineThreadLatestEventSender),
-                    type = AvatarType.User
-                ),
-                onClick = {},
-                modifier = Modifier.padding(6.dp)
-            )
-            AvatarPickerView(
-                AvatarPickerState.Selected(
-                    avatarData = AvatarData("@user:example.com", "User", "content://test", size = AvatarSize.ReadReceiptList),
-                    type = AvatarType.User
-                ),
-                onClick = {},
-                modifier = Modifier.padding(6.dp)
-            )
-            AvatarPickerView(
-                AvatarPickerState.Selected(
-                    avatarData = AvatarData("@user:example.com", "User", "content://test", size = AvatarSize.SelectedUser),
-                    type = AvatarType.User
-                ),
-                onClick = {},
-                modifier = Modifier.padding(6.dp)
-            )
-            AvatarPickerView(
-                AvatarPickerState.Selected(
-                    avatarData = AvatarData("@user:example.com", "User", "content://test", size = AvatarSize.EditRoomDetails),
-                    type = AvatarType.User
-                ),
-                onClick = {},
-                modifier = Modifier.padding(6.dp)
-            )
-            AvatarPickerView(
-                AvatarPickerState.Selected(
-                    avatarData = AvatarData("@user:example.com", "User", "content://test", size = AvatarSize.RoomListManageUser),
-                    type = AvatarType.User
-                ),
-                onClick = {},
-                modifier = Modifier.padding(6.dp)
-            )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            sizes.forEach {
+                AvatarPickerView(
+                    AvatarPickerState.Selected(
+                        avatarData = AvatarData("@user:example.com", "User", "content://test", size = it),
+                        type = AvatarType.User,
+                    ),
+                    onClick = {},
+                    modifier = Modifier.padding(6.dp)
+                )
+            }
         }
-        Row {
-            AvatarPickerView(
-                AvatarPickerState.Selected(
-                    avatarData = AvatarData("@user:example.com", "User", "content://test", size = AvatarSize.TimelineThreadLatestEventSender),
-                    type = AvatarType.Space()
-                ),
-                onClick = {},
-                modifier = Modifier.padding(6.dp)
-            )
-            AvatarPickerView(
-                AvatarPickerState.Selected(
-                    avatarData = AvatarData("@user:example.com", "User", "content://test", size = AvatarSize.ReadReceiptList),
-                    type = AvatarType.Space()
-                ),
-                onClick = {},
-                modifier = Modifier.padding(6.dp)
-            )
-            AvatarPickerView(
-                AvatarPickerState.Selected(
-                    avatarData = AvatarData("@user:example.com", "User", "content://test", size = AvatarSize.SelectedUser),
-                    type = AvatarType.Space()
-                ),
-                onClick = {},
-                modifier = Modifier.padding(6.dp)
-            )
-            AvatarPickerView(
-                AvatarPickerState.Selected(
-                    avatarData = AvatarData("@user:example.com", "User", "content://test", size = AvatarSize.EditRoomDetails),
-                    type = AvatarType.Space()
-                ),
-                onClick = {},
-                modifier = Modifier.padding(6.dp)
-            )
-            AvatarPickerView(
-                AvatarPickerState.Selected(
-                    avatarData = AvatarData("@user:example.com", "User", "content://test", size = AvatarSize.RoomListManageUser),
-                    type = AvatarType.Space()
-                ),
-                onClick = {},
-                modifier = Modifier.padding(6.dp)
-            )
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            sizes.forEach {
+                AvatarPickerView(
+                    AvatarPickerState.Selected(
+                        avatarData = AvatarData("@user:example.com", "User", "content://test", size = it),
+                        type = AvatarType.Space(),
+                    ),
+                    onClick = {},
+                    modifier = Modifier.padding(6.dp)
+                )
+            }
         }
     }
 }
@@ -335,8 +288,9 @@ private fun PreviewContent() {
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
+        val size = AvatarSize.EditRoomDetails
         Text("Pick image")
-        AvatarPickerView(AvatarPickerState.Pick(buttonSize = 48.dp, externalPadding = PaddingValues(6.dp)), onClick = {})
+        AvatarPickerView(AvatarPickerState.Pick(buttonSize = size.dp, externalPadding = PaddingValues(6.dp)), onClick = {})
         HorizontalDivider()
 
         Text("User avatar")
@@ -345,7 +299,7 @@ private fun PreviewContent() {
                 Text("No url")
                 AvatarPickerView(
                     AvatarPickerState.Selected(
-                        avatarData = AvatarData("@user:example.com", "User", null, size = AvatarSize.EditRoomDetails),
+                        avatarData = AvatarData("@user:example.com", "User", null, size = size),
                         type = AvatarType.User
                     ),
                     onClick = {},
@@ -356,7 +310,7 @@ private fun PreviewContent() {
                 Text("Local")
                 AvatarPickerView(
                     AvatarPickerState.Selected(
-                        avatarData = AvatarData("@user:example.com", "User", "content://test", size = AvatarSize.EditRoomDetails),
+                        avatarData = AvatarData("@user:example.com", "User", "content://test", size = size),
                         type = AvatarType.User
                     ),
                     onClick = {},
@@ -367,7 +321,7 @@ private fun PreviewContent() {
                 Text("MXC")
                 AvatarPickerView(
                     AvatarPickerState.Selected(
-                        avatarData = AvatarData("@user:example.com", "User", "mxc://test", size = AvatarSize.EditRoomDetails),
+                        avatarData = AvatarData("@user:example.com", "User", "mxc://test", size = size),
                         type = AvatarType.User
                     ),
                     onClick = {},
@@ -383,7 +337,7 @@ private fun PreviewContent() {
                 Text("No url")
                 AvatarPickerView(
                     AvatarPickerState.Selected(
-                        avatarData = AvatarData("!room:example.com", "Room", null, size = AvatarSize.EditRoomDetails),
+                        avatarData = AvatarData("!room:example.com", "Room", null, size = size),
                         type = AvatarType.Room()
                     ),
                     onClick = {},
@@ -394,7 +348,7 @@ private fun PreviewContent() {
                 Text("Local")
                 AvatarPickerView(
                     AvatarPickerState.Selected(
-                        avatarData = AvatarData("!room:example.com", "Room", "content://test", size = AvatarSize.EditRoomDetails),
+                        avatarData = AvatarData("!room:example.com", "Room", "content://test", size = size),
                         type = AvatarType.Room()
                     ),
                     onClick = {},
@@ -405,7 +359,7 @@ private fun PreviewContent() {
                 Text("MXC")
                 AvatarPickerView(
                     AvatarPickerState.Selected(
-                        avatarData = AvatarData("!room:example.com", "Room", "mxc://test", size = AvatarSize.EditRoomDetails),
+                        avatarData = AvatarData("!room:example.com", "Room", "mxc://test", size = size),
                         type = AvatarType.Room()
                     ),
                     onClick = {},
@@ -421,7 +375,7 @@ private fun PreviewContent() {
                 Text("No url")
                 AvatarPickerView(
                     AvatarPickerState.Selected(
-                        avatarData = AvatarData("!room:example.com", "Space", null, size = AvatarSize.EditRoomDetails),
+                        avatarData = AvatarData("!room:example.com", "Space", null, size = size),
                         type = AvatarType.Space()
                     ),
                     onClick = {},
@@ -432,7 +386,7 @@ private fun PreviewContent() {
                 Text("Local")
                 AvatarPickerView(
                     AvatarPickerState.Selected(
-                        avatarData = AvatarData("!room:example.com", "Space", "content://test", size = AvatarSize.EditRoomDetails),
+                        avatarData = AvatarData("!room:example.com", "Space", "content://test", size = size),
                         type = AvatarType.Space()
                     ),
                     onClick = {},
@@ -443,7 +397,7 @@ private fun PreviewContent() {
                 Text("MXC")
                 AvatarPickerView(
                     AvatarPickerState.Selected(
-                        avatarData = AvatarData("!room:example.com", "Space", "mxc://test", size = AvatarSize.EditRoomDetails),
+                        avatarData = AvatarData("!room:example.com", "Space", "mxc://test", size = size),
                         type = AvatarType.Space()
                     ),
                     onClick = {},

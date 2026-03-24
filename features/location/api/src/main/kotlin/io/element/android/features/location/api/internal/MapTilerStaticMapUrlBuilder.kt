@@ -58,7 +58,7 @@ internal class MapTilerStaticMapUrlBuilder(
         // image smaller than the available space in pixels.
         // The resulting image will have to be scaled to fit the available space in order
         // to keep the perceived content size constant at the expense of sharpness.
-        return "$baseUrl/$mapId/static/$lon,$lat,$finalZoom/${finalWidth}x${finalHeight}$scale.webp?key=$apiKey&attribution=bottomleft"
+        return "$baseUrl/$mapId/static/$lon,$lat,$finalZoom/${finalWidth}x${finalHeight}$scale.webp?key=$apiKey&attribution=topright"
     }
 
     override fun isServiceAvailable() = apiKey.isNotEmpty()

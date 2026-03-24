@@ -12,7 +12,6 @@
   <string name="screen_chat_backup_recovery_action_confirm">"Zadajte kľúč na obnovenie"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Vaše úložisko kľúčov nie je momentálne synchronizované."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Nastaviť obnovenie"</string>
-  <string name="screen_chat_backup_recovery_action_setup_description">"Získajte prístup k vašim šifrovaným správam aj keď stratíte všetky svoje zariadenia alebo sa odhlásite zo všetkých %1$s zariadení."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Otvoriť %1$s v stolnom počítači"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Znova sa prihláste do svojho účtu"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Keď sa zobrazí výzva na overenie vášho zariadenia, vyberte %1$s"</string>
