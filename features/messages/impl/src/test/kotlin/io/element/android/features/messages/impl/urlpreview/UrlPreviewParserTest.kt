@@ -32,4 +32,55 @@ class UrlPreviewParserTest {
 
         assertThat(result).isEqualTo("https://example.org/path")
     }
+
+    @Test
+    fun `find first previewable url returns null when no urls found`() {
+        val result = findFirstPreviewableUrl(
+            formattedBody = "No URLs here at all",
+            htmlDocument = null,
+        )
+
+        assertThat(result).isNull()
+    }
+
+    @Test
+    fun `isPreviewableUrl returns true for https`() {
+        assertThat(isPreviewableUrl("https://example.org")).isTrue()
+    }
+
+    @Test
+    fun `isPreviewableUrl returns true for http`() {
+        assertThat(isPreviewableUrl("http://example.org")).isTrue()
+    }
+
+    @Test
+    fun `isPreviewableUrl returns false for ftp`() {
+        assertThat(isPreviewableUrl("ftp://example.org")).isFalse()
+    }
+
+    @Test
+    fun `isPreviewableUrl returns false for mailto`() {
+        assertThat(isPreviewableUrl("mailto:user@example.org")).isFalse()
+    }
+
+    @Test
+    fun `isPreviewableUrl returns false for malformed url`() {
+        assertThat(isPreviewableUrl("not a url")).isFalse()
+    }
+
+    @Test
+    fun `hostNameFromUrl extracts hostname`() {
+        assertThat(hostNameFromUrl("https://example.org/path")).isEqualTo("example.org")
+    }
+
+    @Test
+    fun `hostNameFromUrl removes www prefix`() {
+        assertThat(hostNameFromUrl("https://www.example.org/path")).isEqualTo("example.org")
+    }
+
+    @Test
+    fun `hostNameFromUrl falls back to original url for invalid input`() {
+        val input = "not a valid url"
+        assertThat(hostNameFromUrl(input)).isEqualTo(input)
+    }
 }

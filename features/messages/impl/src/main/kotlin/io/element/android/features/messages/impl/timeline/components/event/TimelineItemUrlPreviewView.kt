@@ -32,6 +32,8 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.urlpreview.UrlPreviewData
+import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
@@ -114,4 +116,38 @@ private fun previewImageModel(imageUrl: String): Any? {
         imageUrl.startsWith("http://") || imageUrl.startsWith("https://") -> imageUrl
         else -> null
     }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineItemUrlPreviewViewPreview() = ElementPreview {
+    TimelineItemUrlPreviewView(
+        preview = UrlPreviewData(
+            url = "https://example.org/article",
+            title = "Example Article Title That May Be Long",
+            description = "A brief description of the article content that gives context to the reader.",
+            imageUrl = "https://example.org/image.jpg",
+            siteName = "Example",
+            hostName = "example.org",
+        ),
+        onClick = {},
+        onLongClick = {},
+    )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineItemUrlPreviewViewNoImagePreview() = ElementPreview {
+    TimelineItemUrlPreviewView(
+        preview = UrlPreviewData(
+            url = "https://example.org/article",
+            title = "Example Article Title",
+            description = "A brief description of the article content.",
+            imageUrl = null,
+            siteName = null,
+            hostName = "example.org",
+        ),
+        onClick = {},
+        onLongClick = {},
+    )
 }
