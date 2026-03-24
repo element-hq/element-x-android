@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import dev.zacsweers.metro.Inject
 import io.element.android.features.logout.api.direct.DirectLogoutEvents
@@ -30,28 +31,32 @@ class ChooseSelfVerificationModePresenter(
     @Composable
     override fun present(): ChooseSelfVerificationModeState {
         val hasDevicesToVerifyAgainst by encryptionService.hasDevicesToVerifyAgainst.collectAsState()
-        val canEnterRecoveryKey by encryptionService.recoveryStateStateFlow
-            .mapState { recoveryState ->
-                when (recoveryState) {
-                    RecoveryState.WAITING_FOR_SYNC,
-                    RecoveryState.UNKNOWN -> AsyncData.Loading()
-                    RecoveryState.INCOMPLETE -> AsyncData.Success(true)
-                    RecoveryState.ENABLED,
-                    RecoveryState.DISABLED -> AsyncData.Success(false)
+        val canUseRecoveryKey by produceState<AsyncData<Boolean>>(AsyncData.Uninitialized) {
+            encryptionService.recoveryStateStateFlow
+                .mapState { recoveryState ->
+                    when (recoveryState) {
+                        RecoveryState.WAITING_FOR_SYNC,
+                        RecoveryState.UNKNOWN -> AsyncData.Loading()
+                        RecoveryState.INCOMPLETE -> AsyncData.Success(true)
+                        RecoveryState.ENABLED,
+                        RecoveryState.DISABLED -> AsyncData.Success(false)
+                    }
                 }
-            }
-            .collectAsState()
+                .collect {
+                    value = it
+                }
+        }
         val buttonsState by remember {
             derivedStateOf {
                 val canUseAnotherDevice = hasDevicesToVerifyAgainst.dataOrNull()
-                val canEnterRecoveryKey = canEnterRecoveryKey.dataOrNull()
-                if (canUseAnotherDevice == null || canEnterRecoveryKey == null) {
+                val canUseRecoveryKey = canUseRecoveryKey.dataOrNull()
+                if (canUseAnotherDevice == null || canUseRecoveryKey == null) {
                     AsyncData.Loading()
                 } else {
                     AsyncData.Success(
                         ChooseSelfVerificationModeState.ButtonsState(
                             canUseAnotherDevice = canUseAnotherDevice,
-                            canEnterRecoveryKey = canEnterRecoveryKey,
+                            canUseRecoveryKey = canUseRecoveryKey,
                         )
                     )
                 }

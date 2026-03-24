@@ -107,6 +107,10 @@ class TimelineEventContentMapper(
                                 threadInfo = extractThreadInfo(it.content),
                             )
                         }
+                        is MsgLikeKind.LiveLocation -> {
+                            // Live location messages are a special kind of message that we want to treat as unknown content for now
+                             UnknownContent
+                        }
                         is MsgLikeKind.Other -> UnknownContent
                     }
                 }
@@ -134,9 +138,6 @@ class TimelineEventContentMapper(
                 }
                 is TimelineItemContent.CallInvite -> LegacyCallInviteContent
                 is TimelineItemContent.RtcNotification -> CallNotifyContent
-                is TimelineItemContent.LiveLocation -> {
-                    UnknownContent
-                }
             }
         }
     }

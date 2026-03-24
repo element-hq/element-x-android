@@ -14,6 +14,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.annotations.AppCoroutineScope
+import io.element.android.libraries.push.api.push.PushHandlingWakeLock
 import io.element.android.libraries.pushproviders.api.PushHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -25,6 +26,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     @Inject lateinit var firebaseNewTokenHandler: FirebaseNewTokenHandler
     @Inject lateinit var pushParser: FirebasePushParser
     @Inject lateinit var pushHandler: PushHandler
+    @Inject lateinit var pushHandlingWakeLock: PushHandlingWakeLock
     @AppCoroutineScope
     @Inject lateinit var coroutineScope: CoroutineScope
 
@@ -42,6 +44,10 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(message: RemoteMessage) {
         Timber.tag(loggerTag.value).w("New Firebase message. Priority: ${message.priority}/${message.originalPriority}")
+
+        // Acquire wakelock to ensure the device stays awake while we handle the push and schedule and run the work
+        pushHandlingWakeLock.lock()
+
         coroutineScope.launch {
             val pushData = pushParser.parse(message.data)
             if (pushData == null) {
@@ -52,11 +58,17 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                         "$it: ${message.data[it]}"
                     },
                 )
+                pushHandlingWakeLock.unlock()
             } else {
-                pushHandler.handle(
+                val handled = pushHandler.handle(
                     pushData = pushData,
                     providerInfo = FirebaseConfig.NAME,
                 )
+
+                // If we failed to handle the push, we should release the wakelock early to avoid keeping the device awake for too long.
+                if (!handled) {
+                    pushHandlingWakeLock.unlock()
+                }
             }
         }
     }

@@ -20,7 +20,7 @@ import timber.log.Timber
 class RustHomeServerLoginCompatibilityChecker(
     private val clientBuilderProvider: ClientBuilderProvider,
     private val userCertificatesProvider: UserCertificatesProvider,
-) : HomeServerLoginCompatibilityChecker {
+    ) : HomeServerLoginCompatibilityChecker {
     override suspend fun check(url: String): Result<Boolean> = runCatchingExceptions {
         clientBuilderProvider.provide()
             .inMemoryStore()

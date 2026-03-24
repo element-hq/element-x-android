@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_signout_confirmation_dialog_content">"Er du sikker på at du vil logge ut?"</string>
-  <string name="screen_signout_confirmation_dialog_submit">"Logg ut"</string>
-  <string name="screen_signout_confirmation_dialog_title">"Logg ut"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Logger ut…"</string>
+  <string name="screen_signout_confirmation_dialog_content">"Er du sikker på at du vil fjerne denne enheten?"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"Fjern denne enheten"</string>
+  <string name="screen_signout_confirmation_dialog_title">"Fjern denne enheten"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Fjerner enheten …"</string>
   <string name="screen_signout_key_backup_disabled_subtitle">"Du er i ferd med å logge av din siste sesjon. Hvis du logger av nå, mister du tilgangen til de krypterte meldingene dine."</string>
-  <string name="screen_signout_key_backup_disabled_title">"Du har slått av sikkerhetskopiering"</string>
+  <string name="screen_signout_key_backup_disabled_title">"Du er i ferd med å miste tilgangen til dine krypterte chatter"</string>
   <string name="screen_signout_key_backup_offline_subtitle">"Nøklene dine ble fortsatt sikkerhetskopiert da du koblet fra. Koble til igjen, slik at nøklene dine kan sikkerhetskopieres før du logger av."</string>
   <string name="screen_signout_key_backup_offline_title">"Nøklene dine blir fortsatt sikkerhetskopiert"</string>
-  <string name="screen_signout_key_backup_ongoing_subtitle">"Vent til dette er fullført før du logger av."</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"Vennligst vent til dette er fullført før du fjerner denne enheten."</string>
   <string name="screen_signout_key_backup_ongoing_title">"Nøklene dine blir fortsatt sikkerhetskopiert"</string>
-  <string name="screen_signout_preference_item">"Logg ut"</string>
+  <string name="screen_signout_preference_item">"Fjern denne enheten"</string>
   <string name="screen_signout_recovery_disabled_subtitle">"Du er i ferd med å logge ut av din siste sesjon. Hvis du logger ut nå, mister du tilgangen til de krypterte meldingene dine."</string>
-  <string name="screen_signout_recovery_disabled_title">"Gjenoppretting ikke konfigurert"</string>
+  <string name="screen_signout_recovery_disabled_title">"Du er i ferd med å miste tilgangen til dine krypterte chatter"</string>
   <string name="screen_signout_save_recovery_key_subtitle">"Du er i ferd med å logge av din siste sesjon. Hvis du logger av nå, kan du miste tilgangen til de krypterte meldingene dine."</string>
-  <string name="screen_signout_save_recovery_key_title">"Har du lagret gjenopprettingsnøkkelen din?"</string>
+  <string name="screen_signout_save_recovery_key_title">"Sørg for at du har tilgang til gjenopprettingsnøkkelen din før du fjerner denne enheten"</string>
 </resources>

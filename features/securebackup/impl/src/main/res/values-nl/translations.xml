@@ -8,7 +8,6 @@
   <string name="screen_chat_backup_recovery_action_confirm">"Voer herstelsleutel in"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Je sleutelopslag is momenteel niet gesynchroniseerd."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Herstelmogelijkheid instellen"</string>
-  <string name="screen_chat_backup_recovery_action_setup_description">"Krijg toegang tot je versleutelde berichten als je al je apparaten kwijtraakt of overal uit %1$s bent uitgelogd."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Open %1$s op een desktopapparaat"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Log opnieuw in op je account"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Wanneer je wordt gevraagd om je apparaat te verifiëren, selecteer %1$s"</string>

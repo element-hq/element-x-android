@@ -141,6 +141,7 @@ class QrCodeLoginFlowNode(
                                 }
                                 QrLoginException.CheckCodeAlreadySent,
                                 QrLoginException.CheckCodeCannotBeSent,
+                                QrLoginException.UnsupportedQrCodeType,
                                 QrLoginException.Unknown -> {
                                     Timber.e(error, "Unknown error found")
                                     backstack.replace(NavTarget.Error(QrCodeErrorScreenType.UnknownError))

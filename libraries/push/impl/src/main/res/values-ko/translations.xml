@@ -11,7 +11,11 @@
   <plurals name="notification_compat_summary_title">
     <item quantity="other">"%d 알림"</item>
   </plurals>
+  <string name="notification_error_unified_push_unregistered_android">"통합 푸시(UnifiedPush) 알림 배포기를 등록할 수 없어 더 이상 알림을 받을 수 없습니다. 앱의 알림 설정과 푸시 배포기의 상태를 확인해 주세요."</string>
   <string name="notification_fallback_content">"알림"</string>
+  <plurals name="notification_fallback_n_content">
+    <item quantity="other">"%d개의 새 메시지가 있습니다."</item>
+  </plurals>
   <string name="notification_incoming_call">"📹 수신 전화"</string>
   <string name="notification_inline_reply_failed">"** 전송 실패 - 방을 열여주세요"</string>
   <string name="notification_invitation_action_join">"참가하기"</string>
@@ -33,7 +37,10 @@
   <string name="notification_room_invite_body_with_sender">"%1$s 가 당신을 이 방에 초대했습니다"</string>
   <string name="notification_sender_me">"나"</string>
   <string name="notification_sender_mention_reply">"%1$s 언급하거나 답변함"</string>
+  <string name="notification_space_invite_body">"귀하를 스페이스 참여에 초대했습니다"</string>
+  <string name="notification_space_invite_body_with_sender">"%1$s님이 귀하를 스페이스 참여하도록 초대했습니다"</string>
   <string name="notification_test_push_notification_content">"알림을 보고 있습니다! 클릭해주세요!"</string>
+  <string name="notification_thread_in_room">"%1$s의 스레드"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
@@ -48,10 +55,19 @@
   <string name="push_distributor_background_sync_android">"백그라운드 동기화"</string>
   <string name="push_distributor_firebase_android">"Google 서비스"</string>
   <string name="push_no_valid_google_play_services_apk_android">"유효한 Google Play 서비스를 찾지 못했습니다. 알림이 정상적으로 동작하지 않을 수 있습니다."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_description">"차단된 사용자 확인"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_quick_fix">"차단된 사용자 보기"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_result_none">"차단된 사용자는 없습니다."</string>
+  <plurals name="troubleshoot_notifications_test_blocked_users_result_some">
+    <item quantity="other">"%1$d명의 사용자를 차단했습니다. 이제 해당 사용자들의 알림을 받지 않습니다."</item>
+  </plurals>
   <string name="troubleshoot_notifications_test_blocked_users_title">"차단한 사용자"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"현재 제공자의 이름을 가져옵니다."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"푸시 제공자가 선택되지 않았습니다."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found">"현재 푸시 제공업체: %1$s, 현재 배포처: %2$s. 하지만 배포처 %3$s을(를) 찾을 수 없습니다. 애플리케이션이 삭제된 것일 수 있습니다."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_no_distributor">"현재 푸시 제공업체는 %1$s이지만, 설정된 배포처가 없습니다."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"현재 푸시 제공자: %1$s."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success_with_distributor">"현재 푸시 제공업체: %1$s(%2$s)"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_title">"현재 푸시 제공자"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"애플리케이션이 적어도 하나의 푸시 제공자를 지원하는지 확인하십시오."</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"푸시 제공자 지원이 발견되지 않았습니다."</string>

@@ -120,6 +120,7 @@
   <string name="action_leave_space">"Leave space"</string>
   <string name="action_load_more">"Load more"</string>
   <string name="action_manage_account">"Manage account"</string>
+  <string name="action_manage_account_and_devices">"Manage account &amp; devices"</string>
   <string name="action_manage_devices">"Manage devices"</string>
   <string name="action_manage_rooms">"Manage rooms"</string>
   <string name="action_message">"Message"</string>
@@ -162,14 +163,15 @@
   <string name="action_share_live_location">"Share live location"</string>
   <string name="action_show">"Show"</string>
   <string name="action_sign_in_again">"Sign in again"</string>
-  <string name="action_signout">"Sign out"</string>
-  <string name="action_signout_anyway">"Sign out anyway"</string>
+  <string name="action_signout">"Remove this device"</string>
+  <string name="action_signout_anyway">"Remove this device anyway"</string>
   <string name="action_skip">"Skip"</string>
   <string name="action_start">"Start"</string>
   <string name="action_start_chat">"Start chat"</string>
   <string name="action_start_over">"Start over"</string>
   <string name="action_start_verification">"Start verification"</string>
   <string name="action_static_map_load">"Tap to load map"</string>
+  <string name="action_stop">"Stop"</string>
   <string name="action_take_photo">"Take photo"</string>
   <string name="action_tap_for_options">"Tap for options"</string>
   <string name="action_translate">"Translate"</string>
@@ -190,6 +192,7 @@
   <string name="common_advanced_settings">"Advanced settings"</string>
   <string name="common_an_image">"an image"</string>
   <string name="common_analytics">"Analytics"</string>
+  <string name="common_android_fetching_notifications_title">"Syncing notifications…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"You left the room"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"You were logged out of the session"</string>
   <string name="common_appearance">"Appearance"</string>
@@ -223,6 +226,7 @@
   <string name="common_empty_file">"Empty file"</string>
   <string name="common_encryption">"Encryption"</string>
   <string name="common_encryption_enabled">"Encryption enabled"</string>
+  <string name="common_ends_at">"Ends at %1$s"</string>
   <string name="common_enter_your_pin">"Enter your PIN"</string>
   <string name="common_error">"Error"</string>
   <string name="common_error_registering_pusher_android">"An error occurred, you may not receive notifications for new messages. Please troubleshoot notifications from the settings.
@@ -249,6 +253,8 @@ Reason: %1$s."</string>
   <string name="common_line_copied_to_clipboard">"Line copied to clipboard"</string>
   <string name="common_link_copied_to_clipboard">"Link copied to clipboard"</string>
   <string name="common_link_new_device">"Link new device"</string>
+  <string name="common_live_location">"Live location"</string>
+  <string name="common_live_location_ended">"Live location ended"</string>
   <string name="common_loading">"Loading…"</string>
   <string name="common_loading_more">"Loading more…"</string>
   <plurals name="common_many_members">
@@ -345,9 +351,10 @@ Reason: %1$s."</string>
   <string name="common_settings">"Settings"</string>
   <string name="common_share_space">"Share space"</string>
   <string name="common_shared_history">"New members see history"</string>
+  <string name="common_shared_live_location">"Shared live location"</string>
   <string name="common_shared_location">"Shared location"</string>
   <string name="common_shared_space">"Shared space"</string>
-  <string name="common_signing_out">"Signing out"</string>
+  <string name="common_signing_out">"Removing device"</string>
   <string name="common_something_went_wrong">"Something went wrong"</string>
   <string name="common_something_went_wrong_message">"We encountered an issue. Please try again."</string>
   <string name="common_space">"Space"</string>
@@ -372,7 +379,7 @@ Reason: %1$s."</string>
   <string name="common_unable_to_decrypt">"Unable to decrypt"</string>
   <string name="common_unable_to_decrypt_insecure_device">"Sent from an insecure device"</string>
   <string name="common_unable_to_decrypt_no_access">"You don\'t have access to this message"</string>
-  <string name="common_unable_to_decrypt_verification_violation">"Sender\'s verified identity was reset"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Sender\'s verified digital identity was reset"</string>
   <string name="common_unable_to_invite_message">"Invites couldn\'t be sent to one or more users."</string>
   <string name="common_unable_to_invite_title">"Unable to send invite(s)"</string>
   <string name="common_unlock">"Unlock"</string>
@@ -397,16 +404,17 @@ Reason: %1$s."</string>
   <string name="common_voice_message">"Voice message"</string>
   <string name="common_waiting">"Waiting…"</string>
   <string name="common_waiting_for_decryption_key">"Waiting for this message"</string>
+  <string name="common_waiting_live_location">"Waiting for live location…"</string>
   <string name="common_world_readable_history">"Anyone can see history"</string>
   <string name="common_you">"You"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) shared this message since you were not in the room when it was sent."</string>
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s shared this message since you were not in the room when it was sent."</string>
   <string name="crypto_history_visible">"This room has been configured so that new members can read history. %1$s"</string>
-  <string name="crypto_identity_change_pin_violation">"%1$s\'s identity was reset. %2$s"</string>
-  <string name="crypto_identity_change_pin_violation_new">"%1$s’s %2$s identity was reset. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation">"%1$s\'s digital identity was reset. %2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"%1$s’s %2$s digital identity was reset. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
-  <string name="crypto_identity_change_profile_pin_violation">"%1$s’s identity was reset."</string>
-  <string name="crypto_identity_change_verification_violation_new">"%1$s’s %2$s identity was reset. %3$s"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"%1$s’s digital identity was reset."</string>
+  <string name="crypto_identity_change_verification_violation_new">"%1$s’s %2$s digital identity was reset. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Withdraw verification"</string>
   <string name="dialog_allow_access">"Allow access"</string>
   <string name="dialog_confirm_link_message">"The link %1$s is taking you to another site %2$s
@@ -438,6 +446,7 @@ Are you sure you want to continue?"</string>
   <string name="error_failed_locating_user">"%1$s could not access your location. Please try again later."</string>
   <string name="error_failed_uploading_voice_message">"Failed to upload your voice message."</string>
   <string name="error_invalid_invite">"The room no longer exists or the invite is no longer valid."</string>
+  <string name="error_location_service_disabled_android">"Please enable your GPS to access location-based features."</string>
   <string name="error_message_not_found">"Message not found"</string>
   <string name="error_missing_location_auth_android">"%1$s does not have permission to access your location. You can enable access in Settings."</string>
   <string name="error_missing_location_rationale_android">"%1$s does not have permission to access your location. Enable access below."</string>
@@ -465,11 +474,11 @@ Are you sure you want to continue?"</string>
     <item quantity="other">"%1$d Pinned messages"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Pinned messages"</string>
-  <string name="screen_reset_identity_confirmation_subtitle">"You\'re about to go to your %1$s account to reset your identity. Afterwards you\'ll be taken back to the app."</string>
-  <string name="screen_reset_identity_confirmation_title">"Can\'t confirm? Go to your account to reset your identity."</string>
+  <string name="screen_reset_identity_confirmation_subtitle">"You\'re about to go to your %1$s account to reset your digital identity. Afterwards you\'ll be taken back to the app."</string>
+  <string name="screen_reset_identity_confirmation_title">"Can\'t confirm? Go to your account to reset your digital identity."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Withdraw verification and send"</string>
   <string name="screen_resolve_send_failure_changed_identity_subtitle">"You can withdraw your verification and send this message anyway, or you can cancel for now and try again later after reverifying %1$s."</string>
-  <string name="screen_resolve_send_failure_changed_identity_title">"Your message was not sent because %1$s’s verified identity was reset"</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Your message was not sent because %1$s’s verified digital identity was reset"</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Send message anyway"</string>
   <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s is using one or more unverified devices. You can send the message anyway, or you can cancel for now and try again later after %2$s has verified all their devices."</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Your message was not sent because %1$s has not verified all devices"</string>
@@ -487,12 +496,14 @@ Are you sure you want to continue?"</string>
   <string name="screen_room_pinned_banner_loading_description">"Loading message…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"View All"</string>
   <string name="screen_room_title">"Chat"</string>
+  <string name="screen_share_location_live_location_duration_picker_title">"Choose how long to share your live location."</string>
   <string name="screen_share_location_title">"Share location"</string>
   <string name="screen_share_my_location_action">"Share my location"</string>
   <string name="screen_share_open_apple_maps">"Open in Apple Maps"</string>
   <string name="screen_share_open_google_maps">"Open in Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Open in OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Share selected location"</string>
+  <string name="screen_sharing_location_option_sheet_title">"Sharing options"</string>
   <string name="screen_space_list_description">"Spaces you have created or joined."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_empty_state_title">"Create spaces to organize rooms"</string>
@@ -500,7 +511,7 @@ Are you sure you want to continue?"</string>
   <string name="screen_space_list_title">"Spaces"</string>
   <string name="screen_static_location_sheet_timestamp_description">"Shared %1$s"</string>
   <string name="screen_static_location_sheet_title">"On the map"</string>
-  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Message not sent because %1$s’s verified identity was reset."</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Message not sent because %1$s’s verified digital identity was reset."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Message not sent because %1$s has not verified all devices."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Message not sent because you have not verified one or more of your devices."</string>
   <string name="screen_view_location_title">"Location"</string>
@@ -511,5 +522,5 @@ Are you sure you want to continue?"</string>
   <string name="timeline_decryption_failure_historical_event_unverified_device">"You need to verify this device for access to historical messages"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"You don\'t have access to this message"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Unable to decrypt message"</string>
-  <string name="timeline_decryption_failure_withheld_unverified">"This message was blocked either because you did not verify your device or because the sender needs to verify your identity."</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"This message was blocked either because you did not verify your device or because the sender needs to verify your digital identity."</string>
 </resources>

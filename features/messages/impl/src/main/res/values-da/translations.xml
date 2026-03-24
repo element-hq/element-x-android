@@ -35,7 +35,7 @@
   <string name="screen_room_attachment_source_camera_video">"Optag video"</string>
   <string name="screen_room_attachment_source_files">"Vedhæftning"</string>
   <string name="screen_room_attachment_source_gallery">"Foto- og videobibliotek"</string>
-  <string name="screen_room_attachment_source_location">"Lokation"</string>
+  <string name="screen_room_attachment_source_location">"Del lokation"</string>
   <string name="screen_room_attachment_source_poll">"Afstemning"</string>
   <string name="screen_room_attachment_text_formatting">"Tekstformatering"</string>
   <string name="screen_room_encrypted_history_banner">"Beskedhistorikken er i øjeblikket ikke tilgængelig."</string>
