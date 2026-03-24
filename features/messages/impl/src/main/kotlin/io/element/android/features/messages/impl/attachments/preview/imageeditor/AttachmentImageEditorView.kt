@@ -169,7 +169,7 @@ fun AttachmentImageEditorView(
                                 Icon(
                                     modifier = Modifier
                                         .size(22.dp),
-                                    imageVector = CompoundIcons.Restart(),
+                                    imageVector = CompoundIcons.RotateRight(),
                                     contentDescription = null,
                                 )
                                 Spacer(modifier = Modifier.height(3.dp))
@@ -326,6 +326,8 @@ private fun CropOverlay(
         val cropTop = cropRect.top * size.height
         val cropRight = cropRect.right * size.width
         val cropBottom = cropRect.bottom * size.height
+        // Hardcoded black: the crop overlay must always darken the image regardless of theme.
+        // No semantic token exists for this use case in the Compound design system.
         val overlayColor = Color.Black.copy(alpha = 0.48f)
 
         drawRect(
