@@ -35,6 +35,44 @@ Adds link preview cards for URLs shared in the timeline, plus an image crop and 
 
 - [`b5947792`](https://github.com/ceearrbee/element-x-android/commit/b59477921baf9a88685f95e39b05b777717c5873) feat: Add URL previews, image crop/rotate editor, and modern layout perf fix
 
+### Material 3 Expressive Redesign
+
+Complete visual overhaul following M3 Expressive guidelines, Google Messages patterns, and Jetchat sample:
+
+- **Theme**: `MotionScheme.expressive()` with spring-physics animations, M3E shape scale (8/12/16/20/28dp)
+- **Message bubbles**: Asymmetric Jetchat-style corners (16dp/4dp), primaryContainer color with Material You, animated elevation on press
+- **Chat screen**: CenterAlignedTopAppBar with darker `surfaceContainerHigh` layer, rounded-top Surface container wrapping message timeline
+- **Chat input**: M3 Surface with animated tonalElevation on focus, FilledTonalIconButton for attachment
+- **Room list**: Unified rounded-top container, bold typography + numeric badge for unread rooms, spring animateItem
+- **Navigation**: M3 NavigationBar at bottom, ModalNavigationDrawer with profile header
+- **Home**: Crossfade tab transitions, FAB scroll-hide with spring animation
+- **Profile**: LargeTopAppBar with exitUntilCollapsedScrollBehavior
+- **Day separators**: Flanking lines pattern
+- **Loading indicators**: ElementLoadingIndicator (polygon morph) + WavyLinearProgressIndicator
+- **Onboarding**: Button hierarchy (Filled/Outlined/Text)
+- **Settings**: M3E feature flag in Labs, timeline layout always visible
+
+### Thread List
+
+Full thread list feature using the Rust SDK `Room.loadThreadList()` API. Thread button in chat top bar opens a dedicated screen listing all threads with message previews.
+
+### Slash Commands
+
+Full slash command support with suggestion UI:
+- `/me`, `/topic`, `/invite`, `/kick`, `/ban`, `/unban`, `/join`, `/part`
+- `/plain`, `/shrug`, `/tableflip`, `/unflip`, `/lenny`
+- Type `/` to see command suggestions with descriptions
+
+### Additional UX Improvements
+
+- Encryption status shown as composer placeholder text
+- Pin button + thread button in chat top bar
+- Overflow menu with People/Invite/Settings
+- Branded loading splash with Element logo
+- Unread count badge on room list items
+- Sender names visible in DMs for both participants
+- TopAppBar scroll behaviors on RoomDetails, Login, ConfigureRoom
+
 ## Table of contents
 
 <!--- TOC -->
