@@ -286,6 +286,8 @@ class MessagesViewTest {
         )
         rule.setMessagesView(
             state = state,
+            // Swipe gestures may trigger a click as a side effect, provide a no-op handler
+            onEventClick = { _, _ -> false },
         )
         rule.onAllNodesWithTag(TestTags.messageBubble.value).apply {
             onFirst().performTouchInput { swipeRight(endX = 200f) }

@@ -99,6 +99,7 @@ class TimelineProtectionPresenterTest {
     fun `present - show url previews when allowed and enabled for room`() = runTest {
         val roomId = RoomId("!room:example.org")
         val sessionPreferencesStore = InMemorySessionPreferencesStore().apply {
+            setUrlPreviewEnabled(true)
             setRoomUrlPreviewEnabled(roomId.value, true)
         }
         val presenter = createPresenter(

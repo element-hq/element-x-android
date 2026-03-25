@@ -100,7 +100,8 @@ class TimelineItemEventRowModernTest {
                 )
             }
         }
+        // Avatars are now shown in DMs (both sender names visible)
         rule.onNodeWithTag(TestTags.timelineItemSenderAvatar.value, useUnmergedTree = true)
-            .assertDoesNotExist()
+            .assertExists()
     }
 }

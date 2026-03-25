@@ -992,9 +992,11 @@ class MessageComposerPresenterTest {
             initialState.eventSink(MessageComposerEvent.SuggestionReceived(Suggestion(0, 0, SuggestionType.Mention, "dave")))
             assertThat(awaitItem().suggestions).containsExactly(ResolvedSuggestion.Member(david))
 
-            // If the suggestion isn't a mention, no suggestions are returned
+            // If the suggestion is a command, command suggestions are returned
             initialState.eventSink(MessageComposerEvent.SuggestionReceived(Suggestion(0, 0, SuggestionType.Command, "")))
-            assertThat(awaitItem().suggestions).isEmpty()
+            val commandState = awaitItem()
+            assertThat(commandState.suggestions).isNotEmpty()
+            assertThat(commandState.suggestions.all { it is ResolvedSuggestion.Command }).isTrue()
         }
     }
 
