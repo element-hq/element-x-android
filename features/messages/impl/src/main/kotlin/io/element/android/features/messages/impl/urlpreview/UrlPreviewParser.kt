@@ -29,7 +29,10 @@ internal fun findFirstPreviewableUrl(
 }
 
 internal fun isPreviewableUrl(url: String): Boolean {
-    return tryOrNull { URI(url).scheme?.lowercase() } in setOf("http", "https")
+    val uri = tryOrNull { URI(url) } ?: return false
+    val host = uri.host?.lowercase() ?: return false
+    if (host == "matrix.to") return false
+    return uri.scheme?.lowercase() in setOf("http", "https")
 }
 
 internal fun hostNameFromUrl(url: String): String {
