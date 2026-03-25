@@ -31,7 +31,7 @@ class DefaultPushHandlingWakeLock(
         count.incrementAndGet()
     }
 
-    override fun unlock() {
+    override suspend fun unlock() {
         Timber.d("Releasing wakelock used for push handling.")
         FetchPushForegroundService.stop(context)
         if (count.decrementAndGet() <= 0) {
