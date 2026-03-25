@@ -318,6 +318,32 @@ fun MessagesView(
                                     onDismissRequest = { showOverflow = false },
                                 ) {
                                     DropdownMenuItem(
+                                        text = { Text(if (state.isMuted) "Unmute" else "Mute") },
+                                        leadingIcon = {
+                                            Icon(
+                                                if (state.isMuted) CompoundIcons.NotificationsSolid() else CompoundIcons.NotificationsOff(),
+                                                contentDescription = null,
+                                            )
+                                        },
+                                        onClick = {
+                                            showOverflow = false
+                                            state.eventSink(MessagesEvent.ToggleMute)
+                                        },
+                                    )
+                                    DropdownMenuItem(
+                                        text = { Text(if (state.isFavorite) "Unfavorite" else "Favorite") },
+                                        leadingIcon = {
+                                            Icon(
+                                                if (state.isFavorite) CompoundIcons.FavouriteSolid() else CompoundIcons.Favourite(),
+                                                contentDescription = null,
+                                            )
+                                        },
+                                        onClick = {
+                                            showOverflow = false
+                                            state.eventSink(MessagesEvent.ToggleFavorite)
+                                        },
+                                    )
+                                    DropdownMenuItem(
                                         text = { Text(stringResource(CommonStrings.common_people)) },
                                         leadingIcon = { Icon(CompoundIcons.UserProfileSolid(), contentDescription = null) },
                                         onClick = {

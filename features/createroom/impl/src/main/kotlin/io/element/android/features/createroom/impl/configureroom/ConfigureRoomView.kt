@@ -158,6 +158,15 @@ fun ConfigureRoomView(
                     supportingText = stringResource(R.string.screen_create_room_room_address_section_footer),
                 )
             }
+            ListItem(
+                headlineContent = { Text("New members can see history") },
+                trailingContent = ListItemContent.Switch(
+                    checked = state.config.historyVisibilityShared,
+                ),
+                onClick = {
+                    state.eventSink(ConfigureRoomEvents.HistoryVisibilityChanged(!state.config.historyVisibilityShared))
+                },
+            )
         }
     }
 

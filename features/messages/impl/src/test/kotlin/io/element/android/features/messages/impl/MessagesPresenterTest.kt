@@ -52,6 +52,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
+import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.ThreadId
@@ -1350,6 +1351,7 @@ class MessagesPresenterTest {
             featureFlagService = featureFlagService,
             addRecentEmoji = addRecentEmoji,
             markAsFullyRead = markAsFullyRead,
+            notificationSettingsService = FakeNotificationSettingsService(),
             sessionCoroutineScope = backgroundScope,
         )
     }

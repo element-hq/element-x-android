@@ -46,6 +46,12 @@ class AdvancedSettingsPresenter(
         val isSharePresenceEnabled by remember {
             sessionPreferencesStore.isSharePresenceEnabled()
         }.collectAsState(initial = true)
+        val isSendReadReceiptsEnabled by remember {
+            sessionPreferencesStore.isSendPublicReadReceiptsEnabled()
+        }.collectAsState(initial = true)
+        val isSendTypingNotificationsEnabled by remember {
+            sessionPreferencesStore.isSendTypingNotificationsEnabled()
+        }.collectAsState(initial = true)
         val isUrlPreviewEnabled by remember {
             sessionPreferencesStore.isUrlPreviewEnabled()
         }.collectAsState(initial = false)
@@ -139,12 +145,23 @@ class AdvancedSettingsPresenter(
                 is AdvancedSettingsEvents.SetUrlPreviewEnabled -> sessionCoroutineScope.launch {
                     sessionPreferencesStore.setUrlPreviewEnabled(event.enabled)
                 }
+                is AdvancedSettingsEvents.ToggleSendReadReceipts -> sessionCoroutineScope.launch {
+                    sessionPreferencesStore.setSendPublicReadReceipts(!isSendReadReceiptsEnabled)
+                }
+                is AdvancedSettingsEvents.ToggleSendTypingNotifications -> sessionCoroutineScope.launch {
+                    sessionPreferencesStore.setSendTypingNotifications(!isSendTypingNotificationsEnabled)
+                }
+                is AdvancedSettingsEvents.ToggleSharePresence -> sessionCoroutineScope.launch {
+                    sessionPreferencesStore.setSharePresence(!isSharePresenceEnabled)
+                }
             }
         }
 
         return AdvancedSettingsState(
             isDeveloperModeEnabled = isDeveloperModeEnabled,
             isSharePresenceEnabled = isSharePresenceEnabled,
+            isSendReadReceiptsEnabled = isSendReadReceiptsEnabled,
+            isSendTypingNotificationsEnabled = isSendTypingNotificationsEnabled,
             isUrlPreviewEnabled = isUrlPreviewEnabled,
             isDynamicColorEnabled = isDynamicColorEnabled,
             isHighContrastEnabled = isHighContrastEnabled,

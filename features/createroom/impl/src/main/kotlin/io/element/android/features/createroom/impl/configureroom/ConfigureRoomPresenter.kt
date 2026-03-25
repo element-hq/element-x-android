@@ -213,6 +213,9 @@ class ConfigureRoomPresenter(
                 is ConfigureRoomEvents.SetParentSpace -> {
                     dataStore.setParentSpace(event.space, false)
                 }
+                is ConfigureRoomEvents.HistoryVisibilityChanged -> {
+                    dataStore.setHistoryVisibilityShared(event.shared)
+                }
                 ConfigureRoomEvents.CancelCreateRoom -> {
                     createRoomAction.value = AsyncAction.Uninitialized
                 }
@@ -247,6 +250,11 @@ class ConfigureRoomPresenter(
                         isEncrypted = false,
                         isDirect = false,
                         visibility = RoomVisibility.Public,
+                        historyVisibilityOverride = if (config.historyVisibilityShared) {
+                            RoomHistoryVisibility.WorldReadable
+                        } else {
+                            null
+                        },
                         joinRuleOverride = config.visibilityState.joinRuleItem.toJoinRule()
                             // No need to specify the public join rule override, since the preset is already PUBLIC_CHAT
                             .takeIf { it != JoinRule.Public },
@@ -264,7 +272,11 @@ class ConfigureRoomPresenter(
                         isEncrypted = true,
                         isDirect = false,
                         visibility = RoomVisibility.Private,
-                        historyVisibilityOverride = RoomHistoryVisibility.Invited,
+                        historyVisibilityOverride = if (config.historyVisibilityShared) {
+                            RoomHistoryVisibility.Shared
+                        } else {
+                            RoomHistoryVisibility.Invited
+                        },
                         joinRuleOverride = config.visibilityState.joinRuleItem.toJoinRule()
                             // No need to specify the Invite join rule override, since the preset is already PRIVATE_CHAT
                             .takeIf { it != JoinRule.Invite },

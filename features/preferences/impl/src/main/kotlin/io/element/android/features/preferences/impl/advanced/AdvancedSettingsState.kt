@@ -20,6 +20,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 data class AdvancedSettingsState(
     val isDeveloperModeEnabled: Boolean,
     val isSharePresenceEnabled: Boolean,
+    val isSendReadReceiptsEnabled: Boolean,
+    val isSendTypingNotificationsEnabled: Boolean,
     val isUrlPreviewEnabled: Boolean,
     val isDynamicColorEnabled: Boolean,
     val isHighContrastEnabled: Boolean,

@@ -122,6 +122,8 @@ fun aMessagesState(
     roomMemberModerationState: RoomMemberModerationState = aRoomMemberModerationState(),
     topBarSharedHistoryIcon: SharedHistoryIcon = SharedHistoryIcon.NONE,
     successorRoom: SuccessorRoom? = null,
+    isFavorite: Boolean = false,
+    isMuted: Boolean = false,
     showThreadsButton: Boolean = false,
     eventSink: (MessagesEvent) -> Unit = {},
 ) = MessagesState(
@@ -150,6 +152,8 @@ fun aMessagesState(
     dmUserVerificationState = dmUserVerificationState,
     roomMemberModerationState = roomMemberModerationState,
     topBarSharedHistoryIcon = topBarSharedHistoryIcon,
+    isFavorite = isFavorite,
+    isMuted = isMuted,
     successorRoom = successorRoom,
     showThreadsButton = showThreadsButton,
     eventSink = eventSink,

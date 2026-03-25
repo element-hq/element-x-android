@@ -70,10 +70,12 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.toThreadId
 import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
+import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembersState
+import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
@@ -119,6 +121,7 @@ class MessagesPresenter(
     private val analyticsService: AnalyticsService,
     private val encryptionService: EncryptionService,
     private val featureFlagService: FeatureFlagService,
+    private val notificationSettingsService: NotificationSettingsService,
     private val addRecentEmoji: AddRecentEmoji,
     private val markAsFullyRead: MarkAsFullyRead,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
@@ -213,6 +216,13 @@ class MessagesPresenter(
         //   * The room's history_visibility allows future users to see content.
         val topBarSharedHistoryIcon = if (isKeyShareOnInviteEnabled) roomInfo.sharedHistoryIcon() else SharedHistoryIcon.NONE
 
+        val isFavorite by remember { derivedStateOf { roomInfo.isFavorite } }
+        val isMuted by remember {
+            derivedStateOf {
+                roomInfo.userDefinedNotificationMode == RoomNotificationMode.MUTE
+            }
+        }
+
         LifecycleResumeEffect(dmRoomMember, roomInfo.isEncrypted) {
             if (roomInfo.isEncrypted == true) {
                 val dmRoomMemberId = dmRoomMember?.userId
@@ -250,6 +260,21 @@ class MessagesPresenter(
                 }
                 is MessagesEvent.OnUserClicked -> {
                     roomMemberModerationState.eventSink(RoomMemberModerationEvents.ShowActionsForUser(event.user))
+                }
+                is MessagesEvent.ToggleFavorite -> {
+                    localCoroutineScope.launch {
+                        room.setIsFavorite(!isFavorite)
+                    }
+                }
+                is MessagesEvent.ToggleMute -> {
+                    localCoroutineScope.launch {
+                        if (isMuted) {
+                            notificationSettingsService.unmuteRoom(room.roomId, roomInfo.isEncrypted == true, room.isOneToOne)
+                        } else {
+                            notificationSettingsService.muteRoom(room.roomId)
+                        }
+                        room.updateRoomNotificationSettings()
+                    }
                 }
                 is MessagesEvent.MarkAsFullyReadAndExit -> coroutineScope.launch {
                     if (!markingAsReadAndExiting.getAndSet(true)) {
@@ -296,6 +321,8 @@ class MessagesPresenter(
             dmUserVerificationState = dmUserVerificationState,
             roomMemberModerationState = roomMemberModerationState,
             topBarSharedHistoryIcon = topBarSharedHistoryIcon,
+            isFavorite = isFavorite,
+            isMuted = isMuted,
             successorRoom = roomInfo.successorRoom,
             showThreadsButton = showThreadsButton,
             eventSink = ::handleEvent,

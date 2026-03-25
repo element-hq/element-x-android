@@ -115,6 +115,12 @@ class CreateRoomConfigStore(
         }
     }
 
+    fun setHistoryVisibilityShared(shared: Boolean) {
+        createRoomConfigFlow.getAndUpdate { config ->
+            config.copy(historyVisibilityShared = shared)
+        }
+    }
+
     fun clearCachedData() {
         cachedAvatarUri = null
     }

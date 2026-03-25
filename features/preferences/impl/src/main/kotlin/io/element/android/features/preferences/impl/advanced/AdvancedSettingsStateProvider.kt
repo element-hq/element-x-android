@@ -38,6 +38,8 @@ open class AdvancedSettingsStateProvider : PreviewParameterProvider<AdvancedSett
 fun aAdvancedSettingsState(
     isDeveloperModeEnabled: Boolean = false,
     isSharePresenceEnabled: Boolean = false,
+    isSendReadReceiptsEnabled: Boolean = true,
+    isSendTypingNotificationsEnabled: Boolean = true,
     isUrlPreviewEnabled: Boolean = false,
     isDynamicColorEnabled: Boolean = true,
     isHighContrastEnabled: Boolean = false,
@@ -52,6 +54,8 @@ fun aAdvancedSettingsState(
 ) = AdvancedSettingsState(
     isDeveloperModeEnabled = isDeveloperModeEnabled,
     isSharePresenceEnabled = isSharePresenceEnabled,
+    isSendReadReceiptsEnabled = isSendReadReceiptsEnabled,
+    isSendTypingNotificationsEnabled = isSendTypingNotificationsEnabled,
     isUrlPreviewEnabled = isUrlPreviewEnabled,
     isDynamicColorEnabled = isDynamicColorEnabled,
     isHighContrastEnabled = isHighContrastEnabled,

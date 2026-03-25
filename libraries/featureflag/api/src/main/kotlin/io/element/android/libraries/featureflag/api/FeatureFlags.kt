@@ -51,6 +51,7 @@ enum class FeatureFlags(
             " You'll have to stop and re-open the app manually for that setting to take effect.",
         defaultValue = { false },
         isFinished = false,
+        isInLabs = true,
     ),
     EnableKeyShareOnInvite(
         key = "feature.enableKeyShareOnInvite",
@@ -62,6 +63,7 @@ enum class FeatureFlags(
             " Do not enable on production accounts.",
         defaultValue = { false },
         isFinished = false,
+        isInLabs = true,
     ),
     Knock(
         key = "feature.knock",
@@ -108,6 +110,7 @@ enum class FeatureFlags(
         defaultValue = { false },
         // False so it's displayed in the developer options screen
         isFinished = false,
+        isInLabs = true,
     ),
     Threads(
         key = "feature.thread_timeline",
@@ -161,6 +164,7 @@ enum class FeatureFlags(
         description = "Allow sharing live location in rooms.",
         defaultValue = { false },
         isFinished = false,
+        isInLabs = true,
     ),
     ValidateNetworkWhenSchedulingNotificationFetching(
         key = "feature.validate_network_when_scheduling_notification_fetching",

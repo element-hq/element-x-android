@@ -25,4 +25,7 @@ sealed interface AdvancedSettingsEvents {
     data class SetHideInviteAvatars(val value: Boolean) : AdvancedSettingsEvents
     data class SetTimelineLayoutMode(val mode: TimelineLayoutMode) : AdvancedSettingsEvents
     data class SetUrlPreviewEnabled(val enabled: Boolean) : AdvancedSettingsEvents
+    data object ToggleSendReadReceipts : AdvancedSettingsEvents
+    data object ToggleSendTypingNotifications : AdvancedSettingsEvents
+    data object ToggleSharePresence : AdvancedSettingsEvents
 }

@@ -131,18 +131,6 @@ fun AdvancedSettingsView(
         )
         ListItem(
             headlineContent = {
-                Text(text = stringResource(id = R.string.screen_advanced_settings_share_presence))
-            },
-            supportingContent = {
-                Text(text = stringResource(id = R.string.screen_advanced_settings_share_presence_description))
-            },
-            trailingContent = ListItemContent.Switch(
-                checked = state.isSharePresenceEnabled,
-            ),
-            onClick = { state.eventSink(AdvancedSettingsEvents.SetSharePresenceEnabled(!state.isSharePresenceEnabled)) }
-        )
-        ListItem(
-            headlineContent = {
                 Text(text = stringResource(id = R.string.screen_advanced_settings_url_preview_title))
             },
             supportingContent = {
@@ -239,6 +227,26 @@ fun AdvancedSettingsView(
             }
         }
 
+        PreferenceCategory(
+            title = "Privacy & Activity",
+            showTopDivider = true,
+        ) {
+            PreferenceSwitch(
+                title = "Send read receipts",
+                isChecked = state.isSendReadReceiptsEnabled,
+                onCheckedChange = { state.eventSink(AdvancedSettingsEvents.ToggleSendReadReceipts) },
+            )
+            PreferenceSwitch(
+                title = "Send typing notifications",
+                isChecked = state.isSendTypingNotificationsEnabled,
+                onCheckedChange = { state.eventSink(AdvancedSettingsEvents.ToggleSendTypingNotifications) },
+            )
+            PreferenceSwitch(
+                title = stringResource(id = R.string.screen_advanced_settings_share_presence),
+                isChecked = state.isSharePresenceEnabled,
+                onCheckedChange = { state.eventSink(AdvancedSettingsEvents.ToggleSharePresence) },
+            )
+        }
         ModerationAndSafety(state)
     }
 }

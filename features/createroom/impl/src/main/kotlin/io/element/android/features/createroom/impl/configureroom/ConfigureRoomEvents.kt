@@ -19,5 +19,6 @@ sealed interface ConfigureRoomEvents {
     data object CreateRoom : ConfigureRoomEvents
     data class HandleAvatarAction(val action: AvatarAction) : ConfigureRoomEvents
     data class SetParentSpace(val space: SpaceRoom?) : ConfigureRoomEvents
+    data class HistoryVisibilityChanged(val shared: Boolean) : ConfigureRoomEvents
     data object CancelCreateRoom : ConfigureRoomEvents
 }
