@@ -374,8 +374,8 @@ private fun JumpToBottomButton(
     AnimatedVisibility(
         modifier = modifier,
         visible = isVisible,
-        enter = M3Motion.fadeEnter,
-        exit = M3Motion.fadeExit,
+        enter = M3Motion.enterTransition,
+        exit = M3Motion.exitTransition,
     ) {
         FloatingActionButton(
             onClick = onClick,

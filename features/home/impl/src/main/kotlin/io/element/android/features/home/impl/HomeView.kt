@@ -13,14 +13,15 @@ package io.element.android.features.home.impl
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -30,8 +31,11 @@ import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationDrawerItem
+import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.rememberTopAppBarState
@@ -53,7 +57,6 @@ import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
@@ -202,42 +205,51 @@ private fun HomeScaffold(
         drawerState = drawerState,
         drawerContent = {
             ModalDrawerSheet {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(24.dp),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                ) {
-                    Spacer(modifier = Modifier.height(24.dp))
-                    if (currentUser != null) {
-                        val avatarData by remember(currentUser) {
-                            derivedStateOf {
-                                currentUser.getAvatarData(size = AvatarSize.RoomDetailsHeader)
-                            }
+                Spacer(Modifier.height(16.dp))
+                // Header with avatar and name
+                if (currentUser != null) {
+                    val avatarData by remember(currentUser) {
+                        derivedStateOf {
+                            currentUser.getAvatarData(size = AvatarSize.EditRoomDetails)
                         }
+                    }
+                    Row(
+                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    ) {
                         Avatar(
                             avatarData = avatarData,
                             avatarType = AvatarType.User,
                             contentDescription = currentUser.displayName,
                         )
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Text(
-                            text = currentUser.displayName ?: currentUser.userId.value,
-                            style = ElementTheme.typography.fontHeadingMdBold,
-                        )
+                        Column {
+                            Text(
+                                text = currentUser.displayName ?: currentUser.userId.value,
+                                style = ElementTheme.typography.fontHeadingMdBold,
+                            )
+                            Text(
+                                text = currentUser.userId.value,
+                                style = ElementTheme.typography.fontBodySmRegular,
+                                color = ElementTheme.colors.textSecondary,
+                            )
+                        }
                     }
-                    Spacer(modifier = Modifier.height(24.dp))
-                    val coroutineScopeDrawer = rememberCoroutineScope()
-                    TextButton(
-                        text = stringResource(CommonStrings.common_settings),
-                        onClick = {
-                            coroutineScopeDrawer.launch {
-                                drawerState.close()
-                            }
-                            onOpenSettings()
-                        },
-                    )
                 }
+                Spacer(Modifier.height(8.dp))
+                HorizontalDivider()
+                Spacer(Modifier.height(8.dp))
+                val coroutineScopeDrawer = rememberCoroutineScope()
+                NavigationDrawerItem(
+                    icon = { Icon(CompoundIcons.Settings(), contentDescription = null) },
+                    label = { Text(stringResource(CommonStrings.common_settings)) },
+                    selected = false,
+                    onClick = {
+                        coroutineScopeDrawer.launch { drawerState.close() }
+                        onOpenSettings()
+                    },
+                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
+                )
             }
         },
     ) {
