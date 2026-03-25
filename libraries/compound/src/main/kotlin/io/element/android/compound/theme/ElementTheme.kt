@@ -211,7 +211,7 @@ private fun SemanticColors.withDynamicColors(scheme: ColorScheme): SemanticColor
     bgCanvasDefaultLevel1 = scheme.surfaceContainerLow,
     bgCanvasDisabled = scheme.onSurface.copy(alpha = 0.12f),
     // Subtle backgrounds → M3 surface variants
-    bgSubtlePrimary = scheme.surfaceContainerHigh,
+    bgSubtlePrimary = scheme.primaryContainer,
     bgSubtleSecondary = scheme.surfaceContainerLow,
     // Secondary/tertiary actions → M3 secondary
     bgActionSecondaryRest = scheme.surfaceContainerHighest,

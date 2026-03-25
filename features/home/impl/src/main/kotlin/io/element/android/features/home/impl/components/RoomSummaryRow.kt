@@ -27,6 +27,7 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.Surface
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -36,6 +37,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -128,7 +130,8 @@ internal fun RoomSummaryRow(
                     NameAndTimestampRow(
                         name = room.name,
                         timestamp = room.timestamp,
-                        isHighlighted = room.isHighlighted
+                        isHighlighted = room.isHighlighted,
+                        hasNewContent = room.hasNewContent,
                     )
                     MessagePreviewAndIndicatorRow(room = room)
                 }
@@ -144,7 +147,8 @@ internal fun RoomSummaryRow(
                     NameAndTimestampRow(
                         name = room.name,
                         timestamp = null,
-                        isHighlighted = room.isHighlighted
+                        isHighlighted = room.isHighlighted,
+                        hasNewContent = room.hasNewContent,
                     )
                     if (room.canonicalAlias != null) {
                         Text(
@@ -187,31 +191,35 @@ private fun RoomSummaryScaffoldRow(
             interactionSource = remember { MutableInteractionSource() }
         )
         .onKeyboardContextMenuAction { onLongClick(room) }
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .heightIn(min = minHeight)
-            .then(clickModifier)
-            .padding(horizontal = 16.dp, vertical = 12.dp)
-            .height(IntrinsicSize.Min),
+    Surface(
+        tonalElevation = if (room.hasNewContent) 1.dp else 0.dp,
     ) {
-        Avatar(
-            avatarData = room.avatarData,
-            avatarType = if (room.isSpace) {
-                AvatarType.Space(isTombstoned = room.isTombstoned)
-            } else {
-                AvatarType.Room(
-                    heroes = room.heroes,
-                    isTombstoned = room.isTombstoned,
-                )
-            },
-            hideImage = hideAvatarImage,
-        )
-        Spacer(modifier = Modifier.width(16.dp))
-        Column(
-            modifier = Modifier.fillMaxWidth(),
-            content = content,
-        )
+        Row(
+            modifier = modifier
+                .fillMaxWidth()
+                .heightIn(min = minHeight)
+                .then(clickModifier)
+                .padding(horizontal = 16.dp, vertical = 12.dp)
+                .height(IntrinsicSize.Min),
+        ) {
+            Avatar(
+                avatarData = room.avatarData,
+                avatarType = if (room.isSpace) {
+                    AvatarType.Space(isTombstoned = room.isTombstoned)
+                } else {
+                    AvatarType.Room(
+                        heroes = room.heroes,
+                        isTombstoned = room.isTombstoned,
+                    )
+                },
+                hideImage = hideAvatarImage,
+            )
+            Spacer(modifier = Modifier.width(16.dp))
+            Column(
+                modifier = Modifier.fillMaxWidth(),
+                content = content,
+            )
+        }
     }
 }
 
@@ -220,6 +228,7 @@ private fun NameAndTimestampRow(
     name: String?,
     timestamp: String?,
     isHighlighted: Boolean,
+    hasNewContent: Boolean,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -232,7 +241,11 @@ private fun NameAndTimestampRow(
         ) {
             // Name
             Text(
-                style = ElementTheme.typography.fontBodyLgMedium,
+                style = if (hasNewContent) {
+                    ElementTheme.typography.fontBodyLgMedium.copy(fontWeight = FontWeight.Bold)
+                } else {
+                    ElementTheme.typography.fontBodyLgMedium
+                },
                 text = name?.toSafeLength(ellipsize = true) ?: stringResource(id = CommonStrings.common_no_room_name),
                 fontStyle = FontStyle.Italic.takeIf { name == null },
                 color = ElementTheme.colors.roomListRoomName,
