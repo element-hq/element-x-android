@@ -24,6 +24,7 @@ import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.RoomSummary
 import io.element.android.libraries.matrix.api.roomlist.updateVisibleRange
+import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -35,6 +36,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -60,10 +62,12 @@ class RoomListDataSource(
     private val sessionCoroutineScope: CoroutineScope,
     private val dateTimeObserver: DateTimeObserver,
     private val analyticsService: AnalyticsService,
+    private val sessionPreferencesStore: SessionPreferencesStore,
 ) {
     init {
         observeNotificationSettings()
         observeDateTimeChanges()
+        observePinnedRoomsChanges()
     }
 
     private val roomList = roomListService.createRoomList(
@@ -145,6 +149,15 @@ class RoomListDataSource(
             .launchIn(sessionCoroutineScope)
     }
 
+    private fun observePinnedRoomsChanges() {
+        sessionPreferencesStore.getPinnedRoomsFlow()
+            .drop(1) // Skip initial value, only react to changes
+            .onEach {
+                rebuildAllRoomSummaries()
+            }
+            .launchIn(sessionCoroutineScope)
+    }
+
     private suspend fun replaceWith(roomSummaries: List<RoomSummary>) = withContext(coroutineDispatchers.computation) {
         lock.withLock {
             diffCacheUpdater.updateWith(roomSummaries)
@@ -186,6 +199,22 @@ class RoomListDataSource(
             }
         }
 
+        // Apply pinned state and sort pinned rooms first, ordered by pin recency
+        val pinnedRoomIds = sessionPreferencesStore.getPinnedRoomsFlow().first()
+        val pinnedSet = pinnedRoomIds.toSet()
+        val withPinnedState = roomListRoomSummaries.map { summary ->
+            if (pinnedSet.contains(summary.roomId.value)) {
+                summary.copy(isPinned = true)
+            } else {
+                summary
+            }
+        }
+        val pinnedIndexMap = pinnedRoomIds.withIndex().associate { (index, id) -> id to index }
+        val sortedSummaries = withPinnedState.sortedWith(
+            compareBy<RoomListRoomSummary> { !it.isPinned }
+                .thenBy { pinnedIndexMap[it.roomId.value] ?: Int.MAX_VALUE }
+        )
+
         // TODO remove once https://github.com/element-hq/element-x-android/issues/5031 has been confirmed as fixed
         val duplicates = cachingResults.filter { (_, operations) -> operations.size > 1 }
         if (duplicates.isNotEmpty()) {
@@ -197,9 +226,9 @@ class RoomListDataSource(
             )
 
             // Remove duplicates before emitting the new values
-            _roomSummariesFlow.emit(roomListRoomSummaries.distinctBy { it.roomId }.toImmutableList())
+            _roomSummariesFlow.emit(sortedSummaries.distinctBy { it.roomId }.toImmutableList())
         } else {
-            _roomSummariesFlow.emit(roomListRoomSummaries.toImmutableList())
+            _roomSummariesFlow.emit(sortedSummaries.toImmutableList())
         }
     }
 

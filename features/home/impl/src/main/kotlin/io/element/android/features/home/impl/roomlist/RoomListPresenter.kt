@@ -64,6 +64,7 @@ import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
@@ -140,6 +141,7 @@ class RoomListPresenter(
                     leaveRoomState.eventSink(LeaveRoomEvent.LeaveRoom(event.roomId, needsConfirmation = event.needsConfirmation))
                 }
                 is RoomListEvent.SetRoomIsFavorite -> coroutineScope.setRoomIsFavorite(event.roomId, event.isFavorite)
+                is RoomListEvent.SetRoomIsPinned -> coroutineScope.setRoomIsPinned(event.roomId, event.isPinned)
                 is RoomListEvent.MarkAsRead -> coroutineScope.markAsRead(event.roomId)
                 is RoomListEvent.MarkAsUnread -> coroutineScope.markAsUnread(event.roomId)
                 is RoomListEvent.AcceptInvite -> {
@@ -270,6 +272,7 @@ class RoomListPresenter(
             roomName = event.roomSummary.name,
             isDm = event.roomSummary.isDm,
             isFavorite = event.roomSummary.isFavorite,
+            isPinned = event.roomSummary.isPinned,
             hasNewContent = event.roomSummary.hasNewContent,
             displayClearRoomCacheAction = appPreferencesStore.isDeveloperModeEnabledFlow().first(),
         )
@@ -284,9 +287,15 @@ class RoomListPresenter(
                 .map { it.isFavorite }
                 .distinctUntilChanged()
 
-            isFavoriteFlow
-                .onEach { isFavorite ->
-                    contextMenuState.value = initialState.copy(isFavorite = isFavorite)
+            val isPinnedFlow = sessionPreferencesStore.getPinnedRoomsFlow()
+                .map { it.contains(event.roomSummary.roomId.value) }
+                .distinctUntilChanged()
+
+            combine(isFavoriteFlow, isPinnedFlow) { isFavorite, isPinned ->
+                isFavorite to isPinned
+            }
+                .onEach { (isFavorite, isPinned) ->
+                    contextMenuState.value = initialState.copy(isFavorite = isFavorite, isPinned = isPinned)
                 }
                 .flatMapLatest { isShowingContextMenuFlow }
                 .takeWhile { isShowingContextMenu -> isShowingContextMenu }
@@ -301,6 +310,16 @@ class RoomListPresenter(
                     analyticsService.captureInteraction(name = Interaction.Name.MobileRoomListRoomContextMenuFavouriteToggle)
                 }
         }
+    }
+
+    private fun CoroutineScope.setRoomIsPinned(roomId: RoomId, isPinned: Boolean) = launch {
+        val current = sessionPreferencesStore.getPinnedRoomsFlow().first()
+        val updated = if (isPinned) {
+            listOf(roomId.value) + current.filter { it != roomId.value }
+        } else {
+            current.filter { it != roomId.value }
+        }
+        sessionPreferencesStore.setPinnedRooms(updated)
     }
 
     private fun CoroutineScope.markAsRead(roomId: RoomId) = launch {

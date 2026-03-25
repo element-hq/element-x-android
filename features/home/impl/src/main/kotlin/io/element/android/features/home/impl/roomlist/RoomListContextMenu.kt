@@ -66,6 +66,9 @@ fun RoomListContextMenu(
             onFavoriteChange = { isFavorite ->
                 eventSink(RoomListEvent.SetRoomIsFavorite(contextMenu.roomId, isFavorite))
             },
+            onPinChange = { isPinned ->
+                eventSink(RoomListEvent.SetRoomIsPinned(contextMenu.roomId, isPinned))
+            },
             onClearCacheRoomClick = {
                 eventSink(RoomListEvent.HideContextMenu)
                 eventSink(RoomListEvent.ClearCacheOfRoom(contextMenu.roomId))
@@ -85,6 +88,7 @@ private fun RoomListModalBottomSheetContent(
     onRoomSettingsClick: () -> Unit,
     onLeaveRoomClick: () -> Unit,
     onFavoriteChange: (isFavorite: Boolean) -> Unit,
+    onPinChange: (isPinned: Boolean) -> Unit,
     onRoomMarkReadClick: () -> Unit,
     onRoomMarkUnreadClick: () -> Unit,
     onClearCacheRoomClick: () -> Unit,
@@ -153,6 +157,31 @@ private fun RoomListModalBottomSheetContent(
             ),
             onClick = {
                 onFavoriteChange(!contextMenu.isFavorite)
+            },
+            style = ListItemStyle.Primary,
+        )
+        val (pinTextResId, pinIcon) = if (contextMenu.isPinned) {
+            CommonStrings.common_pinned to CompoundIcons.PinSolid()
+        } else {
+            CommonStrings.common_pin_to_top to CompoundIcons.Pin()
+        }
+        ListItem(
+            headlineContent = {
+                Text(
+                    text = stringResource(id = pinTextResId),
+                    style = MaterialTheme.typography.bodyLarge,
+                )
+            },
+            leadingContent = ListItemContent.Icon(
+                iconSource = IconSource.Vector(
+                    pinIcon,
+                )
+            ),
+            trailingContent = ListItemContent.Switch(
+                checked = contextMenu.isPinned,
+            ),
+            onClick = {
+                onPinChange(!contextMenu.isPinned)
             },
             style = ListItemStyle.Primary,
         )
@@ -228,6 +257,7 @@ internal fun RoomListModalBottomSheetContentPreview(
         onRoomSettingsClick = {},
         onLeaveRoomClick = {},
         onFavoriteChange = {},
+        onPinChange = {},
         onClearCacheRoomClick = {},
         onReportRoomClick = {},
     )
