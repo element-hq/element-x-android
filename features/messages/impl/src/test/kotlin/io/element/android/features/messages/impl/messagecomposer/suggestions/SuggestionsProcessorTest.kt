@@ -45,7 +45,7 @@ class SuggestionsProcessorTest {
     }
 
     @Test
-    fun `processing Command will return empty suggestion`() = runTest {
+    fun `processing Command will return command suggestions`() = runTest {
         val result = suggestionsProcessor.process(
             suggestion = aCommandSuggestion,
             roomMembersState = RoomMembersState.Ready(persistentListOf(aRoomMember())),
@@ -53,7 +53,8 @@ class SuggestionsProcessorTest {
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
         )
-        assertThat(result).isEmpty()
+        assertThat(result).isNotEmpty()
+        assertThat(result.first()).isInstanceOf(ResolvedSuggestion.Command::class.java)
     }
 
     @Test

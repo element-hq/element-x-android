@@ -77,6 +77,14 @@ class MarkdownTextEditorState(
                 this.text.update(currentText, true)
                 this.selection = IntRange(end + 1, end + 1)
             }
+            is ResolvedSuggestion.Command -> {
+                val currentText = SpannableStringBuilder(text.value())
+                val replacement = "${resolvedSuggestion.name} "
+                currentText.replace(suggestion.start, suggestion.end, replacement)
+                this.text.update(currentText, true)
+                val newPos = suggestion.start + replacement.length
+                this.selection = IntRange(newPos, newPos)
+            }
         }
     }
 
