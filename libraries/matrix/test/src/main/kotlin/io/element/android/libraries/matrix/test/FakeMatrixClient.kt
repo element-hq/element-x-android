@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.matrix.test
 
+import io.element.android.libraries.matrix.api.HomeserverCapabilitiesProvider
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.analytics.SdkStoreSizes
 import io.element.android.libraries.matrix.api.core.DeviceId
@@ -84,6 +85,7 @@ class FakeMatrixClient(
     override val roomDirectoryService: RoomDirectoryService = FakeRoomDirectoryService(),
     override val mediaPreviewService: MediaPreviewService = FakeMediaPreviewService(),
     override val roomMembershipObserver: RoomMembershipObserver = RoomMembershipObserver(),
+    private val homeserverCapabilitiesProvider: FakeHomeserverCapabilitiesProvider = FakeHomeserverCapabilitiesProvider(),
     private val accountManagementUrlResult: (AccountManagementAction?) -> Result<String?> = { lambdaError() },
     private val resolveRoomAliasResult: (RoomAlias) -> Result<Optional<ResolvedRoomAlias>> = {
         Result.success(
@@ -383,5 +385,9 @@ class FakeMatrixClient(
 
     override suspend fun resetWellKnownConfig(): Result<Unit> {
         return resetWellKnownConfigLambda()
+    }
+
+    override fun homeserverCapabilities(): HomeserverCapabilitiesProvider {
+        return homeserverCapabilitiesProvider
     }
 }
