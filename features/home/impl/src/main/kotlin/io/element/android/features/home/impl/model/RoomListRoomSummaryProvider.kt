@@ -127,7 +127,11 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
                     name = "A tombstoned room",
                     displayType = RoomSummaryDisplayType.ROOM,
                     isTombstoned = true,
-                )
+                ),
+                aRoomListRoomSummary(
+                    name = "A pinned room",
+                    isPinned = true,
+                ),
             ),
             listOf(
                 aRoomListRoomSummary(latestEvent = LatestEvent.Sending("A sending message")),
@@ -162,6 +166,7 @@ internal fun aRoomListRoomSummary(
     isDirect: Boolean = false,
     isDm: Boolean = false,
     isFavorite: Boolean = false,
+    isPinned: Boolean = false,
     inviteSender: InviteSender? = null,
     displayType: RoomSummaryDisplayType = RoomSummaryDisplayType.ROOM,
     canonicalAlias: RoomAlias? = null,
@@ -184,6 +189,7 @@ internal fun aRoomListRoomSummary(
     isDirect = isDirect,
     isDm = isDm,
     isFavorite = isFavorite,
+    isPinned = isPinned,
     inviteSender = inviteSender,
     displayType = displayType,
     canonicalAlias = canonicalAlias,

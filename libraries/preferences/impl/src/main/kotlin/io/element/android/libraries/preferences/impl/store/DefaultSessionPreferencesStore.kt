@@ -33,6 +33,8 @@ class DefaultSessionPreferencesStore(
     @SessionCoroutineScope sessionCoroutineScope: CoroutineScope,
 ) : SessionPreferencesStore {
     companion object {
+        private const val PINNED_ROOMS_SEPARATOR = "|"
+
         fun storeFile(context: Context, sessionId: SessionId): File {
             val hashedUserId = sessionId.value.hash().take(16)
             return context.preferencesDataStoreFile("session_${hashedUserId}_preferences")
@@ -47,6 +49,7 @@ class DefaultSessionPreferencesStore(
     private val skipSessionVerification = booleanPreferencesKey("skipSessionVerification")
     private val compressImages = booleanPreferencesKey("compressMedia")
     private val compressMediaPreset = stringPreferencesKey("compressMediaPreset")
+    private val pinnedRoomsKey = stringPreferencesKey("pinnedRoomsOrdered")
 
     private val dataStoreFile = storeFile(context, sessionId)
     private val store = PreferenceDataStoreFactory.create(
@@ -93,6 +96,10 @@ class DefaultSessionPreferencesStore(
     override suspend fun setVideoCompressionPreset(preset: VideoCompressionPreset) = update(compressMediaPreset, preset.name)
     override fun getVideoCompressionPreset(): Flow<VideoCompressionPreset> = get(compressMediaPreset) { VideoCompressionPreset.STANDARD.name }
         .map { tryOrNull { VideoCompressionPreset.valueOf(it) } ?: VideoCompressionPreset.STANDARD }
+
+    override suspend fun setPinnedRooms(roomIds: List<String>) = update(pinnedRoomsKey, roomIds.joinToString(PINNED_ROOMS_SEPARATOR))
+    override fun getPinnedRoomsFlow(): Flow<List<String>> = get(pinnedRoomsKey) { "" }
+        .map { raw -> if (raw.isEmpty()) emptyList() else raw.split(PINNED_ROOMS_SEPARATOR) }
 
     override suspend fun clear() {
         dataStoreFile.safeDelete()
