@@ -25,6 +25,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import kotlin.time.Duration.Companion.minutes
 
 private const val NOTIFICATION_ID = 1001
@@ -51,11 +52,13 @@ class FetchPushForegroundService : Service() {
         }
     }
 
-    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+    override fun onCreate() {
+        Timber.d("Creating FetchPushForegroundService")
+
         bindings<PushBindings>().inject(this)
 
-        wakelock.acquire(wakelockTimeout)
-
+        Timber.d("Starting FetchPushForegroundService with wakelock timeout of $wakelockTimeout ms")
+        // Start the foreground service as soon as possible
         val notificationCompat = NotificationCompat.Builder(this, notificationChannels.getSilentChannelId())
             .setSmallIcon(CommonDrawables.ic_notification)
             .setContentTitle(getString(CommonStrings.common_android_fetching_notifications_title))
@@ -64,6 +67,12 @@ class FetchPushForegroundService : Service() {
             .setSound(null)
             .build()
         startForeground(NOTIFICATION_ID, notificationCompat)
+
+        super.onCreate()
+    }
+
+    override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        wakelock.acquire(wakelockTimeout)
 
         // The timeout is not automatic before Android 15, so we need to schedule it ourselves
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
