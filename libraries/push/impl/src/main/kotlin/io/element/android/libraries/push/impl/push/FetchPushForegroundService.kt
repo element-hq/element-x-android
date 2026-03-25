@@ -133,7 +133,7 @@ class FetchPushForegroundService : Service() {
                 // so we delay the stop to give it time to start and be set as foreground, otherwise we can crash
                 // with `ForegroundServiceDidNotStartInTimeException`.
                 var isInForeground = runningServiceInfo.foreground
-                withTimeoutOrNull(5.seconds){
+                withTimeoutOrNull(5.seconds) {
                     while (!isInForeground) {
                         delay(50)
                         val updatedServiceInfo = getRunningServiceInfo(context)
