@@ -663,7 +663,7 @@ private fun MessageEventBubbleContent(
                 }
             TimestampPosition.Aligned ->
                 ContentAvoidingLayout(
-                    modifier = modifier,
+                    modifier = modifier.fillMaxWidth(),
                     // The spacing is negative to make the content overlap the empty space at the start of the timestamp
                     spacing = (-4).dp,
                     overlayOffset = DpOffset(0.dp, -1.dp),
