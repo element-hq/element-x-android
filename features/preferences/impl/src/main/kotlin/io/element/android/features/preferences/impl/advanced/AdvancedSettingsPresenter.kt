@@ -150,7 +150,7 @@ class AdvancedSettingsPresenter(
             isHighContrastEnabled = isHighContrastEnabled,
             mediaOptimizationState = mediaOptimizationState,
             theme = themeOption,
-            timelineLayoutMode = if (isModernLayoutEnabled == true) timelineLayoutMode else null,
+            timelineLayoutMode = timelineLayoutMode,
             mediaPreviewConfigState = mediaPreviewConfigState,
             eventSink = ::handleEvent,
         )

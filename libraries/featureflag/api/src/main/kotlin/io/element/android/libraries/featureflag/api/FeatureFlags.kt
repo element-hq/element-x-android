@@ -176,5 +176,6 @@ enum class FeatureFlags(
         description = "Enable M3 Expressive UI: spring physics, shape morphing, new loading indicators",
         defaultValue = { it.buildType != BuildType.RELEASE },
         isFinished = false,
+        isInLabs = true,
     ),
 }
