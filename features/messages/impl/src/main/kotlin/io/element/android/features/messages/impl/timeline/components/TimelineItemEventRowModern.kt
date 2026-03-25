@@ -254,7 +254,7 @@ private fun ModernMessageContent(
                 }
             TimestampPosition.Aligned ->
                 ContentAvoidingLayout(
-                    modifier = modifier,
+                    modifier = modifier.fillMaxWidth(),
                     spacing = (-4).dp,
                     overlayOffset = DpOffset(0.dp, -1.dp),
                     shrinkContent = canShrinkContent,
@@ -269,7 +269,7 @@ private fun ModernMessageContent(
                     }
                 )
             TimestampPosition.Below ->
-                Column(modifier) {
+                Column(modifier.fillMaxWidth()) {
                     content {}
                     TimelineEventTimestampView(
                         event = event,
