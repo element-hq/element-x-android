@@ -27,7 +27,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material3.Surface
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -191,35 +190,31 @@ private fun RoomSummaryScaffoldRow(
             interactionSource = remember { MutableInteractionSource() }
         )
         .onKeyboardContextMenuAction { onLongClick(room) }
-    Surface(
-        tonalElevation = if (room.hasNewContent) 1.dp else 0.dp,
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .heightIn(min = minHeight)
+            .then(clickModifier)
+            .padding(horizontal = 16.dp, vertical = 12.dp)
+            .height(IntrinsicSize.Min),
     ) {
-        Row(
-            modifier = modifier
-                .fillMaxWidth()
-                .heightIn(min = minHeight)
-                .then(clickModifier)
-                .padding(horizontal = 16.dp, vertical = 12.dp)
-                .height(IntrinsicSize.Min),
-        ) {
-            Avatar(
-                avatarData = room.avatarData,
-                avatarType = if (room.isSpace) {
-                    AvatarType.Space(isTombstoned = room.isTombstoned)
-                } else {
-                    AvatarType.Room(
-                        heroes = room.heroes,
-                        isTombstoned = room.isTombstoned,
-                    )
-                },
-                hideImage = hideAvatarImage,
-            )
-            Spacer(modifier = Modifier.width(16.dp))
-            Column(
-                modifier = Modifier.fillMaxWidth(),
-                content = content,
-            )
-        }
+        Avatar(
+            avatarData = room.avatarData,
+            avatarType = if (room.isSpace) {
+                AvatarType.Space(isTombstoned = room.isTombstoned)
+            } else {
+                AvatarType.Room(
+                    heroes = room.heroes,
+                    isTombstoned = room.isTombstoned,
+                )
+            },
+            hideImage = hideAvatarImage,
+        )
+        Spacer(modifier = Modifier.width(16.dp))
+        Column(
+            modifier = Modifier.fillMaxWidth(),
+            content = content,
+        )
     }
 }
 

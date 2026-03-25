@@ -61,7 +61,7 @@ internal fun SendButtonIcon(
     // Shape morphing: Circle → RoundedSquare on press (M3 Expressive feel)
     val isPressed by interactionSource.collectIsPressedAsState()
     val cornerRadius by animateDpAsState(
-        targetValue = if (isPressed) 10.dp else 18.dp,
+        targetValue = if (isPressed) 6.dp else 20.dp,
         animationSpec = M3Motion.defaultValueSpec(),
         label = "send button morph",
     )

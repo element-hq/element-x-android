@@ -9,6 +9,7 @@
 package io.element.android.features.login.impl.screens.loginpassword
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -53,6 +54,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.error.loginError
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.designsystem.animation.M3Motion
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.BigIcon
@@ -168,8 +170,13 @@ fun LoginPasswordView(
                 }
             }
 
-            if (state.loginAction is AsyncData.Failure) {
-                LoginErrorDialog(error = state.loginAction.error, onDismiss = {
+            AnimatedVisibility(
+                visible = state.loginAction is AsyncData.Failure,
+                enter = M3Motion.enterTransition,
+                exit = M3Motion.exitTransition,
+            ) {
+                val error = (state.loginAction as? AsyncData.Failure)?.error ?: return@AnimatedVisibility
+                LoginErrorDialog(error = error, onDismiss = {
                     state.eventSink(LoginPasswordEvents.ClearError)
                 })
             }

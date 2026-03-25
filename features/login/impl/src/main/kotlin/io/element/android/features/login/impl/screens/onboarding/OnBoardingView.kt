@@ -53,6 +53,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.IconSource
+import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.matrix.api.auth.OidcDetails
@@ -296,7 +297,7 @@ private fun OnBoardingButtons(
             )
         }
         if (state.canLoginWithQrCode) {
-            Button(
+            OutlinedButton(
                 text = stringResource(id = R.string.screen_onboarding_sign_in_with_qr_code),
                 leadingIcon = IconSource.Vector(CompoundIcons.QrCode()),
                 onClick = onSignInWithQrCode,
@@ -305,7 +306,7 @@ private fun OnBoardingButtons(
         }
         val defaultAccountProvider = state.defaultAccountProvider
         if (defaultAccountProvider == null) {
-            Button(
+            TextButton(
                 text = stringResource(id = signInButtonStringRes),
                 onClick = {
                     onSignIn(state.mustChooseAccountProvider)

@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -79,12 +80,15 @@ fun PreferencesRootView(
         title = stringResource(id = CommonStrings.common_settings),
         snackbarHost = { SnackbarHost(snackbarHostState) }
     ) {
-        UserPreferences(
-            modifier = Modifier.clickable {
-                onOpenUserProfile(state.myUser)
-            },
-            user = state.myUser,
-        )
+        androidx.compose.material3.Surface(
+            onClick = { onOpenUserProfile(state.myUser) },
+            shape = MaterialTheme.shapes.medium,
+            color = MaterialTheme.colorScheme.surface,
+        ) {
+            UserPreferences(
+                user = state.myUser,
+            )
+        }
         if (state.isMultiAccountEnabled) {
             MultiAccountSection(
                 state = state,

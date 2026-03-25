@@ -12,7 +12,7 @@ import android.content.res.Configuration
 import android.net.Uri
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.background
+import androidx.compose.material3.FilledTonalIconButton
 import androidx.compose.material3.Surface
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -29,7 +29,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -40,7 +39,6 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
@@ -462,16 +460,24 @@ private fun StandardLayout(
                     Spacer(modifier = Modifier.width(19.dp))
                 }
                 else -> {
-                    val endPadding = if (voiceMessageState is VoiceMessageState.Idle) 0.dp else 3.dp
-                    // To avoid loosing keyboard focus, the IconButton has to be defined here and has to be always enabled.
-                    IconButton(
-                        modifier = Modifier
-                            .padding(top = 5.dp, bottom = 5.dp, start = 3.dp, end = endPadding)
-                            .size(48.dp),
-                        onClick = {
-                            if (voiceMessageState is VoiceMessageState.Idle) {
-                                onAddAttachment()
-                            } else {
+                    if (voiceMessageState is VoiceMessageState.Idle) {
+                        FilledTonalIconButton(
+                            onClick = { onAddAttachment() },
+                            modifier = Modifier
+                                .padding(top = 5.dp, bottom = 5.dp, start = 3.dp)
+                                .size(48.dp),
+                        ) {
+                            Icon(
+                                imageVector = CompoundIcons.Plus(),
+                                contentDescription = stringResource(R.string.rich_text_editor_a11y_add_attachment),
+                            )
+                        }
+                    } else {
+                        IconButton(
+                            modifier = Modifier
+                                .padding(top = 5.dp, bottom = 5.dp, start = 3.dp, end = 3.dp)
+                                .size(48.dp),
+                            onClick = {
                                 when (voiceMessageState) {
                                     is VoiceMessageState.Preview -> if (!voiceMessageState.isSending) {
                                         onDeleteVoiceMessage()
@@ -479,21 +485,8 @@ private fun StandardLayout(
                                     is VoiceMessageState.Recording ->
                                         onVoiceRecorderEvent(VoiceMessageRecorderEvent.Cancel)
                                 }
-                            }
-                        },
-                    ) {
-                        if (voiceMessageState is VoiceMessageState.Idle) {
-                            Icon(
-                                modifier = Modifier
-                                    .clip(CircleShape)
-                                    .size(30.dp)
-                                    .background(ElementTheme.colors.iconPrimary)
-                                    .padding(3.dp),
-                                imageVector = CompoundIcons.Plus(),
-                                contentDescription = stringResource(R.string.rich_text_editor_a11y_add_attachment),
-                                tint = ElementTheme.colors.iconOnSolidPrimary
-                            )
-                        } else {
+                            },
+                        ) {
                             when (voiceMessageState) {
                                 is VoiceMessageState.Preview ->
                                     VoiceMessageDeleteButtonIcon(enabled = !voiceMessageState.isSending)

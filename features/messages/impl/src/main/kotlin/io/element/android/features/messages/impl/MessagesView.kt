@@ -13,6 +13,8 @@ import io.element.android.libraries.designsystem.animation.M3Motion
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Surface
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.WindowInsets
@@ -305,44 +307,48 @@ fun MessagesView(
                     }
                 },
                 content = { padding ->
-                    Box(
+                    Surface(
                         modifier = Modifier
                             .padding(padding)
-                            .consumeWindowInsets(padding)
+                            .consumeWindowInsets(padding),
+                        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+                        color = MaterialTheme.colorScheme.surface,
                     ) {
-                        MessagesViewContent(
-                            state = state,
-                            onContentClick = onContentClickStable,
-                            onMessageLongClick = onMessageLongClickStable,
-                            onUserDataClick = onUserDataClickStable,
-                            onLinkClick = onLinkClickStable,
-                            onReactionClick = onEmojiReactionClickStable,
-                            onReactionLongClick = onEmojiReactionLongClickStable,
-                            onMoreReactionsClick = onMoreReactionsClickStable,
-                            onReadReceiptClick = onReadReceiptClickStable,
-                            onSendLocationClick = onSendLocationClick,
-                            onCreatePollClick = onCreatePollClick,
-                            onSwipeToReply = onSwipeToReplyStable,
-                            forceJumpToBottomVisibility = forceJumpToBottomVisibility,
-                            onJoinCallClick = onJoinCallClick,
-                            onViewAllPinnedMessagesClick = onViewAllPinnedMessagesClick,
-                            knockRequestsBannerView = knockRequestsBannerView,
-                        )
+                        Box {
+                            MessagesViewContent(
+                                state = state,
+                                onContentClick = onContentClickStable,
+                                onMessageLongClick = onMessageLongClickStable,
+                                onUserDataClick = onUserDataClickStable,
+                                onLinkClick = onLinkClickStable,
+                                onReactionClick = onEmojiReactionClickStable,
+                                onReactionLongClick = onEmojiReactionLongClickStable,
+                                onMoreReactionsClick = onMoreReactionsClickStable,
+                                onReadReceiptClick = onReadReceiptClickStable,
+                                onSendLocationClick = onSendLocationClick,
+                                onCreatePollClick = onCreatePollClick,
+                                onSwipeToReply = onSwipeToReplyStable,
+                                forceJumpToBottomVisibility = forceJumpToBottomVisibility,
+                                onJoinCallClick = onJoinCallClick,
+                                onViewAllPinnedMessagesClick = onViewAllPinnedMessagesClick,
+                                knockRequestsBannerView = knockRequestsBannerView,
+                            )
 
-                        SuggestionsPickerView(
-                            modifier = Modifier
-                                .shadow(10.dp)
-                                .background(ElementTheme.colors.bgCanvasDefault)
-                                .align(Alignment.BottomStart)
-                                .heightIn(max = 230.dp),
-                            roomId = state.roomId,
-                            roomName = state.roomName,
-                            roomAvatarData = state.roomAvatar,
-                            suggestions = state.composerState.suggestions,
-                            onSelectSuggestion = {
-                                state.composerState.eventSink(MessageComposerEvent.InsertSuggestion(it))
-                            }
-                        )
+                            SuggestionsPickerView(
+                                modifier = Modifier
+                                    .shadow(10.dp)
+                                    .background(ElementTheme.colors.bgCanvasDefault)
+                                    .align(Alignment.BottomStart)
+                                    .heightIn(max = 230.dp),
+                                roomId = state.roomId,
+                                roomName = state.roomName,
+                                roomAvatarData = state.roomAvatar,
+                                suggestions = state.composerState.suggestions,
+                                onSelectSuggestion = {
+                                    state.composerState.eventSink(MessageComposerEvent.InsertSuggestion(it))
+                                }
+                            )
+                        }
                     }
                 },
                 snackbarHost = {

@@ -22,6 +22,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -223,66 +225,72 @@ private fun RoomsViewList(
     OnVisibleRangeChangeEffect(lazyListState) { visibleRange ->
         eventSink(RoomListEvent.UpdateVisibleRange(visibleRange))
     }
-    LazyColumn(
-        state = lazyListState,
+    Surface(
+        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+        tonalElevation = 1.dp,
         modifier = modifier,
-        contentPadding = contentPadding,
     ) {
-        when (state.securityBannerState) {
-            SecurityBannerState.SetUpRecovery -> {
-                item {
-                    SetUpRecoveryKeyBanner(
-                        onContinueClick = onSetUpRecoveryClick,
-                        onDismissClick = { eventSink(RoomListEvent.DismissBanner) },
-                    )
+        LazyColumn(
+            state = lazyListState,
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = contentPadding,
+        ) {
+            when (state.securityBannerState) {
+                SecurityBannerState.SetUpRecovery -> {
+                    item {
+                        SetUpRecoveryKeyBanner(
+                            onContinueClick = onSetUpRecoveryClick,
+                            onDismissClick = { eventSink(RoomListEvent.DismissBanner) },
+                        )
+                    }
+                }
+                SecurityBannerState.RecoveryKeyConfirmation -> {
+                    item {
+                        ConfirmRecoveryKeyBanner(
+                            onContinueClick = onConfirmRecoveryKeyClick,
+                            onDismissClick = { eventSink(RoomListEvent.DismissBanner) },
+                        )
+                    }
+                }
+                SecurityBannerState.None -> if (state.fullScreenIntentPermissionsState.shouldDisplayBanner) {
+                    item {
+                        FullScreenIntentPermissionBanner(state = state.fullScreenIntentPermissionsState)
+                    }
+                } else if (state.batteryOptimizationState.shouldDisplayBanner) {
+                    item {
+                        BatteryOptimizationBanner(state = state.batteryOptimizationState)
+                    }
+                } else if (state.showNewNotificationSoundBanner) {
+                    item {
+                        NewNotificationSoundBanner(
+                            onDismissClick = { eventSink(RoomListEvent.DismissNewNotificationSoundBanner) },
+                        )
+                    }
                 }
             }
-            SecurityBannerState.RecoveryKeyConfirmation -> {
-                item {
-                    ConfirmRecoveryKeyBanner(
-                        onContinueClick = onConfirmRecoveryKeyClick,
-                        onDismissClick = { eventSink(RoomListEvent.DismissBanner) },
-                    )
-                }
-            }
-            SecurityBannerState.None -> if (state.fullScreenIntentPermissionsState.shouldDisplayBanner) {
-                item {
-                    FullScreenIntentPermissionBanner(state = state.fullScreenIntentPermissionsState)
-                }
-            } else if (state.batteryOptimizationState.shouldDisplayBanner) {
-                item {
-                    BatteryOptimizationBanner(state = state.batteryOptimizationState)
-                }
-            } else if (state.showNewNotificationSoundBanner) {
-                item {
-                    NewNotificationSoundBanner(
-                        onDismissClick = { eventSink(RoomListEvent.DismissNewNotificationSoundBanner) },
-                    )
-                }
-            }
-        }
 
-        // Note: do not use a key for the LazyColumn, or the scroll will not behave as expected if a room
-        // is moved to the top of the list.
-        itemsIndexed(
-            items = state.summaries,
-            contentType = { _, room -> room.contentType() },
-        ) { index, room ->
-            RoomSummaryRow(
-                room = room,
-                hideInviteAvatars = hideInvitesAvatars,
-                isInviteSeen = room.displayType == RoomSummaryDisplayType.INVITE &&
-                    state.seenRoomInvites.contains(room.roomId),
-                onClick = onRoomClick,
-                eventSink = eventSink,
-                modifier = Modifier.animateItem(
-                    fadeInSpec = M3Motion.listItemSpec(),
-                    fadeOutSpec = M3Motion.listItemSpec(),
-                    placementSpec = M3Motion.listItemSpec(),
-                ),
-            )
-            if (index != state.summaries.lastIndex) {
-                Spacer(Modifier.height(4.dp))
+            // Note: do not use a key for the LazyColumn, or the scroll will not behave as expected if a room
+            // is moved to the top of the list.
+            itemsIndexed(
+                items = state.summaries,
+                contentType = { _, room -> room.contentType() },
+            ) { index, room ->
+                RoomSummaryRow(
+                    room = room,
+                    hideInviteAvatars = hideInvitesAvatars,
+                    isInviteSeen = room.displayType == RoomSummaryDisplayType.INVITE &&
+                        state.seenRoomInvites.contains(room.roomId),
+                    onClick = onRoomClick,
+                    eventSink = eventSink,
+                    modifier = Modifier.animateItem(
+                        fadeInSpec = M3Motion.listItemSpec(),
+                        fadeOutSpec = M3Motion.listItemSpec(),
+                        placementSpec = M3Motion.listItemSpec(),
+                    ),
+                )
+                if (index != state.summaries.lastIndex) {
+                    Spacer(Modifier.height(4.dp))
+                }
             }
         }
     }
