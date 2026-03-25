@@ -10,6 +10,7 @@ package io.element.android.features.messages.impl.timeline.components
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.draggable
@@ -269,7 +270,9 @@ fun TimelineItemEventRow(
         if (displayThreadSummaries && timelineMode !is Timeline.Mode.Thread && event.threadInfo is TimelineItemThreadInfo.ThreadRoot) {
             ThreadSummaryView(
                 modifier = if (event.isMine) {
-                    Modifier.align(Alignment.End).padding(end = 16.dp)
+                    Modifier
+                        .align(Alignment.End)
+                        .padding(end = 16.dp)
                 } else {
                     if (timelineRoomInfo.isDm) Modifier else Modifier.padding(start = 16.dp)
                 }.padding(top = 2.dp),
@@ -742,11 +745,17 @@ private fun MessageEventBubbleContent(
             } else {
                 inReplyToModifier.clickable(onClick = inReplyToClick)
             }
-            InReplyToView(
-                inReplyTo = inReplyTo,
-                hideImage = timelineProtectionState.hideMediaContent(inReplyTo.eventId()),
-                modifier = talkbackCompatModifier,
-            )
+            Row(
+                talkbackCompatModifier
+                    .border(1.dp, ElementTheme.colors.borderInteractiveSecondary, RoundedCornerShape(6.dp))
+                    .background(ElementTheme.colors.bgCanvasDefault, RoundedCornerShape(6.dp))
+                    .padding(4.dp)
+            ) {
+                InReplyToView(
+                    inReplyTo = inReplyTo,
+                    hideImage = timelineProtectionState.hideMediaContent(inReplyTo.eventId()),
+                )
+            }
         }
         if (inReplyToDetails != null) {
             // Use SubComposeLayout only if necessary as it can have consequences on the performance.
@@ -833,25 +842,27 @@ internal fun TimelineItemEventRowWithThreadSummaryPreview() = ElementPreview {
                     groupPosition = TimelineItemGroupPosition.First,
                     threadInfo = TimelineItemThreadInfo.ThreadRoot(
                         latestEventText = "This is the latest message in the thread",
-                        summary = ThreadSummary(AsyncData.Success(
-                            EmbeddedEventInfo(
-                                eventOrTransactionId = EventOrTransactionId.Event(EventId("\$event-id")),
-                                content = MessageContent(
-                                    body = "This is the latest message in the thread",
-                                    inReplyTo = null,
-                                    isEdited = false,
-                                    threadInfo = null,
-                                    type = TextMessageType("This is the latest message in the thread", null)
-                                ),
-                                senderId = UserId("@user:id"),
-                                senderProfile = ProfileDetails.Ready(
-                                    displayName = "Alice",
-                                    avatarUrl = null,
-                                    displayNameAmbiguous = false,
-                                ),
-                                timestamp = 0L,
-                            )
-                        ), numberOfReplies = 20L)
+                        summary = ThreadSummary(
+                            AsyncData.Success(
+                                EmbeddedEventInfo(
+                                    eventOrTransactionId = EventOrTransactionId.Event(EventId("\$event-id")),
+                                    content = MessageContent(
+                                        body = "This is the latest message in the thread",
+                                        inReplyTo = null,
+                                        isEdited = false,
+                                        threadInfo = null,
+                                        type = TextMessageType("This is the latest message in the thread", null)
+                                    ),
+                                    senderId = UserId("@user:id"),
+                                    senderProfile = ProfileDetails.Ready(
+                                        displayName = "Alice",
+                                        avatarUrl = null,
+                                        displayNameAmbiguous = false,
+                                    ),
+                                    timestamp = 0L,
+                                )
+                            ), numberOfReplies = 20L
+                        )
                     )
                 ),
                 displayThreadSummaries = true,
