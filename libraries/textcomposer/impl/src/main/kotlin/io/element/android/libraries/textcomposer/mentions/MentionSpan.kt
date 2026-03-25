@@ -55,14 +55,14 @@ class MentionSpan(
 
         backgroundColor = when (type) {
             is MentionType.User -> if (isCurrentUser) mentionSpanTheme.currentUserBackgroundColor else mentionSpanTheme.otherBackgroundColor
-            is MentionType.Everyone -> mentionSpanTheme.currentUserBackgroundColor
+            is MentionType.Everyone -> mentionSpanTheme.otherBackgroundColor
             is MentionType.Room -> mentionSpanTheme.otherBackgroundColor
             is MentionType.Message -> mentionSpanTheme.otherBackgroundColor
         }
 
         textColor = when (type) {
             is MentionType.User -> if (isCurrentUser) mentionSpanTheme.currentUserTextColor else mentionSpanTheme.otherTextColor
-            is MentionType.Everyone -> mentionSpanTheme.currentUserTextColor
+            is MentionType.Everyone -> mentionSpanTheme.otherTextColor
             is MentionType.Room -> mentionSpanTheme.otherTextColor
             is MentionType.Message -> mentionSpanTheme.otherTextColor
         }
