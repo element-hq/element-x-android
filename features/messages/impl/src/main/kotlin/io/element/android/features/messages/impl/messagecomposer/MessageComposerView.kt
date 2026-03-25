@@ -34,6 +34,7 @@ import kotlinx.coroutines.launch
 internal fun MessageComposerView(
     state: MessageComposerState,
     voiceMessageState: VoiceMessageComposerState,
+    enableTextFormatting: Boolean = false,
     modifier: Modifier = Modifier,
 ) {
     val view = LocalView.current
@@ -100,7 +101,11 @@ internal fun MessageComposerView(
         onRequestFocus = ::onRequestFocus,
         onSendMessage = ::sendMessage,
         composerMode = state.mode,
+        enableTextFormatting = enableTextFormatting,
         showTextFormatting = state.showTextFormatting,
+        onToggleTextFormatting = {
+            state.eventSink(MessageComposerEvent.ToggleTextFormatting(!state.showTextFormatting))
+        },
         onResetComposerMode = ::onCloseSpecialMode,
         onAddAttachment = ::onAddAttachment,
         onDismissTextFormatting = ::onDismissTextFormatting,

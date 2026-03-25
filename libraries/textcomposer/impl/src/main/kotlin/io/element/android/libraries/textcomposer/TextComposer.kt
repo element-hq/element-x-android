@@ -122,7 +122,9 @@ fun TextComposer(
     resolveMentionDisplay: (text: String, url: String) -> TextDisplay,
     resolveAtRoomMentionDisplay: () -> TextDisplay,
     modifier: Modifier = Modifier,
+    enableTextFormatting: Boolean = false,
     showTextFormatting: Boolean = false,
+    onToggleTextFormatting: () -> Unit = {},
 ) {
     val markdown = when (state) {
         is TextEditorState.Markdown -> state.state.text.value()
@@ -401,6 +403,9 @@ fun TextComposer(
             composerMode = composerMode,
             voiceMessageState = voiceMessageState,
             isRoomEncrypted = state.isRoomEncrypted,
+            enableTextFormatting = enableTextFormatting,
+            isFormattingActive = showTextFormatting,
+            onToggleTextFormatting = onToggleTextFormatting,
             modifier = layoutModifier,
             textInput = textInput,
             endButtonParams = endButtonParams,
@@ -442,6 +447,9 @@ private fun StandardLayout(
     composerMode: MessageComposerMode,
     voiceMessageState: VoiceMessageState,
     isRoomEncrypted: Boolean?,
+    enableTextFormatting: Boolean,
+    isFormattingActive: Boolean,
+    onToggleTextFormatting: () -> Unit,
     textInput: @Composable () -> Unit,
     voiceRecording: @Composable () -> Unit,
     endButtonParams: EndButtonParams,
@@ -506,6 +514,24 @@ private fun StandardLayout(
                     textInput()
                 } else {
                     voiceRecording()
+                }
+            }
+            if (enableTextFormatting && voiceMessageState is VoiceMessageState.Idle) {
+                IconButton(
+                    onClick = onToggleTextFormatting,
+                    modifier = Modifier
+                        .padding(bottom = 5.dp)
+                        .size(48.dp),
+                ) {
+                    Icon(
+                        imageVector = CompoundIcons.TextFormatting(),
+                        contentDescription = stringResource(R.string.rich_text_editor_toggle_text_formatting),
+                        tint = if (isFormattingActive) {
+                            ElementTheme.colors.iconAccentPrimary
+                        } else {
+                            ElementTheme.colors.iconSecondary
+                        },
+                    )
                 }
             }
             // To avoid loosing keyboard focus, the IconButton has to be defined here and has to be always enabled.
@@ -970,10 +996,12 @@ private fun ATextComposer(
     state: TextEditorState,
     voiceMessageState: VoiceMessageState,
     composerMode: MessageComposerMode,
+    enableTextFormatting: Boolean = false,
     showTextFormatting: Boolean = false,
 ) {
     TextComposer(
         state = state,
+        enableTextFormatting = enableTextFormatting,
         showTextFormatting = showTextFormatting,
         voiceMessageState = voiceMessageState,
         composerMode = composerMode,
@@ -982,6 +1010,7 @@ private fun ATextComposer(
         onResetComposerMode = {},
         onAddAttachment = {},
         onDismissTextFormatting = {},
+        onToggleTextFormatting = {},
         onVoiceRecorderEvent = {},
         onVoicePlayerEvent = {},
         onSendVoiceMessage = {},

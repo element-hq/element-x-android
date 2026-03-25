@@ -659,6 +659,7 @@ private fun MessagesViewComposerBottomSheetContents(
                     MessageComposerView(
                         state = state.composerState,
                         voiceMessageState = state.voiceMessageComposerState,
+                        enableTextFormatting = state.enableTextFormatting,
                         modifier = Modifier.fillMaxWidth(),
                     )
                 }
