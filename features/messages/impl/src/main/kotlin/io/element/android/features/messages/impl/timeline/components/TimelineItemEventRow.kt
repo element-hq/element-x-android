@@ -745,8 +745,8 @@ private fun MessageEventBubbleContent(
             } else {
                 inReplyToModifier.clickable(onClick = inReplyToClick)
             }
-            Row(
-                talkbackCompatModifier
+            Box(
+                modifier = talkbackCompatModifier
                     .border(1.dp, ElementTheme.colors.borderInteractiveSecondary, RoundedCornerShape(6.dp))
                     .background(ElementTheme.colors.bgCanvasDefault, RoundedCornerShape(6.dp))
                     .padding(4.dp)
@@ -843,7 +843,7 @@ internal fun TimelineItemEventRowWithThreadSummaryPreview() = ElementPreview {
                     threadInfo = TimelineItemThreadInfo.ThreadRoot(
                         latestEventText = "This is the latest message in the thread",
                         summary = ThreadSummary(
-                            AsyncData.Success(
+                            latestEvent = AsyncData.Success(
                                 EmbeddedEventInfo(
                                     eventOrTransactionId = EventOrTransactionId.Event(EventId("\$event-id")),
                                     content = MessageContent(
@@ -861,7 +861,8 @@ internal fun TimelineItemEventRowWithThreadSummaryPreview() = ElementPreview {
                                     ),
                                     timestamp = 0L,
                                 )
-                            ), numberOfReplies = 20L
+                            ),
+                            numberOfReplies = 20L,
                         )
                     )
                 ),
