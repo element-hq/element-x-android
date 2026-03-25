@@ -318,7 +318,24 @@ fun MessagesView(
                                     onDismissRequest = { showOverflow = false },
                                 ) {
                                     DropdownMenuItem(
-                                        text = { Text(stringResource(CommonStrings.common_about)) },
+                                        text = { Text(stringResource(CommonStrings.common_people)) },
+                                        leadingIcon = { Icon(CompoundIcons.UserProfileSolid(), contentDescription = null) },
+                                        onClick = {
+                                            showOverflow = false
+                                            onRoomDetailsClick()
+                                        },
+                                    )
+                                    DropdownMenuItem(
+                                        text = { Text(stringResource(CommonStrings.action_invite)) },
+                                        leadingIcon = { Icon(CompoundIcons.UserAdd(), contentDescription = null) },
+                                        onClick = {
+                                            showOverflow = false
+                                            onRoomDetailsClick()
+                                        },
+                                    )
+                                    DropdownMenuItem(
+                                        text = { Text(stringResource(CommonStrings.common_settings)) },
+                                        leadingIcon = { Icon(CompoundIcons.Settings(), contentDescription = null) },
                                         onClick = {
                                             showOverflow = false
                                             onRoomDetailsClick()
