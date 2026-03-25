@@ -90,13 +90,13 @@ fun buildAnnotatedStringWithStyledPart(
  */
 fun withColoredPeriod(
     text: String,
+    periodColor: Color,
 ) = buildAnnotatedString {
     append(text)
     if (text.endsWith(".")) {
         addStyle(
             style = SpanStyle(
-                // Light.colorGreen700
-                color = Color(0xff0bc491),
+                color = periodColor,
             ),
             start = text.length - 1,
             end = text.length,

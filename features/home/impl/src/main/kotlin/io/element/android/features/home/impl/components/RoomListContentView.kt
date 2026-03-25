@@ -22,6 +22,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -47,10 +49,10 @@ import io.element.android.features.home.impl.roomlist.RoomListEvent
 import io.element.android.features.home.impl.roomlist.SecurityBannerState
 import io.element.android.features.home.impl.spacefilters.SpaceFiltersState
 import io.element.android.features.home.impl.spacefilters.anUnselectedSpaceFiltersState
+import io.element.android.libraries.designsystem.animation.M3Motion
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.OnVisibleRangeChangeEffect
@@ -122,7 +124,7 @@ private fun SkeletonView(
             item {
                 RoomSummaryPlaceholderRow()
                 if (index != count - 1) {
-                    HorizontalDivider()
+                    Spacer(Modifier.height(4.dp))
                 }
             }
         }
@@ -223,61 +225,72 @@ private fun RoomsViewList(
     OnVisibleRangeChangeEffect(lazyListState) { visibleRange ->
         eventSink(RoomListEvent.UpdateVisibleRange(visibleRange))
     }
-    LazyColumn(
-        state = lazyListState,
+    Surface(
+        shape = RoundedCornerShape(topStart = 28.dp, topEnd = 28.dp),
+        tonalElevation = 1.dp,
         modifier = modifier,
-        contentPadding = contentPadding,
     ) {
-        when (state.securityBannerState) {
-            SecurityBannerState.SetUpRecovery -> {
-                item {
-                    SetUpRecoveryKeyBanner(
-                        onContinueClick = onSetUpRecoveryClick,
-                        onDismissClick = { eventSink(RoomListEvent.DismissBanner) },
-                    )
+        LazyColumn(
+            state = lazyListState,
+            modifier = Modifier.fillMaxSize(),
+            contentPadding = contentPadding,
+        ) {
+            when (state.securityBannerState) {
+                SecurityBannerState.SetUpRecovery -> {
+                    item {
+                        SetUpRecoveryKeyBanner(
+                            onContinueClick = onSetUpRecoveryClick,
+                            onDismissClick = { eventSink(RoomListEvent.DismissBanner) },
+                        )
+                    }
+                }
+                SecurityBannerState.RecoveryKeyConfirmation -> {
+                    item {
+                        ConfirmRecoveryKeyBanner(
+                            onContinueClick = onConfirmRecoveryKeyClick,
+                            onDismissClick = { eventSink(RoomListEvent.DismissBanner) },
+                        )
+                    }
+                }
+                SecurityBannerState.None -> if (state.fullScreenIntentPermissionsState.shouldDisplayBanner) {
+                    item {
+                        FullScreenIntentPermissionBanner(state = state.fullScreenIntentPermissionsState)
+                    }
+                } else if (state.batteryOptimizationState.shouldDisplayBanner) {
+                    item {
+                        BatteryOptimizationBanner(state = state.batteryOptimizationState)
+                    }
+                } else if (state.showNewNotificationSoundBanner) {
+                    item {
+                        NewNotificationSoundBanner(
+                            onDismissClick = { eventSink(RoomListEvent.DismissNewNotificationSoundBanner) },
+                        )
+                    }
                 }
             }
-            SecurityBannerState.RecoveryKeyConfirmation -> {
-                item {
-                    ConfirmRecoveryKeyBanner(
-                        onContinueClick = onConfirmRecoveryKeyClick,
-                        onDismissClick = { eventSink(RoomListEvent.DismissBanner) },
-                    )
-                }
-            }
-            SecurityBannerState.None -> if (state.fullScreenIntentPermissionsState.shouldDisplayBanner) {
-                item {
-                    FullScreenIntentPermissionBanner(state = state.fullScreenIntentPermissionsState)
-                }
-            } else if (state.batteryOptimizationState.shouldDisplayBanner) {
-                item {
-                    BatteryOptimizationBanner(state = state.batteryOptimizationState)
-                }
-            } else if (state.showNewNotificationSoundBanner) {
-                item {
-                    NewNotificationSoundBanner(
-                        onDismissClick = { eventSink(RoomListEvent.DismissNewNotificationSoundBanner) },
-                    )
-                }
-            }
-        }
 
-        // Note: do not use a key for the LazyColumn, or the scroll will not behave as expected if a room
-        // is moved to the top of the list.
-        itemsIndexed(
-            items = state.summaries,
-            contentType = { _, room -> room.contentType() },
-        ) { index, room ->
-            RoomSummaryRow(
-                room = room,
-                hideInviteAvatars = hideInvitesAvatars,
-                isInviteSeen = room.displayType == RoomSummaryDisplayType.INVITE &&
-                    state.seenRoomInvites.contains(room.roomId),
-                onClick = onRoomClick,
-                eventSink = eventSink,
-            )
-            if (index != state.summaries.lastIndex) {
-                HorizontalDivider()
+            // Note: do not use a key for the LazyColumn, or the scroll will not behave as expected if a room
+            // is moved to the top of the list.
+            itemsIndexed(
+                items = state.summaries,
+                contentType = { _, room -> room.contentType() },
+            ) { index, room ->
+                RoomSummaryRow(
+                    room = room,
+                    hideInviteAvatars = hideInvitesAvatars,
+                    isInviteSeen = room.displayType == RoomSummaryDisplayType.INVITE &&
+                        state.seenRoomInvites.contains(room.roomId),
+                    onClick = onRoomClick,
+                    eventSink = eventSink,
+                    modifier = Modifier.animateItem(
+                        fadeInSpec = M3Motion.listItemSpec(),
+                        fadeOutSpec = M3Motion.listItemSpec(),
+                        placementSpec = M3Motion.listItemSpec(),
+                    ),
+                )
+                if (index != state.summaries.lastIndex) {
+                    Spacer(Modifier.height(4.dp))
+                }
             }
         }
     }

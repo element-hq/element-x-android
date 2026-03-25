@@ -11,7 +11,7 @@ package io.element.android.features.messages.impl.timeline.components
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -26,8 +26,6 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.ui.strings.CommonStrings
 
-private val CORNER_RADIUS = 8.dp
-
 @Composable
 fun MessageStateEventContainer(
     interactionSource: MutableInteractionSource,
@@ -37,7 +35,7 @@ fun MessageStateEventContainer(
     content: @Composable () -> Unit = {},
 ) {
     val backgroundColor = Color.Transparent
-    val shape = RoundedCornerShape(CORNER_RADIUS)
+    val shape = MaterialTheme.shapes.small
     Surface(
         modifier = modifier
             .widthIn(min = 80.dp)

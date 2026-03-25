@@ -8,10 +8,12 @@
 
 package io.element.android.features.messages.impl.timeline.components.virtual
 
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,21 +33,33 @@ internal fun TimelineItemDaySeparatorView(
     model: TimelineItemDaySeparatorModel,
     modifier: Modifier = Modifier
 ) {
-    Box(
+    Row(
         modifier = modifier
             .fillMaxWidth()
-            .wrapContentHeight()
-            .padding(16.dp),
-        contentAlignment = Alignment.Center,
+            .padding(vertical = 8.dp, horizontal = 16.dp),
+        verticalAlignment = Alignment.CenterVertically,
     ) {
+        Spacer(
+            modifier = Modifier
+                .weight(1f)
+                .height(0.5.dp)
+                .background(ElementTheme.colors.borderDisabled)
+        )
         Text(
             modifier = Modifier
+                .padding(horizontal = 16.dp)
                 .semantics {
                     heading()
                 },
             text = model.formattedDate,
-            style = ElementTheme.typography.fontBodyMdMedium,
-            color = ElementTheme.colors.textPrimary,
+            style = ElementTheme.typography.fontBodySmMedium,
+            color = ElementTheme.colors.textSecondary,
+        )
+        Spacer(
+            modifier = Modifier
+                .weight(1f)
+                .height(0.5.dp)
+                .background(ElementTheme.colors.borderDisabled)
         )
     }
 }

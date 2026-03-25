@@ -34,7 +34,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.ListItemStyle
@@ -87,7 +86,7 @@ fun MediaDetailsBottomSheet(
             )
             if (state.eventId != null) {
                 Column {
-                    HorizontalDivider()
+                    Spacer(Modifier.height(16.dp))
                     ListItem(
                         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.VisibilityOn())),
                         headlineContent = { Text(stringResource(CommonStrings.action_view_in_timeline)) },
@@ -121,7 +120,7 @@ fun MediaDetailsBottomSheet(
                         }
                     )
                     if (state.canDelete) {
-                        HorizontalDivider()
+                        Spacer(Modifier.height(16.dp))
                         ListItem(
                             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Delete())),
                             headlineContent = { Text(stringResource(CommonStrings.action_remove)) },

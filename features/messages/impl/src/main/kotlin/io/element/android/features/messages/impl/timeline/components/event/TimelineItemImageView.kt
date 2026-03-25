@@ -9,7 +9,6 @@
 package io.element.android.features.messages.impl.timeline.components.event
 
 import android.text.SpannedString
-import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -20,6 +19,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -29,6 +29,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.drawBehind
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -74,7 +75,7 @@ fun TimelineItemImageView(
     val description = content.caption?.let { "$a11yLabel: $it" } ?: a11yLabel
     Column(modifier = modifier) {
         val containerModifier = if (content.showCaption) {
-            Modifier.clip(RoundedCornerShape(10.dp))
+            Modifier.clip(MaterialTheme.shapes.small)
         } else {
             Modifier
         }
@@ -87,10 +88,11 @@ fun TimelineItemImageView(
                 onShowClick = onShowContentClick,
             ) {
                 var isLoaded by remember { mutableStateOf(false) }
+                val bgColor = ElementTheme.colors.bgCanvasDefault
                 AsyncImage(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .then(if (isLoaded) Modifier.background(Color.White) else Modifier)
+                        .drawBehind { if (isLoaded) drawRect(bgColor) }
                         .then(
                             if (!isTalkbackActive() && onContentClick != null) {
                                 Modifier

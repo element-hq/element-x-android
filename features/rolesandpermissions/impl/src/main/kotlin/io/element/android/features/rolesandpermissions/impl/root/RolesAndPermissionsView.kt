@@ -31,7 +31,8 @@ import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.ListItemStyle
@@ -83,13 +84,13 @@ fun RolesAndPermissionsView(
                 leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Edit()))
             )
         }
-        HorizontalDivider()
+        Spacer(Modifier.height(16.dp))
         ListItem(
             headlineContent = { Text(stringResource(R.string.screen_room_roles_and_permissions_permissions_header)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Settings())),
             onClick = { rolesAndPermissionsNavigator.openEditPermissions() },
         )
-        HorizontalDivider()
+        Spacer(Modifier.height(16.dp))
         ListItem(
             headlineContent = { Text(stringResource(R.string.screen_room_roles_and_permissions_reset)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Delete())),

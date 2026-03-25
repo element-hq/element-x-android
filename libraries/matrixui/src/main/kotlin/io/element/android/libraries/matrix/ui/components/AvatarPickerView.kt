@@ -22,6 +22,8 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ripple
@@ -54,7 +56,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.icons.CompoundDrawables
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
+import io.element.android.compound.theme.ElementSpacing
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.testtags.TestTags
@@ -194,6 +196,7 @@ private fun BoxScope.OverlayEditButton(
             .size(editIconContainerSize)
             .offset(x = editIconOffset)
             .clip(CircleShape)
+            // Decorative clickable: small overlay edit button, ripple would obscure the icon
             .clickable(interactionSource = interactionSource, onClick = onClick, indication = null)
             .background(ElementTheme.colors.bgCanvasDefault)
             .border(BorderStroke(1.dp, ElementTheme.colors.borderInteractiveSecondary), shape = CircleShape),
@@ -291,7 +294,7 @@ private fun PreviewContent() {
         val size = AvatarSize.EditRoomDetails
         Text("Pick image")
         AvatarPickerView(AvatarPickerState.Pick(buttonSize = size.dp, externalPadding = PaddingValues(6.dp)), onClick = {})
-        HorizontalDivider()
+        Spacer(modifier = Modifier.height(ElementSpacing.l))
 
         Text("User avatar")
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
@@ -329,7 +332,6 @@ private fun PreviewContent() {
                 )
             }
         }
-        HorizontalDivider()
 
         Text("Room avatar")
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {
@@ -367,7 +369,6 @@ private fun PreviewContent() {
                 )
             }
         }
-        HorizontalDivider()
 
         Text("Space avatar")
         Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly) {

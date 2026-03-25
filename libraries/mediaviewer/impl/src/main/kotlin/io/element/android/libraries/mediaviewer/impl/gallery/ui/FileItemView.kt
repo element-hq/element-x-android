@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,7 +35,6 @@ import io.element.android.libraries.core.extensions.withBrackets
 import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
@@ -64,7 +64,6 @@ fun FileItemView(
         } else {
             Spacer(modifier = Modifier.height(20.dp))
         }
-        HorizontalDivider()
     }
 }
 
@@ -76,10 +75,10 @@ private fun FilenameRow(
 ) {
     Row(
         modifier = Modifier
-            .clip(RoundedCornerShape(12.dp))
+            .clip(MaterialTheme.shapes.medium)
             .background(
                 color = ElementTheme.colors.bgSubtleSecondary,
-                shape = RoundedCornerShape(12.dp),
+                shape = MaterialTheme.shapes.medium,
             )
             .combinedClickable(
                 onClick = onClick,

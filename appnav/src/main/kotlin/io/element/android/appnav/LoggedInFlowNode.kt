@@ -39,6 +39,7 @@ import com.bumble.appyx.navmodel.backstack.operation.singleTop
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
+import io.element.android.appnav.adaptive.AdaptiveLoggedInView
 import io.element.android.appnav.loggedin.LoggedInNode
 import io.element.android.appnav.loggedin.MediaPreviewConfigMigration
 import io.element.android.appnav.loggedin.SendQueues
@@ -93,6 +94,9 @@ import io.element.android.libraries.push.api.notifications.conversations.Notific
 import io.element.android.libraries.ui.common.nodes.emptyNode
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
 import io.element.android.services.analytics.api.AnalyticsService
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import androidx.compose.runtime.produceState
 import io.element.android.services.analytics.api.watchers.AnalyticsRoomListStateWatcher
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
@@ -145,6 +149,7 @@ class LoggedInFlowNode(
     private val enterpriseService: EnterpriseService,
     private val appPreferencesStore: AppPreferencesStore,
     private val buildMeta: BuildMeta,
+    private val featureFlagService: FeatureFlagService,
     snackbarDispatcher: SnackbarDispatcher,
     private val analyticsService: AnalyticsService,
     private val analyticsRoomListStateWatcher: AnalyticsRoomListStateWatcher,
@@ -665,24 +670,50 @@ class LoggedInFlowNode(
         val colors by remember {
             enterpriseService.semanticColorsFlow(sessionId = matrixClient.sessionId)
         }.collectAsState(SemanticColorsLightDark.default)
+        val useExpressiveMotion by produceState(true) {
+            value = featureFlagService.isFeatureEnabled(FeatureFlags.M3Expressive)
+        }
         ElementThemeApp(
             appPreferencesStore = appPreferencesStore,
             compoundLight = colors.light,
             compoundDark = colors.dark,
             buildMeta = buildMeta,
+            useExpressiveMotion = useExpressiveMotion,
         ) {
             val isOnline by syncService.isOnline.collectAsState()
             ConnectivityIndicatorContainer(
                 isOnline = isOnline,
                 modifier = modifier,
             ) { contentModifier ->
-                Box(modifier = contentModifier) {
-                    val ftueState by ftueService.state.collectAsState()
-                    BackstackView(transitionHandler = rememberLoggedInFlowTransitionHandler(backstack))
-                    if (ftueState is FtueState.Complete) {
-                        PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)
-                    }
-                }
+                AdaptiveLoggedInView(
+                    singlePane = { singlePaneModifier ->
+                        Box(modifier = singlePaneModifier) {
+                            val ftueState by ftueService.state.collectAsState()
+                            BackstackView(transitionHandler = rememberLoggedInFlowTransitionHandler(backstack))
+                            if (ftueState is FtueState.Complete) {
+                                PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)
+                            }
+                        }
+                    },
+                    listPane = { listModifier ->
+                        // On expanded screens, the list pane shows the BackstackView
+                        // (which starts at Home). Future: render Home as PermanentChild here.
+                        Box(modifier = listModifier) {
+                            BackstackView(transitionHandler = rememberLoggedInFlowTransitionHandler(backstack))
+                        }
+                    },
+                    detailPane = { detailModifier ->
+                        // On expanded screens, the detail pane shows permanent children.
+                        // Future: render the active Room/Settings child here.
+                        Box(modifier = detailModifier) {
+                            val ftueState by ftueService.state.collectAsState()
+                            if (ftueState is FtueState.Complete) {
+                                PermanentChild(permanentNavModel = permanentNavModel, navTarget = NavTarget.LoggedInPermanent)
+                            }
+                        }
+                    },
+                    modifier = contentModifier,
+                )
             }
         }
     }

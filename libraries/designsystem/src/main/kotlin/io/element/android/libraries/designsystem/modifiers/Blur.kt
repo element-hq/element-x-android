@@ -23,6 +23,8 @@ import androidx.compose.ui.geometry.RoundRect
 import androidx.compose.ui.graphics.AndroidPaint
 import androidx.compose.ui.graphics.ClipOp
 import androidx.compose.ui.graphics.Color
+import io.element.android.compound.theme.ElementTheme
+import androidx.compose.ui.graphics.Paint
 import androidx.compose.ui.graphics.Path
 import androidx.compose.ui.graphics.drawscope.clipPath
 import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
@@ -43,8 +45,9 @@ fun canUseBlur(): Boolean = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S
 @Composable
 fun canUseBlurMaskFilter() = !LocalView.current.isHardwareAccelerated
 
+@Composable
 fun Modifier.blurredShapeShadow(
-    color: Color = Color.Black,
+    color: Color = ElementTheme.materialColors.scrim,
     cornerRadius: Dp = 0.dp,
     offsetX: Dp = 0.dp,
     offsetY: Dp = 0.dp,

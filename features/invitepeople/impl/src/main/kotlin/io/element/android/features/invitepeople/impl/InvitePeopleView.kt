@@ -32,7 +32,6 @@ import io.element.android.libraries.designsystem.components.async.AsyncLoading
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.ListSectionHeader
 import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
@@ -136,9 +135,6 @@ private fun InvitePeopleContentView(
                                 subtext = invitableUser.matrixUser.userId.value,
                             ),
                         )
-                        if (index < state.suggestions.lastIndex) {
-                            HorizontalDivider()
-                        }
                     }
                 }
             }

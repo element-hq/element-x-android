@@ -19,7 +19,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.StrokeCap
 import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -31,7 +30,7 @@ import io.element.android.features.poll.api.R
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.LinearProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.WavyLinearProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.progressIndicatorTrackColor
 import io.element.android.libraries.designsystem.toEnabledColor
@@ -130,7 +129,7 @@ internal fun PollAnswerView(
                 }
             }
             Spacer(modifier = Modifier.height(10.dp))
-            LinearProgressIndicator(
+            WavyLinearProgressIndicator(
                 modifier = Modifier.fillMaxWidth(),
                 color = if (answerItem.isWinner) ElementTheme.colors.textSuccessPrimary else answerItem.isEnabled.toEnabledColor(),
                 progress = {
@@ -141,7 +140,6 @@ internal fun PollAnswerView(
                     }
                 },
                 trackColor = ElementTheme.colors.progressIndicatorTrackColor,
-                strokeCap = StrokeCap.Round,
             )
         }
     }

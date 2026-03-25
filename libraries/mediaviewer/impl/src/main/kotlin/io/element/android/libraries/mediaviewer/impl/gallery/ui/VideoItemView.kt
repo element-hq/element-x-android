@@ -25,7 +25,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -63,7 +62,7 @@ fun VideoItemView(
         AsyncImage(
             modifier = Modifier
                 .fillMaxWidth()
-                .then(if (isLoaded) Modifier.background(Color.White) else Modifier),
+                .then(if (isLoaded) Modifier.background(ElementTheme.colors.bgCanvasDefault) else Modifier),
             model = video.thumbnailMediaRequestData,
             contentScale = ContentScale.Crop,
             alignment = Alignment.Center,

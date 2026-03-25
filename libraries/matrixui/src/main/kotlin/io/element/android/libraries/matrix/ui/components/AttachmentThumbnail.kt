@@ -22,6 +22,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.blurhash.BlurHashAsyncImage
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -36,7 +37,7 @@ fun AttachmentThumbnail(
     info: AttachmentThumbnailInfo,
     modifier: Modifier = Modifier,
     thumbnailSize: Long = 32L,
-    backgroundColor: Color = MaterialTheme.colorScheme.surface,
+    backgroundColor: Color = ElementTheme.materialColors.surface,
 ) {
     if (info.thumbnailSource != null) {
         val mediaRequestData = MediaRequestData(

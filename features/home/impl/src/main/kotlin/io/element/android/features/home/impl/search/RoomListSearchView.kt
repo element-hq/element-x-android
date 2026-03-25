@@ -10,8 +10,7 @@ package io.element.android.features.home.impl.search
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import io.element.android.libraries.designsystem.animation.M3Motion
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,7 +20,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.text.input.TextFieldLineLimits
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -35,6 +33,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.home.impl.components.RoomSummaryRow
 import io.element.android.features.home.impl.contentType
@@ -66,8 +65,8 @@ internal fun RoomListSearchView(
 
     AnimatedVisibility(
         visible = state.isSearchActive,
-        enter = fadeIn(),
-        exit = fadeOut(),
+        enter = M3Motion.fadeEnter,
+        exit = M3Motion.fadeExit,
     ) {
         Column(modifier = modifier) {
             RoomListSearchContent(
@@ -88,7 +87,7 @@ private fun RoomListSearchContent(
     eventSink: (RoomListEvent) -> Unit,
     onRoomClick: (RoomId) -> Unit,
 ) {
-    val borderColor = MaterialTheme.colorScheme.tertiary
+    val borderColor = ElementTheme.materialColors.tertiary
     val strokeWidth = 1.dp
     fun onBackButtonClick() {
         state.eventSink(RoomListSearchEvent.ToggleSearchVisibility)

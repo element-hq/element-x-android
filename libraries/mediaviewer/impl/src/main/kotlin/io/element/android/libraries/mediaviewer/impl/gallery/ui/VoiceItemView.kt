@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.IconButtonDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -44,8 +45,7 @@ import io.element.android.libraries.designsystem.components.media.WaveformPlayba
 import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
+import io.element.android.libraries.designsystem.theme.components.ElementLoadingIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -83,7 +83,6 @@ fun VoiceItemView(
         } else {
             Spacer(modifier = Modifier.height(16.dp))
         }
-        HorizontalDivider()
     }
 }
 
@@ -99,10 +98,10 @@ private fun VoiceInfoRow(
 
     Row(
         modifier = Modifier
-            .clip(RoundedCornerShape(12.dp))
+            .clip(MaterialTheme.shapes.medium)
             .background(
                 color = ElementTheme.colors.bgSubtleSecondary,
-                shape = RoundedCornerShape(12.dp),
+                shape = MaterialTheme.shapes.medium,
             )
             .combinedClickable(
                 onClick = {},
@@ -175,12 +174,12 @@ private fun ProgressButton(
         enabled = false,
     ) {
         if (canDisplay) {
-            CircularProgressIndicator(
+            ElementLoadingIndicator(
                 modifier = Modifier
                     .padding(2.dp)
                     .size(16.dp),
                 color = ElementTheme.colors.iconSecondary,
-                strokeWidth = 2.dp,
+                size = 16.dp,
             )
         } else {
             ControlIcon(

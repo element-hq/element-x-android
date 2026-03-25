@@ -38,6 +38,7 @@ import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.annotations.CoreColorToken
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.colors.gradientActionColors
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -89,11 +90,11 @@ fun GradientFloatingActionButton(
                 enabled = true,
                 onClick = onClick,
                 interactionSource = remember { MutableInteractionSource() },
-                indication = ripple(color = Color.White)
+                indication = ripple(color = ElementTheme.colors.iconOnSolidPrimary)
             ),
         contentAlignment = Alignment.Center
     ) {
-        CompositionLocalProvider(LocalContentColor provides Color.White) {
+        CompositionLocalProvider(LocalContentColor provides ElementTheme.colors.iconOnSolidPrimary) {
             content()
         }
     }

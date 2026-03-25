@@ -38,6 +38,8 @@ import io.element.android.libraries.architecture.appyx.DebugNavStateNodeHost
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.designsystem.theme.ElementThemeApp
+import io.element.android.libraries.featureflag.api.FeatureFlags
+import androidx.compose.runtime.produceState
 import io.element.android.libraries.designsystem.utils.snackbar.LocalSnackbarDispatcher
 import io.element.android.services.analytics.compose.LocalAnalyticsService
 import io.element.android.x.di.AppBindings
@@ -69,11 +71,15 @@ class MainActivity : NodeActivity() {
         val colors by remember {
             appBindings.enterpriseService().semanticColorsFlow(sessionId = null)
         }.collectAsState(SemanticColorsLightDark.default)
+        val useExpressiveMotion by produceState(true) {
+            value = appBindings.featureFlagService().isFeatureEnabled(FeatureFlags.M3Expressive)
+        }
         ElementThemeApp(
             appPreferencesStore = appBindings.preferencesStore(),
             compoundLight = colors.light,
             compoundDark = colors.dark,
-            buildMeta = appBindings.buildMeta()
+            buildMeta = appBindings.buildMeta(),
+            useExpressiveMotion = useExpressiveMotion,
         ) {
             CompositionLocalProvider(
                 LocalSnackbarDispatcher provides appBindings.snackbarDispatcher(),

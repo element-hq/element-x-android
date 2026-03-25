@@ -21,6 +21,8 @@ import io.element.android.compound.theme.Theme
 import io.element.android.compound.theme.isDark
 import io.element.android.compound.theme.mapToTheme
 import io.element.android.compound.tokens.generated.SemanticColors
+import io.element.android.compound.tokens.generated.compoundColorsHcDark
+import io.element.android.compound.tokens.generated.compoundColorsHcLight
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
@@ -57,12 +59,24 @@ fun ElementThemeApp(
     compoundLight: SemanticColors,
     compoundDark: SemanticColors,
     buildMeta: BuildMeta,
+    useExpressiveMotion: Boolean = true,
     content: @Composable () -> Unit,
 ) {
     val theme by remember {
         appPreferencesStore.getThemeFlow().mapToTheme()
     }
         .collectAsState(initial = Theme.System)
+    val dynamicColor by remember {
+        appPreferencesStore.isDynamicColorEnabledFlow()
+    }
+        .collectAsState(initial = true)
+    val highContrast by remember {
+        appPreferencesStore.isHighContrastEnabledFlow()
+    }
+        .collectAsState(initial = false)
+    // When high contrast is enabled, swap to HC color sets
+    val effectiveCompoundLight = if (highContrast) compoundColorsHcLight else compoundLight
+    val effectiveCompoundDark = if (highContrast) compoundColorsHcDark else compoundDark
     LaunchedEffect(theme) {
         AppCompatDelegate.setDefaultNightMode(
             when (theme) {
@@ -77,9 +91,11 @@ fun ElementThemeApp(
     ) {
         ElementTheme(
             darkTheme = theme.isDark(),
+            dynamicColor = dynamicColor,
+            useExpressiveMotion = useExpressiveMotion,
             content = content,
-            compoundLight = compoundLight,
-            compoundDark = compoundDark,
+            compoundLight = effectiveCompoundLight,
+            compoundDark = effectiveCompoundDark,
         )
     }
 }

@@ -12,11 +12,11 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.MutableTransitionState
-import androidx.compose.animation.core.spring
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.slideInVertically
 import androidx.compose.animation.slideOutVertically
+import io.element.android.libraries.designsystem.animation.M3Motion
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.runtime.Composable
@@ -103,9 +103,11 @@ fun rememberAsyncIndicatorState(): AsyncIndicatorState {
 fun AsyncIndicatorHost(
     modifier: Modifier = Modifier,
     state: AsyncIndicatorState = rememberAsyncIndicatorState(),
-    enterTransition: EnterTransition = fadeIn(spring(stiffness = 500F)) + slideInVertically(),
-    exitTransition: ExitTransition = fadeOut(spring(stiffness = 500F)) + slideOutVertically(),
+    enterTransition: EnterTransition? = null,
+    exitTransition: ExitTransition? = null,
 ) {
+    val enter = enterTransition ?: (M3Motion.fadeEnter + slideInVertically())
+    val exit = exitTransition ?: (M3Motion.fadeExit + slideOutVertically())
     val coroutineScope = rememberCoroutineScope()
     Box(
         modifier = modifier.fillMaxWidth(),
@@ -117,8 +119,8 @@ fun AsyncIndicatorHost(
             state.currentItem.value?.let { item ->
                 AnimatedVisibility(
                     visibleState = state.currentAnimationState,
-                    enter = enterTransition,
-                    exit = exitTransition,
+                    enter = enter,
+                    exit = exit,
                 ) {
                     item.composable()
                 }

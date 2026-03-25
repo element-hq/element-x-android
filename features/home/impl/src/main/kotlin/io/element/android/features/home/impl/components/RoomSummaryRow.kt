@@ -8,7 +8,10 @@
 
 package io.element.android.features.home.impl.components
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Arrangement.Absolute.spacedBy
@@ -33,9 +36,12 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.zIndex
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -123,7 +129,8 @@ internal fun RoomSummaryRow(
                     NameAndTimestampRow(
                         name = room.name,
                         timestamp = room.timestamp,
-                        isHighlighted = room.isHighlighted
+                        isHighlighted = room.isHighlighted,
+                        hasNewContent = room.hasNewContent,
                     )
                     MessagePreviewAndIndicatorRow(room = room)
                 }
@@ -139,7 +146,8 @@ internal fun RoomSummaryRow(
                     NameAndTimestampRow(
                         name = room.name,
                         timestamp = null,
-                        isHighlighted = room.isHighlighted
+                        isHighlighted = room.isHighlighted,
+                        hasNewContent = room.hasNewContent,
                     )
                     if (room.canonicalAlias != null) {
                         Text(
@@ -187,7 +195,7 @@ private fun RoomSummaryScaffoldRow(
             .fillMaxWidth()
             .heightIn(min = minHeight)
             .then(clickModifier)
-            .padding(horizontal = 16.dp, vertical = 11.dp)
+            .padding(horizontal = 16.dp, vertical = 12.dp)
             .height(IntrinsicSize.Min),
     ) {
         Avatar(
@@ -215,6 +223,7 @@ private fun NameAndTimestampRow(
     name: String?,
     timestamp: String?,
     isHighlighted: Boolean,
+    hasNewContent: Boolean,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -227,7 +236,11 @@ private fun NameAndTimestampRow(
         ) {
             // Name
             Text(
-                style = ElementTheme.typography.fontBodyLgMedium,
+                style = if (hasNewContent) {
+                    ElementTheme.typography.fontBodyLgMedium.copy(fontWeight = FontWeight.Bold)
+                } else {
+                    ElementTheme.typography.fontBodyLgMedium
+                },
                 text = name?.toSafeLength(ellipsize = true) ?: stringResource(id = CommonStrings.common_no_room_name),
                 fontStyle = FontStyle.Italic.takeIf { name == null },
                 color = ElementTheme.colors.roomListRoomName,
@@ -358,10 +371,19 @@ private fun MessagePreviewAndIndicatorRow(
             }
             if (room.hasNewContent) {
                 val contentDescription = stringResource(CommonStrings.a11y_notifications_new_messages)
-                UnreadIndicatorAtom(
-                    color = tint,
-                    contentDescription = contentDescription,
-                )
+                val count = room.numberOfUnreadNotifications.coerceAtLeast(room.numberOfUnreadMessages)
+                if (count > 0) {
+                    UnreadCountBadge(
+                        count = count,
+                        color = tint,
+                        contentDescription = contentDescription,
+                    )
+                } else {
+                    UnreadIndicatorAtom(
+                        color = tint,
+                        contentDescription = contentDescription,
+                    )
+                }
             }
         }
     }
@@ -425,6 +447,33 @@ private fun MentionIndicatorAtom() {
         imageVector = CompoundIcons.Mention(),
         tint = ElementTheme.colors.unreadIndicator,
     )
+}
+
+@Composable
+private fun UnreadCountBadge(
+    count: Long,
+    color: Color,
+    contentDescription: String? = null,
+) {
+    val label = if (count > 99) "99+" else count.toString()
+    Box(
+        modifier = Modifier
+            .semantics {
+                contentDescription?.let { this.contentDescription = it }
+            }
+            .heightIn(min = 16.dp)
+            .defaultMinSize(minWidth = 16.dp)
+            .background(color, shape = CircleShape)
+            .padding(horizontal = 4.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        Text(
+            text = label,
+            style = ElementTheme.typography.fontBodyXsRegular,
+            color = ElementTheme.colors.textOnSolidPrimary,
+            maxLines = 1,
+        )
+    }
 }
 
 @PreviewsDayNight

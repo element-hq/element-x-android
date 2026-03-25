@@ -10,10 +10,8 @@ package io.element.android.features.messages.impl.timeline
 
 import android.view.HapticFeedbackConstants
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
+import androidx.compose.material3.MaterialTheme
+import io.element.android.libraries.designsystem.animation.M3Motion
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
@@ -106,48 +104,58 @@ fun TimelineView(
     forceJumpToBottomVisibility: Boolean = false,
     nestedScrollConnection: NestedScrollConnection = rememberNestedScrollInteropConnection(),
 ) {
-    fun clearFocusRequestState() {
-        state.eventSink(TimelineEvent.ClearFocusRequestState)
-    }
-
-    fun onScrollFinishAt(firstVisibleIndex: Int) {
-        state.eventSink(TimelineEvent.OnScrollFinished(firstVisibleIndex))
-    }
-
-    fun onFocusEventRender() {
-        state.eventSink(TimelineEvent.OnFocusEventRender)
-    }
-
-    fun onJumpToLive() {
-        state.eventSink(TimelineEvent.JumpToLive)
-    }
-
     val context = LocalContext.current
     val toastMessage = stringResource(CommonStrings.common_copied_to_clipboard)
     val view = LocalView.current
     // Disable reverse layout when TalkBack is enabled to avoid incorrect ordering issues seen in the current Compose UI version
     val useReverseLayout = !isTalkbackActive()
 
-    fun inReplyToClick(eventId: EventId) {
-        state.eventSink(TimelineEvent.FocusOnEvent(eventId))
+    // Memoize callback lambdas to prevent recomposition cascades during scroll.
+    val currentState by rememberUpdatedState(state)
+
+    val clearFocusRequestStateStable = remember {
+        { currentState.eventSink(TimelineEvent.ClearFocusRequestState) }
     }
 
-    fun onLinkLongClick(link: Link) {
-        view.performHapticFeedback(
-            HapticFeedbackConstants.LONG_PRESS
-        )
-        context.copyToClipboard(
-            text = link.url,
-            toastMessage = toastMessage,
-        )
+    val onScrollFinishAtStable = remember {
+        { firstVisibleIndex: Int -> currentState.eventSink(TimelineEvent.OnScrollFinished(firstVisibleIndex)) }
     }
 
-    fun prefetchMoreItems() {
-        state.eventSink(TimelineEvent.LoadMore(Timeline.PaginationDirection.BACKWARDS))
+    val onFocusEventRenderStable = remember {
+        { currentState.eventSink(TimelineEvent.OnFocusEventRender) }
+    }
+
+    val onJumpToLiveStable = remember {
+        { currentState.eventSink(TimelineEvent.JumpToLive) }
+    }
+
+    val inReplyToClickStable = remember {
+        { eventId: EventId -> currentState.eventSink(TimelineEvent.FocusOnEvent(eventId)) }
+    }
+
+    val currentView by rememberUpdatedState(view)
+    val currentContext by rememberUpdatedState(context)
+    val currentToastMessage by rememberUpdatedState(toastMessage)
+    val onLinkLongClickStable = remember {
+        { link: Link ->
+            currentView.performHapticFeedback(HapticFeedbackConstants.LONG_PRESS)
+            currentContext.copyToClipboard(
+                text = link.url,
+                toastMessage = currentToastMessage,
+            )
+        }
+    }
+
+    val prefetchMoreItemsStable = remember {
+        { currentState.eventSink(TimelineEvent.LoadMore(Timeline.PaginationDirection.BACKWARDS)) }
+    }
+
+    val eventSinkStable = remember {
+        { event: TimelineEvent -> currentState.eventSink(event) }
     }
 
     // Animate alpha when timeline is first displayed, to avoid flashes or glitching when viewing rooms
-    AnimatedVisibility(visible = true, enter = fadeIn()) {
+    AnimatedVisibility(visible = true, enter = M3Motion.fadeEnter) {
         Box(modifier) {
             LazyColumn(
                 modifier = Modifier
@@ -156,7 +164,7 @@ fun TimelineView(
                     .testTag(TestTags.timeline),
                 state = lazyListState,
                 reverseLayout = useReverseLayout,
-                contentPadding = PaddingValues(top = 64.dp, bottom = 8.dp),
+                contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp),
             ) {
                 items(
                     items = state.timelineItems,
@@ -164,6 +172,11 @@ fun TimelineView(
                     key = { timelineItem -> timelineItem.identifier() },
                 ) { timelineItem ->
                     TimelineItemRow(
+                        modifier = Modifier.animateItem(
+                            fadeInSpec = M3Motion.listItemSpec(),
+                            placementSpec = M3Motion.listItemSpec(),
+                            fadeOutSpec = M3Motion.listItemSpec(),
+                        ),
                         timelineItem = timelineItem,
                         timelineMode = state.timelineMode,
                         timelineRoomInfo = state.timelineRoomInfo,
@@ -174,29 +187,29 @@ fun TimelineView(
                         displayThreadSummaries = state.displayThreadSummaries,
                         onUserDataClick = onUserDataClick,
                         onLinkClick = onLinkClick,
-                        onLinkLongClick = ::onLinkLongClick,
+                        onLinkLongClick = onLinkLongClickStable,
                         onContentClick = onContentClick,
                         onLongClick = onMessageLongClick,
-                        inReplyToClick = ::inReplyToClick,
+                        inReplyToClick = inReplyToClickStable,
                         onReactionClick = onReactionClick,
                         onReactionLongClick = onReactionLongClick,
                         onMoreReactionsClick = onMoreReactionsClick,
                         onReadReceiptClick = onReadReceiptClick,
                         onSwipeToReply = onSwipeToReply,
                         onJoinCallClick = onJoinCallClick,
-                        eventSink = state.eventSink,
+                        eventSink = eventSinkStable,
                     )
                 }
             }
 
             FocusRequestStateView(
                 focusRequestState = state.focusRequestState,
-                onClearFocusRequestState = ::clearFocusRequestState
+                onClearFocusRequestState = clearFocusRequestStateStable
             )
 
             TimelinePrefetchingHelper(
                 lazyListState = lazyListState,
-                prefetch = ::prefetchMoreItems
+                prefetch = prefetchMoreItemsStable
             )
 
             TimelineScrollHelper(
@@ -206,9 +219,9 @@ fun TimelineView(
                 newEventState = state.newEventState,
                 isLive = state.isLive,
                 focusRequestState = state.focusRequestState,
-                onScrollFinishAt = ::onScrollFinishAt,
-                onJumpToLive = ::onJumpToLive,
-                onFocusEventRender = ::onFocusEventRender,
+                onScrollFinishAt = onScrollFinishAtStable,
+                onJumpToLive = onJumpToLiveStable,
+                onFocusEventRender = onFocusEventRenderStable,
             )
         }
     }
@@ -361,8 +374,8 @@ private fun JumpToBottomButton(
     AnimatedVisibility(
         modifier = modifier,
         visible = isVisible,
-        enter = scaleIn(animationSpec = tween(100)),
-        exit = scaleOut(animationSpec = tween(100)),
+        enter = M3Motion.enterTransition,
+        exit = M3Motion.exitTransition,
     ) {
         FloatingActionButton(
             onClick = onClick,

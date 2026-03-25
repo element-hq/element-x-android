@@ -8,7 +8,7 @@
 
 package io.element.android.libraries.mediaviewer.impl.gallery
 
-import androidx.activity.compose.BackHandler
+import androidx.activity.compose.PredictiveBackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -44,6 +44,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.designsystem.animation.M3Motion
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.background.OnboardingBackground
@@ -53,8 +54,8 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
-import io.element.android.libraries.designsystem.theme.components.LinearProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.ElementLoadingIndicator
+import io.element.android.libraries.designsystem.theme.components.WavyLinearProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.SegmentedButton
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -90,7 +91,14 @@ fun MediaGalleryView(
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
-    BackHandler { onBackClick() }
+    PredictiveBackHandler { progress ->
+        try {
+            progress.collect { }
+            onBackClick()
+        } catch (_: kotlin.coroutines.cancellation.CancellationException) {
+            // Gesture cancelled — no action needed
+        }
+    }
     Scaffold(
         modifier = modifier,
         snackbarHost = { SnackbarHost(snackbarHostState) },
@@ -314,7 +322,11 @@ private fun MediaGalleryFilesList(
         ) { item ->
             when (item) {
                 is MediaItem.File -> FileItemView(
-                    modifier = Modifier.animateItem(),
+                    modifier = Modifier.animateItem(
+                        fadeInSpec = M3Motion.listItemSpec(),
+                        placementSpec = M3Motion.listItemSpec(),
+                        fadeOutSpec = M3Motion.listItemSpec(),
+                    ),
                     file = item,
                     onClick = { onItemClick(item) },
                     onLongClick = {
@@ -322,7 +334,11 @@ private fun MediaGalleryFilesList(
                     },
                 )
                 is MediaItem.Audio -> AudioItemView(
-                    modifier = Modifier.animateItem(),
+                    modifier = Modifier.animateItem(
+                        fadeInSpec = M3Motion.listItemSpec(),
+                        placementSpec = M3Motion.listItemSpec(),
+                        fadeOutSpec = M3Motion.listItemSpec(),
+                    ),
                     audio = item,
                     onClick = { onItemClick(item) },
                     onLongClick = {
@@ -332,7 +348,11 @@ private fun MediaGalleryFilesList(
                 is MediaItem.Voice -> {
                     val presenter: Presenter<VoiceMessageState> = presenterFactories.rememberPresenter(item)
                     VoiceItemView(
-                        modifier = Modifier.animateItem(),
+                        modifier = Modifier.animateItem(
+                            fadeInSpec = M3Motion.listItemSpec(),
+                            placementSpec = M3Motion.listItemSpec(),
+                            fadeOutSpec = M3Motion.listItemSpec(),
+                        ),
                         state = presenter.present(),
                         voice = item,
                         onLongClick = {
@@ -341,7 +361,11 @@ private fun MediaGalleryFilesList(
                     )
                 }
                 is MediaItem.DateSeparator -> DateItemView(
-                    modifier = Modifier.animateItem(),
+                    modifier = Modifier.animateItem(
+                        fadeInSpec = M3Motion.listItemSpec(),
+                        placementSpec = M3Motion.listItemSpec(),
+                        fadeOutSpec = M3Motion.listItemSpec(),
+                    ),
                     item = item
                 )
                 is MediaItem.Image,
@@ -349,7 +373,11 @@ private fun MediaGalleryFilesList(
                     // Should not happen
                 }
                 is MediaItem.LoadingIndicator -> LoadingMoreIndicator(
-                    modifier = Modifier.animateItem(),
+                    modifier = Modifier.animateItem(
+                        fadeInSpec = M3Motion.listItemSpec(),
+                        placementSpec = M3Motion.listItemSpec(),
+                        fadeOutSpec = M3Motion.listItemSpec(),
+                    ),
                     item = item,
                     eventSink = eventSink,
                 )
@@ -386,7 +414,11 @@ private fun MediaGalleryImageGrid(
         ) { item ->
             when (item) {
                 is MediaItem.DateSeparator -> DateItemView(
-                    modifier = Modifier.animateItem(),
+                    modifier = Modifier.animateItem(
+                        fadeInSpec = M3Motion.listItemSpec(),
+                        placementSpec = M3Motion.listItemSpec(),
+                        fadeOutSpec = M3Motion.listItemSpec(),
+                    ),
                     item = item,
                 )
                 is MediaItem.Audio -> {
@@ -399,7 +431,11 @@ private fun MediaGalleryImageGrid(
                     // Should not happen
                 }
                 is MediaItem.Image -> ImageItemView(
-                    modifier = Modifier.animateItem(),
+                    modifier = Modifier.animateItem(
+                        fadeInSpec = M3Motion.listItemSpec(),
+                        placementSpec = M3Motion.listItemSpec(),
+                        fadeOutSpec = M3Motion.listItemSpec(),
+                    ),
                     image = item,
                     onClick = { onItemClick(item) },
                     onLongClick = {
@@ -407,7 +443,11 @@ private fun MediaGalleryImageGrid(
                     },
                 )
                 is MediaItem.Video -> VideoItemView(
-                    modifier = Modifier.animateItem(),
+                    modifier = Modifier.animateItem(
+                        fadeInSpec = M3Motion.listItemSpec(),
+                        placementSpec = M3Motion.listItemSpec(),
+                        fadeOutSpec = M3Motion.listItemSpec(),
+                    ),
                     video = item,
                     onClick = { onItemClick(item) },
                     onLongClick = {
@@ -415,7 +455,11 @@ private fun MediaGalleryImageGrid(
                     },
                 )
                 is MediaItem.LoadingIndicator -> LoadingMoreIndicator(
-                    modifier = Modifier.animateItem(),
+                    modifier = Modifier.animateItem(
+                        fadeInSpec = M3Motion.listItemSpec(),
+                        placementSpec = M3Motion.listItemSpec(),
+                        fadeOutSpec = M3Motion.listItemSpec(),
+                    ),
                     item = item,
                     eventSink = eventSink,
                 )
@@ -436,7 +480,7 @@ private fun LoadingMoreIndicator(
     ) {
         when (item.direction) {
             Timeline.PaginationDirection.FORWARDS -> {
-                LinearProgressIndicator(
+                WavyLinearProgressIndicator(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 2.dp)
@@ -444,9 +488,9 @@ private fun LoadingMoreIndicator(
                 )
             }
             Timeline.PaginationDirection.BACKWARDS -> {
-                CircularProgressIndicator(
-                    strokeWidth = 2.dp,
-                    modifier = Modifier.padding(vertical = 8.dp)
+                ElementLoadingIndicator(
+                    size = 32.dp,
+                    modifier = Modifier.padding(vertical = 8.dp),
                 )
             }
         }
@@ -504,7 +548,7 @@ private fun LoadingContent(
             verticalArrangement = Arrangement.spacedBy(16.dp),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            CircularProgressIndicator()
+            ElementLoadingIndicator()
             val res = when (mode) {
                 MediaGalleryMode.Images -> R.string.screen_media_browser_list_loading_media
                 MediaGalleryMode.Files -> R.string.screen_media_browser_list_loading_files

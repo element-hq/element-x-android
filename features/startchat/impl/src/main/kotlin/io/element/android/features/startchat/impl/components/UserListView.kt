@@ -23,7 +23,6 @@ import io.element.android.features.startchat.impl.userlist.UserListStateProvider
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.ListSectionHeader
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.CheckableUserRow
@@ -105,9 +104,6 @@ fun UserListView(
                                 subtext = recentDirectRoom.matrixUser.userId.value,
                             ),
                         )
-                        if (index < state.recentDirectRooms.lastIndex) {
-                            HorizontalDivider()
-                        }
                     }
                 }
             }

@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -41,6 +42,7 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.material3.minimumInteractiveComponentSize
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.securebackup.impl.R
@@ -48,7 +50,7 @@ import io.element.android.features.securebackup.impl.tools.RecoveryKeyVisualTran
 import io.element.android.libraries.designsystem.modifiers.clickableIfNotNull
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.ElementLoadingIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextField
@@ -106,7 +108,7 @@ private fun RecoveryKeyStaticContent(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clip(RoundedCornerShape(10.dp))
+            .clip(MaterialTheme.shapes.small)
             .background(
                 color = ElementTheme.colors.bgSubtleSecondary,
             )
@@ -130,13 +132,13 @@ private fun RecoveryKeyStaticContent(
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 if (state.inProgress) {
-                    CircularProgressIndicator(
+                    ElementLoadingIndicator(
                         modifier = Modifier
                             .progressSemantics()
                             .padding(end = 8.dp)
                             .size(16.dp),
                         color = ElementTheme.colors.textPrimary,
-                        strokeWidth = 1.5.dp,
+                        size = 16.dp,
                     )
                 }
                 Text(
@@ -227,7 +229,7 @@ private fun RecoveryKeyFormContent(
                 if (state.displayTextFieldContents) CompoundIcons.VisibilityOn() else CompoundIcons.VisibilityOff()
             val description =
                 if (state.displayTextFieldContents) stringResource(CommonStrings.a11y_hide_password) else stringResource(CommonStrings.a11y_show_password)
-            Box(Modifier.clickable { toggleRecoveryKeyVisibility(!state.displayTextFieldContents) }) {
+            Box(Modifier.minimumInteractiveComponentSize().clickable { toggleRecoveryKeyVisibility(!state.displayTextFieldContents) }) {
                 Icon(
                     imageVector = image,
                     contentDescription = description,

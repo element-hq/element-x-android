@@ -22,6 +22,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -104,7 +105,7 @@ private fun DigitView(
     isCurrent: Boolean,
     drawCursor: Boolean,
 ) {
-    val shape = RoundedCornerShape(4.dp)
+    val shape = MaterialTheme.shapes.extraSmall
     val appearanceModifier = when (digit) {
         Digit.Empty -> {
             val color = if (isCurrent) {

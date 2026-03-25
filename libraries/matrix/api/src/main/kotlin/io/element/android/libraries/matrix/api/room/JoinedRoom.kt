@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.room.knock.KnockRequest
 import io.element.android.libraries.matrix.api.room.location.LiveLocationShare
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsValues
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
+import io.element.android.libraries.matrix.api.room.threads.ThreadListItemData
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
@@ -183,6 +184,12 @@ interface JoinedRoom : BaseRoom {
      * Subscribe to a [Flow] of [SendQueueUpdate] related to this room.
      */
     fun subscribeToSendQueueUpdates(): Flow<SendQueueUpdate>
+
+    /**
+     * Load the list of threads in this room.
+     * @return Result containing the list of thread items.
+     */
+    suspend fun loadThreadList(): Result<List<ThreadListItemData>>
 
     /**
      * Subscribe to live location shares in this room.

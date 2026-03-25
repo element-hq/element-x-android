@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.material3.minimumInteractiveComponentSize
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.TimelineEvent
@@ -74,6 +75,7 @@ fun TimelineEventTimestampView(
                 contentDescription = stringResource(id = CommonStrings.common_sending_failed),
                 tint = tint,
                 modifier = Modifier
+                    .minimumInteractiveComponentSize()
                     .size(15.dp, 18.dp)
                     .clickable(
                         enabled = isVerifiedUserSendFailure,
@@ -91,6 +93,7 @@ fun TimelineEventTimestampView(
                     imageVector = shield.toIcon(),
                     contentDescription = stringResource(id = CommonStrings.a11y_encryption_details),
                     modifier = Modifier
+                        .minimumInteractiveComponentSize()
                         .size(15.dp)
                         .clickable(
                             onClickLabel = stringResource(CommonStrings.a11y_view_details),

@@ -25,7 +25,6 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -60,18 +59,15 @@ fun AccountSelectView(
         ) {
             LazyColumn {
                 items(state.accounts, key = { it.userId }) { matrixUser ->
-                    Column {
-                        MatrixUserRow(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    onSelectAccount(matrixUser.userId)
-                                }
-                                .padding(vertical = 8.dp),
-                            matrixUser = matrixUser,
-                        )
-                        HorizontalDivider()
-                    }
+                    MatrixUserRow(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable {
+                                onSelectAccount(matrixUser.userId)
+                            }
+                            .padding(vertical = 8.dp),
+                        matrixUser = matrixUser,
+                    )
                 }
             }
         }

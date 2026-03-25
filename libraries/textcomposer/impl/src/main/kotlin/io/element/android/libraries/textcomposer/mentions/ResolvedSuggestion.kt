@@ -32,4 +32,10 @@ sealed interface ResolvedSuggestion {
             size = size,
         )
     }
+
+    data class Command(
+        val name: String,
+        val description: String,
+        val usage: String,
+    ) : ResolvedSuggestion
 }

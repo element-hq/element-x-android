@@ -10,7 +10,9 @@ package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
@@ -41,7 +43,7 @@ fun ListSectionHeader(
 ) {
     Column(modifier.fillMaxWidth()) {
         if (hasDivider) {
-            HorizontalDivider(modifier = Modifier.padding(top = 16.dp))
+            Spacer(Modifier.height(16.dp))
         }
         Column(
             modifier = Modifier.padding(16.dp),

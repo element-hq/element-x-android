@@ -9,7 +9,8 @@
 package io.element.android.libraries.designsystem.swipe
 
 import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.foundation.MutatePriority
 import androidx.compose.foundation.gestures.DraggableState
 import androidx.compose.runtime.Composable
@@ -20,17 +21,21 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import io.element.android.libraries.designsystem.animation.isReduceMotionEnabled
 
 /**
  * Inspired from https://github.com/bmarty/swipe/blob/trunk/swipe/src/main/kotlin/me/saket/swipe/SwipeableActionsState.kt
  */
 @Composable
 fun rememberSwipeableActionsState(): SwipeableActionsState {
-    return remember { SwipeableActionsState() }
+    val reduceMotion = isReduceMotionEnabled
+    return remember { SwipeableActionsState(reduceMotion = reduceMotion) }
 }
 
 @Stable
-class SwipeableActionsState {
+class SwipeableActionsState(
+    private val reduceMotion: Boolean = false,
+) {
     /**
      * The current position (in pixels) of the content.
      */
@@ -54,11 +59,15 @@ class SwipeableActionsState {
         draggableState.drag(MutatePriority.PreventUserInput) {
             isResettingOnRelease = true
             try {
-                Animatable(offsetState.floatValue).animateTo(
-                    targetValue = 0f,
-                    animationSpec = tween(durationMillis = 300),
-                ) {
-                    dragBy(value - offsetState.floatValue)
+                if (reduceMotion) {
+                    dragBy(0f - offsetState.floatValue)
+                } else {
+                    Animatable(offsetState.floatValue).animateTo(
+                        targetValue = 0f,
+                        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+                    ) {
+                        dragBy(value - offsetState.floatValue)
+                    }
                 }
             } finally {
                 isResettingOnRelease = false

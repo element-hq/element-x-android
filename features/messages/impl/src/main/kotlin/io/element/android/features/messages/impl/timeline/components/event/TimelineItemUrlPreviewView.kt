@@ -8,7 +8,6 @@
 
 package io.element.android.features.messages.impl.timeline.components.event
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,13 +16,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.widthIn
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
@@ -46,7 +46,7 @@ fun TimelineItemUrlPreviewView(
     modifier: Modifier = Modifier,
 ) {
     val link = Link(preview.url, preview.title ?: preview.url)
-    Column(
+    Card(
         modifier = modifier
             .then(
                 if (cardWidth != null) {
@@ -55,13 +55,15 @@ fun TimelineItemUrlPreviewView(
                     Modifier.widthIn(max = 296.dp)
                 }
             )
-            .clip(RoundedCornerShape(12.dp))
-            .background(ElementTheme.colors.bgSubtleSecondary)
             .combinedClickable(
                 onClick = { onClick(link) },
                 onLongClick = { onLongClick(link) },
             )
-            .semantics(mergeDescendants = true) {}
+            .semantics(mergeDescendants = true) {},
+        shape = MaterialTheme.shapes.medium,
+        colors = CardDefaults.cardColors(
+            containerColor = ElementTheme.colors.bgSubtleSecondary,
+        ),
     ) {
         preview.imageUrl?.let { imageUrl ->
             previewImageModel(imageUrl)?.let { imageModel ->

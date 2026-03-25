@@ -73,7 +73,8 @@ fun DmAvatars(
                         boxSizePx - otherAvatarRadius
                     }
                     drawCircle(
-                        color = Color.Black,
+                        // Color is irrelevant: BlendMode.Clear erases destination pixels
+                        color = Color.Transparent,
                         center = Offset(
                             x = xOffset,
                             y = size.height - (boxSizePx - otherAvatarRadius),

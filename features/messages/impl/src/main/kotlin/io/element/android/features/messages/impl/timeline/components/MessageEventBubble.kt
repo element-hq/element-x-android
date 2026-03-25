@@ -8,8 +8,10 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -19,10 +21,12 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithCache
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.BlendMode
 import androidx.compose.ui.graphics.Color
@@ -36,6 +40,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItemGrou
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleStateProvider
 import io.element.android.libraries.core.extensions.to01
+import io.element.android.libraries.designsystem.animation.M3Motion
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -50,7 +55,7 @@ import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.utils.graphics.drawInLayer
 import io.element.android.libraries.ui.utils.time.isTalkbackActive
 
-private val BUBBLE_RADIUS = 12.dp
+private val BUBBLE_RADIUS = 16.dp
 private val avatarRadius = AvatarSize.TimelineSender.dp / 2
 
 private val MIN_BUBBLE_WIDTH = 80.dp
@@ -77,6 +82,13 @@ fun MessageEventBubble(
             .onKeyboardContextMenuAction(onLongClick)
     }
 
+    val isPressed by interactionSource.collectIsPressedAsState()
+    val elevation by animateDpAsState(
+        targetValue = if (isPressed) 4.dp else 1.dp,
+        animationSpec = M3Motion.defaultValueSpec(),
+        label = "bubble elevation",
+    )
+
     val cutTopStart = state.cutTopStart
     // Ignore state.isHighlighted for now, we need a design decision on it.
     val backgroundBubbleColor = MessageEventBubbleDefaults.backgroundBubbleColor(state.isMine)
@@ -85,6 +97,7 @@ fun MessageEventBubble(
     val yOffsetPx = -(NEGATIVE_MARGIN_FOR_BUBBLE + avatarRadius).toPx()
     BoxWithConstraints(
         modifier = modifier
+            .shadow(elevation = elevation, shape = bubbleShape)
             .drawWithCache {
                 // Calculate the outline of the background and cache it
                 val outline = bubbleShape.createOutline(size, layoutDirection, this)
@@ -142,27 +155,25 @@ object MessageEventBubbleDefaults {
         val topLeftCorner = if (cutTopStart) 0.dp else BUBBLE_RADIUS
         return when (groupPosition) {
             TimelineItemGroupPosition.First -> if (isMine) {
-                RoundedCornerShape(BUBBLE_RADIUS, BUBBLE_RADIUS, 0.dp, BUBBLE_RADIUS)
+                RoundedCornerShape(BUBBLE_RADIUS, BUBBLE_RADIUS, 4.dp, 4.dp)
             } else {
-                RoundedCornerShape(topLeftCorner, BUBBLE_RADIUS, BUBBLE_RADIUS, 0.dp)
+                RoundedCornerShape(topLeftCorner, BUBBLE_RADIUS, BUBBLE_RADIUS, 4.dp)
             }
             TimelineItemGroupPosition.Middle -> if (isMine) {
-                RoundedCornerShape(BUBBLE_RADIUS, 0.dp, 0.dp, BUBBLE_RADIUS)
+                RoundedCornerShape(BUBBLE_RADIUS, 4.dp, 4.dp, BUBBLE_RADIUS)
             } else {
-                RoundedCornerShape(0.dp, BUBBLE_RADIUS, BUBBLE_RADIUS, 0.dp)
+                RoundedCornerShape(4.dp, BUBBLE_RADIUS, BUBBLE_RADIUS, 4.dp)
             }
             TimelineItemGroupPosition.Last -> if (isMine) {
-                RoundedCornerShape(BUBBLE_RADIUS, 0.dp, BUBBLE_RADIUS, BUBBLE_RADIUS)
+                RoundedCornerShape(BUBBLE_RADIUS, 4.dp, BUBBLE_RADIUS, BUBBLE_RADIUS)
             } else {
-                RoundedCornerShape(0.dp, BUBBLE_RADIUS, BUBBLE_RADIUS, BUBBLE_RADIUS)
+                RoundedCornerShape(4.dp, BUBBLE_RADIUS, BUBBLE_RADIUS, BUBBLE_RADIUS)
             }
-            TimelineItemGroupPosition.None ->
-                RoundedCornerShape(
-                    topLeftCorner,
-                    BUBBLE_RADIUS,
-                    BUBBLE_RADIUS,
-                    BUBBLE_RADIUS
-                )
+            TimelineItemGroupPosition.None -> if (isMine) {
+                RoundedCornerShape(BUBBLE_RADIUS, BUBBLE_RADIUS, BUBBLE_RADIUS, 4.dp)
+            } else {
+                RoundedCornerShape(4.dp, BUBBLE_RADIUS, BUBBLE_RADIUS, BUBBLE_RADIUS)
+            }
         }
     }
 

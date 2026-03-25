@@ -26,6 +26,12 @@ interface AppPreferencesStore {
     suspend fun setTheme(theme: String)
     fun getThemeFlow(): Flow<String?>
 
+    suspend fun setDynamicColorEnabled(enabled: Boolean)
+    fun isDynamicColorEnabledFlow(): Flow<Boolean>
+
+    suspend fun setHighContrastEnabled(enabled: Boolean)
+    fun isHighContrastEnabledFlow(): Flow<Boolean>
+
     @Deprecated("Use MediaPreviewService instead. Kept only for migration.")
     suspend fun setHideInviteAvatars(hide: Boolean?)
     @Deprecated("Use MediaPreviewService instead. Kept only for migration.")

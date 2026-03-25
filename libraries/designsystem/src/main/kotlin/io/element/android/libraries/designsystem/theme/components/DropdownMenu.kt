@@ -12,6 +12,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.Dp
@@ -38,7 +39,7 @@ fun DropdownMenu(
         modifier = modifier
             .background(color = ElementTheme.colors.bgCanvasDefaultLevel1)
             .widthIn(min = minWidth),
-        shape = RoundedCornerShape(8.dp),
+        shape = MaterialTheme.shapes.small,
         offset = offset,
         properties = properties,
         content = content

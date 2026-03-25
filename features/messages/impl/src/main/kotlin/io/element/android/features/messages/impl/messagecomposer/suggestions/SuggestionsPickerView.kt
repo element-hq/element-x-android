@@ -32,7 +32,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -63,20 +62,18 @@ fun SuggestionsPickerView(
                     is ResolvedSuggestion.AtRoom -> "@room"
                     is ResolvedSuggestion.Member -> suggestion.roomMember.userId.value
                     is ResolvedSuggestion.Alias -> suggestion.roomId.value
+                    is ResolvedSuggestion.Command -> suggestion.name
                 }
             }
         ) {
-            Column(modifier = Modifier.fillParentMaxWidth()) {
-                SuggestionItemView(
-                    suggestion = it,
-                    roomId = roomId.value,
-                    roomName = roomName,
-                    roomAvatar = roomAvatarData,
-                    onSelectSuggestion = onSelectSuggestion,
-                    modifier = Modifier.fillMaxWidth()
-                )
-                HorizontalDivider(modifier = Modifier.fillMaxWidth())
-            }
+            SuggestionItemView(
+                suggestion = it,
+                roomId = roomId.value,
+                roomName = roomName,
+                roomAvatar = roomAvatarData,
+                onSelectSuggestion = onSelectSuggestion,
+                modifier = Modifier.fillParentMaxWidth()
+            )
         }
     }
 }
@@ -90,57 +87,88 @@ private fun SuggestionItemView(
     onSelectSuggestion: (ResolvedSuggestion) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    Row(
-        modifier = modifier.clickable { onSelectSuggestion(suggestion) },
-        horizontalArrangement = Arrangement.spacedBy(16.dp),
-    ) {
-        val avatarSize = AvatarSize.Suggestion
-        val avatarData = when (suggestion) {
-            is ResolvedSuggestion.AtRoom -> roomAvatar?.copy(size = avatarSize) ?: AvatarData(roomId, roomName, null, avatarSize)
-            is ResolvedSuggestion.Member -> suggestion.roomMember.getAvatarData(avatarSize)
-            is ResolvedSuggestion.Alias -> suggestion.getAvatarData(avatarSize)
-        }
-        val avatarType = when (suggestion) {
-            is ResolvedSuggestion.Alias -> AvatarType.Room()
-            ResolvedSuggestion.AtRoom,
-            is ResolvedSuggestion.Member -> AvatarType.User
-        }
-        val title = when (suggestion) {
-            is ResolvedSuggestion.AtRoom -> stringResource(R.string.screen_room_mentions_at_room_title)
-            is ResolvedSuggestion.Member -> suggestion.roomMember.displayName
-            is ResolvedSuggestion.Alias -> suggestion.roomName
-        }
-        val subtitle = when (suggestion) {
-            is ResolvedSuggestion.AtRoom -> "@room"
-            is ResolvedSuggestion.Member -> suggestion.roomMember.userId.value
-            is ResolvedSuggestion.Alias -> suggestion.roomAlias.value
-        }
-        Avatar(
-            avatarData = avatarData,
-            avatarType = avatarType,
-            modifier = Modifier.padding(start = 16.dp, top = 12.dp, bottom = 12.dp),
-        )
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(end = 16.dp, top = 8.dp, bottom = 8.dp)
-                .align(Alignment.CenterVertically),
+    if (suggestion is ResolvedSuggestion.Command) {
+        Row(
+            modifier = modifier.clickable { onSelectSuggestion(suggestion) },
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
         ) {
-            title?.let {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 12.dp),
+            ) {
                 Text(
-                    text = it,
-                    style = ElementTheme.typography.fontBodyLgRegular,
+                    text = suggestion.name,
+                    style = ElementTheme.typography.fontBodyLgMedium,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+                Text(
+                    text = suggestion.description,
+                    style = ElementTheme.typography.fontBodySmRegular,
+                    color = ElementTheme.colors.textSecondary,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
             }
-            Text(
-                text = subtitle,
-                style = ElementTheme.typography.fontBodySmRegular,
-                color = ElementTheme.colors.textSecondary,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
+        }
+    } else {
+        Row(
+            modifier = modifier.clickable { onSelectSuggestion(suggestion) },
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+        ) {
+            val avatarSize = AvatarSize.Suggestion
+            val avatarData = when (suggestion) {
+                is ResolvedSuggestion.AtRoom -> roomAvatar?.copy(size = avatarSize) ?: AvatarData(roomId, roomName, null, avatarSize)
+                is ResolvedSuggestion.Member -> suggestion.roomMember.getAvatarData(avatarSize)
+                is ResolvedSuggestion.Alias -> suggestion.getAvatarData(avatarSize)
+                is ResolvedSuggestion.Command -> error("Handled above")
+            }
+            val avatarType = when (suggestion) {
+                is ResolvedSuggestion.Alias -> AvatarType.Room()
+                ResolvedSuggestion.AtRoom,
+                is ResolvedSuggestion.Member -> AvatarType.User
+                is ResolvedSuggestion.Command -> error("Handled above")
+            }
+            val title = when (suggestion) {
+                is ResolvedSuggestion.AtRoom -> stringResource(R.string.screen_room_mentions_at_room_title)
+                is ResolvedSuggestion.Member -> suggestion.roomMember.displayName
+                is ResolvedSuggestion.Alias -> suggestion.roomName
+                is ResolvedSuggestion.Command -> error("Handled above")
+            }
+            val subtitle = when (suggestion) {
+                is ResolvedSuggestion.AtRoom -> "@room"
+                is ResolvedSuggestion.Member -> suggestion.roomMember.userId.value
+                is ResolvedSuggestion.Alias -> suggestion.roomAlias.value
+                is ResolvedSuggestion.Command -> error("Handled above")
+            }
+            Avatar(
+                avatarData = avatarData,
+                avatarType = avatarType,
+                modifier = Modifier.padding(start = 16.dp, top = 12.dp, bottom = 12.dp),
             )
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(end = 16.dp, top = 8.dp, bottom = 8.dp)
+                    .align(Alignment.CenterVertically),
+            ) {
+                title?.let {
+                    Text(
+                        text = it,
+                        style = ElementTheme.typography.fontBodyLgRegular,
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
+                }
+                Text(
+                    text = subtitle,
+                    style = ElementTheme.typography.fontBodySmRegular,
+                    color = ElementTheme.colors.textSecondary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                )
+            }
         }
     }
 }

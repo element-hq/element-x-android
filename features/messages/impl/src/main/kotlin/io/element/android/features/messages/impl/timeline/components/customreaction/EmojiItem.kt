@@ -28,6 +28,7 @@ import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.material3.minimumInteractiveComponentSize
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.emojibasebindings.Emoji
 import io.element.android.features.messages.impl.timeline.a11y.a11yReactionAction
@@ -56,6 +57,7 @@ fun EmojiItem(
     )
     Box(
         modifier = modifier
+            .minimumInteractiveComponentSize()
             .sizeIn(minWidth = 40.dp, minHeight = 40.dp)
             .background(backgroundColor, CircleShape)
             .clickable(

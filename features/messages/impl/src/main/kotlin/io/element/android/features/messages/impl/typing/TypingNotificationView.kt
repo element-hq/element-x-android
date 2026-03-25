@@ -9,10 +9,7 @@
 package io.element.android.features.messages.impl.typing
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
+import io.element.android.libraries.designsystem.animation.M3Motion
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -71,8 +68,8 @@ fun TypingNotificationView(
             .fillMaxWidth()
             .padding(vertical = 2.dp),
         visible = displayNotifications || state.reserveSpace,
-        enter = fadeIn() + expandVertically(),
-        exit = fadeOut() + shrinkVertically(),
+        enter = M3Motion.enterTransition,
+        exit = M3Motion.exitTransition,
     ) {
         val typingNotificationText = computeTypingNotificationText(state.typingMembers)
         Box(contentAlignment = Alignment.BottomStart) {
@@ -88,8 +85,8 @@ fun TypingNotificationView(
             // Display the actual notification
             AnimatedVisibility(
                 visible = displayNotifications,
-                enter = fadeIn(),
-                exit = fadeOut(),
+                enter = M3Motion.fadeEnter,
+                exit = M3Motion.fadeExit,
             ) {
                 TypingText(text = typingNotificationText, textModifier = Modifier.padding(horizontal = 24.dp))
             }

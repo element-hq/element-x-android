@@ -11,8 +11,7 @@ package io.element.android.features.messages.impl.timeline.debug
 import android.content.ClipData
 import android.content.ClipboardManager
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkVertically
+import io.element.android.libraries.designsystem.animation.M3Motion
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -140,7 +139,7 @@ private fun CollapsibleSection(
                 contentDescription = null
             )
         }
-        AnimatedVisibility(visible = isExpanded, enter = expandVertically(), exit = shrinkVertically()) {
+        AnimatedVisibility(visible = isExpanded, enter = M3Motion.enterTransition, exit = M3Motion.exitTransition) {
             CopyableText(text = text, modifier = Modifier.fillMaxWidth())
         }
     }
@@ -155,8 +154,8 @@ private fun CopyableText(
     val clipboardManager = remember { requireNotNull(context.getSystemService<ClipboardManager>()) }
     Box(
         modifier
-            .clip(RoundedCornerShape(4.dp))
-            .background(MaterialTheme.colorScheme.surfaceVariant)
+            .clip(MaterialTheme.shapes.extraSmall)
+            .background(ElementTheme.materialColors.surfaceVariant)
             .padding(6.dp)
             .clickable { clipboardManager.setPrimaryClip(ClipData.newPlainText("JSON", text)) }
     ) {

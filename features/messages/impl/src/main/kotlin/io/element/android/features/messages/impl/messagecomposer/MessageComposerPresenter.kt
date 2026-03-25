@@ -325,7 +325,22 @@ class MessageComposerPresenter(
                 }
                 is MessageComposerEvent.InsertSuggestion -> {
                     localCoroutineScope.launch {
-                        if (showTextFormatting) {
+                        val commandSuggestion = event.resolvedSuggestion as? ResolvedSuggestion.Command
+                        if (commandSuggestion != null) {
+                            // Command suggestions: insert the command name + space into the composer
+                            if (showTextFormatting) {
+                                richTextEditorState.setHtml("${commandSuggestion.name} ")
+                            } else if (markdownTextEditorState.currentSuggestion != null) {
+                                val suggestion = markdownTextEditorState.currentSuggestion!!
+                                val currentText = android.text.SpannableStringBuilder(markdownTextEditorState.text.value())
+                                val replacement = "${commandSuggestion.name} "
+                                currentText.replace(suggestion.start, suggestion.end, replacement)
+                                markdownTextEditorState.text.update(currentText, true)
+                                val newPos = suggestion.start + replacement.length
+                                markdownTextEditorState.selection = IntRange(newPos, newPos)
+                                suggestionSearchTrigger.value = null
+                            }
+                        } else if (showTextFormatting) {
                             when (val suggestion = event.resolvedSuggestion) {
                                 is ResolvedSuggestion.AtRoom -> {
                                     richTextEditorState.insertAtRoomMentionAtSuggestion()
@@ -340,6 +355,7 @@ class MessageComposerPresenter(
                                     val link = permalinkBuilder.permalinkForRoomAlias(suggestion.roomAlias).getOrNull() ?: return@launch
                                     richTextEditorState.insertMentionAtSuggestion(text = text, link = link)
                                 }
+                                is ResolvedSuggestion.Command -> error("Handled above")
                             }
                         } else if (markdownTextEditorState.currentSuggestion != null) {
                             markdownTextEditorState.insertSuggestion(
@@ -436,6 +452,17 @@ class MessageComposerPresenter(
     ) = launch {
         val message = currentComposerMessage(markdownTextEditorState, richTextEditorState, withMentions = true)
         val capturedMode = messageComposerContext.composerMode
+
+        // Intercept slash commands in Normal/Attachment mode
+        if (capturedMode is MessageComposerMode.Normal || capturedMode is MessageComposerMode.Attachment) {
+            val slashCommand = SlashCommandParser.parse(message.markdown)
+            if (slashCommand != null) {
+                resetComposer(markdownTextEditorState, richTextEditorState, fromEdit = false)
+                handleSlashCommand(slashCommand, message.intentionalMentions)
+                return@launch
+            }
+        }
+
         // Reset composer right away
         resetComposer(markdownTextEditorState, richTextEditorState, fromEdit = capturedMode is MessageComposerMode.Edit)
         when (capturedMode) {
@@ -503,6 +530,78 @@ class MessageComposerPresenter(
                 messageType = Composer.MessageType.Text,
             )
         )
+    }
+
+    @Suppress("LongMethod")
+    private suspend fun handleSlashCommand(
+        command: SlashCommand,
+        mentions: List<IntentionalMention>,
+    ) {
+        when (command) {
+            is SlashCommand.Me -> {
+                timelineController.invokeOnCurrentTimeline {
+                    sendMessage(
+                        body = "/me ${command.message}",
+                        htmlBody = null,
+                        intentionalMentions = mentions,
+                    )
+                }
+            }
+            is SlashCommand.Topic -> {
+                room.setTopic(command.topic)
+            }
+            is SlashCommand.Invite -> {
+                room.inviteUserById(UserId(command.userId))
+            }
+            is SlashCommand.Kick -> {
+                room.kickUser(UserId(command.userId), command.reason)
+            }
+            is SlashCommand.Ban -> {
+                room.banUser(UserId(command.userId), command.reason)
+            }
+            is SlashCommand.Unban -> {
+                room.unbanUser(UserId(command.userId))
+            }
+            is SlashCommand.Join -> {
+                // Join room by alias - would need the matrix client, not just the room.
+                // For now, send as plain text.
+                timelineController.invokeOnCurrentTimeline {
+                    sendMessage(body = command.roomAlias, htmlBody = null, intentionalMentions = emptyList())
+                }
+            }
+            is SlashCommand.Part -> {
+                room.leave()
+            }
+            is SlashCommand.Plain -> {
+                timelineController.invokeOnCurrentTimeline {
+                    sendMessage(body = command.message, htmlBody = null, intentionalMentions = emptyList())
+                }
+            }
+            is SlashCommand.Shrug -> {
+                val text = "\u00AF\\_(\u30C4)_/\u00AF" + (command.message?.let { " $it" } ?: "")
+                timelineController.invokeOnCurrentTimeline {
+                    sendMessage(body = text, htmlBody = null, intentionalMentions = mentions)
+                }
+            }
+            is SlashCommand.TableFlip -> {
+                val text = "(\u256F\u00B0\u25A1\u00B0)\u256F\uFE35 \u253B\u2501\u253B" + (command.message?.let { " $it" } ?: "")
+                timelineController.invokeOnCurrentTimeline {
+                    sendMessage(body = text, htmlBody = null, intentionalMentions = mentions)
+                }
+            }
+            is SlashCommand.UnFlip -> {
+                val text = "\u252C\u2500\u252C\u30CE( \u00BA _ \u00BA\u30CE)" + (command.message?.let { " $it" } ?: "")
+                timelineController.invokeOnCurrentTimeline {
+                    sendMessage(body = text, htmlBody = null, intentionalMentions = mentions)
+                }
+            }
+            is SlashCommand.Lenny -> {
+                val text = "( \u0361\u00B0 \u035C\u0296 \u0361\u00B0)" + (command.message?.let { " $it" } ?: "")
+                timelineController.invokeOnCurrentTimeline {
+                    sendMessage(body = text, htmlBody = null, intentionalMentions = mentions)
+                }
+            }
+        }
     }
 
     private fun CoroutineScope.sendAttachment(

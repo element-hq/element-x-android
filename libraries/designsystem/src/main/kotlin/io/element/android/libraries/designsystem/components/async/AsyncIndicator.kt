@@ -17,7 +17,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.ElementLoadingIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 
 /**
@@ -40,12 +40,12 @@ object AsyncIndicator {
             text = text,
             spacing = 10.dp,
         ) {
-            CircularProgressIndicator(
+            ElementLoadingIndicator(
                 modifier = Modifier
                     .progressSemantics()
                     .size(12.dp),
                 color = ElementTheme.colors.textPrimary,
-                strokeWidth = 1.5.dp,
+                size = 12.dp,
             )
         }
     }

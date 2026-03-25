@@ -9,6 +9,7 @@
 package io.element.android.features.messages.impl.timeline.components
 
 import androidx.compose.animation.animateContentSize
+import io.element.android.libraries.designsystem.animation.M3Motion
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -150,7 +151,7 @@ private fun TimelineItemGroupedEventsRowContent(
             )
         },
 ) {
-    Column(modifier = modifier.animateContentSize()) {
+    Column(modifier = modifier.animateContentSize(animationSpec = M3Motion.defaultContentSizeSpec())) {
         GroupHeaderView(
             text = pluralStringResource(
                 id = R.plurals.screen_room_timeline_state_changes,

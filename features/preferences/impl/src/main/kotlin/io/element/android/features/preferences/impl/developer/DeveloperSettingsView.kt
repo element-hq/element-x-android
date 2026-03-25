@@ -34,7 +34,7 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.components.preferences.PreferenceTextField
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.ElementLoadingIndicator
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.featureflag.ui.FeatureListView
@@ -180,11 +180,11 @@ fun DeveloperSettingsView(
                 },
                 trailingContent = if (state.cacheSize.isLoading() || state.clearCacheAction.isLoading()) {
                     ListItemContent.Custom {
-                        CircularProgressIndicator(
+                        ElementLoadingIndicator(
                             modifier = Modifier
                                 .progressSemantics()
                                 .size(20.dp),
-                            strokeWidth = 2.dp
+                            size = 20.dp,
                         )
                     }
                 } else {

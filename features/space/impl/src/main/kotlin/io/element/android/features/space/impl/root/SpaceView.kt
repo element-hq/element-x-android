@@ -11,22 +11,22 @@ package io.element.android.features.space.impl.root
 import androidx.activity.compose.BackHandler
 import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.shrinkVertically
+import io.element.android.libraries.designsystem.animation.M3Motion
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -70,10 +70,9 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.Checkbox
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.ElementLoadingIndicator
 import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.IconSource
@@ -125,8 +124,8 @@ fun SpaceView(
             Box {
                 AnimatedVisibility(
                     visible = state.isManageMode,
-                    enter = fadeIn(),
-                    exit = fadeOut()
+                    enter = M3Motion.fadeEnter,
+                    exit = M3Motion.fadeExit
                 ) {
                     ManageModeTopBar(
                         selectedCount = state.selectedCount,
@@ -137,8 +136,8 @@ fun SpaceView(
                 }
                 AnimatedVisibility(
                     visible = !state.isManageMode,
-                    enter = fadeIn(),
-                    exit = fadeOut()
+                    enter = M3Motion.fadeEnter,
+                    exit = M3Motion.fadeExit
                 ) {
                     SpaceViewTopBar(
                         spaceInfo = state.spaceInfo,
@@ -256,8 +255,8 @@ private fun SpaceViewContent(
         item(key = "space_header") {
             AnimatedVisibility(
                 !state.isManageMode,
-                enter = fadeIn() + expandVertically(),
-                exit = fadeOut() + shrinkVertically()
+                enter = M3Motion.enterTransition,
+                exit = M3Motion.exitTransition
             ) {
                 Column {
                     SpaceHeaderView(
@@ -271,7 +270,7 @@ private fun SpaceViewContent(
                         numberOfMembers = spaceInfo.joinedMembersCount.toInt(),
                         onTopicClick = onTopicClick
                     )
-                    HorizontalDivider()
+                    Spacer(Modifier.height(16.dp))
                 }
             }
         }
@@ -327,9 +326,6 @@ private fun SpaceViewContent(
                         )
                     }
                 )
-                if (index != state.children.lastIndex) {
-                    HorizontalDivider()
-                }
             }
 
             if (state.hasMoreToLoad) {
@@ -384,9 +380,9 @@ private fun LoadingMoreIndicator(
         modifier = modifier.fillMaxWidth(),
         contentAlignment = Alignment.Center,
     ) {
-        CircularProgressIndicator(
-            strokeWidth = 2.dp,
-            modifier = Modifier.padding(vertical = 8.dp)
+        ElementLoadingIndicator(
+            size = 32.dp,
+            modifier = Modifier.padding(vertical = 8.dp),
         )
         val latestEventSink by rememberUpdatedState(eventSink)
         LaunchedEffect(Unit) {
@@ -418,7 +414,7 @@ private fun SpaceViewTopBar(
             BackButton(onClick = onBackClick)
         },
         title = {
-            val roundedCornerShape = RoundedCornerShape(8.dp)
+            val roundedCornerShape = MaterialTheme.shapes.small
             SpaceAvatarAndNameRow(
                 name = spaceInfo.name,
                 avatarData = spaceInfo.getAvatarData(AvatarSize.TimelineRoom),
@@ -468,7 +464,7 @@ private fun SpaceViewTopBar(
                             }
                         )
                     }
-                    HorizontalDivider()
+                    Spacer(Modifier.height(16.dp))
                 }
                 SpaceMenuItem(
                     titleRes = R.string.screen_space_menu_action_members,
@@ -496,7 +492,7 @@ private fun SpaceViewTopBar(
                         }
                     )
                 }
-                HorizontalDivider()
+                Spacer(Modifier.height(16.dp))
                 SpaceMenuItem(
                     titleRes = CommonStrings.action_leave_space,
                     icon = CompoundIcons.Leave(),

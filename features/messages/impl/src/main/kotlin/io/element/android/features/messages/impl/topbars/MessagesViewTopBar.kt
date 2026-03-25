@@ -12,16 +12,17 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.height
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -31,10 +32,6 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.SharedHistoryIcon
-import io.element.android.features.messages.impl.timeline.components.CallMenuItem
-import io.element.android.features.roomcall.api.RoomCallState
-import io.element.android.features.roomcall.api.aStandByCallState
-import io.element.android.features.roomcall.api.anOngoingCallState
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -43,17 +40,12 @@ import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
-import io.element.android.libraries.matrix.ui.components.aMatrixUserList
-import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toImmutableList
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,115 +54,89 @@ internal fun MessagesViewTopBar(
     roomAvatar: AvatarData,
     isTombstoned: Boolean,
     heroes: ImmutableList<AvatarData>,
-    roomCallState: RoomCallState,
     dmUserIdentityState: IdentityState?,
     sharedHistoryIcon: SharedHistoryIcon,
     onRoomDetailsClick: () -> Unit,
-    onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
+    menuActions: @Composable RowScope.() -> Unit = {},
 ) {
-    TopAppBar(
+    CenterAlignedTopAppBar(
         modifier = modifier,
         navigationIcon = {
             BackButton(onClick = onBackClick)
         },
         title = {
-            val roundedCornerShape = RoundedCornerShape(8.dp)
             Row(
-                modifier = Modifier
-                    .clip(roundedCornerShape)
-                    .clickable { onRoomDetailsClick() },
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                modifier = Modifier.clickable { onRoomDetailsClick() },
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                val titleModifier = Modifier.weight(1f, fill = false)
-                RoomAvatarAndNameRow(
-                    roomName = roomName,
-                    roomAvatar = roomAvatar,
-                    isTombstoned = isTombstoned,
-                    heroes = heroes,
-                    modifier = titleModifier
+                Avatar(
+                    avatarData = roomAvatar,
+                    avatarType = AvatarType.Room(heroes = heroes, isTombstoned = isTombstoned),
                 )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.weight(1f, fill = false),
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .weight(1f, fill = false)
+                            .semantics {
+                                heading()
+                            },
+                        text = roomName ?: stringResource(CommonStrings.common_no_room_name),
+                        style = ElementTheme.typography.fontBodyLgMedium,
+                        fontStyle = FontStyle.Italic.takeIf { roomName == null },
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
 
-                when (dmUserIdentityState) {
-                    IdentityState.Verified -> {
-                        Icon(
-                            imageVector = CompoundIcons.Verified(),
-                            tint = ElementTheme.colors.iconSuccessPrimary,
-                            contentDescription = null,
+                    when (dmUserIdentityState) {
+                        IdentityState.Verified -> {
+                            Icon(
+                                imageVector = CompoundIcons.Verified(),
+                                tint = ElementTheme.colors.iconSuccessPrimary,
+                                contentDescription = null,
+                            )
+                        }
+                        IdentityState.VerificationViolation -> {
+                            Icon(
+                                imageVector = CompoundIcons.ErrorSolid(),
+                                tint = ElementTheme.colors.iconCriticalPrimary,
+                                contentDescription = null,
+                            )
+                        }
+                        else -> Unit
+                    }
+
+                    when (sharedHistoryIcon) {
+                        SharedHistoryIcon.NONE -> Unit
+                        SharedHistoryIcon.SHARED -> Icon(
+                            imageVector = CompoundIcons.History(),
+                            tint = ElementTheme.colors.iconInfoPrimary,
+                            contentDescription = stringResource(CommonStrings.common_shared_history),
+                        )
+                        SharedHistoryIcon.WORLD_READABLE -> Icon(
+                            imageVector = CompoundIcons.UserProfileSolid(),
+                            tint = ElementTheme.colors.iconInfoPrimary,
+                            contentDescription = stringResource(CommonStrings.common_world_readable_history),
                         )
                     }
-                    IdentityState.VerificationViolation -> {
-                        Icon(
-                            imageVector = CompoundIcons.ErrorSolid(),
-                            tint = ElementTheme.colors.iconCriticalPrimary,
-                            contentDescription = null,
-                        )
-                    }
-                    else -> Unit
-                }
-
-                when (sharedHistoryIcon) {
-                    SharedHistoryIcon.NONE -> Unit
-                    SharedHistoryIcon.SHARED -> Icon(
-                        imageVector = CompoundIcons.History(),
-                        tint = ElementTheme.colors.iconInfoPrimary,
-                        contentDescription = stringResource(CommonStrings.common_shared_history),
-                    )
-                    SharedHistoryIcon.WORLD_READABLE -> Icon(
-                        imageVector = CompoundIcons.UserProfileSolid(),
-                        tint = ElementTheme.colors.iconInfoPrimary,
-                        contentDescription = stringResource(CommonStrings.common_world_readable_history),
-                    )
                 }
             }
         },
-        actions = {
-            CallMenuItem(
-                roomCallState = roomCallState,
-                onJoinCallClick = onJoinCallClick,
-            )
-            Spacer(Modifier.width(8.dp))
-        },
+        actions = menuActions,
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+        ),
         windowInsets = WindowInsets(0.dp)
     )
 }
 
-@Composable
-private fun RoomAvatarAndNameRow(
-    roomName: String?,
-    roomAvatar: AvatarData,
-    heroes: ImmutableList<AvatarData>,
-    isTombstoned: Boolean,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        modifier = modifier,
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Avatar(
-            avatarData = roomAvatar,
-            avatarType = AvatarType.Room(
-                heroes = heroes,
-                isTombstoned = isTombstoned,
-            ),
-        )
-        Text(
-            modifier = Modifier
-                .padding(horizontal = 8.dp)
-                .semantics {
-                    heading()
-                },
-            text = roomName ?: stringResource(CommonStrings.common_no_room_name),
-            style = ElementTheme.typography.fontBodyLgMedium,
-            fontStyle = FontStyle.Italic.takeIf { roomName == null },
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-    }
-}
-
+@OptIn(ExperimentalMaterial3Api::class)
 @PreviewsDayNight
 @Composable
 internal fun MessagesViewTopBarPreview() = ElementPreview {
@@ -183,7 +149,6 @@ internal fun MessagesViewTopBarPreview() = ElementPreview {
         ),
         isTombstoned: Boolean = false,
         heroes: ImmutableList<AvatarData> = persistentListOf(),
-        roomCallState: RoomCallState = RoomCallState.Unavailable,
         dmUserIdentityState: IdentityState? = null,
         sharedHistoryIcon: SharedHistoryIcon = SharedHistoryIcon.NONE,
     ) = MessagesViewTopBar(
@@ -191,48 +156,35 @@ internal fun MessagesViewTopBarPreview() = ElementPreview {
         roomAvatar = roomAvatar,
         isTombstoned = isTombstoned,
         heroes = heroes,
-        roomCallState = roomCallState,
         dmUserIdentityState = dmUserIdentityState,
         sharedHistoryIcon = sharedHistoryIcon,
         onRoomDetailsClick = {},
-        onJoinCallClick = {},
         onBackClick = {},
     )
     Column {
         AMessagesViewTopBar()
-        HorizontalDivider()
-        AMessagesViewTopBar(
-            heroes = aMatrixUserList().map { it.getAvatarData(AvatarSize.TimelineRoom) }.toImmutableList(),
-            roomCallState = anOngoingCallState(),
-        )
-        HorizontalDivider()
+        Spacer(Modifier.height(8.dp))
         AMessagesViewTopBar(
             roomName = null,
-            roomCallState = anOngoingCallState(canJoinCall = false),
         )
-        HorizontalDivider()
+        Spacer(Modifier.height(8.dp))
         AMessagesViewTopBar(
             roomName = "A DM with a very very very long name",
-            roomAvatar = anAvatarData(
-                size = AvatarSize.TimelineRoom,
-                url = "https://some-avatar.jpg"
-            ),
-            roomCallState = aStandByCallState(canStartCall = false),
             dmUserIdentityState = IdentityState.Verified
         )
-        HorizontalDivider()
+        Spacer(Modifier.height(8.dp))
         AMessagesViewTopBar(
             roomName = "A DM with a very very very long name",
             isTombstoned = true,
             dmUserIdentityState = IdentityState.VerificationViolation
         )
-        HorizontalDivider()
+        Spacer(Modifier.height(8.dp))
         AMessagesViewTopBar(
             roomName = "A DM with shared history",
             dmUserIdentityState = IdentityState.Verified,
             sharedHistoryIcon = SharedHistoryIcon.SHARED,
         )
-        HorizontalDivider()
+        Spacer(Modifier.height(8.dp))
         AMessagesViewTopBar(
             roomName = "A room with world_readable history",
             sharedHistoryIcon = SharedHistoryIcon.WORLD_READABLE,

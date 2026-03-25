@@ -40,7 +40,9 @@ import io.element.android.libraries.designsystem.components.dialogs.SaveChangesD
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
@@ -172,7 +174,7 @@ fun CreatePollView(
             }
             item {
                 Column {
-                    HorizontalDivider()
+                    Spacer(Modifier.height(16.dp))
                     ListItem(
                         headlineContent = { Text(text = stringResource(id = R.string.screen_create_poll_anonymous_headline)) },
                         supportingContent = { Text(text = stringResource(id = R.string.screen_create_poll_anonymous_desc)) },

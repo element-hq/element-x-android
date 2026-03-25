@@ -19,11 +19,14 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -42,11 +45,11 @@ import io.element.android.libraries.designsystem.components.dialogs.SaveChangesD
 import io.element.android.libraries.designsystem.modifiers.clearFocusOnTap
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.LargeTopAppBar
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TextField
-import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.matrix.ui.components.AvatarActionBottomSheet
 import io.element.android.libraries.matrix.ui.components.AvatarPickerState
 import io.element.android.libraries.matrix.ui.components.AvatarPickerView
@@ -80,11 +83,14 @@ fun EditUserProfileView(
         enabled = true,
         ::onBackClick,
     )
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
     Scaffold(
-        modifier = modifier.clearFocusOnTap(focusManager),
+        modifier = modifier
+            .clearFocusOnTap(focusManager)
+            .nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
-            TopAppBar(
-                titleStr = stringResource(R.string.screen_edit_profile_title),
+            LargeTopAppBar(
+                title = { Text(text = stringResource(R.string.screen_edit_profile_title)) },
                 navigationIcon = { BackButton(::onBackClick) },
                 actions = {
                     TextButton(
@@ -95,7 +101,8 @@ fun EditUserProfileView(
                             state.eventSink(EditUserProfileEvent.Save)
                         },
                     )
-                }
+                },
+                scrollBehavior = scrollBehavior,
             )
         },
     ) { padding ->

@@ -9,6 +9,7 @@
 package io.element.android.libraries.designsystem.theme.components
 
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -73,7 +74,7 @@ fun FilledTextField(
     androidx.compose.material3.TextField(
         value = value,
         onValueChange = onValueChange,
-        modifier = modifier,
+        modifier = modifier.minimumInteractiveComponentSize(),
         enabled = enabled,
         readOnly = readOnly,
         textStyle = textStyle,
@@ -120,7 +121,7 @@ fun FilledTextField(
     androidx.compose.material3.TextField(
         value = value,
         onValueChange = onValueChange,
-        modifier = modifier,
+        modifier = modifier.minimumInteractiveComponentSize(),
         enabled = enabled,
         readOnly = readOnly,
         textStyle = textStyle,

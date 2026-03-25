@@ -10,10 +10,12 @@ package io.element.android.appnav
 
 import android.content.Intent
 import android.os.Parcelable
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.snap
+import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.lifecycle.lifecycleScope
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.navigation.NavElements
@@ -27,6 +29,7 @@ import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
 import com.bumble.appyx.navmodel.backstack.transitionhandler.rememberBackstackFader
 import com.bumble.appyx.navmodel.backstack.transitionhandler.rememberBackstackSlider
+import io.element.android.libraries.designsystem.animation.isReduceMotionEnabled
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
@@ -243,12 +246,20 @@ class RootFlowNode(
             modifier = modifier,
             onOpenBugReport = this::onOpenBugReport,
         ) {
-            val backstackSlider = rememberBackstackSlider<NavTarget>(
-                transitionSpec = { spring(stiffness = Spring.StiffnessMediumLow) },
-            )
-            val backstackFader = rememberBackstackFader<NavTarget>(
-                transitionSpec = { spring(stiffness = Spring.StiffnessMediumLow) },
-            )
+            @OptIn(ExperimentalMaterial3ExpressiveApi::class)
+            val backstackSlider = if (isReduceMotionEnabled) {
+                rememberBackstackSlider<NavTarget>(transitionSpec = { snap() })
+            } else {
+                val effectsSpec = MaterialTheme.motionScheme.defaultEffectsSpec<Offset>()
+                rememberBackstackSlider<NavTarget>(transitionSpec = { effectsSpec })
+            }
+            @OptIn(ExperimentalMaterial3ExpressiveApi::class)
+            val backstackFader = if (isReduceMotionEnabled) {
+                rememberBackstackFader<NavTarget>(transitionSpec = { snap() })
+            } else {
+                val effectsSpec = MaterialTheme.motionScheme.defaultEffectsSpec<Float>()
+                rememberBackstackFader<NavTarget>(transitionSpec = { effectsSpec })
+            }
             val transitionHandler = rememberDelegateTransitionHandler<NavTarget, BackStack.State> { navTarget ->
                 when (navTarget) {
                     is NavTarget.SplashScreen,

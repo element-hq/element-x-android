@@ -101,8 +101,9 @@ fun Slider(
                 SliderDefaults.Track(
                     modifier = Modifier.height(8.dp),
                     colors = colors.copy(
-                        activeTrackColor = Color(0x66E0EDFF),
-                        inactiveTrackColor = Color(0x66E0EDFF),
+                        // M3 state layer: translucent track overlay
+                        activeTrackColor = ElementTheme.materialColors.primaryContainer.copy(alpha = 0.4f),
+                        inactiveTrackColor = ElementTheme.materialColors.primaryContainer.copy(alpha = 0.4f),
                     ),
                     enabled = enabled,
                     sliderState = sliderState,

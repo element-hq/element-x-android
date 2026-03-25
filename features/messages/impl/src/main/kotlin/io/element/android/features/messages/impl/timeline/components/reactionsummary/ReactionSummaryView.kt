@@ -171,7 +171,7 @@ private fun AggregatedReactionButton(
         Color.Transparent
     }
     val textColor = if (isHighlighted) {
-        MaterialTheme.colorScheme.inversePrimary
+        ElementTheme.materialColors.inversePrimary
     } else {
         ElementTheme.colors.textPrimary
     }

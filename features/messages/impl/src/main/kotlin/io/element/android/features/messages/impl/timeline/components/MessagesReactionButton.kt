@@ -21,7 +21,6 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -93,11 +92,11 @@ fun MessagesReactionButton(
             // Outer border, same colour as background
             .border(
                 BorderStroke(2.dp, ElementTheme.colors.bgCanvasDefault),
-                shape = RoundedCornerShape(corner = CornerSize(14.dp))
+                shape = RoundedCornerShape(50)
             )
             .padding(vertical = 2.dp, horizontal = 2.dp)
             // Clip click indicator inside the outer border
-            .clip(RoundedCornerShape(corner = CornerSize(12.dp)))
+            .clip(RoundedCornerShape(50))
             .combinedClickable(
                 onClick = onClick,
                 onClickLabel = (content as? MessagesReactionsButtonContent.Reaction)?.let {
@@ -111,9 +110,10 @@ fun MessagesReactionButton(
             )
             .onKeyboardContextMenuAction(onLongClick)
             // Inner border, to highlight when selected
-            .border(BorderStroke(1.dp, borderColor), RoundedCornerShape(corner = CornerSize(12.dp)))
-            .background(buttonColor, RoundedCornerShape(corner = CornerSize(12.dp)))
-            .padding(vertical = 4.dp, horizontal = 10.dp)
+            .border(BorderStroke(1.dp, borderColor), RoundedCornerShape(50))
+            .background(buttonColor, RoundedCornerShape(50))
+            .heightIn(min = 32.dp)
+            .padding(vertical = 6.dp, horizontal = 12.dp)
             .clearAndSetSemantics {
                 contentDescription = a11yText
             },

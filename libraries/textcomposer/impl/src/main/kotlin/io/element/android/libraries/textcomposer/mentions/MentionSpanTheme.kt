@@ -19,7 +19,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
@@ -245,7 +245,7 @@ internal fun MentionSpanThemeInTimelinePreview() = ElementPreview {
                     .padding(start = 60.dp, end = 8.dp)
                     .background(
                         color = color,
-                        shape = RoundedCornerShape(12.dp),
+                        shape = MaterialTheme.shapes.small,
                     )
                     .padding(8.dp),
                 bgColor = color.toArgb()
@@ -263,7 +263,7 @@ internal fun MentionSpanThemeInTimelinePreview() = ElementPreview {
                     .padding(4.dp)
                     .background(
                         color = color,
-                        shape = RoundedCornerShape(12.dp)
+                        shape = MaterialTheme.shapes.small
                     )
                     .padding(8.dp),
                 bgColor = color.toArgb()

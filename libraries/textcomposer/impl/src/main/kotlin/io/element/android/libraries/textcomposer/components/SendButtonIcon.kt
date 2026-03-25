@@ -8,13 +8,19 @@
 
 package io.element.android.libraries.textcomposer.components
 
+import androidx.compose.animation.core.animateDpAsState
+import io.element.android.libraries.designsystem.animation.M3Motion
 import androidx.compose.foundation.background
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,6 +42,7 @@ internal fun SendButtonIcon(
     canSendMessage: Boolean,
     isEditing: Boolean,
     modifier: Modifier = Modifier,
+    interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
     val iconVector = when {
         isEditing -> CompoundIcons.Check()
@@ -50,9 +57,18 @@ internal fun SendButtonIcon(
     } else {
         Color.Transparent
     }
+
+    // Shape morphing: Circle → RoundedSquare on press (M3 Expressive feel)
+    val isPressed by interactionSource.collectIsPressedAsState()
+    val cornerRadius by animateDpAsState(
+        targetValue = if (isPressed) 6.dp else 20.dp,
+        animationSpec = M3Motion.defaultValueSpec(),
+        label = "send button morph",
+    )
+
     Box(
         modifier = modifier
-            .clip(CircleShape)
+            .clip(RoundedCornerShape(cornerRadius))
             .size(36.dp)
             .background(backgroundColor)
     ) {

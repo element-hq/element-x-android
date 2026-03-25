@@ -15,9 +15,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.sizeIn
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.ProvideTextStyle
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
@@ -215,7 +214,7 @@ internal fun AlertDialogContent(
             }
             title?.let {
                 CompositionLocalProvider(LocalContentColor provides titleContentColor) {
-                    val textStyle = MaterialTheme.typography.headlineSmall
+                    val textStyle = ElementTheme.typography.fontHeadingSmRegular
                     ProvideTextStyle(textStyle) {
                         Box(
                             // Align the title to the center when an icon is present.
@@ -244,7 +243,7 @@ internal fun AlertDialogContent(
             subtitle?.invoke()
             content?.let {
                 CompositionLocalProvider(LocalContentColor provides textContentColor) {
-                    val textStyle = MaterialTheme.typography.bodyMedium
+                    val textStyle = ElementTheme.typography.fontBodyMdRegular
                     ProvideTextStyle(textStyle) {
                         Box(
                             Modifier
@@ -265,7 +264,7 @@ internal fun AlertDialogContent(
             ) {
                 CompositionLocalProvider(LocalContentColor provides buttonContentColor) {
                     val textStyle =
-                        MaterialTheme.typography.labelLarge
+                        ElementTheme.typography.fontBodyMdMedium
                     ProvideTextStyle(value = textStyle, content = buttons)
                 }
             }
@@ -386,7 +385,10 @@ internal fun DialogPreview(content: @Composable () -> Unit) {
 
 internal object DialogContentDefaults {
     private val externalPaddingDp = 24.dp
-    val shape = RoundedCornerShape(12.dp)
+    val shape: Shape
+        @Composable
+        @ReadOnlyComposable
+        get() = MaterialTheme.shapes.extraLarge
     val externalPadding = PaddingValues(all = externalPaddingDp)
     val externalHorizontalPadding = PaddingValues(horizontal = externalPaddingDp)
     val externalVerticalPadding = PaddingValues(vertical = externalPaddingDp)
@@ -397,7 +399,7 @@ internal object DialogContentDefaults {
     val containerColor: Color
         @Composable
         @ReadOnlyComposable
-        get() = ElementTheme.colors.bgCanvasDefault
+        get() = ElementTheme.materialColors.surfaceContainerHigh
 
     val textContentColor: Color
         @Composable

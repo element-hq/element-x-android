@@ -9,8 +9,7 @@
 package io.element.android.libraries.mediaviewer.impl.local.player
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
+import io.element.android.libraries.designsystem.animation.M3Motion
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -33,6 +32,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.material3.minimumInteractiveComponentSize
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.audio.api.AudioFocus
@@ -77,8 +77,8 @@ fun MediaPlayerControllerView(
     AnimatedVisibility(
         visible = state.isVisible,
         modifier = modifier,
-        enter = fadeIn(),
-        exit = fadeOut(),
+        enter = M3Motion.fadeEnter,
+        exit = M3Motion.fadeExit,
     ) {
         Box(
             modifier = Modifier
@@ -98,6 +98,7 @@ fun MediaPlayerControllerView(
                 }
                 Box(
                     modifier = Modifier
+                        .minimumInteractiveComponentSize()
                         .size(36.dp)
                         .background(
                             color = bgColor,

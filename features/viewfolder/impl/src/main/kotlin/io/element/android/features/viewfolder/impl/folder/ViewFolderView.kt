@@ -80,7 +80,7 @@ fun ViewFolderView(
                             Text(
                                 text = "Empty folder",
                                 textAlign = TextAlign.Center,
-                                color = MaterialTheme.colorScheme.tertiary,
+                                color = ElementTheme.colors.textSecondary,
                                 modifier = Modifier.fillMaxWidth()
                             )
                         }

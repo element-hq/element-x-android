@@ -27,7 +27,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.location.api.R
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.ElementLoadingIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -55,7 +55,7 @@ internal fun StaticMapPlaceholder(
             modifier = Modifier.size(width = width, height = height)
         )
         if (showProgress) {
-            CircularProgressIndicator()
+            ElementLoadingIndicator()
         } else if (canReload) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,

@@ -25,7 +25,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.ElementLoadingIndicator
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.impl.viewer.topAppBarHeight
@@ -76,7 +76,7 @@ private fun TextFileContentView(
             modifier = modifier.fillMaxSize(),
             contentAlignment = Alignment.Center
         ) {
-            CircularProgressIndicator()
+            ElementLoadingIndicator()
         }
         is AsyncData.Failure -> Box(
             modifier = modifier.fillMaxSize(),

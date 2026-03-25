@@ -25,6 +25,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -65,7 +66,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.ButtonSize
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.ElementLoadingIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
@@ -524,7 +525,7 @@ private fun IncompleteContent(
         subtitle = {
             if (isLoading) {
                 Spacer(Modifier.height(8.dp))
-                CircularProgressIndicator()
+                ElementLoadingIndicator(size = 32.dp)
             }
         },
     )
@@ -606,7 +607,7 @@ private fun JoinRoomTopBar(
         },
         title = {
             if (contentState is ContentState.Loaded && contentState.joinAuthorisationStatus is JoinAuthorisationStatus.IsKnocked) {
-                val roundedCornerShape = RoundedCornerShape(8.dp)
+                val roundedCornerShape = MaterialTheme.shapes.small
                 val titleModifier = Modifier
                     .clip(roundedCornerShape)
                 if (contentState.name != null) {

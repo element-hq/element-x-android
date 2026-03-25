@@ -22,6 +22,13 @@ import androidx.compose.ui.unit.dp
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
 
+@Deprecated(
+    "Use WavyLinearProgressIndicator for M3 Expressive",
+    ReplaceWith(
+        "WavyLinearProgressIndicator(progress, modifier, color, trackColor)",
+        "io.element.android.libraries.designsystem.theme.components.WavyLinearProgressIndicator"
+    )
+)
 @Composable
 fun LinearProgressIndicator(
     progress: () -> Float,
@@ -42,6 +49,13 @@ fun LinearProgressIndicator(
     )
 }
 
+@Deprecated(
+    "Use WavyLinearProgressIndicator for M3 Expressive",
+    ReplaceWith(
+        "WavyLinearProgressIndicator(modifier, color, trackColor)",
+        "io.element.android.libraries.designsystem.theme.components.WavyLinearProgressIndicator"
+    )
+)
 @Composable
 fun LinearProgressIndicator(
     modifier: Modifier = Modifier,
@@ -72,6 +86,7 @@ fun LinearProgressIndicator(
     }
 }
 
+@Suppress("DEPRECATION")
 @Preview(group = PreviewGroup.Progress)
 @Composable
 internal fun LinearProgressIndicatorPreview() = ElementThemedPreview(vertical = false) {

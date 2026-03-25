@@ -38,15 +38,12 @@ val SemanticColors.unreadIndicator
 val SemanticColors.placeholderBackground
     get() = bgSubtleSecondary
 
-// This color is not present in Semantic color, so put hard-coded value for now
-@OptIn(CoreColorToken::class)
+// Derive from mapped Compound tokens so these adapt under Material You dynamic color
 val SemanticColors.messageFromMeBackground
-    get() = if (isLight) LightColorTokens.colorGray400 else DarkColorTokens.colorGray500
+    get() = bgSubtlePrimary
 
-// This color is not present in Semantic color, so put hard-coded value for now
-@OptIn(CoreColorToken::class)
 val SemanticColors.messageFromOtherBackground
-    get() = if (isLight) LightColorTokens.colorGray300 else DarkColorTokens.colorGray400
+    get() = bgSubtleSecondary
 
 // This color is not present in Semantic color, so put hard-coded value for now
 @OptIn(CoreColorToken::class)
@@ -59,8 +56,9 @@ val SemanticColors.bgSubtleTertiary
     get() = if (isLight) LightColorTokens.colorGray100 else DarkColorTokens.colorGray100
 
 // Temporary color, which is not in the token right now
+@OptIn(CoreColorToken::class)
 val SemanticColors.temporaryColorBgSpecial
-    get() = if (isLight) Color(0xFFE4E8F0) else Color(0xFF3A4048)
+    get() = if (isLight) LightColorTokens.colorGray400 else DarkColorTokens.colorGray400
 
 // This color is not present in Semantic color, so put hard-coded value for now
 @OptIn(CoreColorToken::class)

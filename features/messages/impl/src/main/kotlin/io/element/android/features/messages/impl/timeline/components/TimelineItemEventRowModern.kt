@@ -21,7 +21,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.minimumInteractiveComponentSize
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
@@ -100,32 +100,31 @@ internal fun TimelineItemEventRowModernContent(
     val contentIndent = 16.dp + avatarColumnWidth
 
     Column(
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
     ) {
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp),
+                .fillMaxWidth(),
         ) {
             // Avatar column
-            if (!timelineRoomInfo.isDm) {
-                Box(
-                    modifier = Modifier
-                        .width(avatarColumnWidth)
-                        .padding(top = 2.dp),
-                    contentAlignment = Alignment.TopStart,
-                ) {
-                    if (showSenderInfo) {
-                        Avatar(
-                            modifier = Modifier
-                                .minimumInteractiveComponentSize()
-                                .testTag(TestTags.timelineItemSenderAvatar)
-                                .clip(CircleShape)
-                                .clickable(onClick = onUserDataClick),
-                            avatarData = event.senderAvatar,
-                            avatarType = AvatarType.User,
-                        )
-                    }
+            Box(
+                modifier = Modifier
+                    .width(avatarColumnWidth)
+                    .padding(top = 2.dp),
+                contentAlignment = Alignment.TopStart,
+            ) {
+                if (showSenderInfo) {
+                    Avatar(
+                        modifier = Modifier
+                            .minimumInteractiveComponentSize()
+                            .testTag(TestTags.timelineItemSenderAvatar)
+                            .clip(CircleShape)
+                            .clickable(onClick = onUserDataClick),
+                        avatarData = event.senderAvatar,
+                        avatarType = AvatarType.User,
+                    )
                 }
             }
 
@@ -141,7 +140,7 @@ internal fun TimelineItemEventRowModernContent(
                     ),
             ) {
                 // Sender name + timestamp on same row (matching Classic Modern layout)
-                if (showSenderInfo && !timelineRoomInfo.isDm) {
+                if (showSenderInfo) {
                     val avatarColors = AvatarColorsProvider.provide(event.senderAvatar.id)
                     Row(
                         modifier = Modifier.padding(bottom = 2.dp),
@@ -247,7 +246,7 @@ private fun ModernMessageContent(
                         modifier = Modifier
                             // Outer padding
                             .padding(horizontal = 4.dp, vertical = 4.dp)
-                            .background(ElementTheme.colors.bgSubtleSecondary, RoundedCornerShape(10.0.dp))
+                            .background(ElementTheme.colors.bgSubtleSecondary, MaterialTheme.shapes.small)
                             .align(Alignment.BottomEnd)
                             // Inner padding
                             .padding(horizontal = 4.dp, vertical = 2.dp)
@@ -255,7 +254,7 @@ private fun ModernMessageContent(
                 }
             TimestampPosition.Aligned ->
                 ContentAvoidingLayout(
-                    modifier = modifier,
+                    modifier = modifier.fillMaxWidth(),
                     spacing = (-4).dp,
                     overlayOffset = DpOffset(0.dp, -1.dp),
                     shrinkContent = canShrinkContent,
@@ -270,7 +269,7 @@ private fun ModernMessageContent(
                     }
                 )
             TimestampPosition.Below ->
-                Column(modifier) {
+                Column(modifier.fillMaxWidth()) {
                     content {}
                     TimelineEventTimestampView(
                         event = event,
@@ -321,7 +320,7 @@ private fun ModernMessageContent(
         val inReplyTo = @Composable { inReplyTo: InReplyToDetails ->
             val inReplyToModifier = Modifier
                 .padding(top = if (showThreadDecoration) 0.dp else 4.dp)
-                .clip(RoundedCornerShape(6.dp))
+                .clip(MaterialTheme.shapes.extraSmall)
 
             val talkbackCompatModifier = if (isTalkbackActive()) {
                 inReplyToModifier.zIndex(1f)

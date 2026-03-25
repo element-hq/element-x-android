@@ -54,7 +54,7 @@ import io.element.android.libraries.designsystem.components.form.textFieldState
 import io.element.android.libraries.designsystem.modifiers.onTabOrEnterKeyFocusNext
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.ElementLoadingIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.TextField
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -152,7 +152,7 @@ fun SearchAccountProviderView(
                                 modifier = Modifier
                                     .fillMaxSize()
                             ) {
-                                CircularProgressIndicator(
+                                ElementLoadingIndicator(
                                     modifier = Modifier.align(Alignment.Center)
                                 )
                             }

@@ -16,7 +16,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -39,6 +38,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.material3.minimumInteractiveComponentSize
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.designsystem.components.avatar.Avatar
@@ -118,7 +118,7 @@ fun SelectedItem(
                 text = text,
                 overflow = TextOverflow.Ellipsis,
                 maxLines = maxLines,
-                style = MaterialTheme.typography.bodyMedium,
+                style = ElementTheme.typography.fontBodyMdRegular,
                 color = ElementTheme.colors.textSecondary,
                 textAlign = TextAlign.Center,
             )
@@ -127,6 +127,7 @@ fun SelectedItem(
             Surface(
                 color = ElementTheme.colors.bgActionPrimaryRest,
                 modifier = Modifier
+                    .minimumInteractiveComponentSize()
                     .clip(CircleShape)
                     .size(20.dp)
                     .align(Alignment.TopEnd)

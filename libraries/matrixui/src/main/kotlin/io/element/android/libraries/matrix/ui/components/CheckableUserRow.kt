@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -25,7 +26,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.theme.components.Checkbox
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 
 @Composable
@@ -102,20 +102,20 @@ internal fun CheckableResolvedUserRowPreview() = ElementThemedPreview {
             onCheckedChange = { },
             data = data,
         )
-        HorizontalDivider()
+        Spacer(Modifier.height(8.dp))
         CheckableUserRow(
             checked = true,
             onCheckedChange = { },
             data = data,
         )
-        HorizontalDivider()
+        Spacer(Modifier.height(8.dp))
         CheckableUserRow(
             checked = false,
             onCheckedChange = { },
             data = data,
             enabled = false,
         )
-        HorizontalDivider()
+        Spacer(Modifier.height(8.dp))
         CheckableUserRow(
             checked = true,
             onCheckedChange = { },
@@ -139,20 +139,20 @@ internal fun CheckableUnresolvedUserRowPreview() = ElementThemedPreview {
             onCheckedChange = { },
             data = data,
         )
-        HorizontalDivider()
+        Spacer(Modifier.height(8.dp))
         CheckableUserRow(
             checked = true,
             onCheckedChange = { },
             data = data,
         )
-        HorizontalDivider()
+        Spacer(Modifier.height(8.dp))
         CheckableUserRow(
             checked = false,
             onCheckedChange = { },
             data = data,
             enabled = false,
         )
-        HorizontalDivider()
+        Spacer(Modifier.height(8.dp))
         CheckableUserRow(
             checked = true,
             onCheckedChange = { },

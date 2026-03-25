@@ -30,6 +30,7 @@ import io.element.android.libraries.matrix.api.room.knock.KnockRequest
 import io.element.android.libraries.matrix.api.room.location.LiveLocationShare
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsValues
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
+import io.element.android.libraries.matrix.api.room.threads.ThreadListItemData
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
@@ -85,6 +86,7 @@ class FakeJoinedRoom(
     private val enableEncryptionResult: () -> Result<Unit> = { lambdaError() },
     private val updateJoinRuleResult: (JoinRule) -> Result<Unit> = { lambdaError() },
     private val setSendQueueEnabledResult: (Boolean) -> Unit = { _: Boolean -> },
+    private val loadThreadListResult: () -> Result<List<ThreadListItemData>> = { Result.success(emptyList()) },
     private val liveLocationSharesFlow: Flow<List<LiveLocationShare>> = MutableStateFlow(emptyList()),
     private val startLiveLocationShareResult: (Long) -> Result<Unit> = { lambdaError() },
     private val stopLiveLocationShareResult: () -> Result<Unit> = { lambdaError() },
@@ -230,6 +232,10 @@ class FakeJoinedRoom(
 
     override fun subscribeToSendQueueUpdates(): Flow<SendQueueUpdate> {
         return sendQueueUpdates
+    }
+
+    override suspend fun loadThreadList(): Result<List<ThreadListItemData>> = simulateLongTask {
+        loadThreadListResult()
     }
 
     override fun subscribeToLiveLocationShares(): Flow<List<LiveLocationShare>> {

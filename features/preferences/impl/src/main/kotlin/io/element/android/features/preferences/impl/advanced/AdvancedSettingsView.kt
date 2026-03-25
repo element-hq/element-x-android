@@ -8,6 +8,7 @@
 
 package io.element.android.features.preferences.impl.advanced
 
+import android.os.Build
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -79,6 +80,32 @@ fun AdvancedSettingsView(
             onSelectOption = { themeOption ->
                 state.eventSink(AdvancedSettingsEvents.SetTheme(themeOption))
             }
+        )
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            ListItem(
+                headlineContent = {
+                    Text(text = stringResource(id = R.string.screen_advanced_settings_dynamic_color_title))
+                },
+                supportingContent = {
+                    Text(text = stringResource(id = R.string.screen_advanced_settings_dynamic_color_description))
+                },
+                trailingContent = ListItemContent.Switch(
+                    checked = state.isDynamicColorEnabled,
+                ),
+                onClick = { state.eventSink(AdvancedSettingsEvents.SetDynamicColorEnabled(!state.isDynamicColorEnabled)) }
+            )
+        }
+        ListItem(
+            headlineContent = {
+                Text(text = stringResource(id = R.string.screen_advanced_settings_high_contrast_title))
+            },
+            supportingContent = {
+                Text(text = stringResource(id = R.string.screen_advanced_settings_high_contrast_description))
+            },
+            trailingContent = ListItemContent.Switch(
+                checked = state.isHighContrastEnabled,
+            ),
+            onClick = { state.eventSink(AdvancedSettingsEvents.SetHighContrastEnabled(!state.isHighContrastEnabled)) }
         )
         if (state.timelineLayoutMode != null) {
             PreferenceDropdown(

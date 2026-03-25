@@ -10,8 +10,10 @@ package io.element.android.libraries.textcomposer
 
 import android.content.res.Configuration
 import android.net.Uri
-import androidx.compose.foundation.background
-import androidx.compose.foundation.border
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.material3.FilledTonalIconButton
+import androidx.compose.material3.Surface
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -27,7 +29,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredHeightIn
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -38,7 +39,6 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
@@ -52,6 +52,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.designsystem.animation.M3Motion
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.androidutils.ui.showKeyboard
 import io.element.android.libraries.designsystem.components.media.WaveFormSamples
@@ -59,8 +60,7 @@ import io.element.android.libraries.designsystem.preview.DAY_MODE_NAME
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.NIGHT_MODE_NAME
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
+import io.element.android.libraries.designsystem.theme.components.ElementLoadingIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.IconColorButton
@@ -150,7 +150,11 @@ fun TextComposer(
     } else if (composerMode is MessageComposerMode.Attachment || composerMode is MessageComposerMode.EditCaption) {
         stringResource(id = R.string.rich_text_editor_composer_caption_placeholder)
     } else {
-        stringResource(id = R.string.rich_text_editor_composer_placeholder)
+        when (state.isRoomEncrypted) {
+            true -> stringResource(CommonStrings.common_encrypted)
+            false -> stringResource(CommonStrings.common_not_encrypted)
+            null -> stringResource(id = R.string.rich_text_editor_composer_placeholder)
+        }
     }
     val textInput: @Composable () -> Unit = when (state) {
         is TextEditorState.Rich -> {
@@ -162,7 +166,8 @@ fun TextComposer(
                         modifier = Modifier
                             .clickable(
                                 interactionSource = remember { MutableInteractionSource() },
-                                indication = null,
+                                // Decorative clickable: focus trigger for text input, not a button
+                            indication = null,
                             ) {
                                 coroutineScope.launch {
                                     state.requestFocus()
@@ -175,6 +180,7 @@ fun TextComposer(
                         composerMode = composerMode,
                         onResetComposerMode = onResetComposerMode,
                         isTextEmpty = state.richTextEditorState.messageHtml.isEmpty(),
+                        hasFocus = state.richTextEditorState.hasFocus,
                     ) {
                         RichTextEditor(
                             state = state.richTextEditorState,
@@ -201,6 +207,7 @@ fun TextComposer(
                     composerMode = composerMode,
                     onResetComposerMode = onResetComposerMode,
                     isTextEmpty = state.state.text.value().isEmpty(),
+                    hasFocus = state.hasFocus(),
                 ) {
                     MarkdownTextInput(
                         state = state.state,
@@ -266,8 +273,9 @@ fun TextComposer(
                             endButtonContentDescriptionResId = CommonStrings.common_sending,
                             endButtonClick = {},
                             endButtonContent = @Composable {
-                                CircularProgressIndicator(
+                                ElementLoadingIndicator(
                                     modifier = Modifier.size(24.dp),
+                                    size = 24.dp,
                                 )
                             }
                         )
@@ -443,11 +451,6 @@ private fun StandardLayout(
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
-        if (isRoomEncrypted == false) {
-            Spacer(Modifier.height(16.dp))
-            NotEncryptedBadge()
-            Spacer(Modifier.height(4.dp))
-        }
         Row(verticalAlignment = Alignment.Bottom) {
             when (composerMode) {
                 is MessageComposerMode.Attachment -> {
@@ -457,16 +460,24 @@ private fun StandardLayout(
                     Spacer(modifier = Modifier.width(19.dp))
                 }
                 else -> {
-                    val endPadding = if (voiceMessageState is VoiceMessageState.Idle) 0.dp else 3.dp
-                    // To avoid loosing keyboard focus, the IconButton has to be defined here and has to be always enabled.
-                    IconButton(
-                        modifier = Modifier
-                            .padding(top = 5.dp, bottom = 5.dp, start = 3.dp, end = endPadding)
-                            .size(48.dp),
-                        onClick = {
-                            if (voiceMessageState is VoiceMessageState.Idle) {
-                                onAddAttachment()
-                            } else {
+                    if (voiceMessageState is VoiceMessageState.Idle) {
+                        FilledTonalIconButton(
+                            onClick = { onAddAttachment() },
+                            modifier = Modifier
+                                .padding(top = 5.dp, bottom = 5.dp, start = 3.dp)
+                                .size(48.dp),
+                        ) {
+                            Icon(
+                                imageVector = CompoundIcons.Plus(),
+                                contentDescription = stringResource(R.string.rich_text_editor_a11y_add_attachment),
+                            )
+                        }
+                    } else {
+                        IconButton(
+                            modifier = Modifier
+                                .padding(top = 5.dp, bottom = 5.dp, start = 3.dp, end = 3.dp)
+                                .size(48.dp),
+                            onClick = {
                                 when (voiceMessageState) {
                                     is VoiceMessageState.Preview -> if (!voiceMessageState.isSending) {
                                         onDeleteVoiceMessage()
@@ -474,21 +485,8 @@ private fun StandardLayout(
                                     is VoiceMessageState.Recording ->
                                         onVoiceRecorderEvent(VoiceMessageRecorderEvent.Cancel)
                                 }
-                            }
-                        },
-                    ) {
-                        if (voiceMessageState is VoiceMessageState.Idle) {
-                            Icon(
-                                modifier = Modifier
-                                    .clip(CircleShape)
-                                    .size(30.dp)
-                                    .background(ElementTheme.colors.iconPrimary)
-                                    .padding(3.dp),
-                                imageVector = CompoundIcons.Plus(),
-                                contentDescription = stringResource(R.string.rich_text_editor_a11y_add_attachment),
-                                tint = ElementTheme.colors.iconOnSolidPrimary
-                            )
-                        } else {
+                            },
+                        ) {
                             when (voiceMessageState) {
                                 is VoiceMessageState.Preview ->
                                     VoiceMessageDeleteButtonIcon(enabled = !voiceMessageState.isSending)
@@ -528,28 +526,6 @@ private fun StandardLayout(
 }
 
 @Composable
-private fun NotEncryptedBadge() {
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.Center,
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Icon(
-            modifier = Modifier.size(16.dp),
-            imageVector = CompoundIcons.LockOff(),
-            contentDescription = null,
-            tint = ElementTheme.colors.iconInfoPrimary,
-        )
-        Spacer(Modifier.width(4.dp))
-        Text(
-            text = stringResource(CommonStrings.common_not_encrypted),
-            style = ElementTheme.typography.fontBodySmRegular,
-            color = ElementTheme.colors.textSecondary,
-        )
-    }
-}
-
-@Composable
 private fun TextFormattingLayout(
     isRoomEncrypted: Boolean?,
     textInput: @Composable () -> Unit,
@@ -562,10 +538,6 @@ private fun TextFormattingLayout(
         modifier = modifier.padding(vertical = 4.dp),
         verticalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        if (isRoomEncrypted == false) {
-            NotEncryptedBadge()
-            Spacer(Modifier.height(8.dp))
-        }
         Box(
             modifier = Modifier
                 .weight(1f)
@@ -611,50 +583,62 @@ private fun TextInputBox(
     composerMode: MessageComposerMode,
     onResetComposerMode: () -> Unit,
     isTextEmpty: Boolean,
+    hasFocus: Boolean,
     modifier: Modifier = Modifier,
     textInput: @Composable () -> Unit,
 ) {
-    val bgColor = ElementTheme.colors.bgSubtleSecondary
-    val borderColor = ElementTheme.colors.borderDisabled
     val roundedCorners = textInputRoundedCornerShape(composerMode = composerMode)
+    val elevation by animateDpAsState(
+        targetValue = if (hasFocus) 2.dp else 0.dp,
+        animationSpec = M3Motion.defaultValueSpec(),
+        label = "inputElevation",
+    )
 
-    Column(
+    Surface(
+        shape = roundedCorners,
+        tonalElevation = elevation,
+        color = ElementTheme.colors.bgSubtleSecondary,
         modifier = Modifier
-            .clip(roundedCorners)
-            .border(0.5.dp, borderColor, roundedCorners)
-            .background(color = bgColor)
             .requiredHeightIn(min = 42.dp)
             .fillMaxSize()
             .then(modifier),
     ) {
-        if (composerMode is MessageComposerMode.Special) {
-            ComposerModeView(
-                composerMode = composerMode,
-                onResetComposerMode = onResetComposerMode,
-            )
-        }
-        Box(
-            modifier = Modifier
-                .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 12.dp)
-                .then(Modifier.testTag(TestTags.textEditor)),
-            contentAlignment = Alignment.CenterStart,
-        ) {
-            textInput()
-            if (isTextEmpty && composerMode.showCaptionCompatibilityWarning()) {
-                var showBottomSheet by remember { mutableStateOf(false) }
-                Icon(
-                    modifier = Modifier
-                        .clickable { showBottomSheet = true }
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
-                        .align(Alignment.CenterEnd),
-                    imageVector = CompoundIcons.InfoSolid(),
-                    tint = ElementTheme.colors.iconCriticalPrimary,
-                    contentDescription = null,
-                )
-                if (showBottomSheet) {
-                    CaptionWarningBottomSheet(
-                        onDismiss = { showBottomSheet = false },
+        Column {
+            AnimatedVisibility(
+                visible = composerMode is MessageComposerMode.Special,
+                enter = M3Motion.enterTransition,
+                exit = M3Motion.exitTransition,
+            ) {
+                (composerMode as? MessageComposerMode.Special)?.let {
+                    ComposerModeView(
+                        composerMode = it,
+                        onResetComposerMode = onResetComposerMode,
                     )
+                }
+            }
+            Box(
+                modifier = Modifier
+                    .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 12.dp)
+                    .then(Modifier.testTag(TestTags.textEditor)),
+                contentAlignment = Alignment.CenterStart,
+            ) {
+                textInput()
+                if (isTextEmpty && composerMode.showCaptionCompatibilityWarning()) {
+                    var showBottomSheet by remember { mutableStateOf(false) }
+                    Icon(
+                        modifier = Modifier
+                            .clickable { showBottomSheet = true }
+                            .padding(horizontal = 8.dp, vertical = 4.dp)
+                            .align(Alignment.CenterEnd),
+                        imageVector = CompoundIcons.InfoSolid(),
+                        tint = ElementTheme.colors.iconCriticalPrimary,
+                        contentDescription = null,
+                    )
+                    if (showBottomSheet) {
+                        CaptionWarningBottomSheet(
+                            onDismiss = { showBottomSheet = false },
+                        )
+                    }
                 }
             }
         }
@@ -971,7 +955,7 @@ private fun <T> PreviewColumn(
 ) {
     Column {
         items.forEach { item ->
-            HorizontalDivider()
+            Spacer(Modifier.height(8.dp))
             Box(
                 modifier = Modifier.height(IntrinsicSize.Min)
             ) {

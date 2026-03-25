@@ -26,7 +26,7 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.ElementLoadingIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -73,11 +73,11 @@ private fun ColumnScope.TroubleshootTestView(
         trailingContent = when (status) {
             is Status.Idle -> null
             Status.InProgress -> ListItemContent.Custom {
-                CircularProgressIndicator(
+                ElementLoadingIndicator(
                     modifier = Modifier
                         .progressSemantics()
                         .size(20.dp),
-                    strokeWidth = 2.dp
+                    size = 20.dp,
                 )
             }
             Status.WaitingForUser -> ListItemContent.Custom {

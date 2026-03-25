@@ -86,7 +86,6 @@ import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toSp
-import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
@@ -210,7 +209,7 @@ private fun ActionListViewContent(
                         } else {
                             Spacer(modifier = Modifier.height(14.dp))
                         }
-                        HorizontalDivider()
+                        Spacer(modifier = Modifier.height(12.dp))
                     }
                 }
                 if (target.verifiedUserSendFailure != None) {
@@ -220,7 +219,7 @@ private fun ActionListViewContent(
                             modifier = Modifier.fillMaxWidth(),
                             onClick = onVerifiedUserSendFailureClick
                         )
-                        HorizontalDivider()
+                        Spacer(modifier = Modifier.height(12.dp))
                     }
                 }
                 if (target.displayEmojiReactions) {
@@ -232,7 +231,7 @@ private fun ActionListViewContent(
                             onCustomReactionClick = onCustomReactionClick,
                             modifier = Modifier.fillMaxWidth(),
                         )
-                        HorizontalDivider()
+                        Spacer(modifier = Modifier.height(12.dp))
                     }
                 }
                 items(
@@ -488,7 +487,7 @@ private fun EmojiButton(
     ) {
         Text(
             emoji,
-            style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = 24.dp.toSp(), color = Color.White),
+            style = ElementTheme.typography.fontBodyLgRegular.copy(fontSize = 24.dp.toSp(), color = ElementTheme.colors.textOnSolidPrimary),
         )
     }
 }

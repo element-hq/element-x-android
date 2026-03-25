@@ -19,6 +19,7 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material.icons.filled.CatchingPokemon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
@@ -108,7 +109,7 @@ object BigIcon {
         Box(
             modifier = modifier
                 .size(64.dp)
-                .clip(RoundedCornerShape(14.dp))
+                .clip(MaterialTheme.shapes.medium)
                 .background(backgroundColor),
             contentAlignment = Alignment.Center,
         ) {

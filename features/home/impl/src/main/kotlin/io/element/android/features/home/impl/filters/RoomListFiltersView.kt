@@ -11,6 +11,7 @@ package io.element.android.features.home.impl.filters
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.spring
+import io.element.android.libraries.designsystem.animation.isReduceMotionEnabled
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.gestures.animateScrollBy
@@ -41,7 +42,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
+import androidx.compose.material3.minimumInteractiveComponentSize
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.designsystem.animation.M3Motion
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.home.impl.R
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -69,28 +72,33 @@ fun RoomListFiltersView(
 
     var scrollToStart by remember { mutableIntStateOf(0) }
     val lazyListState = rememberLazyListState()
+    val reduceMotion = isReduceMotionEnabled
     LaunchedEffect(scrollToStart) {
-        // Scroll until the first item start to be displayed
-        // Since all items have different size, there is no way to compute the amount of
-        // pixel to scroll to go directly to the start of the row.
-        // But IRL it should only happen for one item.
-        while (lazyListState.firstVisibleItemIndex > 0) {
+        if (reduceMotion) {
+            lazyListState.scrollToItem(0)
+        } else {
+            // Scroll until the first item start to be displayed
+            // Since all items have different size, there is no way to compute the amount of
+            // pixel to scroll to go directly to the start of the row.
+            // But IRL it should only happen for one item.
+            while (lazyListState.firstVisibleItemIndex > 0) {
+                lazyListState.animateScrollBy(
+                    value = -(lazyListState.firstVisibleItemScrollOffset + 1f),
+                    animationSpec = spring(
+                        stiffness = Spring.StiffnessMediumLow,
+                    )
+                )
+            }
+            // Then scroll to the start of the list, a bit faster, to fully reveal the first
+            // item, which can be the close button to reset filter, or the first item
+            // if the user has scroll a bit before clicking on the close button.
             lazyListState.animateScrollBy(
-                value = -(lazyListState.firstVisibleItemScrollOffset + 1f),
+                value = -lazyListState.firstVisibleItemScrollOffset.toFloat(),
                 animationSpec = spring(
-                    stiffness = Spring.StiffnessMediumLow,
+                    stiffness = Spring.StiffnessMedium,
                 )
             )
         }
-        // Then scroll to the start of the list, a bit faster, to fully reveal the first
-        // item, which can be the close button to reset filter, or the first item
-        // if the user has scroll a bit before clicking on the close button.
-        lazyListState.animateScrollBy(
-            value = -lazyListState.firstVisibleItemScrollOffset.toFloat(),
-            animationSpec = spring(
-                stiffness = Spring.StiffnessMedium,
-            )
-        )
     }
     val previousFilters = remember { mutableStateOf(listOf<RoomListFilter>()) }
     LazyRow(
@@ -121,7 +129,11 @@ fun RoomListFiltersView(
                 val zIndex = (if (previousFilters.value.contains(filterWithSelection.filter)) state.filterSelectionStates.size else 0) - i.toFloat()
                 RoomListFilterView(
                     modifier = Modifier
-                        .animateItem()
+                        .animateItem(
+                            fadeInSpec = M3Motion.listItemSpec(),
+                            placementSpec = M3Motion.listItemSpec(),
+                            fadeOutSpec = M3Motion.listItemSpec(),
+                        )
                         .zIndex(zIndex),
                     roomListFilter = filterWithSelection.filter,
                     selected = filterWithSelection.isSelected,
@@ -146,6 +158,7 @@ private fun RoomListClearFiltersButton(
 ) {
     Box(
         modifier = modifier
+            .minimumInteractiveComponentSize()
             .clip(CircleShape)
             .background(ElementTheme.colors.bgActionPrimaryRest)
             .clickable(onClick = onClick)
@@ -171,17 +184,17 @@ private fun RoomListFilterView(
 ) {
     val background = animateColorAsState(
         targetValue = if (selected) ElementTheme.colors.bgActionPrimaryRest else ElementTheme.colors.bgCanvasDefault,
-        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+        animationSpec = M3Motion.listItemSpec(),
         label = "chip background colour",
     )
     val textColour = animateColorAsState(
         targetValue = if (selected) ElementTheme.colors.textOnSolidPrimary else ElementTheme.colors.textPrimary,
-        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+        animationSpec = M3Motion.listItemSpec(),
         label = "chip text colour",
     )
     val borderColour = animateColorAsState(
         targetValue = if (selected) Color.Transparent else ElementTheme.colors.borderInteractiveSecondary,
-        animationSpec = spring(stiffness = Spring.StiffnessMediumLow),
+        animationSpec = M3Motion.listItemSpec(),
         label = "chip border colour",
     )
 

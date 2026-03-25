@@ -57,6 +57,7 @@ data class MessagesState(
     /** Type of "shared history" icon to show in the top bar. */
     val topBarSharedHistoryIcon: SharedHistoryIcon,
     val successorRoom: SuccessorRoom?,
+    val showThreadsButton: Boolean,
     val eventSink: (MessagesEvent) -> Unit
 ) {
     val isTombstoned = successorRoom != null

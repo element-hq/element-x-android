@@ -45,7 +45,7 @@ import io.element.android.libraries.designsystem.modifiers.squareSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.ElementLoadingIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
@@ -196,11 +196,11 @@ private fun ColumnScope.Buttons(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalArrangement = Arrangement.spacedBy(8.dp),
                 ) {
-                    CircularProgressIndicator(
+                    ElementLoadingIndicator(
                         modifier = Modifier
                             .progressSemantics()
                             .size(20.dp),
-                        strokeWidth = 2.dp
+                        size = 20.dp,
                     )
                     Text(
                         text = stringResource(R.string.screen_qr_code_login_connecting_subtitle),

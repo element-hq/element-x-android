@@ -15,6 +15,7 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.roomMembers
+import io.element.android.features.messages.impl.messagecomposer.AVAILABLE_COMMANDS
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.SuggestionType
@@ -69,7 +70,12 @@ class SuggestionsProcessor {
                         )
                     }
             }
-            SuggestionType.Command,
+            SuggestionType.Command -> {
+                val query = suggestion.text.lowercase()
+                AVAILABLE_COMMANDS
+                    .filter { it.name.startsWith("/$query") || query.isEmpty() }
+                    .map { ResolvedSuggestion.Command(name = it.name, description = it.description, usage = it.usage) }
+            }
             SuggestionType.Emoji,
             is SuggestionType.Custom -> {
                 // Clear suggestions

@@ -20,6 +20,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -74,7 +75,7 @@ private fun PinDigitView(
     digit: PinDigit,
     isSecured: Boolean,
 ) {
-    val shape = RoundedCornerShape(8.dp)
+    val shape = MaterialTheme.shapes.small
     val appearanceModifier = when (digit) {
         PinDigit.Empty -> {
             Modifier.border(1.dp, ElementTheme.colors.iconPrimary, shape)

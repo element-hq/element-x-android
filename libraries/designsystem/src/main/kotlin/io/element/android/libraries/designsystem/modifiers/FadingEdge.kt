@@ -10,6 +10,7 @@ package io.element.android.libraries.designsystem.modifiers
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.runtime.Composable
+import io.element.android.libraries.designsystem.animation.M3Motion
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawWithContent
@@ -19,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.CompositingStrategy
 import androidx.compose.ui.graphics.graphicsLayer
 
+// Color.White used as alpha mask for DstIn blending — represents "fully opaque", not the color white
 @Composable
 fun horizontalFadingEdgesBrush(
     showLeft: Boolean,
@@ -27,10 +29,12 @@ fun horizontalFadingEdgesBrush(
 ): Brush {
     val leftColor by animateColorAsState(
         targetValue = if (showLeft) Color.Transparent else Color.White,
+        animationSpec = M3Motion.defaultValueSpec(),
         label = "AnimateLeftColor",
     )
     val rightColor by animateColorAsState(
         targetValue = if (showRight) Color.Transparent else Color.White,
+        animationSpec = M3Motion.defaultValueSpec(),
         label = "AnimateRightColor",
     )
     return Brush.horizontalGradient(

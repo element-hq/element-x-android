@@ -30,11 +30,14 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.movableContentOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -199,6 +202,14 @@ fun TimelineItemEventRow(
         inReplyToClick(inReplyToEventId)
     }
 
+    // Memoize reaction lambdas keyed on event.id to avoid recreating on every scroll frame
+    val currentOnReactionClick by rememberUpdatedState(onReactionClick)
+    val currentOnReactionLongClick by rememberUpdatedState(onReactionLongClick)
+    val currentOnMoreReactionsClick by rememberUpdatedState(onMoreReactionsClick)
+    val onReactionClickMemo = remember(event.id) { { emoji: String -> currentOnReactionClick(emoji, event) } }
+    val onReactionLongClickMemo = remember(event.id) { { emoji: String -> currentOnReactionLongClick(emoji, event) } }
+    val onMoreReactionsClickMemo = remember(event.id) { { _: TimelineItem.Event -> currentOnMoreReactionsClick(event) } }
+
     Column(modifier = modifier.fillMaxWidth()) {
         if (event.groupPosition.isNew()) {
             Spacer(modifier = Modifier.height(16.dp))
@@ -226,9 +237,9 @@ fun TimelineItemEventRow(
                         onLongClick = onLongClick,
                         inReplyToClick = ::inReplyToClick,
                         onUserDataClick = ::onUserDataClick,
-                        onReactionClick = { emoji -> onReactionClick(emoji, event) },
-                        onReactionLongClick = { emoji -> onReactionLongClick(emoji, event) },
-                        onMoreReactionsClick = { onMoreReactionsClick(event) },
+                        onReactionClick = onReactionClickMemo,
+                        onReactionLongClick = onReactionLongClickMemo,
+                        onMoreReactionsClick = onMoreReactionsClickMemo,
                         modifier = Modifier
                             .absoluteOffset { IntOffset(x = offset.roundToInt(), y = 0) }
                             .draggable(
@@ -260,9 +271,9 @@ fun TimelineItemEventRow(
                 onLongClick = onLongClick,
                 inReplyToClick = ::inReplyToClick,
                 onUserDataClick = ::onUserDataClick,
-                onReactionClick = { emoji -> onReactionClick(emoji, event) },
-                onReactionLongClick = { emoji -> onReactionLongClick(emoji, event) },
-                onMoreReactionsClick = { onMoreReactionsClick(event) },
+                onReactionClick = onReactionClickMemo,
+                onReactionLongClick = onReactionLongClickMemo,
+                onMoreReactionsClick = onMoreReactionsClickMemo,
                 eventSink = eventSink,
                 eventContentView = eventContentView,
             )
@@ -311,12 +322,13 @@ private fun ThreadSummaryView(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val bubbleShape = MaterialTheme.shapes.small
     BoxWithConstraints(modifier = modifier) {
         Row(
             modifier = Modifier
                 .then(if (!isOutgoing) Modifier.padding(start = 16.dp) else Modifier)
                 .graphicsLayer {
-                    shape = RoundedCornerShape(8.dp)
+                    shape = bubbleShape
                     clip = true
                 }
                 .background(MessageEventBubbleDefaults.backgroundBubbleColor(isOutgoing))
@@ -458,8 +470,9 @@ private fun TimelineItemEventRowContent(
             pinIcon,
         ) = createRefs()
 
-        // Sender
-        if (event.showSenderInformation && !timelineRoomInfo.isDm) {
+        // Sender — in DMs, show both sender names at group boundaries
+        val showSender = if (timelineRoomInfo.isDm) event.groupPosition.isNew() else event.showSenderInformation
+        if (showSender) {
             MessageSenderInformation(
                 event.senderId,
                 event.senderProfile,
@@ -576,7 +589,7 @@ private fun MessageSenderInformation(
     val avatarColors = AvatarColorsProvider.provide(senderAvatar.id)
     Row(
         modifier = modifier
-            // Add external clickable modifier with no indicator so the touch target is larger than just the display name
+            // Decorative clickable: extends touch target beyond display name; inner Avatar has its own ripple
             .clickable(onClick = onClick, enabled = true, interactionSource = remember { MutableInteractionSource() }, indication = null)
             .clearAndSetSemantics {
                 hideFromAccessibility()
@@ -593,7 +606,7 @@ private fun MessageSenderInformation(
         SenderName(
             modifier = Modifier
                 .testTag(TestTags.timelineItemSenderName)
-                .clip(RoundedCornerShape(6.dp))
+                .clip(MaterialTheme.shapes.extraSmall)
                 .clickable(onClick = onClick)
                 .padding(horizontal = 4.dp),
             senderId = senderId,
@@ -642,7 +655,7 @@ private fun MessageEventBubbleContent(
                         modifier = Modifier
                             // Outer padding
                             .padding(horizontal = 4.dp, vertical = 4.dp)
-                            .background(ElementTheme.colors.bgSubtleSecondary, RoundedCornerShape(10.0.dp))
+                            .background(ElementTheme.colors.bgSubtleSecondary, MaterialTheme.shapes.small)
                             .align(Alignment.BottomEnd)
                             // Inner padding
                             .padding(horizontal = 4.dp, vertical = 2.dp)
@@ -650,7 +663,7 @@ private fun MessageEventBubbleContent(
                 }
             TimestampPosition.Aligned ->
                 ContentAvoidingLayout(
-                    modifier = modifier,
+                    modifier = modifier.fillMaxWidth(),
                     // The spacing is negative to make the content overlap the empty space at the start of the timestamp
                     spacing = (-4).dp,
                     overlayOffset = DpOffset(0.dp, -1.dp),
@@ -704,7 +717,7 @@ private fun MessageEventBubbleContent(
                 if (inReplyToDetails == null) {
                     Modifier
                 } else {
-                    Modifier.clip(RoundedCornerShape(10.dp))
+                    Modifier.clip(MaterialTheme.shapes.small)
                 }
             }
             ContentPadding.CaptionedMedia ->
@@ -735,7 +748,7 @@ private fun MessageEventBubbleContent(
             val topPadding = if (showThreadDecoration) 0.dp else 8.dp
             val inReplyToModifier = Modifier
                 .padding(top = topPadding, start = 8.dp, end = 8.dp)
-                .clip(RoundedCornerShape(6.dp))
+                .clip(MaterialTheme.shapes.extraSmall)
 
             val talkbackCompatModifier = if (isTalkbackActive()) {
                 // Use z-index to make the replied to text being read after the message

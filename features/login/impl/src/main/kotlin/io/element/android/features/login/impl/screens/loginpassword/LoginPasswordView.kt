@@ -9,6 +9,7 @@
 package io.element.android.features.login.impl.screens.loginpassword
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -24,6 +25,8 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -32,6 +35,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.autofill.ContentType
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalAutofillManager
 import androidx.compose.ui.platform.LocalFocusManager
@@ -44,11 +48,13 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.material3.minimumInteractiveComponentSize
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.error.loginError
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.designsystem.animation.M3Motion
 import io.element.android.libraries.designsystem.atomic.molecules.ButtonColumnMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.BigIcon
@@ -97,8 +103,10 @@ fun LoginPasswordView(
         state.eventSink(LoginPasswordEvents.Submit)
     }
 
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior(rememberTopAppBarState())
+
     Scaffold(
-        modifier = modifier,
+        modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
             TopAppBar(
                 title = {},
@@ -108,6 +116,7 @@ fun LoginPasswordView(
                         onBackClick()
                     })
                 },
+                scrollBehavior = scrollBehavior,
             )
         }
     ) { padding ->
@@ -161,8 +170,13 @@ fun LoginPasswordView(
                 }
             }
 
-            if (state.loginAction is AsyncData.Failure) {
-                LoginErrorDialog(error = state.loginAction.error, onDismiss = {
+            AnimatedVisibility(
+                visible = state.loginAction is AsyncData.Failure,
+                enter = M3Motion.enterTransition,
+                exit = M3Motion.exitTransition,
+            ) {
+                val error = (state.loginAction as? AsyncData.Failure)?.error ?: return@AnimatedVisibility
+                LoginErrorDialog(error = error, onDismiss = {
                     state.eventSink(LoginPasswordEvents.ClearError)
                 })
             }
@@ -210,7 +224,7 @@ private fun LoginForm(
             singleLine = true,
             trailingIcon = if (loginFieldState.isNotEmpty()) {
                 {
-                    Box(Modifier.clickable {
+                    Box(Modifier.minimumInteractiveComponentSize().clickable {
                         loginFieldState = ""
                         eventSink(LoginPasswordEvents.SetLogin(""))
                     }) {
@@ -253,7 +267,7 @@ private fun LoginForm(
                     if (passwordVisible) CompoundIcons.VisibilityOn() else CompoundIcons.VisibilityOff()
                 val description =
                     if (passwordVisible) stringResource(CommonStrings.a11y_hide_password) else stringResource(CommonStrings.a11y_show_password)
-                Box(Modifier.clickable { passwordVisible = !passwordVisible }) {
+                Box(Modifier.minimumInteractiveComponentSize().clickable { passwordVisible = !passwordVisible }) {
                     Icon(
                         imageVector = image,
                         contentDescription = description,
