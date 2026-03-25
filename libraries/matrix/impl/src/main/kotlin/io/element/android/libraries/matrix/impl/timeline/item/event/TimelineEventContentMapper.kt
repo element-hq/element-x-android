@@ -114,6 +114,7 @@ class TimelineEventContentMapper(
                         is MsgLikeKind.LiveLocation -> {
                             LiveLocationContent(
                                 isLive = kind.content.isLive,
+                                timestamp = kind.content.ts.toLong(),
                                 description = kind.content.description,
                                 timeout = kind.content.timeoutMs.toLong(),
                                 assetType = kind.content.assetType.into(),

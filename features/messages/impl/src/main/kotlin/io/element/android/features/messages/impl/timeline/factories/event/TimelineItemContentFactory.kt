@@ -38,6 +38,8 @@ import io.element.android.libraries.matrix.api.timeline.item.event.StickerConten
 import io.element.android.libraries.matrix.api.timeline.item.event.UnableToDecryptContent
 import io.element.android.libraries.matrix.api.timeline.item.event.UnknownContent
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
+import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.services.toolbox.api.strings.StringProvider
 
 @Inject
 class TimelineItemContentFactory(
@@ -52,6 +54,8 @@ class TimelineItemContentFactory(
     private val failedToParseMessageFactory: TimelineItemContentFailedToParseMessageFactory,
     private val failedToParseStateFactory: TimelineItemContentFailedToParseStateFactory,
     private val sessionId: SessionId,
+    private val dateFormatter: DateFormatter,
+    private val stringProvider: StringProvider,
 ) {
     suspend fun create(eventTimelineItem: EventTimelineItem): TimelineItemEventContent {
         return create(
@@ -105,7 +109,12 @@ class TimelineItemContentFactory(
                 val lastKnownLocation = itemContent.locations.mapNotNull { beacon ->
                     Location.fromGeoUri(beacon.geoUri)
                 }.lastOrNull()
-                // Always create content - location can be null for "loading/waiting" state
+
+                val endsAt = dateFormatter.format(
+                    timestamp = itemContent.endsAt,
+                    mode = DateFormatterMode.TimeOnly
+                )
+                // Always create content, location can be null for "loading/waiting" state
                 TimelineItemLocationContent(
                     description = itemContent.description?.trimEnd(),
                     assetType = itemContent.assetType,
@@ -114,7 +123,7 @@ class TimelineItemContentFactory(
                     mode = TimelineItemLocationContent.Mode.Live(
                         lastKnownLocation = lastKnownLocation,
                         isActive = itemContent.isLive,
-                        endsAt = "",
+                        endsAt = stringProvider.getString(CommonStrings.common_ends_at, endsAt),
                     ),
                 )
             }
