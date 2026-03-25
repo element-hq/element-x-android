@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -120,27 +122,29 @@ private fun ThreadsListLoaded(
             items = threads,
             key = { it.rootEventId.value },
         ) { thread ->
-            ListItem(
-                headlineContent = {
-                    Text(
-                        text = thread.senderDisplayName ?: thread.senderId.value,
-                        style = ElementTheme.typography.fontBodyLgMedium,
-                    )
-                },
-                supportingContent = thread.lastMessagePreview?.let { preview ->
-                    {
+            Surface(tonalElevation = 1.dp, shape = MaterialTheme.shapes.medium) {
+                ListItem(
+                    headlineContent = {
                         Text(
-                            text = preview,
-                            maxLines = 2,
-                            overflow = TextOverflow.Ellipsis,
-                            style = ElementTheme.typography.fontBodySmRegular,
-                            color = ElementTheme.colors.textSecondary,
+                            text = thread.senderDisplayName ?: thread.senderId.value,
+                            style = ElementTheme.typography.fontBodyLgMedium,
                         )
-                    }
-                },
-                trailingContent = ListItemContent.Text(formatTimestamp(thread.timestamp)),
-                onClick = { onThreadClick(thread.rootEventId) },
-            )
+                    },
+                    supportingContent = thread.lastMessagePreview?.let { preview ->
+                        {
+                            Text(
+                                text = preview,
+                                maxLines = 2,
+                                overflow = TextOverflow.Ellipsis,
+                                style = ElementTheme.typography.fontBodySmRegular,
+                                color = ElementTheme.colors.textSecondary,
+                            )
+                        }
+                    },
+                    trailingContent = ListItemContent.Text(formatTimestamp(thread.timestamp)),
+                    onClick = { onThreadClick(thread.rootEventId) },
+                )
+            }
         }
     }
 }

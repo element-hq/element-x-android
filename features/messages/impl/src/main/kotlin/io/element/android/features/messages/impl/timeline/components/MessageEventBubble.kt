@@ -8,8 +8,10 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
@@ -19,6 +21,7 @@ import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -37,6 +40,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItemGrou
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleStateProvider
 import io.element.android.libraries.core.extensions.to01
+import io.element.android.libraries.designsystem.animation.M3Motion
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -78,6 +82,13 @@ fun MessageEventBubble(
             .onKeyboardContextMenuAction(onLongClick)
     }
 
+    val isPressed by interactionSource.collectIsPressedAsState()
+    val elevation by animateDpAsState(
+        targetValue = if (isPressed) 4.dp else 1.dp,
+        animationSpec = M3Motion.defaultValueSpec(),
+        label = "bubble elevation",
+    )
+
     val cutTopStart = state.cutTopStart
     // Ignore state.isHighlighted for now, we need a design decision on it.
     val backgroundBubbleColor = MessageEventBubbleDefaults.backgroundBubbleColor(state.isMine)
@@ -86,7 +97,7 @@ fun MessageEventBubble(
     val yOffsetPx = -(NEGATIVE_MARGIN_FOR_BUBBLE + avatarRadius).toPx()
     BoxWithConstraints(
         modifier = modifier
-            .shadow(elevation = 1.dp, shape = bubbleShape)
+            .shadow(elevation = elevation, shape = bubbleShape)
             .drawWithCache {
                 // Calculate the outline of the background and cache it
                 val outline = bubbleShape.createOutline(size, layoutDirection, this)

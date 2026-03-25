@@ -47,6 +47,7 @@ import io.element.android.features.home.impl.roomlist.RoomListEvent
 import io.element.android.features.home.impl.roomlist.SecurityBannerState
 import io.element.android.features.home.impl.spacefilters.SpaceFiltersState
 import io.element.android.features.home.impl.spacefilters.anUnselectedSpaceFiltersState
+import io.element.android.libraries.designsystem.animation.M3Motion
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -274,6 +275,11 @@ private fun RoomsViewList(
                     state.seenRoomInvites.contains(room.roomId),
                 onClick = onRoomClick,
                 eventSink = eventSink,
+                modifier = Modifier.animateItem(
+                    fadeInSpec = M3Motion.listItemSpec(),
+                    fadeOutSpec = M3Motion.listItemSpec(),
+                    placementSpec = M3Motion.listItemSpec(),
+                ),
             )
             if (index != state.summaries.lastIndex) {
                 Spacer(Modifier.height(4.dp))

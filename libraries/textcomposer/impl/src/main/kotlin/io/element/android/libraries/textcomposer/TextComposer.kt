@@ -10,6 +10,7 @@ package io.element.android.libraries.textcomposer
 
 import android.content.res.Configuration
 import android.net.Uri
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.background
 import androidx.compose.material3.Surface
@@ -610,11 +611,17 @@ private fun TextInputBox(
             .then(modifier),
     ) {
         Column {
-            if (composerMode is MessageComposerMode.Special) {
-                ComposerModeView(
-                    composerMode = composerMode,
-                    onResetComposerMode = onResetComposerMode,
-                )
+            AnimatedVisibility(
+                visible = composerMode is MessageComposerMode.Special,
+                enter = M3Motion.enterTransition,
+                exit = M3Motion.exitTransition,
+            ) {
+                (composerMode as? MessageComposerMode.Special)?.let {
+                    ComposerModeView(
+                        composerMode = it,
+                        onResetComposerMode = onResetComposerMode,
+                    )
+                }
             }
             Box(
                 modifier = Modifier
