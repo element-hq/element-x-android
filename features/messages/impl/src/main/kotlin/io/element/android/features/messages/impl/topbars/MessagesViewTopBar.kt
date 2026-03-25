@@ -32,8 +32,10 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.SharedHistoryIcon
+import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -67,52 +69,62 @@ internal fun MessagesViewTopBar(
         title = {
             Row(
                 modifier = Modifier.clickable { onRoomDetailsClick() },
-                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                Text(
-                    modifier = Modifier
-                        .weight(1f, fill = false)
-                        .semantics {
-                            heading()
-                        },
-                    text = roomName ?: stringResource(CommonStrings.common_no_room_name),
-                    style = ElementTheme.typography.fontBodyLgMedium,
-                    fontStyle = FontStyle.Italic.takeIf { roomName == null },
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis,
+                Avatar(
+                    avatarData = roomAvatar,
+                    avatarType = AvatarType.Room(heroes = heroes, isTombstoned = isTombstoned),
                 )
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.weight(1f, fill = false),
+                ) {
+                    Text(
+                        modifier = Modifier
+                            .weight(1f, fill = false)
+                            .semantics {
+                                heading()
+                            },
+                        text = roomName ?: stringResource(CommonStrings.common_no_room_name),
+                        style = ElementTheme.typography.fontBodyLgMedium,
+                        fontStyle = FontStyle.Italic.takeIf { roomName == null },
+                        maxLines = 1,
+                        overflow = TextOverflow.Ellipsis,
+                    )
 
-                when (dmUserIdentityState) {
-                    IdentityState.Verified -> {
-                        Icon(
-                            imageVector = CompoundIcons.Verified(),
-                            tint = ElementTheme.colors.iconSuccessPrimary,
-                            contentDescription = null,
+                    when (dmUserIdentityState) {
+                        IdentityState.Verified -> {
+                            Icon(
+                                imageVector = CompoundIcons.Verified(),
+                                tint = ElementTheme.colors.iconSuccessPrimary,
+                                contentDescription = null,
+                            )
+                        }
+                        IdentityState.VerificationViolation -> {
+                            Icon(
+                                imageVector = CompoundIcons.ErrorSolid(),
+                                tint = ElementTheme.colors.iconCriticalPrimary,
+                                contentDescription = null,
+                            )
+                        }
+                        else -> Unit
+                    }
+
+                    when (sharedHistoryIcon) {
+                        SharedHistoryIcon.NONE -> Unit
+                        SharedHistoryIcon.SHARED -> Icon(
+                            imageVector = CompoundIcons.History(),
+                            tint = ElementTheme.colors.iconInfoPrimary,
+                            contentDescription = stringResource(CommonStrings.common_shared_history),
+                        )
+                        SharedHistoryIcon.WORLD_READABLE -> Icon(
+                            imageVector = CompoundIcons.UserProfileSolid(),
+                            tint = ElementTheme.colors.iconInfoPrimary,
+                            contentDescription = stringResource(CommonStrings.common_world_readable_history),
                         )
                     }
-                    IdentityState.VerificationViolation -> {
-                        Icon(
-                            imageVector = CompoundIcons.ErrorSolid(),
-                            tint = ElementTheme.colors.iconCriticalPrimary,
-                            contentDescription = null,
-                        )
-                    }
-                    else -> Unit
-                }
-
-                when (sharedHistoryIcon) {
-                    SharedHistoryIcon.NONE -> Unit
-                    SharedHistoryIcon.SHARED -> Icon(
-                        imageVector = CompoundIcons.History(),
-                        tint = ElementTheme.colors.iconInfoPrimary,
-                        contentDescription = stringResource(CommonStrings.common_shared_history),
-                    )
-                    SharedHistoryIcon.WORLD_READABLE -> Icon(
-                        imageVector = CompoundIcons.UserProfileSolid(),
-                        tint = ElementTheme.colors.iconInfoPrimary,
-                        contentDescription = stringResource(CommonStrings.common_world_readable_history),
-                    )
                 }
             }
         },

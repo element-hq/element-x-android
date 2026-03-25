@@ -104,6 +104,8 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toAnnotatedString
 import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.BottomSheetDragHandle
+import io.element.android.libraries.designsystem.theme.components.DropdownMenu
+import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -302,6 +304,28 @@ fun MessagesView(
                                 roomCallState = state.roomCallState,
                                 onJoinCallClick = onJoinCallClick,
                             )
+                            // Overflow menu
+                            var showOverflow by remember { mutableStateOf(false) }
+                            Box {
+                                IconButton(onClick = { showOverflow = true }) {
+                                    Icon(
+                                        imageVector = CompoundIcons.OverflowVertical(),
+                                        contentDescription = stringResource(CommonStrings.a11y_user_menu),
+                                    )
+                                }
+                                DropdownMenu(
+                                    expanded = showOverflow,
+                                    onDismissRequest = { showOverflow = false },
+                                ) {
+                                    DropdownMenuItem(
+                                        text = { Text(stringResource(CommonStrings.common_about)) },
+                                        onClick = {
+                                            showOverflow = false
+                                            onRoomDetailsClick()
+                                        },
+                                    )
+                                }
+                            }
                             Spacer(Modifier.width(8.dp))
                         }
                     }
