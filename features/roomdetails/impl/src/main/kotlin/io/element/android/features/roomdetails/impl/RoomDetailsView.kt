@@ -201,6 +201,13 @@ fun RoomDetailsView(
                     }
                 )
 
+                PinItem(
+                    isPinned = state.isPinned,
+                    onPinChanges = {
+                        state.eventSink(RoomDetailsEvent.SetPinned(it))
+                    }
+                )
+
                 if (state.canShowSecurityAndPrivacy) {
                     SecurityAndPrivacyItem(
                         onClick = onSecurityAndPrivacyClick
@@ -630,6 +637,24 @@ private fun FavoriteItem(
         title = stringResource(id = textResId),
         isChecked = isFavorite,
         onCheckedChange = onFavoriteChanges
+    )
+}
+
+@Composable
+private fun PinItem(
+    isPinned: Boolean,
+    onPinChanges: (Boolean) -> Unit,
+) {
+    val (textResId, icon) = if (isPinned) {
+        CommonStrings.common_pinned to CompoundIcons.PinSolid()
+    } else {
+        CommonStrings.common_pin_to_top to CompoundIcons.Pin()
+    }
+    PreferenceSwitch(
+        icon = icon,
+        title = stringResource(id = textResId),
+        isChecked = isPinned,
+        onCheckedChange = onPinChanges
     )
 }
 

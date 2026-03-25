@@ -51,12 +51,15 @@ import io.element.android.libraries.matrix.ui.room.getCurrentRoomMember
 import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
 import io.element.android.libraries.matrix.ui.room.roomMemberIdentityStateChange
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
@@ -73,6 +76,7 @@ class RoomDetailsPresenter(
     private val analyticsService: AnalyticsService,
     private val clipboardHelper: ClipboardHelper,
     private val appPreferencesStore: AppPreferencesStore,
+    private val sessionPreferencesStore: SessionPreferencesStore,
 ) : Presenter<RoomDetailsState> {
     @Composable
     override fun present(): RoomDetailsState {
@@ -87,6 +91,10 @@ class RoomDetailsPresenter(
         val joinRule by remember { derivedStateOf { roomInfo.joinRule } }
 
         val pinnedMessagesCount by remember { derivedStateOf { roomInfo.pinnedEventIds.size } }
+
+        val isPinned by remember {
+            sessionPreferencesStore.getPinnedRoomsFlow().map { it.contains(room.roomId.value) }
+        }.collectAsState(false)
 
         LaunchedEffect(Unit) {
             room.updateRoomNotificationSettings()
@@ -151,6 +159,7 @@ class RoomDetailsPresenter(
                     }
                 }
                 is RoomDetailsEvent.SetFavorite -> scope.setFavorite(event.isFavorite)
+                is RoomDetailsEvent.SetPinned -> scope.setPinned(event.isPinned)
                 is RoomDetailsEvent.CopyToClipboard -> {
                     clipboardHelper.copyPlainText(event.text)
                     snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_copied_to_clipboard))
@@ -186,6 +195,7 @@ class RoomDetailsPresenter(
             leaveRoomState = leaveRoomState,
             roomNotificationSettings = roomNotificationSettingsState.roomNotificationSettings(),
             isFavorite = isFavorite,
+            isPinned = isPinned,
             displayRolesAndPermissionsSettings = !isDm && permissions.canEditRolesAndPermissions,
             isPublic = joinRule == JoinRule.Public,
             heroes = roomInfo.heroes.toImmutableList(),
@@ -259,5 +269,15 @@ class RoomDetailsPresenter(
             .onSuccess {
                 analyticsService.captureInteraction(Interaction.Name.MobileRoomFavouriteToggle)
             }
+    }
+
+    private fun CoroutineScope.setPinned(isPinned: Boolean) = launch {
+        val current = sessionPreferencesStore.getPinnedRoomsFlow().first()
+        val updated = if (isPinned) {
+            listOf(room.roomId.value) + current.filter { it != room.roomId.value }
+        } else {
+            current.filter { it != room.roomId.value }
+        }
+        sessionPreferencesStore.setPinnedRooms(updated)
     }
 }
