@@ -14,6 +14,7 @@ import kotlinx.collections.immutable.ImmutableSet
 
 data class TimelineProtectionState(
     val protectionState: ProtectionState,
+    val showUrlPreviews: Boolean,
     val eventSink: (TimelineProtectionEvent) -> Unit,
 ) {
     fun hideMediaContent(eventId: EventId?) = when (protectionState) {

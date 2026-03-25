@@ -21,12 +21,14 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaPreviewService
 import io.element.android.libraries.matrix.api.media.isPreviewEnabled
 import io.element.android.libraries.matrix.api.room.BaseRoom
+import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import kotlinx.collections.immutable.toImmutableSet
 
 @Inject
 class TimelineProtectionPresenter(
     private val mediaPreviewService: MediaPreviewService,
     private val room: BaseRoom,
+    private val sessionPreferencesStore: SessionPreferencesStore,
 ) : Presenter<TimelineProtectionState> {
     private val allowedEvents = mutableStateOf<Set<EventId>>(setOf())
 
@@ -36,6 +38,9 @@ class TimelineProtectionPresenter(
             mediaPreviewService.mediaPreviewConfigFlow.mapState { config -> config.mediaPreviewValue }
         }.collectAsState()
         val roomInfo = room.roomInfoFlow.collectAsState()
+        val isRoomUrlPreviewEnabled by remember(room.roomId) {
+            sessionPreferencesStore.isRoomUrlPreviewEnabled(room.roomId.value)
+        }.collectAsState(initial = false)
         val protectionState by remember {
             derivedStateOf {
                 val isPreviewEnabled = mediaPreviewValue.value.isPreviewEnabled(roomInfo.value.joinRule)
@@ -44,6 +49,11 @@ class TimelineProtectionPresenter(
                 } else {
                     ProtectionState.RenderOnly(eventIds = allowedEvents.value.toImmutableSet())
                 }
+            }
+        }
+        val showUrlPreviews by remember {
+            derivedStateOf {
+                mediaPreviewValue.value.isPreviewEnabled(roomInfo.value.joinRule) && isRoomUrlPreviewEnabled
             }
         }
 
@@ -57,6 +67,7 @@ class TimelineProtectionPresenter(
 
         return TimelineProtectionState(
             protectionState = protectionState,
+            showUrlPreviews = showUrlPreviews,
             eventSink = ::handleEvent,
         )
     }
