@@ -394,6 +394,8 @@ class MessagesPresenter(
             TimelineItemAction.EndPoll -> handleEndPollAction(targetEvent, timelineState)
             TimelineItemAction.Pin -> handlePinAction(targetEvent)
             TimelineItemAction.Unpin -> handleUnpinAction(targetEvent)
+            TimelineItemAction.KickSender -> handleKickSender(targetEvent)
+            TimelineItemAction.BanSender -> handleBanSender(targetEvent)
             TimelineItemAction.ViewInTimeline -> Unit
         }
     }
@@ -440,6 +442,22 @@ class MessagesPresenter(
                     snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_error))
                 }
         }
+    }
+
+    private suspend fun handleKickSender(targetEvent: TimelineItem.Event) {
+        room.kickUser(userId = targetEvent.senderId, reason = null)
+            .onFailure {
+                Timber.e(it, "Failed to kick user ${targetEvent.senderId}")
+                snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_error))
+            }
+    }
+
+    private suspend fun handleBanSender(targetEvent: TimelineItem.Event) {
+        room.banUser(userId = targetEvent.senderId, reason = null)
+            .onFailure {
+                Timber.e(it, "Failed to ban user ${targetEvent.senderId}")
+                snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_error))
+            }
     }
 
     private fun CoroutineScope.toggleReaction(

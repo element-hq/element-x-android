@@ -402,6 +402,12 @@ class JoinedRustRoom(
         }
     }
 
+    override suspend fun setUserPowerLevel(userId: UserId, powerLevel: Long): Result<Unit> {
+        return runCatchingExceptions {
+            innerRoom.updatePowerLevelsForUsers(listOf(UserPowerLevelUpdate(userId.value, powerLevel)))
+        }
+    }
+
     override suspend fun updatePowerLevels(roomPowerLevelsValues: RoomPowerLevelsValues): Result<Unit> = withContext(roomDispatcher) {
         runCatchingExceptions {
             val changes = RoomPowerLevelChanges(

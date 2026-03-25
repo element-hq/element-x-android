@@ -33,6 +33,8 @@ enum class TimelineItemAction(
     RemoveCaption(CommonStrings.action_remove_caption, CompoundDrawables.ic_compound_close, destructive = true),
     ViewSource(CommonStrings.action_view_source, CompoundDrawables.ic_compound_code),
     ReportContent(CommonStrings.action_report_content, CompoundDrawables.ic_compound_chat_problem, destructive = true),
+    KickSender(CommonStrings.action_kick, CompoundDrawables.ic_compound_block, destructive = true),
+    BanSender(CommonStrings.action_ban, CompoundDrawables.ic_compound_block, destructive = true),
     EndPoll(CommonStrings.action_end_poll, CompoundDrawables.ic_compound_polls_end),
     Pin(CommonStrings.action_pin, CompoundDrawables.ic_compound_pin),
     Unpin(CommonStrings.action_unpin, CompoundDrawables.ic_compound_unpin),

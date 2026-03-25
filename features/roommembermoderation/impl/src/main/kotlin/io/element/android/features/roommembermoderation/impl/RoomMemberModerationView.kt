@@ -202,6 +202,30 @@ private fun RoomMemberAsyncActions(
             is AsyncAction.Loading,
             AsyncAction.Uninitialized -> Unit
         }
+
+        when (val action = state.muteUserAsyncAction) {
+            is AsyncAction.Loading -> {
+                LaunchedEffect(action) {
+                    asyncIndicatorState.enqueue {
+                        AsyncIndicator.Loading(text = stringResource(CommonStrings.common_loading))
+                    }
+                }
+            }
+            is AsyncAction.Failure -> {
+                Timber.e(action.error, "Failed to mute/unmute user.")
+                LaunchedEffect(action) {
+                    asyncIndicatorState.enqueue(AsyncIndicator.DURATION_SHORT) {
+                        AsyncIndicator.Failure(
+                            text = stringResource(CommonStrings.common_failed),
+                        )
+                    }
+                }
+            }
+            is AsyncAction.Success -> {
+                LaunchedEffect(action) { asyncIndicatorState.clear() }
+            }
+            else -> Unit
+        }
     }
 }
 
@@ -311,6 +335,34 @@ private fun RoomMemberActionsBottomSheet(
                             headlineContent = { Text(stringResource(R.string.screen_bottom_sheet_manage_room_member_unban)) },
                             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Restart())),
                             style = ListItemStyle.Destructive,
+                            onClick = {
+                                coroutineScope.launch {
+                                    bottomSheetState.hide()
+                                    onSelectAction(action, user)
+                                }
+                            },
+                            enabled = actionState.isEnabled
+                        )
+                    }
+                    is ModerationAction.MuteUser -> {
+                        ListItem(
+                            headlineContent = { Text(stringResource(CommonStrings.action_mute_user)) },
+                            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Block())),
+                            style = ListItemStyle.Destructive,
+                            onClick = {
+                                coroutineScope.launch {
+                                    bottomSheetState.hide()
+                                    onSelectAction(action, user)
+                                }
+                            },
+                            enabled = actionState.isEnabled
+                        )
+                    }
+                    is ModerationAction.UnmuteUser -> {
+                        ListItem(
+                            headlineContent = { Text(stringResource(CommonStrings.action_unmute_user)) },
+                            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Restart())),
+                            style = ListItemStyle.Primary,
                             onClick = {
                                 coroutineScope.launch {
                                     bottomSheetState.hide()

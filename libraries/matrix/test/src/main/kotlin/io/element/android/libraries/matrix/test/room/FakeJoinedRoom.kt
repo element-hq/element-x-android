@@ -70,6 +70,7 @@ class FakeJoinedRoom(
     private val updateAvatarResult: (String, ByteArray) -> Result<Unit> = { _, _ -> lambdaError() },
     private val removeAvatarResult: () -> Result<Unit> = { lambdaError() },
     private val updateUserRoleResult: (List<UserRoleChange>) -> Result<Unit> = { lambdaError() },
+    private val setUserPowerLevelResult: (UserId, Long) -> Result<Unit> = { _, _ -> lambdaError() },
     private val updatePowerLevelsResult: (RoomPowerLevelsValues) -> Result<Unit> = { lambdaError() },
     private val resetPowerLevelsResult: () -> Result<Unit> = { lambdaError() },
     private val reportContentResult: (EventId, String, UserId?) -> Result<Unit> = { _, _, _ -> lambdaError() },
@@ -171,6 +172,10 @@ class FakeJoinedRoom(
 
     override suspend fun updateUsersRoles(changes: List<UserRoleChange>): Result<Unit> = simulateLongTask {
         updateUserRoleResult(changes)
+    }
+
+    override suspend fun setUserPowerLevel(userId: UserId, powerLevel: Long): Result<Unit> = simulateLongTask {
+        setUserPowerLevelResult(userId, powerLevel)
     }
 
     override suspend fun updatePowerLevels(roomPowerLevelsValues: RoomPowerLevelsValues): Result<Unit> = simulateLongTask {

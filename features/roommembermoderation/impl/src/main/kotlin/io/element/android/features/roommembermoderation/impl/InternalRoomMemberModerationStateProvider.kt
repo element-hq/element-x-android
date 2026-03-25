@@ -90,6 +90,7 @@ fun aRoomMembersModerationState(
     kickUserAsyncAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     banUserAsyncAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     unbanUserAsyncAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    muteUserAsyncAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     eventSink: (RoomMemberModerationEvents) -> Unit = {},
 ) = InternalRoomMemberModerationState(
     permissions = permissions,
@@ -98,5 +99,6 @@ fun aRoomMembersModerationState(
     kickUserAsyncAction = kickUserAsyncAction,
     banUserAsyncAction = banUserAsyncAction,
     unbanUserAsyncAction = unbanUserAsyncAction,
+    muteUserAsyncAction = muteUserAsyncAction,
     eventSink = eventSink,
 )

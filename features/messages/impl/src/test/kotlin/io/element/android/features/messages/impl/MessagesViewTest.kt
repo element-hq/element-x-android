@@ -213,6 +213,8 @@ class MessagesViewTest {
                 canRedactOther = userHasPermissionToRedactOther,
                 canSendReaction = userHasPermissionToSendReaction,
                 canPinUnpin = userCanPinEvent,
+                canKick = false,
+                canBan = false,
             ),
             timelineState = aTimelineState(
                 timelineItems = aTimelineItemList(aTimelineItemTextContent()),

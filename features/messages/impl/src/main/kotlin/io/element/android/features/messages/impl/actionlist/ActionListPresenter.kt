@@ -237,6 +237,12 @@ class DefaultActionListPresenter(
             if (!timelineItem.isMine) {
                 add(TimelineItemAction.ReportContent)
             }
+            if (usersEventPermissions.canKick && !timelineItem.isMine && timelineItem.isRemote) {
+                add(TimelineItemAction.KickSender)
+            }
+            if (usersEventPermissions.canBan && !timelineItem.isMine && timelineItem.isRemote) {
+                add(TimelineItemAction.BanSender)
+            }
             if (canRedact) {
                 add(TimelineItemAction.Redact)
             }

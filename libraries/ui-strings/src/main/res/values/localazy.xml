@@ -65,6 +65,7 @@
   <string name="action_add_existing_rooms">"Add existing rooms"</string>
   <string name="action_add_to_timeline">"Add to timeline"</string>
   <string name="action_back">"Back"</string>
+  <string name="action_ban">"Ban"</string>
   <string name="action_call">"Call"</string>
   <string name="action_cancel">"Cancel"</string>
   <string name="action_cancel_for_now">"Cancel for now"</string>
@@ -113,6 +114,7 @@
   <string name="action_invite_people_to_app">"Invite people to %1$s"</string>
   <string name="action_invites_list">"Invites"</string>
   <string name="action_join">"Join"</string>
+  <string name="action_kick">"Kick"</string>
   <string name="action_learn_more">"Learn more"</string>
   <string name="action_leave">"Leave"</string>
   <string name="action_leave_conversation">"Leave conversation"</string>
@@ -125,6 +127,7 @@
   <string name="action_manage_rooms">"Manage rooms"</string>
   <string name="action_message">"Message"</string>
   <string name="action_minimize">"Minimise"</string>
+  <string name="action_mute_user">"Mute user"</string>
   <string name="action_next">"Next"</string>
   <string name="action_no">"No"</string>
   <string name="action_not_now">"Not now"</string>
@@ -176,6 +179,7 @@
   <string name="action_tap_for_options">"Tap for options"</string>
   <string name="action_translate">"Translate"</string>
   <string name="action_try_again">"Try again"</string>
+  <string name="action_unmute_user">"Unmute user"</string>
   <string name="action_unpin">"Unpin"</string>
   <string name="action_view">"View"</string>
   <string name="action_view_in_timeline">"View in timeline"</string>

@@ -26,4 +26,6 @@ sealed interface ModerationAction {
     data object KickUser : ModerationAction
     data object BanUser : ModerationAction
     data object UnbanUser : ModerationAction
+    data object MuteUser : ModerationAction
+    data object UnmuteUser : ModerationAction
 }

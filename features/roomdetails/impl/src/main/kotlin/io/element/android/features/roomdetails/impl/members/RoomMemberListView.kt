@@ -8,6 +8,7 @@
 
 package io.element.android.features.roomdetails.impl.members
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -23,6 +24,7 @@ import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SingleChoiceSegmentedButtonRow
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -43,14 +45,18 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.Button
+import io.element.android.libraries.designsystem.theme.components.Checkbox
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.WavyLinearProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.SearchField
 import io.element.android.libraries.designsystem.theme.components.SegmentedButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.theme.components.WavyLinearProgressIndicator
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.getBestName
@@ -58,6 +64,7 @@ import io.element.android.libraries.matrix.api.room.toMatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
@@ -66,8 +73,16 @@ fun RoomMemberListView(
     navigator: RoomMemberListNavigator,
     modifier: Modifier = Modifier,
 ) {
+    BackHandler(enabled = state.isSelectionMode) {
+        state.eventSink(RoomMemberListEvent.ClearSelection)
+    }
+
     fun onSelectUser(roomMember: RoomMember) {
-        state.eventSink(RoomMemberListEvent.RoomMemberSelected(roomMember))
+        if (state.isSelectionMode) {
+            state.eventSink(RoomMemberListEvent.ToggleMemberSelection(roomMember.userId))
+        } else {
+            state.eventSink(RoomMemberListEvent.RoomMemberSelected(roomMember))
+        }
     }
 
     Scaffold(
@@ -75,8 +90,27 @@ fun RoomMemberListView(
         topBar = {
             RoomMemberListTopBar(
                 canInvite = state.canInvite,
-                onBackClick = navigator::exitRoomMemberList,
+                isSelectionMode = state.isSelectionMode,
+                selectedCount = state.selectedMemberIds.size,
+                canModerate = state.canKick || state.canBan,
+                onBackClick = {
+                    if (state.isSelectionMode) {
+                        state.eventSink(RoomMemberListEvent.ClearSelection)
+                    } else {
+                        navigator.exitRoomMemberList()
+                    }
+                },
                 onInviteClick = navigator::openInviteMembers,
+                onToggleSelectionMode = { state.eventSink(RoomMemberListEvent.ToggleSelectionMode) },
+            )
+        },
+        bottomBar = {
+            BulkModerationBottomBar(
+                isSelectionMode = state.isSelectionMode,
+                selectedMemberIds = state.selectedMemberIds,
+                canKick = state.canKick,
+                canBan = state.canBan,
+                eventSink = state.eventSink,
             )
         }
     ) { padding ->
@@ -99,9 +133,51 @@ fun RoomMemberListView(
                 selectedSection = state.selectedSection,
                 showBannedSection = state.showBannedSection,
                 searchQuery = state.searchQuery.text.toString(),
+                isSelectionMode = state.isSelectionMode,
+                selectedMemberIds = state.selectedMemberIds,
                 onSelectedSectionChange = { state.eventSink(RoomMemberListEvent.ChangeSelectedSection(it)) },
                 onSelectUser = ::onSelectUser,
             )
+        }
+    }
+}
+
+@Composable
+private fun BulkModerationBottomBar(
+    isSelectionMode: Boolean,
+    selectedMemberIds: ImmutableSet<UserId>,
+    canKick: Boolean,
+    canBan: Boolean,
+    eventSink: (RoomMemberListEvent) -> Unit,
+) {
+    AnimatedVisibility(
+        visible = isSelectionMode && selectedMemberIds.isNotEmpty(),
+        enter = M3Motion.enterTransition,
+        exit = M3Motion.exitTransition,
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(16.dp),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+        ) {
+            if (canKick) {
+                Button(
+                    text = "Kick (${selectedMemberIds.size})",
+                    onClick = { eventSink(RoomMemberListEvent.KickSelectedMembers) },
+                    destructive = true,
+                    modifier = Modifier.weight(1f),
+                )
+            }
+            if (canBan) {
+                Button(
+                    text = "Ban (${selectedMemberIds.size})",
+                    onClick = { eventSink(RoomMemberListEvent.BanSelectedMembers) },
+                    destructive = true,
+                    modifier = Modifier.weight(1f),
+                )
+            }
         }
     }
 }
@@ -112,6 +188,8 @@ private fun RoomMemberList(
     selectedSection: SelectedSection,
     showBannedSection: Boolean,
     searchQuery: String,
+    isSelectionMode: Boolean,
+    selectedMemberIds: ImmutableSet<UserId>,
     onSelectedSectionChange: (SelectedSection) -> Unit,
     onSelectUser: (RoomMember) -> Unit,
 ) {
@@ -156,6 +234,8 @@ private fun RoomMemberList(
                     memberItems(
                         roomMembers = roomMembers,
                         selectedSection = selectedSection,
+                        isSelectionMode = isSelectionMode,
+                        selectedMemberIds = selectedMemberIds,
                         onSelectUser = onSelectUser,
                     )
                 }
@@ -168,6 +248,8 @@ private fun RoomMemberList(
 private fun LazyListScope.memberItems(
     roomMembers: RoomMembers,
     selectedSection: SelectedSection,
+    isSelectionMode: Boolean,
+    selectedMemberIds: ImmutableSet<UserId>,
     onSelectUser: (RoomMember) -> Unit,
 ) {
     when (selectedSection) {
@@ -181,6 +263,8 @@ private fun LazyListScope.memberItems(
                 )
                 roomMemberListSectionItems(
                     members = roomMembers.invited,
+                    isSelectionMode = isSelectionMode,
+                    selectedMemberIds = selectedMemberIds,
                     onMemberSelected = { onSelectUser(it) }
                 )
             }
@@ -193,6 +277,8 @@ private fun LazyListScope.memberItems(
                 )
                 roomMemberListSectionItems(
                     members = roomMembers.joined,
+                    isSelectionMode = isSelectionMode,
+                    selectedMemberIds = selectedMemberIds,
                     onMemberSelected = { onSelectUser(it) }
                 )
             }
@@ -208,6 +294,8 @@ private fun LazyListScope.memberItems(
                 )
                 roomMemberListSectionItems(
                     members = roomMembers.banned,
+                    isSelectionMode = isSelectionMode,
+                    selectedMemberIds = selectedMemberIds,
                     onMemberSelected = { onSelectUser(it) }
                 )
             }
@@ -245,6 +333,8 @@ private fun LazyListScope.roomMemberListSectionHeader(
 
 private fun LazyListScope.roomMemberListSectionItems(
     members: ImmutableList<RoomMemberWithIdentityState>?,
+    isSelectionMode: Boolean,
+    selectedMemberIds: ImmutableSet<UserId>,
     onMemberSelected: (RoomMember) -> Unit,
 ) {
     items(
@@ -260,6 +350,8 @@ private fun LazyListScope.roomMemberListSectionItems(
                 )
                 .fillMaxWidth(),
             roomMemberWithIdentity = matrixUser,
+            isSelectionMode = isSelectionMode,
+            isSelected = matrixUser.roomMember.userId in selectedMemberIds,
             onClick = { onMemberSelected(matrixUser.roomMember) }
         )
     }
@@ -284,6 +376,8 @@ private fun LazyListScope.emptySearchItem(searchQuery: String) {
 @Composable
 private fun RoomMemberListItem(
     roomMemberWithIdentity: RoomMemberWithIdentityState,
+    isSelectionMode: Boolean,
+    isSelected: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -304,35 +398,42 @@ private fun RoomMemberListItem(
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
-                when (roomMemberWithIdentity.identityState) {
-                    IdentityState.Verified -> {
-                        Icon(
-                            modifier = Modifier.size(20.dp),
-                            imageVector = CompoundIcons.Verified(),
-                            contentDescription = stringResource(CommonStrings.common_verified),
-                            tint = ElementTheme.colors.iconSuccessPrimary
-                        )
-                    }
-                    IdentityState.VerificationViolation -> {
-                        Icon(
-                            modifier = Modifier.size(20.dp),
-                            imageVector = CompoundIcons.ErrorSolid(),
-                            contentDescription = stringResource(
-                                CommonStrings.crypto_identity_change_profile_pin_violation,
-                                roomMemberWithIdentity.roomMember.getBestName()
-                            ),
-                            tint = ElementTheme.colors.iconCriticalPrimary
-                        )
-                    }
-                    else -> Unit
-                }
-
-                roleText?.let {
-                    Text(
-                        text = it,
-                        style = ElementTheme.typography.fontBodySmRegular,
-                        color = ElementTheme.colors.textSecondary,
+                if (isSelectionMode) {
+                    Checkbox(
+                        checked = isSelected,
+                        onCheckedChange = { onClick() },
                     )
+                } else {
+                    when (roomMemberWithIdentity.identityState) {
+                        IdentityState.Verified -> {
+                            Icon(
+                                modifier = Modifier.size(20.dp),
+                                imageVector = CompoundIcons.Verified(),
+                                contentDescription = stringResource(CommonStrings.common_verified),
+                                tint = ElementTheme.colors.iconSuccessPrimary
+                            )
+                        }
+                        IdentityState.VerificationViolation -> {
+                            Icon(
+                                modifier = Modifier.size(20.dp),
+                                imageVector = CompoundIcons.ErrorSolid(),
+                                contentDescription = stringResource(
+                                    CommonStrings.crypto_identity_change_profile_pin_violation,
+                                    roomMemberWithIdentity.roomMember.getBestName()
+                                ),
+                                tint = ElementTheme.colors.iconCriticalPrimary
+                            )
+                        }
+                        else -> Unit
+                    }
+
+                    roleText?.let {
+                        Text(
+                            text = it,
+                            style = ElementTheme.typography.fontBodySmRegular,
+                            color = ElementTheme.colors.textSecondary,
+                        )
+                    }
                 }
             }
         }
@@ -343,18 +444,51 @@ private fun RoomMemberListItem(
 @Composable
 private fun RoomMemberListTopBar(
     canInvite: Boolean,
+    isSelectionMode: Boolean,
+    selectedCount: Int,
+    canModerate: Boolean,
     onBackClick: () -> Unit,
     onInviteClick: () -> Unit,
+    onToggleSelectionMode: () -> Unit,
 ) {
     TopAppBar(
-        titleStr = stringResource(CommonStrings.common_people),
-        navigationIcon = { BackButton(onClick = onBackClick) },
+        titleStr = if (isSelectionMode) {
+            if (selectedCount > 0) {
+                "$selectedCount selected"
+            } else {
+                "Select members"
+            }
+        } else {
+            stringResource(CommonStrings.common_people)
+        },
+        navigationIcon = {
+            if (isSelectionMode) {
+                IconButton(onClick = onBackClick) {
+                    Icon(
+                        imageVector = CompoundIcons.Close(),
+                        contentDescription = stringResource(CommonStrings.action_cancel),
+                    )
+                }
+            } else {
+                BackButton(onClick = onBackClick)
+            }
+        },
         actions = {
-            if (canInvite) {
-                TextButton(
-                    text = stringResource(CommonStrings.action_invite),
-                    onClick = onInviteClick,
-                )
+            if (!isSelectionMode) {
+                if (canModerate) {
+                    IconButton(onClick = onToggleSelectionMode) {
+                        Icon(
+                            imageVector = CompoundIcons.ListBulleted(),
+                            contentDescription = "Select members",
+                        )
+                    }
+                }
+                if (canInvite) {
+                    TextButton(
+                        text = stringResource(CommonStrings.action_invite),
+                        onClick = onInviteClick,
+                    )
+                }
             }
         }
     )

@@ -121,6 +121,12 @@ interface JoinedRoom : BaseRoom {
 
     suspend fun updateUsersRoles(changes: List<UserRoleChange>): Result<Unit>
 
+    /**
+     * Set the power level for a specific user. Unlike [updateUsersRoles] which requires
+     * a [RoomMember.Role], this allows setting arbitrary power level values (e.g. -1 for muting).
+     */
+    suspend fun setUserPowerLevel(userId: UserId, powerLevel: Long): Result<Unit>
+
     suspend fun updatePowerLevels(roomPowerLevelsValues: RoomPowerLevelsValues): Result<Unit>
 
     suspend fun resetPowerLevels(): Result<Unit>

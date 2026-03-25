@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents.ShowActionsForUser
@@ -39,10 +40,13 @@ import io.element.android.libraries.matrix.ui.room.PowerLevelRoomMemberComparato
 import io.element.android.libraries.matrix.ui.room.roomMemberIdentityStateChange
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
+import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @Inject
@@ -59,7 +63,13 @@ class RoomMemberListPresenter(
         val searchQuery = rememberTextFieldState()
         val membersState by room.membersStateFlow.collectAsState()
         val canInvite by room.permissionsAsState(false) { perms -> perms.canOwnUserInvite() }
+        val canKick by room.permissionsAsState(false) { perms -> perms.canOwnUserKick() }
+        val canBan by room.permissionsAsState(false) { perms -> perms.canOwnUserBan() }
         val roomModerationState = roomMembersModerationPresenter.present()
+
+        var isSelectionMode by remember { mutableStateOf(false) }
+        var selectedMemberIds by remember { mutableStateOf(persistentSetOf<UserId>()) }
+        val coroutineScope = rememberCoroutineScope()
 
         val roomMemberIdentityStates by produceState(persistentMapOf()) {
             room.roomMemberIdentityStateChange(waitForEncryption = true)
@@ -130,6 +140,39 @@ class RoomMemberListPresenter(
                 is RoomMemberListEvent.RoomMemberSelected ->
                     roomModerationState.eventSink(ShowActionsForUser(event.roomMember.toMatrixUser()))
                 is RoomMemberListEvent.ChangeSelectedSection -> selectedSection = event.section
+                is RoomMemberListEvent.ToggleSelectionMode -> {
+                    isSelectionMode = !isSelectionMode
+                    if (!isSelectionMode) {
+                        selectedMemberIds = persistentSetOf()
+                    }
+                }
+                is RoomMemberListEvent.ToggleMemberSelection -> {
+                    selectedMemberIds = if (event.userId in selectedMemberIds) {
+                        selectedMemberIds.remove(event.userId)
+                    } else {
+                        selectedMemberIds.add(event.userId)
+                    }.toPersistentSet()
+                }
+                is RoomMemberListEvent.KickSelectedMembers -> {
+                    val toKick = selectedMemberIds.toList()
+                    coroutineScope.launch {
+                        toKick.forEach { userId -> room.kickUser(userId, null) }
+                    }
+                    selectedMemberIds = persistentSetOf()
+                    isSelectionMode = false
+                }
+                is RoomMemberListEvent.BanSelectedMembers -> {
+                    val toBan = selectedMemberIds.toList()
+                    coroutineScope.launch {
+                        toBan.forEach { userId -> room.banUser(userId, null) }
+                    }
+                    selectedMemberIds = persistentSetOf()
+                    isSelectionMode = false
+                }
+                is RoomMemberListEvent.ClearSelection -> {
+                    selectedMemberIds = persistentSetOf()
+                    isSelectionMode = false
+                }
             }
         }
 
@@ -140,6 +183,10 @@ class RoomMemberListPresenter(
             canInvite = canInvite,
             moderationState = roomModerationState,
             selectedSection = selectedSection,
+            isSelectionMode = isSelectionMode,
+            selectedMemberIds = selectedMemberIds,
+            canKick = canKick,
+            canBan = canBan,
             eventSink = ::handleEvent,
         )
         if (!state.showBannedSection && selectedSection == SelectedSection.BANNED) {

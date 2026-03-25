@@ -12,9 +12,11 @@ import androidx.compose.foundation.text.input.TextFieldState
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.bool.orFalse
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.room.RoomMember
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.toImmutableList
 
 data class RoomMemberListState(
@@ -25,6 +27,10 @@ data class RoomMemberListState(
     val canInvite: Boolean,
     val selectedSection: SelectedSection,
     val moderationState: RoomMemberModerationState,
+    val isSelectionMode: Boolean,
+    val selectedMemberIds: ImmutableSet<UserId>,
+    val canKick: Boolean,
+    val canBan: Boolean,
     val eventSink: (RoomMemberListEvent) -> Unit,
 ) {
     val showBannedSection: Boolean = moderationState.permissions.canBan && roomMembers.dataOrNull()?.banned?.isNotEmpty() == true

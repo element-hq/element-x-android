@@ -23,6 +23,7 @@ data class InternalRoomMemberModerationState(
     val kickUserAsyncAction: AsyncAction<Unit>,
     val banUserAsyncAction: AsyncAction<Unit>,
     val unbanUserAsyncAction: AsyncAction<Unit>,
+    val muteUserAsyncAction: AsyncAction<Unit>,
     override val eventSink: (RoomMemberModerationEvents) -> Unit,
 ) : RoomMemberModerationState {
     val canDisplayActions = actions.isNotEmpty()

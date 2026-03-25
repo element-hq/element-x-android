@@ -72,6 +72,8 @@ class RoomMemberModerationPresenter(
             remember { mutableStateOf(AsyncAction.Uninitialized as AsyncAction<Unit>) }
         val unbanUserAsyncAction =
             remember { mutableStateOf(AsyncAction.Uninitialized as AsyncAction<Unit>) }
+        val muteUserAsyncAction =
+            remember { mutableStateOf(AsyncAction.Uninitialized as AsyncAction<Unit>) }
         var selectedUser by remember {
             mutableStateOf<MatrixUser?>(null)
         }
@@ -108,6 +110,12 @@ class RoomMemberModerationPresenter(
                             selectedUser = event.targetUser
                             unbanUserAsyncAction.value = AsyncAction.ConfirmingNoParams
                         }
+                        is ModerationAction.MuteUser -> {
+                            coroutineScope.muteUser(event.targetUser.userId, muteUserAsyncAction)
+                        }
+                        is ModerationAction.UnmuteUser -> {
+                            coroutineScope.unmuteUser(event.targetUser.userId, muteUserAsyncAction)
+                        }
                     }
                 }
                 is InternalRoomMemberModerationEvents.DoKickUser -> {
@@ -134,6 +142,7 @@ class RoomMemberModerationPresenter(
                     kickUserAsyncAction.value = AsyncAction.Uninitialized
                     banUserAsyncAction.value = AsyncAction.Uninitialized
                     unbanUserAsyncAction.value = AsyncAction.Uninitialized
+                    muteUserAsyncAction.value = AsyncAction.Uninitialized
                 }
             }
         }
@@ -145,6 +154,7 @@ class RoomMemberModerationPresenter(
             kickUserAsyncAction = kickUserAsyncAction.value,
             banUserAsyncAction = banUserAsyncAction.value,
             unbanUserAsyncAction = unbanUserAsyncAction.value,
+            muteUserAsyncAction = muteUserAsyncAction.value,
             eventSink = ::handleEvent,
         )
     }
@@ -170,6 +180,14 @@ class RoomMemberModerationPresenter(
                 RoomMembershipState.INVITE,
                 RoomMembershipState.JOIN,
                 RoomMembershipState.KNOCK -> {
+                    if (permissions.canMute && canModerateThisUser) {
+                        val isMuted = targetMemberPowerLevel < 0
+                        if (isMuted) {
+                            add(ModerationActionState(action = ModerationAction.UnmuteUser, isEnabled = true))
+                        } else {
+                            add(ModerationActionState(action = ModerationAction.MuteUser, isEnabled = true))
+                        }
+                    }
                     if (permissions.canKick) {
                         add(ModerationActionState(action = ModerationAction.KickUser, isEnabled = canModerateThisUser))
                     }
@@ -222,6 +240,29 @@ class RoomMemberModerationPresenter(
         )
     }
 
+    private fun CoroutineScope.muteUser(
+        userId: UserId,
+        muteUserAction: MutableState<AsyncAction<Unit>>,
+    ) {
+        launch(dispatchers.io) {
+            muteUserAction.runUpdatingState {
+                analyticsService.capture(RoomModeration(RoomModeration.Action.KickMember))
+                room.setUserPowerLevel(userId = userId, powerLevel = MUTED_POWER_LEVEL)
+            }
+        }
+    }
+
+    private fun CoroutineScope.unmuteUser(
+        userId: UserId,
+        muteUserAction: MutableState<AsyncAction<Unit>>,
+    ) {
+        launch(dispatchers.io) {
+            muteUserAction.runUpdatingState {
+                room.setUserPowerLevel(userId = userId, powerLevel = RoomMember.Role.User.powerLevel)
+            }
+        }
+    }
+
     private fun <T> CoroutineScope.runActionAndWaitForMembershipChange(
         action: MutableState<AsyncAction<T>>,
         block: suspend () -> Result<T>
@@ -243,5 +284,10 @@ class RoomMemberModerationPresenter(
                 result
             }
         }
+    }
+
+    companion object {
+        /** Power level used for muted users, below the default events_default of 0. */
+        const val MUTED_POWER_LEVEL = -1L
     }
 }

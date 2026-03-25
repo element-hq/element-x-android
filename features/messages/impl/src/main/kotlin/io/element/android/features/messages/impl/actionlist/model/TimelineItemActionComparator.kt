@@ -31,6 +31,8 @@ class TimelineItemActionComparator : Comparator<TimelineItemAction> {
         TimelineItemAction.RemoveCaption,
         TimelineItemAction.ViewSource,
         TimelineItemAction.ReportContent,
+        TimelineItemAction.KickSender,
+        TimelineItemAction.BanSender,
         TimelineItemAction.Redact,
     )
 

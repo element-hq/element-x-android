@@ -21,6 +21,8 @@ data class UserEventPermissions(
     val canSendMessage: Boolean,
     val canSendReaction: Boolean,
     val canPinUnpin: Boolean,
+    val canKick: Boolean,
+    val canBan: Boolean,
 ) {
     companion object {
         val DEFAULT = UserEventPermissions(
@@ -28,7 +30,9 @@ data class UserEventPermissions(
             canRedactOther = false,
             canSendMessage = true,
             canSendReaction = true,
-            canPinUnpin = false
+            canPinUnpin = false,
+            canKick = false,
+            canBan = false,
         )
     }
 }
@@ -39,6 +43,8 @@ fun RoomPermissions.userEventPermissions(): UserEventPermissions {
         canRedactOther = canOwnUserRedactOther(),
         canSendMessage = canOwnUserSendMessage(MessageEventType.RoomMessage),
         canSendReaction = canOwnUserSendMessage(MessageEventType.Reaction),
-        canPinUnpin = canOwnUserPinUnpin()
+        canPinUnpin = canOwnUserPinUnpin(),
+        canKick = canOwnUserKick(),
+        canBan = canOwnUserBan(),
     )
 }

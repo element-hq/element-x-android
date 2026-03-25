@@ -19,7 +19,9 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 
 internal class RoomMemberListStateProvider : PreviewParameterProvider<RoomMemberListState> {
     override val values: Sequence<RoomMemberListState>
@@ -85,6 +87,10 @@ internal fun aRoomMemberListState(
     selectedSection: SelectedSection = SelectedSection.MEMBERS,
     searchQuery: String = "",
     canInvite: Boolean = false,
+    isSelectionMode: Boolean = false,
+    selectedMemberIds: ImmutableSet<UserId> = persistentSetOf(),
+    canKick: Boolean = false,
+    canBan: Boolean = false,
     eventSink: (RoomMemberListEvent) -> Unit = {},
 ) = RoomMemberListState(
     roomMembers = roomMembers,
@@ -93,6 +99,10 @@ internal fun aRoomMemberListState(
     canInvite = canInvite,
     moderationState = moderationState,
     selectedSection = selectedSection,
+    isSelectionMode = isSelectionMode,
+    selectedMemberIds = selectedMemberIds,
+    canKick = canKick,
+    canBan = canBan,
     eventSink = eventSink
 )
 
@@ -104,6 +114,7 @@ fun aRoomMemberModerationState(
         override val permissions: RoomMemberModerationPermissions = RoomMemberModerationPermissions(
             canBan = canBan,
             canKick = canKick,
+            canMute = false,
         )
         override val eventSink: (RoomMemberModerationEvents) -> Unit = {}
     }
