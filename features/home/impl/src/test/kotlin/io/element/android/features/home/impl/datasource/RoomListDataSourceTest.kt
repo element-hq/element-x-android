@@ -18,6 +18,7 @@ import io.element.android.libraries.matrix.test.notificationsettings.FakeNotific
 import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.roomlist.FakeDynamicRoomList
 import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
+import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.testCoroutineDispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -113,5 +114,6 @@ class RoomListDataSourceTest {
         sessionCoroutineScope = backgroundScope,
         dateTimeObserver = dateTimeObserver,
         analyticsService = FakeAnalyticsService(),
+        sessionPreferencesStore = InMemorySessionPreferencesStore(),
     )
 }
