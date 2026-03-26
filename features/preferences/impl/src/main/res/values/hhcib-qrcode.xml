@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2026 Element Creations Ltd.
+  ~
+  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+  ~ Please see LICENSE files in the repository root for full details.
+  -->
+
+<!-- Temporary resource file for HHCIB QR code invitation -->
+
+<resources>
+    <string name="screen_qrcode_title">Your profile</string>
+    <string name="screen_qr_code_description">Share your QR code to add a contact or invite someone to the app. Once scanned, your identities will be verified.</string>
+    <string name="screen_qrcode_scan_qr_code">Scan QR code instead</string>
+</resources>

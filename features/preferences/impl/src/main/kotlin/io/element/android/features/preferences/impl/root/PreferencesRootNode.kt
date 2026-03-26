@@ -50,6 +50,7 @@ class PreferencesRootNode(
         fun navigateToBlockedUsers()
         fun startSignOutFlow()
         fun startAccountDeactivationFlow()
+        fun navigateToQrCodeInvite()
     }
 
     private val callback: Callback = callback()
@@ -98,7 +99,8 @@ class PreferencesRootNode(
                     callback.startSignOutFlow()
                 }
             },
-            onDeactivateClick = callback::startAccountDeactivationFlow
+            onDeactivateClick = callback::startAccountDeactivationFlow,
+            onShowQrCodeInviteClick = callback::navigateToQrCodeInvite
         )
 
         directLogoutView.Render(state = state.directLogoutState)

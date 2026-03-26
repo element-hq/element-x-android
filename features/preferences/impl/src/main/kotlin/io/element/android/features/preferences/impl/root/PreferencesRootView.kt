@@ -34,6 +34,8 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.ListItemStyle
@@ -67,6 +69,7 @@ fun PreferencesRootView(
     onOpenBlockedUsers: () -> Unit,
     onSignOutClick: () -> Unit,
     onDeactivateClick: () -> Unit,
+    onShowQrCodeInviteClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
@@ -76,7 +79,15 @@ fun PreferencesRootView(
         modifier = modifier,
         onBackClick = onBackClick,
         title = stringResource(id = CommonStrings.common_settings),
-        snackbarHost = { SnackbarHost(snackbarHostState) }
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+        topAppBarActions = {
+            IconButton(onClick = onShowQrCodeInviteClick) {
+                Icon(
+                    imageVector = CompoundIcons.QrCode(),
+                    contentDescription = "TODO",
+                )
+            }
+        }
     ) {
         UserPreferences(
             modifier = Modifier.clickable {
@@ -370,6 +381,7 @@ private fun ContentToPreview(matrixUser: MatrixUser) {
         onOpenBlockedUsers = {},
         onSignOutClick = {},
         onDeactivateClick = {},
+        onShowQrCodeInviteClick = {},
     )
 }
 

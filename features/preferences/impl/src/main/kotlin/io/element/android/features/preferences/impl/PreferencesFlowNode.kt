@@ -33,6 +33,7 @@ import io.element.android.features.preferences.impl.developer.DeveloperSettingsN
 import io.element.android.features.preferences.impl.labs.LabsNode
 import io.element.android.features.preferences.impl.notifications.NotificationSettingsNode
 import io.element.android.features.preferences.impl.notifications.edit.EditDefaultNotificationSettingNode
+import io.element.android.features.preferences.impl.qrcode.QrCodeInviteNode
 import io.element.android.features.preferences.impl.root.PreferencesRootNode
 import io.element.android.features.preferences.impl.user.editprofile.EditUserProfileNode
 import io.element.android.libraries.architecture.BackstackView
@@ -115,6 +116,9 @@ class PreferencesFlowNode(
 
         @Parcelize
         data object OssLicenses : NavTarget
+
+        @Parcelize
+        data object QrCode : NavTarget
     }
 
     private val callback: PreferencesEntryPoint.Callback = callback()
@@ -181,6 +185,10 @@ class PreferencesFlowNode(
 
                     override fun startAccountDeactivationFlow() {
                         backstack.push(NavTarget.AccountDeactivation)
+                    }
+
+                    override fun navigateToQrCodeInvite() {
+                        backstack.push(NavTarget.QrCode)
                     }
                 }
                 createNode<PreferencesRootNode>(buildContext, plugins = listOf(callback))
@@ -319,6 +327,9 @@ class PreferencesFlowNode(
             }
             NavTarget.AccountDeactivation -> {
                 accountDeactivationEntryPoint.createNode(this, buildContext)
+            }
+            NavTarget.QrCode -> {
+                createNode<QrCodeInviteNode>(buildContext)
             }
         }
     }

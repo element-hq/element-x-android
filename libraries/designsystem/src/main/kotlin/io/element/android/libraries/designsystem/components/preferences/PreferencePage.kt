@@ -10,6 +10,7 @@ package io.element.android.libraries.designsystem.components.preferences
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,6 +32,8 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.aliasScreenTitle
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -39,6 +42,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 fun PreferencePage(
     title: String,
     onBackClick: () -> Unit,
+    topAppBarActions: @Composable RowScope.() -> Unit = {},
     modifier: Modifier = Modifier,
     snackbarHost: @Composable () -> Unit = {},
     content: @Composable ColumnScope.() -> Unit,
@@ -53,6 +57,7 @@ fun PreferencePage(
             PreferenceTopAppBar(
                 title = title,
                 onBackClick = onBackClick,
+                actions = topAppBarActions
             )
         },
         snackbarHost = snackbarHost,
@@ -73,6 +78,7 @@ fun PreferencePage(
 @Composable
 private fun PreferenceTopAppBar(
     title: String,
+    actions: @Composable RowScope.() -> Unit = {},
     onBackClick: () -> Unit,
 ) {
     TopAppBar(
@@ -89,7 +95,8 @@ private fun PreferenceTopAppBar(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-        }
+        },
+        actions = actions
     )
 }
 
@@ -99,6 +106,14 @@ internal fun PreferencePagePreview() = ElementPreview {
     PreferencePage(
         title = "Preference screen",
         onBackClick = {},
+        topAppBarActions = {
+            IconButton(onClick = {}) {
+                Icon(
+                    imageVector = CompoundIcons.QrCode(),
+                    contentDescription = "icon"
+                )
+            }
+        }
     ) {
         PreferenceCategory(
             title = "Category title",
