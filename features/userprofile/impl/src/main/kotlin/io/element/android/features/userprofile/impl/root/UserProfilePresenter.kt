@@ -47,13 +47,14 @@ import kotlinx.coroutines.launch
 @AssistedInject
 class UserProfilePresenter(
     @Assisted private val userId: UserId,
+    @Assisted private val openDM: Boolean,
     private val client: MatrixClient,
     private val startDMAction: StartDMAction,
     private val sessionEnterpriseService: SessionEnterpriseService,
 ) : Presenter<UserProfileState> {
     @AssistedFactory
     interface Factory {
-        fun create(userId: UserId): UserProfilePresenter
+        fun create(userId: UserId, openDM: Boolean): UserProfilePresenter
     }
 
     @Composable
@@ -92,13 +93,7 @@ class UserProfilePresenter(
         val isBlocked: MutableState<AsyncData<Boolean>> = remember { mutableStateOf(AsyncData.Uninitialized) }
         val dmRoomId by getDmRoomId()
         val canCall by getCanCall(dmRoomId)
-        LaunchedEffect(Unit) {
-            client.ignoredUsersFlow
-                .map { ignoredUsers -> userId in ignoredUsers }
-                .distinctUntilChanged()
-                .onEach { isBlocked.value = AsyncData.Success(it) }
-                .launchIn(this)
-        }
+
         val userProfile by produceState<MatrixUser?>(null) { value = client.getProfile(userId).getOrNull() }
 
         fun handleEvent(event: UserProfileEvents) {
@@ -138,6 +133,22 @@ class UserProfilePresenter(
                 // Do nothing for other event as they are handled by the RoomMemberDetailsPresenter if needed
                 UserProfileEvents.WithdrawVerification,
                 is UserProfileEvents.CopyToClipboard -> Unit
+            }
+        }
+
+        LaunchedEffect(Unit) {
+            client.ignoredUsersFlow
+                .map { ignoredUsers -> userId in ignoredUsers }
+                .distinctUntilChanged()
+                .onEach { isBlocked.value = AsyncData.Success(it) }
+                .launchIn(this)
+
+            // If we were asked to start a DM, start it.
+            // TODO: only do this the first time! - if the user
+            // navigates back to this screen, let them look
+            // at the profile.
+            if (openDM) {
+                handleEvent(UserProfileEvents.StartDM)
             }
         }
 

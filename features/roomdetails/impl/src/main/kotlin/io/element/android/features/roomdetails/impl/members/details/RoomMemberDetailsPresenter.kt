@@ -54,7 +54,7 @@ class RoomMemberDetailsPresenter(
         fun create(roomMemberId: UserId): RoomMemberDetailsPresenter
     }
 
-    private val userProfilePresenter = userProfilePresenterFactory.create(roomMemberId)
+    private val userProfilePresenter = userProfilePresenterFactory.create(roomMemberId, openDM = false)
 
     @Composable
     override fun present(): UserProfileState {

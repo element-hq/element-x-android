@@ -39,12 +39,13 @@ class UserProfileNode(
     presenterFactory: UserProfilePresenter.Factory,
 ) : Node(buildContext, plugins = plugins) {
     data class UserProfileInputs(
-        val userId: UserId
+        val userId: UserId,
+        val openDM: Boolean,
     ) : NodeInputs
 
     private val inputs = inputs<UserProfileInputs>()
     private val callback = inputs<UserProfileNodeHelper.Callback>()
-    private val presenter = presenterFactory.create(userId = inputs.userId)
+    private val presenter = presenterFactory.create(userId = inputs.userId, openDM = inputs.openDM)
     private val userProfileNodeHelper = UserProfileNodeHelper(inputs.userId)
 
     init {

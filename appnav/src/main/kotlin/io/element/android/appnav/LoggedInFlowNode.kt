@@ -11,6 +11,7 @@ package io.element.android.appnav
 import android.os.Parcelable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -277,6 +278,11 @@ class LoggedInFlowNode(
         ) : NavTarget
 
         @Parcelize
+        data class UserChat(
+            val userId: UserId,
+        ) : NavTarget
+
+        @Parcelize
         data class UserProfile(
             val userId: UserId,
         ) : NavTarget
@@ -432,6 +438,21 @@ class LoggedInFlowNode(
                 )
                 createNode<RoomFlowNode>(buildContext, plugins = listOf(inputs, joinedRoomCallback))
             }
+            is NavTarget.UserChat -> {
+                val callback = object : UserProfileEntryPoint.Callback {
+                    override fun navigateToRoom(roomId: RoomId) {
+                        lifecycleScope.launch {
+                            attachRoom(roomIdOrAlias = roomId.toRoomIdOrAlias(), clearBackstack = false)
+                        }
+                    }
+                }
+                userProfileEntryPoint.createNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    params = UserProfileEntryPoint.Params(userId = navTarget.userId, openDM = true),
+                    callback = callback,
+                )
+            }
             is NavTarget.UserProfile -> {
                 val callback = object : UserProfileEntryPoint.Callback {
                     override fun navigateToRoom(roomId: RoomId) {
@@ -443,7 +464,7 @@ class LoggedInFlowNode(
                 userProfileEntryPoint.createNode(
                     parentNode = this,
                     buildContext = buildContext,
-                    params = UserProfileEntryPoint.Params(userId = navTarget.userId),
+                    params = UserProfileEntryPoint.Params(userId = navTarget.userId, openDM = false),
                     callback = callback,
                 )
             }
@@ -643,6 +664,19 @@ class LoggedInFlowNode(
         attachChild<Node> {
             backstack.push(
                 NavTarget.UserProfile(
+                    userId = userId,
+                )
+            )
+        }
+    }
+
+    suspend fun attachUserChat(userId: UserId) {
+        waitForNavTargetAttached { navTarget ->
+            navTarget is NavTarget.Home
+        }
+        attachChild<Node> {
+            backstack.push(
+                NavTarget.UserChat(
                     userId = userId,
                 )
             )
