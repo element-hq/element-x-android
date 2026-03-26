@@ -9,13 +9,14 @@ package io.element.android.x.widget
 
 import android.content.Context
 import androidx.glance.appwidget.updateAll
+import io.element.android.appnav.widget.WidgetRoomData
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
 object RecentChatsWidgetUpdater {
-    suspend fun updateWidget(context: Context, roomData: List<RoomWidgetInfo>) {
-        val chats = roomData
+    suspend fun updateWidget(context: Context, rooms: List<WidgetRoomData>) {
+        val chats = rooms
             .sortedByDescending { it.unreadCount }
             .take(10)
             .map { room ->
@@ -48,15 +49,3 @@ object RecentChatsWidgetUpdater {
         }
     }
 }
-
-data class RoomWidgetInfo(
-    val sessionId: String,
-    val roomId: String,
-    val name: String,
-    val lastMessage: String?,
-    val lastActivityTimestamp: Long,
-    val unreadCount: Int,
-    val senderName: String = "",
-    val avatarUrl: String? = null,
-    val isFavorite: Boolean = false,
-)

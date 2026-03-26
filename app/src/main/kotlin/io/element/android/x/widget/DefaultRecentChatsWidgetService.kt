@@ -29,56 +29,33 @@ class DefaultRecentChatsWidgetService(
         Timber.d("Widget: updateRecentChats called with ${rooms.size} rooms")
         val avatarDir = File(context.cacheDir, "widget_avatars").also { it.mkdirs() }
 
-        val widgetInfoList = rooms.map { room ->
+        val resolvedRooms = rooms.map { room ->
             val localAvatarPath = room.avatarUrl?.let { url ->
-                Timber.d("Widget: Downloading avatar for ${room.name}, url=$url")
                 try {
-                    val path = downloadAvatar(url, room.roomId, avatarDir)
-                    Timber.d("Widget: Avatar saved to $path")
-                    path
+                    downloadAvatar(url, room.roomId, avatarDir)
                 } catch (e: Exception) {
                     Timber.w(e, "Widget: Failed to download avatar for ${room.name}")
                     null
                 }
             }
-
-            RoomWidgetInfo(
-                sessionId = room.sessionId,
-                roomId = room.roomId,
-                name = room.name,
-                lastMessage = room.lastMessage,
-                lastActivityTimestamp = room.lastActivityTimestamp,
-                unreadCount = room.unreadCount,
-                senderName = room.senderName,
-                avatarUrl = localAvatarPath,
-                isFavorite = room.isFavorite,
-            )
+            room.copy(avatarUrl = localAvatarPath)
         }
-        RecentChatsWidgetUpdater.updateWidget(context, widgetInfoList)
+        RecentChatsWidgetUpdater.updateWidget(context, resolvedRooms)
     }
 
-    private suspend fun downloadAvatar(
-        mxcUrl: String,
-        roomId: String,
-        avatarDir: File,
-    ): String? {
+    private suspend fun downloadAvatar(mxcUrl: String, roomId: String, avatarDir: File): String? {
         val fileName = "${roomId.hashCode().toUInt()}.png"
         val file = File(avatarDir, fileName)
-        // Use cached file if it exists and is recent (less than 1 hour old)
         if (file.exists() && System.currentTimeMillis() - file.lastModified() < 3_600_000) {
             return file.absolutePath
         }
-        val source = MediaSource(mxcUrl)
-        val result = matrixClient.matrixMediaLoader.loadMediaThumbnail(
-            source = source,
+        val bytes = matrixClient.matrixMediaLoader.loadMediaThumbnail(
+            source = MediaSource(mxcUrl),
             width = 96L,
             height = 96L,
-        )
-        val bytes = result.getOrNull() ?: return null
+        ).getOrNull() ?: return null
         val bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.size) ?: return null
-        file.outputStream().use { out ->
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
-        }
+        file.outputStream().use { bitmap.compress(Bitmap.CompressFormat.PNG, 100, it) }
         return file.absolutePath
     }
 }
