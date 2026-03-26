@@ -15,32 +15,21 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.Crossfade
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.calculateEndPadding
 import androidx.compose.foundation.layout.calculateStartPadding
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.FabPosition
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.ModalDrawerSheet
-import androidx.compose.material3.ModalNavigationDrawer
-import androidx.compose.material3.NavigationDrawerItem
-import androidx.compose.material3.NavigationDrawerItemDefaults
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
@@ -58,11 +47,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
-import io.element.android.libraries.designsystem.components.avatar.Avatar
-import io.element.android.libraries.designsystem.components.avatar.AvatarSize
-import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.matrix.ui.model.getAvatarData
 import dev.chrisbanes.haze.hazeEffect
 import dev.chrisbanes.haze.hazeSource
 import dev.chrisbanes.haze.materials.ExperimentalHazeMaterialsApi
@@ -200,65 +185,6 @@ private fun HomeScaffold(
     val hazeState = rememberHazeState()
     val roomsLazyListState = rememberLazyListState()
     val spacesLazyListState = rememberLazyListState()
-    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-
-    // Get current user for drawer content
-    val currentUser = state.currentUserAndNeighbors.let { users ->
-        if (users.size >= 2) users[1] else users.firstOrNull()
-    }
-
-    ModalNavigationDrawer(
-        drawerState = drawerState,
-        drawerContent = {
-            ModalDrawerSheet {
-                Spacer(Modifier.height(16.dp))
-                // Header with avatar and name
-                if (currentUser != null) {
-                    val avatarData by remember(currentUser) {
-                        derivedStateOf {
-                            currentUser.getAvatarData(size = AvatarSize.EditRoomDetails)
-                        }
-                    }
-                    Row(
-                        modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
-                        horizontalArrangement = Arrangement.spacedBy(12.dp),
-                    ) {
-                        Avatar(
-                            avatarData = avatarData,
-                            avatarType = AvatarType.User,
-                            contentDescription = currentUser.displayName,
-                        )
-                        Column {
-                            Text(
-                                text = currentUser.displayName ?: currentUser.userId.value,
-                                style = ElementTheme.typography.fontHeadingMdBold,
-                            )
-                            Text(
-                                text = currentUser.userId.value,
-                                style = ElementTheme.typography.fontBodySmRegular,
-                                color = ElementTheme.colors.textSecondary,
-                            )
-                        }
-                    }
-                }
-                Spacer(Modifier.height(8.dp))
-                HorizontalDivider()
-                Spacer(Modifier.height(8.dp))
-                val coroutineScopeDrawer = rememberCoroutineScope()
-                NavigationDrawerItem(
-                    icon = { Icon(CompoundIcons.Settings(), contentDescription = stringResource(CommonStrings.common_settings)) },
-                    label = { Text(stringResource(CommonStrings.common_settings)) },
-                    selected = false,
-                    onClick = {
-                        coroutineScopeDrawer.launch { drawerState.close() }
-                        onOpenSettings()
-                    },
-                    modifier = Modifier.padding(NavigationDrawerItemDefaults.ItemPadding),
-                )
-            }
-        },
-    ) {
     Scaffold(
         modifier = modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -400,7 +326,6 @@ private fun HomeScaffold(
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
     )
-    } // ModalNavigationDrawer
 }
 
 @Composable

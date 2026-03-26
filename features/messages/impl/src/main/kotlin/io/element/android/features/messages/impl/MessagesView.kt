@@ -321,43 +321,20 @@ fun MessagesView(
                                     expanded = showOverflow,
                                     onDismissRequest = { showOverflow = false },
                                 ) {
-                                    if (state.isMuted) {
-                                        val unmuteLabel = stringResource(CommonStrings.common_unmute)
-                                        DropdownMenuItem(
-                                            text = { Text(unmuteLabel) },
-                                            leadingIcon = { Icon(CompoundIcons.NotificationsSolid(), contentDescription = unmuteLabel) },
-                                            onClick = {
-                                                showOverflow = false
-                                                state.eventSink(MessagesEvent.ToggleMute)
-                                            },
-                                        )
-                                    } else {
-                                        val muteLabel = stringResource(CommonStrings.common_mute)
-                                        DropdownMenuItem(
-                                            text = { Text(muteLabel) },
-                                            leadingIcon = { Icon(CompoundIcons.NotificationsOff(), contentDescription = muteLabel) },
-                                            onClick = {
-                                                showOverflow = false
-                                                state.eventSink(MessagesEvent.ToggleMute)
-                                            },
-                                        )
-                                        DropdownMenuItem(
-                                            text = { Text("Pause 1 hour") },
-                                            leadingIcon = { Icon(CompoundIcons.NotificationsOff(), contentDescription = null) },
-                                            onClick = {
-                                                showOverflow = false
-                                                state.eventSink(MessagesEvent.ToggleMute)
-                                            },
-                                        )
-                                        DropdownMenuItem(
-                                            text = { Text("Pause 8 hours") },
-                                            leadingIcon = { Icon(CompoundIcons.NotificationsOff(), contentDescription = null) },
-                                            onClick = {
-                                                showOverflow = false
-                                                state.eventSink(MessagesEvent.ToggleMute)
-                                            },
-                                        )
-                                    }
+                                    val muteLabel = stringResource(if (state.isMuted) CommonStrings.common_unmute else CommonStrings.common_mute)
+                                    DropdownMenuItem(
+                                        text = { Text(muteLabel) },
+                                        leadingIcon = {
+                                            Icon(
+                                                if (state.isMuted) CompoundIcons.NotificationsSolid() else CompoundIcons.NotificationsOff(),
+                                                contentDescription = muteLabel,
+                                            )
+                                        },
+                                        onClick = {
+                                            showOverflow = false
+                                            state.eventSink(MessagesEvent.ToggleMute)
+                                        },
+                                    )
                                     val favLabel = stringResource(if (state.isFavorite) CommonStrings.common_unfavourite else CommonStrings.common_favourite)
                                     DropdownMenuItem(
                                         text = { Text(favLabel) },

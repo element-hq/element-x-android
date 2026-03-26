@@ -562,13 +562,6 @@ class MessageComposerPresenter(
             is SlashCommand.Unban -> {
                 room.unbanUser(UserId(command.userId))
             }
-            is SlashCommand.Join -> {
-                // Join room by alias - would need the matrix client, not just the room.
-                // For now, send as plain text.
-                timelineController.invokeOnCurrentTimeline {
-                    sendMessage(body = command.roomAlias, htmlBody = null, intentionalMentions = emptyList())
-                }
-            }
             is SlashCommand.Part -> {
                 room.leave()
             }

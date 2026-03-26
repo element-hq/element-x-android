@@ -102,6 +102,7 @@ private fun ThreadsListEmpty(
         contentAlignment = Alignment.Center,
     ) {
         IconTitleSubtitleMolecule(
+            // TODO: Extract to string resource once one is added to CommonStrings
             title = "No threads yet",
             subTitle = null,
             iconStyle = BigIcon.Style.Default(CompoundIcons.Threads()),

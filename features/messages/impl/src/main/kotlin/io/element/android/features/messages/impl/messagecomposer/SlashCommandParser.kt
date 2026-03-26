@@ -14,7 +14,6 @@ sealed interface SlashCommand {
     data class Kick(val userId: String, val reason: String?) : SlashCommand
     data class Ban(val userId: String, val reason: String?) : SlashCommand
     data class Unban(val userId: String) : SlashCommand
-    data class Join(val roomAlias: String) : SlashCommand
     data class Part(val reason: String?) : SlashCommand
     data class Plain(val message: String) : SlashCommand
     data class Shrug(val message: String?) : SlashCommand
@@ -36,7 +35,6 @@ val AVAILABLE_COMMANDS = listOf(
     SlashCommandInfo("/kick", "Kick a user", "/kick <@user:server> [reason]"),
     SlashCommandInfo("/ban", "Ban a user", "/ban <@user:server> [reason]"),
     SlashCommandInfo("/unban", "Unban a user", "/unban <@user:server>"),
-    SlashCommandInfo("/join", "Join a room", "/join <#room:server>"),
     SlashCommandInfo("/part", "Leave this room", "/part [reason]"),
     SlashCommandInfo("/plain", "Send without formatting", "/plain <message>"),
     SlashCommandInfo("/shrug", "Send \u00AF\\_(\u30C4)_/\u00AF", "/shrug [message]"),
@@ -58,7 +56,6 @@ object SlashCommandParser {
             "/kick" -> args?.let { parseUserAndReason(it) }?.let { (u, r) -> SlashCommand.Kick(u, r) }
             "/ban" -> args?.let { parseUserAndReason(it) }?.let { (u, r) -> SlashCommand.Ban(u, r) }
             "/unban" -> args?.let { SlashCommand.Unban(it.trim()) }
-            "/join" -> args?.let { SlashCommand.Join(it.trim()) }
             "/part", "/leave" -> SlashCommand.Part(args)
             "/plain" -> args?.let { SlashCommand.Plain(it) }
             "/shrug" -> SlashCommand.Shrug(args)

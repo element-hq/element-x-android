@@ -51,6 +51,7 @@ import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
 import io.element.android.x.MainActivity
 import java.io.File
+import timber.log.Timber
 
 private val SessionIdKey = ActionParameters.Key<String>("session_id")
 private val RoomIdKey = ActionParameters.Key<String>("room_id")
@@ -152,7 +153,8 @@ class RecentChatsWidget : GlanceAppWidget() {
                         avatarBitmaps[chat.roomId] = bitmap
                     }
                 }
-            } catch (_: Exception) {
+            } catch (e: Exception) {
+                Timber.d(e, "Widget: Failed to load avatar for ${chat.roomId}")
             }
         }
 
