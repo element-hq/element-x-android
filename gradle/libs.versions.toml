@@ -226,7 +226,7 @@ sentry = "io.sentry:sentry-android:8.36.0"
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.33.2"
 
 # Emojibase
-matrix_emojibase_bindings = "io.element.android:emojibase-bindings:1.5.0"
+matrix_emojibase_bindings = "io.element.android:emojibase-bindings:1.5.1"
 sigpwned_emoji4j = "com.sigpwned:emoji4j-core:16.0.0"
 
 # Di
