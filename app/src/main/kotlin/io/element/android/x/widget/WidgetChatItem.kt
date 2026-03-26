@@ -20,4 +20,5 @@ data class WidgetChatItem(
     val unreadCount: Int,
     val senderName: String = "",
     val avatarUrl: String? = null,
+    val isFavorite: Boolean = false,
 )

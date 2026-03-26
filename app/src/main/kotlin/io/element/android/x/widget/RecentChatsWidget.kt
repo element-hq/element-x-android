@@ -10,15 +10,12 @@ package io.element.android.x.widget
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import coil3.SingletonImageLoader
-import coil3.request.ImageRequest
-import coil3.request.SuccessResult
-import coil3.toBitmap
 import kotlin.math.absoluteValue
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
@@ -35,6 +32,7 @@ import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.lazy.LazyColumn
 import androidx.glance.appwidget.lazy.items
 import androidx.glance.appwidget.provideContent
+import androidx.glance.appwidget.updateAll
 import androidx.glance.background
 import androidx.glance.layout.Alignment
 import androidx.glance.layout.Column
@@ -51,12 +49,8 @@ import androidx.glance.text.FontWeight
 import androidx.glance.text.Text
 import androidx.glance.text.TextStyle
 import androidx.glance.unit.ColorProvider
-import io.element.android.libraries.matrix.api.media.MediaSource
-import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.x.MainActivity
-import timber.log.Timber
-
-private val ElementGreen = Color(0xFF0DBD8B)
+import java.io.File
 
 private val SessionIdKey = ActionParameters.Key<String>("session_id")
 private val RoomIdKey = ActionParameters.Key<String>("room_id")
@@ -92,11 +86,31 @@ class NewChatActionCallback : ActionCallback {
         glanceId: GlanceId,
         parameters: ActionParameters,
     ) {
-        val intent = Intent(context, MainActivity::class.java).apply {
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-            putExtra("open_start_chat", true)
+        // Open the app to the session home so the user can tap the FAB to start a new chat
+        val chats = RecentChatsDataStore.loadChats(context)
+        val sessionId = chats.firstOrNull()?.sessionId
+        val intent = if (!sessionId.isNullOrEmpty()) {
+            val deepLinkUri = Uri.parse("elementx://open/${Uri.encode(sessionId)}")
+            Intent(Intent.ACTION_VIEW, deepLinkUri).apply {
+                setClass(context, MainActivity::class.java)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            }
+        } else {
+            Intent(context, MainActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
         }
         context.startActivity(intent)
+    }
+}
+
+class RefreshWidgetActionCallback : ActionCallback {
+    override suspend fun onAction(
+        context: Context,
+        glanceId: GlanceId,
+        parameters: ActionParameters,
+    ) {
+        RecentChatsWidget().updateAll(context)
     }
 }
 
@@ -104,31 +118,20 @@ class RecentChatsWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val chats = RecentChatsDataStore.loadChats(context)
 
-        // Load avatar bitmaps using the app's Coil ImageLoader (which has Matrix media fetchers)
+        // Load avatar bitmaps from local file paths (downloaded by DefaultRecentChatsWidgetService)
         val avatarBitmaps = mutableMapOf<String, Bitmap>()
-        try {
-            val imageLoader = SingletonImageLoader.get(context)
-            for (chat in chats) {
-                val url = chat.avatarUrl ?: continue
-                try {
-                    val data = MediaRequestData(
-                        source = MediaSource(url),
-                        kind = MediaRequestData.Kind.Thumbnail(96),
-                    )
-                    val request = ImageRequest.Builder(context)
-                        .data(data)
-                        .size(96)
-                        .build()
-                    val result = imageLoader.execute(request)
-                    if (result is SuccessResult) {
-                        avatarBitmaps[chat.roomId] = result.image.toBitmap()
+        for (chat in chats) {
+            val path = chat.avatarUrl ?: continue
+            if (!path.startsWith("/")) continue // Skip non-file paths (e.g. stale mxc:// URLs)
+            try {
+                val file = File(path)
+                if (file.exists()) {
+                    BitmapFactory.decodeFile(path)?.let { bitmap ->
+                        avatarBitmaps[chat.roomId] = bitmap
                     }
-                } catch (e: Exception) {
-                    Timber.d(e, "Widget: Failed to load avatar for ${chat.roomName}")
                 }
+            } catch (_: Exception) {
             }
-        } catch (e: Exception) {
-            Timber.d(e, "Widget: Failed to initialize image loader for avatars")
         }
 
         provideContent {
@@ -157,13 +160,15 @@ class RecentChatsWidget : GlanceAppWidget() {
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = "Element",
+                    text = "Element X",
                     style = TextStyle(
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp,
                         color = GlanceTheme.colors.onSurfaceVariant,
                     ),
-                    modifier = GlanceModifier.defaultWeight(),
+                    modifier = GlanceModifier
+                        .defaultWeight()
+                        .clickable(actionRunCallback<RefreshWidgetActionCallback>()),
                 )
                 Text(
                     text = "+ New Chat",
@@ -194,7 +199,7 @@ class RecentChatsWidget : GlanceAppWidget() {
                     )
                     Spacer(modifier = GlanceModifier.height(4.dp))
                     Text(
-                        text = "Tap to open Element",
+                        text = "Tap to open Element X",
                         style = TextStyle(
                             fontSize = 12.sp,
                             color = GlanceTheme.colors.onSurfaceVariant,
@@ -276,8 +281,13 @@ class RecentChatsWidget : GlanceAppWidget() {
                     modifier = GlanceModifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
+                    val displayName = if (chat.isFavorite) {
+                        "\u2605 ${chat.roomName}"
+                    } else {
+                        chat.roomName
+                    }
                     Text(
-                        text = chat.roomName,
+                        text = displayName,
                         style = TextStyle(
                             fontWeight = if (chat.unreadCount > 0) FontWeight.Bold else FontWeight.Normal,
                             fontSize = 15.sp,

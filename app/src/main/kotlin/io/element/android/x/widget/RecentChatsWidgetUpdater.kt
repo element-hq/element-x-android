@@ -29,6 +29,7 @@ object RecentChatsWidgetUpdater {
                     unreadCount = room.unreadCount,
                     senderName = room.senderName,
                     avatarUrl = room.avatarUrl,
+                    isFavorite = room.isFavorite,
                 )
             }
         RecentChatsDataStore.saveChats(context, chats)
@@ -57,4 +58,5 @@ data class RoomWidgetInfo(
     val unreadCount: Int,
     val senderName: String = "",
     val avatarUrl: String? = null,
+    val isFavorite: Boolean = false,
 )

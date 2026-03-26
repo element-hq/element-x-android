@@ -330,6 +330,7 @@ class LoggedInFlowNode(
                                     unreadCount = summary.info.numUnreadNotifications.toInt(),
                                     senderName = senderName,
                                     avatarUrl = summary.info.avatarUrl,
+                                    isFavorite = summary.info.isFavorite,
                                 )
                             }
                         Timber.d("Widget: Updating widget with ${widgetRooms.size} rooms")
