@@ -82,7 +82,9 @@ class RecentChatsWidget : GlanceAppWidget() {
 
             if (chats.isEmpty()) {
                 Column(
-                    modifier = GlanceModifier.fillMaxSize(),
+                    modifier = GlanceModifier
+                        .fillMaxSize()
+                        .clickable(actionStartActivity<MainActivity>()),
                     horizontalAlignment = Alignment.CenterHorizontally,
                     verticalAlignment = Alignment.CenterVertically,
                 ) {
@@ -90,6 +92,14 @@ class RecentChatsWidget : GlanceAppWidget() {
                         text = "No recent chats",
                         style = TextStyle(
                             fontSize = 14.sp,
+                            color = GlanceTheme.colors.onSurfaceVariant,
+                        ),
+                    )
+                    Spacer(modifier = GlanceModifier.height(4.dp))
+                    Text(
+                        text = "Tap to open Element",
+                        style = TextStyle(
+                            fontSize = 12.sp,
                             color = GlanceTheme.colors.onSurfaceVariant,
                         ),
                     )
