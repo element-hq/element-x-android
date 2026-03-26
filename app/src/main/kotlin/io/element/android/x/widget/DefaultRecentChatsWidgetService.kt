@@ -11,7 +11,6 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Inject
 import io.element.android.appnav.widget.RecentChatsWidgetService
 import io.element.android.appnav.widget.WidgetRoomData
 import io.element.android.libraries.di.annotations.ApplicationContext
@@ -22,7 +21,6 @@ import timber.log.Timber
 import java.io.File
 
 @ContributesBinding(SessionScope::class)
-@Inject
 class DefaultRecentChatsWidgetService(
     @ApplicationContext private val context: Context,
     private val matrixClient: MatrixClient,
