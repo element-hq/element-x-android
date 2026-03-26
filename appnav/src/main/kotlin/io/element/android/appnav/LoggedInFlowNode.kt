@@ -92,14 +92,21 @@ import io.element.android.libraries.matrix.api.verification.VerificationRequest
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
 import io.element.android.libraries.ui.common.nodes.emptyNode
+import io.element.android.appnav.widget.RecentChatsWidgetService
+import io.element.android.appnav.widget.WidgetRoomData
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import androidx.compose.runtime.produceState
+import io.element.android.libraries.matrix.api.room.CurrentUserMembership
+import io.element.android.libraries.matrix.api.roomlist.LatestEventValue
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
 import io.element.android.services.analytics.api.watchers.AnalyticsRoomListStateWatcher
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -119,6 +126,9 @@ import im.vector.app.features.analytics.plan.JoinedRoom as JoinedRoomAnalyticsEv
 // The maximum number of room nodes that should be kept in the backstack at the same time.
 // Having 5 rooms in the backstack seems reasonable and shouldn't grow the saved state size too much.
 private const val MAX_ROOM_NODE_COUNT = 5
+
+// Maximum rooms to show in the Recent Chats home-screen widget.
+private const val MAX_WIDGET_ROOMS = 10
 
 @ContributesNode(SessionScope::class)
 @AssistedInject
@@ -154,6 +164,7 @@ class LoggedInFlowNode(
     private val analyticsService: AnalyticsService,
     private val analyticsRoomListStateWatcher: AnalyticsRoomListStateWatcher,
     private val createRoomEntryPoint: CreateRoomEntryPoint,
+    private val recentChatsWidgetService: RecentChatsWidgetService,
 ) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Placeholder,
@@ -240,6 +251,8 @@ class LoggedInFlowNode(
                         }
                     }
                     .launchIn(lifecycleScope)
+
+                observeRoomListForWidget()
             },
             onResume = {
                 lifecycleScope.launch {
@@ -259,6 +272,44 @@ class LoggedInFlowNode(
 
     private fun setupSendingQueue() {
         sendingQueue.launchIn(lifecycleScope)
+    }
+
+    /**
+     * Observe the room list and push updates to the Recent Chats home-screen widget.
+     * Debounced to avoid excessive widget refreshes during rapid sync bursts.
+     */
+    @OptIn(FlowPreview::class)
+    @Suppress("MagicNumber")
+    private fun observeRoomListForWidget() {
+        matrixClient.roomListService.allRooms.summaries
+            .debounce(2_000L)
+            .onEach { summaries ->
+                try {
+                    val widgetRooms = summaries
+                        .filter { it.info.currentUserMembership == CurrentUserMembership.JOINED }
+                        .filter { !it.info.isSpace }
+                        .take(MAX_WIDGET_ROOMS)
+                        .map { summary ->
+                            val lastMessage = when (val event = summary.latestEvent) {
+                                is LatestEventValue.Remote -> (event.content as? MessageContent)?.body
+                                is LatestEventValue.Local -> (event.content as? MessageContent)?.body
+                                is LatestEventValue.RoomInvite,
+                                is LatestEventValue.None -> null
+                            }
+                            WidgetRoomData(
+                                roomId = summary.roomId.value,
+                                name = summary.info.name ?: summary.roomId.value,
+                                lastMessage = lastMessage,
+                                lastActivityTimestamp = summary.latestEventTimestamp ?: 0L,
+                                unreadCount = summary.info.numUnreadNotifications.toInt(),
+                            )
+                        }
+                    recentChatsWidgetService.updateRecentChats(widgetRooms)
+                } catch (e: Exception) {
+                    Timber.w(e, "Failed to update Recent Chats widget")
+                }
+            }
+            .launchIn(sessionCoroutineScope)
     }
 
     sealed interface NavTarget : Parcelable {
