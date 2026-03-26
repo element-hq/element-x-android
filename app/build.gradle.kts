@@ -288,6 +288,9 @@ dependencies {
 
     implementation(libs.matrix.emojibase.bindings)
 
+    implementation(libs.androidx.glance.appwidget)
+    implementation(libs.androidx.glance.material3)
+
     testCommonDependencies(libs)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.services.toolbox.test)
