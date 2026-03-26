@@ -15,16 +15,20 @@ import java.util.Locale
 
 object RecentChatsWidgetUpdater {
     suspend fun updateWidget(context: Context, roomData: List<RoomWidgetInfo>) {
-        val chats = roomData.take(10).map { room ->
-            WidgetChatItem(
-                roomId = room.roomId,
-                roomName = room.name,
-                avatarInitial = room.name.firstOrNull()?.uppercase() ?: "?",
-                lastMessage = room.lastMessage ?: "",
-                timestamp = formatTimestamp(room.lastActivityTimestamp),
-                unreadCount = room.unreadCount,
-            )
-        }
+        val chats = roomData
+            .sortedByDescending { it.unreadCount }
+            .take(10)
+            .map { room ->
+                WidgetChatItem(
+                    sessionId = room.sessionId,
+                    roomId = room.roomId,
+                    roomName = room.name,
+                    avatarInitial = room.name.firstOrNull()?.uppercase() ?: "?",
+                    lastMessage = room.lastMessage ?: "",
+                    timestamp = formatTimestamp(room.lastActivityTimestamp),
+                    unreadCount = room.unreadCount,
+                )
+            }
         RecentChatsDataStore.saveChats(context, chats)
         RecentChatsWidget().updateAll(context)
     }
@@ -43,6 +47,7 @@ object RecentChatsWidgetUpdater {
 }
 
 data class RoomWidgetInfo(
+    val sessionId: String,
     val roomId: String,
     val name: String,
     val lastMessage: String?,

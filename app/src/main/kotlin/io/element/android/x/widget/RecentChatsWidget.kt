@@ -8,6 +8,8 @@
 package io.element.android.x.widget
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
@@ -15,9 +17,13 @@ import androidx.compose.ui.unit.sp
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
+import androidx.glance.action.ActionParameters
+import androidx.glance.action.actionParametersOf
 import androidx.glance.action.actionStartActivity
 import androidx.glance.action.clickable
 import androidx.glance.appwidget.GlanceAppWidget
+import androidx.glance.appwidget.action.ActionCallback
+import androidx.glance.appwidget.action.actionRunCallback
 import androidx.glance.appwidget.cornerRadius
 import androidx.glance.appwidget.lazy.LazyColumn
 import androidx.glance.appwidget.lazy.items
@@ -42,6 +48,28 @@ import io.element.android.x.MainActivity
 private val ElementGreen = Color(0xFF0DBD8B)
 private val BadgeRed = Color(0xFFFF3B30)
 
+private val SessionIdKey = ActionParameters.Key<String>("session_id")
+private val RoomIdKey = ActionParameters.Key<String>("room_id")
+
+class OpenChatActionCallback : ActionCallback {
+    override suspend fun onAction(
+        context: Context,
+        glanceId: GlanceId,
+        parameters: ActionParameters,
+    ) {
+        val sessionId = parameters[SessionIdKey] ?: return
+        val roomId = parameters[RoomIdKey] ?: return
+        val deepLinkUri = Uri.parse(
+            "elementx://open/${Uri.encode(sessionId)}/${Uri.encode(roomId)}"
+        )
+        val intent = Intent(Intent.ACTION_VIEW, deepLinkUri).apply {
+            setClass(context, MainActivity::class.java)
+            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        }
+        context.startActivity(intent)
+    }
+}
+
 class RecentChatsWidget : GlanceAppWidget() {
     override suspend fun provideGlance(context: Context, id: GlanceId) {
         val chats = RecentChatsDataStore.loadChats(context)
@@ -58,7 +86,7 @@ class RecentChatsWidget : GlanceAppWidget() {
             modifier = GlanceModifier
                 .fillMaxSize()
                 .background(GlanceTheme.colors.widgetBackground)
-                .cornerRadius(16.dp)
+                .cornerRadius(24.dp)
                 .padding(8.dp),
         ) {
             // Header
@@ -69,13 +97,22 @@ class RecentChatsWidget : GlanceAppWidget() {
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 Text(
-                    text = "Recent Chats",
+                    text = "Element",
                     style = TextStyle(
                         fontWeight = FontWeight.Bold,
                         fontSize = 16.sp,
                         color = GlanceTheme.colors.onSurface,
                     ),
                     modifier = GlanceModifier.defaultWeight(),
+                )
+                Text(
+                    text = "New",
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        fontWeight = FontWeight.Medium,
+                        color = GlanceTheme.colors.primary,
+                    ),
+                    modifier = GlanceModifier.clickable(actionStartActivity<MainActivity>()),
                 )
             }
             Spacer(modifier = GlanceModifier.height(4.dp))
@@ -108,6 +145,12 @@ class RecentChatsWidget : GlanceAppWidget() {
                 LazyColumn(modifier = GlanceModifier.fillMaxSize()) {
                     items(chats) { chat ->
                         ChatItemRow(chat)
+                        Spacer(
+                            modifier = GlanceModifier
+                                .fillMaxWidth()
+                                .height(1.dp)
+                                .background(GlanceTheme.colors.outline)
+                        )
                     }
                 }
             }
@@ -120,7 +163,14 @@ class RecentChatsWidget : GlanceAppWidget() {
             modifier = GlanceModifier
                 .fillMaxWidth()
                 .padding(horizontal = 8.dp, vertical = 6.dp)
-                .clickable(actionStartActivity<MainActivity>()),
+                .clickable(
+                    actionRunCallback<OpenChatActionCallback>(
+                        actionParametersOf(
+                            SessionIdKey to chat.sessionId,
+                            RoomIdKey to chat.roomId,
+                        )
+                    )
+                ),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             // Avatar placeholder (circle with initial)

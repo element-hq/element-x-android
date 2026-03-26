@@ -27,6 +27,7 @@ interface RecentChatsWidgetService {
  * pulling Matrix API types into the widget layer.
  */
 data class WidgetRoomData(
+    val sessionId: String,
     val roomId: String,
     val name: String,
     val lastMessage: String?,

@@ -23,6 +23,7 @@ class DefaultRecentChatsWidgetService(
     override suspend fun updateRecentChats(rooms: List<WidgetRoomData>) {
         val widgetInfoList = rooms.map { room ->
             RoomWidgetInfo(
+                sessionId = room.sessionId,
                 roomId = room.roomId,
                 name = room.name,
                 lastMessage = room.lastMessage,

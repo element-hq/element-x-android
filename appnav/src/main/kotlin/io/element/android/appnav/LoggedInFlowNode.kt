@@ -310,6 +310,7 @@ class LoggedInFlowNode(
                                     is LatestEventValue.None -> null
                                 }
                                 WidgetRoomData(
+                                    sessionId = matrixClient.sessionId.value,
                                     roomId = summary.roomId.value,
                                     name = summary.info.name ?: summary.roomId.value,
                                     lastMessage = lastMessage,
