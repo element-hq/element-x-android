@@ -396,6 +396,10 @@ class MessagesPresenter(
             TimelineItemAction.Unpin -> handleUnpinAction(targetEvent)
             TimelineItemAction.KickSender -> handleKickSender(targetEvent)
             TimelineItemAction.BanSender -> handleBanSender(targetEvent)
+            TimelineItemAction.Select -> {
+                timelineState.eventSink(TimelineEvent.EnterSelectionMode)
+                timelineState.eventSink(TimelineEvent.ToggleMessageSelection(targetEvent.id))
+            }
             TimelineItemAction.ViewInTimeline -> Unit
         }
     }

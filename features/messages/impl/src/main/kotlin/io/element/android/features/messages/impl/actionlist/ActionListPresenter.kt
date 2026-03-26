@@ -246,6 +246,8 @@ class DefaultActionListPresenter(
             if (canRedact) {
                 add(TimelineItemAction.Redact)
             }
+            // Always allow selecting messages for multi-select
+            add(TimelineItemAction.Select)
         }
             .postFilter(timelineItem.content)
             .sortedWith(comparator)
@@ -261,9 +263,9 @@ private fun Iterable<TimelineItemAction>.postFilter(content: TimelineItemEventCo
         when (content) {
             is TimelineItemRtcNotificationContent,
             is TimelineItemLegacyCallInviteContent,
-            is TimelineItemStateContent -> action == TimelineItemAction.ViewSource
+            is TimelineItemStateContent -> action == TimelineItemAction.ViewSource || action == TimelineItemAction.Select
             is TimelineItemRedactedContent -> {
-                action == TimelineItemAction.ViewSource || action == TimelineItemAction.Unpin
+                action == TimelineItemAction.ViewSource || action == TimelineItemAction.Unpin || action == TimelineItemAction.Select
             }
             else -> true
         }

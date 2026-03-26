@@ -8,6 +8,10 @@
 
 package io.element.android.features.preferences.impl.notifications
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.progressSemantics
@@ -34,7 +38,9 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.ButtonSize
 import io.element.android.libraries.designsystem.theme.components.ElementLoadingIndicator
+import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -84,6 +90,9 @@ fun NotificationSettingsView(
 //                onCallsNotificationsChanged = { state.eventSink(NotificationSettingsEvents.SetCallNotificationsEnabled(it)) },
                 onInviteForMeNotificationsChange = { state.eventSink(NotificationSettingsEvents.SetInviteForMeNotificationsEnabled(it)) },
                 onTroubleshootNotificationsClick = onTroubleshootNotificationsClick,
+                dndUntilTimestamp = state.dndUntilTimestamp,
+                onSetDndDuration = { state.eventSink(NotificationSettingsEvents.SetDndDuration(it)) },
+                onClearDnd = { state.eventSink(NotificationSettingsEvents.ClearDnd) },
             )
         }
         AsyncActionView(
@@ -95,6 +104,7 @@ fun NotificationSettingsView(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun NotificationSettingsContentView(
     matrixSettings: NotificationSettingsState.MatrixSettings.Valid,
@@ -107,6 +117,9 @@ private fun NotificationSettingsContentView(
 //    onCallsNotificationsChanged: (Boolean) -> Unit,
     onInviteForMeNotificationsChange: (Boolean) -> Unit,
     onTroubleshootNotificationsClick: () -> Unit,
+    dndUntilTimestamp: Long = 0L,
+    onSetDndDuration: (Long) -> Unit = {},
+    onClearDnd: () -> Unit = {},
 ) {
     val context = LocalContext.current
     val systemSettings: NotificationSettingsState.AppSettings = state.appSettings
@@ -137,6 +150,65 @@ private fun NotificationSettingsContentView(
     )
 
     if (systemSettings.appNotificationsEnabled) {
+        // Do Not Disturb section
+        PreferenceCategory(title = "Pause notifications") {
+            val now = System.currentTimeMillis()
+            val isDndActive = dndUntilTimestamp > now
+            if (isDndActive) {
+                val remainingMinutes = ((dndUntilTimestamp - now) / 60_000).toInt()
+                val statusText = when {
+                    remainingMinutes >= 60 -> {
+                        val hours = remainingMinutes / 60
+                        val mins = remainingMinutes % 60
+                        if (mins > 0) "Paused for ${hours}h ${mins}m" else "Paused for ${hours}h"
+                    }
+                    remainingMinutes > 0 -> "Paused for ${remainingMinutes}m"
+                    else -> "Paused for less than a minute"
+                }
+                ListItem(
+                    headlineContent = { Text(statusText) },
+                    supportingContent = { Text("Notifications are paused") },
+                    leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.NotificationsOffSolid())),
+                )
+            }
+            FlowRow(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 16.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalArrangement = Arrangement.spacedBy(8.dp),
+            ) {
+                OutlinedButton(
+                    text = "1h",
+                    onClick = { onSetDndDuration(1 * 60 * 60 * 1000L) },
+                    size = ButtonSize.Small,
+                )
+                OutlinedButton(
+                    text = "4h",
+                    onClick = { onSetDndDuration(4 * 60 * 60 * 1000L) },
+                    size = ButtonSize.Small,
+                )
+                OutlinedButton(
+                    text = "8h",
+                    onClick = { onSetDndDuration(8 * 60 * 60 * 1000L) },
+                    size = ButtonSize.Small,
+                )
+                OutlinedButton(
+                    text = "24h",
+                    onClick = { onSetDndDuration(24 * 60 * 60 * 1000L) },
+                    size = ButtonSize.Small,
+                )
+                if (isDndActive) {
+                    OutlinedButton(
+                        text = "Off",
+                        onClick = onClearDnd,
+                        size = ButtonSize.Small,
+                        destructive = true,
+                    )
+                }
+            }
+        }
+
         if (!state.fullScreenIntentPermissionsState.permissionGranted) {
             PreferenceCategory {
                 ListItem(

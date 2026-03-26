@@ -44,6 +44,7 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalView
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.semantics.onClick
@@ -104,10 +105,12 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toAnnotatedString
 import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.BottomSheetDragHandle
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.DropdownMenuItem
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
+import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.HideKeyboardWhenDisposed
@@ -124,6 +127,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.textcomposer.model.TextEditorState
+import io.element.android.libraries.ui.strings.CommonPlurals
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.wysiwyg.link.Link
 import kotlinx.collections.immutable.persistentListOf
@@ -510,7 +514,10 @@ fun MessagesView(
         state = state.customReactionState,
         onSelectEmoji = { uniqueId, emoji ->
             state.eventSink(MessagesEvent.ToggleReaction(emoji.unicode, uniqueId))
-        }
+        },
+        onSelectCustomReaction = { uniqueId, text ->
+            state.eventSink(MessagesEvent.ToggleReaction(text, uniqueId))
+        },
     )
 
     ReactionSummaryView(state = state.reactionSummaryState)
@@ -642,6 +649,9 @@ private fun MessagesViewComposerBottomSheetContents(
     onLinkClick: (String, Boolean) -> Unit,
 ) {
     when {
+        state.timelineState.isSelectionMode -> {
+            SelectionModeBottomBar(state = state)
+        }
         state.successorRoom != null -> {
             SuccessorRoomBanner(roomSuccessor = state.successorRoom, onRoomSuccessorClick = onRoomSuccessorClick)
         }
@@ -672,6 +682,43 @@ private fun MessagesViewComposerBottomSheetContents(
         }
         else -> {
             CantSendMessageBanner()
+        }
+    }
+}
+
+@Composable
+private fun SelectionModeBottomBar(state: MessagesState) {
+    val selectedCount = state.timelineState.selectedMessageIds.size
+    val canRedact = state.userEventPermissions.canRedactOwn || state.userEventPermissions.canRedactOther
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.surfaceContainer)
+            .padding(horizontal = 16.dp, vertical = 12.dp),
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
+    ) {
+        Text(
+            text = pluralStringResource(CommonPlurals.common_selected_count, selectedCount, selectedCount),
+            style = ElementTheme.typography.fontBodyMdMedium,
+            color = MaterialTheme.colorScheme.onSurface,
+        )
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            if (canRedact && selectedCount > 0) {
+                Button(
+                    text = stringResource(CommonStrings.action_remove) + " ($selectedCount)",
+                    onClick = {
+                        state.timelineState.eventSink(TimelineEvent.DeleteSelectedMessages)
+                    },
+                    destructive = true,
+                )
+            }
+            OutlinedButton(
+                text = stringResource(CommonStrings.action_cancel),
+                onClick = {
+                    state.timelineState.eventSink(TimelineEvent.ExitSelectionMode)
+                },
+            )
         }
     }
 }

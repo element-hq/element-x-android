@@ -42,7 +42,9 @@ import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.aProfileDetailsReady
 import io.element.android.libraries.preferences.api.store.TimelineLayoutMode
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
 import kotlinx.collections.immutable.toImmutableList
 import java.util.UUID
 import kotlin.random.Random
@@ -56,6 +58,8 @@ fun aTimelineState(
     isLive: Boolean = true,
     messageShield: MessageShield? = null,
     resolveVerifiedUserSendFailureState: ResolveVerifiedUserSendFailureState = aResolveVerifiedUserSendFailureState(),
+    isSelectionMode: Boolean = false,
+    selectedMessageIds: ImmutableSet<UniqueId> = persistentSetOf(),
     displayThreadSummaries: Boolean = false,
     eventSink: (TimelineEvent) -> Unit = {},
 ): TimelineState {
@@ -75,6 +79,8 @@ fun aTimelineState(
         focusRequestState = focusRequestState,
         messageShieldDialogData = messageShield?.let { MessageShieldData(it) },
         resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailureState,
+        isSelectionMode = isSelectionMode,
+        selectedMessageIds = selectedMessageIds,
         displayThreadSummaries = displayThreadSummaries,
         eventSink = eventSink,
     )

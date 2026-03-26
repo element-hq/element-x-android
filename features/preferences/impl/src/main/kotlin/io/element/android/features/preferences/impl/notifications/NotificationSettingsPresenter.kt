@@ -30,6 +30,7 @@ import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermiss
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
@@ -52,6 +53,7 @@ class NotificationSettingsPresenter(
     private val pushService: PushService,
     private val systemNotificationsEnabledProvider: SystemNotificationsEnabledProvider,
     private val fullScreenIntentPermissionsPresenter: Presenter<FullScreenIntentPermissionsState>,
+    private val appPreferencesStore: AppPreferencesStore,
     @SessionCoroutineScope
     private val sessionCoroutineScope: CoroutineScope,
 ) : Presenter<NotificationSettingsState> {
@@ -109,6 +111,10 @@ class NotificationSettingsPresenter(
 
         var showChangePushProviderDialog by remember { mutableStateOf(false) }
 
+        val dndUntilTimestamp by remember {
+            appPreferencesStore.getDndUntilTimestamp()
+        }.collectAsState(initial = 0L)
+
         fun CoroutineScope.changePushProvider(
             data: Pair<PushProvider, Distributor>?
         ) = launch {
@@ -157,6 +163,12 @@ class NotificationSettingsPresenter(
                 NotificationSettingsEvents.ChangePushProvider -> showChangePushProviderDialog = true
                 NotificationSettingsEvents.CancelChangePushProvider -> showChangePushProviderDialog = false
                 is NotificationSettingsEvents.SetPushProvider -> localCoroutineScope.changePushProvider(distributors.getOrNull(event.index))
+                is NotificationSettingsEvents.SetDndDuration -> localCoroutineScope.launch {
+                    appPreferencesStore.setDndUntilTimestamp(System.currentTimeMillis() + event.durationMillis)
+                }
+                NotificationSettingsEvents.ClearDnd -> localCoroutineScope.launch {
+                    appPreferencesStore.setDndUntilTimestamp(0L)
+                }
             }
         }
 
@@ -171,6 +183,7 @@ class NotificationSettingsPresenter(
             availablePushDistributors = availableDistributors,
             showChangePushProviderDialog = showChangePushProviderDialog,
             fullScreenIntentPermissionsState = key(refreshFullScreenIntentSettings) { fullScreenIntentPermissionsPresenter.present() },
+            dndUntilTimestamp = dndUntilTimestamp,
             eventSink = ::handleEvent,
         )
     }

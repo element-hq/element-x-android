@@ -10,6 +10,7 @@ package io.element.android.libraries.preferences.impl.store
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
@@ -34,6 +35,7 @@ private val traceLogPacksKey = stringPreferencesKey("traceLogPacks")
 private val timelineLayoutModeKey = stringPreferencesKey("timelineLayoutMode")
 private val dynamicColorKey = booleanPreferencesKey("dynamicColor")
 private val highContrastKey = booleanPreferencesKey("highContrast")
+private val dndUntilKey = longPreferencesKey("dnd_until")
 
 @ContributesBinding(AppScope::class)
 class DefaultAppPreferencesStore(
@@ -183,6 +185,18 @@ class DefaultAppPreferencesStore(
                 ?.mapNotNull { value -> TraceLogPack.entries.find { it.key == value } }
                 ?.toSet()
                 ?: emptySet()
+        }
+    }
+
+    override fun getDndUntilTimestamp(): Flow<Long> {
+        return store.data.map { prefs ->
+            prefs[dndUntilKey] ?: 0L
+        }
+    }
+
+    override suspend fun setDndUntilTimestamp(timestamp: Long) {
+        store.edit { prefs ->
+            prefs[dndUntilKey] = timestamp
         }
     }
 

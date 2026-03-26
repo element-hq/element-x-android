@@ -47,5 +47,8 @@ interface AppPreferencesStore {
     suspend fun setTracingLogPacks(targets: Set<TraceLogPack>)
     fun getTracingLogPacksFlow(): Flow<Set<TraceLogPack>>
 
+    fun getDndUntilTimestamp(): Flow<Long>
+    suspend fun setDndUntilTimestamp(timestamp: Long)
+
     suspend fun reset()
 }

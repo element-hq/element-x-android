@@ -13,6 +13,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.ThreadId
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import kotlin.time.Duration
 
@@ -39,6 +40,14 @@ sealed interface TimelineEvent {
      * Navigate to the predecessor or successor room of the current room.
      */
     data class NavigateToPredecessorOrSuccessorRoom(val roomId: RoomId) : TimelineItemEvent
+
+    /**
+     * Selection mode events.
+     */
+    data object EnterSelectionMode : TimelineItemEvent
+    data class ToggleMessageSelection(val id: UniqueId) : TimelineItemEvent
+    data object ExitSelectionMode : TimelineItemEvent
+    data object DeleteSelectedMessages : TimelineItemEvent
 
     /**
      * Events coming from a poll item.

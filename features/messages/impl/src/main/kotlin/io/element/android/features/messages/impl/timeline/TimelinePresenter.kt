@@ -64,7 +64,10 @@ import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.api.finishLongRunningTransaction
 import io.element.android.services.analyticsproviders.api.AnalyticsUserData
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.persistentSetOf
+import kotlinx.collections.immutable.toPersistentSet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.combine
@@ -137,6 +140,9 @@ class TimelinePresenter(
 
         val newEventState = remember { mutableStateOf(NewEventState.None) }
         val messageShieldDialogData: MutableState<MessageShieldData?> = remember { mutableStateOf(null) }
+
+        var isSelectionMode by remember { mutableStateOf(false) }
+        var selectedMessageIds by remember { mutableStateOf<ImmutableSet<UniqueId>>(persistentSetOf()) }
 
         val resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailurePresenter.present()
         val isSendPublicReadReceiptsEnabled by remember {
@@ -222,6 +228,42 @@ class TimelinePresenter(
                 is TimelineEvent.ShowShieldDialog -> messageShieldDialogData.value = event.messageShieldData
                 is TimelineEvent.ComputeVerifiedUserSendFailure -> {
                     resolveVerifiedUserSendFailureState.eventSink(ResolveVerifiedUserSendFailureEvent.ComputeForMessage(event.event))
+                }
+                is TimelineEvent.EnterSelectionMode -> {
+                    isSelectionMode = true
+                }
+                is TimelineEvent.ToggleMessageSelection -> {
+                    val id = event.id
+                    selectedMessageIds = if (id in selectedMessageIds) {
+                        (selectedMessageIds - id).toPersistentSet()
+                    } else {
+                        (selectedMessageIds + id).toPersistentSet()
+                    }
+                    if (selectedMessageIds.isEmpty()) isSelectionMode = false
+                }
+                is TimelineEvent.ExitSelectionMode -> {
+                    isSelectionMode = false
+                    selectedMessageIds = persistentSetOf()
+                }
+                is TimelineEvent.DeleteSelectedMessages -> {
+                    val idsToDelete = selectedMessageIds.toList()
+                    isSelectionMode = false
+                    selectedMessageIds = persistentSetOf()
+                    sessionCoroutineScope.launch {
+                        idsToDelete.forEach { uniqueId ->
+                            // Find the timeline event by UniqueId and redact it
+                            val timelineEvent = timelineItems.filterIsInstance<TimelineItem.Event>()
+                                .firstOrNull { it.id == uniqueId }
+                            if (timelineEvent != null) {
+                                timelineController.invokeOnCurrentTimeline {
+                                    redactEvent(
+                                        eventOrTransactionId = timelineEvent.eventOrTransactionId,
+                                        reason = null
+                                    )
+                                }
+                            }
+                        }
+                    }
                 }
                 is TimelineEvent.NavigateToPredecessorOrSuccessorRoom -> {
                     // Navigate to the predecessor or successor room
@@ -321,6 +363,8 @@ class TimelinePresenter(
             focusRequestState = focusRequestState.value,
             messageShieldDialogData = messageShieldDialogData.value,
             resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailureState,
+            isSelectionMode = isSelectionMode,
+            selectedMessageIds = selectedMessageIds,
             displayThreadSummaries = displayThreadSummaries,
             eventSink = ::handleEvent,
         )

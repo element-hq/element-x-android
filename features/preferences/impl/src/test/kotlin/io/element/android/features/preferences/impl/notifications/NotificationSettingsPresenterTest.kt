@@ -13,6 +13,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.fullscreenintent.api.aFullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -366,6 +367,7 @@ class NotificationSettingsPresenterTest {
             pushService = pushService,
             systemNotificationsEnabledProvider = FakeSystemNotificationsEnabledProvider(),
             fullScreenIntentPermissionsPresenter = { fullScreenIntentPermissionsStateLambda() },
+            appPreferencesStore = InMemoryAppPreferencesStore(),
             sessionCoroutineScope = backgroundScope,
         )
     }

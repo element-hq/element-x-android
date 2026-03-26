@@ -21,6 +21,8 @@ import io.element.android.libraries.matrix.api.room.tombstone.PredecessorRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.preferences.api.store.TimelineLayoutMode
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.persistentSetOf
 import kotlin.time.Duration
 
 data class TimelineState(
@@ -34,6 +36,8 @@ data class TimelineState(
     // If not null, info will be rendered in a dialog
     val messageShieldDialogData: MessageShieldData?,
     val resolveVerifiedUserSendFailureState: ResolveVerifiedUserSendFailureState,
+    val isSelectionMode: Boolean = false,
+    val selectedMessageIds: ImmutableSet<UniqueId> = persistentSetOf(),
     val displayThreadSummaries: Boolean,
     val eventSink: (TimelineEvent) -> Unit,
 ) {

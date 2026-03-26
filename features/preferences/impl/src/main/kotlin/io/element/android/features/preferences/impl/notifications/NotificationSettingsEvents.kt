@@ -20,4 +20,6 @@ sealed interface NotificationSettingsEvents {
     data object ChangePushProvider : NotificationSettingsEvents
     data object CancelChangePushProvider : NotificationSettingsEvents
     data class SetPushProvider(val index: Int) : NotificationSettingsEvents
+    data class SetDndDuration(val durationMillis: Long) : NotificationSettingsEvents
+    data object ClearDnd : NotificationSettingsEvents
 }

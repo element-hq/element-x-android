@@ -27,6 +27,7 @@ class InMemoryAppPreferencesStore(
     logLevel: LogLevel = LogLevel.INFO,
     traceLockPacks: Set<TraceLogPack> = emptySet(),
     timelineLayoutMode: TimelineLayoutMode = TimelineLayoutMode.Bubble,
+    dndUntilTimestamp: Long = 0L,
 ) : AppPreferencesStore {
     private val isDeveloperModeEnabled = MutableStateFlow(isDeveloperModeEnabled)
     private val customElementCallBaseUrl = MutableStateFlow(customElementCallBaseUrl)
@@ -38,6 +39,7 @@ class InMemoryAppPreferencesStore(
     private val hideInviteAvatars = MutableStateFlow(hideInviteAvatars)
     private val timelineMediaPreviewValue = MutableStateFlow(timelineMediaPreviewValue)
     private val timelineLayoutMode = MutableStateFlow(timelineLayoutMode)
+    private val dndUntilTimestamp = MutableStateFlow(dndUntilTimestamp)
 
     override suspend fun setTimelineLayoutMode(mode: TimelineLayoutMode) {
         timelineLayoutMode.value = mode
@@ -121,6 +123,14 @@ class InMemoryAppPreferencesStore(
 
     override fun getTracingLogPacksFlow(): Flow<Set<TraceLogPack>> {
         return tracingLogPacks
+    }
+
+    override fun getDndUntilTimestamp(): Flow<Long> {
+        return dndUntilTimestamp
+    }
+
+    override suspend fun setDndUntilTimestamp(timestamp: Long) {
+        dndUntilTimestamp.value = timestamp
     }
 
     override suspend fun reset() {

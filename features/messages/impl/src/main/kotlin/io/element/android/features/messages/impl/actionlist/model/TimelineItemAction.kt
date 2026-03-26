@@ -36,6 +36,7 @@ enum class TimelineItemAction(
     KickSender(CommonStrings.action_kick, CompoundDrawables.ic_compound_block, destructive = true),
     BanSender(CommonStrings.action_ban, CompoundDrawables.ic_compound_block, destructive = true),
     EndPoll(CommonStrings.action_end_poll, CompoundDrawables.ic_compound_polls_end),
+    Select(CommonStrings.action_select, CompoundDrawables.ic_compound_check),
     Pin(CommonStrings.action_pin, CompoundDrawables.ic_compound_pin),
     Unpin(CommonStrings.action_unpin, CompoundDrawables.ic_compound_unpin),
 }
