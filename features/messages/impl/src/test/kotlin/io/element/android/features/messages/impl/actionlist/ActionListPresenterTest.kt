@@ -91,6 +91,7 @@ class ActionListPresenterTest {
                     displayEmojiReactions = false,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
+                        TimelineItemAction.Select,
                         TimelineItemAction.ViewSource,
                     ),
                     recentEmojis = suggestedEmojis,
@@ -131,6 +132,7 @@ class ActionListPresenterTest {
                     displayEmojiReactions = false,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
+                        TimelineItemAction.Select,
                         TimelineItemAction.ViewSource,
                     ),
                     recentEmojis = suggestedEmojis,
@@ -176,6 +178,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
                         TimelineItemAction.CopyText,
+                        TimelineItemAction.Select,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
                     ),
@@ -223,6 +226,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
                         TimelineItemAction.CopyText,
+                        TimelineItemAction.Select,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
                     ),
@@ -268,6 +272,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
                         TimelineItemAction.CopyText,
+                        TimelineItemAction.Select,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
                     ),
@@ -314,6 +319,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
                         TimelineItemAction.CopyText,
+                        TimelineItemAction.Select,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
                         TimelineItemAction.Redact,
@@ -361,6 +367,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
                         TimelineItemAction.CopyText,
+                        TimelineItemAction.Select,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
                         TimelineItemAction.Redact,
@@ -408,6 +415,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
                         TimelineItemAction.CopyText,
+                        TimelineItemAction.Select,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
                     ),
@@ -455,6 +463,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
                         TimelineItemAction.CopyText,
+                        TimelineItemAction.Select,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
                     ),
@@ -501,6 +510,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
                         TimelineItemAction.CopyText,
+                        TimelineItemAction.Select,
                         TimelineItemAction.ViewSource,
                     ),
                     recentEmojis = suggestedEmojis,
@@ -543,6 +553,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.Forward,
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.CopyText,
+                        TimelineItemAction.Select,
                         TimelineItemAction.ViewSource,
                     ),
                     recentEmojis = suggestedEmojis,
@@ -588,6 +599,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.AddCaption,
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
+                        TimelineItemAction.Select,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
                     ),
@@ -638,6 +650,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.Pin,
                         TimelineItemAction.CopyCaption,
                         TimelineItemAction.RemoveCaption,
+                        TimelineItemAction.Select,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
                     ),
@@ -686,6 +699,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
                         TimelineItemAction.CopyCaption,
+                        TimelineItemAction.Select,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.ReportContent,
                     ),
@@ -726,6 +740,7 @@ class ActionListPresenterTest {
                     displayEmojiReactions = false,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
+                        TimelineItemAction.Select,
                         TimelineItemAction.ViewSource,
                     ),
                     recentEmojis = suggestedEmojis,
@@ -757,7 +772,19 @@ class ActionListPresenterTest {
                     )
                 )
             )
-            assertThat(awaitItem().target).isEqualTo(ActionListState.Target.None)
+            val successState = awaitItem()
+            assertThat(successState.target).isEqualTo(
+                ActionListState.Target.Success(
+                    event = stateEvent,
+                    sentTimeFull = "0 Full true",
+                    displayEmojiReactions = false,
+                    verifiedUserSendFailure = VerifiedUserSendFailure.None,
+                    actions = persistentListOf(
+                        TimelineItemAction.Select,
+                    ),
+                    recentEmojis = suggestedEmojis,
+                )
+            )
         }
     }
 
@@ -796,6 +823,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
                         TimelineItemAction.CopyText,
+                        TimelineItemAction.Select,
                         TimelineItemAction.Redact,
                     ),
                     recentEmojis = suggestedEmojis,
@@ -840,6 +868,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.Edit,
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.CopyText,
+                        TimelineItemAction.Select,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
                     ),
@@ -892,6 +921,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Unpin,
                         TimelineItemAction.CopyText,
+                        TimelineItemAction.Select,
                         TimelineItemAction.ViewSource,
                         TimelineItemAction.Redact,
                     ),
@@ -943,7 +973,18 @@ class ActionListPresenterTest {
                 )
             )
             awaitItem().run {
-                assertThat(target).isEqualTo(ActionListState.Target.None)
+                assertThat(target).isEqualTo(
+                    ActionListState.Target.Success(
+                        event = redactedEvent,
+                        sentTimeFull = "0 Full true",
+                        displayEmojiReactions = false,
+                        verifiedUserSendFailure = VerifiedUserSendFailure.None,
+                        actions = persistentListOf(
+                            TimelineItemAction.Select,
+                        ),
+                        recentEmojis = suggestedEmojis,
+                    )
+                )
             }
         }
     }
@@ -983,6 +1024,7 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         TimelineItemAction.Edit,
                         TimelineItemAction.CopyText,
+                        TimelineItemAction.Select,
                         TimelineItemAction.Redact,
                     ),
                     recentEmojis = suggestedEmojis,
@@ -1026,6 +1068,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.EditPoll,
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
+                        TimelineItemAction.Select,
                         TimelineItemAction.Redact,
                     ),
                     recentEmojis = suggestedEmojis,
@@ -1068,6 +1111,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.Reply,
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
+                        TimelineItemAction.Select,
                         TimelineItemAction.Redact,
                     ),
                     recentEmojis = suggestedEmojis,
@@ -1109,6 +1153,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.Reply,
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
+                        TimelineItemAction.Select,
                         TimelineItemAction.Redact,
                     ),
                     recentEmojis = suggestedEmojis,
@@ -1153,6 +1198,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.Forward,
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
+                        TimelineItemAction.Select,
                         TimelineItemAction.Redact,
                     ),
                     recentEmojis = suggestedEmojis,
@@ -1189,7 +1235,8 @@ class ActionListPresenterTest {
                     displayEmojiReactions = false,
                     verifiedUserSendFailure = VerifiedUserSendFailure.None,
                     actions = persistentListOf(
-                        TimelineItemAction.ViewSource
+                        TimelineItemAction.Select,
+                        TimelineItemAction.ViewSource,
                     ),
                     recentEmojis = suggestedEmojis,
                 )
@@ -1263,6 +1310,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.Forward,
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
+                        TimelineItemAction.Select,
                         TimelineItemAction.Redact,
                     ),
                     recentEmojis = suggestedEmojis,
@@ -1315,6 +1363,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.Forward,
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
+                        TimelineItemAction.Select,
                         TimelineItemAction.Redact,
                     ),
                     recentEmojis = suggestedEmojis,
@@ -1368,6 +1417,7 @@ class ActionListPresenterTest {
                         TimelineItemAction.Forward,
                         TimelineItemAction.CopyLink,
                         TimelineItemAction.Pin,
+                        TimelineItemAction.Select,
                         TimelineItemAction.Redact,
                     ),
                     recentEmojis = suggestedEmojis,
@@ -1418,6 +1468,7 @@ class ActionListPresenterTest {
                     actions = persistentListOf(
                         // Can't reply in thread for local events
                         TimelineItemAction.Reply,
+                        TimelineItemAction.Select,
                         TimelineItemAction.Redact,
                     ),
                     recentEmojis = suggestedEmojis,
