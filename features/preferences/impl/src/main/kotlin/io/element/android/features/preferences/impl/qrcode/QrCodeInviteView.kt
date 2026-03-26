@@ -24,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -63,7 +64,7 @@ fun QrCodeInviteView(
         modifier = modifier.clearFocusOnTap(focusManager),
         topBar = {
             TopAppBar(
-                titleStr = R.string.screen_qrcode_title,
+                titleStr = stringResource(R.string.screen_qrcode_title),
                 navigationIcon = { BackButton(onBack) }
             )
         },
@@ -73,8 +74,8 @@ fun QrCodeInviteView(
                 containerColor = Color.Transparent
             ) {
                 TextButton(
-                    text = R.string.screen_qrcode_scan_qr_code,
                     onClick = { state.eventSink(QrCodeInviteEvents.ScanQrCode) },
+                    text = stringResource(R.string.screen_qrcode_scan_qr_code),
                     modifier = Modifier
                         .fillMaxWidth()
                         .testTag(TestTags.loginChangeServer)
@@ -120,7 +121,7 @@ fun QrCodeInviteView(
 
             Text(
                 modifier = Modifier.fillMaxWidth(),
-                text = R.string.screen_qr_code_description,
+                text = stringResource(R.string.screen_qr_code_description),
                 textAlign = TextAlign.Center
             )
         }
