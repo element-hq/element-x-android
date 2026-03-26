@@ -61,6 +61,7 @@ class DefaultPermalinkParser(
             when (val id = result.id) {
                 is MatrixId.User -> PermalinkData.UserLink(
                     userId = UserId(id.id),
+                    action = result.action,
                 )
                 is MatrixId.Room -> PermalinkData.RoomLink(
                     roomIdOrAlias = RoomId(id.id).toRoomIdOrAlias(),

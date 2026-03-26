@@ -501,9 +501,11 @@ class RootFlowNode(
                 ).maybeAttachThread(permalinkData.threadId, permalinkData.eventId)
             }
             is PermalinkData.UserLink -> {
-                // TODO: if action=chat, open DM, otherwise open user profile
-                //attachUser(permalinkData.userId)
-                attachUserChat(permalinkData.userId)
+                if (permalinkData.action == "chat") {
+                    attachUserChat(permalinkData.userId)
+                } else {
+                    attachUser(permalinkData.userId)
+                }
             }
         }
     }

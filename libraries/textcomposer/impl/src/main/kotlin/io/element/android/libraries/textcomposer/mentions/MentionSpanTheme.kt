@@ -131,8 +131,8 @@ internal fun MentionSpanThemePreview() {
                 permalinkParser = object : PermalinkParser {
                     override fun parse(uriString: String): PermalinkData {
                         return when (uriString) {
-                            "https://matrix.to/#/@me:matrix.org" -> PermalinkData.UserLink(UserId("@me:matrix.org"))
-                            "https://matrix.to/#/@other:matrix.org" -> PermalinkData.UserLink(UserId("@other:matrix.org"))
+                            "https://matrix.to/#/@me:matrix.org" -> PermalinkData.UserLink(UserId("@me:matrix.org"), null)
+                            "https://matrix.to/#/@other:matrix.org" -> PermalinkData.UserLink(UserId("@other:matrix.org"), null)
                             "https://matrix.to/#/#room:matrix.org" -> PermalinkData.RoomLink(
                                 roomIdOrAlias = RoomAlias("#room:matrix.org").toRoomIdOrAlias(),
                                 eventId = null,
@@ -199,8 +199,8 @@ private fun MentionSpanThemeInTimelineContent(
             permalinkParser = object : PermalinkParser {
                 override fun parse(uriString: String): PermalinkData {
                     return when (uriString) {
-                        "https://matrix.to/#/@me:matrix.org" -> PermalinkData.UserLink(UserId("@me:matrix.org"))
-                        "https://matrix.to/#/@other:matrix.org" -> PermalinkData.UserLink(UserId("@other:matrix.org"))
+                        "https://matrix.to/#/@me:matrix.org" -> PermalinkData.UserLink(UserId("@me:matrix.org"), null)
+                        "https://matrix.to/#/@other:matrix.org" -> PermalinkData.UserLink(UserId("@other:matrix.org"), null)
                         else -> throw AssertionError("Unexpected value $uriString")
                     }
                 }
