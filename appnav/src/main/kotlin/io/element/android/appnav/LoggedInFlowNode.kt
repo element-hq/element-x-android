@@ -107,6 +107,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetail
 import io.element.android.services.analytics.api.watchers.AnalyticsRoomListStateWatcher
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
@@ -321,8 +322,12 @@ class LoggedInFlowNode(
                                     }
                                     else -> ""
                                 }
-                                val avatarUrl = summary.info.avatarUrl
-                                    ?: if (summary.info.isDirect) summary.info.heroes.firstOrNull()?.avatarUrl else null
+                                val roomAvatarUrl = summary.info.avatarUrl
+                                val heroAvatarUrl = if (summary.info.isDirect) summary.info.heroes.firstOrNull()?.avatarUrl else null
+                                val avatarUrl = roomAvatarUrl ?: heroAvatarUrl
+                                if (summary.info.isDirect && roomAvatarUrl == null) {
+                                    Timber.d("Widget: DM '${summary.info.name}' roomAvatar=null, heroAvatar=$heroAvatarUrl, heroes=${summary.info.heroes.size}")
+                                }
                                 WidgetRoomData(
                                     sessionId = matrixClient.sessionId.value,
                                     roomId = summary.roomId.value,
@@ -342,6 +347,16 @@ class LoggedInFlowNode(
                     }
                 }
                 .launchIn(this)
+            // Periodic refresh every 60 seconds to keep widget data fresh
+            launch {
+                while (true) {
+                    delay(60_000)
+                    try {
+                        matrixClient.roomListService.allRooms.rebuildSummaries()
+                        Timber.d("Widget: Triggered periodic rebuildSummaries")
+                    } catch (_: Exception) {}
+                }
+            }
         }
     }
 

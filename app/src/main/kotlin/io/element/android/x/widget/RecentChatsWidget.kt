@@ -69,7 +69,7 @@ class OpenChatActionCallback : ActionCallback {
             )
             Intent(Intent.ACTION_VIEW, deepLinkUri).apply {
                 setClass(context, MainActivity::class.java)
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
             }
         } else {
             Intent(context, MainActivity::class.java).apply {
@@ -92,7 +92,7 @@ class NewChatActionCallback : ActionCallback {
             val deepLinkUri = Uri.parse("elementx://open/${Uri.encode(sessionId)}/create-room")
             Intent(Intent.ACTION_VIEW, deepLinkUri).apply {
                 setClass(context, MainActivity::class.java)
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
             }
         } else {
             Intent(context, MainActivity::class.java).apply {
@@ -115,7 +115,7 @@ class OpenAppActionCallback : ActionCallback {
             val deepLinkUri = Uri.parse("elementx://open/${Uri.encode(sessionId)}")
             Intent(Intent.ACTION_VIEW, deepLinkUri).apply {
                 setClass(context, MainActivity::class.java)
-                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP)
             }
         } else {
             Intent(context, MainActivity::class.java).apply {
