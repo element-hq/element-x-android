@@ -422,6 +422,10 @@ class LoggedInFlowNode(
                     override fun navigateToGlobalNotificationSettings() {
                         backstack.push(NavTarget.Settings(PreferencesEntryPoint.InitialTarget.NotificationSettings))
                     }
+
+                    override fun navigateToDeveloperSettings() {
+                        backstack.push(NavTarget.Settings(PreferencesEntryPoint.InitialTarget.DeveloperSettings))
+                    }
                 }
                 val inputs = RoomFlowNode.Inputs(
                     roomIdOrAlias = navTarget.roomIdOrAlias,
@@ -744,11 +748,11 @@ private class AttachRoomOperation(
                     }
                 } + // Always create a new element, otherwise we wouldn't be navigating to the target event id or child node
                     BackStackElement(
-                    key = NavKey(roomTarget),
-                    fromState = CREATED,
-                    targetState = ACTIVE,
-                    operation = this
-                )
+                        key = NavKey(roomTarget),
+                        fromState = CREATED,
+                        targetState = ACTIVE,
+                        operation = this
+                    )
             } else {
                 // Otherwise, just push the new node to the end of the backstack
                 Push<LoggedInFlowNode.NavTarget>(roomTarget).invoke(currentElements)

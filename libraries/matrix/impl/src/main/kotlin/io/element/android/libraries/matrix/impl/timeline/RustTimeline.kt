@@ -271,8 +271,16 @@ class RustTimeline(
         body: String,
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
+        asEmote: Boolean,
+        asPlainText: Boolean,
     ): Result<Unit> = withContext(dispatcher) {
-        MessageEventContent.from(body, htmlBody, intentionalMentions).use { content ->
+        MessageEventContent.from(
+            body = body,
+            htmlBody = htmlBody,
+            intentionalMentions = intentionalMentions,
+            asEmote = asEmote,
+            asPlainText = asPlainText,
+        ).use { content ->
             runCatchingExceptions<Unit> {
                 inner.send(content)
             }
@@ -337,9 +345,15 @@ class RustTimeline(
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
         fromNotification: Boolean,
+        asEmote: Boolean,
     ): Result<Unit> = withContext(dispatcher) {
         runCatchingExceptions {
-            val msg = MessageEventContent.from(body, htmlBody, intentionalMentions)
+            val msg = MessageEventContent.from(
+                body = body,
+                htmlBody = htmlBody,
+                intentionalMentions = intentionalMentions,
+                asEmote = asEmote,
+            )
             inner.sendReply(
                 msg = msg,
                 eventId = repliedToEventId.value,

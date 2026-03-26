@@ -64,7 +64,9 @@ class FakeTimeline(
         body: String,
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
-    ) -> Result<Unit> = { _, _, _ ->
+        asEmote: Boolean,
+        asPlainText: Boolean,
+    ) -> Result<Unit> = { _, _, _, _, _ ->
         lambdaError()
     }
 
@@ -76,8 +78,10 @@ class FakeTimeline(
         body: String,
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
+        asEmote: Boolean,
+        asPlainText: Boolean,
     ): Result<Unit> = simulateLongTask {
-        sendMessageLambda(body, htmlBody, intentionalMentions)
+        sendMessageLambda(body, htmlBody, intentionalMentions, asEmote, asPlainText)
     }
 
     var redactEventLambda: (eventOrTransactionId: EventOrTransactionId, reason: String?) -> Result<Unit> = { _, _ ->
@@ -134,7 +138,8 @@ class FakeTimeline(
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
         fromNotification: Boolean,
-    ) -> Result<Unit> = { _, _, _, _, _ ->
+        asEmote: Boolean,
+    ) -> Result<Unit> = { _, _, _, _, _, _ ->
         lambdaError()
     }
 
@@ -144,12 +149,14 @@ class FakeTimeline(
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
         fromNotification: Boolean,
+        asEmote: Boolean,
     ): Result<Unit> = replyMessageLambda(
         repliedToEventId,
         body,
         htmlBody,
         intentionalMentions,
         fromNotification,
+        asEmote,
     )
 
     var sendImageLambda: (

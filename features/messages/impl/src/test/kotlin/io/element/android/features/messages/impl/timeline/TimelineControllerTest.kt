@@ -154,10 +154,10 @@ class TimelineControllerTest {
 
     @Test
     fun `test invokeOnCurrentTimeline use the detached timeline and not the live timeline`() = runTest {
-        val lambdaForDetached = lambdaRecorder { _: String, _: String?, _: List<IntentionalMention> ->
+        val lambdaForDetached = lambdaRecorder { _: String, _: String?, _: List<IntentionalMention>, _: Boolean, _: Boolean ->
             Result.success(Unit)
         }
-        val lambdaForLive = lambdaRecorder(ensureNeverCalled = true) { _: String, _: String?, _: List<IntentionalMention> ->
+        val lambdaForLive = lambdaRecorder(ensureNeverCalled = true) { _: String, _: String?, _: List<IntentionalMention>, _: Boolean, _: Boolean ->
             Result.success(Unit)
         }
         val liveTimeline = FakeTimeline(name = "live").apply {

@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.room.aRoomSummary
+import io.element.android.libraries.slash.test.FakeSlashService
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.SuggestionType
@@ -30,7 +31,11 @@ class SuggestionsProcessorTest {
     private val aCommandSuggestion = Suggestion(0, 1, SuggestionType.Command, "")
     private val aCustomSuggestion = Suggestion(0, 1, SuggestionType.Custom("*"), "")
 
-    private val suggestionsProcessor = SuggestionsProcessor()
+    private val suggestionsProcessor = SuggestionsProcessor(
+        slashService = FakeSlashService(
+            getSuggestionsResult = { _, _ -> emptyList() },
+        ),
+    )
 
     @Test
     fun `processing null suggestion will return empty suggestion`() = runTest {
@@ -40,6 +45,7 @@ class SuggestionsProcessorTest {
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEmpty()
     }
@@ -52,6 +58,7 @@ class SuggestionsProcessorTest {
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEmpty()
     }
@@ -64,6 +71,7 @@ class SuggestionsProcessorTest {
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEmpty()
     }
@@ -76,6 +84,7 @@ class SuggestionsProcessorTest {
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEmpty()
     }
@@ -88,6 +97,7 @@ class SuggestionsProcessorTest {
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEmpty()
     }
@@ -100,6 +110,7 @@ class SuggestionsProcessorTest {
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEmpty()
     }
@@ -120,6 +131,7 @@ class SuggestionsProcessorTest {
             ),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEqualTo(
             listOf(
@@ -149,6 +161,7 @@ class SuggestionsProcessorTest {
             ),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEqualTo(
             listOf(
@@ -178,6 +191,7 @@ class SuggestionsProcessorTest {
             ),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEmpty()
     }
@@ -198,6 +212,7 @@ class SuggestionsProcessorTest {
             ),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEqualTo(
             listOf(
@@ -227,6 +242,7 @@ class SuggestionsProcessorTest {
             ),
             currentUserId = A_USER_ID,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEmpty()
     }
@@ -240,6 +256,7 @@ class SuggestionsProcessorTest {
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID_2,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEqualTo(
             listOf(
@@ -257,6 +274,7 @@ class SuggestionsProcessorTest {
             roomAliasSuggestions = emptyList(),
             currentUserId = UserId("@alice:server.org"),
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEmpty()
     }
@@ -270,6 +288,7 @@ class SuggestionsProcessorTest {
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID_2,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEmpty()
     }
@@ -283,6 +302,7 @@ class SuggestionsProcessorTest {
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID_2,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEmpty()
     }
@@ -296,6 +316,7 @@ class SuggestionsProcessorTest {
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID_2,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEqualTo(
             listOf(
@@ -313,6 +334,7 @@ class SuggestionsProcessorTest {
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID_2,
             canSendRoomMention = { true },
+            isInThread = false,
         )
         assertThat(result).isEqualTo(
             listOf(
@@ -331,6 +353,7 @@ class SuggestionsProcessorTest {
             roomAliasSuggestions = emptyList(),
             currentUserId = A_USER_ID_2,
             canSendRoomMention = { false },
+            isInThread = false,
         )
         assertThat(result).isEqualTo(
             listOf(

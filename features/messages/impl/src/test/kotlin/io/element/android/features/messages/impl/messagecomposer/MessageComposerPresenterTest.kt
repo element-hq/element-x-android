@@ -89,6 +89,9 @@ import io.element.android.libraries.preferences.api.store.SessionPreferencesStor
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.push.test.notifications.conversations.FakeNotificationConversationService
+import io.element.android.libraries.slash.api.SlashCommand
+import io.element.android.libraries.slash.api.SlashService
+import io.element.android.libraries.slash.test.FakeSlashService
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
@@ -374,9 +377,12 @@ class MessageComposerPresenterTest {
         val presenter = createPresenter(
             room = FakeJoinedRoom(
                 liveTimeline = FakeTimeline().apply {
-                    sendMessageLambda = { _, _, _ -> Result.success(Unit) }
+                    sendMessageLambda = { _, _, _, _, _ -> Result.success(Unit) }
                 },
                 typingNoticeResult = { Result.success(Unit) }
+            ),
+            slashService = FakeSlashService(
+                parseResult = { _, _, _ -> SlashCommand.NotACommand }
             ),
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -409,9 +415,12 @@ class MessageComposerPresenterTest {
             isRichTextEditorEnabled = false,
             room = FakeJoinedRoom(
                 liveTimeline = FakeTimeline().apply {
-                    sendMessageLambda = { _, _, _ -> Result.success(Unit) }
+                    sendMessageLambda = { _, _, _, _, _ -> Result.success(Unit) }
                 },
                 typingNoticeResult = { Result.success(Unit) }
+            ),
+            slashService = FakeSlashService(
+                parseResult = { _, _, _ -> SlashCommand.NotACommand }
             ),
         )
         moleculeFlow(RecompositionMode.Immediate) {
@@ -602,7 +611,7 @@ class MessageComposerPresenterTest {
 
     @Test
     fun `present - reply message`() = runTest {
-        val replyMessageLambda = lambdaRecorder { _: EventId?, _: String, _: String?, _: List<IntentionalMention>, _: Boolean ->
+        val replyMessageLambda = lambdaRecorder { _: EventId?, _: String, _: String?, _: List<IntentionalMention>, _: Boolean, _: Boolean ->
             Result.success(Unit)
         }
         val timeline = FakeTimeline().apply {
@@ -633,7 +642,7 @@ class MessageComposerPresenterTest {
 
             assert(replyMessageLambda)
                 .isCalledOnce()
-                .with(any(), value(A_REPLY), value(A_REPLY), any(), value(false))
+                .with(any(), value(A_REPLY), value(A_REPLY), any(), value(false), value(false))
 
             assertThat(analyticsService.capturedEvents).containsExactly(
                 Composer(
@@ -967,7 +976,12 @@ class MessageComposerPresenterTest {
             )
             givenRoomInfo(aRoomInfo(isDirect = false))
         }
-        val presenter = createPresenter(room)
+        val presenter = createPresenter(
+            room = room,
+            slashService = FakeSlashService(
+                getSuggestionsResult = { _, _ -> emptyList() },
+            ),
+        )
         presenter.test {
             val initialState = awaitItem()
 
@@ -1086,13 +1100,13 @@ class MessageComposerPresenterTest {
     @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun `present - send messages with intentional mentions`() = runTest {
-        val replyMessageLambda = lambdaRecorder { _: EventId?, _: String, _: String?, _: List<IntentionalMention>, _: Boolean ->
+        val replyMessageLambda = lambdaRecorder { _: EventId?, _: String, _: String?, _: List<IntentionalMention>, _: Boolean, _: Boolean ->
             Result.success(Unit)
         }
         val editMessageLambda = lambdaRecorder { _: EventOrTransactionId, _: String, _: String?, _: List<IntentionalMention> ->
             Result.success(Unit)
         }
-        val sendMessageResult = lambdaRecorder { _: String, _: String?, _: List<IntentionalMention> ->
+        val sendMessageResult = lambdaRecorder { _: String, _: String?, _: List<IntentionalMention>, _: Boolean, _: Boolean ->
             Result.success(Unit)
         }
         val timeline = FakeTimeline().apply {
@@ -1104,7 +1118,12 @@ class MessageComposerPresenterTest {
             liveTimeline = timeline,
             typingNoticeResult = { Result.success(Unit) }
         )
-        val presenter = createPresenter(room = room)
+        val presenter = createPresenter(
+            room = room,
+            slashService = FakeSlashService(
+                parseResult = { _, _, _ -> SlashCommand.NotACommand }
+            ),
+        )
         presenter.test {
             val initialState = awaitFirstItem()
 
@@ -1122,7 +1141,7 @@ class MessageComposerPresenterTest {
             advanceUntilIdle()
 
             sendMessageResult.assertions().isCalledOnce()
-                .with(value(A_MESSAGE), any(), value(listOf(IntentionalMention.User(A_USER_ID))))
+                .with(value(A_MESSAGE), any(), value(listOf(IntentionalMention.User(A_USER_ID))), value(false), value(false))
 
             // Check intentional mentions on reply sent
             initialState.eventSink(MessageComposerEvent.SetMode(aReplyMode()))
@@ -1139,7 +1158,7 @@ class MessageComposerPresenterTest {
 
             assert(replyMessageLambda)
                 .isCalledOnce()
-                .with(any(), any(), any(), value(listOf(IntentionalMention.User(A_USER_ID_2))), value(false))
+                .with(any(), any(), any(), value(listOf(IntentionalMention.User(A_USER_ID_2))), value(false), value(false))
 
             // Check intentional mentions on edit message
             skipItems(1)
@@ -1512,9 +1531,12 @@ class MessageComposerPresenterTest {
         isRichTextEditorEnabled: Boolean = true,
         draftService: ComposerDraftService = FakeComposerDraftService(),
         mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
+        isInThread: Boolean = false,
+        slashService: SlashService = FakeSlashService(),
     ) = MessageComposerPresenter(
         navigator = navigator,
         sessionCoroutineScope = this,
+        isInThread = isInThread,
         room = room,
         mediaPickerProvider = pickerProvider,
         sessionPreferencesStore = sessionPreferencesStore,
@@ -1545,9 +1567,10 @@ class MessageComposerPresenterTest {
         draftService = draftService,
         mentionSpanProvider = mentionSpanProvider,
         pillificationHelper = textPillificationHelper,
-        suggestionsProcessor = SuggestionsProcessor(),
+        suggestionsProcessor = SuggestionsProcessor(slashService = slashService),
         mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
         notificationConversationService = notificationConversationService,
+        slashService = slashService,
     ).apply {
         isTesting = true
         showTextFormatting = isRichTextEditorEnabled
