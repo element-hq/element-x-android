@@ -57,14 +57,20 @@ class OpenChatActionCallback : ActionCallback {
         glanceId: GlanceId,
         parameters: ActionParameters,
     ) {
-        val sessionId = parameters[SessionIdKey] ?: return
-        val roomId = parameters[RoomIdKey] ?: return
-        val deepLinkUri = Uri.parse(
-            "elementx://open/${Uri.encode(sessionId)}/${Uri.encode(roomId)}"
-        )
-        val intent = Intent(Intent.ACTION_VIEW, deepLinkUri).apply {
-            setClass(context, MainActivity::class.java)
-            addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val sessionId = parameters[SessionIdKey]
+        val roomId = parameters[RoomIdKey]
+        val intent = if (!sessionId.isNullOrEmpty() && !roomId.isNullOrEmpty()) {
+            val deepLinkUri = Uri.parse(
+                "elementx://open/${Uri.encode(sessionId)}/${Uri.encode(roomId)}"
+            )
+            Intent(Intent.ACTION_VIEW, deepLinkUri).apply {
+                setClass(context, MainActivity::class.java)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            }
+        } else {
+            Intent(context, MainActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
         }
         context.startActivity(intent)
     }

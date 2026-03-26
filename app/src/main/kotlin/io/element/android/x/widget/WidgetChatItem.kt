@@ -11,7 +11,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class WidgetChatItem(
-    val sessionId: String,
+    val sessionId: String = "",
     val roomId: String,
     val roomName: String,
     val avatarInitial: String,
