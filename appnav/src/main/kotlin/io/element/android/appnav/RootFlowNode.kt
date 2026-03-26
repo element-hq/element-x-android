@@ -535,6 +535,10 @@ class RootFlowNode(
                         clearBackstack = true,
                     ).maybeAttachThread(deeplinkData.threadId, deeplinkData.eventId)
                 }
+                is DeeplinkData.CreateRoom -> {
+                    loggedInFlowNode.navigateToHome()
+                    loggedInFlowNode.navigateToCreateRoom()
+                }
             }
         }
     }

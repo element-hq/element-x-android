@@ -86,7 +86,29 @@ class NewChatActionCallback : ActionCallback {
         glanceId: GlanceId,
         parameters: ActionParameters,
     ) {
-        // Open the app to the session home so the user can tap the FAB to start a new chat
+        val chats = RecentChatsDataStore.loadChats(context)
+        val sessionId = chats.firstOrNull()?.sessionId
+        val intent = if (!sessionId.isNullOrEmpty()) {
+            val deepLinkUri = Uri.parse("elementx://open/${Uri.encode(sessionId)}/create-room")
+            Intent(Intent.ACTION_VIEW, deepLinkUri).apply {
+                setClass(context, MainActivity::class.java)
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TOP)
+            }
+        } else {
+            Intent(context, MainActivity::class.java).apply {
+                addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            }
+        }
+        context.startActivity(intent)
+    }
+}
+
+class OpenAppActionCallback : ActionCallback {
+    override suspend fun onAction(
+        context: Context,
+        glanceId: GlanceId,
+        parameters: ActionParameters,
+    ) {
         val chats = RecentChatsDataStore.loadChats(context)
         val sessionId = chats.firstOrNull()?.sessionId
         val intent = if (!sessionId.isNullOrEmpty()) {
@@ -150,42 +172,8 @@ class RecentChatsWidget : GlanceAppWidget() {
                 .cornerRadius(24.dp)
                 .padding(8.dp),
         ) {
-            // Header with surfaceVariant background
-            Row(
-                modifier = GlanceModifier
-                    .fillMaxWidth()
-                    .cornerRadius(12.dp)
-                    .background(GlanceTheme.colors.surfaceVariant)
-                    .padding(horizontal = 12.dp, vertical = 8.dp),
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Image(
-                    provider = ImageProvider(io.element.android.appicon.element.R.mipmap.ic_launcher_round),
-                    contentDescription = "Element X",
-                    modifier = GlanceModifier.size(24.dp).cornerRadius(12.dp),
-                )
-                Spacer(modifier = GlanceModifier.width(8.dp))
-                Text(
-                    text = "Element X",
-                    style = TextStyle(
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 16.sp,
-                        color = GlanceTheme.colors.onSurfaceVariant,
-                    ),
-                    modifier = GlanceModifier
-                        .defaultWeight()
-                        .clickable(actionRunCallback<RefreshWidgetActionCallback>()),
-                )
-                Text(
-                    text = "+ New Chat",
-                    style = TextStyle(
-                        fontSize = 14.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = GlanceTheme.colors.primary,
-                    ),
-                    modifier = GlanceModifier.clickable(actionRunCallback<NewChatActionCallback>()),
-                )
-            }
+            // Header: [App icon] [Element X (N) → open app] [↻ refresh] [✎ compose]
+            WidgetHeader(chatCount = chats.size)
             Spacer(modifier = GlanceModifier.height(4.dp))
 
             if (chats.isEmpty()) {
@@ -220,6 +208,62 @@ class RecentChatsWidget : GlanceAppWidget() {
                     }
                 }
             }
+        }
+    }
+
+    @Composable
+    private fun WidgetHeader(chatCount: Int) {
+        Row(
+            modifier = GlanceModifier
+                .fillMaxWidth()
+                .cornerRadius(12.dp)
+                .background(GlanceTheme.colors.surfaceVariant)
+                .padding(horizontal = 12.dp, vertical = 8.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            // App icon
+            Image(
+                provider = ImageProvider(io.element.android.appicon.element.R.mipmap.ic_launcher_round),
+                contentDescription = "Element X",
+                modifier = GlanceModifier.size(24.dp).cornerRadius(12.dp),
+            )
+            Spacer(modifier = GlanceModifier.width(8.dp))
+            // "Element X (N)" — clickable to open app
+            Text(
+                text = "Element X ($chatCount)",
+                style = TextStyle(
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 16.sp,
+                    color = GlanceTheme.colors.onSurfaceVariant,
+                ),
+                modifier = GlanceModifier
+                    .defaultWeight()
+                    .clickable(actionRunCallback<OpenAppActionCallback>()),
+            )
+            // Refresh button
+            Text(
+                text = "\u21BB",
+                style = TextStyle(
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = GlanceTheme.colors.primary,
+                ),
+                modifier = GlanceModifier
+                    .padding(horizontal = 8.dp)
+                    .clickable(actionRunCallback<RefreshWidgetActionCallback>()),
+            )
+            // Compose / new chat button
+            Text(
+                text = "\u270E",
+                style = TextStyle(
+                    fontSize = 18.sp,
+                    fontWeight = FontWeight.Bold,
+                    color = GlanceTheme.colors.primary,
+                ),
+                modifier = GlanceModifier
+                    .padding(start = 4.dp)
+                    .clickable(actionRunCallback<NewChatActionCallback>()),
+            )
         }
     }
 
@@ -281,8 +325,9 @@ class RecentChatsWidget : GlanceAppWidget() {
 
             Spacer(modifier = GlanceModifier.width(12.dp))
 
-            // Name + last message
+            // Two-row layout: name+timestamp on row 1, message+badge on row 2
             Column(modifier = GlanceModifier.defaultWeight()) {
+                // Row 1: [Name ......................... Timestamp]
                 Row(
                     modifier = GlanceModifier.fillMaxWidth(),
                     verticalAlignment = Alignment.CenterVertically,
@@ -310,11 +355,19 @@ class RecentChatsWidget : GlanceAppWidget() {
                         ),
                     )
                 }
-                if (chat.lastMessage.isNotEmpty()) {
-                    val preview = if (chat.senderName.isNotEmpty() && chat.lastMessage.isNotEmpty()) {
-                        "${chat.senderName}: ${chat.lastMessage}"
+                // Row 2: [Sender: message .............. Badge   ]
+                Row(
+                    modifier = GlanceModifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically,
+                ) {
+                    val preview = if (chat.lastMessage.isNotEmpty()) {
+                        if (chat.senderName.isNotEmpty()) {
+                            "${chat.senderName}: ${chat.lastMessage}"
+                        } else {
+                            chat.lastMessage
+                        }
                     } else {
-                        chat.lastMessage
+                        ""
                     }
                     Text(
                         text = preview,
@@ -323,29 +376,28 @@ class RecentChatsWidget : GlanceAppWidget() {
                             color = GlanceTheme.colors.onSurfaceVariant,
                         ),
                         maxLines = 1,
+                        modifier = GlanceModifier.defaultWeight(),
                     )
-                }
-            }
-
-            // Unread badge using theme error color
-            if (chat.unreadCount > 0) {
-                Spacer(modifier = GlanceModifier.width(8.dp))
-                Column(
-                    modifier = GlanceModifier
-                        .size(20.dp)
-                        .cornerRadius(10.dp)
-                        .background(GlanceTheme.colors.error),
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Text(
-                        text = if (chat.unreadCount > 99) "99+" else chat.unreadCount.toString(),
-                        style = TextStyle(
-                            fontSize = 10.sp,
-                            fontWeight = FontWeight.Bold,
-                            color = GlanceTheme.colors.onError,
-                        ),
-                    )
+                    if (chat.unreadCount > 0) {
+                        Spacer(modifier = GlanceModifier.width(8.dp))
+                        Column(
+                            modifier = GlanceModifier
+                                .size(20.dp)
+                                .cornerRadius(10.dp)
+                                .background(GlanceTheme.colors.error),
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Text(
+                                text = if (chat.unreadCount > 99) "99+" else chat.unreadCount.toString(),
+                                style = TextStyle(
+                                    fontSize = 10.sp,
+                                    fontWeight = FontWeight.Bold,
+                                    color = GlanceTheme.colors.onError,
+                                ),
+                            )
+                        }
+                    }
                 }
             }
         }

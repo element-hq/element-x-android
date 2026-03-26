@@ -22,4 +22,7 @@ sealed interface DeeplinkData {
 
     /** The target is a room, with the given [sessionId], [roomId] and optionally a [threadId] and [eventId]. */
     data class Room(override val sessionId: SessionId, val roomId: RoomId, val threadId: ThreadId?, val eventId: EventId?) : DeeplinkData
+
+    /** The target is the create-room screen, with the given [sessionId]. */
+    data class CreateRoom(override val sessionId: SessionId) : DeeplinkData
 }

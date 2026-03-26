@@ -321,6 +321,8 @@ class LoggedInFlowNode(
                                     }
                                     else -> ""
                                 }
+                                val avatarUrl = summary.info.avatarUrl
+                                    ?: if (summary.info.isDirect) summary.info.heroes.firstOrNull()?.avatarUrl else null
                                 WidgetRoomData(
                                     sessionId = matrixClient.sessionId.value,
                                     roomId = summary.roomId.value,
@@ -329,7 +331,7 @@ class LoggedInFlowNode(
                                     lastActivityTimestamp = summary.latestEventTimestamp ?: 0L,
                                     unreadCount = summary.info.numUnreadNotifications.toInt(),
                                     senderName = senderName,
-                                    avatarUrl = summary.info.avatarUrl,
+                                    avatarUrl = avatarUrl,
                                     isFavorite = summary.info.isFavorite,
                                 )
                             }
@@ -694,6 +696,10 @@ class LoggedInFlowNode(
 
     fun navigateToHome() {
         backstack.safeRoot(NavTarget.Home)
+    }
+
+    fun navigateToCreateRoom() {
+        backstack.push(NavTarget.CreateRoom)
     }
 
     suspend fun attachRoom(
