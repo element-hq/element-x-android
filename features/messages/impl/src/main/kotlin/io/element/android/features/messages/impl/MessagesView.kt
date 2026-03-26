@@ -317,12 +317,13 @@ fun MessagesView(
                                     expanded = showOverflow,
                                     onDismissRequest = { showOverflow = false },
                                 ) {
+                                    val muteLabel = stringResource(if (state.isMuted) CommonStrings.common_unmute else CommonStrings.common_mute)
                                     DropdownMenuItem(
-                                        text = { Text(if (state.isMuted) "Unmute" else "Mute") },
+                                        text = { Text(muteLabel) },
                                         leadingIcon = {
                                             Icon(
                                                 if (state.isMuted) CompoundIcons.NotificationsSolid() else CompoundIcons.NotificationsOff(),
-                                                contentDescription = null,
+                                                contentDescription = muteLabel,
                                             )
                                         },
                                         onClick = {
@@ -330,12 +331,13 @@ fun MessagesView(
                                             state.eventSink(MessagesEvent.ToggleMute)
                                         },
                                     )
+                                    val favLabel = stringResource(if (state.isFavorite) CommonStrings.common_unfavourite else CommonStrings.common_favourite)
                                     DropdownMenuItem(
-                                        text = { Text(if (state.isFavorite) "Unfavorite" else "Favorite") },
+                                        text = { Text(favLabel) },
                                         leadingIcon = {
                                             Icon(
                                                 if (state.isFavorite) CompoundIcons.FavouriteSolid() else CompoundIcons.Favourite(),
-                                                contentDescription = null,
+                                                contentDescription = favLabel,
                                             )
                                         },
                                         onClick = {
@@ -343,25 +345,28 @@ fun MessagesView(
                                             state.eventSink(MessagesEvent.ToggleFavorite)
                                         },
                                     )
+                                    val peopleLabel = stringResource(CommonStrings.common_people)
                                     DropdownMenuItem(
-                                        text = { Text(stringResource(CommonStrings.common_people)) },
-                                        leadingIcon = { Icon(CompoundIcons.UserProfileSolid(), contentDescription = null) },
+                                        text = { Text(peopleLabel) },
+                                        leadingIcon = { Icon(CompoundIcons.UserProfileSolid(), contentDescription = peopleLabel) },
                                         onClick = {
                                             showOverflow = false
                                             onRoomDetailsClick()
                                         },
                                     )
+                                    val inviteLabel = stringResource(CommonStrings.action_invite)
                                     DropdownMenuItem(
-                                        text = { Text(stringResource(CommonStrings.action_invite)) },
-                                        leadingIcon = { Icon(CompoundIcons.UserAdd(), contentDescription = null) },
+                                        text = { Text(inviteLabel) },
+                                        leadingIcon = { Icon(CompoundIcons.UserAdd(), contentDescription = inviteLabel) },
                                         onClick = {
                                             showOverflow = false
                                             onRoomDetailsClick()
                                         },
                                     )
+                                    val settingsLabel = stringResource(CommonStrings.common_settings)
                                     DropdownMenuItem(
-                                        text = { Text(stringResource(CommonStrings.common_settings)) },
-                                        leadingIcon = { Icon(CompoundIcons.Settings(), contentDescription = null) },
+                                        text = { Text(settingsLabel) },
+                                        leadingIcon = { Icon(CompoundIcons.Settings(), contentDescription = settingsLabel) },
                                         onClick = {
                                             showOverflow = false
                                             onRoomDetailsClick()

@@ -247,7 +247,7 @@ private fun HomeScaffold(
                 Spacer(Modifier.height(8.dp))
                 val coroutineScopeDrawer = rememberCoroutineScope()
                 NavigationDrawerItem(
-                    icon = { Icon(CompoundIcons.Settings(), contentDescription = null) },
+                    icon = { Icon(CompoundIcons.Settings(), contentDescription = stringResource(CommonStrings.common_settings)) },
                     label = { Text(stringResource(CommonStrings.common_settings)) },
                     selected = false,
                     onClick = {
@@ -332,7 +332,7 @@ private fun HomeScaffold(
                                     state.eventSink(HomeEvent.SelectHomeNavigationBarItem(item))
                                 }
                             },
-                            icon = { Icon(imageVector = item.icon(isSelected), contentDescription = null) },
+                            icon = { Icon(imageVector = item.icon(isSelected), contentDescription = stringResource(item.labelRes)) },
                             label = { Text(text = stringResource(item.labelRes)) },
                         )
                     }

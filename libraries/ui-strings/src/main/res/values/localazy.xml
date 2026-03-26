@@ -240,6 +240,7 @@ Reason: %1$s."</string>
   <string name="common_failed">"Failed"</string>
   <string name="common_favourite">"Favourite"</string>
   <string name="common_favourited">"Favourited"</string>
+  <string name="common_unfavourite">"Unfavourite"</string>
   <string name="common_file">"File"</string>
   <string name="common_file_deleted">"File deleted"</string>
   <string name="common_file_saved">"File saved"</string>
