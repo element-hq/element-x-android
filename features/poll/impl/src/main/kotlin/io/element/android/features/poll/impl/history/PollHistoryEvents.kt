@@ -13,7 +13,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 
 sealed interface PollHistoryEvents {
     data object LoadMore : PollHistoryEvents
-    data class SelectPollAnswer(val pollStartId: EventId, val answerId: String) : PollHistoryEvents
+    data class SelectPollAnswer(val pollStartId: EventId, val answerIds: List<String>) : PollHistoryEvents
     data class EndPoll(val pollStartId: EventId) : PollHistoryEvents
     data class SelectFilter(val filter: PollHistoryFilter) : PollHistoryEvents
 }

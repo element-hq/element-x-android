@@ -26,8 +26,8 @@ fun TimelineItemPollView(
     eventSink: (TimelineEvent.TimelineItemPollEvent) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    fun onSelectAnswer(pollStartId: EventId, answerId: String) {
-        eventSink(TimelineEvent.SelectPollAnswer(pollStartId, answerId))
+    fun onSelectAnswer(pollStartId: EventId, answerIds: List<String>) {
+        eventSink(TimelineEvent.SelectPollAnswer(pollStartId, answerIds))
     }
 
     fun onEndPoll(pollStartId: EventId) {
@@ -43,6 +43,8 @@ fun TimelineItemPollView(
         question = content.question,
         answerItems = content.answerItems.toImmutableList(),
         pollKind = content.pollKind,
+        isMultipleSelection = content.maxSelections > 1u,
+        maxSelections = content.maxSelections,
         isPollEnded = content.isEnded,
         isPollEditable = content.isEditable,
         isMine = content.isMine,

@@ -19,6 +19,7 @@ data class TimelineItemPollContent(
     val question: String,
     val answerItems: List<PollAnswerItem>,
     val pollKind: PollKind,
+    val maxSelections: ULong,
     val isEnded: Boolean,
     override val isEdited: Boolean,
 ) : TimelineItemEventContent,

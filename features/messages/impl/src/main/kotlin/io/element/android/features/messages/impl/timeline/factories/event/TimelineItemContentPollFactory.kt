@@ -33,6 +33,7 @@ class TimelineItemContentPollFactory(
             question = pollContentState.question,
             answerItems = pollContentState.answerItems,
             pollKind = pollContentState.pollKind,
+            maxSelections = pollContentState.maxSelections,
             isEnded = pollContentState.isPollEnded,
             isEdited = content.isEdited
         )

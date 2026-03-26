@@ -59,10 +59,10 @@ class PollContentStateFactoryTest {
         )
         val expectedState = aPollContentState(
             answerItems = listOf(
-                aPollAnswerItem(answer = A_POLL_ANSWER_1, votesCount = 3, percentage = 0.3f),
+                aPollAnswerItem(answer = A_POLL_ANSWER_1, isEnabled = false, votesCount = 3, percentage = 0.3f),
                 aPollAnswerItem(answer = A_POLL_ANSWER_2, isSelected = true, votesCount = 6, percentage = 0.6f),
-                aPollAnswerItem(answer = A_POLL_ANSWER_3),
-                aPollAnswerItem(answer = A_POLL_ANSWER_4, votesCount = 1, percentage = 0.1f),
+                aPollAnswerItem(answer = A_POLL_ANSWER_3, isEnabled = false),
+                aPollAnswerItem(answer = A_POLL_ANSWER_4, isEnabled = false, votesCount = 1, percentage = 0.1f),
             )
         )
         assertThat(state).isEqualTo(expectedState)
@@ -139,10 +139,10 @@ class PollContentStateFactoryTest {
         val expectedState = aPollContentState(
             pollKind = PollKind.Undisclosed,
             answerItems = listOf(
-                aPollAnswerItem(answer = A_POLL_ANSWER_1, showVotes = false, votesCount = 3, percentage = 0.3f),
+                aPollAnswerItem(answer = A_POLL_ANSWER_1, isEnabled = false, showVotes = false, votesCount = 3, percentage = 0.3f),
                 aPollAnswerItem(answer = A_POLL_ANSWER_2, showVotes = false, isSelected = true, votesCount = 6, percentage = 0.6f),
-                aPollAnswerItem(answer = A_POLL_ANSWER_3, showVotes = false),
-                aPollAnswerItem(answer = A_POLL_ANSWER_4, showVotes = false, votesCount = 1, percentage = 0.1f),
+                aPollAnswerItem(answer = A_POLL_ANSWER_3, isEnabled = false, showVotes = false),
+                aPollAnswerItem(answer = A_POLL_ANSWER_4, isEnabled = false, showVotes = false, votesCount = 1, percentage = 0.1f),
             ),
         )
         assertThat(state).isEqualTo(expectedState)
@@ -241,6 +241,7 @@ class PollContentStateFactoryTest {
         question = question,
         answerItems = answerItems.toImmutableList(),
         pollKind = pollKind,
+        maxSelections = 1u,
         isPollEditable = isEditable,
         isPollEnded = isEnded,
         isMine = isMine,
