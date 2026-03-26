@@ -290,6 +290,7 @@ dependencies {
 
     implementation(libs.androidx.glance.appwidget)
     implementation(libs.androidx.glance.material3)
+    implementation(projects.libraries.matrixmedia.api)
 
     testCommonDependencies(libs)
     testImplementation(projects.libraries.matrix.test)

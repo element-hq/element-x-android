@@ -329,6 +329,7 @@ class LoggedInFlowNode(
                                     lastActivityTimestamp = summary.latestEventTimestamp ?: 0L,
                                     unreadCount = summary.info.numUnreadNotifications.toInt(),
                                     senderName = senderName,
+                                    avatarUrl = summary.info.avatarUrl,
                                 )
                             }
                         Timber.d("Widget: Updating widget with ${widgetRooms.size} rooms")

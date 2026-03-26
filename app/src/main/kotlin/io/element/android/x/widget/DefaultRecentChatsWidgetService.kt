@@ -30,6 +30,7 @@ class DefaultRecentChatsWidgetService(
                 lastActivityTimestamp = room.lastActivityTimestamp,
                 unreadCount = room.unreadCount,
                 senderName = room.senderName,
+                avatarUrl = room.avatarUrl,
             )
         }
         RecentChatsWidgetUpdater.updateWidget(context, widgetInfoList)

@@ -19,4 +19,5 @@ data class WidgetChatItem(
     val timestamp: String,
     val unreadCount: Int,
     val senderName: String = "",
+    val avatarUrl: String? = null,
 )

@@ -34,4 +34,5 @@ data class WidgetRoomData(
     val lastActivityTimestamp: Long,
     val unreadCount: Int,
     val senderName: String = "",
+    val avatarUrl: String? = null,
 )

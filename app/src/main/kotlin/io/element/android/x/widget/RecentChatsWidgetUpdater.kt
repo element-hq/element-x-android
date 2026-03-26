@@ -28,6 +28,7 @@ object RecentChatsWidgetUpdater {
                     timestamp = formatTimestamp(room.lastActivityTimestamp),
                     unreadCount = room.unreadCount,
                     senderName = room.senderName,
+                    avatarUrl = room.avatarUrl,
                 )
             }
         RecentChatsDataStore.saveChats(context, chats)
@@ -55,4 +56,5 @@ data class RoomWidgetInfo(
     val lastActivityTimestamp: Long,
     val unreadCount: Int,
     val senderName: String = "",
+    val avatarUrl: String? = null,
 )
