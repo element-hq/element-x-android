@@ -33,4 +33,5 @@ data class WidgetRoomData(
     val lastMessage: String?,
     val lastActivityTimestamp: Long,
     val unreadCount: Int,
+    val senderName: String = "",
 )

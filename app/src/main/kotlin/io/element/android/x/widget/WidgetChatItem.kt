@@ -18,4 +18,5 @@ data class WidgetChatItem(
     val lastMessage: String,
     val timestamp: String,
     val unreadCount: Int,
+    val senderName: String = "",
 )

@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import kotlin.math.absoluteValue
 import androidx.glance.GlanceId
 import androidx.glance.GlanceModifier
 import androidx.glance.GlanceTheme
@@ -112,10 +113,10 @@ class RecentChatsWidget : GlanceAppWidget() {
                     modifier = GlanceModifier.defaultWeight(),
                 )
                 Text(
-                    text = "New",
+                    text = "+ New Chat",
                     style = TextStyle(
                         fontSize = 14.sp,
-                        fontWeight = FontWeight.Medium,
+                        fontWeight = FontWeight.Bold,
                         color = GlanceTheme.colors.primary,
                     ),
                     modifier = GlanceModifier.clickable(actionStartActivity<MainActivity>()),
@@ -151,12 +152,7 @@ class RecentChatsWidget : GlanceAppWidget() {
                 LazyColumn(modifier = GlanceModifier.fillMaxSize()) {
                     items(chats) { chat ->
                         ChatItemRow(chat)
-                        Spacer(
-                            modifier = GlanceModifier
-                                .fillMaxWidth()
-                                .height(1.dp)
-                                .background(GlanceTheme.colors.outline)
-                        )
+                        Spacer(modifier = GlanceModifier.height(2.dp))
                     }
                 }
             }
@@ -165,6 +161,16 @@ class RecentChatsWidget : GlanceAppWidget() {
 
     @Composable
     private fun ChatItemRow(chat: WidgetChatItem) {
+        val avatarColors = listOf(
+            Color(0xFF0DBD8B), // green
+            Color(0xFF368BD6), // blue
+            Color(0xFFAC3BA8), // purple
+            Color(0xFFE64F7A), // pink
+            Color(0xFFFF812D), // orange
+            Color(0xFF2DC50A), // lime
+        )
+        val avatarColor = avatarColors[chat.roomName.hashCode().absoluteValue % avatarColors.size]
+
         Row(
             modifier = GlanceModifier
                 .fillMaxWidth()
@@ -184,7 +190,7 @@ class RecentChatsWidget : GlanceAppWidget() {
                 modifier = GlanceModifier
                     .size(40.dp)
                     .cornerRadius(20.dp)
-                    .background(ColorProvider(ElementGreen)),
+                    .background(ColorProvider(avatarColor)),
                 horizontalAlignment = Alignment.CenterHorizontally,
                 verticalAlignment = Alignment.CenterVertically,
             ) {
@@ -225,8 +231,13 @@ class RecentChatsWidget : GlanceAppWidget() {
                     )
                 }
                 if (chat.lastMessage.isNotEmpty()) {
+                    val preview = if (chat.senderName.isNotEmpty() && chat.lastMessage.isNotEmpty()) {
+                        "${chat.senderName}: ${chat.lastMessage}"
+                    } else {
+                        chat.lastMessage
+                    }
                     Text(
-                        text = chat.lastMessage,
+                        text = preview,
                         style = TextStyle(
                             fontSize = 12.sp,
                             color = GlanceTheme.colors.onSurfaceVariant,

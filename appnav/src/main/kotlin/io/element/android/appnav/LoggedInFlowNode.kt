@@ -103,6 +103,7 @@ import io.element.android.libraries.matrix.api.room.CurrentUserMembership
 import io.element.android.libraries.matrix.api.roomlist.LatestEventValue
 import io.element.android.libraries.matrix.api.roomlist.awaitLoaded
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
 import io.element.android.services.analytics.api.watchers.AnalyticsRoomListStateWatcher
 import io.element.android.services.appnavstate.api.AppNavigationStateService
 import kotlinx.coroutines.CoroutineScope
@@ -309,6 +310,17 @@ class LoggedInFlowNode(
                                     is LatestEventValue.RoomInvite,
                                     is LatestEventValue.None -> null
                                 }
+                                val senderName = when (val event = summary.latestEvent) {
+                                    is LatestEventValue.Remote -> when (val profile = event.senderProfile) {
+                                        is ProfileDetails.Ready -> profile.displayName ?: event.senderId.value
+                                        else -> event.senderId.value
+                                    }
+                                    is LatestEventValue.Local -> when (val profile = event.senderProfile) {
+                                        is ProfileDetails.Ready -> profile.displayName ?: event.senderId.value
+                                        else -> event.senderId.value
+                                    }
+                                    else -> ""
+                                }
                                 WidgetRoomData(
                                     sessionId = matrixClient.sessionId.value,
                                     roomId = summary.roomId.value,
@@ -316,6 +328,7 @@ class LoggedInFlowNode(
                                     lastMessage = lastMessage,
                                     lastActivityTimestamp = summary.latestEventTimestamp ?: 0L,
                                     unreadCount = summary.info.numUnreadNotifications.toInt(),
+                                    senderName = senderName,
                                 )
                             }
                         Timber.d("Widget: Updating widget with ${widgetRooms.size} rooms")
