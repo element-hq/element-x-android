@@ -28,7 +28,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.foundation.gestures.rememberTransformableState
-import androidx.compose.foundation.gestures.transformable
+import androidx.compose.foundation.gestures.awaitEachGesture
+import androidx.compose.foundation.gestures.awaitFirstDown
+import androidx.compose.foundation.gestures.calculateZoom
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -165,10 +168,6 @@ fun TimelineView(
 
     // Pinch-to-zoom: scale the density of the timeline content area
     var chatScale by remember { mutableFloatStateOf(1f) }
-    @Suppress("DEPRECATION")
-    val transformState = rememberTransformableState { zoomChange, _, _ ->
-        chatScale = (chatScale * zoomChange).coerceIn(0.7f, 1.5f)
-    }
     val currentDensity = LocalDensity.current
     val scaledDensity = remember(currentDensity, chatScale) {
         Density(currentDensity.density * chatScale, currentDensity.fontScale)
@@ -182,7 +181,22 @@ fun TimelineView(
                     modifier = Modifier
                         .fillMaxSize()
                         .nestedScroll(nestedScrollConnection)
-                        .transformable(transformState)
+                        .pointerInput(Unit) {
+                            awaitEachGesture {
+                                // Wait for at least two fingers
+                                awaitFirstDown()
+                                do {
+                                    val event = awaitPointerEvent()
+                                    if (event.changes.size >= 2) {
+                                        val zoom = event.calculateZoom()
+                                        if (zoom != 1f) {
+                                            chatScale = (chatScale * zoom).coerceIn(0.7f, 1.5f)
+                                            event.changes.forEach { it.consume() }
+                                        }
+                                    }
+                                } while (event.changes.any { it.pressed })
+                            }
+                        }
                         .testTag(TestTags.timeline),
                     state = lazyListState,
                     reverseLayout = useReverseLayout,
