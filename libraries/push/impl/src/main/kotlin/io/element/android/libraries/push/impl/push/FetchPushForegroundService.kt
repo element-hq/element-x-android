@@ -143,7 +143,7 @@ class FetchPushForegroundService : Service() {
                         }
                         isInForeground = updatedServiceInfo.foreground == true
                     }
-                }
+                } ?: Timber.w("FetchPushForegroundService did not start in foreground after 5s, stopping it anyway.")
                 context.stopService(intent)
             }
         }
