@@ -692,6 +692,10 @@ class LoggedInFlowNode(
         }
     }
 
+    fun navigateToHome() {
+        backstack.safeRoot(NavTarget.Home)
+    }
+
     suspend fun attachRoom(
         roomIdOrAlias: RoomIdOrAlias,
         serverNames: List<String> = emptyList(),

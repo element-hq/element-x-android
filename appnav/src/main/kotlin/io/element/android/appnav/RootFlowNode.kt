@@ -527,7 +527,7 @@ class RootFlowNode(
         Timber.d("Navigating to $deeplinkData")
         attachSession(deeplinkData.sessionId).let { loggedInFlowNode ->
             when (deeplinkData) {
-                is DeeplinkData.Root -> Unit // The room list will always be shown, observing FtueState
+                is DeeplinkData.Root -> loggedInFlowNode.navigateToHome()
                 is DeeplinkData.Room -> {
                     loggedInFlowNode.attachRoom(
                         roomIdOrAlias = deeplinkData.roomId.toRoomIdOrAlias(),

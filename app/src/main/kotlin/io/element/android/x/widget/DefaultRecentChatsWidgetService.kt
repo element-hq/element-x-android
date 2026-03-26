@@ -28,14 +28,18 @@ class DefaultRecentChatsWidgetService(
     private val matrixClient: MatrixClient,
 ) : RecentChatsWidgetService {
     override suspend fun updateRecentChats(rooms: List<WidgetRoomData>) {
+        Timber.d("Widget: updateRecentChats called with ${rooms.size} rooms")
         val avatarDir = File(context.cacheDir, "widget_avatars").also { it.mkdirs() }
 
         val widgetInfoList = rooms.map { room ->
             val localAvatarPath = room.avatarUrl?.let { url ->
+                Timber.d("Widget: Downloading avatar for ${room.name}, url=$url")
                 try {
-                    downloadAvatar(url, room.roomId, avatarDir)
+                    val path = downloadAvatar(url, room.roomId, avatarDir)
+                    Timber.d("Widget: Avatar saved to $path")
+                    path
                 } catch (e: Exception) {
-                    Timber.d(e, "Widget: Failed to download avatar for ${room.name}")
+                    Timber.w(e, "Widget: Failed to download avatar for ${room.name}")
                     null
                 }
             }

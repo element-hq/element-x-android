@@ -159,6 +159,12 @@ class RecentChatsWidget : GlanceAppWidget() {
                     .padding(horizontal = 12.dp, vertical = 8.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
+                Image(
+                    provider = ImageProvider(io.element.android.appicon.element.R.mipmap.ic_launcher_round),
+                    contentDescription = "Element X",
+                    modifier = GlanceModifier.size(24.dp).cornerRadius(12.dp),
+                )
+                Spacer(modifier = GlanceModifier.width(8.dp))
                 Text(
                     text = "Element X",
                     style = TextStyle(
