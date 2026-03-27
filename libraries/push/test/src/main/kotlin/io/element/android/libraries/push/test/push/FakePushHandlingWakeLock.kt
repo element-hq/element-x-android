@@ -18,7 +18,7 @@ class FakePushHandlingWakeLock(
         lock.invoke(time)
     }
 
-    override fun unlock() {
+    override suspend fun unlock() {
         unlock.invoke()
     }
 }
