@@ -29,6 +29,7 @@ jobs:
               repo: context.repo.repo,
               body: `Thank you for your contribution! Here are a few things to check in the PR to ensure it's reviewed as quickly as possible:
             
+              - If your pull request adds a feature or modifies the UI, this should have an equivalent pull request in the [Element X iOS repo](https://github.com/element-hq/element-x-ios) unless it only affects an Android-only behaviour or is behind a disabled feature flag, since we need parity in both clients to consider a feature done. It will also need to be approved by our product and design teams before being merged, so it's usually a good idea to discuss the changes in a Github issue first and then start working on them once the approach has been validated.
               - Your branch should be based on \`origin/develop\`, at least when it was created.
               - The title of the PR will be used for release notes, so it needs to describe the change visible to the user.
               - The test pass locally running \`./gradlew test\`.

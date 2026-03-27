@@ -17,7 +17,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Folder
 import androidx.compose.material.icons.outlined.SubdirectoryArrowLeft
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -112,7 +111,7 @@ private fun ItemRow(
         }
         is Item.Folder -> {
             ListItem(
-                leadingContent = ListItemContent.Icon(IconSource.Vector(Icons.Outlined.Folder)),
+                leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Folder())),
                 headlineContent = {
                     Text(
                         text = item.name,

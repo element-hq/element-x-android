@@ -228,7 +228,7 @@ cp \
 
 if [ "${buildApp}" == "0" ]; then
     printf "\n## Building the application...\n\n"
-    ./gradlew assembleDebug
+    ./gradlew :app:assembleGplayDebug
 fi
 
 ## Clean remote checkout of SDK repo

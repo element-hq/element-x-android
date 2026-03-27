@@ -9,6 +9,7 @@
 package io.element.android.libraries.textcomposer
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +18,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ripple
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -120,6 +120,9 @@ private fun EditingModeView(
     }
 }
 
+/**
+ * https://www.figma.com/design/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?node-id=2019-6286
+ */
 @Composable
 private fun ReplyToModeView(
     replyToDetails: InReplyToDetails,
@@ -129,8 +132,9 @@ private fun ReplyToModeView(
 ) {
     Row(
         modifier
-            .clip(RoundedCornerShape(13.dp))
-            .background(MaterialTheme.colorScheme.surface)
+            .clip(RoundedCornerShape(6.dp))
+            .background(ElementTheme.colors.bgCanvasDefault)
+            .border(1.dp, ElementTheme.colors.borderInteractiveSecondary, RoundedCornerShape(6.dp))
             .padding(4.dp)
     ) {
         InReplyToView(

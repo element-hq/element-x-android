@@ -4,8 +4,8 @@
 [versions]
 # Project
 android_gradle_plugin = "8.13.2"
-# When updateing this, please also update the version in the file ./idea/kotlinc.xml
-kotlin = "2.3.10"
+# When updating this, please also update the version in the file ./idea/kotlinc.xml
+kotlin = "2.3.20"
 kotlinpoet = "2.2.0"
 ksp = "2.3.6"
 firebaseAppDistribution = "5.2.1"
@@ -45,7 +45,7 @@ showkase = "1.0.5"
 # There is some custom logic in `RootFlowNode` that may break because it reuses some Appyx internal APIs.
 # When upgrading this version, check state restoration still works fine.
 appyx = "1.7.1"
-sqldelight = "2.3.1"
+sqldelight = "2.3.2"
 wysiwyg = "2.41.1"
 telephoto = "0.18.0"
 haze = "1.7.2"
@@ -80,7 +80,7 @@ kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlin
 kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 ksp_gradle_plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:34.10.0"
+google_firebase_bom = "com.google.firebase:firebase-bom:34.11.0"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 ksp_plugin = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
@@ -226,14 +226,14 @@ sentry = "io.sentry:sentry-android:8.36.0"
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.33.2"
 
 # Emojibase
-matrix_emojibase_bindings = "io.element.android:emojibase-bindings:1.5.0"
+matrix_emojibase_bindings = "io.element.android:emojibase-bindings:1.5.1"
 sigpwned_emoji4j = "com.sigpwned:emoji4j-core:16.0.0"
 
 # Di
 metro_runtime = { module = "dev.zacsweers.metro:runtime", version.ref = "metro" }
 
 # Element Call
-element_call_embedded = "io.element.android:element-call-embedded:0.17.0"
+element_call_embedded = "io.element.android:element-call-embedded:0.18.0"
 
 # Auto services
 google_autoservice = { module = "com.google.auto.service:auto-service", version.ref = "autoservice" }
