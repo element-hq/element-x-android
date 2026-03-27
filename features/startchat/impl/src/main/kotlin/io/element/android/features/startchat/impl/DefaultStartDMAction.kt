@@ -40,7 +40,7 @@ class DefaultStartDMAction(
                     analyticsService.capture(CreatedRoom(isDM = true))
                 }
 
-                if (secret!= null) {
+                if (secret != null) {
                     val verifyResult = matrixClient.encryptionService.verifyIdentityIfMatches(matrixUser.userId.value, secret)
                     val verifyError = verifyResult.exceptionOrNull()
 
