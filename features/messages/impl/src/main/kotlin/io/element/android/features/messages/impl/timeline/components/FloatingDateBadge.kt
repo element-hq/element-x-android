@@ -25,6 +25,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -44,6 +45,7 @@ internal fun BoxScope.FloatingDateBadgeOverlay(
     timelineItems: ImmutableList<TimelineItem>,
     isLive: Boolean,
     useReverseLayout: Boolean,
+    topOffset: Dp = 0.dp,
 ) {
     val currentDateText by remember(timelineItems) {
         derivedStateOf {
@@ -89,7 +91,7 @@ internal fun BoxScope.FloatingDateBadgeOverlay(
                 if (isScrolling) {
                     isBadgeVisible = true
                 } else {
-                    delay(1200.milliseconds)
+                    delay(2000.milliseconds)
                     isBadgeVisible = false
                 }
             }
@@ -101,7 +103,7 @@ internal fun BoxScope.FloatingDateBadgeOverlay(
         visible = showBadge,
         modifier = Modifier
             .align(Alignment.TopCenter)
-            .padding(top = 8.dp),
+            .padding(top = 8.dp + topOffset),
         enter = fadeIn(animationSpec = tween(150)),
         exit = fadeOut(animationSpec = tween(300)),
     ) {
@@ -119,7 +121,11 @@ internal fun FloatingDateBadge(
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(16.dp),
-        color = ElementTheme.colors.bgCanvasDefault.copy(alpha = 0.85f),
+        color = if (ElementTheme.isLightTheme) {
+            ElementTheme.colors.bgCanvasDefault.copy(alpha = 0.85f)
+        } else {
+            ElementTheme.colors.bgSubtlePrimary
+        },
     ) {
         Text(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
