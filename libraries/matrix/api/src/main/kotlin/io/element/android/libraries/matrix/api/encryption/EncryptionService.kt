@@ -11,6 +11,7 @@ package io.element.android.libraries.matrix.api.encryption
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
+import io.element.android.libraries.matrix.api.encryption.identity.UserIdentity
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -83,7 +84,7 @@ interface EncryptionService {
      * @param userId the user id to get the identity for.
      * @param fallbackToServer whether to fallback to fetching the identity from the server if not known locally. Defaults to true.
      */
-    suspend fun getUserIdentity(userId: UserId, fallbackToServer: Boolean = true): Result<IdentityState?>
+    suspend fun getUserIdentity(userId: UserId, fallbackToServer: Boolean = true): Result<UserIdentity>
 }
 
 /**

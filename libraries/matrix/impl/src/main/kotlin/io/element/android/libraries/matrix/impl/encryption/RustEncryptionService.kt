@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.api.encryption.EncryptionService
 import io.element.android.libraries.matrix.api.encryption.IdentityResetHandle
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
+import io.element.android.libraries.matrix.api.encryption.identity.UserIdentity
 import io.element.android.libraries.matrix.api.sync.SyncState
 import io.element.android.libraries.matrix.impl.exception.mapClientException
 import io.element.android.libraries.matrix.impl.sync.RustSyncService
@@ -43,7 +44,7 @@ import org.matrix.rustcomponents.sdk.BackupSteadyStateListener
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.EnableRecoveryProgressListener
 import org.matrix.rustcomponents.sdk.Encryption
-import org.matrix.rustcomponents.sdk.UserIdentity
+import org.matrix.rustcomponents.sdk.UserIdentity as RustUserIdentity
 import timber.log.Timber
 import org.matrix.rustcomponents.sdk.BackupUploadState as RustBackupUploadState
 import org.matrix.rustcomponents.sdk.EnableRecoveryProgress as RustEnableRecoveryProgress
@@ -248,18 +249,22 @@ class RustEncryptionService(
         getUserIdentityInternal(userId).withdrawVerification()
     }
 
-    override suspend fun getUserIdentity(userId: UserId, fallbackToServer: Boolean): Result<IdentityState?> = runCatchingExceptions {
+    override suspend fun getUserIdentity(userId: UserId, fallbackToServer: Boolean): Result<UserIdentity> = runCatchingExceptions {
         val identity = getUserIdentityInternal(userId, fallbackToServer)
         val isVerified = identity.isVerified()
-        when {
+        val state = when {
             identity.hasVerificationViolation() -> IdentityState.VerificationViolation
             isVerified -> IdentityState.Verified
             !isVerified -> IdentityState.Pinned
             else -> null
         }
+        UserIdentity(
+            identityState = state,
+            msk = identity.masterKey()
+        )
     }
 
-    private suspend fun getUserIdentityInternal(userId: UserId, fallbackToServer: Boolean = true): UserIdentity {
+    private suspend fun getUserIdentityInternal(userId: UserId, fallbackToServer: Boolean = true): RustUserIdentity {
         return service.userIdentity(
             userId = userId.value,
             fallbackToServer = fallbackToServer,

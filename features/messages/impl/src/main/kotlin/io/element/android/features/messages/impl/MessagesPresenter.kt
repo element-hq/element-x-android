@@ -218,7 +218,7 @@ class MessagesPresenter(
                 localCoroutineScope.launch {
                     dmRoomMemberId?.let { userId ->
                         dmUserVerificationState = roomMemberIdentityStateChanges.find { it.identityRoomMember.userId == userId }?.identityState
-                            ?: encryptionService.getUserIdentity(userId).getOrNull()
+                            ?: encryptionService.getUserIdentity(userId).getOrNull()?.identityState
                     }
                 }
             }

@@ -87,15 +87,15 @@ class RoomMemberDetailsPresenter(
 
         val identityStateChanges = produceState<IdentityStateChange?>(initialValue = null) {
             // Fetch the initial identity state manually
-            val identityState = encryptionService.getUserIdentity(roomMemberId).getOrNull()
-            value = identityState?.let { IdentityStateChange(roomMemberId, it) }
+            val identity = encryptionService.getUserIdentity(roomMemberId).getOrNull()
+            value = identity?.identityState?.let { IdentityStateChange(roomMemberId, it) }
 
             // Subscribe to the identity changes
             room.roomMemberIdentityStateChange(waitForEncryption = false)
                 .map { it.find { it.identityRoomMember.userId == roomMemberId } }
                 .map { roomMemberIdentityStateChange ->
                     // If we didn't receive any info, manually fetch it
-                    roomMemberIdentityStateChange?.identityState ?: encryptionService.getUserIdentity(roomMemberId).getOrNull()
+                    roomMemberIdentityStateChange?.identityState ?: encryptionService.getUserIdentity(roomMemberId).getOrNull()?.identityState
                 }
                 .filterNotNull()
                 .collect { value = IdentityStateChange(roomMemberId, it) }
