@@ -153,7 +153,7 @@ class DefaultVoiceMessageComposerPresenter(
             }
         }
 
-        fun sendVoiceMessage(inReplyToEventId: EventId?, composerEvent: Composer) {
+        fun sendVoiceMessage(inReplyToEventId: EventId?) {
             val finishedState = recorderState as? VoiceRecorderState.Finished
             if (finishedState == null) {
                 val exception = VoiceMessageException.FileException("No file to send")
@@ -166,7 +166,7 @@ class DefaultVoiceMessageComposerPresenter(
             }
             isSending = true
             player.pause()
-            analyticsService.capture(composerEvent)
+            analyticsService.captureComposerEvent()
             sessionCoroutineScope.launch {
                 val result = sendMessage(
                     file = finishedState.file,
@@ -187,12 +187,11 @@ class DefaultVoiceMessageComposerPresenter(
                 is VoiceMessageComposerEvent.RecorderEvent -> handleVoiceMessageRecorderEvent(event.recorderEvent)
                 is VoiceMessageComposerEvent.PlayerEvent -> handleVoiceMessagePlayerEvent(event.playerEvent)
                 is VoiceMessageComposerEvent.SendVoiceMessage -> {
-                    // Capture mode eagerly before any coroutine dispatch, since CloseSpecialMode
-                    // may reset it before the coroutine runs.
+                    // Capture reply info eagerly before any coroutine dispatch, since CloseSpecialMode
+                    // may reset composerMode before the coroutine runs.
                     val inReplyToEventId = (messageComposerContext.composerMode as? MessageComposerMode.Reply)?.eventId
-                    val composerEvent = buildComposerEvent()
                     localCoroutineScope.launch {
-                        sendVoiceMessage(inReplyToEventId, composerEvent)
+                        sendVoiceMessage(inReplyToEventId)
                     }
                 }
                 VoiceMessageComposerEvent.DeleteVoiceMessage -> {
@@ -308,12 +307,14 @@ class DefaultVoiceMessageComposerPresenter(
         return result
     }
 
-    private fun buildComposerEvent() =
-        Composer(
-            inThread = messageComposerContext.composerMode.inThread,
-            isEditing = messageComposerContext.composerMode.isEditing,
-            isReply = messageComposerContext.composerMode.isReply,
-            messageType = Composer.MessageType.VoiceMessage,
+    private fun AnalyticsService.captureComposerEvent() =
+        capture(
+            Composer(
+                inThread = messageComposerContext.composerMode.inThread,
+                isEditing = messageComposerContext.composerMode.isEditing,
+                isReply = messageComposerContext.composerMode.isReply,
+                messageType = Composer.MessageType.VoiceMessage,
+            )
         )
 }
 
