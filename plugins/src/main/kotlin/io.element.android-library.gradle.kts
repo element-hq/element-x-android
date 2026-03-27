@@ -9,7 +9,7 @@
 /**
  * This will generate the plugin "io.element.android-library", used in android library without compose modules.
  */
-import extension.androidConfig
+import extension.androidLibraryConfig
 import extension.commonDependencies
 import extension.setupKover
 import org.gradle.accessors.dm.LibrariesForLibs
@@ -22,7 +22,7 @@ plugins {
 }
 
 android {
-    androidConfig(project)
+    androidLibraryConfig(project)
     compileOptions {
         isCoreLibraryDesugaringEnabled = true
     }
