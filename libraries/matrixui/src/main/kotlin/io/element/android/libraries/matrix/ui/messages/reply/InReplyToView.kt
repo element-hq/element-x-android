@@ -18,7 +18,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -82,19 +81,19 @@ private fun ReplyToReadyContent(
     modifier: Modifier = Modifier,
 ) {
     val paddings = if (metadata is InReplyToMetadata.Thumbnail) {
-        PaddingValues(start = 4.dp, end = 12.dp, top = 4.dp, bottom = 4.dp)
+        PaddingValues(end = 8.dp)
     } else {
-        PaddingValues(horizontal = 12.dp, vertical = 4.dp)
+        PaddingValues(start = 8.dp, end = 8.dp)
     }
     Row(
         modifier
-            .background(MaterialTheme.colorScheme.surface)
+            .background(ElementTheme.colors.bgCanvasDefault)
             .padding(paddings)
     ) {
         if (metadata is InReplyToMetadata.Thumbnail) {
             AttachmentThumbnail(
                 info = metadata.attachmentThumbnailInfo,
-                backgroundColor = MaterialTheme.colorScheme.surfaceVariant,
+                backgroundColor = ElementTheme.colors.bgSubtlePrimary,
                 modifier = Modifier
                     .size(36.dp)
                     .clip(RoundedCornerShape(4.dp))
@@ -128,7 +127,7 @@ private fun ReplyToLoadingContent(
     val paddings = PaddingValues(horizontal = 12.dp, vertical = 4.dp)
     Row(
         modifier
-            .background(MaterialTheme.colorScheme.surface)
+            .background(ElementTheme.colors.bgCanvasDefault)
             .padding(paddings)
     ) {
         Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
@@ -146,7 +145,7 @@ private fun ReplyToErrorContent(
     val paddings = PaddingValues(horizontal = 12.dp, vertical = 4.dp)
     Row(
         modifier
-            .background(MaterialTheme.colorScheme.surface)
+            .background(ElementTheme.colors.bgCanvasDefault)
             .padding(paddings)
     ) {
         Text(
