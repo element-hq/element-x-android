@@ -19,7 +19,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -30,10 +29,10 @@ private const val TAG = "VoiceAutoplay"
 class DefaultVoiceMessageAutoplayManager(
     private val mediaPlayer: MediaPlayer,
     private val voiceMessagePlayerFactory: VoiceMessagePlayer.Factory,
+    private val transitionSoundPlayer: TransitionSoundPlayer,
     @SessionCoroutineScope private val coroutineScope: CoroutineScope,
 ) : VoiceMessageAutoplayManager {
-    private val _resetRequests = MutableSharedFlow<EventId>(extraBufferCapacity = 1)
-    override val resetRequests: SharedFlow<EventId> = _resetRequests.asSharedFlow()
+    override val resetRequests: SharedFlow<EventId> = MutableSharedFlow()
 
     private var timelineItems: List<AutoplayTimelineItemInfo> = emptyList()
     private var autoplayJob: Job? = null
@@ -120,18 +119,13 @@ class DefaultVoiceMessageAutoplayManager(
             return
         }
 
-        // Reset the ended message position to 0:00
-        val endedEventId = items[endedIndex].eventId
-        if (endedEventId != null) {
-            _resetRequests.tryEmit(endedEventId)
-        }
-
         Timber.tag(TAG).d("Starting autoplay of next voice message: %s", nextEventId)
         expectedAutoplayMediaId = nextEventId.value
         cancelled = false
 
         autoplayJob?.cancel()
         autoplayJob = coroutineScope.launch {
+            transitionSoundPlayer.playAndAwait()
             val nextPlayer = voiceMessagePlayerFactory.create(
                 eventId = nextEventId,
                 mediaSource = nextMediaSource,
