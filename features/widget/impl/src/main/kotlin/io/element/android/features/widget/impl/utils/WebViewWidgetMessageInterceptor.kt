@@ -164,7 +164,6 @@ class WebViewWidgetMessageInterceptor(
 
     override fun sendMessage(message: String) {
         val formattedMessage = "postMessage($message, '*')";
-        Timber.v("Evaluated js: "+formattedMessage)
         webView.evaluateJavascript(formattedMessage, null)
     }
 

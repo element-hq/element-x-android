@@ -34,11 +34,7 @@ class ExtensionsPresenter @Inject constructor(
                     Timber.v("fetched room events. Result from room.getStateEvents $rawEvents")
                     extensions.value = rawEvents.mapNotNull { json ->
                         parseWidgetStateEvent(json)
-                    }.plus(ExtensionItem(
-                        name = "DEFAULT_TEST expenses widget",
-                        url = $$"https://matrix-expenses-widget-nightly.netlify.app/#/?widgetId=$matrix_widget_id&userId=$matrix_user_id&roomId=$matrix_room_id&baseUrl=$org.matrix.msc4039.matrix_base_url&deviceId=$org.matrix.msc3819.matrix_device_id",
-                        avatarUrl = null
-                    ))
+                    }
 
                 }
                 .onFailure { error ->
