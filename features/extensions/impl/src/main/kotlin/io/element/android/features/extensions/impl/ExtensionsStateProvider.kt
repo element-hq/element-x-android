@@ -16,9 +16,9 @@ open class ExtensionsStateProvider : PreviewParameterProvider<ExtensionsState> {
             anExtensionsState(),
             anExtensionsState(
                 extensions = listOf(
-                    anExtensionItem(name = "Alice's Bot"),
-                    anExtensionItem(name = "Reminder", avatarUrl = "https://example.com/avatar.png"),
-                    anExtensionItem(name = "Poll Bot"),
+                    anExtensionItem(name = "Alice's Bot", url = "https://example.com/bot"),
+                    anExtensionItem(name = "Reminder", avatarUrl = "https://example.com/avatar.png", url = "https://example.com/reminder"),
+                    anExtensionItem(name = "Poll Bot", url = "https://example.com/poll"),
                 ),
             ),
         )
@@ -35,7 +35,9 @@ fun anExtensionsState(
 fun anExtensionItem(
     name: String = "An extension",
     avatarUrl: String? = null,
+    url: String = "https://example.com/widget",
 ) = ExtensionItem(
     name = name,
     avatarUrl = avatarUrl,
+    url = url,
 )

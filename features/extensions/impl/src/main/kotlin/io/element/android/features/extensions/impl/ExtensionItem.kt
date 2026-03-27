@@ -10,4 +10,5 @@ package io.element.android.features.extensions.impl
 data class ExtensionItem(
     val name: String,
     val avatarUrl: String?,
+    val url: String,
 )

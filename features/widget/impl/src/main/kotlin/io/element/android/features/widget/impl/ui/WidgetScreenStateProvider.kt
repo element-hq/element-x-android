@@ -26,6 +26,7 @@ internal fun aWidgetScreenState(
     userAgent: String = "",
     isWidgetLoaded: Boolean = true,
     isInWidgetMode: Boolean = false,
+    widgetName: String = "Widget",
     eventSink: (WidgetScreenEvents) -> Unit = {},
 ): WidgetScreenState {
     return WidgetScreenState(
@@ -34,6 +35,7 @@ internal fun aWidgetScreenState(
         userAgent = userAgent,
         isWidgetLoaded = isWidgetLoaded,
         isInWidgetMode = isInWidgetMode,
+        widgetName = widgetName,
         eventSink = eventSink,
     )
 }

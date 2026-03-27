@@ -215,6 +215,14 @@ interface BaseRoom : Closeable {
     suspend fun threadRootIdForEvent(eventId: EventId): Result<ThreadId?>
 
     /**
+     * Get raw state events of the given type from the room.
+     *
+     * @param eventType The type of state event to fetch.
+     * @return A list of raw JSON strings for matching state events, or a failure.
+     */
+    suspend fun getStateEvents(eventType: StateEventType): Result<List<String>>
+
+    /**
      * Destroy the room and release all resources associated to it.
      */
     fun destroy()

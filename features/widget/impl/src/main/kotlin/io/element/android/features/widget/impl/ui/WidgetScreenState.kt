@@ -15,6 +15,7 @@ data class WidgetScreenState(
     val userAgent: String,
     val isWidgetLoaded: Boolean,
     val isInWidgetMode: Boolean,
+    val widgetName: String,
     val eventSink: (WidgetScreenEvents) -> Unit,
 )
 

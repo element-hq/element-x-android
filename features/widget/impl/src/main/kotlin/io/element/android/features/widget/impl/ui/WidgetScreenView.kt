@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -29,16 +30,19 @@ import androidx.compose.ui.viewinterop.AndroidView
 import io.element.android.features.widget.impl.utils.WebViewWidgetMessageInterceptor
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.ui.strings.CommonStrings
 import timber.log.Timber
 
 typealias RequestPermissionCallback = (Array<String>) -> Unit
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun WidgetScreenView(
     state: WidgetScreenState,
@@ -52,6 +56,14 @@ internal fun WidgetScreenView(
 
     Scaffold(
         modifier = modifier,
+        topBar = {
+            TopAppBar(
+                titleStr = state.widgetName,
+                navigationIcon = {
+                    BackButton(onClick = ::handleBack)
+                },
+            )
+        },
     ) { padding ->
         BackHandler {
             handleBack()

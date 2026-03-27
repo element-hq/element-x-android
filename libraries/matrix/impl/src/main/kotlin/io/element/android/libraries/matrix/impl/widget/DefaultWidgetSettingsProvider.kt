@@ -8,21 +8,11 @@
 
 package io.element.android.libraries.matrix.impl.widget
 
+import androidx.core.net.toUri
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.core.meta.BuildType
-import io.element.android.libraries.matrix.api.widget.CallAnalyticCredentialsProvider
 import io.element.android.libraries.matrix.api.widget.WidgetSettingsProvider
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
-import io.element.android.services.analytics.api.AnalyticsService
-import kotlinx.coroutines.flow.first
-import org.matrix.rustcomponents.sdk.newVirtualElementCallWidget
-import timber.log.Timber
-import uniffi.matrix_sdk.EncryptionSystem
-import uniffi.matrix_sdk.VirtualElementCallWidgetConfig
-import uniffi.matrix_sdk.VirtualElementCallWidgetProperties
-import uniffi.matrix_sdk.Intent as CallIntent
 
 @ContributesBinding(AppScope::class)
 class IDefaultWidgetSettingsProvider() : WidgetSettingsProvider {
@@ -31,11 +21,20 @@ class IDefaultWidgetSettingsProvider() : WidgetSettingsProvider {
         initAfterContentLoad: Boolean,
         widgetId: String,
     ): MatrixWidgetSettings {
-
+        val parsedUri = rawUrl.toUri()
+        val parentUrl = parsedUri.buildUpon()
+            .clearQuery()
+            .fragment(null)
+            .build()
+            .toString()
+        val updatedUrl = parsedUri.buildUpon()
+            .appendQueryParameter("parentUrl", parentUrl)
+            .build()
+            .toString()
         return MatrixWidgetSettings(
             id = widgetId,
             initAfterContentLoad = initAfterContentLoad,
-            rawUrl = rawUrl+"&parentUrl=https%3A%2F%2Fmatrix-expenses-widget-nightly.netlify.app",
+            rawUrl = updatedUrl,
         )
 
     }

@@ -17,8 +17,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -68,16 +70,17 @@ fun ExtensionListItem(
     onClick: () -> Unit,
 ) {
     val leadingContent = if (extension.avatarUrl != null) {
-        // TODO add proper avatar
-//        ListItemContent.Avatar(
-//            avatarData = AvatarData(
-//                id = extension.stateKey,
-//                name = extension.name,
-//                url = extension.avatarUrl,
-//                size = AvatarSize.RoomListItem,
-//            )
-//        )
-        ListItemContent.Icon(IconSource.Vector(CompoundIcons.Extensions()))
+        ListItemContent.Custom { _ ->
+            Avatar(
+                avatarData = AvatarData(
+                    id = extension.name,
+                    name = extension.name,
+                    url = extension.avatarUrl,
+                    size = AvatarSize.ExtensionsListItem,
+                ),
+                avatarType = AvatarType.User,
+            )
+        }
     } else {
         ListItemContent.Icon(IconSource.Vector(CompoundIcons.Extensions()))
     }

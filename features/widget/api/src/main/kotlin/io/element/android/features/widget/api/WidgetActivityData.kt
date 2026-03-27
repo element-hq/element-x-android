@@ -17,5 +17,7 @@ import kotlinx.parcelize.Parcelize
 data class WidgetActivityData(
     val sessionId: SessionId,
     val roomId: RoomId,
+    val url: String,
+    val widgetName: String,
 ) : NodeInputs, Parcelable
 
