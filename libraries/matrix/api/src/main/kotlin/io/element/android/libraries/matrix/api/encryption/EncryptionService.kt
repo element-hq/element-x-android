@@ -43,6 +43,8 @@ interface EncryptionService {
      */
     suspend fun recover(recoveryKey: String): Result<Unit>
 
+    suspend fun verifyIdentityIfMatches(userId: String, masterKey: String): Result<Unit>
+
     /**
      * Wait for backup upload steady state.
      */

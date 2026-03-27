@@ -41,11 +41,16 @@ class UserProfileNode(
     data class UserProfileInputs(
         val userId: UserId,
         val openDM: Boolean,
+        val secret: String?,
     ) : NodeInputs
 
     private val inputs = inputs<UserProfileInputs>()
     private val callback = inputs<UserProfileNodeHelper.Callback>()
-    private val presenter = presenterFactory.create(userId = inputs.userId, openDM = inputs.openDM)
+    private val presenter = presenterFactory.create(
+        userId = inputs.userId,
+        openDM = inputs.openDM,
+        secret = inputs.secret
+    )
     private val userProfileNodeHelper = UserProfileNodeHelper(inputs.userId)
 
     init {

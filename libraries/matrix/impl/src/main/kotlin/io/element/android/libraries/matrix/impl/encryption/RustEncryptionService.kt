@@ -225,6 +225,12 @@ class RustEncryptionService(
         }
     }
 
+    override suspend fun verifyIdentityIfMatches(userId: String, masterKey: String): Result<Unit> {
+        return runCatchingExceptions {
+            service.verifyIdentityIfMatches(userId, masterKey)
+        }.mapFailure { it.mapClientException() }
+    }
+
     override suspend fun deviceCurve25519(): String? {
         return runCatchingExceptions { service.curve25519Key() }.getOrNull()
     }

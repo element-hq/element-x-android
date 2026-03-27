@@ -501,10 +501,10 @@ class RootFlowNode(
                 ).maybeAttachThread(permalinkData.threadId, permalinkData.eventId)
             }
             is PermalinkData.UserLink -> {
-                if (permalinkData.action == "chat") {
-                    attachUserChat(permalinkData.userId)
-                } else {
-                    attachUser(permalinkData.userId)
+                when (permalinkData.action) {
+                    "chat" -> attachUserChat(permalinkData.userId)
+                    "verify" -> attachUserVerify(permalinkData.userId, permalinkData.secret)
+                    else -> attachUser(permalinkData.userId)
                 }
             }
         }

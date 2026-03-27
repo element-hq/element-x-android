@@ -25,5 +25,6 @@ interface StartDMAction {
         matrixUser: MatrixUser,
         createIfDmDoesNotExist: Boolean,
         actionState: MutableState<AsyncAction<RoomId>>,
+        secret: String?
     )
 }

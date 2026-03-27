@@ -20,5 +20,5 @@ import io.element.android.libraries.matrix.api.core.UserId
 class DefaultUserProfilePresenterFactory(
     private val factory: UserProfilePresenter.Factory,
 ) : UserProfilePresenterFactory {
-    override fun create(userId: UserId, openDM: Boolean): Presenter<UserProfileState> = factory.create(userId, openDM)
+    override fun create(userId: UserId, openDM: Boolean, secret: String?): Presenter<UserProfileState> = factory.create(userId, openDM, secret)
 }

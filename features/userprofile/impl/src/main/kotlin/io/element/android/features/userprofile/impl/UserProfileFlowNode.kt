@@ -98,7 +98,11 @@ class UserProfileFlowNode(
                         backstack.push(NavTarget.VerifyUser(userId))
                     }
                 }
-                val params = UserProfileNode.UserProfileInputs(userId = inputs.userId, openDM = inputs.openDM)
+                val params = UserProfileNode.UserProfileInputs(
+                    userId = inputs.userId,
+                    openDM = inputs.openDM,
+                    secret = inputs.secret
+                )
                 createNode<UserProfileNode>(buildContext, listOf(callback, params))
             }
             is NavTarget.AvatarPreview -> {

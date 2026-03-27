@@ -12,5 +12,5 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.matrix.api.core.UserId
 
 fun interface UserProfilePresenterFactory {
-    fun create(userId: UserId, openDM: Boolean): Presenter<UserProfileState>
+    fun create(userId: UserId, openDM: Boolean, secret: String?): Presenter<UserProfileState>
 }

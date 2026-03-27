@@ -283,6 +283,12 @@ class LoggedInFlowNode(
         ) : NavTarget
 
         @Parcelize
+        data class UserVerify(
+            val userId: UserId,
+            val secret: String?,
+        ) : NavTarget
+
+        @Parcelize
         data class UserProfile(
             val userId: UserId,
         ) : NavTarget
@@ -449,7 +455,30 @@ class LoggedInFlowNode(
                 userProfileEntryPoint.createNode(
                     parentNode = this,
                     buildContext = buildContext,
-                    params = UserProfileEntryPoint.Params(userId = navTarget.userId, openDM = true),
+                    params = UserProfileEntryPoint.Params(
+                        userId = navTarget.userId,
+                        openDM = true,
+                        secret = null
+                    ),
+                    callback = callback,
+                )
+            }
+            is NavTarget.UserVerify -> {
+                val callback = object : UserProfileEntryPoint.Callback {
+                    override fun navigateToRoom(roomId: RoomId) {
+                        lifecycleScope.launch {
+                            attachRoom(roomIdOrAlias = roomId.toRoomIdOrAlias(), clearBackstack = false)
+                        }
+                    }
+                }
+                userProfileEntryPoint.createNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    params = UserProfileEntryPoint.Params(
+                        userId = navTarget.userId,
+                        openDM = true,
+                        secret = navTarget.secret
+                    ),
                     callback = callback,
                 )
             }
@@ -464,7 +493,11 @@ class LoggedInFlowNode(
                 userProfileEntryPoint.createNode(
                     parentNode = this,
                     buildContext = buildContext,
-                    params = UserProfileEntryPoint.Params(userId = navTarget.userId, openDM = false),
+                    params = UserProfileEntryPoint.Params(
+                        userId = navTarget.userId,
+                        openDM = false,
+                        secret = null
+                    ),
                     callback = callback,
                 )
             }
@@ -678,6 +711,20 @@ class LoggedInFlowNode(
             backstack.push(
                 NavTarget.UserChat(
                     userId = userId,
+                )
+            )
+        }
+    }
+
+    suspend fun attachUserVerify(userId: UserId, secret: String?) {
+        waitForNavTargetAttached { navTarget ->
+            navTarget is NavTarget.Home
+        }
+        attachChild<Node> {
+            backstack.push(
+                NavTarget.UserVerify(
+                    userId = userId,
+                    secret = secret,
                 )
             )
         }

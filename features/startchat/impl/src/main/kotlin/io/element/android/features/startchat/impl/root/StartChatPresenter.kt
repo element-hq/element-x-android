@@ -65,6 +65,7 @@ class StartChatPresenter(
                         matrixUser = event.matrixUser,
                         createIfDmDoesNotExist = startDmActionState.value is AsyncAction.Confirming,
                         actionState = startDmActionState,
+                        secret = null,
                     )
                 }
                 StartChatEvents.CancelStartDM -> startDmActionState.value = AsyncAction.Uninitialized
