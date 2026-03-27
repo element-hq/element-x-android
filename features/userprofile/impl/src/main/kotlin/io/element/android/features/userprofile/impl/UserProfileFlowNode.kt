@@ -101,7 +101,7 @@ class UserProfileFlowNode(
                 val params = UserProfileNode.UserProfileInputs(
                     userId = inputs.userId,
                     openDM = inputs.openDM,
-                    secret = inputs.secret
+                    msk = inputs.msk
                 )
                 createNode<UserProfileNode>(buildContext, listOf(callback, params))
             }

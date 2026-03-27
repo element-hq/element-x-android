@@ -52,7 +52,7 @@ sealed interface PermalinkData : Parcelable {
         val roomType: String?
     ) : PermalinkData
 
-    data class UserLink(val userId: UserId, val action: String?, val secret: String?) : PermalinkData
+    data class UserLink(val userId: UserId, val action: String?, val msk: String?) : PermalinkData
 
     data class FallbackLink(val uri: Uri, val isLegacyGroupLink: Boolean = false) : PermalinkData
 }

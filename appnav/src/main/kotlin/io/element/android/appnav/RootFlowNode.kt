@@ -503,7 +503,7 @@ class RootFlowNode(
             is PermalinkData.UserLink -> {
                 when (permalinkData.action) {
                     "chat" -> attachUserChat(permalinkData.userId)
-                    "verify" -> attachUserVerify(permalinkData.userId, permalinkData.secret)
+                    "verify" -> attachUserVerify(permalinkData.userId, permalinkData.msk)
                     else -> attachUser(permalinkData.userId)
                 }
             }

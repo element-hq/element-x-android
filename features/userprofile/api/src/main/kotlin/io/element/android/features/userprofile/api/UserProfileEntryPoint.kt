@@ -17,7 +17,7 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 
 interface UserProfileEntryPoint : FeatureEntryPoint {
-    data class Params(val userId: UserId, val openDM: Boolean, val secret: String?) : NodeInputs
+    data class Params(val userId: UserId, val openDM: Boolean, val msk: String?) : NodeInputs
 
     interface Callback : Plugin {
         fun navigateToRoom(roomId: RoomId)

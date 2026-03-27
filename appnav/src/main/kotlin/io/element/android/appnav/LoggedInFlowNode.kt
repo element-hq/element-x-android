@@ -11,7 +11,6 @@ package io.element.android.appnav
 import android.os.Parcelable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -285,7 +284,7 @@ class LoggedInFlowNode(
         @Parcelize
         data class UserVerify(
             val userId: UserId,
-            val secret: String?,
+            val msk: String?,
         ) : NavTarget
 
         @Parcelize
@@ -458,7 +457,7 @@ class LoggedInFlowNode(
                     params = UserProfileEntryPoint.Params(
                         userId = navTarget.userId,
                         openDM = true,
-                        secret = null
+                        msk = null
                     ),
                     callback = callback,
                 )
@@ -477,7 +476,7 @@ class LoggedInFlowNode(
                     params = UserProfileEntryPoint.Params(
                         userId = navTarget.userId,
                         openDM = true,
-                        secret = navTarget.secret
+                        msk = navTarget.msk
                     ),
                     callback = callback,
                 )
@@ -496,7 +495,7 @@ class LoggedInFlowNode(
                     params = UserProfileEntryPoint.Params(
                         userId = navTarget.userId,
                         openDM = false,
-                        secret = null
+                        msk = null
                     ),
                     callback = callback,
                 )
@@ -716,7 +715,7 @@ class LoggedInFlowNode(
         }
     }
 
-    suspend fun attachUserVerify(userId: UserId, secret: String?) {
+    suspend fun attachUserVerify(userId: UserId, msk: String?) {
         waitForNavTargetAttached { navTarget ->
             navTarget is NavTarget.Home
         }
@@ -724,7 +723,7 @@ class LoggedInFlowNode(
             backstack.push(
                 NavTarget.UserVerify(
                     userId = userId,
-                    secret = secret,
+                    msk = msk,
                 )
             )
         }

@@ -31,7 +31,7 @@ class DefaultStartDMAction(
         matrixUser: MatrixUser,
         createIfDmDoesNotExist: Boolean,
         actionState: MutableState<AsyncAction<RoomId>>,
-        secret: String?,
+        msk: String?,
     ) {
         actionState.value = AsyncAction.Loading
         when (val result = matrixClient.startDM(matrixUser.userId, createIfDmDoesNotExist)) {
@@ -40,8 +40,8 @@ class DefaultStartDMAction(
                     analyticsService.capture(CreatedRoom(isDM = true))
                 }
 
-                if (secret != null) {
-                    val verifyResult = matrixClient.encryptionService.verifyIdentityIfMatches(matrixUser.userId.value, secret)
+                if (msk != null) {
+                    val verifyResult = matrixClient.encryptionService.verifyIdentityIfMatches(matrixUser.userId.value, msk)
                     val verifyError = verifyResult.exceptionOrNull()
 
                     if (verifyError ==null) {

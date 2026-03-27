@@ -48,14 +48,14 @@ import kotlinx.coroutines.launch
 class UserProfilePresenter(
     @Assisted private val userId: UserId,
     @Assisted private val openDM: Boolean,
-    @Assisted private val secret: String?,
+    @Assisted private val msk: String?,
     private val client: MatrixClient,
     private val startDMAction: StartDMAction,
     private val sessionEnterpriseService: SessionEnterpriseService,
 ) : Presenter<UserProfileState> {
     @AssistedFactory
     interface Factory {
-        fun create(userId: UserId, openDM: Boolean, secret: String?): UserProfilePresenter
+        fun create(userId: UserId, openDM: Boolean, msk: String?): UserProfilePresenter
     }
 
     @Composable
@@ -125,7 +125,7 @@ class UserProfilePresenter(
                             matrixUser = userProfile ?: MatrixUser(userId),
                             createIfDmDoesNotExist = startDmActionState.value is AsyncAction.Confirming,
                             actionState = startDmActionState,
-                            secret = secret
+                            msk = msk
                         )
                     }
                 }
