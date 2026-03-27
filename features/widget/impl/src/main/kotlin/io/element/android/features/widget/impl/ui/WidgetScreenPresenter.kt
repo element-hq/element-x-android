@@ -127,6 +127,8 @@ class WidgetScreenPresenter(
             }
 
             // Note: For external URLs isWidgetLoaded will always be false
+            // We do not need this since we will have the back button in this view
+            // can be removed properly after testing
             LaunchedEffect(Unit) {
                 // Wait for the widget to load, if it takes too long, we display an error
                 delay(30.seconds)
@@ -135,7 +137,7 @@ class WidgetScreenPresenter(
                     Timber.w("The widget took too long to load. Displaying an error before exiting.")
 
                     // This will display a simple 'Sorry, an error occurred' dialog and force the user to exit
-                    webViewError = ""
+//                    webViewError = ""
                 }
             }
         }
