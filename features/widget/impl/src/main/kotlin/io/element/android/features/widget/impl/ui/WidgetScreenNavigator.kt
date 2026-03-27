@@ -5,8 +5,9 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.extensions.impl
+package io.element.android.features.widget.impl.ui
 
-sealed interface ExtensionsEvents {
-    data class OnExtensionClicked(val extension: ExtensionItem) : ExtensionsEvents
+interface WidgetScreenNavigator {
+    fun close()
 }
+

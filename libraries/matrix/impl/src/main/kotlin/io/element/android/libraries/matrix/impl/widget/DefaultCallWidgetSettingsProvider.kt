@@ -25,7 +25,7 @@ import uniffi.matrix_sdk.VirtualElementCallWidgetProperties
 import uniffi.matrix_sdk.Intent as CallIntent
 
 @ContributesBinding(AppScope::class)
-class DefaultCallWidgetSettingsProvider(
+class IDefaultCallWidgetSettingsProvider(
     private val buildMeta: BuildMeta,
     private val callAnalyticsCredentialsProvider: CallAnalyticCredentialsProvider,
     private val analyticsService: AnalyticsService,

@@ -9,9 +9,15 @@ package io.element.android.features.extensions.impl
 
 import androidx.compose.runtime.Composable
 import dev.zacsweers.metro.Inject
+import io.element.android.features.widget.api.WidgetEntryPoint
+import io.element.android.features.widget.api.WidgetActivityData
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import kotlinx.collections.immutable.persistentListOf
 
-class ExtensionsPresenter @Inject constructor() {
+class ExtensionsPresenter @Inject constructor(
+    private val room: JoinedRoom,
+    private val widgetEntryPoint: WidgetEntryPoint,
+) {
     @Composable
     fun present(): ExtensionsState {
         // TODO: Fetch real state events of type "im.vector.modular.widgets" from the room
@@ -26,9 +32,22 @@ class ExtensionsPresenter @Inject constructor() {
             ),
         )
 
+        fun handleEvent(event: ExtensionsEvents) {
+            when (event) {
+                is ExtensionsEvents.OnExtensionClicked -> {
+                    widgetEntryPoint.startWidget(
+                        WidgetActivityData(
+                            sessionId = room.sessionId,
+                            roomId = room.roomId,
+                        )
+                    )
+                }
+            }
+        }
+
         return ExtensionsState(
             extensions = extensions,
-            eventSink = {},
+            eventSink = ::handleEvent,
         )
     }
 }

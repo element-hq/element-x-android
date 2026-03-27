@@ -53,7 +53,10 @@ fun ExtensionsView(
                 .consumeWindowInsets(padding)
         ) {
             items(state.extensions) { extension ->
-                ExtensionListItem(extension = extension)
+                ExtensionListItem(
+                    extension = extension,
+                    onClick = { state.eventSink(ExtensionsEvents.OnExtensionClicked(extension)) },
+                )
             }
         }
     }
@@ -62,6 +65,7 @@ fun ExtensionsView(
 @Composable
 fun ExtensionListItem(
     extension: ExtensionItem,
+    onClick: () -> Unit,
 ) {
     val leadingContent = if (extension.avatarUrl != null) {
         // TODO add proper avatar
@@ -80,6 +84,7 @@ fun ExtensionListItem(
     ListItem(
         headlineContent = { Text(extension.name) },
         leadingContent = leadingContent,
+        onClick = onClick,
     )
 }
 
