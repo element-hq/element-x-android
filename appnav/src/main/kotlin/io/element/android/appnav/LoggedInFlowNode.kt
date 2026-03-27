@@ -447,6 +447,7 @@ class LoggedInFlowNode(
                 val callback = object : UserProfileEntryPoint.Callback {
                     override fun navigateToRoom(roomId: RoomId) {
                         lifecycleScope.launch {
+                            backstack.replace(NavTarget.UserProfile(navTarget.userId))
                             attachRoom(roomIdOrAlias = roomId.toRoomIdOrAlias(), clearBackstack = false)
                         }
                     }
@@ -466,6 +467,7 @@ class LoggedInFlowNode(
                 val callback = object : UserProfileEntryPoint.Callback {
                     override fun navigateToRoom(roomId: RoomId) {
                         lifecycleScope.launch {
+                            backstack.replace(NavTarget.UserProfile(navTarget.userId))
                             attachRoom(roomIdOrAlias = roomId.toRoomIdOrAlias(), clearBackstack = false)
                         }
                     }
