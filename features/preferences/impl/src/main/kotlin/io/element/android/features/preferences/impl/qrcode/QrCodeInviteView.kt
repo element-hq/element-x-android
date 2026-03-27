@@ -8,6 +8,7 @@
 package io.element.android.features.preferences.impl.qrcode
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -31,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.core.extensions.orEmpty
+import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -39,6 +41,7 @@ import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.modifiers.clearFocusOnTap
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
@@ -114,10 +117,26 @@ fun QrCodeInviteView(
                 )
             }
 
-            QrCodeImage(
-                data = state.qrCodeContent,
-                modifier = Modifier.size(220.dp)
-            )
+            if (state.loading) {
+                Box(
+                    modifier = Modifier.size(220.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator()
+                }
+            } else if (state.qrCodeContent != null) {
+                QrCodeImage(
+                    data = state.qrCodeContent,
+                    modifier = Modifier.size(220.dp)
+                )
+            } else {
+                Box(
+                    modifier = Modifier.size(220.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(text = stringResource(R.string.screen_qr_code_failure_descrption))
+                }
+            }
 
             Text(
                 modifier = Modifier.fillMaxWidth(),

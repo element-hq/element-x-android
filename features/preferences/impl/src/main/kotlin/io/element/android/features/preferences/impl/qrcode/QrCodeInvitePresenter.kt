@@ -7,25 +7,20 @@
 
 package io.element.android.features.preferences.impl.qrcode
 
+import android.net.Uri
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
-import com.bumble.appyx.core.plugin.Plugin
+import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.matrix.api.MatrixClient
 
 @Inject
 class QrCodeInvitePresenter(
     private val matrixClient: MatrixClient,
-
 ):  Presenter<QrCodeInviteState> {
-
-
     @Composable
     override fun present(): QrCodeInviteState {
         val matrixUser = matrixClient.userProfile.collectAsState()
@@ -37,13 +32,30 @@ class QrCodeInvitePresenter(
         }
 
         val userId = matrixUser.value.userId
-        val qrCodeContent = "matrix:u/${userId.value.substring(1)}"
+
+        val mskState by produceState<MskState>(initialValue = MskState.Loading) {
+            val identity = matrixClient
+                .encryptionService
+                .getUserIdentity(userId, true)
+                .getOrNull()
+
+            value = MskState.Loaded(identity?.msk)
+        }
+
+        val qrCodeContent = remember(mskState, userId) {
+            mskState.valueOrNull?.let {
+                val localUserId = userId.value.removePrefix("@")
+                val msk = Uri.encode(it)
+                "matrix:u/$localUserId?action=verify&msk=$msk"
+            }
+        }
 
         return QrCodeInviteState(
-            userId,
+            userId = matrixUser.value.userId,
             displayName = matrixUser.value.displayName,
             userAvatarUrl = matrixUser.value.avatarUrl,
-            qrCodeContent,
+            loading = mskState.isLoading,
+            qrCodeContent = qrCodeContent,
             eventSink = ::handleEvent,
         )
     }

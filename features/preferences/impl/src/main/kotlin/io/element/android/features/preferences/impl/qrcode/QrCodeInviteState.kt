@@ -13,6 +13,7 @@ data class QrCodeInviteState(
     var userId: UserId,
     var displayName: String?,
     val userAvatarUrl: String?,
-    val qrCodeContent: String,
+    val loading: Boolean,
+    val qrCodeContent: String?,
     val eventSink: (QrCodeInviteEvents) -> Unit
 )
