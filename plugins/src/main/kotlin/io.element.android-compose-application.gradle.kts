@@ -19,7 +19,6 @@ import org.gradle.accessors.dm.LibrariesForLibs
 val libs = the<LibrariesForLibs>()
 plugins {
     id("com.android.application")
-    id("kotlin-android")
     id("com.autonomousapps.dependency-analysis")
     id("org.jetbrains.kotlin.plugin.compose")
 }
