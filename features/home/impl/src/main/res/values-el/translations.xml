@@ -5,9 +5,9 @@
   <string name="banner_battery_optimization_title_android">"Δεν φτάνουν οι ειδοποιήσεις;"</string>
   <string name="banner_new_sound_message">"Το ping ειδοποιήσεών σας έχει ενημερωθεί—είναι πιο σαφές, πιο γρήγορο και λιγότερο ενοχλητικό."</string>
   <string name="banner_new_sound_title">"Ανανεώσαμε τους ήχους σας"</string>
-  <string name="banner_set_up_recovery_content">"Δημιούργησε ένα νέο κλειδί ανάκτησης που μπορεί να χρησιμοποιηθεί για την επαναφορά του ιστορικού των κρυπτογραφημένων μηνυμάτων σου σε περίπτωση που χάσεις την πρόσβαση στις συσκευές σου."</string>
-  <string name="banner_set_up_recovery_submit">"Ρύθμιση ανάκτησης"</string>
-  <string name="banner_set_up_recovery_title">"Ρύθμιση ανάκτησης"</string>
+  <string name="banner_set_up_recovery_content">"Οι συνομιλίες σας αποθηκεύονται αυτόματα με κρυπτογράφηση από άκρο σε άκρο. Για να επαναφέρετε αυτό το αντίγραφο ασφαλείας και να διατηρήσετε την ψηφιακή σας ταυτότητα όταν χάσετε την πρόσβαση σε όλες τις συσκευές σας, θα χρειαστείτε το κλειδί ανάκτησης. "</string>
+  <string name="banner_set_up_recovery_submit">"Λήψη κλειδιού ανάκτησης"</string>
+  <string name="banner_set_up_recovery_title">"Δημιουργήστε αντίγραφα ασφαλείας των συνομιλιών σας"</string>
   <string name="confirm_recovery_key_banner_message">"Επιβεβαίωσε το κλειδί ανάκτησης για να διατηρήσεις την πρόσβαση στο χώρο αποθήκευσης κλειδιών και στο ιστορικό μηνυμάτων."</string>
   <string name="confirm_recovery_key_banner_primary_button_title">"Εισήγαγε το κλειδί ανάκτησης"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Ξέχασες το κλειδί ανάκτησης;"</string>

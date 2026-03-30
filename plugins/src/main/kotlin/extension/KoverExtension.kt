@@ -13,10 +13,11 @@ import kotlinx.kover.gradle.plugin.dsl.CoverageUnit
 import kotlinx.kover.gradle.plugin.dsl.GroupingEntityType
 import kotlinx.kover.gradle.plugin.dsl.KoverProjectExtension
 import kotlinx.kover.gradle.plugin.dsl.KoverVariantCreateConfig
-import org.gradle.api.Action
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.apply
 import org.gradle.kotlin.dsl.assign
+import org.gradle.kotlin.dsl.configure
+import java.io.File
 
 enum class KoverVariant(val variantName: String) {
     Presenters("presenters"),
@@ -24,7 +25,7 @@ enum class KoverVariant(val variantName: String) {
     Views("views"),
 }
 
-val koverVariants = KoverVariant.values().map { it.variantName }
+val koverVariants = KoverVariant.entries.map { it.variantName }
 
 val localAarProjects = listOf(
     ":libraries:rustsdk",
@@ -32,7 +33,7 @@ val localAarProjects = listOf(
 )
 
 val excludedKoverSubProjects = listOf(
-    ":app",
+    ":appconfig",
     ":annotations",
     ":codegen",
     ":tests:testutils",
@@ -42,24 +43,63 @@ val excludedKoverSubProjects = listOf(
     ":libraries:core",
     ":libraries:coroutines",
     ":libraries:di",
+    ":tests:detekt-rules",
+    ":tests:konsist",
+    ":tests:testutils",
 ) + localAarProjects
 
-private fun Project.kover(action: Action<KoverProjectExtension>) {
-    (this as org.gradle.api.plugins.ExtensionAware).extensions.configure("kover", action)
+private fun Project.kover(any: Any) {
+    this.dependencies.add("kover", any)
 }
 
 fun Project.setupKover() {
+    // If the project is excluded from Kover, don't apply anything
+    if (path in excludedKoverSubProjects) return
+
+    // Apply the plugin
+    apply(plugin = "org.jetbrains.kotlinx.kover")
+
     // Create verify all task joining all existing verification tasks
     tasks.register("koverVerifyAll") {
         group = "verification"
         description = "Verifies the code coverage of all subprojects."
-        val dependencies = listOf(":app:koverVerifyGplayDebug") + koverVariants.map { ":app:koverVerify${it.replaceFirstChar(Char::titlecase)}" }
+        val dependencies = listOf(":koverVerifyMerged") + koverVariants.map { ":app:koverVerify${it.replaceFirstChar(Char::titlecase)}" }
         dependsOn(dependencies)
     }
     // https://kotlin.github.io/kotlinx-kover/
     // Run `./gradlew :app:koverHtmlReport` to get report at ./app/build/reports/kover
     // Run `./gradlew :app:koverXmlReport` to get XML report
-    kover {
+    extensions.configure<KoverProjectExtension> {
+        currentProject {
+            // Create custom variants for verification
+            for (variant in koverVariants) {
+                createVariant(variant) {
+                    defaultVariants(project)
+
+                    // Using the cache for coverage verification seems to be flaky, so we disable it for now.
+                    val taskName = "koverCachedVerify${variant.replaceFirstChar(Char::titlecase)}"
+                    val cachedTask = project.tasks.findByName(taskName)
+                    cachedTask?.let {
+                        it.outputs.upToDateWhen { false }
+                    }
+                }
+            }
+
+            // Create merged variant
+            createVariant("merged") {
+                defaultVariants(project)
+            }
+        }
+
+        // If it's the root project, set up kover for subprojects
+        if (project.path == ":") {
+            for (project in project.subprojects) {
+                if (project.path !in excludedKoverSubProjects && File(project.projectDir, "build.gradle.kts").exists()) {
+                    kover(project)
+                }
+            }
+        }
+
         reports {
             filters {
                 excludes {
@@ -83,6 +123,8 @@ fun Project.setupKover() {
                         "io.element.android.libraries.designsystem.theme.components.bottomsheet.*",
                         // Konsist code to make test fails
                         "io.element.android.tests.konsist.failures",
+                        // Copied from Appyx
+                        "io.element.android.libraries.architecture.appyx.SafeChildrenTransitionScope",
                     )
                     annotatedBy(
                         "androidx.compose.ui.tooling.preview.Preview",
@@ -194,54 +236,10 @@ fun Project.setupKover() {
     }
 }
 
-fun Project.applyKoverPluginToAllSubProjects() = rootProject.subprojects {
-    if (project.path !in localAarProjects) {
-        apply(plugin = "org.jetbrains.kotlinx.kover")
-        kover {
-            currentProject {
-                for (variant in koverVariants) {
-                    createVariant(variant) {
-                        defaultVariants(project)
-                    }
-                }
-            }
-        }
-
-        project.afterEvaluate {
-            for (variant in koverVariants) {
-                // Using the cache for coverage verification seems to be flaky, so we disable it for now.
-                val taskName = "koverCachedVerify${variant.replaceFirstChar(Char::titlecase)}"
-                val cachedTask = project.tasks.findByName(taskName)
-                cachedTask?.let {
-                    it.outputs.upToDateWhen { false }
-                }
-            }
-        }
-    }
-}
-
 fun KoverVariantCreateConfig.defaultVariants(project: Project) {
-    if (project.name == "app") {
+    if (project.path == ":app") {
         addWithDependencies("gplayDebug")
     } else {
         addWithDependencies("debug", "jvm", optional = true)
     }
-}
-
-fun Project.koverSubprojects() = project.rootProject.subprojects
-    .filter {
-        it.project.projectDir.resolve("build.gradle.kts").exists()
-    }
-    .map { it.path }
-    .sorted()
-    .filter {
-        it !in excludedKoverSubProjects
-    }
-
-fun Project.koverDependencies() {
-    project.koverSubprojects()
-        .forEach {
-            // println("Add $it to kover")
-            dependencies.add("kover", project(it))
-        }
 }

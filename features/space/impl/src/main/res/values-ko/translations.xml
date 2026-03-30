@@ -1,6 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_leave_space_choose_owners_action">"소유자 선택"</string>
+  <string name="screen_leave_space_last_admin_info">"%1$s (관리자)"</string>
+  <plurals name="screen_leave_space_submit">
+    <item quantity="other">"방 %1$d개 및 스페이스 나가기"</item>
+  </plurals>
+  <string name="screen_leave_space_subtitle">"참여 중인 방 중 귀하가 유일한 관리자가 아닌 방들을 선택하여 나갈 수 있습니다:"</string>
+  <string name="screen_leave_space_subtitle_last_admin">"이 Space를 떠나기 전에 다른 관리자를 지정해야 합니다."</string>
+  <string name="screen_leave_space_subtitle_last_owner">"귀하는 %1$s의 유일한 소유자입니다. 나가기 전에 다른 사람에게 소유권을 이전해야 합니다."</string>
+  <string name="screen_leave_space_subtitle_only_last_admin">"귀하가 유일한 관리자인 다음 방에서는 나갈수 없습니다.:"</string>
+  <string name="screen_leave_space_title">"%1$s에서 나가시겠습니까?"</string>
+  <string name="screen_leave_space_title_last_admin">"귀하는 %1$s의 유일한 관리자입니다."</string>
+  <string name="screen_leave_space_title_last_owner">"소유권 이전"</string>
+  <string name="screen_space_add_room_action">"방"</string>
+  <string name="screen_space_add_rooms_room_access_description">"방을 추가해도 해당 방의 액세스 권한은 변경되지 않습니다. 권한을 변경하려면 방 설정 &gt; 보안 및 개인정보 보호로 이동하세요."</string>
+  <string name="screen_space_empty_state_title">"첫 번째 방 추가"</string>
+  <string name="screen_space_menu_action_members">"멤버 보기"</string>
+  <string name="screen_space_remove_rooms_confirmation_content">"방을 제거해도 해당 방의 액세스 권한은 변경되지 않습니다. 권한을 변경하려면 방 정보 &gt; 개인정보 보호 및 보안으로 이동하세요."</string>
+  <plurals name="screen_space_remove_rooms_confirmation_title">
+    <item quantity="other">"%2$s에서 방 %1$d개 제거"</item>
+  </plurals>
+  <string name="screen_space_settings_leave_space">"스페이스 떠나기"</string>
   <string name="screen_space_settings_roles_and_permissions">"역할 및 권한"</string>
   <string name="screen_space_settings_security_and_privacy">"보안 및 개인정보 보호"</string>
 </resources>

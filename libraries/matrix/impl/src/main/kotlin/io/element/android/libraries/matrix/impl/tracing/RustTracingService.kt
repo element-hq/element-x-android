@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.api.tracing.LogLevel
 import io.element.android.libraries.matrix.api.tracing.TracingConfiguration
 import io.element.android.libraries.matrix.api.tracing.TracingService
 import io.element.android.libraries.matrix.api.tracing.WriteToFilesConfiguration
+import org.matrix.rustcomponents.sdk.SentryConfig
 import org.matrix.rustcomponents.sdk.TracingFileConfiguration
 import org.matrix.rustcomponents.sdk.reloadTracingFileWriter
 import timber.log.Timber
@@ -59,11 +60,17 @@ private fun WriteToFilesConfiguration.toTracingFileConfiguration(): TracingFileC
     }
 }
 
-fun TracingConfiguration.map(): org.matrix.rustcomponents.sdk.TracingConfiguration = org.matrix.rustcomponents.sdk.TracingConfiguration(
+fun TracingConfiguration.map(buildMeta: BuildMeta): org.matrix.rustcomponents.sdk.TracingConfiguration = org.matrix.rustcomponents.sdk.TracingConfiguration(
     writeToStdoutOrSystem = writesToLogcat,
     logLevel = logLevel.toRustLogLevel(),
     extraTargets = extraTargets,
     traceLogPacks = traceLogPacks.map(),
     writeToFiles = writesToFilesConfiguration.toTracingFileConfiguration(),
-    sentryDsn = sdkSentryDsn,
+    sentryConfig = sdkSentryDsn?.let {
+        SentryConfig(
+            dsn = it,
+            appVersion = buildMeta.versionName,
+            appPlatform = "Android",
+        )
+    }
 )

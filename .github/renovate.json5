@@ -1,0 +1,47 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:recommended",
+  ],
+  "labels": [
+    "PR-Dependencies",
+  ],
+  "ignoreDeps": [
+    "string:app_name",
+    "gradle",
+  ],
+  "minimumReleaseAge": "7 days",
+  "packageRules": [
+    {
+      "matchPackageNames": [
+        "org.matrix.rustcomponents:sdk-android",
+        "/^io.element.android/",
+      ],
+      "minimumReleaseAge": null,
+    },
+    {
+      "groupName": "kotlin",
+      "matchPackageNames": [
+        "/^org.jetbrains.kotlin/",
+        "/^com.google.devtools.ksp/",
+        "/^androidx.compose.compiler/",
+      ],
+    },
+    {
+      "versioning": "semver",
+      "matchPackageNames": [
+        "/^org.maplibre/",
+        "/^org.jetbrains.kotlinx:kotlinx-datetime/",
+      ],
+    },
+    {
+      // Limit PostHog Android upgrade to one PR per month, the first day of the month
+      "matchPackageNames": [
+        "com.posthog:posthog-android",
+      ],
+      "schedule": [
+          "* * 1 * *",
+      ]
+    },
+  ],
+}

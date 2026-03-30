@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Přidat reakci: %1$s"</string>
+  <string name="a11y_address">"Adresa"</string>
   <string name="a11y_avatar">"Profilový obrázek"</string>
   <string name="a11y_collapse_message_text_field">"Minimalizovat textové pole zprávy"</string>
   <string name="a11y_delete">"Smazat"</string>
@@ -27,9 +28,12 @@
   <string name="a11y_pause">"Pozastavit"</string>
   <string name="a11y_paused_voice_message">"Hlasová zpráva, délka: %1$s, aktuální pozice: %2$s"</string>
   <string name="a11y_pin_field">"Pole pro PIN"</string>
+  <string name="a11y_pinned_location">"Připnutá poloha"</string>
   <string name="a11y_play">"Přehrát"</string>
+  <string name="a11y_playback_speed">"Rychlost přehrávání"</string>
   <string name="a11y_poll">"Hlasování"</string>
   <string name="a11y_poll_end">"Hlasování ukončeno"</string>
+  <string name="a11y_qr_code">"QR kód"</string>
   <string name="a11y_react_with">"Reagovat s %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Reagovat s dalšími emoji"</string>
   <string name="a11y_read_receipts_multiple">"%1$s a %2$s přečetli"</string>
@@ -44,9 +48,11 @@
   <string name="a11y_remove_reaction_with">"Odstranit reakci pomocí %1$s"</string>
   <string name="a11y_room_avatar">"Avatar místnosti"</string>
   <string name="a11y_send_files">"Odeslat soubory"</string>
+  <string name="a11y_sender_location">"Poloha odesílatele"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Vyžaduje se časově omezená akce, na ověření máte jednu minutu"</string>
   <string name="a11y_show_password">"Zobrazit heslo"</string>
   <string name="a11y_start_call">"Zahájit hovor"</string>
+  <string name="a11y_start_voice_call">"Zahájit hlasový hovor"</string>
   <string name="a11y_tombstoned_room">"Místnost s náhrobkem"</string>
   <string name="a11y_user_avatar">"Avatar uživatele"</string>
   <string name="a11y_user_menu">"Uživatelské menu"</string>
@@ -155,6 +161,7 @@
   <string name="action_send_voice_message">"Odeslat hlasovou zprávu"</string>
   <string name="action_share">"Sdílet"</string>
   <string name="action_share_link">"Sdílet odkaz"</string>
+  <string name="action_share_live_location">"Sdílet aktuální polohu"</string>
   <string name="action_show">"Zobrazit"</string>
   <string name="action_sign_in_again">"Přihlásit se znovu"</string>
   <string name="action_signout">"Odhlásit se"</string>
@@ -272,6 +279,7 @@ Důvod: %1$s."</string>
   <string name="common_offline">"Offline"</string>
   <string name="common_open_source_licenses">"Licence s otevřeným zdrojovým kódem"</string>
   <string name="common_or">"nebo"</string>
+  <string name="common_other_options">"Další možnosti"</string>
   <string name="common_password">"Heslo"</string>
   <string name="common_people">"Lidé"</string>
   <string name="common_permalink">"Trvalý odkaz"</string>
@@ -407,6 +415,7 @@ Důvod: %1$s."</string>
   <string name="crypto_identity_change_profile_pin_violation">"Identita uživatele %1$s se změnila."</string>
   <string name="crypto_identity_change_verification_violation_new">"Identita uživatele %1$s %2$s se změnila. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Zrušit ověření"</string>
+  <string name="dialog_allow_access">"Povolit přístup"</string>
   <string name="dialog_confirm_link_message">"Odkaz %1$s vás přesměruje na jinou stránku %2$s
 
 Opravdu chcete pokračovat?"</string>
@@ -455,6 +464,7 @@ Opravdu chcete pokračovat?"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Odstranit %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Nastavení"</string>
   <string name="screen_media_picker_error_failed_selection">"Výběr média se nezdařil, zkuste to prosím znovu."</string>
+  <string name="screen_onboarding_welcome_back">"Vítejte zpět"</string>
   <string name="screen_pinned_timeline_empty_state_description">"Přidržte zprávu a vyberte „%1$s“, kterou chcete zahrnout sem."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Připněte důležité zprávy, aby je bylo možné snadno najít"</string>
   <plurals name="screen_pinned_timeline_screen_title">
@@ -490,12 +500,15 @@ Opravdu chcete pokračovat?"</string>
   <string name="screen_share_open_apple_maps">"Otevřít v Mapách Apple"</string>
   <string name="screen_share_open_google_maps">"Otevřít v Mapách Google"</string>
   <string name="screen_share_open_osm_maps">"Otevřít v OpenStreetMap"</string>
-  <string name="screen_share_this_location_action">"Sdílet tuto polohu"</string>
+  <string name="screen_share_this_location_action">"Sdílejte vybranou polohu"</string>
+  <string name="screen_sharing_location_option_sheet_title">"Možnosti sdílení"</string>
   <string name="screen_space_list_description">"Prostory, které jste vytvořili nebo se k nim připojili."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_empty_state_title">"Vytvořte prostory pro uspořádání místností"</string>
   <string name="screen_space_list_parent_space">"%1$s prostor"</string>
   <string name="screen_space_list_title">"Prostory"</string>
+  <string name="screen_static_location_sheet_timestamp_description">"Sdíleno %1$s"</string>
+  <string name="screen_static_location_sheet_title">"Na mapě"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Zpráva nebyla odeslána, protože ověřená identita uživatele %1$s se změnila."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Zpráva nebyla odeslána, protože%1$s neověřil(a) všechna zařízení."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Zpráva nebyla odeslána, protože jste neověřili jedno nebo více zařízení."</string>

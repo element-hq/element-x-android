@@ -54,7 +54,7 @@ fun ModalBottomSheet(
     tonalElevation: Dp = if (ElementTheme.isLightTheme) 0.dp else BottomSheetDefaults.Elevation,
     scrimColor: Color = BottomSheetDefaults.ScrimColor,
     dragHandle: @Composable (() -> Unit)? = { BottomSheetDefaults.DragHandle() },
-    contentWindowInsets: @Composable () -> WindowInsets = { BottomSheetDefaults.windowInsets },
+    contentWindowInsets: @Composable () -> WindowInsets = { BottomSheetDefaults.modalWindowInsets },
     content: @Composable ColumnScope.() -> Unit,
 ) {
     val safeSheetState = if (LocalInspectionMode.current) sheetStateForPreview() else sheetState

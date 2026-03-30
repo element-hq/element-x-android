@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2025 Element Creations Ltd.
+ * Copyright (c) 2026 Element Creations Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
@@ -37,9 +37,12 @@ val compoundColorsHcDark = SemanticColors(
     bgActionTertiaryHovered = DarkHcColorTokens.colorGray300,
     bgActionTertiaryRest = DarkHcColorTokens.colorThemeBg,
     bgActionTertiarySelected = DarkHcColorTokens.colorGray400,
-    bgBadgeAccent = DarkHcColorTokens.colorAlphaGreen500,
-    bgBadgeDefault = DarkHcColorTokens.colorAlphaGray500,
-    bgBadgeInfo = DarkHcColorTokens.colorAlphaBlue500,
+    bgBadgeAccent = DarkHcColorTokens.colorGreen400,
+    bgBadgeCritical = DarkHcColorTokens.colorRed300,
+    bgBadgeDefault = DarkHcColorTokens.colorThemeBg,
+    bgBadgeInfo = DarkHcColorTokens.colorBlue400,
+    bgBadgePrimary = DarkHcColorTokens.colorGray1400,
+    bgBadgeSecondary = DarkHcColorTokens.colorGray400,
     bgCanvasDefault = DarkHcColorTokens.colorThemeBg,
     bgCanvasDefaultLevel1 = DarkHcColorTokens.colorGray300,
     bgCanvasDisabled = DarkHcColorTokens.colorGray200,
@@ -73,12 +76,10 @@ val compoundColorsHcDark = SemanticColors(
     gradientActionStop2 = DarkHcColorTokens.colorGreen900,
     gradientActionStop3 = DarkHcColorTokens.colorGreen700,
     gradientActionStop4 = DarkHcColorTokens.colorGreen500,
-    gradientInfoStop1 = DarkHcColorTokens.colorAlphaBlue500,
-    gradientInfoStop2 = DarkHcColorTokens.colorAlphaBlue400,
-    gradientInfoStop3 = DarkHcColorTokens.colorAlphaBlue300,
-    gradientInfoStop4 = DarkHcColorTokens.colorAlphaBlue200,
-    gradientInfoStop5 = DarkHcColorTokens.colorAlphaBlue100,
-    gradientInfoStop6 = DarkHcColorTokens.colorTransparent,
+    gradientCriticalStop1 = DarkHcColorTokens.colorRed200,
+    gradientCriticalStop2 = DarkHcColorTokens.colorThemeBg,
+    gradientInfoStop1 = DarkHcColorTokens.colorBlue200,
+    gradientInfoStop2 = DarkHcColorTokens.colorThemeBg,
     gradientSubtleStop1 = DarkHcColorTokens.colorAlphaGreen500,
     gradientSubtleStop2 = DarkHcColorTokens.colorAlphaGreen400,
     gradientSubtleStop3 = DarkHcColorTokens.colorAlphaGreen300,

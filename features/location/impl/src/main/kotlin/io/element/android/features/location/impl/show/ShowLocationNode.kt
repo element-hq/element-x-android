@@ -40,7 +40,7 @@ class ShowLocationNode(
     }
 
     private val inputs: ShowLocationEntryPoint.Inputs = inputs()
-    private val presenter = presenterFactory.create(inputs.location, inputs.description)
+    private val presenter = presenterFactory.create(inputs.mode)
 
     @Composable
     override fun View(modifier: Modifier) {

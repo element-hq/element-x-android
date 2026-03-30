@@ -15,6 +15,7 @@ import com.google.firebase.messaging.RemoteMessage
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SECRET
+import io.element.android.libraries.push.test.push.FakePushHandlingWakeLock
 import io.element.android.libraries.push.test.test.FakePushHandler
 import io.element.android.libraries.pushproviders.api.PushData
 import io.element.android.libraries.pushproviders.api.PushHandler
@@ -28,6 +29,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
+import kotlin.time.Duration
 
 @RunWith(RobolectricTestRunner::class)
 class VectorFirebaseMessagingServiceTest {
@@ -55,7 +57,7 @@ class VectorFirebaseMessagingServiceTest {
 
     @Test
     fun `test receiving valid data`() = runTest {
-        val lambda = lambdaRecorder<PushData, String, Unit> { _, _ -> }
+        val lambda = lambdaRecorder<PushData, String, Boolean> { _, _ -> true }
         val vectorFirebaseMessagingService = createVectorFirebaseMessagingService(
             pushHandler = FakePushHandler(handleResult = lambda)
         )
@@ -78,6 +80,68 @@ class VectorFirebaseMessagingServiceTest {
     }
 
     @Test
+    fun `test pushHandler returning true locks and does not unlock the wakelock so it continues running`() = runTest {
+        val lockLambda = lambdaRecorder<Duration, Unit> { _ -> }
+        val unlockLambda = lambdaRecorder<Unit> { }
+        val vectorFirebaseMessagingService = createVectorFirebaseMessagingService(
+            pushHandler = FakePushHandler(handleResult = { _, _ -> true }),
+            pushHandlingWakeLock = FakePushHandlingWakeLock(
+                lock = lockLambda,
+                unlock = unlockLambda
+            )
+        )
+        vectorFirebaseMessagingService.onMessageReceived(
+            message = RemoteMessage(
+                Bundle().apply {
+                    putString("event_id", AN_EVENT_ID.value)
+                    putString("room_id", A_ROOM_ID.value)
+                    putString("cs", A_SECRET)
+                },
+            )
+        )
+
+        // The wakelock should be locked but not unlocked
+        lockLambda.assertions().isCalledOnce()
+        unlockLambda.assertions().isNeverCalled()
+
+        advanceUntilIdle()
+
+        // After handling the push, the wakelock should still not be unlocked
+        unlockLambda.assertions().isNeverCalled()
+    }
+
+    @Test
+    fun `test pushHandler returning false locks and unlocks the wakelock early`() = runTest {
+        val lockLambda = lambdaRecorder<Duration, Unit> { _ -> }
+        val unlockLambda = lambdaRecorder<Unit> { }
+        val vectorFirebaseMessagingService = createVectorFirebaseMessagingService(
+            pushHandler = FakePushHandler(handleResult = { _, _ -> false }),
+            pushHandlingWakeLock = FakePushHandlingWakeLock(
+                lock = lockLambda,
+                unlock = unlockLambda
+            )
+        )
+        vectorFirebaseMessagingService.onMessageReceived(
+            message = RemoteMessage(
+                Bundle().apply {
+                    putString("event_id", AN_EVENT_ID.value)
+                    putString("room_id", A_ROOM_ID.value)
+                    putString("cs", A_SECRET)
+                },
+            )
+        )
+
+        // The wakelock should be locked but not unlocked
+        lockLambda.assertions().isCalledOnce()
+        unlockLambda.assertions().isNeverCalled()
+
+        advanceUntilIdle()
+
+        // After handling the push, the wakelock should be unlocked
+        unlockLambda.assertions().isCalledOnce()
+    }
+
+    @Test
     fun `test new token is forwarded to the handler`() = runTest {
         val lambda = lambdaRecorder<String, Unit> { }
         val vectorFirebaseMessagingService = createVectorFirebaseMessagingService(
@@ -93,12 +157,14 @@ class VectorFirebaseMessagingServiceTest {
     private fun TestScope.createVectorFirebaseMessagingService(
         firebaseNewTokenHandler: FirebaseNewTokenHandler = FakeFirebaseNewTokenHandler(),
         pushHandler: PushHandler = FakePushHandler(),
+        pushHandlingWakeLock: FakePushHandlingWakeLock = FakePushHandlingWakeLock(),
     ): VectorFirebaseMessagingService {
         return VectorFirebaseMessagingService().apply {
             this.firebaseNewTokenHandler = firebaseNewTokenHandler
             this.pushParser = FirebasePushParser()
             this.pushHandler = pushHandler
             this.coroutineScope = this@createVectorFirebaseMessagingService
+            this.pushHandlingWakeLock = pushHandlingWakeLock
         }
     }
 }

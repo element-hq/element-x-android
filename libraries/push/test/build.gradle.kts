@@ -21,6 +21,7 @@ dependencies {
     implementation(projects.libraries.push.impl)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixui)
+    implementation(projects.libraries.workmanager.api)
     implementation(projects.tests.testutils)
     implementation(libs.androidx.core)
     implementation(libs.coil.compose)

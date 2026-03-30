@@ -97,6 +97,7 @@ sqldelight {
     databases {
         create("PushDatabase") {
             schemaOutputDirectory = File("src/main/sqldelight/databases")
+            verifyMigrations = true
         }
     }
 }

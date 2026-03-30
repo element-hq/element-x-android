@@ -43,6 +43,9 @@ import io.element.android.features.messages.impl.timeline.TimelinePresenter
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.TimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.roommembermoderation.api.ModerationAction
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
+import io.element.android.features.roommembermoderation.api.RoomMemberModerationRenderer
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.androidutils.system.openUrlInExternalApp
 import io.element.android.libraries.architecture.NodeInputs
@@ -86,6 +89,7 @@ class ThreadedMessagesNode(
     private val mediaPlayer: MediaPlayer,
     private val permalinkParser: PermalinkParser,
     private val appNavigationStateService: AppNavigationStateService,
+    private val roomMemberModerationRenderer: RoomMemberModerationRenderer,
 ) : Node(buildContext, plugins = plugins), MessagesNavigator {
     data class Inputs(
         val threadRootEventId: ThreadId,
@@ -130,7 +134,7 @@ class ThreadedMessagesNode(
         fun navigateToSendLocation()
         fun navigateToCreatePoll()
         fun navigateToEditPoll(eventId: EventId)
-        fun navigateToRoomCall(roomId: RoomId)
+        fun navigateToRoomCall(roomId: RoomId, isAudioCall: Boolean)
         fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?)
     }
 
@@ -281,10 +285,23 @@ class ThreadedMessagesNode(
                     },
                     onSendLocationClick = callback::navigateToSendLocation,
                     onCreatePollClick = callback::navigateToCreatePoll,
-                    onJoinCallClick = { callback.navigateToRoomCall(room.roomId) },
+                    onJoinCallClick = { isAudioCall ->
+                        callback.navigateToRoomCall(room.roomId, isAudioCall)
+                    },
                     onViewAllPinnedMessagesClick = {},
                     modifier = modifier,
                     knockRequestsBannerView = {},
+                )
+
+                roomMemberModerationRenderer.Render(
+                    state = state.roomMemberModerationState,
+                    onSelectAction = { action, target ->
+                        when (action) {
+                            is ModerationAction.DisplayProfile -> callback.navigateToRoomMemberDetails(target.userId)
+                            else -> state.roomMemberModerationState.eventSink(RoomMemberModerationEvents.ProcessAction(action, target))
+                        }
+                    },
+                    modifier = Modifier,
                 )
 
                 var focusedEventId by rememberSaveable {

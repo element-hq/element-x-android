@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_app_lock_biometric_authentication">"биометрическая идентификация"</string>
-  <string name="screen_app_lock_biometric_unlock">"биометрическая разблокировка"</string>
+  <string name="screen_app_lock_biometric_authentication">"идентификация по биометрии"</string>
+  <string name="screen_app_lock_biometric_unlock">"разблокировка по биометрии"</string>
   <string name="screen_app_lock_biometric_unlock_title_android">"Разблокировать с помощью биометрии"</string>
-  <string name="screen_app_lock_confirm_biometric_authentication_android">"Подтвердить биометрические данные"</string>
+  <string name="screen_app_lock_confirm_biometric_authentication_android">"Подтвердить биометрию"</string>
   <string name="screen_app_lock_forgot_pin">"Забыли PIN-код?"</string>
   <string name="screen_app_lock_settings_change_pin">"Изменить PIN-код"</string>
   <string name="screen_app_lock_settings_enable_biometric_unlock">"Разрешить разблокировку по биометрии"</string>
@@ -11,23 +11,23 @@
   <string name="screen_app_lock_settings_remove_pin_alert_message">"Вы действительно хотите удалить PIN-код?"</string>
   <string name="screen_app_lock_settings_remove_pin_alert_title">"Удалить PIN-код?"</string>
   <string name="screen_app_lock_setup_biometric_unlock_allow_title">"Разрешить %1$s"</string>
-  <string name="screen_app_lock_setup_biometric_unlock_skip">"Я бы предпочел использовать PIN-код"</string>
-  <string name="screen_app_lock_setup_biometric_unlock_subtitle">"Сэкономьте время и используйте %1$s для разблокировки приложения"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_skip">"Использовать PIN-код"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_subtitle">"Используйте %1$s для разблокировки приложения"</string>
   <string name="screen_app_lock_setup_choose_pin">"Выберите PIN-код"</string>
   <string name="screen_app_lock_setup_confirm_pin">"Подтвердите PIN-код"</string>
-  <string name="screen_app_lock_setup_pin_context">"Заблокируйте %1$s, чтобы повысить безопасность ваших чатов.
+  <string name="screen_app_lock_setup_pin_context">"Установите блокировку на %1$s, чтобы повысить безопасность ваших чатов.
 
-Введите что-нибудь незабываемое. Если вы забудете этот PIN-код, вы выйдете из приложения."</string>
-  <string name="screen_app_lock_setup_pin_forbidden_dialog_content">"Из соображений безопасности вы не можешь выбрать это в качестве PIN-кода"</string>
-  <string name="screen_app_lock_setup_pin_forbidden_dialog_title">"Выберите другой PIN-код"</string>
+Выберите код, который трудно забыть. Если вы забудете PIN-код, вам придется выйти из приложения."</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_content">"Этот PIN-код небезопасен."</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_title">"Выбрать другой PIN-код"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Повторите PIN-код"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN-коды не совпадают"</string>
   <string name="screen_app_lock_signout_alert_message">"Чтобы продолжить, вам необходимо повторно войти в систему и создать новый PIN-код"</string>
-  <string name="screen_app_lock_signout_alert_title">"Выполняется выход из системы"</string>
+  <string name="screen_app_lock_signout_alert_title">"Это устройство удаляется"</string>
   <plurals name="screen_app_lock_subtitle">
-    <item quantity="one">"У вас осталась %1$d попытка на разблокировку"</item>
-    <item quantity="few">"У вас остались %1$d попытки на разблокировку"</item>
-    <item quantity="many">"У вас осталось %1$d попыток на разблокировку"</item>
+    <item quantity="one">"У вас осталась %1$d попытка разблокировки"</item>
+    <item quantity="few">"У вас остались %1$d попытки разблокировки"</item>
+    <item quantity="many">"У вас осталось %1$d попыток разблокировки"</item>
   </plurals>
   <plurals name="screen_app_lock_subtitle_wrong_pin">
     <item quantity="one">"Неверный PIN-код. У вас осталась %1$d попытка"</item>

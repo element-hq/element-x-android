@@ -30,7 +30,6 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EnsureNeverCalledWithTwoParams
 import io.element.android.tests.testutils.EventsRecorder
@@ -39,6 +38,7 @@ import io.element.android.tests.testutils.setSafeContent
 import io.element.android.wysiwyg.link.Link
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
@@ -142,6 +142,10 @@ class TimelineViewTest {
         eventsRecorder.assertSingle(TimelineEvent.HideShieldDialog)
     }
 
+    @Ignore(
+        "performScrollToIndex in compose tests no longer sets LazyListState.isScrollInProgress to true, so the LoadMore event is not emitted." +
+        "This needs to be reworked to use a different approach to check the LoadMore event was emitted."
+    )
     @Test
     fun `scrolling near to the start of the loaded items triggers a pre-fetch`() {
         val eventsRecorder = EventsRecorder<TimelineEvent>()
@@ -186,7 +190,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setTimel
     onReactionLongClick: (emoji: String, TimelineItem.Event) -> Unit = EnsureNeverCalledWithTwoParams(),
     onMoreReactionsClick: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
     onReadReceiptClick: (TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
-    onJoinCallClick: () -> Unit = EnsureNeverCalled(),
+    onJoinCallClick: (Boolean) -> Unit = EnsureNeverCalledWithParam(),
     forceJumpToBottomVisibility: Boolean = false,
 ) {
     setSafeContent(clearAndroidUiDispatcher = true) {

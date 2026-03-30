@@ -41,6 +41,7 @@ class RoomCallStatePresenterTest {
             assertThat(initialState).isEqualTo(
                 RoomCallState.StandBy(
                     canStartCall = false,
+                    isDM = false
                 )
             )
         }
@@ -79,6 +80,28 @@ class RoomCallStatePresenterTest {
             assertThat(initialState).isEqualTo(
                 RoomCallState.StandBy(
                     canStartCall = true,
+                    isDM = false
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - initial state - when is direct room`() = runTest {
+        val room = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
+                initialRoomInfo = aRoomInfo(isDirect = true),
+                roomPermissions = roomPermissions(true),
+            )
+        )
+        val presenter = createRoomCallStatePresenter(joinedRoom = room)
+        presenter.test {
+            skipItems(1)
+            val initialState = awaitItem()
+            assertThat(initialState).isEqualTo(
+                RoomCallState.StandBy(
+                    canStartCall = true,
+                    isDM = true
                 )
             )
         }
@@ -98,6 +121,7 @@ class RoomCallStatePresenterTest {
             assertThat(awaitItem()).isEqualTo(
                 RoomCallState.OnGoing(
                     canJoinCall = false,
+                    isAudioCall = false,
                     isUserInTheCall = false,
                     isUserLocallyInTheCall = false,
                 )
@@ -125,6 +149,7 @@ class RoomCallStatePresenterTest {
             assertThat(awaitItem()).isEqualTo(
                 RoomCallState.OnGoing(
                     canJoinCall = true,
+                    isAudioCall = false,
                     isUserInTheCall = true,
                     isUserLocallyInTheCall = false,
                 )
@@ -155,6 +180,7 @@ class RoomCallStatePresenterTest {
             assertThat(awaitItem()).isEqualTo(
                 RoomCallState.OnGoing(
                     canJoinCall = true,
+                    isAudioCall = false,
                     isUserInTheCall = true,
                     isUserLocallyInTheCall = true,
                 )
@@ -187,6 +213,7 @@ class RoomCallStatePresenterTest {
             assertThat(awaitItem()).isEqualTo(
                 RoomCallState.OnGoing(
                     canJoinCall = true,
+                    isAudioCall = false,
                     isUserInTheCall = true,
                     isUserLocallyInTheCall = true,
                 )
@@ -195,6 +222,7 @@ class RoomCallStatePresenterTest {
             assertThat(awaitItem()).isEqualTo(
                 RoomCallState.OnGoing(
                     canJoinCall = true,
+                    isAudioCall = false,
                     isUserInTheCall = true,
                     isUserLocallyInTheCall = false,
                 )
@@ -208,6 +236,7 @@ class RoomCallStatePresenterTest {
             assertThat(awaitItem()).isEqualTo(
                 RoomCallState.OnGoing(
                     canJoinCall = true,
+                    isAudioCall = false,
                     isUserInTheCall = false,
                     isUserLocallyInTheCall = false,
                 )
@@ -221,6 +250,7 @@ class RoomCallStatePresenterTest {
             assertThat(awaitItem()).isEqualTo(
                 RoomCallState.StandBy(
                     canStartCall = true,
+                    isDM = false
                 )
             )
         }

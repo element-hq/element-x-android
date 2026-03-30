@@ -10,13 +10,14 @@
   * [I want to add new strings to the project](#i-want-to-add-new-strings-to-the-project)
   * [I want to help translating Element](#i-want-to-help-translating-element)
   * [Element X Android Gallery](#element-x-android-gallery)
+* [I want to add a new feature to Element X Android](#i-want-to-add-a-new-feature-to-element-x-android)
 * [I want to submit a PR to fix an issue](#i-want-to-submit-a-pr-to-fix-an-issue)
   * [Kotlin](#kotlin)
   * [Changelog](#changelog)
   * [Code quality](#code-quality)
     * [detekt](#detekt)
     * [ktlint](#ktlint)
-    * [knit](#knit)
+    * [checkDocs](#checkdocs)
     * [lint](#lint)
   * [Unit tests](#unit-tests)
     * [konsist](#konsist)
@@ -76,6 +77,14 @@ Once added to Localazy, translations can be checked screen per screen using our 
 
 Localazy syncs occur every Monday and the screenshots on this page are generated every Tuesday, so you'll have to wait to see your change appearing on Element X Android Gallery.
 
+## I want to add a new feature to Element X Android
+
+Thank you for contributing to the project! Please have a look in the [dedicated documentation](./docs/pull_request.md) about pull request.
+
+Also, please keep in mind that any feature added to Element X Android needs to be added to [the iOS client](https://github.com/element-hq/element-x-ios) too, unless it's related to an Android OS only behaviour.
+
+**IMPORTANT:** if you are adding new screens or modifying existing ones, this needs acceptance from the product and design teams before being merged. For this, it's better to start with a [feature request issue](https://github.com/element-hq/element-x-android/issues/new?template=enhancement.yml) describing the change you want to make and the motivation behind it instead of directly creating a pull request. This will allow the product and design teams to give feedback on the change before you start working on it, and avoid you doing work that might end up being rejected.
+
 ## I want to submit a PR to fix an issue
 
 Please have a look in the [dedicated documentation](./docs/pull_request.md) about pull request.
@@ -123,13 +132,13 @@ Note that you can run
 
 For ktlint to fix some detected errors for you (you still have to check and commit the fix of course)
 
-#### knit
+#### checkDocs
 
-[knit](https://github.com/Kotlin/kotlinx-knit) is a tool which checks markdown files on the project. Also it generates/updates the table of content (toc) of the markdown files.
+`checkDocs` is a Gradle task which checks markdown files on the project to ensure their table of contents is up to date. It uses `tools/docs/generate_toc.py --verify` under the hood, and has a counterpart `generateDocsToc` task which runs `tools/docs/generate_toc.py` to update the table of contents of markdown files.
 
 So everytime the toc should be updated, just run
 <pre>
-./gradlew knit
+./gradlew generateDocsToc
 </pre>
 
 and commit the changes.
@@ -137,7 +146,7 @@ and commit the changes.
 The CI will check that markdown files are up to date by running
 
 <pre>
-./gradlew knitCheck
+./gradlew checkDocs
 </pre>
 
 #### lint
@@ -184,7 +193,7 @@ internal fun PinIconPreview() = ElementPreview {
 }
 ```
 
-This will allow to preview the composable in both light and dark mode in Android Studio. This will also automatically add UI tests. The GitHub action [Record screenshots](https://github.com/element-hq/element-x-android/actions/workflows/recordScreenshots.yml) has to be run to record the new screenshots. The PR reviewer can trigger this for you if you're not part of the core team. 
+This will allow to preview the composable in both light and dark mode in Android Studio. This will also automatically add UI tests. The GitHub action [Record screenshots](https://github.com/element-hq/element-x-android/actions/workflows/recordScreenshots.yml) has to be run to record the new screenshots. The PR reviewer can trigger this for you if you're not part of the core team.
 
 ### Authors
 

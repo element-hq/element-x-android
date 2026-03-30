@@ -23,6 +23,11 @@ sealed class NotificationResolverException : Exception() {
     data object EventFilteredOut : NotificationResolverException()
 
     /**
+     * The event was found but it has been redacted.
+     */
+    data object EventRedacted : NotificationResolverException()
+
+    /**
      * An unexpected error occurred while trying to resolve the event.
      */
     data class UnknownError(override val message: String) : NotificationResolverException()

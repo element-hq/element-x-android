@@ -50,6 +50,8 @@
   <string name="screen_room_details_error_loading_notification_settings">"Ett fel uppstod vid laddning av aviseringsinställningar."</string>
   <string name="screen_room_details_error_muting">"Misslyckades att tysta det här rummet, vänligen pröva igen."</string>
   <string name="screen_room_details_error_unmuting">"Misslyckades att avtysta det här rummet, vänligen pröva igen."</string>
+  <string name="screen_room_details_invite_people_dont_close">"Stäng inte appen förrän det är klart."</string>
+  <string name="screen_room_details_invite_people_preparing">"Förbereder inbjudningar …"</string>
   <string name="screen_room_details_invite_people_title">"Bjud in personer"</string>
   <string name="screen_room_details_leave_conversation_title">"Lämna konversation"</string>
   <string name="screen_room_details_leave_room_title">"Lämna rum"</string>

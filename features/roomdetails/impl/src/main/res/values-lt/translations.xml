@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_room_change_permissions_room_details">"Redaguoti kambarį"</string>
+  <string name="screen_room_change_permissions_room_details">"Redaguoti informaciją"</string>
   <string name="screen_room_details_add_topic_title">"Pridėti temą"</string>
-  <string name="screen_room_details_edit_room_title">"Redaguoti kambarį"</string>
+  <string name="screen_room_details_edit_room_title">"Redaguoti informaciją"</string>
   <string name="screen_room_details_edition_error">"Įvyko nežinoma klaida ir informacijos pakeisti nepavyko."</string>
   <string name="screen_room_details_edition_error_title">"Nepavyko atnaujinti kambario"</string>
   <string name="screen_room_details_encryption_enabled_subtitle">"Žinutės yra užrakintos. Tik Jūs ir gavėjai turite unikalius raktus joms atrakinti."</string>
   <string name="screen_room_details_encryption_enabled_title">"Įjungtas žinučių šifravimas"</string>
   <string name="screen_room_details_invite_people_title">"Pakviesti žmonių"</string>
   <string name="screen_room_details_leave_conversation_title">"Palikti pokalbį"</string>
-  <string name="screen_room_details_leave_room_title">"Palikti kambarį"</string>
+  <string name="screen_room_details_leave_room_title">"Išeiti iš kambario"</string>
+  <string name="screen_room_details_notification_mode_custom">"Pasirinktinis"</string>
+  <string name="screen_room_details_notification_mode_default">"Numatytasis"</string>
+  <string name="screen_room_details_notification_title">"Pranešimai"</string>
   <string name="screen_room_details_security_title">"Saugumas"</string>
   <string name="screen_room_details_share_room_title">"Bendrinti kambarį"</string>
   <string name="screen_room_details_topic_title">"Tema"</string>

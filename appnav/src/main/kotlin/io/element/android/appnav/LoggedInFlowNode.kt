@@ -8,7 +8,6 @@
 
 package io.element.android.appnav
 
-import android.content.Intent
 import android.os.Parcelable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.runtime.Composable
@@ -63,6 +62,7 @@ import io.element.android.features.roomdirectory.api.RoomDescription
 import io.element.android.features.roomdirectory.api.RoomDirectoryEntryPoint
 import io.element.android.features.securebackup.api.SecureBackupEntryPoint
 import io.element.android.features.share.api.ShareEntryPoint
+import io.element.android.features.share.api.ShareIntentData
 import io.element.android.features.startchat.api.StartChatEntryPoint
 import io.element.android.features.userprofile.api.UserProfileEntryPoint
 import io.element.android.features.verifysession.api.IncomingVerificationEntryPoint
@@ -307,7 +307,7 @@ class LoggedInFlowNode(
         data object RoomDirectory : NavTarget
 
         @Parcelize
-        data class IncomingShare(val intent: Intent) : NavTarget
+        data class IncomingShare(val shareIntentData: ShareIntentData) : NavTarget
 
         @Parcelize
         data class IncomingVerificationRequest(val data: VerificationRequest.Incoming) : NavTarget
@@ -570,7 +570,7 @@ class LoggedInFlowNode(
                 shareEntryPoint.createNode(
                     parentNode = this,
                     buildContext = buildContext,
-                    params = ShareEntryPoint.Params(intent = navTarget.intent),
+                    params = ShareEntryPoint.Params(shareIntentData = navTarget.shareIntentData),
                     callback = object : ShareEntryPoint.Callback {
                         override fun onDone(roomIds: List<RoomId>) {
                             // Remove the incoming share screen
@@ -649,13 +649,13 @@ class LoggedInFlowNode(
         }
     }
 
-    internal suspend fun attachIncomingShare(intent: Intent) {
+    internal suspend fun attachIncomingShare(shareIntentData: ShareIntentData) {
         waitForNavTargetAttached { navTarget ->
             navTarget is NavTarget.Home
         }
         attachChild<Node> {
             backstack.push(
-                NavTarget.IncomingShare(intent)
+                NavTarget.IncomingShare(shareIntentData)
             )
         }
     }

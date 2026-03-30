@@ -42,6 +42,7 @@ import io.element.android.libraries.textcomposer.model.SuggestionType
 import io.element.android.libraries.textcomposer.model.aMarkdownTextEditorState
 import io.element.android.wysiwyg.compose.RichTextEditorStyle
 import io.element.android.wysiwyg.compose.internal.applyStyleInCompose
+import timber.log.Timber
 
 @Suppress("ModifierMissing")
 @Composable
@@ -103,6 +104,9 @@ fun MarkdownTextInput(
                 }
                 addTextChangedListener { editable ->
                     onTyping(!editable.isNullOrEmpty())
+                    if (state.lineCount != lineCount) {
+                        post { bringPointIntoView(selectionStart) }
+                    }
                     state.text.update(editable, false)
                     state.lineCount = lineCount
 
@@ -146,8 +150,20 @@ fun MarkdownTextInput(
 
 private fun Editable.checkSuggestionNeeded(): Suggestion? {
     if (this.isEmpty()) return null
-    val start = Selection.getSelectionStart(this)
-    val end = Selection.getSelectionEnd(this)
+    var start = Selection.getSelectionStart(this)
+    var end = Selection.getSelectionEnd(this)
+    val range = 0..this.length
+
+    if (start !in range || end !in range) {
+        Timber.tag("checkSuggestionNeeded").e("Selection indices are out of bounds: start=$start, end=$end, text length=${this.length}")
+        return null
+    }
+
+    // Make sure the selection order is correct, if not swap them: sometimes we can get the end before the start
+    val tempEnd = end
+    end = maxOf(start, end)
+    start = minOf(start, tempEnd)
+
     var startOfWord = start
     while ((startOfWord > 0 || startOfWord == length) && !this[startOfWord - 1].isWhitespace()) {
         startOfWord--
@@ -158,11 +174,16 @@ private fun Editable.checkSuggestionNeeded(): Suggestion? {
     // If a mention span already exists we don't need suggestions
     if (getSpans<MentionSpan>(startOfWord, startOfWord + 1).isNotEmpty()) return null
 
-    return if (firstChar in listOf('@', '#', '/')) {
+    return if (firstChar in listOf('@', '#', '/', ':')) {
         var endOfWord = end
         while (endOfWord < this.length && !this[endOfWord].isWhitespace()) {
             endOfWord++
         }
+        if (startOfWord + 1 > endOfWord) {
+            Timber.tag("checkSuggestionNeeded").e("No need to show suggestions for an invalid range (${startOfWord + 1}..$endOfWord)")
+            return null
+        }
+
         val text = this.subSequence(startOfWord + 1, endOfWord).toString()
         val suggestionType = when (firstChar) {
             '@' -> SuggestionType.Mention
