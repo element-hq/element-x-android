@@ -96,7 +96,7 @@ class FetchPushForegroundService : Service() {
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         if (!isOnForeground) {
             Timber.w("FetchPushForegroundService is not running in foreground, stopping it to avoid crash")
-            coroutineScope.launch { stopSelf() }
+            stopSelf()
             return START_NOT_STICKY
         }
 
