@@ -34,6 +34,7 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.designsystem.theme.floatingDateBadgeBackground
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -121,11 +122,7 @@ internal fun FloatingDateBadge(
     Surface(
         modifier = modifier,
         shape = RoundedCornerShape(16.dp),
-        color = if (ElementTheme.isLightTheme) {
-            ElementTheme.colors.bgCanvasDefault.copy(alpha = 0.85f)
-        } else {
-            ElementTheme.colors.bgSubtlePrimary
-        },
+        color = ElementTheme.colors.floatingDateBadgeBackground,
     ) {
         Text(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),

@@ -465,8 +465,8 @@ private fun MessagesViewContent(
             val scrollBehavior = PinnedMessagesBannerViewDefaults.rememberScrollBehavior(
                 pinnedMessagesCount = (state.pinnedMessagesBannerState as? PinnedMessagesBannerState.Visible)?.pinnedMessagesCount() ?: 0,
             )
-            var pinnedBannerHeightPx by remember { mutableIntStateOf(0) }
-            val pinnedBannerHeightDp = with(LocalDensity.current) { pinnedBannerHeightPx.toDp() }
+            val density = LocalDensity.current
+            var pinnedBannerHeightDp by remember { mutableStateOf(0.dp) }
 
             TimelineView(
                 state = state.timelineState,
@@ -489,7 +489,7 @@ private fun MessagesViewContent(
             if (state.timelineState.timelineMode !is Timeline.Mode.Thread) {
                 AnimatedVisibility(
                     visible = state.pinnedMessagesBannerState is PinnedMessagesBannerState.Visible && scrollBehavior.isVisible,
-                    modifier = Modifier.onSizeChanged { pinnedBannerHeightPx = it.height },
+                    modifier = Modifier.onSizeChanged { pinnedBannerHeightDp = with(density) { it.height.toDp() } },
                     enter = expandVertically(),
                     exit = shrinkVertically(),
                 ) {
