@@ -17,6 +17,7 @@ import android.os.PowerManager
 import androidx.core.app.NotificationCompat
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.bindings
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.push.api.push.PushHandlingWakeLock
@@ -57,6 +58,8 @@ class FetchPushForegroundService : Service() {
         }
     }
 
+    private var isOnForeground = false
+
     override fun onCreate() {
         Timber.d("Creating FetchPushForegroundService")
 
@@ -71,12 +74,32 @@ class FetchPushForegroundService : Service() {
             .setVibrate(longArrayOf(0))
             .setSound(null)
             .build()
-        startForeground(NOTIFICATION_ID, notificationCompat)
+
+        // Try to start the service in foreground. This can fail, even in cases where it's supposed to work according to the docs.
+        // In those cases we catch the exception and handle the failure so we don't try to start the wakelock or stop the service
+        // from running in foreground later.
+        runCatchingExceptions {
+            startForeground(NOTIFICATION_ID, notificationCompat)
+        }
+            .onSuccess {
+                isOnForeground = true
+                Timber.d("FetchPushForegroundService started in foreground successfully")
+            }
+            .onFailure {
+                isOnForeground = false
+                Timber.e(it, "Failed to start FetchPushForegroundService in foreground")
+            }
 
         super.onCreate()
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        if (!isOnForeground) {
+            Timber.w("FetchPushForegroundService is not running in foreground, stopping it to avoid crash")
+            stopSelf()
+            return START_NOT_STICKY
+        }
+
         wakelock.acquire(wakelockTimeout)
 
         // The timeout is not automatic before Android 15, so we need to schedule it ourselves
@@ -91,18 +114,21 @@ class FetchPushForegroundService : Service() {
     }
 
     override fun stopService(intent: Intent?): Boolean {
-        wakelock.release()
+        if (isOnForeground) {
+            wakelock.release()
+            stopForeground(STOP_FOREGROUND_REMOVE)
+        }
 
-        stopForeground(STOP_FOREGROUND_REMOVE)
         return super.stopService(intent)
     }
 
     override fun onTimeout(startId: Int) {
         super.onTimeout(startId)
 
-        Timber.d("Wakelock timeout reached, stopping FetchPushForegroundService")
-
-        coroutineScope.launch { pushHandlingWakeLock.unlock() }
+        if (isOnForeground) {
+            Timber.d("Wakelock timeout reached, stopping FetchPushForegroundService")
+            coroutineScope.launch { pushHandlingWakeLock.unlock() }
+        }
     }
 
     companion object {

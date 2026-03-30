@@ -10,6 +10,7 @@ package io.element.android.libraries.pushproviders.firebase
 
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.google.firebase.messaging.RemoteMessage.PRIORITY_HIGH
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
@@ -45,8 +46,11 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         Timber.tag(loggerTag.value).w("New Firebase message. Priority: ${message.priority}/${message.originalPriority}")
 
-        // Acquire wakelock to ensure the device stays awake while we handle the push and schedule and run the work
-        pushHandlingWakeLock.lock()
+        val isHighPriority = message.priority == PRIORITY_HIGH
+        if (isHighPriority) {
+            // Acquire wakelock to ensure the device stays awake while we handle the push and schedule and run the work
+            pushHandlingWakeLock.lock()
+        }
 
         coroutineScope.launch {
             val pushData = pushParser.parse(message.data)
@@ -58,7 +62,9 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                         "$it: ${message.data[it]}"
                     },
                 )
-                pushHandlingWakeLock.unlock()
+                if (isHighPriority) {
+                    pushHandlingWakeLock.unlock()
+                }
             } else {
                 val handled = pushHandler.handle(
                     pushData = pushData,
@@ -66,7 +72,7 @@ class VectorFirebaseMessagingService : FirebaseMessagingService() {
                 )
 
                 // If we failed to handle the push, we should release the wakelock early to avoid keeping the device awake for too long.
-                if (!handled) {
+                if (!handled && isHighPriority) {
                     pushHandlingWakeLock.unlock()
                 }
             }
