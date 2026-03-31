@@ -20,10 +20,13 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.TopAppBarDefaults
@@ -39,6 +42,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
@@ -538,18 +542,43 @@ private fun MediaViewerBottomBar(
             if (showDivider) {
                 HorizontalDivider()
             }
-            Text(
+            val scrollState = rememberScrollState()
+            val showBottomShadow = scrollState.value < scrollState.maxValue
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
-                text = caption,
-                maxLines = 5,
-                overflow = TextOverflow.Ellipsis,
-                style = ElementTheme.typography.fontBodyLgRegular,
-            )
+                    .heightIn(max = maxCaptionHeight),
+            ) {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .verticalScroll(scrollState),
+                    text = caption,
+                    style = ElementTheme.typography.fontBodyLgRegular,
+                )
+                if (showBottomShadow) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(48.dp)
+                            .align(Alignment.BottomCenter)
+                            .background(
+                                brush = Brush.verticalGradient(
+                                    colors = listOf(
+                                        Color.Transparent,
+                                        bgCanvasWithTransparency,
+                                    ),
+                                ),
+                            ),
+                    )
+                }
+            }
         }
     }
 }
+
+private val maxCaptionHeight = 200.dp
 
 @Composable
 private fun ThumbnailView(
