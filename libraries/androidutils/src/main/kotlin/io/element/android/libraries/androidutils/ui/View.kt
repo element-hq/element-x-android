@@ -36,7 +36,7 @@ suspend fun View.hideKeyboardAndAwaitAnimation() {
     val imm = context?.getSystemService<InputMethodManager>() ?: return
     val future = CompletableDeferred<Unit>()
 
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+    val requested = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         setOnApplyWindowInsetsListener { view, insets ->
             if (!insets.isVisible(WindowInsets.Type.ime())) {
                 future.complete(Unit)
@@ -48,22 +48,19 @@ suspend fun View.hideKeyboardAndAwaitAnimation() {
         imm.hideSoftInputFromWindow(windowToken, 0)
     } else {
         @Suppress("DEPRECATION")
-        val requested = imm.hideSoftInputFromWindow(windowToken, 0, object : ResultReceiver(null) {
+        imm.hideSoftInputFromWindow(windowToken, 0, object : ResultReceiver(null) {
             override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
                 if (resultCode == InputMethodManager.RESULT_UNCHANGED_HIDDEN || resultCode == InputMethodManager.RESULT_HIDDEN) {
                     future.complete(Unit)
                 }
             }
         })
-
-        if (!requested) {
-            // If the request to hide the keyboard was not accepted, complete the future immediately
-            future.complete(Unit)
-        }
     }
 
-    // Await the future to ensure the keyboard hide animation has completed before proceeding
-    withTimeoutOrNull(1.seconds) { future.await() }
+    if (requested) {
+        // Await the future to ensure the keyboard hide animation has completed before proceeding
+        withTimeoutOrNull(1.seconds) { future.await() }
+    }
 }
 
 fun View.showKeyboard(andRequestFocus: Boolean = false) {
