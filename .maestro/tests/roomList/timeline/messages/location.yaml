@@ -3,5 +3,5 @@ appId: ${MAESTRO_APP_ID}
 - takeScreenshot: build/maestro/520-Timeline
 - tapOn: "Add attachment"
 - tapOn: "Share location"
-- tapOn: "Share my location"
+- tapOn: "Share selected location"
 - takeScreenshot: build/maestro/521-Timeline
