@@ -47,30 +47,28 @@ internal fun BoxScope.FloatingDateBadgeOverlay(
     isLive: Boolean,
     topOffset: Dp = 0.dp,
 ) {
-    val currentDateText by remember(timelineItems) {
+    // Look for the last visible item with a timestamp, starting from the last visible item and going backwards until we find one or reach the start of the list
+    val lastVisibleItemWithTimestamp by remember(timelineItems) {
         derivedStateOf {
-            val visibleItems = lazyListState.layoutInfo.visibleItemsInfo
-            if (visibleItems.isEmpty()) return@derivedStateOf null
-
-            // In reverse layout, the last visible item is at the top of the screen
-            val topVisibleIndex = visibleItems.last().index
-
-            // Search forward (toward older items) for the nearest day separator
-            for (i in topVisibleIndex until timelineItems.size) {
-                val item = timelineItems[i]
-                if (item is TimelineItem.Virtual && item.model is TimelineItemDaySeparatorModel) {
-                    return@derivedStateOf item.model.formattedDate
+            var index = lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: return@derivedStateOf null
+            while (index >= 0) {
+                when (val item = timelineItems.getOrNull(index)) {
+                    is TimelineItem.Event -> return@derivedStateOf item
+                    is TimelineItem.Virtual -> if (item.model is TimelineItemDaySeparatorModel) return@derivedStateOf item
+                    is TimelineItem.GroupedEvents -> return@derivedStateOf item.events.firstOrNull()
+                    else -> Unit
                 }
-            }
-            // Fallback: search backward (toward newer items)
-            for (i in topVisibleIndex - 1 downTo 0) {
-                val item = timelineItems[i]
-                if (item is TimelineItem.Virtual && item.model is TimelineItemDaySeparatorModel) {
-                    return@derivedStateOf item.model.formattedDate
-                }
+                index--
             }
             null
         }
+    }
+
+    // Store the formatted date so we recompute it lazily and can keep it around even if we need to dispose the badge because the timeline items changed
+    var formattedDate: String? by remember { mutableStateOf(null) }
+    // Update the formatted date when we have a new non-null timestamp
+    LaunchedEffect(lastVisibleItemWithTimestamp) {
+        lastVisibleItemWithTimestamp?.formattedDate()?.let { formattedDate = it }
     }
 
     val isAtBottom by remember {
@@ -93,7 +91,7 @@ internal fun BoxScope.FloatingDateBadgeOverlay(
             }
     }
 
-    val showBadge = isBadgeVisible && !isAtBottom && currentDateText != null
+    val showBadge = isBadgeVisible && !isAtBottom && formattedDate != null
 
     AnimatedVisibility(
         visible = showBadge,
@@ -105,6 +103,10 @@ internal fun BoxScope.FloatingDateBadgeOverlay(
     ) {
         currentDateText?.let { dateText ->
             FloatingDateBadge(dateText = dateText)
+        formattedDate?.let { dateText ->
+            FloatingDateBadge(
+                dateText = dateText,
+            )
         }
     }
 }
