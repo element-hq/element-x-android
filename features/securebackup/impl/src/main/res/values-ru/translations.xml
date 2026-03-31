@@ -12,6 +12,7 @@
   <string name="screen_chat_backup_recovery_action_confirm">"Введите ключ восстановления"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"В настоящее время резервная копия ваших чатов не синхронизирована."</string>
   <string name="screen_chat_backup_recovery_action_setup">"Получить ключ восстановления"</string>
+  <string name="screen_chat_backup_recovery_action_setup_description">"Ваши чаты автоматически резервируются с использованием сквозного шифрования. Для восстановления этой резервной копии и сохранения вашей цифровой личности в случае потери доступа ко всем вашим устройствам вам потребуется ключ восстановления."</string>
   <string name="screen_create_new_recovery_key_list_item_1">"Откройте %1$s на компьютере"</string>
   <string name="screen_create_new_recovery_key_list_item_2">"Войдите в свой аккаунт еще раз"</string>
   <string name="screen_create_new_recovery_key_list_item_3">"Когда потребуется подтвердить устройство, выберите %1$s"</string>
@@ -25,7 +26,7 @@
   <string name="screen_encryption_reset_bullet_3">"Вам нужно будет заново подтвердить все существующие устройства и контакты."</string>
   <string name="screen_encryption_reset_footer">"Сбрасывайте личность только в том случае, если у вас нет доступа к другим устройству, на которых выполнен вход, и вы потеряли ключ восстановления."</string>
   <string name="screen_encryption_reset_title">"Не можете подтвердить? Вам потребуется сбросить личность вашей учетной записи."</string>
-  <string name="screen_key_backup_disable_confirmation_action_turn_off">"Выключить"</string>
+  <string name="screen_key_backup_disable_confirmation_action_turn_off">"Удалить"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Вы потеряете зашифрованные сообщения, если выйдете из всех устройств."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Вы действительно хотите отключить резервное копирование?"</string>
   <string name="screen_key_backup_disable_description">"Удаление хранилища ключей приведёт к удалению вашей криптографической личности и ключей сообщений с сервера, а также отключению следующих функций безопасности:"</string>
