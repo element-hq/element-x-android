@@ -28,7 +28,7 @@ fun View.hideKeyboard() {
 suspend fun View.hideKeyboardAndAwaitAnimation() {
     val imm = context?.getSystemService<InputMethodManager>()
 
-    val future = CompletableDeferred(Unit)
+    val future = CompletableDeferred<Unit>()
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         setOnApplyWindowInsetsListener { view, insets ->
             if (!insets.isVisible(WindowInsets.Type.ime())) {
