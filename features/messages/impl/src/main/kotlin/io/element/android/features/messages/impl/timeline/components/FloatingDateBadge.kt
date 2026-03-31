@@ -45,7 +45,6 @@ internal fun BoxScope.FloatingDateBadgeOverlay(
     lazyListState: LazyListState,
     timelineItems: ImmutableList<TimelineItem>,
     isLive: Boolean,
-    useReverseLayout: Boolean,
     topOffset: Dp = 0.dp,
 ) {
     val currentDateText by remember(timelineItems) {
@@ -54,11 +53,7 @@ internal fun BoxScope.FloatingDateBadgeOverlay(
             if (visibleItems.isEmpty()) return@derivedStateOf null
 
             // In reverse layout, the last visible item is at the top of the screen
-            val topVisibleIndex = if (useReverseLayout) {
-                visibleItems.last().index
-            } else {
-                visibleItems.first().index
-            }
+            val topVisibleIndex = visibleItems.last().index
 
             // Search forward (toward older items) for the nearest day separator
             for (i in topVisibleIndex until timelineItems.size) {
