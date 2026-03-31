@@ -18,7 +18,9 @@ import android.view.inputmethod.InputMethodManager
 import androidx.core.content.getSystemService
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.suspendCancellableCoroutine
+import kotlinx.coroutines.withTimeoutOrNull
 import kotlin.coroutines.resume
+import kotlin.time.Duration.Companion.seconds
 
 fun View.hideKeyboard() {
     val imm = context?.getSystemService<InputMethodManager>()
@@ -26,9 +28,14 @@ fun View.hideKeyboard() {
 }
 
 suspend fun View.hideKeyboardAndAwaitAnimation() {
-    val imm = context?.getSystemService<InputMethodManager>()
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !rootWindowInsets.isVisible(WindowInsets.Type.ime())) {
+        // Keyboard is already hidden, no need to do anything
+        return
+    }
 
+    val imm = context?.getSystemService<InputMethodManager>() ?: return
     val future = CompletableDeferred<Unit>()
+
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
         setOnApplyWindowInsetsListener { view, insets ->
             if (!insets.isVisible(WindowInsets.Type.ime())) {
@@ -38,20 +45,25 @@ suspend fun View.hideKeyboardAndAwaitAnimation() {
             }
             insets
         }
-        imm?.hideSoftInputFromWindow(windowToken, 0)
+        imm.hideSoftInputFromWindow(windowToken, 0)
     } else {
         @Suppress("DEPRECATION")
-        imm?.hideSoftInputFromWindow(windowToken, 0, object : ResultReceiver(null) {
+        val requested = imm.hideSoftInputFromWindow(windowToken, 0, object : ResultReceiver(null) {
             override fun onReceiveResult(resultCode: Int, resultData: Bundle?) {
                 if (resultCode == InputMethodManager.RESULT_UNCHANGED_HIDDEN || resultCode == InputMethodManager.RESULT_HIDDEN) {
                     future.complete(Unit)
                 }
             }
         })
+
+        if (!requested) {
+            // If the request to hide the keyboard was not accepted, complete the future immediately
+            future.complete(Unit)
+        }
     }
 
     // Await the future to ensure the keyboard hide animation has completed before proceeding
-    future.await()
+    withTimeoutOrNull(1.seconds) { future.await() }
 }
 
 fun View.showKeyboard(andRequestFocus: Boolean = false) {
