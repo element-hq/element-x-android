@@ -214,13 +214,15 @@ fun TimelineView(
                 onFocusEventRender = ::onFocusEventRender,
             )
 
-            FloatingDateBadgeOverlay(
-                lazyListState = lazyListState,
-                timelineItems = state.timelineItems,
-                isLive = state.isLive,
-                useReverseLayout = useReverseLayout,
-                topOffset = floatingDateTopOffset,
-            )
+            if (state.displayFloatingDateBadge) {
+                FloatingDateBadgeOverlay(
+                    lazyListState = lazyListState,
+                    timelineItems = state.timelineItems,
+                    isLive = state.isLive,
+                    useReverseLayout = useReverseLayout,
+                    topOffset = floatingDateTopOffset,
+                )
+            }
         }
     }
 

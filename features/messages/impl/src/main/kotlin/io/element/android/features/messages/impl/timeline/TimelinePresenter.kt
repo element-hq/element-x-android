@@ -149,6 +149,9 @@ class TimelinePresenter(
         val displayThreadSummaries by produceState(false) {
             value = featureFlagService.isFeatureEnabled(FeatureFlags.Threads)
         }
+        val displayFloatingDateBadge by produceState(false) {
+            value = featureFlagService.isFeatureEnabled(FeatureFlags.FloatingDateBadge)
+        }
 
         fun handleEvent(event: TimelineEvent) {
             when (event) {
@@ -315,6 +318,7 @@ class TimelinePresenter(
             messageShieldDialogData = messageShieldDialogData.value,
             resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailureState,
             displayThreadSummaries = displayThreadSummaries,
+            displayFloatingDateBadge = displayFloatingDateBadge,
             eventSink = ::handleEvent,
         )
     }
