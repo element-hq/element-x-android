@@ -11,11 +11,15 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
 import io.element.android.libraries.matrix.api.timeline.MsgType
+import io.element.android.libraries.matrix.test.AN_AVATAR_URL
+import io.element.android.libraries.matrix.test.A_MESSAGE
 import io.element.android.libraries.matrix.test.A_USER_ID
+import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
+import io.element.android.libraries.slashcommands.api.ChatEffect
 import io.element.android.libraries.slashcommands.api.SlashCommand
 import io.element.android.libraries.slashcommands.impl.rainbow.RainbowGenerator
 import io.element.android.services.toolbox.api.strings.StringProvider
@@ -87,21 +91,110 @@ class CommandExecutorTest {
     }
 
     @Test
+    fun `send shrug prefixes message`() = runTest {
+        val timeline = FakeTimeline()
+        var capturedBody: String? = null
+        timeline.sendMessageLambda = { body, _, _, _, _ ->
+            capturedBody = body
+            Result.success(Unit)
+        }
+        val sut = createCommandExecutor()
+        val res = sut.proceedSendMessage(SlashCommand.SendShrug("wow"), timeline)
+        assertThat(res.isSuccess).isTrue()
+        assertThat(capturedBody).isEqualTo("¯\\\\_(ツ)\\_/¯ wow")
+    }
+
+    @Test
     fun `send rainbow provides html body`() = runTest {
         val timeline = FakeTimeline()
         var capturedHtml: String? = null
         var capturedBody: String? = null
-        timeline.sendMessageLambda = { body, htmlBody, _, _, _ ->
+        var capturedMsgType: MsgType? = null
+        timeline.sendMessageLambda = { body, htmlBody, _, msgType, _ ->
             capturedBody = body
             capturedHtml = htmlBody
+            capturedMsgType = msgType
             Result.success(Unit)
         }
         val sut = createCommandExecutor()
-        val res = sut.proceedSendMessage(SlashCommand.SendRainbow("party"), timeline)
+        val res = sut.proceedSendMessage(SlashCommand.SendRainbow("a nice rainbow"), timeline)
         assertThat(res.isSuccess).isTrue()
-        assertThat(capturedBody).isEqualTo("party")
+        assertThat(capturedBody).isEqualTo("a nice rainbow")
         assertThat(capturedHtml).isNotNull()
         assertThat(capturedHtml!!.contains("<font") || capturedHtml!!.contains("<span")).isTrue()
+        assertThat(capturedMsgType).isEqualTo(MsgType.MSG_TYPE_TEXT)
+    }
+
+    @Test
+    fun `send rainbow emote provides html body`() = runTest {
+        val timeline = FakeTimeline()
+        var capturedHtml: String? = null
+        var capturedBody: String? = null
+        var capturedMsgType: MsgType? = null
+        timeline.sendMessageLambda = { body, htmlBody, _, msgType, _ ->
+            capturedBody = body
+            capturedHtml = htmlBody
+            capturedMsgType = msgType
+            Result.success(Unit)
+        }
+        val sut = createCommandExecutor()
+        val res = sut.proceedSendMessage(SlashCommand.SendRainbowEmote("a nice rainbow"), timeline)
+        assertThat(res.isSuccess).isTrue()
+        assertThat(capturedBody).isEqualTo("a nice rainbow")
+        assertThat(capturedHtml).isNotNull()
+        assertThat(capturedHtml!!.contains("<font") || capturedHtml!!.contains("<span")).isTrue()
+        assertThat(capturedMsgType).isEqualTo(MsgType.MSG_TYPE_EMOTE)
+    }
+
+    @Test
+    fun `change display name invokes the method of the matrix client`() = runTest {
+        val matrixClient = FakeMatrixClient()
+        val sut = createCommandExecutor(matrixClient = matrixClient)
+        val res = sut.proceedAdmin(SlashCommand.ChangeDisplayName("new name"))
+        assertThat(res.isSuccess).isTrue()
+        assertThat(matrixClient.setDisplayNameCalled).isTrue()
+    }
+
+    @Test
+    fun `change room avatar is not supported`() = runTest {
+        val sut = createCommandExecutor()
+        val res = sut.proceedAdmin(SlashCommand.ChangeRoomAvatar(AN_AVATAR_URL))
+        assertThat(res.isFailure).isTrue()
+    }
+
+    @Test
+    fun `change avatar for room is not supported`() = runTest {
+        val sut = createCommandExecutor()
+        val res = sut.proceedAdmin(SlashCommand.ChangeAvatarForRoom(AN_AVATAR_URL))
+        assertThat(res.isFailure).isTrue()
+    }
+
+    @Test
+    fun `change display name for room is not supported`() = runTest {
+        val sut = createCommandExecutor()
+        val res = sut.proceedAdmin(SlashCommand.ChangeDisplayNameForRoom(A_USER_NAME))
+        assertThat(res.isFailure).isTrue()
+    }
+
+    @Test
+    fun `upgrade room is not supported`() = runTest {
+        val sut = createCommandExecutor()
+        val res = sut.proceedAdmin(SlashCommand.UpgradeRoom("1"))
+        assertThat(res.isFailure).isTrue()
+    }
+
+    @Test
+    fun `set user power level is not supported`() = runTest {
+        val sut = createCommandExecutor()
+        val res = sut.proceedAdmin(SlashCommand.SetUserPowerLevel(A_USER_ID, 50))
+        assertThat(res.isFailure).isTrue()
+    }
+
+    @Test
+    fun `discard session is not supported`() = runTest {
+        val sut = createCommandExecutor()
+        val res = sut.proceedAdmin(SlashCommand.DiscardSession)
+        assertThat(res.isFailure).isTrue()
     }
 
     @Test
@@ -122,6 +215,16 @@ class CommandExecutorTest {
         assertThat(res.isSuccess).isTrue()
         assertThat(capturedBody).isEqualTo("[SPOILER](secret)")
         assertThat(capturedHtml).isEqualTo("<span data-mx-spoiler>secret</span>")
+    }
+
+    @Test
+    fun `send chat effect is not supported`() = runTest {
+        val sut = createCommandExecutor()
+        val res = sut.proceedSendMessage(
+            SlashCommand.SendChatEffect(ChatEffect.CONFETTI, A_MESSAGE),
+            FakeTimeline()
+        )
+        assertThat(res.isFailure).isTrue()
     }
 
     @Test
