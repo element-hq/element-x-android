@@ -96,6 +96,7 @@ class VectorFirebaseMessagingServiceTest {
                     putString("event_id", AN_EVENT_ID.value)
                     putString("room_id", A_ROOM_ID.value)
                     putString("cs", A_SECRET)
+                    putString("google.priority", "high")
                 },
             )
         )
@@ -127,6 +128,7 @@ class VectorFirebaseMessagingServiceTest {
                     putString("event_id", AN_EVENT_ID.value)
                     putString("room_id", A_ROOM_ID.value)
                     putString("cs", A_SECRET)
+                    putString("google.priority", "high")
                 },
             )
         )
@@ -139,6 +141,33 @@ class VectorFirebaseMessagingServiceTest {
 
         // After handling the push, the wakelock should be unlocked
         unlockLambda.assertions().isCalledOnce()
+    }
+
+    @Test
+    fun `test pushHandler with a remote message with normal priority won't lock the wakelock`() = runTest {
+        val lockLambda = lambdaRecorder<Duration, Unit> { _ -> }
+        val unlockLambda = lambdaRecorder<Unit> { }
+        val vectorFirebaseMessagingService = createVectorFirebaseMessagingService(
+            pushHandler = FakePushHandler(handleResult = { _, _ -> false }),
+            pushHandlingWakeLock = FakePushHandlingWakeLock(
+                lock = lockLambda,
+                unlock = unlockLambda
+            )
+        )
+        vectorFirebaseMessagingService.onMessageReceived(
+            message = RemoteMessage(
+                Bundle().apply {
+                    putString("event_id", AN_EVENT_ID.value)
+                    putString("room_id", A_ROOM_ID.value)
+                    putString("cs", A_SECRET)
+                    putString("google.priority", "normal")
+                },
+            )
+        )
+
+        // The wakelock should not be locked
+        lockLambda.assertions().isNeverCalled()
+        unlockLambda.assertions().isNeverCalled()
     }
 
     @Test

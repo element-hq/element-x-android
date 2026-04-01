@@ -43,13 +43,13 @@ jobs:
           labels: Record-Screenshots
       - name: ⏬ Checkout with LFS (PR)
         if: github.event.label.name == 'Record-Screenshots'
-        uses: nschloe/action-cached-lfs-checkout@f46300cd8952454b9f0a21a3d133d4bd5684cfc2 # v1.2.3
+        uses: nschloe/action-cached-lfs-checkout@1c185ad576953eab13e35ffe1bffef437d97e9d2 # v1.2.4
         with:
           persist-credentials: false
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || github.ref }}
       - name: ⏬ Checkout with LFS (Branch)
         if: github.event_name == 'workflow_dispatch'
-        uses: nschloe/action-cached-lfs-checkout@f46300cd8952454b9f0a21a3d133d4bd5684cfc2 # v1.2.3
+        uses: nschloe/action-cached-lfs-checkout@1c185ad576953eab13e35ffe1bffef437d97e9d2 # v1.2.4
         with:
           persist-credentials: false
       - name: ☕️ Use JDK 21

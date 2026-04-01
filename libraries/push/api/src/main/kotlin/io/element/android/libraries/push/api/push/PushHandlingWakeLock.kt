@@ -22,5 +22,5 @@ interface PushHandlingWakeLock {
     /**
      * Release the wakelock. If no wakelock is associated with the key, this method does nothing.
      */
-    fun unlock()
+    suspend fun unlock()
 }

@@ -27,6 +27,7 @@ import io.element.android.libraries.matrix.api.room.SendQueueUpdate
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.knock.KnockRequest
+import io.element.android.libraries.matrix.api.room.location.LiveLocationShare
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsValues
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
@@ -84,6 +85,10 @@ class FakeJoinedRoom(
     private val enableEncryptionResult: () -> Result<Unit> = { lambdaError() },
     private val updateJoinRuleResult: (JoinRule) -> Result<Unit> = { lambdaError() },
     private val setSendQueueEnabledResult: (Boolean) -> Unit = { _: Boolean -> },
+    private val liveLocationSharesFlow: Flow<List<LiveLocationShare>> = MutableStateFlow(emptyList()),
+    private val startLiveLocationShareResult: (Long) -> Result<Unit> = { lambdaError() },
+    private val stopLiveLocationShareResult: () -> Result<Unit> = { lambdaError() },
+    private val sendLiveLocationResult: (String) -> Result<Unit> = { lambdaError() },
 ) : JoinedRoom, BaseRoom by baseRoom {
     private val sendQueueUpdates = MutableSharedFlow<SendQueueUpdate>(extraBufferCapacity = 10)
 
@@ -225,6 +230,22 @@ class FakeJoinedRoom(
 
     override fun subscribeToSendQueueUpdates(): Flow<SendQueueUpdate> {
         return sendQueueUpdates
+    }
+
+    override fun subscribeToLiveLocationShares(): Flow<List<LiveLocationShare>> {
+        return liveLocationSharesFlow
+    }
+
+    override suspend fun startLiveLocationShare(durationMillis: Long): Result<Unit> = simulateLongTask {
+        startLiveLocationShareResult(durationMillis)
+    }
+
+    override suspend fun stopLiveLocationShare(): Result<Unit> = simulateLongTask {
+        stopLiveLocationShareResult()
+    }
+
+    override suspend fun sendLiveLocation(geoUri: String): Result<Unit> = simulateLongTask {
+        sendLiveLocationResult(geoUri)
     }
 
     private suspend fun simulateSendMediaProgress(progressCallback: ProgressCallback?) {

@@ -147,12 +147,26 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
+    LiveLocationSharing(
+        key = "feature.liveLocationSharing",
+        title = "Live location sharing",
+        description = "Allow sharing live location in rooms.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
     ValidateNetworkWhenSchedulingNotificationFetching(
         key = "feature.validate_network_when_scheduling_notification_fetching",
-        title = "validate internet connectivity when scheduling notification fetching",
+        title = "Validate internet connectivity when scheduling notification fetching",
         description = "Only fetch events for push notifications when the device has internet connectivity. " +
             "Enabling this can be problematic in air-gapped environments.",
         defaultValue = { true },
+        isFinished = false,
+    ),
+    FloatingDateBadge(
+        key = "feature.floating_date_badge",
+        title = "Display sticky date headers in the timeline",
+        description = "When scrolling, a sticky date badge will be displayed so you can easily know on which date the messages you're seeing were sent.",
+        defaultValue = { false },
         isFinished = false,
     ),
 }

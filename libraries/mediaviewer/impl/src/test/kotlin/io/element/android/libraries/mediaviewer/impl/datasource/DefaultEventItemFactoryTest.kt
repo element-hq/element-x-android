@@ -107,7 +107,7 @@ class DefaultEventItemFactoryTest {
             EmoteMessageType("", null),
             NoticeMessageType("", null),
             OtherMessageType("", ""),
-            LocationMessageType("", "", null),
+            LocationMessageType("", "", null, null),
             TextMessageType("", null)
         )
         messageTypes.forEach {

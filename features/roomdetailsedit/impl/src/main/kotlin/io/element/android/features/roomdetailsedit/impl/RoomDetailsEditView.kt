@@ -51,6 +51,12 @@ import io.element.android.libraries.matrix.ui.components.AvatarPickerView
 import io.element.android.libraries.permissions.api.PermissionsView
 import io.element.android.libraries.ui.strings.CommonStrings
 
+/**
+ * For space:
+ * https://www.figma.com/design/pDlJZGBsri47FNTXMnEdXB/Compound-Android-Templates?node-id=2216-110711
+ * For room:
+ * https://www.figma.com/design/pDlJZGBsri47FNTXMnEdXB/Compound-Android-Templates?node-id=3187-47342
+ */
 @Composable
 fun RoomDetailsEditView(
     state: RoomDetailsEditState,
@@ -102,11 +108,11 @@ fun RoomDetailsEditView(
         ) {
             Spacer(modifier = Modifier.height(24.dp))
             val avatarPickerState = remember(state.roomAvatarUrl, state.roomRawName) {
-                val size = AvatarSize.EditRoomDetails
+                val size = if (state.isSpace) AvatarSize.EditSpaceDetails else AvatarSize.EditRoomDetails
                 val type = if (state.isSpace) AvatarType.Space() else AvatarType.Room()
                 AvatarPickerState.Selected(
                     avatarData = AvatarData(id = state.roomId.value, name = state.roomRawName, size = size, url = state.roomAvatarUrl),
-                    type = type
+                    type = type,
                 )
             }
             AvatarPickerView(

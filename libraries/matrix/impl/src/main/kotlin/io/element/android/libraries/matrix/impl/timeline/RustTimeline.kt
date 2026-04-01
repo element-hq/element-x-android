@@ -32,7 +32,7 @@ import io.element.android.libraries.matrix.impl.media.MediaUploadHandlerImpl
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.poll.toInner
 import io.element.android.libraries.matrix.impl.room.RoomContentForwarder
-import io.element.android.libraries.matrix.impl.room.location.toInner
+import io.element.android.libraries.matrix.impl.room.location.into
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
 import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTimelineItemMapper
@@ -478,7 +478,7 @@ class RustTimeline(
                 geoUri = geoUri,
                 description = description,
                 zoomLevel = zoomLevel?.toUByte(),
-                assetType = assetType?.toInner(),
+                assetType = assetType?.into(),
                 repliedToEventId = inReplyToEventId?.value,
             )
         }

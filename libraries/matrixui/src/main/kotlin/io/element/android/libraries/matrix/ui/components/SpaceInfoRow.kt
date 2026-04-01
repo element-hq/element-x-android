@@ -48,7 +48,7 @@ fun SpaceInfoRow(
     ) {
         if (iconVector != null) {
             Icon(
-                modifier = Modifier.size(20.dp),
+                modifier = Modifier.size(16.dp),
                 imageVector = iconVector,
                 contentDescription = null,
                 tint = ElementTheme.colors.iconTertiary,
@@ -61,7 +61,7 @@ fun SpaceInfoRow(
         }
         Text(
             text = text,
-            style = ElementTheme.typography.fontBodyLgRegular,
+            style = ElementTheme.typography.fontBodyMdRegular,
             color = ElementTheme.colors.textSecondary,
             textAlign = TextAlign.Center,
         )
