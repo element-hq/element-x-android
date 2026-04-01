@@ -61,6 +61,20 @@ class DefaultSlashCommandServiceTest {
     }
 
     @Test
+    fun `getSuggestions returns empty list when the feature is enabled`() = runTest {
+        val sut = createDefaultSlashCommandService(isFeatureEnabled = true)
+        val all = sut.getSuggestions("me", isInThread = false)
+        assertThat(all).isNotEmpty()
+    }
+
+    @Test
+    fun `getSuggestions returns empty list when the feature is disabled`() = runTest {
+        val sut = createDefaultSlashCommandService(isFeatureEnabled = false)
+        val all = sut.getSuggestions("me", isInThread = false)
+        assertThat(all).isEmpty()
+    }
+
+    @Test
     fun `getSuggestions for aliases`() = runTest {
         val stringProvider = FakeStringProvider()
         val prefs = InMemoryAppPreferencesStore(isDeveloperModeEnabled = false)
@@ -126,37 +140,26 @@ class DefaultSlashCommandServiceTest {
 
     private fun createDefaultSlashCommandService(
         isFeatureEnabled: Boolean = true,
+        featureFlagService: FeatureFlagService = FakeFeatureFlagService(
+            initialState = mapOf(
+                FeatureFlags.SlashCommand.key to isFeatureEnabled,
+            ),
+        ),
         appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
         stringProvider: StringProvider = FakeStringProvider(),
         commandParser: CommandParser = createCommandParser(
-            isFeatureEnabled = isFeatureEnabled,
+            featureFlagService = featureFlagService,
             appPreferencesStore = appPreferencesStore,
             stringProvider = stringProvider,
         ),
         commandExecutor: CommandExecutor = createCommandExecutor(
             stringProvider = stringProvider,
         ),
-    ): DefaultSlashCommandService {
-        return DefaultSlashCommandService(
-            commandParser = commandParser,
-            commandExecutor = commandExecutor,
-            stringProvider = stringProvider,
-            appPreferencesStore = appPreferencesStore,
-        )
-    }
+    ) = DefaultSlashCommandService(
+        commandParser = commandParser,
+        commandExecutor = commandExecutor,
+        stringProvider = stringProvider,
+        appPreferencesStore = appPreferencesStore,
+        featureFlagService = featureFlagService,
+    )
 }
-
-fun createCommandParser(
-    isFeatureEnabled: Boolean = true,
-    appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
-    featureFlagService: FeatureFlagService = FakeFeatureFlagService(
-        initialState = mapOf(
-            FeatureFlags.SlashCommand.key to isFeatureEnabled,
-        ),
-    ),
-    stringProvider: StringProvider = FakeStringProvider(),
-) = CommandParser(
-    appPreferencesStore = appPreferencesStore,
-    featureFlagService = featureFlagService,
-    stringProvider = stringProvider,
-)

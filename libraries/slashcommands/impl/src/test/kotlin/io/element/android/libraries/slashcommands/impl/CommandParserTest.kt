@@ -205,18 +205,18 @@ class CommandParserTest {
         val result = commandParser.parseSlashCommand(message, null, false)
         assertThat(result).isEqualTo(expectedResult)
     }
-
-    private fun createCommandParser(
-        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
-        featureFlagService: FeatureFlagService = FakeFeatureFlagService(
-            initialState = mapOf(
-                FeatureFlags.SlashCommand.key to true,
-            ),
-        ),
-        stringProvider: StringProvider = FakeStringProvider(),
-    ) = CommandParser(
-        appPreferencesStore = appPreferencesStore,
-        featureFlagService = featureFlagService,
-        stringProvider = stringProvider,
-    )
 }
+
+internal fun createCommandParser(
+    appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
+    featureFlagService: FeatureFlagService = FakeFeatureFlagService(
+        initialState = mapOf(
+            FeatureFlags.SlashCommand.key to true,
+        ),
+    ),
+    stringProvider: StringProvider = FakeStringProvider(),
+) = CommandParser(
+    appPreferencesStore = appPreferencesStore,
+    featureFlagService = featureFlagService,
+    stringProvider = stringProvider,
+)

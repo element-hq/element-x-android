@@ -9,11 +9,13 @@ package io.element.android.libraries.slashcommands.impl
 
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.slashcommands.api.SlashCommand
-import io.element.android.libraries.slashcommands.api.SlashCommandSuggestion
 import io.element.android.libraries.slashcommands.api.SlashCommandService
+import io.element.android.libraries.slashcommands.api.SlashCommandSuggestion
 import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.coroutines.flow.first
 
@@ -23,11 +25,13 @@ class DefaultSlashCommandService(
     private val commandExecutor: CommandExecutor,
     private val stringProvider: StringProvider,
     private val appPreferencesStore: AppPreferencesStore,
+    private val featureFlagService: FeatureFlagService,
 ) : SlashCommandService {
     override suspend fun getSuggestions(
         text: String,
         isInThread: Boolean,
     ): List<SlashCommandSuggestion> {
+        if (!featureFlagService.isFeatureEnabled(FeatureFlags.SlashCommand)) return emptyList()
         val isDeveloperModeEnabled = appPreferencesStore.isDeveloperModeEnabledFlow().first()
         return Command.entries.filter {
             it.startsWith(text)
