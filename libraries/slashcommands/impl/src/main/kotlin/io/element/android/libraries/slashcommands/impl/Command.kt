@@ -20,6 +20,7 @@ enum class Command(
     val parameters: String? = null,
     @StringRes val description: Int,
     val isAllowedInThread: Boolean = true,
+    val isSupported: Boolean = true,
     val isDevCommand: Boolean = false,
 ) {
     CRASH_APP(
@@ -57,12 +58,14 @@ enum class Command(
         parameters = "<user-id> [<power-level>]",
         description = R.string.slash_command_description_op_user,
         isAllowedInThread = false,
+        isSupported = false,
     ),
     RESET_USER_POWER_LEVEL(
         command = "/deop",
         parameters = "<user-id>",
         description = R.string.slash_command_description_deop_user,
         isAllowedInThread = false,
+        isSupported = false,
     ),
     ROOM_NAME(
         command = "/roomname",
@@ -81,6 +84,7 @@ enum class Command(
         parameters = "<room-address> [reason]",
         description = R.string.slash_command_description_join_room,
         isAllowedInThread = false,
+        isSupported = false,
     ),
     TOPIC(
         command = "/topic",
@@ -105,6 +109,7 @@ enum class Command(
         parameters = "<display-name>",
         description = R.string.slash_command_description_nick_for_room,
         isAllowedInThread = false,
+        isSupported = false,
     ),
     ROOM_AVATAR(
         command = "/roomavatar",
@@ -113,6 +118,7 @@ enum class Command(
         isAllowedInThread = false,
         // Dev command since user has to know the mxc url
         isDevCommand = true,
+        isSupported = false,
     ),
     CHANGE_AVATAR_FOR_ROOM(
         command = "/myroomavatar",
@@ -121,6 +127,7 @@ enum class Command(
         isAllowedInThread = false,
         // Dev command since user has to know the mxc url
         isDevCommand = true,
+        isSupported = false,
     ),
     RAINBOW(
         command = "/rainbow",
@@ -129,7 +136,6 @@ enum class Command(
     ),
     RAINBOW_EMOTE(
         command = "/rainbowme",
-
         parameters = "<message>",
         description = R.string.slash_command_description_rainbow_emote,
     ),
@@ -167,18 +173,21 @@ enum class Command(
         command = "/discardsession",
         description = R.string.slash_command_description_discard_session,
         isAllowedInThread = false,
+        isSupported = false,
     ),
     CONFETTI(
         command = "/confetti",
         parameters = "<message>",
         description = R.string.slash_command_confetti,
         isAllowedInThread = false,
+        isSupported = false,
     ),
     SNOWFALL(
         command = "/snowfall",
         parameters = "<message>",
         description = R.string.slash_command_snow,
         isAllowedInThread = false,
+        isSupported = false,
     ),
     LEAVE_ROOM(
         command = "/leave",
@@ -193,6 +202,7 @@ enum class Command(
         description = R.string.slash_command_description_upgrade_room,
         isAllowedInThread = false,
         isDevCommand = true,
+        isSupported = false,
     ),
     TABLE_FLIP(
         command = "/tableflip",
@@ -201,7 +211,18 @@ enum class Command(
     );
 
     val allAliases = listOf(command) + aliases.orEmpty()
+
+    /**
+     * Checks if the input command matches any of the command aliases, ignoring case.
+     * Do not exclude not supported commands so that user can discover that the command is not supported.
+     * Used for whole command parsing.
+     */
     fun matches(inputCommand: CharSequence) = allAliases.any { it.contentEquals(inputCommand, true) }
-    fun startsWith(input: CharSequence) =
+
+    /**
+     * Checks if the input is a prefix of any of the command aliases, ignoring the first character (the slash), and excluding not supported command.
+     * Used for suggestions.
+     */
+    fun startsWith(input: CharSequence) = isSupported &&
         allAliases.any { it.startsWith(input, 1, true) }
 }
