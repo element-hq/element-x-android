@@ -22,6 +22,7 @@ import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
@@ -48,16 +49,19 @@ internal fun BoxScope.FloatingDateBadgeOverlay(
     isLive: Boolean,
     topOffset: Dp = 0.dp,
 ) {
+    // This needs to be a state to trigger a `derivedState` recalculation
+    val updatedTimelineItems by rememberUpdatedState(timelineItems)
+
     // Look for the last visible item with a timestamp, starting from the last visible item and going backwards until we find one or reach the start of the list
-    val lastVisibleItemWithTimestamp by remember(timelineItems) {
+    val lastVisibleItemWithTimestamp by remember {
         derivedStateOf {
             var index = lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: return@derivedStateOf null
             while (index >= 0) {
-                when (val item = timelineItems.getOrNull(index)) {
+                when (val item = updatedTimelineItems.getOrNull(index)) {
                     is TimelineItem.Event -> return@derivedStateOf item
                     is TimelineItem.Virtual -> if (item.model is TimelineItemDaySeparatorModel) return@derivedStateOf item
                     is TimelineItem.GroupedEvents -> return@derivedStateOf item.events.firstOrNull()
-                    else -> Unit
+                    null -> Unit
                 }
                 index--
             }
