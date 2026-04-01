@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkBuilder
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.matrix.test.room.aRoomMember
+import io.element.android.libraries.slashcommands.api.SlashCommandSuggestion
 import io.element.android.libraries.textcomposer.impl.mentions.aMentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.MentionSpan
 import io.element.android.libraries.textcomposer.mentions.MentionType
@@ -42,6 +43,7 @@ class MarkdownTextEditorStateTest {
         val mentionSpanProvider = aMentionSpanProvider()
         state.insertSuggestion(suggestion, mentionSpanProvider)
         assertThat(state.getMentions()).isEmpty()
+        assertThat(state.text.value().toString()).isEqualTo("Hello @")
     }
 
     @Test
@@ -53,6 +55,7 @@ class MarkdownTextEditorStateTest {
         val permalinkParser = FakePermalinkParser(result = { PermalinkData.RoomLink(A_ROOM_ALIAS.toRoomIdOrAlias()) })
         val mentionSpanProvider = aMentionSpanProvider(permalinkParser = permalinkParser)
         state.insertSuggestion(suggestion, mentionSpanProvider)
+        assertThat(state.text.value().toString()).isEqualTo("Hello # ")
     }
 
     @Test
@@ -64,6 +67,19 @@ class MarkdownTextEditorStateTest {
         val permalinkParser = FakePermalinkParser(result = { PermalinkData.RoomLink(A_ROOM_ALIAS.toRoomIdOrAlias()) })
         val mentionSpanProvider = aMentionSpanProvider(permalinkParser = permalinkParser)
         state.insertSuggestion(suggestion, mentionSpanProvider)
+        assertThat(state.text.value().toString()).isEqualTo("Hello # ")
+    }
+
+    @Test
+    fun `insertSuggestion - command`() {
+        val state = aMarkdownTextEditorState(initialText = "/rai", initialFocus = true).apply {
+            currentSuggestion = Suggestion(start = 0, end = 3, type = SuggestionType.Command, text = "/rainbow")
+        }
+        val suggestion = aSlashCommandSuggestion()
+        val permalinkParser = FakePermalinkParser(result = { PermalinkData.RoomLink(A_ROOM_ALIAS.toRoomIdOrAlias()) })
+        val mentionSpanProvider = aMentionSpanProvider(permalinkParser = permalinkParser)
+        state.insertSuggestion(suggestion, mentionSpanProvider)
+        assertThat(state.text.value().toString()).isEqualTo("/rainbow ")
     }
 
     @Test
@@ -74,6 +90,7 @@ class MarkdownTextEditorStateTest {
         val mentionSpanProvider = aMentionSpanProvider()
         state.insertSuggestion(mention, mentionSpanProvider)
         assertThat(state.getMentions()).isEmpty()
+        assertThat(state.text.value().toString()).isEqualTo("Hello @")
     }
 
     @Test
@@ -91,6 +108,7 @@ class MarkdownTextEditorStateTest {
         val mentions = state.getMentions()
         assertThat(mentions).isNotEmpty()
         assertThat((mentions.firstOrNull() as? IntentionalMention.User)?.userId).isEqualTo(member.userId)
+        assertThat(state.text.value().toString()).isEqualTo("Hello @ ")
     }
 
     @Test
@@ -107,15 +125,14 @@ class MarkdownTextEditorStateTest {
         val mentions = state.getMentions()
         assertThat(mentions).isNotEmpty()
         assertThat(mentions.firstOrNull()).isInstanceOf(IntentionalMention.Room::class.java)
+        assertThat(state.text.value().toString()).isEqualTo("Hello @ ")
     }
 
     @Test
     fun `getMessageMarkdown - when there are no MentionSpans returns the same text`() {
         val text = "No mentions here"
         val state = aMarkdownTextEditorState(initialText = text, initialFocus = true)
-
         val markdown = state.getMessageMarkdown(FakePermalinkBuilder())
-
         assertThat(markdown).isEqualTo(text)
     }
 
@@ -128,19 +145,17 @@ class MarkdownTextEditorStateTest {
         )
         val state = aMarkdownTextEditorState(initialText = text, initialFocus = true)
         state.text.update(aMarkdownTextWithMentions(), needsDisplaying = false)
-
         val markdown = state.getMessageMarkdown(permalinkBuilder = permalinkBuilder)
-
         assertThat(markdown).isEqualTo(
             "Hello [@alice:matrix.org](https://matrix.to/#/@alice:matrix.org) and everyone in @room" +
                 " and a room [#room:domain.org](https://matrix.to/#/#room:domain.org)"
         )
+        assertThat(state.text.value().toString()).isEqualTo("Hello @ and everyone in @ and a room #room:domain.org")
     }
 
     @Test
     fun `getMentions - when there are no MentionSpans returns empty list of mentions`() {
         val state = aMarkdownTextEditorState(initialText = "Hello @", initialFocus = true)
-
         assertThat(state.getMentions()).isEmpty()
     }
 
@@ -148,9 +163,7 @@ class MarkdownTextEditorStateTest {
     fun `getMentions - when there are MentionSpans returns a list of mentions`() {
         val state = aMarkdownTextEditorState(initialText = "Hello @", initialFocus = true)
         state.text.update(aMarkdownTextWithMentions(), needsDisplaying = false)
-
         val mentions = state.getMentions()
-
         assertThat(mentions).isNotEmpty()
         assertThat((mentions.firstOrNull() as? IntentionalMention.User)?.userId?.value).isEqualTo("@alice:matrix.org")
         assertThat(mentions.lastOrNull()).isInstanceOf(IntentionalMention.Room::class.java)
@@ -182,6 +195,16 @@ class MarkdownTextEditorStateTest {
             roomId = A_ROOM_ID,
             roomName = null,
             roomAvatarUrl = null
+        )
+    }
+
+    private fun aSlashCommandSuggestion(): ResolvedSuggestion.Command {
+        return ResolvedSuggestion.Command(
+            command = SlashCommandSuggestion(
+                command = "/rainbow",
+                parameters = "param",
+                description = "Make the text colorful 🌈",
+            ),
         )
     }
 }
