@@ -13,17 +13,17 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.slashcommands.api.SlashCommand
 import io.element.android.libraries.slashcommands.api.SlashCommandSuggestion
-import io.element.android.libraries.slashcommands.api.SlashService
+import io.element.android.libraries.slashcommands.api.SlashCommandService
 import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.coroutines.flow.first
 
 @ContributesBinding(RoomScope::class)
-class DefaultSlashService(
+class DefaultSlashCommandService(
     private val commandParser: CommandParser,
     private val commandExecutor: CommandExecutor,
     private val stringProvider: StringProvider,
     private val appPreferencesStore: AppPreferencesStore,
-) : SlashService {
+) : SlashCommandService {
     override suspend fun getSuggestions(
         text: String,
         isInThread: Boolean,

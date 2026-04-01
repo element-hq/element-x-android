@@ -15,7 +15,7 @@ import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembersState
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.room.roomMembers
-import io.element.android.libraries.slashcommands.api.SlashService
+import io.element.android.libraries.slashcommands.api.SlashCommandService
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.SuggestionType
@@ -25,7 +25,7 @@ import io.element.android.libraries.textcomposer.model.SuggestionType
  */
 @Inject
 class SuggestionsProcessor(
-    private val slashService: SlashService,
+    private val slashCommandService: SlashCommandService,
 ) {
     /**
      *  Process the suggestion.
@@ -77,7 +77,7 @@ class SuggestionsProcessor(
             SuggestionType.Command -> {
                 // Command suggestions are valid only if this is the beginning of the message
                 if (suggestion.start == 0) {
-                    slashService.getSuggestions(suggestion.text, isInThread).map {
+                    slashCommandService.getSuggestions(suggestion.text, isInThread).map {
                         ResolvedSuggestion.Command(it)
                     }
                 } else {

@@ -72,7 +72,7 @@ import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
 import io.element.android.libraries.slashcommands.api.SlashCommand
-import io.element.android.libraries.slashcommands.api.SlashService
+import io.element.android.libraries.slashcommands.api.SlashCommandService
 import io.element.android.libraries.slashcommands.api.message
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
@@ -132,7 +132,7 @@ class MessageComposerPresenter(
     private val suggestionsProcessor: SuggestionsProcessor,
     private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
     private val notificationConversationService: NotificationConversationService,
-    private val slashService: SlashService,
+    private val slashCommandService: SlashCommandService,
 ) : Presenter<MessageComposerState> {
     @AssistedFactory
     interface Factory {
@@ -462,7 +462,7 @@ class MessageComposerPresenter(
         val capturedMode = messageComposerContext.composerMode
 
         val slashCommand = if (capturedMode is MessageComposerMode.Normal) {
-            slashService.parse(
+            slashCommandService.parse(
                 textMessage = message.markdown,
                 formattedMessage = message.html,
                 isInThreadTimeline = isInThread,
@@ -491,7 +491,7 @@ class MessageComposerPresenter(
             }
             is SlashCommand.SlashCommandSendMessage -> {
                 timelineController.invokeOnCurrentTimeline {
-                    slashService.proceedSendMessage(slashCommand, this)
+                    slashCommandService.proceedSendMessage(slashCommand, this)
                         .onFailure { cause ->
                             Timber.e(cause, "Failed to proceed with admin slash command")
                             slashCommandAction.value = AsyncAction.Failure(cause)
@@ -505,7 +505,7 @@ class MessageComposerPresenter(
             }
             is SlashCommand.SlashCommandAdmin -> {
                 slashCommandAction.value = AsyncAction.Loading
-                slashService.proceedAdmin(slashCommand)
+                slashCommandService.proceedAdmin(slashCommand)
                     .onFailure { cause ->
                         Timber.e(cause, "Failed to proceed with admin slash command")
                         slashCommandAction.value = AsyncAction.Failure(cause)

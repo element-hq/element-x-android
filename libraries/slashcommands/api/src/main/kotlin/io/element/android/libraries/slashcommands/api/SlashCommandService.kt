@@ -9,7 +9,7 @@ package io.element.android.libraries.slashcommands.api
 
 import io.element.android.libraries.matrix.api.timeline.Timeline
 
-interface SlashService {
+interface SlashCommandService {
     suspend fun getSuggestions(
         text: String,
         isInThread: Boolean,

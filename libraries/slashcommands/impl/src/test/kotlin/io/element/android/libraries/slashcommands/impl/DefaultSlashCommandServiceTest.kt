@@ -26,12 +26,12 @@ import io.element.android.tests.testutils.lambda.lambdaRecorder
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 
-class DefaultSlashServiceTest {
+class DefaultSlashCommandServiceTest {
     @Test
     fun `getSuggestions filters by text and maps to suggestions`() = runTest {
         val stringProvider = FakeStringProvider(defaultResult = "desc")
         val prefs = InMemoryAppPreferencesStore(isDeveloperModeEnabled = false)
-        val sut = createDefaultSlashService(
+        val sut = createDefaultSlashCommandService(
             commandParser = CommandParser(
                 appPreferencesStore = prefs,
                 featureFlagService = FakeFeatureFlagService(
@@ -54,7 +54,7 @@ class DefaultSlashServiceTest {
     fun `getSuggestions hides dev commands when developer mode disabled`() = runTest {
         val stringProvider = FakeStringProvider()
         val prefs = InMemoryAppPreferencesStore(isDeveloperModeEnabled = false)
-        val sut = createDefaultSlashService(appPreferencesStore = prefs, stringProvider = stringProvider)
+        val sut = createDefaultSlashCommandService(appPreferencesStore = prefs, stringProvider = stringProvider)
         val all = sut.getSuggestions("crash", isInThread = true)
         assertThat(all).isEmpty()
     }
@@ -63,7 +63,7 @@ class DefaultSlashServiceTest {
     fun `getSuggestions for aliases`() = runTest {
         val stringProvider = FakeStringProvider()
         val prefs = InMemoryAppPreferencesStore(isDeveloperModeEnabled = false)
-        val sut = createDefaultSlashService(appPreferencesStore = prefs, stringProvider = stringProvider)
+        val sut = createDefaultSlashCommandService(appPreferencesStore = prefs, stringProvider = stringProvider)
         val all = sut.getSuggestions("part", isInThread = true)
         assertThat(all).isEmpty()
     }
@@ -72,7 +72,7 @@ class DefaultSlashServiceTest {
     fun `getSuggestions shows dev commands when developer mode enabled`() = runTest {
         val stringProvider = FakeStringProvider()
         val prefs = InMemoryAppPreferencesStore(isDeveloperModeEnabled = true)
-        val sut = createDefaultSlashService(appPreferencesStore = prefs, stringProvider = stringProvider)
+        val sut = createDefaultSlashCommandService(appPreferencesStore = prefs, stringProvider = stringProvider)
         val all = sut.getSuggestions("crash", isInThread = true)
         assertThat(all).isNotEmpty()
         assertThat(all.first().command).isEqualTo("/crash")
@@ -80,7 +80,7 @@ class DefaultSlashServiceTest {
 
     @Test
     fun `parse delegates to commandParser`() = runTest {
-        val sut = createDefaultSlashService()
+        val sut = createDefaultSlashCommandService()
         val res = sut.parse("test", null, false)
         assertThat(res).isEqualTo(SlashCommand.NotACommand)
     }
@@ -90,7 +90,7 @@ class DefaultSlashServiceTest {
         val sendMessage = lambdaRecorder { _: String, _: String?, _: List<IntentionalMention>, _: Boolean, _: Boolean ->
             Result.success(Unit)
         }
-        val sut = createDefaultSlashService()
+        val sut = createDefaultSlashCommandService()
         val sendRes = sut.proceedSendMessage(
             slashCommand = SlashCommand.SendPlainText("hi"),
             timeline = FakeTimeline().apply {
@@ -106,7 +106,7 @@ class DefaultSlashServiceTest {
         val leaveRoomLambda = lambdaRecorder<Result<Unit>> {
             Result.success(Unit)
         }
-        val sut = createDefaultSlashService(
+        val sut = createDefaultSlashCommandService(
             commandExecutor = CommandExecutor(
                 matrixClient = FakeMatrixClient(),
                 joinedRoom = FakeJoinedRoom(
@@ -123,7 +123,7 @@ class DefaultSlashServiceTest {
         leaveRoomLambda.assertions().isCalledOnce()
     }
 
-    private fun createDefaultSlashService(
+    private fun createDefaultSlashCommandService(
         isFeatureEnabled: Boolean = true,
         appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
         stringProvider: StringProvider = FakeStringProvider(),
@@ -135,8 +135,8 @@ class DefaultSlashServiceTest {
         commandExecutor: CommandExecutor = createCommandExecutor(
             stringProvider = stringProvider,
         ),
-    ): DefaultSlashService {
-        return DefaultSlashService(
+    ): DefaultSlashCommandService {
+        return DefaultSlashCommandService(
             commandParser = commandParser,
             commandExecutor = commandExecutor,
             stringProvider = stringProvider,

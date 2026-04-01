@@ -17,7 +17,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.room.aRoomSummary
-import io.element.android.libraries.slashcommands.test.FakeSlashService
+import io.element.android.libraries.slashcommands.test.FakeSlashCommandService
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.Suggestion
 import io.element.android.libraries.textcomposer.model.SuggestionType
@@ -32,7 +32,7 @@ class SuggestionsProcessorTest {
     private val aCustomSuggestion = Suggestion(0, 1, SuggestionType.Custom("*"), "")
 
     private val suggestionsProcessor = SuggestionsProcessor(
-        slashService = FakeSlashService(
+        slashCommandService = FakeSlashCommandService(
             getSuggestionsResult = { _, _ -> emptyList() },
         ),
     )

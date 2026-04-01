@@ -90,8 +90,8 @@ import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.push.test.notifications.conversations.FakeNotificationConversationService
 import io.element.android.libraries.slashcommands.api.SlashCommand
-import io.element.android.libraries.slashcommands.api.SlashService
-import io.element.android.libraries.slashcommands.test.FakeSlashService
+import io.element.android.libraries.slashcommands.api.SlashCommandService
+import io.element.android.libraries.slashcommands.test.FakeSlashCommandService
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
@@ -381,7 +381,7 @@ class MessageComposerPresenterTest {
                 },
                 typingNoticeResult = { Result.success(Unit) }
             ),
-            slashService = FakeSlashService(
+            slashCommandService = FakeSlashCommandService(
                 parseResult = { _, _, _ -> SlashCommand.NotACommand }
             ),
         )
@@ -419,7 +419,7 @@ class MessageComposerPresenterTest {
                 },
                 typingNoticeResult = { Result.success(Unit) }
             ),
-            slashService = FakeSlashService(
+            slashCommandService = FakeSlashCommandService(
                 parseResult = { _, _, _ -> SlashCommand.NotACommand }
             ),
         )
@@ -978,7 +978,7 @@ class MessageComposerPresenterTest {
         }
         val presenter = createPresenter(
             room = room,
-            slashService = FakeSlashService(
+            slashCommandService = FakeSlashCommandService(
                 getSuggestionsResult = { _, _ -> emptyList() },
             ),
         )
@@ -1120,7 +1120,7 @@ class MessageComposerPresenterTest {
         )
         val presenter = createPresenter(
             room = room,
-            slashService = FakeSlashService(
+            slashCommandService = FakeSlashCommandService(
                 parseResult = { _, _, _ -> SlashCommand.NotACommand }
             ),
         )
@@ -1532,7 +1532,7 @@ class MessageComposerPresenterTest {
         draftService: ComposerDraftService = FakeComposerDraftService(),
         mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
         isInThread: Boolean = false,
-        slashService: SlashService = FakeSlashService(),
+        slashCommandService: SlashCommandService = FakeSlashCommandService(),
     ) = MessageComposerPresenter(
         navigator = navigator,
         sessionCoroutineScope = this,
@@ -1567,10 +1567,10 @@ class MessageComposerPresenterTest {
         draftService = draftService,
         mentionSpanProvider = mentionSpanProvider,
         pillificationHelper = textPillificationHelper,
-        suggestionsProcessor = SuggestionsProcessor(slashService = slashService),
+        suggestionsProcessor = SuggestionsProcessor(slashCommandService = slashCommandService),
         mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
         notificationConversationService = notificationConversationService,
-        slashService = slashService,
+        slashCommandService = slashCommandService,
     ).apply {
         isTesting = true
         showTextFormatting = isRichTextEditorEnabled
