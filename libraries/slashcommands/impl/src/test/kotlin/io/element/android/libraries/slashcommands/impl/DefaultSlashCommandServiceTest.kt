@@ -12,6 +12,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.room.IntentionalMention
+import io.element.android.libraries.matrix.api.timeline.MsgType
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
@@ -87,7 +88,7 @@ class DefaultSlashCommandServiceTest {
 
     @Test
     fun `proceedSendMessage delegate to commandExecutor`() = runTest {
-        val sendMessage = lambdaRecorder { _: String, _: String?, _: List<IntentionalMention>, _: Boolean, _: Boolean ->
+        val sendMessage = lambdaRecorder { _: String, _: String?, _: List<IntentionalMention>, _: MsgType, _: Boolean ->
             Result.success(Unit)
         }
         val sut = createDefaultSlashCommandService()

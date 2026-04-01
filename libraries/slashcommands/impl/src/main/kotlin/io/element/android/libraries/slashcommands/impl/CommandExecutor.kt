@@ -10,6 +10,7 @@ package io.element.android.libraries.slashcommands.impl
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.timeline.MsgType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.slashcommands.api.SlashCommand
 import io.element.android.libraries.slashcommands.impl.rainbow.RainbowGenerator
@@ -102,7 +103,7 @@ class CommandExecutor(
         return timeline.sendMessage(
             body = message,
             htmlBody = rainbowGenerator.generate(message),
-            asEmote = true,
+            msgType = MsgType.MSG_TYPE_EMOTE,
             intentionalMentions = emptyList(),
         )
     }
@@ -134,7 +135,7 @@ class CommandExecutor(
         return timeline.sendMessage(
             body = message,
             htmlBody = null,
-            asEmote = true,
+            msgType = MsgType.MSG_TYPE_EMOTE,
             intentionalMentions = emptyList(),
         )
     }

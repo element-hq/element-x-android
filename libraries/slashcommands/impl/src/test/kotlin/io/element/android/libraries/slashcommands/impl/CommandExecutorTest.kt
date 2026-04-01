@@ -10,6 +10,7 @@ package io.element.android.libraries.slashcommands.impl
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
+import io.element.android.libraries.matrix.api.timeline.MsgType
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
@@ -46,15 +47,15 @@ class CommandExecutorTest {
     @Test
     fun `send emote delegates to timeline as emote`() = runTest {
         val timeline = FakeTimeline()
-        var asEmote = false
-        timeline.sendMessageLambda = { _, _, _, emote, _ ->
-            asEmote = emote
+        var msgType: MsgType? = null
+        timeline.sendMessageLambda = { _, _, _, type, _ ->
+            msgType = type
             Result.success(Unit)
         }
         val sut = createCommandExecutor()
         val res = sut.proceedSendMessage(SlashCommand.SendEmote("yay"), timeline)
         assertThat(res.isSuccess).isTrue()
-        assertThat(asEmote).isTrue()
+        assertThat(msgType).isEqualTo(MsgType.MSG_TYPE_EMOTE)
     }
 
     @Test

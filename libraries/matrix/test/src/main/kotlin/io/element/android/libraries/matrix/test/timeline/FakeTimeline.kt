@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.MsgType
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
@@ -64,7 +65,7 @@ class FakeTimeline(
         body: String,
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
-        asEmote: Boolean,
+        msgType: MsgType,
         asPlainText: Boolean,
     ) -> Result<Unit> = { _, _, _, _, _ ->
         lambdaError()
@@ -78,10 +79,10 @@ class FakeTimeline(
         body: String,
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
-        asEmote: Boolean,
+        msgType: MsgType,
         asPlainText: Boolean,
     ): Result<Unit> = simulateLongTask {
-        sendMessageLambda(body, htmlBody, intentionalMentions, asEmote, asPlainText)
+        sendMessageLambda(body, htmlBody, intentionalMentions, msgType, asPlainText)
     }
 
     var redactEventLambda: (eventOrTransactionId: EventOrTransactionId, reason: String?) -> Result<Unit> = { _, _ ->
@@ -138,7 +139,7 @@ class FakeTimeline(
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
         fromNotification: Boolean,
-        asEmote: Boolean,
+        msgType: MsgType,
     ) -> Result<Unit> = { _, _, _, _, _, _ ->
         lambdaError()
     }
@@ -149,14 +150,14 @@ class FakeTimeline(
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
         fromNotification: Boolean,
-        asEmote: Boolean,
+        msgType: MsgType,
     ): Result<Unit> = replyMessageLambda(
         repliedToEventId,
         body,
         htmlBody,
         intentionalMentions,
         fromNotification,
-        asEmote,
+        msgType,
     )
 
     var sendImageLambda: (

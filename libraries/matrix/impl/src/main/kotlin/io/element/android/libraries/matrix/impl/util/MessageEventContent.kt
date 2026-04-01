@@ -9,6 +9,7 @@
 package io.element.android.libraries.matrix.impl.util
 
 import io.element.android.libraries.matrix.api.room.IntentionalMention
+import io.element.android.libraries.matrix.api.timeline.MsgType
 import io.element.android.libraries.matrix.impl.room.map
 import org.matrix.rustcomponents.sdk.MessageContent
 import org.matrix.rustcomponents.sdk.MessageType
@@ -28,7 +29,7 @@ object MessageEventContent {
         body: String,
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
-        asEmote: Boolean = false,
+        msgType: MsgType = MsgType.MSG_TYPE_TEXT,
         asPlainText: Boolean = false,
     ): RoomMessageEventContentWithoutRelation {
         return when {
@@ -45,12 +46,12 @@ object MessageEventContent {
                     mentions = null,
                 )
             )
-            htmlBody != null -> if (asEmote) {
+            htmlBody != null -> if (msgType == MsgType.MSG_TYPE_EMOTE) {
                 messageEventContentFromHtmlAsEmote(body, htmlBody)
             } else {
                 messageEventContentFromHtml(body, htmlBody)
             }
-            else -> if (asEmote) {
+            else -> if (msgType == MsgType.MSG_TYPE_EMOTE) {
                 messageEventContentFromMarkdownAsEmote(body)
             } else {
                 messageEventContentFromMarkdown(body)
