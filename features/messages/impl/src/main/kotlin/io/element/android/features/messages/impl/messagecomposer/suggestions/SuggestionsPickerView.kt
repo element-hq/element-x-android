@@ -41,7 +41,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.ui.model.getAvatarData
-import io.element.android.libraries.slash.api.SlashCommandSuggestion
+import io.element.android.libraries.slashcommands.api.SlashCommandSuggestion
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf

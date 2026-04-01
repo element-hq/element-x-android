@@ -71,9 +71,9 @@ import io.element.android.libraries.permissions.api.PermissionsEvent
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
-import io.element.android.libraries.slash.api.SlashCommand
-import io.element.android.libraries.slash.api.SlashService
-import io.element.android.libraries.slash.api.message
+import io.element.android.libraries.slashcommands.api.SlashCommand
+import io.element.android.libraries.slashcommands.api.SlashService
+import io.element.android.libraries.slashcommands.api.message
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState

@@ -89,9 +89,9 @@ import io.element.android.libraries.preferences.api.store.SessionPreferencesStor
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.libraries.push.test.notifications.conversations.FakeNotificationConversationService
-import io.element.android.libraries.slash.api.SlashCommand
-import io.element.android.libraries.slash.api.SlashService
-import io.element.android.libraries.slash.test.FakeSlashService
+import io.element.android.libraries.slashcommands.api.SlashCommand
+import io.element.android.libraries.slashcommands.api.SlashService
+import io.element.android.libraries.slashcommands.test.FakeSlashService
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
