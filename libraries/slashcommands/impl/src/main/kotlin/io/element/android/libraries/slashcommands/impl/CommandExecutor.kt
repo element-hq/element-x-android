@@ -95,7 +95,7 @@ class CommandExecutor(
     }
 
     private suspend fun sendShrug(slashCommand: SlashCommand.SendShrug, timeline: Timeline): Result<Unit> {
-        return sendPrefixedMessage(timeline, "¯\\_(ツ)_/¯", slashCommand.message)
+        return sendPrefixedMessage(timeline, "¯\\\\_(ツ)\\_/¯", slashCommand.message)
     }
 
     private suspend fun sendRainbowEmote(slashCommand: SlashCommand.SendRainbowEmote, timeline: Timeline): Result<Unit> {
