@@ -9,8 +9,8 @@ package io.element.android.libraries.slashcommands.test
 
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.slashcommands.api.SlashCommand
-import io.element.android.libraries.slashcommands.api.SlashCommandSuggestion
 import io.element.android.libraries.slashcommands.api.SlashCommandService
+import io.element.android.libraries.slashcommands.api.SlashCommandSuggestion
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.simulateLongTask
 
