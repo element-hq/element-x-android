@@ -11,6 +11,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
@@ -101,10 +102,9 @@ internal fun BoxScope.FloatingDateBadgeOverlay(
         enter = fadeIn(animationSpec = tween(150)),
         exit = fadeOut(animationSpec = tween(300)),
     ) {
-        currentDateText?.let { dateText ->
-            FloatingDateBadge(dateText = dateText)
         formattedDate?.let { dateText ->
             FloatingDateBadge(
+                modifier = Modifier.padding(8.dp),
                 dateText = dateText,
             )
         }
@@ -120,6 +120,7 @@ internal fun FloatingDateBadge(
         modifier = modifier,
         shape = RoundedCornerShape(16.dp),
         color = ElementTheme.colors.floatingDateBadgeBackground,
+        shadowElevation = 4.dp,
     ) {
         Text(
             modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
@@ -133,5 +134,7 @@ internal fun FloatingDateBadge(
 @PreviewsDayNight
 @Composable
 internal fun FloatingDateBadgePreview() = ElementPreview {
-    FloatingDateBadge(dateText = "March 9, 2026")
+    Box(modifier = Modifier.padding(16.dp)) {
+        FloatingDateBadge(dateText = "March 9, 2026")
+    }
 }

@@ -76,7 +76,7 @@ val SemanticColors.pinnedMessageBannerBorder
     get() = if (isLight) LightColorTokens.colorAlphaGray400 else DarkColorTokens.colorAlphaGray400
 
 val SemanticColors.floatingDateBadgeBackground
-    get() = if (isLight) bgCanvasDefault.copy(alpha = 0.85f) else bgSubtlePrimary
+    get() = if (isLight) bgCanvasDefault else bgSubtlePrimary
 
 @PreviewsDayNight
 @Composable
