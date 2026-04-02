@@ -12,6 +12,7 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.timeline.MsgType
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.slashcommands.api.MessagePrefix
 import io.element.android.libraries.slashcommands.api.SlashCommand
 import io.element.android.libraries.slashcommands.impl.rainbow.RainbowGenerator
 import io.element.android.services.toolbox.api.strings.StringProvider
@@ -30,13 +31,11 @@ class CommandExecutor(
         return when (slashCommand) {
             is SlashCommand.SendChatEffect -> sendChatEffect()
             is SlashCommand.SendEmote -> sendEmote(slashCommand, timeline)
-            is SlashCommand.SendLenny -> sendLenny(slashCommand, timeline)
+            is SlashCommand.SendWithPrefix -> sendPrefixedMessage(slashCommand.prefix, slashCommand.message, timeline)
             is SlashCommand.SendPlainText -> sendPlainText(slashCommand, timeline)
             is SlashCommand.SendRainbow -> sendRainbow(slashCommand, timeline)
             is SlashCommand.SendRainbowEmote -> sendRainbowEmote(slashCommand, timeline)
-            is SlashCommand.SendShrug -> sendShrug(slashCommand, timeline)
             is SlashCommand.SendSpoiler -> sendSpoiler(slashCommand, timeline)
-            is SlashCommand.SendTableFlip -> sendTableFlip(slashCommand, timeline)
         }
     }
 
@@ -80,10 +79,6 @@ class CommandExecutor(
         return Result.failure(Exception("Not yet implemented"))
     }
 
-    private suspend fun sendTableFlip(slashCommand: SlashCommand.SendTableFlip, timeline: Timeline): Result<Unit> {
-        return sendPrefixedMessage(timeline, "(╯°□°）╯︵ ┻━┻", slashCommand.message)
-    }
-
     private suspend fun sendSpoiler(slashCommand: SlashCommand.SendSpoiler, timeline: Timeline): Result<Unit> {
         val text = "[${stringProvider.getString(R.string.common_spoiler)}](${slashCommand.message})"
         val formattedText = "<span data-mx-spoiler>${slashCommand.message}</span>"
@@ -92,10 +87,6 @@ class CommandExecutor(
             htmlBody = formattedText,
             intentionalMentions = emptyList(),
         )
-    }
-
-    private suspend fun sendShrug(slashCommand: SlashCommand.SendShrug, timeline: Timeline): Result<Unit> {
-        return sendPrefixedMessage(timeline, "¯\\\\_(ツ)\\_/¯", slashCommand.message)
     }
 
     private suspend fun sendRainbowEmote(slashCommand: SlashCommand.SendRainbowEmote, timeline: Timeline): Result<Unit> {
@@ -124,10 +115,6 @@ class CommandExecutor(
             intentionalMentions = emptyList(),
             asPlainText = true,
         )
-    }
-
-    private suspend fun sendLenny(slashCommand: SlashCommand.SendLenny, timeline: Timeline): Result<Unit> {
-        return sendPrefixedMessage(timeline, "( ͡° ͜ʖ ͡°)", slashCommand.message)
     }
 
     private suspend fun sendEmote(slashCommand: SlashCommand.SendEmote, timeline: Timeline): Result<Unit> {
@@ -200,12 +187,12 @@ class CommandExecutor(
     }
 
     private suspend fun sendPrefixedMessage(
-        timeline: Timeline,
-        prefix: String,
+        prefix: MessagePrefix,
         message: CharSequence,
+        timeline: Timeline,
     ): Result<Unit> {
         val sequence = buildString {
-            append(prefix)
+            append(prefix.toMarkdown())
             if (message.isNotEmpty()) {
                 append(" ")
                 append(message)
@@ -217,4 +204,10 @@ class CommandExecutor(
             intentionalMentions = emptyList(),
         )
     }
+}
+
+private fun MessagePrefix.toMarkdown() = when (this) {
+    MessagePrefix.Shrug -> "¯\\\\_(ツ)\\_/¯"
+    MessagePrefix.TableFlip -> "(╯°□°）╯︵ ┻━┻"
+    MessagePrefix.Lenny -> "( ͡° ͜ʖ ͡°)"
 }

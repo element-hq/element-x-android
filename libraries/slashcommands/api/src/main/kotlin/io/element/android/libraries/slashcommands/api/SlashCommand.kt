@@ -53,9 +53,7 @@ sealed interface SlashCommand {
     data class ChangeRoomAvatar(val url: String) : SlashCommandAdmin
     data class ChangeAvatarForRoom(val url: String) : SlashCommandAdmin
     data class SendSpoiler(val message: String) : SlashCommandSendMessage
-    data class SendShrug(val message: CharSequence) : SlashCommandSendMessage
-    data class SendTableFlip(val message: CharSequence) : SlashCommandSendMessage
-    data class SendLenny(val message: CharSequence) : SlashCommandSendMessage
+    data class SendWithPrefix(val prefix: MessagePrefix, val message: CharSequence) : SlashCommandSendMessage
     data object DiscardSession : SlashCommandAdmin
     data class SendChatEffect(val chatEffect: ChatEffect, val message: String) : SlashCommandSendMessage
     data object LeaveRoom : SlashCommandAdmin

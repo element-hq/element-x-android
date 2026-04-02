@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.mxc.isMxcUrl
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.slashcommands.api.ChatEffect
+import io.element.android.libraries.slashcommands.api.MessagePrefix
 import io.element.android.libraries.slashcommands.api.SlashCommand
 import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.coroutines.flow.first
@@ -278,13 +279,13 @@ class CommandParser(
                     }
                 }
                 Command.SHRUG.matches(slashCommand) -> {
-                    SlashCommand.SendShrug(message)
+                    SlashCommand.SendWithPrefix(MessagePrefix.Shrug, message)
                 }
                 Command.LENNY.matches(slashCommand) -> {
-                    SlashCommand.SendLenny(message)
+                    SlashCommand.SendWithPrefix(MessagePrefix.Lenny, message)
                 }
                 Command.TABLE_FLIP.matches(slashCommand) -> {
-                    SlashCommand.SendTableFlip(message)
+                    SlashCommand.SendWithPrefix(MessagePrefix.TableFlip, message)
                 }
                 Command.DISCARD_SESSION.matches(slashCommand) -> {
                     if (messageParts.size == 1) {

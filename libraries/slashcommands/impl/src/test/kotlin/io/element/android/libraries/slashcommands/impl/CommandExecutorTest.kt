@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.slashcommands.api.ChatEffect
+import io.element.android.libraries.slashcommands.api.MessagePrefix
 import io.element.android.libraries.slashcommands.api.SlashCommand
 import io.element.android.libraries.slashcommands.impl.rainbow.RainbowGenerator
 import io.element.android.services.toolbox.api.strings.StringProvider
@@ -71,7 +72,7 @@ class CommandExecutorTest {
             Result.success(Unit)
         }
         val sut = createCommandExecutor()
-        val res = sut.proceedSendMessage(SlashCommand.SendLenny("fun"), timeline)
+        val res = sut.proceedSendMessage(SlashCommand.SendWithPrefix(MessagePrefix.Lenny, "fun"), timeline)
         assertThat(res.isSuccess).isTrue()
         assertThat(capturedBody).isEqualTo("( ͡° ͜ʖ ͡°) fun")
     }
@@ -85,7 +86,7 @@ class CommandExecutorTest {
             Result.success(Unit)
         }
         val sut = createCommandExecutor()
-        val res = sut.proceedSendMessage(SlashCommand.SendTableFlip("wow"), timeline)
+        val res = sut.proceedSendMessage(SlashCommand.SendWithPrefix(MessagePrefix.TableFlip, "wow"), timeline)
         assertThat(res.isSuccess).isTrue()
         assertThat(capturedBody).isEqualTo("(╯°□°）╯︵ ┻━┻ wow")
     }
@@ -99,7 +100,7 @@ class CommandExecutorTest {
             Result.success(Unit)
         }
         val sut = createCommandExecutor()
-        val res = sut.proceedSendMessage(SlashCommand.SendShrug("wow"), timeline)
+        val res = sut.proceedSendMessage(SlashCommand.SendWithPrefix(MessagePrefix.Shrug, "wow"), timeline)
         assertThat(res.isSuccess).isTrue()
         assertThat(capturedBody).isEqualTo("¯\\\\_(ツ)\\_/¯ wow")
     }

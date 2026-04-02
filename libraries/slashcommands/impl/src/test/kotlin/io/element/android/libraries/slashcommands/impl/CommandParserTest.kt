@@ -18,6 +18,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.slashcommands.api.ChatEffect
+import io.element.android.libraries.slashcommands.api.MessagePrefix
 import io.element.android.libraries.slashcommands.api.SlashCommand
 import io.element.android.services.toolbox.api.strings.StringProvider
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
@@ -153,11 +154,11 @@ class CommandParserTest {
 
     @Test
     fun parseSlashCommandEmojisAndSession() = runTest {
-        test("/shrug hello", SlashCommand.SendShrug("hello"))
-        test("/shrug", SlashCommand.SendShrug(""))
+        test("/shrug hello", SlashCommand.SendWithPrefix(MessagePrefix.Shrug, "hello"))
+        test("/shrug", SlashCommand.SendWithPrefix(MessagePrefix.Shrug, ""))
 
-        test("/lenny fun", SlashCommand.SendLenny("fun"))
-        test("/tableflip wow", SlashCommand.SendTableFlip("wow"))
+        test("/lenny fun", SlashCommand.SendWithPrefix(MessagePrefix.Lenny, "fun"))
+        test("/tableflip wow", SlashCommand.SendWithPrefix(MessagePrefix.TableFlip, "wow"))
 
         test("/discardsession", SlashCommand.DiscardSession)
         test("/discardsession extra", SlashCommand.ErrorSyntax("A string/discardsession, /discardsession"))
