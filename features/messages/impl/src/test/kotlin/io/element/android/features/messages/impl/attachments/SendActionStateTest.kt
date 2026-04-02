@@ -25,7 +25,7 @@ class SendActionStateTest {
     @Test
     fun `mediaUploadInfo() should return the value from ReadyToUpload class`() {
         val mediaUploadInfo: MediaUploadInfo = aMediaUploadInfo()
-        val state: SendActionState = SendActionState.Sending.ReadyToUpload(mediaInfo = aMediaUploadInfo())
+        val state: SendActionState = SendActionState.Sending.ReadyToUpload(mediaInfos = listOf(aMediaUploadInfo()))
         assertThat(state.mediaUploadInfo()).isEqualTo(mediaUploadInfo)
     }
 

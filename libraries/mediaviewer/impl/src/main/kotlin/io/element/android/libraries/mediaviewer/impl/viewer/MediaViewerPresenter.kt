@@ -290,4 +290,22 @@ class MediaViewerPresenter(
             CommonStrings.error_unknown
         }
     }
+
+    private fun searchIndex(data: List<MediaViewerPageData>, eventId: EventId?): Int {
+        if (eventId == null) {
+            return 0
+        }
+        val mediaSource = inputs.mediaSource
+        val exactMatch = data.indexOfFirst {
+            val pageData = it as? MediaViewerPageData.MediaViewerData
+            pageData?.eventId == eventId && pageData.mediaSource == mediaSource
+        }
+        if (exactMatch >= 0) {
+            return exactMatch
+        }
+        return data.indexOfFirst {
+            (it as? MediaViewerPageData.MediaViewerData)?.eventId == eventId
+        }.coerceAtLeast(0)
+    }
+}
 }
