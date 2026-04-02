@@ -410,6 +410,14 @@ fun TextComposer(
 
     SoftKeyboardEffect(showTextFormatting, onRequestFocus) { it }
 
+    // Re-focus the text input when voice recording ends so the user can continue typing
+    var previousVoiceMessageState by remember { mutableStateOf(voiceMessageState) }
+    LaunchedEffect(voiceMessageState) {
+        if (voiceMessageState is VoiceMessageState.Idle && previousVoiceMessageState !is VoiceMessageState.Idle) {
+            onRequestFocus()
+        }
+        previousVoiceMessageState = voiceMessageState
+    }
 
     val latestOnReceiveSuggestion by rememberUpdatedState(onReceiveSuggestion)
     if (state is TextEditorState.Rich) {
