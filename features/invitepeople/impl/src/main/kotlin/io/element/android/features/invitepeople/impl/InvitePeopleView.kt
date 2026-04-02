@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -26,20 +27,29 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.invitepeople.api.InvitePeopleEvents
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
+import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.async.AsyncFailure
 import io.element.android.libraries.designsystem.components.async.AsyncLoading
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
+import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListSectionHeader
+import io.element.android.libraries.designsystem.theme.components.ModalBottomSheet
+import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.CheckableUserRow
 import io.element.android.libraries.matrix.ui.components.CheckableUserRowData
+import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.matrix.ui.components.SelectedUsersRowList
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.getBestName
@@ -143,6 +153,14 @@ private fun InvitePeopleContentView(
                 }
             }
         }
+
+        if (state.showConfirmationModal) {
+            InvitePeopleConfirmModal(
+                users = state.unknownUsers,
+                onInvite = { state.eventSink.invoke(InvitePeopleEvents.SendInvites) },
+                onRemove = { state.eventSink.invoke(DefaultInvitePeopleEvents.RemoveUnknownUsers) }
+            )
+        }
     }
 }
 
@@ -228,6 +246,55 @@ private fun InvitePeopleSearchBar(
             }
         },
     )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun InvitePeopleConfirmModal(
+    users: ImmutableList<MatrixUser>,
+    onInvite: () -> Unit,
+    onRemove: () -> Unit
+) {
+    ModalBottomSheet(
+        onDismissRequest = {},
+        dragHandle = null,
+    ) {
+        IconTitleSubtitleMolecule(
+            title = stringResource(R.string.screen_invite_users_confirm_dialog_title),
+            subTitle = stringResource(R.string.screen_invite_users_confirm_dialog_subtitle),
+            iconStyle = BigIcon.Style.Default(CompoundIcons.UserAddSolid()),
+            modifier = Modifier.padding(
+                top = 32.dp,
+                bottom = 16.dp,
+                start = 16.dp,
+                end = 16.dp,
+            )
+        )
+
+        LazyColumn {
+            itemsIndexed(users) { index, user ->
+                MatrixUserRow(user)
+            }
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(16.dp, alignment = Alignment.CenterHorizontally),
+            modifier = Modifier.fillMaxWidth().padding(all = 16.dp)
+        ) {
+            OutlinedButton(
+                text = stringResource(CommonStrings.action_remove),
+                onClick = onRemove,
+                leadingIcon = IconSource.Vector(CompoundIcons.Close()),
+                modifier = Modifier.weight(1f)
+            )
+            Button(
+                text = stringResource(CommonStrings.action_invite),
+                onClick = onInvite,
+                leadingIcon = IconSource.Vector(CompoundIcons.Check()),
+                modifier = Modifier.weight(1f)
+            )
+        }
+    }
 }
 
 @PreviewsDayNight

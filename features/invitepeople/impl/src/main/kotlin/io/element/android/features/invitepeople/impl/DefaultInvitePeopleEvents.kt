@@ -14,4 +14,5 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 sealed interface DefaultInvitePeopleEvents : InvitePeopleEvents {
     data class ToggleUser(val user: MatrixUser) : DefaultInvitePeopleEvents
     data class OnSearchActiveChanged(val active: Boolean) : DefaultInvitePeopleEvents
+    data object RemoveUnknownUsers : DefaultInvitePeopleEvents
 }

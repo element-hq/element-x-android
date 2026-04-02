@@ -46,7 +46,7 @@ fun AddPeopleView(
             Button(
                 text = stringResource(CommonStrings.action_finish),
                 onClick = {
-                    state.eventSink(InvitePeopleEvents.SendInvites)
+                    state.eventSink(InvitePeopleEvents.PromptOrInvite)
                     onFinish()
                 },
                 enabled = state.canInvite,

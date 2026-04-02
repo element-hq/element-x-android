@@ -37,6 +37,7 @@ dependencies {
     implementation(projects.libraries.usersearch.impl)
     implementation(libs.coil.compose)
     implementation(projects.services.apperror.api)
+    implementation(projects.libraries.featureflag.api)
     api(projects.features.invitepeople.api)
 
     testCommonDependencies(libs, true)
