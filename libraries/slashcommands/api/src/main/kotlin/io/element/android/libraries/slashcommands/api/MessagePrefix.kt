@@ -10,5 +10,6 @@ package io.element.android.libraries.slashcommands.api
 enum class MessagePrefix {
     Shrug,
     TableFlip,
+    Unflip,
     Lenny,
 }

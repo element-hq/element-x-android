@@ -287,6 +287,9 @@ class CommandParser(
                 Command.TABLE_FLIP.matches(slashCommand) -> {
                     SlashCommand.SendWithPrefix(MessagePrefix.TableFlip, message)
                 }
+                Command.UNFLIP.matches(slashCommand) -> {
+                    SlashCommand.SendWithPrefix(MessagePrefix.Unflip, message)
+                }
                 Command.DISCARD_SESSION.matches(slashCommand) -> {
                     if (messageParts.size == 1) {
                         SlashCommand.DiscardSession

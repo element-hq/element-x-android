@@ -159,6 +159,7 @@ class CommandParserTest {
 
         test("/lenny fun", SlashCommand.SendWithPrefix(MessagePrefix.Lenny, "fun"))
         test("/tableflip wow", SlashCommand.SendWithPrefix(MessagePrefix.TableFlip, "wow"))
+        test("/unflip be safe", SlashCommand.SendWithPrefix(MessagePrefix.Unflip, "be safe"))
 
         test("/discardsession", SlashCommand.DiscardSession)
         test("/discardsession extra", SlashCommand.ErrorSyntax("A string/discardsession, /discardsession"))

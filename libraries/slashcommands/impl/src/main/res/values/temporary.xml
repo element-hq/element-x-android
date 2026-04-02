@@ -37,6 +37,7 @@
     <string name="slash_command_description_shrug">Prepends ¯\\_(ツ)_/¯ to a plain-text message</string>
     <string name="slash_command_description_lenny">Prepends ( ͡° ͜ʖ ͡°) to a plain-text message</string>
     <string name="slash_command_description_table_flip">Prepends (╯°□°）╯︵ ┻━┻ to a plain-text message</string>
+    <string name="slash_command_description_unflip">Prepends ┬──┬ ノ( ゜-゜ノ) to a plain-text message</string>
     <string name="slash_command_description_discard_session">Forces the current outbound group session in an encrypted room to be discarded</string>
     <string name="slash_command_description_discard_session_not_handled">Only supported in encrypted rooms</string>
     <string name="slash_command_description_leave_room">Leave the current room</string>

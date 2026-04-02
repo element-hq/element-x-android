@@ -92,6 +92,20 @@ class CommandExecutorTest {
     }
 
     @Test
+    fun `send unflip prefixes message`() = runTest {
+        val timeline = FakeTimeline()
+        var capturedBody: String? = null
+        timeline.sendMessageLambda = { body, _, _, _, _ ->
+            capturedBody = body
+            Result.success(Unit)
+        }
+        val sut = createCommandExecutor()
+        val res = sut.proceedSendMessage(SlashCommand.SendWithPrefix(MessagePrefix.Unflip, "keep cool"), timeline)
+        assertThat(res.isSuccess).isTrue()
+        assertThat(capturedBody).isEqualTo("┬──┬ ノ( ゜-゜ノ) keep cool")
+    }
+
+    @Test
     fun `send shrug prefixes message`() = runTest {
         val timeline = FakeTimeline()
         var capturedBody: String? = null

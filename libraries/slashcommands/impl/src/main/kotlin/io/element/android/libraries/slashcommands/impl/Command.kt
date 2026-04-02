@@ -208,6 +208,11 @@ enum class Command(
         command = "/tableflip",
         parameters = "<message>",
         description = R.string.slash_command_description_table_flip,
+    ),
+    UNFLIP(
+        command = "/unflip",
+        parameters = "<message>",
+        description = R.string.slash_command_description_unflip,
     );
 
     val allAliases = listOf(command) + aliases.orEmpty()

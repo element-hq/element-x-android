@@ -209,5 +209,6 @@ class CommandExecutor(
 private fun MessagePrefix.toMarkdown() = when (this) {
     MessagePrefix.Shrug -> "¯\\\\_(ツ)\\_/¯"
     MessagePrefix.TableFlip -> "(╯°□°）╯︵ ┻━┻"
+    MessagePrefix.Unflip -> "┬──┬ ノ( ゜-゜ノ)"
     MessagePrefix.Lenny -> "( ͡° ͜ʖ ͡°)"
 }
