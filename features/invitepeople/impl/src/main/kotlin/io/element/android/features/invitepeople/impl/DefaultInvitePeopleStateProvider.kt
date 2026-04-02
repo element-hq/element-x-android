@@ -76,6 +76,16 @@ internal class DefaultInvitePeopleStateProvider : PreviewParameterProvider<Defau
                 selectedUsers = aMatrixUserList().toImmutableList(),
                 sendInvitesAction = AsyncAction.Loading,
             ),
+            aDefaultInvitePeopleState(
+                unknownUsers = persistentListOf(
+                    aMatrixUser("@alice:server.org"),
+                ),
+                showConfirmationModal = true
+            ),
+            aDefaultInvitePeopleState(
+                unknownUsers = aMatrixUserList().toImmutableList(),
+                showConfirmationModal = true
+            )
         )
 }
 
@@ -99,8 +109,10 @@ private fun aDefaultInvitePeopleState(
     searchQuery: String = "",
     searchResults: SearchBarResultState<ImmutableList<InvitableUser>> = SearchBarResultState.Initial(),
     selectedUsers: ImmutableList<MatrixUser> = persistentListOf(),
+    unknownUsers: ImmutableList<MatrixUser> = persistentListOf(),
     isSearchActive: Boolean = false,
     showSearchLoader: Boolean = false,
+    showConfirmationModal: Boolean = false,
     sendInvitesAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     suggestions: List<InvitableUser> = aMatrixUserList()
         .take(5)
@@ -112,8 +124,10 @@ private fun aDefaultInvitePeopleState(
         searchQuery = TextFieldState(initialText = searchQuery),
         searchResults = searchResults,
         selectedUsers = selectedUsers,
+        unknownUsers = unknownUsers,
         isSearchActive = isSearchActive,
         showSearchLoader = showSearchLoader,
+        showConfirmationModal = showConfirmationModal,
         sendInvitesAction = sendInvitesAction,
         suggestions = suggestions.toImmutableList(),
         eventSink = {},
