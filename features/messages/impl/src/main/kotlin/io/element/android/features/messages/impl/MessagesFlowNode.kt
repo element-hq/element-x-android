@@ -293,6 +293,10 @@ class MessagesFlowNode(
                     override fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?) {
                         backstack.push(NavTarget.Thread(threadRootId, focusedEventId))
                     }
+
+                    override fun navigateToDeveloperSettings() {
+                        callback.navigateToDeveloperSettings()
+                    }
                 }
                 val inputs = MessagesNode.Inputs(focusedEventId = navTarget.focusedEventId)
                 createNode<MessagesNode>(buildContext, listOf(callback, inputs))
@@ -502,6 +506,10 @@ class MessagesFlowNode(
                     override fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?) {
                         backstack.push(NavTarget.Thread(threadRootId, focusedEventId))
                     }
+
+                    override fun navigateToDeveloperSettings() {
+                        callback.navigateToDeveloperSettings()
+                    }
                 }
                 createNode<ThreadedMessagesNode>(buildContext, listOf(inputs, callback))
             }
@@ -567,7 +575,7 @@ class MessagesFlowNode(
                     assetType = event.content.assetType,
                 )
                 NavTarget.LocationViewer(
-                   mode = mode
+                    mode = mode
                 ).takeIf { locationService.isServiceAvailable() }
             }
             else -> null

@@ -28,6 +28,9 @@ interface PreferencesEntryPoint : FeatureEntryPoint {
 
         @Parcelize
         data object NotificationTroubleshoot : InitialTarget
+
+        @Parcelize
+        data object DeveloperSettings : InitialTarget
     }
 
     data class Params(val initialElement: InitialTarget) : NodeInputs
