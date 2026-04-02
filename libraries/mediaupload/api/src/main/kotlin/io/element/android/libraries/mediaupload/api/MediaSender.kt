@@ -61,5 +61,12 @@ interface MediaSender {
         inReplyToEventId: EventId? = null,
     ): Result<Unit>
 
+    suspend fun sendGallery(
+        mediaUploadInfos: List<MediaUploadInfo>,
+        caption: String?,
+        formattedCaption: String?,
+        inReplyToEventId: EventId?,
+    ): Result<Unit>
+
     fun cleanUp()
 }

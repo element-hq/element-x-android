@@ -56,7 +56,9 @@ fun TimelineItemEventContent.canBeForwarded(): Boolean =
         is TimelineItemAudioContent,
         is TimelineItemVideoContent,
         is TimelineItemLocationContent,
-        is TimelineItemVoiceContent -> true
+        is TimelineItemVoiceContent,
+        is TimelineItemGalleryContent,
+        is TimelineItemAttachmentsContent -> true
         // Stickers can't be forwarded (yet) so we don't show the option
         // See https://github.com/element-hq/element-x-android/issues/2161
         is TimelineItemStickerContent -> false
@@ -78,7 +80,9 @@ fun TimelineItemEventContent.canReact(): Boolean =
         is TimelineItemLocationContent,
         is TimelineItemPollContent,
         is TimelineItemVoiceContent,
-        is TimelineItemVideoContent -> true
+        is TimelineItemVideoContent,
+        is TimelineItemGalleryContent,
+        is TimelineItemAttachmentsContent -> true
         is TimelineItemStateContent,
         is TimelineItemRedactedContent,
         is TimelineItemLegacyCallInviteContent,
