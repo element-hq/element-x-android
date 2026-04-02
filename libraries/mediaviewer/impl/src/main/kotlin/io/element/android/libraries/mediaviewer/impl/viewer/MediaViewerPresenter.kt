@@ -301,6 +301,16 @@ class MediaViewerPresenter(
         if (eventId == null) {
             return 0
         }
+        // First try to match both eventId and mediaSource (for gallery items that share the same eventId)
+        val mediaSource = inputs.mediaSource
+        val exactMatch = data.indexOfFirst {
+            val pageData = it as? MediaViewerPageData.MediaViewerData
+            pageData?.eventId == eventId && pageData.mediaSource == mediaSource
+        }
+        if (exactMatch >= 0) {
+            return exactMatch
+        }
+        // Fall back to matching only eventId
         return data.indexOfFirst {
             (it as? MediaViewerPageData.MediaViewerData)?.eventId == eventId
         }.coerceAtLeast(0)

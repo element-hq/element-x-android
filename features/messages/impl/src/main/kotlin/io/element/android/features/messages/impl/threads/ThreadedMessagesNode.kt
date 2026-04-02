@@ -124,7 +124,7 @@ class ThreadedMessagesNode(
     }
 
     interface Callback : Plugin {
-        fun handleEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event): Boolean
+        fun handleEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event, galleryItemIndex: Int? = null): Boolean
         fun navigateToPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?)
         fun navigateToRoomMemberDetails(userId: UserId)
         fun handlePermalinkClick(data: PermalinkData)
@@ -276,6 +276,20 @@ class ThreadedMessagesNode(
                                 val detachedTimelineMode = controller.detachedTimelineMode()
                                 if (detachedTimelineMode != null) {
                                     callback.handleEventClick(detachedTimelineMode, event)
+                                } else {
+                                    false
+                                }
+                            }
+                        } == true
+                    },
+                    onGalleryItemClick = { isLive, event, index ->
+                        timelineController?.let { controller ->
+                            if (isLive) {
+                                callback.handleEventClick(controller.mainTimelineMode(), event, index)
+                            } else {
+                                val detachedTimelineMode = controller.detachedTimelineMode()
+                                if (detachedTimelineMode != null) {
+                                    callback.handleEventClick(detachedTimelineMode, event, index)
                                 } else {
                                     false
                                 }

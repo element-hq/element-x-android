@@ -14,6 +14,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
+import io.element.android.libraries.matrix.api.media.GalleryItemInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaUploadHandler
 import io.element.android.libraries.matrix.api.media.VideoInfo
@@ -29,6 +30,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
+import io.element.android.libraries.matrix.impl.media.GalleryMediaUploadHandlerImpl
 import io.element.android.libraries.matrix.impl.media.MediaUploadHandlerImpl
 import io.element.android.libraries.matrix.impl.media.map
 import io.element.android.libraries.matrix.impl.poll.toInner
@@ -65,6 +67,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.EditedContent
 import org.matrix.rustcomponents.sdk.FormattedBody
+import org.matrix.rustcomponents.sdk.GalleryItemInfo as RustGalleryItemInfo
+import org.matrix.rustcomponents.sdk.GalleryUploadParameters
 import org.matrix.rustcomponents.sdk.MessageFormat
 import org.matrix.rustcomponents.sdk.PollData
 import org.matrix.rustcomponents.sdk.SendAttachmentJoinHandle
@@ -522,6 +526,42 @@ class RustTimeline(
                 audioInfo = audioInfo.map(),
                 waveform = waveform,
             )
+        }
+    }
+
+    override suspend fun sendGallery(
+        items: List<GalleryItemInfo>,
+        caption: String?,
+        formattedCaption: String?,
+        inReplyToEventId: EventId?,
+    ): Result<MediaUploadHandler> {
+        Timber.d("Sending gallery with ${items.size} items")
+        val allFiles = items.flatMap { item ->
+            when (item) {
+                is GalleryItemInfo.Image -> listOfNotNull(item.file, item.thumbnailFile)
+                is GalleryItemInfo.Video -> listOfNotNull(item.file, item.thumbnailFile)
+                is GalleryItemInfo.Audio -> listOf(item.file)
+                is GalleryItemInfo.MediaFile -> listOf(item.file)
+            }
+        }
+        return sendGalleryAttachment(allFiles) {
+            inner.sendGallery(
+                params = GalleryUploadParameters(
+                    caption = caption,
+                    formattedCaption = formattedCaption?.let {
+                        FormattedBody(body = it, format = MessageFormat.Html)
+                    },
+                    mentions = null,
+                    inReplyTo = inReplyToEventId?.value,
+                ),
+                itemInfos = items.map { it.map() },
+            )
+        }
+    }
+
+    private fun sendGalleryAttachment(files: List<File>, handle: () -> org.matrix.rustcomponents.sdk.SendGalleryJoinHandle): Result<MediaUploadHandler> {
+        return runCatchingExceptions {
+            GalleryMediaUploadHandlerImpl(files, handle())
         }
     }
 

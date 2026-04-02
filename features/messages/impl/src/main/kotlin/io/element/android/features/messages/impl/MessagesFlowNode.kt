@@ -46,6 +46,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentWithAttachment
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemGalleryContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
@@ -143,10 +144,11 @@ class MessagesFlowNode(
             val mediaInfo: MediaInfo,
             val mediaSource: MediaSource,
             val thumbnailSource: MediaSource?,
+            val galleryItems: List<io.element.android.libraries.mediaviewer.api.GalleryItemData> = emptyList(),
         ) : NavTarget
 
         @Parcelize
-        data class AttachmentPreview(val timelineMode: Timeline.Mode, val attachment: Attachment, val inReplyToEventId: EventId?) : NavTarget
+        data class AttachmentPreview(val timelineMode: Timeline.Mode, val attachments: ImmutableList<Attachment>, val inReplyToEventId: EventId?) : NavTarget
 
         @Parcelize
         data class LocationViewer(val mode: ShowLocationMode) : NavTarget
@@ -227,17 +229,18 @@ class MessagesFlowNode(
                         callback.navigateToRoomDetails()
                     }
 
-                    override fun handleEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event): Boolean {
+                    override fun handleEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event, galleryItemIndex: Int?): Boolean {
                         return processEventClick(
                             timelineMode = timelineMode,
                             event = event,
+                            galleryItemIndex = galleryItemIndex,
                         )
                     }
 
                     override fun navigateToPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?) {
                         backstack.push(
                             NavTarget.AttachmentPreview(
-                                attachment = attachments.first(),
+                                attachments = attachments,
                                 timelineMode = Timeline.Mode.Live,
                                 inReplyToEventId = inReplyToEventId,
                             )
@@ -317,6 +320,7 @@ class MessagesFlowNode(
                     mediaSource = navTarget.mediaSource,
                     thumbnailSource = navTarget.thumbnailSource,
                     canShowInfo = true,
+                    galleryItems = navTarget.galleryItems,
                 )
                 val callback = object : MediaViewerEntryPoint.Callback {
                     override fun onDone() {
@@ -341,7 +345,7 @@ class MessagesFlowNode(
             }
             is NavTarget.AttachmentPreview -> {
                 val inputs = AttachmentsPreviewNode.Inputs(
-                    attachment = navTarget.attachment,
+                    attachments = navTarget.attachments,
                     timelineMode = navTarget.timelineMode,
                     inReplyToEventId = navTarget.inReplyToEventId,
                 )
@@ -456,17 +460,18 @@ class MessagesFlowNode(
                     focusedEventId = navTarget.focusedEventId,
                 )
                 val callback = object : ThreadedMessagesNode.Callback {
-                    override fun handleEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event): Boolean {
+                    override fun handleEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event, galleryItemIndex: Int?): Boolean {
                         return processEventClick(
                             timelineMode = timelineMode,
                             event = event,
+                            galleryItemIndex = galleryItemIndex,
                         )
                     }
 
                     override fun navigateToPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?) {
                         backstack.push(
                             NavTarget.AttachmentPreview(
-                                attachment = attachments.first(),
+                                attachments = attachments,
                                 timelineMode = Timeline.Mode.Thread(navTarget.threadRootId),
                                 inReplyToEventId = inReplyToEventId,
                             )
@@ -547,6 +552,7 @@ class MessagesFlowNode(
     private fun processEventClick(
         timelineMode: Timeline.Mode,
         event: TimelineItem.Event,
+        galleryItemIndex: Int? = null,
     ): Boolean {
         val navTarget = when (event.content) {
             is TimelineItemImageContent -> {
@@ -598,6 +604,58 @@ class MessagesFlowNode(
                     )
                 }
                 NavTarget.LocationViewer(mode = mode).takeIf { locationService.isServiceAvailable() }
+            }
+            is TimelineItemGalleryContent -> {
+                val item = if (galleryItemIndex != null) {
+                    event.content.items.getOrNull(galleryItemIndex)
+                } else {
+                    event.content.items.firstOrNull()
+                } ?: return false
+                val mediaInfo = MediaInfo(
+                    filename = item.filename,
+                    fileSize = null,
+                    caption = event.content.caption,
+                    mimeType = item.mimeType,
+                    formattedFileSize = "",
+                    fileExtension = item.filename.substringAfterLast('.', ""),
+                    senderId = event.senderId,
+                    senderName = event.safeSenderName,
+                    senderAvatar = event.senderAvatar.url,
+                    dateSent = dateFormatter.format(
+                        event.sentTimeMillis,
+                        mode = DateFormatterMode.Day,
+                    ),
+                    dateSentFull = dateFormatter.format(
+                        timestamp = event.sentTimeMillis,
+                        mode = DateFormatterMode.Full,
+                    ),
+                    waveform = null,
+                    duration = null,
+                )
+                val galleryItems = event.content.items.map { galleryItem ->
+                    io.element.android.libraries.mediaviewer.api.GalleryItemData(
+                        filename = galleryItem.filename,
+                        mimeType = galleryItem.mimeType,
+                        mediaSource = galleryItem.mediaSource,
+                        thumbnailSource = galleryItem.thumbnailSource,
+                        isVideo = galleryItem.isVideo,
+                        isAudio = galleryItem.isAudio,
+                        isFile = galleryItem.isFile,
+                    )
+                }
+                val mode = if (event.content.items.any { it.isVideo || (!it.isAudio && !it.isFile) }) {
+                    MediaViewerEntryPoint.MediaViewerMode.TimelineImagesAndVideos(timelineMode)
+                } else {
+                    MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios(timelineMode)
+                }
+                NavTarget.MediaViewer(
+                    mode = mode,
+                    eventId = event.eventId,
+                    mediaInfo = mediaInfo,
+                    mediaSource = item.mediaSource,
+                    thumbnailSource = item.thumbnailSource,
+                    galleryItems = galleryItems,
+                )
             }
             else -> null
         }

@@ -30,7 +30,10 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -178,13 +181,17 @@ private fun AttachmentPreviewContent(
                 .weight(1f),
             contentAlignment = Alignment.Center
         ) {
-            when (val attachment = state.attachment) {
+            val firstAttachment = state.attachments.first()
+            when (firstAttachment) {
                 is Attachment.Media -> {
-                    localMediaRenderer.Render(attachment.localMedia)
+                    localMediaRenderer.Render(firstAttachment.localMedia)
                 }
             }
+            if (state.isGallery) {
+                GalleryBadge(count = state.attachments.size)
+            }
         }
-        val mimeType = (state.attachment as? Attachment.Media)?.localMedia?.info?.mimeType
+        val mimeType = (state.attachments.first() as? Attachment.Media)?.localMedia?.info?.mimeType
         if (mimeType?.isMimeTypeImage() == true) {
             ImageOptimizationSelector(state.mediaOptimizationSelectorState)
         } else if (mimeType?.isMimeTypeVideo() == true) {
@@ -441,4 +448,27 @@ fun VideoCompressionPreset.subtitle(): String {
             VideoCompressionPreset.LOW -> CommonStrings.common_video_quality_low_description
         }
     )
+}
+
+@Composable
+private fun GalleryBadge(count: Int, modifier: Modifier = Modifier) {
+    val contentDescription = pluralStringResource(R.plurals.screen_attachments_preview_gallery_badge_a11y, count, count)
+    Box(
+        modifier = modifier
+            .padding(12.dp)
+            .background(
+                color = ElementTheme.colors.bgCanvasDefault.copy(alpha = 0.8f),
+                shape = androidx.compose.foundation.shape.RoundedCornerShape(8.dp),
+            )
+            .padding(horizontal = 8.dp, vertical = 4.dp)
+            .semantics {
+                this.contentDescription = contentDescription
+            },
+    ) {
+        Text(
+            text = "$count",
+            style = ElementTheme.typography.fontBodySmMedium,
+            color = ElementTheme.colors.textPrimary,
+        )
+    }
 }

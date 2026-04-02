@@ -70,12 +70,16 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.TimelineItemThreadInfo
 import io.element.android.features.messages.impl.timeline.model.bubble.BubbleState
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemGalleryContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemAttachmentsContent
+import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemGalleryContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
 import io.element.android.features.messages.impl.timeline.model.event.ensureActiveLiveLocation
@@ -155,6 +159,7 @@ fun TimelineItemEventRow(
     onMoreReactionsClick: (eventId: TimelineItem.Event) -> Unit,
     onReadReceiptClick: (event: TimelineItem.Event) -> Unit,
     onSwipeToReply: () -> Unit,
+    onGalleryItemClick: ((Int) -> Unit)? = null,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
     eventContentView: @Composable (Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit = { contentModifier, onContentLayoutChange ->
@@ -165,13 +170,14 @@ fun TimelineItemEventRow(
             content = event.content,
             hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId),
             onContentClick = onContentClick,
+            onGalleryItemClick = onGalleryItemClick,
             onLongClick = onLongClick,
             onShowContentClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
             onLinkClick = onLinkClick,
             onLinkLongClick = onLinkLongClick,
             eventSink = eventSink,
             modifier = contentModifier,
-            onContentLayoutChange = onContentLayoutChange
+            onContentLayoutChange = onContentLayoutChange,
         )
     },
 ) {
@@ -777,6 +783,8 @@ private fun MessageEventBubbleContent(
     val timestampPosition = when (val content = event.content) {
         is TimelineItemImageContent -> if (content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
         is TimelineItemVideoContent -> if (content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
+        is TimelineItemGalleryContent -> TimestampPosition.Below
+        is TimelineItemAttachmentsContent -> TimestampPosition.Below
         is TimelineItemStickerContent -> TimestampPosition.Overlay
         is TimelineItemLocationContent -> {
             val content = content.ensureActiveLiveLocation()
@@ -791,6 +799,8 @@ private fun MessageEventBubbleContent(
     val paddingBehaviour = when (event.content) {
         is TimelineItemImageContent -> if (event.content.showCaption) ContentPadding.CaptionedMedia else ContentPadding.Media
         is TimelineItemVideoContent -> if (event.content.showCaption) ContentPadding.CaptionedMedia else ContentPadding.Media
+        is TimelineItemGalleryContent -> ContentPadding.CaptionedMedia
+        is TimelineItemAttachmentsContent -> ContentPadding.CaptionedMedia
         is TimelineItemStickerContent,
         is TimelineItemLocationContent -> ContentPadding.Media
         else -> ContentPadding.Textual
@@ -826,6 +836,249 @@ internal fun TimelineItemEventRowPreview() = ElementPreview {
                     isMine = isMine,
                     content = aTimelineItemImageContent(
                         aspectRatio = 2.5f
+                    ),
+                    groupPosition = TimelineItemGroupPosition.Last,
+                ),
+            )
+        }
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineItemEventRowWithGalleryPreview() = ElementPreview {
+    Column {
+        sequenceOf(false, true).forEach { isMine ->
+            ATimelineItemEventRow(
+                event = aTimelineItemEvent(
+                    isMine = isMine,
+                    content = aTimelineItemGalleryContent(
+                        caption = "My vacation photos",
+                        items = listOf(
+                            io.element.android.features.messages.impl.timeline.model.event.aGalleryItem(),
+                            io.element.android.features.messages.impl.timeline.model.event.aGalleryItem(),
+                            io.element.android.features.messages.impl.timeline.model.event.aGalleryItem(),
+                            io.element.android.features.messages.impl.timeline.model.event.aGalleryItem(),
+                        ),
+                    ),
+                    groupPosition = TimelineItemGroupPosition.Last,
+                ),
+            )
+        }
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineItemEventRowWithGalleryTwoItemsPreview() = ElementPreview {
+    Column {
+        sequenceOf(false, true).forEach { isMine ->
+            ATimelineItemEventRow(
+                event = aTimelineItemEvent(
+                    isMine = isMine,
+                    content = aTimelineItemGalleryContent(
+                        items = listOf(
+                            io.element.android.features.messages.impl.timeline.model.event.aGalleryItem(),
+                            io.element.android.features.messages.impl.timeline.model.event.aGalleryItem(),
+                        ),
+                    ),
+                    groupPosition = TimelineItemGroupPosition.Last,
+                ),
+            )
+        }
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineItemEventRowWithGalleryThreeItemsPreview() = ElementPreview {
+    Column {
+        sequenceOf(false, true).forEach { isMine ->
+            ATimelineItemEventRow(
+                event = aTimelineItemEvent(
+                    isMine = isMine,
+                    content = aTimelineItemGalleryContent(
+                        caption = "Three photos",
+                        items = listOf(
+                            io.element.android.features.messages.impl.timeline.model.event.aGalleryItem(),
+                            io.element.android.features.messages.impl.timeline.model.event.aGalleryItem(),
+                            io.element.android.features.messages.impl.timeline.model.event.aGalleryItem(),
+                        ),
+                    ),
+                    groupPosition = TimelineItemGroupPosition.Last,
+                ),
+            )
+        }
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineItemEventRowWithGalleryManyItemsPreview() = ElementPreview {
+    Column {
+        sequenceOf(false, true).forEach { isMine ->
+            ATimelineItemEventRow(
+                event = aTimelineItemEvent(
+                    isMine = isMine,
+                    content = aTimelineItemGalleryContent(
+                        caption = "Many photos",
+                        items = (1..8).map { io.element.android.features.messages.impl.timeline.model.event.aGalleryItem() },
+                    ),
+                    groupPosition = TimelineItemGroupPosition.Last,
+                ),
+            )
+        }
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineItemEventRowWithGalleryVideoItemsPreview() = ElementPreview {
+    Column {
+        sequenceOf(false, true).forEach { isMine ->
+            ATimelineItemEventRow(
+                event = aTimelineItemEvent(
+                    isMine = isMine,
+                    content = aTimelineItemGalleryContent(
+                        caption = "Videos",
+                        items = listOf(
+                            io.element.android.features.messages.impl.timeline.model.event.aGalleryItem(isVideo = true, duration = kotlin.time.Duration.parse("PT1M30S")),
+                            io.element.android.features.messages.impl.timeline.model.event.aGalleryItem(isVideo = true, duration = kotlin.time.Duration.parse("PT45S")),
+                            io.element.android.features.messages.impl.timeline.model.event.aGalleryItem(),
+                        ),
+                    ),
+                    groupPosition = TimelineItemGroupPosition.Last,
+                ),
+            )
+        }
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineItemEventRowWithAttachmentsPreview() = ElementPreview {
+    Column {
+        sequenceOf(false, true).forEach { isMine ->
+            ATimelineItemEventRow(
+                event = aTimelineItemEvent(
+                    isMine = isMine,
+                    content = aTimelineItemAttachmentsContent(
+                        caption = "Documents",
+                        attachments = listOf(
+                            io.element.android.features.messages.impl.timeline.model.event.anAttachmentItem(
+                                filename = "document.pdf",
+                                fileExtension = "pdf",
+                            ),
+                            io.element.android.features.messages.impl.timeline.model.event.anAttachmentItem(
+                                filename = "presentation.pdf",
+                                fileExtension = "pdf",
+                            ),
+                            io.element.android.features.messages.impl.timeline.model.event.anAttachmentItem(
+                                filename = "spreadsheet.xlsx",
+                                fileExtension = "xlsx",
+                            ),
+                        ),
+                    ),
+                    groupPosition = TimelineItemGroupPosition.Last,
+                ),
+            )
+        }
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineItemEventRowWithAttachmentsImagesPreview() = ElementPreview {
+    Column {
+        sequenceOf(false, true).forEach { isMine ->
+            ATimelineItemEventRow(
+                event = aTimelineItemEvent(
+                    isMine = isMine,
+                    content = aTimelineItemAttachmentsContent(
+                        caption = "Photos",
+                        attachments = listOf(
+                            io.element.android.features.messages.impl.timeline.model.event.anAttachmentItem(
+                                filename = "photo1.jpg",
+                                fileExtension = "jpg",
+                                hasThumbnail = true,
+                            ),
+                            io.element.android.features.messages.impl.timeline.model.event.anAttachmentItem(
+                                filename = "photo2.jpg",
+                                fileExtension = "jpg",
+                                hasThumbnail = true,
+                            ),
+                            io.element.android.features.messages.impl.timeline.model.event.anAttachmentItem(
+                                filename = "photo3.jpg",
+                                fileExtension = "jpg",
+                                hasThumbnail = true,
+                            ),
+                        ),
+                    ),
+                    groupPosition = TimelineItemGroupPosition.Last,
+                ),
+            )
+        }
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineItemEventRowWithAttachmentsVideosPreview() = ElementPreview {
+    Column {
+        sequenceOf(false, true).forEach { isMine ->
+            ATimelineItemEventRow(
+                event = aTimelineItemEvent(
+                    isMine = isMine,
+                    content = aTimelineItemAttachmentsContent(
+                        caption = "Videos",
+                        attachments = listOf(
+                            io.element.android.features.messages.impl.timeline.model.event.anAttachmentItem(
+                                filename = "video1.mp4",
+                                fileExtension = "mp4",
+                                hasThumbnail = true,
+                                fileSize = 150_000_000L,
+                                formattedFileSize = "150MB",
+                            ),
+                            io.element.android.features.messages.impl.timeline.model.event.anAttachmentItem(
+                                filename = "video2.mov",
+                                fileExtension = "mov",
+                                hasThumbnail = true,
+                                fileSize = 85_000_000L,
+                                formattedFileSize = "85MB",
+                            ),
+                        ),
+                    ),
+                    groupPosition = TimelineItemGroupPosition.Last,
+                ),
+            )
+        }
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineItemEventRowWithAttachmentsAudioPreview() = ElementPreview {
+    Column {
+        sequenceOf(false, true).forEach { isMine ->
+            ATimelineItemEventRow(
+                event = aTimelineItemEvent(
+                    isMine = isMine,
+                    content = aTimelineItemAttachmentsContent(
+                        caption = "Audio",
+                        attachments = listOf(
+                            io.element.android.features.messages.impl.timeline.model.event.anAttachmentItem(
+                                filename = "recording.mp3",
+                                fileExtension = "mp3",
+                                fileSize = 4_500_000L,
+                                formattedFileSize = "4.5MB",
+                            ),
+                            io.element.android.features.messages.impl.timeline.model.event.anAttachmentItem(
+                                filename = "voice_message.m4a",
+                                fileExtension = "m4a",
+                                fileSize = 1_200_000L,
+                                formattedFileSize = "1.2MB",
+                            ),
+                        ),
                     ),
                     groupPosition = TimelineItemGroupPosition.Last,
                 ),

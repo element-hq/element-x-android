@@ -96,7 +96,7 @@ class DefaultEventItemFactoryTest {
                     )
                 )
             )
-            assertThat(result).isNull()
+            assertThat(result).isEmpty()
         }
     }
 
@@ -121,7 +121,7 @@ class DefaultEventItemFactoryTest {
                     )
                 )
             )
-            assertThat(result).isNull()
+            assertThat(result).isEmpty()
         }
     }
 
@@ -149,7 +149,7 @@ class DefaultEventItemFactoryTest {
                 )
             )
         )
-        assertThat(result).isEqualTo(
+        assertThat(result).containsExactly(
             MediaItem.File(
                 id = A_UNIQUE_ID,
                 eventId = AN_EVENT_ID,
@@ -200,7 +200,7 @@ class DefaultEventItemFactoryTest {
                 )
             )
         )
-        assertThat(result).isEqualTo(
+        assertThat(result).containsExactly(
             MediaItem.Image(
                 id = A_UNIQUE_ID,
                 eventId = AN_EVENT_ID,
@@ -248,7 +248,7 @@ class DefaultEventItemFactoryTest {
                 )
             )
         )
-        assertThat(result).isEqualTo(
+        assertThat(result).containsExactly(
             MediaItem.Audio(
                 id = A_UNIQUE_ID,
                 eventId = AN_EVENT_ID,
@@ -300,7 +300,7 @@ class DefaultEventItemFactoryTest {
                 )
             )
         )
-        assertThat(result).isEqualTo(
+        assertThat(result).containsExactly(
             MediaItem.Video(
                 id = A_UNIQUE_ID,
                 eventId = AN_EVENT_ID,
@@ -352,7 +352,7 @@ class DefaultEventItemFactoryTest {
                 )
             )
         )
-        assertThat(result).isEqualTo(
+        assertThat(result).containsExactly(
             MediaItem.Voice(
                 id = A_UNIQUE_ID,
                 eventId = AN_EVENT_ID,
@@ -403,7 +403,7 @@ class DefaultEventItemFactoryTest {
                 )
             )
         )
-        assertThat(result).isEqualTo(
+        assertThat(result).containsExactly(
             MediaItem.Image(
                 id = A_UNIQUE_ID,
                 eventId = AN_EVENT_ID,

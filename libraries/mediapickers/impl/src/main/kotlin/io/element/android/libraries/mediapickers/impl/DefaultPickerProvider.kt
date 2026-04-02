@@ -81,6 +81,23 @@ class DefaultPickerProvider(
     }
 
     /**
+     * Remembers and returns a [PickerLauncher] for selecting multiple gallery items (images/videos).
+     * [onResult] will be called with the list of selected file [Uri]s.
+     */
+    @Composable
+    override fun registerGalleryMultiPicker(
+        onResult: (uris: List<Uri>) -> Unit
+    ): PickerLauncher<PickVisualMediaRequest, List<Uri>> {
+        return if (LocalInspectionMode.current) {
+            NoOpPickerLauncher { onResult(emptyList()) }
+        } else {
+            rememberPickerLauncher(type = PickerType.ImageAndVideoMulti) { uris ->
+                onResult(uris)
+            }
+        }
+    }
+
+    /**
      * Remembers and returns a [PickerLauncher] for a file of a certain [mimeType] (any type of file, by default).
      * [onResult] will be called with either the selected file's [Uri] or `null` if nothing was selected.
      */
@@ -96,6 +113,25 @@ class DefaultPickerProvider(
             rememberPickerLauncher(type = PickerType.File(mimeType)) { uri ->
                 val pickedMimeType = uri?.let { context.contentResolver.getType(it) }
                 onResult(uri, pickedMimeType)
+            }
+        }
+    }
+
+    /**
+     * Remembers and returns a [PickerLauncher] for selecting multiple files of a certain [mimeType].
+     * [onResult] will be called with the list of selected file URIs.
+     */
+    @Composable
+    override fun registerFileMultiPicker(
+        mimeType: String,
+        onResult: (uris: List<Uri>) -> Unit,
+    ): PickerLauncher<Array<String>, List<Uri>> {
+        // Tests and UI preview can't handle Context or FileProviders, so we might as well disable the whole picker
+        return if (LocalInspectionMode.current) {
+            NoOpPickerLauncher { onResult(emptyList()) }
+        } else {
+            rememberPickerLauncher(type = PickerType.FileMulti(mimeType)) { uris ->
+                onResult(uris)
             }
         }
     }

@@ -65,6 +65,7 @@ internal fun TimelineItemRow(
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
     onContentClick: (TimelineItem.Event) -> Unit,
+    onGalleryItemClick: ((TimelineItem.Event, Int) -> Unit)? = null,
     onLongClick: (TimelineItem.Event) -> Unit,
     inReplyToClick: (EventId) -> Unit,
     onReactionClick: (key: String, TimelineItem.Event) -> Unit,
@@ -82,12 +83,13 @@ internal fun TimelineItemRow(
                 hideMediaContent = timelineProtectionState.hideMediaContent(event.eventId),
                 onShowContentClick = { timelineProtectionState.eventSink(TimelineProtectionEvent.ShowContent(event.eventId)) },
                 onContentClick = { onContentClick(event) },
+                onGalleryItemClick = { index -> onGalleryItemClick?.invoke(event, index) },
                 onLongClick = { onLongClick(event) },
                 onLinkClick = onLinkClick,
                 onLinkLongClick = onLinkLongClick,
                 eventSink = eventSink,
                 modifier = contentModifier,
-                onContentLayoutChange = onContentLayoutChange
+                onContentLayoutChange = onContentLayoutChange,
             )
         },
 ) {
@@ -181,6 +183,7 @@ internal fun TimelineItemRow(
                             onMoreReactionsClick = onMoreReactionsClick,
                             onReadReceiptClick = onReadReceiptClick,
                             onSwipeToReply = { onSwipeToReply(timelineItem) },
+                            onGalleryItemClick = { index -> onGalleryItemClick?.invoke(timelineItem, index) },
                             eventSink = eventSink,
                             eventContentView = { contentModifier, onContentLayoutChange ->
                                 eventContentView(timelineItem, contentModifier, onContentLayoutChange)

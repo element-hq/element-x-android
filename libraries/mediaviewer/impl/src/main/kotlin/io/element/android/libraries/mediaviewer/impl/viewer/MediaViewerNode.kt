@@ -75,6 +75,13 @@ class MediaViewerNode(
 
     private val mediaGallerySource = if (inputs.mode == MediaViewerEntryPoint.MediaViewerMode.SingleMedia) {
         SingleMediaGalleryDataSource.createFrom(inputs)
+    } else if (inputs.galleryItems.isNotEmpty()) {
+        GalleryMediaGalleryDataSource.createFrom(
+            eventId = inputs.eventId,
+            galleryItems = inputs.galleryItems,
+            mediaInfo = inputs.mediaInfo,
+            mode = inputs.mode,
+        )
     } else {
         val eventId = inputs.eventId
         if (eventId == null) {

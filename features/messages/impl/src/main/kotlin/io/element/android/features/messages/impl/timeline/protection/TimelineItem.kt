@@ -10,9 +10,11 @@ package io.element.android.features.messages.impl.timeline.protection
 
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEmoteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemGalleryContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
@@ -36,6 +38,8 @@ fun TimelineItem.mustBeProtected(): Boolean {
     return when (this) {
         is TimelineItem.Event -> when (content) {
             is TimelineItemImageContent,
+            is TimelineItemGalleryContent,
+            is TimelineItemAttachmentsContent,
             is TimelineItemVideoContent,
             is TimelineItemStickerContent -> true
             is TimelineItemAudioContent,

@@ -42,6 +42,7 @@ interface MediaViewerEntryPoint : FeatureEntryPoint {
         val mediaSource: MediaSource,
         val thumbnailSource: MediaSource?,
         val canShowInfo: Boolean,
+        val galleryItems: List<GalleryItemData> = emptyList(),
     ) : NodeInputs
 
     sealed interface MediaViewerMode : Parcelable {

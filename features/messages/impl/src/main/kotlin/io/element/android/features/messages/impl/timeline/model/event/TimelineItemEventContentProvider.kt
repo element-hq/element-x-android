@@ -111,3 +111,83 @@ fun aTimelineItemStateEventContent(
 ) = TimelineItemStateEventContent(
     body = body,
 )
+
+fun aTimelineItemGalleryContent(
+    body: String = "Gallery",
+    caption: String? = null,
+    items: List<GalleryItem> = listOf(
+        aGalleryItem(),
+        aGalleryItem(),
+        aGalleryItem(),
+        aGalleryItem(),
+    ),
+) = TimelineItemGalleryContent(
+    body = body,
+    caption = caption,
+    formattedCaption = null,
+    isEdited = false,
+    items = items,
+)
+
+fun aGalleryItem(
+    filename: String = "photo.jpg",
+    width: Int = 400,
+    height: Int = 300,
+    isVideo: Boolean = false,
+    isAudio: Boolean = false,
+    isFile: Boolean = false,
+    duration: kotlin.time.Duration = kotlin.time.Duration.ZERO,
+) = GalleryItem(
+    filename = filename,
+    mimeType = when {
+        isVideo -> "video/mp4"
+        isAudio -> "audio/mpeg"
+        isFile -> "application/pdf"
+        else -> "image/jpeg"
+    },
+    mediaSource = io.element.android.libraries.matrix.api.media.MediaSource(url = "", json = ""),
+    thumbnailSource = null,
+    width = width,
+    height = height,
+    thumbnailWidth = width,
+    thumbnailHeight = height,
+    blurhash = null,
+    isVideo = isVideo,
+    isAudio = isAudio,
+    isFile = isFile,
+    duration = duration,
+)
+
+fun aTimelineItemAttachmentsContent(
+    body: String = "Attachments",
+    caption: String? = null,
+    attachments: List<AttachmentItem> = listOf(
+        anAttachmentItem(filename = "document.pdf", fileExtension = "pdf"),
+        anAttachmentItem(filename = "recording.mp3", fileExtension = "mp3", fileSize = 4_500_000L, formattedFileSize = "4.5MB"),
+    ),
+) = TimelineItemAttachmentsContent(
+    body = body,
+    caption = caption,
+    formattedCaption = null,
+    isEdited = false,
+    attachments = attachments,
+)
+
+fun anAttachmentItem(
+    filename: String = "file.pdf",
+    fileExtension: String = "pdf",
+    fileSize: Long = 1_000_000L,
+    formattedFileSize: String = "1MB",
+    hasThumbnail: Boolean = false,
+) = AttachmentItem(
+    filename = filename,
+    mimeType = when {
+        hasThumbnail -> "image/jpeg"
+        else -> "application/$fileExtension"
+    },
+    mediaSource = io.element.android.libraries.matrix.api.media.MediaSource(url = "", json = ""),
+    thumbnailSource = if (hasThumbnail) io.element.android.libraries.matrix.api.media.MediaSource(url = "", json = "") else null,
+    fileSize = fileSize,
+    formattedFileSize = formattedFileSize,
+    fileExtension = fileExtension,
+)

@@ -64,8 +64,10 @@ import io.element.android.features.messages.impl.timeline.a11y.a11yReactionActio
 import io.element.android.features.messages.impl.timeline.components.MessageShieldView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemGalleryContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
@@ -297,6 +299,12 @@ private fun MessageSummary(
         }
         is TimelineItemImageContent -> {
             content = { ContentForBody(event.content.bestDescription) }
+        }
+        is TimelineItemGalleryContent -> {
+            content = { ContentForBody(event.content.body) }
+        }
+        is TimelineItemAttachmentsContent -> {
+            content = { ContentForBody(event.content.body) }
         }
         is TimelineItemStickerContent -> {
             content = { ContentForBody(event.content.bestDescription) }

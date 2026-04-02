@@ -13,6 +13,7 @@ import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.dateformatter.api.toHumanReadableDuration
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.CallNotifyContent
@@ -20,6 +21,8 @@ import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseMessageLikeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FailedToParseStateContent
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
+import io.element.android.libraries.matrix.api.timeline.item.event.GalleryItemType
+import io.element.android.libraries.matrix.api.timeline.item.event.GalleryMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.LegacyCallInviteContent
 import io.element.android.libraries.matrix.api.timeline.item.event.LiveLocationContent
@@ -54,7 +57,7 @@ class EventItemFactory(
 ) {
     fun create(
         currentTimelineItem: MatrixTimelineItem.Event,
-    ): MediaItem.Event? {
+    ): List<MediaItem.Event> {
         val event = currentTimelineItem.event
         val dateSent = dateFormatter.format(
             currentTimelineItem.event.timestamp,
@@ -79,7 +82,7 @@ class EventItemFactory(
             is LiveLocationContent,
             UnknownContent -> {
                 Timber.w("Should not happen: ${content.javaClass.simpleName}")
-                null
+                emptyList()
             }
             is MessageContent -> {
                 when (val type = content.type) {
@@ -89,9 +92,56 @@ class EventItemFactory(
                     is LocationMessageType,
                     is TextMessageType -> {
                         Timber.w("Should not happen: ${content.type}")
-                        null
+                        emptyList()
                     }
-                    is AudioMessageType -> MediaItem.Audio(
+                    is GalleryMessageType -> {
+                        val baseId = currentTimelineItem.uniqueId.value
+                        type.items.mapIndexedNotNull { index, galleryItem ->
+                            val id = UniqueId("${baseId}_$index")
+                            when (galleryItem) {
+                                is GalleryItemType.Image -> {
+                                    val c = galleryItem.content
+                                    MediaItem.Image(
+                                        id = id,
+                                        eventId = currentTimelineItem.eventId,
+                                        mediaInfo = createMediaInfo(c.filename, c.info?.size, c.caption, c.info?.mimetype.orEmpty(), c.filename, event, dateSent, dateSentFull),
+                                        mediaSource = c.source,
+                                        thumbnailSource = c.info?.thumbnailSource,
+                                    )
+                                }
+                                is GalleryItemType.Video -> {
+                                    val c = galleryItem.content
+                                    MediaItem.Video(
+                                        id = id,
+                                        eventId = currentTimelineItem.eventId,
+                                        mediaInfo = createMediaInfo(c.filename, c.info?.size, c.caption, c.info?.mimetype.orEmpty(), c.filename, event, dateSent, dateSentFull, duration = c.info?.duration?.inWholeMilliseconds?.toHumanReadableDuration()),
+                                        mediaSource = c.source,
+                                        thumbnailSource = c.info?.thumbnailSource,
+                                    )
+                                }
+                                is GalleryItemType.Audio -> {
+                                    val c = galleryItem.content
+                                    MediaItem.Audio(
+                                        id = id,
+                                        eventId = currentTimelineItem.eventId,
+                                        mediaInfo = createMediaInfo(c.filename, c.info?.size, c.caption, c.info?.mimetype.orEmpty(), c.filename, event, dateSent, dateSentFull),
+                                        mediaSource = c.source,
+                                    )
+                                }
+                                is GalleryItemType.File -> {
+                                    val c = galleryItem.content
+                                    MediaItem.File(
+                                        id = id,
+                                        eventId = currentTimelineItem.eventId,
+                                        mediaInfo = createMediaInfo(c.filename, c.info?.size, c.caption, c.info?.mimetype.orEmpty(), c.filename, event, dateSent, dateSentFull),
+                                        mediaSource = c.source,
+                                    )
+                                }
+                                is GalleryItemType.Other -> null
+                            }
+                        }
+                    }
+                    is AudioMessageType -> listOf(MediaItem.Audio(
                         id = currentTimelineItem.uniqueId,
                         eventId = currentTimelineItem.eventId,
                         mediaInfo = MediaInfo(
@@ -110,8 +160,8 @@ class EventItemFactory(
                             duration = null,
                         ),
                         mediaSource = type.source,
-                    )
-                    is FileMessageType -> MediaItem.File(
+                    ))
+                    is FileMessageType -> listOf(MediaItem.File(
                         id = currentTimelineItem.uniqueId,
                         eventId = currentTimelineItem.eventId,
                         mediaInfo = MediaInfo(
@@ -131,8 +181,8 @@ class EventItemFactory(
                         ),
                         mediaSource = type.source,
                         // TODO We may want to add a thumbnailSource and set it to type.info?.thumbnailSource
-                    )
-                    is ImageMessageType -> MediaItem.Image(
+                    ))
+                    is ImageMessageType -> listOf(MediaItem.Image(
                         id = currentTimelineItem.uniqueId,
                         eventId = currentTimelineItem.eventId,
                         mediaInfo = MediaInfo(
@@ -152,8 +202,8 @@ class EventItemFactory(
                         ),
                         mediaSource = type.source,
                         thumbnailSource = type.info?.thumbnailSource,
-                    )
-                    is StickerMessageType -> MediaItem.Image(
+                    ))
+                    is StickerMessageType -> listOf(MediaItem.Image(
                         id = currentTimelineItem.uniqueId,
                         eventId = currentTimelineItem.eventId,
                         mediaInfo = MediaInfo(
@@ -173,8 +223,8 @@ class EventItemFactory(
                         ),
                         mediaSource = type.source,
                         thumbnailSource = type.info?.thumbnailSource,
-                    )
-                    is VideoMessageType -> MediaItem.Video(
+                    ))
+                    is VideoMessageType -> listOf(MediaItem.Video(
                         id = currentTimelineItem.uniqueId,
                         eventId = currentTimelineItem.eventId,
                         mediaInfo = MediaInfo(
@@ -194,8 +244,8 @@ class EventItemFactory(
                         ),
                         mediaSource = type.source,
                         thumbnailSource = type.info?.thumbnailSource,
-                    )
-                    is VoiceMessageType -> MediaItem.Voice(
+                    ))
+                    is VoiceMessageType -> listOf(MediaItem.Voice(
                         id = currentTimelineItem.uniqueId,
                         eventId = currentTimelineItem.eventId,
                         mediaInfo = MediaInfo(
@@ -214,9 +264,36 @@ class EventItemFactory(
                             duration = type.info?.duration?.inWholeMilliseconds?.toHumanReadableDuration(),
                         ),
                         mediaSource = type.source,
-                    )
+                    ))
                 }
             }
         }
     }
+
+    private fun createMediaInfo(
+        filename: String,
+        fileSize: Long?,
+        caption: String?,
+        mimeType: String,
+        fileExtension: String,
+        event: io.element.android.libraries.matrix.api.timeline.item.event.EventTimelineItem,
+        dateSent: String,
+        dateSentFull: String,
+        waveform: List<Float>? = null,
+        duration: String? = null,
+    ) = MediaInfo(
+        filename = filename,
+        fileSize = fileSize,
+        caption = caption,
+        mimeType = mimeType,
+        formattedFileSize = fileSize?.let { fileSizeFormatter.format(it) }.orEmpty(),
+        fileExtension = fileExtensionExtractor.extractFromName(fileExtension),
+        senderId = event.sender,
+        senderName = event.senderProfile.getDisambiguatedDisplayName(event.sender),
+        senderAvatar = event.senderProfile.getAvatarUrl(),
+        dateSent = dateSent,
+        dateSentFull = dateSentFull,
+        waveform = waveform,
+        duration = duration,
+    )
 }
