@@ -22,6 +22,7 @@ import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.api.roomlist.updateVisibleRange
 import io.element.android.libraries.matrix.api.spaces.SpaceRoomList
+import io.element.android.libraries.matrix.api.spaces.SpaceRoomVisibility
 import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
 import io.element.android.libraries.matrix.ui.model.toSelectRoomInfo
 import kotlinx.collections.immutable.ImmutableList
@@ -40,7 +41,8 @@ private const val MAX_SUGGESTIONS_COUNT = 5
 
 /**
  * DataSource for rooms that can be added to a space.
- * Filters out DMs, spaces, rooms already in the space, and only includes rooms the user has joined.
+ * Filters out spaces, rooms already in the space, and only includes rooms the user has joined.
+ * DMs are only included when the space is private/personal.
  */
 @AssistedInject
 class AddRoomToSpaceSearchDataSource(
@@ -76,9 +78,13 @@ class AddRoomToSpaceSearchDataSource(
         addedRoomIdsFlow.value += roomIds
     }
 
-    private val filterRoomPredicate: (RoomInfo, Set<RoomId>, Set<RoomId>) -> Boolean = { info, childIds, addedIds ->
+    private val isPrivateSpaceFlow = spaceRoomList.currentSpaceFlow.map { spaceOptional ->
+        spaceOptional.map { it.visibility == SpaceRoomVisibility.Private }.orElse(true)
+    }
+
+    private val filterRoomPredicate: (RoomInfo, Set<RoomId>, Set<RoomId>, Boolean) -> Boolean = { info, childIds, addedIds, isPrivateSpace ->
         !info.isSpace &&
-            !info.isDm &&
+            (isPrivateSpace || !info.isDm) &&
             info.currentUserMembership == CurrentUserMembership.JOINED &&
             info.id !in childIds &&
             info.id !in addedIds
@@ -88,9 +94,10 @@ class AddRoomToSpaceSearchDataSource(
         roomList.summaries,
         spaceChildrenFlow,
         addedRoomIdsFlow,
-    ) { roomSummaries, childIds, addedIds ->
+        isPrivateSpaceFlow,
+    ) { roomSummaries, childIds, addedIds, isPrivateSpace ->
         roomSummaries
-            .filter { filterRoomPredicate(it.info, childIds, addedIds) }
+            .filter { filterRoomPredicate(it.info, childIds, addedIds, isPrivateSpace) }
             .map { it.info.toSelectRoomInfo() }
             .toImmutableList()
     }.flowOn(coroutineDispatchers.computation)
@@ -98,9 +105,10 @@ class AddRoomToSpaceSearchDataSource(
     val suggestions: Flow<ImmutableList<SelectRoomInfo>> = combine(
         spaceChildrenFlow,
         addedRoomIdsFlow,
-    ) { childIds, addedIds ->
+        isPrivateSpaceFlow,
+    ) { childIds, addedIds, isPrivateSpace ->
         matrixClient
-            .getRecentlyVisitedRoomInfoFlow { filterRoomPredicate(it, childIds, addedIds) }
+            .getRecentlyVisitedRoomInfoFlow { filterRoomPredicate(it, childIds, addedIds, isPrivateSpace) }
             .take(MAX_SUGGESTIONS_COUNT)
             .toList()
             .map { it.toSelectRoomInfo() }

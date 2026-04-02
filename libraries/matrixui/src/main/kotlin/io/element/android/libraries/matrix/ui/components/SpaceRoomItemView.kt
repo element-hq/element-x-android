@@ -103,7 +103,11 @@ fun SpaceRoomItemView(
             Text(
                 modifier = Modifier.weight(1f),
                 style = ElementTheme.typography.fontBodyMdRegular,
-                text = pluralStringResource(CommonPlurals.common_member_count, spaceRoom.numJoinedMembers, spaceRoom.numJoinedMembers),
+                text = if (spaceRoom.isDirect == true) {
+                    stringResource(CommonStrings.common_direct_chat)
+                } else {
+                    pluralStringResource(CommonPlurals.common_member_count, spaceRoom.numJoinedMembers, spaceRoom.numJoinedMembers)
+                },
                 color = ElementTheme.colors.textSecondary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis

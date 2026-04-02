@@ -15,6 +15,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
+import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
@@ -26,6 +27,7 @@ import io.element.android.libraries.matrix.test.spaces.FakeSpaceRoomList
 import io.element.android.libraries.matrix.test.spaces.FakeSpaceService
 import io.element.android.libraries.matrix.ui.components.aSelectRoomInfo
 import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
+import io.element.android.libraries.previewutils.room.aSpaceRoom
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.test
@@ -364,6 +366,92 @@ class AddRoomToSpacePresenterTest {
             failureState.eventSink(AddRoomToSpaceEvent.Dismiss)
             advanceUntilIdle()
             assert(resetResult).isCalledOnce()
+        }
+    }
+
+    @Test
+    fun `present - DMs are included in search results when space is private`() = runTest {
+        val roomList = FakeDynamicRoomList()
+        val roomListService = FakeRoomListService(
+            createRoomListLambda = { roomList }
+        )
+        val spaceRoomList = FakeSpaceRoomList(
+            paginateResult = { Result.success(Unit) },
+            resetResult = { Result.success(Unit) },
+            initialSpaceFlowValue = aSpaceRoom(joinRule = null), // Private space
+        )
+        val presenter = createAddRoomToSpacePresenter(
+            roomListService = roomListService,
+            spaceRoomList = spaceRoomList,
+        )
+        presenter.test {
+            awaitItem() // Initial state
+            // Post a DM room to the service
+            roomList.summaries.emit(
+                listOf(
+                    aRoomSummary(
+                        roomId = A_ROOM_ID,
+                        name = "DM Room",
+                        isDirect = true,
+                        isSpace = false,
+                        activeMembersCount = 2,
+                        currentUserMembership = CurrentUserMembership.JOINED,
+                    )
+                )
+            )
+            advanceUntilIdle()
+            val state = expectMostRecentItem()
+            assertThat(state.searchResults).isInstanceOf(SearchBarResultState.Results::class.java)
+            val results = (state.searchResults as SearchBarResultState.Results).results
+            assertThat(results).hasSize(1)
+            assertThat(results.first().roomId).isEqualTo(A_ROOM_ID)
+        }
+    }
+
+    @Test
+    fun `present - DMs are excluded from search results when space is public`() = runTest {
+        val roomList = FakeDynamicRoomList()
+        val roomListService = FakeRoomListService(
+            createRoomListLambda = { roomList }
+        )
+        val spaceRoomList = FakeSpaceRoomList(
+            paginateResult = { Result.success(Unit) },
+            resetResult = { Result.success(Unit) },
+            initialSpaceFlowValue = aSpaceRoom(joinRule = JoinRule.Public), // Public space
+        )
+        val presenter = createAddRoomToSpacePresenter(
+            roomListService = roomListService,
+            spaceRoomList = spaceRoomList,
+        )
+        presenter.test {
+            awaitItem() // Initial state
+            // Post a DM room and a regular room to the service
+            roomList.summaries.emit(
+                listOf(
+                    aRoomSummary(
+                        roomId = A_ROOM_ID,
+                        name = "DM Room",
+                        isDirect = true,
+                        isSpace = false,
+                        activeMembersCount = 2,
+                        currentUserMembership = CurrentUserMembership.JOINED,
+                    ),
+                    aRoomSummary(
+                        roomId = A_ROOM_ID_2,
+                        name = "Regular Room",
+                        isDirect = false,
+                        isSpace = false,
+                        currentUserMembership = CurrentUserMembership.JOINED,
+                    )
+                )
+            )
+            advanceUntilIdle()
+            val state = expectMostRecentItem()
+            assertThat(state.searchResults).isInstanceOf(SearchBarResultState.Results::class.java)
+            val results = (state.searchResults as SearchBarResultState.Results).results
+            // Only the regular room should be included, not the DM
+            assertThat(results).hasSize(1)
+            assertThat(results.first().roomId).isEqualTo(A_ROOM_ID_2)
         }
     }
 
