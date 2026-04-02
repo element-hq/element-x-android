@@ -145,7 +145,13 @@ class FetchPushForegroundService : Service() {
         fun start(context: Context) {
             val intent = Intent(context, FetchPushForegroundService::class.java)
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                context.startForegroundService(intent)
+                runCatchingExceptions { context.startForegroundService(intent) }
+                    .onFailure { throwable ->
+                        Timber.e(
+                            throwable,
+                            "Failed to start FetchPushForegroundService, notifications may take longer than usual to sync"
+                        )
+                    }
             } else {
                 context.startService(intent)
             }
