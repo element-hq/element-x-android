@@ -78,6 +78,9 @@ internal fun MessageComposerView(
     }
 
     val onVoiceRecorderEvent = { press: VoiceMessageRecorderEvent ->
+        if (press == VoiceMessageRecorderEvent.StopAndSend) {
+            onCloseSpecialMode()
+        }
         voiceMessageState.eventSink(VoiceMessageComposerEvent.RecorderEvent(press))
     }
 

@@ -34,10 +34,12 @@ import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.audio.api.AudioFocusRequester
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaupload.api.MediaSenderFactory
 import io.element.android.libraries.permissions.api.PermissionsEvent
 import io.element.android.libraries.permissions.api.PermissionsPresenter
+import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.libraries.textcomposer.model.RecordingMode
 import io.element.android.libraries.textcomposer.model.VoiceMessagePlayerEvent
 import io.element.android.libraries.textcomposer.model.VoiceMessageRecorderEvent
@@ -130,7 +132,7 @@ class DefaultVoiceMessageComposerPresenter(
             }
         }
 
-        fun sendVoiceMessage() {
+        fun sendVoiceMessage(inReplyToEventId: EventId?) {
             val finishedState = recorderState as? VoiceRecorderState.Finished
             if (finishedState == null) {
                 val exception = VoiceMessageException.FileException("No file to send")
@@ -149,6 +151,7 @@ class DefaultVoiceMessageComposerPresenter(
                     file = finishedState.file,
                     mimeType = finishedState.mimeType,
                     waveform = finishedState.waveform,
+                    inReplyToEventId = inReplyToEventId,
                 )
                 if (result.isFailure) {
                     showSendFailureDialog = true
@@ -184,6 +187,9 @@ class DefaultVoiceMessageComposerPresenter(
                 }
                 VoiceMessageRecorderEvent.StopAndSend -> {
                     Timber.v("Voice message released — stop and send")
+                    // Capture reply info eagerly before coroutine dispatch, since CloseSpecialMode
+                    // may reset composerMode before the coroutine runs.
+                    val inReplyToEventId = (messageComposerContext.composerMode as? MessageComposerMode.Reply)?.eventId
                     skipPreview = true
                     isPlayingBack = false
                     player.pause()
@@ -199,6 +205,7 @@ class DefaultVoiceMessageComposerPresenter(
                                 file = finishedState.file,
                                 mimeType = finishedState.mimeType,
                                 waveform = finishedState.waveform,
+                                inReplyToEventId = inReplyToEventId,
                             )
                             isSending = false
                             if (result.isFailure) {
@@ -255,8 +262,13 @@ class DefaultVoiceMessageComposerPresenter(
             when (event) {
                 is VoiceMessageComposerEvent.RecorderEvent -> handleVoiceMessageRecorderEvent(event.recorderEvent)
                 is VoiceMessageComposerEvent.PlayerEvent -> handleVoiceMessagePlayerEvent(event.playerEvent)
-                is VoiceMessageComposerEvent.SendVoiceMessage -> localCoroutineScope.launch {
-                    sendVoiceMessage()
+                is VoiceMessageComposerEvent.SendVoiceMessage -> {
+                    // Capture reply info eagerly before any coroutine dispatch, since CloseSpecialMode
+                    // may reset composerMode before the coroutine runs.
+                    val inReplyToEventId = (messageComposerContext.composerMode as? MessageComposerMode.Reply)?.eventId
+                    localCoroutineScope.launch {
+                        sendVoiceMessage(inReplyToEventId)
+                    }
                 }
                 VoiceMessageComposerEvent.DeleteVoiceMessage -> {
                     isStartingOrRecording = false
@@ -346,11 +358,13 @@ class DefaultVoiceMessageComposerPresenter(
         file: File,
         mimeType: String,
         waveform: List<Float>,
+        inReplyToEventId: EventId? = null,
     ): Result<Unit> {
         val result = mediaSender.sendVoiceMessage(
             uri = file.toUri(),
             mimeType = mimeType,
             waveForm = waveform,
+            inReplyToEventId = inReplyToEventId,
         )
 
         if (result.isFailure) {
