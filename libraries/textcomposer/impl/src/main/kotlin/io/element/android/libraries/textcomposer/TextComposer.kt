@@ -41,7 +41,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.platform.LocalHapticFeedback
-import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
@@ -411,13 +410,6 @@ fun TextComposer(
 
     SoftKeyboardEffect(showTextFormatting, onRequestFocus) { it }
 
-    // Dismiss keyboard when voice recording starts
-    val keyboardController = LocalSoftwareKeyboardController.current
-    LaunchedEffect(voiceMessageState) {
-        if (voiceMessageState !is VoiceMessageState.Idle) {
-            keyboardController?.hide()
-        }
-    }
 
     val latestOnReceiveSuggestion by rememberUpdatedState(onReceiveSuggestion)
     if (state is TextEditorState.Rich) {
