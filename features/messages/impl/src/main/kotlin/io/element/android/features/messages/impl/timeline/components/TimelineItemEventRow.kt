@@ -747,7 +747,7 @@ private fun MessageEventBubbleContent(
             }
             Box(
                 modifier = talkbackCompatModifier
-                    .border(1.dp, ElementTheme.colors.borderInteractiveSecondary, RoundedCornerShape(6.dp))
+                    .border(1.dp, ElementTheme.colors.separatorPrimary, RoundedCornerShape(6.dp))
                     .background(ElementTheme.colors.bgCanvasDefault, RoundedCornerShape(6.dp))
                     .padding(4.dp)
             ) {
