@@ -15,6 +15,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -33,12 +34,14 @@ import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.location.api.LocationService
 import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.attachments.Attachment.Media
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
 import io.element.android.features.messages.impl.draft.ComposerDraftService
 import io.element.android.features.messages.impl.messagecomposer.suggestions.RoomAliasSuggestionsDataSource
 import io.element.android.features.messages.impl.messagecomposer.suggestions.SuggestionsProcessor
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.utils.TextPillificationHelper
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.core.mimetype.MimeTypes
@@ -68,6 +71,9 @@ import io.element.android.libraries.permissions.api.PermissionsEvent
 import io.element.android.libraries.permissions.api.PermissionsPresenter
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.push.api.notifications.conversations.NotificationConversationService
+import io.element.android.libraries.slashcommands.api.SlashCommand
+import io.element.android.libraries.slashcommands.api.SlashCommandService
+import io.element.android.libraries.slashcommands.api.message
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.ResolvedSuggestion
 import io.element.android.libraries.textcomposer.model.MarkdownTextEditorState
@@ -104,6 +110,7 @@ import io.element.android.libraries.core.mimetype.MimeTypes.Any as AnyMimeTypes
 class MessageComposerPresenter(
     @Assisted private val navigator: MessagesNavigator,
     @Assisted private val timelineController: TimelineController,
+    @Assisted private val isInThread: Boolean,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
     private val room: JoinedRoom,
     private val mediaPickerProvider: PickerProvider,
@@ -125,10 +132,15 @@ class MessageComposerPresenter(
     private val suggestionsProcessor: SuggestionsProcessor,
     private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
     private val notificationConversationService: NotificationConversationService,
+    private val slashCommandService: SlashCommandService,
 ) : Presenter<MessageComposerState> {
     @AssistedFactory
     interface Factory {
-        fun create(timelineController: TimelineController, navigator: MessagesNavigator): MessageComposerPresenter
+        fun create(
+            timelineController: TimelineController,
+            navigator: MessagesNavigator,
+            isInThread: Boolean,
+        ): MessageComposerPresenter
     }
 
     private val mediaSender = mediaSenderFactory.create(timelineMode = timelineController.mainTimelineMode())
@@ -218,6 +230,8 @@ class MessageComposerPresenter(
             }
         )
 
+        val slashCommandAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
+
         LaunchedEffect(Unit) {
             val draft = draftService.loadDraft(
                 roomId = room.roomId,
@@ -246,12 +260,13 @@ class MessageComposerPresenter(
                     sessionCoroutineScope.sendMessage(
                         markdownTextEditorState = markdownTextEditorState,
                         richTextEditorState = richTextEditorState,
+                        slashCommandAction = slashCommandAction,
                     )
                 }
                 is MessageComposerEvent.SendUri -> {
                     val inReplyToEventId = (messageComposerContext.composerMode as? MessageComposerMode.Reply)?.eventId
                     sessionCoroutineScope.sendAttachment(
-                        attachment = Attachment.Media(
+                        attachment = Media(
                             localMedia = localMediaFactory.createFromUri(
                                 uri = event.uri,
                                 mimeType = null,
@@ -340,6 +355,9 @@ class MessageComposerPresenter(
                                     val link = permalinkBuilder.permalinkForRoomAlias(suggestion.roomAlias).getOrNull() ?: return@launch
                                     richTextEditorState.insertMentionAtSuggestion(text = text, link = link)
                                 }
+                                is ResolvedSuggestion.Command -> {
+                                    richTextEditorState.replaceSuggestion(suggestion.command.command)
+                                }
                             }
                         } else if (markdownTextEditorState.currentSuggestion != null) {
                             markdownTextEditorState.insertSuggestion(
@@ -353,6 +371,9 @@ class MessageComposerPresenter(
                 MessageComposerEvent.SaveDraft -> {
                     val draft = createDraftFromState(markdownTextEditorState, richTextEditorState)
                     sessionCoroutineScope.updateDraft(draft, isVolatile = false)
+                }
+                MessageComposerEvent.ClearSlashError -> {
+                    slashCommandAction.value = AsyncAction.Uninitialized
                 }
             }
         }
@@ -385,6 +406,7 @@ class MessageComposerPresenter(
             suggestions = suggestions.toImmutableList(),
             resolveMentionDisplay = resolveMentionDisplay,
             resolveAtRoomMentionDisplay = resolveAtRoomMentionDisplay,
+            slashCommandAction = slashCommandAction.value,
             eventSink = ::handleEvent,
         )
     }
@@ -422,6 +444,7 @@ class MessageComposerPresenter(
                     roomAliasSuggestions = roomAliasSuggestions,
                     currentUserId = currentUserId,
                     canSendRoomMention = ::canSendRoomMention,
+                    isInThread = isInThread,
                 )
                 suggestions.clear()
                 suggestions.addAll(result)
@@ -433,9 +456,69 @@ class MessageComposerPresenter(
     private fun CoroutineScope.sendMessage(
         markdownTextEditorState: MarkdownTextEditorState,
         richTextEditorState: RichTextEditorState,
+        slashCommandAction: MutableState<AsyncAction<Unit>>,
     ) = launch {
         val message = currentComposerMessage(markdownTextEditorState, richTextEditorState, withMentions = true)
         val capturedMode = messageComposerContext.composerMode
+
+        val slashCommand = if (capturedMode is MessageComposerMode.Normal) {
+            slashCommandService.parse(
+                textMessage = message.markdown,
+                formattedMessage = message.html,
+                isInThreadTimeline = isInThread,
+            )
+        } else {
+            SlashCommand.NotACommand
+        }
+
+        when (slashCommand) {
+            is SlashCommand.NotACommand -> Unit
+            is SlashCommand.Error -> {
+                slashCommandAction.value = AsyncAction.Failure(Exception(slashCommand.message()))
+                return@launch
+            }
+            is SlashCommand.SlashCommandNavigation -> {
+                when (slashCommand) {
+                    is SlashCommand.ShowUser -> {
+                        navigator.navigateToMember(slashCommand.userId)
+                    }
+                    SlashCommand.DevTools -> {
+                        navigator.navigateToDeveloperSettings()
+                    }
+                }
+                resetComposer(markdownTextEditorState, richTextEditorState, fromEdit = capturedMode is MessageComposerMode.Edit)
+                return@launch
+            }
+            is SlashCommand.SlashCommandSendMessage -> {
+                timelineController.invokeOnCurrentTimeline {
+                    slashCommandService.proceedSendMessage(slashCommand, this)
+                        .onFailure { cause ->
+                            Timber.e(cause, "Failed to proceed with admin slash command")
+                            slashCommandAction.value = AsyncAction.Failure(cause)
+                        }
+                        .onSuccess {
+                            // Reset composer
+                            resetComposer(markdownTextEditorState, richTextEditorState, fromEdit = capturedMode is MessageComposerMode.Edit)
+                        }
+                }
+                return@launch
+            }
+            is SlashCommand.SlashCommandAdmin -> {
+                slashCommandAction.value = AsyncAction.Loading
+                slashCommandService.proceedAdmin(slashCommand)
+                    .onFailure { cause ->
+                        Timber.e(cause, "Failed to proceed with admin slash command")
+                        slashCommandAction.value = AsyncAction.Failure(cause)
+                    }
+                    .onSuccess {
+                        // Reset composer
+                        resetComposer(markdownTextEditorState, richTextEditorState, fromEdit = capturedMode is MessageComposerMode.Edit)
+                        slashCommandAction.value = AsyncAction.Uninitialized
+                    }
+                return@launch
+            }
+        }
+
         // Reset composer right away
         resetComposer(markdownTextEditorState, richTextEditorState, fromEdit = capturedMode is MessageComposerMode.Edit)
         when (capturedMode) {

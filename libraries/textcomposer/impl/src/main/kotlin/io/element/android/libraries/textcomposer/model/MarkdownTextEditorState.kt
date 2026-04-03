@@ -61,21 +61,29 @@ class MarkdownTextEditorState(
             }
             is ResolvedSuggestion.Member -> {
                 val currentText = SpannableStringBuilder(text.value())
-                val mentionSpan = mentionSpanProvider.createUserMentionSpan(resolvedSuggestion.roomMember.userId)
+                val userId = resolvedSuggestion.roomMember.userId
+                val mentionSpan = mentionSpanProvider.createUserMentionSpan(userId)
                 currentText.replace(suggestion.start, suggestion.end, "@ ")
                 val end = suggestion.start + 1
                 currentText.setSpan(mentionSpan, suggestion.start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                this.text.update(currentText, true)
-                this.selection = IntRange(end + 1, end + 1)
+                text.update(currentText, true)
+                selection = IntRange(end + 1, end + 1)
             }
             is ResolvedSuggestion.Alias -> {
                 val currentText = SpannableStringBuilder(text.value())
-                val mentionSpan = mentionSpanProvider.createRoomMentionSpan(resolvedSuggestion.roomAlias.toRoomIdOrAlias())
+                val roomAlias = resolvedSuggestion.roomAlias
+                val mentionSpan = mentionSpanProvider.createRoomMentionSpan(roomAlias.toRoomIdOrAlias())
                 currentText.replace(suggestion.start, suggestion.end, "# ")
                 val end = suggestion.start + 1
                 currentText.setSpan(mentionSpan, suggestion.start, end, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
-                this.text.update(currentText, true)
-                this.selection = IntRange(end + 1, end + 1)
+                text.update(currentText, true)
+                selection = IntRange(end + 1, end + 1)
+            }
+            is ResolvedSuggestion.Command -> {
+                // Just insert the command text
+                text.update("${resolvedSuggestion.command.command} ", true)
+                val length = resolvedSuggestion.command.command.length + 1
+                selection = IntRange(length, length)
             }
         }
     }

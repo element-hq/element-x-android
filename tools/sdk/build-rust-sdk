@@ -41,7 +41,7 @@ sdkArg=""
 
 ## Argument parsing
 
-TEMP=$(getopt -o 'rs:b:at:h' --long 'remote,sdk:,branch:,build-app,target-arch,help' -- "$@")
+TEMP=$(getopt -o 'rs:b:at:h' --long 'remote,sdk:,branch:,build-app,target-arch:,help' -- "$@")
 
 if [ $? -ne 0 ]; then
     echo 'Terminating...' >&2
