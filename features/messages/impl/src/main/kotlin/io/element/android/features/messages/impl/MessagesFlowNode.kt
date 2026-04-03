@@ -558,17 +558,18 @@ class MessagesFlowNode(
                 )
             }
             is TimelineItemLocationContent -> {
-                val mode = ShowLocationMode.Static(
-                    location = event.content.location,
-                    senderName = event.safeSenderName,
-                    senderId = event.senderId,
-                    senderAvatarUrl = event.senderAvatar.url,
-                    timestamp = event.sentTimeMillis,
-                    assetType = event.content.assetType,
-                )
-                NavTarget.LocationViewer(
-                   mode = mode
-                ).takeIf { locationService.isServiceAvailable() }
+                val mode = when(event.content.mode){
+                    is TimelineItemLocationContent.Mode.Live -> ShowLocationMode.Live
+                    is TimelineItemLocationContent.Mode.Static -> ShowLocationMode.Static(
+                        location = event.content.mode.location,
+                        senderName = event.safeSenderName,
+                        senderId = event.senderId,
+                        senderAvatarUrl = event.senderAvatar.url,
+                        timestamp = event.sentTimeMillis,
+                        assetType = event.content.assetType,
+                    )
+                }
+                NavTarget.LocationViewer(mode = mode).takeIf { locationService.isServiceAvailable() }
             }
             else -> null
         }

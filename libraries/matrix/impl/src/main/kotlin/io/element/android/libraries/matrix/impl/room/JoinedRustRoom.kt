@@ -43,7 +43,7 @@ import io.element.android.libraries.matrix.impl.mapper.map
 import io.element.android.libraries.matrix.impl.room.history.map
 import io.element.android.libraries.matrix.impl.room.join.map
 import io.element.android.libraries.matrix.impl.room.knock.RustKnockRequest
-import io.element.android.libraries.matrix.impl.room.location.map
+import io.element.android.libraries.matrix.impl.room.location.liveLocationSharesFlow
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher
 import io.element.android.libraries.matrix.impl.roomdirectory.map
 import io.element.android.libraries.matrix.impl.timeline.RustTimeline
@@ -68,7 +68,6 @@ import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.DateDividerMode
 import org.matrix.rustcomponents.sdk.IdentityStatusChangeListener
 import org.matrix.rustcomponents.sdk.KnockRequestsListener
-import org.matrix.rustcomponents.sdk.LiveLocationShareListener
 import org.matrix.rustcomponents.sdk.RoomMessageEventMessageType
 import org.matrix.rustcomponents.sdk.RoomSendQueueUpdate
 import org.matrix.rustcomponents.sdk.SendQueueListener
@@ -504,13 +503,7 @@ class JoinedRustRoom(
     }
 
     override fun subscribeToLiveLocationShares(): Flow<List<LiveLocationShare>> {
-        return mxCallbackFlow {
-            innerRoom.subscribeToLiveLocationShares(object : LiveLocationShareListener {
-                override fun call(liveLocationShares: List<org.matrix.rustcomponents.sdk.LiveLocationShare>) {
-                    trySend(liveLocationShares.map { it.map() })
-                }
-            })
-        }
+        return innerRoom.liveLocationSharesFlow()
     }
 
     override suspend fun startLiveLocationShare(durationMillis: Long): Result<Unit> = withContext(roomDispatcher) {

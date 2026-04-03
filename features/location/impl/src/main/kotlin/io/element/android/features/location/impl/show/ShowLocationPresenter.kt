@@ -13,11 +13,13 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.ShowLocationMode
 import io.element.android.features.location.impl.common.LocationConstraintsCheck
 import io.element.android.features.location.impl.common.MapDefaults
@@ -29,14 +31,21 @@ import io.element.android.features.location.impl.common.permissions.PermissionsS
 import io.element.android.features.location.impl.common.toDialogState
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.core.coroutine.mapState
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.room.getBestName
+import io.element.android.libraries.matrix.api.room.joinedRoomMembers
+import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.collections.immutable.toPersistentList
+import kotlinx.coroutines.flow.combine
 
 @AssistedInject
 class ShowLocationPresenter(
@@ -46,6 +55,7 @@ class ShowLocationPresenter(
     private val buildMeta: BuildMeta,
     private val dateFormatter: DateFormatter,
     private val stringProvider: StringProvider,
+    private val joinedRoom: JoinedRoom,
 ) : Presenter<ShowLocationState> {
     @AssistedFactory
     fun interface Factory {
@@ -96,9 +106,9 @@ class ShowLocationPresenter(
             }
         }
 
-        val locationShares = remember {
-            when (mode) {
-                is ShowLocationMode.Static -> {
+        val locationShares = when (mode) {
+            is ShowLocationMode.Static -> {
+                remember {
                     val relativeTime = dateFormatter.format(timestamp = mode.timestamp, mode = DateFormatterMode.Full, useRelative = true)
                     val formattedTimestamp = stringProvider.getString(
                         CommonStrings.screen_static_location_sheet_timestamp_description,
@@ -121,7 +131,35 @@ class ShowLocationPresenter(
                         )
                     )
                 }
-                ShowLocationMode.Live -> persistentListOf()
+            }
+            ShowLocationMode.Live -> {
+                val liveShares by produceState(persistentListOf()) {
+                    val liveLocationSharesFlow = joinedRoom.subscribeToLiveLocationShares()
+                    val membersStateFlow = joinedRoom.membersStateFlow.mapState { it.joinedRoomMembers() }
+                    combine(liveLocationSharesFlow, membersStateFlow) { liveShares, members ->
+                        liveShares.mapNotNull { share ->
+                            val location = Location.fromGeoUri(share.lastGeoUri) ?: return@mapNotNull null
+                            val member = members.find { it.userId == share.userId }
+                            val displayName = member?.getBestName() ?: share.userId.value
+                            val avatarUrl = member?.avatarUrl
+                            LocationShareItem(
+                                userId = share.userId,
+                                displayName = displayName,
+                                avatarData = AvatarData(
+                                    id = share.userId.value,
+                                    name = displayName,
+                                    url = avatarUrl,
+                                    size = AvatarSize.UserListItem,
+                                ),
+                                formattedTimestamp = "Sharing live location",
+                                location = location,
+                                isLive = true,
+                                assetType = AssetType.SENDER,
+                            )
+                        }.toPersistentList()
+                    }.collect { value = it }
+                }
+                liveShares
             }
         }
 

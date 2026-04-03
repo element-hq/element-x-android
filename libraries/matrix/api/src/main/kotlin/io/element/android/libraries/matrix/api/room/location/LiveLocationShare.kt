@@ -19,6 +19,4 @@ data class LiveLocationShare(
     val lastGeoUri: String,
     /** The timestamp of the last location update. */
     val lastTimestamp: Long,
-    /** Whether the live location share is still active. */
-    val isLive: Boolean,
 )
