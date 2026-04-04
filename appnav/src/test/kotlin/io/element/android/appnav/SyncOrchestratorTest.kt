@@ -381,6 +381,66 @@ class SyncOrchestratorTest {
         startSyncRecorder.assertions().isNeverCalled()
     }
 
+    @Test
+    fun `when sync repeatedly fails, restarts from idle are backed off`() = runTest {
+        val startSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val syncService = FakeSyncService(initialSyncState = SyncState.Error).apply {
+            startSyncLambda = startSyncRecorder
+        }
+        val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Connected)
+        val syncOrchestrator = createSyncOrchestrator(
+            syncService = syncService,
+            networkMonitor = networkMonitor,
+        )
+
+        syncOrchestrator.observeStates()
+
+        advanceTimeBy(100.milliseconds)
+        startSyncRecorder.assertions().isNeverCalled()
+
+        syncService.emitSyncState(SyncState.Idle)
+
+        advanceTimeBy(249.milliseconds)
+        startSyncRecorder.assertions().isNeverCalled()
+        advanceTimeBy(1.milliseconds)
+        startSyncRecorder.assertions().isCalledOnce()
+
+        syncService.emitSyncState(SyncState.Error)
+        syncService.emitSyncState(SyncState.Idle)
+
+        advanceTimeBy(999.milliseconds)
+        startSyncRecorder.assertions().isCalledOnce()
+        advanceTimeBy(1.milliseconds)
+        startSyncRecorder.assertions().isCalledExactly(2)
+    }
+
+    @Test
+    fun `when sync recovers, the restart backoff resets`() = runTest {
+        val startSyncRecorder = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val syncService = FakeSyncService(initialSyncState = SyncState.Error).apply {
+            startSyncLambda = startSyncRecorder
+        }
+        val networkMonitor = FakeNetworkMonitor(initialStatus = NetworkStatus.Connected)
+        val syncOrchestrator = createSyncOrchestrator(
+            syncService = syncService,
+            networkMonitor = networkMonitor,
+        )
+
+        syncOrchestrator.observeStates()
+
+        advanceTimeBy(100.milliseconds)
+        syncService.emitSyncState(SyncState.Idle)
+
+        advanceTimeBy(250.milliseconds)
+        startSyncRecorder.assertions().isCalledOnce()
+
+        syncService.emitSyncState(SyncState.Running)
+        syncService.emitSyncState(SyncState.Idle)
+
+        advanceTimeBy(1.milliseconds)
+        startSyncRecorder.assertions().isCalledExactly(2)
+    }
+
     private fun TestScope.createSyncOrchestrator(
         syncService: FakeSyncService = FakeSyncService(),
         networkMonitor: FakeNetworkMonitor = FakeNetworkMonitor(),

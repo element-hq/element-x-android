@@ -29,9 +29,11 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.onCompletion
+import kotlinx.coroutines.flow.scan
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
@@ -99,34 +101,47 @@ class SyncOrchestrator(
             isInForeground || isInCall || isSyncingNotificationEvent || hasRingingCall
         }
 
+        val syncRetryStateFlow = syncService.syncState
+            .scan(SyncRetryState()) { retryState, syncState ->
+                retryState.updated(syncState)
+            }
+            .distinctUntilChanged()
+
         combine(
             // small debounce to avoid spamming startSync when the state is changing quickly in case of error.
-            syncService.syncState.debounce(100.milliseconds),
+            syncRetryStateFlow.debounce(100.milliseconds),
             networkMonitor.connectivity,
             isAppActiveFlow,
-        ) { syncState, networkState, isAppActive ->
+        ) { retryState, networkState, isAppActive ->
             val isNetworkAvailable = networkState == NetworkStatus.Connected
 
-            Timber.tag(tag).d("isAppActive=$isAppActive, isNetworkAvailable=$isNetworkAvailable")
-            if (syncState == SyncState.Running && !isAppActive) {
+            Timber.tag(tag).d(
+                "isAppActive=$isAppActive, isNetworkAvailable=$isNetworkAvailable, " +
+                    "syncState=${retryState.syncState}, consecutiveFailures=${retryState.consecutiveFailures}"
+            )
+            if (retryState.syncState == SyncState.Running && !isAppActive) {
                 SyncStateAction.StopSync
-            } else if (syncState == SyncState.Idle && isAppActive && isNetworkAvailable) {
-                SyncStateAction.StartSync
+            } else if (retryState.syncState == SyncState.Idle && isAppActive && isNetworkAvailable) {
+                SyncStateAction.StartSync(retryState.startDelay)
             } else {
                 SyncStateAction.NoOp
             }
         }
             .distinctUntilChanged()
             .debounce { action ->
-                // Don't stop the sync immediately, wait a bit to avoid starting/stopping the sync too often
-                if (action == SyncStateAction.StopSync) 3.seconds else 0.seconds
+                when (action) {
+                    is SyncStateAction.StartSync -> action.delay
+                    // Don't stop the sync immediately, wait a bit to avoid starting/stopping the sync too often
+                    SyncStateAction.StopSync -> 3.seconds
+                    SyncStateAction.NoOp -> 0.seconds
+                }
             }
             .onCompletion {
                 Timber.tag(tag).d("has been stopped")
             }
             .collect { action ->
                 when (action) {
-                    SyncStateAction.StartSync -> {
+                    is SyncStateAction.StartSync -> {
                         syncService.startSync()
                     }
                     SyncStateAction.StopSync -> {
@@ -138,8 +153,34 @@ class SyncOrchestrator(
     }
 }
 
-private enum class SyncStateAction {
-    StartSync,
-    StopSync,
-    NoOp,
+private sealed interface SyncStateAction {
+    data class StartSync(val delay: Duration) : SyncStateAction
+
+    data object StopSync : SyncStateAction
+
+    data object NoOp : SyncStateAction
+}
+
+private data class SyncRetryState(
+    val syncState: SyncState = SyncState.Idle,
+    val consecutiveFailures: Int = 0,
+) {
+    val startDelay: Duration
+        get() = when (consecutiveFailures) {
+            0 -> 0.seconds
+            1 -> 250.milliseconds
+            2 -> 1.seconds
+            3 -> 3.seconds
+            else -> 10.seconds
+        }
+
+    fun updated(nextSyncState: SyncState): SyncRetryState {
+        return when (nextSyncState) {
+            SyncState.Error -> copy(syncState = nextSyncState, consecutiveFailures = (consecutiveFailures + 1).coerceAtMost(4))
+            SyncState.Running,
+            SyncState.Terminated,
+            SyncState.Offline -> SyncRetryState(syncState = nextSyncState)
+            SyncState.Idle -> copy(syncState = nextSyncState)
+        }
+    }
 }
