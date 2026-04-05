@@ -112,7 +112,7 @@ class ThreadedMessagesNode(
         this.timelineController = timelineController
         return presenterFactory.create(
             navigator = this,
-            composerPresenter = messageComposerPresenterFactory.create(timelineController, this),
+            composerPresenter = messageComposerPresenterFactory.create(timelineController, this, isInThread = true),
             timelinePresenter = timelinePresenterFactory.create(timelineController = timelineController, this),
             // TODO add special processor for threaded timeline
             actionListPresenter = actionListPresenterFactory.create(
@@ -136,6 +136,7 @@ class ThreadedMessagesNode(
         fun navigateToEditPoll(eventId: EventId)
         fun navigateToRoomCall(roomId: RoomId, isAudioCall: Boolean)
         fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?)
+        fun navigateToDeveloperSettings()
     }
 
     override fun onBuilt() {
@@ -233,8 +234,16 @@ class ThreadedMessagesNode(
         callback.handlePermalinkClick(permalinkData)
     }
 
+    override fun navigateToMember(userId: UserId) {
+        callback.navigateToRoomMemberDetails(userId)
+    }
+
     override fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?) {
         callback.navigateToThread(threadRootId, focusedEventId)
+    }
+
+    override fun navigateToDeveloperSettings() {
+        callback.navigateToDeveloperSettings()
     }
 
     override fun close() = navigateUp()

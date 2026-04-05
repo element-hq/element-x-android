@@ -374,6 +374,7 @@ Reason: %1$s."</string>
   <string name="common_text">"Text"</string>
   <string name="common_third_party_notices">"Third-party notices"</string>
   <string name="common_thread">"Thread"</string>
+  <string name="common_threads">"Threads"</string>
   <string name="common_topic">"Topic"</string>
   <string name="common_topic_placeholder">"What is this room about?"</string>
   <string name="common_unable_to_decrypt">"Unable to decrypt"</string>

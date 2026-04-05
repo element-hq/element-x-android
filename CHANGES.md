@@ -1,3 +1,49 @@
+Changes in Element X v26.04.0
+=============================
+
+## What's Changed
+### ✨ Features
+* Add floating/sticky date badge in the timeline by @kalix127 in https://github.com/element-hq/element-x-android/pull/6496
+### 🐛 Bugfixes
+* Fix `ForegroundServiceDidNotStartInTimeException` by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6470
+* Fix media cover placeholder floating by @bxdxnn in https://github.com/element-hq/element-x-android/pull/6484
+* Try handling `ForegroundServiceStartNotAllowedException` better by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6483
+* Fix crash when using `View.hideKeyboardAndAwaitAnimation` by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6502
+* Fix content scrolling not working in the RTE by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6492
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/6486
+### 🧱 Build
+* Add instructions for AI by @bmarty in https://github.com/element-hq/element-x-android/pull/6468
+* Fix permissions to publish GitHub pages. by @bmarty in https://github.com/element-hq/element-x-android/pull/6500
+* Try fixing location pin previews by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6495
+* CI: yet another Maestro fix by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6505
+### 📄 Documentation
+* Add some instructions for features to the community PR notice message by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6465
+### 🚧 In development 🚧
+* Setup live location sharing feature by @ganfra in https://github.com/element-hq/element-x-android/pull/6342
+### Dependency upgrades
+* Update dependency io.sentry:sentry-android to v8.36.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6461
+* Update metro to v0.11.4 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6448
+* Sync compound tokens https://github.com/element-hq/compound-design-tokens/releases/tag/v8.0.0 by @bmarty in https://github.com/element-hq/element-x-android/pull/6459
+* Update sqldelight to v2.3.2 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6449
+* Update nschloe/action-cached-lfs-checkout action to v1.2.4 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6442
+* Update kotlin to v2.3.20 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6437
+* Update dependency io.element.android:element-call-embedded to v0.18.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6358
+* fix(deps): update dependency io.element.android:emojibase-bindings to v1.5.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6474
+* fix(deps): update dependency com.google.firebase:firebase-bom to v34.11.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6478
+* fix(deps): update dependency io.element.android:emojibase-bindings to v1.5.2 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6487
+* fix(deps): update dependency com.google.crypto.tink:tink-android to v1.21.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6499
+* fix(deps): update dependency com.posthog:posthog-android to v3.39.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6504
+* fix(deps): update dependency org.matrix.rustcomponents:sdk-android to v26.03.31 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6494
+### Others
+* Iterate on space header by @bmarty in https://github.com/element-hq/element-x-android/pull/6456
+* Add margin after bullet points by @bxdxnn in https://github.com/element-hq/element-x-android/pull/6446
+* chore: update the build-rust-sdk script by @bnjbvr in https://github.com/element-hq/element-x-android/pull/6476
+* Update replied message UI by @bmarty in https://github.com/element-hq/element-x-android/pull/6472
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v26.03.4...v26.04.0
+
 Changes in Element X v26.03.4
 =============================
 
