@@ -33,7 +33,7 @@ fun Theme.isDark(): Boolean {
     }
 }
 
-fun Flow<String?>.mapToTheme(allowBlackTheme: Boolean = true): Flow<Theme> = map {
+fun Flow<String?>.mapToTheme(allowBlackTheme: Boolean): Flow<Theme> = map {
     when (it) {
         null -> Theme.System
         else -> Theme.valueOf(it)
