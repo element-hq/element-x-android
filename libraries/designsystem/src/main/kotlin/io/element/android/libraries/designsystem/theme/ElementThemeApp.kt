@@ -64,7 +64,7 @@ fun ElementThemeApp(
     val isBlackThemeAllowed by remember {
         featureFlagService.isFeatureEnabledFlow(FeatureFlags.AllowBlackTheme)
     }.collectAsState(initial = false)
-    val theme by remember {
+    val theme by remember(isBlackThemeAllowed) {
         appPreferencesStore.getThemeFlow().mapToTheme(allowBlackTheme = isBlackThemeAllowed)
     }.collectAsState(initial = Theme.System)
     LaunchedEffect(theme) {
