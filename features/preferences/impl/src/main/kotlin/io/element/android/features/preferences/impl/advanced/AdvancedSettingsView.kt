@@ -47,7 +47,6 @@ import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.compose.LocalAnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
-import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun AdvancedSettingsView(
@@ -75,7 +74,7 @@ fun AdvancedSettingsView(
         PreferenceDropdown(
             title = stringResource(id = CommonStrings.common_appearance),
             selectedOption = state.theme,
-            options = ThemeOption.entries.toImmutableList(),
+            options = state.availableThemeOptions,
             onSelectOption = { themeOption ->
                 state.eventSink(AdvancedSettingsEvents.SetTheme(themeOption))
             }

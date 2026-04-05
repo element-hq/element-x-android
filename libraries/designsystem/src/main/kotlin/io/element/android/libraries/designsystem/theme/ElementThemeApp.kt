@@ -22,6 +22,8 @@ import io.element.android.compound.theme.mapToTheme
 import io.element.android.compound.tokens.generated.SemanticColors
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.core.meta.BuildType
+import io.element.android.libraries.featureflag.api.FeatureFlagService
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 
 val LocalBuildMeta = staticCompositionLocalOf {
@@ -53,15 +55,18 @@ val LocalBuildMeta = staticCompositionLocalOf {
 @Composable
 fun ElementThemeApp(
     appPreferencesStore: AppPreferencesStore,
+    featureFlagService: FeatureFlagService,
     compoundLight: SemanticColors,
     compoundDark: SemanticColors,
     buildMeta: BuildMeta,
     content: @Composable () -> Unit,
 ) {
+    val isBlackThemeAllowed by remember {
+        featureFlagService.isFeatureEnabledFlow(FeatureFlags.AllowBlackTheme)
+    }.collectAsState(initial = false)
     val theme by remember {
-        appPreferencesStore.getThemeFlow().mapToTheme()
-    }
-        .collectAsState(initial = Theme.System)
+        appPreferencesStore.getThemeFlow().mapToTheme(allowBlackTheme = isBlackThemeAllowed)
+    }.collectAsState(initial = Theme.System)
     LaunchedEffect(theme) {
         AppCompatDelegate.setDefaultNightMode(
             when (theme) {

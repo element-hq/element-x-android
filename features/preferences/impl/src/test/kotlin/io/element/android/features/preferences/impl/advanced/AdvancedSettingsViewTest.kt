@@ -12,6 +12,7 @@ import androidx.activity.ComponentActivity
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithText
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Interaction
@@ -24,9 +25,11 @@ import io.element.android.services.analytics.compose.LocalAnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EventsRecorder
+import io.element.android.tests.testutils.assertNoNodeWithText
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBack
+import kotlinx.collections.immutable.toImmutableList
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
@@ -63,6 +66,31 @@ class AdvancedSettingsViewTest {
         rule.clickOn(CommonStrings.common_appearance)
         rule.clickOn(CommonStrings.common_dark)
         eventsRecorder.assertSingle(AdvancedSettingsEvents.SetTheme(ThemeOption.Dark))
+    }
+
+    @Test
+    fun `black theme is shown when available`() {
+        rule.setAdvancedSettingsView(
+            state = aAdvancedSettingsState(
+                availableThemeOptions = ThemeOption.entries.toImmutableList(),
+            ),
+        )
+        rule.clickOn(CommonStrings.common_appearance)
+        rule.run {
+            val text = activity.getString(CommonStrings.common_black)
+            onNodeWithText(text).assertExists()
+        }
+    }
+
+    @Test
+    fun `black theme is hidden when unavailable`() {
+        rule.setAdvancedSettingsView(
+            state = aAdvancedSettingsState(
+                availableThemeOptions = ThemeOption.entries.filterNot { it == ThemeOption.Black }.toImmutableList(),
+            ),
+        )
+        rule.clickOn(CommonStrings.common_appearance)
+        rule.assertNoNodeWithText(CommonStrings.common_black)
     }
 
     @Test

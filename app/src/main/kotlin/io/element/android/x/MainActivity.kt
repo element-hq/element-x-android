@@ -71,6 +71,7 @@ class MainActivity : NodeActivity() {
         }.collectAsState(SemanticColorsLightDark.default)
         ElementThemeApp(
             appPreferencesStore = appBindings.preferencesStore(),
+            featureFlagService = appBindings.featureFlagService(),
             compoundLight = colors.light,
             compoundDark = colors.dark,
             buildMeta = appBindings.buildMeta()
