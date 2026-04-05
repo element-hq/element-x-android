@@ -16,12 +16,14 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Composer
 import io.element.android.features.location.api.Location
+import io.element.android.features.location.api.live.ActiveLiveLocationShare
 import io.element.android.features.location.impl.aPermissionsState
 import io.element.android.features.location.impl.common.actions.FakeLocationActions
 import io.element.android.features.location.impl.common.permissions.FakePermissionsPresenter
 import io.element.android.features.location.impl.common.permissions.PermissionsEvents
 import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
+import io.element.android.features.location.test.FakeActiveLiveLocationShareManager
 import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.libraries.dateformatter.test.FakeDurationFormatter
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
@@ -29,6 +31,8 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.core.aBuildMeta
@@ -42,8 +46,10 @@ import io.element.android.tests.testutils.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.Instant
 import org.junit.Rule
 import org.junit.Test
+import kotlin.time.Duration.Companion.hours
 
 class ShareLocationPresenterTest {
     @get:Rule
@@ -62,6 +68,7 @@ class ShareLocationPresenterTest {
     private fun createShareLocationPresenter(
         joinedRoom: JoinedRoom = FakeJoinedRoom(),
         locationActions: FakeLocationActions = fakeLocationActions,
+        liveLocationShareManager: FakeActiveLiveLocationShareManager = FakeActiveLiveLocationShareManager(),
     ): ShareLocationPresenter = ShareLocationPresenter(
         permissionsPresenterFactory = { fakePermissionsPresenter },
         room = joinedRoom,
@@ -73,6 +80,7 @@ class ShareLocationPresenterTest {
         featureFlagService = fakeFeatureFlagService,
         client = fakeMatrixClient,
         durationFormatter = durationFormatter,
+        liveLocationShareManager = liveLocationShareManager,
     )
 
     @Test
@@ -447,4 +455,31 @@ class ShareLocationPresenterTest {
             cancelAndIgnoreRemainingEvents()
         }
     }
+
+    @Test
+    fun `StartLiveLocationShare event calls manager startShare`() = runTest {
+        val manager = FakeActiveLiveLocationShareManager()
+        val shareLocationPresenter = createShareLocationPresenter(liveLocationShareManager = manager)
+        fakePermissionsPresenter.givenState(
+            aPermissionsState(
+                permissions = PermissionsState.Permissions.AllGranted,
+                shouldShowRationale = false,
+            )
+        )
+
+        shareLocationPresenter.test {
+            skipItems(1)
+            val state = awaitItem()
+            state.eventSink(ShareLocationEvent.StartLiveLocationShare(duration = 1.hours))
+            advanceUntilIdle()
+
+            assertThat(manager.startShareCalls.size).isEqualTo(1)
+            val call = manager.startShareCalls[0]
+            assertThat(call.first).isEqualTo(A_SESSION_ID)
+            assertThat(call.second).isEqualTo(A_ROOM_ID)
+            assertThat(call.third).isEqualTo(3_600_000L)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
 }

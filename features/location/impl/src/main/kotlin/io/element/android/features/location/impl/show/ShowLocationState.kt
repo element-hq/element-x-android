@@ -38,6 +38,7 @@ data class LocationShareItem(
     val location: Location,
     val isLive: Boolean,
     val assetType: AssetType?,
+    val canStop: Boolean = false
 )
 
 fun LocationShareItem.toMarkerData(): LocationMarkerData {

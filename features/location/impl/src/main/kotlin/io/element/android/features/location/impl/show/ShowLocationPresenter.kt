@@ -15,12 +15,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.ShowLocationMode
+import io.element.android.features.location.api.live.ActiveLiveLocationShareManager
+import io.element.android.features.location.api.live.isCurrentlySharing
 import io.element.android.features.location.impl.common.LocationConstraintsCheck
 import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.actions.LocationActions
@@ -45,6 +48,7 @@ import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.launch
 
 @AssistedInject
 class ShowLocationPresenter(
@@ -55,6 +59,7 @@ class ShowLocationPresenter(
     private val dateFormatter: DateFormatter,
     private val stringProvider: StringProvider,
     private val joinedRoom: JoinedRoom,
+    private val liveLocationShareManager: ActiveLiveLocationShareManager,
 ) : Presenter<ShowLocationState> {
     @AssistedFactory
     fun interface Factory {
@@ -65,6 +70,7 @@ class ShowLocationPresenter(
 
     @Composable
     override fun present(): ShowLocationState {
+        val coroutineScope = rememberCoroutineScope()
         val permissionsState: PermissionsState = permissionsPresenter.present()
         var isTrackMyLocation by remember { mutableStateOf(false) }
         val appName by remember { derivedStateOf { buildMeta.applicationName } }
@@ -102,6 +108,9 @@ class ShowLocationPresenter(
                     dialogState = LocationConstraintsDialogState.None
                 }
                 ShowLocationEvent.RequestPermissions -> permissionsState.eventSink(PermissionsEvents.RequestPermissions)
+                ShowLocationEvent.StopLocationSharing -> coroutineScope.launch {
+                    liveLocationShareManager.stopShare(joinedRoom.roomId)
+                }
             }
         }
 
@@ -134,9 +143,10 @@ class ShowLocationPresenter(
             is ShowLocationMode.Live -> {
                 produceState(persistentListOf()) {
                     val comparator = LiveLocationShareComparator(currentUser = joinedRoom.sessionId)
+                    val isCurrentlySharing = liveLocationShareManager.isCurrentlySharing(joinedRoom.roomId)
                     val liveLocationSharesFlow = joinedRoom.subscribeToLiveLocationShares()
                     val membersStateFlow = joinedRoom.membersStateFlow.mapState { it.joinedRoomMembers() }
-                    combine(liveLocationSharesFlow, membersStateFlow) { liveShares, members ->
+                    combine(isCurrentlySharing, liveLocationSharesFlow, membersStateFlow) { isCurrentlySharing, liveShares, members ->
                         liveShares
                             .sortedWith(comparator)
                             .mapNotNull { share ->
@@ -163,6 +173,7 @@ class ShowLocationPresenter(
                                     location = location,
                                     isLive = true,
                                     assetType = lastLocation.assetType,
+                                    canStop = isCurrentlySharing && share.userId == joinedRoom.sessionId
                                 )
                             }
                             .toImmutableList()

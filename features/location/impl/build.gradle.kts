@@ -37,10 +37,13 @@ dependencies {
     implementation(projects.libraries.core)
     implementation(projects.libraries.matrixui)
     implementation(projects.services.analytics.api)
+    implementation(projects.services.appnavstate.api)
     implementation(libs.accompanist.permission)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.dateformatter.api)
+    implementation(projects.libraries.push.api)
+    implementation(libs.datetime)
 
     testCommonDependencies(libs, true)
     testImplementation(projects.libraries.matrix.test)
@@ -50,4 +53,5 @@ dependencies {
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.features.messages.test)
     testImplementation(projects.libraries.featureflag.test)
+    testImplementation(projects.features.location.test)
 }
