@@ -50,5 +50,5 @@
   <string name="screen_session_verification_waiting_subtitle">"После принятия запроса вы сможете продолжить проверку."</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Чтобы продолжить, примите запрос на запуск процесса подтверждения в другом сеансе."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Ожидание принятия запроса"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Выполняется выход…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Удаление устройства…"</string>
 </resources>

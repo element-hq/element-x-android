@@ -28,7 +28,7 @@
   <string name="screen_encryption_reset_title">"Не можете подтвердить? Вам потребуется сбросить личность вашей учетной записи."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Удалить"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Вы потеряете зашифрованные сообщения, если выйдете из всех устройств."</string>
-  <string name="screen_key_backup_disable_confirmation_title">"Вы действительно хотите отключить резервное копирование?"</string>
+  <string name="screen_key_backup_disable_confirmation_title">"Вы уверены, что хотите удалить хранилище ключей?"</string>
   <string name="screen_key_backup_disable_description">"Удаление хранилища ключей приведёт к удалению вашей криптографической личности и ключей сообщений с сервера, а также отключению следующих функций безопасности:"</string>
   <string name="screen_key_backup_disable_description_point_1">"Нет зашифрованной истории сообщений на новых устройствах"</string>
   <string name="screen_key_backup_disable_description_point_2">"Вы потеряете доступ к зашифрованным сообщениям, если выйдете из %1$s везде"</string>

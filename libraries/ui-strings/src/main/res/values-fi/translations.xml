@@ -472,7 +472,7 @@ Haluatko varmasti jatkaa?"</string>
   <string name="screen_missing_key_backup_step_2_android">"Mene kohtaan \"Asetukset\" &gt; \"Tietoturva ja yksityisyys\""</string>
   <string name="screen_missing_key_backup_step_3_android">"Osiossa \"Salausavainten hallinta\", paina \"Salattujen viestien palautus\"."</string>
   <string name="screen_missing_key_backup_step_4">"Noudata ohjeita"</string>
-  <string name="screen_missing_key_backup_step_5">"Valmis!"</string>
+  <string name="screen_missing_key_backup_step_5">"Palaa takaisin %1$s -sovellukseen"</string>
   <string name="screen_onboarding_welcome_back">"Tervetuloa takaisin"</string>
   <string name="screen_pinned_timeline_empty_state_description">"Paina viestiä ja valitse “%1$s” lisätäksesi sen tänne."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Kiinnitä tärkeät viestit, jotta ne löytyvät helposti."</string>
