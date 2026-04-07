@@ -12,8 +12,8 @@ import io.element.android.libraries.androidutils.media.VideoCompressorHelper
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 
 data class MediaOptimizationConfig(
-    val compressImages: Boolean,
-    val videoCompressionPreset: VideoCompressionPreset,
+    val compressImages: Boolean = true,
+    val videoCompressionPreset: VideoCompressionPreset = VideoCompressionPreset.STANDARD,
 )
 
 fun VideoCompressionPreset.compressorHelper(): VideoCompressorHelper = when (this) {

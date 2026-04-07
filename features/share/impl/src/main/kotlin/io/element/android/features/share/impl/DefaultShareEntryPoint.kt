@@ -23,10 +23,10 @@ class DefaultShareEntryPoint : ShareEntryPoint {
         params: ShareEntryPoint.Params,
         callback: ShareEntryPoint.Callback,
     ): Node {
-        return parentNode.createNode<ShareNode>(
+        return parentNode.createNode<ShareFlowNode>(
             buildContext = buildContext,
             plugins = listOf(
-                ShareNode.Inputs(shareIntentData = params.shareIntentData),
+                ShareFlowNode.Inputs(shareIntentData = params.shareIntentData),
                 callback,
             )
         )

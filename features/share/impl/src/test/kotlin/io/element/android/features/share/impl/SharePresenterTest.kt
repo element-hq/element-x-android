@@ -24,9 +24,7 @@ import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
-import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.api.MediaSenderRoomFactory
-import io.element.android.libraries.mediaupload.test.FakeMediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.test.FakeMediaSender
 import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import io.element.android.services.appnavstate.impl.DefaultActiveRoomsHolder
@@ -171,7 +169,6 @@ internal fun TestScope.createSharePresenter(
     matrixClient: MatrixClient = FakeMatrixClient(),
     activeRoomsHolder: ActiveRoomsHolder = DefaultActiveRoomsHolder(),
     mediaSenderRoomFactory: MediaSenderRoomFactory = MediaSenderRoomFactory { FakeMediaSender() },
-    mediaOptimizationConfigProvider: MediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
     onSharedData: OnSharedData = OnSharedData {},
 ): SharePresenter {
     return SharePresenter(
@@ -180,7 +177,6 @@ internal fun TestScope.createSharePresenter(
         matrixClient = matrixClient,
         activeRoomsHolder = activeRoomsHolder,
         mediaSenderRoomFactory = mediaSenderRoomFactory,
-        mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
         onSharedData = onSharedData,
     )
 }

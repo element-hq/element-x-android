@@ -24,8 +24,9 @@ import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
-import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
+import io.element.android.libraries.mediaupload.api.MediaOptimizationConfig
 import io.element.android.libraries.mediaupload.api.MediaSenderRoomFactory
+import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.services.appnavstate.api.ActiveRoomsHolder
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -39,7 +40,6 @@ class SharePresenter(
     private val matrixClient: MatrixClient,
     private val mediaSenderRoomFactory: MediaSenderRoomFactory,
     private val activeRoomsHolder: ActiveRoomsHolder,
-    private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
     private val onSharedData: OnSharedData,
 ) : Presenter<ShareState> {
     @AssistedFactory
@@ -48,9 +48,38 @@ class SharePresenter(
     }
 
     private val shareActionState: MutableState<AsyncAction<List<RoomId>>> = mutableStateOf(AsyncAction.Uninitialized)
+    private var updatedCaption: String? = null
+    private var pendingRoomIds: List<RoomId>? = null
+    private var optimizeImage: Boolean = true
+    private var videoPreset: VideoCompressionPreset = VideoCompressionPreset.STANDARD
 
     fun onRoomSelected(roomIds: List<RoomId>) {
-        sessionCoroutineScope.share(shareIntentData, roomIds)
+        pendingRoomIds = roomIds
+    }
+
+    fun onRoomSelectedForMediaPreview(): List<RoomId>? {
+        return pendingRoomIds
+    }
+
+    fun onProceedFromPreview(
+        caption: String?,
+        optimizeImage: Boolean,
+        videoPreset: VideoCompressionPreset?,
+    ): List<RoomId>? {
+        val roomIds = pendingRoomIds ?: return null
+        updatedCaption = caption
+        this.optimizeImage = optimizeImage
+        this.videoPreset = videoPreset ?: VideoCompressionPreset.STANDARD
+        return roomIds
+    }
+
+    fun onConfirmShare() {
+        val roomIds = pendingRoomIds ?: return
+        val effectiveShareData = when (shareIntentData) {
+            is ShareIntentData.Uris -> shareIntentData.copy(text = updatedCaption ?: shareIntentData.text)
+            else -> shareIntentData
+        }
+        sessionCoroutineScope.share(effectiveShareData, roomIds)
     }
 
     @Composable
@@ -95,6 +124,10 @@ class SharePresenter(
                     if (filesToShare.isEmpty()) {
                         false
                     } else {
+                        val mediaOptimizationConfig = MediaOptimizationConfig(
+                            compressImages = optimizeImage,
+                            videoCompressionPreset = videoPreset,
+                        )
                         roomIds
                             .map { roomId ->
                                 val room = getJoinedRoom(roomId) ?: return@map false
@@ -105,7 +138,7 @@ class SharePresenter(
                                             caption = shareIntentData.text,
                                             uri = fileToShare.uri,
                                             mimeType = fileToShare.mimeType,
-                                            mediaOptimizationConfig = mediaOptimizationConfigProvider.get(),
+                                            mediaOptimizationConfig = mediaOptimizationConfig,
                                         )
                                         // If the coroutine was cancelled, destroy the room and rethrow the exception
                                         val cancellationException = result.exceptionOrNull() as? CancellationException
