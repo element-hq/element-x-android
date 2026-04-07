@@ -16,6 +16,8 @@ import dev.zacsweers.metro.Multibinds
 import dev.zacsweers.metro.Provides
 import io.element.android.libraries.architecture.NodeFactoriesBindings
 import io.element.android.libraries.di.annotations.ApplicationContext
+import io.element.android.libraries.mediaupload.api.VideoMetadataExtractor
+import io.element.android.libraries.mediaupload.impl.DefaultVideoMetadataExtractorFactory
 import io.element.android.libraries.workmanager.api.di.MetroWorkerFactory
 import kotlin.reflect.KClass
 
@@ -26,6 +28,11 @@ interface AppGraph : NodeFactoriesBindings {
     @Multibinds
     val workerProviders:
         Map<KClass<out ListenableWorker>, MetroWorkerFactory.WorkerInstanceFactory<*>>
+
+    @Provides
+    fun providesVideoMetadataExtractorFactory(
+        @ApplicationContext context: Context
+    ): VideoMetadataExtractor.Factory = DefaultVideoMetadataExtractorFactory(context)
 
     @DependencyGraph.Factory
     interface Factory {
