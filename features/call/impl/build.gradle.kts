@@ -73,7 +73,7 @@ dependencies {
     implementation(projects.libraries.core)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.featureflag.api)
-    implementation(projects.libraries.matrix.impl)
+    implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixmedia.api)
     implementation(projects.libraries.network)
     implementation(projects.libraries.preferences.api)
