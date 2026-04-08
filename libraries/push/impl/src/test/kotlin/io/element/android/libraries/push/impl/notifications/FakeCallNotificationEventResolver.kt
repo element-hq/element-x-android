@@ -6,11 +6,10 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.push.test.notifications
+package io.element.android.libraries.push.impl.notifications
 
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.notification.NotificationData
-import io.element.android.libraries.push.impl.notifications.CallNotificationEventResolver
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
 import io.element.android.tests.testutils.lambda.lambdaError
 
