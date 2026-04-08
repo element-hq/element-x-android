@@ -31,6 +31,7 @@ import io.element.android.libraries.androidutils.system.openUrlInExternalApp
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
@@ -55,6 +56,7 @@ class PinnedMessagesListNode(
         fun handlePermalinkClick(data: PermalinkData.RoomLink)
         fun navigateToEventDebugInfo(eventId: EventId?, debugInfo: TimelineItemDebugInfo)
         fun handleForwardEventClick(eventId: EventId)
+        fun navigateToThread(threadRootId: ThreadId)
     }
 
     private val callback: Callback = callback()
@@ -93,6 +95,10 @@ class PinnedMessagesListNode(
 
     override fun forwardEvent(eventId: EventId) {
         callback.handleForwardEventClick(eventId)
+    }
+
+    override fun navigateToThread(threadRootId: ThreadId) {
+        callback.navigateToThread(threadRootId)
     }
 
     @Composable

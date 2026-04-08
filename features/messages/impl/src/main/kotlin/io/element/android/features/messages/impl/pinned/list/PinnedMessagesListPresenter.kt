@@ -137,6 +137,7 @@ class PinnedMessagesListPresenter(
         fun handleEvent(event: PinnedMessagesListEvent) {
             when (event) {
                 is PinnedMessagesListEvent.HandleAction -> sessionCoroutineScope.handleTimelineAction(event.action, event.event)
+                is PinnedMessagesListEvent.OpenThread -> navigator.navigateToThread(event.threadRootId)
             }
         }
 
