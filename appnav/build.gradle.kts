@@ -51,7 +51,7 @@ dependencies {
     implementation(projects.features.linknewdevice.api)
     implementation(projects.features.share.api)
 
-    implementation(projects.services.apperror.impl)
+    implementation(projects.services.apperror.api)
     implementation(projects.services.appnavstate.api)
     implementation(projects.services.analytics.api)
 
