@@ -71,5 +71,6 @@ fun aCreateRoomRootState(
     userListState = userListState,
     startDmAction = startDmAction,
     isRoomDirectorySearchEnabled = isRoomDirectorySearchEnabled,
+    enableKeyShareOnInvite = false,
     eventSink = eventSink,
 )

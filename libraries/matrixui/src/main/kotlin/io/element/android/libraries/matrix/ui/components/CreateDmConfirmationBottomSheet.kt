@@ -48,10 +48,23 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun CreateDmConfirmationBottomSheet(
     matrixUser: MatrixUser,
+    enableKeyShareOnInvite: Boolean,
+    isUserIdentityUnknown: Boolean,
     onSendInvite: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val titleContent = if (enableKeyShareOnInvite && isUserIdentityUnknown) {
+        stringResource(R.string.crypto_history_sharing_confirm_start_chat_dialog_title)
+    } else {
+        stringResource(R.string.screen_bottom_sheet_create_dm_title)
+    }
+    val descriptionContent = if (enableKeyShareOnInvite && isUserIdentityUnknown) {
+        stringResource(R.string.crypto_history_sharing_confirm_start_chat_dialog_content)
+    } else {
+        stringResource(R.string.screen_bottom_sheet_create_dm_message, matrixUser.getFullName())
+    }
+
     ModalBottomSheet(
         modifier = modifier,
         onDismissRequest = onDismiss,
@@ -69,14 +82,14 @@ fun CreateDmConfirmationBottomSheet(
             )
             Spacer(modifier = Modifier.height(16.dp))
             Text(
-                text = stringResource(R.string.screen_bottom_sheet_create_dm_title),
+                text = titleContent,
                 style = ElementTheme.typography.fontHeadingMdBold,
                 color = ElementTheme.colors.textPrimary,
                 textAlign = TextAlign.Center,
             )
             Spacer(modifier = Modifier.height(8.dp))
             Text(
-                text = stringResource(R.string.screen_bottom_sheet_create_dm_message, matrixUser.getFullName()),
+                text = descriptionContent,
                 style = ElementTheme.typography.fontBodyMdRegular,
                 color = ElementTheme.colors.textSecondary,
                 textAlign = TextAlign.Center,

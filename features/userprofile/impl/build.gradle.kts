@@ -34,6 +34,7 @@ dependencies {
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.mediaviewer.api)
+    implementation(projects.libraries.featureflag.api)
     implementation(projects.features.call.api)
     implementation(projects.features.enterprise.api)
     implementation(projects.features.verifysession.api)

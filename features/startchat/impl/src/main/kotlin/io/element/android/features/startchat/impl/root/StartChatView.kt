@@ -130,6 +130,8 @@ fun StartChatView(
             if (data is ConfirmingStartDmWithMatrixUser) {
                 CreateDmConfirmationBottomSheet(
                     matrixUser = data.matrixUser,
+                    enableKeyShareOnInvite = state.enableKeyShareOnInvite,
+                    isUserIdentityUnknown = data.isUserIdentityUnknown,
                     onSendInvite = {
                         state.eventSink(StartChatEvents.StartDM(data.matrixUser))
                     },
