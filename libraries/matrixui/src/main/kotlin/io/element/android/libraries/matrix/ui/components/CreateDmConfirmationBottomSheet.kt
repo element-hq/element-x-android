@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -113,10 +114,28 @@ fun CreateDmConfirmationBottomSheet(
 
 @PreviewsDayNight
 @Composable
-internal fun CreateDmConfirmationBottomSheetPreview(@PreviewParameter(MatrixUserProvider::class) matrixUser: MatrixUser) = ElementPreview {
+internal fun CreateDmConfirmationBottomSheetPreview(@PreviewParameter(
+    CreateDmConfirmationBottomSheetStateProvider::class
+) state: CreateDmConfirmationBottomSheetState) = ElementPreview {
     CreateDmConfirmationBottomSheet(
-        matrixUser = matrixUser,
+        matrixUser = state.matrixUser,
+        enableKeyShareOnInvite = state.enableKeyShareOnInvite,
+        isUserIdentityUnknown = state.isUserIdentityUnknown,
         onSendInvite = {},
         onDismiss = {},
     )
+}
+
+data class CreateDmConfirmationBottomSheetState(
+    val matrixUser: MatrixUser,
+    val enableKeyShareOnInvite: Boolean,
+    val isUserIdentityUnknown: Boolean,
+)
+
+class CreateDmConfirmationBottomSheetStateProvider : PreviewParameterProvider<CreateDmConfirmationBottomSheetState> {
+    override val values = sequenceOf(
+        CreateDmConfirmationBottomSheetState(matrixUser = aMatrixUser(), enableKeyShareOnInvite = false, isUserIdentityUnknown = false),
+            CreateDmConfirmationBottomSheetState(matrixUser = aMatrixUser(), enableKeyShareOnInvite = true, isUserIdentityUnknown = false),
+            CreateDmConfirmationBottomSheetState(matrixUser = aMatrixUser(), enableKeyShareOnInvite = true, isUserIdentityUnknown = true),
+        )
 }
