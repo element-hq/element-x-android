@@ -254,8 +254,7 @@ class MessagesPresenter(
                     coroutineScope.launch {
                         val latestEventId = room.liveTimeline.getLatestEventId().getOrElse {
                             Timber.w(it, "Failed to get latest event id to mark as fully read")
-                            navigator.close()
-                            return@launch
+                            null
                         }
                         latestEventId?.let { eventId ->
                             sessionCoroutineScope.launch {
