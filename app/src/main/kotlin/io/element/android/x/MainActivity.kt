@@ -52,7 +52,7 @@ class MainActivity : NodeActivity() {
     private lateinit var appBindings: AppBindings
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        Timber.tag(loggerTag.value).w("onCreate, with savedInstanceState: ${savedInstanceState != null}")
+        Timber.tag(loggerTag.value).d("onCreate, with savedInstanceState: ${savedInstanceState != null}")
         installSplashScreen()
         super.onCreate(savedInstanceState)
         appBindings = bindings()
@@ -108,7 +108,7 @@ class MainActivity : NodeActivity() {
                 plugins = listOf(
                     object : NodeReadyObserver<MainNode> {
                         override fun init(node: MainNode) {
-                            Timber.tag(loggerTag.value).w("onMainNodeInit")
+                            Timber.tag(loggerTag.value).d("onMainNodeInit")
                             mainNode = node
                             mainNode.handleIntent(intent)
                         }
@@ -144,7 +144,7 @@ class MainActivity : NodeActivity() {
      */
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        Timber.tag(loggerTag.value).w("onNewIntent")
+        Timber.tag(loggerTag.value).d("onNewIntent")
         // If the mainNode is not init yet, keep the intent for later.
         // It can happen when the activity is killed by the system. The methods are called in this order :
         // onCreate(savedInstanceState=true) -> onNewIntent -> onResume -> onMainNodeInit
@@ -157,16 +157,16 @@ class MainActivity : NodeActivity() {
 
     override fun onPause() {
         super.onPause()
-        Timber.tag(loggerTag.value).w("onPause")
+        Timber.tag(loggerTag.value).d("onPause")
     }
 
     override fun onResume() {
         super.onResume()
-        Timber.tag(loggerTag.value).w("onResume")
+        Timber.tag(loggerTag.value).d("onResume")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Timber.tag(loggerTag.value).w("onDestroy")
+        Timber.tag(loggerTag.value).d("onDestroy")
     }
 }
