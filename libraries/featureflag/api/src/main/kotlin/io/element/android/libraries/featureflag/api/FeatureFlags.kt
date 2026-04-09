@@ -70,13 +70,6 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
-    RoomListSpaceFilters(
-        key = "feature.roomListSpaceFilters",
-        title = "Room list space filters",
-        description = "Allow filtering the room list by space.",
-        defaultValue = { true },
-        isFinished = false,
-    ),
     PrintLogsToLogcat(
         key = "feature.print_logs_to_logcat",
         title = "Print logs to logcat",
