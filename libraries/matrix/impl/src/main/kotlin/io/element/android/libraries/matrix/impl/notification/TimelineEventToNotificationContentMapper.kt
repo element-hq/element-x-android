@@ -49,7 +49,6 @@ private fun StateEventContent.toContent(): NotificationContent.StateEvent {
         StateEventContent.PolicyRuleRoom -> NotificationContent.StateEvent.PolicyRuleRoom
         StateEventContent.PolicyRuleServer -> NotificationContent.StateEvent.PolicyRuleServer
         StateEventContent.PolicyRuleUser -> NotificationContent.StateEvent.PolicyRuleUser
-        StateEventContent.RoomAliases -> NotificationContent.StateEvent.RoomAliases
         StateEventContent.RoomAvatar -> NotificationContent.StateEvent.RoomAvatar
         StateEventContent.RoomCanonicalAlias -> NotificationContent.StateEvent.RoomCanonicalAlias
         StateEventContent.RoomCreate -> NotificationContent.StateEvent.RoomCreate

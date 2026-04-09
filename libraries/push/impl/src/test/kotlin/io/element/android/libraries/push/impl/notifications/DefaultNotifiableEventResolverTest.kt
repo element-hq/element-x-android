@@ -835,7 +835,6 @@ class DefaultNotifiableEventResolverTest {
         testNoResults(NotificationContent.StateEvent.PolicyRuleRoom)
         testNoResults(NotificationContent.StateEvent.PolicyRuleServer)
         testNoResults(NotificationContent.StateEvent.PolicyRuleUser)
-        testNoResults(NotificationContent.StateEvent.RoomAliases)
         testNoResults(NotificationContent.StateEvent.RoomAvatar)
         testNoResults(NotificationContent.StateEvent.RoomCanonicalAlias)
         testNoResults(NotificationContent.StateEvent.RoomCreate)
