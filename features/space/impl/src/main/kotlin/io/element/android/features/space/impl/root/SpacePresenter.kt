@@ -29,8 +29,6 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.mapState
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
@@ -66,7 +64,6 @@ class SpacePresenter(
     private val joinRoom: JoinRoom,
     private val acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
-    private val featureFlagService: FeatureFlagService,
     private val spaceService: SpaceService,
 ) : Presenter<SpaceState> {
     private var children by mutableStateOf<ImmutableList<SpaceRoom>>(persistentListOf())
@@ -99,16 +96,13 @@ class SpacePresenter(
         val permissions by room.permissionsAsState(SpacePermissions.DEFAULT) { perms ->
             perms.spacePermissions()
         }
-        val isSpaceSettingsEnabled by remember {
-            featureFlagService.isFeatureEnabledFlow(FeatureFlags.SpaceSettings)
-        }.collectAsState(false)
 
         val roomInfo by room.roomInfoFlow.collectAsState()
         val canAccessSpaceSettings by remember {
-            derivedStateOf { isSpaceSettingsEnabled && permissions.settingsPermissions.hasAny(roomInfo.joinRule) }
+            derivedStateOf { permissions.settingsPermissions.hasAny(roomInfo.joinRule) }
         }
         val canEditSpaceGraph by remember {
-            derivedStateOf { isSpaceSettingsEnabled && permissions.canEditSpaceGraph }
+            derivedStateOf { permissions.canEditSpaceGraph }
         }
         val (joinActions, setJoinActions) = remember { mutableStateOf(emptyMap<RoomId, AsyncAction<Unit>>()) }
 

@@ -77,13 +77,6 @@ enum class FeatureFlags(
         defaultValue = { true },
         isFinished = false,
     ),
-    SpaceSettings(
-        key = "feature.spaceSettings",
-        title = "Space settings",
-        description = "Allow managing space settings such as details, permissions and privacy.",
-        defaultValue = { true },
-        isFinished = false,
-    ),
     RoomListSpaceFilters(
         key = "feature.roomListSpaceFilters",
         title = "Room list space filters",

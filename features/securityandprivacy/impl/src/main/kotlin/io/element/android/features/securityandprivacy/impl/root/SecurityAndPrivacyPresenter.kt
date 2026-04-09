@@ -78,9 +78,6 @@ class SecurityAndPrivacyPresenter(
         val isKnockEnabled by remember {
             featureFlagService.isFeatureEnabledFlow(FeatureFlags.Knock)
         }.collectAsState(false)
-        val isSpaceSettingsEnabled by remember {
-            featureFlagService.isFeatureEnabledFlow(FeatureFlags.SpaceSettings)
-        }.collectAsState(false)
 
         val saveAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
         val homeserverName = remember { matrixClient.userIdServerName() }
@@ -248,7 +245,6 @@ class SecurityAndPrivacyPresenter(
             saveAction = saveAction.value,
             permissions = permissions,
             isSpace = roomInfo.isSpace,
-            isSpaceSettingsEnabled = isSpaceSettingsEnabled,
             selectableJoinedSpaces = selectableJoinedSpaces,
             spaceSelectionMode = spaceSelectionMode,
             eventSink = ::handleEvent,
