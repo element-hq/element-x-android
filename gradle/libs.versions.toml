@@ -47,7 +47,7 @@ showkase = "1.0.5"
 appyx = "1.7.1"
 sqldelight = "2.3.2"
 wysiwyg = "2.41.1"
-telephoto = "0.18.0"
+telephoto = "0.19.0"
 haze = "1.7.2"
 
 # Dependency analysis
