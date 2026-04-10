@@ -659,7 +659,7 @@ internal class DefaultInvitePeoplePresenterTest {
                 eventSink(InvitePeopleEvents.SendInvites)
             }
 
-            assertThat(getUserIdentityResult.assertions().isCalledExactly(3).withSequence(
+            getUserIdentityResult.assertions().isCalledExactly(3).withSequence(
                 listOf(value(alice.userId)),
                 listOf(value(bob.userId)),
                 listOf(value(charlie.userId))
@@ -726,12 +726,10 @@ internal class DefaultInvitePeoplePresenterTest {
                 eventSink(InvitePeopleEvents.SendInvites)
             }
 
-            assertThat(
-                getUserIdentityResult.assertions().isCalledExactly(3).withSequence(
-                    listOf(value(alice.userId)),
-                    listOf(value(bob.userId)),
-                    listOf(value(charlie.userId))
-                )
+            getUserIdentityResult.assertions().isCalledExactly(3).withSequence(
+                listOf(value(alice.userId)),
+                listOf(value(bob.userId)),
+                listOf(value(charlie.userId))
             )
 
             // When we then try to invite these user, we should prompt for confirmation first.
