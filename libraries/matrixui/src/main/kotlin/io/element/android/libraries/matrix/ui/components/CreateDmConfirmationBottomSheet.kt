@@ -61,12 +61,12 @@ fun CreateDmConfirmationBottomSheet(
     modifier: Modifier = Modifier,
 ) {
     val titleContent = if (enableKeyShareOnInvite && isUserIdentityUnknown) {
-        stringResource(R.string.crypto_history_sharing_confirm_start_chat_dialog_title)
+        stringResource(R.string.screen_bottom_sheet_create_dm_unknown_user_title)
     } else {
         stringResource(R.string.screen_bottom_sheet_create_dm_title)
     }
     val descriptionContent = if (enableKeyShareOnInvite && isUserIdentityUnknown) {
-        stringResource(R.string.crypto_history_sharing_confirm_start_chat_dialog_content)
+        stringResource(R.string.screen_bottom_sheet_create_dm_unknown_user_content)
     } else {
         stringResource(R.string.screen_bottom_sheet_create_dm_message, matrixUser.getFullName())
     }
