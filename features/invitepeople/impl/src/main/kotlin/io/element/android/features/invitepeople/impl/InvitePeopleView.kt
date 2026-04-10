@@ -17,6 +17,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -272,7 +273,7 @@ private fun InvitePeopleConfirmModal(
         )
 
         LazyColumn {
-            itemsIndexed(users) { index, user ->
+            items(users) { user ->
                 MatrixUserRow(user)
             }
         }

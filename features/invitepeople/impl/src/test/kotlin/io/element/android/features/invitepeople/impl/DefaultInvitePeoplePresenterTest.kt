@@ -619,10 +619,10 @@ internal class DefaultInvitePeoplePresenterTest {
 
         val getUserIdentityResult = lambdaRecorder<UserId, Result<IdentityState?>> { userId ->
             when (userId.value) {
-            alice.userId.value -> Result.success(IdentityState.Pinned)
-            bob.userId.value -> Result.success(null)
-            else -> Result.failure(AN_EXCEPTION)
-        }
+                alice.userId.value -> Result.success(IdentityState.Pinned)
+                bob.userId.value -> Result.success(null)
+                else -> Result.failure(AN_EXCEPTION)
+            }
         }
 
         val inviteUserResult = lambdaRecorder<UserId, Result<Unit>> { userId: UserId ->
@@ -689,10 +689,10 @@ internal class DefaultInvitePeoplePresenterTest {
 
         val getUserIdentityResult = lambdaRecorder<UserId, Result<IdentityState?>> { userId ->
             when (userId.value) {
-            alice.userId.value -> Result.success(IdentityState.Pinned)
-            bob.userId.value -> Result.success(null)
-            else -> Result.failure(AN_EXCEPTION)
-        }
+                alice.userId.value -> Result.success(IdentityState.Pinned)
+                bob.userId.value -> Result.success(null)
+                else -> Result.failure(AN_EXCEPTION)
+            }
         }
 
         val encryptionService = FakeEncryptionService(

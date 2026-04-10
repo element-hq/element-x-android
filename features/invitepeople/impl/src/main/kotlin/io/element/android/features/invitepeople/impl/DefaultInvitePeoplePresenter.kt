@@ -148,7 +148,6 @@ class DefaultInvitePeoplePresenter(
 
             val cached = value
                 .filterKeys { it in selected }
-                .toImmutableMap()
 
             val uncached = selected
                 .filterNot(cached::containsKey)
@@ -157,7 +156,6 @@ class DefaultInvitePeoplePresenter(
                         .getUserIdentity(user.userId, fallbackToServer = false)
                         .getOrNull()
                 }
-                .toImmutableMap()
 
             value = (cached + uncached).toImmutableMap()
         }
