@@ -6,14 +6,12 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.services.apperror.impl
+package io.element.android.services.apperror.api
 
 import androidx.compose.runtime.Composable
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.services.apperror.api.AppErrorState
-import io.element.android.services.apperror.api.aAppErrorState
 
 @Composable
 fun AppErrorView(

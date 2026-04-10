@@ -12,13 +12,10 @@ import io.element.android.features.messages.impl.voicemessages.composer.DefaultV
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageComposerPlayer
 import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.libraries.matrix.api.timeline.Timeline
-import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.mediaplayer.test.FakeAudioFocus
 import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
 import io.element.android.libraries.mediaupload.api.MediaSender
-import io.element.android.libraries.mediaupload.impl.DefaultMediaSender
-import io.element.android.libraries.mediaupload.test.FakeMediaOptimizationConfigProvider
-import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
+import io.element.android.libraries.mediaupload.test.FakeMediaSender
 import io.element.android.libraries.permissions.test.FakePermissionsPresenterFactory
 import io.element.android.libraries.voicerecorder.test.FakeVoiceRecorder
 import io.element.android.services.analytics.test.FakeAnalyticsService
@@ -26,12 +23,7 @@ import kotlinx.coroutines.CoroutineScope
 
 class FakeDefaultVoiceMessageComposerPresenterFactory(
     private val sessionCoroutineScope: CoroutineScope,
-    private val mediaSender: MediaSender = DefaultMediaSender(
-        preProcessor = FakeMediaPreProcessor(),
-        room = FakeJoinedRoom(),
-        timelineMode = Timeline.Mode.Live,
-        mediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
-    ),
+    private val mediaSender: MediaSender = FakeMediaSender(),
 ) : DefaultVoiceMessageComposerPresenter.Factory {
     override fun create(timelineMode: Timeline.Mode): DefaultVoiceMessageComposerPresenter {
         return DefaultVoiceMessageComposerPresenter(

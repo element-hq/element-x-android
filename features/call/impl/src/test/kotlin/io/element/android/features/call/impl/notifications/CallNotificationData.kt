@@ -6,9 +6,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.call.test
+package io.element.android.features.call.impl.notifications
 
-import io.element.android.features.call.impl.notifications.CallNotificationData
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
