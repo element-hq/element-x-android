@@ -131,8 +131,8 @@ class ShowLocationPresenter(
                     )
                 }
             }
-            ShowLocationMode.Live -> {
-                val liveShares by produceState(persistentListOf()) {
+            is ShowLocationMode.Live -> {
+                produceState(persistentListOf()) {
                     val liveLocationSharesFlow = joinedRoom.subscribeToLiveLocationShares()
                     val membersStateFlow = joinedRoom.membersStateFlow.mapState { it.joinedRoomMembers() }
                     combine(liveLocationSharesFlow, membersStateFlow) { liveShares, members ->
@@ -158,14 +158,19 @@ class ShowLocationPresenter(
                             )
                         }.toPersistentList()
                     }.collect { value = it }
-                }
-                liveShares
+                }.value
             }
+        }
+
+        val focusedLocation = when (mode) {
+            is ShowLocationMode.Static -> locationShares.firstOrNull()
+            is ShowLocationMode.Live -> locationShares.firstOrNull { it.userId == mode.senderId }
         }
 
         return ShowLocationState(
             dialogState = dialogState,
             locationShares = locationShares,
+            focusedLocation = focusedLocation,
             hasLocationPermission = permissionsState.isAnyGranted,
             isTrackMyLocation = isTrackMyLocation,
             isLive = mode is ShowLocationMode.Live,

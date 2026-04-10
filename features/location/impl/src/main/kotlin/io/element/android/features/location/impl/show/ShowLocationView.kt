@@ -22,8 +22,11 @@ import androidx.compose.material3.rememberBottomSheetScaffoldState
 import androidx.compose.material3.rememberStandardBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -67,25 +70,25 @@ fun ShowLocationView(
         onDismiss = { state.eventSink(ShowLocationEvent.DismissDialog) },
     )
 
-    val initialPosition = remember {
-        if (state.locationShares.isEmpty()) {
-            MapDefaults.defaultCameraPosition
-        } else {
-            val firstLocation = state.locationShares.first().location
-            CameraPosition(
-                target = Position(latitude = firstLocation.lat, longitude = firstLocation.lon),
+    val cameraState = rememberCameraState(firstPosition = MapDefaults.defaultCameraPosition)
+    var hasAnimatedToFocusedLocation by remember { mutableStateOf(false) }
+    LaunchedEffect(state.focusedLocation) {
+        if (state.focusedLocation != null && !hasAnimatedToFocusedLocation) {
+            hasAnimatedToFocusedLocation = true
+            val position = CameraPosition(
+                target = Position(latitude = state.focusedLocation.location.lat, longitude = state.focusedLocation.location.lon),
                 zoom = MapDefaults.DEFAULT_ZOOM
             )
+            cameraState.position = position
         }
     }
-    val cameraState = rememberCameraState(firstPosition = initialPosition)
-    val userLocationState = rememberUserLocationState(state.hasLocationPermission)
     LaunchedEffect(cameraState.isCameraMoving) {
         if (cameraState.moveReason == CameraMoveReason.GESTURE) {
             state.eventSink(ShowLocationEvent.TrackMyLocation(false))
         }
     }
 
+    val userLocationState = rememberUserLocationState(state.hasLocationPermission)
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberStandardBottomSheetState(
             initialValue =

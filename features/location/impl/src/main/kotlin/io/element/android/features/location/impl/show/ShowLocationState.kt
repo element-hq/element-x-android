@@ -9,7 +9,6 @@
 package io.element.android.features.location.impl.show
 
 import io.element.android.features.location.api.Location
-import io.element.android.features.location.api.ShowLocationMode
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.features.location.impl.common.ui.LocationMarkerData
 import io.element.android.libraries.designsystem.components.PinVariant
@@ -22,6 +21,7 @@ data class ShowLocationState(
     val isLive: Boolean,
     val dialogState: LocationConstraintsDialogState,
     val locationShares: ImmutableList<LocationShareItem>,
+    val focusedLocation: LocationShareItem?,
     val hasLocationPermission: Boolean,
     val isTrackMyLocation: Boolean,
     val appName: String,

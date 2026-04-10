@@ -50,6 +50,7 @@ fun aShowLocationState(
     isLive: Boolean = false,
     constraintsDialogState: LocationConstraintsDialogState = LocationConstraintsDialogState.None,
     locationShares: List<LocationShareItem> = listOf(aLocationShareItem(isLive = isLive)),
+    focusedLocation: LocationShareItem? = locationShares.firstOrNull(),
     hasLocationPermission: Boolean = false,
     isTrackMyLocation: Boolean = false,
     appName: String = APP_NAME,
@@ -58,6 +59,7 @@ fun aShowLocationState(
     return ShowLocationState(
         dialogState = constraintsDialogState,
         locationShares = locationShares.toImmutableList(),
+        focusedLocation = focusedLocation,
         hasLocationPermission = hasLocationPermission,
         isTrackMyLocation = isTrackMyLocation,
         appName = appName,
