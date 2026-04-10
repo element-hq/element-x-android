@@ -10,7 +10,8 @@ package io.element.android.features.announcement.impl
 
 import io.element.android.features.announcement.api.Announcement
 
-data class AnnouncementState(
-    val announcement: Announcement.Fullscreen? = null,
-    val eventSink: (AnnouncementEvent) -> Unit,
-)
+sealed interface AnnouncementEvent {
+    data class Continue(
+        val announcement: Announcement.Fullscreen,
+    ) : AnnouncementEvent
+}

@@ -8,7 +8,10 @@
 
 package io.element.android.features.announcement.api
 
-enum class Announcement {
-    Space,
-    NewNotificationSound,
+sealed interface Announcement {
+    sealed interface Fullscreen : Announcement {
+        data object Space : Fullscreen
+    }
+
+    data object NewNotificationSound : Announcement
 }

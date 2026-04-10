@@ -17,7 +17,6 @@ import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFac
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
-private val spaceAnnouncementKey = intPreferencesKey("spaceAnnouncement")
 private val newNotificationSoundKey = intPreferencesKey("newNotificationSound")
 
 @ContributesBinding(AppScope::class)
@@ -35,9 +34,10 @@ class DefaultAnnouncementStore(
 
     override fun announcementStatusFlow(announcement: Announcement): Flow<AnnouncementStatus> {
         val key = announcement.toKey()
+        // Announcement.Fullscreen.Space is disabled, consider it's shown
         // For NewNotificationSound, a migration will set it to Show on application upgrade (see AppMigration08)
         val defaultStatus = when (announcement) {
-            Announcement.Space -> AnnouncementStatus.NeverShown
+            Announcement.Fullscreen.Space -> AnnouncementStatus.Shown
             Announcement.NewNotificationSound -> AnnouncementStatus.Shown
         }
         return store.data.map { prefs ->
@@ -52,6 +52,6 @@ class DefaultAnnouncementStore(
 }
 
 private fun Announcement.toKey() = when (this) {
-    Announcement.Space -> spaceAnnouncementKey
+    is Announcement.Fullscreen -> intPreferencesKey("fullscreen_" + this::class.simpleName)
     Announcement.NewNotificationSound -> newNotificationSoundKey
 }
