@@ -10,10 +10,12 @@ package io.element.android.libraries.matrix.impl.room.location
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.location.LastLocation
 import io.element.android.libraries.matrix.api.room.location.LiveLocationShare
-import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
+import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.buffer
+import kotlinx.coroutines.flow.callbackFlow
 import org.matrix.rustcomponents.sdk.LiveLocationShareListener
 import org.matrix.rustcomponents.sdk.LiveLocationShareUpdate
 import org.matrix.rustcomponents.sdk.RoomInterface
@@ -38,9 +40,10 @@ fun RoomInterface.liveLocationSharesFlow(): Flow<List<LiveLocationShare>> {
             is LiveLocationShareUpdate.Truncate -> subList(update.length.toInt(), size).clear()
         }
     }
-    return mxCallbackFlow {
+    return callbackFlow {
+        val liveLocationShares = liveLocationShares()
         val shares: MutableList<LiveLocationShare> = ArrayList()
-        subscribeToLiveLocationShares(object : LiveLocationShareListener {
+        val taskHandle = liveLocationShares.subscribe(object : LiveLocationShareListener {
             override fun onUpdate(updates: List<LiveLocationShareUpdate>) {
                 for (update in updates) {
                     shares.applyUpdate(update)
@@ -48,6 +51,10 @@ fun RoomInterface.liveLocationSharesFlow(): Flow<List<LiveLocationShare>> {
                 trySend(shares)
             }
         })
+        awaitClose {
+            taskHandle.cancelAndDestroy()
+            liveLocationShares.destroy()
+        }
     }.buffer(Channel.UNLIMITED)
 }
 
