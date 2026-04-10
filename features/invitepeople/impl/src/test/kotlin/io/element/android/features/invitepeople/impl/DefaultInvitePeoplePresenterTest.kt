@@ -62,6 +62,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
+@Suppress("LargeClass")
 internal class DefaultInvitePeoplePresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
@@ -743,6 +744,70 @@ internal class DefaultInvitePeoplePresenterTest {
             (awaitLastSequentialItem() as DefaultInvitePeopleState).run {
                 assertThat(sendInvitesAction.isUninitialized()).isTrue()
                 assertThat(selectedUsers).containsExactly(alice)
+            }
+        }
+    }
+
+    @Test
+    fun `present - dismissing confirmation prompt does not affect selection`() = runTest {
+        val alice = aMatrixUser("@alice:example.com")
+        val bob = aMatrixUser("@bob:example.com")
+        val charlie = aMatrixUser("@charlie:example.com")
+
+        val getUserIdentityResult = lambdaRecorder<UserId, Result<IdentityState?>> { userId ->
+            when (userId.value) {
+                alice.userId.value -> Result.success(IdentityState.Pinned)
+                bob.userId.value -> Result.success(null)
+                else -> Result.failure(AN_EXCEPTION)
+            }
+        }
+
+        val encryptionService = FakeEncryptionService(
+            getUserIdentityResult = getUserIdentityResult
+        )
+        val featureFlagService = FakeFeatureFlagService().apply {
+            setFeatureEnabled(FeatureFlags.EnableKeyShareOnInvite, true)
+        }
+
+        val presenter = createDefaultInvitePeoplePresenter(
+            coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
+            matrixClient = FakeMatrixClient(encryptionService = encryptionService),
+            featureFlagService = featureFlagService
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            skipItems(1)
+
+            // When we toggle a user not in the list, they are added, and we fetch their identity.
+            initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(alice))
+            delay(100)
+            awaitItemAsDefault().eventSink(DefaultInvitePeopleEvents.ToggleUser(bob))
+            delay(100)
+            awaitItemAsDefault().eventSink(DefaultInvitePeopleEvents.ToggleUser(charlie))
+            delay(100)
+
+            awaitItemAsDefault().run {
+                assertThat(selectedUsers).containsExactly(alice, bob, charlie)
+                eventSink(InvitePeopleEvents.SendInvites)
+            }
+
+            getUserIdentityResult.assertions().isCalledExactly(3).withSequence(
+                listOf(value(alice.userId)),
+                listOf(value(bob.userId)),
+                listOf(value(charlie.userId))
+            )
+
+            // When we then try to invite these user, we should prompt for confirmation first.
+            awaitItemAsDefault().run {
+                assertThat(sendInvitesAction).isInstanceOf(ConfirmingUnknownUserInvitation::class.java)
+                assertThat(canInvite).isTrue()
+                eventSink(DefaultInvitePeopleEvents.DismissUnknownUsersModal)
+            }
+
+            // Dismissing should not modify the selection at all
+            (awaitLastSequentialItem() as DefaultInvitePeopleState).run {
+                assertThat(sendInvitesAction.isUninitialized()).isTrue()
+                assertThat(selectedUsers).containsExactly(alice, bob, charlie)
             }
         }
     }

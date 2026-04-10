@@ -200,6 +200,9 @@ class DefaultInvitePeoplePresenter(
                         searchResults.toggleUser(event.user)
                         // suggestions will automatically update via derivedStateOf when selectedUsers changes
                     }
+                    is DefaultInvitePeopleEvents.DismissUnknownUsersModal -> {
+                        sendInvitesAction.value = AsyncAction.Uninitialized
+                    }
                     is DefaultInvitePeopleEvents.RemoveUnknownUsers -> {
                         selectedUsers.value = selectedUsers.value.filter { it !in unknownUsers }.toImmutableList()
                         sendInvitesAction.value = AsyncAction.Uninitialized

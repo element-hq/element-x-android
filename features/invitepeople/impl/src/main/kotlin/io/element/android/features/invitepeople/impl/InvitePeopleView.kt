@@ -158,6 +158,7 @@ private fun InvitePeopleContentView(
         if (state.sendInvitesAction is ConfirmingUnknownUserInvitation) {
             InvitePeopleConfirmModal(
                 users = state.sendInvitesAction.users,
+                onDismiss = { state.eventSink.invoke(DefaultInvitePeopleEvents.DismissUnknownUsersModal) },
                 onInvite = { state.eventSink.invoke(InvitePeopleEvents.SendInvites) },
                 onRemove = { state.eventSink.invoke(DefaultInvitePeopleEvents.RemoveUnknownUsers) }
             )
@@ -253,11 +254,12 @@ private fun InvitePeopleSearchBar(
 @Composable
 private fun InvitePeopleConfirmModal(
     users: ImmutableList<MatrixUser>,
+    onDismiss: () -> Unit,
     onInvite: () -> Unit,
     onRemove: () -> Unit
 ) {
     ModalBottomSheet(
-        onDismissRequest = {},
+        onDismissRequest = onDismiss,
         dragHandle = null,
     ) {
         IconTitleSubtitleMolecule(
