@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -31,6 +30,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.invitepeople.api.InvitePeopleEvents
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.designsystem.atomic.molecules.ButtonRowMolecule
 import io.element.android.libraries.designsystem.atomic.molecules.IconTitleSubtitleMolecule
 import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.components.async.AsyncFailure
@@ -155,9 +155,9 @@ private fun InvitePeopleContentView(
             }
         }
 
-        if (state.showConfirmationModal) {
+        if (state.sendInvitesAction is ConfirmingUnknownUserInvitation) {
             InvitePeopleConfirmModal(
-                users = state.unknownUsers,
+                users = state.sendInvitesAction.users,
                 onInvite = { state.eventSink.invoke(InvitePeopleEvents.SendInvites) },
                 onRemove = { state.eventSink.invoke(DefaultInvitePeopleEvents.RemoveUnknownUsers) }
             )
@@ -278,9 +278,9 @@ private fun InvitePeopleConfirmModal(
             }
         }
 
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(16.dp, alignment = Alignment.CenterHorizontally),
-            modifier = Modifier.fillMaxWidth().padding(all = 16.dp)
+        ButtonRowMolecule(
+            horizontalArrangement = Arrangement.spacedBy(16.dp),
+            modifier = Modifier.padding(16.dp)
         ) {
             OutlinedButton(
                 text = stringResource(CommonStrings.action_remove),

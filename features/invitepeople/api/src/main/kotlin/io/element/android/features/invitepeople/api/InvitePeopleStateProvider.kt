@@ -24,7 +24,6 @@ class InvitePeopleStateProvider : PreviewParameterProvider<InvitePeopleState> {
 private data class PreviewInvitePeopleState(
     override val canInvite: Boolean,
     override val isSearchActive: Boolean,
-    override val showConfirmationModal: Boolean,
     override val sendInvitesAction: AsyncAction<Unit>,
     override val eventSink: (InvitePeopleEvents) -> Unit,
 ) : InvitePeopleState
@@ -32,13 +31,11 @@ private data class PreviewInvitePeopleState(
 private fun aPreviewInvitePeopleState(
     canInvite: Boolean = false,
     isSearchActive: Boolean = false,
-    showConfirmationModal: Boolean = false,
     sendInvitesAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     eventSink: (InvitePeopleEvents) -> Unit = {},
 ) = PreviewInvitePeopleState(
     canInvite = canInvite,
     isSearchActive = isSearchActive,
-    showConfirmationModal = showConfirmationModal,
     sendInvitesAction = sendInvitesAction,
     eventSink = eventSink
 )

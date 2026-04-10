@@ -91,7 +91,6 @@ class DefaultInvitePeoplePresenter(
         val queryState = rememberTextFieldState()
         var searchActive by rememberSaveable { mutableStateOf(false) }
         val showSearchLoader = rememberSaveable { mutableStateOf(false) }
-        val showConfirmationModal = rememberSaveable { mutableStateOf(false) }
         val sendInvitesAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
 
         val enableKeyShareOnInvite by featureFlagService.isFeatureEnabledFlow(FeatureFlags.EnableKeyShareOnInvite).collectAsState(initial = false)
@@ -201,11 +200,13 @@ class DefaultInvitePeoplePresenter(
                 }
                 is DefaultInvitePeopleEvents.RemoveUnknownUsers -> {
                     selectedUsers.value = selectedUsers.value.filter { it !in unknownUsers }.toImmutableList()
-                    showConfirmationModal.value = false
+                    sendInvitesAction.value = AsyncAction.Uninitialized
                 }
                 is InvitePeopleEvents.PromptOrInvite -> {
                     if (enableKeyShareOnInvite && unknownUsers.isNotEmpty()) {
-                        showConfirmationModal.value = true
+                        sendInvitesAction.value = ConfirmingUnknownUserInvitation(
+                            unknownUsers
+                        )
                     } else {
                         handleEvent(InvitePeopleEvents.SendInvites)
                     }
@@ -213,7 +214,6 @@ class DefaultInvitePeoplePresenter(
                 is InvitePeopleEvents.SendInvites -> {
                     room.dataOrNull()?.let {
                         sessionCoroutineScope.sendInvites(it, selectedUsers.value, sendInvitesAction)
-                        showConfirmationModal.value = false
                     }
                 }
                 is InvitePeopleEvents.CloseSearch -> {
@@ -227,12 +227,10 @@ class DefaultInvitePeoplePresenter(
             room = room.map { },
             canInvite = selectedUsers.value.isNotEmpty() && !sendInvitesAction.value.isLoading(),
             selectedUsers = selectedUsers.value,
-            unknownUsers = unknownUsers,
             searchQuery = queryState,
             isSearchActive = searchActive,
             searchResults = searchResults.value,
             showSearchLoader = showSearchLoader.value,
-            showConfirmationModal = showConfirmationModal.value,
             sendInvitesAction = sendInvitesAction.value,
             suggestions = suggestions,
             eventSink = ::handleEvent,

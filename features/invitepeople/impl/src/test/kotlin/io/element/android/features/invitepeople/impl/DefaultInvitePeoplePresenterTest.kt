@@ -649,11 +649,10 @@ internal class DefaultInvitePeoplePresenterTest {
             initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(alice))
             awaitItemAsDefault().eventSink(DefaultInvitePeopleEvents.ToggleUser(bob))
             awaitItemAsDefault().eventSink(DefaultInvitePeopleEvents.ToggleUser(charlie))
-            assertThat(awaitItemAsDefault().selectedUsers).containsExactly(alice, bob, charlie)
 
             // If we do not have their identity cached, or fail to fetch it, we should mark them as unknown.
             awaitItemAsDefault().run {
-                assertThat(unknownUsers).containsExactly(bob, charlie)
+                assertThat(selectedUsers).containsExactly(alice, bob, charlie)
                 eventSink(InvitePeopleEvents.PromptOrInvite)
             }
 
@@ -665,7 +664,7 @@ internal class DefaultInvitePeoplePresenterTest {
 
             // When we then try to invite these users, we should prompt for confirmation first.
             awaitItemAsDefault().run {
-                assertThat(showConfirmationModal).isTrue()
+                assertThat(sendInvitesAction).isInstanceOf(ConfirmingUnknownUserInvitation::class.java)
                 assertThat(canInvite).isTrue()
                 eventSink(InvitePeopleEvents.SendInvites)
             }
@@ -715,11 +714,8 @@ internal class DefaultInvitePeoplePresenterTest {
             initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(alice))
             awaitItemAsDefault().eventSink(DefaultInvitePeopleEvents.ToggleUser(bob))
             awaitItemAsDefault().eventSink(DefaultInvitePeopleEvents.ToggleUser(charlie))
-            assertThat(awaitItemAsDefault().selectedUsers).containsExactly(alice, bob, charlie)
-
-            // If we do not have their identity cached, or fail to fetch it, we should mark them as unknown.
             awaitItemAsDefault().run {
-                assertThat(unknownUsers).containsExactly(bob, charlie)
+                assertThat(selectedUsers).containsExactly(alice, bob, charlie)
                 eventSink(InvitePeopleEvents.PromptOrInvite)
             }
 
@@ -733,16 +729,15 @@ internal class DefaultInvitePeoplePresenterTest {
 
             // When we then try to invite these user, we should prompt for confirmation first.
             awaitItemAsDefault().run {
-                assertThat(showConfirmationModal).isTrue()
+                assertThat(sendInvitesAction).isInstanceOf(ConfirmingUnknownUserInvitation::class.java)
                 assertThat(canInvite).isTrue()
                 eventSink(DefaultInvitePeopleEvents.RemoveUnknownUsers)
             }
 
             // Selecting "remove" should remove all unknown users, but keeps those who are known.
             (awaitLastSequentialItem() as DefaultInvitePeopleState).run {
-                assertThat(showConfirmationModal).isFalse()
+                assertThat(sendInvitesAction.isUninitialized()).isTrue()
                 assertThat(selectedUsers).containsExactly(alice)
-                assertThat(unknownUsers).isEmpty()
             }
         }
     }

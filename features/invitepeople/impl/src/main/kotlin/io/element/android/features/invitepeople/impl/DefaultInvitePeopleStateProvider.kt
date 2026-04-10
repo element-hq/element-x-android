@@ -77,15 +77,24 @@ internal class DefaultInvitePeopleStateProvider : PreviewParameterProvider<Defau
                 sendInvitesAction = AsyncAction.Loading,
             ),
             aDefaultInvitePeopleState(
-                unknownUsers = persistentListOf(
-                    aMatrixUser("@alice:server.org"),
-                ),
-                showConfirmationModal = true
+                sendInvitesAction = ConfirmingUnknownUserInvitation(persistentListOf(
+                    aMatrixUser("@alice:server.org")
+                ))
             ),
             aDefaultInvitePeopleState(
-                unknownUsers = aMatrixUserList().toImmutableList(),
-                showConfirmationModal = true
-            )
+                sendInvitesAction = ConfirmingUnknownUserInvitation(persistentListOf(
+                    aMatrixUser("@alice:server.org"),
+                    aMatrixUser("@bob:server.org"),
+                    aMatrixUser("@charlie:server.org"),
+                    aMatrixUser("@danielle:server.org"),
+                    aMatrixUser("@egbert:server.org"),
+                    aMatrixUser("@francesca:server.org"),
+                    aMatrixUser("@gunther:server.org"),
+                    aMatrixUser("@hubert:server.org"),
+                    aMatrixUser("@isobel:server.org"),
+                    aMatrixUser("@jaime:server.org"),
+                ))
+            ),
         )
 }
 
@@ -109,10 +118,8 @@ private fun aDefaultInvitePeopleState(
     searchQuery: String = "",
     searchResults: SearchBarResultState<ImmutableList<InvitableUser>> = SearchBarResultState.Initial(),
     selectedUsers: ImmutableList<MatrixUser> = persistentListOf(),
-    unknownUsers: ImmutableList<MatrixUser> = persistentListOf(),
     isSearchActive: Boolean = false,
     showSearchLoader: Boolean = false,
-    showConfirmationModal: Boolean = false,
     sendInvitesAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     suggestions: List<InvitableUser> = aMatrixUserList()
         .take(5)
@@ -124,10 +131,8 @@ private fun aDefaultInvitePeopleState(
         searchQuery = TextFieldState(initialText = searchQuery),
         searchResults = searchResults,
         selectedUsers = selectedUsers,
-        unknownUsers = unknownUsers,
         isSearchActive = isSearchActive,
         showSearchLoader = showSearchLoader,
-        showConfirmationModal = showConfirmationModal,
         sendInvitesAction = sendInvitesAction,
         suggestions = suggestions.toImmutableList(),
         eventSink = {},
