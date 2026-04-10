@@ -15,8 +15,17 @@ import io.element.android.libraries.matrix.api.core.UserId
 data class LiveLocationShare(
     /** The user who is sharing their location. */
     val userId: UserId,
+    /** The last known location if any. */
+    val lastLocation: LastLocation?,
+    /** The timestamp when location sharing ends, in milliseconds. */
+    val endTimestamp: Long,
+)
+
+data class LastLocation(
     /** The last known geo URI (e.g., "geo:51.5074,-0.1278"). */
-    val lastGeoUri: String,
+    val geoUri: String,
     /** The timestamp of the last location update. */
-    val lastTimestamp: Long,
+    val timestamp: Long,
+    /** The asset of the last location update. */
+    val assetType: AssetType,
 )

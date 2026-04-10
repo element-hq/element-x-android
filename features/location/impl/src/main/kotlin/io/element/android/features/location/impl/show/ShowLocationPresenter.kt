@@ -138,7 +138,8 @@ class ShowLocationPresenter(
                     val membersStateFlow = joinedRoom.membersStateFlow.mapState { it.joinedRoomMembers() }
                     combine(liveLocationSharesFlow, membersStateFlow) { liveShares, members ->
                         liveShares.mapNotNull { share ->
-                            val location = Location.fromGeoUri(share.lastGeoUri) ?: return@mapNotNull null
+                            val lastLocation = share.lastLocation ?: return@mapNotNull null
+                            val location = Location.fromGeoUri(lastLocation.geoUri) ?: return@mapNotNull null
                             val member = members.find { it.userId == share.userId }
                             val displayName = member?.getBestName() ?: share.userId.value
                             val avatarUrl = member?.avatarUrl
@@ -154,7 +155,7 @@ class ShowLocationPresenter(
                                 formattedTimestamp = "Sharing live location",
                                 location = location,
                                 isLive = true,
-                                assetType = AssetType.SENDER,
+                                assetType = lastLocation.assetType,
                             )
                         }.toPersistentList()
                     }.collect { value = it }

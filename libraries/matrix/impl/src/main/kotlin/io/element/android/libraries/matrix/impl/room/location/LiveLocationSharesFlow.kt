@@ -8,15 +8,16 @@
 package io.element.android.libraries.matrix.impl.room.location
 
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.location.LastLocation
 import io.element.android.libraries.matrix.api.room.location.LiveLocationShare
 import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.buffer
-import org.matrix.rustcomponents.sdk.LiveLocationShare as RustLiveLocationShare
 import org.matrix.rustcomponents.sdk.LiveLocationShareListener
 import org.matrix.rustcomponents.sdk.LiveLocationShareUpdate
 import org.matrix.rustcomponents.sdk.RoomInterface
+import org.matrix.rustcomponents.sdk.LiveLocationShare as RustLiveLocationShare
 
 fun RoomInterface.liveLocationSharesFlow(): Flow<List<LiveLocationShare>> {
     fun MutableList<LiveLocationShare>.applyUpdate(update: LiveLocationShareUpdate) {
@@ -53,8 +54,14 @@ fun RoomInterface.liveLocationSharesFlow(): Flow<List<LiveLocationShare>> {
 private fun RustLiveLocationShare.into(): LiveLocationShare {
     return LiveLocationShare(
         userId = UserId(userId),
-        lastGeoUri = lastLocation?.location?.geoUri.orEmpty(),
-        lastTimestamp = lastLocation?.ts?.toLong() ?: 0,
+        lastLocation = lastLocation?.let {
+            LastLocation(
+                geoUri = it.location.geoUri,
+                timestamp = it.ts.toLong(),
+                assetType = it.location.asset.into(),
+            )
+        },
+        endTimestamp = (startTs + timeout).toLong()
     )
 }
 
