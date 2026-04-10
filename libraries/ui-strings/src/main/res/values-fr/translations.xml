@@ -374,6 +374,7 @@ Raison : %1$s."</string>
   <string name="common_text">"Texte"</string>
   <string name="common_third_party_notices">"Avis de tiers"</string>
   <string name="common_thread">"Fil de discussion"</string>
+  <string name="common_threads">"Fils de discussion"</string>
   <string name="common_topic">"Sujet"</string>
   <string name="common_topic_placeholder">"De quoi s’agit-il dans ce salon ?"</string>
   <string name="common_unable_to_decrypt">"Échec de déchiffrement"</string>
@@ -466,6 +467,13 @@ Raison : %1$s."</string>
   <string name="screen_create_poll_remove_accessibility_label">"Supprimer %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Paramètres"</string>
   <string name="screen_media_picker_error_failed_selection">"Échec de la sélection du média, veuillez réessayer."</string>
+  <string name="screen_missing_key_backup_open_element_classic">"Ouvrir Element Classic"</string>
+  <string name="screen_missing_key_backup_step_1">"Ouvrez Element Classic sur votre appareil"</string>
+  <string name="screen_missing_key_backup_step_2_android">"Aller à Paramètres &gt; Sécurité et vie privée"</string>
+  <string name="screen_missing_key_backup_step_3_android">"Dans Gestion des clés cryptographiques, sélectionnez Récupération des messages chiffrés"</string>
+  <string name="screen_missing_key_backup_step_4">"Suivez les instructions pour activer votre stockage de clés"</string>
+  <string name="screen_missing_key_backup_step_5">"Revenez à %1$s"</string>
+  <string name="screen_missing_key_backup_title">"Activez le stockage de vos clés avant de continuer avec %1$s"</string>
   <string name="screen_onboarding_welcome_back">"Bon retour parmi nous"</string>
   <string name="screen_pinned_timeline_empty_state_description">"Cliquez (clic long) sur un message et choisissez « %1$s » pour qu‘il apparaisse ici."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Épinglez les messages importants pour leur donner plus de visibilité"</string>

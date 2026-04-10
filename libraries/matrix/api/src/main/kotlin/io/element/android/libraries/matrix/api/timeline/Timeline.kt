@@ -69,6 +69,8 @@ interface Timeline : AutoCloseable {
         body: String,
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
+        msgType: MsgType = MsgType.MSG_TYPE_TEXT,
+        asPlainText: Boolean = false,
     ): Result<Unit>
 
     suspend fun editMessage(
@@ -90,6 +92,7 @@ interface Timeline : AutoCloseable {
         htmlBody: String?,
         intentionalMentions: List<IntentionalMention>,
         fromNotification: Boolean = false,
+        msgType: MsgType = MsgType.MSG_TYPE_TEXT,
     ): Result<Unit>
 
     suspend fun sendImage(

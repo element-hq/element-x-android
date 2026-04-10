@@ -34,7 +34,7 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.androidutils)
-    implementation(projects.libraries.usersearch.impl)
+    implementation(projects.libraries.usersearch.api)
     implementation(libs.coil.compose)
     implementation(projects.services.apperror.api)
     api(projects.features.invitepeople.api)

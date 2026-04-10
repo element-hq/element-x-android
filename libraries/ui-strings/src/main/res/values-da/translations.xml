@@ -120,6 +120,7 @@
   <string name="action_leave_space">"Forlad klynge"</string>
   <string name="action_load_more">"Indlæs mere"</string>
   <string name="action_manage_account">"Administrer konto"</string>
+  <string name="action_manage_account_and_devices">"Administrer konto og enheder"</string>
   <string name="action_manage_devices">"Administrer enheder"</string>
   <string name="action_manage_rooms">"Administrer rum"</string>
   <string name="action_message">"Besked"</string>
@@ -162,14 +163,15 @@
   <string name="action_share_live_location">"Del liveplacering"</string>
   <string name="action_show">"Vis"</string>
   <string name="action_sign_in_again">"Log ind igen"</string>
-  <string name="action_signout">"Log ud"</string>
-  <string name="action_signout_anyway">"Log ud alligevel"</string>
+  <string name="action_signout">"Fjern denne enhed"</string>
+  <string name="action_signout_anyway">"Fjern denne enhed alligevel"</string>
   <string name="action_skip">"Spring over"</string>
   <string name="action_start">"Start"</string>
   <string name="action_start_chat">"Start samtale"</string>
   <string name="action_start_over">"Begynd forfra"</string>
   <string name="action_start_verification">"Begynd verifikation"</string>
   <string name="action_static_map_load">"Tryk for at indlæse kort"</string>
+  <string name="action_stop">"Stop"</string>
   <string name="action_take_photo">"Tag billede"</string>
   <string name="action_tap_for_options">"Tryk for indstillinger"</string>
   <string name="action_translate">"Oversæt"</string>
@@ -190,6 +192,7 @@
   <string name="common_advanced_settings">"Avancerede indstillinger"</string>
   <string name="common_an_image">"et billede"</string>
   <string name="common_analytics">"Analyse-værktøj"</string>
+  <string name="common_android_fetching_notifications_title">"Synkroniserer notifikationer…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Du forlod rummet"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Du blev logget ud af sessionen"</string>
   <string name="common_appearance">"Udseende"</string>
@@ -223,6 +226,7 @@
   <string name="common_empty_file">"Tom fil"</string>
   <string name="common_encryption">"Kryptering"</string>
   <string name="common_encryption_enabled">"Kryptering aktiveret"</string>
+  <string name="common_ends_at">"Slutter kl.%1$s"</string>
   <string name="common_enter_your_pin">"Indtast din PIN-kode"</string>
   <string name="common_error">"Fejl"</string>
   <string name="common_error_registering_pusher_android">"Der opstod en fejl, du modtager muligvis ikke meddelelser om nye meddelelser. Fejlfinding af meddelelser fra indstillingerne.
@@ -249,6 +253,8 @@
   <string name="common_line_copied_to_clipboard">"Linje kopieret til udklipsholder"</string>
   <string name="common_link_copied_to_clipboard">"Linket er kopieret til udklipsholderen"</string>
   <string name="common_link_new_device">"Forbind ny enhed"</string>
+  <string name="common_live_location">"Aktuel position"</string>
+  <string name="common_live_location_ended">"Aktuel position afsluttet"</string>
   <string name="common_loading">"Indlæser…"</string>
   <string name="common_loading_more">"Indlæser flere…"</string>
   <plurals name="common_many_members">
@@ -344,9 +350,10 @@
   <string name="common_settings">"Indstillinger"</string>
   <string name="common_share_space">"Del klynge"</string>
   <string name="common_shared_history">"Nye medlemmer ser historik"</string>
+  <string name="common_shared_live_location">"Deling af aktuel position"</string>
   <string name="common_shared_location">"Delt placering"</string>
   <string name="common_shared_space">"Delt klynge"</string>
-  <string name="common_signing_out">"Logger ud"</string>
+  <string name="common_signing_out">"Fjerner enhed"</string>
   <string name="common_something_went_wrong">"Noget gik galt"</string>
   <string name="common_something_went_wrong_message">"Vi stødte på et problem. Prøv venligst igen."</string>
   <string name="common_space">"Klynge"</string>
@@ -366,12 +373,13 @@
   <string name="common_text">"Tekst"</string>
   <string name="common_third_party_notices">"Tredjepartsmeddelelser"</string>
   <string name="common_thread">"Tråd"</string>
+  <string name="common_threads">"Tråde"</string>
   <string name="common_topic">"Emne"</string>
   <string name="common_topic_placeholder">"Hvad handler det her rum om?"</string>
   <string name="common_unable_to_decrypt">"Ude af stand til at dekryptere"</string>
   <string name="common_unable_to_decrypt_insecure_device">"Sendt fra en usikker enhed"</string>
   <string name="common_unable_to_decrypt_no_access">"Du har ikke adgang til denne meddelelse"</string>
-  <string name="common_unable_to_decrypt_verification_violation">"Afsenderens verificerede identitet blev nulstillet"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Afsenderens verificerede digitale identitet blev nulstillet"</string>
   <string name="common_unable_to_invite_message">"Invitationer kunne ikke sendes til en eller flere brugere."</string>
   <string name="common_unable_to_invite_title">"Kan ikke sende invitation(er)"</string>
   <string name="common_unlock">"Lås op"</string>
@@ -396,16 +404,17 @@
   <string name="common_voice_message">"Talebesked"</string>
   <string name="common_waiting">"Venter…"</string>
   <string name="common_waiting_for_decryption_key">"Venter på denne besked"</string>
+  <string name="common_waiting_live_location">"Venter på aktuel position…"</string>
   <string name="common_world_readable_history">"Alle kan se historikken"</string>
   <string name="common_you">"Dig"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s(%2$s ) har delt denne besked siden du ikke var i rummet da den blev sendt."</string>
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s delte denne besked, siden du ikke var i rummet da den blev sendt."</string>
   <string name="crypto_history_visible">"Dette rum er konfigureret, så nye medlemmer kan læse historikken.%1$s"</string>
-  <string name="crypto_identity_change_pin_violation">"%1$ss identitet blev nulstillet. %2$s"</string>
-  <string name="crypto_identity_change_pin_violation_new">"%1$ss %2$s identitet blev nulstillet. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation">"%1$ss digitale identitet blev nulstillet. %2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"%1$ss %2$s digitale identitet blev nulstillet. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
-  <string name="crypto_identity_change_profile_pin_violation">"%1$ss identitet blev nulstillet."</string>
-  <string name="crypto_identity_change_verification_violation_new">"%1$ss %2$s identitet blev nulstillet. %3$s"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"%1$ss digitale identitet blev nulstillet."</string>
+  <string name="crypto_identity_change_verification_violation_new">"%1$ss %2$s digitale identitet blev nulstillet. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Tilbagetræk verifikation"</string>
   <string name="dialog_allow_access">"Tillad adgang"</string>
   <string name="dialog_confirm_link_message">"Linket %1$s fører dig til et andet websted %2$s
@@ -437,6 +446,7 @@ Er du sikker på, at du vil fortsætte?"</string>
   <string name="error_failed_locating_user">"%1$s kunne ikke få adgang til din placering. Prøv igen senere."</string>
   <string name="error_failed_uploading_voice_message">"Kunne ikke uploade din talebesked."</string>
   <string name="error_invalid_invite">"Rummet findes ikke længere, eller invitationen er ikke længere gyldig."</string>
+  <string name="error_location_service_disabled_android">"Aktiver venligst din GPS for at få adgang til lokationsbaserede funktioner."</string>
   <string name="error_message_not_found">"Meddelelsen blev ikke fundet"</string>
   <string name="error_missing_location_auth_android">"%1$s har ikke tilladelse til at få adgang til din placering. Du kan aktivere adgang i Indstillinger."</string>
   <string name="error_missing_location_rationale_android">"%1$s har ikke tilladelse til at se din placering. Aktivér adgang nedenfor."</string>
@@ -464,11 +474,11 @@ Er du sikker på, at du vil fortsætte?"</string>
     <item quantity="other">"%1$d Fastgjorte beskeder"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Fastgjorte beskeder"</string>
-  <string name="screen_reset_identity_confirmation_subtitle">"Du er ved at gå til din %1$s konto for at nulstille din identitet. Derefter vil du blive ført tilbage til appen."</string>
-  <string name="screen_reset_identity_confirmation_title">"Kan du ikke bekræfte? Gå til din konto for at nulstille din identitet."</string>
+  <string name="screen_reset_identity_confirmation_subtitle">"Du er ved at gå til din %1$s konto for at nulstille din digitale identitet. Derefter vil du blive ført tilbage til appen."</string>
+  <string name="screen_reset_identity_confirmation_title">"Kan du ikke bekræfte? Gå til din konto for at nulstille din digitale identitet."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Træk verifikationen tilbage og send"</string>
   <string name="screen_resolve_send_failure_changed_identity_subtitle">"Du kan trække din verifikation tilbage og sende denne meddelelse alligevel, eller du kan annullere for nu og prøve igen senere efter at have gen-verificeret. %1$s"</string>
-  <string name="screen_resolve_send_failure_changed_identity_title">"Din besked blev ikke sendt, fordi %1$s\'s verificerede identitet er blevet nulstillet"</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Din besked blev ikke sendt, fordi %1$s\'s verificerede digitale identitet er blevet nulstillet"</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Send besked alligevel"</string>
   <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s bruger en eller flere uverificerede enheder. Du kan sende beskeden alligevel, eller du kan annullere for nu og prøve igen senere, når %2$s har bekræftet alle deres enheder."</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Din besked blev ikke sendt, fordi %1$s ikke har bekræftet alle enheder"</string>
@@ -500,7 +510,7 @@ Er du sikker på, at du vil fortsætte?"</string>
   <string name="screen_space_list_title">"Klynger"</string>
   <string name="screen_static_location_sheet_timestamp_description">"Delt %1$s"</string>
   <string name="screen_static_location_sheet_title">"På kortet"</string>
-  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Beskeden blev ikke sendt fordi %1$s s bekræftede identitet blev nulstillet."</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Beskeden blev ikke sendt fordi %1$s s bekræftede digitale identitet blev nulstillet."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Meddelelsen er ikke sendt, fordi %1$s ikke har bekræftet alle enheder."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Beskeden er ikke sendt, fordi du ikke har verificeret en eller flere af dine enheder."</string>
   <string name="screen_view_location_title">"Lokation"</string>
@@ -510,5 +520,5 @@ Er du sikker på, at du vil fortsætte?"</string>
   <string name="timeline_decryption_failure_historical_event_unverified_device">"Du skal verificere denne enhed for at få adgang til historiske beskeder"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Du har ikke adgang til denne meddelelse"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Kan ikke dekryptere beskeden"</string>
-  <string name="timeline_decryption_failure_withheld_unverified">"Denne besked blev blokeret, enten fordi du ikke verificerede din enhed, eller fordi afsenderen skal have verificeret din identitet."</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Denne besked blev blokeret, enten fordi du ikke verificerede din enhed, eller fordi afsenderen endnu ikke har bekræftet din digitale identitet."</string>
 </resources>

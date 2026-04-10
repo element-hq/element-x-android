@@ -105,7 +105,7 @@ class MessagesNode(
     private val timelineController = TimelineController(room, room.liveTimeline)
     private val presenter = presenterFactory.create(
         navigator = this,
-        composerPresenter = messageComposerPresenterFactory.create(timelineController, this),
+        composerPresenter = messageComposerPresenterFactory.create(timelineController, this, isInThread = false),
         timelinePresenter = timelinePresenterFactory.create(timelineController = timelineController, this),
         actionListPresenter = actionListPresenterFactory.create(
             postProcessor = TimelineItemActionPostProcessor.Default,
@@ -130,6 +130,7 @@ class MessagesNode(
         fun navigateToRoomDetails()
         fun navigateToPinnedMessagesList()
         fun navigateToKnockRequestsList()
+        fun navigateToDeveloperSettings()
     }
 
     override fun onBuilt() {
@@ -222,8 +223,16 @@ class MessagesNode(
         }
     }
 
+    override fun navigateToMember(userId: UserId) {
+        callback.navigateToRoomMemberDetails(userId)
+    }
+
     override fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?) {
         callback.navigateToThread(threadRootId, focusedEventId)
+    }
+
+    override fun navigateToDeveloperSettings() {
+        callback.navigateToDeveloperSettings()
     }
 
     private fun displaySameRoomToast() {

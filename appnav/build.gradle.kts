@@ -51,7 +51,7 @@ dependencies {
     implementation(projects.features.linknewdevice.api)
     implementation(projects.features.share.api)
 
-    implementation(projects.services.apperror.impl)
+    implementation(projects.services.apperror.api)
     implementation(projects.services.appnavstate.api)
     implementation(projects.services.analytics.api)
 
@@ -67,8 +67,7 @@ dependencies {
     testImplementation(projects.features.messages.test)
     testImplementation(projects.features.networkmonitor.test)
     testImplementation(projects.features.rageshake.test)
-    testImplementation(projects.services.appnavstate.impl)
+    testImplementation(projects.services.apperror.test)
     testImplementation(projects.services.appnavstate.test)
     testImplementation(projects.services.analytics.test)
-    testImplementation(projects.services.toolbox.test)
 }

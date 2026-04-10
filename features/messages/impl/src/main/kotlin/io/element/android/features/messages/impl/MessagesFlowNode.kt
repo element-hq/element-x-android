@@ -293,6 +293,10 @@ class MessagesFlowNode(
                     override fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?) {
                         backstack.push(NavTarget.Thread(threadRootId, focusedEventId))
                     }
+
+                    override fun navigateToDeveloperSettings() {
+                        callback.navigateToDeveloperSettings()
+                    }
                 }
                 val inputs = MessagesNode.Inputs(focusedEventId = navTarget.focusedEventId)
                 createNode<MessagesNode>(buildContext, listOf(callback, inputs))
@@ -428,6 +432,10 @@ class MessagesFlowNode(
                     override fun handleForwardEventClick(eventId: EventId) {
                         backstack.push(NavTarget.ForwardEvent(eventId = eventId, fromPinnedEvents = true))
                     }
+
+                    override fun navigateToThread(threadRootId: ThreadId) {
+                        backstack.push(NavTarget.Thread(threadRootId, null))
+                    }
                 }
                 createNode<PinnedMessagesListNode>(buildContext, plugins = listOf(callback))
             }
@@ -501,6 +509,10 @@ class MessagesFlowNode(
 
                     override fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?) {
                         backstack.push(NavTarget.Thread(threadRootId, focusedEventId))
+                    }
+
+                    override fun navigateToDeveloperSettings() {
+                        callback.navigateToDeveloperSettings()
                     }
                 }
                 createNode<ThreadedMessagesNode>(buildContext, listOf(inputs, callback))

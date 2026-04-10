@@ -122,6 +122,7 @@
   <string name="action_leave_space">"Покинуть пространство"</string>
   <string name="action_load_more">"Загрузить еще"</string>
   <string name="action_manage_account">"Настройки аккаунта"</string>
+  <string name="action_manage_account_and_devices">"Управление учетной записью и устройствами"</string>
   <string name="action_manage_devices">"Управление устройствами"</string>
   <string name="action_manage_rooms">"Управление комнатами"</string>
   <string name="action_message">"Написать"</string>
@@ -172,6 +173,7 @@
   <string name="action_start_over">"Начать заново"</string>
   <string name="action_start_verification">"Начать подтверждение"</string>
   <string name="action_static_map_load">"Нажмите, чтобы загрузить карту"</string>
+  <string name="action_stop">"Остановить"</string>
   <string name="action_take_photo">"Сделать фото"</string>
   <string name="action_tap_for_options">"Нажмите для просмотра вариантов"</string>
   <string name="action_translate">"Перевести"</string>
@@ -226,6 +228,7 @@
   <string name="common_empty_file">"Пустой файл"</string>
   <string name="common_encryption">"Шифрование"</string>
   <string name="common_encryption_enabled">"Шифрование включено"</string>
+  <string name="common_ends_at">"Время завершения: %1$s"</string>
   <string name="common_enter_your_pin">"Введите свой PIN-код"</string>
   <string name="common_error">"Ошибка"</string>
   <string name="common_error_registering_pusher_android">"Произошла ошибка. Вы можете не получать уведомления о новых сообщениях. Устраните неполадки с уведомлениями в настройках.

@@ -70,27 +70,6 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
-    CreateSpaces(
-        key = "feature.createSpaces",
-        title = "Create spaces",
-        description = "Allow creating spaces.",
-        defaultValue = { true },
-        isFinished = false,
-    ),
-    SpaceSettings(
-        key = "feature.spaceSettings",
-        title = "Space settings",
-        description = "Allow managing space settings such as details, permissions and privacy.",
-        defaultValue = { true },
-        isFinished = false,
-    ),
-    RoomListSpaceFilters(
-        key = "feature.roomListSpaceFilters",
-        title = "Room list space filters",
-        description = "Allow filtering the room list by space.",
-        defaultValue = { true },
-        isFinished = false,
-    ),
     PrintLogsToLogcat(
         key = "feature.print_logs_to_logcat",
         title = "Print logs to logcat",
@@ -156,10 +135,24 @@ enum class FeatureFlags(
     ),
     ValidateNetworkWhenSchedulingNotificationFetching(
         key = "feature.validate_network_when_scheduling_notification_fetching",
-        title = "validate internet connectivity when scheduling notification fetching",
+        title = "Validate internet connectivity when scheduling notification fetching",
         description = "Only fetch events for push notifications when the device has internet connectivity. " +
             "Enabling this can be problematic in air-gapped environments.",
         defaultValue = { true },
+        isFinished = false,
+    ),
+    FloatingDateBadge(
+        key = "feature.floating_date_badge",
+        title = "Display sticky date headers in the timeline",
+        description = "When scrolling, a sticky date badge will be displayed so you can easily know on which date the messages you're seeing were sent.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    SlashCommand(
+        key = "feature.slash_command",
+        title = "Parse slash commands in the message composer",
+        description = "Allow parsing slash commands in the message composer and perform action.",
+        defaultValue = { false },
         isFinished = false,
     ),
 }

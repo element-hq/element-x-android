@@ -16,6 +16,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.room.RoomInfo
+import io.element.android.libraries.matrix.api.timeline.MsgType
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_MESSAGE
@@ -341,9 +342,9 @@ class NotificationBroadcastReceiverHandlerTest {
 
     @Test
     fun `Test send reply`() = runTest {
-        val sendMessage = lambdaRecorder<String, String?, List<IntentionalMention>, Result<Unit>> { _, _, _ -> Result.success(Unit) }
+        val sendMessage = lambdaRecorder<String, String?, List<IntentionalMention>, MsgType, Boolean, Result<Unit>> { _, _, _, _, _ -> Result.success(Unit) }
         val replyMessage =
-            lambdaRecorder<EventId?, String, String?, List<IntentionalMention>, Boolean, Result<Unit>> { _, _, _, _, _ -> Result.success(Unit) }
+            lambdaRecorder<EventId?, String, String?, List<IntentionalMention>, Boolean, MsgType, Result<Unit>> { _, _, _, _, _, _ -> Result.success(Unit) }
         val liveTimeline = FakeTimeline().apply {
             sendMessageLambda = sendMessage
             replyMessageLambda = replyMessage
@@ -375,7 +376,13 @@ class NotificationBroadcastReceiverHandlerTest {
         advanceUntilIdle()
         sendMessage.assertions()
             .isCalledOnce()
-            .with(value(A_MESSAGE), value(null), value(emptyList<IntentionalMention>()))
+            .with(
+                value(A_MESSAGE),
+                value(null),
+                value(emptyList<IntentionalMention>()),
+                value(MsgType.MSG_TYPE_TEXT),
+                value(false),
+            )
         onNotifiableEventsReceivedResult.assertions()
             .isCalledOnce()
         replyMessage.assertions()
@@ -384,7 +391,7 @@ class NotificationBroadcastReceiverHandlerTest {
 
     @Test
     fun `Test send reply blank message`() = runTest {
-        val sendMessage = lambdaRecorder<String, String?, List<IntentionalMention>, Result<Unit>> { _, _, _ -> Result.success(Unit) }
+        val sendMessage = lambdaRecorder<String, String?, List<IntentionalMention>, MsgType, Boolean, Result<Unit>> { _, _, _, _, _ -> Result.success(Unit) }
         val liveTimeline = FakeTimeline().apply {
             sendMessageLambda = sendMessage
         }
@@ -408,9 +415,9 @@ class NotificationBroadcastReceiverHandlerTest {
 
     @Test
     fun `Test send reply to thread`() = runTest {
-        val sendMessage = lambdaRecorder<String, String?, List<IntentionalMention>, Result<Unit>> { _, _, _ -> Result.success(Unit) }
+        val sendMessage = lambdaRecorder<String, String?, List<IntentionalMention>, MsgType, Boolean, Result<Unit>> { _, _, _, _, _ -> Result.success(Unit) }
         val replyMessage =
-            lambdaRecorder<EventId?, String, String?, List<IntentionalMention>, Boolean, Result<Unit>> { _, _, _, _, _ -> Result.success(Unit) }
+            lambdaRecorder<EventId?, String, String?, List<IntentionalMention>, Boolean, MsgType, Result<Unit>> { _, _, _, _, _, _ -> Result.success(Unit) }
         val liveTimeline = FakeTimeline().apply {
             sendMessageLambda = sendMessage
             replyMessageLambda = replyMessage
@@ -453,7 +460,8 @@ class NotificationBroadcastReceiverHandlerTest {
                 value(A_MESSAGE),
                 value(null),
                 value(emptyList<IntentionalMention>()),
-                value(true)
+                value(true),
+                value(MsgType.MSG_TYPE_TEXT),
             )
     }
 

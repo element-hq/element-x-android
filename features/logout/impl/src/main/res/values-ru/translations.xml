@@ -3,7 +3,7 @@
   <string name="screen_signout_confirmation_dialog_content">"Вы уверены, что вы хотите выйти?"</string>
   <string name="screen_signout_confirmation_dialog_submit">"Удалить это устройство"</string>
   <string name="screen_signout_confirmation_dialog_title">"Удалить это устройство"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Выполняется выход…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Удаление устройства…"</string>
   <string name="screen_signout_key_backup_disabled_subtitle">"Вы собираетесь выйти из последнего сеанса. Если вы выйдете из системы сейчас, вы потеряете доступ к зашифрованным сообщениям."</string>
   <string name="screen_signout_key_backup_disabled_title">"Вы отключили резервное копирование"</string>
   <string name="screen_signout_key_backup_offline_subtitle">"Когда вы перешли в автономный режим, резервное копирование ваших ключей продолжалось. Повторно подключитесь, чтобы перед выходом из системы можно было создать резервную копию ключей."</string>

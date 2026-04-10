@@ -32,9 +32,13 @@ import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.LocalResources
 import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
+import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.createBitmap
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.withSave
 import coil3.Image
 import coil3.ImageLoader
@@ -50,6 +54,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 private val PIN_WIDTH = 42.dp
 private val PIN_HEIGHT = PIN_WIDTH * 1.2f
@@ -99,21 +104,33 @@ fun LocationPin(
 fun rememberLocationPinBitmap(variant: PinVariant): ImageBitmap? {
     val context = LocalContext.current
     val density = LocalDensity.current
-    val imageLoader = SingletonImageLoader.get(context)
     val colors = pinColors(variant)
     val cacheKey = rememberCacheKey(variant)
-    return produceState<ImageBitmap?>(initialValue = null, cacheKey) {
-        val memoryCacheKey = MemoryCache.Key(cacheKey)
-        val cached = imageLoader.memoryCache?.get(memoryCacheKey)
-        if (cached != null) {
-            value = cached.image.toBitmap().asImageBitmap()
-        } else {
-            val dimensions = PinDimensions(density)
-            val bitmap = LocationPinRenderer.renderPin(variant, colors, dimensions, context, imageLoader)
-            imageLoader.memoryCache?.set(memoryCacheKey, MemoryCache.Value(bitmap.asImage()))
-            value = bitmap.asImageBitmap()
-        }
-    }.value
+    val resources = LocalResources.current
+
+    return if (LocalInspectionMode.current) {
+        // In preview mode, skip async loading and return a simple placeholder image instead to avoid using ImageLoader
+        val dimensions = PinDimensions(density)
+        val avatarImage = ResourcesCompat.getDrawable(resources, CommonDrawables.sample_avatar, context.theme)?.toBitmap()?.asImage()
+        LocationPinRenderer.renderPin(variant, colors, dimensions, avatarImage).asImageBitmap()
+    } else {
+        produceState<ImageBitmap?>(initialValue = null, cacheKey) {
+            val imageLoader = SingletonImageLoader.get(context)
+            val memoryCacheKey = MemoryCache.Key(cacheKey)
+            val cached = imageLoader.memoryCache?.get(memoryCacheKey)
+            if (cached != null) {
+                value = cached.image.toBitmap().asImageBitmap()
+            } else {
+                val dimensions = PinDimensions(density)
+                val bitmap = with(LocationPinRenderer) {
+                    val avatarImage = loadAvatarImage(variant, context, imageLoader)
+                    renderPin(variant, colors, dimensions, avatarImage)
+                }
+                imageLoader.memoryCache?.set(memoryCacheKey, MemoryCache.Value(bitmap.asImage()))
+                value = bitmap.asImageBitmap()
+            }
+        }.value
+    }
 }
 
 @Composable
@@ -208,19 +225,17 @@ private object LocationPinRenderer {
     /**
      * Renders a pin variant to bitmap. Suspending for async avatar loading.
      */
-    suspend fun renderPin(
+    fun renderPin(
         variant: PinVariant,
         colors: PinColors,
         dimensions: PinDimensions,
-        context: Context,
-        imageLoader: ImageLoader,
+        avatarImage: Image?,
     ): Bitmap {
         val bitmap = createBitmap(dimensions.pinWidth.toInt(), dimensions.pinHeight.toInt())
         val canvas = Canvas(bitmap)
         canvas.drawPinShape(colors.fill, colors.stroke, dimensions)
         when (variant) {
             is PinVariant.UserLocation -> {
-                val avatarImage = loadAvatarImage(variant.avatarData, context, imageLoader)
                 canvas.drawAvatar(
                     avatarImage = avatarImage,
                     avatarData = variant.avatarData,
@@ -284,11 +299,15 @@ private object LocationPinRenderer {
         return path
     }
 
-    private suspend fun loadAvatarImage(
-        avatarData: AvatarData,
+    suspend fun loadAvatarImage(
+        variant: PinVariant,
         context: Context,
         imageLoader: ImageLoader,
     ): Image? {
+        val avatarData = when (variant) {
+            is PinVariant.UserLocation -> variant.avatarData
+            else -> return null
+        }
         val request = ImageRequest.Builder(context)
             .data(avatarData)
             // Disable hardware rendering for Canvas

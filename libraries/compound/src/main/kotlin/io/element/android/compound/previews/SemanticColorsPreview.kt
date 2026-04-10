@@ -122,6 +122,7 @@ private fun getSemanticColors(): ImmutableMap<String, Color> {
             "bgBadgeAccent" to bgBadgeAccent,
             "bgBadgeDefault" to bgBadgeDefault,
             "bgBadgeInfo" to bgBadgeInfo,
+            "bgBadgePrimary" to bgBadgePrimary,
             "bgCanvasDefault" to bgCanvasDefault,
             "bgCanvasDefaultLevel1" to bgCanvasDefaultLevel1,
             "bgCanvasDisabled" to bgCanvasDisabled,

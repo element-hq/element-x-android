@@ -93,6 +93,7 @@ class DefaultMessagesEntryPointTest {
             override fun handlePermalinkClick(data: PermalinkData, pushToBackstack: Boolean) = lambdaError()
             override fun forwardEvent(eventId: EventId, fromPinnedEvents: Boolean) = lambdaError()
             override fun navigateToRoom(roomId: RoomId) = lambdaError()
+            override fun navigateToDeveloperSettings() = lambdaError()
         }
         val initialTarget = MessagesEntryPoint.InitialTarget.Messages(focusedEventId = AN_EVENT_ID)
         val params = MessagesEntryPoint.Params(initialTarget)

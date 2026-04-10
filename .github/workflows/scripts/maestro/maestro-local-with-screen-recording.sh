@@ -19,6 +19,9 @@ adb install -r $1
 echo "Starting the screen recording..."
 adb push .github/workflows/scripts/maestro/local-recording.sh /data/local/tmp/
 adb shell "chmod +x /data/local/tmp/local-recording.sh"
+mkdir -p ~/.maestro/tests
+# Start logcat in the background and save the output to a file, use `org.matrix.rust.sdk` tag since the SDK handles the logging
+adb logcat 'org.matrix.rust.sdk:D *:S' > ~/.maestro/tests/logcat.txt &
 adb shell "/data/local/tmp/local-recording.sh & echo \$! > /data/local/tmp/screenrecord_pid.txt" &
 set +e
 ~/.maestro/bin/maestro test .maestro/allTests.yaml
