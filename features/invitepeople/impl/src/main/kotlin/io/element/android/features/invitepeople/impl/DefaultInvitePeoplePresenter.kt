@@ -186,34 +186,34 @@ class DefaultInvitePeoplePresenter(
 
         fun handleEvent(event: InvitePeopleEvents) {
             when (event) {
-                is DefaultInvitePeopleEvents.OnSearchActiveChanged -> {
-                    searchActive = event.active
-                    if (!event.active) {
-                        queryState.clearText()
+                // Dedicated `when` for exhaustivity.
+                is DefaultInvitePeopleEvents -> when (event) {
+                    is DefaultInvitePeopleEvents.OnSearchActiveChanged -> {
+                        searchActive = event.active
+                        if (!event.active) {
+                            queryState.clearText()
+                        }
+                    }
+
+                    is DefaultInvitePeopleEvents.ToggleUser -> {
+                        selectedUsers.toggleUser(event.user)
+                        searchResults.toggleUser(event.user)
+                        // suggestions will automatically update via derivedStateOf when selectedUsers changes
+                    }
+                    is DefaultInvitePeopleEvents.RemoveUnknownUsers -> {
+                        selectedUsers.value = selectedUsers.value.filter { it !in unknownUsers }.toImmutableList()
+                        sendInvitesAction.value = AsyncAction.Uninitialized
                     }
                 }
-
-                is DefaultInvitePeopleEvents.ToggleUser -> {
-                    selectedUsers.toggleUser(event.user)
-                    searchResults.toggleUser(event.user)
-                    // suggestions will automatically update via derivedStateOf when selectedUsers changes
-                }
-                is DefaultInvitePeopleEvents.RemoveUnknownUsers -> {
-                    selectedUsers.value = selectedUsers.value.filter { it !in unknownUsers }.toImmutableList()
-                    sendInvitesAction.value = AsyncAction.Uninitialized
-                }
-                is InvitePeopleEvents.PromptOrInvite -> {
-                    if (enableKeyShareOnInvite && unknownUsers.isNotEmpty()) {
+                is InvitePeopleEvents.SendInvites -> {
+                    if (enableKeyShareOnInvite && unknownUsers.isNotEmpty() && sendInvitesAction.value !is ConfirmingUnknownUserInvitation) {
                         sendInvitesAction.value = ConfirmingUnknownUserInvitation(
                             unknownUsers
                         )
                     } else {
-                        handleEvent(InvitePeopleEvents.SendInvites)
-                    }
-                }
-                is InvitePeopleEvents.SendInvites -> {
-                    room.dataOrNull()?.let {
-                        sessionCoroutineScope.sendInvites(it, selectedUsers.value, sendInvitesAction)
+                        room.dataOrNull()?.let {
+                            sessionCoroutineScope.sendInvites(it, selectedUsers.value, sendInvitesAction)
+                        }
                     }
                 }
                 is InvitePeopleEvents.CloseSearch -> {

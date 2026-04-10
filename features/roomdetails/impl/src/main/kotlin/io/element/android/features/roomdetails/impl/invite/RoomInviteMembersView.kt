@@ -55,7 +55,7 @@ fun RoomInviteMembersView(
                     }
                 },
                 onSubmitClick = {
-                    state.eventSink(InvitePeopleEvents.PromptOrInvite)
+                    state.eventSink(InvitePeopleEvents.SendInvites)
                 },
                 canSend = state.canInvite,
             )

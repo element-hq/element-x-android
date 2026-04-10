@@ -422,7 +422,7 @@ internal class DefaultInvitePeoplePresenterTest {
             // The results are updated...
             assertThat(resultState.searchResults).isInstanceOf(SearchBarResultState.Results::class.java)
             // Send invites
-            initialState.eventSink(InvitePeopleEvents.PromptOrInvite)
+            initialState.eventSink(InvitePeopleEvents.SendInvites)
 
             // Can't invite in the loading state
             awaitItem().run {
@@ -471,7 +471,7 @@ internal class DefaultInvitePeoplePresenterTest {
             // The results are updated...
             assertThat(resultState.searchResults).isInstanceOf(SearchBarResultState.Results::class.java)
             // Send invites
-            initialState.eventSink(InvitePeopleEvents.PromptOrInvite)
+            initialState.eventSink(InvitePeopleEvents.SendInvites)
 
             // Can't invite in the loading state
             awaitItem().run {
@@ -656,14 +656,14 @@ internal class DefaultInvitePeoplePresenterTest {
             // If we do not have their identity cached, or fail to fetch it, we should mark them as unknown.
             awaitItemAsDefault().run {
                 assertThat(selectedUsers).containsExactly(alice, bob, charlie)
-                eventSink(InvitePeopleEvents.PromptOrInvite)
+                eventSink(InvitePeopleEvents.SendInvites)
             }
 
             assertThat(getUserIdentityResult.assertions().isCalledExactly(3).withSequence(
                 listOf(value(alice.userId)),
                 listOf(value(bob.userId)),
                 listOf(value(charlie.userId))
-            ))
+            )
 
             // When we then try to invite these users, we should prompt for confirmation first.
             awaitItemAsDefault().run {
@@ -723,7 +723,7 @@ internal class DefaultInvitePeoplePresenterTest {
 
             awaitItemAsDefault().run {
                 assertThat(selectedUsers).containsExactly(alice, bob, charlie)
-                eventSink(InvitePeopleEvents.PromptOrInvite)
+                eventSink(InvitePeopleEvents.SendInvites)
             }
 
             assertThat(

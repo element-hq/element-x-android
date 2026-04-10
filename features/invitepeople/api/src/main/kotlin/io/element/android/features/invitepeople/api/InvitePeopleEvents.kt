@@ -9,7 +9,6 @@
 package io.element.android.features.invitepeople.api
 
 interface InvitePeopleEvents {
-    data object PromptOrInvite : InvitePeopleEvents
     data object SendInvites : InvitePeopleEvents
     data object CloseSearch : InvitePeopleEvents
 }
