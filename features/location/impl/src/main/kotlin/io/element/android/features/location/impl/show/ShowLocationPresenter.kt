@@ -40,7 +40,6 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.getBestName
 import io.element.android.libraries.matrix.api.room.joinedRoomMembers
-import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.collections.immutable.persistentListOf
@@ -124,7 +123,7 @@ class ShowLocationPresenter(
                                 url = mode.senderAvatarUrl,
                                 size = AvatarSize.UserListItem,
                             ),
-                            formattedTimestamp = formattedTimestamp,
+                            description = formattedTimestamp,
                             location = mode.location,
                             isLive = false,
                             assetType = mode.assetType,
@@ -152,7 +151,7 @@ class ShowLocationPresenter(
                                     url = avatarUrl,
                                     size = AvatarSize.UserListItem,
                                 ),
-                                formattedTimestamp = "Sharing live location",
+                                description = "Sharing live location",
                                 location = location,
                                 isLive = true,
                                 assetType = lastLocation.assetType,
@@ -169,6 +168,7 @@ class ShowLocationPresenter(
             locationShares = locationShares,
             hasLocationPermission = permissionsState.isAnyGranted,
             isTrackMyLocation = isTrackMyLocation,
+            isLive = mode is ShowLocationMode.Live,
             appName = appName,
             eventSink = ::handleEvent,
         )

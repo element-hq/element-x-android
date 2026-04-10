@@ -9,6 +9,7 @@
 package io.element.android.features.location.impl.show
 
 import io.element.android.features.location.api.Location
+import io.element.android.features.location.api.ShowLocationMode
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.features.location.impl.common.ui.LocationMarkerData
 import io.element.android.libraries.designsystem.components.PinVariant
@@ -18,6 +19,7 @@ import io.element.android.libraries.matrix.api.room.location.AssetType
 import kotlinx.collections.immutable.ImmutableList
 
 data class ShowLocationState(
+    val isLive: Boolean,
     val dialogState: LocationConstraintsDialogState,
     val locationShares: ImmutableList<LocationShareItem>,
     val hasLocationPermission: Boolean,
@@ -25,14 +27,14 @@ data class ShowLocationState(
     val appName: String,
     val eventSink: (ShowLocationEvent) -> Unit,
 ) {
-    val isSheetDraggable = locationShares.any { item -> item.isLive }
+    val isSheetDraggable = isLive && locationShares.isNotEmpty()
 }
 
 data class LocationShareItem(
     val userId: UserId,
     val displayName: String,
     val avatarData: AvatarData,
-    val formattedTimestamp: String,
+    val description: String,
     val location: Location,
     val isLive: Boolean,
     val assetType: AssetType?,

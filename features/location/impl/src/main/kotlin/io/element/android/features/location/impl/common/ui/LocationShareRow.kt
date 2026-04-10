@@ -91,7 +91,7 @@ fun LocationShareRow(
                     )
                 }
                 Text(
-                    text = item.formattedTimestamp,
+                    text = item.description,
                     style = ElementTheme.typography.fontBodySmRegular,
                     color = ElementTheme.colors.textSecondary,
                     maxLines = 1,
@@ -123,7 +123,7 @@ internal fun LocationShareRowPreview() = ElementPreview {
                     url = null,
                     size = AvatarSize.UserListItem,
                 ),
-                formattedTimestamp = "Shared 1 min ago",
+                description = "Shared 1 min ago",
                 isLive = true,
                 assetType = AssetType.SENDER,
                 location = Location(0.0, 0.0)
@@ -142,7 +142,7 @@ internal fun LocationShareRowPreview() = ElementPreview {
                 ),
                 isLive = false,
                 assetType = AssetType.PIN,
-                formattedTimestamp = "Shared 5 hours ago",
+                description = "Shared 5 hours ago",
                 location = Location(0.0, 0.0)
             ),
             onShareClick = {},

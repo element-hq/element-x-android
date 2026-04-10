@@ -10,6 +10,7 @@ package io.element.android.features.location.impl.show
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.location.api.Location
+import io.element.android.features.location.api.ShowLocationMode
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -21,6 +22,8 @@ class ShowLocationStateProvider : PreviewParameterProvider<ShowLocationState> {
     override val values: Sequence<ShowLocationState>
         get() = sequenceOf(
             aShowLocationState(),
+            aShowLocationState(isLive = true),
+            aShowLocationState(isLive = true, locationShares = emptyList()),
             aShowLocationState(
                 constraintsDialogState = LocationConstraintsDialogState.PermissionDenied,
             ),
@@ -44,8 +47,9 @@ class ShowLocationStateProvider : PreviewParameterProvider<ShowLocationState> {
 private const val APP_NAME = "ApplicationName"
 
 fun aShowLocationState(
+    isLive: Boolean = false,
     constraintsDialogState: LocationConstraintsDialogState = LocationConstraintsDialogState.None,
-    locationShares: List<LocationShareItem> = listOf(aLocationShareItem()),
+    locationShares: List<LocationShareItem> = listOf(aLocationShareItem(isLive = isLive)),
     hasLocationPermission: Boolean = false,
     isTrackMyLocation: Boolean = false,
     appName: String = APP_NAME,
@@ -57,6 +61,7 @@ fun aShowLocationState(
         hasLocationPermission = hasLocationPermission,
         isTrackMyLocation = isTrackMyLocation,
         appName = appName,
+        isLive = isLive,
         eventSink = eventSink,
     )
 }
@@ -78,7 +83,7 @@ fun aLocationShareItem(
     userId = userId,
     displayName = displayName,
     avatarData = avatarData,
-    formattedTimestamp = formattedTimestamp,
+    description = formattedTimestamp,
     location = location,
     isLive = isLive,
     assetType = assetType,
