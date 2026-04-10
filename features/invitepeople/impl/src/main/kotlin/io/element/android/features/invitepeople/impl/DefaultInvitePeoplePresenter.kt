@@ -137,7 +137,7 @@ class DefaultInvitePeoplePresenter(
         val selectedUserIdentities = produceState(
             emptyMap<MatrixUser, IdentityState?>().toImmutableMap(),
             selectedUsers.value,
-            enableKeyShareOnInvite
+            enableKeyShareOnInvite,
         ) {
             if (!enableKeyShareOnInvite) {
                 return@produceState

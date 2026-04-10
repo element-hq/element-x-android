@@ -647,8 +647,11 @@ internal class DefaultInvitePeoplePresenterTest {
 
             // When we toggle a user not in the list, they are added, and we fetch their identity.
             initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(alice))
+            delay(100)
             awaitItemAsDefault().eventSink(DefaultInvitePeopleEvents.ToggleUser(bob))
+            delay(100)
             awaitItemAsDefault().eventSink(DefaultInvitePeopleEvents.ToggleUser(charlie))
+            delay(100)
 
             // If we do not have their identity cached, or fail to fetch it, we should mark them as unknown.
             awaitItemAsDefault().run {
@@ -712,8 +715,12 @@ internal class DefaultInvitePeoplePresenterTest {
 
             // When we toggle a user not in the list, they are added, and we fetch their identity.
             initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(alice))
+            delay(100)
             awaitItemAsDefault().eventSink(DefaultInvitePeopleEvents.ToggleUser(bob))
+            delay(100)
             awaitItemAsDefault().eventSink(DefaultInvitePeopleEvents.ToggleUser(charlie))
+            delay(100)
+
             awaitItemAsDefault().run {
                 assertThat(selectedUsers).containsExactly(alice, bob, charlie)
                 eventSink(InvitePeopleEvents.PromptOrInvite)
