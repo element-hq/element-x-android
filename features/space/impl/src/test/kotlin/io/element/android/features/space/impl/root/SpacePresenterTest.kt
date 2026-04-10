@@ -19,8 +19,6 @@ import io.element.android.features.invite.api.toInviteData
 import io.element.android.features.invite.test.InMemorySeenInvitesStore
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
@@ -75,16 +73,7 @@ class SpacePresenterTest {
     }
 
     @Test
-    fun `present - canAccessSpaceSettings false when space settings ff is enabled but no permissions`() = runTest {
-        val presenter = createSpacePresenter(spaceSettingsEnabled = true)
-        presenter.test {
-            val state = awaitItem()
-            assertThat(state.canAccessSpaceSettings).isFalse()
-        }
-    }
-
-    @Test
-    fun `present - canAccessSpaceSettings true when space settings ff is enabled and has permissions`() = runTest {
+    fun `present - canAccessSpaceSettings true when has permissions`() = runTest {
         val room = FakeBaseRoom(
             roomPermissions = FakeRoomPermissions(
                 canSendState = { true }
@@ -92,7 +81,6 @@ class SpacePresenterTest {
         )
         val presenter = createSpacePresenter(
             room = room,
-            spaceSettingsEnabled = true,
         )
         presenter.test {
             skipItems(1)
@@ -627,7 +615,6 @@ class SpacePresenterTest {
             lambda = { _, _, _ -> Result.success(Unit) },
         ),
         acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState> = Presenter { anAcceptDeclineInviteState() },
-        spaceSettingsEnabled: Boolean = false,
         spaceService: FakeSpaceService = FakeSpaceService(),
     ): SpacePresenter {
         return SpacePresenter(
@@ -638,11 +625,6 @@ class SpacePresenterTest {
             joinRoom = joinRoom,
             acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
             sessionCoroutineScope = this,
-            featureFlagService = FakeFeatureFlagService(
-                initialState = mapOf(
-                    FeatureFlags.SpaceSettings.key to spaceSettingsEnabled,
-                )
-            ),
             spaceService = spaceService,
         )
     }
