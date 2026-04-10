@@ -8,7 +8,11 @@
 
 package io.element.android.features.announcement.api
 
+import androidx.compose.runtime.Immutable
+
+@Immutable
 sealed interface Announcement {
+    @Immutable
     sealed interface Fullscreen : Announcement {
         data object Space : Fullscreen
     }
