@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_share_location_live_location_disclaimer_title">"ライブ位置情報の履歴はルームに保管され、メンバーは後から確認することもできます。"</string>
+  <string name="screen_share_location_live_location_duration_picker_title">"ライブ位置情報を共有する期間を選択してください。"</string>
+</resources>

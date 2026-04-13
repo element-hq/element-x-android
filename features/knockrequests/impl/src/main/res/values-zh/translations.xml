@@ -30,6 +30,6 @@
   </plurals>
   <string name="screen_room_multiple_knock_requests_view_all_button_title">"查看全部"</string>
   <string name="screen_room_single_knock_request_accept_button_title">"接受"</string>
-  <string name="screen_room_single_knock_request_title">"%1$s想加入这个房间"</string>
+  <string name="screen_room_single_knock_request_title">"%1$s 想加入此房间"</string>
   <string name="screen_room_single_knock_request_view_button_title">"查看"</string>
 </resources>

@@ -15,6 +15,11 @@
   </plurals>
   <string name="notification_error_unified_push_unregistered_android">"Non è stato possibile registrare il distributore di notifiche UnifiedPush, quindi non riceverai più notifiche. Controlla le impostazioni delle notifiche dell\'app e lo stato del distributore push."</string>
   <string name="notification_fallback_content">"Hai nuovi messaggi."</string>
+  <plurals name="notification_fallback_n_content">
+    <item quantity="one">"Hai %d nuovo messaggio."</item>
+    <item quantity="other">"Hai %d nuovi messaggi."</item>
+  </plurals>
+  <string name="notification_incoming_audio_call">"📞 Chiamata in arrivo"</string>
   <string name="notification_incoming_call">"📹 Chiamata in arrivo"</string>
   <string name="notification_inline_reply_failed">"** Invio fallito - si prega di aprire la stanza"</string>
   <string name="notification_invitation_action_join">"Entra"</string>
@@ -38,6 +43,8 @@
   <string name="notification_room_invite_body_with_sender">"%1$s ti ha invitato a unirti alla stanza"</string>
   <string name="notification_sender_me">"Io"</string>
   <string name="notification_sender_mention_reply">"%1$s ti ha menzionato o risposto"</string>
+  <string name="notification_space_invite_body">"Ti abbiamo invitato a unirti allo spazio"</string>
+  <string name="notification_space_invite_body_with_sender">"%1$s ti ha invitato a unirti allo spazio"</string>
   <string name="notification_test_push_notification_content">"Stai visualizzando la notifica! Cliccami!"</string>
   <string name="notification_thread_in_room">"Discussione in %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>

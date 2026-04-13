@@ -2,4 +2,12 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_invite_users_already_a_member">"Already a member"</string>
   <string name="screen_invite_users_already_invited">"Already invited"</string>
+  <plurals name="screen_invite_users_confirm_dialog_subtitle">
+    <item quantity="one">"You currently don’t have any chats with this contact. Confirm inviting them to this room before continuing."</item>
+    <item quantity="other">"You currently don’t have any chats with these contacts. Confirm inviting them to this room before continuing."</item>
+  </plurals>
+  <plurals name="screen_invite_users_confirm_dialog_title">
+    <item quantity="one">"Invite a new contact to this room?"</item>
+    <item quantity="other">"Invite new contacts to this room?"</item>
+  </plurals>
 </resources>

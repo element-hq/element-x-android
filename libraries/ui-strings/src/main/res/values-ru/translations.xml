@@ -52,6 +52,7 @@
   <string name="a11y_session_verification_time_limited_action_required">"Требуется действие, на которое есть ограничение по времени, у вас есть одна минута для проверки"</string>
   <string name="a11y_show_password">"Показать пароль"</string>
   <string name="a11y_start_call">"Начать звонок"</string>
+  <string name="a11y_start_video_call">"Начать видеозвонок"</string>
   <string name="a11y_start_voice_call">"Начать голосовой вызов"</string>
   <string name="a11y_tombstoned_room">"Брошенная комната"</string>
   <string name="a11y_user_avatar">"Аватар пользователя"</string>
@@ -143,7 +144,7 @@
   <string name="action_remove_caption">"Удалить подпись"</string>
   <string name="action_remove_message">"Удалить сообщение"</string>
   <string name="action_reply">"Ответить"</string>
-  <string name="action_reply_in_thread">"Ответить в ветке"</string>
+  <string name="action_reply_in_thread">"Обсудить"</string>
   <string name="action_report">"Пожаловаться"</string>
   <string name="action_report_bug">"Сообщить об ошибке"</string>
   <string name="action_report_content">"Пожаловаться на содержание"</string>
@@ -382,7 +383,8 @@
   <string name="common_system">"Системное"</string>
   <string name="common_text">"Текст"</string>
   <string name="common_third_party_notices">"Уведомления о третьих лицах"</string>
-  <string name="common_thread">"Ветка"</string>
+  <string name="common_thread">"Обсуждение"</string>
+  <string name="common_threads">"Обсуждения"</string>
   <string name="common_topic">"Тема"</string>
   <string name="common_topic_placeholder">"О чем эта комната?"</string>
   <string name="common_unable_to_decrypt">"Невозможно расшифровать"</string>
@@ -475,6 +477,13 @@
   <string name="screen_create_poll_remove_accessibility_label">"Удалить %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Настройки"</string>
   <string name="screen_media_picker_error_failed_selection">"Не удалось выбрать медиа, попробуйте еще раз."</string>
+  <string name="screen_missing_key_backup_open_element_classic">"Открыть Element Classic"</string>
+  <string name="screen_missing_key_backup_step_1">"Откройте Element Classic на своем устройстве."</string>
+  <string name="screen_missing_key_backup_step_2_android">"Перейдите в Настройки &gt; Безопасность и конфиденциальность"</string>
+  <string name="screen_missing_key_backup_step_3_android">"В разделе «Управление криптографическими ключами» выбери «Восстановление зашифрованных сообщений»"</string>
+  <string name="screen_missing_key_backup_step_4">"Следуйте инструкциям, чтобы активировать хранилище ключей"</string>
+  <string name="screen_missing_key_backup_step_5">"Вернитесь к %1$s"</string>
+  <string name="screen_missing_key_backup_title">"Перед продолжением активируйте хранилище ключей %1$s"</string>
   <string name="screen_onboarding_welcome_back">"С возвращением"</string>
   <string name="screen_pinned_timeline_empty_state_description">"Нажмите на сообщение и выберите «%1$s», чтобы добавить его сюда."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Закрепите важные сообщения, чтобы их можно было легко найти"</string>
@@ -488,7 +497,7 @@
   <string name="screen_reset_identity_confirmation_title">"Не можете подтвердить? Перейдите в свой аккаунт, чтобы сбросить свою личность."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Сбросить верификацию и отправить"</string>
   <string name="screen_resolve_send_failure_changed_identity_subtitle">"Вы можете либо сбросить подтверждение и всё равно отправить это сообщение, либо отменить его сейчас и повторить попытку после повторного подтверждения %1$s."</string>
-  <string name="screen_resolve_send_failure_changed_identity_title">"Ваше сообщение не было отправлено, потому что подтвержденная личность %1$s была сброшена"</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Ваше сообщение не было отправлено, потому что подтвержденная идентификации %1$s была сброшена"</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Все равно отправить сообщение"</string>
   <string name="screen_resolve_send_failure_unsigned_device_subtitle">"У %1$s есть одно или несколько неподтвержденных устройств. Вы все равно можете отправить сообщение или отменить его пока и повторить попытку позже, когда %2$s подтвердить все свои устройства."</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Ваше сообщение не было отправлено, потому что %1$s имеет неподтвержденные устройства"</string>
@@ -500,6 +509,7 @@
   <string name="screen_room_event_pill">"Сообщение в %1$s"</string>
   <string name="screen_room_grouped_state_events_expand">"Развернуть"</string>
   <string name="screen_room_grouped_state_events_reduce">"Уменьшить"</string>
+  <string name="screen_room_live_location_banner">"Поделиться текущим местоположением…"</string>
   <string name="screen_room_permalink_same_room_android">"Эта комната уже просматривается!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s из %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s закрепленные сообщения"</string>
@@ -520,7 +530,7 @@
   <string name="screen_space_list_title">"Пространства"</string>
   <string name="screen_static_location_sheet_timestamp_description">"Поделился %1$s"</string>
   <string name="screen_static_location_sheet_title">"На карте"</string>
-  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Сообщение не отправлено, потому что подтвержденная личность %1$s была сброшена."</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Сообщение не отправлено, так как подтвержденная цифровая идентичность %1$s была сброшена."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Сообщение не отправлено, потому что %1$s не подтвердил(а) все свои устройства."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Сообщение не отправлено, поскольку вы не подтвердили одно или несколько своих устройств."</string>
   <string name="screen_view_location_title">"Местоположение"</string>
@@ -530,5 +540,5 @@
   <string name="timeline_decryption_failure_historical_event_unverified_device">"Вам необходимо подтвердить это устройство чтобы получить доступ к истории сообщений"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Вы не имеете доступа к этому сообщению"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Не удалось расшифровать сообщение"</string>
-  <string name="timeline_decryption_failure_withheld_unverified">"Это сообщение было заблокировано, так как вы не подтвердили свое устройство, либо отправителю необходимо подтвердить вашу личность."</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Это сообщение было заблокировано либо потому, что вы не подтвердили свое устройство, либо потому, что отправителю необходимо подтвердить вашу цифровую личность."</string>
 </resources>

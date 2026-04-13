@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_deactivate_account_delete_all_messages">"Xóa tất cả tin nhắn của tôi"</string>
+  <string name="screen_deactivate_account_delete_all_messages_notice">"Cảnh báo: Người dùng sau này có thể thấy các cuộc trò chuyện chưa hoàn chỉnh."</string>
+  <string name="screen_deactivate_account_list_item_4">"Tin nhắn của bạn vẫn sẽ hiển thị cho người dùng đã đăng ký nhưng sẽ không hiển thị cho người dùng mới hoặc chưa đăng ký nếu bạn chọn xóa chúng."</string>
+  <string name="screen_deactivate_account_title">"Vô hiệu hóa tài khoản"</string>
+</resources>
