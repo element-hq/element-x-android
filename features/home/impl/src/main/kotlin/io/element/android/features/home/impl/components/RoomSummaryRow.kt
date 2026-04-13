@@ -123,7 +123,8 @@ internal fun RoomSummaryRow(
                     NameAndTimestampRow(
                         name = room.name,
                         timestamp = room.timestamp,
-                        isHighlighted = room.isHighlighted
+                        isHighlighted = room.isHighlighted,
+                        isPinned = room.isPinned,
                     )
                     MessagePreviewAndIndicatorRow(room = room)
                 }
@@ -215,7 +216,8 @@ private fun NameAndTimestampRow(
     name: String?,
     timestamp: String?,
     isHighlighted: Boolean,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isPinned: Boolean = false,
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
@@ -235,16 +237,29 @@ private fun NameAndTimestampRow(
                 overflow = TextOverflow.Ellipsis
             )
         }
-        // Timestamp
-        Text(
-            text = timestamp ?: "",
-            style = ElementTheme.typography.fontBodySmMedium,
-            color = if (isHighlighted) {
-                ElementTheme.colors.unreadIndicator
-            } else {
-                ElementTheme.colors.roomListRoomMessageDate
-            },
-        )
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = spacedBy(4.dp),
+        ) {
+            if (isPinned) {
+                Icon(
+                    modifier = Modifier.size(14.dp),
+                    imageVector = CompoundIcons.PinSolid(),
+                    contentDescription = stringResource(id = CommonStrings.common_pinned),
+                    tint = ElementTheme.colors.iconSecondary,
+                )
+            }
+            // Timestamp
+            Text(
+                text = timestamp ?: "",
+                style = ElementTheme.typography.fontBodySmMedium,
+                color = if (isHighlighted) {
+                    ElementTheme.colors.unreadIndicator
+                } else {
+                    ElementTheme.colors.roomListRoomMessageDate
+                },
+            )
+        }
     }
 }
 

@@ -35,5 +35,8 @@ interface SessionPreferencesStore {
     suspend fun setVideoCompressionPreset(preset: VideoCompressionPreset)
     fun getVideoCompressionPreset(): Flow<VideoCompressionPreset>
 
+    suspend fun setPinnedRooms(roomIds: List<String>)
+    fun getPinnedRoomsFlow(): Flow<List<String>>
+
     suspend fun clear()
 }

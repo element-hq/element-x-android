@@ -44,7 +44,9 @@ import io.element.android.libraries.matrix.test.notificationsettings.FakeNotific
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
+import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.EventsRecorder
@@ -87,7 +89,8 @@ class RoomDetailsPresenterTest {
         ),
         encryptionService: FakeEncryptionService = FakeEncryptionService(),
         clipboardHelper: ClipboardHelper = FakeClipboardHelper(),
-        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore()
+        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
+        sessionPreferencesStore: SessionPreferencesStore = InMemorySessionPreferencesStore(),
     ): RoomDetailsPresenter {
         val matrixClient = FakeMatrixClient(notificationSettingsService = notificationSettingsService)
         val roomMemberDetailsPresenterFactory = object : RoomMemberDetailsPresenter.Factory {
@@ -115,6 +118,7 @@ class RoomDetailsPresenterTest {
             analyticsService = analyticsService,
             clipboardHelper = clipboardHelper,
             appPreferencesStore = appPreferencesStore,
+            sessionPreferencesStore = sessionPreferencesStore,
         )
     }
 
@@ -559,6 +563,28 @@ class RoomDetailsPresenterTest {
             room.givenRoomInfo(aRoomInfo(isFavorite = false))
             consumeItemsUntilPredicate { !it.isFavorite }.last().let { state ->
                 assertThat(state.isFavorite).isFalse()
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - when set is pinned event is emitted, then the room is pinned in preferences`() = runTest {
+        val sessionPreferencesStore = InMemorySessionPreferencesStore()
+        val room = aJoinedRoom(
+            roomPermissions = roomPermissions(),
+        )
+        val presenter = createRoomDetailsPresenter(room = room, sessionPreferencesStore = sessionPreferencesStore)
+        presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
+            val initialState = awaitItem()
+            assertThat(initialState.isPinned).isFalse()
+            initialState.eventSink(RoomDetailsEvent.SetPinned(true))
+            consumeItemsUntilPredicate { it.isPinned }.last().let { state ->
+                assertThat(state.isPinned).isTrue()
+            }
+            initialState.eventSink(RoomDetailsEvent.SetPinned(false))
+            consumeItemsUntilPredicate { !it.isPinned }.last().let { state ->
+                assertThat(state.isPinned).isFalse()
             }
             cancelAndIgnoreRemainingEvents()
         }

@@ -226,6 +226,7 @@ class RoomListPresenterTest {
                             roomName = summary.name,
                             isDm = false,
                             isFavorite = false,
+                            isPinned = false,
                             hasNewContent = false,
                             displayClearRoomCacheAction = false,
                         )
@@ -243,6 +244,7 @@ class RoomListPresenterTest {
                             roomName = summary.name,
                             isDm = false,
                             isFavorite = true,
+                            isPinned = false,
                             hasNewContent = false,
                             displayClearRoomCacheAction = false,
                         )
@@ -270,6 +272,7 @@ class RoomListPresenterTest {
                             roomName = summary.name,
                             isDm = false,
                             isFavorite = false,
+                            isPinned = false,
                             // true here.
                             hasNewContent = false,
                             displayClearRoomCacheAction = true,
@@ -299,6 +302,7 @@ class RoomListPresenterTest {
                         roomName = summary.name,
                         isDm = false,
                         isFavorite = false,
+                        isPinned = false,
                         hasNewContent = false,
                         displayClearRoomCacheAction = false,
                     )
@@ -408,6 +412,20 @@ class RoomListPresenterTest {
                 Interaction(name = Interaction.Name.MobileRoomListRoomContextMenuFavouriteToggle),
                 Interaction(name = Interaction.Name.MobileRoomListRoomContextMenuFavouriteToggle)
             )
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - when set is pinned event is emitted, then the room is pinned in preferences`() = runTest {
+        val sessionPreferencesStore = InMemorySessionPreferencesStore()
+        val presenter = createRoomListPresenter(sessionPreferencesStore = sessionPreferencesStore)
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(RoomListEvent.SetRoomIsPinned(A_ROOM_ID, true))
+            assertThat(sessionPreferencesStore.getPinnedRoomsFlow().first()).contains(A_ROOM_ID.value)
+            initialState.eventSink(RoomListEvent.SetRoomIsPinned(A_ROOM_ID, false))
+            assertThat(sessionPreferencesStore.getPinnedRoomsFlow().first()).doesNotContain(A_ROOM_ID.value)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -682,6 +700,7 @@ class RoomListPresenterTest {
             sessionCoroutineScope = backgroundScope,
             dateTimeObserver = FakeDateTimeObserver(),
             analyticsService = FakeAnalyticsService(),
+            sessionPreferencesStore = sessionPreferencesStore,
         ),
         searchPresenter = searchPresenter,
         sessionPreferencesStore = sessionPreferencesStore,

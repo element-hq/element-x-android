@@ -129,6 +129,38 @@ class RoomListContextMenuTest {
         )
     }
 
+    @Test
+    fun `clicking on Pin to top generates expected Event`() {
+        val eventsRecorder = EventsRecorder<RoomListEvent>()
+        val contextMenu = aContextMenuShown(isPinned = false)
+        rule.setRoomListContextMenu(
+            contextMenu = contextMenu,
+            eventSink = eventsRecorder,
+        )
+        rule.clickOn(CommonStrings.common_pin_to_top)
+        eventsRecorder.assertList(
+            listOf(
+                RoomListEvent.SetRoomIsPinned(contextMenu.roomId, true),
+            )
+        )
+    }
+
+    @Test
+    fun `clicking on Pinned generates expected Event`() {
+        val eventsRecorder = EventsRecorder<RoomListEvent>()
+        val contextMenu = aContextMenuShown(isPinned = true)
+        rule.setRoomListContextMenu(
+            contextMenu = contextMenu,
+            eventSink = eventsRecorder,
+        )
+        rule.clickOn(CommonStrings.common_pinned)
+        eventsRecorder.assertList(
+            listOf(
+                RoomListEvent.SetRoomIsPinned(contextMenu.roomId, false),
+            )
+        )
+    }
+
     private fun AndroidComposeTestRule<*, *>.setRoomListContextMenu(
         contextMenu: RoomListState.ContextMenu.Shown,
         canReportRoom: Boolean = false,
