@@ -118,6 +118,26 @@ class DefaultSlashCommandServiceTest {
     }
 
     @Test
+    fun `canChangeDisplayName is respected in suggestions`() = runTest {
+        var result = false
+        val capabilitiesProvider = FakeHomeserverCapabilitiesProvider(
+            canChangeDisplayName = { Result.success(result) },
+        )
+        val sut = createDefaultSlashCommandService(capabilitiesProvider = capabilitiesProvider)
+
+        // Initially, with a disabled capability, the change display name command should not be in the suggestions
+        var changeNameCommand = sut.getSuggestions("", isInThread = false)
+            .find { it.command == Command.CHANGE_DISPLAY_NAME.command }
+        assertThat(changeNameCommand).isNull()
+
+        // When the capability is true, the command should be included in the suggestions
+        result = true
+        changeNameCommand = sut.getSuggestions("", isInThread = false)
+            .find { it.command == Command.CHANGE_DISPLAY_NAME.command }
+        assertThat(changeNameCommand).isNotNull()
+    }
+
+    @Test
     fun `proceedAdmin delegates to commandExecutor`() = runTest {
         val leaveRoomLambda = lambdaRecorder<Result<Unit>> {
             Result.success(Unit)
