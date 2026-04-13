@@ -82,18 +82,9 @@ internal class DefaultInvitePeopleStateProvider : PreviewParameterProvider<Defau
                 ))
             ),
             aDefaultInvitePeopleState(
-                sendInvitesAction = ConfirmingUnknownUserInvitation(persistentListOf(
-                    aMatrixUser("@alice:server.org"),
-                    aMatrixUser("@bob:server.org"),
-                    aMatrixUser("@charlie:server.org"),
-                    aMatrixUser("@danielle:server.org"),
-                    aMatrixUser("@egbert:server.org"),
-                    aMatrixUser("@francesca:server.org"),
-                    aMatrixUser("@gunther:server.org"),
-                    aMatrixUser("@hubert:server.org"),
-                    aMatrixUser("@isobel:server.org"),
-                    aMatrixUser("@jaime:server.org"),
-                ))
+                sendInvitesAction = ConfirmingUnknownUserInvitation(
+                    aMatrixUserList().toImmutableList()
+                )
             ),
         )
 }
