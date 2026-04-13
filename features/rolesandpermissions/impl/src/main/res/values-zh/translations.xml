@@ -19,7 +19,7 @@
   <string name="screen_room_change_permissions_send_messages">"发送消息"</string>
   <string name="screen_room_change_permissions_title">"权限"</string>
   <string name="screen_room_change_role_administrators_title">"编辑管理员"</string>
-  <string name="screen_room_change_role_confirm_add_admin_description">"您将无法撤消此操作。您正在提升用户的权限，使其拥有与您平权。"</string>
+  <string name="screen_room_change_role_confirm_add_admin_description">"您将无法撤消此操作。您正在提升用户的权限到与您相同的级别。"</string>
   <string name="screen_room_change_role_confirm_add_admin_title">"添加管理员？"</string>
   <string name="screen_room_change_role_confirm_change_owners_description">"此操作无法撤销。您正在将所有权转移给所选用户。一旦离开此界面，该操作将永久生效。"</string>
   <string name="screen_room_change_role_confirm_change_owners_title">"转让所有权"</string>
@@ -50,7 +50,7 @@
   <string name="screen_room_member_list_manage_member_remove_confirmation_kick">"仅移除成员"</string>
   <string name="screen_room_member_list_manage_member_unban_action">"取消封禁"</string>
   <string name="screen_room_member_list_manage_member_unban_message">"如果受到邀请，他们可以重新加入聊天室。"</string>
-  <string name="screen_room_member_list_manage_member_unban_title">"从房间取消解封"</string>
+  <string name="screen_room_member_list_manage_member_unban_title">"解封用户"</string>
   <string name="screen_room_member_list_mode_banned">"已封禁用户"</string>
   <string name="screen_room_member_list_mode_members">"成员"</string>
   <plurals name="screen_room_member_list_pending_header_title">
@@ -61,7 +61,7 @@
   <string name="screen_room_member_list_role_moderator">"协管员"</string>
   <string name="screen_room_member_list_role_owner">"所有者"</string>
   <string name="screen_room_member_list_room_members_header_title">"聊天室成员"</string>
-  <string name="screen_room_member_list_unbanning_user">"解除封禁 %1$s"</string>
+  <string name="screen_room_member_list_unbanning_user">"正在解除封禁 %1$s"</string>
   <string name="screen_room_roles_and_permissions_admins">"管理员"</string>
   <string name="screen_room_roles_and_permissions_admins_and_owners">"管理员和所有者"</string>
   <string name="screen_room_roles_and_permissions_change_my_role">"更改我的角色"</string>

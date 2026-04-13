@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_cancel_knock_action">"Hủy yêu cầu"</string>
+  <string name="screen_join_room_cancel_knock_alert_confirmation">"Có, hủy"</string>
+  <string name="screen_join_room_cancel_knock_alert_description">"Bạn có chắc chắn muốn hủy yêu cầu tham gia phòng này không?"</string>
+  <string name="screen_join_room_cancel_knock_alert_title">"Hủy yêu cầu tham gia"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Có, từ chối &amp; chặn"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Bạn có chắc muốn từ chối lời mời tham gia phòng này không? Điều này cũng sẽ ngăn %1$s liên hệ với bạn hoặc mời bạn vào các phòng."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Từ chối lời mời và chặn"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Từ chối và chặn"</string>
+  <string name="screen_join_room_invited_by">"Được mời bởi"</string>
+  <string name="screen_join_room_join_action">"Tham gia"</string>
+  <string name="screen_join_room_knock_message_characters_count">"Số ký tự cho phép: %1$d / %2$d"</string>
+  <string name="screen_join_room_knock_message_description">"Lời nhắn (tùy chọn)"</string>
+  <string name="screen_join_room_knock_sent_description">"Bạn sẽ nhận được lời mời tham gia phòng nếu yêu cầu của bạn được chấp nhận."</string>
+  <string name="screen_join_room_knock_sent_title">"Yêu cầu tham gia đã được gửi"</string>
+  <string name="screen_join_room_loading_alert_message">"Không thể hiển thị bản xem trước của phòng. Có thể do lỗi mạng hoặc máy chủ."</string>
+  <string name="screen_join_room_loading_alert_title">"Không thể hiển thị bản xem trước của phòng này"</string>
+</resources>

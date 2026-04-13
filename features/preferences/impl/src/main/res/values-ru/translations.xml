@@ -25,7 +25,7 @@
   <string name="screen_advanced_settings_rich_text_editor_description">"Отключить редактор форматированного текста и включить Markdown."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Уведомления о прочтении"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Если этот параметр выключен, другие пользователи не будут видеть, прочитали ли вы сообщения. Вы по-прежнему будете видеть статус прочтения других пользователей."</string>
-  <string name="screen_advanced_settings_share_presence">"Поделиться присутствием"</string>
+  <string name="screen_advanced_settings_share_presence">"Делиться присутствием"</string>
   <string name="screen_advanced_settings_share_presence_description">"Если выключено, вы не будете видеть, кто печатает и читает сообщения, а также другие пользователи не будут знать, когда вы печатаете или читаете сообщения."</string>
   <string name="screen_advanced_settings_show_media_timeline_always_hide">"Всегда скрывать"</string>
   <string name="screen_advanced_settings_show_media_timeline_always_show">"Всегда показывать"</string>
@@ -44,7 +44,7 @@
   <string name="screen_edit_profile_error_title">"Невозможно обновить профиль"</string>
   <string name="screen_edit_profile_title">"Редактировать профиль"</string>
   <string name="screen_edit_profile_updating_details">"Обновление профиля…"</string>
-  <string name="screen_labs_enable_threads">"Включить ответы в ветке"</string>
+  <string name="screen_labs_enable_threads">"Включить ответы в обсуждениях"</string>
   <string name="screen_labs_enable_threads_description">"Приложение перезапустится, чтобы применить это изменение."</string>
   <string name="screen_labs_header_description">"Попробуйте функции в разработке. Эти функции ещё не завершены, они нестабильны и могут измениться."</string>
   <string name="screen_labs_header_title">"Хотите попробовать?"</string>

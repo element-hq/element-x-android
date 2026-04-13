@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Aggiungi reazione: %1$s"</string>
+  <string name="a11y_address">"Indirizzo"</string>
   <string name="a11y_avatar">"Avatar"</string>
   <string name="a11y_collapse_message_text_field">"Riduci al minimo il campo di testo del messaggio"</string>
   <string name="a11y_delete">"Elimina"</string>
@@ -26,9 +27,12 @@
   <string name="a11y_pause">"Pausa"</string>
   <string name="a11y_paused_voice_message">"Messaggio vocale, durata: %1$s, posizione attuale: %2$s"</string>
   <string name="a11y_pin_field">"Campo del PIN"</string>
+  <string name="a11y_pinned_location">"Posizione fissata"</string>
   <string name="a11y_play">"Riproduci"</string>
+  <string name="a11y_playback_speed">"Velocità di riproduzione"</string>
   <string name="a11y_poll">"Sondaggio"</string>
   <string name="a11y_poll_end">"Sondaggio terminato"</string>
+  <string name="a11y_qr_code">"Codice QR"</string>
   <string name="a11y_react_with">"Reagisci con %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Reagisci con altri emoji"</string>
   <string name="a11y_read_receipts_multiple">"Visualizzato da %1$s e %2$s"</string>
@@ -42,9 +46,12 @@
   <string name="a11y_remove_reaction_with">"Rimuovere la reazione con %1$s"</string>
   <string name="a11y_room_avatar">"Avatar della stanza"</string>
   <string name="a11y_send_files">"Invia file"</string>
+  <string name="a11y_sender_location">"Posizione del mittente"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Azione richiesta a tempo limitato, hai un minuto per la verifica"</string>
   <string name="a11y_show_password">"Mostra password"</string>
   <string name="a11y_start_call">"Avvia una chiamata"</string>
+  <string name="a11y_start_video_call">"Avvia una videochiamata"</string>
+  <string name="a11y_start_voice_call">"Avvia una chiamata vocale"</string>
   <string name="a11y_tombstoned_room">"Stanza obsoleta"</string>
   <string name="a11y_user_avatar">"Avatar utente"</string>
   <string name="a11y_user_menu">"Menu utente"</string>
@@ -56,6 +63,7 @@
   <string name="a11y_your_avatar">"Il tuo avatar"</string>
   <string name="action_accept">"Accetta"</string>
   <string name="action_add_caption">"Aggiungi didascalia"</string>
+  <string name="action_add_existing_rooms">"Aggiungi stanze esistenti"</string>
   <string name="action_add_to_timeline">"Aggiungi alla conversazione"</string>
   <string name="action_back">"Indietro"</string>
   <string name="action_call">"Chiama"</string>
@@ -75,6 +83,7 @@
   <string name="action_copy_text">"Copia testo"</string>
   <string name="action_create">"Crea"</string>
   <string name="action_create_room">"Crea stanza"</string>
+  <string name="action_create_space">"Crea spazio"</string>
   <string name="action_deactivate">"Disattiva"</string>
   <string name="action_deactivate_account">"Disattiva account"</string>
   <string name="action_decline">"Rifiuta"</string>
@@ -91,6 +100,7 @@
   <string name="action_enable">"Attiva"</string>
   <string name="action_end_poll">"Termina sondaggio"</string>
   <string name="action_enter_pin">"Inserisci PIN"</string>
+  <string name="action_explore_public_spaces">"Esplora gli spazi pubblici"</string>
   <string name="action_finish">"Fine"</string>
   <string name="action_forgot_password">"Password dimenticata?"</string>
   <string name="action_forward">"Inoltra"</string>
@@ -111,6 +121,7 @@
   <string name="action_leave_space">"Esci dallo spazio"</string>
   <string name="action_load_more">"Carica altro"</string>
   <string name="action_manage_account">"Gestisci account"</string>
+  <string name="action_manage_account_and_devices">"Gestisci account &amp; dispositivi"</string>
   <string name="action_manage_devices">"Gestisci dispositivi"</string>
   <string name="action_manage_rooms">"Gestisci le stanze"</string>
   <string name="action_message">"Invia messaggio"</string>
@@ -150,18 +161,21 @@
   <string name="action_send_voice_message">"Invia messaggio vocale"</string>
   <string name="action_share">"Condividi"</string>
   <string name="action_share_link">"Condividi collegamento"</string>
+  <string name="action_share_live_location">"Condividi la posizione in tempo reale"</string>
   <string name="action_show">"Mostra"</string>
   <string name="action_sign_in_again">"Accedi di nuovo"</string>
-  <string name="action_signout">"Disconnetti"</string>
-  <string name="action_signout_anyway">"Disconnetti comunque"</string>
+  <string name="action_signout">"Rimuovi questo dispositivo"</string>
+  <string name="action_signout_anyway">"Rimuovi comunque questo dispositivo"</string>
   <string name="action_skip">"Salta"</string>
   <string name="action_start">"Inizia"</string>
   <string name="action_start_chat">"Avvia conversazione"</string>
   <string name="action_start_over">"Ricomincia"</string>
   <string name="action_start_verification">"Avvia la verifica"</string>
   <string name="action_static_map_load">"Tocca per caricare la mappa"</string>
+  <string name="action_stop">"Ferma"</string>
   <string name="action_take_photo">"Scatta foto"</string>
   <string name="action_tap_for_options">"Tocca per le opzioni"</string>
+  <string name="action_translate">"Traduci"</string>
   <string name="action_try_again">"Riprova"</string>
   <string name="action_unpin">"Rimuovi dai fissati"</string>
   <string name="action_view">"Visualizza"</string>
@@ -179,6 +193,7 @@
   <string name="common_advanced_settings">"Impostazioni avanzate"</string>
   <string name="common_an_image">"un\'immagine"</string>
   <string name="common_analytics">"Statistiche di utilizzo"</string>
+  <string name="common_android_fetching_notifications_title">"Sincronizzazione delle notifiche…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Hai lasciato la stanza"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Sei stato disconnesso dalla sessione"</string>
   <string name="common_appearance">"Aspetto"</string>
@@ -191,6 +206,7 @@
   <string name="common_copied_to_clipboard">"Copiato negli appunti"</string>
   <string name="common_copyright">"Copyright"</string>
   <string name="common_creating_room">"Creazione stanza…"</string>
+  <string name="common_creating_space">"Creazione spazio…"</string>
   <string name="common_current_user_canceled_knock">"Richiesta annullata"</string>
   <string name="common_current_user_left_room">"Hai lasciato la stanza"</string>
   <string name="common_current_user_left_space">"Hai lasciato lo spazio"</string>
@@ -211,6 +227,7 @@
   <string name="common_empty_file">"File vuoto"</string>
   <string name="common_encryption">"Crittografia"</string>
   <string name="common_encryption_enabled">"Crittografia abilitata"</string>
+  <string name="common_ends_at">"Termina alle %1$s"</string>
   <string name="common_enter_your_pin">"Inserisci il PIN"</string>
   <string name="common_error">"Errore"</string>
   <string name="common_error_registering_pusher_android">"Si è verificato un errore, potresti non ricevere notifiche per nuovi messaggi. Risolvi i problemi relativi alle notifiche dalle impostazioni.
@@ -236,6 +253,9 @@ Motivo:. %1$s"</string>
   <string name="common_light">"Chiaro"</string>
   <string name="common_line_copied_to_clipboard">"Riga copiata negli appunti"</string>
   <string name="common_link_copied_to_clipboard">"Collegamento copiato negli appunti"</string>
+  <string name="common_link_new_device">"Collega un nuovo dispositivo"</string>
+  <string name="common_live_location">"Posizione in tempo reale"</string>
+  <string name="common_live_location_ended">"Posizione in tempo reale terminata"</string>
   <string name="common_loading">"Caricamento…"</string>
   <string name="common_loading_more">"Caricamento in corso…"</string>
   <plurals name="common_many_members">
@@ -248,10 +268,12 @@ Motivo:. %1$s"</string>
   </plurals>
   <string name="common_message">"Messaggio"</string>
   <string name="common_message_actions">"Azioni messaggio"</string>
+  <string name="common_message_failed_to_send">"Impossibile inviare il messaggio"</string>
   <string name="common_message_layout">"Impaginazione del messaggio"</string>
   <string name="common_message_removed">"Messaggio rimosso"</string>
   <string name="common_modern">"Moderno"</string>
   <string name="common_mute">"Silenzia"</string>
+  <string name="common_name">"Nome"</string>
   <string name="common_name_and_id">"%1$s (%2$s)"</string>
   <string name="common_no_results">"Nessun risultato"</string>
   <string name="common_no_room_name">"Nessun nome della stanza"</string>
@@ -260,6 +282,7 @@ Motivo:. %1$s"</string>
   <string name="common_offline">"Non in linea"</string>
   <string name="common_open_source_licenses">"Licenze open source"</string>
   <string name="common_or">"o"</string>
+  <string name="common_other_options">"Altre opzioni"</string>
   <string name="common_password">"Password"</string>
   <string name="common_people">"Persone"</string>
   <string name="common_permalink">"Collegamento permanente"</string>
@@ -277,8 +300,10 @@ Motivo:. %1$s"</string>
   </plurals>
   <string name="common_preparing">"Preparazione…"</string>
   <string name="common_privacy_policy">"Informativa sulla privacy"</string>
+  <string name="common_private">"Privato"</string>
   <string name="common_private_room">"Stanza privata"</string>
   <string name="common_private_space">"Spazio privato"</string>
+  <string name="common_public">"Pubblico"</string>
   <string name="common_public_room">"Stanza pubblica"</string>
   <string name="common_public_space">"Spazio pubblico"</string>
   <string name="common_reaction">"Reazione"</string>
@@ -286,6 +311,7 @@ Motivo:. %1$s"</string>
   <string name="common_reason">"Motivo"</string>
   <string name="common_recovery_key">"Chiave di recupero"</string>
   <string name="common_refreshing">"Aggiornamento…"</string>
+  <string name="common_removing">"Rimozione…"</string>
   <plurals name="common_replies">
     <item quantity="one">"%1$d risposta"</item>
     <item quantity="other">"%1$d risposte"</item>
@@ -295,6 +321,7 @@ Motivo:. %1$s"</string>
   <string name="common_report_a_problem">"Segnala un problema"</string>
   <string name="common_report_submitted">"Segnalazione inviata"</string>
   <string name="common_rich_text_editor">"Editor di testo avanzato"</string>
+  <string name="common_role">"Ruolo"</string>
   <string name="common_room">"Stanza"</string>
   <string name="common_room_name">"Nome stanza"</string>
   <string name="common_room_name_placeholder">"ad es. il nome del tuo progetto"</string>
@@ -310,6 +337,10 @@ Motivo:. %1$s"</string>
   <string name="common_security">"Sicurezza"</string>
   <string name="common_seen_by">"Visto da"</string>
   <string name="common_select_account">"Seleziona un account"</string>
+  <plurals name="common_selected_count">
+    <item quantity="one">"%1$d selezionato"</item>
+    <item quantity="other">"%1$d selezionati"</item>
+  </plurals>
   <string name="common_send_to">"Invia a"</string>
   <string name="common_sending">"Invio in corso…"</string>
   <string name="common_sending_failed">"Invio fallito"</string>
@@ -320,12 +351,16 @@ Motivo:. %1$s"</string>
   <string name="common_server_url">"URL del server"</string>
   <string name="common_settings">"Impostazioni"</string>
   <string name="common_share_space">"Condividi lo spazio"</string>
+  <string name="common_shared_history">"I nuovi membri vedono la cronologia"</string>
+  <string name="common_shared_live_location">"Posizione in tempo reale condivisa"</string>
   <string name="common_shared_location">"Posizione condivisa"</string>
   <string name="common_shared_space">"Spazio condiviso"</string>
-  <string name="common_signing_out">"Disconnessione"</string>
+  <string name="common_signing_out">"Rimozione del dispositivo"</string>
   <string name="common_something_went_wrong">"Qualcosa è andato storto"</string>
   <string name="common_something_went_wrong_message">"Abbiamo riscontrato un problema. Per favore riprova."</string>
   <string name="common_space">"Spazio"</string>
+  <string name="common_space_members">"Membri dello spazio"</string>
+  <string name="common_space_topic_placeholder">"Di cosa tratta questo spazio?"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d Spazio"</item>
     <item quantity="other">"%1$d Spazi"</item>
@@ -333,18 +368,20 @@ Motivo:. %1$s"</string>
   <string name="common_starting_chat">"Avvio della conversazione…"</string>
   <string name="common_sticker">"Adesivo"</string>
   <string name="common_success">"Operazione riuscita"</string>
+  <string name="common_suggested">"Suggeriti"</string>
   <string name="common_suggestions">"Suggerimenti"</string>
   <string name="common_syncing">"Sincronizzazione"</string>
   <string name="common_system">"Sistema"</string>
   <string name="common_text">"Testo"</string>
   <string name="common_third_party_notices">"Comunicazioni di terze parti"</string>
   <string name="common_thread">"Discussione"</string>
+  <string name="common_threads">"Discussioni"</string>
   <string name="common_topic">"Argomento"</string>
-  <string name="common_topic_placeholder">"Di cosa parla questa stanza?"</string>
+  <string name="common_topic_placeholder">"Di cosa riguarda questa stanza?"</string>
   <string name="common_unable_to_decrypt">"Impossibile decrittografare"</string>
   <string name="common_unable_to_decrypt_insecure_device">"Inviato da un dispositivo non sicuro"</string>
   <string name="common_unable_to_decrypt_no_access">"Non hai accesso a questo messaggio"</string>
-  <string name="common_unable_to_decrypt_verification_violation">"L\'identità verificata del mittente è stata reimpostata"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"L\'identità digitale verificata del mittente è stata reimpostata"</string>
   <string name="common_unable_to_invite_message">"Non è stato possibile spedire inviti a uno o più utenti."</string>
   <string name="common_unable_to_invite_title">"Impossibile inviare inviti"</string>
   <string name="common_unlock">"Sblocca"</string>
@@ -369,13 +406,19 @@ Motivo:. %1$s"</string>
   <string name="common_voice_message">"Messaggio vocale"</string>
   <string name="common_waiting">"In attesa…"</string>
   <string name="common_waiting_for_decryption_key">"In attesa del messaggio"</string>
+  <string name="common_waiting_live_location">"In attesa della posizione in tempo reale…"</string>
+  <string name="common_world_readable_history">"Chiunque può vedere la cronologia"</string>
   <string name="common_you">"Tu"</string>
-  <string name="crypto_identity_change_pin_violation">"L\'identità di %1$s è stata reimpostata. %2$s"</string>
-  <string name="crypto_identity_change_pin_violation_new">"L\'identità %2$s di %1$s sembra essere cambiata. %3$s"</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) ha condiviso questo messaggio poiché non eri nella stanza quando è stato inviato."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s ha condiviso questo messaggio poiché non eri nella stanza quando è stato inviato."</string>
+  <string name="crypto_history_visible">"Questa stanza è stata configurata in modo che i nuovi membri possano leggere la cronologia. %1$s"</string>
+  <string name="crypto_identity_change_pin_violation">"%1$sL\'identità digitale di %2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"%1$sL\'identità digitale di %2$s è stata reimpostata. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
-  <string name="crypto_identity_change_profile_pin_violation">"L\'identità di %1$s è stata reimpostata."</string>
-  <string name="crypto_identity_change_verification_violation_new">"L\'identità %2$s di %1$s è stata reimpostata. %3$s"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"L\'identità digitale di %1$s è stata reimpostata."</string>
+  <string name="crypto_identity_change_verification_violation_new">"L\'identità digitale %2$s di %1$s è stata reimpostata. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Ritira verifica"</string>
+  <string name="dialog_allow_access">"Consenti l\'accesso"</string>
   <string name="dialog_confirm_link_message">"Il link %1$s ti porta ad un altro sito %2$s
 
 Sei sicuro di voler continuare?"</string>
@@ -405,6 +448,7 @@ Sei sicuro di voler continuare?"</string>
   <string name="error_failed_locating_user">"%1$s non è riuscito ad accedere alla tua posizione. Riprova più tardi."</string>
   <string name="error_failed_uploading_voice_message">"Invio del messaggio vocale fallito."</string>
   <string name="error_invalid_invite">"La stanza non esiste più o l\'invito non è più valido."</string>
+  <string name="error_location_service_disabled_android">"Attiva il GPS per accedere alle funzioni basate sulla posizione."</string>
   <string name="error_message_not_found">"Messaggio non trovato"</string>
   <string name="error_missing_location_auth_android">"%1$s non ha l\'autorizzazione di accedere alla tua posizione. Puoi attivare l\'accesso nelle impostazioni."</string>
   <string name="error_missing_location_rationale_android">"%1$s non ha l\'autorizzazione per accedere alla tua posizione. Attiva l\'accesso di seguito."</string>
@@ -424,6 +468,14 @@ Sei sicuro di voler continuare?"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Rimuovi %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Impostazioni"</string>
   <string name="screen_media_picker_error_failed_selection">"Selezione del file multimediale fallita, riprova."</string>
+  <string name="screen_missing_key_backup_open_element_classic">"Apri Element Classic"</string>
+  <string name="screen_missing_key_backup_step_1">"Apri Element Classic sul tuo dispositivo"</string>
+  <string name="screen_missing_key_backup_step_2_android">"Vai su Impostazioni &gt; Sicurezza &amp; privacy"</string>
+  <string name="screen_missing_key_backup_step_3_android">"Nella gestione delle chiavi crittografiche, seleziona Recupero dei messaggi cifrati"</string>
+  <string name="screen_missing_key_backup_step_4">"Segui le istruzioni per abilitare l\'archiviazione delle chiavi"</string>
+  <string name="screen_missing_key_backup_step_5">"Torna a %1$s"</string>
+  <string name="screen_missing_key_backup_title">"Abilita l\'archivio delle chiavi prima di procedere con %1$s"</string>
+  <string name="screen_onboarding_welcome_back">"Bentornato"</string>
   <string name="screen_pinned_timeline_empty_state_description">"Premi su un messaggio e scegli “%1$s” per includerlo qui."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Fissa i messaggi importanti così che possano essere trovati facilmente"</string>
   <plurals name="screen_pinned_timeline_screen_title">
@@ -431,11 +483,11 @@ Sei sicuro di voler continuare?"</string>
     <item quantity="other">"%1$d Messaggi fissati"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Messaggi fissati"</string>
-  <string name="screen_reset_identity_confirmation_subtitle">"Stai per accedere al tuo account di %1$s per ripristinare la tua identità. Dopodiché verrai riportato all\'app."</string>
-  <string name="screen_reset_identity_confirmation_title">"Non riesci a confermare? Vai al tuo account per ripristinare la tua identità."</string>
+  <string name="screen_reset_identity_confirmation_subtitle">"Stai per accedere al tuo account %1$s per reimpostare la tua identità digitale. Al termine, verrai reindirizzato all\'app."</string>
+  <string name="screen_reset_identity_confirmation_title">"Non riesci a confermare? Vai al tuo account per reimpostare la tua identità digitale."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Ritira la verifica e invia"</string>
   <string name="screen_resolve_send_failure_changed_identity_subtitle">"Puoi ritirare la tua verifica e inviare comunque questo messaggio, oppure annullarlo per ora e riprovare più tardi dopo aver riverificato %1$s."</string>
-  <string name="screen_resolve_send_failure_changed_identity_title">"Il tuo messaggio non è stato inviato perché l\'identità verificata di %1$s è stata reimpostata."</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Il tuo messaggio non è stato inviato perché l\'identità digitale verificata di %1$sè stata reimpostata"</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Invia comunque il messaggio"</string>
   <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s sta usando uno o più dispositivi non verificati. Puoi inviare il messaggio in ogni caso, oppure annullarlo e riprovare più tardi quando %2$s avrà verificato tutti i suoi dispositivi."</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Il tuo messaggio non è stato inviato perché %1$s non ha verificato tutti i dispositivi."</string>
@@ -458,12 +510,16 @@ Sei sicuro di voler continuare?"</string>
   <string name="screen_share_open_apple_maps">"Apri in Apple Maps"</string>
   <string name="screen_share_open_google_maps">"Apri in Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Apri in OpenStreetMap"</string>
-  <string name="screen_share_this_location_action">"Condividi questa posizione"</string>
+  <string name="screen_share_this_location_action">"Condividi la posizione selezionata"</string>
+  <string name="screen_sharing_location_option_sheet_title">"Opzioni di condivisione"</string>
   <string name="screen_space_list_description">"Spazi che hai creato o a cui hai aderito."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_empty_state_title">"Crea spazi per organizzare le stanze"</string>
   <string name="screen_space_list_parent_space">"%1$s spazio"</string>
   <string name="screen_space_list_title">"Spazi"</string>
-  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Messaggio non inviato perché l\'identità verificata di %1$s è stata reimpostata."</string>
+  <string name="screen_static_location_sheet_timestamp_description">"Condivisa %1$s"</string>
+  <string name="screen_static_location_sheet_title">"Sulla mappa"</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Il messaggio non è stato inviato perché l\'identità digitale verificata di %1$sè stata reimpostata."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Messaggio non inviato perché %1$s non ha verificato tutti i dispositivi."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Messaggio non inviato perché non hai verificato uno o più dispositivi."</string>
   <string name="screen_view_location_title">"Posizione"</string>
@@ -473,5 +529,5 @@ Sei sicuro di voler continuare?"</string>
   <string name="timeline_decryption_failure_historical_event_unverified_device">"È necessario verificare questo dispositivo per accedere alla cronologia messaggi"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Non hai accesso a questo messaggio"</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Impossibile decifrare il messaggio"</string>
-  <string name="timeline_decryption_failure_withheld_unverified">"Questo messaggio è stato bloccato perché il dispositivo non è verificato o perché il mittente deve verificare la tua identità."</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Questo messaggio è stato bloccato perché non hai verificato il tuo dispositivo o perché il mittente deve verificare la tua identità digitale."</string>
 </resources>

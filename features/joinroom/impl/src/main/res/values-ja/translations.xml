@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_ban_by_message">"%1$s があなたを追放しました。"</string>
+  <string name="screen_join_room_ban_message">"追放されました"</string>
+  <string name="screen_join_room_ban_reason">"理由: %1$s"</string>
+  <string name="screen_join_room_cancel_knock_action">"リクエストをキャンセル"</string>
+  <string name="screen_join_room_cancel_knock_alert_confirmation">"キャンセルします"</string>
+  <string name="screen_join_room_cancel_knock_alert_description">"このルームへの参加のリクエストを本当にキャンセルしますか？"</string>
+  <string name="screen_join_room_cancel_knock_alert_title">"参加のリクエストをキャンセル"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"拒否してブロックする"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"本当にこのルームへの参加の招待を拒否しますか？%1$s は、あなたと会話することやルームに招待することができなくなります。"</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"招待を拒否してブロック"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"拒否してブロック"</string>
+  <string name="screen_join_room_fail_message">"参加に失敗"</string>
+  <string name="screen_join_room_fail_reason">"制限付きアクセスまたは招待制です。"</string>
+  <string name="screen_join_room_forget_action">"忘れる"</string>
+  <string name="screen_join_room_invite_required_message">"参加するには招待が必要です"</string>
+  <string name="screen_join_room_invited_by">"以下のユーザーからの招待"</string>
+  <string name="screen_join_room_join_action">"参加"</string>
+  <string name="screen_join_room_join_restricted_message">"参加するには、招待またはスペースのメンバーである必要があります。"</string>
+  <string name="screen_join_room_knock_action">"参加をリクエスト"</string>
+  <string name="screen_join_room_knock_message_characters_count">"文字数制限 %1$d/%2$d 字"</string>
+  <string name="screen_join_room_knock_message_description">"メッセージ (任意)"</string>
+  <string name="screen_join_room_knock_sent_description">"リクエストが承認された場合はルームへの招待が届きます。"</string>
+  <string name="screen_join_room_knock_sent_title">"参加リクエストを送信しました"</string>
+  <string name="screen_join_room_loading_alert_message">"ルームのプレビューを表示できません。サーバーまたはネットワークの問題の可能性があります。"</string>
+  <string name="screen_join_room_loading_alert_title">"ルームのプレビューを表示できません"</string>
+  <string name="screen_join_room_space_not_supported_description">"%1$s はスペースに対応していません。Webからアクセスすることができます。"</string>
+  <string name="screen_join_room_space_not_supported_title">"まだスペースに対応していません"</string>
+  <string name="screen_join_room_subtitle_knock">"下のボタンを押すとルーム管理者に通知が届きます。承認の後、会話に参加することができます。"</string>
+  <string name="screen_join_room_subtitle_no_preview">"過去のメッセージを表示するには、このルームのメンバーである必要があります。"</string>
+  <string name="screen_join_room_title_knock">"ルームに参加しますか？"</string>
+  <string name="screen_join_room_title_no_preview">"プレビューは利用できません"</string>
+</resources>

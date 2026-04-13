@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="leave_conversation_alert_subtitle">"Bạn có chắc chắn muốn rời khỏi cuộc trò chuyện này không? Cuộc trò chuyện này không công khai và bạn sẽ không thể tham gia lại nếu không được mời."</string>
+  <string name="leave_room_alert_empty_subtitle">"Bạn có chắc chắn muốn rời khỏi phòng này không? Bạn là người duy nhất ở đây. Nếu bạn rời đi, sẽ không ai có thể tham gia nữa, kể cả bạn."</string>
+  <string name="leave_room_alert_private_subtitle">"Bạn có chắc chắn muốn rời khỏi phòng này không? Phòng này không công khai và bạn sẽ không thể tham gia lại nếu không có lời mời."</string>
+  <string name="leave_room_alert_subtitle">"Bạn có chắc chắn muốn rời khỏi phòng không?"</string>
+</resources>

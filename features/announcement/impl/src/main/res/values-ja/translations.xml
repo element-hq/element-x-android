@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_space_announcement_item1">"作成または参加したスペースを表示できます"</string>
+  <string name="screen_space_announcement_item2">"スペースへの招待を受諾または拒否できます"</string>
+  <string name="screen_space_announcement_item3">"スペース内の参加可能なルームを検索できます"</string>
+  <string name="screen_space_announcement_item4">"公開スペースに参加できます"</string>
+  <string name="screen_space_announcement_item5">"参加したスペースを退出できます"</string>
+  <string name="screen_space_announcement_notice">"スペースの作成や管理, フィルター検索は近日実装予定です。"</string>
+  <string name="screen_space_announcement_subtitle">"ベータ版のスペースにようこそ。この最新のバージョンでは:"</string>
+  <string name="screen_space_announcement_title">"スペースの紹介"</string>
+</resources>

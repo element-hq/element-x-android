@@ -16,6 +16,7 @@
   <plurals name="notification_fallback_n_content">
     <item quantity="other">"您有 %d 条新消息。"</item>
   </plurals>
+  <string name="notification_incoming_audio_call">"📞 来电"</string>
   <string name="notification_incoming_call">"📹 来电"</string>
   <string name="notification_inline_reply_failed">"** 无法发送——请打开聊天室"</string>
   <string name="notification_invitation_action_join">"加入"</string>
@@ -57,7 +58,7 @@
   <string name="push_no_valid_google_play_services_apk_android">"找不到有效的 Google Play 服务。通知可能无法正常工作。"</string>
   <string name="troubleshoot_notifications_test_blocked_users_description">"检查被阻止的用户"</string>
   <string name="troubleshoot_notifications_test_blocked_users_quick_fix">"查看被屏蔽的用户"</string>
-  <string name="troubleshoot_notifications_test_blocked_users_result_none">"没有用户被阻止。"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_result_none">"未屏蔽任何用户。"</string>
   <plurals name="troubleshoot_notifications_test_blocked_users_result_some">
     <item quantity="other">"您已屏蔽 %1$d 位用户。您将不再收到这些用户的推送通知。"</item>
   </plurals>
@@ -87,6 +88,6 @@
   <string name="troubleshoot_notifications_test_push_loop_back_failure_2">"错误：%1$s。"</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_3">"错误，无法测试推送。"</string>
   <string name="troubleshoot_notifications_test_push_loop_back_failure_4">"错误，等待推送超时。"</string>
-  <string name="troubleshoot_notifications_test_push_loop_back_success">"推送回路耗时%1$d 毫秒。"</string>
+  <string name="troubleshoot_notifications_test_push_loop_back_success">"推送回路耗时 %1$d 毫秒。"</string>
   <string name="troubleshoot_notifications_test_push_loop_back_title">"测试推送回路"</string>
 </resources>

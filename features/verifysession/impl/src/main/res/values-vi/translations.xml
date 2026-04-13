@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_subtitle">"Chọn phương thức xác minh để bật nhắn tin bảo mật."</string>
+  <string name="screen_identity_confirmation_title">"Xác nhận danh tính kỹ thuật số của bạn"</string>
+  <string name="screen_identity_confirmed_subtitle">"Giờ đây bạn có thể đọc và gửi tin nhắn một cách an toàn, và những người bạn trò chuyện cũng có thể tin tưởng thiết bị này."</string>
+  <string name="screen_identity_confirmed_title">"Thiết bị được xác thực"</string>
+  <string name="screen_identity_waiting_on_other_device">"Đang chờ trên thiết bị khác…"</string>
+  <string name="screen_session_verification_cancelled_subtitle">"Có vẻ như có điều gì đó không đúng. Hoặc yêu cầu đã hết thời gian chờ hoặc yêu cầu đã bị từ chối."</string>
+  <string name="screen_session_verification_compare_emojis_subtitle">"Hãy xác nhận rằng các biểu tượng cảm xúc bên dưới khớp với các biểu tượng hiển thị trên thiết bị khác của bạn."</string>
+  <string name="screen_session_verification_compare_emojis_title">"So sánh các biểu tượng cảm xúc"</string>
+  <string name="screen_session_verification_compare_numbers_subtitle">"Xác nhận rằng các số bên dưới khớp với số hiển thị trên thiết bị đăng nhập khác của bạn."</string>
+  <string name="screen_session_verification_compare_numbers_title">"So sánh số liệu"</string>
+  <string name="screen_session_verification_complete_subtitle">"Giờ đây, bạn có thể đọc hoặc gửi tin nhắn một cách an toàn trên thiết bị khác của mình."</string>
+  <string name="screen_session_verification_device_verified">"Thiết bị được xác thực"</string>
+  <string name="screen_session_verification_enter_recovery_key">"Nhập mã khôi phục."</string>
+  <string name="screen_session_verification_open_existing_session_subtitle">"Hãy chứng minh đó là bạn để truy cập vào lịch sử tin nhắn đã mã hóa của bạn."</string>
+  <string name="screen_session_verification_open_existing_session_title">"Mở một phiên hiện có"</string>
+  <string name="screen_session_verification_positive_button_canceled">"Thử xác minh lại"</string>
+  <string name="screen_session_verification_positive_button_initial">"Tôi đã sẵn sàng"</string>
+  <string name="screen_session_verification_positive_button_verifying_ongoing">"Đang chờ ghép đôi…"</string>
+  <string name="screen_session_verification_ready_subtitle">"So sánh một bộ biểu tượng cảm xúc duy nhất."</string>
+  <string name="screen_session_verification_request_accepted_subtitle">"So sánh các biểu tượng cảm xúc riêng biệt, đảm bảo chúng xuất hiện theo cùng một thứ tự."</string>
+  <string name="screen_session_verification_request_failure_title">"Xác minh thất bại"</string>
+  <string name="screen_session_verification_request_success_subtitle">"Giờ đây, bạn có thể đọc hoặc gửi tin nhắn một cách an toàn trên thiết bị khác của mình."</string>
+  <string name="screen_session_verification_request_success_title">"Thiết bị được xác thực"</string>
+  <string name="screen_session_verification_they_dont_match">"Chúng không khớp nhau"</string>
+  <string name="screen_session_verification_they_match">"Chúng khớp với nhau"</string>
+  <string name="screen_session_verification_waiting_to_accept_subtitle">"Hãy chấp nhận yêu cầu bắt đầu quá trình xác minh trong phiên làm việc khác của bạn để tiếp tục."</string>
+  <string name="screen_session_verification_waiting_to_accept_title">"Đang chờ chấp nhận yêu cầu"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Đang gỡ thiết bị…"</string>
+</resources>
