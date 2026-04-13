@@ -43,7 +43,7 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '21'
       - name: Configure gradle
-        uses: gradle/actions/setup-gradle@39e147cb9de83bb9910b8ef8bd7fff0ee20fcd6f # v6.0.1
+        uses: gradle/actions/setup-gradle@50e97c2cd7a37755bbfafc9c5b7cafaece252f6e # v6.1.0
       - name: Create app bundle
         env:
           ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
@@ -87,7 +87,7 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '21'
       - name: Configure gradle
-        uses: gradle/actions/setup-gradle@39e147cb9de83bb9910b8ef8bd7fff0ee20fcd6f # v6.0.1
+        uses: gradle/actions/setup-gradle@50e97c2cd7a37755bbfafc9c5b7cafaece252f6e # v6.1.0
       - name: Create Enterprise app bundle
         env:
           ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
@@ -131,7 +131,7 @@ jobs:
           distribution: 'temurin' # See 'Supported distributions' for available options
           java-version: '21'
       - name: Configure gradle
-        uses: gradle/actions/setup-gradle@39e147cb9de83bb9910b8ef8bd7fff0ee20fcd6f # v6.0.1
+        uses: gradle/actions/setup-gradle@50e97c2cd7a37755bbfafc9c5b7cafaece252f6e # v6.1.0
       - name: Create APKs
         env:
           ELEMENT_ANDROID_MAPTILER_API_KEY: ${{ secrets.MAPTILER_KEY }}
