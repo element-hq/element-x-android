@@ -13,6 +13,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.timeline.MsgType
+import io.element.android.libraries.matrix.test.FakeHomeserverCapabilitiesProvider
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
@@ -155,11 +156,13 @@ class DefaultSlashCommandServiceTest {
         commandExecutor: CommandExecutor = createCommandExecutor(
             stringProvider = stringProvider,
         ),
+        capabilitiesProvider: FakeHomeserverCapabilitiesProvider = FakeHomeserverCapabilitiesProvider(),
     ) = DefaultSlashCommandService(
         commandParser = commandParser,
         commandExecutor = commandExecutor,
         stringProvider = stringProvider,
         appPreferencesStore = appPreferencesStore,
         featureFlagService = featureFlagService,
+        capabilitiesProvider = capabilitiesProvider,
     )
 }
