@@ -34,7 +34,7 @@ data class LocationShareItem(
     val userId: UserId,
     val displayName: String,
     val avatarData: AvatarData,
-    val description: String,
+    val formattedTimestamp: String,
     val location: Location,
     val isLive: Boolean,
     val assetType: AssetType?,

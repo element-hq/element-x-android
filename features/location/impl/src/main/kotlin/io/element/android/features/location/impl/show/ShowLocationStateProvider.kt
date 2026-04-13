@@ -10,7 +10,6 @@ package io.element.android.features.location.impl.show
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.location.api.Location
-import io.element.android.features.location.api.ShowLocationMode
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -77,15 +76,15 @@ fun aLocationShareItem(
         url = null,
         size = AvatarSize.UserListItem,
     ),
-    formattedTimestamp: String = "Shared 1 min ago",
-    location: Location = Location(1.23, 2.34, 4f),
     isLive: Boolean = false,
     assetType: AssetType? = null,
+    formattedTimestamp: String = "Shared 1 min ago",
+    location: Location = Location(1.23, 2.34, 4f),
 ) = LocationShareItem(
     userId = userId,
     displayName = displayName,
     avatarData = avatarData,
-    description = formattedTimestamp,
+    formattedTimestamp = formattedTimestamp,
     location = location,
     isLive = isLive,
     assetType = assetType,

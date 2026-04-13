@@ -123,7 +123,7 @@ class ShowLocationPresenter(
                                 url = mode.senderAvatarUrl,
                                 size = AvatarSize.UserListItem,
                             ),
-                            description = formattedTimestamp,
+                            formattedTimestamp = formattedTimestamp,
                             location = mode.location,
                             isLive = false,
                             assetType = mode.assetType,
@@ -142,6 +142,11 @@ class ShowLocationPresenter(
                             val member = members.find { it.userId == share.userId }
                             val displayName = member?.getBestName() ?: share.userId.value
                             val avatarUrl = member?.avatarUrl
+                            val relativeTime = dateFormatter.format(timestamp = share.lastLocation?.timestamp, mode = DateFormatterMode.Full, useRelative = true)
+                            val formattedTimestamp = stringProvider.getString(
+                                CommonStrings.screen_static_location_sheet_timestamp_description,
+                                relativeTime
+                            )
                             LocationShareItem(
                                 userId = share.userId,
                                 displayName = displayName,
@@ -151,7 +156,7 @@ class ShowLocationPresenter(
                                     url = avatarUrl,
                                     size = AvatarSize.UserListItem,
                                 ),
-                                description = "Sharing live location",
+                                formattedTimestamp = formattedTimestamp,
                                 location = location,
                                 isLive = true,
                                 assetType = lastLocation.assetType,
