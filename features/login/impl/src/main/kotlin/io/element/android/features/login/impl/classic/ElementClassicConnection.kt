@@ -319,8 +319,16 @@ class DefaultElementClassicConnection(
             if (userId == null) {
                 ElementClassicConnectionState.ElementClassicReadyNoSession
             } else {
-                val secrets = getString(KEY_SECRETS_STR)?.takeIf { it.isNotEmpty() }
-                val roomKeysVersion = getString(KEY_ROOM_KEYS_VERSION_STR)?.takeIf { it.isNotEmpty() }
+                var secrets = getString(KEY_SECRETS_STR)?.takeIf { it.isNotEmpty() }
+                val roomKeysVersion = getString(KEY_ROOM_KEYS_VERSION_STR)
+                    .also {
+                        if (secrets != null && it == null) {
+                            Timber.tag(loggerTag.value).w("Room keys version is null, outdated version of Element Classic, ignore secrets")
+                            // In this case, just ignore the secrets, the SDK will not accept them anyway
+                            secrets = null
+                        }
+                    }
+                    ?.takeIf { it.isNotEmpty() }
                 val homeserverUrl = getString(KEY_HOMESERVER_URL_STR)?.takeIf { it.isNotEmpty() }
                 val displayName = getString(KEY_USER_DISPLAY_NAME_STR)?.takeIf { it.isNotEmpty() }
                 val doesContainBackupKey = secrets != null &&

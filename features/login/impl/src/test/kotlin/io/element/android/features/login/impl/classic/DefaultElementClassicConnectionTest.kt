@@ -271,6 +271,82 @@ class DefaultElementClassicConnectionTest {
     }
 
     @Test
+    fun `when session is received with secret but without room keys version Element Classic is outdated and the secret is ignored`() = runTest {
+        val connection = createDefaultElementClassicConnection(
+            homeServerLoginCompatibilityChecker = FakeHomeServerLoginCompatibilityChecker(
+                checkResult = { Result.success(true) }
+            ),
+            matrixAuthenticationService = FakeMatrixAuthenticationService(
+                setElementClassicSessionResult = {},
+            ),
+        )
+        connection.stateFlow.test {
+            assertThat(awaitItem()).isEqualTo(ElementClassicConnectionState.Idle)
+            // Simulate receiving a session from Element Classic
+            connection.onSessionReceived(
+                Bundle().apply {
+                    putString(DefaultElementClassicConnection.KEY_USER_ID_STR, A_USER_ID.value)
+                    putString(DefaultElementClassicConnection.KEY_HOMESERVER_URL_STR, A_HOMESERVER_URL)
+                    putString(DefaultElementClassicConnection.KEY_SECRETS_STR, A_SECRET)
+                    putString(DefaultElementClassicConnection.KEY_ROOM_KEYS_VERSION_STR, null)
+                    putString(DefaultElementClassicConnection.KEY_USER_DISPLAY_NAME_STR, A_USER_NAME)
+                }
+            )
+            assertThat(awaitItem()).isEqualTo(
+                ElementClassicConnectionState.ElementClassicReady(
+                    elementClassicSession = ElementClassicSession(
+                        userId = A_USER_ID,
+                        homeserverUrl = A_HOMESERVER_URL,
+                        secrets = null,
+                        roomKeysVersion = null,
+                        doesContainBackupKey = false,
+                    ),
+                    displayName = A_USER_NAME,
+                    avatar = null,
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `when session is received with secret but with empty room keys version, doesContainBackupKey is false`() = runTest {
+        val connection = createDefaultElementClassicConnection(
+            homeServerLoginCompatibilityChecker = FakeHomeServerLoginCompatibilityChecker(
+                checkResult = { Result.success(true) }
+            ),
+            matrixAuthenticationService = FakeMatrixAuthenticationService(
+                setElementClassicSessionResult = {},
+            ),
+        )
+        connection.stateFlow.test {
+            assertThat(awaitItem()).isEqualTo(ElementClassicConnectionState.Idle)
+            // Simulate receiving a session from Element Classic
+            connection.onSessionReceived(
+                Bundle().apply {
+                    putString(DefaultElementClassicConnection.KEY_USER_ID_STR, A_USER_ID.value)
+                    putString(DefaultElementClassicConnection.KEY_HOMESERVER_URL_STR, A_HOMESERVER_URL)
+                    putString(DefaultElementClassicConnection.KEY_SECRETS_STR, A_SECRET)
+                    putString(DefaultElementClassicConnection.KEY_ROOM_KEYS_VERSION_STR, "")
+                    putString(DefaultElementClassicConnection.KEY_USER_DISPLAY_NAME_STR, A_USER_NAME)
+                }
+            )
+            assertThat(awaitItem()).isEqualTo(
+                ElementClassicConnectionState.ElementClassicReady(
+                    elementClassicSession = ElementClassicSession(
+                        userId = A_USER_ID,
+                        homeserverUrl = A_HOMESERVER_URL,
+                        secrets = A_SECRET,
+                        roomKeysVersion = null,
+                        doesContainBackupKey = false,
+                    ),
+                    displayName = A_USER_NAME,
+                    avatar = null,
+                )
+            )
+        }
+    }
+
+    @Test
     fun `when session is received with empty data, and homeserver is supported, ElementClassicReady is emitted`() = runTest {
         val connection = createDefaultElementClassicConnection(
             homeServerLoginCompatibilityChecker = FakeHomeServerLoginCompatibilityChecker(
