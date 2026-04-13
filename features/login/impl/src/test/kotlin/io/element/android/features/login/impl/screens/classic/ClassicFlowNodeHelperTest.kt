@@ -27,6 +27,7 @@ import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceTimeBy
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -39,16 +40,6 @@ class ClassicFlowNodeHelperTest {
     val warmUpRule = WarmUpRule()
 
     @Test
-    fun `initial state`() = runTest {
-        createHelper()
-            .navigationEventFlow()
-            .test {
-                val initialState = awaitItem()
-                assertThat(initialState).isEqualTo(NavigationEvent.Idle)
-            }
-    }
-
-    @Test
     fun `after a few seconds in Idle, NavigateToOnBoarding is emitted`() = runTest {
         createHelper()
             .navigationEventFlow()
@@ -57,6 +48,8 @@ class ClassicFlowNodeHelperTest {
                 assertThat(initialState).isEqualTo(NavigationEvent.Idle)
                 val finalState = awaitItem()
                 assertThat(finalState).isEqualTo(NavigationEvent.NavigateToOnBoarding)
+                advanceTimeBy(10_000)
+                expectNoEvents()
             }
     }
 
@@ -82,6 +75,8 @@ class ClassicFlowNodeHelperTest {
                 )
                 val finalState = awaitItem()
                 assertThat(finalState).isEqualTo(NavigationEvent.NavigateToOnBoarding)
+                advanceTimeBy(10_000)
+                expectNoEvents()
             }
     }
 
@@ -100,6 +95,8 @@ class ClassicFlowNodeHelperTest {
                 )
                 val finalState = awaitItem()
                 assertThat(finalState).isEqualTo(NavigationEvent.NavigateToOnBoarding)
+                advanceTimeBy(10_000)
+                expectNoEvents()
             }
     }
 
@@ -118,6 +115,8 @@ class ClassicFlowNodeHelperTest {
                 )
                 val finalState = awaitItem()
                 assertThat(finalState).isEqualTo(NavigationEvent.NavigateToOnBoarding)
+                advanceTimeBy(10_000)
+                expectNoEvents()
             }
     }
 
@@ -136,6 +135,8 @@ class ClassicFlowNodeHelperTest {
                 )
                 val finalState = awaitItem()
                 assertThat(finalState).isEqualTo(NavigationEvent.NavigateToOnBoarding)
+                advanceTimeBy(10_000)
+                expectNoEvents()
             }
     }
 
@@ -154,6 +155,8 @@ class ClassicFlowNodeHelperTest {
                 )
                 val finalState = awaitItem()
                 assertThat(finalState).isEqualTo(NavigationEvent.NavigateToLoginWithClassic(A_USER_ID))
+                advanceTimeBy(10_000)
+                expectNoEvents()
             }
     }
 
@@ -178,6 +181,7 @@ class ClassicFlowNodeHelperTest {
                         avatar = createBitmap(1, 1)
                     )
                 )
+                advanceTimeBy(10_000)
                 expectNoEvents()
             }
     }
@@ -211,6 +215,8 @@ class ClassicFlowNodeHelperTest {
                 )
                 val finalState = awaitItem()
                 assertThat(finalState).isEqualTo(NavigationEvent.NavigateToLoginWithClassic(A_USER_ID))
+                advanceTimeBy(10_000)
+                expectNoEvents()
             }
     }
 
@@ -236,6 +242,8 @@ class ClassicFlowNodeHelperTest {
                 )
                 val finalState = awaitItem()
                 assertThat(finalState).isEqualTo(NavigationEvent.NavigateToLoginWithClassic(A_USER_ID))
+                advanceTimeBy(10_000)
+                expectNoEvents()
             }
     }
 
@@ -264,6 +272,7 @@ class ClassicFlowNodeHelperTest {
                         sessionId = A_USER_ID.value,
                     )
                 )
+                advanceTimeBy(10_000)
                 expectNoEvents()
             }
     }
