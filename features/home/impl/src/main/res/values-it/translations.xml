@@ -5,9 +5,9 @@
   <string name="banner_battery_optimization_title_android">"Le notifiche non arrivano?"</string>
   <string name="banner_new_sound_message">"Il ping delle notifiche è stato aggiornato: ora è più chiaro, più rapido e meno fastidioso."</string>
   <string name="banner_new_sound_title">"Abbiamo rinnovato i tuoi suoni"</string>
-  <string name="banner_set_up_recovery_content">"Recupera la tua identità crittografica e la cronologia dei messaggi con una chiave di recupero se hai perso tutti i tuoi dispositivi."</string>
-  <string name="banner_set_up_recovery_submit">"Configura il recupero"</string>
-  <string name="banner_set_up_recovery_title">"Configura il ripristino"</string>
+  <string name="banner_set_up_recovery_content">"Le tue conversazioni vengono automaticamente salvate con crittografia end-to-end. Per ripristinare questo backup e conservare la tua identità digitale quando perdi l\'accesso a tutti i tuoi dispositivi, avrai bisogno della tua chiave di recupero."</string>
+  <string name="banner_set_up_recovery_submit">"Ottieni la chiave di recupero"</string>
+  <string name="banner_set_up_recovery_title">"Esegui il backup delle tue conversazioni"</string>
   <string name="confirm_recovery_key_banner_message">"Conferma la chiave di recupero per mantenere l\'accesso all\'archiviazione delle chiavi e alla cronologia dei messaggi."</string>
   <string name="confirm_recovery_key_banner_primary_button_title">"Inserisci la tua chiave di recupero"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Hai dimenticato la chiave di recupero?"</string>
@@ -50,6 +50,7 @@ Non hai messaggi non letti!"</string>
   <string name="screen_roomlist_mark_as_read">"Segna come letto"</string>
   <string name="screen_roomlist_mark_as_unread">"Segna come non letto"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Questa stanza è stata aggiornata"</string>
+  <string name="screen_roomlist_your_spaces">"I tuoi spazi"</string>
   <string name="session_verification_banner_message">"Sembra che tu stia usando un nuovo dispositivo. Verificati con un altro dispositivo per accedere ai tuoi messaggi cifrati."</string>
   <string name="session_verification_banner_title">"Verifica che sei tu"</string>
 </resources>

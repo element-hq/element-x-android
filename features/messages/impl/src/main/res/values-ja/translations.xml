@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crypto_event_authenticity_mismatched_sender">"イベントの送信者と、使用された端末の所有者が一致しません。"</string>
+  <string name="crypto_event_authenticity_not_guaranteed">"この暗号化されたメッセージの真正性を、この端末では保証できません。"</string>
+  <string name="crypto_event_authenticity_previously_verified">"以前に検証されたユーザーにより暗号化されています。"</string>
+  <string name="crypto_event_authenticity_sent_in_clear">"暗号化されていません。"</string>
+  <string name="crypto_event_authenticity_unknown_device">"削除されたまたは不明な端末により暗号化されています。"</string>
+  <string name="crypto_event_authenticity_unsigned_device">"所有者に検証されていない端末により暗号化されています。"</string>
+  <string name="crypto_event_authenticity_unverified_identity">"未検証のユーザーにより暗号化されています。"</string>
+  <string name="emoji_picker_category_activity">"アクティビティ"</string>
+  <string name="emoji_picker_category_flags">"旗"</string>
+  <string name="emoji_picker_category_foods">"食べ物"</string>
+  <string name="emoji_picker_category_nature">"動物・自然"</string>
+  <string name="emoji_picker_category_objects">"物"</string>
+  <string name="emoji_picker_category_people">"顔・人"</string>
+  <string name="emoji_picker_category_places">"旅・場所"</string>
+  <string name="emoji_picker_category_recent">"最近使用"</string>
+  <string name="emoji_picker_category_symbols">"記号"</string>
+  <string name="screen_media_upload_preview_caption_warning">"古いアプリケーションを使用しているユーザーはキャプションを見られない可能性があります。"</string>
+  <string name="screen_media_upload_preview_change_video_quality_prompt">"動画のアップロード画質を変更するにはタップしてください"</string>
+  <string name="screen_media_upload_preview_error_could_not_be_uploaded">"ファイルをアップロードに失敗しました。"</string>
+  <string name="screen_media_upload_preview_error_failed_processing">"ファイルの処理に失敗しました。再試行してください。"</string>
+  <string name="screen_media_upload_preview_error_failed_sending">"ファイルのアップロードに失敗しました。再試行してください。"</string>
+  <string name="screen_media_upload_preview_error_too_large_message">"許容されている最大サイズは %1$s です。"</string>
+  <string name="screen_media_upload_preview_error_too_large_title">"ファイルが大きすぎるためアップロードできません"</string>
+  <string name="screen_media_upload_preview_item_count">"個数 %1$d / %2$d"</string>
+  <string name="screen_media_upload_preview_optimize_image_quality_title">"画像の品質を最適化"</string>
+  <string name="screen_media_upload_preview_processing">"処理中…"</string>
+  <string name="screen_report_content_block_user">"ユーザーをブロック"</string>
+  <string name="screen_report_content_block_user_hint">"このユーザーからのメッセージをすべて非表示にする場合はチェックしてください。"</string>
+  <string name="screen_report_content_explanation">"このメッセージはホームサーバーの管理者に報告されます。暗号化されたメッセージを確認することはできません。"</string>
+  <string name="screen_report_content_hint">"このコンテンツを通報する理由"</string>
+  <string name="screen_room_attachment_source_camera">"カメラ"</string>
+  <string name="screen_room_attachment_source_camera_photo">"写真を撮影"</string>
+  <string name="screen_room_attachment_source_camera_video">"動画を撮影"</string>
+  <string name="screen_room_attachment_source_files">"添付ファイル"</string>
+  <string name="screen_room_attachment_source_gallery">"アルバムの写真・動画"</string>
+  <string name="screen_room_attachment_source_location">"場所を共有"</string>
+  <string name="screen_room_attachment_source_poll">"投票"</string>
+  <string name="screen_room_attachment_text_formatting">"書式設定"</string>
+  <string name="screen_room_encrypted_history_banner">"過去のメッセージを現在表示できません。"</string>
+  <string name="screen_room_encrypted_history_banner_unverified">"このルームの過去のメッセージを表示できません。確認するには、この端末を検証してください。"</string>
+  <string name="screen_room_invite_again_alert_message">"招待し直しますか？"</string>
+  <string name="screen_room_invite_again_alert_title">"このチャットにはあなた一人だけです"</string>
+  <string name="screen_room_mentions_at_room_subtitle">"ルーム全体に通知"</string>
+  <string name="screen_room_mentions_at_room_title">"全員"</string>
+  <string name="screen_room_retry_send_menu_send_again_action">"再送信する"</string>
+  <string name="screen_room_retry_send_menu_title">"メッセージの送信に失敗しました"</string>
+  <string name="screen_room_timeline_add_reaction">"リアクションを追加"</string>
+  <string name="screen_room_timeline_beginning_of_room">"%1$s の始まりです。"</string>
+  <string name="screen_room_timeline_beginning_of_room_no_name">"ここが会話の開始点です。"</string>
+  <string name="screen_room_timeline_legacy_call">"非対応の着信です。新しい Element X を使用できないか確認してください。"</string>
+  <string name="screen_room_timeline_less_reactions">"一部を表示"</string>
+  <string name="screen_room_timeline_message_copied">"メッセージをコピーしました"</string>
+  <string name="screen_room_timeline_no_permission_to_post">"このルームに発言する権限がありません"</string>
+  <plurals name="screen_room_timeline_reaction_a11y">
+    <item quantity="other">"%1$d 人の反応 %2$s"</item>
+  </plurals>
+  <plurals name="screen_room_timeline_reaction_including_you_a11y">
+    <item quantity="other">"あなたと %1$d 人の反応 %2$s"</item>
+  </plurals>
+  <string name="screen_room_timeline_reaction_you_a11y">"%1$s と反応"</string>
+  <string name="screen_room_timeline_reactions_show_less">"一部を表示"</string>
+  <string name="screen_room_timeline_reactions_show_more">"さらに表示"</string>
+  <string name="screen_room_timeline_reactions_show_reactions_summary">"リアクションのまとめを表示"</string>
+  <string name="screen_room_timeline_read_marker_title">"新着"</string>
+  <plurals name="screen_room_timeline_state_changes">
+    <item quantity="other">"%1$d 個のルーム更新点"</item>
+  </plurals>
+  <string name="screen_room_timeline_tombstoned_room_action">"新しいルームに移動"</string>
+  <string name="screen_room_timeline_tombstoned_room_message">"このルームは移行して非アクティブ状態です"</string>
+  <string name="screen_room_timeline_upgraded_room_action">"古いメッセージを表示"</string>
+  <string name="screen_room_timeline_upgraded_room_message">"このルームは他のルームからの移行先です"</string>
+  <plurals name="screen_room_typing_many_members">
+    <item quantity="other">"%1$s, %2$s 他 %3$d 人"</item>
+  </plurals>
+  <plurals name="screen_room_typing_notification">
+    <item quantity="other">"%1$s が入力中"</item>
+  </plurals>
+  <string name="screen_room_typing_two_members">"%1$s と %2$s"</string>
+</resources>

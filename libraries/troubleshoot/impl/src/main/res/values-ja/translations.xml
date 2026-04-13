@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_push_history_title">"プッシュ履歴"</string>
+  <string name="troubleshoot_notifications_screen_action">"テストを実行"</string>
+  <string name="troubleshoot_notifications_screen_action_again">"再度テスト"</string>
+  <string name="troubleshoot_notifications_screen_failure">"一部のテストで失敗しました。詳細を確認してください。"</string>
+  <string name="troubleshoot_notifications_screen_notice">"テストを実行することで、不安定な通知を生じさせる設定の問題を特定できます。"</string>
+  <string name="troubleshoot_notifications_screen_quick_fix_action">"修正を試行"</string>
+  <string name="troubleshoot_notifications_screen_success">"テストは問題なく完了しました。"</string>
+  <string name="troubleshoot_notifications_screen_title">"通知のトラブルシューティング"</string>
+  <string name="troubleshoot_notifications_screen_waiting">"一部のテストはあなたの操作が必要です。詳細を確認してください。"</string>
+</resources>

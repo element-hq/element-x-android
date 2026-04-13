@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_analytics_prompt_data_usage">"いかなる個人情報も記録, 分析されることはありません"</string>
+  <string name="screen_analytics_prompt_help_us_improve">"問題発見のため、匿名の使用データの共有にご協力ください。"</string>
+  <string name="screen_analytics_prompt_read_terms">"利用規約の全文を%1$sから確認することができます。"</string>
+  <string name="screen_analytics_prompt_read_terms_content_link">"こちら"</string>
+  <string name="screen_analytics_prompt_settings">"いつでも設定は変更できます"</string>
+  <string name="screen_analytics_prompt_third_party_sharing">"情報が第三者に共有されることはありません"</string>
+  <string name="screen_analytics_prompt_title">"%1$s の改善にご協力ください"</string>
+</resources>

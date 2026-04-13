@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_deactivate_account_confirmation_dialog_content">"アカウントを無効化することを再度確認します。この操作は元に戻せません。"</string>
+  <string name="screen_deactivate_account_delete_all_messages">"メッセージをすべて削除"</string>
+  <string name="screen_deactivate_account_delete_all_messages_notice">"注意: 新しいユーザーには断片的な会話が表示されます"</string>
+  <string name="screen_deactivate_account_description">"アカウントを無効化することは %1$s であり、次の変化が生じます:"</string>
+  <string name="screen_deactivate_account_description_bold_part">"不可逆"</string>
+  <string name="screen_deactivate_account_list_item_1">"アカウントを %1$s (再度ログイン不可, 同一のIDを再利用不可)"</string>
+  <string name="screen_deactivate_account_list_item_1_bold_part">"恒久的に無効化する"</string>
+  <string name="screen_deactivate_account_list_item_2">"すべてのチャットルームから退出します。"</string>
+  <string name="screen_deactivate_account_list_item_3">"アカウント提供元サーバーからアカウント情報を削除します。"</string>
+  <string name="screen_deactivate_account_list_item_4">"あなたの会話は、既存ユーザーには引き続き表示されますが、新規ユーザーには表示されなくなります。"</string>
+  <string name="screen_deactivate_account_title">"アカウントを無効化"</string>
+</resources>

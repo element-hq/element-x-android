@@ -60,6 +60,8 @@
   <string name="screen_qr_code_login_error_cancelled_title">"Richiesta di accesso annullata"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"L\'accesso è stato rifiutato sull\'altro dispositivo."</string>
   <string name="screen_qr_code_login_error_declined_title">"Accesso rifiutato"</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_subtitle">"Non devi fare altro."</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_title">"L\'altro tuo dispositivo è già connesso"</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"L\'accesso è scaduto. Riprova."</string>
   <string name="screen_qr_code_login_error_expired_title">"L\'accesso non è stato completato in tempo"</string>
   <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"L\'altro dispositivo non supporta l\'accesso a %s con un codice QR.

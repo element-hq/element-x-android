@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="notification_channel_call">"Gọi"</string>
+  <string name="notification_channel_listening_for_events">"Đang lắng nghe sự kiện"</string>
+  <string name="notification_channel_noisy">"Thông báo ồn ào"</string>
+  <string name="notification_channel_ringing_calls">"Cuộc gọi đang đổ chuông"</string>
+  <string name="notification_channel_silent">"Thông báo im lặng"</string>
+  <plurals name="notification_compat_summary_line_for_room">
+    <item quantity="other">"%1$s:%2$d tin nhắn"</item>
+  </plurals>
+  <plurals name="notification_compat_summary_title">
+    <item quantity="other">"%d thông báo"</item>
+  </plurals>
+  <string name="notification_fallback_content">"Bạn có tin nhắn mới."</string>
+  <string name="notification_incoming_call">"📹 Cuộc gọi đến"</string>
+  <string name="notification_inline_reply_failed">"** Không gửi được - vui lòng mở phòng"</string>
+  <string name="notification_invitation_action_join">"Tham gia"</string>
+  <string name="notification_invitation_action_reject">"Từ chối"</string>
+  <plurals name="notification_invitations">
+    <item quantity="other">"%d lời mời"</item>
+  </plurals>
+  <string name="notification_invite_body">"Đã mời bạn trò chuyện"</string>
+  <string name="notification_mentioned_you_body">"Đã nhắc đến bạn: %1$s"</string>
+  <string name="notification_new_messages">"Tin nhắn mới"</string>
+  <plurals name="notification_new_messages_for_room">
+    <item quantity="other">"%dtin nhắn mới"</item>
+  </plurals>
+  <string name="notification_reaction_body">"Đã thả %1$s vào tin nhắn"</string>
+  <string name="notification_room_action_mark_as_read">"Đánh dấu đã đọc"</string>
+  <string name="notification_room_action_quick_reply">"Trả lời nhanh"</string>
+  <string name="notification_room_invite_body">"Đã mời bạn tham gia phòng"</string>
+  <string name="notification_sender_me">"Tôi"</string>
+  <string name="notification_test_push_notification_content">"Bạn đang xem thông báo! Bấm vào đây!"</string>
+  <string name="notification_ticker_text_dm">"%1$s:%2$s"</string>
+  <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
+  <plurals name="notification_unread_notified_messages">
+    <item quantity="other">"%dtin nhắn chưa đọc đã thông báo"</item>
+  </plurals>
+  <string name="notification_unread_notified_messages_and_invitation">"%1$s và %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room">"%1$s in %2$s"</string>
+  <string name="notification_unread_notified_messages_in_room_and_invitation">"%1$s trong %2$s và %3$s"</string>
+  <plurals name="notification_unread_notified_messages_in_room_rooms">
+    <item quantity="other">"%d phòng"</item>
+  </plurals>
+  <string name="push_distributor_background_sync_android">"Đồng bộ hóa trong nền"</string>
+  <string name="push_distributor_firebase_android">"Dịch vụ của Google"</string>
+  <string name="push_no_valid_google_play_services_apk_android">"Không tìm thấy Dịch vụ Google Play hợp lệ. Thông báo có thể không hoạt động đúng cách."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_title">"Người dùng bị chặn"</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_description">"Hãy đảm bảo rằng ứng dụng hỗ trợ ít nhất một nhà cung cấp thông báo đẩy."</string>
+  <string name="troubleshoot_notifications_test_detect_push_provider_failure">"Không tìm thấy hỗ trợ từ nhà cung cấp thông báo đẩy."</string>
+  <plurals name="troubleshoot_notifications_test_detect_push_provider_success">
+    <item quantity="other">"Đã tìm thấy %1$d nhà cung cấp thông báo đẩy: %2$s"</item>
+  </plurals>
+  <string name="troubleshoot_notifications_test_detect_push_provider_title">"Hỗ trợ nhà cung cấp thông báo đẩy"</string>
+  <string name="troubleshoot_notifications_test_display_notification_description">"Kiểm tra xem ứng dụng có thể hiển thị thông báo hay không."</string>
+  <string name="troubleshoot_notifications_test_display_notification_failure">"Thông báo chưa được nhấp vào."</string>
+  <string name="troubleshoot_notifications_test_display_notification_permission_failure">"Không thể hiển thị thông báo."</string>
+  <string name="troubleshoot_notifications_test_display_notification_success">"Thông báo đã được nhấp!"</string>
+  <string name="troubleshoot_notifications_test_display_notification_title">"Hiển thị thông báo"</string>
+  <string name="troubleshoot_notifications_test_display_notification_waiting">"Hãy nhấp vào thông báo để tiếp tục thử nghiệm."</string>
+</resources>

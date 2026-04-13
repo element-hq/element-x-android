@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_create_room_action_create_room">"Phòng mới"</string>
+  <string name="screen_create_room_add_people_title">"Mời ai đó"</string>
+  <string name="screen_create_room_error_creating_room">"Đã xảy ra lỗi khi tạo phòng."</string>
+  <string name="screen_create_room_private_option_description">"Chỉ những người được mời mới có thể tham gia."</string>
+  <string name="screen_create_room_public_option_description">"Bất kỳ ai cũng có thể tìm thấy phòng này. 
+Bạn có thể thay đổi cài đặt phòng bất cứ lúc nào."</string>
+  <string name="screen_create_room_topic_label">"Chủ đề (tùy chọn)"</string>
+  <string name="screen_create_room_topic_placeholder">"Thêm mô tả…"</string>
+</resources>

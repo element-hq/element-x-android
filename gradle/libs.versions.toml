@@ -54,7 +54,7 @@ haze = "1.7.2"
 dependencyAnalysis = "3.6.1"
 
 # DI
-metro = "0.12.1"
+metro = "0.13.1"
 
 # Auto service
 autoservice = "1.1.1"
@@ -178,7 +178,7 @@ test_detekt_test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version
 # https://github.com/matrix-org/matrix-rust-components-kotlin/commits/main/sdk/sdk-android/src/main/kotlin/org/matrix/rustcomponents/sdk/matrix_sdk_ffi.kt
 # All new features should not be implemented in the pull request that upgrades the version, developers should
 # only fix API breaks and may add some TODOs.
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.04.8"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.04.13"
 
 # Others
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
