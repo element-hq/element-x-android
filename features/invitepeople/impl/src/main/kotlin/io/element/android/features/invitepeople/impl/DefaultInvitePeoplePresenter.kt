@@ -204,7 +204,11 @@ class DefaultInvitePeoplePresenter(
                         sendInvitesAction.value = AsyncAction.Uninitialized
                     }
                     is DefaultInvitePeopleEvents.RemoveUnknownUsers -> {
-                        selectedUsers.value = selectedUsers.value.filter { it !in unknownUsers }.toImmutableList()
+                        val usersToRemove = selectedUsers.value.filter { it in unknownUsers }
+                        usersToRemove.forEach { user ->
+                            selectedUsers.toggleUser(user)
+                            searchResults.toggleUser(user)
+                        }
                         sendInvitesAction.value = AsyncAction.Uninitialized
                     }
                 }

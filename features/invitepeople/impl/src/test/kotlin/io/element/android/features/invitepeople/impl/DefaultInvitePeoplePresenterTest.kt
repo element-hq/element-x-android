@@ -690,6 +690,8 @@ internal class DefaultInvitePeoplePresenterTest {
         val bob = aMatrixUser("@bob:example.com")
         val charlie = aMatrixUser("@charlie:example.com")
 
+        val repository = FakeUserRepository()
+
         val getUserIdentityResult = lambdaRecorder<UserId, Result<IdentityState?>> { userId ->
             when (userId.value) {
                 alice.userId.value -> Result.success(IdentityState.Pinned)
@@ -706,12 +708,13 @@ internal class DefaultInvitePeoplePresenterTest {
         }
 
         val presenter = createDefaultInvitePeoplePresenter(
+            userRepository = repository,
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
             matrixClient = FakeMatrixClient(encryptionService = encryptionService),
             featureFlagService = featureFlagService
         )
         presenter.test {
-            val initialState = awaitItem()
+            val initialState = awaitItemAsDefault()
             skipItems(1)
 
             // When we toggle a user not in the list, they are added, and we fetch their identity.
@@ -722,8 +725,25 @@ internal class DefaultInvitePeoplePresenterTest {
             awaitItemAsDefault().eventSink(DefaultInvitePeopleEvents.ToggleUser(charlie))
             delay(100)
 
+            // And the search is matching Alice and Bob
+            initialState.searchQuery.setTextAndPlaceCursorAtEnd("some query")
+            assertThat(repository.providedQuery).isEqualTo("some query")
+            repository.emitState(
+                UserSearchResultState(
+                    results = listOf(UserSearchResult(alice), UserSearchResult(bob)),
+                    isSearching = true
+                )
+            )
+            skipItems(3)
+
             awaitItemAsDefault().run {
                 assertThat(selectedUsers).containsExactly(alice, bob, charlie)
+
+                // Both Alice and Bob are selected in searchResults
+                assertThat(
+                    searchResults.users().map { Pair(it.matrixUser, it.isSelected) }
+                ).containsExactly(Pair(alice, true), Pair(bob, true))
+
                 eventSink(InvitePeopleEvents.SendInvites)
             }
 
@@ -744,6 +764,11 @@ internal class DefaultInvitePeoplePresenterTest {
             (awaitLastSequentialItem() as DefaultInvitePeopleState).run {
                 assertThat(sendInvitesAction.isUninitialized()).isTrue()
                 assertThat(selectedUsers).containsExactly(alice)
+
+                // Bob is no longer selected in searchResults
+                assertThat(
+                    searchResults.users().map { Pair(it.matrixUser, it.isSelected) }
+                ).containsExactly(Pair(alice, true), Pair(bob, false))
             }
         }
     }
