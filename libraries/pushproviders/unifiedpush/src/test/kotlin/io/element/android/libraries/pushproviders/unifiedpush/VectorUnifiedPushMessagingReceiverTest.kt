@@ -39,7 +39,6 @@ import org.unifiedpush.android.connector.FailedReason
 import org.unifiedpush.android.connector.data.PublicKeySet
 import org.unifiedpush.android.connector.data.PushEndpoint
 import org.unifiedpush.android.connector.data.PushMessage
-import kotlin.time.Duration
 
 @RunWith(RobolectricTestRunner::class)
 class VectorUnifiedPushMessagingReceiverTest {
@@ -106,7 +105,7 @@ class VectorUnifiedPushMessagingReceiverTest {
     fun `pushHandler returning true locks the wake lock but does not unlock it so it continues to run`() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().context
         val pushHandlerResult = lambdaRecorder<PushData, String, Boolean> { _, _ -> true }
-        val lockLambda = lambdaRecorder<Duration, Unit> { _ -> }
+        val lockLambda = lambdaRecorder<Unit> { }
         val unlockLambda = lambdaRecorder<Unit> { }
         val vectorUnifiedPushMessagingReceiver = createVectorUnifiedPushMessagingReceiver(
             pushHandler = FakePushHandler(
@@ -133,7 +132,7 @@ class VectorUnifiedPushMessagingReceiverTest {
     fun `pushHandler returning false locks and unlocks the wakelock early`() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().context
         val pushHandlerResult = lambdaRecorder<PushData, String, Boolean> { _, _ -> false }
-        val lockLambda = lambdaRecorder<Duration, Unit> { _ -> }
+        val lockLambda = lambdaRecorder<Unit> { }
         val unlockLambda = lambdaRecorder<Unit> { }
         val vectorUnifiedPushMessagingReceiver = createVectorUnifiedPushMessagingReceiver(
             pushHandler = FakePushHandler(

@@ -67,6 +67,7 @@ class FetchPendingNotificationsWorker(
             inputData.getString(SyncPendingNotificationsRequestBuilder.SESSION_ID)?.let(::SessionId)
         }.getOrNull() ?: return Result.failure()
 
+        // We can release now because at this point, the Worker should keep network access
         pushHandlingWakeLock.unlock()
 
         // Fetch pending requests in the last 24 hours

@@ -8,14 +8,13 @@
 package io.element.android.libraries.push.test.push
 
 import io.element.android.libraries.push.api.push.PushHandlingWakeLock
-import kotlin.time.Duration
 
 class FakePushHandlingWakeLock(
-    private val lock: (time: Duration) -> Unit = {},
+    private val lock: () -> Unit = {},
     private val unlock: () -> Unit = {},
 ) : PushHandlingWakeLock {
-    override fun lock(time: Duration) {
-        lock.invoke(time)
+    override fun lock() {
+        lock.invoke()
     }
 
     override suspend fun unlock() {

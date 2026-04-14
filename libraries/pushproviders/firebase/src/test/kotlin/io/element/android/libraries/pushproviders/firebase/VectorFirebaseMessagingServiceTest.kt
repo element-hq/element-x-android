@@ -29,7 +29,6 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
-import kotlin.time.Duration
 
 @RunWith(RobolectricTestRunner::class)
 class VectorFirebaseMessagingServiceTest {
@@ -81,7 +80,7 @@ class VectorFirebaseMessagingServiceTest {
 
     @Test
     fun `test pushHandler returning true locks and does not unlock the wakelock so it continues running`() = runTest {
-        val lockLambda = lambdaRecorder<Duration, Unit> { _ -> }
+        val lockLambda = lambdaRecorder<Unit> { }
         val unlockLambda = lambdaRecorder<Unit> { }
         val vectorFirebaseMessagingService = createVectorFirebaseMessagingService(
             pushHandler = FakePushHandler(handleResult = { _, _ -> true }),
@@ -113,7 +112,7 @@ class VectorFirebaseMessagingServiceTest {
 
     @Test
     fun `test pushHandler returning false locks and unlocks the wakelock early`() = runTest {
-        val lockLambda = lambdaRecorder<Duration, Unit> { _ -> }
+        val lockLambda = lambdaRecorder<Unit> { }
         val unlockLambda = lambdaRecorder<Unit> { }
         val vectorFirebaseMessagingService = createVectorFirebaseMessagingService(
             pushHandler = FakePushHandler(handleResult = { _, _ -> false }),
@@ -145,7 +144,7 @@ class VectorFirebaseMessagingServiceTest {
 
     @Test
     fun `test pushHandler with a remote message with normal priority won't lock the wakelock`() = runTest {
-        val lockLambda = lambdaRecorder<Duration, Unit> { _ -> }
+        val lockLambda = lambdaRecorder<Unit> { }
         val unlockLambda = lambdaRecorder<Unit> { }
         val vectorFirebaseMessagingService = createVectorFirebaseMessagingService(
             pushHandler = FakePushHandler(handleResult = { _, _ -> false }),

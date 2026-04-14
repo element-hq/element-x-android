@@ -11,16 +11,18 @@ import android.app.ActivityManager
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
 import androidx.core.app.NotificationCompat
+import androidx.core.app.ServiceCompat
+import androidx.core.content.ContextCompat
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.di.annotations.AppCoroutineScope
-import io.element.android.libraries.push.api.push.PushHandlingWakeLock
 import io.element.android.libraries.push.impl.di.PushBindings
 import io.element.android.libraries.push.impl.notifications.channels.NotificationChannels
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -48,7 +50,6 @@ class FetchPushForegroundService : Service() {
     }
 
     @Inject lateinit var notificationChannels: NotificationChannels
-    @Inject lateinit var pushHandlingWakeLock: PushHandlingWakeLock
     @Inject @AppCoroutineScope lateinit var coroutineScope: CoroutineScope
 
     private val wakelock: PowerManager.WakeLock by lazy {
@@ -78,8 +79,13 @@ class FetchPushForegroundService : Service() {
         // Try to start the service in foreground. This can fail, even in cases where it's supposed to work according to the docs.
         // In those cases we catch the exception and handle the failure so we don't try to start the wakelock or stop the service
         // from running in foreground later.
+        val serviceType = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
+            ServiceInfo.FOREGROUND_SERVICE_TYPE_SHORT_SERVICE
+        } else {
+            0
+        }
         runCatchingExceptions {
-            startForeground(NOTIFICATION_ID, notificationCompat)
+            ServiceCompat.startForeground(this, NOTIFICATION_ID, notificationCompat, serviceType)
         }
             .onSuccess {
                 isOnForeground = true
@@ -116,7 +122,7 @@ class FetchPushForegroundService : Service() {
     override fun stopService(intent: Intent?): Boolean {
         if (isOnForeground) {
             wakelock.release()
-            stopForeground(STOP_FOREGROUND_REMOVE)
+            ServiceCompat.stopForeground(this, ServiceCompat.STOP_FOREGROUND_REMOVE)
         }
 
         return super.stopService(intent)
@@ -131,33 +137,31 @@ class FetchPushForegroundService : Service() {
         Timber.d("onTimeoutAction, calledByTheSystem: $calledByTheSystem, isOnForeground: $isOnForeground")
         if (isOnForeground) {
             Timber.d("Wakelock timeout reached, stopping FetchPushForegroundService")
-            coroutineScope.launch { pushHandlingWakeLock.unlock() }
+            coroutineScope.launch { stop(this@FetchPushForegroundService) }
         }
     }
 
     companion object {
         private val stopMutex = Mutex()
 
-        fun startIfNeeded(context: Context) {
+        fun start(context: Context) {
             // Don't start the foreground service if the device is already awake
             val powerManager = context.getSystemService(POWER_SERVICE) as PowerManager
-            if (powerManager.isInteractive) return
-
-            start(context)
-        }
-
-        fun start(context: Context) {
-            val intent = Intent(context, FetchPushForegroundService::class.java)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                runCatchingExceptions { context.startForegroundService(intent) }
-                    .onFailure { throwable ->
-                        Timber.e(
-                            throwable,
-                            "Failed to start FetchPushForegroundService, notifications may take longer than usual to sync"
-                        )
-                    }
+            if (powerManager.isInteractive) {
+                Timber.d("Device is already in an interactive state, no need to start FetchPushForegroundService")
             } else {
-                context.startService(intent)
+                val intent = Intent(context, FetchPushForegroundService::class.java)
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                    runCatchingExceptions { ContextCompat.startForegroundService(context, intent) }
+                        .onFailure { throwable ->
+                            Timber.e(
+                                throwable,
+                                "Failed to start FetchPushForegroundService, notifications may take longer than usual to sync"
+                            )
+                        }
+                } else {
+                    context.startService(intent)
+                }
             }
         }
 

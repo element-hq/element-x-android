@@ -14,20 +14,19 @@ import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.push.api.push.PushHandlingWakeLock
 import timber.log.Timber
-import kotlin.time.Duration
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
 class DefaultPushHandlingWakeLock(
     @ApplicationContext private val context: Context,
 ) : PushHandlingWakeLock {
-    override fun lock(time: Duration) {
+    override fun lock() {
         Timber.d("Acquiring wakelock for push handling, starting service.")
-        FetchPushForegroundService.startIfNeeded(context)
+        FetchPushForegroundService.start(context)
     }
 
     override suspend fun unlock() {
-        Timber.d("Releasing wakelock used for push handling.")
+        Timber.d("Releasing wakelock used for push handling, stoping service.")
         FetchPushForegroundService.stop(context)
     }
 }
