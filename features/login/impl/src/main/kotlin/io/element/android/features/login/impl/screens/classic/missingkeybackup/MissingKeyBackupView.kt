@@ -16,7 +16,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.login.impl.R
 import io.element.android.libraries.designsystem.atomic.organisms.NumberedListOrganism
@@ -25,7 +24,6 @@ import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
-import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import kotlinx.collections.immutable.persistentListOf
 
 @Composable
@@ -35,11 +33,6 @@ fun MissingKeyBackupView(
     onOpenClassicClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    OnLifecycleEvent { _, event ->
-        if (event == Lifecycle.Event.ON_RESUME) {
-            state.eventSink.invoke(MissingKeyBackupEvent.OnResume)
-        }
-    }
     FlowStepPage(
         modifier = modifier,
         onBackClick = onBackClick,

@@ -8,7 +8,6 @@
 package io.element.android.features.login.impl.screens.classic.loginwithclassic
 
 sealed interface LoginWithClassicEvent {
-    data object RefreshData : LoginWithClassicEvent
     data object Submit : LoginWithClassicEvent
     data object ClearError : LoginWithClassicEvent
 }

@@ -19,8 +19,6 @@ open class MissingKeyBackupStateProvider : PreviewParameterProvider<MissingKeyBa
 
 fun aMissingKeyBackupState(
     appName: String = "AppName",
-    eventSink: (MissingKeyBackupEvent) -> Unit = {},
 ) = MissingKeyBackupState(
     appName = appName,
-    eventSink = eventSink
 )

@@ -58,36 +58,6 @@ class LoginWithClassicPresenterTest {
     }
 
     @Test
-    fun `present - refresh data invokes the expected methods`() = runTest {
-        val requestAvatarResult = lambdaRecorder<UserId, Unit> { }
-        val elementClassicConnection = FakeElementClassicConnection(
-            startResult = {},
-            requestAvatarResult = requestAvatarResult,
-        )
-        val presenter = createPresenter(
-            elementClassicConnection = elementClassicConnection,
-        )
-        presenter.test {
-            skipItems(1)
-            elementClassicConnection.emitState(
-                anElementClassicReady(
-                    elementClassicSession = anElementClassicSession(
-                        userId = A_USER_ID,
-                        secrets = A_SECRET,
-                        roomKeysVersion = ROOM_KEYS_VERSION,
-                    ),
-                    displayName = A_USER_NAME,
-                )
-            )
-            val readyState = awaitItem()
-            assertThat(readyState.userId).isEqualTo(A_USER_ID)
-            assertThat(readyState.displayName).isEqualTo(A_USER_NAME)
-            readyState.eventSink(LoginWithClassicEvent.RefreshData)
-            requestAvatarResult.assertions().isCalledOnce()
-        }
-    }
-
-    @Test
     fun `present - start login with correct state - user can login`() = runTest {
         val authenticationService = FakeMatrixAuthenticationService(
             setHomeserverResult = {

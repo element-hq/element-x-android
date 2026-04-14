@@ -43,7 +43,6 @@ interface ElementClassicConnection {
     fun start()
     fun stop()
     fun requestSession()
-    fun requestAvatar(userId: UserId)
     val stateFlow: StateFlow<ElementClassicConnectionState>
 }
 
@@ -174,7 +173,7 @@ class DefaultElementClassicConnection(
         }
     }
 
-    override fun requestAvatar(userId: UserId) {
+    private fun requestAvatar(userId: UserId) {
         Timber.tag(loggerTag.value).d("requestAvatar()")
         coroutineScope.launch {
             val finalMessenger = messenger
@@ -225,6 +224,11 @@ class DefaultElementClassicConnection(
         coroutineScope.launch {
             val updatedState = ensureHomeserverIsSupported(state)
             emitState(updatedState)
+            val userId = (updatedState as? ElementClassicConnectionState.ElementClassicReady)?.elementClassicSession?.userId
+            if (userId != null) {
+                // Step 2, request the avatar
+                requestAvatar(userId)
+            }
         }
     }
 
@@ -241,11 +245,15 @@ class DefaultElementClassicConnection(
                 )
             } else {
                 val avatar = BundleCompat.getParcelable(data, KEY_USER_AVATAR_PARCELABLE, Bitmap::class.java)
-                val updatedState = currentState.copy(
-                    avatar = avatar,
-                )
-                coroutineScope.launch {
-                    emitState(updatedState)
+                // If the avatar is identical to the current one, do not emit a new state to avoid unnecessary recompositions
+                // and blink on the avatar image
+                if (avatar == null || !avatar.sameAs(currentState.avatar)) {
+                    val updatedState = currentState.copy(
+                        avatar = avatar,
+                    )
+                    coroutineScope.launch {
+                        emitState(updatedState)
+                    }
                 }
             }
         } else {
@@ -343,6 +351,10 @@ class DefaultElementClassicConnection(
                         append(doesContainBackupKey)
                     }
                 )
+                // Ensure avatar is not lost when refreshing the data
+                val currentAvatar = (stateFlow.value as? ElementClassicConnectionState.ElementClassicReady)
+                    ?.takeIf { it.elementClassicSession.userId == userId }
+                    ?.avatar
                 ElementClassicConnectionState.ElementClassicReady(
                     elementClassicSession = ElementClassicSession(
                         userId = userId,
@@ -352,7 +364,7 @@ class DefaultElementClassicConnection(
                         doesContainBackupKey = doesContainBackupKey,
                     ),
                     displayName = displayName,
-                    avatar = null,
+                    avatar = currentAvatar,
                 )
             }
         }

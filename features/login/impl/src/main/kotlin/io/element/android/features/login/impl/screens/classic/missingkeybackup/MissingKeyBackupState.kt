@@ -9,5 +9,4 @@ package io.element.android.features.login.impl.screens.classic.missingkeybackup
 
 data class MissingKeyBackupState(
     val appName: String,
-    val eventSink: (MissingKeyBackupEvent) -> Unit
 )

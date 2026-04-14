@@ -8,12 +8,9 @@
 package io.element.android.features.login.impl.screens.classic.missingkeybackup
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.login.impl.classic.ElementClassicConnection
-import io.element.android.features.login.impl.classic.FakeElementClassicConnection
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.test.AN_APPLICATION_NAME
 import io.element.android.libraries.matrix.test.core.aBuildMeta
-import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -27,29 +24,10 @@ class MissingKeyBackupPresenterTest {
             assertThat(initialState.appName).isEqualTo(AN_APPLICATION_NAME)
         }
     }
-
-    @Test
-    fun `present - when the screen is resumed twice, the start over method is called`() = runTest {
-        val requestSessionResult = lambdaRecorder<Unit> { }
-        val presenter = createPresenter(
-            elementClassicConnection = FakeElementClassicConnection(
-                requestSessionResult = requestSessionResult,
-            ),
-        )
-        presenter.test {
-            val initialState = awaitItem()
-            initialState.eventSink(MissingKeyBackupEvent.OnResume)
-            expectNoEvents()
-            initialState.eventSink(MissingKeyBackupEvent.OnResume)
-            requestSessionResult.assertions().isCalledOnce()
-        }
-    }
 }
 
 private fun createPresenter(
     buildMeta: BuildMeta = aBuildMeta(applicationName = AN_APPLICATION_NAME),
-    elementClassicConnection: ElementClassicConnection = FakeElementClassicConnection(),
 ) = MissingKeyBackupPresenter(
     buildMeta = buildMeta,
-    elementClassicConnection = elementClassicConnection,
 )

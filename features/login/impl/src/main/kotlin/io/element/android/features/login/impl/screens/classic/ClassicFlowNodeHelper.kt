@@ -26,6 +26,10 @@ class ClassicFlowNodeHelper(
     private val elementClassicConnection: ElementClassicConnection,
     private val sessionStore: SessionStore,
 ) {
+    fun onResume() {
+        elementClassicConnection.requestSession()
+    }
+
     @OptIn(ExperimentalCoroutinesApi::class)
     fun navigationEventFlow(): Flow<NavigationEvent> {
         return elementClassicConnection.stateFlow

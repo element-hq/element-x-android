@@ -11,6 +11,7 @@ import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.lifecycle.lifecycleScope
+import com.bumble.appyx.core.lifecycle.subscribe
 import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
@@ -75,6 +76,11 @@ class ClassicFlowNode(
     override fun onBuilt() {
         super.onBuilt()
         observeElementClassicConnection()
+        lifecycle.subscribe(
+            onResume = {
+                classicFlowNodeHelper.onResume()
+            },
+        )
     }
 
     private fun observeElementClassicConnection() {

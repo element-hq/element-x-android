@@ -33,8 +33,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.Lifecycle
-import androidx.lifecycle.compose.LifecycleEventEffect
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.login.LoginModeView
@@ -67,10 +65,6 @@ fun LoginWithClassicView(
     onCreateAccountContinue: (url: String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    LifecycleEventEffect(Lifecycle.Event.ON_RESUME) {
-        state.eventSink(LoginWithClassicEvent.RefreshData)
-    }
-
     val isLoading by remember(state.loginMode) {
         derivedStateOf {
             state.loginMode is AsyncData.Loading
