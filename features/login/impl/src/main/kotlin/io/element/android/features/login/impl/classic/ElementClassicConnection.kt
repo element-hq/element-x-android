@@ -80,6 +80,14 @@ class DefaultElementClassicConnection(
     // Flag indicating whether we have called bind on the service.
     private var bound: Boolean = false
 
+    private val mutableStateFlow = MutableStateFlow<ElementClassicConnectionState>(ElementClassicConnectionState.Idle)
+    override val stateFlow = mutableStateFlow.asStateFlow()
+
+    private val elementClassicComponent = ComponentName(
+        BuildConfig.elementClassicPackage,
+        ELEMENT_CLASSIC_SERVICE_FULL_CLASS_NAME,
+    )
+
     /**
      * Class for interacting with the main interface of the service.
      */
@@ -192,9 +200,6 @@ class DefaultElementClassicConnection(
         }
     }
 
-    private val mutableStateFlow = MutableStateFlow<ElementClassicConnectionState>(ElementClassicConnectionState.Idle)
-    override val stateFlow = mutableStateFlow.asStateFlow()
-
     /**
      * Handler of incoming messages from service.
      */
@@ -303,11 +308,6 @@ class DefaultElementClassicConnection(
         )
         mutableStateFlow.emit(state)
     }
-
-    private val elementClassicComponent = ComponentName(
-        BuildConfig.elementClassicPackage,
-        ELEMENT_CLASSIC_SERVICE_FULL_CLASS_NAME,
-    )
 
     private fun Bundle.toElementClassicConnectionState(): ElementClassicConnectionState {
         val error = getString(KEY_ERROR_STR)
