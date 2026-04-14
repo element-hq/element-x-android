@@ -35,6 +35,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
+import io.element.android.libraries.matrix.test.room.threads.FakeThreadsListService
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.simulateLongTask
@@ -56,6 +57,7 @@ class FakeJoinedRoom(
     override val roomNotificationSettingsStateFlow: StateFlow<RoomNotificationSettingsState> =
         MutableStateFlow(RoomNotificationSettingsState.Unknown),
     override val knockRequestsFlow: Flow<List<KnockRequest>> = MutableStateFlow(emptyList()),
+    override val threadsListService: FakeThreadsListService = FakeThreadsListService(),
     private val roomNotificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
     private var createTimelineResult: (CreateTimelineParams) -> Result<Timeline> = { lambdaError() },
     private val editMessageLambda: (EventId, String, String?, List<IntentionalMention>) -> Result<Unit> = { _, _, _, _ -> lambdaError() },
