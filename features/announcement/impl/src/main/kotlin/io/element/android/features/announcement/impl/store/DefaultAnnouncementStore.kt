@@ -17,6 +17,7 @@ import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFac
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 
+private val spaceAnnouncementKey = intPreferencesKey("spaceAnnouncement")
 private val newNotificationSoundKey = intPreferencesKey("newNotificationSound")
 
 @ContributesBinding(AppScope::class)
@@ -52,6 +53,6 @@ class DefaultAnnouncementStore(
 }
 
 private fun Announcement.toKey() = when (this) {
-    is Announcement.Fullscreen -> intPreferencesKey("fullscreen_" + this::class.simpleName)
+    Announcement.Fullscreen.Space -> spaceAnnouncementKey
     Announcement.NewNotificationSound -> newNotificationSoundKey
 }
