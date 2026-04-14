@@ -170,6 +170,8 @@
       "name" : ":features:login:impl",
       "includeRegex" : [
         "screen_onboarding_.*",
+        "screen\\.onboarding\\..*",
+        "screen\\.missing_key_backup\\..*",
         "screen_login_.*",
         "screen_server_confirmation_.*",
         "screen_change_server_.*",

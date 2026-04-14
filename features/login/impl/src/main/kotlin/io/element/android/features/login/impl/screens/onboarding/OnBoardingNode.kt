@@ -48,6 +48,7 @@ class OnBoardingNode(
     data class Params(
         val accountProvider: String?,
         val loginHint: String?,
+        val showBackButton: Boolean,
     ) : NodeInputs
 
     private val callback: Callback = callback()
@@ -61,6 +62,7 @@ class OnBoardingNode(
     override fun View(modifier: Modifier) {
         val state = presenter.present()
         val context = LocalContext.current
+
         OnBoardingView(
             state = state,
             modifier = modifier,

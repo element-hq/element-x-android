@@ -44,6 +44,7 @@ class ChooseAccountProviderPresenter(
                         loginHelper.submit(
                             isAccountCreation = false,
                             homeserverUrl = it.url,
+                            resolvedHomeserverUrl = null,
                             loginHint = null,
                         )
                     }

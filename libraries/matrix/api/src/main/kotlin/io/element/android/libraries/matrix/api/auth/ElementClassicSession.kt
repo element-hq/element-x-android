@@ -5,11 +5,14 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.login.impl.screens.onboarding.classic
+package io.element.android.libraries.matrix.api.auth
 
-import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.UserId
 
-class ConfirmingLoginWithElementClassic(
+data class ElementClassicSession(
     val userId: UserId,
-) : AsyncAction.Confirming
+    val homeserverUrl: String?,
+    val secrets: String?,
+    val roomKeysVersion: String?,
+    val doesContainBackupKey: Boolean,
+)

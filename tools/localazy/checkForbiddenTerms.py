@@ -31,6 +31,9 @@ forbiddenTerms = {
         # We explicitly want to mention Element Pro in these 2:
         "screen_change_server_error_element_pro_required_title",
         "screen_change_server_error_element_pro_required_message",
+        # Contains "Element Classic"
+        "screen_missing_key_backup_open_element_classic",
+        "screen_missing_key_backup_step_1",
     ]
 }
 
