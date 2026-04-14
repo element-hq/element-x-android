@@ -308,7 +308,7 @@ internal fun ThreadsListViewPreview() {
                 roomId = RoomId("!room-id:server"),
                 roomName = "Room name",
                 roomAvatarUrl = null,
-                threads = List(10) { aThreadListRowItem(threadId = ThreadId("thread-$it")) }.toImmutableList(),
+                threads = List(10) { aThreadListRowItem(threadId = ThreadId("\$thread-$it")) }.toImmutableList(),
                 eventSink = {},
             ),
             onThreadClick = {},
