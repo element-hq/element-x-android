@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_signout_confirmation_dialog_content">"Bạn có chắc muốn gỡ thiết bị này không?"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"Gỡ bỏ thiết bị này"</string>
+  <string name="screen_signout_confirmation_dialog_title">"Gỡ bỏ thiết bị này"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Đang gỡ thiết bị…"</string>
+  <string name="screen_signout_key_backup_disabled_subtitle">"Đây là thiết bị duy nhất của bạn. Nếu xóa nó, bạn sẽ cần khóa khôi phục để xác nhận danh tính kỹ thuật số và khôi phục các cuộc trò chuyện được mã hóa lần tiếp theo khi đăng nhập."</string>
+  <string name="screen_signout_key_backup_disabled_title">"Bạn sắp mất quyền truy cập vào các cuộc trò chuyện được mã hóa"</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"Bạn đã ngoại tuyến khi các khóa đang được sao lưu. Kết nối lại để hoàn tất sao lưu trước khi gỡ thiết bị."</string>
+  <string name="screen_signout_key_backup_offline_title">"Khóa của bạn vẫn đang được sao lưu."</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"Đợi quá trình hoàn tất rồi hãy gỡ thiết bị."</string>
+  <string name="screen_signout_key_backup_ongoing_title">"Khóa của bạn vẫn đang được sao lưu."</string>
+  <string name="screen_signout_preference_item">"Gỡ bỏ thiết bị này"</string>
+  <string name="screen_signout_recovery_disabled_subtitle">"Bạn sắp đăng xuất khỏi phiên làm việc cuối cùng. Nếu bạn đăng xuất ngay bây giờ, bạn sẽ mất quyền truy cập vào các tin nhắn đã mã hóa của mình."</string>
+  <string name="screen_signout_recovery_disabled_title">"Bạn sắp mất quyền truy cập vào các cuộc trò chuyện được mã hóa"</string>
+  <string name="screen_signout_save_recovery_key_subtitle">"Đây là thiết bị duy nhất của bạn. Nếu xóa nó, bạn sẽ cần khóa khôi phục để xác nhận danh tính kỹ thuật số và khôi phục các cuộc trò chuyện được mã hóa khi đăng nhập lần tới."</string>
+  <string name="screen_signout_save_recovery_key_title">"Đảm bảo bạn có khóa khôi phục trước khi gỡ thiết bị này."</string>
+</resources>

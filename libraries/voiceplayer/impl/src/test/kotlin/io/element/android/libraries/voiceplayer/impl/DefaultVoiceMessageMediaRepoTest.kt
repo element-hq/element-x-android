@@ -32,6 +32,9 @@ class DefaultVoiceMessageMediaRepoTest {
         val repo = createDefaultVoiceMessageMediaRepo(
             temporaryFolder = temporaryFolder,
             matrixMediaLoader = matrixMediaLoader,
+            mxcUri2FilePathResult = {
+                "matrix.org/1234567890abcdefg"
+            },
         )
 
         repo.getMediaFile().let { result ->
@@ -76,6 +79,9 @@ class DefaultVoiceMessageMediaRepoTest {
         val repo = createDefaultVoiceMessageMediaRepo(
             temporaryFolder = temporaryFolder,
             matrixMediaLoader = matrixMediaLoader,
+            mxcUri2FilePathResult = {
+                "matrix.org/1234567890abcdefg"
+            },
         )
 
         repo.getMediaFile().let { result ->
@@ -98,6 +104,9 @@ class DefaultVoiceMessageMediaRepoTest {
         val repo = createDefaultVoiceMessageMediaRepo(
             temporaryFolder = temporaryFolder,
             matrixMediaLoader = matrixMediaLoader,
+            mxcUri2FilePathResult = {
+                "matrix.org/1234567890abcdefg"
+            },
         )
 
         repo.getMediaFile().let { result ->
@@ -128,10 +137,13 @@ class DefaultVoiceMessageMediaRepoTest {
 private fun createDefaultVoiceMessageMediaRepo(
     temporaryFolder: TemporaryFolder,
     matrixMediaLoader: MatrixMediaLoader = FakeMatrixMediaLoader(),
+    mxcUri2FilePathResult: (String) -> String? = { null },
     mxcUri: String = MXC_URI,
 ) = DefaultVoiceMessageMediaRepo(
     cacheDir = temporaryFolder.root,
-    mxcTools = FakeMxcTools(),
+    mxcTools = FakeMxcTools(
+        mxcUri2FilePathResult = mxcUri2FilePathResult,
+    ),
     matrixMediaLoader = matrixMediaLoader,
     mediaSource = MediaSource(
         url = mxcUri,

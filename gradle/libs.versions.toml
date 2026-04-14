@@ -6,7 +6,7 @@
 android_gradle_plugin = "8.13.2"
 # When updating this, please also update the version in the file ./idea/kotlinc.xml
 kotlin = "2.3.20"
-kotlinpoet = "2.2.0"
+kotlinpoet = "2.3.0"
 ksp = "2.3.6"
 firebaseAppDistribution = "5.2.1"
 
@@ -17,7 +17,7 @@ constraintlayout = "2.2.1"
 constraintlayout_compose = "1.1.1"
 lifecycle = "2.10.0"
 activity = "1.13.0"
-media3 = "1.9.3"
+media3 = "1.10.0"
 camera = "1.5.3"
 work = "2.11.2"
 
@@ -47,14 +47,14 @@ showkase = "1.0.5"
 appyx = "1.7.1"
 sqldelight = "2.3.2"
 wysiwyg = "2.41.1"
-telephoto = "0.18.0"
+telephoto = "0.19.0"
 haze = "1.7.2"
 
 # Dependency analysis
 dependencyAnalysis = "3.6.1"
 
 # DI
-metro = "0.12.0"
+metro = "0.13.1"
 
 # Auto service
 autoservice = "1.1.1"
@@ -168,7 +168,7 @@ test_truth = "com.google.truth:truth:1.4.5"
 test_parameter_injector = "com.google.testparameterinjector:test-parameter-injector:1.21"
 test_robolectric = "org.robolectric:robolectric:4.16.1"
 test_appyx_junit = { module = "com.bumble.appyx:testing-junit4", version.ref = "appyx" }
-test_composable_preview_scanner = "io.github.sergio-sastre.ComposablePreviewScanner:android:0.8.1"
+test_composable_preview_scanner = "io.github.sergio-sastre.ComposablePreviewScanner:android:0.8.2"
 test_detekt_api = { module = "io.gitlab.arturbosch.detekt:detekt-api", version.ref = "detekt" }
 test_detekt_test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version.ref = "detekt" }
 
@@ -178,7 +178,7 @@ test_detekt_test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version
 # https://github.com/matrix-org/matrix-rust-components-kotlin/commits/main/sdk/sdk-android/src/main/kotlin/org/matrix/rustcomponents/sdk/matrix_sdk_ffi.kt
 # All new features should not be implemented in the pull request that upgrades the version, developers should
 # only fix API breaks and may add some TODOs.
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.03.31"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.04.13"
 
 # Others
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
@@ -200,14 +200,14 @@ matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose",
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-driver-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
-sqlcipher = "net.zetetic:sqlcipher-android:4.14.0"
+sqlcipher = "net.zetetic:sqlcipher-android:4.14.1"
 sqlite = "androidx.sqlite:sqlite-ktx:2.6.2"
 unifiedpush = "org.unifiedpush.android:connector:3.3.2"
 vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
 telephoto_zoomableimage = { module = "me.saket.telephoto:zoomable-image-coil", version.ref = "telephoto" }
 telephoto_flick = { module = "me.saket.telephoto:flick-android", version.ref = "telephoto" }
 statemachine = "com.freeletics.flowredux:compose:1.2.2"
-maplibre = "org.maplibre.gl:android-sdk:13.0.1"
+maplibre = "org.maplibre.gl:android-sdk:13.0.2"
 maplibre_ktx = "org.maplibre.gl:android-sdk-ktx-v7:3.0.2"
 maplibre_compose = "org.maplibre.compose:maplibre-compose:0.12.1"
 maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:3.0.2"
@@ -221,7 +221,7 @@ color_picker = "io.mhssn:colorpicker:1.0.0"
 
 # Analytics
 posthog = "com.posthog:posthog-android:3.39.0"
-sentry = "io.sentry:sentry-android:8.36.0"
+sentry = "io.sentry:sentry-android:8.37.1"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.33.2"
 
@@ -233,7 +233,7 @@ sigpwned_emoji4j = "com.sigpwned:emoji4j-core:16.0.0"
 metro_runtime = { module = "dev.zacsweers.metro:runtime", version.ref = "metro" }
 
 # Element Call
-element_call_embedded = "io.element.android:element-call-embedded:0.18.0"
+element_call_embedded = "io.element.android:element-call-embedded:0.19.0"
 
 # Auto services
 google_autoservice = { module = "com.google.auto.service:auto-service", version.ref = "autoservice" }

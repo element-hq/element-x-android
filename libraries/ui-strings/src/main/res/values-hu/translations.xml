@@ -120,6 +120,7 @@
   <string name="action_leave_space">"Tér elhagyása"</string>
   <string name="action_load_more">"Továbbiak betöltése"</string>
   <string name="action_manage_account">"Fiók kezelése"</string>
+  <string name="action_manage_account_and_devices">"Fiók és eszközök kezelése"</string>
   <string name="action_manage_devices">"Eszközök kezelése"</string>
   <string name="action_manage_rooms">"Szobák kezelése"</string>
   <string name="action_message">"Üzenet"</string>
@@ -162,14 +163,15 @@
   <string name="action_share_live_location">"Valós idejű hely megosztása"</string>
   <string name="action_show">"Megjelenítés"</string>
   <string name="action_sign_in_again">"Jelentkezzen be újra"</string>
-  <string name="action_signout">"Kijelentkezés"</string>
-  <string name="action_signout_anyway">"Kijelentkezés mindenképp"</string>
+  <string name="action_signout">"Eszköz eltávolítása"</string>
+  <string name="action_signout_anyway">"Eszköz eltávolítása mindenképpen"</string>
   <string name="action_skip">"Kihagyás"</string>
   <string name="action_start">"Indítás"</string>
   <string name="action_start_chat">"Csevegés indítása"</string>
   <string name="action_start_over">"Újrakezdés"</string>
   <string name="action_start_verification">"Ellenőrzés elindítása"</string>
   <string name="action_static_map_load">"Koppintson a térkép betöltéséhez"</string>
+  <string name="action_stop">"Leállítás"</string>
   <string name="action_take_photo">"Fénykép készítése"</string>
   <string name="action_tap_for_options">"Koppintson a beállításokért"</string>
   <string name="action_translate">"Fordítás"</string>
@@ -190,6 +192,7 @@
   <string name="common_advanced_settings">"Speciális beállítások"</string>
   <string name="common_an_image">"egy kép"</string>
   <string name="common_analytics">"Elemzések"</string>
+  <string name="common_android_fetching_notifications_title">"Értesítések szinkronizálása…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Elhagyta a szobát"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Ki lett jelentkeztetve a munkamenetből"</string>
   <string name="common_appearance">"Megjelenítés"</string>
@@ -223,6 +226,7 @@
   <string name="common_empty_file">"Üres fájl"</string>
   <string name="common_encryption">"Titkosítás"</string>
   <string name="common_encryption_enabled">"Titkosítás engedélyezve"</string>
+  <string name="common_ends_at">"Vége: %1$s"</string>
   <string name="common_enter_your_pin">"Adja meg a PIN-kódját"</string>
   <string name="common_error">"Hiba"</string>
   <string name="common_error_registering_pusher_android">"Hiba történt, előfordulhat, hogy nem kap értesítést az új üzenetekről. Az értesítések hibaelhárítása a beállításokban található.
@@ -249,6 +253,8 @@ Ok: %1$s."</string>
   <string name="common_line_copied_to_clipboard">"A sor a vágólapra másolva"</string>
   <string name="common_link_copied_to_clipboard">"Hivatkozás a vágólapra másolva"</string>
   <string name="common_link_new_device">"Új eszköz összekapcsolása"</string>
+  <string name="common_live_location">"Élő helymeghatározás"</string>
+  <string name="common_live_location_ended">"Élő pozíciómegosztás befejezve"</string>
   <string name="common_loading">"Betöltés…"</string>
   <string name="common_loading_more">"Továbbiak betöltése…"</string>
   <plurals name="common_many_members">
@@ -344,9 +350,10 @@ Ok: %1$s."</string>
   <string name="common_settings">"Beállítások"</string>
   <string name="common_share_space">"Tér megosztása"</string>
   <string name="common_shared_history">"Az új tagok látják az előzményeket"</string>
+  <string name="common_shared_live_location">"Megosztott élő helymeghatározás"</string>
   <string name="common_shared_location">"Megosztott tartózkodási hely"</string>
   <string name="common_shared_space">"Megosztott tér"</string>
-  <string name="common_signing_out">"Kijelentkezés"</string>
+  <string name="common_signing_out">"Eszköz eltávolítása"</string>
   <string name="common_something_went_wrong">"Valamilyen hiba történt"</string>
   <string name="common_something_went_wrong_message">"Problémába ütköztünk. Próbálja újra."</string>
   <string name="common_space">"Tér"</string>
@@ -366,6 +373,7 @@ Ok: %1$s."</string>
   <string name="common_text">"Szöveg"</string>
   <string name="common_third_party_notices">"Harmadik felek nyilatkozatai"</string>
   <string name="common_thread">"Üzenetszál"</string>
+  <string name="common_threads">"Üzenetszálak"</string>
   <string name="common_topic">"Téma"</string>
   <string name="common_topic_placeholder">"Miről szól ez a szoba?"</string>
   <string name="common_unable_to_decrypt">"Nem lehet visszafejteni"</string>
@@ -396,6 +404,7 @@ Ok: %1$s."</string>
   <string name="common_voice_message">"Hangüzenet"</string>
   <string name="common_waiting">"Várakozás…"</string>
   <string name="common_waiting_for_decryption_key">"Várakozás erre az üzenetre"</string>
+  <string name="common_waiting_live_location">"Várakozás az élő helymeghatározásra…"</string>
   <string name="common_world_readable_history">"Bárki láthatja az előzményeket"</string>
   <string name="common_you">"Ön"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) megosztotta ezt az üzenetet, mivel Ön nem volt a szobában, amikor elküldték."</string>
@@ -457,6 +466,13 @@ Biztos, hogy folytatja?"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Eltávolítás: %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Beállítások"</string>
   <string name="screen_media_picker_error_failed_selection">"Nem sikerült kiválasztani a médiát, próbálja újra."</string>
+  <string name="screen_missing_key_backup_open_element_classic">"Nyissa meg az Element Classic alkalmazást"</string>
+  <string name="screen_missing_key_backup_step_1">"Nyissa meg az Element Classic alkalmazást az eszközén"</string>
+  <string name="screen_missing_key_backup_step_2_android">"Lépjen a Beállítások &gt; Biztonság és adatvédelem menüponthoz"</string>
+  <string name="screen_missing_key_backup_step_3_android">"A Kriptográfiai kulcsok kezelése részben válassza a Titkosított üzenetek helyreállítása lehetőséget"</string>
+  <string name="screen_missing_key_backup_step_4">"Kövesse az utasításokat a kulcstároló engedélyezéséhez"</string>
+  <string name="screen_missing_key_backup_step_5">"Térjen vissza ide: %1$s"</string>
+  <string name="screen_missing_key_backup_title">"Engedélyezze a kulcstárolást a folytatás előtt ide: %1$s"</string>
   <string name="screen_onboarding_welcome_back">"Üdvözöljük újra!"</string>
   <string name="screen_pinned_timeline_empty_state_description">"Nyomjon hosszan az üzenetre, és válassza a „%1$s” lehetőséget, hogy itt szerepeljen."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Tűzze ki a fontos üzeneteket, hogy könnyen felfedezhetők legyenek"</string>

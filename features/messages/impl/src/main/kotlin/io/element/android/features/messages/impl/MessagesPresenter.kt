@@ -250,12 +250,11 @@ class MessagesPresenter(
                 is MessagesEvent.OnUserClicked -> {
                     roomMemberModerationState.eventSink(RoomMemberModerationEvents.ShowActionsForUser(event.user))
                 }
-                is MessagesEvent.MarkAsFullyReadAndExit -> coroutineScope.launch {
-                    if (!markingAsReadAndExiting.getAndSet(true)) {
+                is MessagesEvent.MarkAsFullyReadAndExit -> if (!markingAsReadAndExiting.getAndSet(true)) {
+                    coroutineScope.launch {
                         val latestEventId = room.liveTimeline.getLatestEventId().getOrElse {
                             Timber.w(it, "Failed to get latest event id to mark as fully read")
-                            navigator.close()
-                            return@launch
+                            null
                         }
                         latestEventId?.let { eventId ->
                             sessionCoroutineScope.launch {
@@ -263,7 +262,6 @@ class MessagesPresenter(
                             }
                         }
                         navigator.close()
-                        markingAsReadAndExiting.set(false)
                     }
                 }
             }

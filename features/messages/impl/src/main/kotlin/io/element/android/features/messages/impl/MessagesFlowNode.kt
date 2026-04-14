@@ -432,6 +432,10 @@ class MessagesFlowNode(
                     override fun handleForwardEventClick(eventId: EventId) {
                         backstack.push(NavTarget.ForwardEvent(eventId = eventId, fromPinnedEvents = true))
                     }
+
+                    override fun navigateToThread(threadRootId: ThreadId) {
+                        backstack.push(NavTarget.Thread(threadRootId, null))
+                    }
                 }
                 createNode<PinnedMessagesListNode>(buildContext, plugins = listOf(callback))
             }

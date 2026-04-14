@@ -17,7 +17,7 @@
   <string name="screen_session_verification_compare_numbers_subtitle">"아래 숫자가 다른 세션에 표시된 숫자와 일치하는지 확인하세요."</string>
   <string name="screen_session_verification_compare_numbers_title">"숫자 비교"</string>
   <string name="screen_session_verification_complete_subtitle">"이제 다른 기기에서도 안전하게 메시지를 읽거나 보낼 수 있습니다."</string>
-  <string name="screen_session_verification_complete_user_subtitle">"이제 메시지를 보내거나 받을 때 이 사용자의 신원을 신뢰할 수 있습니다."</string>
+  <string name="screen_session_verification_complete_user_subtitle">"이제 메시지를 주고받을 때 이 사용자의 디지털 신원을 신뢰할 수 있습니다."</string>
   <string name="screen_session_verification_device_verified">"기기 검증됨"</string>
   <string name="screen_session_verification_enter_recovery_key">"복구 키를 입력하세요"</string>
   <string name="screen_session_verification_failed_subtitle">"요청이 시간 초과되었거나, 요청이 거부되었거나, 검증 불일치가 발생했습니다."</string>
@@ -42,7 +42,7 @@
   <string name="screen_session_verification_use_another_device_title">"다른 검증된 장치에서 앱을 실행하세요"</string>
   <string name="screen_session_verification_user_initiator_subtitle">"보안을 강화하려면, 기기에 표시된 이모티콘을 비교하여 이 사용자를 확인하세요. 신뢰할 수 있는 통신 수단을 사용하여 확인하시기 바랍니다."</string>
   <string name="screen_session_verification_user_initiator_title">"이 사용자를 검증하시겠습니까?"</string>
-  <string name="screen_session_verification_user_responder_subtitle">"추가 보안 위해 다른 사용자가 귀하의 신원을 확인하고자 합니다. 비교할 이모티콘 세트가 표시됩니다."</string>
+  <string name="screen_session_verification_user_responder_subtitle">"보안 강화를 위해 상대방이 귀하의 디지털 신원을 확인하려고 합니다. 화면에 표시되는 이모지 세트가 서로 일치하는지 비교해 주세요."</string>
   <string name="screen_session_verification_waiting_another_device_subtitle">"다른 기기에 팝업이 표시될 것입니다. 지금 그곳에서 확인을 시작하세요."</string>
   <string name="screen_session_verification_waiting_another_device_title">"다른 장치에서 검증 시작"</string>
   <string name="screen_session_verification_waiting_other_device_title">"다른 장치에서 검증 시작"</string>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_subtitle">"Chọn phương thức xác minh để bật nhắn tin bảo mật."</string>
+  <string name="screen_identity_confirmation_title">"Xác nhận danh tính kỹ thuật số của bạn"</string>
+  <string name="screen_identity_confirmed_subtitle">"Giờ đây bạn có thể đọc và gửi tin nhắn một cách an toàn, và những người bạn trò chuyện cũng có thể tin tưởng thiết bị này."</string>
+  <string name="screen_identity_confirmed_title">"Thiết bị được xác thực"</string>
+  <string name="screen_identity_waiting_on_other_device">"Đang chờ trên thiết bị khác…"</string>
+  <string name="screen_notification_optin_subtitle">"Bạn có thể thay đổi cài đặt sau."</string>
+  <string name="screen_notification_optin_title">"Cho phép thông báo để không bỏ lỡ bất kỳ tin nhắn nào"</string>
+</resources>

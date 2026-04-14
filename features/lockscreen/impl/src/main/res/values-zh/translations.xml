@@ -32,5 +32,5 @@
   </plurals>
   <string name="screen_app_lock_use_biometric_android">"使用生物识别"</string>
   <string name="screen_app_lock_use_pin_android">"使用 PIN 码"</string>
-  <string name="screen_signout_in_progress_dialog_content">"正在登出…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"正在删除设备……"</string>
 </resources>

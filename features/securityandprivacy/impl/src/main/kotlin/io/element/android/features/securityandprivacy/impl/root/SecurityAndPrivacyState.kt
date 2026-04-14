@@ -29,7 +29,6 @@ data class SecurityAndPrivacyState(
     val homeserverName: String,
     val showEnableEncryptionConfirmation: Boolean,
     private val isKnockEnabled: Boolean,
-    private val isSpaceSettingsEnabled: Boolean,
     val saveAction: AsyncAction<Unit>,
     val isSpace: Boolean,
     private val permissions: SecurityAndPrivacyPermissions,
@@ -37,7 +36,7 @@ data class SecurityAndPrivacyState(
     private val spaceSelectionMode: SpaceSelectionMode,
     val eventSink: (SecurityAndPrivacyEvent) -> Unit
 ) {
-    val isSpaceMemberSelectable = isSpaceSettingsEnabled && spaceSelectionMode != SpaceSelectionMode.None
+    val isSpaceMemberSelectable = spaceSelectionMode != SpaceSelectionMode.None
 
     // Show SpaceMember option in two cases:
     // - SpaceMember is the current saved value

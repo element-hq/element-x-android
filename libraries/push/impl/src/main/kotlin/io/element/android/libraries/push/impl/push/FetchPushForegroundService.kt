@@ -106,7 +106,7 @@ class FetchPushForegroundService : Service() {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM) {
             coroutineScope.launch {
                 delay(wakelockTimeout)
-                onTimeout(startId)
+                onTimeoutAction(calledByTheSystem = false)
             }
         }
 
@@ -124,7 +124,11 @@ class FetchPushForegroundService : Service() {
 
     override fun onTimeout(startId: Int) {
         super.onTimeout(startId)
+        onTimeoutAction(calledByTheSystem = true)
+    }
 
+    private fun onTimeoutAction(calledByTheSystem: Boolean) {
+        Timber.d("onTimeoutAction, calledByTheSystem: $calledByTheSystem, isOnForeground: $isOnForeground")
         if (isOnForeground) {
             Timber.d("Wakelock timeout reached, stopping FetchPushForegroundService")
             coroutineScope.launch { pushHandlingWakeLock.unlock() }

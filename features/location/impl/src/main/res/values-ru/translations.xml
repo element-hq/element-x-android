@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_share_location_live_location_disclaimer_title">"История вашего местоположения в режиме реального времени будет сохранена в комнате и станет доступна участникам после окончания сессии."</string>
+  <string name="screen_share_location_live_location_duration_picker_title">"Выберите, как долго вы будете делиться своим местоположением в режиме реального времени."</string>
+</resources>

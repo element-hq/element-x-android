@@ -19,6 +19,7 @@
     <locale android:name="hu"/>
     <locale android:name="in"/>
     <locale android:name="it"/>
+    <locale android:name="ja"/>
     <locale android:name="ka"/>
     <locale android:name="ko"/>
     <locale android:name="lt"/>
@@ -35,6 +36,7 @@
     <locale android:name="uk"/>
     <locale android:name="ur"/>
     <locale android:name="uz"/>
+    <locale android:name="vi"/>
     <locale android:name="zh-CN"/>
     <locale android:name="zh-TW"/>
 </locale-config>

@@ -374,6 +374,7 @@ Syy: %1$s."</string>
   <string name="common_text">"Teksti"</string>
   <string name="common_third_party_notices">"Kolmannen osapuolen ilmoitukset"</string>
   <string name="common_thread">"Viestiketju"</string>
+  <string name="common_threads">"Viestiketjut"</string>
   <string name="common_topic">"Aihe"</string>
   <string name="common_topic_placeholder">"Mistä tässä huoneessa on kyse?"</string>
   <string name="common_unable_to_decrypt">"Salauksen purkaminen ei onnistunut"</string>
@@ -466,6 +467,12 @@ Haluatko varmasti jatkaa?"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Poista %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Asetukset"</string>
   <string name="screen_media_picker_error_failed_selection">"Median valinta epäonnistui, yritä uudelleen."</string>
+  <string name="screen_missing_key_backup_open_element_classic">"Avaa Element Classic"</string>
+  <string name="screen_missing_key_backup_step_1">"Avaa Element Classic laitteellasi"</string>
+  <string name="screen_missing_key_backup_step_2_android">"Mene kohtaan \"Asetukset\" &gt; \"Tietoturva ja yksityisyys\""</string>
+  <string name="screen_missing_key_backup_step_3_android">"Osiossa \"Salausavainten hallinta\", paina \"Salattujen viestien palautus\"."</string>
+  <string name="screen_missing_key_backup_step_4">"Noudata ohjeita"</string>
+  <string name="screen_missing_key_backup_step_5">"Palaa takaisin %1$s -sovellukseen"</string>
   <string name="screen_onboarding_welcome_back">"Tervetuloa takaisin"</string>
   <string name="screen_pinned_timeline_empty_state_description">"Paina viestiä ja valitse “%1$s” lisätäksesi sen tänne."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Kiinnitä tärkeät viestit, jotta ne löytyvät helposti."</string>

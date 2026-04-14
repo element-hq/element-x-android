@@ -33,7 +33,6 @@ import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
-import io.element.android.tests.testutils.MutablePresenter
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
@@ -79,7 +78,6 @@ class HomePresenterTest {
                 MatrixUser(A_USER_ID, A_USER_NAME, AN_AVATAR_URL)
             )
             assertThat(withUserState.showAvatarIndicator).isFalse()
-            assertThat(withUserState.showNavigationBar).isTrue()
         }
     }
 
@@ -156,36 +154,6 @@ class HomePresenterTest {
             assertThat(finalState.currentHomeNavigationBarItem).isEqualTo(HomeNavigationBarItem.Spaces)
             showAnnouncementResult.assertions().isCalledOnce()
                 .with(value(Announcement.Space))
-        }
-    }
-
-    @Test
-    fun `present - NavigationBar is hidden when the last space is left when the user can't create new spaces`() = runTest {
-        val homeSpacesPresenter = MutablePresenter(aHomeSpacesState())
-        val presenter = createHomePresenter(
-            sessionStore = InMemorySessionStore(
-                updateUserProfileResult = { _, _, _ -> },
-            ),
-            homeSpacesPresenter = homeSpacesPresenter,
-            announcementService = FakeAnnouncementService(
-                showAnnouncementResult = {},
-            )
-        )
-        presenter.test {
-            val initialState = awaitItem()
-            assertThat(initialState.currentHomeNavigationBarItem).isEqualTo(HomeNavigationBarItem.Chats)
-            assertThat(initialState.showNavigationBar).isTrue()
-            // User navigate to Spaces
-            initialState.eventSink(HomeEvent.SelectHomeNavigationBarItem(HomeNavigationBarItem.Spaces))
-            val spaceState = awaitItem()
-            assertThat(spaceState.currentHomeNavigationBarItem).isEqualTo(HomeNavigationBarItem.Spaces)
-            // The last space is left
-            homeSpacesPresenter.updateState(aHomeSpacesState(spaceRooms = emptyList(), canCreateSpaces = false))
-            skipItems(1)
-            val finalState = awaitItem()
-            // We are back to Chats
-            assertThat(finalState.currentHomeNavigationBarItem).isEqualTo(HomeNavigationBarItem.Chats)
-            assertThat(finalState.showNavigationBar).isFalse()
         }
     }
 }

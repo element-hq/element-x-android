@@ -24,12 +24,12 @@
   <string name="screen_encryption_reset_bullet_1">"Данные вашего аккаунта, контакты, настройки и список чатов будут сохранены"</string>
   <string name="screen_encryption_reset_bullet_2">"Вы потеряете историю тех сообщений, которые хранятся только на сервере"</string>
   <string name="screen_encryption_reset_bullet_3">"Вам нужно будет заново подтвердить все существующие устройства и контакты."</string>
-  <string name="screen_encryption_reset_footer">"Сбрасывайте личность только в том случае, если у вас нет доступа к другим устройству, на которых выполнен вход, и вы потеряли ключ восстановления."</string>
-  <string name="screen_encryption_reset_title">"Не можете подтвердить? Вам потребуется сбросить личность вашей учетной записи."</string>
+  <string name="screen_encryption_reset_footer">"Сбрасывайте ключ шифрования только в том случае, если у вас нет доступа к другому устройству, на котором выполнен вход, и вы потеряли ключ восстановления."</string>
+  <string name="screen_encryption_reset_title">"Не можете подтвердить? Вам потребуется сбросить свою цифровую идентификацию."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Удалить"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Вы потеряете зашифрованные сообщения, если выйдете из всех устройств."</string>
-  <string name="screen_key_backup_disable_confirmation_title">"Вы действительно хотите отключить резервное копирование?"</string>
-  <string name="screen_key_backup_disable_description">"Удаление хранилища ключей приведёт к удалению вашей криптографической личности и ключей сообщений с сервера, а также отключению следующих функций безопасности:"</string>
+  <string name="screen_key_backup_disable_confirmation_title">"Вы уверены, что хотите удалить хранилище ключей?"</string>
+  <string name="screen_key_backup_disable_description">"Удаление хранилища ключей приведет к удалению вашей цифровой идентификации и ключей сообщений с сервера, а также к отключению следующих функций безопасности:"</string>
   <string name="screen_key_backup_disable_description_point_1">"Нет зашифрованной истории сообщений на новых устройствах"</string>
   <string name="screen_key_backup_disable_description_point_2">"Вы потеряете доступ к зашифрованным сообщениям, если выйдете из %1$s везде"</string>
   <string name="screen_key_backup_disable_title">"Вы уверены, что хотите отключить хранение ключей и удалить их?"</string>

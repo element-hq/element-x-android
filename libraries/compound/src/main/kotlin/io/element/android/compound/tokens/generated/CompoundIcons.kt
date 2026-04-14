@@ -229,9 +229,6 @@ object CompoundIcons {
     @Composable fun Filter(): ImageVector {
         return ImageVector.vectorResource(R.drawable.ic_compound_filter)
     }
-    @Composable fun Folder(): ImageVector {
-        return ImageVector.vectorResource(R.drawable.ic_compound_folder)
-    }
     @Composable fun Forward(): ImageVector {
         return ImageVector.vectorResource(R.drawable.ic_compound_forward)
     }
@@ -771,7 +768,6 @@ object CompoundIcons {
         FileError(),
         Files(),
         Filter(),
-        Folder(),
         Forward(),
         FullScreen(),
         Grid(),
@@ -1000,7 +996,6 @@ object CompoundIcons {
         R.drawable.ic_compound_file_error,
         R.drawable.ic_compound_files,
         R.drawable.ic_compound_filter,
-        R.drawable.ic_compound_folder,
         R.drawable.ic_compound_forward,
         R.drawable.ic_compound_full_screen,
         R.drawable.ic_compound_grid,

@@ -1,3 +1,37 @@
+Changes in Element X v26.04.2
+=============================
+
+## What's Changed
+### 🐛 Bugfixes
+* Restore enterprise submodule. by @bmarty in https://github.com/element-hq/element-x-android/pull/6541
+### Dependency upgrades
+* fix(deps): update dependency io.element.android:element-call-embedded to v0.19.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6538
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v26.04.1...v26.04.2
+
+Changes in Element X v26.04.1
+=============================
+
+## What's Changed
+### ✨ Features
+* Add support for slash commands (under Feature Flag) by @bmarty in https://github.com/element-hq/element-x-android/pull/6482
+### Dependency upgrades
+* chore(deps): update gradle/actions action to v6 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6489
+* fix(deps): update dependency androidx.work:work-runtime-ktx to v2.11.2 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6479
+* fix(deps): update dependency net.zetetic:sqlcipher-android to v4.14.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6460
+* fix(deps): update metro to v0.12.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6503
+* fix(deps): update dependency androidx.compose:compose-bom to v2026.03.01 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6511
+* fix(deps): update dependency org.jetbrains.kotlinx:kover-gradle-plugin to v0.9.8 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6513
+* fix(deps): update dependency androidx.browser:browser to v1.10.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6515
+* fix(deps): update dependency io.element.android:emojibase-bindings to v1.5.3 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6493
+* fix(deps): update core to v1.18.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6328
+### Others
+* Tentative fix for `ForegroundServiceStartNotAllowedException` by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6509
+* Fix a missing : in build-rust-sdk by @andybalaam in https://github.com/element-hq/element-x-android/pull/6522
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v26.04.0...v26.04.1
+
 Changes in Element X v26.04.0
 =============================
 
