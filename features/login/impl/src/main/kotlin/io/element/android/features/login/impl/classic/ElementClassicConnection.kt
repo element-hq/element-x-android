@@ -107,7 +107,7 @@ class DefaultElementClassicConnection(
     }
 
     override fun start() {
-        Timber.tag(loggerTag.value).w("start()")
+        Timber.tag(loggerTag.value).d("start()")
         coroutineScope.launch {
             // Establish a connection with the service. We use an explicit
             // class name because there is no reason to be able to let other
@@ -130,7 +130,7 @@ class DefaultElementClassicConnection(
     }
 
     override fun stop() {
-        Timber.tag(loggerTag.value).w("stop(): Unbinding (bound=$bound)")
+        Timber.tag(loggerTag.value).d("stop(): Unbinding (bound=$bound)")
         if (bound) {
             // Detach our existing connection.
             serviceBinder.unbindService(serviceConnection)
@@ -142,13 +142,12 @@ class DefaultElementClassicConnection(
     }
 
     override fun requestSession() {
-        Timber.tag(loggerTag.value).w("requestSession()")
+        Timber.tag(loggerTag.value).d("requestSession()")
         coroutineScope.launch {
             val finalMessenger = messenger
             if (finalMessenger == null) {
-                Timber.tag(loggerTag.value).w("The messenger is null, can't request data")
+                Timber.tag(loggerTag.value).d("The messenger is null, can't request data")
                 // Do not emit error, else the regular on boarding flow will be displayed
-                // emitState(ElementClassicConnectionState.Error("The messenger is null, can't request data"))
             } else {
                 try {
                     // Get the data
@@ -168,7 +167,7 @@ class DefaultElementClassicConnection(
     }
 
     override fun requestAvatar(userId: UserId) {
-        Timber.tag(loggerTag.value).w("requestAvatar()")
+        Timber.tag(loggerTag.value).d("requestAvatar()")
         coroutineScope.launch {
             val finalMessenger = messenger
             if (finalMessenger == null) {
@@ -265,7 +264,7 @@ class DefaultElementClassicConnection(
                 if (isCompatible) {
                     Timber.tag(loggerTag.value).d("Found compatible homeserver URL: %s", url)
                 } else {
-                    Timber.tag(loggerTag.value).w("Homeserver URL is not compatible: %s", url)
+                    Timber.tag(loggerTag.value).d("Homeserver URL is not compatible: %s", url)
                 }
                 isCompatible
             }
@@ -334,6 +333,16 @@ class DefaultElementClassicConnection(
                 val doesContainBackupKey = secrets != null &&
                     roomKeysVersion != null &&
                     matrixAuthenticationService.doSecretsContainBackupKey(userId, secrets, roomKeysVersion)
+                Timber.tag(loggerTag.value).d(
+                    buildString {
+                        append("Receiving session $userId ($displayName) from Element Classic, with secrets: ")
+                        append(secrets != null)
+                        append(", with roomKeysVersion: ")
+                        append(roomKeysVersion != null)
+                        append(", with valid backup key: ")
+                        append(doesContainBackupKey)
+                    }
+                )
                 ElementClassicConnectionState.ElementClassicReady(
                     elementClassicSession = ElementClassicSession(
                         userId = userId,
