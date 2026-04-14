@@ -12,9 +12,8 @@ import androidx.compose.runtime.Immutable
 
 @Immutable
 sealed interface Announcement {
-    @Immutable
-    sealed interface Fullscreen : Announcement {
-        data object Space : Fullscreen
+    enum class Fullscreen : Announcement {
+        Space,
     }
 
     data object NewNotificationSound : Announcement
