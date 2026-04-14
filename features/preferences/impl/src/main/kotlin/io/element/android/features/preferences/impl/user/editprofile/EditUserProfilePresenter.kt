@@ -106,10 +106,10 @@ class EditUserProfilePresenter(
 
         val homeserverCapabilities = matrixClient.homeserverCapabilities()
         val canChangeDisplayName = produceState(true) {
-            value = homeserverCapabilities.canChangeDisplayName().getOrDefault(false)
+            value = homeserverCapabilities.canChangeDisplayName().getOrDefault(true)
         }
         val canChangeAvatar = produceState(true) {
-            value = homeserverCapabilities.canChangeAvatarUrl().getOrDefault(false)
+            value = homeserverCapabilities.canChangeAvatarUrl().getOrDefault(true)
         }
 
         val saveAction: MutableState<AsyncAction<Unit>> = remember { mutableStateOf(AsyncAction.Uninitialized) }
