@@ -138,7 +138,7 @@ enum class FeatureFlags(
         title = "Validate internet connectivity when scheduling notification fetching",
         description = "Only fetch events for push notifications when the device has internet connectivity. " +
             "Enabling this can be problematic in air-gapped environments.",
-        defaultValue = { true },
+        defaultValue = { it.isEnterpriseBuild },
         isFinished = false,
     ),
     FloatingDateBadge(
