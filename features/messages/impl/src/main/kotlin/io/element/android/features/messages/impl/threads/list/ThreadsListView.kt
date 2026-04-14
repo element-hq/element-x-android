@@ -63,7 +63,6 @@ import io.element.android.libraries.matrix.api.timeline.item.event.getDisambigua
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.delay
-import timber.log.Timber
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -147,13 +146,11 @@ private fun ScrollHelper(
     }
     val needsPagination by remember {
         derivedStateOf {
-            Timber.d("Last index: $lastVisibleItemIndex | Total: ${listState.layoutInfo.totalItemsCount} | Offset: ${listState.firstVisibleItemScrollOffset}")
             val canLoadNewItems = listState.isScrollInProgress || listState.firstVisibleItemScrollOffset == 0
             canLoadNewItems && lastVisibleItemIndex == listState.layoutInfo.totalItemsCount - 1
         }
     }
     LaunchedEffect(needsPagination, lastVisibleItemIndex) {
-        Timber.d("Needs pagination: $needsPagination")
         if (needsPagination) {
             onPaginate()
             delay(400L)
