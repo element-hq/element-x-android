@@ -114,7 +114,7 @@ class DefaultElementClassicConnection(
             // applications replace our component.
             try {
                 val intentService = Intent()
-                intentService.setComponent(getElementClassicComponent())
+                intentService.setComponent(elementClassicComponent)
                 if (serviceBinder.bindService(intentService, serviceConnection, BIND_AUTO_CREATE)) {
                     Timber.tag(loggerTag.value).d("Binding returned true")
                 } else {
@@ -304,7 +304,7 @@ class DefaultElementClassicConnection(
         mutableStateFlow.emit(state)
     }
 
-    private fun getElementClassicComponent() = ComponentName(
+    private val elementClassicComponent = ComponentName(
         BuildConfig.elementClassicPackage,
         ELEMENT_CLASSIC_SERVICE_FULL_CLASS_NAME,
     )
