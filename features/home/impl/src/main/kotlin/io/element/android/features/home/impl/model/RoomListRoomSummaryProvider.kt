@@ -14,6 +14,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.ui.model.InviteSender
 import kotlinx.collections.immutable.toImmutableList
@@ -132,6 +133,14 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
             listOf(
                 aRoomListRoomSummary(latestEvent = LatestEvent.Sending("A sending message")),
                 aRoomListRoomSummary(latestEvent = LatestEvent.Error),
+            ),
+            listOf(
+                aRoomListRoomSummary(
+                    name = "Active voice call",
+                    latestEvent = LatestEvent.Synced("No activity, call"),
+                    hasRoomCall = true,
+                    activeCallIntent = CallIntent.AUDIO
+                ),
             )
         ).flatten()
 }
@@ -158,6 +167,7 @@ internal fun aRoomListRoomSummary(
     timestamp: String? = latestEvent.takeIf { it !is LatestEvent.None }?.let { "88:88" },
     notificationMode: RoomNotificationMode? = null,
     hasRoomCall: Boolean = false,
+    activeCallIntent: CallIntent? = null,
     avatarData: AvatarData = AvatarData(id, name, size = AvatarSize.RoomListItem),
     isDirect: Boolean = false,
     isDm: Boolean = false,
@@ -181,6 +191,7 @@ internal fun aRoomListRoomSummary(
     avatarData = avatarData,
     userDefinedNotificationMode = notificationMode,
     hasRoomCall = hasRoomCall,
+    activeCallIntent = activeCallIntent,
     isDirect = isDirect,
     isDm = isDm,
     isFavorite = isFavorite,
