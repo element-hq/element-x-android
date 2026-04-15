@@ -15,6 +15,7 @@ import io.element.android.libraries.architecture.AsyncData
 data class OnBoardingState(
     val isAddingAccount: Boolean,
     val showBackButton: Boolean,
+    val showDeveloperSettings: Boolean,
     val productionApplicationName: String,
     val defaultAccountProvider: String?,
     val mustChooseAccountProvider: Boolean,

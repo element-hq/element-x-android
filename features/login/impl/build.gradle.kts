@@ -55,6 +55,7 @@ setupDependencyInjection()
 dependencies {
     implementation(projects.appconfig)
     implementation(projects.features.enterprise.api)
+    implementation(projects.features.preferences.api)
     implementation(projects.features.rageshake.api)
     implementation(projects.libraries.core)
     implementation(projects.libraries.androidutils)
