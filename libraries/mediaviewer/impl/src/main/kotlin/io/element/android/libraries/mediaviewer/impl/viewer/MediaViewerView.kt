@@ -111,8 +111,12 @@ fun MediaViewerView(
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
     var showOverlay by remember { mutableStateOf(true) }
 
-    val defaultBottomPaddingInPixels = if (LocalInspectionMode.current) 303 else 0
     val currentData = state.listData.getOrNull(state.currentIndex)
+    val isLandscape = with(LocalWindowInfo.current) {
+        containerDpSize.width > containerDpSize.height
+    }
+    val defaultBottomPaddingInPixels = if (LocalInspectionMode.current && !isLandscape) 303 else 0
+
     BackHandler { onBackClick() }
     Scaffold(
         modifier,
@@ -635,6 +639,17 @@ private fun ErrorView(
 @Preview
 @Composable
 internal fun MediaViewerViewPreview(@PreviewParameter(MediaViewerStateProvider::class) state: MediaViewerState) = ElementPreviewDark {
+    MediaViewerView(
+        state = state,
+        audioFocus = null,
+        textFileViewer = { _, _ -> },
+        onBackClick = {},
+    )
+}
+
+@Preview(device = "spec:width=411dp,height=891dp, orientation=landscape")
+@Composable
+internal fun MediaViewerViewLandscapePreview(@PreviewParameter(MediaViewerStateProvider::class) state: MediaViewerState) = ElementPreviewDark {
     MediaViewerView(
         state = state,
         audioFocus = null,
