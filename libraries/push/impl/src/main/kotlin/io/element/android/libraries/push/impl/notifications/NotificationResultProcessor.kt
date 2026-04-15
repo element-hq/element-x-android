@@ -13,8 +13,6 @@ import dev.zacsweers.metro.SingleIn
 import io.element.android.features.call.api.CallType
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.libraries.di.annotations.AppCoroutineScope
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -32,7 +30,6 @@ import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEv
 import io.element.android.libraries.push.impl.push.MutableBatteryOptimizationStore
 import io.element.android.libraries.push.impl.push.OnNotifiableEventReceived
 import io.element.android.libraries.push.impl.push.OnRedactedEventReceived
-import io.element.android.libraries.push.impl.push.SyncOnNotifiableEvent
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -60,8 +57,6 @@ class DefaultNotificationResultProcessor(
     private val userPushStoreFactory: UserPushStoreFactory,
     private val onRedactedEventReceived: OnRedactedEventReceived,
     private val onNotifiableEventReceived: OnNotifiableEventReceived,
-    private val featureFlagService: FeatureFlagService,
-    private val syncOnNotifiableEvent: SyncOnNotifiableEvent,
     private val elementCallEntryPoint: ElementCallEntryPoint,
     private val notificationChannels: NotificationChannels,
     @AppCoroutineScope private val coroutineScope: CoroutineScope,
