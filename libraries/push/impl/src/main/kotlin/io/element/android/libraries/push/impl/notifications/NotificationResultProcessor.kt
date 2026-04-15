@@ -215,10 +215,6 @@ class DefaultNotificationResultProcessor(
         if (nonRingingCallEvents.isNotEmpty()) {
             onNotifiableEventReceived.onNotifiableEventsReceived(nonRingingCallEvents)
         }
-
-        if (!featureFlagService.isFeatureEnabled(FeatureFlags.SyncNotificationsWithWorkManager)) {
-            syncOnNotifiableEvent(results.keys.toList())
-        }
     }
 
     private suspend fun handleRingingCallEvent(notifiableEvent: NotifiableRingingCallEvent) {
