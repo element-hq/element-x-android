@@ -121,6 +121,7 @@ class ThreadsListPresenter(
             roomId = room.roomId,
             roomName = roomInfo.name ?: room.roomId.value,
             roomAvatarUrl = roomInfo.avatarUrl,
+            isRoomTombstoned = roomInfo.successorRoom != null,
             eventSink = ::handleEvent,
         )
     }
@@ -130,6 +131,7 @@ data class ThreadsListState(
     val roomId: RoomId,
     val roomName: String,
     val roomAvatarUrl: String?,
+    val isRoomTombstoned: Boolean,
     val threads: ImmutableList<ThreadListRowItem>,
     val eventSink: (ThreadsListEvents) -> Unit,
 )

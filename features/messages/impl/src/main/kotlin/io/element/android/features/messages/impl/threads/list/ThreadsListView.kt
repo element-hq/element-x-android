@@ -85,7 +85,7 @@ fun ThreadsListView(
                                 url = state.roomAvatarUrl,
                                 size = AvatarSize.CurrentUserTopBar,
                             ),
-                            avatarType = AvatarType.Room(),
+                            avatarType = AvatarType.Room(isTombstoned = state.isRoomTombstoned),
                             contentDescription = null,
                         )
                         Column {
@@ -118,9 +118,9 @@ fun ThreadsListView(
             contentPadding = padding,
             state = lazyListState,
         ) {
-            itemsIndexed(state.threads, key = { _, row -> row.item.threadId }) { index, threadItem ->
+            itemsIndexed(state.threads, key = { _, row -> row.item.threadId }) { index, row ->
                 ThreadListItemRow(
-                    threadItem = threadItem,
+                    threadItem = row,
                     onClick = onThreadClick,
                 )
 
@@ -306,6 +306,7 @@ internal fun ThreadsListViewPreview() {
                 roomName = "Room name",
                 roomAvatarUrl = null,
                 threads = List(10) { aThreadListRowItem(threadId = ThreadId("\$thread-$it")) }.toImmutableList(),
+                isRoomTombstoned = false,
                 eventSink = {},
             ),
             onThreadClick = {},
