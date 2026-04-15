@@ -30,6 +30,7 @@ import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.knockrequests.api.list.KnockRequestsListEntryPoint
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.poll.api.history.PollHistoryEntryPoint
+import io.element.android.features.extensions.api.ExtensionsEntryPoint
 import io.element.android.features.reportroom.api.ReportRoomEntryPoint
 import io.element.android.features.rolesandpermissions.api.ChangeRoomMemberRolesEntryPoint
 import io.element.android.features.rolesandpermissions.api.ChangeRoomMemberRolesListType
@@ -74,6 +75,7 @@ class RoomDetailsFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val pollHistoryEntryPoint: PollHistoryEntryPoint,
+    private val extensionsEntryPoint: ExtensionsEntryPoint,
     private val elementCallEntryPoint: ElementCallEntryPoint,
     private val room: JoinedRoom,
     private val analyticsService: AnalyticsService,
@@ -125,6 +127,9 @@ class RoomDetailsFlowNode(
 
         @Parcelize
         data object PollHistory : NavTarget
+
+        @Parcelize
+        data object Extensions : NavTarget
 
         @Parcelize
         data object MediaGallery : NavTarget
@@ -202,6 +207,10 @@ class RoomDetailsFlowNode(
 
                     override fun navigateToMediaGallery() {
                         backstack.push(NavTarget.MediaGallery)
+                    }
+
+                    override fun navigateToExtensions() {
+                        backstack.push(NavTarget.Extensions)
                     }
 
                     override fun navigateToAdminSettings() {
@@ -330,6 +339,9 @@ class RoomDetailsFlowNode(
             }
             is NavTarget.PollHistory -> {
                 pollHistoryEntryPoint.createNode(this, buildContext)
+            }
+            is NavTarget.Extensions -> {
+                extensionsEntryPoint.createNode(this, buildContext)
             }
             is NavTarget.MediaGallery -> {
                 val callback = object : MediaGalleryEntryPoint.Callback {

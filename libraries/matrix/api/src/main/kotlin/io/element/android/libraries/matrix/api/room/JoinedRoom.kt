@@ -156,7 +156,7 @@ interface JoinedRoom : BaseRoom {
      * @param widgetSettings The widget settings to use.
      * @return The resulting [MatrixWidgetDriver], or a failure.
      */
-    fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver>
+    fun getWidgetDriver(widgetSettings: MatrixWidgetSettings, ecCapabilities: Boolean = true): Result<MatrixWidgetDriver>
 
     suspend fun setSendQueueEnabled(enabled: Boolean)
 

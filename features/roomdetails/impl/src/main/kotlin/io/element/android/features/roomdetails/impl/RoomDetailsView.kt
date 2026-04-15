@@ -105,6 +105,7 @@ fun RoomDetailsView(
     openAvatarPreview: (name: String, url: String) -> Unit,
     openPollHistory: () -> Unit,
     openMediaGallery: () -> Unit,
+    openExtensions: () -> Unit,
     openAdminSettings: () -> Unit,
     onJoinCallClick: (CallIntent) -> Unit,
     onPinnedMessagesClick: () -> Unit,
@@ -248,6 +249,9 @@ fun RoomDetailsView(
                 )
                 MediaGalleryItem(
                     onClick = openMediaGallery
+                )
+                ExtensionsItem(
+                    onClick = openExtensions
                 )
             }
 
@@ -724,6 +728,17 @@ private fun MediaGalleryItem(
 }
 
 @Composable
+private fun ExtensionsItem(
+    onClick: () -> Unit,
+) {
+    ListItem(
+        headlineContent = { Text(stringResource(R.string.screen_room_details_extensions_title)) },
+        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Extensions())),
+        onClick = onClick,
+    )
+}
+
+@Composable
 private fun OtherActionsSection(
     canReportRoom: Boolean,
     onReportRoomClick: () -> Unit,
@@ -827,6 +842,7 @@ private fun ContentToPreview(state: RoomDetailsState) {
         openAvatarPreview = { _, _ -> },
         openPollHistory = {},
         openMediaGallery = {},
+        openExtensions = {},
         openAdminSettings = {},
         onJoinCallClick = {},
         onPinnedMessagesClick = {},

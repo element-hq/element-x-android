@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.matrix.test.room
 
+import android.content.pm.Capability
 import io.element.android.libraries.core.bool.orFalse
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.EventId
@@ -212,7 +213,7 @@ class FakeJoinedRoom(
         generateWidgetWebViewUrlResult(widgetSettings, clientId, languageTag, theme)
     }
 
-    override fun getWidgetDriver(widgetSettings: MatrixWidgetSettings): Result<MatrixWidgetDriver> {
+    override fun getWidgetDriver(widgetSettings: MatrixWidgetSettings, ecCapabilities: Boolean): Result<MatrixWidgetDriver> {
         return getWidgetDriverResult(widgetSettings)
     }
 

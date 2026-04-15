@@ -61,7 +61,7 @@ class DefaultCallWidgetProvider(
             theme = theme,
         ).getOrThrow()
 
-        val driver = room.getWidgetDriver(widgetSettings).getOrThrow()
+        val driver = room.getWidgetDriver(widgetSettings, true).getOrThrow()
 
         CallWidgetProvider.GetWidgetResult(
             driver = driver,
