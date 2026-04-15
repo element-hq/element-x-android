@@ -73,6 +73,7 @@ import io.element.android.tests.testutils.assertNoNodeWithText
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.pressBack
 import io.element.android.tests.testutils.setSafeContent
 import kotlinx.collections.immutable.persistentListOf
@@ -607,6 +608,23 @@ class MessagesViewTest {
     }
 
     @Test
+    fun `clicking on threads list button calls the expected function`() {
+        val state = aMessagesState(
+            threads = MessagesState.Threads(
+                hasThreads = true,
+                hasUnreadThreads = false,
+            )
+        )
+        val onThreadsListClicked = lambdaRecorder<Unit> {}
+        rule.setMessagesView(
+            state = state,
+            onThreadsListClicked = onThreadsListClicked,
+        )
+        rule.onNodeWithContentDescription("Threads").performClick()
+        onThreadsListClicked.assertions().isCalledOnce()
+    }
+
+    @Test
     fun `no banner shown when there is no successor room`() {
         val eventsRecorder = EventsRecorder<MessagesEvent>(expectEvents = false)
         val state = aMessagesState(
@@ -630,6 +648,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMessa
     onCreatePollClick: () -> Unit = EnsureNeverCalled(),
     onJoinCallClick: (Boolean) -> Unit = EnsureNeverCalledWithParam(),
     onViewAllPinnedMessagesClick: () -> Unit = EnsureNeverCalled(),
+    onThreadsListClicked: () -> Unit = EnsureNeverCalled(),
 ) {
     setSafeContent {
         // Cannot use the RichTextEditor, so simulate a LocalInspectionMode
@@ -646,6 +665,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMessa
                 onJoinCallClick = onJoinCallClick,
                 onViewAllPinnedMessagesClick = onViewAllPinnedMessagesClick,
                 knockRequestsBannerView = {},
+                onThreadsListClick = onThreadsListClicked,
             )
         }
     }

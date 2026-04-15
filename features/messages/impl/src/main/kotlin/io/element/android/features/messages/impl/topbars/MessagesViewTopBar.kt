@@ -12,10 +12,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -30,8 +29,8 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.messages.impl.MessagesMenuActions
 import io.element.android.features.messages.impl.SharedHistoryIcon
-import io.element.android.features.messages.impl.timeline.components.CallMenuItem
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.features.roomcall.api.anOngoingCallState
@@ -62,13 +61,12 @@ internal fun MessagesViewTopBar(
     roomAvatar: AvatarData,
     isTombstoned: Boolean,
     heroes: ImmutableList<AvatarData>,
-    roomCallState: RoomCallState,
     dmUserIdentityState: IdentityState?,
     sharedHistoryIcon: SharedHistoryIcon,
     onRoomDetailsClick: () -> Unit,
-    onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
+    menuActions: @Composable RowScope.() -> Unit,
 ) {
     TopAppBar(
         modifier = modifier,
@@ -126,13 +124,7 @@ internal fun MessagesViewTopBar(
                 }
             }
         },
-        actions = {
-            CallMenuItem(
-                roomCallState = roomCallState,
-                onJoinCallClick = onJoinCallClick,
-            )
-            Spacer(Modifier.width(8.dp))
-        },
+        actions = menuActions,
         windowInsets = WindowInsets(0.dp)
     )
 }
@@ -186,17 +178,24 @@ internal fun MessagesViewTopBarPreview() = ElementPreview {
         roomCallState: RoomCallState = RoomCallState.Unavailable,
         dmUserIdentityState: IdentityState? = null,
         sharedHistoryIcon: SharedHistoryIcon = SharedHistoryIcon.NONE,
+        displayThreads: Boolean = false,
     ) = MessagesViewTopBar(
         roomName = roomName,
         roomAvatar = roomAvatar,
         isTombstoned = isTombstoned,
         heroes = heroes,
-        roomCallState = roomCallState,
         dmUserIdentityState = dmUserIdentityState,
         sharedHistoryIcon = sharedHistoryIcon,
         onRoomDetailsClick = {},
-        onJoinCallClick = {},
         onBackClick = {},
+        menuActions = {
+            MessagesMenuActions(
+                roomCallState = roomCallState,
+                displayThreads = displayThreads,
+                onJoinCallClick = {},
+                onThreadsListClick = {},
+            )
+        }
     )
     Column {
         AMessagesViewTopBar()
@@ -236,6 +235,10 @@ internal fun MessagesViewTopBarPreview() = ElementPreview {
         AMessagesViewTopBar(
             roomName = "A room with world_readable history",
             sharedHistoryIcon = SharedHistoryIcon.WORLD_READABLE,
+        )
+        HorizontalDivider()
+        AMessagesViewTopBar(
+            displayThreads = true,
         )
     }
 }
