@@ -22,6 +22,7 @@ open class EditUserProfileStateProvider : PreviewParameterProvider<EditUserProfi
             aEditUserProfileState(),
             aEditUserProfileState(userAvatarUrl = "example://uri"),
             aEditUserProfileState(saveAction = AsyncAction.ConfirmingCancellation),
+            aEditUserProfileState(canChangeAvatarUrl = false, canChangeDisplayName = false),
         )
 }
 
@@ -33,6 +34,8 @@ fun aEditUserProfileState(
     saveButtonEnabled: Boolean = true,
     saveAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     cameraPermissionState: PermissionsState = aPermissionsState(showDialog = false),
+    canChangeDisplayName: Boolean = true,
+    canChangeAvatarUrl: Boolean = true,
     eventSink: (EditUserProfileEvent) -> Unit = {},
 ) = EditUserProfileState(
     userId = userId,
@@ -42,5 +45,7 @@ fun aEditUserProfileState(
     saveButtonEnabled = saveButtonEnabled,
     saveAction = saveAction,
     cameraPermissionState = cameraPermissionState,
+    canChangeDisplayName = canChangeDisplayName,
+    canChangeAvatarUrl = canChangeAvatarUrl,
     eventSink = eventSink,
 )
