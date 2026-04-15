@@ -55,6 +55,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -641,7 +642,7 @@ internal fun MediaViewerViewPreview(@PreviewParameter(MediaViewerStateProvider::
     )
 }
 
-@Preview(device = "spec:width=411dp,height=891dp, orientation=landscape")
+@Preview(device = "${Devices.PHONE}, orientation=landscape")
 @Composable
 internal fun MediaViewerViewLandscapePreview(@PreviewParameter(MediaViewerStateProvider::class) state: MediaViewerState) = ElementPreviewDark {
     MediaViewerView(
