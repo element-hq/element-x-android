@@ -41,6 +41,7 @@ import io.element.android.features.login.impl.screens.createaccount.CreateAccoun
 import io.element.android.features.login.impl.screens.loginpassword.LoginPasswordNode
 import io.element.android.features.login.impl.screens.onboarding.OnBoardingNode
 import io.element.android.features.login.impl.screens.searchaccountprovider.SearchAccountProviderNode
+import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
@@ -67,6 +68,7 @@ class LoginFlowNode(
     @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,
     private val elementClassicConnection: ElementClassicConnection,
+    private val preferencesEntryPoint: PreferencesEntryPoint,
 ) : BaseFlowNode<LoginFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.CheckClassicFlow,
@@ -116,6 +118,9 @@ class LoginFlowNode(
 
         @Parcelize
         data object QrCode : NavTarget
+
+        @Parcelize
+        data object AppDeveloperSettings : NavTarget
 
         @Parcelize
         data class ConfirmAccountProvider(
@@ -200,6 +205,10 @@ class LoginFlowNode(
                         backstack.push(NavTarget.CreateAccount(url))
                     }
 
+                    override fun navigateToDeveloperSettings() {
+                        backstack.push(NavTarget.AppDeveloperSettings)
+                    }
+
                     override fun navigateToLoginPassword() {
                         backstack.push(NavTarget.LoginPassword())
                     }
@@ -219,6 +228,18 @@ class LoginFlowNode(
                     showBackButton = navTarget.showBackButton,
                 )
                 createNode<OnBoardingNode>(buildContext, listOf(callback, inputs))
+            }
+            NavTarget.AppDeveloperSettings -> {
+                val callback = object : PreferencesEntryPoint.DeveloperSettingsCallback {
+                    override fun onDone() {
+                        backstack.pop()
+                    }
+                }
+                preferencesEntryPoint.createAppDeveloperSettingsNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    callback = callback,
+                )
             }
             NavTarget.ChooseAccountProvider -> {
                 val callback = object : ChooseAccountProviderNode.Callback {

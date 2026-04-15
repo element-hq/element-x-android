@@ -11,6 +11,7 @@ package io.element.android.features.login.impl.screens.onboarding
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.google.testing.junit.testparameterinjector.KotlinTestParameters.namedTestValues
@@ -46,11 +47,15 @@ class OnboardingViewTest {
             rule.setOnboardingView(
                 state = anOnBoardingState(
                     canCreateAccount = true,
+                    showDeveloperSettings = false,
                     eventSink = eventSink,
                 ),
                 onCreateAccount = callback,
             )
             rule.clickOn(R.string.screen_onboarding_sign_up)
+            // Developer settings should not be shown
+            val developerSettingsText = rule.activity.getString(CommonStrings.common_developer_options)
+            rule.onNodeWithContentDescription(developerSettingsText).assertDoesNotExist()
         }
     }
 
@@ -173,6 +178,22 @@ class OnboardingViewTest {
     }
 
     @Test
+    fun `clicking on settings calls the developer settings callback`() {
+        val eventSink = EventsRecorder<OnBoardingEvents>(expectEvents = false)
+        ensureCalledOnce { callback ->
+            rule.setOnboardingView(
+                state = anOnBoardingState(
+                    showDeveloperSettings = true,
+                    eventSink = eventSink,
+                ),
+                onDeveloperSettingsClick = callback,
+            )
+            val text = rule.activity.getString(CommonStrings.common_developer_options)
+            rule.onNodeWithContentDescription(text).performClick()
+        }
+    }
+
+    @Test
     fun `cannot report a problem when the feature is disabled`() {
         val eventSink = EventsRecorder<OnBoardingEvents>(expectEvents = false)
         rule.setOnboardingView(
@@ -235,6 +256,7 @@ class OnboardingViewTest {
     private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setOnboardingView(
         state: OnBoardingState,
         onBackClick: () -> Unit = EnsureNeverCalled(),
+        onDeveloperSettingsClick: () -> Unit = EnsureNeverCalled(),
         onSignInWithQrCode: () -> Unit = EnsureNeverCalled(),
         onSignIn: (Boolean) -> Unit = EnsureNeverCalledWithParam(),
         onCreateAccount: () -> Unit = EnsureNeverCalled(),
@@ -248,6 +270,7 @@ class OnboardingViewTest {
             OnBoardingView(
                 state = state,
                 onBackClick = onBackClick,
+                onDeveloperSettingsClick = onDeveloperSettingsClick,
                 onSignInWithQrCode = onSignInWithQrCode,
                 onSignIn = onSignIn,
                 onCreateAccount = onCreateAccount,
