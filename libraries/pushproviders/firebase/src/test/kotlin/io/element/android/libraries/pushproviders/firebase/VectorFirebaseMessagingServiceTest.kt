@@ -80,8 +80,8 @@ class VectorFirebaseMessagingServiceTest {
 
     @Test
     fun `test pushHandler returning true locks and does not unlock the wakelock so it continues running`() = runTest {
-        val lockLambda = lambdaRecorder<Unit> { }
-        val unlockLambda = lambdaRecorder<Unit> { }
+        val lockLambda = lambdaRecorder<Boolean> { true }
+        val unlockLambda = lambdaRecorder<Boolean> { true }
         val vectorFirebaseMessagingService = createVectorFirebaseMessagingService(
             pushHandler = FakePushHandler(handleResult = { _, _ -> true }),
             pushHandlingWakeLock = FakeFetchPushForegroundServiceManager(
@@ -112,8 +112,8 @@ class VectorFirebaseMessagingServiceTest {
 
     @Test
     fun `test pushHandler returning false locks and unlocks the wakelock early`() = runTest {
-        val lockLambda = lambdaRecorder<Unit> { }
-        val unlockLambda = lambdaRecorder<Unit> { }
+        val lockLambda = lambdaRecorder<Boolean> { true }
+        val unlockLambda = lambdaRecorder<Boolean> { true }
         val vectorFirebaseMessagingService = createVectorFirebaseMessagingService(
             pushHandler = FakePushHandler(handleResult = { _, _ -> false }),
             pushHandlingWakeLock = FakeFetchPushForegroundServiceManager(
@@ -144,8 +144,8 @@ class VectorFirebaseMessagingServiceTest {
 
     @Test
     fun `test pushHandler with a remote message with normal priority won't lock the wakelock`() = runTest {
-        val lockLambda = lambdaRecorder<Unit> { }
-        val unlockLambda = lambdaRecorder<Unit> { }
+        val lockLambda = lambdaRecorder<Boolean> { true }
+        val unlockLambda = lambdaRecorder<Boolean> { true }
         val vectorFirebaseMessagingService = createVectorFirebaseMessagingService(
             pushHandler = FakePushHandler(handleResult = { _, _ -> false }),
             pushHandlingWakeLock = FakeFetchPushForegroundServiceManager(

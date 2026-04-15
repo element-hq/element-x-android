@@ -35,14 +35,14 @@ class DefaultFetchPushForegroundServiceManager(
 ) : FetchPushForegroundServiceManager {
     private val stopMutex = Mutex()
 
-    override fun start() {
+    override fun start(): Boolean {
         Timber.d("Acquiring wakelock for push handling, starting service.")
 
         // Don't start the foreground service if the device is already awake
         val powerManager = context.getSystemService(POWER_SERVICE) as PowerManager
         if (powerManager.isInteractive) {
             Timber.d("Device is already in an interactive state, no need to start FetchPushForegroundService")
-            return
+            return false
         }
 
         val intent = Intent(context, FetchPushForegroundService::class.java)
@@ -54,11 +54,13 @@ class DefaultFetchPushForegroundServiceManager(
         } else {
             context.startService(intent)
         }
+
+        return true
     }
 
-    override suspend fun stop() {
-        Timber.d("Releasing wakelock used for push handling, stoping service.")
-        stopMutex.withLock {
+    override suspend fun stop(): Boolean {
+        Timber.d("Releasing wakelock used for push handling, stopping service.")
+        return stopMutex.withLock {
             val runningServiceInfo = getRunningServiceInfo(context)
             if (runningServiceInfo != null) {
                 val intent = Intent(context, FetchPushForegroundService::class.java)
@@ -78,6 +80,8 @@ class DefaultFetchPushForegroundServiceManager(
                     }
                 } ?: Timber.w("FetchPushForegroundService did not start in foreground after 5s, stopping it anyway.")
                 context.stopService(intent)
+            } else {
+                false
             }
         }
     }

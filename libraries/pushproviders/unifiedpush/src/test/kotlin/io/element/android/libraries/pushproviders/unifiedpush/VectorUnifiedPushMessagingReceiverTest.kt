@@ -105,8 +105,8 @@ class VectorUnifiedPushMessagingReceiverTest {
     fun `pushHandler returning true locks the wake lock but does not unlock it so it continues to run`() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().context
         val pushHandlerResult = lambdaRecorder<PushData, String, Boolean> { _, _ -> true }
-        val lockLambda = lambdaRecorder<Unit> { }
-        val unlockLambda = lambdaRecorder<Unit> { }
+        val lockLambda = lambdaRecorder<Boolean> { true }
+        val unlockLambda = lambdaRecorder<Boolean> { true }
         val vectorUnifiedPushMessagingReceiver = createVectorUnifiedPushMessagingReceiver(
             pushHandler = FakePushHandler(
                 handleResult = pushHandlerResult
@@ -132,8 +132,8 @@ class VectorUnifiedPushMessagingReceiverTest {
     fun `pushHandler returning false locks and unlocks the wakelock early`() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().context
         val pushHandlerResult = lambdaRecorder<PushData, String, Boolean> { _, _ -> false }
-        val lockLambda = lambdaRecorder<Unit> { }
-        val unlockLambda = lambdaRecorder<Unit> { }
+        val lockLambda = lambdaRecorder<Boolean> { true }
+        val unlockLambda = lambdaRecorder<Boolean> { true }
         val vectorUnifiedPushMessagingReceiver = createVectorUnifiedPushMessagingReceiver(
             pushHandler = FakePushHandler(
                 handleResult = pushHandlerResult

@@ -13,11 +13,15 @@ package io.element.android.libraries.push.api.push
 interface FetchPushForegroundServiceManager {
     /**
      * Start the foreground service to acquire the wakelock. If the device is already awake, this method does nothing.
+     *
+     * @return true if the service was started, false otherwise (e.g. if the device was already awake or if starting the service failed).
      */
-    fun start()
+    fun start(): Boolean
 
     /**
      * Stop the foreground service to release the wakelock. If the service is not running, this method does nothing.
+     *
+     * @return true if the service was stopped, false otherwise (e.g. if the service was not running or if stopping the service failed).
      */
-    suspend fun stop()
+    suspend fun stop(): Boolean
 }

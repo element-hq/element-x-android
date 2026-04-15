@@ -10,14 +10,14 @@ package io.element.android.libraries.push.test.push
 import io.element.android.libraries.push.api.push.FetchPushForegroundServiceManager
 
 class FakeFetchPushForegroundServiceManager(
-    private val lock: () -> Unit = {},
-    private val unlock: () -> Unit = {},
+    private val lock: () -> Boolean = { true },
+    private val unlock: () -> Boolean = { true },
 ) : FetchPushForegroundServiceManager {
-    override fun start() {
-        lock.invoke()
+    override fun start(): Boolean {
+        return lock.invoke()
     }
 
-    override suspend fun stop() {
-        unlock.invoke()
+    override suspend fun stop(): Boolean {
+        return unlock.invoke()
     }
 }
