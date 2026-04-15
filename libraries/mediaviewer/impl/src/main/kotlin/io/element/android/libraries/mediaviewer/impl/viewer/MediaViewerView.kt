@@ -51,7 +51,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -78,6 +77,7 @@ import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.hasCompactHeightWindowSize
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.media.MediaSource
@@ -112,10 +112,7 @@ fun MediaViewerView(
     var showOverlay by remember { mutableStateOf(true) }
 
     val currentData = state.listData.getOrNull(state.currentIndex)
-    val isLandscape = with(LocalWindowInfo.current) {
-        containerDpSize.width > containerDpSize.height
-    }
-    val defaultBottomPaddingInPixels = if (LocalInspectionMode.current && !isLandscape) 303 else 0
+    val defaultBottomPaddingInPixels = if (LocalInspectionMode.current && !hasCompactHeightWindowSize()) 303 else 0
 
     BackHandler { onBackClick() }
     Scaffold(
@@ -552,13 +549,10 @@ private fun MediaViewerBottomBar(
             }
             val scrollState = rememberScrollState()
             val showBottomShadow by remember { derivedStateOf { scrollState.value < scrollState.maxValue } }
-            val isLandscape = with(LocalWindowInfo.current) {
-                containerDpSize.width > containerDpSize.height
-            }
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(max = if (isLandscape) maxCaptionHeightLandscape else maxCaptionHeightPortrait),
+                    .heightIn(max = if (hasCompactHeightWindowSize()) maxCaptionHeightLandscape else maxCaptionHeightPortrait),
             ) {
                 Text(
                     modifier = Modifier
