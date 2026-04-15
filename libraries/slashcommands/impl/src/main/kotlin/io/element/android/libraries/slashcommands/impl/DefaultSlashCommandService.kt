@@ -38,10 +38,11 @@ class DefaultSlashCommandService(
         if (!featureFlagService.isFeatureEnabled(FeatureFlags.SlashCommand)) return emptyList()
         val isDeveloperModeEnabled = appPreferencesStore.isDeveloperModeEnabledFlow().first()
         return Command.entries
+            .asSequence()
             .filter { it.startsWith(text) }
             .filter { !isInThread || it.isAllowedInThread }
             .filter { !it.isDevCommand || isDeveloperModeEnabled }
-            // Don't include the change display name command if the user can't change their display name
+            // Don't include the change display name commands if the user can't change their display name
             .run {
                 val canUserChangeDisplayName = withTimeoutOrNull(5.seconds) {
                     capabilitiesProvider.canChangeDisplayName().getOrNull()
@@ -52,7 +53,7 @@ class DefaultSlashCommandService(
                     this
                 }
             }
-            // Don't include the change avatar command if the user can't change their avatar url
+            // Don't include the change avatar commands if the user can't change their avatar url
             .run {
                 val canUserChangeAvatar = withTimeoutOrNull(5.seconds) {
                     capabilitiesProvider.canChangeAvatarUrl().getOrNull()
@@ -70,6 +71,7 @@ class DefaultSlashCommandService(
                     description = stringProvider.getString(it.description),
                 )
             }
+            .toList()
     }
 
     override suspend fun parse(
