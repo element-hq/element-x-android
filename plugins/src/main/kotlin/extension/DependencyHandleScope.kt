@@ -49,6 +49,7 @@ fun DependencyHandlerScope.testCommonDependencies(
     testImplementation(libs.test.arch.core)
     testImplementation(libs.test.junit)
     testImplementation(libs.test.mockk)
+    testImplementation(libs.test.parameter.injector)
     testImplementation(libs.test.robolectric)
     testImplementation(libs.test.truth)
     testImplementation(libs.test.turbine)

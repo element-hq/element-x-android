@@ -13,7 +13,8 @@ import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.testing.junit.testparameterinjector.KotlinTestParameters.namedTestValues
+import com.google.testing.junit.testparameterinjector.TestParameter
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.login.LoginMode
 import io.element.android.libraries.architecture.AsyncData
@@ -31,8 +32,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestParameterInjector
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(RobolectricTestParameterInjector::class)
 class OnboardingViewTest {
     @get:Rule
     val rule = createAndroidComposeRule<ComponentActivity>()
@@ -83,21 +85,11 @@ class OnboardingViewTest {
     }
 
     @Test
-    fun `when can login with QR code - clicking on sign in manually calls the expected callback - can search account provider`() {
-        `when can login with QR code - clicking on sign in manually calls the expected callback`(
-            mustChooseAccountProvider = false,
+    fun `when can login with QR code - clicking on sign in manually calls the expected callback`(
+        @TestParameter mustChooseAccountProvider: Boolean = namedTestValues(
+            "can search account provider" to false,
+            "cannot search account provider" to true,
         )
-    }
-
-    @Test
-    fun `when can login with QR code - clicking on sign in manually calls the expected callback - cannot search account provider`() {
-        `when can login with QR code - clicking on sign in manually calls the expected callback`(
-            mustChooseAccountProvider = true,
-        )
-    }
-
-    private fun `when can login with QR code - clicking on sign in manually calls the expected callback`(
-        mustChooseAccountProvider: Boolean,
     ) {
         val eventSink = EventsRecorder<OnBoardingEvents>(expectEvents = false)
         ensureCalledOnceWithParam(mustChooseAccountProvider) { callback ->
@@ -114,21 +106,11 @@ class OnboardingViewTest {
     }
 
     @Test
-    fun `when cannot login with QR code or create account - clicking on continue calls the sign in callback - can search account provider`() {
-        `when cannot login with QR code or create account - clicking on continue calls the sign in callback`(
-            mustChooseAccountProvider = false,
+    fun `when cannot login with QR code or create account - clicking on continue calls the sign in callback`(
+        @TestParameter mustChooseAccountProvider: Boolean = namedTestValues(
+            "can search account provider" to false,
+            "cannot search account provider" to true,
         )
-    }
-
-    @Test
-    fun `when cannot login with QR code or create account - clicking on continue calls the sign in callback - cannot search account provider`() {
-        `when cannot login with QR code or create account - clicking on continue calls the sign in callback`(
-            mustChooseAccountProvider = true,
-        )
-    }
-
-    private fun `when cannot login with QR code or create account - clicking on continue calls the sign in callback`(
-        mustChooseAccountProvider: Boolean,
     ) {
         val eventSink = EventsRecorder<OnBoardingEvents>(expectEvents = false)
         ensureCalledOnceWithParam(mustChooseAccountProvider) { callback ->
