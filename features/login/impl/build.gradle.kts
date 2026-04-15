@@ -80,6 +80,7 @@ dependencies {
     testCommonDependencies(libs, true)
     testImplementation(projects.features.login.test)
     testImplementation(projects.features.enterprise.test)
+    testImplementation(projects.features.preferences.test)
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.oidc.test)
