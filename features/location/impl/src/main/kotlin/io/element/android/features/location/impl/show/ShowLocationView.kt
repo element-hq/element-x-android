@@ -127,7 +127,7 @@ fun ShowLocationView(
             }
             if (state.locationShares.isEmpty()) {
                 Text(
-                    text = "Nobody is sharing their location",
+                    text = stringResource(CommonStrings.screen_live_location_sheet_nobody_sharing),
                     style = ElementTheme.typography.fontBodyLgMedium,
                     color = ElementTheme.colors.textPrimary,
                     modifier = Modifier

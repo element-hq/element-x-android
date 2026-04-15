@@ -91,7 +91,7 @@ fun LocationShareRow(
                     )
                 }
                 Text(
-                    text = if (item.isLive) "Sharing live location" else item.formattedTimestamp,
+                    text = if (item.isLive) stringResource(CommonStrings.screen_room_live_location_banner) else item.formattedTimestamp,
                     style = ElementTheme.typography.fontBodySmRegular,
                     color = if(item.isLive) ElementTheme.colors.textPrimary else ElementTheme.colors.textSecondary,
                     maxLines = 1,
