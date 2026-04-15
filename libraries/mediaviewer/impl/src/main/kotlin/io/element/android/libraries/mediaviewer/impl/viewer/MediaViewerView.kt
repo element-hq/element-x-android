@@ -17,10 +17,12 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
@@ -32,6 +34,7 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -46,7 +49,9 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
@@ -157,10 +162,11 @@ fun MediaViewerView(
                             // So we need to update this value only when the `settledPage` value changes. It seems like a bug that needs to be fixed in Compose.
                             page == pagerState.settledPage
                         }
+                        val navigationBarPadding = WindowInsets.navigationBars.getBottom(LocalDensity.current)
                         MediaViewerPage(
                             isDisplayed = isDisplayed,
                             showOverlay = showOverlay,
-                            bottomPaddingInPixels = bottomPaddingInPixels,
+                            bottomPaddingInPixels = (bottomPaddingInPixels - navigationBarPadding).coerceAtLeast(0),
                             data = dataForPage,
                             textFileViewer = textFileViewer,
                             onDismiss = onBackClick,
@@ -179,9 +185,7 @@ fun MediaViewerView(
                         // Bottom bar
                         AnimatedVisibility(visible = showOverlay, enter = fadeIn(), exit = fadeOut()) {
                             Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .navigationBarsPadding()
+                                modifier = Modifier.fillMaxSize()
                             ) {
                                 MediaViewerBottomBar(
                                     modifier = Modifier.align(Alignment.BottomCenter),
@@ -543,17 +547,21 @@ private fun MediaViewerBottomBar(
                 HorizontalDivider()
             }
             val scrollState = rememberScrollState()
-            val showBottomShadow = scrollState.value < scrollState.maxValue
+            val showBottomShadow by remember { derivedStateOf { scrollState.value < scrollState.maxValue } }
+            val isLandscape = with(LocalWindowInfo.current) {
+                containerDpSize.width > containerDpSize.height
+            }
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .heightIn(max = maxCaptionHeight),
+                    .heightIn(max = if (isLandscape) maxCaptionHeightLandscape else maxCaptionHeightPortrait),
             ) {
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp)
-                        .verticalScroll(scrollState),
+                        .verticalScroll(scrollState)
+                        .navigationBarsPadding(),
                     text = caption,
                     style = ElementTheme.typography.fontBodyLgRegular,
                 )
@@ -578,7 +586,8 @@ private fun MediaViewerBottomBar(
     }
 }
 
-private val maxCaptionHeight = 200.dp
+private val maxCaptionHeightPortrait = 200.dp
+private val maxCaptionHeightLandscape = 128.dp
 
 @Composable
 private fun ThumbnailView(
