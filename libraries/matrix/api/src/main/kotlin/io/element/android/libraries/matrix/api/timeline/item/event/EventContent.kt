@@ -107,12 +107,12 @@ data class FailedToParseStateContent(
 data class LiveLocationContent(
     val isLive: Boolean,
     val description: String?,
-    val timestamp: Long,
+    val startTimestamp: Long,
     val timeout: Long,
     val assetType: AssetType?,
     val locations: List<LiveLocationInfo>,
 ) : EventContent {
-    val endsAt = timestamp + timeout
+    val endTimestamp = startTimestamp + timeout
 }
 
 data object LegacyCallInviteContent : EventContent

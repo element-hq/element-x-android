@@ -25,6 +25,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
@@ -32,12 +33,14 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.location.api.StaticMapView
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContentProvider
+import io.element.android.features.messages.impl.timeline.model.event.ensureActiveLiveLocation
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun TimelineItemLocationView(
@@ -121,7 +124,12 @@ private fun LiveLocationOverlay(
         Spacer(Modifier.width(8.dp))
         Column(modifier = Modifier.weight(1f)) {
             Text(
-                text = if (mode.isActive) "Live location" else "Live location ended",
+                text = if (mode.isActive) {
+                    stringResource(CommonStrings.common_live_location)
+                } else {
+                    stringResource(CommonStrings.common_live_location_ended)
+                },
+
                 style = ElementTheme.typography.fontBodySmMedium,
                 color = ElementTheme.colors.textPrimary,
             )

@@ -110,10 +110,9 @@ class TimelineItemContentMessageFactoryTest {
             eventId = AN_EVENT_ID,
         )
         val expected = TimelineItemLocationContent(
-            location = Location(lat = 1.0, lon = 2.0, accuracy = null),
             description = "description",
             assetType = assetType,
-            mode = TimelineItemLocationContent.Mode.Static,
+            mode = TimelineItemLocationContent.Mode.Static(location = Location(lat = 1.0, lon = 2.0, accuracy = null)),
             senderId = A_USER_ID,
             senderProfile = aProfileDetails(),
         )

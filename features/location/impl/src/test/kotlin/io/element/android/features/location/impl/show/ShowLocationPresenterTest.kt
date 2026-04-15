@@ -24,19 +24,21 @@ import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import io.element.android.libraries.matrix.api.room.location.LastLocation
 import io.element.android.libraries.matrix.api.room.location.LiveLocationShare
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
-import io.element.android.libraries.matrix.test.room.FakeLiveLocationShareService
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.test
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class ShowLocationPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
@@ -330,7 +332,7 @@ class ShowLocationPresenterTest {
     @Test
     fun `live mode emits empty location shares initially`() = runTest {
         val presenter = createShowLocationPresenter(
-            mode = ShowLocationMode.Live,
+            mode = ShowLocationMode.Live(senderId = UserId("@alice:matrix.org")),
             joinedRoom = FakeJoinedRoom(),
         )
         presenter.test {
@@ -345,22 +347,13 @@ class ShowLocationPresenterTest {
         val userId = UserId("@bob:matrix.org")
         val liveSharesFlow = MutableStateFlow(
             listOf(
-                LiveLocationShare(
-                    userId = userId,
-                    lastGeoUri = "geo:48.8584,2.2945",
-                    lastTimestamp = 1234567890L,
-                    isLive = true,
-                )
+                aLiveLocationShare(userId = userId)
             )
         )
-        val fakeRoom = FakeJoinedRoom(
-            liveLocationShareService = FakeLiveLocationShareService(
-                liveLocationSharesFlow = liveSharesFlow
-            )
-        )
+        val fakeRoom = FakeJoinedRoom(liveLocationSharesFlow = liveSharesFlow)
 
         val presenter = createShowLocationPresenter(
-            mode = ShowLocationMode.Live,
+            mode = ShowLocationMode.Live(senderId = userId),
             joinedRoom = fakeRoom,
         )
         presenter.test {
@@ -384,28 +377,14 @@ class ShowLocationPresenterTest {
         val invalidUserId = UserId("@bob:matrix.org")
         val liveSharesFlow = MutableStateFlow(
             listOf(
-                LiveLocationShare(
-                    userId = validUserId,
-                    lastGeoUri = "geo:48.8584,2.2945",
-                    lastTimestamp = 1234567890L,
-                    isLive = true,
-                ),
-                LiveLocationShare(
-                    userId = invalidUserId,
-                    lastGeoUri = "invalid-geo-uri",
-                    lastTimestamp = 1234567890L,
-                    isLive = true,
-                ),
+                aLiveLocationShare(userId = validUserId),
+                aLiveLocationShare(userId = invalidUserId, geoUri = "invalid-geo-uri"),
             )
         )
-        val fakeRoom = FakeJoinedRoom(
-            liveLocationShareService = FakeLiveLocationShareService(
-                liveLocationSharesFlow = liveSharesFlow
-            )
-        )
+        val fakeRoom = FakeJoinedRoom(liveLocationSharesFlow = liveSharesFlow)
 
         val presenter = createShowLocationPresenter(
-            mode = ShowLocationMode.Live,
+            mode = ShowLocationMode.Live(senderId = validUserId),
             joinedRoom = fakeRoom,
         )
         presenter.test {
@@ -423,14 +402,10 @@ class ShowLocationPresenterTest {
     fun `live mode updates when shares change`() = runTest {
         val userId = UserId("@bob:matrix.org")
         val liveSharesFlow = MutableStateFlow(emptyList<LiveLocationShare>())
-        val fakeRoom = FakeJoinedRoom(
-            liveLocationShareService = FakeLiveLocationShareService(
-                liveLocationSharesFlow = liveSharesFlow
-            )
-        )
+        val fakeRoom = FakeJoinedRoom(liveLocationSharesFlow = liveSharesFlow)
 
         val presenter = createShowLocationPresenter(
-            mode = ShowLocationMode.Live,
+            mode = ShowLocationMode.Live(senderId = userId),
             joinedRoom = fakeRoom,
         )
         presenter.test {
@@ -440,12 +415,7 @@ class ShowLocationPresenterTest {
 
             // Emit a new live share
             liveSharesFlow.value = listOf(
-                LiveLocationShare(
-                    userId = userId,
-                    lastGeoUri = "geo:48.8584,2.2945",
-                    lastTimestamp = 1234567890L,
-                    isLive = true,
-                )
+                aLiveLocationShare(userId = userId)
             )
 
             val updatedState = awaitItem()
@@ -493,4 +463,22 @@ class ShowLocationPresenterTest {
             assertThat(state.isSheetDraggable).isFalse()
         }
     }
+}
+
+private fun aLiveLocationShare(
+    userId: UserId,
+    geoUri: String = "geo:48.8584,2.2945",
+    timestamp: Long = 1234567890L,
+    endTimestamp: Long = Long.MAX_VALUE,
+    assetType: AssetType = AssetType.SENDER,
+): LiveLocationShare {
+    return LiveLocationShare(
+        userId = userId,
+        lastLocation = LastLocation(
+            geoUri = geoUri,
+            timestamp = timestamp,
+            assetType = assetType,
+        ),
+        endTimestamp = endTimestamp,
+    )
 }

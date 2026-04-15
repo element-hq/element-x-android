@@ -44,6 +44,7 @@ import io.element.android.libraries.matrix.impl.room.history.map
 import io.element.android.libraries.matrix.impl.room.join.map
 import io.element.android.libraries.matrix.impl.room.knock.RustKnockRequest
 import io.element.android.libraries.matrix.impl.room.location.liveLocationSharesFlow
+import io.element.android.libraries.matrix.impl.room.location.timedByExpiry
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher
 import io.element.android.libraries.matrix.impl.roomdirectory.map
 import io.element.android.libraries.matrix.impl.timeline.RustTimeline
@@ -503,7 +504,7 @@ class JoinedRustRoom(
     }
 
     override fun subscribeToLiveLocationShares(): Flow<List<LiveLocationShare>> {
-        return innerRoom.liveLocationSharesFlow()
+        return innerRoom.liveLocationSharesFlow().timedByExpiry(systemClock::epochMillis)
     }
 
     override suspend fun startLiveLocationShare(durationMillis: Long): Result<Unit> = withContext(roomDispatcher) {

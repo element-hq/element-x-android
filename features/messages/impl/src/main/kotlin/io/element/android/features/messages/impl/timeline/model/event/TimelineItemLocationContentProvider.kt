@@ -22,6 +22,7 @@ open class TimelineItemLocationContentProvider : PreviewParameterProvider<Timeli
                 mode = TimelineItemLocationContent.Mode.Live(
                     isActive = true,
                     endsAt = "Ends at 12:34",
+                    endTimestamp = 0L,
                     canStop = true,
                     lastKnownLocation = aLocation()
                 ),
@@ -30,6 +31,7 @@ open class TimelineItemLocationContentProvider : PreviewParameterProvider<Timeli
                 mode = TimelineItemLocationContent.Mode.Live(
                     isActive = true,
                     endsAt = "Ends at 12:34",
+                    endTimestamp = 0L,
                     lastKnownLocation = aLocation()
                 ),
             ),
@@ -37,6 +39,7 @@ open class TimelineItemLocationContentProvider : PreviewParameterProvider<Timeli
                 mode = TimelineItemLocationContent.Mode.Live(
                     isActive = true,
                     endsAt = "Ends at 12:34",
+                    endTimestamp = 0L,
                     lastKnownLocation = null
                 ),
             ),
@@ -44,6 +47,7 @@ open class TimelineItemLocationContentProvider : PreviewParameterProvider<Timeli
                 mode = TimelineItemLocationContent.Mode.Live(
                     isActive = false,
                     endsAt = "",
+                    endTimestamp = 0L,
                     lastKnownLocation = aLocation()
                 ),
             ),

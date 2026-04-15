@@ -142,7 +142,7 @@ class ShowLocationPresenter(
                             val member = members.find { it.userId == share.userId }
                             val displayName = member?.getBestName() ?: share.userId.value
                             val avatarUrl = member?.avatarUrl
-                            val relativeTime = dateFormatter.format(timestamp = share.lastLocation?.timestamp, mode = DateFormatterMode.Full, useRelative = true)
+                            val relativeTime = dateFormatter.format(timestamp = lastLocation.timestamp, mode = DateFormatterMode.Full, useRelative = true)
                             val formattedTimestamp = stringProvider.getString(
                                 CommonStrings.screen_static_location_sheet_timestamp_description,
                                 relativeTime

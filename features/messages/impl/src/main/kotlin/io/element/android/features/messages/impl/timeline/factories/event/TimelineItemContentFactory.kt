@@ -111,7 +111,7 @@ class TimelineItemContentFactory(
                 }.lastOrNull()
 
                 val endsAt = dateFormatter.format(
-                    timestamp = itemContent.endsAt,
+                    timestamp = itemContent.endTimestamp,
                     mode = DateFormatterMode.TimeOnly
                 )
                 // Always create content, location can be null for "loading/waiting" state
@@ -124,6 +124,7 @@ class TimelineItemContentFactory(
                         lastKnownLocation = lastKnownLocation,
                         isActive = itemContent.isLive,
                         endsAt = stringProvider.getString(CommonStrings.common_ends_at, endsAt),
+                        endTimestamp = itemContent.endTimestamp,
                     ),
                 )
             }
