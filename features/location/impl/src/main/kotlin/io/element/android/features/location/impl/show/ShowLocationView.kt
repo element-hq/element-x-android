@@ -15,6 +15,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.BottomSheetDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetValue
@@ -90,15 +92,13 @@ fun ShowLocationView(
 
     val userLocationState = rememberUserLocationState(state.hasLocationPermission)
     val scaffoldState = rememberBottomSheetScaffoldState(
-        bottomSheetState = rememberStandardBottomSheetState(
-            initialValue =
-                if (state.isSheetDraggable) {
-                    SheetValue.Expanded
-                } else {
-                    SheetValue.Expanded
-                }
-        )
+        bottomSheetState = rememberStandardBottomSheetState(SheetValue.Expanded)
     )
+    LaunchedEffect(state.isSheetDraggable) {
+        if (!state.isSheetDraggable) {
+            scaffoldState.bottomSheetState.expand()
+        }
+    }
     MapBottomSheetScaffold(
         sheetDragHandle = if (state.isSheetDraggable) {
             { BottomSheetDefaults.DragHandle() }
@@ -122,18 +122,19 @@ fun ShowLocationView(
         sheetContent = { sheetPaddings ->
             val coroutineScope = rememberCoroutineScope()
             if (!state.isSheetDraggable) {
+                // If sheet is draggable the DragHandle has already some padding
                 Spacer(Modifier.height(20.dp))
             }
             if (state.locationShares.isEmpty()) {
-                Spacer(Modifier.height(16.dp))
                 Text(
                     text = "Nobody is sharing their location",
                     style = ElementTheme.typography.fontBodyLgMedium,
                     color = ElementTheme.colors.textPrimary,
-                    modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(all = 16.dp),
                     textAlign = TextAlign.Center,
                 )
-                Spacer(Modifier.height(16.dp))
             } else {
                 Text(
                     text = stringResource(CommonStrings.screen_static_location_sheet_title),
@@ -141,22 +142,24 @@ fun ShowLocationView(
                     color = ElementTheme.colors.textPrimary,
                     modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
                 )
-                state.locationShares.forEach { locationShare ->
-                    LocationShareRow(
-                        item = locationShare,
-                        onShareClick = { state.eventSink(ShowLocationEvent.Share(locationShare.location)) },
-                        modifier = Modifier.clickable {
-                            state.eventSink(ShowLocationEvent.TrackMyLocation(false))
-                            val position = CameraPosition(
-                                padding = sheetPaddings,
-                                target = Position(locationShare.location.lon, locationShare.location.lat),
-                                zoom = MapDefaults.DEFAULT_ZOOM
-                            )
-                            coroutineScope.launch {
-                                cameraState.animateTo(finalPosition = position)
+                LazyColumn {
+                    items(state.locationShares) { locationShare ->
+                        LocationShareRow(
+                            item = locationShare,
+                            onShareClick = { state.eventSink(ShowLocationEvent.Share(locationShare.location)) },
+                            modifier = Modifier.clickable {
+                                state.eventSink(ShowLocationEvent.TrackMyLocation(false))
+                                val position = CameraPosition(
+                                    padding = sheetPaddings,
+                                    target = Position(locationShare.location.lon, locationShare.location.lat),
+                                    zoom = MapDefaults.DEFAULT_ZOOM
+                                )
+                                coroutineScope.launch {
+                                    cameraState.animateTo(finalPosition = position)
+                                }
                             }
-                        }
-                    )
+                        )
+                    }
                 }
             }
         },
