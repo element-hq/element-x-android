@@ -47,7 +47,7 @@ class DefaultSlashCommandService(
                     capabilitiesProvider.canChangeDisplayName().getOrNull()
                 } ?: false
                 if (!canUserChangeDisplayName) {
-                    filterNot { it == Command.CHANGE_DISPLAY_NAME }
+                    filterNot { it == Command.CHANGE_DISPLAY_NAME || it == Command.CHANGE_DISPLAY_NAME_FOR_ROOM }
                 } else {
                     this
                 }
@@ -58,7 +58,7 @@ class DefaultSlashCommandService(
                     capabilitiesProvider.canChangeAvatarUrl().getOrNull()
                 } ?: false
                 if (!canUserChangeAvatar) {
-                    filterNot { it == Command.CHANGE_AVATAR }
+                    filterNot { it == Command.CHANGE_AVATAR || it == Command.CHANGE_AVATAR_FOR_ROOM }
                 } else {
                     this
                 }
