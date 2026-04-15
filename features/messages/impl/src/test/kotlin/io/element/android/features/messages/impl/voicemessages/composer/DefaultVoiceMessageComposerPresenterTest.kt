@@ -414,23 +414,22 @@ class DefaultVoiceMessageComposerPresenterTest {
     fun `present - send voice message passes reply event ID only when in reply mode`() = runTest {
         val presenter = createDefaultVoiceMessageComposerPresenter()
         presenter.test {
-            // Send without reply - should pass null
-            messageComposerContext.composerMode = MessageComposerMode.Normal
+            // First send in Normal mode (default composerMode).
             awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
             awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Stop))
             awaitItem().eventSink(VoiceMessageComposerEvent.SendVoiceMessage)
-            skipItems(1) // Sending state
-            advanceUntilIdle()
+            assertThat(awaitItem().voiceMessageState).isEqualTo(aPreviewState().toSendingState())
+            val idleAfterFirstSend = awaitItem()
+            assertThat(idleAfterFirstSend.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
 
-            sendVoiceMessageResult.assertions().isCalledOnce()
-                .with(any(), any(), any(), value(null))
-
-            // Send as reply - should pass event ID
+            // Switching to reply mode does not trigger recomposition, so reuse the prior eventSink.
             messageComposerContext.composerMode = aReplyMode()
-            awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
+            idleAfterFirstSend.eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Start))
             awaitItem().eventSink(VoiceMessageComposerEvent.RecorderEvent(VoiceMessageRecorderEvent.Stop))
             awaitItem().eventSink(VoiceMessageComposerEvent.SendVoiceMessage)
-            val finalState = awaitItem() // Sending state
+            assertThat(awaitItem().voiceMessageState).isEqualTo(aPreviewState().toSendingState())
+            val finalState = awaitItem()
+            assertThat(finalState.voiceMessageState).isEqualTo(VoiceMessageState.Idle)
 
             sendVoiceMessageResult.assertions().isCalledExactly(2)
                 .withSequence(
