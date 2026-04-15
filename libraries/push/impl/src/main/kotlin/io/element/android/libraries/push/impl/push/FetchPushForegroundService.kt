@@ -7,9 +7,7 @@
 
 package io.element.android.libraries.push.impl.push
 
-import android.app.ActivityManager
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.content.pm.ServiceInfo
 import android.os.Build
@@ -17,7 +15,6 @@ import android.os.IBinder
 import android.os.PowerManager
 import androidx.core.app.NotificationCompat
 import androidx.core.app.ServiceCompat
-import androidx.core.content.ContextCompat
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.extensions.runCatchingExceptions
@@ -29,12 +26,8 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.sync.Mutex
-import kotlinx.coroutines.sync.withLock
-import kotlinx.coroutines.withTimeoutOrNull
 import timber.log.Timber
 import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Duration.Companion.seconds
 
 private const val NOTIFICATION_ID = 1001
 
@@ -137,62 +130,7 @@ class FetchPushForegroundService : Service() {
         Timber.d("onTimeoutAction, calledByTheSystem: $calledByTheSystem, isOnForeground: $isOnForeground")
         if (isOnForeground) {
             Timber.d("Wakelock timeout reached, stopping FetchPushForegroundService")
-            coroutineScope.launch { stop(this@FetchPushForegroundService) }
-        }
-    }
-
-    companion object {
-        private val stopMutex = Mutex()
-
-        fun start(context: Context) {
-            // Don't start the foreground service if the device is already awake
-            val powerManager = context.getSystemService(POWER_SERVICE) as PowerManager
-            if (powerManager.isInteractive) {
-                Timber.d("Device is already in an interactive state, no need to start FetchPushForegroundService")
-            } else {
-                val intent = Intent(context, FetchPushForegroundService::class.java)
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                    runCatchingExceptions { ContextCompat.startForegroundService(context, intent) }
-                        .onFailure { throwable ->
-                            Timber.e(
-                                throwable,
-                                "Failed to start FetchPushForegroundService, notifications may take longer than usual to sync"
-                            )
-                        }
-                } else {
-                    context.startService(intent)
-                }
-            }
-        }
-
-        suspend fun stop(context: Context) = stopMutex.withLock {
-            val runningServiceInfo = getRunningServiceInfo(context)
-            if (runningServiceInfo != null) {
-                val intent = Intent(context, FetchPushForegroundService::class.java)
-                // If it's still not running in foreground, it means the service is still starting,
-                // so we delay the stop to give it time to start and be set as foreground, otherwise we can crash
-                // with `ForegroundServiceDidNotStartInTimeException`.
-                var isInForeground = runningServiceInfo.foreground
-                withTimeoutOrNull(5.seconds) {
-                    while (!isInForeground) {
-                        delay(50)
-                        val updatedServiceInfo = getRunningServiceInfo(context)
-                        if (updatedServiceInfo == null) {
-                            Timber.d("FetchPushForegroundService is no longer running, no need to stop it.")
-                            return@withTimeoutOrNull
-                        }
-                        isInForeground = updatedServiceInfo.foreground == true
-                    }
-                } ?: Timber.w("FetchPushForegroundService did not start in foreground after 5s, stopping it anyway.")
-                context.stopService(intent)
-            }
-        }
-
-        @Suppress("DEPRECATION")
-        private fun getRunningServiceInfo(context: Context): ActivityManager.RunningServiceInfo? {
-            val activityManager = context.getSystemService(ACTIVITY_SERVICE) as ActivityManager
-            return activityManager.getRunningServices(Int.MAX_VALUE)
-                .firstOrNull { it.service.className == FetchPushForegroundService::class.java.name }
+            stopSelf()
         }
     }
 }

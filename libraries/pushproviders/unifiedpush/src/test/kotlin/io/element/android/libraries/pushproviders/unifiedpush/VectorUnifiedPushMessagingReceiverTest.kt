@@ -18,7 +18,7 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SECRET
-import io.element.android.libraries.push.test.push.FakePushHandlingWakeLock
+import io.element.android.libraries.push.test.push.FakeFetchPushForegroundServiceManager
 import io.element.android.libraries.push.test.test.FakePushHandler
 import io.element.android.libraries.pushproviders.api.PushData
 import io.element.android.libraries.pushproviders.api.PushHandler
@@ -111,7 +111,7 @@ class VectorUnifiedPushMessagingReceiverTest {
             pushHandler = FakePushHandler(
                 handleResult = pushHandlerResult
             ),
-            pushHandlingWakeLock = FakePushHandlingWakeLock(
+            pushHandlingWakeLock = FakeFetchPushForegroundServiceManager(
                 lock = lockLambda,
                 unlock = unlockLambda,
             ),
@@ -138,7 +138,7 @@ class VectorUnifiedPushMessagingReceiverTest {
             pushHandler = FakePushHandler(
                 handleResult = pushHandlerResult
             ),
-            pushHandlingWakeLock = FakePushHandlingWakeLock(
+            pushHandlingWakeLock = FakeFetchPushForegroundServiceManager(
                 lock = lockLambda,
                 unlock = unlockLambda,
             ),
@@ -263,7 +263,7 @@ class VectorUnifiedPushMessagingReceiverTest {
         unifiedPushNewGatewayHandler: UnifiedPushNewGatewayHandler = FakeUnifiedPushNewGatewayHandler(),
         endpointRegistrationHandler: EndpointRegistrationHandler = EndpointRegistrationHandler(),
         removedGatewayHandler: UnifiedPushRemovedGatewayHandler = UnifiedPushRemovedGatewayHandler { lambdaError() },
-        pushHandlingWakeLock: FakePushHandlingWakeLock = FakePushHandlingWakeLock(),
+        pushHandlingWakeLock: FakeFetchPushForegroundServiceManager = FakeFetchPushForegroundServiceManager(),
     ): VectorUnifiedPushMessagingReceiver {
         return VectorUnifiedPushMessagingReceiver().apply {
             this.pushParser = unifiedPushParser
@@ -276,7 +276,7 @@ class VectorUnifiedPushMessagingReceiverTest {
             this.removedGatewayHandler = removedGatewayHandler
             this.endpointRegistrationHandler = endpointRegistrationHandler
             this.coroutineScope = this@createVectorUnifiedPushMessagingReceiver
-            this.pushHandlingWakeLock = pushHandlingWakeLock
+            this.fetchPushForegroundServiceManager = pushHandlingWakeLock
         }
     }
 }

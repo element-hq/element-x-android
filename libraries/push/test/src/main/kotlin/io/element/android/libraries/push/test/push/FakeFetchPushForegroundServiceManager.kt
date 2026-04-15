@@ -7,17 +7,17 @@
 
 package io.element.android.libraries.push.test.push
 
-import io.element.android.libraries.push.api.push.PushHandlingWakeLock
+import io.element.android.libraries.push.api.push.FetchPushForegroundServiceManager
 
-class FakePushHandlingWakeLock(
+class FakeFetchPushForegroundServiceManager(
     private val lock: () -> Unit = {},
     private val unlock: () -> Unit = {},
-) : PushHandlingWakeLock {
-    override fun lock() {
+) : FetchPushForegroundServiceManager {
+    override fun start() {
         lock.invoke()
     }
 
-    override suspend fun unlock() {
+    override suspend fun stop() {
         unlock.invoke()
     }
 }
