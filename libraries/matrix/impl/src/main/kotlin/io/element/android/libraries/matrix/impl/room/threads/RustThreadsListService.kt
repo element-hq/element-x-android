@@ -16,13 +16,11 @@ import io.element.android.libraries.matrix.api.room.threads.ThreadListPagination
 import io.element.android.libraries.matrix.api.room.threads.ThreadsListService
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.map
-import io.element.android.libraries.matrix.impl.util.cancelAndDestroy
+import io.element.android.libraries.matrix.impl.util.mxCallbackFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
-import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.onStart
@@ -30,8 +28,6 @@ import org.matrix.rustcomponents.sdk.ThreadListEntriesListener
 import org.matrix.rustcomponents.sdk.ThreadListPaginationStateListener
 import org.matrix.rustcomponents.sdk.ThreadListUpdate
 import uniffi.matrix_sdk_ui.ThreadListPaginationState
-import kotlin.apply
-import kotlin.collections.plus
 import org.matrix.rustcomponents.sdk.ThreadListService as InnerThreadListService
 
 class RustThreadsListService(
@@ -52,38 +48,33 @@ class RustThreadsListService(
     }
 
     private fun doSubscribeToItemUpdates(): Job {
-        val updatesFlow = callbackFlow {
-            val handle = inner.subscribeToItemsUpdates(object : ThreadListEntriesListener {
+        val updatesFlow = mxCallbackFlow {
+            inner.subscribeToItemsUpdates(object : ThreadListEntriesListener {
                 override fun onUpdate(diff: List<ThreadListUpdate>) {
                     trySend(diff)
                 }
             })
-
-            awaitClose {
-                handle.cancelAndDestroy()
-            }
         }
 
         return updatesFlow
             .onStart { items.value = inner.items().map { it.map(contentMapper) } }
             .onEach { diff ->
-                items.value = diff.apply(items.value, contentMapper)
+                val updated = items.value.toMutableList()
+                updated.apply(diff, contentMapper)
+                items.value = updated
             }
             .launchIn(roomCoroutineScope)
     }
 
     override fun subscribeToPaginationUpdates(): Flow<ThreadListPaginationStatus> {
-        return callbackFlow {
-            val paginationHandle = inner.subscribeToPaginationStateUpdates(object : ThreadListPaginationStateListener {
+        return mxCallbackFlow {
+            inner.subscribeToPaginationStateUpdates(object : ThreadListPaginationStateListener {
                 override fun onUpdate(state: ThreadListPaginationState) {
                     trySend(state.map())
                 }
-            })
-
-            trySend(inner.paginationState().map())
-
-            awaitClose {
-                paginationHandle.cancelAndDestroy()
+            }).also {
+                // Send the initial state
+                trySend(inner.paginationState().map())
             }
         }
     }
@@ -97,62 +88,52 @@ class RustThreadsListService(
     }
 
     override fun destroy() {
-        if (itemSubscriptionJob?.isActive == true) {
-            itemSubscriptionJob?.cancel()
-        }
+        itemSubscriptionJob?.cancel()
         inner.destroy()
     }
 }
 
-private fun List<ThreadListUpdate>.apply(
-    current: List<ThreadListItem>,
+private fun MutableList<ThreadListItem>.apply(
+    diff: List<ThreadListUpdate>,
     contentMapper: TimelineEventContentMapper
-): List<ThreadListItem> {
-    var items = current
-    for (diffItem in this) {
-        items = when (diffItem) {
+) {
+    for (diffItem in diff) {
+        when (diffItem) {
             is ThreadListUpdate.Append -> {
                 val newItems = diffItem.values.map { it.map(contentMapper) }
-                items + newItems
+                addAll(newItems)
             }
-            ThreadListUpdate.Clear -> emptyList()
+            ThreadListUpdate.Clear -> clear()
             is ThreadListUpdate.Insert -> {
-                items.toMutableList().apply {
-                    add(diffItem.index.toInt(), diffItem.value.map(contentMapper))
-                }
+                add(diffItem.index.toInt(), diffItem.value.map(contentMapper))
             }
             ThreadListUpdate.PopBack -> {
-                items.dropLast(1)
+                removeAt(lastIndex)
             }
             ThreadListUpdate.PopFront -> {
-                items.drop(1)
+                removeAt(0)
             }
             is ThreadListUpdate.PushBack -> {
-                items + diffItem.value.map(contentMapper)
+                add(diffItem.value.map(contentMapper))
             }
             is ThreadListUpdate.PushFront -> {
-                listOf(diffItem.value.map(contentMapper)) + items
+                add(0, diffItem.value.map(contentMapper))
             }
             is ThreadListUpdate.Remove -> {
-                items.toMutableList().apply {
-                    removeAt(diffItem.index.toInt())
-                }
+                removeAt(diffItem.index.toInt())
             }
             is ThreadListUpdate.Reset -> {
-                diffItem.values.map { it.map(contentMapper) }
+                clear()
+                addAll(diffItem.values.map { it.map(contentMapper) })
             }
             is ThreadListUpdate.Set -> {
-                items.toMutableList().apply {
-                    set(diffItem.index.toInt(), diffItem.value.map(contentMapper))
-                }
+                set(diffItem.index.toInt(), diffItem.value.map(contentMapper))
             }
             is ThreadListUpdate.Truncate -> {
-                items.take(diffItem.length.toInt())
+                subList(diffItem.length.toInt(), size).clear()
             }
         }
     }
-
-    return items
 }
 
 fun org.matrix.rustcomponents.sdk.ThreadListItem.map(contentMapper: TimelineEventContentMapper): ThreadListItem = ThreadListItem(
