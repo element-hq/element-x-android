@@ -18,7 +18,6 @@ object TimelineConfig {
      */
     val excludedEvents = listOf(
         StateEventType.CallMember,
-        StateEventType.RoomAliases,
         StateEventType.RoomCanonicalAlias,
         StateEventType.RoomGuestAccess,
         StateEventType.RoomHistoryVisibility,

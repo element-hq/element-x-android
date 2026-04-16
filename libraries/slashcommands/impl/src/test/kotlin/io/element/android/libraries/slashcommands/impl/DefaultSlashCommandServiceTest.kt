@@ -13,6 +13,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.room.IntentionalMention
 import io.element.android.libraries.matrix.api.timeline.MsgType
+import io.element.android.libraries.matrix.test.FakeHomeserverCapabilitiesProvider
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
@@ -117,6 +118,26 @@ class DefaultSlashCommandServiceTest {
     }
 
     @Test
+    fun `canChangeDisplayName is respected in suggestions`() = runTest {
+        var result = false
+        val capabilitiesProvider = FakeHomeserverCapabilitiesProvider(
+            canChangeDisplayName = { Result.success(result) },
+        )
+        val sut = createDefaultSlashCommandService(capabilitiesProvider = capabilitiesProvider)
+
+        // Initially, with a disabled capability, the change display name command should not be in the suggestions
+        var changeNameCommand = sut.getSuggestions("", isInThread = false)
+            .find { it.command == Command.CHANGE_DISPLAY_NAME.command }
+        assertThat(changeNameCommand).isNull()
+
+        // When the capability is true, the command should be included in the suggestions
+        result = true
+        changeNameCommand = sut.getSuggestions("", isInThread = false)
+            .find { it.command == Command.CHANGE_DISPLAY_NAME.command }
+        assertThat(changeNameCommand).isNotNull()
+    }
+
+    @Test
     fun `proceedAdmin delegates to commandExecutor`() = runTest {
         val leaveRoomLambda = lambdaRecorder<Result<Unit>> {
             Result.success(Unit)
@@ -155,11 +176,13 @@ class DefaultSlashCommandServiceTest {
         commandExecutor: CommandExecutor = createCommandExecutor(
             stringProvider = stringProvider,
         ),
+        capabilitiesProvider: FakeHomeserverCapabilitiesProvider = FakeHomeserverCapabilitiesProvider(),
     ) = DefaultSlashCommandService(
         commandParser = commandParser,
         commandExecutor = commandExecutor,
         stringProvider = stringProvider,
         appPreferencesStore = appPreferencesStore,
         featureFlagService = featureFlagService,
+        capabilitiesProvider = capabilitiesProvider,
     )
 }

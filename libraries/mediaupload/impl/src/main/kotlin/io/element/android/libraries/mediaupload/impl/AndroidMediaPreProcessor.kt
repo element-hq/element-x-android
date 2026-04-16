@@ -195,18 +195,16 @@ class AndroidMediaPreProcessor(
                 file = file,
                 mimeType = mimeType,
             )
-            val imageInfo = contentResolver.openInputStream(uri).use { input ->
-                val bitmap = BitmapFactory.decodeStream(input, null, null)!!
-                ImageInfo(
-                    width = bitmap.width.toLong(),
-                    height = bitmap.height.toLong(),
-                    mimetype = mimeType,
-                    size = file.length(),
-                    thumbnailInfo = thumbnailResult?.info,
-                    thumbnailSource = null,
-                    blurhash = thumbnailResult?.blurhash,
-                )
-            }
+            val (width, height) = extractOrientedImageDimensions(file)
+            val imageInfo = ImageInfo(
+                width = width,
+                height = height,
+                mimetype = mimeType,
+                size = file.length(),
+                thumbnailInfo = thumbnailResult?.info,
+                thumbnailSource = null,
+                blurhash = thumbnailResult?.blurhash,
+            )
             removeSensitiveImageMetadata(file)
             return MediaUploadInfo.Image(
                 file = file,
@@ -354,6 +352,23 @@ class AndroidMediaPreProcessor(
         return contentResolver.openInputStream(uri)?.use { createTmpFileWithInput(it) }
             ?: error("Could not copy the contents of $uri to a temporary file")
     }
+
+    private fun extractOrientedImageDimensions(file: File): Pair<Long, Long> {
+        val options = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        BitmapFactory.decodeFile(file.path, options)
+
+        val rawWidth = options.outWidth.toLong()
+        val rawHeight = options.outHeight.toLong()
+        val orientation = tryOrNull {
+            ExifInterface(file).getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_UNDEFINED)
+        } ?: ExifInterface.ORIENTATION_UNDEFINED
+
+        return orientedImageDimensions(
+            rawWidth = rawWidth,
+            rawHeight = rawHeight,
+            orientation = orientation,
+        )
+    }
 }
 
 private fun ImageCompressionResult.toImageInfo(mimeType: String, thumbnailResult: ThumbnailResult?) = ImageInfo(
@@ -370,4 +385,19 @@ private fun ImageCompressionResult.toImageInfo(mimeType: String, thumbnailResult
 private fun MediaMetadataRetriever.extractDuration(): Duration {
     val durationInMs = extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION)?.toLong() ?: 0L
     return durationInMs.milliseconds
+}
+
+internal fun orientedImageDimensions(rawWidth: Long, rawHeight: Long, orientation: Int): Pair<Long, Long> {
+    return if (orientation.rotatesRightAngle()) {
+        rawHeight to rawWidth
+    } else {
+        rawWidth to rawHeight
+    }
+}
+
+private fun Int.rotatesRightAngle(): Boolean {
+    return this == ExifInterface.ORIENTATION_ROTATE_90 ||
+        this == ExifInterface.ORIENTATION_ROTATE_270 ||
+        this == ExifInterface.ORIENTATION_TRANSPOSE ||
+        this == ExifInterface.ORIENTATION_TRANSVERSE
 }

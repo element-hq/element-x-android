@@ -16,6 +16,7 @@
   <plurals name="notification_fallback_n_content">
     <item quantity="other">"%d개의 새 메시지가 있습니다."</item>
   </plurals>
+  <string name="notification_incoming_audio_call">"📞 수신 전화"</string>
   <string name="notification_incoming_call">"📹 수신 전화"</string>
   <string name="notification_inline_reply_failed">"** 전송 실패 - 방을 열여주세요"</string>
   <string name="notification_invitation_action_join">"참가하기"</string>

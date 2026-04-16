@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_analytics_settings_help_us_improve">"Chia sẻ dữ liệu sử dụng ẩn danh để giúp chúng tôi xác định vấn đề."</string>
+  <string name="screen_analytics_settings_read_terms">"Bạn có thể xem tất cả điều khoản của chúng tôi tại %1$s"</string>
+  <string name="screen_analytics_settings_read_terms_content_link">"tại đây"</string>
+  <string name="screen_analytics_settings_share_data">"Chia sẻ dữ liệu phân tích"</string>
+</resources>

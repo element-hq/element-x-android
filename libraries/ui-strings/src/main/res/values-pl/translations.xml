@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Dodaj reakcję: %1$s"</string>
+  <string name="a11y_address">"Adres"</string>
   <string name="a11y_avatar">"Awatar"</string>
   <string name="a11y_collapse_message_text_field">"Zmniejsz pole tekstowe wiadomości"</string>
   <string name="a11y_delete">"Usuń"</string>
@@ -27,6 +28,7 @@
   <string name="a11y_pause">"Wstrzymaj"</string>
   <string name="a11y_paused_voice_message">"Wiadomość głosowa, czas trwania: %1$s, aktualna pozycja: %2$s"</string>
   <string name="a11y_pin_field">"Pole PIN"</string>
+  <string name="a11y_pinned_location">"Przypięta lokalizacja"</string>
   <string name="a11y_play">"Odtwórz"</string>
   <string name="a11y_poll">"Ankieta"</string>
   <string name="a11y_poll_end">"Zakończona ankieta"</string>
@@ -148,8 +150,8 @@
   <string name="action_send_edited_message">"Wyślij edytowaną wiadomość"</string>
   <string name="action_send_message">"Wyślij wiadomość"</string>
   <string name="action_send_voice_message">"Wyślij wiadomość głosową"</string>
-  <string name="action_share">"Udostępnij"</string>
-  <string name="action_share_link">"Udostępnij link"</string>
+  <string name="action_share">"Wyślij"</string>
+  <string name="action_share_link">"Wyślij link"</string>
   <string name="action_show">"Pokaż"</string>
   <string name="action_sign_in_again">"Zaloguj się ponownie"</string>
   <string name="action_signout">"Wyloguj"</string>

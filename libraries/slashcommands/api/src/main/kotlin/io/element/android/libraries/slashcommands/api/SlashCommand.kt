@@ -51,6 +51,7 @@ sealed interface SlashCommand {
     data class ChangeDisplayName(val displayName: String) : SlashCommandAdmin
     data class ChangeDisplayNameForRoom(val displayName: String) : SlashCommandAdmin
     data class ChangeRoomAvatar(val url: String) : SlashCommandAdmin
+    data class ChangeAvatar(val url: String) : SlashCommandAdmin
     data class ChangeAvatarForRoom(val url: String) : SlashCommandAdmin
     data class SendSpoiler(val message: String) : SlashCommandSendMessage
     data class SendWithPrefix(val prefix: MessagePrefix, val message: CharSequence) : SlashCommandSendMessage

@@ -9,6 +9,7 @@
 package io.element.android.libraries.matrix.test.auth
 
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.auth.ElementClassicSession
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.api.auth.OidcDetails
@@ -17,6 +18,7 @@ import io.element.android.libraries.matrix.api.auth.external.ExternalSession
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
@@ -32,6 +34,8 @@ class FakeMatrixAuthenticationService(
         lambdaRecorder<MatrixQrCodeLoginData, (QrCodeLoginStep) -> Unit, Result<SessionId>> { _, _ -> Result.success(A_SESSION_ID) },
     private val importCreatedSessionLambda: (ExternalSession) -> Result<SessionId> = { lambdaError() },
     private val setHomeserverResult: (String) -> Result<MatrixHomeServerDetails> = { lambdaError() },
+    private val setElementClassicSessionResult: (ElementClassicSession?) -> Unit = { lambdaError() },
+    private val doSecretsContainBackupKeyResult: (UserId, String, String) -> Boolean = { _, _, _ -> lambdaError() },
 ) : MatrixAuthenticationService {
     private var oidcError: Throwable? = null
     private var oidcCancelError: Throwable? = null
@@ -107,5 +111,13 @@ class FakeMatrixAuthenticationService(
 
     fun givenMatrixClient(matrixClient: MatrixClient) {
         this.matrixClient = matrixClient
+    }
+
+    override fun setElementClassicSession(session: ElementClassicSession?) {
+        setElementClassicSessionResult(session)
+    }
+
+    override fun doSecretsContainBackupKey(userId: UserId, secrets: String, backupInfo: String): Boolean {
+        return doSecretsContainBackupKeyResult(userId, secrets, backupInfo)
     }
 }

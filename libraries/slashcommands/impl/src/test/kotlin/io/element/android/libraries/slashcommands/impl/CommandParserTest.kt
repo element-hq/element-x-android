@@ -78,12 +78,19 @@ class CommandParserTest {
     }
 
     @Test
-    fun parseSlashCommandPlainAndNick() = runTest {
+    fun parseSlashCommandPlain() = runTest {
         test("/plain hello", SlashCommand.SendPlainText("hello"))
         test("/plain", SlashCommand.ErrorSyntax("A string/plain, /plain <message>"))
+    }
 
+    @Test
+    fun parseSlashCommandNickAndMyAvatar() = runTest {
         test("/nick John", SlashCommand.ChangeDisplayName("John"))
         test("/nick", SlashCommand.ErrorSyntax("A string/nick, /nick <display-name>"))
+
+        test("/myavatar mxc://matrix.org/abc", SlashCommand.ChangeAvatar("mxc://matrix.org/abc"))
+        test("/myavatar http://notmxc", SlashCommand.ErrorSyntax("A string/myavatar, /myavatar <mxc_url>"))
+        test("/myavatar", SlashCommand.ErrorSyntax("A string/myavatar, /myavatar <mxc_url>"))
     }
 
     @Test

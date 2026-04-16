@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_room_details_edit_room_title">"Chỉnh sửa thông tin"</string>
+  <string name="screen_room_details_edition_error">"Có lỗi không xác định, thông tin không được cập nhật."</string>
+  <string name="screen_room_details_edition_error_title">"Không thể cập nhật phòng"</string>
+  <string name="screen_room_details_updating_room">"Đang cập nhật thông tin…"</string>
+</resources>

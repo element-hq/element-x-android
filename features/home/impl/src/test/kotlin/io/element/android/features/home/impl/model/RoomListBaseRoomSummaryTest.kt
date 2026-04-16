@@ -101,6 +101,7 @@ internal fun createRoomListRoomSummary(
     displayType = displayType,
     userDefinedNotificationMode = userDefinedNotificationMode,
     hasRoomCall = false,
+    activeCallIntent = null,
     isDirect = false,
     isFavorite = isFavorite,
     canonicalAlias = null,

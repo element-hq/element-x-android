@@ -23,7 +23,7 @@
   <string name="screen_link_new_device_mobile_step3">"请用另一台设备扫描此处显示的二维码"</string>
   <string name="screen_link_new_device_mobile_title">"在另一台设备上打开 %1$s"</string>
   <string name="screen_link_new_device_root_desktop_computer">"台式计算机"</string>
-  <string name="screen_link_new_device_root_loading_qr_code">"正在加载 QR 码…"</string>
+  <string name="screen_link_new_device_root_loading_qr_code">"正在加载二维码…"</string>
   <string name="screen_link_new_device_root_mobile_device">"移动设备"</string>
   <string name="screen_link_new_device_root_title">"您想连接哪种类型的设备？"</string>
   <string name="screen_link_new_device_wrong_number_subtitle">"请重试，并确保您已正确输入两位验证码。如果验证码仍然不匹配，请联系您的账户提供商。"</string>

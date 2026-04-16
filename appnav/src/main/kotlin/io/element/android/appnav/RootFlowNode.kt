@@ -252,7 +252,8 @@ class RootFlowNode(
             val transitionHandler = rememberDelegateTransitionHandler<NavTarget, BackStack.State> { navTarget ->
                 when (navTarget) {
                     is NavTarget.SplashScreen,
-                    is NavTarget.LoggedInFlow -> backstackFader
+                    is NavTarget.LoggedInFlow,
+                    is NavTarget.NotLoggedInFlow -> backstackFader
                     else -> backstackSlider
                 }
             }

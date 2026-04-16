@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"Не можете подтвердить?"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"Создайте новый ключ восстановления"</string>
-  <string name="screen_identity_confirmation_subtitle">"Подтвердите это устройство, чтобы настроить безопасный обмен сообщениями."</string>
+  <string name="screen_identity_confirmation_subtitle">"Выберите способ подтверждения для настройки защищенного обмена сообщениями."</string>
   <string name="screen_identity_confirmation_title">"Подтвердите личность"</string>
   <string name="screen_identity_confirmation_use_another_device">"Использовать другое устройство"</string>
   <string name="screen_identity_confirmation_use_recovery_key">"Использовать ключ восстановления"</string>

@@ -88,7 +88,7 @@
   <string name="common_developer_options">"Kūrėjo nustatymai"</string>
   <string name="common_direct_chat">"Asmeninis pokalbis"</string>
   <string name="common_edited_suffix">"(redaguota)"</string>
-  <string name="common_editing">"Taisymas"</string>
+  <string name="common_editing">"Redagavimas"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_encryption_enabled">"Šifravimas įjungtas"</string>
   <string name="common_error">"Klaida"</string>
@@ -96,7 +96,7 @@
   <string name="common_file_saved_on_disk_android">"Failas išsaugotas aplanke Atsisiuntimai"</string>
   <string name="common_forward_message">"Persiųsti žinutę"</string>
   <string name="common_gif">"GIF"</string>
-  <string name="common_image">"Paveikslėlis"</string>
+  <string name="common_image">"Vaizdas"</string>
   <string name="common_invite_unknown_profile">"Šio Matrix ID nepavyksta rasti, todėl kvietimas gali būti negautas."</string>
   <string name="common_leaving_room">"Paliekamas kambarys"</string>
   <string name="common_link_copied_to_clipboard">"Nuoroda nukopijuota į iškarpinę"</string>
@@ -170,6 +170,7 @@
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Papurtykite, kad praneštumėte apie klaidą"</string>
   <string name="screen_media_picker_error_failed_selection">"Nepavyko pasirinkti laikmenos, pabandykite dar kartą."</string>
+  <string name="screen_onboarding_welcome_back">"Sveiki sugrįžę"</string>
   <string name="screen_room_error_failed_processing_media">"Nepavyko apdoroti įkeliamos laikmenos, bandykite dar kartą."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Nepavyko gauti naudotojo išsamios informacijos."</string>
   <string name="screen_share_location_title">"Bendrinti vietą"</string>

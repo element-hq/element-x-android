@@ -43,13 +43,13 @@ jobs:
           labels: Record-Screenshots
       - name: ⏬ Checkout with LFS (PR)
         if: github.event.label.name == 'Record-Screenshots'
-        uses: nschloe/action-cached-lfs-checkout@1c185ad576953eab13e35ffe1bffef437d97e9d2 # v1.2.4
+        uses: nschloe/action-cached-lfs-checkout@385a8ecc719e50b8c71af6ab01a624b486b7c3bc # v1.2.5
         with:
           persist-credentials: false
           ref: ${{ github.event_name == 'pull_request' && github.event.pull_request.head.ref || github.ref }}
       - name: ⏬ Checkout with LFS (Branch)
         if: github.event_name == 'workflow_dispatch'
-        uses: nschloe/action-cached-lfs-checkout@1c185ad576953eab13e35ffe1bffef437d97e9d2 # v1.2.4
+        uses: nschloe/action-cached-lfs-checkout@385a8ecc719e50b8c71af6ab01a624b486b7c3bc # v1.2.5
         with:
           persist-credentials: false
       - name: ☕️ Use JDK 21
@@ -59,7 +59,7 @@ jobs:
           java-version: '21'
       # Add gradle cache, this should speed up the process
       - name: Configure gradle
-        uses: gradle/actions/setup-gradle@39e147cb9de83bb9910b8ef8bd7fff0ee20fcd6f # v6.0.1
+        uses: gradle/actions/setup-gradle@50e97c2cd7a37755bbfafc9c5b7cafaece252f6e # v6.1.0
         with:
           cache-read-only: ${{ github.ref != 'refs/heads/develop' }}
       - name: Record screenshots

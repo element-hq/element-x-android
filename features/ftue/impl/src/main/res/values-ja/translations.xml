@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"認証できませんか？"</string>
+  <string name="screen_identity_confirmation_create_new_recovery_key">"回復鍵を新規作成します"</string>
+  <string name="screen_identity_confirmation_subtitle">"安全なメッセージを設定するための検証方法を選択してください。"</string>
+  <string name="screen_identity_confirmation_title">"デジタルIDの認証"</string>
+  <string name="screen_identity_confirmation_use_another_device">"他の端末を使用"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"回復鍵を使用"</string>
+  <string name="screen_identity_confirmed_subtitle">"メッセージのやり取りを安全に行えるようになりました。他のユーザーはこの端末を信頼できます。"</string>
+  <string name="screen_identity_confirmed_title">"検証済みの端末"</string>
+  <string name="screen_identity_use_another_device">"他の端末を使用"</string>
+  <string name="screen_identity_waiting_on_other_device">"一方の端末を待機中…"</string>
+  <string name="screen_notification_optin_subtitle">"設定は後で変更することができます。"</string>
+  <string name="screen_notification_optin_title">"メッセージを見逃さないため通知を許可"</string>
+</resources>

@@ -1,3 +1,14 @@
+Changes in Element X v26.04.2
+=============================
+
+## What's Changed
+### 🐛 Bugfixes
+* Restore enterprise submodule. by @bmarty in https://github.com/element-hq/element-x-android/pull/6541
+### Dependency upgrades
+* fix(deps): update dependency io.element.android:element-call-embedded to v0.19.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6538
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v26.04.1...v26.04.2
+
 Changes in Element X v26.04.1
 =============================
 

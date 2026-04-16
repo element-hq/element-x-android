@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_app_lock_biometric_authentication">"生体認証"</string>
+  <string name="screen_app_lock_biometric_unlock">"生体認証で解除"</string>
+  <string name="screen_app_lock_biometric_unlock_title_android">"生体認証を使用"</string>
+  <string name="screen_app_lock_confirm_biometric_authentication_android">"生体認証を使用しますか？"</string>
+  <string name="screen_app_lock_forgot_pin">"PINをお忘れですか？"</string>
+  <string name="screen_app_lock_settings_change_pin">"PINを変更"</string>
+  <string name="screen_app_lock_settings_enable_biometric_unlock">"生体認証を使用"</string>
+  <string name="screen_app_lock_settings_remove_pin">"PINを削除"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_message">"本当にPINを削除しますか？"</string>
+  <string name="screen_app_lock_settings_remove_pin_alert_title">"PINを削除しますか？"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_allow_title">"%1$sを使用"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_skip">"PINを使用する"</string>
+  <string name="screen_app_lock_setup_biometric_unlock_subtitle">"素早い認証のために %1$s を常に使用"</string>
+  <string name="screen_app_lock_setup_choose_pin">"PINを選択"</string>
+  <string name="screen_app_lock_setup_confirm_pin">"PINの確認"</string>
+  <string name="screen_app_lock_setup_pin_context">"チャットのセキュリティを強化するため、%1$s を保護しましょう。
+
+覚えやすいPINを設定してください。PINを忘れると、アプリにログインできなくなります。"</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_content">"セキュリティ上の理由により、入力された内容をPINとして使用できません。"</string>
+  <string name="screen_app_lock_setup_pin_forbidden_dialog_title">"別のPINを使用してください"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"同一のPINを2回入力してください"</string>
+  <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PINが一致しません"</string>
+  <string name="screen_app_lock_signout_alert_message">"再度ログインし、PINを再設定する必要があります"</string>
+  <string name="screen_app_lock_signout_alert_title">"端末を削除しようとしています"</string>
+  <plurals name="screen_app_lock_subtitle">
+    <item quantity="other">"%1$d 回試すことができます"</item>
+  </plurals>
+  <plurals name="screen_app_lock_subtitle_wrong_pin">
+    <item quantity="other">"PINが間違っています。あと %1$d 回試すことができます。"</item>
+  </plurals>
+  <string name="screen_app_lock_use_biometric_android">"生体認証を使用"</string>
+  <string name="screen_app_lock_use_pin_android">"PINを使用"</string>
+  <string name="screen_signout_in_progress_dialog_content">"削除中…"</string>
+</resources>
