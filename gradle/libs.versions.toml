@@ -89,7 +89,7 @@ google_tink = "com.google.crypto.tink:tink-android:1.21.0"
 # AndroidX
 androidx_core = { module = "androidx.core:core", version.ref = "core" }
 androidx_corektx = { module = "androidx.core:core-ktx", version.ref = "core" }
-androidx_annotationjvm = "androidx.annotation:annotation-jvm:1.9.1"
+androidx_annotationjvm = "androidx.annotation:annotation-jvm:1.10.0"
 androidx_datastore_preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastore" }
 androidx_datastore_datastore = { module = "androidx.datastore:datastore", version.ref = "datastore" }
 androidx_exifinterface = "androidx.exifinterface:exifinterface:1.4.2"
