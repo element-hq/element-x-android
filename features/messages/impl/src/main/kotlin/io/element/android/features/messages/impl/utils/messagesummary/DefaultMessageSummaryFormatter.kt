@@ -41,7 +41,10 @@ class DefaultMessageSummaryFormatter(
             is TimelineItemTextBasedContent -> content.plainText
             is TimelineItemProfileChangeContent -> content.body
             is TimelineItemStateContent -> content.body
-            is TimelineItemLocationContent -> context.getString(CommonStrings.common_shared_location)
+            is TimelineItemLocationContent -> when(content.mode) {
+                is TimelineItemLocationContent.Mode.Live -> context.getString(CommonStrings.common_shared_live_location)
+                is TimelineItemLocationContent.Mode.Static -> context.getString(CommonStrings.common_shared_location)
+            }
             is TimelineItemEncryptedContent -> context.getString(CommonStrings.common_unable_to_decrypt)
             is TimelineItemRedactedContent -> context.getString(CommonStrings.common_message_removed)
             is TimelineItemPollContent -> content.question
