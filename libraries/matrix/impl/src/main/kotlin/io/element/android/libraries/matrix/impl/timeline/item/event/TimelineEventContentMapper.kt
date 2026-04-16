@@ -11,6 +11,7 @@ package io.element.android.libraries.matrix.impl.timeline.item.event
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.ThreadId
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.timeline.item.EmbeddedEventInfo
 import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
 import io.element.android.libraries.matrix.api.timeline.item.ThreadSummary
@@ -137,7 +138,15 @@ class TimelineEventContentMapper(
                     )
                 }
                 is TimelineItemContent.CallInvite -> LegacyCallInviteContent
-                is TimelineItemContent.RtcNotification -> CallNotifyContent
+                is TimelineItemContent.RtcNotification -> CallNotifyContent(
+                    it.callIntent?.let { intentString ->
+                        if (intentString == "audio") {
+                            CallIntent.AUDIO
+                        } else {
+                            CallIntent.VIDEO
+                        }
+                    }
+                )
             }
         }
     }

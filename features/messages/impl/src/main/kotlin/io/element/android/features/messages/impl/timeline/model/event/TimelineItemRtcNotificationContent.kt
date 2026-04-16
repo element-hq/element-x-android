@@ -8,6 +8,8 @@
 
 package io.element.android.features.messages.impl.timeline.model.event
 
-class TimelineItemRtcNotificationContent : TimelineItemEventContent {
+import io.element.android.libraries.matrix.api.notification.CallIntent
+
+class TimelineItemRtcNotificationContent(val callIntent: CallIntent?) : TimelineItemEventContent {
     override val type: String = "org.matrix.msc4075.rtc.notification"
 }

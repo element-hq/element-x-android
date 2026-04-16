@@ -65,7 +65,7 @@ class EventItemFactory(
             mode = DateFormatterMode.Full,
         )
         return when (val content = event.content) {
-            CallNotifyContent,
+            is CallNotifyContent,
             is FailedToParseMessageLikeContent,
             is FailedToParseStateContent,
             LegacyCallInviteContent,
