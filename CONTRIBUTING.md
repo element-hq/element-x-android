@@ -44,7 +44,7 @@ To help translating, please go to [https://localazy.com/p/element](https://local
 
 Once a language is sufficiently translated, it will be added to the app. The core team will decide when a language is sufficiently translated.
 
-### I want to fix an bug
+### I want to fix a bug
 
 Please check if a corresponding issue exists, if not please create one. In both cases, let us know in the comment that you've started working on it.
 
