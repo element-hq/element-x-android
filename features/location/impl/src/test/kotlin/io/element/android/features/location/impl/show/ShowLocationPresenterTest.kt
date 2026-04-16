@@ -434,7 +434,7 @@ class ShowLocationPresenterTest {
             senderName = senderName,
             senderId = senderId,
             senderAvatarUrl = avatarUrl,
-            timestamp = 1234567890L,
+            timestamp = 0L,
             assetType = AssetType.SENDER,
         )
 
@@ -468,7 +468,7 @@ class ShowLocationPresenterTest {
 private fun aLiveLocationShare(
     userId: UserId,
     geoUri: String = "geo:48.8584,2.2945",
-    timestamp: Long = 1234567890L,
+    timestamp: Long = 0L,
     endTimestamp: Long = Long.MAX_VALUE,
     assetType: AssetType = AssetType.SENDER,
 ): LiveLocationShare {

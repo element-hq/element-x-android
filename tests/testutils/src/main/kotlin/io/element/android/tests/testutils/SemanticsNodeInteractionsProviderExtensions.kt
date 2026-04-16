@@ -66,5 +66,3 @@ fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.assertNodeWithTe
     val text = activity.getString(res)
     onNodeWithText(text).assertIsDisplayed()
 }
-
-

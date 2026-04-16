@@ -88,7 +88,7 @@ data class TimelineItemLocationContent(
 internal fun TimelineItemLocationContent.ensureActiveLiveLocation(
     currentTimeMillis: () -> Long = System::currentTimeMillis,
 ): TimelineItemLocationContent {
-    return when (val mode = mode) {
+    return when (mode) {
         is TimelineItemLocationContent.Mode.Live -> {
             val isActive = rememberIsLiveLocationActive(mode, currentTimeMillis)
             copy(mode = mode.copy(isActive = isActive))
@@ -102,7 +102,6 @@ private fun rememberIsLiveLocationActive(
     mode: TimelineItemLocationContent.Mode.Live,
     currentTimeMillis: () -> Long,
 ): Boolean {
-
     fun TimelineItemLocationContent.Mode.Live.isActive(): Boolean {
         return isActive && endTimestamp > currentTimeMillis()
     }

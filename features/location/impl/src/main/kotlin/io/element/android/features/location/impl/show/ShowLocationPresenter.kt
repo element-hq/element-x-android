@@ -43,7 +43,7 @@ import io.element.android.libraries.matrix.api.room.joinedRoomMembers
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.collections.immutable.persistentListOf
-import kotlinx.collections.immutable.toPersistentList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.combine
 
 @AssistedInject
@@ -161,7 +161,7 @@ class ShowLocationPresenter(
                                 isLive = true,
                                 assetType = lastLocation.assetType,
                             )
-                        }.toPersistentList()
+                        }.toImmutableList()
                     }.collect { value = it }
                 }.value
             }

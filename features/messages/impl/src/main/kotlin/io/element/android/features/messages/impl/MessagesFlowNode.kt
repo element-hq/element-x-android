@@ -570,7 +570,7 @@ class MessagesFlowNode(
                 )
             }
             is TimelineItemLocationContent -> {
-                val mode = when(event.content.mode){
+                val mode = when (event.content.mode) {
                     is TimelineItemLocationContent.Mode.Live -> ShowLocationMode.Live(event.senderId)
                     is TimelineItemLocationContent.Mode.Static -> ShowLocationMode.Static(
                         location = event.content.mode.location,

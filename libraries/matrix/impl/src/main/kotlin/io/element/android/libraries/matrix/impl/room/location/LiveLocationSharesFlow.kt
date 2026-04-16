@@ -71,4 +71,3 @@ private fun RustLiveLocationShare.into(): LiveLocationShare {
         endTimestamp = (startTs + timeout).toLong()
     )
 }
-

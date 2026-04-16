@@ -289,7 +289,7 @@ private fun MessageSummary(
         is TimelineItemRedactedContent,
         is TimelineItemUnknownContent -> content = { ContentForBody(textContent) }
         is TimelineItemLocationContent -> {
-            val body = when(event.content.mode) {
+            val body = when (event.content.mode) {
                 is TimelineItemLocationContent.Mode.Live -> stringResource(CommonStrings.common_shared_live_location)
                 is TimelineItemLocationContent.Mode.Static -> stringResource(CommonStrings.common_shared_location)
             }
