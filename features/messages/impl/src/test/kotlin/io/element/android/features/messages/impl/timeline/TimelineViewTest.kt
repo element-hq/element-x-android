@@ -101,7 +101,7 @@ class TimelineViewTest {
         val eventsRecorder = EventsRecorder<TimelineEvent>()
         rule.setTimelineView(
             state = aTimelineState(
-                timelineItems = persistentListOf(aTimelineItemEvent()),
+                timelineItems = persistentListOf(aTimelineItemEvent(content = aTimelineItemImageContent())),
                 isLive = false,
                 eventSink = eventsRecorder,
             ),
