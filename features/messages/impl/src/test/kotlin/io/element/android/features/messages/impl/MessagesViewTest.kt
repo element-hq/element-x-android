@@ -522,6 +522,9 @@ class MessagesViewTest {
         rule.setMessagesView(
             state = stateWithActionListState,
         )
+        // Clear initial 'LoadMore' event emitted when setting the state
+        eventsRecorder.clear()
+
         val verifiedUserSendFailure = rule.activity.getString(CommonStrings.screen_timeline_item_menu_send_failure_changed_identity, "Alice")
         rule.onNodeWithText(verifiedUserSendFailure).performClick()
         // Give time for the close animation to complete
@@ -585,6 +588,9 @@ class MessagesViewTest {
             ),
         )
         rule.setMessagesView(state = state)
+        // Clear initial 'LoadMore' event emitted when setting the state
+        eventsRecorder.clear()
+
         rule.onNodeWithText("This is a pinned message").performClick()
         eventsRecorder.assertSingle(TimelineEvent.FocusOnEvent(AN_EVENT_ID, debounce = FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS.milliseconds))
     }
@@ -601,6 +607,9 @@ class MessagesViewTest {
             timelineState = aTimelineState(eventSink = eventsRecorder)
         )
         rule.setMessagesView(state = state)
+        // Clear initial 'LoadMore' event emitted when setting the state
+        eventsRecorder.clear()
+
         val text = rule.activity.getString(R.string.screen_room_timeline_tombstoned_room_action)
         // The bottomsheet subcompose seems to make the node to appear twice
         rule.onAllNodesWithText(text).onFirst().performClick()
