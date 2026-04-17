@@ -84,6 +84,7 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.conflate
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.transform
 import kotlinx.coroutines.launch
 import timber.log.Timber
@@ -260,11 +261,16 @@ private fun TimelinePrefetchingHelper(
             firstVisibleItemIndex + layoutInfo.visibleItemsInfo.size >= layoutInfo.totalItemsCount - 40
         }
 
+        // If we have no timeline items, we need to back paginate to load some messages. This usually happens on all timelines except for live ones.
+        // This automatic pagination was previously done by the SDK, and we received a `Reset` update, but now we need to do it ourselves.
+        val isEmptyTimelineFlow = layoutInfoFlow.map { it.totalItemsCount == 0 }
+
         combine(
             isCloseToStartOfLoadedTimelineFlow.distinctUntilChanged(),
             isScrollingFlow.distinctUntilChanged(),
-        ) { needsPrefetch, isScrolling ->
-            needsPrefetch && isScrolling
+            isEmptyTimelineFlow,
+        ) { needsPrefetch, isScrolling, isEmptyAndNeedsBackPagination ->
+            isEmptyAndNeedsBackPagination || needsPrefetch && isScrolling
         }
             .distinctUntilChanged()
             .collectLatest { needsPrefetch ->
