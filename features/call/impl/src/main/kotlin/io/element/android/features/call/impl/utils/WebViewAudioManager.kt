@@ -65,6 +65,11 @@ class WebViewAudioManager(
     private val isWebViewAudioEnabled = AtomicBoolean(true)
 
     /**
+     * Store the device id requested by EC, and re-set it if something try to switch (only android S+).
+     */
+    private var ecRequestedDeviceId: String? = null
+
+    /**
      * The list of device types that are considered as communication devices, sorted by likelihood of it being used for communication.
      */
     private val wantedDeviceTypes = listOf(
@@ -114,6 +119,12 @@ class WebViewAudioManager(
     private val commsDeviceChangedListener by lazy {
         AudioManager.OnCommunicationDeviceChangedListener { device ->
             Timber.d("Audio device changed, type: ${device?.id}")
+            val wantedDevice = this.ecRequestedDeviceId
+            if (wantedDevice != null && this.ecRequestedDeviceId != device?.id?.toString()) {
+                // We want to ensure that we stick to what EC selected even if it was changed outside
+                Timber.d("Audio device changed to unwanted device ${device?.id}, enforce using the expected device $wantedDevice")
+                audioManager.selectAudioDevice(wantedDevice)
+            }
         }
     }
 
@@ -136,12 +147,6 @@ class WebViewAudioManager(
             setAvailableAudioDevices()
         }
     }
-//
-//
-//    /**
-//     * When a new audio device is selected but not yet set as the communication device by the OS, this id is used to check if the device is the expected one.
-//     */
-//    private var expectedNewCommunicationDeviceId: Int? = null
 
     /**
      * Previously selected device, used to restore the selection when the selected device is removed.
@@ -228,6 +233,7 @@ class WebViewAudioManager(
         val webViewAudioDeviceSelectedCallback = AndroidWebViewAudioBridge(
             onAudioDeviceSelected = { selectedDeviceId ->
                 previousSelectedDevice = listAudioDevices().find { it.id.toString() == selectedDeviceId }
+                this.ecRequestedDeviceId = selectedDeviceId
                 audioManager.selectAudioDevice(selectedDeviceId)
             },
             onAudioPlaybackStarted = {
@@ -293,17 +299,6 @@ class WebViewAudioManager(
         webView.evaluateJavascript("controls.setAvailableOutputDevices($deviceList);", {
             Timber.d("Audio: setAvailableOutputDevices result: $it")
         })
-    }
-
-    /**
-     * Updates the WebView's UI to reflect the selected audio device.
-     *
-     * @param deviceId The id of the selected audio device.
-     */
-    private fun updateSelectedAudioDeviceInWebView(deviceId: String) {
-        coroutineScope.launch(Dispatchers.Main) {
-            webView.evaluateJavascript("controls.setOutputDevice('$deviceId');", null)
-        }
     }
 
     /**
