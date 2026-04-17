@@ -5,3 +5,5 @@ we previously just manually updated the AAR file instead using a script. This wo
 no sources attached to it, so we can't use it like that.
 
 Instead, for the time being, we're adding the single `CertificateVerifier.kt` class this AAR had in it as part of our sources.
+
+When this file is updated, the [UPDATED.md](./UPDATED.md) file should be updated too with the commit SHA of the new version.
