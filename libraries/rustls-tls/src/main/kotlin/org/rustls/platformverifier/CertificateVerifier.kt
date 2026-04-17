@@ -4,9 +4,9 @@
 // IMPORTANT: this file comes from rustls-platform-verifier and should not be modified locally.
 
 /*
- * MIT License
- *
  * Copyright (c) 2022 1Password
+ *
+ * SPDX-License-Identifier: MIT
  */
 
 package org.rustls.platformverifier
