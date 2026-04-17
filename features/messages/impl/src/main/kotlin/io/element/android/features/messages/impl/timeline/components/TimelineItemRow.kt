@@ -126,6 +126,7 @@ internal fun TimelineItemRow(
                         TimelineItemCallNotifyView(
                             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
                             event = timelineItem,
+                            content = timelineItem.content,
                             onLongClick = onLongClick,
                         )
                     }

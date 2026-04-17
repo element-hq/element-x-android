@@ -43,10 +43,10 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 internal fun TimelineItemCallNotifyView(
     event: TimelineItem.Event,
+    content: TimelineItemRtcNotificationContent,
     onLongClick: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val intent = (event.content as? TimelineItemRtcNotificationContent)?.callIntent
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -54,7 +54,7 @@ internal fun TimelineItemCallNotifyView(
             .combinedClickable(
                 enabled = true,
                 onClick = {},
-                onLongClick = { onLongClick(event) },
+                onLongClick = { onLongClick() },
                 onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
             )
             .onKeyboardContextMenuAction { onLongClick(event) }
@@ -80,7 +80,7 @@ internal fun TimelineItemCallNotifyView(
                 Icon(
                     modifier = Modifier.size(20.sp.toDp()),
                     imageVector =
-                        if (intent == CallIntent.AUDIO) CompoundIcons.VoiceCallSolid() else CompoundIcons.VideoCallSolid(),
+                        if (content.callIntent == CallIntent.AUDIO) CompoundIcons.VoiceCallSolid() else CompoundIcons.VideoCallSolid(),
                     contentDescription = null,
                     tint = ElementTheme.colors.iconSecondary,
                 )
@@ -108,12 +108,13 @@ internal fun TimelineItemCallNotifyView(
 internal fun TimelineItemCallNotifyViewPreview() = ElementPreview {
     Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         listOf(
-            aTimelineItemEvent(content = TimelineItemRtcNotificationContent(null)),
-            aTimelineItemEvent(content = TimelineItemRtcNotificationContent(CallIntent.AUDIO)),
-            aTimelineItemEvent(content = TimelineItemRtcNotificationContent(CallIntent.VIDEO)),
-        ).forEach { event ->
+            TimelineItemRtcNotificationContent(null),
+            TimelineItemRtcNotificationContent(CallIntent.AUDIO),
+            TimelineItemRtcNotificationContent(CallIntent.VIDEO),
+        ).forEach { content ->
             TimelineItemCallNotifyView(
-                event = event,
+                event = aTimelineItemEvent(content = content),
+                content = content,
                 onLongClick = {},
             )
         }
