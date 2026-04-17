@@ -126,6 +126,13 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
+    AllowBlackTheme(
+        key = "feature.allow_black_theme",
+        title = "Allow black theme",
+        description = "Allow selecting the black appearance theme for battery saving on OLED.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
     LiveLocationSharing(
         key = "feature.liveLocationSharing",
         title = "Live location sharing",

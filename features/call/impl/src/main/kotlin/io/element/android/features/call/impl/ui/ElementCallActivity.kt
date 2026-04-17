@@ -54,6 +54,7 @@ import io.element.android.libraries.audio.api.AudioFocusRequester
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.theme.ElementThemeApp
+import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import timber.log.Timber
 
@@ -66,6 +67,7 @@ class ElementCallActivity :
     @Inject lateinit var callIntentDataParser: CallIntentDataParser
     @Inject lateinit var presenterFactory: CallScreenPresenter.Factory
     @Inject lateinit var appPreferencesStore: AppPreferencesStore
+    @Inject lateinit var featureFlagService: FeatureFlagService
     @Inject lateinit var enterpriseService: EnterpriseService
     @Inject lateinit var pictureInPicturePresenter: PictureInPicturePresenter
     @Inject lateinit var buildMeta: BuildMeta
@@ -114,6 +116,7 @@ class ElementCallActivity :
             }.collectAsState(SemanticColorsLightDark.default)
             ElementThemeApp(
                 appPreferencesStore = appPreferencesStore,
+                featureFlagService = featureFlagService,
                 compoundLight = colors.light,
                 compoundDark = colors.dark,
                 buildMeta = buildMeta,
