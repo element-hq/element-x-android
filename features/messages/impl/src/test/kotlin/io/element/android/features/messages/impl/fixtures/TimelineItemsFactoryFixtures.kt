@@ -49,40 +49,44 @@ internal fun TestScope.aTimelineItemsFactoryCreator(): TimelineItemsFactory.Crea
     }
 }
 
+internal fun aTimelineItemContentFactory(
+    timelineEventFormatter: TimelineEventFormatter = aTimelineEventFormatter(),
+    matrixClient: FakeMatrixClient = FakeMatrixClient(),
+): TimelineItemContentFactory = TimelineItemContentFactory(
+    messageFactory = TimelineItemContentMessageFactory(
+        fileSizeFormatter = FakeFileSizeFormatter(),
+        fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
+        htmlConverterProvider = FakeHtmlConverterProvider(),
+        permalinkParser = FakePermalinkParser(),
+        textPillificationHelper = FakeTextPillificationHelper(),
+    ),
+    redactedMessageFactory = TimelineItemContentRedactedFactory(),
+    stickerFactory = TimelineItemContentStickerFactory(
+        fileSizeFormatter = FakeFileSizeFormatter(),
+        fileExtensionExtractor = FileExtensionExtractorWithoutValidation()
+    ),
+    pollFactory = TimelineItemContentPollFactory(FakePollContentStateFactory()),
+    utdFactory = TimelineItemContentUTDFactory(),
+    roomMembershipFactory = TimelineItemContentRoomMembershipFactory(timelineEventFormatter),
+    profileChangeFactory = TimelineItemContentProfileChangeFactory(timelineEventFormatter),
+    stateFactory = TimelineItemContentStateFactory(timelineEventFormatter),
+    failedToParseMessageFactory = TimelineItemContentFailedToParseMessageFactory(),
+    failedToParseStateFactory = TimelineItemContentFailedToParseStateFactory(),
+    sessionId = matrixClient.sessionId,
+    dateFormatter = FakeDateFormatter(),
+    stringProvider = FakeStringProvider(),
+)
+
 internal fun TestScope.aTimelineItemsFactory(
     config: TimelineItemsFactoryConfig,
 ): TimelineItemsFactory {
-    val timelineEventFormatter = aTimelineEventFormatter()
     val matrixClient = FakeMatrixClient()
     return TimelineItemsFactory(
         dispatchers = testCoroutineDispatchers(),
         eventItemFactoryCreator = object : TimelineItemEventFactory.Creator {
             override fun create(config: TimelineItemsFactoryConfig): TimelineItemEventFactory {
                 return TimelineItemEventFactory(
-                    contentFactory = TimelineItemContentFactory(
-                        messageFactory = TimelineItemContentMessageFactory(
-                            fileSizeFormatter = FakeFileSizeFormatter(),
-                            fileExtensionExtractor = FileExtensionExtractorWithoutValidation(),
-                            htmlConverterProvider = FakeHtmlConverterProvider(),
-                            permalinkParser = FakePermalinkParser(),
-                            textPillificationHelper = FakeTextPillificationHelper(),
-                        ),
-                        redactedMessageFactory = TimelineItemContentRedactedFactory(),
-                        stickerFactory = TimelineItemContentStickerFactory(
-                            fileSizeFormatter = FakeFileSizeFormatter(),
-                            fileExtensionExtractor = FileExtensionExtractorWithoutValidation()
-                        ),
-                        pollFactory = TimelineItemContentPollFactory(FakePollContentStateFactory()),
-                        utdFactory = TimelineItemContentUTDFactory(),
-                        roomMembershipFactory = TimelineItemContentRoomMembershipFactory(timelineEventFormatter),
-                        profileChangeFactory = TimelineItemContentProfileChangeFactory(timelineEventFormatter),
-                        stateFactory = TimelineItemContentStateFactory(timelineEventFormatter),
-                        failedToParseMessageFactory = TimelineItemContentFailedToParseMessageFactory(),
-                        failedToParseStateFactory = TimelineItemContentFailedToParseStateFactory(),
-                        sessionId = matrixClient.sessionId,
-                        dateFormatter = FakeDateFormatter(),
-                        stringProvider = FakeStringProvider(),
-                    ),
+                    contentFactory = aTimelineItemContentFactory(matrixClient = matrixClient),
                     matrixClient = matrixClient,
                     dateFormatter = FakeDateFormatter(),
                     permalinkParser = FakePermalinkParser(),

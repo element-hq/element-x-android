@@ -1,3 +1,62 @@
+Changes in Element X v26.04.3
+=============================
+
+<!-- Release notes generated using configuration in .github/release.yml at v26.04.3 -->
+
+## What's Changed
+### ✨ Features
+* Sign in with element classic final by @bmarty in https://github.com/element-hq/element-x-android/pull/6296
+* Take into account homeserver capabilities by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6507
+### 🙌 Improvements
+* feat: Default to camera muted when joining ongoing voice call by @BillCarsonFr in https://github.com/element-hq/element-x-android/pull/6574
+### 🐛 Bugfixes
+* Fix crash in FetchPushForegroundService: No super method onTimeout by @bmarty in https://github.com/element-hq/element-x-android/pull/6547
+* Ensure mark as fully read is called only once when leaving the timeline by @bmarty in https://github.com/element-hq/element-x-android/pull/6550
+* Fix `isInAirGappedEnvironment` check for older APIs by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6573
+* Fix loading initial items of non-live timelines by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6598
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/6537
+* Sync Strings - new translations in Japanese and Vietnamese by @ElementBot in https://github.com/element-hq/element-x-android/pull/6568
+### 🧱 Build
+* Fix module dependencies by @bmarty in https://github.com/element-hq/element-x-android/pull/6559
+### 🚧 In development 🚧
+* Add confirmation dialog when inviting users with unknown identities by @kaylendog in https://github.com/element-hq/element-x-android/pull/6523
+* Feature: add room threads list by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6575
+### Dependency upgrades
+* fix(deps): update media3 to v1.10.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6529
+* fix(deps): update dependency io.github.sergio-sastre.composablepreviewscanner:android to v0.8.2 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6525
+* fix(deps): update metro to v0.12.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6543
+* fix(deps): update kotlinpoet to v2.3.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6528
+* Sync compound tokens https://github.com/element-hq/compound-design-tokens/releases/tag/v10.0.0 by @bmarty in https://github.com/element-hq/element-x-android/pull/6517
+* fix(deps): update dependency io.sentry:sentry-android to v8.37.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6508
+* fix(deps): update dependency org.maplibre.gl:android-sdk to v13.0.2 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6546
+* Update codecov/codecov-action action to v6 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6521
+* Update telephoto to v0.19.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6558
+* Update dependency net.zetetic:sqlcipher-android to v4.14.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6552
+* Update dependency org.matrix.rustcomponents:sdk-android to v26.04.8 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6553
+* Update gradle/actions action to v6.1.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6562
+* Update metro to v0.13.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6565
+* Update dependency org.matrix.rustcomponents:sdk-android to v26.04.13 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6570
+* Update wysiwyg to v2.41.3 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6572
+* Update dependency com.google.testparameterinjector:test-parameter-injector to v1.22 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6576
+* Use `Coil3` for `ZoomableAsyncImage` by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6582
+* Update dependency org.matrix.rustcomponents:sdk-android to v26.04.15 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6595
+* Update nschloe/action-cached-lfs-checkout action to v1.2.5 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6600
+### Others
+* Fix portrait image metadata when uploading without media optimization by @kalix127 in https://github.com/element-hq/element-x-android/pull/6362
+* Fix Threads not tappable in pinned messages list by @bxdxnn in https://github.com/element-hq/element-x-android/pull/6535
+* Reduce log level of activity lifecycle from warning to debug. by @bmarty in https://github.com/element-hq/element-x-android/pull/6548
+* Remove spaces features flags by @bmarty in https://github.com/element-hq/element-x-android/pull/6560
+* Remove space announcement by @bmarty in https://github.com/element-hq/element-x-android/pull/6561
+* Update metro to v0.13.2 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6571
+* Take into account the value of FeatureFlags.SignInWithClassic by @bmarty in https://github.com/element-hq/element-x-android/pull/6586
+* Add extra logs for timeline pagination by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6589
+* Scrollable media caption - tweaks by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6583
+* Split developer settings into 2 screens to be able to access global settings when no logged in. by @bmarty in https://github.com/element-hq/element-x-android/pull/6587
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v26.04.2...v26.04.3
+
 Changes in Element X v26.04.2
 =============================
 

@@ -52,6 +52,9 @@ allprojects {
 
     tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
         exclude("io/element/android/tests/konsist/failures/**")
+
+        // This file comes from another project and we want to keep it as close to the original as possible
+        exclude("org/rustls/platformverifier/**")
     }
 
     // KtLint
@@ -79,6 +82,9 @@ allprojects {
 
             // This file comes from another project and we want to keep it as close to the original as possible
             exclude("**/SafeChildrenTransitionScope.kt")
+
+            // This file comes from another project and we want to keep it as close to the original as possible
+            exclude("org/rustls/platformverifier/**")
         }
     }
     // Dependency check

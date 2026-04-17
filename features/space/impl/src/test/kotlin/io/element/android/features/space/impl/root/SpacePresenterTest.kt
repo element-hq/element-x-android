@@ -11,6 +11,9 @@
 package io.element.android.features.space.impl.root
 
 import com.google.common.truth.Truth.assertThat
+import com.google.testing.junit.testparameterinjector.KotlinTestParameters.namedTestValues
+import com.google.testing.junit.testparameterinjector.TestParameter
+import com.google.testing.junit.testparameterinjector.TestParameterInjector
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteEvents
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
@@ -49,8 +52,10 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
+import org.junit.runner.RunWith
 import im.vector.app.features.analytics.plan.JoinedRoom as AnalyticsJoinedRoom
 
+@RunWith(TestParameterInjector::class)
 class SpacePresenterTest {
     @Test
     fun `present - initial state`() = runTest {
@@ -259,21 +264,11 @@ class SpacePresenterTest {
     }
 
     @Test
-    fun `present - accept invite is transmitted to acceptDeclineInviteState`() {
-        `invite action is transmitted to acceptDeclineInviteState`(
-            acceptInvite = true,
-        )
-    }
-
-    @Test
-    fun `present - decline invite is transmitted to acceptDeclineInviteState`() {
-        `invite action is transmitted to acceptDeclineInviteState`(
-            acceptInvite = false,
-        )
-    }
-
-    private fun `invite action is transmitted to acceptDeclineInviteState`(
-        acceptInvite: Boolean,
+    fun `present - invite action is transmitted to acceptDeclineInviteState`(
+        @TestParameter acceptInvite: Boolean = namedTestValues(
+            "accept" to true,
+            "decline" to false,
+        ),
     ) = runTest {
         val eventRecorder = EventsRecorder<AcceptDeclineInviteEvents>()
         val anInvitedRoom = aSpaceRoom(

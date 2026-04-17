@@ -11,6 +11,7 @@ import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
+import io.element.android.libraries.matrix.api.HomeserverCapabilitiesProvider
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.slashcommands.api.SlashCommand
@@ -18,6 +19,8 @@ import io.element.android.libraries.slashcommands.api.SlashCommandService
 import io.element.android.libraries.slashcommands.api.SlashCommandSuggestion
 import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.withTimeoutOrNull
+import kotlin.time.Duration.Companion.seconds
 
 @ContributesBinding(RoomScope::class)
 class DefaultSlashCommandService(
@@ -26,6 +29,7 @@ class DefaultSlashCommandService(
     private val stringProvider: StringProvider,
     private val appPreferencesStore: AppPreferencesStore,
     private val featureFlagService: FeatureFlagService,
+    private val capabilitiesProvider: HomeserverCapabilitiesProvider,
 ) : SlashCommandService {
     override suspend fun getSuggestions(
         text: String,
@@ -33,19 +37,41 @@ class DefaultSlashCommandService(
     ): List<SlashCommandSuggestion> {
         if (!featureFlagService.isFeatureEnabled(FeatureFlags.SlashCommand)) return emptyList()
         val isDeveloperModeEnabled = appPreferencesStore.isDeveloperModeEnabledFlow().first()
-        return Command.entries.filter {
-            it.startsWith(text)
-        }.filter {
-            !isInThread || it.isAllowedInThread
-        }.filter {
-            !it.isDevCommand || isDeveloperModeEnabled
-        }.map {
-            SlashCommandSuggestion(
-                command = it.command,
-                parameters = it.parameters,
-                description = stringProvider.getString(it.description),
-            )
-        }
+        return Command.entries
+            .asSequence()
+            .filter { it.startsWith(text) }
+            .filter { !isInThread || it.isAllowedInThread }
+            .filter { !it.isDevCommand || isDeveloperModeEnabled }
+            // Don't include the change display name commands if the user can't change their display name
+            .run {
+                val canUserChangeDisplayName = withTimeoutOrNull(5.seconds) {
+                    capabilitiesProvider.canChangeDisplayName().getOrNull()
+                } ?: false
+                if (!canUserChangeDisplayName) {
+                    filterNot { it == Command.CHANGE_DISPLAY_NAME || it == Command.CHANGE_DISPLAY_NAME_FOR_ROOM }
+                } else {
+                    this
+                }
+            }
+            // Don't include the change avatar commands if the user can't change their avatar url
+            .run {
+                val canUserChangeAvatar = withTimeoutOrNull(5.seconds) {
+                    capabilitiesProvider.canChangeAvatarUrl().getOrNull()
+                } ?: false
+                if (!canUserChangeAvatar) {
+                    filterNot { it == Command.CHANGE_AVATAR || it == Command.CHANGE_AVATAR_FOR_ROOM }
+                } else {
+                    this
+                }
+            }
+            .map {
+                SlashCommandSuggestion(
+                    command = it.command,
+                    parameters = it.parameters,
+                    description = stringProvider.getString(it.description),
+                )
+            }
+            .toList()
     }
 
     override suspend fun parse(

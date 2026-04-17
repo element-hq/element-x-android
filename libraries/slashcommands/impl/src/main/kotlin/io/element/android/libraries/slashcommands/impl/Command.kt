@@ -120,6 +120,15 @@ enum class Command(
         isDevCommand = true,
         isSupported = false,
     ),
+    CHANGE_AVATAR(
+        command = "/myavatar",
+        parameters = "<mxc_url>",
+        description = R.string.slash_command_description_avatar,
+        isAllowedInThread = false,
+        // Dev command since user has to know the mxc url
+        isDevCommand = true,
+        isSupported = false,
+    ),
     CHANGE_AVATAR_FOR_ROOM(
         command = "/myroomavatar",
         parameters = "<mxc_url>",

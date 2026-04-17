@@ -9,14 +9,11 @@
 package io.element.android.features.home.impl
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.announcement.api.Announcement
-import io.element.android.features.announcement.api.AnnouncementService
 import io.element.android.features.home.impl.roomlist.aRoomListState
 import io.element.android.features.home.impl.spaces.HomeSpacesState
 import io.element.android.features.home.impl.spaces.aHomeSpacesState
 import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
-import io.element.android.features.rageshake.test.logs.FakeAnnouncementService
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
 import io.element.android.libraries.indicator.api.IndicatorService
@@ -34,8 +31,6 @@ import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.tests.testutils.WarmUpRule
-import io.element.android.tests.testutils.lambda.lambdaRecorder
-import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
@@ -137,14 +132,10 @@ class HomePresenterTest {
 
     @Test
     fun `present - NavigationBar change`() = runTest {
-        val showAnnouncementResult = lambdaRecorder<Announcement, Unit> { }
         val presenter = createHomePresenter(
             sessionStore = InMemorySessionStore(
                 updateUserProfileResult = { _, _, _ -> },
             ),
-            announcementService = FakeAnnouncementService(
-                showAnnouncementResult = showAnnouncementResult,
-            )
         )
         presenter.test {
             val initialState = awaitItem()
@@ -152,8 +143,6 @@ class HomePresenterTest {
             initialState.eventSink(HomeEvent.SelectHomeNavigationBarItem(HomeNavigationBarItem.Spaces))
             val finalState = awaitItem()
             assertThat(finalState.currentHomeNavigationBarItem).isEqualTo(HomeNavigationBarItem.Spaces)
-            showAnnouncementResult.assertions().isCalledOnce()
-                .with(value(Announcement.Space))
         }
     }
 }
@@ -166,7 +155,6 @@ internal fun createHomePresenter(
     indicatorService: IndicatorService = FakeIndicatorService(),
     homeSpacesPresenter: Presenter<HomeSpacesState> = Presenter { aHomeSpacesState() },
     sessionStore: SessionStore = InMemorySessionStore(),
-    announcementService: AnnouncementService = FakeAnnouncementService(),
 ) = HomePresenter(
     client = client,
     syncService = syncService,
@@ -177,5 +165,4 @@ internal fun createHomePresenter(
     logoutPresenter = { aDirectLogoutState() },
     rageshakeFeatureAvailability = rageshakeFeatureAvailability,
     sessionStore = sessionStore,
-    announcementService = announcementService,
 )

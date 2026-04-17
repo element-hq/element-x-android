@@ -22,6 +22,7 @@ import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
 import com.bumble.appyx.navmodel.backstack.operation.pop
 import com.bumble.appyx.navmodel.backstack.operation.push
+import com.bumble.appyx.navmodel.backstack.operation.replace
 import com.bumble.appyx.navmodel.backstack.operation.singleTop
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
@@ -30,14 +31,17 @@ import io.element.android.annotations.ContributesNode
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.login.api.LoginEntryPoint
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
+import io.element.android.features.login.impl.classic.ElementClassicConnection
 import io.element.android.features.login.impl.qrcode.QrCodeLoginFlowNode
 import io.element.android.features.login.impl.screens.changeaccountprovider.ChangeAccountProviderNode
 import io.element.android.features.login.impl.screens.chooseaccountprovider.ChooseAccountProviderNode
+import io.element.android.features.login.impl.screens.classic.ClassicFlowNode
 import io.element.android.features.login.impl.screens.confirmaccountprovider.ConfirmAccountProviderNode
 import io.element.android.features.login.impl.screens.createaccount.CreateAccountNode
 import io.element.android.features.login.impl.screens.loginpassword.LoginPasswordNode
 import io.element.android.features.login.impl.screens.onboarding.OnBoardingNode
 import io.element.android.features.login.impl.screens.searchaccountprovider.SearchAccountProviderNode
+import io.element.android.features.preferences.api.PreferencesEntryPoint
 import io.element.android.libraries.androidutils.browser.openUrlInChromeCustomTab
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
@@ -63,9 +67,11 @@ class LoginFlowNode(
     private val oidcActionFlow: OidcActionFlow,
     @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,
+    private val elementClassicConnection: ElementClassicConnection,
+    private val preferencesEntryPoint: PreferencesEntryPoint,
 ) : BaseFlowNode<LoginFlowNode.NavTarget>(
     backstack = BackStack(
-        initialElement = NavTarget.OnBoarding,
+        initialElement = NavTarget.CheckClassicFlow,
         savedStateMap = buildContext.savedStateMap,
     ),
     buildContext = buildContext,
@@ -103,10 +109,18 @@ class LoginFlowNode(
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
-        data object OnBoarding : NavTarget
+        data object CheckClassicFlow : NavTarget
+
+        @Parcelize
+        data class OnBoarding(
+            val showBackButton: Boolean,
+        ) : NavTarget
 
         @Parcelize
         data object QrCode : NavTarget
+
+        @Parcelize
+        data object AppDeveloperSettings : NavTarget
 
         @Parcelize
         data class ConfirmAccountProvider(
@@ -123,7 +137,9 @@ class LoginFlowNode(
         data object SearchAccountProvider : NavTarget
 
         @Parcelize
-        data object LoginPassword : NavTarget
+        data class LoginPassword(
+            val initialLogin: String = "",
+        ) : NavTarget
 
         @Parcelize
         data class CreateAccount(val url: String) : NavTarget
@@ -131,7 +147,31 @@ class LoginFlowNode(
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
-            NavTarget.OnBoarding -> {
+            NavTarget.CheckClassicFlow -> {
+                val callback = object : ClassicFlowNode.Callback {
+                    override fun navigateToOnBoarding(allowBackNavigation: Boolean) {
+                        if (allowBackNavigation) {
+                            backstack.push(NavTarget.OnBoarding(showBackButton = true))
+                        } else {
+                            backstack.replace(NavTarget.OnBoarding(showBackButton = false))
+                        }
+                    }
+
+                    override fun navigateToLoginPassword() {
+                        backstack.push(NavTarget.LoginPassword())
+                    }
+
+                    override fun navigateToOidc(oidcDetails: OidcDetails) {
+                        navigateToMas(oidcDetails)
+                    }
+
+                    override fun navigateToCreateAccount(url: String) {
+                        backstack.push(NavTarget.CreateAccount(url))
+                    }
+                }
+                createNode<ClassicFlowNode>(buildContext, listOf(callback))
+            }
+            is NavTarget.OnBoarding -> {
                 val callback = object : OnBoardingNode.Callback {
                     override fun navigateToSignUpFlow() {
                         backstack.push(
@@ -165,20 +205,41 @@ class LoginFlowNode(
                         backstack.push(NavTarget.CreateAccount(url))
                     }
 
+                    override fun navigateToDeveloperSettings() {
+                        backstack.push(NavTarget.AppDeveloperSettings)
+                    }
+
                     override fun navigateToLoginPassword() {
-                        backstack.push(NavTarget.LoginPassword)
+                        backstack.push(NavTarget.LoginPassword())
                     }
 
                     override fun onDone() {
-                        callback.onDone()
+                        if (navTarget.showBackButton) {
+                            backstack.pop()
+                        } else {
+                            callback.onDone()
+                        }
                     }
                 }
                 val params = inputs<Params>()
                 val inputs = OnBoardingNode.Params(
                     accountProvider = params.accountProvider,
                     loginHint = params.loginHint,
+                    showBackButton = navTarget.showBackButton,
                 )
                 createNode<OnBoardingNode>(buildContext, listOf(callback, inputs))
+            }
+            NavTarget.AppDeveloperSettings -> {
+                val callback = object : PreferencesEntryPoint.DeveloperSettingsCallback {
+                    override fun onDone() {
+                        backstack.pop()
+                    }
+                }
+                preferencesEntryPoint.createAppDeveloperSettingsNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    callback = callback,
+                )
             }
             NavTarget.ChooseAccountProvider -> {
                 val callback = object : ChooseAccountProviderNode.Callback {
@@ -191,7 +252,7 @@ class LoginFlowNode(
                     }
 
                     override fun navigateToLoginPassword() {
-                        backstack.push(NavTarget.LoginPassword)
+                        backstack.push(NavTarget.LoginPassword())
                     }
                 }
                 createNode<ChooseAccountProviderNode>(buildContext, listOf(callback))
@@ -218,7 +279,7 @@ class LoginFlowNode(
                     }
 
                     override fun navigateToLoginPassword() {
-                        backstack.push(NavTarget.LoginPassword)
+                        backstack.push(NavTarget.LoginPassword())
                     }
 
                     override fun navigateToChangeAccountProvider() {
@@ -257,8 +318,11 @@ class LoginFlowNode(
 
                 createNode<SearchAccountProviderNode>(buildContext, plugins = listOf(callback))
             }
-            NavTarget.LoginPassword -> {
-                createNode<LoginPasswordNode>(buildContext)
+            is NavTarget.LoginPassword -> {
+                val inputs = LoginPasswordNode.Inputs(
+                    initialLogin = navTarget.initialLogin,
+                )
+                createNode<LoginPasswordNode>(buildContext, plugins = listOf(inputs))
             }
             is NavTarget.CreateAccount -> {
                 val inputs = CreateAccountNode.Inputs(
@@ -280,6 +344,14 @@ class LoginFlowNode(
     override fun View(modifier: Modifier) {
         activity = requireNotNull(LocalActivity.current)
         darkTheme = !ElementTheme.isLightTheme
+
+        DisposableEffect(Unit) {
+            elementClassicConnection.start()
+            onDispose {
+                elementClassicConnection.stop()
+            }
+        }
+
         DisposableEffect(Unit) {
             onDispose {
                 activity = null
@@ -288,6 +360,6 @@ class LoginFlowNode(
                 }
             }
         }
-        BackstackView()
+        BackstackView(transitionHandler = rememberLoginFlowTransitionHandler())
     }
 }

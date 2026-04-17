@@ -16,7 +16,6 @@ import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.features.login.impl.accesscontrol.DefaultAccountProviderAccessControl
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.login.LoginHelper
-import io.element.android.features.login.impl.screens.onboarding.classic.aLoginWithClassicState
 import io.element.android.features.login.impl.web.FakeWebClientUrlForAuthenticationRetriever
 import io.element.android.features.login.impl.web.WebClientUrlForAuthenticationRetriever
 import io.element.android.features.wellknown.test.FakeWellknownRetriever
@@ -83,16 +82,31 @@ class OnBoardingPresenterTest {
         )
         presenter.test {
             val initialState = awaitItem()
+            assertThat(initialState.showBackButton).isFalse()
             assertThat(initialState.defaultAccountProvider).isNull()
             assertThat(initialState.canLoginWithQrCode).isFalse()
             assertThat(initialState.productionApplicationName).isEqualTo("B")
             assertThat(initialState.canCreateAccount).isEqualTo(OnBoardingConfig.CAN_CREATE_ACCOUNT)
             assertThat(initialState.canReportBug).isFalse()
             assertThat(initialState.isAddingAccount).isFalse()
-            assertThat(initialState.loginWithClassicState.canLoginWithClassic).isFalse()
             val finalState = awaitItem()
             assertThat(finalState.canLoginWithQrCode).isTrue()
-            assertThat(finalState.loginWithClassicState.canLoginWithClassic).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - initial state with back button`() = runTest {
+        val presenter = createPresenter(
+            params = OnBoardingNode.Params(
+                accountProvider = null,
+                loginHint = null,
+                showBackButton = true,
+            ),
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            assertThat(initialState.showBackButton).isTrue()
+            skipItems(1)
         }
     }
 
@@ -162,6 +176,7 @@ class OnBoardingPresenterTest {
             params = OnBoardingNode.Params(
                 accountProvider = ACCOUNT_PROVIDER_FROM_LINK,
                 loginHint = null,
+                showBackButton = false,
             ),
             enterpriseService = FakeEnterpriseService(
                 defaultHomeserverListResult = { listOf(ACCOUNT_PROVIDER_FROM_CONFIG, EnterpriseService.ANY_ACCOUNT_PROVIDER) },
@@ -184,6 +199,7 @@ class OnBoardingPresenterTest {
             params = OnBoardingNode.Params(
                 accountProvider = ACCOUNT_PROVIDER_FROM_LINK,
                 loginHint = null,
+                showBackButton = false,
             ),
             enterpriseService = FakeEnterpriseService(
                 defaultHomeserverListResult = { listOf(ACCOUNT_PROVIDER_FROM_CONFIG, ACCOUNT_PROVIDER_FROM_CONFIG_2) },
@@ -206,6 +222,7 @@ class OnBoardingPresenterTest {
             params = OnBoardingNode.Params(
                 accountProvider = ACCOUNT_PROVIDER_FROM_LINK,
                 loginHint = null,
+                showBackButton = false,
             ),
             enterpriseService = FakeEnterpriseService(
                 defaultHomeserverListResult = { listOf(ACCOUNT_PROVIDER_FROM_CONFIG) },
@@ -233,6 +250,7 @@ class OnBoardingPresenterTest {
             params = OnBoardingNode.Params(
                 accountProvider = A_HOMESERVER_URL,
                 loginHint = A_LOGIN_HINT,
+                showBackButton = false,
             ),
             enterpriseService = FakeEnterpriseService(
                 isAllowedToConnectToHomeserverResult = { true },
@@ -265,7 +283,11 @@ class OnBoardingPresenterTest {
 }
 
 private fun createPresenter(
-    params: OnBoardingNode.Params = OnBoardingNode.Params(null, null),
+    params: OnBoardingNode.Params = OnBoardingNode.Params(
+        accountProvider = null,
+        loginHint = null,
+        showBackButton = false,
+    ),
     buildMeta: BuildMeta = aBuildMeta(),
     enterpriseService: EnterpriseService = FakeEnterpriseService(),
     wellknownRetriever: WellknownRetriever = FakeWellknownRetriever(),
@@ -287,7 +309,6 @@ private fun createPresenter(
     onBoardingLogoResIdProvider = onBoardingLogoResIdProvider,
     sessionStore = sessionStore,
     accountProviderDataSource = accountProviderDataSource,
-    loginWithClassicPresenter = { aLoginWithClassicState() },
 )
 
 fun createLoginHelper(

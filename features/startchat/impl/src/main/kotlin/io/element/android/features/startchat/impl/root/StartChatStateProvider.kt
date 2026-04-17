@@ -16,6 +16,7 @@ import io.element.android.features.startchat.impl.userlist.aUserListState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.aMatrixUser
 import io.element.android.libraries.usersearch.api.UserSearchResult
 import kotlinx.collections.immutable.persistentListOf
@@ -52,12 +53,22 @@ open class StartChatStateProvider : PreviewParameterProvider<StartChatState> {
                 )
             ),
             aCreateRoomRootState(
-                startDmAction = ConfirmingStartDmWithMatrixUser(aMatrixUser()),
+                startDmAction = aConfirmingStartDmWithMatrixUser()
             ),
             aCreateRoomRootState(
                 isRoomDirectorySearchEnabled = true,
             ),
         )
+}
+
+fun aConfirmingStartDmWithMatrixUser(
+    matrixUser: MatrixUser = aMatrixUser(),
+    isUserIdentityUnknown: Boolean = false
+): ConfirmingStartDmWithMatrixUser {
+    return ConfirmingStartDmWithMatrixUser(
+        matrixUser,
+        isUserIdentityUnknown
+    )
 }
 
 fun aCreateRoomRootState(
@@ -71,5 +82,6 @@ fun aCreateRoomRootState(
     userListState = userListState,
     startDmAction = startDmAction,
     isRoomDirectorySearchEnabled = isRoomDirectorySearchEnabled,
+    enableKeyShareOnInvite = false,
     eventSink = eventSink,
 )

@@ -26,6 +26,7 @@ data class UserProfileState(
     val dmRoomId: RoomId?,
     val canCall: Boolean,
     val snackbarMessage: SnackbarMessage?,
+    val enableKeyShareOnInvite: Boolean,
     val eventSink: (UserProfileEvents) -> Unit
 ) {
     enum class ConfirmationDialog {

@@ -107,6 +107,18 @@ class CommandParser(
                         syntaxError(Command.ROOM_AVATAR)
                     }
                 }
+                Command.CHANGE_AVATAR.matches(slashCommand) -> {
+                    if (messageParts.size == 2) {
+                        val url = messageParts[1]
+                        if (url.isMxcUrl()) {
+                            SlashCommand.ChangeAvatar(url)
+                        } else {
+                            syntaxError(Command.CHANGE_AVATAR)
+                        }
+                    } else {
+                        syntaxError(Command.CHANGE_AVATAR)
+                    }
+                }
                 Command.CHANGE_AVATAR_FOR_ROOM.matches(slashCommand) -> {
                     if (messageParts.size == 2) {
                         val url = messageParts[1]

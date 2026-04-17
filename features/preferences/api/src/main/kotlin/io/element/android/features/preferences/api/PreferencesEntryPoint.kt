@@ -50,4 +50,14 @@ interface PreferencesEntryPoint : FeatureEntryPoint {
         fun navigateToRoomNotificationSettings(roomId: RoomId)
         fun navigateToEvent(roomId: RoomId, eventId: EventId)
     }
+
+    fun createAppDeveloperSettingsNode(
+        parentNode: Node,
+        buildContext: BuildContext,
+        callback: DeveloperSettingsCallback,
+    ): Node
+
+    interface DeveloperSettingsCallback : Plugin {
+        fun onDone()
+    }
 }

@@ -20,6 +20,7 @@ import io.element.android.libraries.matrix.api.room.knock.KnockRequest
 import io.element.android.libraries.matrix.api.room.location.LiveLocationShare
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsValues
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
+import io.element.android.libraries.matrix.api.room.threads.ThreadsListService
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
@@ -43,6 +44,8 @@ interface JoinedRoom : BaseRoom {
      * The live timeline of the room. Must be used to send Event to a room.
      */
     val liveTimeline: Timeline
+
+    val threadsListService: ThreadsListService
 
     /**
      * Create a new timeline.

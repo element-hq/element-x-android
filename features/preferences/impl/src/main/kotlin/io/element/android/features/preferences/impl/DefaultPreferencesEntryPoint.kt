@@ -13,6 +13,7 @@ import com.bumble.appyx.core.node.Node
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.preferences.api.PreferencesEntryPoint
+import io.element.android.features.preferences.impl.developer.appsettings.AppDeveloperSettingsNode
 import io.element.android.libraries.architecture.createNode
 
 @ContributesBinding(AppScope::class)
@@ -26,6 +27,17 @@ class DefaultPreferencesEntryPoint : PreferencesEntryPoint {
         return parentNode.createNode<PreferencesFlowNode>(
             buildContext = buildContext,
             plugins = listOf(params, callback)
+        )
+    }
+
+    override fun createAppDeveloperSettingsNode(
+        parentNode: Node,
+        buildContext: BuildContext,
+        callback: PreferencesEntryPoint.DeveloperSettingsCallback,
+    ): Node {
+        return parentNode.createNode<AppDeveloperSettingsNode>(
+            buildContext = buildContext,
+            plugins = listOf(callback),
         )
     }
 }
