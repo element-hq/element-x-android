@@ -8,16 +8,21 @@
 
 package io.element.android.libraries.designsystem.preview
 
+import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
+import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 @Composable
 fun ElementPreviewLight(
     showBackground: Boolean = true,
-    content: @Composable () -> Unit
+    @DrawableRes
+    drawableFallbackForImages: Int = CommonDrawables.sample_background,
+    content: @Composable () -> Unit,
 ) {
     ElementPreview(
         darkTheme = false,
         showBackground = showBackground,
-        content = content
+        drawableFallbackForImages = drawableFallbackForImages,
+        content = content,
     )
 }

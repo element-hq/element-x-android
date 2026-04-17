@@ -10,7 +10,7 @@ package io.element.android.features.preferences.impl.root
 
 import io.element.android.libraries.matrix.api.core.SessionId
 
-sealed interface PreferencesRootEvents {
-    data object OnVersionInfoClick : PreferencesRootEvents
-    data class SwitchToSession(val sessionId: SessionId) : PreferencesRootEvents
+sealed interface PreferencesRootEvent {
+    data object OnVersionInfoClick : PreferencesRootEvent
+    data class SwitchToSession(val sessionId: SessionId) : PreferencesRootEvent
 }
