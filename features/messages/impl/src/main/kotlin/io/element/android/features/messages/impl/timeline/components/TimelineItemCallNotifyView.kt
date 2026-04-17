@@ -54,7 +54,7 @@ internal fun TimelineItemCallNotifyView(
             .combinedClickable(
                 enabled = true,
                 onClick = {},
-                onLongClick = { onLongClick() },
+                onLongClick = { onLongClick(event) },
                 onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
             )
             .onKeyboardContextMenuAction { onLongClick(event) }
