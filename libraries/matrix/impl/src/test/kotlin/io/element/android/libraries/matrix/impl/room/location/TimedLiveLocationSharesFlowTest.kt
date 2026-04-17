@@ -141,6 +141,7 @@ private fun aLiveLocationShare(
     return LiveLocationShare(
         userId = UserId(userId),
         lastLocation = null,
+        startTimestamp = 0L,
         endTimestamp = endTimestamp,
     )
 }
