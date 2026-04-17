@@ -32,12 +32,3 @@ fun aVoiceMessageComposerState(
     keepScreenOn = keepScreenOn,
     eventSink = {},
 )
-
-fun aVoiceMessagePreviewState() = VoiceMessageState.Preview(
-    isSending = false,
-    isPlaying = false,
-    showCursor = false,
-    playbackProgress = 0f,
-    time = 10.seconds,
-    waveform = WaveFormSamples.realisticWaveForm,
-)

@@ -38,7 +38,10 @@ import kotlinx.coroutines.yield
 import timber.log.Timber
 import java.io.File
 import java.util.UUID
+import java.util.concurrent.atomic.AtomicBoolean
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.TimeMark
 import kotlin.time.TimeSource
 
 @SingleIn(RoomScope::class)
@@ -67,6 +70,10 @@ class DefaultVoiceRecorder(
     private val levels: MutableList<Float> = mutableListOf()
     private val lock = Mutex()
 
+    private val isPaused = AtomicBoolean(false)
+    private var totalPausedDuration: Duration = Duration.ZERO
+    private var pauseStartMark: TimeMark? = null
+
     private val _state = MutableStateFlow<VoiceRecorderState>(VoiceRecorderState.Idle)
     override val state: StateFlow<VoiceRecorderState> = _state
 
@@ -79,6 +86,9 @@ class DefaultVoiceRecorder(
         lock.withLock {
             levels.clear()
         }
+        isPaused.set(false)
+        totalPausedDuration = Duration.ZERO
+        pauseStartMark = null
 
         val audioRecorder = audioReaderFactory.create(config, dispatchers).also { audioReader = it }
 
@@ -87,7 +97,14 @@ class DefaultVoiceRecorder(
             audioRecorder.record { audio ->
                 yield()
 
-                val elapsedTime = startedAt.elapsedNow()
+                // When paused, discard audio data but keep AudioRecord running
+                if (isPaused.get()) {
+                    return@record
+                }
+
+                val elapsedTime = lock.withLock {
+                    startedAt.elapsedNow() - totalPausedDuration
+                }
 
                 if (elapsedTime > VoiceMessageConfig.maxVoiceMessageDuration) {
                     Timber.w("Voice message time limit reached")
@@ -101,17 +118,40 @@ class DefaultVoiceRecorder(
 
                         lock.withLock {
                             levels.add(audioLevel)
-                            _state.emit(VoiceRecorderState.Recording(elapsedTime, levels.toList()))
+                            _state.emit(VoiceRecorderState.Recording(elapsedTime, levels.toList(), file = outputFile))
                         }
                         encoder.encode(audio.buffer, audio.readSize)
                     }
                     is Audio.Error -> {
                         Timber.e("Voice message error: code=${audio.audioRecordErrorCode}")
-                        _state.emit(VoiceRecorderState.Recording(elapsedTime, listOf()))
+                        _state.emit(VoiceRecorderState.Recording(elapsedTime, listOf(), file = outputFile))
                     }
                 }
             }
         }
+    }
+
+    override suspend fun pauseRecord() {
+        Timber.i("Voice recorder paused")
+        val currentState = state.value as? VoiceRecorderState.Recording ?: return
+        lock.withLock {
+            isPaused.set(true)
+            pauseStartMark = timeSource.markNow()
+        }
+        _state.emit(currentState.copy(isPaused = true))
+    }
+
+    override suspend fun resumeRecord() {
+        Timber.i("Voice recorder resumed")
+        val currentState = state.value as? VoiceRecorderState.Recording ?: return
+        lock.withLock {
+            pauseStartMark?.let { mark ->
+                totalPausedDuration += mark.elapsedNow()
+            }
+            pauseStartMark = null
+            isPaused.set(false)
+        }
+        _state.emit(currentState.copy(isPaused = false))
     }
 
     /**
@@ -122,6 +162,17 @@ class DefaultVoiceRecorder(
     override suspend fun stopRecord(
         cancelled: Boolean
     ) {
+        // If paused, account for the final paused segment
+        lock.withLock {
+            if (isPaused.get()) {
+                pauseStartMark?.let { mark ->
+                    totalPausedDuration += mark.elapsedNow()
+                }
+            }
+            isPaused.set(false)
+            pauseStartMark = null
+        }
+
         recordingJob?.cancel()?.also {
             Timber.i("Voice recorder stopped recording")
         }

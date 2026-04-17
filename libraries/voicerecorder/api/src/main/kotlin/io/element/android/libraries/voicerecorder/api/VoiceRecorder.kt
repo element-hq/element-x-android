@@ -25,6 +25,18 @@ interface VoiceRecorder {
     suspend fun startRecord()
 
     /**
+     * Pause the current recording.
+     *
+     * Audio data is discarded while paused. Call [resumeRecord] to continue recording.
+     */
+    suspend fun pauseRecord()
+
+    /**
+     * Resume a paused recording.
+     */
+    suspend fun resumeRecord()
+
+    /**
      * Stop the current recording.
      *
      * Call [deleteRecording] to delete any recorded audio.

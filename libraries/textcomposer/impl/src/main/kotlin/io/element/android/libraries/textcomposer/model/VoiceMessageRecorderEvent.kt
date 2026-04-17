@@ -10,6 +10,16 @@ package io.element.android.libraries.textcomposer.model
 
 sealed interface VoiceMessageRecorderEvent {
     data object Start : VoiceMessageRecorderEvent
-    data object Stop : VoiceMessageRecorderEvent
     data object Cancel : VoiceMessageRecorderEvent
+
+    /** Swipe-up or tap triggered — locks recording so user can release the button. */
+    data object Lock : VoiceMessageRecorderEvent
+
+    /** Release in hold mode — stops recording and sends immediately. */
+    data object StopAndSend : VoiceMessageRecorderEvent
+    data object Pause : VoiceMessageRecorderEvent
+    data object Resume : VoiceMessageRecorderEvent
+
+    /** Stop recording and enter preview mode for playback review. */
+    data object StopAndPreview : VoiceMessageRecorderEvent
 }
