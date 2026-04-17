@@ -17,6 +17,8 @@ data class LiveLocationShare(
     val userId: UserId,
     /** The last known location if any. */
     val lastLocation: LastLocation?,
+    /** The timestamp when location sharing started, in milliseconds.*/
+    val startTimestamp: Long,
     /** The timestamp when location sharing ends, in milliseconds. */
     val endTimestamp: Long,
 )

@@ -68,6 +68,7 @@ private fun RustLiveLocationShare.into(): LiveLocationShare {
                 assetType = it.location.asset.into(),
             )
         },
+        startTimestamp = startTs.toLong(),
         endTimestamp = (startTs + timeout).toLong()
     )
 }

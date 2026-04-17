@@ -133,35 +133,39 @@ class ShowLocationPresenter(
             }
             is ShowLocationMode.Live -> {
                 produceState(persistentListOf()) {
+                    val comparator = LiveLocationShareComparator(currentUser = joinedRoom.sessionId)
                     val liveLocationSharesFlow = joinedRoom.subscribeToLiveLocationShares()
                     val membersStateFlow = joinedRoom.membersStateFlow.mapState { it.joinedRoomMembers() }
                     combine(liveLocationSharesFlow, membersStateFlow) { liveShares, members ->
-                        liveShares.mapNotNull { share ->
-                            val lastLocation = share.lastLocation ?: return@mapNotNull null
-                            val location = Location.fromGeoUri(lastLocation.geoUri) ?: return@mapNotNull null
-                            val member = members.find { it.userId == share.userId }
-                            val displayName = member?.getBestName() ?: share.userId.value
-                            val avatarUrl = member?.avatarUrl
-                            val relativeTime = dateFormatter.format(timestamp = lastLocation.timestamp, mode = DateFormatterMode.Full, useRelative = true)
-                            val formattedTimestamp = stringProvider.getString(
-                                CommonStrings.screen_static_location_sheet_timestamp_description,
-                                relativeTime
-                            )
-                            LocationShareItem(
-                                userId = share.userId,
-                                displayName = displayName,
-                                avatarData = AvatarData(
-                                    id = share.userId.value,
-                                    name = displayName,
-                                    url = avatarUrl,
-                                    size = AvatarSize.UserListItem,
-                                ),
-                                formattedTimestamp = formattedTimestamp,
-                                location = location,
-                                isLive = true,
-                                assetType = lastLocation.assetType,
-                            )
-                        }.toImmutableList()
+                        liveShares
+                            .sortedWith(comparator)
+                            .mapNotNull { share ->
+                                val lastLocation = share.lastLocation ?: return@mapNotNull null
+                                val location = Location.fromGeoUri(lastLocation.geoUri) ?: return@mapNotNull null
+                                val member = members.find { it.userId == share.userId }
+                                val displayName = member?.getBestName() ?: share.userId.value
+                                val avatarUrl = member?.avatarUrl
+                                val relativeTime = dateFormatter.format(timestamp = lastLocation.timestamp, mode = DateFormatterMode.Full, useRelative = true)
+                                val formattedTimestamp = stringProvider.getString(
+                                    CommonStrings.screen_static_location_sheet_timestamp_description,
+                                    relativeTime
+                                )
+                                LocationShareItem(
+                                    userId = share.userId,
+                                    displayName = displayName,
+                                    avatarData = AvatarData(
+                                        id = share.userId.value,
+                                        name = displayName,
+                                        url = avatarUrl,
+                                        size = AvatarSize.UserListItem,
+                                    ),
+                                    formattedTimestamp = formattedTimestamp,
+                                    location = location,
+                                    isLive = true,
+                                    assetType = lastLocation.assetType,
+                                )
+                            }
+                            .toImmutableList()
                     }.collect { value = it }
                 }.value
             }
