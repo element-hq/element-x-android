@@ -29,6 +29,14 @@ import io.element.android.libraries.mediaviewer.impl.details.aMediaDeleteConfirm
 import io.element.android.libraries.mediaviewer.impl.details.aMediaDetailsBottomSheetState
 import kotlinx.collections.immutable.toImmutableList
 
+private const val LONG_CAPTION = "This is a very long caption that should be scrollable in the media viewer. " +
+    "It contains multiple lines of text to demonstrate the scrolling behavior. " +
+    "Line 1: Lorem ipsum dolor sit amet, consectetur adipiscing elit. " +
+    "Line 2: Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. " +
+    "Line 3: Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris. " +
+    "Line 4: Duis aute irure dolor in reprehenderit in voluptate velit esse cillum. " +
+    "Line 5: Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia."
+
 open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState> {
     override val values: Sequence<MediaViewerState>
         get() = sequenceOf(
@@ -170,6 +178,22 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
                     )
                 )
             ),
+            anImageMediaInfo(
+                senderName = "Alice",
+                dateSent = "21 NOV, 2024",
+                caption = LONG_CAPTION,
+            ).let {
+                aMediaViewerState(
+                    listOf(
+                        aMediaViewerPageData(
+                            downloadedMedia = AsyncData.Success(
+                                LocalMedia(Uri.EMPTY, it)
+                            ),
+                            mediaInfo = it,
+                        )
+                    )
+                )
+            },
         )
 }
 

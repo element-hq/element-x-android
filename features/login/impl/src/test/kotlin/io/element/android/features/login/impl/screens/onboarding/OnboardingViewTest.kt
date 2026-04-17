@@ -11,9 +11,11 @@ package io.element.android.features.login.impl.screens.onboarding
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
-import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.google.testing.junit.testparameterinjector.KotlinTestParameters.namedTestValues
+import com.google.testing.junit.testparameterinjector.TestParameter
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.login.LoginMode
 import io.element.android.libraries.architecture.AsyncData
@@ -31,8 +33,9 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
+import org.robolectric.RobolectricTestParameterInjector
 
-@RunWith(AndroidJUnit4::class)
+@RunWith(RobolectricTestParameterInjector::class)
 class OnboardingViewTest {
     @get:Rule
     val rule = createAndroidComposeRule<ComponentActivity>()
@@ -44,11 +47,15 @@ class OnboardingViewTest {
             rule.setOnboardingView(
                 state = anOnBoardingState(
                     canCreateAccount = true,
+                    showDeveloperSettings = false,
                     eventSink = eventSink,
                 ),
                 onCreateAccount = callback,
             )
             rule.clickOn(R.string.screen_onboarding_sign_up)
+            // Developer settings should not be shown
+            val developerSettingsText = rule.activity.getString(CommonStrings.common_developer_options)
+            rule.onNodeWithContentDescription(developerSettingsText).assertDoesNotExist()
         }
     }
 
@@ -83,21 +90,11 @@ class OnboardingViewTest {
     }
 
     @Test
-    fun `when can login with QR code - clicking on sign in manually calls the expected callback - can search account provider`() {
-        `when can login with QR code - clicking on sign in manually calls the expected callback`(
-            mustChooseAccountProvider = false,
+    fun `when can login with QR code - clicking on sign in manually calls the expected callback`(
+        @TestParameter mustChooseAccountProvider: Boolean = namedTestValues(
+            "can search account provider" to false,
+            "cannot search account provider" to true,
         )
-    }
-
-    @Test
-    fun `when can login with QR code - clicking on sign in manually calls the expected callback - cannot search account provider`() {
-        `when can login with QR code - clicking on sign in manually calls the expected callback`(
-            mustChooseAccountProvider = true,
-        )
-    }
-
-    private fun `when can login with QR code - clicking on sign in manually calls the expected callback`(
-        mustChooseAccountProvider: Boolean,
     ) {
         val eventSink = EventsRecorder<OnBoardingEvents>(expectEvents = false)
         ensureCalledOnceWithParam(mustChooseAccountProvider) { callback ->
@@ -114,21 +111,11 @@ class OnboardingViewTest {
     }
 
     @Test
-    fun `when cannot login with QR code or create account - clicking on continue calls the sign in callback - can search account provider`() {
-        `when cannot login with QR code or create account - clicking on continue calls the sign in callback`(
-            mustChooseAccountProvider = false,
+    fun `when cannot login with QR code or create account - clicking on continue calls the sign in callback`(
+        @TestParameter mustChooseAccountProvider: Boolean = namedTestValues(
+            "can search account provider" to false,
+            "cannot search account provider" to true,
         )
-    }
-
-    @Test
-    fun `when cannot login with QR code or create account - clicking on continue calls the sign in callback - cannot search account provider`() {
-        `when cannot login with QR code or create account - clicking on continue calls the sign in callback`(
-            mustChooseAccountProvider = true,
-        )
-    }
-
-    private fun `when cannot login with QR code or create account - clicking on continue calls the sign in callback`(
-        mustChooseAccountProvider: Boolean,
     ) {
         val eventSink = EventsRecorder<OnBoardingEvents>(expectEvents = false)
         ensureCalledOnceWithParam(mustChooseAccountProvider) { callback ->
@@ -187,6 +174,22 @@ class OnboardingViewTest {
             val text = rule.activity.getString(CommonStrings.common_report_a_problem)
             rule.onNodeWithText(text).assertExists()
             rule.clickOn(CommonStrings.common_report_a_problem)
+        }
+    }
+
+    @Test
+    fun `clicking on settings calls the developer settings callback`() {
+        val eventSink = EventsRecorder<OnBoardingEvents>(expectEvents = false)
+        ensureCalledOnce { callback ->
+            rule.setOnboardingView(
+                state = anOnBoardingState(
+                    showDeveloperSettings = true,
+                    eventSink = eventSink,
+                ),
+                onDeveloperSettingsClick = callback,
+            )
+            val text = rule.activity.getString(CommonStrings.common_developer_options)
+            rule.onNodeWithContentDescription(text).performClick()
         }
     }
 
@@ -253,6 +256,7 @@ class OnboardingViewTest {
     private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setOnboardingView(
         state: OnBoardingState,
         onBackClick: () -> Unit = EnsureNeverCalled(),
+        onDeveloperSettingsClick: () -> Unit = EnsureNeverCalled(),
         onSignInWithQrCode: () -> Unit = EnsureNeverCalled(),
         onSignIn: (Boolean) -> Unit = EnsureNeverCalledWithParam(),
         onCreateAccount: () -> Unit = EnsureNeverCalled(),
@@ -266,6 +270,7 @@ class OnboardingViewTest {
             OnBoardingView(
                 state = state,
                 onBackClick = onBackClick,
+                onDeveloperSettingsClick = onDeveloperSettingsClick,
                 onSignInWithQrCode = onSignInWithQrCode,
                 onSignIn = onSignIn,
                 onCreateAccount = onCreateAccount,

@@ -17,6 +17,7 @@ import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientDelegate
 import org.matrix.rustcomponents.sdk.CreateRoomParameters
 import org.matrix.rustcomponents.sdk.Encryption
+import org.matrix.rustcomponents.sdk.HomeserverCapabilities
 import org.matrix.rustcomponents.sdk.HomeserverLoginDetails
 import org.matrix.rustcomponents.sdk.IgnoredUsersListener
 import org.matrix.rustcomponents.sdk.NoHandle
@@ -50,6 +51,7 @@ class FakeFfiClient(
     private val homeserverLoginDetailsResult: () -> HomeserverLoginDetails = { lambdaError() },
     private val getStoreSizesResult: () -> StoreSizes = { lambdaError() },
     private val createRoomResult: (CreateRoomParameters) -> String = { lambdaError() },
+    private val homeserverCapabilities: HomeserverCapabilities = FakeFfiHomeserverCapabilities(),
     private val closeResult: () -> Unit = {},
 ) : Client(NoHandle) {
     override fun userId(): String = userId
@@ -101,6 +103,10 @@ class FakeFfiClient(
 
     override suspend fun createRoom(request: CreateRoomParameters): String {
         return createRoomResult(request)
+    }
+
+    override fun homeserverCapabilities(): HomeserverCapabilities {
+        return homeserverCapabilities
     }
 
     override fun close() = closeResult()

@@ -48,6 +48,7 @@ class ConfirmAccountProviderPresenter(
                     loginHelper.submit(
                         isAccountCreation = params.isAccountCreation,
                         homeserverUrl = accountProvider.url,
+                        resolvedHomeserverUrl = null,
                         loginHint = null,
                     )
                 }

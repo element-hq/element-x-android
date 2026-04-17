@@ -8,7 +8,13 @@
 
 package io.element.android.features.announcement.api
 
-enum class Announcement {
-    Space,
-    NewNotificationSound,
+import androidx.compose.runtime.Immutable
+
+@Immutable
+sealed interface Announcement {
+    enum class Fullscreen : Announcement {
+        Space,
+    }
+
+    data object NewNotificationSound : Announcement
 }

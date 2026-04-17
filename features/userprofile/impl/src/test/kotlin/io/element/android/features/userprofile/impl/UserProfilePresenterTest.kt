@@ -24,6 +24,7 @@ import io.element.android.features.userprofile.api.UserProfileVerificationState
 import io.element.android.features.userprofile.impl.root.UserProfilePresenter
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
+import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -324,7 +325,7 @@ class UserProfilePresenterTest {
     @Test
     fun `present - start DM action confirmation scenario - cancel`() = runTest {
         val matrixUser = MatrixUser(UserId("@alice:server.org"))
-        val startDMConfirmationResult = ConfirmingStartDmWithMatrixUser(matrixUser)
+        val startDMConfirmationResult = ConfirmingStartDmWithMatrixUser(matrixUser, false)
         val executeResult = lambdaRecorder<MatrixUser, Boolean, MutableState<AsyncAction<RoomId>>, Unit> { _, _, actionState ->
             actionState.value = startDMConfirmationResult
         }
@@ -354,7 +355,7 @@ class UserProfilePresenterTest {
     @Test
     fun `present - start DM action confirmation scenario - confirm`() = runTest {
         val matrixUser = MatrixUser(UserId("@alice:server.org"))
-        val startDMConfirmationResult = ConfirmingStartDmWithMatrixUser(matrixUser)
+        val startDMConfirmationResult = ConfirmingStartDmWithMatrixUser(matrixUser, false)
         val executeResult = lambdaRecorder<MatrixUser, Boolean, MutableState<AsyncAction<RoomId>>, Unit> { _, _, actionState ->
             actionState.value = startDMConfirmationResult
         }
@@ -414,6 +415,7 @@ class UserProfilePresenterTest {
             sessionEnterpriseService = FakeSessionEnterpriseService(
                 isElementCallAvailableResult = { isElementCallAvailable },
             ),
+            featureFlagService = FakeFeatureFlagService()
         )
     }
 }

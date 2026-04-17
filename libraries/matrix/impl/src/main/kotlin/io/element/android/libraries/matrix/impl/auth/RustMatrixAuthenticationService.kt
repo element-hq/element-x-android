@@ -16,6 +16,7 @@ import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.auth.AuthenticationException
+import io.element.android.libraries.matrix.api.auth.ElementClassicSession
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
 import io.element.android.libraries.matrix.api.auth.OidcDetails
@@ -25,6 +26,7 @@ import io.element.android.libraries.matrix.api.auth.external.ExternalSession
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.impl.ClientBuilderSlidingSync
 import io.element.android.libraries.matrix.impl.RustMatrixClientFactory
@@ -50,6 +52,7 @@ import org.matrix.rustcomponents.sdk.QrCodeData
 import org.matrix.rustcomponents.sdk.QrCodeDecodeException
 import org.matrix.rustcomponents.sdk.QrLoginProgress
 import org.matrix.rustcomponents.sdk.QrLoginProgressListener
+import org.matrix.rustcomponents.sdk.SecretsBundleWithUserId
 import timber.log.Timber
 import uniffi.matrix_sdk.OAuthAuthorizationData
 import kotlin.time.Duration.Companion.seconds
@@ -64,6 +67,9 @@ class RustMatrixAuthenticationService(
     private val passphraseGenerator: PassphraseGenerator,
     private val oidcConfigurationProvider: OidcConfigurationProvider,
 ) : MatrixAuthenticationService {
+    // Any existing Element Classic session that we want to try to import secrets from during login.
+    private var elementClassicSession: ElementClassicSession? = null
+
     // Passphrase which will be used for new sessions. Existing sessions will use the passphrase
     // stored in the SessionData.
     private val pendingPassphrase = getDatabasePassphrase()
@@ -138,9 +144,15 @@ class RustMatrixAuthenticationService(
             runCatchingExceptions {
                 val client = currentClient ?: error("You need to call `setHomeserver()` first")
                 val currentSessionPaths = sessionPaths ?: error("You need to call `setHomeserver()` first")
-                client.login(username, password, "Element X Android", null)
+                client.login(
+                    username = username,
+                    password = password,
+                    initialDeviceName = "Element X Android",
+                    deviceId = null,
+                )
                 // Ensure that the user is not already logged in with the same account
                 ensureNotAlreadyLoggedIn(client)
+                tryToImportSecretForElementClassicSession(client)
                 val sessionData = client.session()
                     .toSessionData(
                         isTokenValid = true,
@@ -161,6 +173,53 @@ class RustMatrixAuthenticationService(
                 failure.mapAuthenticationException()
             }
         }
+
+    private suspend fun tryToImportSecretForElementClassicSession(client: Client) {
+        elementClassicSession
+            ?.takeIf {
+                // Note: the SDK will also do this check
+                it.userId.value == client.userId()
+            }
+            ?.let {
+                val secrets = it.secrets
+                val roomKeysVersion = it.roomKeysVersion
+                if (secrets == null || roomKeysVersion == null) {
+                    Timber.d("No secrets or roomKeysVersion found for Element Classic session ${it.userId}, skipping import")
+                } else {
+                    Timber.d("Trying to import secrets for Element Classic session ${it.userId}")
+                    runCatchingExceptions {
+                        SecretsBundleWithUserId.fromStr(
+                            userId = it.userId.value,
+                            bundle = secrets,
+                            backupInfo = roomKeysVersion,
+                        ).use { secretsBundle ->
+                            client.encryption().importSecretsBundle(secretsBundle)
+                        }
+                    }.onFailure { failure ->
+                        Timber.e(failure, "Failed to import secrets for Element Classic session ${it.userId}")
+                    }
+                }
+            }
+    }
+
+    override fun doSecretsContainBackupKey(
+        userId: UserId,
+        secrets: String,
+        backupInfo: String,
+    ): Boolean {
+        return try {
+            SecretsBundleWithUserId.fromStr(
+                userId = userId.value,
+                bundle = secrets,
+                backupInfo = backupInfo,
+            ).use { secretsBundle ->
+                secretsBundle.containsBackupKey()
+            }
+        } catch (failure: Exception) {
+            Timber.e(failure, "Failed to parse secrets for Element Classic session $userId")
+            false
+        }
+    }
 
     override suspend fun importCreatedSession(externalSession: ExternalSession): Result<SessionId> =
         withContext(coroutineDispatchers.io) {
@@ -233,6 +292,10 @@ class RustMatrixAuthenticationService(
         }
     }
 
+    override fun setElementClassicSession(session: ElementClassicSession?) {
+        elementClassicSession = session
+    }
+
     /**
      * callbackUrl should be the uriRedirect from OidcClientMetadata (with all the parameters).
      */
@@ -241,14 +304,15 @@ class RustMatrixAuthenticationService(
             runCatchingExceptions {
                 val client = currentClient ?: error("You need to call `setHomeserver()` first")
                 val currentSessionPaths = sessionPaths ?: error("You need to call `setHomeserver()` first")
-                client.loginWithOidcCallback(callbackUrl)
-
+                client.loginWithOidcCallback(
+                    callbackUrl = callbackUrl,
+                )
                 // Free the pending data since we won't use it to abort the flow anymore
                 pendingOAuthAuthorizationData?.close()
                 pendingOAuthAuthorizationData = null
-
                 // Ensure that the user is not already logged in with the same account
                 ensureNotAlreadyLoggedIn(client)
+                tryToImportSecretForElementClassicSession(client)
                 val sessionData = client.session().toSessionData(
                     isTokenValid = true,
                     loginType = LoginType.OIDC,

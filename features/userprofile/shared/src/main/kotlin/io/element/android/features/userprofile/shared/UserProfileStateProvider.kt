@@ -31,7 +31,7 @@ open class UserProfileStateProvider : PreviewParameterProvider<UserProfileState>
             aUserProfileState(isBlocked = AsyncData.Loading(true), verificationState = UserProfileVerificationState.UNKNOWN),
             aUserProfileState(startDmActionState = AsyncAction.Loading),
             aUserProfileState(canCall = true),
-            aUserProfileState(startDmActionState = ConfirmingStartDmWithMatrixUser(aMatrixUser())),
+            aUserProfileState(startDmActionState = ConfirmingStartDmWithMatrixUser(aMatrixUser(), isUserIdentityUnknown = false)),
             aUserProfileState(verificationState = UserProfileVerificationState.VERIFICATION_VIOLATION),
         )
 }
@@ -61,5 +61,6 @@ fun aUserProfileState(
     dmRoomId = dmRoomId,
     canCall = canCall,
     snackbarMessage = snackbarMessage,
+    enableKeyShareOnInvite = false,
     eventSink = eventSink,
 )

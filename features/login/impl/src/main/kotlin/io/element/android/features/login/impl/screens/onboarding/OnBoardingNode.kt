@@ -42,12 +42,14 @@ class OnBoardingNode(
         fun navigateToLoginPassword()
         fun navigateToOidc(oidcDetails: OidcDetails)
         fun navigateToCreateAccount(url: String)
+        fun navigateToDeveloperSettings()
         fun onDone()
     }
 
     data class Params(
         val accountProvider: String?,
         val loginHint: String?,
+        val showBackButton: Boolean,
     ) : NodeInputs
 
     private val callback: Callback = callback()
@@ -61,6 +63,7 @@ class OnBoardingNode(
     override fun View(modifier: Modifier) {
         val state = presenter.present()
         val context = LocalContext.current
+
         OnBoardingView(
             state = state,
             modifier = modifier,
@@ -73,6 +76,7 @@ class OnBoardingNode(
             onLearnMoreClick = { openLearnMorePage(context) },
             onCreateAccountContinue = callback::navigateToCreateAccount,
             onBackClick = callback::onDone,
+            onDeveloperSettingsClick = callback::navigateToDeveloperSettings,
         )
     }
 }

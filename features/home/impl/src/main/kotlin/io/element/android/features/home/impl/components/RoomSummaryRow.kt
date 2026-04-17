@@ -60,6 +60,7 @@ import io.element.android.libraries.designsystem.theme.roomListRoomMessage
 import io.element.android.libraries.designsystem.theme.roomListRoomMessageDate
 import io.element.android.libraries.designsystem.theme.roomListRoomName
 import io.element.android.libraries.designsystem.theme.unreadIndicator
+import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.matrix.ui.components.InviteSenderView
 import io.element.android.libraries.matrix.ui.model.InviteSender
@@ -349,6 +350,7 @@ private fun MessagePreviewAndIndicatorRow(
             if (room.hasRoomCall) {
                 OnGoingCallIcon(
                     color = tint,
+                    isAudio = room.activeCallIntent == CallIntent.AUDIO
                 )
             }
             if (room.userDefinedNotificationMode == RoomNotificationMode.MUTE) {
@@ -398,10 +400,11 @@ private fun InviteNameAndIndicatorRow(
 @Composable
 private fun OnGoingCallIcon(
     color: Color,
+    isAudio: Boolean
 ) {
     Icon(
         modifier = Modifier.size(16.dp),
-        imageVector = CompoundIcons.VideoCallSolid(),
+        imageVector = if (isAudio) CompoundIcons.VoiceCallSolid() else CompoundIcons.VideoCallSolid(),
         contentDescription = stringResource(CommonStrings.a11y_notifications_ongoing_call),
         tint = color,
     )

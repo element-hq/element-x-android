@@ -26,6 +26,7 @@
     <string name="slash_command_description_topic">Set the room topic</string>
     <string name="slash_command_description_remove_user">Removes user with given id from this room</string>
     <string name="slash_command_description_nick">Changes your display nickname</string>
+    <string name="slash_command_description_avatar">Changes your profile picture in all rooms</string>
     <string name="slash_command_confetti">Sends the given message with confetti</string>
     <string name="slash_command_snow">Sends the given message with snowfall</string>
     <string name="slash_command_description_plain">Sends a message as plain text, without interpreting it as markdown</string>
