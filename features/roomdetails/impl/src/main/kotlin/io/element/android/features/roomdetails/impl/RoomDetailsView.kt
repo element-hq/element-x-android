@@ -160,6 +160,9 @@ fun RoomDetailsView(
                         openAvatarPreview = { avatarUrl ->
                             openAvatarPreview(state.roomName, avatarUrl)
                         },
+                        onTitleClick = {
+                            state.eventSink(RoomDetailsEvent.CopyToClipboard(state.roomName))
+                        },
                         onSubtitleClick = { subtitle ->
                             state.eventSink(RoomDetailsEvent.CopyToClipboard(subtitle))
                         }
@@ -172,6 +175,9 @@ fun RoomDetailsView(
                         isTombstoned = state.isTombstoned,
                         openAvatarPreview = { name, avatarUrl ->
                             openAvatarPreview(name, avatarUrl)
+                        },
+                        onTitleClick = {
+                            state.eventSink(RoomDetailsEvent.CopyToClipboard(state.roomName))
                         },
                         onSubtitleClick = { subtitle ->
                             state.eventSink(RoomDetailsEvent.CopyToClipboard(subtitle))
@@ -468,7 +474,8 @@ private fun RoomHeaderSection(
     heroes: ImmutableList<MatrixUser>,
     isTombstoned: Boolean,
     openAvatarPreview: (url: String) -> Unit,
-    onSubtitleClick: (String) -> Unit,
+    onTitleClick: (() -> Unit)? = null,
+    onSubtitleClick: ((String) -> Unit)? = null,
 ) {
     Column(
         modifier = Modifier
@@ -497,6 +504,11 @@ private fun RoomHeaderSection(
         )
         Spacer(modifier = Modifier.height(24.dp))
         Text(
+            modifier = if (onTitleClick != null) {
+                Modifier.niceClickable { onTitleClick() }
+            } else {
+                Modifier
+            },
             text = roomName,
             style = ElementTheme.typography.fontHeadingLgBold,
             textAlign = TextAlign.Center,
@@ -504,7 +516,11 @@ private fun RoomHeaderSection(
         if (roomAlias != null) {
             Spacer(modifier = Modifier.height(12.dp))
             Text(
-                modifier = Modifier.niceClickable { onSubtitleClick(roomAlias.value) },
+                modifier = if (onSubtitleClick != null) {
+                    Modifier.niceClickable { onSubtitleClick(roomAlias.value) }
+                } else {
+                    Modifier
+                },
                 text = roomAlias.value,
                 style = ElementTheme.typography.fontBodyLgRegular,
                 color = ElementTheme.colors.textSecondary,
@@ -521,7 +537,8 @@ private fun DmHeaderSection(
     roomName: String,
     isTombstoned: Boolean,
     openAvatarPreview: (name: String, url: String) -> Unit,
-    onSubtitleClick: (String) -> Unit,
+    onTitleClick: (() -> Unit)? = null,
+    onSubtitleClick: ((String) -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -551,6 +568,11 @@ private fun DmHeaderSection(
         )
         Spacer(modifier = Modifier.height(24.dp))
         Text(
+            modifier = if (onTitleClick != null) {
+                Modifier.niceClickable { onTitleClick() }
+            } else {
+                Modifier
+            },
             text = roomName,
             style = ElementTheme.typography.fontHeadingLgBold,
             textAlign = TextAlign.Center,
@@ -570,7 +592,11 @@ private fun DmHeaderSection(
         }
         Spacer(modifier = Modifier.height(12.dp))
         Text(
-            modifier = Modifier.niceClickable { onSubtitleClick(otherMember.userId.value) },
+            modifier = if (onSubtitleClick != null) {
+                Modifier.niceClickable { onSubtitleClick(otherMember.userId.value) }
+            } else {
+                Modifier
+            },
             text = otherMember.userId.value,
             style = ElementTheme.typography.fontBodyLgRegular,
             color = ElementTheme.colors.textSecondary,

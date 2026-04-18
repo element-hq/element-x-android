@@ -15,6 +15,7 @@ import io.element.android.features.roommembermoderation.api.ModerationActionStat
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationEvents
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationPermissions
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
+import io.element.android.libraries.androidutils.clipboard.FakeClipboardHelper
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -388,11 +389,13 @@ class RoomMemberModerationPresenterTest {
         room: JoinedRoom,
         dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
         analyticsService: AnalyticsService = FakeAnalyticsService(),
+        clipboardHelper: FakeClipboardHelper = FakeClipboardHelper(),
     ): RoomMemberModerationPresenter {
         return RoomMemberModerationPresenter(
             room = room,
             dispatchers = dispatchers,
             analyticsService = analyticsService,
+            clipboardHelper = clipboardHelper,
         )
     }
 
