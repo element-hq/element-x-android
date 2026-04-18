@@ -97,12 +97,6 @@ class ThreadsListPresenter(
 
         val roomInfo by room.roomInfoFlow.collectAsState()
 
-        DisposableEffect(Unit) {
-            onDispose {
-                threadsListService.destroy()
-            }
-        }
-
         fun handleEvent(event: ThreadsListEvents) {
             when (event) {
                 ThreadsListEvents.Paginate -> if ((paginationStatus as? ThreadListPaginationStatus.Idle)?.hasMoreToLoad == true) {
