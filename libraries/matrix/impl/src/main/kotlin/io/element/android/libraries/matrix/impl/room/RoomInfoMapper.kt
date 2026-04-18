@@ -75,6 +75,7 @@ class RoomInfoMapper {
             roomVersion = it.roomVersion,
             privilegedCreatorRole = it.privilegedCreatorsRole,
             isLowPriority = it.isLowPriority,
+            activeCallIntentConsensus = it.activeRoomCallConsensusIntent.map(),
         )
     }
 }

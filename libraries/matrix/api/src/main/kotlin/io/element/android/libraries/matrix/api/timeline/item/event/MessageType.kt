@@ -15,6 +15,7 @@ import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.media.VideoInfo
+import io.element.android.libraries.matrix.api.room.location.AssetType
 
 @Immutable
 sealed interface MessageType
@@ -55,6 +56,7 @@ data class LocationMessageType(
     val body: String,
     val geoUri: String,
     val description: String?,
+    val assetType: AssetType?,
 ) : MessageType
 
 data class AudioMessageType(

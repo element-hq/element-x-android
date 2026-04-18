@@ -73,6 +73,7 @@ import io.element.android.tests.testutils.assertNoNodeWithText
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
+import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.pressBack
 import io.element.android.tests.testutils.setSafeContent
 import kotlinx.collections.immutable.persistentListOf
@@ -521,6 +522,9 @@ class MessagesViewTest {
         rule.setMessagesView(
             state = stateWithActionListState,
         )
+        // Clear initial 'LoadMore' event emitted when setting the state
+        eventsRecorder.clear()
+
         val verifiedUserSendFailure = rule.activity.getString(CommonStrings.screen_timeline_item_menu_send_failure_changed_identity, "Alice")
         rule.onNodeWithText(verifiedUserSendFailure).performClick()
         // Give time for the close animation to complete
@@ -584,6 +588,9 @@ class MessagesViewTest {
             ),
         )
         rule.setMessagesView(state = state)
+        // Clear initial 'LoadMore' event emitted when setting the state
+        eventsRecorder.clear()
+
         rule.onNodeWithText("This is a pinned message").performClick()
         eventsRecorder.assertSingle(TimelineEvent.FocusOnEvent(AN_EVENT_ID, debounce = FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS.milliseconds))
     }
@@ -600,10 +607,30 @@ class MessagesViewTest {
             timelineState = aTimelineState(eventSink = eventsRecorder)
         )
         rule.setMessagesView(state = state)
+        // Clear initial 'LoadMore' event emitted when setting the state
+        eventsRecorder.clear()
+
         val text = rule.activity.getString(R.string.screen_room_timeline_tombstoned_room_action)
         // The bottomsheet subcompose seems to make the node to appear twice
         rule.onAllNodesWithText(text).onFirst().performClick()
         eventsRecorder.assertSingle(TimelineEvent.NavigateToPredecessorOrSuccessorRoom(successorRoomId))
+    }
+
+    @Test
+    fun `clicking on threads list button calls the expected function`() {
+        val state = aMessagesState(
+            threads = MessagesState.Threads(
+                hasThreads = true,
+                hasUnreadThreads = false,
+            )
+        )
+        val onThreadsListClicked = lambdaRecorder<Unit> {}
+        rule.setMessagesView(
+            state = state,
+            onThreadsListClicked = onThreadsListClicked,
+        )
+        rule.onNodeWithContentDescription("Threads").performClick()
+        onThreadsListClicked.assertions().isCalledOnce()
     }
 
     @Test
@@ -630,6 +657,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMessa
     onCreatePollClick: () -> Unit = EnsureNeverCalled(),
     onJoinCallClick: (Boolean) -> Unit = EnsureNeverCalledWithParam(),
     onViewAllPinnedMessagesClick: () -> Unit = EnsureNeverCalled(),
+    onThreadsListClicked: () -> Unit = EnsureNeverCalled(),
 ) {
     setSafeContent {
         // Cannot use the RichTextEditor, so simulate a LocalInspectionMode
@@ -646,6 +674,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMessa
                 onJoinCallClick = onJoinCallClick,
                 onViewAllPinnedMessagesClick = onViewAllPinnedMessagesClick,
                 knockRequestsBannerView = {},
+                onThreadsListClick = onThreadsListClicked,
             )
         }
     }

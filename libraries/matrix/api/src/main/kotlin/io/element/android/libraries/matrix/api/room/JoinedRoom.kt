@@ -17,8 +17,10 @@ import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.room.history.RoomHistoryVisibility
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.knock.KnockRequest
+import io.element.android.libraries.matrix.api.room.location.LiveLocationShare
 import io.element.android.libraries.matrix.api.room.powerlevels.RoomPowerLevelsValues
 import io.element.android.libraries.matrix.api.room.powerlevels.UserRoleChange
+import io.element.android.libraries.matrix.api.room.threads.ThreadsListService
 import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
@@ -42,6 +44,8 @@ interface JoinedRoom : BaseRoom {
      * The live timeline of the room. Must be used to send Event to a room.
      */
     val liveTimeline: Timeline
+
+    val threadsListService: ThreadsListService
 
     /**
      * Create a new timeline.
@@ -182,4 +186,30 @@ interface JoinedRoom : BaseRoom {
      * Subscribe to a [Flow] of [SendQueueUpdate] related to this room.
      */
     fun subscribeToSendQueueUpdates(): Flow<SendQueueUpdate>
+
+    /**
+     * Subscribe to live location shares in this room.
+     * @return Flow of list of active live location shares.
+     */
+    fun subscribeToLiveLocationShares(): Flow<List<LiveLocationShare>>
+
+    /**
+     * Start sharing live location in this room.
+     * @param durationMillis How long to share location (in milliseconds).
+     * @return Result indicating success or failure.
+     */
+    suspend fun startLiveLocationShare(durationMillis: Long): Result<Unit>
+
+    /**
+     * Stop sharing live location in this room.
+     * @return Result indicating success or failure.
+     */
+    suspend fun stopLiveLocationShare(): Result<Unit>
+
+    /**
+     * Send a live location update while a live location share is active.
+     * @param geoUri The geo URI (e.g., "geo:51.5074,-0.1278").
+     * @return Result indicating success or failure.
+     */
+    suspend fun sendLiveLocation(geoUri: String): Result<Unit>
 }

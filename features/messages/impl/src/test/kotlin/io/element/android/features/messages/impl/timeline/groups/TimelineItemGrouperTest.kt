@@ -23,7 +23,7 @@ import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSen
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.core.FakeSendHandle
-import io.element.android.libraries.matrix.ui.messages.reply.aProfileTimelineDetailsReady
+import io.element.android.libraries.matrix.ui.messages.reply.aProfileDetailsReady
 import kotlinx.collections.immutable.toImmutableList
 import org.junit.Test
 
@@ -34,7 +34,7 @@ class TimelineItemGrouperTest {
         id = UniqueId("0"),
         senderId = A_USER_ID,
         senderAvatar = anAvatarData(),
-        senderProfile = aProfileTimelineDetailsReady(displayName = ""),
+        senderProfile = aProfileDetailsReady(displayName = ""),
         content = TimelineItemStateEventContent(body = "a state event"),
         reactionsState = aTimelineItemReactions(count = 0),
         readReceiptState = TimelineItemReadReceipts(emptyList<ReadReceiptData>().toImmutableList()),

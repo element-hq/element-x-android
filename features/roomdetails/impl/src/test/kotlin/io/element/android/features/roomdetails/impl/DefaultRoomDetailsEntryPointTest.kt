@@ -69,6 +69,7 @@ class DefaultRoomDetailsEntryPointTest {
         }
         val callback = object : RoomDetailsEntryPoint.Callback {
             override fun navigateToGlobalNotificationSettings() = lambdaError()
+            override fun navigateToDeveloperSettings() = lambdaError()
             override fun navigateToRoom(roomId: RoomId, serverNames: List<String>) = lambdaError()
             override fun handlePermalinkClick(data: PermalinkData, pushToBackstack: Boolean) = lambdaError()
             override fun startForwardEventFlow(eventId: EventId, fromPinnedEvents: Boolean) = lambdaError()

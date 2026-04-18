@@ -146,8 +146,8 @@
   <string name="action_share_link">"Dela länk"</string>
   <string name="action_show">"Visa"</string>
   <string name="action_sign_in_again">"Logga in igen"</string>
-  <string name="action_signout">"Logga ut"</string>
-  <string name="action_signout_anyway">"Logga ut ändå"</string>
+  <string name="action_signout">"Ta bort den här enheten"</string>
+  <string name="action_signout_anyway">"Ta bort den här enheten ändå"</string>
   <string name="action_skip">"Hoppa över"</string>
   <string name="action_start">"Starta"</string>
   <string name="action_start_chat">"Starta chat"</string>

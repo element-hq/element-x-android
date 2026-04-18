@@ -85,6 +85,7 @@ class JoinedRoomLoadedFlowNode(
         fun navigateToRoom(roomId: RoomId, serverNames: List<String>)
         fun handlePermalinkClick(data: PermalinkData, pushToBackstack: Boolean)
         fun navigateToGlobalNotificationSettings()
+        fun navigateToDeveloperSettings()
     }
 
     data class Inputs(
@@ -143,6 +144,10 @@ class JoinedRoomLoadedFlowNode(
         val callback = object : RoomDetailsEntryPoint.Callback {
             override fun navigateToGlobalNotificationSettings() {
                 callback.navigateToGlobalNotificationSettings()
+            }
+
+            override fun navigateToDeveloperSettings() {
+                callback.navigateToDeveloperSettings()
             }
 
             override fun navigateToRoom(roomId: RoomId, serverNames: List<String>) {
@@ -251,6 +256,10 @@ class JoinedRoomLoadedFlowNode(
 
             override fun navigateToRoom(roomId: RoomId) {
                 callback.navigateToRoom(roomId, emptyList())
+            }
+
+            override fun navigateToDeveloperSettings() {
+                callback.navigateToDeveloperSettings()
             }
         }
         val params = MessagesEntryPoint.Params(

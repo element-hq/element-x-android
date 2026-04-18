@@ -33,7 +33,7 @@
   <string name="screen_room_attachment_source_camera_video">"Spela in video"</string>
   <string name="screen_room_attachment_source_files">"Bilaga"</string>
   <string name="screen_room_attachment_source_gallery">"Foto- och videobibliotek"</string>
-  <string name="screen_room_attachment_source_location">"Plats"</string>
+  <string name="screen_room_attachment_source_location">"Dela plats"</string>
   <string name="screen_room_attachment_source_poll">"Omröstning"</string>
   <string name="screen_room_attachment_text_formatting">"Textformatering"</string>
   <string name="screen_room_encrypted_history_banner">"Meddelandehistoriken är för närvarande otillgänglig."</string>

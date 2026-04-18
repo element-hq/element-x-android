@@ -223,7 +223,6 @@ private fun RustOtherState.map(): OtherState {
         RustOtherState.PolicyRuleRoom -> OtherState.PolicyRuleRoom
         RustOtherState.PolicyRuleServer -> OtherState.PolicyRuleServer
         RustOtherState.PolicyRuleUser -> OtherState.PolicyRuleUser
-        RustOtherState.RoomAliases -> OtherState.RoomAliases
         is RustOtherState.RoomAvatar -> OtherState.RoomAvatar(url)
         RustOtherState.RoomCanonicalAlias -> OtherState.RoomCanonicalAlias
         RustOtherState.RoomCreate -> OtherState.RoomCreate

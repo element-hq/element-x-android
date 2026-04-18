@@ -76,6 +76,16 @@ internal class DefaultInvitePeopleStateProvider : PreviewParameterProvider<Defau
                 selectedUsers = aMatrixUserList().toImmutableList(),
                 sendInvitesAction = AsyncAction.Loading,
             ),
+            aDefaultInvitePeopleState(
+                sendInvitesAction = ConfirmingUnknownUserInvitation(persistentListOf(
+                    aMatrixUser("@alice:server.org")
+                ))
+            ),
+            aDefaultInvitePeopleState(
+                sendInvitesAction = ConfirmingUnknownUserInvitation(
+                    aMatrixUserList().toImmutableList()
+                )
+            ),
         )
 }
 

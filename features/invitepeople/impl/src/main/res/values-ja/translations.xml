@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_invite_users_already_a_member">"既に参加しています"</string>
+  <string name="screen_invite_users_already_invited">"既に招待しています"</string>
+  <plurals name="screen_invite_users_confirm_dialog_subtitle">
+    <item quantity="other">"この連絡先とのチャットがありません。続行する前に、このルームに招待してください。"</item>
+  </plurals>
+  <plurals name="screen_invite_users_confirm_dialog_title">
+    <item quantity="other">"このルームに新しい連絡先を追加しますか？"</item>
+  </plurals>
+</resources>

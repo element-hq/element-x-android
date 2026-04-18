@@ -38,6 +38,7 @@ import io.element.android.tests.testutils.setSafeContent
 import io.element.android.wysiwyg.link.Link
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
+import org.junit.Ignore
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
@@ -66,24 +67,31 @@ class TimelineViewTest {
 
     @Test
     fun `reaching the end of the timeline does not send a LoadMore event`() {
-        val eventsRecorder = EventsRecorder<TimelineEvent>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<TimelineEvent>()
         rule.setTimelineView(
             state = aTimelineState(
+                timelineItems = persistentListOf(aTimelineItemEvent(content = aTimelineItemImageContent())),
                 eventSink = eventsRecorder,
             ),
         )
+        eventsRecorder.assertSingle(TimelineEvent.OnScrollFinished(firstIndex = 0))
     }
 
     @Test
     fun `scroll to bottom on live timeline does not emit the Event`() {
-        val eventsRecorder = EventsRecorder<TimelineEvent>(expectEvents = false)
+        val eventsRecorder = EventsRecorder<TimelineEvent>()
         rule.setTimelineView(
             state = aTimelineState(
+                timelineItems = persistentListOf(aTimelineItemEvent(content = aTimelineItemImageContent())),
                 isLive = true,
                 eventSink = eventsRecorder,
             ),
             forceJumpToBottomVisibility = true,
         )
+
+        eventsRecorder.assertSingle(TimelineEvent.OnScrollFinished(firstIndex = 0))
+        eventsRecorder.clear()
+
         val contentDescription = rule.activity.getString(CommonStrings.a11y_jump_to_bottom)
         rule.onNodeWithContentDescription(contentDescription).performClick()
     }
@@ -93,13 +101,31 @@ class TimelineViewTest {
         val eventsRecorder = EventsRecorder<TimelineEvent>()
         rule.setTimelineView(
             state = aTimelineState(
+                timelineItems = persistentListOf(aTimelineItemEvent(content = aTimelineItemImageContent())),
                 isLive = false,
                 eventSink = eventsRecorder,
             ),
         )
+
+        eventsRecorder.assertSingle(TimelineEvent.OnScrollFinished(firstIndex = 0))
+        eventsRecorder.clear()
+
         val contentDescription = rule.activity.getString(CommonStrings.a11y_jump_to_bottom)
         rule.onNodeWithContentDescription(contentDescription).performClick()
         eventsRecorder.assertSingle(TimelineEvent.JumpToLive)
+    }
+
+    @Test
+    fun `an empty timeline triggers a prefetch`() {
+        val eventsRecorder = EventsRecorder<TimelineEvent>()
+        rule.setTimelineView(
+            state = aTimelineState(
+                timelineItems = persistentListOf(),
+                eventSink = eventsRecorder,
+            ),
+        )
+
+        eventsRecorder.assertSingle(TimelineEvent.LoadMore(Timeline.PaginationDirection.BACKWARDS))
     }
 
     @Test
@@ -132,15 +158,23 @@ class TimelineViewTest {
         val eventsRecorder = EventsRecorder<TimelineEvent>()
         rule.setTimelineView(
             state = aTimelineState(
+                timelineItems = persistentListOf(aTimelineItemEvent(content = aTimelineItemImageContent())),
                 isLive = false,
                 eventSink = eventsRecorder,
                 messageShield = aCriticalShield(),
             ),
         )
+        eventsRecorder.assertSingle(TimelineEvent.OnScrollFinished(firstIndex = 0))
+        eventsRecorder.clear()
+
         rule.clickOn(CommonStrings.action_ok)
         eventsRecorder.assertSingle(TimelineEvent.HideShieldDialog)
     }
 
+    @Ignore(
+        "performScrollToIndex in compose tests no longer sets LazyListState.isScrollInProgress to true, so the LoadMore event is not emitted." +
+        "This needs to be reworked to use a different approach to check the LoadMore event was emitted."
+    )
     @Test
     fun `scrolling near to the start of the loaded items triggers a pre-fetch`() {
         val eventsRecorder = EventsRecorder<TimelineEvent>()

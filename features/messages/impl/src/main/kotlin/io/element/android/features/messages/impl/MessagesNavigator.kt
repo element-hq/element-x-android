@@ -23,6 +23,8 @@ interface MessagesNavigator {
     fun navigateToEditPoll(eventId: EventId)
     fun navigateToPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?)
     fun navigateToRoom(roomId: RoomId, eventId: EventId?, serverNames: List<String>)
+    fun navigateToMember(userId: UserId)
     fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?)
+    fun navigateToDeveloperSettings()
     fun close()
 }

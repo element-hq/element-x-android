@@ -98,6 +98,9 @@ import kotlinx.coroutines.launch
 import uniffi.wysiwyg_composer.MenuAction
 import kotlin.time.Duration.Companion.seconds
 
+/**
+ * https://www.figma.com/design/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?node-id=2012-39036
+ */
 @Composable
 fun TextComposer(
     state: TextEditorState,
@@ -397,6 +400,7 @@ fun TextComposer(
             onAddAttachment = onAddAttachment,
             onDeleteVoiceMessage = onDeleteVoiceMessage,
             onVoiceRecorderEvent = onVoiceRecorderEvent,
+            onResetComposerMode = onResetComposerMode,
         )
     }
 
@@ -405,6 +409,15 @@ fun TextComposer(
     }
 
     SoftKeyboardEffect(showTextFormatting, onRequestFocus) { it }
+
+    // Re-focus the text input when voice recording ends so the user can continue typing
+    var previousVoiceMessageState by remember { mutableStateOf(voiceMessageState) }
+    LaunchedEffect(voiceMessageState) {
+        if (voiceMessageState is VoiceMessageState.Idle && previousVoiceMessageState !is VoiceMessageState.Idle) {
+            onRequestFocus()
+        }
+        previousVoiceMessageState = voiceMessageState
+    }
 
     val latestOnReceiveSuggestion by rememberUpdatedState(onReceiveSuggestion)
     if (state is TextEditorState.Rich) {
@@ -437,6 +450,7 @@ private fun StandardLayout(
     onAddAttachment: () -> Unit,
     onDeleteVoiceMessage: () -> Unit,
     onVoiceRecorderEvent: (VoiceMessageRecorderEvent) -> Unit,
+    onResetComposerMode: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier) {
@@ -503,6 +517,14 @@ private fun StandardLayout(
             ) {
                 if (voiceMessageState is VoiceMessageState.Idle) {
                     textInput()
+                } else if (composerMode is MessageComposerMode.Special) {
+                    TextInputBox(
+                        composerMode = composerMode,
+                        onResetComposerMode = onResetComposerMode,
+                        isTextEmpty = true,
+                    ) {
+                        voiceRecording()
+                    }
                 } else {
                     voiceRecording()
                 }

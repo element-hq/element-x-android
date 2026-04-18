@@ -6,7 +6,7 @@
   <string name="screen_advanced_settings_developer_mode">"开发者模式"</string>
   <string name="screen_advanced_settings_developer_mode_description">"允许开发人员访问特性和功能。"</string>
   <string name="screen_advanced_settings_element_call_base_url">"自定义 Element Call URL"</string>
-  <string name="screen_advanced_settings_element_call_base_url_description">"为 Element 通话设置根 URL。"</string>
+  <string name="screen_advanced_settings_element_call_base_url_description">"为 Element 通话设置基本 URL。"</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"URL 无效，请确保包含协议（http/https）和正确的地址。"</string>
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"在房间邀请请求中隐藏头像"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"在时间轴中隐藏媒体预览"</string>
@@ -34,12 +34,12 @@
   <string name="screen_advanced_settings_show_media_timeline_title">"在时间轴中显示媒体"</string>
   <string name="screen_advanced_settings_view_source_description">"启用在时间轴中查看消息源码的选项。"</string>
   <string name="screen_blocked_users_empty">"您没有屏蔽用户"</string>
-  <string name="screen_blocked_users_unblock_alert_action">"解封"</string>
+  <string name="screen_blocked_users_unblock_alert_action">"解除屏蔽"</string>
   <string name="screen_blocked_users_unblock_alert_description">"可以重新接收他们的消息。"</string>
-  <string name="screen_blocked_users_unblock_alert_title">"解封用户"</string>
+  <string name="screen_blocked_users_unblock_alert_title">"解除屏蔽用户"</string>
   <string name="screen_blocked_users_unblocking">"正在解除屏蔽……"</string>
   <string name="screen_edit_profile_display_name">"显示名称"</string>
-  <string name="screen_edit_profile_display_name_placeholder">"你的显示名称"</string>
+  <string name="screen_edit_profile_display_name_placeholder">"您的显示名称"</string>
   <string name="screen_edit_profile_error">"遇到未知错误，无法更改信息。"</string>
   <string name="screen_edit_profile_error_title">"无法更新个人资料"</string>
   <string name="screen_edit_profile_title">"编辑个人资料"</string>

@@ -35,7 +35,7 @@
   <string name="screen_room_attachment_source_camera_video">"동영상 녹화"</string>
   <string name="screen_room_attachment_source_files">"첨부 파일"</string>
   <string name="screen_room_attachment_source_gallery">"사진 &amp; 동영상 라이브러리"</string>
-  <string name="screen_room_attachment_source_location">"위치"</string>
+  <string name="screen_room_attachment_source_location">"위치 공유"</string>
   <string name="screen_room_attachment_source_poll">"투표"</string>
   <string name="screen_room_attachment_text_formatting">"텍스트 서식"</string>
   <string name="screen_room_encrypted_history_banner">"메시지 기록은 현재 사용할 수 없습니다."</string>

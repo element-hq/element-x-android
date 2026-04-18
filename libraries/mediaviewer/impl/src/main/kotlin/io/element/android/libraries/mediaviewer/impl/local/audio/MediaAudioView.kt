@@ -25,6 +25,7 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -51,6 +52,7 @@ import androidx.media3.common.Timeline
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
+import com.bumble.appyx.core.node.LocalNodeTargetVisibility
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.libraries.audio.api.AudioFocus
@@ -121,6 +123,7 @@ private fun ExoPlayerMediaAudioView(
                 durationInMillis = 0,
                 canMute = false,
                 isMuted = false,
+                seekingToMillis = null,
             )
         )
     }
@@ -128,6 +131,8 @@ private fun ExoPlayerMediaAudioView(
     var metadata: MediaMetadata? by remember {
         mutableStateOf(null)
     }
+
+    val isTargetVisible = LocalNodeTargetVisibility.current
 
     val playableState: PlayableState.Playable by remember {
         derivedStateOf {
@@ -171,15 +176,21 @@ private fun ExoPlayerMediaAudioView(
     LaunchedEffect(exoPlayer.isPlaying) {
         if (exoPlayer.isPlaying) {
             while (true) {
+                val position = exoPlayer.currentPosition
+                val seekingTo = mediaPlayerControllerState.seekingToMillis
                 mediaPlayerControllerState = mediaPlayerControllerState.copy(
-                    progressInMillis = exoPlayer.currentPosition,
+                    progressInMillis = position,
+                    seekingToMillis = if (seekingTo != null && position >= seekingTo) null else seekingTo,
                 )
                 delay(200)
             }
         } else {
             // Ensure we render the final state
+            val position = exoPlayer.currentPosition
+            val seekingTo = mediaPlayerControllerState.seekingToMillis
             mediaPlayerControllerState = mediaPlayerControllerState.copy(
-                progressInMillis = exoPlayer.currentPosition,
+                progressInMillis = position,
+                seekingToMillis = if (seekingTo != null && position >= seekingTo) null else seekingTo,
             )
         }
     }
@@ -189,13 +200,21 @@ private fun ExoPlayerMediaAudioView(
             exoPlayer.pause()
         }
     }
+    LaunchedEffect(isTargetVisible) {
+        if (!isTargetVisible) {
+            exoPlayer.pause()
+        }
+    }
     if (localMedia?.uri != null) {
         LaunchedEffect(localMedia.uri) {
             val mediaItem = MediaItem.fromUri(localMedia.uri)
             exoPlayer.setMediaItem(mediaItem)
+            exoPlayer.prepare()
         }
     } else {
-        exoPlayer.setMediaItems(emptyList())
+        LaunchedEffect(Unit) {
+            exoPlayer.setMediaItems(emptyList())
+        }
     }
     val context = LocalContext.current
     val waveform = info?.waveform
@@ -240,7 +259,7 @@ private fun ExoPlayerMediaAudioView(
                             }
                         },
                         update = { playerView ->
-                            playerView.isVisible = metadata.hasArtwork()
+                            playerView.isVisible = metadata.hasArtwork() && isTargetVisible
                         },
                         onRelease = { playerView ->
                             playerView.player = null
@@ -294,6 +313,9 @@ private fun ExoPlayerMediaAudioView(
                 exoPlayer.togglePlay()
             },
             onSeekChange = {
+                mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                    seekingToMillis = it.toLong(),
+                )
                 exoPlayer.seekToEnsurePlaying(it.toLong())
             },
             onToggleMute = {
@@ -307,16 +329,19 @@ private fun ExoPlayerMediaAudioView(
         )
     }
 
-    OnLifecycleEvent { _, event ->
-        when (event) {
-            Lifecycle.Event.ON_CREATE -> exoPlayer.addListener(playerListener)
-            Lifecycle.Event.ON_RESUME -> exoPlayer.prepare()
-            Lifecycle.Event.ON_PAUSE -> exoPlayer.pause()
-            Lifecycle.Event.ON_DESTROY -> {
-                exoPlayer.release()
+    DisposableEffect(exoPlayer) {
+        exoPlayer.addListener(playerListener)
+        onDispose {
+            if (!exoPlayer.isReleased) {
                 exoPlayer.removeListener(playerListener)
+                exoPlayer.release()
             }
-            else -> Unit
+        }
+    }
+
+    OnLifecycleEvent { _, event ->
+        if (event == Lifecycle.Event.ON_PAUSE) {
+            exoPlayer.pause()
         }
     }
 }

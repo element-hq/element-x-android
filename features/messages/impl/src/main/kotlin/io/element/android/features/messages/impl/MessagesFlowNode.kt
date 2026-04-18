@@ -28,10 +28,10 @@ import io.element.android.features.call.api.CallType
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.forward.api.ForwardEntryPoint
 import io.element.android.features.knockrequests.api.list.KnockRequestsListEntryPoint
-import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.LocationService
-import io.element.android.features.location.api.SendLocationEntryPoint
+import io.element.android.features.location.api.ShareLocationEntryPoint
 import io.element.android.features.location.api.ShowLocationEntryPoint
+import io.element.android.features.location.api.ShowLocationMode
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewNode
@@ -39,6 +39,7 @@ import io.element.android.features.messages.impl.pinned.DefaultPinnedEventsTimel
 import io.element.android.features.messages.impl.pinned.list.PinnedMessagesListNode
 import io.element.android.features.messages.impl.report.ReportMessageNode
 import io.element.android.features.messages.impl.threads.ThreadedMessagesNode
+import io.element.android.features.messages.impl.threads.list.ThreadsListNode
 import io.element.android.features.messages.impl.timeline.TimelineController
 import io.element.android.features.messages.impl.timeline.debug.EventDebugInfoNode
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -102,7 +103,7 @@ class MessagesFlowNode(
     @Assisted plugins: List<Plugin>,
     private val roomListService: RoomListService,
     private val sessionId: SessionId,
-    private val sendLocationEntryPoint: SendLocationEntryPoint,
+    private val shareLocationEntryPoint: ShareLocationEntryPoint,
     private val showLocationEntryPoint: ShowLocationEntryPoint,
     private val createPollEntryPoint: CreatePollEntryPoint,
     private val elementCallEntryPoint: ElementCallEntryPoint,
@@ -148,7 +149,7 @@ class MessagesFlowNode(
         data class AttachmentPreview(val timelineMode: Timeline.Mode, val attachment: Attachment, val inReplyToEventId: EventId?) : NavTarget
 
         @Parcelize
-        data class LocationViewer(val location: Location, val description: String?) : NavTarget
+        data class LocationViewer(val mode: ShowLocationMode) : NavTarget
 
         @Parcelize
         data class EventDebugInfo(val eventId: EventId?, val debugInfo: TimelineItemDebugInfo) : NavTarget
@@ -179,6 +180,9 @@ class MessagesFlowNode(
 
         @Parcelize
         data class Thread(val threadRootId: ThreadId, val focusedEventId: EventId?) : NavTarget
+
+        @Parcelize
+        data object ThreadsList : NavTarget
     }
 
     private val callback: MessagesEntryPoint.Callback = callback()
@@ -293,6 +297,14 @@ class MessagesFlowNode(
                     override fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?) {
                         backstack.push(NavTarget.Thread(threadRootId, focusedEventId))
                     }
+
+                    override fun navigateToThreadsList() {
+                        backstack.push(NavTarget.ThreadsList)
+                    }
+
+                    override fun navigateToDeveloperSettings() {
+                        callback.navigateToDeveloperSettings()
+                    }
                 }
                 val inputs = MessagesNode.Inputs(focusedEventId = navTarget.focusedEventId)
                 createNode<MessagesNode>(buildContext, listOf(callback, inputs))
@@ -336,7 +348,7 @@ class MessagesFlowNode(
                 createNode<AttachmentsPreviewNode>(buildContext, listOf(inputs))
             }
             is NavTarget.LocationViewer -> {
-                val inputs = ShowLocationEntryPoint.Inputs(navTarget.location, navTarget.description)
+                val inputs = ShowLocationEntryPoint.Inputs(navTarget.mode)
                 showLocationEntryPoint.createNode(
                     parentNode = this,
                     buildContext = buildContext,
@@ -374,7 +386,7 @@ class MessagesFlowNode(
                 createNode<ReportMessageNode>(buildContext, listOf(inputs))
             }
             is NavTarget.SendLocation -> {
-                sendLocationEntryPoint.createNode(
+                shareLocationEntryPoint.createNode(
                     parentNode = this,
                     buildContext = buildContext,
                     timelineMode = navTarget.timelineMode,
@@ -427,6 +439,10 @@ class MessagesFlowNode(
 
                     override fun handleForwardEventClick(eventId: EventId) {
                         backstack.push(NavTarget.ForwardEvent(eventId = eventId, fromPinnedEvents = true))
+                    }
+
+                    override fun navigateToThread(threadRootId: ThreadId) {
+                        backstack.push(NavTarget.Thread(threadRootId, null))
                     }
                 }
                 createNode<PinnedMessagesListNode>(buildContext, plugins = listOf(callback))
@@ -502,8 +518,20 @@ class MessagesFlowNode(
                     override fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?) {
                         backstack.push(NavTarget.Thread(threadRootId, focusedEventId))
                     }
+
+                    override fun navigateToDeveloperSettings() {
+                        callback.navigateToDeveloperSettings()
+                    }
                 }
                 createNode<ThreadedMessagesNode>(buildContext, listOf(inputs, callback))
+            }
+            NavTarget.ThreadsList -> {
+                val callback = object : ThreadsListNode.Callback {
+                    override fun openThread(threadId: ThreadId) {
+                        backstack.push(NavTarget.Thread(threadId, focusedEventId = null))
+                    }
+                }
+                createNode<ThreadsListNode>(buildContext, listOf(callback))
             }
         }
     }
@@ -558,9 +586,16 @@ class MessagesFlowNode(
                 )
             }
             is TimelineItemLocationContent -> {
-                NavTarget.LocationViewer(
+                val mode = ShowLocationMode.Static(
                     location = event.content.location,
-                    description = event.content.description,
+                    senderName = event.safeSenderName,
+                    senderId = event.senderId,
+                    senderAvatarUrl = event.senderAvatar.url,
+                    timestamp = event.sentTimeMillis,
+                    assetType = event.content.assetType,
+                )
+                NavTarget.LocationViewer(
+                    mode = mode
                 ).takeIf { locationService.isServiceAvailable() }
             }
             else -> null

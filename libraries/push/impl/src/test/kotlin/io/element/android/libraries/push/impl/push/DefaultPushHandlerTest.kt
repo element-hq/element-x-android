@@ -26,8 +26,8 @@ import io.element.android.libraries.push.impl.history.PushHistoryService
 import io.element.android.libraries.push.impl.notifications.FakeNotificationResultProcessor
 import io.element.android.libraries.push.impl.test.DefaultTestPush
 import io.element.android.libraries.push.impl.troubleshoot.DiagnosticPushHandler
+import io.element.android.libraries.push.impl.workmanager.FakeSyncPendingNotificationsRequestBuilder
 import io.element.android.libraries.push.impl.workmanager.SyncPendingNotificationsRequestBuilder
-import io.element.android.libraries.push.test.workmanager.FakeSyncPendingNotificationsRequestBuilder
 import io.element.android.libraries.pushproviders.api.PushData
 import io.element.android.libraries.pushstore.api.clientsecret.PushClientSecret
 import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStore

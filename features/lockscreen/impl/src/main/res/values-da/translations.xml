@@ -23,7 +23,7 @@ Vælg noget mindeværdigt. Hvis du glemmer denne pinkode, bliver du logget ud af
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Indtast venligst den samme PIN-kode to gange"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN-koderne stemmer ikke overens"</string>
   <string name="screen_app_lock_signout_alert_message">"Du vil være nødt til at logge ind igen og oprette en ny PIN-kode for at fortsætte."</string>
-  <string name="screen_app_lock_signout_alert_title">"Du bliver logget ud"</string>
+  <string name="screen_app_lock_signout_alert_title">"Denne enhed bliver fjernet"</string>
   <plurals name="screen_app_lock_subtitle">
     <item quantity="one">"Du har %1$d forsøg på at låse op"</item>
     <item quantity="other">"Du har %1$d forsøg på at låse op"</item>
@@ -34,5 +34,5 @@ Vælg noget mindeværdigt. Hvis du glemmer denne pinkode, bliver du logget ud af
   </plurals>
   <string name="screen_app_lock_use_biometric_android">"Brug biometri"</string>
   <string name="screen_app_lock_use_pin_android">"Brug PIN-kode"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Logger ud…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Fjerner enhed…"</string>
 </resources>

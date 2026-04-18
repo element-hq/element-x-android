@@ -19,6 +19,7 @@ import coil3.asImage
 import coil3.compose.AsyncImagePreviewHandler
 import coil3.compose.LocalAsyncImagePreviewHandler
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.theme.Theme
 import io.element.android.libraries.designsystem.theme.components.Surface
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 
@@ -26,7 +27,7 @@ import io.element.android.libraries.designsystem.utils.CommonDrawables
 @Composable
 @Suppress("ModifierMissing")
 fun ElementPreview(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    theme: Theme = if (isSystemInDarkTheme()) Theme.Dark else Theme.Light,
     showBackground: Boolean = true,
     @DrawableRes
     drawableFallbackForImages: Int = CommonDrawables.sample_background,
@@ -38,7 +39,7 @@ fun ElementPreview(
             ResourcesCompat.getDrawable(context.resources, drawableFallbackForImages, null)!!.asImage()
         }
     ) {
-        ElementTheme(darkTheme = darkTheme) {
+        ElementTheme(theme = theme) {
             if (showBackground) {
                 // If we have a proper contentColor applied we need a Surface instead of a Box
                 Surface(content = content)

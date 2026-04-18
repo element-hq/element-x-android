@@ -38,6 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.theme.Theme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
@@ -62,7 +63,7 @@ internal fun IconsCompoundPreviewRtl() = ElementTheme {
 
 @Preview(widthDp = 730, heightDp = 1920)
 @Composable
-internal fun IconsCompoundPreviewDark() = ElementTheme(darkTheme = true) {
+internal fun IconsCompoundPreviewDark() = ElementTheme(theme = Theme.Dark) {
     IconsCompoundPreview()
 }
 

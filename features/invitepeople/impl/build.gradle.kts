@@ -34,13 +34,15 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.androidutils)
-    implementation(projects.libraries.usersearch.impl)
+    implementation(projects.libraries.usersearch.api)
     implementation(libs.coil.compose)
     implementation(projects.services.apperror.api)
+    implementation(projects.libraries.featureflag.api)
     api(projects.features.invitepeople.api)
 
     testCommonDependencies(libs, true)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.usersearch.test)
     testImplementation(projects.services.apperror.test)
+    testImplementation(projects.libraries.featureflag.test)
 }

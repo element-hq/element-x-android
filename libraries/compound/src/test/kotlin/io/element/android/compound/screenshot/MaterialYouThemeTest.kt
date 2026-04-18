@@ -24,6 +24,7 @@ import com.github.takahirom.roborazzi.captureRoboImage
 import io.element.android.compound.previews.ColorsSchemePreview
 import io.element.android.compound.screenshot.utils.screenshotFile
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.theme.Theme
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
@@ -51,7 +52,7 @@ class MaterialYouThemeTest {
             }
         }
         captureRoboImage(file = screenshotFile("MaterialYou Theme - Dark.png")) {
-            ElementTheme(dynamicColor = true, darkTheme = true) {
+            ElementTheme(dynamicColor = true, theme = Theme.Dark) {
                 Surface {
                     Column(
                         modifier = Modifier.padding(16.dp),

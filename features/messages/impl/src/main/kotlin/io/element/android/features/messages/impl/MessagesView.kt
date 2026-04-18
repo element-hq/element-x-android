@@ -12,10 +12,12 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.expandVertically
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,6 +28,7 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
@@ -51,6 +55,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerEvent
 import io.element.android.features.messages.impl.actionlist.ActionListEvent
 import io.element.android.features.messages.impl.actionlist.ActionListView
@@ -73,6 +78,7 @@ import io.element.android.features.messages.impl.timeline.aGroupedEvents
 import io.element.android.features.messages.impl.timeline.aTimelineItemDaySeparator
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.aTimelineState
+import io.element.android.features.messages.impl.timeline.components.CallMenuItem
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionBottomSheet
 import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionEvent
 import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryEvent
@@ -87,6 +93,7 @@ import io.element.android.features.messages.impl.topbars.MessagesViewTopBar
 import io.element.android.features.messages.impl.topbars.ThreadTopBar
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessagePermissionRationaleDialog
 import io.element.android.features.messages.impl.voicemessages.composer.VoiceMessageSendingFailedDialog
+import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.libraries.androidutils.ui.hideKeyboard
 import io.element.android.libraries.designsystem.atomic.molecules.ComposerAlertMolecule
 import io.element.android.libraries.designsystem.components.ExpandableBottomSheetLayout
@@ -98,6 +105,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toAnnotatedString
 import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.BottomSheetDragHandle
+import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.HideKeyboardWhenDisposed
@@ -132,6 +140,7 @@ fun MessagesView(
     onCreatePollClick: () -> Unit,
     onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     onViewAllPinnedMessagesClick: () -> Unit,
+    onThreadsListClick: () -> Unit,
     modifier: Modifier = Modifier,
     forceJumpToBottomVisibility: Boolean = false,
     knockRequestsBannerView: @Composable () -> Unit,
@@ -223,12 +232,18 @@ fun MessagesView(
                             roomAvatar = state.roomAvatar,
                             isTombstoned = state.isTombstoned,
                             heroes = state.heroes,
-                            roomCallState = state.roomCallState,
                             dmUserIdentityState = state.dmUserVerificationState,
                             sharedHistoryIcon = state.topBarSharedHistoryIcon,
                             onBackClick = { hidingKeyboard { onBackClick() } },
                             onRoomDetailsClick = { hidingKeyboard { onRoomDetailsClick() } },
-                            onJoinCallClick = onJoinCallClick,
+                            menuActions = {
+                                MessagesMenuActions(
+                                    displayThreads = state.timelineState.timelineMode !is Timeline.Mode.Thread && state.threads.hasThreads,
+                                    roomCallState = state.roomCallState,
+                                    onJoinCallClick = onJoinCallClick,
+                                    onThreadsListClick = onThreadsListClick
+                                )
+                            }
                         )
                     }
                 },
@@ -397,6 +412,28 @@ fun MessagesView(
 }
 
 @Composable
+internal fun MessagesMenuActions(
+    displayThreads: Boolean,
+    roomCallState: RoomCallState,
+    onJoinCallClick: (isAudioCall: Boolean) -> Unit,
+    onThreadsListClick: () -> Unit,
+) {
+    if (displayThreads) {
+        Icon(
+            modifier = Modifier.clickable(enabled = true, onClick = onThreadsListClick),
+            imageVector = CompoundIcons.ThreadsSolid(),
+            contentDescription = stringResource(CommonStrings.common_threads),
+        )
+        Spacer(Modifier.width(8.dp))
+    }
+    CallMenuItem(
+        roomCallState = roomCallState,
+        onJoinCallClick = onJoinCallClick,
+    )
+    Spacer(Modifier.width(8.dp))
+}
+
+@Composable
 private fun ReinviteDialog(state: MessagesState) {
     if (state.showReinvitePrompt) {
         ConfirmationDialog(
@@ -464,6 +501,9 @@ private fun MessagesViewContent(
             val scrollBehavior = PinnedMessagesBannerViewDefaults.rememberScrollBehavior(
                 pinnedMessagesCount = (state.pinnedMessagesBannerState as? PinnedMessagesBannerState.Visible)?.pinnedMessagesCount() ?: 0,
             )
+            val density = LocalDensity.current
+            var pinnedBannerHeightDp by remember { mutableStateOf(0.dp) }
+
             TimelineView(
                 state = state.timelineState,
                 timelineProtectionState = state.timelineProtectionState,
@@ -479,11 +519,13 @@ private fun MessagesViewContent(
                 forceJumpToBottomVisibility = forceJumpToBottomVisibility,
                 onJoinCallClick = onJoinCallClick,
                 nestedScrollConnection = scrollBehavior.nestedScrollConnection,
+                floatingDateTopOffset = pinnedBannerHeightDp,
             )
 
             if (state.timelineState.timelineMode !is Timeline.Mode.Thread) {
                 AnimatedVisibility(
                     visible = state.pinnedMessagesBannerState is PinnedMessagesBannerState.Visible && scrollBehavior.isVisible,
+                    modifier = Modifier.onSizeChanged { pinnedBannerHeightDp = with(density) { it.height.toDp() } },
                     enter = expandVertically(),
                     exit = shrinkVertically(),
                 ) {
@@ -595,6 +637,7 @@ internal fun MessagesViewPreview(@PreviewParameter(MessagesStateProvider::class)
         onViewAllPinnedMessagesClick = { },
         forceJumpToBottomVisibility = true,
         knockRequestsBannerView = {},
+        onThreadsListClick = {},
     )
 }
 
@@ -646,7 +689,8 @@ internal fun MessagesViewA11yPreview() = ElementPreview {
         onSendLocationClick = {},
         onCreatePollClick = {},
         onJoinCallClick = {},
-        onViewAllPinnedMessagesClick = { },
+        onViewAllPinnedMessagesClick = {},
+        onThreadsListClick = {},
         forceJumpToBottomVisibility = true,
         knockRequestsBannerView = {},
     )

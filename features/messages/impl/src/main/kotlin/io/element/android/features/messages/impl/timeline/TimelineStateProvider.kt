@@ -39,7 +39,7 @@ import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugIn
 import io.element.android.libraries.matrix.api.timeline.item.event.LocalEventSendState
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageShield
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
-import io.element.android.libraries.matrix.ui.messages.reply.aProfileTimelineDetailsReady
+import io.element.android.libraries.matrix.ui.messages.reply.aProfileDetailsReady
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -56,6 +56,7 @@ fun aTimelineState(
     messageShield: MessageShield? = null,
     resolveVerifiedUserSendFailureState: ResolveVerifiedUserSendFailureState = aResolveVerifiedUserSendFailureState(),
     displayThreadSummaries: Boolean = false,
+    displayFloatingDateBadge: Boolean = false,
     eventSink: (TimelineEvent) -> Unit = {},
 ): TimelineState {
     val focusedEventId = timelineItems.filterIsInstance<TimelineItem.Event>().getOrNull(focusedEventIndex)?.eventId
@@ -75,6 +76,7 @@ fun aTimelineState(
         messageShieldDialogData = messageShield?.let { MessageShieldData(it) },
         resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailureState,
         displayThreadSummaries = displayThreadSummaries,
+        displayFloatingDateBadge = displayFloatingDateBadge,
         eventSink = eventSink,
     )
 }
@@ -166,7 +168,7 @@ internal fun aTimelineItemEvent(
         isMine = isMine,
         isEditable = isEditable,
         canBeRepliedTo = canBeRepliedTo,
-        senderProfile = aProfileTimelineDetailsReady(
+        senderProfile = aProfileDetailsReady(
             displayName = senderDisplayName,
             displayNameAmbiguous = displayNameAmbiguous,
         ),

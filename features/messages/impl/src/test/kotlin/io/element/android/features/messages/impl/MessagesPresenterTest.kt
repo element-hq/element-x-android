@@ -24,6 +24,7 @@ import io.element.android.features.messages.impl.messagecomposer.MessageComposer
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerState
 import io.element.android.features.messages.impl.messagecomposer.aMessageComposerState
 import io.element.android.features.messages.impl.pinned.banner.aLoadedPinnedMessagesBannerState
+import io.element.android.features.messages.impl.threads.list.aThreadListItem
 import io.element.android.features.messages.impl.timeline.FakeMarkAsFullyRead
 import io.element.android.features.messages.impl.timeline.MarkAsFullyRead
 import io.element.android.features.messages.impl.timeline.TimelineController
@@ -88,6 +89,7 @@ import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.aRoomMember
 import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
+import io.element.android.libraries.matrix.test.room.threads.FakeThreadsListService
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.aTimelineItemDebugInfo
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
@@ -110,6 +112,7 @@ import io.element.android.tests.testutils.testWithLifecycleOwner
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runCurrent
@@ -1255,6 +1258,35 @@ class MessagesPresenterTest {
             runCurrent()
             val state = awaitItem()
             assertThat(state.topBarSharedHistoryIcon).isEqualTo(SharedHistoryIcon.WORLD_READABLE)
+        }
+    }
+
+    @Test
+    fun `present - only has threads enabled if the feature flag is on`() = runTest {
+        val itemsFlow = MutableStateFlow(listOf(aThreadListItem()))
+        val room = FakeJoinedRoom(
+            threadsListService = FakeThreadsListService(items = itemsFlow)
+        )
+        val featureFlagService = FakeFeatureFlagService(
+            initialState = mapOf(FeatureFlags.Threads.key to false)
+        )
+        val presenter = createMessagesPresenter(
+            joinedRoom = room,
+            featureFlagService = featureFlagService
+        )
+        presenter.testWithLifecycleOwner {
+            val initialState = awaitItem()
+            // The feature flag is disabled, so even if the thread list has items, it will return it doesn't have any
+            assertThat(initialState.threads.hasThreads).isFalse()
+
+            // Enable the feature flag, now it should reflect the thread list state
+            featureFlagService.setFeatureEnabled(FeatureFlags.RoomThreadList, true)
+            skipItems(1)
+            assertThat(awaitItem().threads.hasThreads).isTrue()
+
+            // And if we remove the items, it should update accordingly
+            itemsFlow.value = emptyList()
+            assertThat(awaitItem().threads.hasThreads).isFalse()
         }
     }
 

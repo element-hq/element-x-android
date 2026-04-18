@@ -14,12 +14,14 @@ import androidx.compose.ui.res.stringResource
 import io.element.android.libraries.designsystem.components.preferences.DropdownOption
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.ImmutableList
 
 data class AdvancedSettingsState(
     val isDeveloperModeEnabled: Boolean,
     val isSharePresenceEnabled: Boolean,
     val mediaOptimizationState: MediaOptimizationState?,
     val theme: ThemeOption,
+    val availableThemeOptions: ImmutableList<ThemeOption>,
     val mediaPreviewConfigState: MediaPreviewConfigState,
     val eventSink: (AdvancedSettingsEvents) -> Unit
 )
@@ -43,14 +45,22 @@ enum class ThemeOption : DropdownOption {
         @ReadOnlyComposable
         override fun getText(): String = stringResource(CommonStrings.common_system)
     },
+
+    Light {
+        @Composable
+        @ReadOnlyComposable
+        override fun getText(): String = stringResource(CommonStrings.common_light)
+    },
+
     Dark {
         @Composable
         @ReadOnlyComposable
         override fun getText(): String = stringResource(CommonStrings.common_dark)
     },
-    Light {
+
+    Black {
         @Composable
         @ReadOnlyComposable
-        override fun getText(): String = stringResource(CommonStrings.common_light)
+        override fun getText(): String = stringResource(CommonStrings.common_black)
     }
 }

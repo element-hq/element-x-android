@@ -17,6 +17,7 @@ import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.impl.analytics.UtdTracker
+import io.element.android.libraries.matrix.impl.certificates.UserCertificatesProvider
 import io.element.android.libraries.matrix.impl.paths.SessionPaths
 import io.element.android.libraries.matrix.impl.paths.getSessionPaths
 import io.element.android.libraries.matrix.impl.proxy.ProxyProvider
@@ -57,6 +58,7 @@ class RustMatrixClientFactory(
     private val sessionStore: SessionStore,
     private val userAgentProvider: UserAgentProvider,
     private val proxyProvider: ProxyProvider,
+    private val userCertificatesProvider: UserCertificatesProvider,
     private val clock: SystemClock,
     private val analyticsService: AnalyticsService,
     private val featureFlagService: FeatureFlagService,
@@ -141,6 +143,7 @@ class RustMatrixClientFactory(
             }
             .setSessionDelegate(sessionDelegate)
             .userAgent(userAgentProvider.provide())
+            .addRootCertificates(userCertificatesProvider.provides())
             .autoEnableBackups(true)
             .autoEnableCrossSigning(true)
             .roomKeyRecipientStrategy(

@@ -23,6 +23,7 @@ import app.cash.paparazzi.Paparazzi
 import app.cash.paparazzi.RenderExtension
 import app.cash.paparazzi.TestName
 import com.android.resources.NightMode
+import com.android.resources.ScreenOrientation
 import io.element.android.compound.theme.ElementTheme
 import sergio.sastre.composable.preview.scanner.android.AndroidPreviewInfo
 import sergio.sastre.composable.preview.scanner.core.preview.ComposablePreview
@@ -122,6 +123,7 @@ object PaparazziPreviewRule {
     ): Paparazzi {
         val densityScale = deviceConfig.density.dpiValue / 160f
         val customScreenHeight = preview.previewInfo.heightDp.takeIf { it >= 0 }?.let { it * densityScale }?.toInt()
+        val isLandscape = preview.previewInfo.device.contains("landscape")
         return Paparazzi(
             deviceConfig = deviceConfig.copy(
                 nightMode = when (preview.previewInfo.uiMode and Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES) {
@@ -131,6 +133,7 @@ object PaparazziPreviewRule {
                 locale = locale,
                 softButtons = false,
                 screenHeight = customScreenHeight ?: deviceConfig.screenHeight,
+                orientation = if (isLandscape) ScreenOrientation.LANDSCAPE else ScreenOrientation.PORTRAIT,
             ),
             maxPercentDifference = 0.01,
             renderExtensions = renderExtensions,

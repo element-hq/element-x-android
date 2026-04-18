@@ -9,57 +9,35 @@
 package io.element.android.features.location.impl.common
 
 import android.Manifest
-import android.view.Gravity
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ReadOnlyComposable
-import androidx.compose.ui.graphics.Color
-import io.element.android.compound.theme.ElementTheme
-import io.element.android.libraries.maplibre.compose.MapLocationSettings
-import io.element.android.libraries.maplibre.compose.MapSymbolManagerSettings
-import io.element.android.libraries.maplibre.compose.MapUiSettings
-import org.maplibre.android.camera.CameraPosition
-import org.maplibre.android.geometry.LatLng
+import androidx.compose.ui.Alignment
+import org.maplibre.compose.camera.CameraPosition
+import org.maplibre.compose.map.GestureOptions
+import org.maplibre.compose.map.MapOptions
+import org.maplibre.compose.map.OrnamentOptions
+import org.maplibre.compose.map.RenderOptions
+import org.maplibre.spatialk.geojson.Position
 
 /**
  * Common configuration values for the map.
  */
 object MapDefaults {
-    val uiSettings: MapUiSettings
-        @Composable
-        @ReadOnlyComposable
-        get() = MapUiSettings(
-            compassEnabled = false,
-            rotationGesturesEnabled = false,
-            scrollGesturesEnabled = true,
-            tiltGesturesEnabled = false,
-            zoomGesturesEnabled = true,
-            logoGravity = Gravity.TOP,
-            attributionGravity = Gravity.TOP,
-            attributionTintColor = ElementTheme.colors.iconPrimary
+    val options = MapOptions(
+        renderOptions = RenderOptions.Standard,
+        gestureOptions = GestureOptions.Standard,
+        ornamentOptions = OrnamentOptions(
+            isLogoEnabled = true,
+            logoAlignment = Alignment.BottomStart,
+            isAttributionEnabled = true,
+            attributionAlignment = Alignment.BottomEnd,
+            isCompassEnabled = false,
+            isScaleBarEnabled = false,
         )
+    )
 
-    val symbolManagerSettings: MapSymbolManagerSettings
-        get() = MapSymbolManagerSettings(
-            iconAllowOverlap = true
-        )
-
-    val locationSettings: MapLocationSettings
-        get() = MapLocationSettings(
-            locationEnabled = false,
-            backgroundTintColor = Color.White,
-            foregroundTintColor = Color.Black,
-            backgroundStaleTintColor = Color.White,
-            foregroundStaleTintColor = Color.Black,
-            accuracyColor = Color.Black,
-            pulseEnabled = true,
-            pulseColor = Color.Black,
-        )
-
-    val centerCameraPosition = CameraPosition.Builder()
-        .target(LatLng(49.843, 9.902056))
-        .zoom(2.7)
-        .build()
-
+    val defaultCameraPosition = CameraPosition(
+        target = Position(0.0, 0.0),
+        zoom = 0.0,
+    )
     const val DEFAULT_ZOOM = 15.0
 
     val permissions = listOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)

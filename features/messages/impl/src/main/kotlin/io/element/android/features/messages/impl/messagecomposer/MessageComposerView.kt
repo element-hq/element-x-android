@@ -22,6 +22,7 @@ import io.element.android.features.messages.api.timeline.voicemessages.composer.
 import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerState
 import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerStateProvider
 import io.element.android.features.messages.api.timeline.voicemessages.composer.aVoiceMessageComposerState
+import io.element.android.libraries.designsystem.components.async.AsyncActionView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.textcomposer.TextComposer
@@ -83,6 +84,7 @@ internal fun MessageComposerView(
 
     val onSendVoiceMessage = {
         voiceMessageState.eventSink(VoiceMessageComposerEvent.SendVoiceMessage)
+        state.eventSink(MessageComposerEvent.CloseSpecialMode)
     }
 
     val onDeleteVoiceMessage = {
@@ -114,6 +116,12 @@ internal fun MessageComposerView(
         onError = ::onError,
         onTyping = ::onTyping,
         onSelectRichContent = ::sendUri,
+    )
+
+    AsyncActionView(
+        async = state.slashCommandAction,
+        onSuccess = {},
+        onErrorDismiss = { state.eventSink(MessageComposerEvent.ClearSlashError) },
     )
 }
 

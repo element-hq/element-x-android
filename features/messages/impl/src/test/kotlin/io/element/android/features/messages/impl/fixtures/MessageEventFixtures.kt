@@ -31,7 +31,7 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_NAME
 import io.element.android.libraries.matrix.test.core.FakeSendHandle
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
-import io.element.android.libraries.matrix.ui.messages.reply.aProfileTimelineDetailsReady
+import io.element.android.libraries.matrix.ui.messages.reply.aProfileDetailsReady
 import kotlinx.collections.immutable.toImmutableList
 
 internal fun aMessageEvent(
@@ -52,7 +52,7 @@ internal fun aMessageEvent(
     eventId = eventId,
     transactionId = transactionId,
     senderId = A_USER_ID,
-    senderProfile = aProfileTimelineDetailsReady(displayName = A_USER_NAME),
+    senderProfile = aProfileDetailsReady(displayName = A_USER_NAME),
     senderAvatar = AvatarData(A_USER_ID.value, A_USER_NAME, size = AvatarSize.TimelineSender),
     content = content,
     sentTime = "",

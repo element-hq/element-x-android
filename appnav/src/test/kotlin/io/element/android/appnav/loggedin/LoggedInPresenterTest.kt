@@ -14,6 +14,8 @@ import app.cash.turbine.ReceiveTurbine
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.CryptoSessionStateChange
 import im.vector.app.features.analytics.plan.UserProperties
+import io.element.android.features.networkmonitor.api.NetworkStatus
+import io.element.android.features.networkmonitor.test.FakeNetworkMonitor
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -27,6 +29,7 @@ import io.element.android.libraries.matrix.api.verification.SessionVerificationS
 import io.element.android.libraries.matrix.api.verification.SessionVerifiedStatus
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.FakeHomeserverCapabilitiesProvider
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.encryption.FakeEncryptionService
@@ -68,7 +71,7 @@ class LoggedInPresenterTest {
     }
 
     @Test
-    fun `present - ensure that account urls are preloaded`() = runTest {
+    fun `present - ensure that account url is preloaded`() = runTest {
         val accountManagementUrlResult = lambdaRecorder<AccountManagementAction?, Result<String?>> { Result.success("aUrl") }
         val matrixClient = FakeMatrixClient(
             accountManagementUrlResult = accountManagementUrlResult,
@@ -78,11 +81,8 @@ class LoggedInPresenterTest {
         ).test {
             awaitItem()
             advanceUntilIdle()
-            accountManagementUrlResult.assertions().isCalledExactly(2)
-                .withSequence(
-                    listOf(value(AccountManagementAction.Profile)),
-                    listOf(value(AccountManagementAction.DevicesList)),
-                )
+            accountManagementUrlResult.assertions().isCalledOnce()
+                .with(value(null))
         }
     }
 
@@ -109,6 +109,7 @@ class LoggedInPresenterTest {
         val verificationService = FakeSessionVerificationService()
         val encryptionService = FakeEncryptionService()
         val buildMeta = aBuildMeta()
+        val networkMonitor = FakeNetworkMonitor()
         LoggedInPresenter(
             matrixClient = FakeMatrixClient(
                 roomListService = roomListService,
@@ -122,6 +123,7 @@ class LoggedInPresenterTest {
             analyticsService = analyticsService,
             encryptionService = encryptionService,
             buildMeta = buildMeta,
+            networkMonitor = networkMonitor,
         ).test {
             encryptionService.emitRecoveryState(RecoveryState.UNKNOWN)
             encryptionService.emitRecoveryState(RecoveryState.INCOMPLETE)
@@ -319,6 +321,27 @@ class LoggedInPresenterTest {
         }
     }
 
+    @Test
+    fun `present - refreshes homeserver capabilities when network is back`() = runTest {
+        val refreshLambda = lambdaRecorder<Result<Unit>> { Result.success(Unit) }
+        val matrixClient = FakeMatrixClient(
+            homeserverCapabilitiesProvider = FakeHomeserverCapabilitiesProvider(refresh = refreshLambda),
+            accountManagementUrlResult = { Result.success(null) },
+        )
+        val networkMonitor = FakeNetworkMonitor()
+        createLoggedInPresenter(
+            matrixClient = matrixClient,
+            networkMonitor = networkMonitor,
+        ).test {
+            awaitItem()
+            networkMonitor.connectivity.value = NetworkStatus.Connected
+
+            advanceUntilIdle()
+
+            refreshLambda.assertions().isCalledOnce()
+        }
+    }
+
     private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
         skipItems(1)
         return awaitItem()
@@ -334,6 +357,7 @@ class LoggedInPresenterTest {
             accountManagementUrlResult = { Result.success(null) },
         ),
         buildMeta: BuildMeta = aBuildMeta(),
+        networkMonitor: FakeNetworkMonitor = FakeNetworkMonitor(),
     ): LoggedInPresenter {
         return LoggedInPresenter(
             matrixClient = matrixClient,
@@ -343,6 +367,7 @@ class LoggedInPresenterTest {
             analyticsService = analyticsService,
             encryptionService = encryptionService,
             buildMeta = buildMeta,
+            networkMonitor = networkMonitor,
         )
     }
 }

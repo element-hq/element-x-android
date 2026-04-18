@@ -19,6 +19,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.compound.theme.Theme
 import io.element.android.compound.tokens.generated.compoundColorsHcDark
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.persistentMapOf
@@ -65,7 +66,7 @@ internal fun CompoundSemanticColorsLightHc() = ElementTheme(
 
 @Preview(heightDp = 2000)
 @Composable
-internal fun CompoundSemanticColorsDark() = ElementTheme(darkTheme = true) {
+internal fun CompoundSemanticColorsDark() = ElementTheme(theme = Theme.Dark) {
     Surface {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -85,7 +86,7 @@ internal fun CompoundSemanticColorsDark() = ElementTheme(darkTheme = true) {
 @Preview(heightDp = 2000)
 @Composable
 internal fun CompoundSemanticColorsDarkHc() = ElementTheme(
-    darkTheme = true,
+    theme = Theme.Dark,
     compoundDark = compoundColorsHcDark,
 ) {
     Surface {
@@ -122,6 +123,7 @@ private fun getSemanticColors(): ImmutableMap<String, Color> {
             "bgBadgeAccent" to bgBadgeAccent,
             "bgBadgeDefault" to bgBadgeDefault,
             "bgBadgeInfo" to bgBadgeInfo,
+            "bgBadgePrimary" to bgBadgePrimary,
             "bgCanvasDefault" to bgCanvasDefault,
             "bgCanvasDefaultLevel1" to bgCanvasDefaultLevel1,
             "bgCanvasDisabled" to bgCanvasDisabled,

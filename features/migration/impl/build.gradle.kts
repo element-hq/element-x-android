@@ -24,7 +24,7 @@ dependencies {
     implementation(projects.features.migration.api)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.androidutils)
-    implementation(projects.libraries.preferences.impl)
+    implementation(projects.libraries.preferences.api)
     implementation(libs.androidx.datastore.preferences)
     implementation(projects.features.rageshake.api)
     implementation(projects.libraries.designsystem)

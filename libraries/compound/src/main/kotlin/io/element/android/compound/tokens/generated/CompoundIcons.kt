@@ -148,6 +148,9 @@ object CompoundIcons {
     @Composable fun Delete(): ImageVector {
         return ImageVector.vectorResource(R.drawable.ic_compound_delete)
     }
+    @Composable fun DevicePasskey(): ImageVector {
+        return ImageVector.vectorResource(R.drawable.ic_compound_device_passkey)
+    }
     @Composable fun Devices(): ImageVector {
         return ImageVector.vectorResource(R.drawable.ic_compound_devices)
     }
@@ -738,6 +741,7 @@ object CompoundIcons {
         Copy(),
         DarkMode(),
         Delete(),
+        DevicePasskey(),
         Devices(),
         DialPad(),
         Document(),
@@ -965,6 +969,7 @@ object CompoundIcons {
         R.drawable.ic_compound_copy,
         R.drawable.ic_compound_dark_mode,
         R.drawable.ic_compound_delete,
+        R.drawable.ic_compound_device_passkey,
         R.drawable.ic_compound_devices,
         R.drawable.ic_compound_dial_pad,
         R.drawable.ic_compound_document,

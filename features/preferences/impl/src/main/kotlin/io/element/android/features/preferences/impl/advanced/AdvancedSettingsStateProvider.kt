@@ -12,6 +12,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 open class AdvancedSettingsStateProvider : PreviewParameterProvider<AdvancedSettingsState> {
     override val values: Sequence<AdvancedSettingsState>
@@ -36,6 +38,7 @@ fun aAdvancedSettingsState(
     isSharePresenceEnabled: Boolean = false,
     mediaOptimizationState: MediaOptimizationState = MediaOptimizationState.AllMedia(isEnabled = false),
     theme: ThemeOption = ThemeOption.System,
+    availableThemeOptions: ImmutableList<ThemeOption> = ThemeOption.entries.toImmutableList(),
     hideInviteAvatars: Boolean = false,
     timelineMediaPreviewValue: MediaPreviewValue = MediaPreviewValue.On,
     setTimelineMediaPreviewAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
@@ -46,6 +49,7 @@ fun aAdvancedSettingsState(
     isSharePresenceEnabled = isSharePresenceEnabled,
     mediaOptimizationState = mediaOptimizationState,
     theme = theme,
+    availableThemeOptions = availableThemeOptions,
     mediaPreviewConfigState = MediaPreviewConfigState(
         hideInviteAvatars = hideInviteAvatars,
         timelineMediaPreviewValue = timelineMediaPreviewValue,
