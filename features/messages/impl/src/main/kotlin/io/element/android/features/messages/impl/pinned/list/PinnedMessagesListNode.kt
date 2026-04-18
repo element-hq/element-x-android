@@ -115,6 +115,7 @@ class PinnedMessagesListNode(
                 onBackClick = ::navigateUp,
                 onEventClick = callback::handleEventClick,
                 onUserDataClick = { callback.navigateToRoomMemberDetails(it.userId) },
+                onMemberClick = {},
                 onLinkClick = { link -> onLinkClick(context, link.url) },
                 onLinkLongClick = {
                     view.performHapticFeedback(

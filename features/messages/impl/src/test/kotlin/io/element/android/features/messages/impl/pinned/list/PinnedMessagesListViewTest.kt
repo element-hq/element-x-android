@@ -110,6 +110,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setPinne
             onBackClick = onBackClick,
             onEventClick = onEventClick,
             onUserDataClick = onUserDataClick,
+            onMemberClick = {},
             onLinkClick = onLinkClick,
             onLinkLongClick = onLinkLongClick,
         )

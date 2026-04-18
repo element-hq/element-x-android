@@ -8,8 +8,11 @@
 
 package io.element.android.features.messages.impl.timeline.model.event
 
+import io.element.android.libraries.matrix.api.core.UserId
+
 data class TimelineItemRoomMembershipContent(
     override val body: String,
+    val targetUserId: UserId? = null,
 ) : TimelineItemStateContent {
     override val type: String = "TimelineItemRoomMembershipContent"
 }
