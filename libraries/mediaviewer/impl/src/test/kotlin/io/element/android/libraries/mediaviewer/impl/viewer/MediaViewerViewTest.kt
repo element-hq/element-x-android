@@ -75,6 +75,18 @@ class MediaViewerViewTest {
     }
 
     @Test
+    fun `clicking on download emit expected Event`() {
+        val data = aMediaViewerPageData(
+            downloadedMedia = AsyncData.Success(aLocalMedia(uri = mockMediaUrl)),
+        )
+        testMenuAction(
+            data,
+            CommonStrings.action_save,
+            MediaViewerEvents.SaveOnDisk(data),
+        )
+    }
+
+    @Test
     fun `clicking on info emit expected Event`() {
         val data = aMediaViewerPageData(
             downloadedMedia = AsyncData.Success(aLocalMedia(uri = mockMediaUrl)),
@@ -106,17 +118,6 @@ class MediaViewerViewTest {
                 MediaViewerEvents.LoadMedia(data),
                 expectedEvent,
             )
-        )
-    }
-
-    @Test
-    @Config(qualifiers = "h1024dp")
-    fun `clicking on save emit expected Event`() {
-        val data = aMediaViewerPageData()
-        testBottomSheetAction(
-            data,
-            CommonStrings.action_save,
-            MediaViewerEvents.SaveOnDisk(data),
         )
     }
 

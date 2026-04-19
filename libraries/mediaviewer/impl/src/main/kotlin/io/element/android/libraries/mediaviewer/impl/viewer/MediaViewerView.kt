@@ -217,6 +217,11 @@ fun MediaViewerView(
                             onInfoClick = {
                                 state.eventSink(MediaViewerEvents.OpenInfo(currentData))
                             },
+                            onDownloadClick = {
+                                currentData.let {
+                                    state.eventSink(MediaViewerEvents.SaveOnDisk(currentData))
+                                }
+                            },
                             eventSink = state.eventSink
                         )
                     }
@@ -260,11 +265,6 @@ fun MediaViewerView(
                 },
                 onForward = {
                     state.eventSink(MediaViewerEvents.Forward(it))
-                },
-                onDownload = {
-                    (currentData as? MediaViewerPageData.MediaViewerData)?.let {
-                        state.eventSink(MediaViewerEvents.SaveOnDisk(currentData))
-                    }
                 },
                 onDelete = { eventId ->
                     (currentData as? MediaViewerPageData.MediaViewerData)?.let {
@@ -457,6 +457,7 @@ private fun MediaViewerTopBar(
     data: MediaViewerPageData.MediaViewerData,
     canShowInfo: Boolean,
     onBackClick: () -> Unit,
+    onDownloadClick: () -> Unit,
     onInfoClick: () -> Unit,
     eventSink: (MediaViewerEvents) -> Unit,
 ) {
@@ -513,6 +514,15 @@ private fun MediaViewerTopBar(
                         contentDescription = stringResource(id = CommonStrings.action_open_with)
                     )
                 }
+            }
+            IconButton(
+                onClick = onDownloadClick,
+                enabled = actionsEnabled,
+            ) {
+                Icon(
+                    imageVector = CompoundIcons.Download(),
+                    contentDescription = stringResource(id = CommonStrings.action_save),
+                )
             }
             if (canShowInfo) {
                 IconButton(

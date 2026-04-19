@@ -51,7 +51,7 @@ fun MediaDetailsBottomSheet(
     onViewInTimeline: (EventId) -> Unit,
     onShare: (EventId) -> Unit,
     onForward: (EventId) -> Unit,
-    onDownload: (EventId) -> Unit,
+    onDownload: ((EventId) -> Unit)? = null,
     onDelete: (EventId) -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
@@ -112,14 +112,16 @@ fun MediaDetailsBottomSheet(
                             onForward(state.eventId)
                         }
                     )
-                    ListItem(
-                        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Download())),
-                        headlineContent = { Text(stringResource(CommonStrings.action_save)) },
-                        style = ListItemStyle.Primary,
-                        onClick = {
-                            onDownload(state.eventId)
-                        }
-                    )
+                    if (onDownload != null) {
+                        ListItem(
+                            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Download())),
+                            headlineContent = { Text(stringResource(CommonStrings.action_save)) },
+                            style = ListItemStyle.Primary,
+                            onClick = {
+                                onDownload.invoke(state.eventId)
+                            }
+                        )
+                    }
                     if (state.canDelete) {
                         HorizontalDivider()
                         ListItem(
