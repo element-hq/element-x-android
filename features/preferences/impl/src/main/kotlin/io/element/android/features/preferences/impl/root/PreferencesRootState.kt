@@ -27,7 +27,7 @@ data class PreferencesRootState(
     val showLinkNewDevice: Boolean,
     val showAnalyticsSettings: Boolean,
     val showDeveloperSettings: Boolean,
-    val canDeactivateAccount: Boolean,
+    val canDeleteAccount: Boolean,
     val nbOfBlockedUsers: Int,
     val showLabsItem: Boolean,
     val directLogoutState: DirectLogoutState,

@@ -92,7 +92,7 @@ class PreferencesRootPresenterTest {
             assertThat(loadedState.showAnalyticsSettings).isFalse()
             assertThat(loadedState.showLinkNewDevice).isFalse()
             assertThat(loadedState.showDeveloperSettings).isTrue()
-            assertThat(loadedState.canDeactivateAccount).isTrue()
+            assertThat(loadedState.canDeleteAccount).isTrue()
             assertThat(loadedState.canReportBug).isTrue()
             assertThat(loadedState.nbOfBlockedUsers).isEqualTo(0)
             assertThat(loadedState.directLogoutState).isEqualTo(aDirectLogoutState())
@@ -166,7 +166,7 @@ class PreferencesRootPresenterTest {
             ),
         ).test {
             val loadedState = awaitFirstItem()
-            assertThat(loadedState.canDeactivateAccount).isFalse()
+            assertThat(loadedState.canDeleteAccount).isFalse()
         }
     }
 

@@ -98,12 +98,12 @@ class PreferencesRootPresenter(
         val accountManagementUrl: MutableState<String?> = remember {
             mutableStateOf(null)
         }
-        var canDeactivateAccount by remember {
+        var canDeleteAccount by remember {
             mutableStateOf(false)
         }
         val canReportBug by remember { rageshakeFeatureAvailability.isAvailable() }.collectAsState(false)
         LaunchedEffect(Unit) {
-            canDeactivateAccount = matrixClient.canDeactivateAccount()
+            canDeleteAccount = matrixClient.canDeactivateAccount()
         }
 
         val nbOfBlockedUsers by produceState(initialValue = 0) {
@@ -146,7 +146,7 @@ class PreferencesRootPresenter(
             canReportBug = canReportBug,
             showLinkNewDevice = showLinkNewDevice,
             showDeveloperSettings = showDeveloperSettings,
-            canDeactivateAccount = canDeactivateAccount,
+            canDeleteAccount = canDeleteAccount,
             nbOfBlockedUsers = nbOfBlockedUsers,
             showLabsItem = showLabsItem,
             directLogoutState = directLogoutState,

@@ -397,30 +397,30 @@ class PreferencesRootViewTest {
     }
 
     @Test
-    fun `click on Deactivate invokes the expected callback`() {
+    fun `click on Delete invokes the expected callback`() {
         val eventsRecorder = EventsRecorder<PreferencesRootEvent>(expectEvents = false)
         ensureCalledOnce { callback ->
             rule.setView(
                 aPreferencesRootState(
-                    canDeactivateAccount = true,
+                    canDeleteAccount = true,
                     eventSink = eventsRecorder,
                 ),
                 onDeactivateClick = callback,
             )
-            rule.clickOn(CommonStrings.action_deactivate_account)
+            rule.clickOn(CommonStrings.action_delete_account)
         }
     }
 
     @Test
-    fun `when canDeactivateAccount is false, item is not shown`() {
+    fun `when canDeleteAccount is false, item is not shown`() {
         val eventsRecorder = EventsRecorder<PreferencesRootEvent>(expectEvents = false)
         rule.setView(
             aPreferencesRootState(
-                canDeactivateAccount = false,
+                canDeleteAccount = false,
                 eventSink = eventsRecorder,
             ),
         )
-        rule.onNodeWithText(rule.activity.getString(CommonStrings.action_deactivate_account)).assertDoesNotExist()
+        rule.onNodeWithText(rule.activity.getString(CommonStrings.action_delete_account)).assertDoesNotExist()
     }
 
     @Test
