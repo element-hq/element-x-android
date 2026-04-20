@@ -5,9 +5,9 @@
   <string name="screen_account_provider_form_notice">"Gib einen Suchbegriff oder eine Domainadresse ein."</string>
   <string name="screen_account_provider_form_subtitle">"Suche nach einem Unternehmen, einer Community oder einem privaten Server."</string>
   <string name="screen_account_provider_form_title">"Kontoanbieter finden"</string>
-  <string name="screen_account_provider_signin_subtitle">"Hier werden deine Gespräche gespeichert - so wie du deine E-Mails bei einem E-Mail-Anbieter aufbewahren würden."</string>
+  <string name="screen_account_provider_signin_subtitle">"Hier werden deine Gespräche gespeichert - so wie du deine E-Mails bei einem E-Mail-Anbieter aufbewahren würdest."</string>
   <string name="screen_account_provider_signin_title">"Du bist dabei, dich bei %s anzumelden"</string>
-  <string name="screen_account_provider_signup_subtitle">"Hier werden deine Gespräche gespeichert - so wie du deine E-Mails bei einem E-Mail-Anbieter aufbewahren würden."</string>
+  <string name="screen_account_provider_signup_subtitle">"Hier werden deine Gespräche gespeichert - so wie du deine E-Mails bei einem E-Mail-Anbieter aufbewahren würdest."</string>
   <string name="screen_account_provider_signup_title">"Du bist dabei, ein Konto bei %s zu erstellen"</string>
   <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org ist ein großer, kostenloser Server im öffentlichen Matrix-Netzwerk für eine sichere, dezentralisierte Kommunikation, der von der Matrix.org Foundation betrieben wird."</string>
   <string name="screen_change_account_provider_other">"Sonstige"</string>
@@ -42,6 +42,7 @@
   <string name="screen_onboarding_sign_in_to">"Anmelden bei %1$s"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"Mit QR-Code anmelden"</string>
   <string name="screen_onboarding_sign_up">"Konto erstellen"</string>
+  <string name="screen_onboarding_welcome_back">"Willkommen zurück"</string>
   <string name="screen_onboarding_welcome_message">"Willkommen beim schnellsten %1$s aller Zeiten. Optimiert für Geschwindigkeit und Einfachheit."</string>
   <string name="screen_onboarding_welcome_subtitle">"Willkommen zu %1$s. Aufgeladen, für Geschwindigkeit und Einfachheit."</string>
   <string name="screen_onboarding_welcome_title">"Sei in Deinem Element"</string>
@@ -93,7 +94,7 @@ Versuche, dich manuell anzumelden, oder scanne den QR-Code mit einem anderen Ger
   <string name="screen_server_confirmation_change_server">"Kontoanbieter wechseln"</string>
   <string name="screen_server_confirmation_message_login_element_dot_io">"Ein privater Server für die Mitarbeiter von Element."</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix ist ein offenes Netzwerk für eine sichere, dezentrale Kommunikation."</string>
-  <string name="screen_server_confirmation_message_register">"Hier werden deine Gespräche gespeichert - so wie du deine E-Mails bei einem E-Mail-Anbieter aufbewahren würden."</string>
+  <string name="screen_server_confirmation_message_register">"Hier werden deine Gespräche gespeichert - so wie du deine E-Mails bei einem E-Mail-Anbieter aufbewahren würdest."</string>
   <string name="screen_server_confirmation_title_login">"Du bist dabei, dich bei %1$s anzumelden"</string>
   <string name="screen_server_confirmation_title_picker_mode">"Kontoanbieter auswählen"</string>
   <string name="screen_server_confirmation_title_register">"Du bist dabei, auf %1$s ein Konto zu erstellen"</string>

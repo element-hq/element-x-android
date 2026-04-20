@@ -5,6 +5,7 @@
   <string name="screen_create_poll_anonymous_headline">"Ẩn phiếu"</string>
   <string name="screen_create_poll_answer_hint">"Lựa chọn %1$d"</string>
   <string name="screen_create_poll_cancel_confirmation_content_android">"Các thay đổi của bạn chưa được lưu. Bạn có chắc muốn quay lại không?"</string>
+  <string name="screen_create_poll_delete_option_a11y">"Tùy chọn xóa %1$s"</string>
   <string name="screen_create_poll_question_desc">"Câu hỏi hoặc chủ đề"</string>
   <string name="screen_create_poll_question_hint">"Cuộc thăm dò này về vấn đề gì?"</string>
   <string name="screen_create_poll_title">"Tạo Cuộc thăm dò ý kiến"</string>

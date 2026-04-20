@@ -35,7 +35,7 @@
   <string name="screen_room_attachment_source_camera_video">"錄影"</string>
   <string name="screen_room_attachment_source_files">"附件"</string>
   <string name="screen_room_attachment_source_gallery">"照片與影片庫"</string>
-  <string name="screen_room_attachment_source_location">"位置"</string>
+  <string name="screen_room_attachment_source_location">"分享位置"</string>
   <string name="screen_room_attachment_source_poll">"投票"</string>
   <string name="screen_room_attachment_text_formatting">"格式化文字"</string>
   <string name="screen_room_encrypted_history_banner">"目前無法檢視訊息歷史紀錄。"</string>

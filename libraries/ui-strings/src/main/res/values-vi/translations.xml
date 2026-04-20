@@ -6,7 +6,7 @@
   <string name="a11y_collapse_message_text_field">"Thu nhỏ ô nhập tin nhắn"</string>
   <string name="a11y_delete">"Xóa"</string>
   <plurals name="a11y_digits_entered">
-    <item quantity="other">"Đã nhập %1$d chữ số"</item>
+    <item quantity="other">"%1$d các chữ số đã nhập"</item>
   </plurals>
   <string name="a11y_edit_avatar">"Đổi ảnh đại diện"</string>
   <string name="a11y_edit_room_address_hint">"Đường dẫn đầy đủ của phòng là %1$s"</string>
@@ -47,7 +47,8 @@
   <string name="a11y_sender_location">"Vị trí người gửi"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Yêu cầu hành động có giới hạn thời gian, bạn có một phút để xác minh"</string>
   <string name="a11y_show_password">"Hiện mật khẩu"</string>
-  <string name="a11y_start_call">"Gọi"</string>
+  <string name="a11y_start_call">"Bắt đầu cuộc gọi"</string>
+  <string name="a11y_start_video_call">"Bắt đầu cuộc gọi video"</string>
   <string name="a11y_start_voice_call">"Bắt đầu cuộc gọi thoại"</string>
   <string name="a11y_tombstoned_room">"Phòng Tombstone"</string>
   <string name="a11y_user_avatar">"Ảnh đại diện của người dùng"</string>
@@ -270,13 +271,20 @@ Lý do: %1$s ."</string>
   <string name="common_mute">"Tắt tiếng"</string>
   <string name="common_name">"Tên"</string>
   <string name="common_no_results">"Không có kết quả"</string>
+  <string name="common_no_room_name">"Không có tên phòng"</string>
+  <string name="common_no_space_name">"Không có tên space"</string>
   <string name="common_not_encrypted">"Không được mã hóa"</string>
   <string name="common_offline">"Ngoại tuyến"</string>
+  <string name="common_open_source_licenses">"Giấy phép mã nguồn mở"</string>
   <string name="common_or">"hoặc"</string>
+  <string name="common_other_options">"Các lựa chọn khác"</string>
   <string name="common_password">"Mật khẩu"</string>
   <string name="common_people">"Danh bạ"</string>
   <string name="common_permalink">"Liên kết cố định"</string>
   <string name="common_permission">"Quyền truy cập"</string>
+  <string name="common_pinned">"Đã ghim"</string>
+  <string name="common_please_check_internet_connection">"Vui lòng kiểm tra kết nối internet của bạn."</string>
+  <string name="common_please_wait">"Vui lòng chờ…"</string>
   <string name="common_poll_end_confirmation">"Bạn có chắc chắn muốn kết thúc cuộc thăm dò này không?"</string>
   <string name="common_poll_summary">"Khảo sát: %1$s"</string>
   <string name="common_poll_total_votes">"Tổng số phiếu: %1$s"</string>
@@ -284,20 +292,35 @@ Lý do: %1$s ."</string>
   <plurals name="common_poll_votes_count">
     <item quantity="other">"%d lượt bình chọn"</item>
   </plurals>
+  <string name="common_preparing">"Đang chuẩn bị…"</string>
   <string name="common_privacy_policy">"Chính sách bảo mật"</string>
+  <string name="common_private">"Riêng tư"</string>
   <string name="common_private_room">"Phòng riêng tư"</string>
+  <string name="common_private_space">"Không gian riêng tư"</string>
+  <string name="common_public">"Công cộng"</string>
+  <string name="common_public_room">"Phòng công cộng"</string>
+  <string name="common_public_space">"Không gian công cộng"</string>
   <string name="common_reaction">"Biểu cảm"</string>
   <string name="common_reactions">"Cảm xúc"</string>
+  <string name="common_reason">"Lý do"</string>
   <string name="common_recovery_key">"Khóa khôi phục."</string>
   <string name="common_refreshing">"Đang làm mới…"</string>
+  <string name="common_removing">"Đang xóa…"</string>
+  <plurals name="common_replies">
+    <item quantity="other">"%1$d trả lời"</item>
+  </plurals>
   <string name="common_replying_to">"Đang trả lời cho %1$s"</string>
   <string name="common_report_a_bug">"Báo cáo lỗi"</string>
   <string name="common_report_a_problem">"Báo cáo sự cố"</string>
   <string name="common_report_submitted">"Đã gửi báo cáo"</string>
   <string name="common_rich_text_editor">"Trình soạn thảo văn bản nâng cao"</string>
+  <string name="common_role">"Vai trò"</string>
   <string name="common_room">"Phòng"</string>
   <string name="common_room_name">"Tên phòng"</string>
   <string name="common_room_name_placeholder">"ví dụ: tên dự án của bạn"</string>
+  <plurals name="common_rooms">
+    <item quantity="other">"%1$d Phòng"</item>
+  </plurals>
   <string name="common_saved_changes">"Đã lưu thay đổi"</string>
   <string name="common_saving">"Đang lưu"</string>
   <string name="common_screen_lock">"Khóa màn hình"</string>
@@ -305,6 +328,11 @@ Lý do: %1$s ."</string>
   <string name="common_search_results">"Kết quả tìm kiếm"</string>
   <string name="common_security">"Bảo mật"</string>
   <string name="common_seen_by">"Được xem bởi"</string>
+  <string name="common_select_account">"Chọn tài khoản"</string>
+  <plurals name="common_selected_count">
+    <item quantity="other">"%1$d đã chọn"</item>
+  </plurals>
+  <string name="common_send_to">"Gửi đến"</string>
   <string name="common_sending">"Đang gửi…"</string>
   <string name="common_sending_failed">"Không gửi được"</string>
   <string name="common_sent">"Đã gửi"</string>
@@ -323,6 +351,9 @@ Lý do: %1$s ."</string>
   <string name="common_space">"Không gian"</string>
   <string name="common_space_members">"Thành viên không gian"</string>
   <string name="common_space_topic_placeholder">"Không gian này dùng để làm gì?"</string>
+  <plurals name="common_spaces">
+    <item quantity="other">"%1$d Không gian"</item>
+  </plurals>
   <string name="common_starting_chat">"Đang bắt đầu cuộc trò chuyện…"</string>
   <string name="common_sticker">"Sticker"</string>
   <string name="common_success">"Thành công"</string>
@@ -337,7 +368,9 @@ Lý do: %1$s ."</string>
   <string name="common_topic">"Chủ đề"</string>
   <string name="common_topic_placeholder">"Phòng này dùng để làm gì?"</string>
   <string name="common_unable_to_decrypt">"Không thể giải mã"</string>
+  <string name="common_unable_to_decrypt_insecure_device">"Được gửi từ một thiết bị không an toàn"</string>
   <string name="common_unable_to_decrypt_no_access">"Bạn không thể xem tin nhắn này"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Danh tính kỹ thuật số đã được xác minh của người gửi đã được đặt lại."</string>
   <string name="common_unable_to_invite_message">"Không thể gửi lời mời đến một hoặc nhiều người dùng."</string>
   <string name="common_unable_to_invite_title">"Không thể gửi lời mời"</string>
   <string name="common_unlock">"Mở khóa"</string>
@@ -383,6 +416,7 @@ Bạn có chắc muốn tiếp tục không?"</string>
   <string name="dialog_file_too_large_to_upload_subtitle">"Kích thước tệp tối đa cho phép là: %1$s"</string>
   <string name="dialog_file_too_large_to_upload_title">"Kích thước tệp quá lớn để tải lên"</string>
   <string name="dialog_room_reported">"Phòng đã được báo cáo"</string>
+  <string name="dialog_room_reported_and_left">"Đã báo cáo và rời khỏi phòng."</string>
   <string name="dialog_title_confirmation">"Xác nhận"</string>
   <string name="dialog_title_error">"Lỗi"</string>
   <string name="dialog_title_success">"Thành công"</string>
@@ -393,14 +427,23 @@ Bạn có chắc muốn tiếp tục không?"</string>
   <string name="dialog_video_quality_selector_subtitle_file_size">"Kích thước tệp tối đa cho phép là: %1$s"</string>
   <string name="dialog_video_quality_selector_subtitle_no_file_size">"Chọn chất lượng video bạn muốn tải lên."</string>
   <string name="dialog_video_quality_selector_title">"Chọn chất lượng tải lên video"</string>
+  <string name="emoji_picker_search_placeholder">"Tìm kiếm biểu tượng cảm xúc"</string>
+  <string name="error_account_already_logged_in">"Bạn đã đăng nhập trên thiết bị này với tư cách là%1$s ."</string>
+  <string name="error_account_creation_not_possible">"Máy chủ  của bạn cần được nâng cấp để hỗ trợ Dịch vụ Xác thực và tạo tài khoản."</string>
   <string name="error_failed_creating_the_permalink">"Không tạo được liên kết cố định"</string>
   <string name="error_failed_loading_map">"%1$s không thể tải bản đồ. Vui lòng thử lại sau."</string>
   <string name="error_failed_loading_messages">"Không tải được tin nhắn"</string>
   <string name="error_failed_locating_user">"%1$s không thể truy cập vị trí của bạn. Vui lòng thử lại sau."</string>
   <string name="error_failed_uploading_voice_message">"Không thể tải lên tin nhắn thoại của bạn."</string>
+  <string name="error_invalid_invite">"Phòng đó không còn tồn tại hoặc lời mời không còn hiệu lực."</string>
+  <string name="error_location_service_disabled_android">"Vui lòng bật GPS để truy cập các tính năng dựa trên vị trí."</string>
+  <string name="error_message_not_found">"Không tìm thấy tin nhắn"</string>
   <string name="error_missing_location_auth_android">"%1$s không có quyền truy cập vị trí của bạn. Bạn có thể bật quyền trong Cài đặt."</string>
   <string name="error_missing_location_rationale_android">"%1$s chưa được phép truy cập vị trí. Bật quyền dưới đây."</string>
   <string name="error_missing_microphone_voice_rationale_android">"%1$s không có quyền truy cập micro của bạn. Hãy bật quyền để ghi tin nhắn thoại."</string>
+  <string name="error_network_or_server_issue">"Nguyên nhân có thể là do sự cố mạng hoặc máy chủ."</string>
+  <string name="error_room_address_already_exists">"Địa chỉ phòng này đã tồn tại. Vui lòng thử chỉnh sửa trường địa chỉ phòng hoặc thay đổi tên phòng."</string>
+  <string name="error_room_address_invalid_symbols">"Một số ký tự không được phép. Chỉ các chữ cái, chữ số và các ký hiệu sau được hỗ trợ: ! $ &amp;amp; ' ( ) * + / ; = ? @ [ ] - . _"</string>
   <string name="error_some_messages_have_not_been_sent">"Một số tin nhắn chưa được gửi"</string>
   <string name="error_unknown">"Rất tiếc, đã có lỗi xảy ra."</string>
   <string name="invite_friends_rich_title">"🔐️ Tham gia cùng tôi trên %1$s"</string>
@@ -408,6 +451,9 @@ Bạn có chắc muốn tiếp tục không?"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Lắc điện thoại để báo cáo lỗi"</string>
   <string name="screen_media_picker_error_failed_selection">"Không thể chọn tệp phương tiện. Vui lòng thử lại."</string>
+  <plurals name="screen_pinned_timeline_screen_title">
+    <item quantity="other">"%1$d tin nhắn được ghim"</item>
+  </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Tin nhắn được ghim"</string>
   <string name="screen_room_error_failed_processing_media">"Xử lý phương tiện tải lên không thành công, vui lòng thử lại."</string>
   <string name="screen_room_error_failed_retrieving_user_details">"Không thể lấy thông tin người dùng"</string>
