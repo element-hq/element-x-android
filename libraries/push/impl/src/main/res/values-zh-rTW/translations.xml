@@ -13,6 +13,10 @@
   </plurals>
   <string name="notification_error_unified_push_unregistered_android">"Unified Push 通知散佈程式註冊失敗，因此您無法再收到通知。請檢查應用程式的通知設定與推播散佈程式的狀態。"</string>
   <string name="notification_fallback_content">"您有新訊息。"</string>
+  <plurals name="notification_fallback_n_content">
+    <item quantity="other">"您有 %d 則新訊息。"</item>
+  </plurals>
+  <string name="notification_incoming_audio_call">"📞 來電"</string>
   <string name="notification_incoming_call">"📹 來電"</string>
   <string name="notification_inline_reply_failed">"** 無法傳送，請開啟聊天室"</string>
   <string name="notification_invitation_action_join">"加入"</string>
@@ -34,6 +38,8 @@
   <string name="notification_room_invite_body_with_sender">"%1$s 邀請您加入聊天室"</string>
   <string name="notification_sender_me">"我"</string>
   <string name="notification_sender_mention_reply">"%1$s 提及或回覆"</string>
+  <string name="notification_space_invite_body">"已邀請您加入空間"</string>
+  <string name="notification_space_invite_body_with_sender">"%1$s 已邀請您的加入此空間"</string>
   <string name="notification_test_push_notification_content">"您正在查看通知！點我！"</string>
   <string name="notification_thread_in_room">"在 %1$s 的討論串"</string>
   <string name="notification_ticker_text_dm">"%1$s：%2$s"</string>

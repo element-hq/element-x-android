@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="crypto_history_sharing_room_info_hidden_badge_content">"Neue Mitglieder sehen den Nachrichtenverlauf nicht"</string>
+  <string name="crypto_history_sharing_room_info_shared_badge_content">"Neue Mitglieder sehen den Nachrichtenverlauf"</string>
+  <string name="crypto_history_sharing_room_info_world_readable_badge_content">"Jeder sieht den Nachrichtenverlauf"</string>
   <string name="screen_edit_room_address_room_address_section_footer">"Du benötigst eine Chat-Adresse, um den Chat im öffentlichen Verzeichnis sichtbar zu machen."</string>
   <string name="screen_edit_room_address_title">"Chat-Adresse bearbeiten"</string>
   <string name="screen_notification_settings_edit_failed_updating_default_mode">"Beim Aktualisieren der Benachrichtigungseinstellungen ist ein Fehler aufgetreten."</string>
@@ -150,6 +153,7 @@ Wir empfehlen keine Verschlüsselung für Chats zu aktivieren, die jeder finden 
   <string name="screen_security_and_privacy_room_access_section_header">"Zugang"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_multiple_parents_description">"Jeder in autorisierten Spaces kann beitreten."</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_single_parent_description">"Jeder in %1$s kann beitreten."</string>
+  <string name="screen_security_and_privacy_room_access_space_members_option_title">"Space Mitglieder"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_unavailable_description">"Spaces werden zur Zeit nicht unterstützt."</string>
   <string name="screen_security_and_privacy_room_address_section_footer">"Du benötigst eine Chat-Adresse, um den Chat im öffentlichen Verzeichnis sichtbar zu machen."</string>
   <string name="screen_security_and_privacy_room_address_section_header">"Adresse"</string>

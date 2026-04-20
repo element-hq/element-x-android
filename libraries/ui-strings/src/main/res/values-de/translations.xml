@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Reaktion hinzufügen: %1$s"</string>
+  <string name="a11y_address">"Adresse"</string>
   <string name="a11y_avatar">"Avatar"</string>
   <string name="a11y_collapse_message_text_field">"Nachrichtentextfeld minimieren"</string>
   <string name="a11y_delete">"Löschen"</string>
@@ -26,9 +27,12 @@
   <string name="a11y_pause">"Pausieren"</string>
   <string name="a11y_paused_voice_message">"Sprachnachricht, Dauer:%1$s, aktuelle Position: %2$s"</string>
   <string name="a11y_pin_field">"PIN-Feld"</string>
+  <string name="a11y_pinned_location">"Fixierter Standort"</string>
   <string name="a11y_play">"Abspielen"</string>
+  <string name="a11y_playback_speed">"Wiedergabegeschwindigkeit"</string>
   <string name="a11y_poll">"Umfrage"</string>
   <string name="a11y_poll_end">"Umfrage beendet"</string>
+  <string name="a11y_qr_code">"QR-Code"</string>
   <string name="a11y_react_with">"Reagiere mit %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Mit anderen Emojis reagieren"</string>
   <string name="a11y_read_receipts_multiple">"Gelesen von %1$s und %2$s"</string>
@@ -42,9 +46,11 @@
   <string name="a11y_remove_reaction_with">"Entferne Reaktionen mit %1$s"</string>
   <string name="a11y_room_avatar">"Avatar"</string>
   <string name="a11y_send_files">"Dateien senden"</string>
+  <string name="a11y_sender_location">"Standort des Absenders"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Zeitlich begrenzte Handlung erforderlich, du hast eine Minute Zeit zur Verifizierung"</string>
   <string name="a11y_show_password">"Passwort anzeigen"</string>
   <string name="a11y_start_call">"Anruf starten"</string>
+  <string name="a11y_start_voice_call">"Sprachanruf starten"</string>
   <string name="a11y_tombstoned_room">"Stillgelegter Chat"</string>
   <string name="a11y_user_avatar">"Nutzer-Avatar"</string>
   <string name="a11y_user_menu">"Nutzer-Menü"</string>
@@ -114,6 +120,7 @@
   <string name="action_leave_space">"Space verlassen"</string>
   <string name="action_load_more">"Mehr laden…"</string>
   <string name="action_manage_account">"Konto verwalten"</string>
+  <string name="action_manage_account_and_devices">"Konto &amp; Geräte verwalten"</string>
   <string name="action_manage_devices">"Geräte verwalten"</string>
   <string name="action_manage_rooms">"Chats und Gruppen konfigurieren"</string>
   <string name="action_message">"Nachricht"</string>
@@ -153,16 +160,18 @@
   <string name="action_send_voice_message">"Sprachnachricht senden"</string>
   <string name="action_share">"Teilen"</string>
   <string name="action_share_link">"Link teilen"</string>
+  <string name="action_share_live_location">"Live-Standort teilen"</string>
   <string name="action_show">"Zeige"</string>
   <string name="action_sign_in_again">"Erneut anmelden"</string>
-  <string name="action_signout">"Abmelden"</string>
-  <string name="action_signout_anyway">"Trotzdem abmelden"</string>
+  <string name="action_signout">"Dieses Gerät entfernen"</string>
+  <string name="action_signout_anyway">"Dieses Gerät trotzdem entfernen"</string>
   <string name="action_skip">"Überspringen"</string>
   <string name="action_start">"Start"</string>
   <string name="action_start_chat">"Chat starten"</string>
   <string name="action_start_over">"Neu beginnen"</string>
   <string name="action_start_verification">"Verifizierung starten"</string>
   <string name="action_static_map_load">"Tippe, um die Karte zu laden"</string>
+  <string name="action_stop">"Beenden"</string>
   <string name="action_take_photo">"Foto aufnehmen"</string>
   <string name="action_tap_for_options">"Für Optionen tippen"</string>
   <string name="action_translate">"Übersetzen"</string>
@@ -183,6 +192,7 @@
   <string name="common_advanced_settings">"Erweiterte Einstellungen"</string>
   <string name="common_an_image">"ein Bild"</string>
   <string name="common_analytics">"Analysedaten"</string>
+  <string name="common_android_fetching_notifications_title">"Benachrichtigungen werden synchronisiert…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Du hast den Chat verlassen"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Du wurdest aus der Sitzung abgemeldet."</string>
   <string name="common_appearance">"Erscheinungsbild"</string>
@@ -216,6 +226,7 @@
   <string name="common_empty_file">"Leere Datei"</string>
   <string name="common_encryption">"Verschlüsselung"</string>
   <string name="common_encryption_enabled">"Verschlüsselung aktiviert"</string>
+  <string name="common_ends_at">"Endet um %1$s"</string>
   <string name="common_enter_your_pin">"PIN eingeben"</string>
   <string name="common_error">"Fehler"</string>
   <string name="common_error_registering_pusher_android">"Es ist ein Fehler aufgetreten. Du erhältst eventuell keine Benachrichtigungen für neue Nachrichten. Bitte behebe den Fehler in den Einstellungen.
@@ -242,6 +253,8 @@ Grund: %1$s."</string>
   <string name="common_line_copied_to_clipboard">"Zeile in die Zwischenablage kopiert"</string>
   <string name="common_link_copied_to_clipboard">"Link in die Zwischenablage kopiert"</string>
   <string name="common_link_new_device">"Neues Gerät verknüpfen"</string>
+  <string name="common_live_location">"Live-Standort"</string>
+  <string name="common_live_location_ended">"Live-Standort teilen beendet"</string>
   <string name="common_loading">"Laden…"</string>
   <string name="common_loading_more">"Mehr wird geladen…"</string>
   <plurals name="common_many_members">
@@ -268,6 +281,7 @@ Grund: %1$s."</string>
   <string name="common_offline">"Offline"</string>
   <string name="common_open_source_licenses">"Open-Source-Lizenzen"</string>
   <string name="common_or">"oder"</string>
+  <string name="common_other_options">"Weitere Optionen"</string>
   <string name="common_password">"Passwort"</string>
   <string name="common_people">"Personen"</string>
   <string name="common_permalink">"Permalink"</string>
@@ -285,8 +299,10 @@ Grund: %1$s."</string>
   </plurals>
   <string name="common_preparing">"Vorbereitung läuft …"</string>
   <string name="common_privacy_policy">"Datenschutz­erklärung"</string>
+  <string name="common_private">"Privat"</string>
   <string name="common_private_room">"Privater Chat"</string>
   <string name="common_private_space">"Privater Space"</string>
+  <string name="common_public">"Öffentlich"</string>
   <string name="common_public_room">"Öffentlicher Chat"</string>
   <string name="common_public_space">"Öffentlicher Space"</string>
   <string name="common_reaction">"Reaktion"</string>
@@ -335,12 +351,14 @@ Grund: %1$s."</string>
   <string name="common_settings">"Einstellungen"</string>
   <string name="common_share_space">"Space teilen"</string>
   <string name="common_shared_history">"Neue Mitglieder sehen den Nachrichtenverlauf"</string>
+  <string name="common_shared_live_location">"Geteilter Live-Standort"</string>
   <string name="common_shared_location">"Geteilter Standort"</string>
   <string name="common_shared_space">"Gemeinsamer Space"</string>
-  <string name="common_signing_out">"Abmelden"</string>
+  <string name="common_signing_out">"Gerät entfernen"</string>
   <string name="common_something_went_wrong">"Es ist ein Fehler aufgetreten."</string>
   <string name="common_something_went_wrong_message">"Wir haben ein Problem festgestellt. Bitte versuch es erneut."</string>
   <string name="common_space">"Space"</string>
+  <string name="common_space_members">"Space Mitglieder"</string>
   <string name="common_space_topic_placeholder">"Worum geht es hier?"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d Space"</item>
@@ -356,12 +374,13 @@ Grund: %1$s."</string>
   <string name="common_text">"Text"</string>
   <string name="common_third_party_notices">"Hinweise von Drittanbietern"</string>
   <string name="common_thread">"Thread"</string>
+  <string name="common_threads">"Threads"</string>
   <string name="common_topic">"Thema"</string>
   <string name="common_topic_placeholder">"Worum geht is in diesem Chat?"</string>
   <string name="common_unable_to_decrypt">"Entschlüsselung nicht möglich"</string>
   <string name="common_unable_to_decrypt_insecure_device">"Von einem ungesicherten Gerät gesendet"</string>
   <string name="common_unable_to_decrypt_no_access">"Du hast keinen Zugriff auf diese Nachricht."</string>
-  <string name="common_unable_to_decrypt_verification_violation">"Die verifizierte Identität des Senders hat sich geändert"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Die verifizierte Identität des Senders wurde zurückgesetzt"</string>
   <string name="common_unable_to_invite_message">"Einladungen konnten nicht an einen oder mehrere Nutzer gesendet werden."</string>
   <string name="common_unable_to_invite_title">"Einladung(en) konnte(n) nicht gesendet werden"</string>
   <string name="common_unlock">"Entsperren"</string>
@@ -386,17 +405,19 @@ Grund: %1$s."</string>
   <string name="common_voice_message">"Sprachnachricht"</string>
   <string name="common_waiting">"Warten…"</string>
   <string name="common_waiting_for_decryption_key">"Warte auf diese Nachricht"</string>
+  <string name="common_waiting_live_location">"Warten auf Live-Standort…"</string>
   <string name="common_world_readable_history">"Jeder kann den Nachrichtenverlauf sehen"</string>
   <string name="common_you">"Du"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) hat diese Nachricht geteilt, weil du nicht im Chat warst, als sie verschickt wurde."</string>
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"Diese Nachricht wurde von %1$s weitergeleitet, da du zum Zeitpunkt des Versands kein Mitglied der Gruppe warst."</string>
   <string name="crypto_history_visible">"Diese Gruppe wurde so konfiguriert, dass neue Mitglieder den vergangenen Nachrichtenverlauf lesen können. %1$s"</string>
-  <string name="crypto_identity_change_pin_violation">"%1$s\'s Identität has sich geändert. %2$s"</string>
-  <string name="crypto_identity_change_pin_violation_new">"%1$s\'s %2$s Identität hat sich geändert. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation">"Die Identität von %1$s wurde zurückgesetzt. %2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"Die Identität von %1$s %2$s wurde zurückgesetzt. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
-  <string name="crypto_identity_change_profile_pin_violation">"Die Identität von %1$s hat sich geändert."</string>
-  <string name="crypto_identity_change_verification_violation_new">"Die Identität von %1$s\'s %2$s hat sich geändert. %3$s"</string>
+  <string name="crypto_identity_change_profile_pin_violation">"Die Identität von %1$s wurde zurückgesetzt."</string>
+  <string name="crypto_identity_change_verification_violation_new">"Die Identität von %1$s %2$s wurde zurückgesetzt. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Verifizierung zurückziehen"</string>
+  <string name="dialog_allow_access">"Zugriff erlauben"</string>
   <string name="dialog_confirm_link_message">"Der Link %1$s führt dich zu einer anderen Seite %2$s. 
 
 Möchtest du wirklich fortfahren?"</string>
@@ -453,7 +474,7 @@ Möchtest du wirklich fortfahren?"</string>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Fixierte Nachrichten"</string>
   <string name="screen_reset_identity_confirmation_subtitle">"Du wirst jetzt zu deinem %1$s Konto geleitet, um deine Identität zurückzusetzen. Danach wirst du zur App zurückgebracht."</string>
-  <string name="screen_reset_identity_confirmation_title">"Kannst du das nicht bestätigen? Gehe zu deinem Konto, um deine Identität zurückzusetzen."</string>
+  <string name="screen_reset_identity_confirmation_title">"Bestätigung nicht möglich? Rufe dein Konto auf, um deine digitale Identität zurückzusetzen."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Verifizierung zurückziehen und senden"</string>
   <string name="screen_resolve_send_failure_changed_identity_subtitle">"Du kannst deine Verifizierung zurückziehen und diese Nachricht trotzdem senden, oder du kannst vorerst abbrechen und es später noch einmal versuchen, nachdem du %1$s erneut verifiziert hast."</string>
   <string name="screen_resolve_send_failure_changed_identity_title">"Deine Nachricht wurde nicht gesendet, da die verifizierte Identität von %1$s zurückgesetzt wurde"</string>
@@ -480,11 +501,14 @@ Möchtest du wirklich fortfahren?"</string>
   <string name="screen_share_open_google_maps">"In Google Maps öffnen"</string>
   <string name="screen_share_open_osm_maps">"In OpenStreetMap öffnen"</string>
   <string name="screen_share_this_location_action">"Diesen Standort teilen"</string>
+  <string name="screen_sharing_location_option_sheet_title">"Optionen zum Teilen"</string>
   <string name="screen_space_list_description">"Von dir erstellte oder beigetretene Spaces."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_empty_state_title">"Erstelle einen Space, um Chats zu organisieren"</string>
   <string name="screen_space_list_parent_space">"%1$s Space"</string>
   <string name="screen_space_list_title">"Spaces"</string>
+  <string name="screen_static_location_sheet_timestamp_description">"Geteilt %1$s"</string>
+  <string name="screen_static_location_sheet_title">"Auf der Karte"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Nachricht nicht gesendet, weil sich die verifizierte Identität von %1$s geändert hat."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Die Nachricht wurde nicht gesendet, weil %1$s nicht alle Geräte verifiziert hat."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Die Nachricht wurde nicht gesendet, weil du eines oder mehrere deiner Geräte nicht verifiziert hast."</string>

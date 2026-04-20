@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_signout_confirmation_dialog_content">"您確定要登出嗎？"</string>
-  <string name="screen_signout_confirmation_dialog_submit">"登出"</string>
-  <string name="screen_signout_confirmation_dialog_title">"登出"</string>
-  <string name="screen_signout_in_progress_dialog_content">"正在登出…"</string>
-  <string name="screen_signout_key_backup_disabled_subtitle">"您將要登出上一次作業階段。若您現在登出，將會失去對加密訊息的存取權。"</string>
-  <string name="screen_signout_key_backup_disabled_title">"您已關閉備份"</string>
-  <string name="screen_signout_key_backup_offline_subtitle">"當您離線時，您的金鑰仍在備份中。請重新連線才能在您登出前備份金鑰。"</string>
+  <string name="screen_signout_confirmation_dialog_content">"您確定要移除此裝置嗎？"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"移除此裝置"</string>
+  <string name="screen_signout_confirmation_dialog_title">"移除此裝置"</string>
+  <string name="screen_signout_in_progress_dialog_content">"正在移除裝置……"</string>
+  <string name="screen_signout_key_backup_disabled_subtitle">"這是您唯一的裝置。若您移除它，下次登入時您將需要還原金鑰來確認您的數位身份並還原您的加密聊天。"</string>
+  <string name="screen_signout_key_backup_disabled_title">"您即將失去對您加密聊天的存取權"</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"當您離線時，您的金鑰仍在備份中。請重新連線才能在您移除此裝置前備份金鑰。"</string>
   <string name="screen_signout_key_backup_offline_title">"您的金鑰仍在備份中"</string>
-  <string name="screen_signout_key_backup_ongoing_subtitle">"請等待此動作完成後再登出。"</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"請等待此動作完成後再移除此裝置。"</string>
   <string name="screen_signout_key_backup_ongoing_title">"您的金鑰仍在備份中"</string>
-  <string name="screen_signout_preference_item">"登出"</string>
-  <string name="screen_signout_recovery_disabled_subtitle">"您將要登出上一次作業階段。若您現在登出，將會失去對加密訊息的存取權。"</string>
-  <string name="screen_signout_recovery_disabled_title">"未設定復原金鑰"</string>
-  <string name="screen_signout_save_recovery_key_subtitle">"您將要登出上一次作業階段。若您現在登出，將會失去對加密訊息的存取權。"</string>
+  <string name="screen_signout_preference_item">"移除此裝置"</string>
+  <string name="screen_signout_recovery_disabled_subtitle">"這是您唯一的裝置。若您移除它，下此登入時將需要還原金鑰來驗證您的數位身份並還原您的加密聊天。"</string>
+  <string name="screen_signout_recovery_disabled_title">"您即將失去對您的加密聊天的存取權"</string>
+  <string name="screen_signout_save_recovery_key_subtitle">"這是您唯一的裝置。若您移除它，下此登入時將需要還原金鑰來驗證您的數位身份並還原您的加密聊天。"</string>
+  <string name="screen_signout_save_recovery_key_title">"在移除此裝置前，請確保您可存取您的還原金鑰"</string>
 </resources>
