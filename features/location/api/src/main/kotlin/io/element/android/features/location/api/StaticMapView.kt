@@ -58,6 +58,9 @@ fun StaticMapView(
     modifier: Modifier = Modifier,
     darkMode: Boolean = !ElementTheme.isLightTheme,
 ) {
+    // Using BoxWithConstraints to:
+    // 1) Size the inner Image to the same Dp size of the outer BoxWithConstraints.
+    // 2) Request the static map image of the exact required size in Px to fill the AsyncImage.
     BoxWithConstraints(
         modifier = modifier,
         contentAlignment = Alignment.Center
