@@ -12,6 +12,7 @@ import androidx.activity.ComponentActivity
 import androidx.annotation.StringRes
 import androidx.compose.ui.test.SemanticsMatcher
 import androidx.compose.ui.test.SemanticsNodeInteractionsProvider
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.hasAnyAncestor
 import androidx.compose.ui.test.hasClickAction
 import androidx.compose.ui.test.hasContentDescription
@@ -59,4 +60,9 @@ fun SemanticsNodeInteractionsProvider.pressTag(tag: String) {
 fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.assertNoNodeWithText(@StringRes res: Int) {
     val text = activity.getString(res)
     onNodeWithText(text).assertDoesNotExist()
+}
+
+fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.assertNodeWithTextIsDisplayed(@StringRes res: Int) {
+    val text = activity.getString(res)
+    onNodeWithText(text).assertIsDisplayed()
 }
