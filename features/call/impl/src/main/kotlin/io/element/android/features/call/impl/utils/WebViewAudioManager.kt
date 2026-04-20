@@ -366,9 +366,11 @@ class WebViewAudioManager(
         coroutineScope.launch {
             proximitySensorMutex.withLock {
                 @Suppress("WakeLock", "WakeLockTimeout")
-                if (device?.type == AudioDeviceInfo.TYPE_BUILTIN_EARPIECE && proximitySensorWakeLock?.isHeld == false) {
-                    // If the device is the built-in earpiece, we need to acquire the proximity sensor wake lock
-                    proximitySensorWakeLock?.acquire()
+                if (device?.type == AudioDeviceInfo.TYPE_BUILTIN_EARPIECE) {
+                    if (proximitySensorWakeLock?.isHeld == false) {
+                        // If the device is the built-in earpiece, we need to acquire the proximity sensor wake lock
+                        proximitySensorWakeLock?.acquire()
+                    }
                 } else if (proximitySensorWakeLock?.isHeld == true) {
                     // If the device is no longer the earpiece, we need to release the wake lock
                     proximitySensorWakeLock?.release()
