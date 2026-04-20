@@ -65,7 +65,7 @@ internal fun ComposerModeView(
         }
         is MessageComposerMode.Reply -> {
             ReplyToModeView(
-                modifier = modifier.padding(8.dp),
+                modifier = modifier.padding(top = 8.dp, start = 8.dp, end = 8.dp),
                 replyToDetails = composerMode.replyToDetails,
                 hideImage = composerMode.hideImage,
                 onResetComposerMode = onResetComposerMode,

@@ -181,7 +181,7 @@ fun TextComposer(
                             placeholder = placeholder,
                             registerStateUpdates = true,
                             modifier = Modifier
-                                .padding(top = 6.dp, bottom = 6.dp)
+                                .padding(top = 4.dp, bottom = 6.dp)
                                 .fillMaxWidth(),
                             style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.richTextEditorState.hasFocus),
                             resolveMentionDisplay = resolveMentionDisplay,
@@ -651,10 +651,14 @@ private fun TextInputBox(
                 composerMode = composerMode,
                 onResetComposerMode = onResetComposerMode,
             )
+        } else {
+            // Top padding for the message composer box
+            Spacer(Modifier.height(6.dp))
         }
+
         Box(
             modifier = Modifier
-                .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 12.dp)
+                .padding(bottom = 4.dp, start = 12.dp, end = 12.dp)
                 .then(Modifier.testTag(TestTags.textEditor)),
             contentAlignment = Alignment.CenterStart,
         ) {
