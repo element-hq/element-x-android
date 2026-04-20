@@ -14,7 +14,7 @@ import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.di.annotations.AppCoroutineScope
-import io.element.android.libraries.push.api.push.PushHandlingWakeLock
+import io.element.android.libraries.push.api.push.FetchPushForegroundServiceManager
 import io.element.android.libraries.pushproviders.api.PushHandler
 import io.element.android.libraries.pushproviders.unifiedpush.registration.EndpointRegistrationHandler
 import io.element.android.libraries.pushproviders.unifiedpush.registration.RegistrationResult
@@ -38,7 +38,7 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
     @Inject lateinit var newGatewayHandler: UnifiedPushNewGatewayHandler
     @Inject lateinit var removedGatewayHandler: UnifiedPushRemovedGatewayHandler
     @Inject lateinit var endpointRegistrationHandler: EndpointRegistrationHandler
-    @Inject lateinit var pushHandlingWakeLock: PushHandlingWakeLock
+    @Inject lateinit var fetchPushForegroundServiceManager: FetchPushForegroundServiceManager
 
     @AppCoroutineScope
     @Inject lateinit var coroutineScope: CoroutineScope
@@ -59,8 +59,8 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
      * @param instance connection, for multi-account
      */
     override fun onMessage(context: Context, message: PushMessage, instance: String) {
-        // Acquire wakelock to ensure the device stays awake while we handle the push and schedule and run the work
-        pushHandlingWakeLock.lock()
+        // Start the foreground service to ensure the device stays awake while we handle the push and schedule and run the work.
+        fetchPushForegroundServiceManager.start()
 
         Timber.tag(loggerTag.value).d("New message, decrypted: ${message.decrypted}")
         coroutineScope.launch {
@@ -71,16 +71,16 @@ class VectorUnifiedPushMessagingReceiver : MessagingReceiver() {
                     providerInfo = "${UnifiedPushConfig.NAME} - $instance",
                     data = String(message.content),
                 )
-                pushHandlingWakeLock.unlock()
+                fetchPushForegroundServiceManager.stop()
             } else {
                 val handled = pushHandler.handle(
                     pushData = pushData,
                     providerInfo = "${UnifiedPushConfig.NAME} - $instance",
                 )
 
-                // If we failed to handle the push, we should release the wakelock early to avoid keeping the device awake for too long.
+                // If we failed to handle the push, we should stop the foreground service early to avoid keeping the device awake for too long.
                 if (!handled) {
-                    pushHandlingWakeLock.unlock()
+                    fetchPushForegroundServiceManager.stop()
                 }
             }
         }
