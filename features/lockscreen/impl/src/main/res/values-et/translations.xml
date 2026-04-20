@@ -23,7 +23,7 @@ Vali midagi, mis hästi meelde jääb. Kui unustad selle PIN-koodi, siis turvaka
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Palun sisesta sama PIN-kood kaks korda"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN-koodid ei klapi omavahel"</string>
   <string name="screen_app_lock_signout_alert_message">"Jätkamaks pead uuesti sisse logima ja looma uue PIN-koodi"</string>
-  <string name="screen_app_lock_signout_alert_title">"Sa oled logimas välja"</string>
+  <string name="screen_app_lock_signout_alert_title">"See seade on eemaldamisel"</string>
   <plurals name="screen_app_lock_subtitle">
     <item quantity="one">"Sul on lukustuse eemaldamiseks jäänud %1$d katse"</item>
     <item quantity="other">"Sul on lukustuse eemaldamiseks jäänud %1$d katset"</item>

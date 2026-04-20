@@ -28,6 +28,7 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
 import io.element.android.libraries.designsystem.components.preferences.PreferenceSwitch
 import io.element.android.libraries.designsystem.preview.ElementPreview
+import io.element.android.libraries.designsystem.preview.ElementPreviewBlack
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
@@ -46,7 +47,6 @@ import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.compose.LocalAnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
-import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun AdvancedSettingsView(
@@ -74,7 +74,7 @@ fun AdvancedSettingsView(
         PreferenceDropdown(
             title = stringResource(id = CommonStrings.common_appearance),
             selectedOption = state.theme,
-            options = ThemeOption.entries.toImmutableList(),
+            options = state.availableThemeOptions,
             onSelectOption = { themeOption ->
                 state.eventSink(AdvancedSettingsEvents.SetTheme(themeOption))
             }
@@ -323,6 +323,11 @@ internal fun AdvancedSettingsViewLightPreview(@PreviewParameter(AdvancedSettings
 @Composable
 internal fun AdvancedSettingsViewDarkPreview(@PreviewParameter(AdvancedSettingsStateProvider::class) state: AdvancedSettingsState) =
     ElementPreviewDark { ContentToPreview(state) }
+
+@PreviewWithLargeHeight
+@Composable
+internal fun AdvancedSettingsViewBlackPreview(@PreviewParameter(AdvancedSettingsStateProvider::class) state: AdvancedSettingsState) =
+    ElementPreviewBlack { ContentToPreview(state) }
 
 @ExcludeFromCoverage
 @Composable

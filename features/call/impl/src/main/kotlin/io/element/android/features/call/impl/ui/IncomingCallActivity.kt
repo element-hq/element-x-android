@@ -30,6 +30,7 @@ import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.theme.ElementThemeApp
 import io.element.android.libraries.di.annotations.AppCoroutineScope
+import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filter
@@ -56,6 +57,9 @@ class IncomingCallActivity : AppCompatActivity() {
 
     @Inject
     lateinit var appPreferencesStore: AppPreferencesStore
+
+    @Inject
+    lateinit var featureFlagService: FeatureFlagService
 
     @Inject
     lateinit var enterpriseService: EnterpriseService
@@ -88,6 +92,7 @@ class IncomingCallActivity : AppCompatActivity() {
                 }.collectAsState(SemanticColorsLightDark.default)
                 ElementThemeApp(
                     appPreferencesStore = appPreferencesStore,
+                    featureFlagService = featureFlagService,
                     compoundLight = colors.light,
                     compoundDark = colors.dark,
                     buildMeta = buildMeta,

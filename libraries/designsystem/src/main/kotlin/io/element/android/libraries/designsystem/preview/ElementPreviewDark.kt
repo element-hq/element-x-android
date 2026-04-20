@@ -10,6 +10,7 @@ package io.element.android.libraries.designsystem.preview
 
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
+import io.element.android.compound.theme.Theme
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 @Composable
@@ -20,7 +21,7 @@ fun ElementPreviewDark(
     content: @Composable () -> Unit,
 ) {
     ElementPreview(
-        darkTheme = true,
+        theme = Theme.Dark,
         showBackground = showBackground,
         drawableFallbackForImages = drawableFallbackForImages,
         content = content,

@@ -3,6 +3,7 @@
   <string name="screen_app_lock_biometric_authentication">"xác thực sinh trắc học"</string>
   <string name="screen_app_lock_biometric_unlock">"mở khóa sinh trắc học"</string>
   <string name="screen_app_lock_biometric_unlock_title_android">"Mở khóa bằng sinh trắc học"</string>
+  <string name="screen_app_lock_confirm_biometric_authentication_android">"Xác nhận sinh trắc học"</string>
   <string name="screen_app_lock_forgot_pin">"Quên mã PIN rồi à?"</string>
   <string name="screen_app_lock_settings_change_pin">"Thay đổi mã PIN"</string>
   <string name="screen_app_lock_settings_enable_biometric_unlock">"Cho phép mở khóa bằng sinh trắc học"</string>

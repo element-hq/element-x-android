@@ -30,7 +30,8 @@ class KonsistPreviewTest {
             .assertTrue {
                 it.hasNameEndingWith("Preview") &&
                     it.hasNameEndingWith("LightPreview").not() &&
-                    it.hasNameEndingWith("DarkPreview").not()
+                    it.hasNameEndingWith("DarkPreview").not() &&
+                    it.hasNameEndingWith("BlackPreview").not()
             }
     }
 

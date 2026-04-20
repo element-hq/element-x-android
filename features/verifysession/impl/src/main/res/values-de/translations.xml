@@ -2,7 +2,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"Bestätigung unmöglich?"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"Erstelle einen neuen Wiederherstellungsschlüssel"</string>
-  <string name="screen_identity_confirmation_subtitle">"Verifiziere dieses Gerät, um sichere Chats einzurichten."</string>
+  <string name="screen_identity_confirmation_subtitle">"Wähle eine Verifizierungsmethode, um den sicheren Nachrichtenversand einzurichten."</string>
   <string name="screen_identity_confirmation_title">"Bestätige deine Identität"</string>
   <string name="screen_identity_confirmation_use_another_device">"Ein anderes Gerät verwenden"</string>
   <string name="screen_identity_confirmation_use_recovery_key">"Wiederherstellungsschlüssel verwenden"</string>
@@ -50,5 +50,5 @@
   <string name="screen_session_verification_waiting_subtitle">"Nach der Bestätigung kannst du mit der Verifizierung fortfahren."</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Akzeptiere die Anfrage für die Verifizierung in deiner anderen Sitzung um fortzufahren."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Warten auf die Annahme der Anfrage"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Abmelden…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Gerät wird entfernt…"</string>
 </resources>
