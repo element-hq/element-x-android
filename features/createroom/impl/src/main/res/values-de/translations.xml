@@ -8,15 +8,19 @@
   <string name="screen_create_room_new_room_title">"Neuer Chat"</string>
   <string name="screen_create_room_new_space_title">"Neuer Space"</string>
   <string name="screen_create_room_private_option_description">"Nur eingeladene Personen haben Zutritt zu diesem Chat."</string>
+  <string name="screen_create_room_private_option_title">"Privat"</string>
   <string name="screen_create_room_public_option_description">"Jeder kann diesen Chat finden.
 Du kannst dies jederzeit in den Einstellungen des Chats ändern."</string>
   <string name="screen_create_room_public_option_short_description">"Jeder kann beitreten."</string>
+  <string name="screen_create_room_public_option_title">"Öffentlich"</string>
   <string name="screen_create_room_room_access_section_knocking_option_description">"Jeder kann den Beitritt zum Chat erbitten, aber ein Admin oder Moderator muss die Anfrage akzeptieren."</string>
   <string name="screen_create_room_room_access_section_knocking_option_title">"Anfrage zum Beitritt zulassen"</string>
   <string name="screen_create_room_room_access_section_knocking_restricted_option_description">"Jeder in %1$s kann beitreten, aber alle anderen müssen den Beitritt anfragen."</string>
   <string name="screen_create_room_room_access_section_knocking_restricted_option_title">"Beitritt anfragen"</string>
   <string name="screen_create_room_room_access_section_private_option_description">"Nur eingeladene Personen können beitreten."</string>
+  <string name="screen_create_room_room_access_section_private_option_title">"Privat"</string>
   <string name="screen_create_room_room_access_section_public_option_description">"Jeder darf diesem Chat beitreten."</string>
+  <string name="screen_create_room_room_access_section_public_option_title">"Öffentlich"</string>
   <string name="screen_create_room_room_access_section_restricted_option_description">"Jeder in %1$s kann beitreten."</string>
   <string name="screen_create_room_room_access_section_restricted_option_title">"Standard"</string>
   <string name="screen_create_room_room_access_section_title">"Wer hat Zugang"</string>

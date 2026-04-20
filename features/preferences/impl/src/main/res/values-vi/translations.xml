@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="full_screen_intent_banner_message">"Để đảm bảo bạn không bỏ lỡ bất kỳ cuộc gọi quan trọng nào, vui lòng thay đổi cài đặt để cho phép thông báo toàn màn hình khi điện thoại của bạn bị khóa."</string>
+  <string name="full_screen_intent_banner_title">"Nâng cao trải nghiệm cuộc gọi của bạn"</string>
   <string name="screen_advanced_settings_choose_distributor_dialog_title_android">"Chọn cách nhận thông báo"</string>
   <string name="screen_advanced_settings_developer_mode">"Chế độ nhà phát triển"</string>
   <string name="screen_advanced_settings_developer_mode_description">"Cho phép truy cập vào các tính năng và chức năng dành cho nhà phát triển."</string>
@@ -7,6 +9,9 @@
   <string name="screen_advanced_settings_element_call_base_url_description">"Đặt địa chỉ máy chủ cuộc gọi tùy chỉnh cho Element."</string>
   <string name="screen_advanced_settings_element_call_base_url_validation_error">"Địa chỉ URL không hợp lệ. Hãy kiểm tra lại giao thức (http/https) và địa chỉ chính xác."</string>
   <string name="screen_advanced_settings_labs">"Labs"</string>
+  <string name="screen_advanced_settings_media_compression_description">"Tải ảnh và video nhanh hơn và giảm mức sử dụng dữ liệu."</string>
+  <string name="screen_advanced_settings_media_compression_title">"Tối ưu hóa chất lượng media"</string>
+  <string name="screen_advanced_settings_push_provider_android">"Nhà cung cấp dịch vụ thông báo"</string>
   <string name="screen_advanced_settings_rich_text_editor_description">"Tắt trình soạn thảo văn bản nâng cao để nhập Markdown thủ công."</string>
   <string name="screen_advanced_settings_send_read_receipts">"Thông báo đã đọc"</string>
   <string name="screen_advanced_settings_send_read_receipts_description">"Nếu tắt, thông báo đã đọc của bạn sẽ không được gửi cho ai. Bạn vẫn sẽ nhận được thông báo đã đọc từ người khác."</string>

@@ -188,7 +188,7 @@
   <string name="common_about">"About"</string>
   <string name="common_acceptable_use_policy">"Acceptable use policy"</string>
   <string name="common_add_account">"Add an account"</string>
-  <string name="common_add_another_account">"Add another account"</string>
+  <string name="common_add_another_account">"Add account"</string>
   <string name="common_adding_caption">"Adding caption"</string>
   <string name="common_advanced_settings">"Advanced settings"</string>
   <string name="common_an_image">"an image"</string>
@@ -467,16 +467,14 @@ Are you sure you want to continue?"</string>
   <string name="screen_create_poll_options_section_title">"Options"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Remove %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Settings"</string>
+  <string name="screen_live_location_sheet_nobody_sharing">"Nobody is sharing their location"</string>
+  <string name="screen_live_location_sheet_sharing_live_location">"Sharing live location"</string>
+  <plurals name="screen_live_location_sheet_subtitle">
+    <item quantity="one">"%1$d person"</item>
+    <item quantity="other">"%1$d people"</item>
+  </plurals>
+  <string name="screen_live_location_sheet_title">"On the map"</string>
   <string name="screen_media_picker_error_failed_selection">"Failed selecting media, please try again."</string>
-  <string name="screen_missing_key_backup_open_element_classic">"Open Element Classic"</string>
-  <string name="screen_missing_key_backup_step_1">"Open Element Classic on your device"</string>
-  <string name="screen_missing_key_backup_step_2_android">"Go to Settings &gt; Security &amp; Privacy"</string>
-  <string name="screen_missing_key_backup_step_3_android">"In Cryptography keys management, select Encrypted messages recovery"</string>
-  <string name="screen_missing_key_backup_step_4">"Follow the instructions to enable your key storage"</string>
-  <string name="screen_missing_key_backup_step_5">"Come back to %1$s"</string>
-  <string name="screen_missing_key_backup_title">"Enable your key storage before proceeding to %1$s"</string>
-  <string name="screen_onboarding_checking_account">"Checking account"</string>
-  <string name="screen_onboarding_welcome_back">"Welcome back"</string>
   <string name="screen_pinned_timeline_empty_state_description">"Press on a message and choose “%1$s” to include here."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Pin important messages so that they can be easily discovered"</string>
   <plurals name="screen_pinned_timeline_screen_title">

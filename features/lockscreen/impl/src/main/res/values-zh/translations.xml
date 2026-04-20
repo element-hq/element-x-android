@@ -23,7 +23,7 @@
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"请输入两次相同的 PIN 码"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"PIN 码不匹配"</string>
   <string name="screen_app_lock_signout_alert_message">"您需要重新登录并创建新的 PIN 才能继续"</string>
-  <string name="screen_app_lock_signout_alert_title">"您正在登出"</string>
+  <string name="screen_app_lock_signout_alert_title">"正在被移除该设备"</string>
   <plurals name="screen_app_lock_subtitle">
     <item quantity="other">"还剩 %1$d 次解锁机会"</item>
   </plurals>

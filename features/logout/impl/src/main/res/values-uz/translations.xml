@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_signout_confirmation_dialog_content">"Haqiqatan ham tizimdan chiqmoqchimisiz?"</string>
-  <string name="screen_signout_confirmation_dialog_submit">"Tizimdan chiqish"</string>
-  <string name="screen_signout_confirmation_dialog_title">"Tizimdan chiqish"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"Bu qurilmani olib tashlash"</string>
+  <string name="screen_signout_confirmation_dialog_title">"Bu qurilmani olib tashlash"</string>
   <string name="screen_signout_in_progress_dialog_content">"Chiqish…"</string>
-  <string name="screen_signout_key_backup_disabled_subtitle">"Siz oxirgi sessiyangizdan chiqmoqdasiz. Agar hozir chiqib ketsangiz, shifrlangan xabarlaringizga kira olmaysiz."</string>
-  <string name="screen_signout_key_backup_disabled_title">"Siz zaxira nusxasini oʻchirdingiz"</string>
-  <string name="screen_signout_key_backup_offline_subtitle">"Siz oflayn bo‘lganingizda ham kalitlaringiz zaxiralanish jarayonida edi. Tizimdan chiqishdan oldin kalitlaringizning to‘liq zaxiralanishini ta’minlash uchun qayta ulanishingiz zarur."</string>
+  <string name="screen_signout_key_backup_disabled_subtitle">"Bu sizning yagona qurilmangiz. Agar uni olib tashlasangiz, keyingi safar hisobingizga kirganingizda raqamli shaxsingizni tasdiqlash va shifrlangan chatlaringizni tiklash uchun zaxira kaliti kerak bo‘ladi."</string>
+  <string name="screen_signout_key_backup_disabled_title">"Shifrlangan chatlarga ruxsat yopiladi"</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"Oflaynga chiqqaningizda kalitlaringiz hali ham zaxiralanayotgan edi. Bu qurilmani olib tashlashdan oldin kalitlaringiz zaxiralanishi uchun qayta ulaning."</string>
   <string name="screen_signout_key_backup_offline_title">"Kalitlaringiz hamon zaxiralanmoqda"</string>
-  <string name="screen_signout_key_backup_ongoing_subtitle">"Tizimdan chiqishdan oldin bu jarayon tugashini kuting."</string>
+  <string name="screen_signout_key_backup_ongoing_subtitle">"Bu qurilmani olib tashlashdan oldin uning tugashini kuting."</string>
   <string name="screen_signout_key_backup_ongoing_title">"Kalitlaringiz hamon zaxiralanmoqda"</string>
-  <string name="screen_signout_preference_item">"Tizimdan chiqish"</string>
-  <string name="screen_signout_recovery_disabled_subtitle">"Siz oxirgi sessiyangizdan chiqmoqdasiz. Agar hozir chiqib ketsangiz, shifrlangan xabarlaringizga kira olmaysiz."</string>
+  <string name="screen_signout_preference_item">"Bu qurilmani olib tashlash"</string>
+  <string name="screen_signout_recovery_disabled_subtitle">"Bu sizning yagona qurilmangiz. Agar uni o‘chirsangiz, keyingi safar tizimga kirganingizda raqamli shaxsingizni tasdiqlash va shifrlangan chatlaringizni tiklash uchun tiklash kaliti kerak bo‘ladi."</string>
   <string name="screen_signout_recovery_disabled_title">"Qayta tiklash sozlanmagan"</string>
-  <string name="screen_signout_save_recovery_key_subtitle">"Siz oxirgi sessiyangizdan chiqmoqdasiz. Agar hozir chiqib ketsangiz, shifrlangan xabarlaringizga kira olmay qolishingiz mumkin."</string>
+  <string name="screen_signout_save_recovery_key_subtitle">"Bu sizning yagona qurilmangiz. Agar uni olib tashlasangiz, keyingi safar hisobingizga kirganingizda raqamli shaxsingizni tasdiqlash va shifrlangan chatlaringizni tiklash uchun zaxira kaliti kerak bo‘ladi."</string>
+  <string name="screen_signout_save_recovery_key_title">"Bu qurilmani olib tashlashdan oldin zaxira kalitiga ruxsatingiz borligini tekshiring"</string>
 </resources>
