@@ -263,8 +263,16 @@ private fun InvitePeopleConfirmModal(
         dragHandle = null,
     ) {
         IconTitleSubtitleMolecule(
-            title = stringResource(R.string.screen_invite_users_confirm_dialog_title),
-            subTitle = stringResource(R.string.screen_invite_users_confirm_dialog_subtitle),
+            title = if (users.size > 1) {
+                stringResource(R.string.screen_invite_users_confirm_dialog_title_mutiple_users)
+            } else {
+                stringResource(R.string.screen_invite_users_confirm_dialog_title_one_user)
+            },
+            subTitle = if (users.size > 1) {
+                stringResource(R.string.screen_invite_users_confirm_dialog_subtitle_multiple_users)
+            } else {
+                stringResource(R.string.screen_invite_users_confirm_dialog_subtitle_one_user)
+            },
             iconStyle = BigIcon.Style.Default(CompoundIcons.UserAddSolid()),
             modifier = Modifier.padding(
                 top = 32.dp,
