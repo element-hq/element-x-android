@@ -261,7 +261,7 @@ metro = { id = "dev.zacsweers.metro", version.ref = "metro" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ktlint = "org.jlleitschuh.gradle.ktlint:14.2.0"
 dependencygraph = "com.savvasdalkitsis.module-dependency-graph:0.12"
-dependencycheck = "org.owasp.dependencycheck:12.2.0"
+dependencycheck = "org.owasp.dependencycheck:12.2.1"
 dependencyanalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }
 paparazzi = "app.cash.paparazzi:2.0.0-alpha04"
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
