@@ -31,6 +31,7 @@ open class OnBoardingStateProvider : PreviewParameterProvider<OnBoardingState> {
             ),
             anOnBoardingState(
                 showBackButton = true,
+                showDeveloperSettings = true,
             ),
         )
 }
@@ -38,6 +39,7 @@ open class OnBoardingStateProvider : PreviewParameterProvider<OnBoardingState> {
 fun anOnBoardingState(
     isAddingAccount: Boolean = false,
     showBackButton: Boolean = false,
+    showDeveloperSettings: Boolean = false,
     productionApplicationName: String = "Element",
     defaultAccountProvider: String? = null,
     mustChooseAccountProvider: Boolean = false,
@@ -52,6 +54,7 @@ fun anOnBoardingState(
 ) = OnBoardingState(
     isAddingAccount = isAddingAccount,
     showBackButton = showBackButton,
+    showDeveloperSettings = showDeveloperSettings,
     productionApplicationName = productionApplicationName,
     defaultAccountProvider = defaultAccountProvider,
     mustChooseAccountProvider = mustChooseAccountProvider,

@@ -17,18 +17,24 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -39,14 +45,17 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -69,6 +78,7 @@ import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.designsystem.utils.hasCompactHeightWindowSize
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
 import io.element.android.libraries.matrix.api.media.MediaSource
@@ -102,8 +112,9 @@ fun MediaViewerView(
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
     var showOverlay by remember { mutableStateOf(true) }
 
-    val defaultBottomPaddingInPixels = if (LocalInspectionMode.current) 303 else 0
     val currentData = state.listData.getOrNull(state.currentIndex)
+    val defaultBottomPaddingInPixels = if (LocalInspectionMode.current && !hasCompactHeightWindowSize()) 303 else 0
+
     BackHandler { onBackClick() }
     Scaffold(
         modifier,
@@ -153,10 +164,11 @@ fun MediaViewerView(
                             // So we need to update this value only when the `settledPage` value changes. It seems like a bug that needs to be fixed in Compose.
                             page == pagerState.settledPage
                         }
+                        val navigationBarPadding = WindowInsets.navigationBars.getBottom(LocalDensity.current)
                         MediaViewerPage(
                             isDisplayed = isDisplayed,
                             showOverlay = showOverlay,
-                            bottomPaddingInPixels = bottomPaddingInPixels,
+                            bottomPaddingInPixels = (bottomPaddingInPixels - navigationBarPadding).coerceAtLeast(0),
                             data = dataForPage,
                             textFileViewer = textFileViewer,
                             onDismiss = onBackClick,
@@ -175,9 +187,7 @@ fun MediaViewerView(
                         // Bottom bar
                         AnimatedVisibility(visible = showOverlay, enter = fadeIn(), exit = fadeOut()) {
                             Box(
-                                modifier = Modifier
-                                    .fillMaxSize()
-                                    .navigationBarsPadding()
+                                modifier = Modifier.fillMaxSize()
                             ) {
                                 MediaViewerBottomBar(
                                     modifier = Modifier.align(Alignment.BottomCenter),
@@ -538,18 +548,45 @@ private fun MediaViewerBottomBar(
             if (showDivider) {
                 HorizontalDivider()
             }
-            Text(
+            val scrollState = rememberScrollState()
+            val showBottomShadow by remember { derivedStateOf { scrollState.value < scrollState.maxValue } }
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
-                text = caption,
-                maxLines = 5,
-                overflow = TextOverflow.Ellipsis,
-                style = ElementTheme.typography.fontBodyLgRegular,
-            )
+                    .heightIn(max = if (hasCompactHeightWindowSize()) maxCaptionHeightLandscape else maxCaptionHeightPortrait),
+            ) {
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp)
+                        .verticalScroll(scrollState)
+                        .navigationBarsPadding(),
+                    text = caption,
+                    style = ElementTheme.typography.fontBodyLgRegular,
+                )
+                if (showBottomShadow) {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(48.dp)
+                            .align(Alignment.BottomCenter)
+                            .background(
+                                brush = Brush.verticalGradient(
+                                    colors = listOf(
+                                        Color.Transparent,
+                                        bgCanvasWithTransparency,
+                                    ),
+                                ),
+                            ),
+                    )
+                }
+            }
         }
     }
 }
+
+private val maxCaptionHeightPortrait = 200.dp
+private val maxCaptionHeightLandscape = 128.dp
 
 @Composable
 private fun ThumbnailView(
@@ -597,6 +634,17 @@ private fun ErrorView(
 @Preview
 @Composable
 internal fun MediaViewerViewPreview(@PreviewParameter(MediaViewerStateProvider::class) state: MediaViewerState) = ElementPreviewDark {
+    MediaViewerView(
+        state = state,
+        audioFocus = null,
+        textFileViewer = { _, _ -> },
+        onBackClick = {},
+    )
+}
+
+@Preview(device = "${Devices.PHONE}, orientation=landscape")
+@Composable
+internal fun MediaViewerViewLandscapePreview(@PreviewParameter(MediaViewerStateProvider::class) state: MediaViewerState) = ElementPreviewDark {
     MediaViewerView(
         state = state,
         audioFocus = null,

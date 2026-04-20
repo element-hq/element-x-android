@@ -64,6 +64,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun OnBoardingView(
     state: OnBoardingState,
     onBackClick: () -> Unit,
+    onDeveloperSettingsClick: () -> Unit,
     onSignInWithQrCode: () -> Unit,
     onSignIn: (mustChooseAccountProvider: Boolean) -> Unit,
     onCreateAccount: () -> Unit,
@@ -110,6 +111,7 @@ fun OnBoardingView(
             loginView = loginView,
             buttons = buttons,
             onBackClick = onBackClick,
+            onDeveloperSettingsClick = onDeveloperSettingsClick,
         )
     }
 }
@@ -120,6 +122,7 @@ private fun AddFirstAccountScaffold(
     loginView: @Composable () -> Unit,
     buttons: @Composable () -> Unit,
     onBackClick: () -> Unit,
+    onDeveloperSettingsClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     OnBoardingPage(
@@ -135,6 +138,18 @@ private fun AddFirstAccountScaffold(
                     )
                 } else {
                     OnBoardingContent(state = state)
+                }
+                if (state.showDeveloperSettings) {
+                    IconButton(
+                        onClick = onDeveloperSettingsClick,
+                        modifier = Modifier
+                            .align(Alignment.TopStart),
+                    ) {
+                        Icon(
+                            imageVector = CompoundIcons.SettingsSolid(),
+                            contentDescription = stringResource(CommonStrings.common_developer_options),
+                        )
+                    }
                 }
                 if (state.showBackButton) {
                     // Add icon button to "navigate back"
@@ -334,6 +349,7 @@ internal fun OnBoardingViewPreview(
     OnBoardingView(
         state = state,
         onBackClick = {},
+        onDeveloperSettingsClick = {},
         onSignInWithQrCode = {},
         onSignIn = {},
         onCreateAccount = {},

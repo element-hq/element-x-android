@@ -30,7 +30,6 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.api.verification.SessionVerificationService
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -99,9 +98,6 @@ class PreferencesRootPresenter(
         val accountManagementUrl: MutableState<String?> = remember {
             mutableStateOf(null)
         }
-        val devicesManagementUrl: MutableState<String?> = remember {
-            mutableStateOf(null)
-        }
         var canDeactivateAccount by remember {
             mutableStateOf(false)
         }
@@ -110,9 +106,9 @@ class PreferencesRootPresenter(
             canDeactivateAccount = matrixClient.canDeactivateAccount()
         }
 
-        val showBlockedUsersItem by produceState(initialValue = false) {
+        val nbOfBlockedUsers by produceState(initialValue = 0) {
             matrixClient.ignoredUsersFlow
-                .onEach { value = it.isNotEmpty() }
+                .onEach { value = it.size }
                 .launchIn(this)
         }
 
@@ -121,17 +117,17 @@ class PreferencesRootPresenter(
         val directLogoutState = directLogoutPresenter.present()
 
         LaunchedEffect(Unit) {
-            initAccountManagementUrl(accountManagementUrl, devicesManagementUrl)
+            initAccountManagementUrl(accountManagementUrl)
         }
 
         val showDeveloperSettings by showDeveloperSettingsProvider.showDeveloperSettings.collectAsState()
 
-        fun handleEvent(event: PreferencesRootEvents) {
+        fun handleEvent(event: PreferencesRootEvent) {
             when (event) {
-                is PreferencesRootEvents.OnVersionInfoClick -> {
+                is PreferencesRootEvent.OnVersionInfoClick -> {
                     showDeveloperSettingsProvider.unlockDeveloperSettings(coroutineScope)
                 }
-                is PreferencesRootEvents.SwitchToSession -> coroutineScope.launch {
+                is PreferencesRootEvent.SwitchToSession -> coroutineScope.launch {
                     sessionStore.setLatestSession(event.sessionId.value)
                 }
             }
@@ -146,13 +142,12 @@ class PreferencesRootPresenter(
             showSecureBackup = !canVerifyUserSession,
             showSecureBackupBadge = showSecureBackupIndicator,
             accountManagementUrl = accountManagementUrl.value,
-            devicesManagementUrl = devicesManagementUrl.value,
             showAnalyticsSettings = hasAnalyticsProviders,
             canReportBug = canReportBug,
             showLinkNewDevice = showLinkNewDevice,
             showDeveloperSettings = showDeveloperSettings,
             canDeactivateAccount = canDeactivateAccount,
-            showBlockedUsersItem = showBlockedUsersItem,
+            nbOfBlockedUsers = nbOfBlockedUsers,
             showLabsItem = showLabsItem,
             directLogoutState = directLogoutState,
             snackbarMessage = snackbarMessage,
@@ -162,9 +157,7 @@ class PreferencesRootPresenter(
 
     private fun CoroutineScope.initAccountManagementUrl(
         accountManagementUrl: MutableState<String?>,
-        devicesManagementUrl: MutableState<String?>,
     ) = launch {
-        accountManagementUrl.value = matrixClient.getAccountManagementUrl(AccountManagementAction.Profile).getOrNull()
-        devicesManagementUrl.value = matrixClient.getAccountManagementUrl(AccountManagementAction.DevicesList).getOrNull()
+        accountManagementUrl.value = matrixClient.getAccountManagementUrl(null).getOrNull()
     }
 }

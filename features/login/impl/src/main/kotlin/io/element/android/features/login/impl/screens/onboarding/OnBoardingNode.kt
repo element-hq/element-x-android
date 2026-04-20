@@ -42,6 +42,7 @@ class OnBoardingNode(
         fun navigateToLoginPassword()
         fun navigateToOidc(oidcDetails: OidcDetails)
         fun navigateToCreateAccount(url: String)
+        fun navigateToDeveloperSettings()
         fun onDone()
     }
 
@@ -75,6 +76,7 @@ class OnBoardingNode(
             onLearnMoreClick = { openLearnMorePage(context) },
             onCreateAccountContinue = callback::navigateToCreateAccount,
             onBackClick = callback::onDone,
+            onDeveloperSettingsClick = callback::navigateToDeveloperSettings,
         )
     }
 }

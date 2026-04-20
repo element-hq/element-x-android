@@ -50,7 +50,7 @@ internal fun ColorsSchemeLightHcPreview() = ElementTheme(
 @Preview(heightDp = 1200)
 @Composable
 internal fun ColorsSchemeDarkPreview() = ElementTheme(
-    darkTheme = true,
+    theme = Theme.Dark,
 ) {
     ColorsSchemePreview(
         Color.White,
@@ -62,8 +62,20 @@ internal fun ColorsSchemeDarkPreview() = ElementTheme(
 @Preview(heightDp = 1200)
 @Composable
 internal fun ColorsSchemeDarkHcPreview() = ElementTheme(
-    darkTheme = true,
+    theme = Theme.Dark,
     compoundDark = compoundColorsHcDark,
+) {
+    ColorsSchemePreview(
+        Color.White,
+        Color.Black,
+        ElementTheme.materialColors,
+    )
+}
+
+@Preview(heightDp = 1200)
+@Composable
+internal fun ColorsSchemeBlackPreview() = ElementTheme(
+    theme = Theme.Black
 ) {
     ColorsSchemePreview(
         Color.White,

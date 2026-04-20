@@ -20,15 +20,6 @@ open class MatrixUserProvider : PreviewParameterProvider<MatrixUser> {
         )
 }
 
-open class MatrixUserWithNullProvider : PreviewParameterProvider<MatrixUser?> {
-    override val values: Sequence<MatrixUser?>
-        get() = sequenceOf(
-            aMatrixUser(),
-            aMatrixUser(displayName = null),
-            null,
-        )
-}
-
 open class MatrixUserWithAvatarProvider : PreviewParameterProvider<MatrixUser?> {
     override val values: Sequence<MatrixUser?>
         get() = sequenceOf(
