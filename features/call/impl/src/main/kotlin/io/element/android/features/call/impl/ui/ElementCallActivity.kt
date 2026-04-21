@@ -32,6 +32,9 @@ import androidx.compose.runtime.rememberUpdatedState
 import androidx.core.app.PictureInPictureModeChangedInfo
 import androidx.core.content.IntentCompat
 import androidx.core.util.Consumer
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.WindowInsetsControllerCompat
 import androidx.lifecycle.Lifecycle
 import dev.zacsweers.metro.Inject
 import io.element.android.compound.colors.SemanticColorsLightDark
@@ -54,6 +57,7 @@ import io.element.android.libraries.audio.api.AudioFocusRequester
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.designsystem.theme.ElementThemeApp
+import io.element.android.libraries.designsystem.utils.hasCompactHeightWindowSize
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import timber.log.Timber
@@ -114,6 +118,27 @@ class ElementCallActivity :
             val colors by remember(webViewTarget.value?.getSessionId()) {
                 enterpriseService.semanticColorsFlow(sessionId = webViewTarget.value?.getSessionId())
             }.collectAsState(SemanticColorsLightDark.default)
+
+            // When the height is compact, hide the system bars by default to maximize the space for the call, using immersive mode
+            val hasCompactHeight = hasCompactHeightWindowSize()
+            DisposableEffect(hasCompactHeight) {
+                if (hasCompactHeight) {
+                    val window = this@ElementCallActivity.window ?: return@DisposableEffect onDispose {}
+                    val insetsController = WindowCompat.getInsetsController(window, window.decorView)
+                    val systemBarInsets = WindowInsetsCompat.Type.systemBars()
+                    insetsController.hide(systemBarInsets)
+
+                    insetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+
+                    onDispose {
+                        insetsController.show(systemBarInsets)
+                        insetsController.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_DEFAULT
+                    }
+                } else {
+                    onDispose {}
+                }
+            }
+
             ElementThemeApp(
                 appPreferencesStore = appPreferencesStore,
                 featureFlagService = featureFlagService,
