@@ -161,4 +161,12 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
+    AutomaticBackPagination(
+        key = "feature.automatic_back_pagination",
+        title = "Automatic back pagination of rooms",
+        description = "Allow the app to automatically back paginate in rooms to pre-fetch older messages in background." +
+            "\nRequires an app restart to take effect.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
 }
