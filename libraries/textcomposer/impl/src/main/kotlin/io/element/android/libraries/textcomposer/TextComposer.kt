@@ -66,10 +66,14 @@ import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.IconColorButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetailsProvider
+import io.element.android.libraries.matrix.ui.messages.reply.aProfileDetailsReady
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.textcomposer.components.SendButtonIcon
@@ -984,6 +988,33 @@ internal fun TextComposerVoiceNotEncryptedPreview() = ElementPreview {
             voiceMessageState = voiceMessageState,
             composerMode = MessageComposerMode.Normal,
         )
+    }
+}
+
+@Preview(device = "spec:width=420dp,height=136dp", fontScale = 1.5f)
+@Composable
+internal fun TextComposerScaledDensityWithReplyPreview() {
+    ElementPreview {
+        val replyToDetails = InReplyToDetails.Ready(
+            eventId = EventId("\$1234"),
+            senderId = UserId("@alice:example.com"),
+            senderProfile = aProfileDetailsReady(),
+            eventContent = MessageContent(
+                body = "Message which are being replied, and which was long enough to be displayed on two lines (only!).",
+                inReplyTo = null,
+                isEdited = false,
+                threadInfo = null,
+                type = TextMessageType("Message which are being replied, and which was long enough to be displayed on two lines (only!).", null)
+            ),
+            textContent = "Message which are being replied, and which was long enough to be displayed on two lines (only!).",
+        )
+        Box {
+            ATextComposer(
+                state = aTextEditorStateMarkdown(initialText = "", initialFocus = true),
+                voiceMessageState = VoiceMessageState.Idle,
+                composerMode = MessageComposerMode.Reply(replyToDetails, hideImage = false),
+            )
+        }
     }
 }
 
