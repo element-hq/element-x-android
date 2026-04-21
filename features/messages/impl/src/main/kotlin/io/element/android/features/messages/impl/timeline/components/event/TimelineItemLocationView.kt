@@ -140,7 +140,7 @@ private fun LiveLocationOverlay(
             }
         }
 
-        if (mode.isActive && mode.canStop) {
+        if (mode.canStopSharing) {
             IconButton(
                 onClick = onStopClick,
                 colors = IconButtonDefaults.iconButtonColors(

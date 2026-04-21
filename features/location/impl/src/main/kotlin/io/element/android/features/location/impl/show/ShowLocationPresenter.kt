@@ -136,6 +136,7 @@ class ShowLocationPresenter(
                             location = mode.location,
                             isLive = false,
                             assetType = mode.assetType,
+                            isOwnUser = mode.senderId == joinedRoom.sessionId
                         )
                     )
                 }
@@ -143,10 +144,9 @@ class ShowLocationPresenter(
             is ShowLocationMode.Live -> {
                 produceState(persistentListOf()) {
                     val comparator = LiveLocationShareComparator(currentUser = joinedRoom.sessionId)
-                    val isCurrentlySharing = liveLocationShareManager.isCurrentlySharing(joinedRoom.roomId)
                     val liveLocationSharesFlow = joinedRoom.subscribeToLiveLocationShares()
                     val membersStateFlow = joinedRoom.membersStateFlow.mapState { it.joinedRoomMembers() }
-                    combine(isCurrentlySharing, liveLocationSharesFlow, membersStateFlow) { isCurrentlySharing, liveShares, members ->
+                    combine(liveLocationSharesFlow, membersStateFlow) { liveShares, members ->
                         liveShares
                             .sortedWith(comparator)
                             .mapNotNull { share ->
@@ -173,7 +173,7 @@ class ShowLocationPresenter(
                                     location = location,
                                     isLive = true,
                                     assetType = lastLocation.assetType,
-                                    canStop = isCurrentlySharing && share.userId == joinedRoom.sessionId
+                                    isOwnUser = share.userId == joinedRoom.sessionId
                                 )
                             }
                             .toImmutableList()

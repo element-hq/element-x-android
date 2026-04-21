@@ -125,6 +125,7 @@ class TimelineItemContentFactory(
                         isActive = itemContent.isLive,
                         endsAt = stringProvider.getString(CommonStrings.common_ends_at, endsAt),
                         endTimestamp = itemContent.endTimestamp,
+                        isOwnUser = sessionId == sender
                     ),
                 )
             }

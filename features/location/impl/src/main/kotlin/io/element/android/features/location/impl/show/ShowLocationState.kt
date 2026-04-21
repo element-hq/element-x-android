@@ -38,8 +38,10 @@ data class LocationShareItem(
     val location: Location,
     val isLive: Boolean,
     val assetType: AssetType?,
-    val canStop: Boolean = false
-)
+    val isOwnUser: Boolean
+){
+    val canStopSharing = isLive && isOwnUser
+}
 
 fun LocationShareItem.toMarkerData(): LocationMarkerData {
     val pinVariant = if (assetType == AssetType.PIN) {

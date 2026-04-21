@@ -30,6 +30,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemUnknownContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVideoContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
+import io.element.android.features.messages.impl.timeline.model.event.ensureActiveLiveLocation
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.voiceplayer.api.VoiceMessageState
 import io.element.android.wysiwyg.link.Link
@@ -72,9 +73,8 @@ fun TimelineItemEventContentView(
             modifier = modifier
         )
         is TimelineItemLocationContent -> {
-            val presenter: Presenter<TimelineItemLocationContent> = presenterFactories.rememberPresenter(content)
             TimelineItemLocationView(
-                content = presenter.present(),
+                content = content.ensureActiveLiveLocation(),
                 onStopLiveLocationClick = { eventSink(TimelineEvent.StopLiveLocationShare) },
                 modifier = modifier
             )

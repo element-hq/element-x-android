@@ -782,7 +782,7 @@ private fun MessageEventBubbleContent(
             val content = content.ensureActiveLiveLocation()
             val shouldHide = content.mode is TimelineItemLocationContent.Mode.Live &&
                 content.mode.isActive &&
-                content.mode.canStop
+                content.mode.isOwnUser
             if (shouldHide) TimestampPosition.Hidden else TimestampPosition.Overlay
         }
         is TimelineItemPollContent -> TimestampPosition.Below

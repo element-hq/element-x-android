@@ -101,7 +101,7 @@ fun LocationShareRow(
                 )
             }
         }
-        if (item.canStop) {
+        if (item.canStopSharing) {
             IconButton(
                 onClick = onStopClick,
                 colors = IconButtonDefaults.iconButtonColors(
@@ -115,13 +115,7 @@ fun LocationShareRow(
                 )
             }
         }
-        IconButton(
-            onClick = onShareClick,
-            colors = IconButtonDefaults.iconButtonColors(
-                containerColor = ElementTheme.colors.bgCanvasDefaultLevel1,
-                contentColor = ElementTheme.colors.iconPrimary,
-            )
-        ) {
+        IconButton(onClick = onShareClick) {
             Icon(
                 imageVector = CompoundIcons.ShareAndroid(),
                 contentDescription = stringResource(CommonStrings.action_share),
@@ -148,7 +142,7 @@ internal fun LocationShareRowPreview() = ElementPreview {
                 isLive = true,
                 assetType = AssetType.SENDER,
                 location = Location(0.0, 0.0),
-                canStop = true,
+                isOwnUser = true,
             ),
             onStopClick = {},
             onShareClick = {},
@@ -166,7 +160,8 @@ internal fun LocationShareRowPreview() = ElementPreview {
                 isLive = false,
                 assetType = AssetType.PIN,
                 formattedTimestamp = "Shared 5 hours ago",
-                location = Location(0.0, 0.0)
+                location = Location(0.0, 0.0),
+                isOwnUser = false
             ),
             onStopClick = {},
             onShareClick = {},

@@ -17,54 +17,51 @@ import io.element.android.libraries.matrix.ui.messages.reply.aProfileDetailsRead
 open class TimelineItemLocationContentProvider : PreviewParameterProvider<TimelineItemLocationContent> {
     override val values: Sequence<TimelineItemLocationContent>
         get() = sequenceOf(
-            aTimelineItemLocationContent(),
             aTimelineItemLocationContent(
-                mode = TimelineItemLocationContent.Mode.Live(
-                    isActive = true,
-                    endsAt = "Ends at 12:34",
-                    endTimestamp = 0L,
-                    canStop = true,
-                    lastKnownLocation = aLocation()
-                ),
+                mode = aStaticLocationMode()
             ),
             aTimelineItemLocationContent(
-                mode = TimelineItemLocationContent.Mode.Live(
-                    isActive = true,
-                    endsAt = "Ends at 12:34",
-                    endTimestamp = 0L,
-                    lastKnownLocation = aLocation()
-                ),
+                mode = aLiveLocationMode(isActive = true)
             ),
             aTimelineItemLocationContent(
-                mode = TimelineItemLocationContent.Mode.Live(
-                    isActive = true,
-                    endsAt = "Ends at 12:34",
-                    endTimestamp = 0L,
-                    lastKnownLocation = null
-                ),
+                mode = aLiveLocationMode(isActive = true, lastKnownLocation = null)
             ),
             aTimelineItemLocationContent(
-                mode = TimelineItemLocationContent.Mode.Live(
-                    isActive = false,
-                    endsAt = "",
-                    endTimestamp = 0L,
-                    lastKnownLocation = aLocation()
-                ),
+                mode = aLiveLocationMode(isActive = true, isOwnUser = false)
+            ),
+            aTimelineItemLocationContent(
+                mode = aLiveLocationMode(isActive = false)
             ),
         )
 }
+fun aLiveLocationMode(
+    isActive: Boolean,
+    isOwnUser: Boolean = true,
+    lastKnownLocation: Location? = aLocation(),
+    endsAt: String = "Ends at 12:34",
+    endTimestamp: Long = 0L,
+): TimelineItemLocationContent.Mode = TimelineItemLocationContent.Mode.Live(
+    isActive = isActive,
+    endsAt = endsAt,
+    endTimestamp = endTimestamp,
+    isOwnUser = isOwnUser,
+    lastKnownLocation = lastKnownLocation
+)
+
+fun aStaticLocationMode(location: Location = aLocation()) = TimelineItemLocationContent.Mode.Static(location)
 
 fun aTimelineItemLocationContent(
     senderId: UserId = UserId("@sender:matrix.org"),
     senderProfile: ProfileDetails = aProfileDetailsReady(),
     description: String? = null,
-    mode: TimelineItemLocationContent.Mode = TimelineItemLocationContent.Mode.Static(aLocation()),
+    mode: TimelineItemLocationContent.Mode,
 ) = TimelineItemLocationContent(
     senderId = senderId,
     senderProfile = senderProfile,
     description = description,
     mode = mode,
 )
+
 
 fun aLocation() = Location(
     lat = 52.2445,
