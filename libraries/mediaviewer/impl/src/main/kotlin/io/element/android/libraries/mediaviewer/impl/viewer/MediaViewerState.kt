@@ -12,6 +12,8 @@ import androidx.compose.runtime.State
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaviewer.api.MediaInfo
@@ -26,8 +28,8 @@ data class MediaViewerState(
     val snackbarMessage: SnackbarMessage?,
     val canShowInfo: Boolean,
     val mediaBottomSheetState: MediaBottomSheetState,
-    val sessionId: String,
-    val roomId: String,
+    val sessionId: SessionId,
+    val roomId: RoomId,
     val eventSink: (MediaViewerEvents) -> Unit,
 )
 

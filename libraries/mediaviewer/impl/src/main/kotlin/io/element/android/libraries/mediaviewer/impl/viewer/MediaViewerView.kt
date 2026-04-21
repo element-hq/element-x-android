@@ -79,6 +79,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.hasCompactHeightWindowSize
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.mediaviewer.api.MediaInfo
@@ -155,7 +156,7 @@ fun MediaViewerView(
                         LocalMediaPlaybackContext provides MediaPlaybackContext(
                             sessionId = state.sessionId,
                             roomId = state.roomId,
-                            eventId = dataForPage.eventId?.value.orEmpty(),
+                            eventId = dataForPage.eventId ?: EventId(""),
                             thumbnailSource = dataForPage.thumbnailSource,
                         )
                     ) {

@@ -13,6 +13,7 @@ import androidx.media3.common.MediaMetadata
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaSource
@@ -60,8 +61,8 @@ class MediaPlaylistManager(
     )
 
     private val skipMutex = Mutex()
-    private var currentSessionId: String? = null
-    private var currentRoomId: String? = null
+    private var currentSessionId: SessionId? = null
+    private var currentRoomId: RoomId? = null
     var currentEventId: EventId? = null
         private set
 
@@ -85,25 +86,25 @@ class MediaPlaylistManager(
             return index > 0
         }
 
-    fun initialize(sessionId: String, roomId: String, eventId: String) {
+    fun initialize(sessionId: SessionId, roomId: RoomId, eventId: EventId) {
         if (sessionId == currentSessionId && roomId == currentRoomId) {
-            currentEventId = EventId(eventId)
+            currentEventId = eventId
             return
         }
         release()
         currentSessionId = sessionId
         currentRoomId = roomId
-        currentEventId = EventId(eventId)
+        currentEventId = eventId
 
         collectionJob = coroutineScope.launch {
             try {
-                val client = matrixClientProvider.getOrRestore(UserId(sessionId)).getOrNull() ?: return@launch
+                val client = matrixClientProvider.getOrRestore(sessionId).getOrNull() ?: return@launch
                 mediaLoader = client.matrixMediaLoader
-                val joinedRoom = client.getJoinedRoom(RoomId(roomId)) ?: return@launch
+                val joinedRoom = client.getJoinedRoom(roomId) ?: return@launch
                 room = joinedRoom
 
                 val mediaTimeline = joinedRoom.createTimeline(
-                    CreateTimelineParams.MediaOnlyFocused(EventId(eventId))
+                    CreateTimelineParams.MediaOnlyFocused(eventId)
                 ).getOrNull() ?: return@launch
                 timeline = mediaTimeline
 
@@ -248,8 +249,8 @@ class MediaPlaylistManager(
             }
 
             val extras = Bundle().apply {
-                putString("sessionId", currentSessionId)
-                putString("roomId", currentRoomId)
+                putString("sessionId", currentSessionId?.value)
+                putString("roomId", currentRoomId?.value)
                 putString("eventId", item.eventId.value)
             }
             val metadata = MediaMetadata.Builder()

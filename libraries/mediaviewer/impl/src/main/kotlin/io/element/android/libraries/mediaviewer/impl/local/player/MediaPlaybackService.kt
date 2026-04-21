@@ -29,6 +29,9 @@ import dev.zacsweers.metro.Inject
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.data.tryOrNull
 import io.element.android.libraries.matrix.api.MatrixClientProvider
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaFactory
@@ -130,7 +133,7 @@ class MediaPlaybackService : MediaSessionService() {
         val roomId = extras.getString("roomId") ?: return
         val eventId = extras.getString("eventId") ?: return
 
-        playlistManager?.initialize(sessionId, roomId, eventId)
+        playlistManager?.initialize(SessionId(sessionId), RoomId(roomId), EventId(eventId))
         updateSkipButtonState()
     }
 

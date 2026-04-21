@@ -196,12 +196,12 @@ private fun ServicePlayerMediaVideoView(
             if (!isDisplayed) return@LaunchedEffect
             // Step 1: Send bare MediaItem with ONLY extras - let ExoPlayer extract embedded metadata
             // (title/artist/artwork). Service will inject notification metadata after embedded is extracted.
-            val hasValidContext = playbackContext.sessionId.isNotEmpty()
+            val hasValidContext = playbackContext.sessionId.value.isNotEmpty()
             val extras = if (hasValidContext) {
                 Bundle().apply {
-                    putString("sessionId", playbackContext.sessionId)
-                    putString("roomId", playbackContext.roomId)
-                    putString("eventId", playbackContext.eventId)
+                    putString("sessionId", playbackContext.sessionId.value)
+                    putString("roomId", playbackContext.roomId.value)
+                    putString("eventId", playbackContext.eventId.value)
                     // Signal that notification metadata should be injected by the service
                     putString("notificationTitle", localMedia.info.filename)
                     putString("notificationArtist", localMedia.info.senderName)
@@ -214,7 +214,7 @@ private fun ServicePlayerMediaVideoView(
             // Send minimal MediaItem - no title/artist/artwork so ExoPlayer extracts embedded
             val mediaMetadata = extras?.let { MediaMetadata.Builder().setExtras(it).build() }
                 ?: MediaMetadata.EMPTY
-            val mediaId = if (hasValidContext) playbackContext.eventId else localMedia.uri.toString()
+            val mediaId = if (hasValidContext) playbackContext.eventId.value else localMedia.uri.toString()
             val mediaItem = MediaItem.Builder()
                 .setMediaId(mediaId)
                 .setUri(localMedia.uri)

@@ -168,8 +168,8 @@ class MediaViewerPresenter(
             snackbarMessage = snackbarMessage,
             canShowInfo = inputs.canShowInfo,
             mediaBottomSheetState = mediaBottomSheetState,
-            sessionId = room.sessionId.value,
-            roomId = room.roomId.value,
+            sessionId = room.sessionId,
+            roomId = room.roomId,
             eventSink = ::handleEvent,
         )
     }

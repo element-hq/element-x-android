@@ -8,12 +8,15 @@
 package io.element.android.libraries.mediaviewer.impl.local.player
 
 import androidx.compose.runtime.compositionLocalOf
+import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.media.MediaSource
 
 data class MediaPlaybackContext(
-    val sessionId: String = "",
-    val roomId: String = "",
-    val eventId: String = "",
+    val sessionId: SessionId = SessionId(""),
+    val roomId: RoomId = RoomId(""),
+    val eventId: EventId = EventId(""),
     val thumbnailSource: MediaSource? = null,
 )
 
