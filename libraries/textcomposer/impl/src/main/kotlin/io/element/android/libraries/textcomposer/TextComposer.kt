@@ -657,12 +657,12 @@ private fun TextInputBox(
             )
         } else {
             // Top padding for the message composer box
-            Spacer(Modifier.height(7.dp))
+            Spacer(Modifier.height(4.dp))
         }
 
         Box(
             modifier = Modifier
-                .padding(bottom = 4.dp, start = 12.dp, end = 12.dp)
+                .padding(top = 1.dp, bottom = 4.dp, start = 12.dp, end = 12.dp)
                 .then(Modifier.testTag(TestTags.textEditor)),
             contentAlignment = Alignment.CenterStart,
         ) {
@@ -672,7 +672,7 @@ private fun TextInputBox(
                 Icon(
                     modifier = Modifier
                         .clickable { showBottomSheet = true }
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                        .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp)
                         .align(Alignment.CenterEnd),
                     imageVector = CompoundIcons.InfoSolid(),
                     tint = ElementTheme.colors.iconCriticalPrimary,

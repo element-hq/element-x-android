@@ -82,7 +82,7 @@ fun MarkdownTextInput(
 
     AndroidView(
         modifier = Modifier
-            .padding(top = 2.dp, bottom = 6.dp)
+            .padding(top = 5.dp, bottom = 6.dp)
             .fillMaxWidth(),
         factory = { context ->
             MarkdownEditText(context).apply {
