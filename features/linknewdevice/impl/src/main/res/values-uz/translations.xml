@@ -26,6 +26,7 @@
   <string name="screen_link_new_device_root_loading_qr_code">"QR kod yuklanmoqda…"</string>
   <string name="screen_link_new_device_root_mobile_device">"Mobil qurilma"</string>
   <string name="screen_link_new_device_root_title">"Qaysi turdagi qurilmani bog‘lashni xohlaysiz?"</string>
+  <string name="screen_link_new_device_wrong_number_subtitle">"Qayta urining va 2 xonali kodni bexato kiritganingizni tekshiring. Agar raqamlar hali ham mos kelmasa, hisobingiz provayderiga murojaat qiling."</string>
   <string name="screen_link_new_device_wrong_number_title">"Raqamlar mos kelmaydi"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Yangi qurilmaga xavfsiz ulanish amalga oshirilmadi. Mavjud qurilmalaringiz hali ham xavfsiz va ular haqida qaygʻurishingiz shart emas."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_header">"Endi nima?"</string>
@@ -37,6 +38,8 @@
   <string name="screen_qr_code_login_error_cancelled_title">"Tizimga kirish soʻrovi bekor qilindi"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"Boshqa qurilmadan hisobga kirish bekor qilindi."</string>
   <string name="screen_qr_code_login_error_declined_title">"Tizimga kirish rad etildi"</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_subtitle">"Boshqa hech narsa qilishingiz shart emas."</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_title">"Boshqa qurilmangiz allaqachon tizimga kirgan"</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"Kirish muddati tugagan. Iltimos, qayta urinib koʻring."</string>
   <string name="screen_qr_code_login_error_expired_title">"Kirish oʻz vaqtida tugallanmagan"</string>
   <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"Boshqa qurilmangiz %s hisobiga QR kod orqali kirishni qoʻllab-quvvatlamaydi.

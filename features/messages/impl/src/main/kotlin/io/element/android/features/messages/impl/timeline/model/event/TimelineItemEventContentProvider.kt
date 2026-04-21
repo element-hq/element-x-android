@@ -35,7 +35,9 @@ class TimelineItemEventContentProvider : PreviewParameterProvider<TimelineItemEv
         aTimelineItemUnknownContent(),
         aTimelineItemTextContent().copy(isEdited = true),
         aTimelineItemTextContent(body = AN_EMOJI_ONLY_TEXT),
-        aTimelineItemLocationContent(mode = TimelineItemLocationContent.Mode.Live(isActive = true)),
+        aTimelineItemLocationContent(
+            mode = TimelineItemLocationContent.Mode.Live(isActive = true, endsAt = "Ends at 12:34", endTimestamp = 0L, lastKnownLocation = null)
+        ),
     )
 }
 

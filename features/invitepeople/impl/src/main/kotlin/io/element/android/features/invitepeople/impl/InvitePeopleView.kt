@@ -23,7 +23,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -264,8 +263,16 @@ private fun InvitePeopleConfirmModal(
         dragHandle = null,
     ) {
         IconTitleSubtitleMolecule(
-            title = pluralStringResource(R.plurals.screen_invite_users_confirm_dialog_title, users.size),
-            subTitle = pluralStringResource(R.plurals.screen_invite_users_confirm_dialog_subtitle, users.size),
+            title = if (users.size > 1) {
+                stringResource(R.string.screen_invite_users_confirm_dialog_title_mutiple_users)
+            } else {
+                stringResource(R.string.screen_invite_users_confirm_dialog_title_one_user)
+            },
+            subTitle = if (users.size > 1) {
+                stringResource(R.string.screen_invite_users_confirm_dialog_subtitle_multiple_users)
+            } else {
+                stringResource(R.string.screen_invite_users_confirm_dialog_subtitle_one_user)
+            },
             iconStyle = BigIcon.Style.Default(CompoundIcons.UserAddSolid()),
             modifier = Modifier.padding(
                 top = 32.dp,

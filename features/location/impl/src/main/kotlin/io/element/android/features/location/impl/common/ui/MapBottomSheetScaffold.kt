@@ -10,12 +10,14 @@ package io.element.android.features.location.impl.common.ui
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.WindowInsetsSides
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.only
 import androidx.compose.foundation.layout.safeDrawing
@@ -43,6 +45,7 @@ import androidx.compose.ui.unit.max
 import io.element.android.features.location.api.internal.rememberTileStyleUrl
 import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.libraries.core.data.tryOrNull
+import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.BottomSheetScaffold
 import org.maplibre.compose.camera.CameraState
 import org.maplibre.compose.camera.rememberCameraState
@@ -112,8 +115,11 @@ fun MapBottomSheetScaffold(
             modifier = Modifier,
             sheetPeekHeight = sheetPeekHeight,
             sheetContent = {
-                sheetContent(sheetPadding)
-                Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
+                val maxContentHeight = (layoutHeightPx * 0.5f).roundToInt().toDp()
+                Column(modifier = Modifier.heightIn(max = maxContentHeight)) {
+                    sheetContent(sheetPadding)
+                    Spacer(modifier = Modifier.windowInsetsBottomHeight(WindowInsets.navigationBars))
+                }
             },
             scaffoldState = scaffoldState,
             sheetDragHandle = sheetDragHandle,

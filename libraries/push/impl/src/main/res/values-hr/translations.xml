@@ -17,6 +17,11 @@
   </plurals>
   <string name="notification_error_unified_push_unregistered_android">"Distributer obavijesti UnifiedPush nije mogao biti registriran, tako da više nećete primati obavijesti. Provjerite postavke obavijesti u aplikaciji i status distributera push obavijesti."</string>
   <string name="notification_fallback_content">"Imate nove poruke."</string>
+  <plurals name="notification_fallback_n_content">
+    <item quantity="one">"Imate%d novu poruku."</item>
+    <item quantity="other">"Imate %d novi poruka."</item>
+  </plurals>
+  <string name="notification_incoming_audio_call">"📞 Dolazni poziv"</string>
   <string name="notification_incoming_call">"📹 Dolazni poziv"</string>
   <string name="notification_inline_reply_failed">"** Slanje nije uspjelo – otvorite sobu"</string>
   <string name="notification_invitation_action_join">"Pridruži se"</string>

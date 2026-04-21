@@ -8,10 +8,20 @@
   </plurals>
   <string name="screen_leave_space_subtitle">"Siz yagona administrator bo‘lmagan xonalardan chiqishni xohlasangiz, ularni tanlang:"</string>
   <string name="screen_leave_space_subtitle_last_admin">" Ketishingizdan oldin bu maydon uchun boshqa administrator tayinlashingiz kerak."</string>
+  <string name="screen_leave_space_subtitle_last_owner">"Siz %1$s yagona egasisiz. Ketishdan oldin egalik huquqini boshqa shaxsga o‘tkazishingiz kerak."</string>
   <string name="screen_leave_space_subtitle_only_last_admin">"Siz quyidagi xona(lar)dan olib tashlanmaysiz, chunki siz yagona administratorsiz:"</string>
   <string name="screen_leave_space_title">"%1$s dan chiqasizmi?"</string>
   <string name="screen_leave_space_title_last_admin">"Siz %1$s uchun yagona administratorsiz"</string>
+  <string name="screen_leave_space_title_last_owner">"Egalikni topshirish"</string>
+  <string name="screen_space_add_room_action">"Xona"</string>
+  <string name="screen_space_add_rooms_room_access_description">"Xona kiritish xonaga kirishga ta’sir qilmaydi. Ruxsatni o‘zgartirish uchun Xona sozlamalari &gt; Xavfsizlik va maxfiylik rukniga kiring."</string>
+  <string name="screen_space_empty_state_title">"Birinchi xonangizni qo‘shing"</string>
   <string name="screen_space_menu_action_members">"A’zolarni ko‘rish"</string>
+  <string name="screen_space_remove_rooms_confirmation_content">"Xona olib tashlansa, unga kirish ruxsatiga ta’sir qilmaydi. Ruxsatni o‘zgartirish uchun Xona haqida &gt; Maxfiylik va xavfsizlik rukniga kiring."</string>
+  <plurals name="screen_space_remove_rooms_confirmation_title">
+    <item quantity="one">"%1$d ta xonani %2$sdan olib tashlash"</item>
+    <item quantity="other">"%1$d ta xonani %2$sdan olib tashlash"</item>
+  </plurals>
   <string name="screen_space_settings_leave_space">"Maydondan chiqish"</string>
   <string name="screen_space_settings_roles_and_permissions">"Rollar va ruxsatlar"</string>
   <string name="screen_space_settings_security_and_privacy">"Xavfsizlik va maxfiylik"</string>
