@@ -60,7 +60,7 @@ class AccountDeactivationViewTest {
                 eventSink = eventsRecorder,
             ),
         )
-        rule.clickOn(CommonStrings.action_deactivate)
+        rule.clickOn(CommonStrings.action_delete)
         eventsRecorder.assertSingle(AccountDeactivationEvents.DeactivateAccount(false))
     }
 
