@@ -108,7 +108,6 @@ internal fun TimelineItemCallNotifyView(
 internal fun TimelineItemCallNotifyViewPreview() = ElementPreview {
     Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         listOf(
-            TimelineItemRtcNotificationContent(null),
             TimelineItemRtcNotificationContent(CallIntent.AUDIO),
             TimelineItemRtcNotificationContent(CallIntent.VIDEO),
         ).forEach { content ->
