@@ -139,7 +139,6 @@ class KonsistPreviewTest {
         "TextComposerLinkDialogCreateLinkWithoutTextPreview",
         "TextComposerLinkDialogEditLinkPreview",
         "TextComposerReplyPreview",
-        "TextComposerScaledDensityWithReplyPreview",
         "TextComposerSimpleNotEncryptedPreview",
         "TextComposerSimplePreview",
         "TextComposerVoiceNotEncryptedPreview",
