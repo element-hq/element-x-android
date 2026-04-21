@@ -7,10 +7,19 @@
   </plurals>
   <string name="screen_leave_space_subtitle">"這也會將您從此空間中的所有聊天室移除。"</string>
   <string name="screen_leave_space_subtitle_last_admin">"您必須為此空間另外指定一位管理員後才能離開。"</string>
+  <string name="screen_leave_space_subtitle_last_owner">"您是 %1$s 唯一的擁有者。在您離開前，您必須將所有權轉移給其他人。"</string>
   <string name="screen_leave_space_subtitle_only_last_admin">"您不會被從以下聊天室移除，因為您是唯一的管理員："</string>
   <string name="screen_leave_space_title">"離開 %1$s？"</string>
   <string name="screen_leave_space_title_last_admin">"您是 %1$s 唯一的管理員"</string>
+  <string name="screen_leave_space_title_last_owner">"轉移所有權"</string>
+  <string name="screen_space_add_room_action">"聊天室"</string>
+  <string name="screen_space_add_rooms_room_access_description">"新增聊天室不會影響聊天室存取權。要變更存取權，請前往「聊天室設定」→「安全性與隱私權」"</string>
+  <string name="screen_space_empty_state_title">"新增您的第一個聊天室"</string>
   <string name="screen_space_menu_action_members">"檢視成員"</string>
+  <string name="screen_space_remove_rooms_confirmation_content">"移除聊天室不會影響聊天室存取權。要變更存取權，請前往「聊天室資訊」→「隱私權與安全性」。"</string>
+  <plurals name="screen_space_remove_rooms_confirmation_title">
+    <item quantity="other">"從 %2$s 移除 %1$d 個聊天室"</item>
+  </plurals>
   <string name="screen_space_settings_leave_space">"離開空間"</string>
   <string name="screen_space_settings_roles_and_permissions">"角色與權限"</string>
   <string name="screen_space_settings_security_and_privacy">"安全與隱私"</string>

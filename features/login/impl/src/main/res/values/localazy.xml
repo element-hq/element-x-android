@@ -28,7 +28,7 @@
   <string name="screen_change_server_subtitle">"What is the address of your server?"</string>
   <string name="screen_change_server_title">"Select your server"</string>
   <string name="screen_create_account_title">"Create account"</string>
-  <string name="screen_login_error_deactivated_account">"This account has been deactivated."</string>
+  <string name="screen_login_error_deactivated_account">"This account has been deleted."</string>
   <string name="screen_login_error_invalid_credentials">"Incorrect username and/or password"</string>
   <string name="screen_login_error_invalid_user_id">"This is not a valid user identifier. Expected format: ‘@user:homeserver.org’"</string>
   <string name="screen_login_error_refresh_tokens">"This server is configured to use refresh tokens. These aren\'t supported when using password based login."</string>
@@ -40,11 +40,12 @@
   <string name="screen_missing_key_backup_open_element_classic">"Open Element Classic"</string>
   <string name="screen_missing_key_backup_step_1">"Open Element Classic on your device"</string>
   <string name="screen_missing_key_backup_step_2_android">"Go to Settings &gt; Security &amp; Privacy"</string>
-  <string name="screen_missing_key_backup_step_3_android">"In Cryptography keys management, select Encrypted message recovery"</string>
+  <string name="screen_missing_key_backup_step_3_android">"In Cryptography keys management, select Encrypted messages recovery"</string>
   <string name="screen_missing_key_backup_step_4">"Follow the instructions to enable your key storage"</string>
   <string name="screen_missing_key_backup_step_5">"Come back to %1$s"</string>
   <string name="screen_missing_key_backup_title">"Enable your key storage before proceeding to %1$s"</string>
   <string name="screen_onboarding_app_version">"Version %1$s"</string>
+  <string name="screen_onboarding_checking_account">"Checking account"</string>
   <string name="screen_onboarding_sign_in_manually">"Sign in manually"</string>
   <string name="screen_onboarding_sign_in_to">"Sign in to %1$s"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"Sign in with QR code"</string>

@@ -77,10 +77,10 @@ internal val LocalCompoundColors = staticCompositionLocalOf { compoundColorsLigh
 /**
  * Sets up the theme for the application, or a part of it.
  *
- * @param darkTheme whether to use the dark theme or not. If `true`, the dark theme will be used.
+ * @param theme the [Theme] to use. Defaults to [Theme.Dark] or [Theme.Light] based on the system setting.
  * @param applySystemBarsUpdate whether to update the system bars color scheme or not when the theme changes. It's `true` by default.
  * This is specially useful when you want to apply an alternate theme to a part of the app but don't want it to affect the system bars.
- * @param lightStatusBar whether to use a light status bar color scheme or not. By default, it's the opposite of [darkTheme].
+ * @param lightStatusBar whether to use a light status bar color scheme or not. By default, it's `true` for light themes and `false` for dark ones.
  * @param dynamicColor whether to enable MaterialYou or not. It's `false` by default.
  * @param compoundLight the [SemanticColors] to use in light theme.
  * @param compoundDark the [SemanticColors] to use in dark theme.
@@ -91,9 +91,9 @@ internal val LocalCompoundColors = staticCompositionLocalOf { compoundColorsLigh
  */
 @Composable
 fun ElementTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
+    theme: Theme = if (isSystemInDarkTheme()) Theme.Dark else Theme.Light,
     applySystemBarsUpdate: Boolean = true,
-    lightStatusBar: Boolean = !darkTheme,
+    lightStatusBar: Boolean = !theme.isDark(),
     // true to enable MaterialYou
     dynamicColor: Boolean = false,
     compoundLight: SemanticColors = compoundColorsLight,
@@ -103,8 +103,13 @@ fun ElementTheme(
     typography: Typography = compoundTypography,
     content: @Composable () -> Unit,
 ) {
+    val darkTheme = theme.isDark()
     val currentCompoundColor = when {
-        darkTheme -> compoundDark
+        darkTheme -> if (theme == Theme.Black) {
+            compoundDark.copy(bgCanvasDefault = Color.Black)
+        } else {
+            compoundDark
+        }
         else -> compoundLight
     }
 
@@ -113,7 +118,11 @@ fun ElementTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-        darkTheme -> materialColorsDark
+        darkTheme -> if (theme == Theme.Black) {
+            currentCompoundColor.toMaterialColorScheme()
+        } else {
+            materialColorsDark
+        }
         else -> materialColorsLight
     }
 
@@ -130,7 +139,7 @@ fun ElementTheme(
 
     if (applySystemBarsUpdate) {
         val activity = LocalActivity.current as? ComponentActivity
-        LaunchedEffect(statusBarColorScheme, darkTheme, lightStatusBar) {
+        LaunchedEffect(statusBarColorScheme, theme, lightStatusBar) {
             activity?.enableEdgeToEdge(
                 // For Status bar use the background color of the app
                 statusBarStyle = SystemBarStyle.auto(

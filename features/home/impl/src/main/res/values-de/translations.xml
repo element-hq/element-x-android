@@ -5,9 +5,9 @@
   <string name="banner_battery_optimization_title_android">"Kommen die Benachrichtigungen nicht an?"</string>
   <string name="banner_new_sound_message">"Dein Benachrichtigungs-Ping wurde aktualisiert – klarer, schneller und weniger störend."</string>
   <string name="banner_new_sound_title">"Wir haben deine Sounds aktualisiert"</string>
-  <string name="banner_set_up_recovery_content">"Stelle Deine kryptographische Identität und Deinen Nachrichtenverlauf mit Hilfe eines Wiederherstellungsschlüssels wieder her, falls du alle deine Geräte verloren haben solltest"</string>
-  <string name="banner_set_up_recovery_submit">"Wiederherstellung einrichten"</string>
-  <string name="banner_set_up_recovery_title">"Wiederherstellung einrichten"</string>
+  <string name="banner_set_up_recovery_content">"Deine Chats werden automatisch gesichert und mit einer Ende-zu-Ende-Verschlüsselung geschützt. Um dieses Backup wiederherzustellen und deine digitale Identität zu bewahren, falls du den Zugriff auf alle deine Geräte verlierst, benötigst du deinen Wiederherstellungsschlüssel."</string>
+  <string name="banner_set_up_recovery_submit">"Wiederherstellungsschlüssel einrichten"</string>
+  <string name="banner_set_up_recovery_title">"Sichere deine Chats"</string>
   <string name="confirm_recovery_key_banner_message">"Bestätige deinen Wiederherstellungsschlüssel, um weiterhin auf deinen Schlüsselspeicher und den Nachrichtenverlauf zugreifen zu können."</string>
   <string name="confirm_recovery_key_banner_primary_button_title">"Gib deinen Wiederherstellungsschlüssel ein"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Hast du deinen Wiederherstellungsschlüssel vergessen?"</string>

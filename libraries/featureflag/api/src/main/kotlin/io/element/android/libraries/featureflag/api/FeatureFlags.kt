@@ -104,14 +104,6 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
-    SyncNotificationsWithWorkManager(
-        key = "feature.sync_notifications_with_workmanager",
-        title = "Sync notifications with WorkManager",
-        description = "Use WorkManager to schedule notification sync tasks when a push is received." +
-            " This should improve reliability and battery usage.",
-        defaultValue = { true },
-        isFinished = false,
-    ),
     QrCodeLogin(
         key = "feature.qr_code_login",
         title = "QR Code Login",
@@ -123,6 +115,13 @@ enum class FeatureFlags(
         key = "feature.signin_with_classic",
         title = "Sign in with Element Classic",
         description = "Allow the application to sign in to the current Element Classic account.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    AllowBlackTheme(
+        key = "feature.allow_black_theme",
+        title = "Allow black theme",
+        description = "Allow selecting the black appearance theme for battery saving on OLED.",
         defaultValue = { false },
         isFinished = false,
     ),
@@ -159,6 +158,14 @@ enum class FeatureFlags(
         key = "feature.room_thread_list",
         title = "Add a list of threads in a room",
         description = "Add a new screen with a list of threads in a room.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    AutomaticBackPagination(
+        key = "feature.automatic_back_pagination",
+        title = "Automatic back pagination of rooms",
+        description = "Allow the app to automatically back paginate in rooms to pre-fetch older messages in background." +
+            "\nRequires an app restart to take effect.",
         defaultValue = { false },
         isFinished = false,
     ),

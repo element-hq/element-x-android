@@ -42,6 +42,7 @@
   <string name="screen_onboarding_sign_in_to">"Log ind på %1$s"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"Log ind med QR-kode"</string>
   <string name="screen_onboarding_sign_up">"Opret konto"</string>
+  <string name="screen_onboarding_welcome_back">"Velkommen tilbage"</string>
   <string name="screen_onboarding_welcome_message">"Velkommen til den hurtigste %1$s nogensinde. Supercharged til hastighed og enkelhed."</string>
   <string name="screen_onboarding_welcome_subtitle">"Velkommen til %1$s. Ladet med hastighed og enkelhed."</string>
   <string name="screen_onboarding_welcome_title">"Vær i dit rette Element"</string>

@@ -21,6 +21,8 @@ class ShowLocationStateProvider : PreviewParameterProvider<ShowLocationState> {
     override val values: Sequence<ShowLocationState>
         get() = sequenceOf(
             aShowLocationState(),
+            aShowLocationState(isLive = true),
+            aShowLocationState(isLive = true, locationShares = emptyList()),
             aShowLocationState(
                 constraintsDialogState = LocationConstraintsDialogState.PermissionDenied,
             ),
@@ -44,8 +46,10 @@ class ShowLocationStateProvider : PreviewParameterProvider<ShowLocationState> {
 private const val APP_NAME = "ApplicationName"
 
 fun aShowLocationState(
+    isLive: Boolean = false,
     constraintsDialogState: LocationConstraintsDialogState = LocationConstraintsDialogState.None,
-    locationShares: List<LocationShareItem> = listOf(aLocationShareItem()),
+    locationShares: List<LocationShareItem> = listOf(aLocationShareItem(isLive = isLive)),
+    focusedLocation: LocationShareItem? = locationShares.firstOrNull(),
     hasLocationPermission: Boolean = false,
     isTrackMyLocation: Boolean = false,
     appName: String = APP_NAME,
@@ -54,9 +58,11 @@ fun aShowLocationState(
     return ShowLocationState(
         dialogState = constraintsDialogState,
         locationShares = locationShares.toImmutableList(),
+        focusedLocation = focusedLocation,
         hasLocationPermission = hasLocationPermission,
         isTrackMyLocation = isTrackMyLocation,
         appName = appName,
+        isLive = isLive,
         eventSink = eventSink,
     )
 }
@@ -70,10 +76,10 @@ fun aLocationShareItem(
         url = null,
         size = AvatarSize.UserListItem,
     ),
-    formattedTimestamp: String = "Shared 1 min ago",
-    location: Location = Location(1.23, 2.34, 4f),
     isLive: Boolean = false,
     assetType: AssetType? = null,
+    formattedTimestamp: String = "Shared 1 min ago",
+    location: Location = Location(1.23, 2.34, 4f),
 ) = LocationShareItem(
     userId = userId,
     displayName = displayName,

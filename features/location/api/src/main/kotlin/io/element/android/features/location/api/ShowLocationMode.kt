@@ -24,5 +24,7 @@ sealed interface ShowLocationMode : Parcelable {
     ) : ShowLocationMode
 
     @Parcelize
-    data object Live : ShowLocationMode
+    data class Live(
+        val senderId: UserId
+    ) : ShowLocationMode
 }

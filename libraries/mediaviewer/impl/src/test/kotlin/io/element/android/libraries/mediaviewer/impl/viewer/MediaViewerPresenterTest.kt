@@ -593,20 +593,20 @@ class MediaViewerPresenterTest {
                     if (mode is MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios) {
                         GroupedMediaItems(
                             imageAndVideoItems = persistentListOf(),
-                            fileItems = persistentListOf(aForwardLoadingIndicator, anImage, aBackwardLoadingIndicator),
+                            fileItems = persistentListOf(aBackwardLoadingIndicator, anImage, aForwardLoadingIndicator),
                         )
                     } else {
                         GroupedMediaItems(
-                            imageAndVideoItems = persistentListOf(aForwardLoadingIndicator, anImage, aBackwardLoadingIndicator),
+                            imageAndVideoItems = persistentListOf(aBackwardLoadingIndicator, anImage, aForwardLoadingIndicator),
                             fileItems = persistentListOf(),
                         )
                     }
                 )
             )
             val updatedState = awaitItem()
-            // User navigate to the first item (forward loading indicator)
+            // User navigate to the last item (forward loading indicator)
             updatedState.eventSink(
-                MediaViewerEvents.OnNavigateTo(0)
+                MediaViewerEvents.OnNavigateTo(2)
             )
             // data source claims that there is no more items to load forward
             mediaGalleryDataSource.emitGroupedMediaItems(
@@ -614,19 +614,21 @@ class MediaViewerPresenterTest {
                     if (mode is MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios) {
                         GroupedMediaItems(
                             imageAndVideoItems = persistentListOf(),
-                            fileItems = persistentListOf(anImage, aBackwardLoadingIndicator),
+                            fileItems = persistentListOf(aBackwardLoadingIndicator, anImage),
                         )
                     } else {
                         GroupedMediaItems(
-                            imageAndVideoItems = persistentListOf(anImage, aBackwardLoadingIndicator),
+                            imageAndVideoItems = persistentListOf(aBackwardLoadingIndicator, anImage),
                             fileItems = persistentListOf(),
                         )
                     }
                 )
             )
-            skipItems(1)
-            val stateWithSnackbar = awaitItem()
-            assertThat(stateWithSnackbar.snackbarMessage!!.messageResId).isEqualTo(expectedSnackbarResId)
+            var stateWithSnackbar = awaitItem()
+            while (stateWithSnackbar.snackbarMessage == null) {
+                stateWithSnackbar = awaitItem()
+            }
+            assertThat(stateWithSnackbar.snackbarMessage.messageResId).isEqualTo(expectedSnackbarResId)
         }
     }
 
@@ -665,41 +667,42 @@ class MediaViewerPresenterTest {
                     if (mode is MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios) {
                         GroupedMediaItems(
                             imageAndVideoItems = persistentListOf(),
-                            fileItems = persistentListOf(aForwardLoadingIndicator, anImage, aBackwardLoadingIndicator),
+                            fileItems = persistentListOf(aBackwardLoadingIndicator, anImage, aForwardLoadingIndicator),
                         )
                     } else {
                         GroupedMediaItems(
-                            imageAndVideoItems = persistentListOf(aForwardLoadingIndicator, anImage, aBackwardLoadingIndicator),
+                            imageAndVideoItems = persistentListOf(aBackwardLoadingIndicator, anImage, aForwardLoadingIndicator),
                             fileItems = persistentListOf(),
                         )
                     }
                 )
             )
             val updatedState = awaitItem()
-            // User navigate to the last item (backward loading indicator)
+            // User navigate to the first item (backward loading indicator)
             updatedState.eventSink(
-                MediaViewerEvents.OnNavigateTo(2)
+                MediaViewerEvents.OnNavigateTo(0)
             )
-            skipItems(1)
             // data source claims that there is no more items to load backward
             mediaGalleryDataSource.emitGroupedMediaItems(
                 AsyncData.Success(
                     if (mode is MediaViewerEntryPoint.MediaViewerMode.TimelineFilesAndAudios) {
                         GroupedMediaItems(
                             imageAndVideoItems = persistentListOf(),
-                            fileItems = persistentListOf(aForwardLoadingIndicator, anImage),
+                            fileItems = persistentListOf(anImage, aForwardLoadingIndicator),
                         )
                     } else {
                         GroupedMediaItems(
-                            imageAndVideoItems = persistentListOf(aForwardLoadingIndicator, anImage),
+                            imageAndVideoItems = persistentListOf(anImage, aForwardLoadingIndicator),
                             fileItems = persistentListOf(),
                         )
                     }
                 )
             )
-            skipItems(1)
-            val stateWithSnackbar = awaitItem()
-            assertThat(stateWithSnackbar.snackbarMessage!!.messageResId).isEqualTo(expectedSnackbarResId)
+            var stateWithSnackbar = awaitItem()
+            while (stateWithSnackbar.snackbarMessage == null) {
+                stateWithSnackbar = awaitItem()
+            }
+            assertThat(stateWithSnackbar.snackbarMessage.messageResId).isEqualTo(expectedSnackbarResId)
         }
     }
 
@@ -717,7 +720,7 @@ class MediaViewerPresenterTest {
             mediaGalleryDataSource.emitGroupedMediaItems(
                 AsyncData.Success(
                     GroupedMediaItems(
-                        imageAndVideoItems = persistentListOf(aForwardLoadingIndicator, anImage, aBackwardLoadingIndicator),
+                        imageAndVideoItems = persistentListOf(aBackwardLoadingIndicator, anImage, aForwardLoadingIndicator),
                         fileItems = persistentListOf(),
                     )
                 )

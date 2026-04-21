@@ -117,7 +117,7 @@ class DefaultRoomLatestEventFormatter(
                 message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is LiveLocationContent -> {
-                val message = sp.getString(CommonStrings.common_shared_location)
+                val message = sp.getString(CommonStrings.common_shared_live_location)
                 message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is LegacyCallInviteContent -> sp.getString(CommonStrings.common_unsupported_call)

@@ -71,7 +71,7 @@ class LoggedInPresenterTest {
     }
 
     @Test
-    fun `present - ensure that account urls are preloaded`() = runTest {
+    fun `present - ensure that account url is preloaded`() = runTest {
         val accountManagementUrlResult = lambdaRecorder<AccountManagementAction?, Result<String?>> { Result.success("aUrl") }
         val matrixClient = FakeMatrixClient(
             accountManagementUrlResult = accountManagementUrlResult,
@@ -81,11 +81,8 @@ class LoggedInPresenterTest {
         ).test {
             awaitItem()
             advanceUntilIdle()
-            accountManagementUrlResult.assertions().isCalledExactly(2)
-                .withSequence(
-                    listOf(value(AccountManagementAction.Profile)),
-                    listOf(value(AccountManagementAction.DevicesList)),
-                )
+            accountManagementUrlResult.assertions().isCalledOnce()
+                .with(value(null))
         }
     }
 

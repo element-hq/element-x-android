@@ -11,7 +11,7 @@
   <string name="screen_chat_backup_recovery_action_change_description">"Stelle deine kryptographische Identität und deinen Nachrichtenverlauf mit einem Wiederherstellungsschlüssel wieder her, falls du deine Geräte verloren hast."</string>
   <string name="screen_chat_backup_recovery_action_confirm">"Wiederherstellungsschlüssel eingeben"</string>
   <string name="screen_chat_backup_recovery_action_confirm_description">"Dein Schlüssel ist derzeit nicht synchronisiert."</string>
-  <string name="screen_chat_backup_recovery_action_setup">"Wiederherstellung einrichten"</string>
+  <string name="screen_chat_backup_recovery_action_setup">"Wiederherstellungsschlüssel einrichten"</string>
   <string name="screen_create_new_recovery_key_list_item_1">
     "Öffne "
     <b>"%1$s"</b>
@@ -32,8 +32,8 @@
   <string name="screen_encryption_reset_bullet_1">"Deine Kontodaten, Kontakte, Einstellungen und die Liste der Chats bleiben erhalten"</string>
   <string name="screen_encryption_reset_bullet_2">"Du verlierst alle bisherigen Nachrichten, wenn sie ausschließlich auf dem Server gespeichert sein sollten."</string>
   <string name="screen_encryption_reset_bullet_3">"Du musst alle deine bestehenden Geräte und Kontakte erneut verifizieren."</string>
-  <string name="screen_encryption_reset_footer">"Setze deine Identität nur dann zurück, wenn du keinen Zugriff mehr auf ein anderes angemeldetes Gerät hast und auch deinen Wiederherstellungsschlüssel verloren hast."</string>
-  <string name="screen_encryption_reset_title">"Bestätigung unmöglich? Dann musst du deine Identität zurücksetzen."</string>
+  <string name="screen_encryption_reset_footer">"Setze deine digitale Identität nur dann zurück, wenn du keinen Zugriff auf ein anderes verifiziertes Gerät hast und deinen Wiederherstellungsschlüssel verloren hast."</string>
+  <string name="screen_encryption_reset_title">"Bestätigung nicht möglich? Setze deine digitale Identität zurück."</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Ausschalten"</string>
   <string name="screen_key_backup_disable_confirmation_description">"Du verlierst deine verschlüsselten Nachrichten, wenn du auf allen Geräten abgemeldet bist."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Bist du sicher, dass du das Backup deaktivieren willst?"</string>
@@ -67,12 +67,12 @@
   <string name="screen_recovery_key_setup_generate_key">"Wiederherstellungsschlüssel erstellen"</string>
   <string name="screen_recovery_key_setup_generate_key_description">"Teile das mit niemandem!"</string>
   <string name="screen_recovery_key_setup_success">"Einrichtung der Wiederherstellung erfolgreich"</string>
-  <string name="screen_recovery_key_setup_title">"Wiederherstellung einrichten"</string>
+  <string name="screen_recovery_key_setup_title">"Wiederherstellungsschlüssel einrichten"</string>
   <string name="screen_reset_encryption_confirmation_alert_action">"Ja, zurücksetzen"</string>
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"Das Zurücksetzen kann nicht rückgängig gemacht werden."</string>
-  <string name="screen_reset_encryption_confirmation_alert_title">"Bist du sicher, dass du deine Identität zurücksetzen möchtest?"</string>
+  <string name="screen_reset_encryption_confirmation_alert_title">"Bist du sicher, dass du deine digitale Identität zurücksetzen möchtest?"</string>
   <string name="screen_reset_encryption_password_error">"Es ist ein unbekannter Fehler aufgetreten. Bitte überprüfe das Passwort deines Kontos und versuche es erneut."</string>
   <string name="screen_reset_encryption_password_placeholder">"Eingeben…"</string>
-  <string name="screen_reset_encryption_password_subtitle">"Bestätige, dass du deine Identität zurücksetzen möchtest."</string>
+  <string name="screen_reset_encryption_password_subtitle">"Bestätige, dass du deine digitale Identität zurücksetzen möchtest."</string>
   <string name="screen_reset_encryption_password_title">"Gib dein Passwort ein, um fortzufahren"</string>
 </resources>
