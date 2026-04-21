@@ -278,7 +278,7 @@ private fun ColumnScope.GeneralSection(
     )
     if (state.canDeactivateAccount) {
         ListItem(
-            headlineContent = { Text(stringResource(id = CommonStrings.action_deactivate_account)) },
+            headlineContent = { Text(stringResource(id = CommonStrings.action_delete_account)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Delete())),
             style = ListItemStyle.Destructive,
             onClick = onDeactivateClick,

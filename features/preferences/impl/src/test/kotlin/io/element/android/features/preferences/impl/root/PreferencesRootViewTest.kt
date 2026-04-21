@@ -407,7 +407,7 @@ class PreferencesRootViewTest {
                 ),
                 onDeactivateClick = callback,
             )
-            rule.clickOn(CommonStrings.action_deactivate_account)
+            rule.clickOn(CommonStrings.action_delete_account)
         }
     }
 
@@ -420,7 +420,7 @@ class PreferencesRootViewTest {
                 eventSink = eventsRecorder,
             ),
         )
-        rule.onNodeWithText(rule.activity.getString(CommonStrings.action_deactivate_account)).assertDoesNotExist()
+        rule.onNodeWithText(rule.activity.getString(CommonStrings.action_delete_account)).assertDoesNotExist()
     }
 
     @Test

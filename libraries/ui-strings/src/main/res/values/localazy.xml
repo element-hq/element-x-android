@@ -88,6 +88,8 @@
   <string name="action_deactivate_account">"Deactivate account"</string>
   <string name="action_decline">"Decline"</string>
   <string name="action_decline_and_block">"Decline and block"</string>
+  <string name="action_delete">"Delete"</string>
+  <string name="action_delete_account">"Delete account"</string>
   <string name="action_delete_poll">"Delete Poll"</string>
   <string name="action_deselect_all">"Deselect all"</string>
   <string name="action_disable">"Disable"</string>
