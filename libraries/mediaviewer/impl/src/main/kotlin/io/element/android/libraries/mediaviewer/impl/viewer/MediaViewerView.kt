@@ -214,6 +214,9 @@ fun MediaViewerView(
                             data = currentData,
                             canShowInfo = state.canShowInfo,
                             onBackClick = onBackClick,
+                            onShareClick = {
+                                state.eventSink(MediaViewerEvent.Share(currentData))
+                            },
                             onInfoClick = {
                                 state.eventSink(MediaViewerEvent.OpenInfo(currentData))
                             },
@@ -457,6 +460,7 @@ private fun MediaViewerTopBar(
     data: MediaViewerPageData.MediaViewerData,
     canShowInfo: Boolean,
     onBackClick: () -> Unit,
+    onShareClick: () -> Unit,
     onInfoClick: () -> Unit,
     eventSink: (MediaViewerEvent) -> Unit,
 ) {
@@ -513,6 +517,15 @@ private fun MediaViewerTopBar(
                         contentDescription = stringResource(id = CommonStrings.action_open_with)
                     )
                 }
+            }
+            IconButton(
+                onClick = onShareClick,
+                enabled = actionsEnabled,
+            ) {
+                Icon(
+                    imageVector = CompoundIcons.ShareAndroid(),
+                    contentDescription = stringResource(id = CommonStrings.action_share),
+                )
             }
             if (canShowInfo) {
                 IconButton(

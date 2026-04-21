@@ -86,6 +86,18 @@ class MediaViewerViewTest {
         )
     }
 
+    @Test
+    fun `clicking on top action share emits expected Event`() {
+        val data = aMediaViewerPageData(
+            downloadedMedia = AsyncData.Success(aLocalMedia(uri = mockMediaUrl)),
+        )
+        testMenuAction(
+            data,
+            CommonStrings.action_share,
+            MediaViewerEvent.Share(data),
+        )
+    }
+
     private fun testMenuAction(
         data: MediaViewerPageData.MediaViewerData,
         contentDescriptionRes: Int,
