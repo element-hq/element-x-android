@@ -27,6 +27,7 @@
   <string name="a11y_pause">"Peata"</string>
   <string name="a11y_paused_voice_message">"Häälsõnum, kestus:%1$s, praegune asukoht: %2$s"</string>
   <string name="a11y_pin_field">"PIN-koodi väli"</string>
+  <string name="a11y_pinned_location">"Esiletõstetud asukoht"</string>
   <string name="a11y_play">"Esita"</string>
   <string name="a11y_playback_speed">"Taasesituse kiirus"</string>
   <string name="a11y_poll">"Küsitlus"</string>
@@ -45,9 +46,12 @@
   <string name="a11y_remove_reaction_with">"Eemalda reageerimine: %1$s"</string>
   <string name="a11y_room_avatar">"Jututoa tunnuspilt"</string>
   <string name="a11y_send_files">"Saada faile"</string>
+  <string name="a11y_sender_location">"Saatja asukoht"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Palun tee see ajapiiranguga toiming, sul on aega üks minut"</string>
   <string name="a11y_show_password">"Näita salasõna"</string>
   <string name="a11y_start_call">"Helista"</string>
+  <string name="a11y_start_video_call">"Alusta videokõnet"</string>
+  <string name="a11y_start_voice_call">"Helista"</string>
   <string name="a11y_tombstoned_room">"Lõpetatuks märgitud jututuba"</string>
   <string name="a11y_user_avatar">"Kasutaja tunnuspilt"</string>
   <string name="a11y_user_menu">"Kasutajamenüü"</string>
@@ -117,6 +121,7 @@
   <string name="action_leave_space">"Lahku kogukonnast"</string>
   <string name="action_load_more">"Näita veel"</string>
   <string name="action_manage_account">"Halda kasutajakontot"</string>
+  <string name="action_manage_account_and_devices">"Halda kasutajakontosid ja seadmeid"</string>
   <string name="action_manage_devices">"Halda seadmeid"</string>
   <string name="action_manage_rooms">"Halda jututuba"</string>
   <string name="action_message">"Saada sõnum"</string>
@@ -156,16 +161,18 @@
   <string name="action_send_voice_message">"Saada häälsõnum"</string>
   <string name="action_share">"Jaga"</string>
   <string name="action_share_link">"Jaga linki"</string>
+  <string name="action_share_live_location">"Jaga asukohta reaalajas"</string>
   <string name="action_show">"Näita"</string>
   <string name="action_sign_in_again">"Logi uuesti sisse"</string>
-  <string name="action_signout">"Logi välja"</string>
-  <string name="action_signout_anyway">"Ikkagi logi välja"</string>
+  <string name="action_signout">"Eemalda see seade"</string>
+  <string name="action_signout_anyway">"Eemalda see seade ikkagi"</string>
   <string name="action_skip">"Jäta vahele"</string>
   <string name="action_start">"Alusta"</string>
   <string name="action_start_chat">"Alusta vestlust"</string>
   <string name="action_start_over">"Alusta uuesti"</string>
   <string name="action_start_verification">"Alusta verifitseerimist"</string>
   <string name="action_static_map_load">"Kaardi laadimiseks klõpsa"</string>
+  <string name="action_stop">"Lõpeta"</string>
   <string name="action_take_photo">"Pildista"</string>
   <string name="action_tap_for_options">"Valikuteks klõpsa"</string>
   <string name="action_translate">"Tõlgi"</string>
@@ -186,6 +193,7 @@
   <string name="common_advanced_settings">"Täiendavad seadistused"</string>
   <string name="common_an_image">"pilt"</string>
   <string name="common_analytics">"Analüütika"</string>
+  <string name="common_android_fetching_notifications_title">"Sünkroonin teavitusi…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Sina lahkusid jututoast"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Sa olid sessioonist väljaloginud"</string>
   <string name="common_appearance">"Välimus"</string>
@@ -362,6 +370,7 @@ Põhjus: %1$s."</string>
   <string name="common_text">"Tekst"</string>
   <string name="common_third_party_notices">"Kolmandate osapoolte teatised"</string>
   <string name="common_thread">"Jutulõng"</string>
+  <string name="common_threads">"Jutulõngad"</string>
   <string name="common_topic">"Teema"</string>
   <string name="common_topic_placeholder">"Mis on selle jututoa mõte?"</string>
   <string name="common_unable_to_decrypt">"Dekrüptimine ei olnud võimalik"</string>
@@ -450,6 +459,8 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="screen_create_poll_options_section_title">"Valikud"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Kustuta: %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Seadistused"</string>
+  <string name="screen_live_location_sheet_nobody_sharing">"Mitte keegi ei jaga oma asukohta"</string>
+  <string name="screen_live_location_sheet_sharing_live_location">"Asukoht on jagamisel reaalajas"</string>
   <string name="screen_media_picker_error_failed_selection">"Meediafaili valimine ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Siia lisamiseks vajuta sõnumil ja vali „%1$s“."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Et olulisi sõnumeid oleks lihtsam leida, tõsta nad esile"</string>
@@ -486,6 +497,7 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="screen_share_open_google_maps">"Ava Google Mapsis"</string>
   <string name="screen_share_open_osm_maps">"Ava OpenStreetMapis"</string>
   <string name="screen_share_this_location_action">"Jaga seda asukohta"</string>
+  <string name="screen_sharing_location_option_sheet_title">"Jagamise valikud"</string>
   <string name="screen_space_list_description">"Sinu loodud kogukonnad ning need, millega oled liitunud."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_empty_state_title">"Jututubade haldamiseks võid luua kogukondi"</string>

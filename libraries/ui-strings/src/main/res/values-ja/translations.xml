@@ -280,7 +280,7 @@
   <string name="common_or">"または"</string>
   <string name="common_other_options">"他のオプション"</string>
   <string name="common_password">"パスワード"</string>
-  <string name="common_people">"人"</string>
+  <string name="common_people">"人々"</string>
   <string name="common_permalink">"固定リンク"</string>
   <string name="common_permission">"権限"</string>
   <string name="common_pinned">"ピン留め"</string>
@@ -458,16 +458,13 @@
   <string name="screen_create_poll_options_section_title">"選択肢"</string>
   <string name="screen_create_poll_remove_accessibility_label">"%1$s を削除"</string>
   <string name="screen_create_poll_settings_section_title">"設定"</string>
+  <string name="screen_live_location_sheet_nobody_sharing">"誰も位置情報を共有していません"</string>
+  <string name="screen_live_location_sheet_sharing_live_location">"ライブ位置情報を共有しています"</string>
+  <plurals name="screen_live_location_sheet_subtitle">
+    <item quantity="other">"%1$d 人"</item>
+  </plurals>
+  <string name="screen_live_location_sheet_title">"地図上"</string>
   <string name="screen_media_picker_error_failed_selection">"ファイルの選択に失敗しました。再試行してください。"</string>
-  <string name="screen_missing_key_backup_open_element_classic">"Element Classic を開く"</string>
-  <string name="screen_missing_key_backup_step_1">"Element Classic をこの端末で開く"</string>
-  <string name="screen_missing_key_backup_step_2_android">"「設定- セキュリティとプライバシー」に移動します"</string>
-  <string name="screen_missing_key_backup_step_3_android">"暗号鍵の管理から、暗号化されたメッセージの回復を選択します"</string>
-  <string name="screen_missing_key_backup_step_4">"指示に従って、鍵の保管庫を有効化してください"</string>
-  <string name="screen_missing_key_backup_step_5">"%1$s に戻ってください"</string>
-  <string name="screen_missing_key_backup_title">"%1$s に続行する前に、鍵の保管庫を有効化してください"</string>
-  <string name="screen_onboarding_checking_account">"アカウントを確認中"</string>
-  <string name="screen_onboarding_welcome_back">"おかえりなさい"</string>
   <string name="screen_pinned_timeline_empty_state_description">"メッセージを長押しし \"%1$s\" を選択してください"</string>
   <string name="screen_pinned_timeline_empty_state_headline">"重要なメッセージをピン留めして容易に見つけられるようにします"</string>
   <plurals name="screen_pinned_timeline_screen_title">

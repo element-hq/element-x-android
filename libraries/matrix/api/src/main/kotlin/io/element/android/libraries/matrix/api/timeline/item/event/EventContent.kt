@@ -12,6 +12,7 @@ import androidx.compose.runtime.Immutable
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.poll.PollAnswer
 import io.element.android.libraries.matrix.api.poll.PollKind
 import io.element.android.libraries.matrix.api.room.location.AssetType
@@ -105,16 +106,20 @@ data class FailedToParseStateContent(
 ) : EventContent
 
 data class LiveLocationContent(
-    val body: String,
     val isLive: Boolean,
     val description: String?,
+    val startTimestamp: Long,
     val timeout: Long,
     val assetType: AssetType?,
     val locations: List<LiveLocationInfo>,
-) : EventContent
+) : EventContent {
+    val endTimestamp = startTimestamp + timeout
+}
 
 data object LegacyCallInviteContent : EventContent
 
-data object CallNotifyContent : EventContent
+data class CallNotifyContent(
+    val callIntent: CallIntent
+) : EventContent
 
 data object UnknownContent : EventContent

@@ -13,9 +13,16 @@
   <string name="screen_change_account_provider_other">"Khác"</string>
   <string name="screen_change_account_provider_subtitle">"Sử dụng nhà cung cấp tài khoản khác, ví dụ như máy chủ riêng của bạn hoặc tài khoản công việc."</string>
   <string name="screen_change_account_provider_title">"Thay đổi nhà cung cấp tài khoản"</string>
+  <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
+  <string name="screen_change_server_error_element_pro_required_message">"Ứng dụng Element Pro là bắt buộc trên %1$s. Vui lòng tải xuống từ cửa hàng."</string>
+  <string name="screen_change_server_error_element_pro_required_title">"Element Pro là bắt buộc"</string>
   <string name="screen_change_server_error_invalid_homeserver">"Chúng tớ không thể kết nối với homeserver này. Vui lòng kiểm tra xem cậu đã nhập URL homeserver chính xác chưa. Nếu URL chính xác, hãy liên hệ với quản trị viên homeserver để được hỗ trợ thêm."</string>
   <string name="screen_change_server_error_invalid_well_known">"Máy chủ không khả dụng do sự cố trong tệp .well-known:
 %1$s"</string>
+  <string name="screen_change_server_error_no_sliding_sync_message">"Nhà cung cấp tài khoản đã chọn không hỗ trợ đồng bộ sliding. Cần nâng cấp máy chủ để sử dụng %1$s ."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver">"%1$s không được phép kết nối với %2$s ."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_content">"Ứng dụng này đã được cấu hình để cho phép: %1$s ."</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_title">"Không cho phép nhà cung cấp tài khoản %1$s."</string>
   <string name="screen_change_server_form_header">"URL homeserver"</string>
   <string name="screen_change_server_subtitle">"Địa chỉ máy chủ của bạn là gì?"</string>
   <string name="screen_change_server_title">"Chọn máy chủ của bạn"</string>
