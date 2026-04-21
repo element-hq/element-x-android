@@ -24,6 +24,7 @@ import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
+import timber.log.Timber
 import kotlin.time.Duration
 import kotlin.time.Instant
 
@@ -40,10 +41,12 @@ class DefaultActiveLiveLocationShareManager(
     override val activeShares: StateFlow<Map<RoomId, ActiveLiveLocationShare>> = _activeShares
 
     override suspend fun startShare(roomId: RoomId, duration: Duration): Result<Unit> {
+        Timber.d("ActiveLiveLocationShareManager starting share for room $roomId with duration ${duration.inWholeSeconds}s")
         return runOnRoom(roomId) { room ->
             room.startLiveLocationShare(duration.inWholeMilliseconds)
         }.onSuccess {
             val wasEmpty = _activeShares.value.isEmpty()
+            Timber.d("ActiveLiveLocationShareManager share started successfully for room $roomId (wasEmpty=$wasEmpty)")
             _activeShares.update {
                 it + (roomId to ActiveLiveLocationShare(
                     sessionId = matrixClient.sessionId,
@@ -52,26 +55,39 @@ class DefaultActiveLiveLocationShareManager(
                 ))
             }
             if (wasEmpty) {
+                Timber.d("ActiveLiveLocationShareManager registering with coordinator for session ${matrixClient.sessionId}")
                 coordinator.register(matrixClient.sessionId, this)
             }
+        }.onFailure {
+            Timber.e(it, "ActiveLiveLocationShareManager failed to start share for room $roomId")
         }
     }
 
     override suspend fun stopShare(roomId: RoomId): Result<Unit> {
+        Timber.d("ActiveLiveLocationShareManager stopping share for room $roomId")
         return runOnRoom(roomId) { room ->
             room.stopLiveLocationShare()
         }.onSuccess {
+            Timber.d("ActiveLiveLocationShareManager share stopped successfully for room $roomId")
             _activeShares.update { it - roomId }
             if (_activeShares.value.isEmpty()) {
+                Timber.d("ActiveLiveLocationShareManager unregistering from coordinator for session ${matrixClient.sessionId}")
                 coordinator.unregister(matrixClient.sessionId)
             }
+        }.onFailure {
+            Timber.e(it, "ActiveLiveLocationShareManager failed to stop share for room $roomId")
         }
     }
 
     override suspend fun onLocationUpdate(location: Location) {
+        val activeSharesCount = _activeShares.value.size
+        Timber.d("ActiveLiveLocationShareManager received location update for $activeSharesCount active share(s)")
         _activeShares.value.values.forEach { share ->
+            Timber.d("ActiveLiveLocationShareManager sending location to room ${share.roomId}")
             runOnRoom(share.roomId) { room ->
                 room.sendLiveLocation(location.toGeoUri())
+            }.onFailure {
+                Timber.e(it, "ActiveLiveLocationShareManager failed to send location to room ${share.roomId}")
             }
         }
     }

@@ -40,8 +40,10 @@ class DefaultLiveLocationSharingCoordinator internal constructor(
 
     override fun register(sessionId: SessionId, receiver: LiveLocationReceiver) {
         val wasEmpty = receivers.isEmpty()
+        Timber.d("LiveLocationSharingCoordinator registering receiver for session $sessionId (wasEmpty=$wasEmpty)")
         receivers[sessionId] = receiver
         if (wasEmpty) {
+            Timber.d("LiveLocationSharingCoordinator starting service")
             runCatching(startService).onFailure {
                 Timber.e(it, "Failed to start live location sharing service")
             }
@@ -49,8 +51,10 @@ class DefaultLiveLocationSharingCoordinator internal constructor(
     }
 
     override fun unregister(sessionId: SessionId) {
+        Timber.d("LiveLocationSharingCoordinator unregistering receiver for session $sessionId")
         receivers.remove(sessionId)
         if (receivers.isEmpty()) {
+            Timber.d("LiveLocationSharingCoordinator stopping service (no more receivers)")
             runCatching(stopService).onFailure {
                 Timber.e(it, "Failed to stop live location sharing service")
             }
@@ -59,6 +63,7 @@ class DefaultLiveLocationSharingCoordinator internal constructor(
 
     override suspend fun dispatch(location: Location) {
         receivers.forEach { (sessionId, receiver) ->
+            Timber.d("Dispatch received location for session $sessionId ")
             runCatching {
                 receiver.onLocationUpdate(location)
             }.onFailure {

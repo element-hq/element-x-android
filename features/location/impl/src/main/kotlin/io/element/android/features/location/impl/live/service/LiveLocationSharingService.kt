@@ -7,6 +7,7 @@
 
 package io.element.android.features.location.impl.live.service
 
+import android.annotation.SuppressLint
 import android.app.Service
 import android.content.Intent
 import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
@@ -18,9 +19,13 @@ import io.element.android.features.location.impl.live.notification.LiveLocationS
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.coroutine.childScope
 import io.element.android.libraries.di.annotations.AppCoroutineScope
+import io.element.android.libraries.push.api.notifications.ForegroundServiceType
+import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.cancel
+import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
@@ -36,7 +41,6 @@ class LiveLocationSharingService : Service() {
     companion object {
         private const val UPDATE_INTERVAL_IN_SECOND = 60
         private const val MIN_DISTANCE_METERS = 10f
-        private const val NOTIFICATION_ID = 1001
     }
 
     @Inject lateinit var coordinator: LiveLocationSharingCoordinator
@@ -48,11 +52,15 @@ class LiveLocationSharingService : Service() {
 
     override fun onBind(p0: Intent?): IBinder? = null
 
+    @OptIn(FlowPreview::class)
+    @SuppressLint("InlinedApi")
     override fun onCreate() {
         super.onCreate()
+        Timber.d("LiveLocationSharingService onCreate")
         runCatching {
             bindings<LocationBindings>().inject(this)
             coroutineScope = appCoroutineScope.childScope(Dispatchers.Default, "LiveLocationSharingService")
+            Timber.d("LiveLocationSharingService creating location provider with updateInterval=${UPDATE_INTERVAL_IN_SECOND}s, minDistance=${MIN_DISTANCE_METERS}m")
             val locationProvider = AndroidLocationProvider(
                 context = applicationContext,
                 updateInterval = UPDATE_INTERVAL_IN_SECOND.seconds,
@@ -60,14 +68,18 @@ class LiveLocationSharingService : Service() {
                 desiredAccuracy = DesiredAccuracy.Balanced,
                 coroutineScope = coroutineScope
             )
+            val notificationId = NotificationIdProvider.getForegroundServiceNotificationId(ForegroundServiceType.LIVE_LOCATION)
+            Timber.d("LiveLocationSharingService starting foreground service with notificationId=$notificationId")
             ServiceCompat.startForeground(
                 /* service = */ this,
-                /* id = */ NOTIFICATION_ID,
+                /* id = */ notificationId,
                 /* notification = */ notificationCreator.createNotification(),
                 /* foregroundServiceType = */ FOREGROUND_SERVICE_TYPE_LOCATION
             )
+            Timber.d("LiveLocationSharingService listening to location updates")
             locationProvider.location
                 .filterNotNull()
+                .debounce(1.seconds)
                 .map { location ->
                     ApiLocation(
                         lat = location.position.latitude,
@@ -84,10 +96,12 @@ class LiveLocationSharingService : Service() {
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
+        Timber.d("LiveLocationSharingService onStartCommand startId=$startId")
         return START_STICKY
     }
 
     override fun onDestroy() {
+        Timber.d("LiveLocationSharingService onDestroy")
         if (::coroutineScope.isInitialized) {
             coroutineScope.cancel()
         }
