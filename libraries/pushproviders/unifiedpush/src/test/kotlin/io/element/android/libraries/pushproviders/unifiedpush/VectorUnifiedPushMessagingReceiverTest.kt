@@ -18,7 +18,7 @@ import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SECRET
-import io.element.android.libraries.push.test.push.FakePushHandlingWakeLock
+import io.element.android.libraries.push.test.push.FakeFetchPushForegroundServiceManager
 import io.element.android.libraries.push.test.test.FakePushHandler
 import io.element.android.libraries.pushproviders.api.PushData
 import io.element.android.libraries.pushproviders.api.PushHandler
@@ -39,7 +39,6 @@ import org.unifiedpush.android.connector.FailedReason
 import org.unifiedpush.android.connector.data.PublicKeySet
 import org.unifiedpush.android.connector.data.PushEndpoint
 import org.unifiedpush.android.connector.data.PushMessage
-import kotlin.time.Duration
 
 @RunWith(RobolectricTestRunner::class)
 class VectorUnifiedPushMessagingReceiverTest {
@@ -106,13 +105,13 @@ class VectorUnifiedPushMessagingReceiverTest {
     fun `pushHandler returning true locks the wake lock but does not unlock it so it continues to run`() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().context
         val pushHandlerResult = lambdaRecorder<PushData, String, Boolean> { _, _ -> true }
-        val lockLambda = lambdaRecorder<Duration, Unit> { _ -> }
-        val unlockLambda = lambdaRecorder<Unit> { }
+        val lockLambda = lambdaRecorder<Boolean> { true }
+        val unlockLambda = lambdaRecorder<Boolean> { true }
         val vectorUnifiedPushMessagingReceiver = createVectorUnifiedPushMessagingReceiver(
             pushHandler = FakePushHandler(
                 handleResult = pushHandlerResult
             ),
-            pushHandlingWakeLock = FakePushHandlingWakeLock(
+            pushHandlingWakeLock = FakeFetchPushForegroundServiceManager(
                 lock = lockLambda,
                 unlock = unlockLambda,
             ),
@@ -133,13 +132,13 @@ class VectorUnifiedPushMessagingReceiverTest {
     fun `pushHandler returning false locks and unlocks the wakelock early`() = runTest {
         val context = InstrumentationRegistry.getInstrumentation().context
         val pushHandlerResult = lambdaRecorder<PushData, String, Boolean> { _, _ -> false }
-        val lockLambda = lambdaRecorder<Duration, Unit> { _ -> }
-        val unlockLambda = lambdaRecorder<Unit> { }
+        val lockLambda = lambdaRecorder<Boolean> { true }
+        val unlockLambda = lambdaRecorder<Boolean> { true }
         val vectorUnifiedPushMessagingReceiver = createVectorUnifiedPushMessagingReceiver(
             pushHandler = FakePushHandler(
                 handleResult = pushHandlerResult
             ),
-            pushHandlingWakeLock = FakePushHandlingWakeLock(
+            pushHandlingWakeLock = FakeFetchPushForegroundServiceManager(
                 lock = lockLambda,
                 unlock = unlockLambda,
             ),
@@ -264,7 +263,7 @@ class VectorUnifiedPushMessagingReceiverTest {
         unifiedPushNewGatewayHandler: UnifiedPushNewGatewayHandler = FakeUnifiedPushNewGatewayHandler(),
         endpointRegistrationHandler: EndpointRegistrationHandler = EndpointRegistrationHandler(),
         removedGatewayHandler: UnifiedPushRemovedGatewayHandler = UnifiedPushRemovedGatewayHandler { lambdaError() },
-        pushHandlingWakeLock: FakePushHandlingWakeLock = FakePushHandlingWakeLock(),
+        pushHandlingWakeLock: FakeFetchPushForegroundServiceManager = FakeFetchPushForegroundServiceManager(),
     ): VectorUnifiedPushMessagingReceiver {
         return VectorUnifiedPushMessagingReceiver().apply {
             this.pushParser = unifiedPushParser
@@ -277,7 +276,7 @@ class VectorUnifiedPushMessagingReceiverTest {
             this.removedGatewayHandler = removedGatewayHandler
             this.endpointRegistrationHandler = endpointRegistrationHandler
             this.coroutineScope = this@createVectorUnifiedPushMessagingReceiver
-            this.pushHandlingWakeLock = pushHandlingWakeLock
+            this.fetchPushForegroundServiceManager = pushHandlingWakeLock
         }
     }
 }

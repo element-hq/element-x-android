@@ -21,6 +21,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.Theme
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 
 @Composable
@@ -40,14 +41,14 @@ fun ElementThemedPreview(
         if (vertical) {
             Column {
                 ElementPreview(
-                    darkTheme = false,
+                    theme = Theme.Light,
                     showBackground = showBackground,
                     drawableFallbackForImages = drawableFallbackForImages,
                     content = content,
                 )
                 Spacer(modifier = Modifier.height(4.dp))
                 ElementPreview(
-                    darkTheme = true,
+                    theme = Theme.Dark,
                     showBackground = showBackground,
                     drawableFallbackForImages = drawableFallbackForImages,
                     content = content
@@ -56,14 +57,14 @@ fun ElementThemedPreview(
         } else {
             Row {
                 ElementPreview(
-                    darkTheme = false,
+                    theme = Theme.Light,
                     showBackground = showBackground,
                     drawableFallbackForImages = drawableFallbackForImages,
                     content = content,
                 )
                 Spacer(modifier = Modifier.width(4.dp))
                 ElementPreview(
-                    darkTheme = true,
+                    theme = Theme.Dark,
                     showBackground = showBackground,
                     drawableFallbackForImages = drawableFallbackForImages,
                     content = content

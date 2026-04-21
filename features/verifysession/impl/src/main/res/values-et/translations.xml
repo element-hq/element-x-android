@@ -3,7 +3,7 @@
   <string name="screen_identity_confirmation_cannot_confirm">"Kas kinnitamine pole võimalik?"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"Loo uus taastevõti"</string>
   <string name="screen_identity_confirmation_subtitle">"Krüptitud sõnumivahetuse tagamiseks verifitseeri see seade."</string>
-  <string name="screen_identity_confirmation_title">"Kinnita, et see oled sina"</string>
+  <string name="screen_identity_confirmation_title">"Kinnita oma digitaalne identiteet"</string>
   <string name="screen_identity_confirmation_use_another_device">"Kasuta teist seadet"</string>
   <string name="screen_identity_confirmation_use_recovery_key">"Kasuta taastevõtit"</string>
   <string name="screen_identity_confirmed_subtitle">"Nüüd saad saata või lugeda sõnumeid turvaliselt ning kõik sinu vestluspartnerid võivad usaldada seda seadet."</string>

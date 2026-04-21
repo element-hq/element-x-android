@@ -14,6 +14,7 @@
   <string name="emoji_picker_category_objects">"Đồ vật"</string>
   <string name="emoji_picker_category_people">"Mặt cười &amp; mọi người"</string>
   <string name="emoji_picker_category_places">"Du lịch và địa danh"</string>
+  <string name="emoji_picker_category_recent">"Biểu tượng cảm xúc gần đây"</string>
   <string name="emoji_picker_category_symbols">"Biểu tượng"</string>
   <string name="screen_media_upload_preview_error_failed_processing">"Xử lý phương tiện tải lên không thành công, vui lòng thử lại."</string>
   <string name="screen_media_upload_preview_error_failed_sending">"Không thể tải lên tệp phương tiện. Vui lòng thử lại."</string>
@@ -44,6 +45,12 @@
   <string name="screen_room_timeline_less_reactions">"Thu gọn"</string>
   <string name="screen_room_timeline_message_copied">"Đã sao chép tin nhắn"</string>
   <string name="screen_room_timeline_no_permission_to_post">"Bạn không có quyền gửi tin nhắn trong phòng này"</string>
+  <plurals name="screen_room_timeline_reaction_a11y">
+    <item quantity="other">"%1$d thành viên đã phản ứng với %2$s"</item>
+  </plurals>
+  <plurals name="screen_room_timeline_reaction_including_you_a11y">
+    <item quantity="other">"Bạn và thành viên %1$d đã phản ứng với%2$s"</item>
+  </plurals>
   <string name="screen_room_timeline_reactions_show_less">"Thu gọn"</string>
   <string name="screen_room_timeline_reactions_show_more">"Xem thêm"</string>
   <string name="screen_room_timeline_read_marker_title">"Mới"</string>

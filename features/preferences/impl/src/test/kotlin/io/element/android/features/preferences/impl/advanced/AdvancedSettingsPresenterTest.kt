@@ -12,6 +12,7 @@ import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.compound.theme.Theme
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
@@ -20,6 +21,7 @@ import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
@@ -40,6 +42,9 @@ class AdvancedSettingsPresenterTest {
                 assertThat(isSharePresenceEnabled).isTrue()
                 assertThat(mediaOptimizationState).isNull()
                 assertThat(theme).isEqualTo(ThemeOption.System)
+                assertThat(availableThemeOptions).isEqualTo(
+                    listOf(ThemeOption.System, ThemeOption.Light, ThemeOption.Dark).toImmutableList()
+                )
                 assertThat(mediaPreviewConfigState.hideInviteAvatars).isFalse()
                 assertThat(mediaPreviewConfigState.timelineMediaPreviewValue).isEqualTo(MediaPreviewValue.On)
                 assertThat(mediaPreviewConfigState.setHideInviteAvatarsAction).isEqualTo(AsyncAction.Uninitialized)
@@ -200,6 +205,42 @@ class AdvancedSettingsPresenterTest {
             }
             with(awaitItem()) {
                 assertThat(theme).isEqualTo(ThemeOption.System)
+            }
+        }
+    }
+
+    @Test
+    fun `present - black theme option shown when feature flag enabled`() = runTest {
+        val presenter = createAdvancedSettingsPresenter(
+            featureFlagService = FakeFeatureFlagService().apply {
+                setFeatureEnabled(FeatureFlags.AllowBlackTheme, true)
+            }
+        )
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+
+            with(awaitItem()) {
+                assertThat(availableThemeOptions).contains(ThemeOption.Black)
+                assertThat(availableThemeOptions).isEqualTo(ThemeOption.entries.toImmutableList())
+            }
+        }
+    }
+
+    @Test
+    fun `present - stored black theme falls back to dark when feature flag disabled`() = runTest {
+        val appPreferencesStore = InMemoryAppPreferencesStore().apply {
+            setTheme(Theme.Black.name)
+        }
+        val presenter = createAdvancedSettingsPresenter(appPreferencesStore = appPreferencesStore)
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+
+            with(awaitItem()) {
+                assertThat(theme).isEqualTo(ThemeOption.Dark)
             }
         }
     }

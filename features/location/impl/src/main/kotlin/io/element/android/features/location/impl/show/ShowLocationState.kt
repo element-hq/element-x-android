@@ -18,14 +18,16 @@ import io.element.android.libraries.matrix.api.room.location.AssetType
 import kotlinx.collections.immutable.ImmutableList
 
 data class ShowLocationState(
+    val isLive: Boolean,
     val dialogState: LocationConstraintsDialogState,
     val locationShares: ImmutableList<LocationShareItem>,
+    val focusedLocation: LocationShareItem?,
     val hasLocationPermission: Boolean,
     val isTrackMyLocation: Boolean,
     val appName: String,
     val eventSink: (ShowLocationEvent) -> Unit,
 ) {
-    val isSheetDraggable = locationShares.any { item -> item.isLive }
+    val isSheetDraggable = isLive && locationShares.isNotEmpty()
 }
 
 data class LocationShareItem(

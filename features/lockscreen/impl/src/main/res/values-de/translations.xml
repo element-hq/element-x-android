@@ -23,7 +23,7 @@ Wähle eine einprägsame PIN. Wenn du sie vergisst, wirst du aus der App abgemel
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Bitte gib die gleiche PIN wie zuvor ein."</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"Die PINs stimmen nicht überein"</string>
   <string name="screen_app_lock_signout_alert_message">"Um fortzufahren, musst du dich erneut anmelden und eine neue PIN erstellen"</string>
-  <string name="screen_app_lock_signout_alert_title">"Du wirst abgemeldet"</string>
+  <string name="screen_app_lock_signout_alert_title">"Dieses Gerät wurde entfernt"</string>
   <plurals name="screen_app_lock_subtitle">
     <item quantity="one">"Du hast %1$d Versuch, um zu entsperren"</item>
     <item quantity="other">"Du hast %1$d Versuche, um zu entsperren"</item>
@@ -34,5 +34,5 @@ Wähle eine einprägsame PIN. Wenn du sie vergisst, wirst du aus der App abgemel
   </plurals>
   <string name="screen_app_lock_use_biometric_android">"Biometrie verwenden"</string>
   <string name="screen_app_lock_use_pin_android">"PIN verwenden"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Abmelden…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Gerät wird entfernt…"</string>
 </resources>

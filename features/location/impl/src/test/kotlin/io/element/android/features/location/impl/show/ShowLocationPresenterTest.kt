@@ -22,15 +22,23 @@ import io.element.android.features.location.impl.common.permissions.PermissionsS
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.matrix.api.core.UserId
+import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.room.location.AssetType
+import io.element.android.libraries.matrix.api.room.location.LastLocation
+import io.element.android.libraries.matrix.api.room.location.LiveLocationShare
 import io.element.android.libraries.matrix.test.core.aBuildMeta
+import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.test
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
+@OptIn(ExperimentalCoroutinesApi::class)
 class ShowLocationPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
@@ -51,13 +59,15 @@ class ShowLocationPresenterTest {
             assetType = null,
         ),
         locationActions: FakeLocationActions = fakeLocationActions,
+        joinedRoom: JoinedRoom = FakeJoinedRoom(),
     ) = ShowLocationPresenter(
         mode = mode,
         permissionsPresenterFactory = { fakePermissionsPresenter },
         locationActions = locationActions,
         buildMeta = fakeBuildMeta,
         dateFormatter = fakeDateFormatter,
-        stringProvider = FakeStringProvider()
+        stringProvider = FakeStringProvider(),
+        joinedRoom = joinedRoom,
     )
 
     @Test
@@ -318,4 +328,159 @@ class ShowLocationPresenterTest {
             assertThat(fakeLocationActions.openLocationSettingsInvocationsCount).isEqualTo(1)
         }
     }
+
+    @Test
+    fun `live mode emits empty location shares initially`() = runTest {
+        val presenter = createShowLocationPresenter(
+            mode = ShowLocationMode.Live(senderId = UserId("@alice:matrix.org")),
+            joinedRoom = FakeJoinedRoom(),
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            assertThat(initialState.locationShares).isEmpty()
+            assertThat(initialState.isSheetDraggable).isFalse()
+        }
+    }
+
+    @Test
+    fun `live mode collects live shares from room`() = runTest {
+        val userId = UserId("@bob:matrix.org")
+        val liveSharesFlow = MutableStateFlow(
+            listOf(
+                aLiveLocationShare(userId = userId)
+            )
+        )
+        val fakeRoom = FakeJoinedRoom(liveLocationSharesFlow = liveSharesFlow)
+
+        val presenter = createShowLocationPresenter(
+            mode = ShowLocationMode.Live(senderId = userId),
+            joinedRoom = fakeRoom,
+        )
+        presenter.test {
+            // Skip initial empty state from collectAsState(initial = emptyList())
+            skipItems(1)
+            val state = awaitItem()
+
+            assertThat(state.locationShares).hasSize(1)
+            val item = state.locationShares.first()
+            assertThat(item.userId).isEqualTo(userId)
+            assertThat(item.location.lat).isEqualTo(48.8584)
+            assertThat(item.location.lon).isEqualTo(2.2945)
+            assertThat(item.isLive).isTrue()
+            assertThat(state.isSheetDraggable).isTrue()
+        }
+    }
+
+    @Test
+    fun `live mode handles invalid geo uri gracefully`() = runTest {
+        val validUserId = UserId("@alice:matrix.org")
+        val invalidUserId = UserId("@bob:matrix.org")
+        val liveSharesFlow = MutableStateFlow(
+            listOf(
+                aLiveLocationShare(userId = validUserId),
+                aLiveLocationShare(userId = invalidUserId, geoUri = "invalid-geo-uri"),
+            )
+        )
+        val fakeRoom = FakeJoinedRoom(liveLocationSharesFlow = liveSharesFlow)
+
+        val presenter = createShowLocationPresenter(
+            mode = ShowLocationMode.Live(senderId = validUserId),
+            joinedRoom = fakeRoom,
+        )
+        presenter.test {
+            // Skip initial empty state from collectAsState(initial = emptyList())
+            skipItems(1)
+            val state = awaitItem()
+
+            // Only the valid location share should be present
+            assertThat(state.locationShares).hasSize(1)
+            assertThat(state.locationShares.first().userId).isEqualTo(validUserId)
+        }
+    }
+
+    @Test
+    fun `live mode updates when shares change`() = runTest {
+        val userId = UserId("@bob:matrix.org")
+        val liveSharesFlow = MutableStateFlow(emptyList<LiveLocationShare>())
+        val fakeRoom = FakeJoinedRoom(liveLocationSharesFlow = liveSharesFlow)
+
+        val presenter = createShowLocationPresenter(
+            mode = ShowLocationMode.Live(senderId = userId),
+            joinedRoom = fakeRoom,
+        )
+        presenter.test {
+            // Initial state is empty
+            val initialState = awaitItem()
+            assertThat(initialState.locationShares).isEmpty()
+
+            // Emit a new live share
+            liveSharesFlow.value = listOf(
+                aLiveLocationShare(userId = userId)
+            )
+
+            val updatedState = awaitItem()
+            assertThat(updatedState.locationShares).hasSize(1)
+            assertThat(updatedState.locationShares.first().userId).isEqualTo(userId)
+        }
+    }
+
+    @Test
+    fun `static mode emits location share with correct data`() = runTest {
+        val senderId = UserId("@alice:matrix.org")
+        val senderName = "Alice"
+        val avatarUrl = "https://example.com/avatar.png"
+        val mode = ShowLocationMode.Static(
+            location = location,
+            senderName = senderName,
+            senderId = senderId,
+            senderAvatarUrl = avatarUrl,
+            timestamp = 0L,
+            assetType = AssetType.SENDER,
+        )
+
+        val presenter = createShowLocationPresenter(mode = mode)
+        presenter.test {
+            val state = awaitItem()
+            assertThat(state.locationShares).hasSize(1)
+
+            val item = state.locationShares.first()
+            assertThat(item.userId).isEqualTo(senderId)
+            assertThat(item.displayName).isEqualTo(senderName)
+            assertThat(item.location).isEqualTo(location)
+            assertThat(item.isLive).isFalse()
+            assertThat(item.assetType).isEqualTo(AssetType.SENDER)
+            assertThat(item.avatarData.id).isEqualTo(senderId.value)
+            assertThat(item.avatarData.name).isEqualTo(senderName)
+            assertThat(item.avatarData.url).isEqualTo(avatarUrl)
+        }
+    }
+
+    @Test
+    fun `static mode has non-draggable sheet`() = runTest {
+        val presenter = createShowLocationPresenter()
+        presenter.test {
+            val state = awaitItem()
+            assertThat(state.isSheetDraggable).isFalse()
+        }
+    }
+}
+
+private fun aLiveLocationShare(
+    userId: UserId,
+    geoUri: String = "geo:48.8584,2.2945",
+    timestamp: Long = 0L,
+    startTimestamp: Long = 0L,
+    endTimestamp: Long = Long.MAX_VALUE,
+    assetType: AssetType = AssetType.SENDER,
+): LiveLocationShare {
+    return LiveLocationShare(
+        userId = userId,
+        lastLocation = LastLocation(
+            geoUri = geoUri,
+            timestamp = timestamp,
+            assetType = assetType,
+        ),
+        startTimestamp = startTimestamp,
+        endTimestamp = endTimestamp,
+    )
 }
