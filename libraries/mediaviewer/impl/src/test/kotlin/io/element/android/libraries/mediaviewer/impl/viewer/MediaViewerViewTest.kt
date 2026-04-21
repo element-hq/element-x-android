@@ -98,6 +98,18 @@ class MediaViewerViewTest {
         )
     }
 
+    @Test
+    fun `clicking on top action save emits expected Event`() {
+        val data = aMediaViewerPageData(
+            downloadedMedia = AsyncData.Success(aLocalMedia(uri = mockMediaUrl)),
+        )
+        testMenuAction(
+            data,
+            CommonStrings.action_save,
+            MediaViewerEvent.SaveOnDisk(data),
+        )
+    }
+
     private fun testMenuAction(
         data: MediaViewerPageData.MediaViewerData,
         contentDescriptionRes: Int,
