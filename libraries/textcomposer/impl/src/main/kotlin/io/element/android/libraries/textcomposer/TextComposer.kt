@@ -653,7 +653,7 @@ private fun TextInputBox(
             )
         } else {
             // Top padding for the message composer box
-            Spacer(Modifier.height(6.dp))
+            Spacer(Modifier.height(7.dp))
         }
 
         Box(
