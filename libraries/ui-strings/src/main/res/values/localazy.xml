@@ -84,8 +84,8 @@
   <string name="action_create">"Create"</string>
   <string name="action_create_room">"Create room"</string>
   <string name="action_create_space">"Create space"</string>
-  <string name="action_deactivate">"Deactivate"</string>
-  <string name="action_deactivate_account">"Deactivate account"</string>
+  <string name="action_deactivate">"Delete"</string>
+  <string name="action_deactivate_account">"Delete account"</string>
   <string name="action_decline">"Decline"</string>
   <string name="action_decline_and_block">"Decline and block"</string>
   <string name="action_delete_poll">"Delete Poll"</string>
