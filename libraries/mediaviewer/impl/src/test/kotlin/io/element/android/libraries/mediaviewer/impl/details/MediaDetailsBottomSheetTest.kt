@@ -116,6 +116,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMedia
     onShare: (EventId) -> Unit = EnsureNeverCalledWithParam(),
     onForward: (EventId) -> Unit = EnsureNeverCalledWithParam(),
     onDownload: (EventId) -> Unit = EnsureNeverCalledWithParam(),
+    onOpenWith: (EventId) -> Unit = EnsureNeverCalledWithParam(),
     onDelete: (EventId) -> Unit = EnsureNeverCalledWithParam(),
     onDismiss: () -> Unit = EnsureNeverCalled(),
 ) {
@@ -126,6 +127,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMedia
             onShare = onShare,
             onForward = onForward,
             onDownload = onDownload,
+            onOpenWith = onOpenWith,
             onDelete = onDelete,
             onDismiss = onDismiss,
         )

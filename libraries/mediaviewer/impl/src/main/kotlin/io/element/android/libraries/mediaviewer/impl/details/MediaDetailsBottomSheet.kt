@@ -28,6 +28,7 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -57,6 +58,7 @@ fun MediaDetailsBottomSheet(
     onShare: (EventId) -> Unit,
     onForward: (EventId) -> Unit,
     onDownload: (EventId) -> Unit,
+    onOpenWith: (EventId) -> Unit,
     onDelete: (EventId) -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
@@ -126,6 +128,26 @@ fun MediaDetailsBottomSheet(
                         style = ListItemStyle.Primary,
                         onClick = {
                             onDownload(state.eventId)
+                        }
+                    )
+                    val mimeType = state.mediaInfo.mimeType
+                    val icon = when (mimeType) {
+                        MimeTypes.Apk ->
+                            ListItemContent.Icon(IconSource.Resource(R.drawable.ic_apk_install))
+                        else ->
+                            ListItemContent.Icon(IconSource.Vector(CompoundIcons.PopOut()))
+                    }
+                    val wording = when (mimeType) {
+                        MimeTypes.Apk -> stringResource(id = CommonStrings.common_install_apk_android)
+                        else -> stringResource(id = CommonStrings.action_open_with)
+                    }
+                    HorizontalDivider()
+                    ListItem(
+                        leadingContent = icon,
+                        headlineContent = { Text(wording) },
+                        style = ListItemStyle.Primary,
+                        onClick = {
+                            onOpenWith(state.eventId)
                         }
                     )
                     if (state.canDelete) {
@@ -236,6 +258,7 @@ internal fun MediaDetailsBottomSheetPreview() = ElementPreview {
         onShare = {},
         onForward = {},
         onDownload = {},
+        onOpenWith = {},
         onDelete = {},
         onDismiss = {},
     )

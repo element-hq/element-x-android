@@ -105,6 +105,12 @@ class MediaGalleryPresenter(
                         saveOnDisk(it)
                     }
                 }
+                is MediaGalleryEvents.OpenWith -> coroutineScope.launch {
+                    mediaBottomSheetState = MediaBottomSheetState.Hidden
+                    groupedMediaItems.dataOrNull().find(event.eventId)?.let {
+                        openWith(it)
+                    }
+                }
                 is MediaGalleryEvents.Share -> coroutineScope.launch {
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
                     groupedMediaItems.dataOrNull().find(event.eventId)?.let {
@@ -193,6 +199,17 @@ class MediaGalleryPresenter(
         downloadMedia(mediaItem)
             .mapCatchingExceptions { localMedia ->
                 localMediaActions.share(localMedia)
+            }
+            .onFailure {
+                val snackbarMessage = SnackbarMessage(mediaActionsError(it))
+                snackbarDispatcher.post(snackbarMessage)
+            }
+    }
+
+    private suspend fun openWith(mediaItem: MediaItem.Event) {
+        downloadMedia(mediaItem)
+            .mapCatchingExceptions { localMedia ->
+                localMediaActions.open(localMedia)
             }
             .onFailure {
                 val snackbarMessage = SnackbarMessage(mediaActionsError(it))

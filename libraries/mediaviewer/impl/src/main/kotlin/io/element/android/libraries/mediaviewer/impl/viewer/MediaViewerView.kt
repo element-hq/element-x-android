@@ -65,7 +65,6 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.viewfolder.api.TextFileViewer
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.audio.api.AudioFocus
-import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.designsystem.components.async.AsyncFailure
 import io.element.android.libraries.designsystem.components.async.AsyncLoading
@@ -85,7 +84,6 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
-import io.element.android.libraries.mediaviewer.impl.R
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.details.MediaDeleteConfirmationBottomSheet
 import io.element.android.libraries.mediaviewer.impl.details.MediaDetailsBottomSheet
@@ -226,7 +224,6 @@ fun MediaViewerView(
                             onInfoClick = {
                                 state.eventSink(MediaViewerEvent.OpenInfo(currentData))
                             },
-                            eventSink = state.eventSink
                         )
                     }
                     else -> {
@@ -273,6 +270,11 @@ fun MediaViewerView(
                 onDownload = {
                     (currentData as? MediaViewerPageData.MediaViewerData)?.let {
                         state.eventSink(MediaViewerEvent.SaveOnDisk(currentData))
+                    }
+                },
+                onOpenWith = {
+                    (currentData as? MediaViewerPageData.MediaViewerData)?.let {
+                        state.eventSink(MediaViewerEvent.OpenWith(currentData))
                     }
                 },
                 onDelete = { eventId ->
@@ -469,11 +471,9 @@ private fun MediaViewerTopBar(
     onShareClick: () -> Unit,
     onSaveClick: () -> Unit,
     onInfoClick: () -> Unit,
-    eventSink: (MediaViewerEvent) -> Unit,
 ) {
     val downloadedMedia by data.downloadedMedia
     val actionsEnabled = downloadedMedia.isSuccess()
-    val mimeType = data.mediaInfo.mimeType
     val senderName = data.mediaInfo.senderName
     val dateSent = data.mediaInfo.dateSent
     TopAppBar(
@@ -508,23 +508,6 @@ private fun MediaViewerTopBar(
         ),
         navigationIcon = { BackButton(onClick = onBackClick) },
         actions = {
-            IconButton(
-                enabled = actionsEnabled,
-                onClick = {
-                    eventSink(MediaViewerEvent.OpenWith(data))
-                },
-            ) {
-                when (mimeType) {
-                    MimeTypes.Apk -> Icon(
-                        resourceId = R.drawable.ic_apk_install,
-                        contentDescription = stringResource(id = CommonStrings.common_install_apk_android)
-                    )
-                    else -> Icon(
-                        imageVector = CompoundIcons.PopOut(),
-                        contentDescription = stringResource(id = CommonStrings.action_open_with)
-                    )
-                }
-            }
             IconButton(
                 onClick = onShareClick,
                 enabled = actionsEnabled,

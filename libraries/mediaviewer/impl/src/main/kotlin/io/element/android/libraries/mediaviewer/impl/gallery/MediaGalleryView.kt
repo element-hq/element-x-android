@@ -173,6 +173,9 @@ fun MediaGalleryView(
                 onDownload = { eventId ->
                     state.eventSink(MediaGalleryEvents.SaveOnDisk(eventId))
                 },
+                onOpenWith = { eventId ->
+                    state.eventSink(MediaGalleryEvents.OpenWith(eventId))
+                },
                 onDelete = { eventId ->
                     state.eventSink(
                         MediaGalleryEvents.ConfirmDelete(

@@ -20,6 +20,7 @@ sealed interface MediaGalleryEvents {
     data class Share(val eventId: EventId) : MediaGalleryEvents
     data class Forward(val eventId: EventId) : MediaGalleryEvents
     data class SaveOnDisk(val eventId: EventId) : MediaGalleryEvents
+    data class OpenWith(val eventId: EventId) : MediaGalleryEvents
     data class OpenInfo(val mediaItem: MediaItem.Event) : MediaGalleryEvents
     data class ViewInTimeline(val eventId: EventId) : MediaGalleryEvents
 

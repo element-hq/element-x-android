@@ -10,6 +10,7 @@ package io.element.android.libraries.mediaviewer.impl.viewer
 
 import android.net.Uri
 import androidx.activity.ComponentActivity
+import androidx.annotation.StringRes
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -63,19 +64,7 @@ class MediaViewerViewTest {
     }
 
     @Test
-    fun `clicking on open emit expected Event`() {
-        val data = aMediaViewerPageData(
-            downloadedMedia = AsyncData.Success(aLocalMedia(uri = mockMediaUrl)),
-        )
-        testMenuAction(
-            data,
-            CommonStrings.action_open_with,
-            MediaViewerEvent.OpenWith(data),
-        )
-    }
-
-    @Test
-    fun `clicking on info emit expected Event`() {
+    fun `clicking on info emits expected Event`() {
         val data = aMediaViewerPageData(
             downloadedMedia = AsyncData.Success(aLocalMedia(uri = mockMediaUrl)),
         )
@@ -112,7 +101,7 @@ class MediaViewerViewTest {
 
     private fun testMenuAction(
         data: MediaViewerPageData.MediaViewerData,
-        contentDescriptionRes: Int,
+        @StringRes contentDescriptionRes: Int,
         expectedEvent: MediaViewerEvent,
     ) {
         val eventsRecorder = EventsRecorder<MediaViewerEvent>()
@@ -135,7 +124,7 @@ class MediaViewerViewTest {
 
     @Test
     @Config(qualifiers = "h1024dp")
-    fun `clicking on download emit expected Event`() {
+    fun `clicking on download emits expected Event`() {
         val data = aMediaViewerPageData()
         testBottomSheetAction(
             data,
@@ -146,7 +135,7 @@ class MediaViewerViewTest {
 
     @Test
     @Config(qualifiers = "h1024dp")
-    fun `clicking on share emit expected Event`() {
+    fun `clicking on share emits expected Event`() {
         val data = aMediaViewerPageData()
         testBottomSheetAction(
             data,
@@ -155,9 +144,20 @@ class MediaViewerViewTest {
         )
     }
 
+    @Config(qualifiers = "h1024dp")
+    @Test
+    fun `clicking on open in emits expected Event`() {
+        val data = aMediaViewerPageData()
+        testBottomSheetAction(
+            data,
+            CommonStrings.action_open_with,
+            MediaViewerEvent.OpenWith(data),
+        )
+    }
+
     private fun testBottomSheetAction(
         data: MediaViewerPageData.MediaViewerData,
-        contentDescriptionRes: Int,
+        @StringRes textRes: Int,
         expectedEvent: MediaViewerEvent,
     ) {
         val eventsRecorder = EventsRecorder<MediaViewerEvent>()
@@ -168,7 +168,7 @@ class MediaViewerViewTest {
                 eventSink = eventsRecorder
             ),
         )
-        rule.clickOn(contentDescriptionRes)
+        rule.clickOn(textRes)
         eventsRecorder.assertList(
             listOf(
                 MediaViewerEvent.OnNavigateTo(0),
@@ -188,7 +188,7 @@ class MediaViewerViewTest {
             state = state,
         )
         // Ensure that the action are visible
-        val contentDescription = rule.activity.getString(CommonStrings.action_open_with)
+        val contentDescription = rule.activity.getString(CommonStrings.action_share)
         rule.onNodeWithContentDescription(contentDescription)
             .assertExists()
             .assertHasClickAction()
