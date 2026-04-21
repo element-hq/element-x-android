@@ -72,28 +72,28 @@ class MediaDetailsBottomSheetTest {
 
     @Test
     @Config(qualifiers = "h1024dp")
-    fun `clicking on Save invokes expected callback`() {
+    fun `clicking on Download invokes expected callback`() {
         val state = aMediaDetailsBottomSheetState()
         ensureCalledOnceWithParam(state.eventId) { callback ->
             rule.setMediaDetailsBottomSheet(
                 state = state,
                 onDownload = callback,
             )
-            rule.clickOn(CommonStrings.action_save)
+            rule.clickOn(CommonStrings.action_download)
         }
     }
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `clicking on Remove invokes expected callback`() {
+    fun `clicking on Delete invokes expected callback`() {
         val state = aMediaDetailsBottomSheetState()
         ensureCalledOnceWithParam(state.eventId) { callback ->
             rule.setMediaDetailsBottomSheet(
                 state = state,
                 onDelete = callback,
             )
-            rule.onNodeWithText(rule.activity.getString(CommonStrings.action_remove)).assertExists()
-            rule.clickOn(CommonStrings.action_remove)
+            rule.onNodeWithText(rule.activity.getString(CommonStrings.action_delete)).assertExists()
+            rule.clickOn(CommonStrings.action_delete)
         }
     }
 

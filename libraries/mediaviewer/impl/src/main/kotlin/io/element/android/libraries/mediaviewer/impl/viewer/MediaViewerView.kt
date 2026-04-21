@@ -101,6 +101,9 @@ import me.saket.telephoto.zoomable.rememberZoomableState
 
 val topAppBarHeight = 88.dp
 
+/**
+ * Ref: https://www.figma.com/design/pDlJZGBsri47FNTXMnEdXB/Compound-Android-Templates?node-id=3361-16623
+ */
 @Composable
 fun MediaViewerView(
     state: MediaViewerState,
@@ -537,7 +540,7 @@ private fun MediaViewerTopBar(
             ) {
                 Icon(
                     imageVector = CompoundIcons.Download(),
-                    contentDescription = stringResource(id = CommonStrings.action_save),
+                    contentDescription = stringResource(id = CommonStrings.action_download),
                 )
             }
             if (canShowInfo) {

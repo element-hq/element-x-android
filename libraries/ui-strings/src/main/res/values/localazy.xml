@@ -96,6 +96,7 @@
   <string name="action_discard">"Discard"</string>
   <string name="action_dismiss">"Dismiss"</string>
   <string name="action_done">"Done"</string>
+  <string name="action_download">"Download"</string>
   <string name="action_edit">"Edit"</string>
   <string name="action_edit_caption">"Edit caption"</string>
   <string name="action_edit_poll">"Edit poll"</string>

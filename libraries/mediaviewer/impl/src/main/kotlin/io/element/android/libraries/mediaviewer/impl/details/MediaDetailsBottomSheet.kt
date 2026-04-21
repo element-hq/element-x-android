@@ -46,6 +46,9 @@ import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.impl.R
 import io.element.android.libraries.ui.strings.CommonStrings
 
+/**
+ * Ref: https://www.figma.com/design/pDlJZGBsri47FNTXMnEdXB/Compound-Android-Templates?node-id=2229-149220
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MediaDetailsBottomSheet(
@@ -99,6 +102,7 @@ fun MediaDetailsBottomSheet(
                             onViewInTimeline(state.eventId)
                         }
                     )
+                    HorizontalDivider()
                     ListItem(
                         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ShareAndroid())),
                         headlineContent = { Text(stringResource(CommonStrings.action_share)) },
@@ -115,9 +119,10 @@ fun MediaDetailsBottomSheet(
                             onForward(state.eventId)
                         }
                     )
+                    HorizontalDivider()
                     ListItem(
                         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Download())),
-                        headlineContent = { Text(stringResource(CommonStrings.action_save)) },
+                        headlineContent = { Text(stringResource(CommonStrings.action_download)) },
                         style = ListItemStyle.Primary,
                         onClick = {
                             onDownload(state.eventId)
@@ -127,7 +132,7 @@ fun MediaDetailsBottomSheet(
                         HorizontalDivider()
                         ListItem(
                             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Delete())),
-                            headlineContent = { Text(stringResource(CommonStrings.action_remove)) },
+                            headlineContent = { Text(stringResource(CommonStrings.action_delete)) },
                             style = ListItemStyle.Destructive,
                             onClick = {
                                 onDelete(state.eventId)
