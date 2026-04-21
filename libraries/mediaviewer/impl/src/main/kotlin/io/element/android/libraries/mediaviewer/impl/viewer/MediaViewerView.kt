@@ -126,7 +126,7 @@ fun MediaViewerView(
         }
         LaunchedEffect(pagerState) {
             snapshotFlow { pagerState.currentPage }.collect { page ->
-                state.eventSink(MediaViewerEvents.OnNavigateTo(page))
+                state.eventSink(MediaViewerEvent.OnNavigateTo(page))
             }
         }
         HorizontalPager(
@@ -145,7 +145,7 @@ fun MediaViewerView(
                 }
                 is MediaViewerPageData.Loading -> {
                     LaunchedEffect(dataForPage.timestamp) {
-                        state.eventSink(MediaViewerEvents.LoadMore(dataForPage.direction))
+                        state.eventSink(MediaViewerEvent.LoadMore(dataForPage.direction))
                     }
                     MediaViewerLoadingPage(
                         onDismiss = onBackClick,
@@ -154,7 +154,7 @@ fun MediaViewerView(
                 is MediaViewerPageData.MediaViewerData -> {
                     var bottomPaddingInPixels by remember { mutableIntStateOf(defaultBottomPaddingInPixels) }
                     LaunchedEffect(Unit) {
-                        state.eventSink(MediaViewerEvents.LoadMedia(dataForPage))
+                        state.eventSink(MediaViewerEvent.LoadMedia(dataForPage))
                     }
                     Box(
                         modifier = Modifier.fillMaxSize()
@@ -173,10 +173,10 @@ fun MediaViewerView(
                             textFileViewer = textFileViewer,
                             onDismiss = onBackClick,
                             onRetry = {
-                                state.eventSink(MediaViewerEvents.LoadMedia(dataForPage))
+                                state.eventSink(MediaViewerEvent.LoadMedia(dataForPage))
                             },
                             onDismissError = {
-                                state.eventSink(MediaViewerEvents.ClearLoadingError(dataForPage))
+                                state.eventSink(MediaViewerEvent.ClearLoadingError(dataForPage))
                             },
                             onShowOverlayChange = {
                                 showOverlay = it
@@ -215,7 +215,7 @@ fun MediaViewerView(
                             canShowInfo = state.canShowInfo,
                             onBackClick = onBackClick,
                             onInfoClick = {
-                                state.eventSink(MediaViewerEvents.OpenInfo(currentData))
+                                state.eventSink(MediaViewerEvent.OpenInfo(currentData))
                             },
                             eventSink = state.eventSink
                         )
@@ -251,25 +251,25 @@ fun MediaViewerView(
             MediaDetailsBottomSheet(
                 state = bottomSheetState,
                 onViewInTimeline = {
-                    state.eventSink(MediaViewerEvents.ViewInTimeline(it))
+                    state.eventSink(MediaViewerEvent.ViewInTimeline(it))
                 },
                 onShare = {
                     (currentData as? MediaViewerPageData.MediaViewerData)?.let {
-                        state.eventSink(MediaViewerEvents.Share(currentData))
+                        state.eventSink(MediaViewerEvent.Share(currentData))
                     }
                 },
                 onForward = {
-                    state.eventSink(MediaViewerEvents.Forward(it))
+                    state.eventSink(MediaViewerEvent.Forward(it))
                 },
                 onDownload = {
                     (currentData as? MediaViewerPageData.MediaViewerData)?.let {
-                        state.eventSink(MediaViewerEvents.SaveOnDisk(currentData))
+                        state.eventSink(MediaViewerEvent.SaveOnDisk(currentData))
                     }
                 },
                 onDelete = { eventId ->
                     (currentData as? MediaViewerPageData.MediaViewerData)?.let {
                         state.eventSink(
-                            MediaViewerEvents.ConfirmDelete(
+                            MediaViewerEvent.ConfirmDelete(
                                 eventId,
                                 currentData,
                             )
@@ -277,7 +277,7 @@ fun MediaViewerView(
                     }
                 },
                 onDismiss = {
-                    state.eventSink(MediaViewerEvents.CloseBottomSheet)
+                    state.eventSink(MediaViewerEvent.CloseBottomSheet)
                 },
             )
         }
@@ -285,10 +285,10 @@ fun MediaViewerView(
             MediaDeleteConfirmationBottomSheet(
                 state = bottomSheetState,
                 onDelete = {
-                    state.eventSink(MediaViewerEvents.Delete(it))
+                    state.eventSink(MediaViewerEvent.Delete(it))
                 },
                 onDismiss = {
-                    state.eventSink(MediaViewerEvents.CloseBottomSheet)
+                    state.eventSink(MediaViewerEvent.CloseBottomSheet)
                 },
             )
         }
@@ -458,7 +458,7 @@ private fun MediaViewerTopBar(
     canShowInfo: Boolean,
     onBackClick: () -> Unit,
     onInfoClick: () -> Unit,
-    eventSink: (MediaViewerEvents) -> Unit,
+    eventSink: (MediaViewerEvent) -> Unit,
 ) {
     val downloadedMedia by data.downloadedMedia
     val actionsEnabled = downloadedMedia.isSuccess()
@@ -500,7 +500,7 @@ private fun MediaViewerTopBar(
             IconButton(
                 enabled = actionsEnabled,
                 onClick = {
-                    eventSink(MediaViewerEvents.OpenWith(data))
+                    eventSink(MediaViewerEvent.OpenWith(data))
                 },
             ) {
                 when (mimeType) {

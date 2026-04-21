@@ -226,7 +226,7 @@ fun aMediaViewerState(
     currentIndex: Int = 0,
     canShowInfo: Boolean = true,
     mediaBottomSheetState: MediaBottomSheetState = MediaBottomSheetState.Hidden,
-    eventSink: (MediaViewerEvents) -> Unit = {},
+    eventSink: (MediaViewerEvent) -> Unit = {},
 ) = MediaViewerState(
     initiallySelectedEventId = EventId("\$a:b"),
     listData = listData.toImmutableList(),

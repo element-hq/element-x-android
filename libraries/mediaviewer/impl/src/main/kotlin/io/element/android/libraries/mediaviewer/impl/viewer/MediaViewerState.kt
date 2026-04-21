@@ -26,7 +26,7 @@ data class MediaViewerState(
     val snackbarMessage: SnackbarMessage?,
     val canShowInfo: Boolean,
     val mediaBottomSheetState: MediaBottomSheetState,
-    val eventSink: (MediaViewerEvents) -> Unit,
+    val eventSink: (MediaViewerEvent) -> Unit,
 )
 
 sealed interface MediaViewerPageData {
