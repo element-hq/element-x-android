@@ -7,9 +7,12 @@
 
 package io.element.android.services.analytics.api
 
+import androidx.annotation.Discouraged
+
 /**
  * Represents an analytics span in the Rust SDK.
  */
+@Discouraged("This component can cause crashes of the app when using debug builds of the Rust SDK.")
 interface AnalyticsSdkSpan {
     /** Enters the span and starts collecting metrics. */
     fun enter()
