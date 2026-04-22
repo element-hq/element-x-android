@@ -64,23 +64,27 @@ internal fun CallScreenView(
     requestPermissions: (Array<String>, RequestPermissionCallback) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    fun handleBack() {
-        if (pipState.supportPip) {
-            pipState.eventSink.invoke(PictureInPictureEvents.EnterPictureInPicture)
-        } else {
-            state.eventSink(CallScreenEvents.Hangup)
+    var callWebView by remember { mutableStateOf<WebView?>(null) }
+
+    fun handleBack(fromNative: Boolean = false) {
+        when (CallScreenBackPressPolicy.resolve(supportPip = pipState.supportPip, hasWebView = callWebView!=null,fromNative)) {
+            CallScreenBackPressAction.EnterPictureInPicture -> {
+                pipState.eventSink(PictureInPictureEvents.EnterPictureInPicture)
+            }
+            CallScreenBackPressAction.DispatchEscapeToWebView -> {
+                callWebView?.dispatchEscKeyEvent()
+            }
+            CallScreenBackPressAction.Hangup -> {
+                state.eventSink(CallScreenEvents.Hangup)
+            }
         }
     }
 
     Scaffold(
         modifier = modifier,
     ) { padding ->
-        var callWebView by remember { mutableStateOf<WebView?>(null) }
         BackHandler {
-            val handledByWebView = callWebView?.dispatchEscKeyEvent() == true
-            if (!handledByWebView) {
-                handleBack()
-            }
+            handleBack(fromNative = true)
         }
         if (state.webViewError != null) {
             ErrorDialog(
@@ -267,20 +271,9 @@ private fun WebView.addBackHandler(onBackPressed: () -> Unit) {
     )
 }
 
-private fun WebView.dispatchEscKeyEvent(): Boolean {
-    val downHandled = dispatchKeyEvent(
-        android.view.KeyEvent(
-            android.view.KeyEvent.ACTION_DOWN,
-            android.view.KeyEvent.KEYCODE_ESCAPE
-        )
-    )
-    val upHandled = dispatchKeyEvent(
-        android.view.KeyEvent(
-            android.view.KeyEvent.ACTION_UP,
-            android.view.KeyEvent.KEYCODE_ESCAPE
-        )
-    )
-    return downHandled && upHandled
+private fun WebView.dispatchEscKeyEvent() {
+    dispatchKeyEvent(android.view.KeyEvent(android.view.KeyEvent.ACTION_DOWN, android.view.KeyEvent.KEYCODE_ESCAPE))
+    dispatchKeyEvent(android.view.KeyEvent(android.view.KeyEvent.ACTION_UP, android.view.KeyEvent.KEYCODE_ESCAPE))
 }
 
 @PreviewsDayNight
