@@ -90,7 +90,7 @@ internal fun MatrixTimelineItem.Event.canBeDisplayedInBubbleBlock(): Boolean {
         is RoomMembershipContent,
         UnknownContent,
         is LegacyCallInviteContent,
-        CallNotifyContent,
+        is CallNotifyContent,
         is StateContent -> false
     }
 }

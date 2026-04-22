@@ -1,3 +1,45 @@
+Changes in Element X v26.04.4
+=============================
+
+<!-- Release notes generated using configuration in .github/release.yml at v26.04.4 -->
+
+## What's Changed
+### 🙌 Improvements
+* Natural media viewer swiping order by @bxdxnn in https://github.com/element-hq/element-x-android/pull/6431
+* Replace `rustls-platform-verifier-android.aar` with single class by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6610
+* Cleanup FetchPushForegroundService by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6577
+* cleaning: Remove join button from call notify timelineItemView by @BillCarsonFr in https://github.com/element-hq/element-x-android/pull/6603
+### 🐛 Bugfixes
+* Fix crash when going back to threads list by @bxdxnn in https://github.com/element-hq/element-x-android/pull/6620
+* audio: Let EC decide alone what communication device to use by @BillCarsonFr in https://github.com/element-hq/element-x-android/pull/6609
+* Fix media viewer bottom sheets not being scrollable by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6631
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/6626
+### 📄 Documentation
+* Updates to new features and some refactoring. by @mxandreas in https://github.com/element-hq/element-x-android/pull/6591
+### 🚧 In development 🚧
+* WIP : live location rendering by @ganfra in https://github.com/element-hq/element-x-android/pull/6611
+### Dependency upgrades
+* Update dependency io.element.android:element-call-embedded to v0.19.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6593
+* Update dependency androidx.annotation:annotation-jvm to v1.10.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6596
+* Update dependency org.jetbrains.kotlinx:kotlinx-serialization-json to v1.11.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6605
+* Update dependency com.google.firebase:firebase-bom to v34.12.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6604
+* Update actions/upload-artifact action to v7.0.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6614
+* Update plugin dependencycheck to v12.2.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6621
+* Update actions/github-script action to v9 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6606
+* Update peter-evans/create-pull-request action to v8.1.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6615
+* Update dependencyAnalysis to v3.7.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6616
+* Update dependency org.matrix.rustcomponents:sdk-android to v26.04.21 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6635
+### Others
+* Settings UI update. by @bmarty in https://github.com/element-hq/element-x-android/pull/6602
+* Support replying to messages with voice recordings by @kalix127 in https://github.com/element-hq/element-x-android/pull/6464
+* Add Black theme option for battery saving on OLED displays by @timurgilfanov in https://github.com/element-hq/element-x-android/pull/6441
+* Fix | When selecting earpiece twice in a row the proximity sensor get wrongly disabled by @BillCarsonFr in https://github.com/element-hq/element-x-android/pull/6627
+* Update wording of deactivate account screen by @bmarty in https://github.com/element-hq/element-x-android/pull/6633
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v26.04.3...v26.04.4
+
 Changes in Element X v26.04.3
 =============================
 
