@@ -13,31 +13,28 @@ import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.anApkMediaInfo
 import io.element.android.libraries.mediaviewer.api.anImageMediaInfo
 
-open class MediaDetailsBottomSheetStateProvider : PreviewParameterProvider<MediaBottomSheetState.MediaDetailsBottomSheetState> {
-    override val values: Sequence<MediaBottomSheetState.MediaDetailsBottomSheetState>
+open class MediaBottomSheetStateDetailsProvider : PreviewParameterProvider<MediaBottomSheetState.Details> {
+    override val values: Sequence<MediaBottomSheetState.Details>
         get() = sequenceOf(
-            aMediaDetailsBottomSheetState(),
-            aMediaDetailsBottomSheetState(
+            aMediaBottomSheetStateDetails(),
+            aMediaBottomSheetStateDetails(
                 canDelete = false,
             ),
-            aMediaDetailsBottomSheetState(
+            aMediaBottomSheetStateDetails(
                 mediaInfo = anApkMediaInfo(),
             ),
         )
 }
 
-fun aMediaDetailsBottomSheetState(
-    dateSentFull: String = "December 6, 2024 at 12:59",
+fun aMediaBottomSheetStateDetails(
     canDelete: Boolean = true,
     mediaInfo: MediaInfo = anImageMediaInfo(
         senderName = "Alice",
-        dateSentFull = dateSentFull,
+        dateSentFull = "December 6, 2024 at 12:59",
     ),
-): MediaBottomSheetState.MediaDetailsBottomSheetState {
-    return MediaBottomSheetState.MediaDetailsBottomSheetState(
-        eventId = EventId("\$eventId"),
-        canDelete = canDelete,
-        mediaInfo = mediaInfo,
-        thumbnailSource = null,
-    )
-}
+) = MediaBottomSheetState.Details(
+    eventId = EventId("\$eventId"),
+    canDelete = canDelete,
+    mediaInfo = mediaInfo,
+    thumbnailSource = null,
+)

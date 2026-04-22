@@ -126,7 +126,7 @@ class MediaGalleryPresenter(
                     navigator.onViewInTimelineClick(event.eventId)
                 }
                 is MediaGalleryEvent.OpenInfo -> coroutineScope.launch {
-                    mediaBottomSheetState = MediaBottomSheetState.MediaDetailsBottomSheetState(
+                    mediaBottomSheetState = MediaBottomSheetState.Details(
                         eventId = event.mediaItem.eventId(),
                         canDelete = when (event.mediaItem.mediaInfo().senderId) {
                             null -> false
@@ -144,7 +144,7 @@ class MediaGalleryPresenter(
                     )
                 }
                 is MediaGalleryEvent.ConfirmDelete -> {
-                    mediaBottomSheetState = MediaBottomSheetState.MediaDeleteConfirmationState(
+                    mediaBottomSheetState = MediaBottomSheetState.DeleteConfirmation(
                         eventId = event.eventId,
                         mediaInfo = event.mediaInfo,
                         thumbnailSource = event.thumbnailSource,

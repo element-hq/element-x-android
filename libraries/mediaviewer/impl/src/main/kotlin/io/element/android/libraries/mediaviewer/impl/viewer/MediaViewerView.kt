@@ -253,7 +253,7 @@ fun MediaViewerView(
 
     when (val bottomSheetState = state.mediaBottomSheetState) {
         MediaBottomSheetState.Hidden -> Unit
-        is MediaBottomSheetState.MediaDetailsBottomSheetState -> {
+        is MediaBottomSheetState.Details -> {
             MediaDetailsBottomSheet(
                 state = bottomSheetState,
                 onViewInTimeline = {
@@ -292,7 +292,7 @@ fun MediaViewerView(
                 },
             )
         }
-        is MediaBottomSheetState.MediaDeleteConfirmationState -> {
+        is MediaBottomSheetState.DeleteConfirmation -> {
             MediaDeleteConfirmationBottomSheet(
                 state = bottomSheetState,
                 onDelete = {

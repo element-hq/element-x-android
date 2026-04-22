@@ -136,7 +136,7 @@ class MediaGalleryPresenterTest {
             initialState.eventSink(MediaGalleryEvent.OpenInfo(item))
             val state = awaitItem()
             assertThat(state.mediaBottomSheetState).isEqualTo(
-                MediaBottomSheetState.MediaDetailsBottomSheetState(
+                MediaBottomSheetState.Details(
                     eventId = AN_EVENT_ID,
                     canDelete = canDeleteOwn,
                     mediaInfo = item.mediaInfo,
@@ -183,7 +183,7 @@ class MediaGalleryPresenterTest {
             initialState.eventSink(MediaGalleryEvent.OpenInfo(item))
             val state = awaitItem()
             assertThat(state.mediaBottomSheetState).isEqualTo(
-                MediaBottomSheetState.MediaDetailsBottomSheetState(
+                MediaBottomSheetState.Details(
                     eventId = AN_EVENT_ID,
                     canDelete = canDeleteOther,
                     mediaInfo = item.mediaInfo,
@@ -212,7 +212,7 @@ class MediaGalleryPresenterTest {
             initialState.eventSink(MediaGalleryEvent.ConfirmDelete(AN_EVENT_ID, item.mediaInfo, item.thumbnailSource))
             val deleteState = awaitItem()
             assertThat(deleteState.mediaBottomSheetState).isEqualTo(
-                MediaBottomSheetState.MediaDeleteConfirmationState(
+                MediaBottomSheetState.DeleteConfirmation(
                     eventId = AN_EVENT_ID,
                     mediaInfo = item.mediaInfo,
                     thumbnailSource = item.thumbnailSource,
@@ -384,7 +384,7 @@ class MediaGalleryPresenterTest {
             val initialState = awaitFirstItem()
             initialState.eventSink(MediaGalleryEvent.OpenInfo(item))
             val withBottomSheetState = awaitItem()
-            assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.MediaDetailsBottomSheetState::class.java)
+            assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.Details::class.java)
             withBottomSheetState.eventSink(MediaGalleryEvent.OpenWith(AN_EVENT_ID))
             val finalState = awaitItem()
             assertThat(finalState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
@@ -451,7 +451,7 @@ class MediaGalleryPresenterTest {
             )
             initialState.eventSink(MediaGalleryEvent.OpenInfo(item))
             val withBottomSheetState = awaitItem()
-            assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.MediaDetailsBottomSheetState::class.java)
+            assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.Details::class.java)
             withBottomSheetState.eventSink(MediaGalleryEvent.ViewInTimeline(AN_EVENT_ID))
             val finalState = awaitItem()
             assertThat(finalState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
@@ -484,7 +484,7 @@ class MediaGalleryPresenterTest {
             )
             initialState.eventSink(MediaGalleryEvent.OpenInfo(item))
             val withBottomSheetState = awaitItem()
-            assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.MediaDetailsBottomSheetState::class.java)
+            assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.Details::class.java)
             withBottomSheetState.eventSink(MediaGalleryEvent.Forward(AN_EVENT_ID))
             val finalState = awaitItem()
             assertThat(finalState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)

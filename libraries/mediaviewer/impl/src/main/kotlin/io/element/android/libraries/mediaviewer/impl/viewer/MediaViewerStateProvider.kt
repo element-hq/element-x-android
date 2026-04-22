@@ -25,8 +25,8 @@ import io.element.android.libraries.mediaviewer.api.anAudioMediaInfo
 import io.element.android.libraries.mediaviewer.api.anImageMediaInfo
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
-import io.element.android.libraries.mediaviewer.impl.details.aMediaDeleteConfirmationState
-import io.element.android.libraries.mediaviewer.impl.details.aMediaDetailsBottomSheetState
+import io.element.android.libraries.mediaviewer.impl.details.aMediaBottomSheetStateDeleteConfirmation
+import io.element.android.libraries.mediaviewer.impl.details.aMediaBottomSheetStateDetails
 import kotlinx.collections.immutable.toImmutableList
 
 private const val LONG_CAPTION = "This is a very long caption that should be scrollable in the media viewer. " +
@@ -141,10 +141,10 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
                 )
             },
             aMediaViewerState(
-                mediaBottomSheetState = aMediaDetailsBottomSheetState(),
+                mediaBottomSheetState = aMediaBottomSheetStateDetails(),
             ),
             aMediaViewerState(
-                mediaBottomSheetState = aMediaDeleteConfirmationState(),
+                mediaBottomSheetState = aMediaBottomSheetStateDeleteConfirmation(),
             ),
             anAudioMediaInfo(
                 waveForm = WaveFormSamples.realisticWaveForm,

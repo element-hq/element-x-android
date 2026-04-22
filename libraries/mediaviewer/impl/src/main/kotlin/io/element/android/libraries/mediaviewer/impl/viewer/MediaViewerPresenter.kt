@@ -131,7 +131,7 @@ class MediaViewerPresenter(
                     )
                 }
                 is MediaViewerEvent.OpenInfo -> coroutineScope.launch {
-                    mediaBottomSheetState = MediaBottomSheetState.MediaDetailsBottomSheetState(
+                    mediaBottomSheetState = MediaBottomSheetState.Details(
                         eventId = event.data.eventId,
                         canDelete = when (event.data.mediaInfo.senderId) {
                             null -> false
@@ -143,7 +143,7 @@ class MediaViewerPresenter(
                     )
                 }
                 is MediaViewerEvent.ConfirmDelete -> {
-                    mediaBottomSheetState = MediaBottomSheetState.MediaDeleteConfirmationState(
+                    mediaBottomSheetState = MediaBottomSheetState.DeleteConfirmation(
                         eventId = event.eventId,
                         mediaInfo = event.data.mediaInfo,
                         thumbnailSource = event.data.thumbnailSource ?: event.data.mediaSource,

@@ -34,7 +34,7 @@ class MediaDetailsBottomSheetTest {
     @Test
     @Config(qualifiers = "h1024dp")
     fun `clicking on View in timeline invokes expected callback`() {
-        val state = aMediaDetailsBottomSheetState()
+        val state = aMediaBottomSheetStateDetails()
         ensureCalledOnceWithParam(state.eventId) { callback ->
             rule.setMediaDetailsBottomSheet(
                 state = state,
@@ -47,7 +47,7 @@ class MediaDetailsBottomSheetTest {
     @Test
     @Config(qualifiers = "h1024dp")
     fun `clicking on Share invokes expected callback`() {
-        val state = aMediaDetailsBottomSheetState()
+        val state = aMediaBottomSheetStateDetails()
         ensureCalledOnceWithParam(state.eventId) { callback ->
             rule.setMediaDetailsBottomSheet(
                 state = state,
@@ -60,7 +60,7 @@ class MediaDetailsBottomSheetTest {
     @Test
     @Config(qualifiers = "h1024dp")
     fun `clicking on Forward invokes expected callback`() {
-        val state = aMediaDetailsBottomSheetState()
+        val state = aMediaBottomSheetStateDetails()
         ensureCalledOnceWithParam(state.eventId) { callback ->
             rule.setMediaDetailsBottomSheet(
                 state = state,
@@ -73,7 +73,7 @@ class MediaDetailsBottomSheetTest {
     @Test
     @Config(qualifiers = "h1024dp")
     fun `clicking on Download invokes expected callback`() {
-        val state = aMediaDetailsBottomSheetState()
+        val state = aMediaBottomSheetStateDetails()
         ensureCalledOnceWithParam(state.eventId) { callback ->
             rule.setMediaDetailsBottomSheet(
                 state = state,
@@ -86,7 +86,7 @@ class MediaDetailsBottomSheetTest {
     @Config(qualifiers = "h1024dp")
     @Test
     fun `clicking on Delete invokes expected callback`() {
-        val state = aMediaDetailsBottomSheetState()
+        val state = aMediaBottomSheetStateDetails()
         ensureCalledOnceWithParam(state.eventId) { callback ->
             rule.setMediaDetailsBottomSheet(
                 state = state,
@@ -100,7 +100,7 @@ class MediaDetailsBottomSheetTest {
     @Config(qualifiers = "h1024dp")
     @Test
     fun `Remove is not present if canDelete is false`() {
-        val state = aMediaDetailsBottomSheetState(
+        val state = aMediaBottomSheetStateDetails(
             canDelete = false,
         )
         rule.setMediaDetailsBottomSheet(
@@ -111,7 +111,7 @@ class MediaDetailsBottomSheetTest {
 }
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMediaDetailsBottomSheet(
-    state: MediaBottomSheetState.MediaDetailsBottomSheetState,
+    state: MediaBottomSheetState.Details,
     onViewInTimeline: (EventId) -> Unit = EnsureNeverCalledWithParam(),
     onShare: (EventId) -> Unit = EnsureNeverCalledWithParam(),
     onForward: (EventId) -> Unit = EnsureNeverCalledWithParam(),

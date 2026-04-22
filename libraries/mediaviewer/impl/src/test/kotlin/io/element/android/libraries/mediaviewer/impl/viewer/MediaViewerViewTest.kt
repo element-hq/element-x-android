@@ -20,7 +20,7 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeDown
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.mediaviewer.impl.details.aMediaDetailsBottomSheetState
+import io.element.android.libraries.mediaviewer.impl.details.aMediaBottomSheetStateDetails
 import io.element.android.libraries.mediaviewer.test.viewer.aLocalMedia
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
@@ -164,7 +164,7 @@ class MediaViewerViewTest {
         rule.setMediaViewerView(
             aMediaViewerState(
                 listData = listOf(data),
-                mediaBottomSheetState = aMediaDetailsBottomSheetState(),
+                mediaBottomSheetState = aMediaBottomSheetStateDetails(),
                 eventSink = eventsRecorder
             ),
         )

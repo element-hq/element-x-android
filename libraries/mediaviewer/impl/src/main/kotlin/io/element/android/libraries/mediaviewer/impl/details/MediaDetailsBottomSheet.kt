@@ -54,7 +54,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MediaDetailsBottomSheet(
-    state: MediaBottomSheetState.MediaDetailsBottomSheetState,
+    state: MediaBottomSheetState.Details,
     onViewInTimeline: (EventId) -> Unit,
     onShare: (EventId) -> Unit,
     onForward: (EventId) -> Unit,
@@ -250,7 +250,7 @@ private fun SectionText(
 @PreviewsDayNight
 @Composable
 internal fun MediaDetailsBottomSheetPreview(
-    @PreviewParameter(MediaDetailsBottomSheetStateProvider::class) state: MediaBottomSheetState.MediaDetailsBottomSheetState,
+    @PreviewParameter(MediaBottomSheetStateDetailsProvider::class) state: MediaBottomSheetState.Details,
 ) = ElementPreview {
     MediaDetailsBottomSheet(
         state = state,
