@@ -75,8 +75,9 @@ internal fun CallScreenView(
     Scaffold(
         modifier = modifier,
     ) { padding ->
+        var callWebView by remember { mutableStateOf<WebView?>(null) }
         BackHandler {
-            handleBack()
+            callWebView?.dispatchEscKeyEvent()
         }
         if (state.webViewError != null) {
             ErrorDialog(
@@ -111,6 +112,7 @@ internal fun CallScreenView(
                 },
                 onConsoleMessage = onConsoleMessage,
                 onCreateWebView = { webView ->
+                    callWebView = webView
                     webView.addBackHandler(onBackPressed = ::handleBack)
                     val interceptor = WebViewWidgetMessageInterceptor(
                         webView = webView,
@@ -135,6 +137,9 @@ internal fun CallScreenView(
                     pipState.eventSink(PictureInPictureEvents.SetPipController(pipController))
                 },
                 onDestroyWebView = {
+                    if (callWebView === it) {
+                        callWebView = null
+                    }
                     // Reset audio mode
                     webViewAudioManager?.onCallStopped()
                 }
@@ -143,6 +148,7 @@ internal fun CallScreenView(
                 AsyncData.Uninitialized,
                 is AsyncData.Loading ->
                     ProgressDialog(text = stringResource(id = CommonStrings.common_please_wait))
+
                 is AsyncData.Failure -> {
                     Timber.e(state.urlState.error, "WebView failed to load URL: ${state.urlState.error.message}")
                     ErrorDialog(
@@ -150,6 +156,7 @@ internal fun CallScreenView(
                         onSubmit = { state.eventSink(CallScreenEvents.Hangup) },
                     )
                 }
+
                 is AsyncData.Success -> Unit
             }
         }
@@ -255,6 +262,10 @@ private fun WebView.addBackHandler(onBackPressed: () -> Unit) {
         },
         "backHandler"
     )
+}
+
+private fun WebView.dispatchEscKeyEvent() {
+    this.dispatchKeyEvent(android.view.KeyEvent(android.view.KeyEvent.ACTION_DOWN, android.view.KeyEvent.KEYCODE_ESCAPE))
 }
 
 @PreviewsDayNight
