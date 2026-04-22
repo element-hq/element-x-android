@@ -6,6 +6,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalCoroutinesApi::class)
+
 package io.element.android.libraries.mediaviewer.impl.gallery
 
 import android.net.Uri
@@ -27,6 +29,7 @@ import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.room.aRoomInfo
 import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
+import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.impl.datasource.FakeMediaGalleryDataSource
 import io.element.android.libraries.mediaviewer.impl.datasource.MediaGalleryDataSource
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
@@ -39,6 +42,8 @@ import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import io.mockk.mockk
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -52,8 +57,12 @@ class MediaGalleryPresenterTest {
 
     @Test
     fun `present - initial state`() = runTest {
+        val configureLambda = lambdaRecorder<Unit> { }
         val startLambda = lambdaRecorder<Unit> { }
         val presenter = createMediaGalleryPresenter(
+            localMediaActions = FakeLocalMediaActions(
+                configureResult = configureLambda,
+            ),
             mediaGalleryDataSource = FakeMediaGalleryDataSource(
                 startLambda = startLambda,
             ),
@@ -70,6 +79,7 @@ class MediaGalleryPresenterTest {
             assertThat(initialState.groupedMediaItems.isUninitialized()).isTrue()
             assertThat(initialState.snackbarMessage).isNull()
         }
+        configureLambda.assertions().isCalledOnce()
         startLambda.assertions().isCalledOnce()
     }
 
@@ -304,15 +314,20 @@ class MediaGalleryPresenterTest {
         val mediaGalleryDataSource = FakeMediaGalleryDataSource(
             startLambda = { },
         )
+        val saveOnDiskResult = lambdaRecorder<LocalMedia, Result<Unit>> { _ -> Result.success(Unit) }
+        val media = aMediaItemImage(eventId = AN_EVENT_ID)
         mediaGalleryDataSource.emitGroupedMediaItems(
             AsyncData.Success(
                 aGroupedMediaItems(
-                    imageAndVideoItems = listOf(aMediaItemImage(eventId = AN_EVENT_ID)),
+                    imageAndVideoItems = listOf(media),
                     fileItems = emptyList(),
                 )
             )
         )
         val presenter = createMediaGalleryPresenter(
+            localMediaActions = FakeLocalMediaActions(
+                saveOnDiskResult = saveOnDiskResult,
+            ),
             mediaGalleryDataSource = mediaGalleryDataSource,
         )
         presenter.test {
@@ -321,6 +336,67 @@ class MediaGalleryPresenterTest {
             skipItems(1)
             val finalState = awaitItem()
             assertThat(finalState.snackbarMessage?.messageResId).isEqualTo(CommonStrings.common_file_saved_on_disk_android)
+            saveOnDiskResult.assertions().isCalledOnce().with(
+                value(
+                    LocalMedia(
+                        uri = mockMediaUri,
+                        info = media.mediaInfo,
+                    )
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - open with closes the bottom sheet and invokes the navigator`() = runTest {
+        val mediaGalleryDataSource = FakeMediaGalleryDataSource(
+            startLambda = { },
+        )
+        val openWithResult = lambdaRecorder<LocalMedia, Result<Unit>> { _ -> Result.success(Unit) }
+        val item = aMediaItemImage(
+            eventId = AN_EVENT_ID,
+            senderId = A_USER_ID,
+        )
+        mediaGalleryDataSource.emitGroupedMediaItems(
+            AsyncData.Success(
+                aGroupedMediaItems(
+                    imageAndVideoItems = listOf(item),
+                    fileItems = emptyList(),
+                )
+            )
+        )
+        val presenter = createMediaGalleryPresenter(
+            localMediaActions = FakeLocalMediaActions(
+                openResult = openWithResult,
+            ),
+            mediaGalleryDataSource = mediaGalleryDataSource,
+            room = FakeJoinedRoom(
+                createTimelineResult = { Result.success(FakeTimeline()) },
+                baseRoom = FakeBaseRoom(
+                    roomPermissions = FakeRoomPermissions(
+                        canRedactOwn = true
+                    ),
+                ),
+            ),
+        )
+        presenter.test {
+            skipItems(1)
+            val initialState = awaitFirstItem()
+            initialState.eventSink(MediaGalleryEvent.OpenInfo(item))
+            val withBottomSheetState = awaitItem()
+            assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.MediaDetailsBottomSheetState::class.java)
+            withBottomSheetState.eventSink(MediaGalleryEvent.OpenWith(AN_EVENT_ID))
+            val finalState = awaitItem()
+            assertThat(finalState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
+            advanceUntilIdle()
+            openWithResult.assertions().isCalledOnce().with(
+                value(
+                    LocalMedia(
+                        uri = mockMediaUri,
+                        info = item.mediaInfo,
+                    )
+                )
+            )
         }
     }
 
