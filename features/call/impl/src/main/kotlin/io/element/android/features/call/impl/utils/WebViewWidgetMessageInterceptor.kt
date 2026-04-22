@@ -140,26 +140,32 @@ class WebViewWidgetMessageInterceptor(
             }
         }
 
-        // Create a WebMessageListener, which will receive messages from the WebView and reply to them
-        val webMessageListener = WebViewCompat.WebMessageListener { _, message, _, _, _ ->
-            onMessageReceived(message.data)
-        }
+        // Always register JavascriptInterface as the baseline message channel.
+        // This works on all WebView implementations including Huawei.
+        webView.addJavascriptInterface(object {
+            @JavascriptInterface
+            fun postMessage(json: String?) {
+                onMessageReceived(json)
+            }
+        }, LISTENER_NAME)
 
-        // Use WebMessageListener if supported, otherwise use JavascriptInterface
-        if (WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {
+        // Additionally register WebMessageListener on WebViews that reliably support it.
+        // Huawei WebView (Chromium < 119) reports WEB_MESSAGE_LISTENER as supported
+        // but silently drops messages, so we only trust it on Chrome 119+.
+        // See: https://github.com/element-hq/element-x-android/issues/6632
+        val webViewVersion = WebViewCompat.getCurrentWebViewPackage(webView.context)
+            ?.versionName?.split(".")?.firstOrNull()?.toIntOrNull() ?: 0
+
+        if (webViewVersion >= 119 &&
+            WebViewFeature.isFeatureSupported(WebViewFeature.WEB_MESSAGE_LISTENER)) {
             WebViewCompat.addWebMessageListener(
                 webView,
                 LISTENER_NAME,
                 setOf("*"),
-                webMessageListener
-            )
-        } else {
-            webView.addJavascriptInterface(object {
-                @JavascriptInterface
-                fun postMessage(json: String?) {
-                    onMessageReceived(json)
+                WebViewCompat.WebMessageListener { _, message, _, _, _ ->
+                    onMessageReceived(message.data)
                 }
-            }, LISTENER_NAME)
+            )
         }
     }
 
