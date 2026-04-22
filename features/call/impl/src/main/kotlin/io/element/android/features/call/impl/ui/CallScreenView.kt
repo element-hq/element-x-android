@@ -77,7 +77,10 @@ internal fun CallScreenView(
     ) { padding ->
         var callWebView by remember { mutableStateOf<WebView?>(null) }
         BackHandler {
-            callWebView?.dispatchEscKeyEvent()
+            val handledByWebView = callWebView?.dispatchEscKeyEvent() == true
+            if (!handledByWebView) {
+                handleBack()
+            }
         }
         if (state.webViewError != null) {
             ErrorDialog(
@@ -264,8 +267,20 @@ private fun WebView.addBackHandler(onBackPressed: () -> Unit) {
     )
 }
 
-private fun WebView.dispatchEscKeyEvent() {
-    this.dispatchKeyEvent(android.view.KeyEvent(android.view.KeyEvent.ACTION_DOWN, android.view.KeyEvent.KEYCODE_ESCAPE))
+private fun WebView.dispatchEscKeyEvent(): Boolean {
+    val downHandled = dispatchKeyEvent(
+        android.view.KeyEvent(
+            android.view.KeyEvent.ACTION_DOWN,
+            android.view.KeyEvent.KEYCODE_ESCAPE
+        )
+    )
+    val upHandled = dispatchKeyEvent(
+        android.view.KeyEvent(
+            android.view.KeyEvent.ACTION_UP,
+            android.view.KeyEvent.KEYCODE_ESCAPE
+        )
+    )
+    return downHandled && upHandled
 }
 
 @PreviewsDayNight
