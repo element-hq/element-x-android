@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -248,9 +249,11 @@ private fun SectionText(
 
 @PreviewsDayNight
 @Composable
-internal fun MediaDetailsBottomSheetPreview() = ElementPreview {
+internal fun MediaDetailsBottomSheetPreview(
+    @PreviewParameter(MediaDetailsBottomSheetStateProvider::class) state: MediaBottomSheetState.MediaDetailsBottomSheetState,
+) = ElementPreview {
     MediaDetailsBottomSheet(
-        state = aMediaDetailsBottomSheetState(),
+        state = state,
         onViewInTimeline = {},
         onShare = {},
         onForward = {},
