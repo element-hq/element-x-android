@@ -39,11 +39,11 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.R
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.error.sendAttachmentError
+import io.element.android.features.messages.impl.attachments.preview.imageeditor.AttachmentImageEditorView
 import io.element.android.features.messages.impl.attachments.video.MediaOptimizationSelectorEvent
 import io.element.android.features.messages.impl.attachments.video.MediaOptimizationSelectorState
 import io.element.android.features.messages.impl.attachments.video.VideoUploadEstimation
 import io.element.android.libraries.core.bool.orFalse
-import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeImage
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.designsystem.components.ProgressDialogType
@@ -56,6 +56,8 @@ import io.element.android.libraries.designsystem.modifiers.niceClickable
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.Switch
@@ -81,6 +83,13 @@ fun AttachmentsPreviewView(
     localMediaRenderer: LocalMediaRenderer,
     modifier: Modifier = Modifier,
 ) {
+    val canShowEditAction = when (state.sendActionState) {
+        is SendActionState.Sending.Uploading -> false
+        is SendActionState.Sending.Processing -> !state.sendActionState.displayProgress
+        SendActionState.Done -> false
+        else -> true
+    }
+
     fun postSendAttachment() {
         state.eventSink(AttachmentsPreviewEvent.SendAttachment)
     }
@@ -93,33 +102,75 @@ fun AttachmentsPreviewView(
         state.eventSink(AttachmentsPreviewEvent.CancelAndClearSendState)
     }
 
-    BackHandler(enabled = state.sendActionState !is SendActionState.Sending.Uploading && state.sendActionState !is SendActionState.Done) {
-        postCancel()
+    fun postOpenImageEditor() {
+        state.eventSink(AttachmentsPreviewEvent.OpenImageEditor)
     }
 
-    Scaffold(
-        modifier = modifier,
-        topBar = {
-            TopAppBar(
-                navigationIcon = {
-                    BackButton(
-                        imageVector = CompoundIcons.Close(),
-                        onClick = ::postCancel,
-                    )
-                },
-                title = {},
+    fun postCloseImageEditor() {
+        state.eventSink(AttachmentsPreviewEvent.CloseImageEditor)
+    }
+
+    fun postApplyImageEdits() {
+        state.eventSink(AttachmentsPreviewEvent.ApplyImageEdits)
+    }
+
+    BackHandler(enabled = state.sendActionState !is SendActionState.Sending.Uploading && state.sendActionState !is SendActionState.Done) {
+        if (state.imageEditorState != null) {
+            postCloseImageEditor()
+        } else {
+            postCancel()
+        }
+    }
+
+    if (state.imageEditorState != null) {
+        AttachmentImageEditorView(
+            state = state.imageEditorState,
+            onCropRectChange = { cropRect ->
+                state.eventSink(AttachmentsPreviewEvent.UpdateImageCropRect(cropRect))
+            },
+            onRotateClick = { state.eventSink(AttachmentsPreviewEvent.RotateImage) },
+            onCancelClick = ::postCloseImageEditor,
+            onDoneClick = ::postApplyImageEdits,
+            modifier = modifier,
+        )
+    } else {
+        Scaffold(
+            modifier = modifier,
+            topBar = {
+                TopAppBar(
+                    navigationIcon = {
+                        BackButton(
+                            imageVector = CompoundIcons.Close(),
+                            onClick = ::postCancel,
+                        )
+                    },
+                    title = {},
+                    actions = {
+                        if (state.canEditImage && canShowEditAction) {
+                            IconButton(onClick = ::postOpenImageEditor) {
+                                Icon(
+                                    imageVector = CompoundIcons.Edit(),
+                                    contentDescription = stringResource(CommonStrings.action_edit),
+                                )
+                            }
+                        }
+                    }
+                )
+            }
+        ) { paddingValues ->
+            AttachmentPreviewContent(
+                modifier = Modifier.padding(paddingValues),
+                state = state,
+                localMediaRenderer = localMediaRenderer,
+                onSendClick = ::postSendAttachment,
             )
         }
-    ) { paddingValues ->
-        AttachmentPreviewContent(
-            modifier = Modifier.padding(paddingValues),
-            state = state,
-            localMediaRenderer = localMediaRenderer,
-            onSendClick = ::postSendAttachment,
-        )
     }
     AttachmentSendStateView(
         sendActionState = state.sendActionState,
+        isApplyingImageEdits = state.isApplyingImageEdits,
+        displayImageEditError = state.displayImageEditError,
+        onDismissImageEditError = { state.eventSink(AttachmentsPreviewEvent.ClearImageEditError) },
         onDismissClick = ::postClearSendState,
         onRetryClick = ::postSendAttachment
     )
@@ -128,10 +179,29 @@ fun AttachmentsPreviewView(
 @Composable
 private fun AttachmentSendStateView(
     sendActionState: SendActionState,
+    isApplyingImageEdits: Boolean,
+    displayImageEditError: Boolean,
+    onDismissImageEditError: () -> Unit,
     onDismissClick: () -> Unit,
     onRetryClick: () -> Unit
 ) {
-    when (sendActionState) {
+    when {
+        isApplyingImageEdits -> {
+            ProgressDialog(
+                type = ProgressDialogType.Indeterminate,
+                text = stringResource(CommonStrings.common_preparing),
+                showCancelButton = false,
+                onDismissRequest = {},
+            )
+        }
+        displayImageEditError -> {
+            AlertDialog(
+                title = stringResource(CommonStrings.common_error),
+                content = stringResource(CommonStrings.common_something_went_wrong_message),
+                onDismiss = onDismissImageEditError,
+            )
+        }
+        else -> when (sendActionState) {
         is SendActionState.Sending.Processing -> {
             if (sendActionState.displayProgress) {
                 ProgressDialog(
@@ -158,6 +228,7 @@ private fun AttachmentSendStateView(
             )
         }
         else -> Unit
+        }
     }
 }
 
@@ -184,10 +255,10 @@ private fun AttachmentPreviewContent(
                 }
             }
         }
-        val mimeType = (state.attachment as? Attachment.Media)?.localMedia?.info?.mimeType
-        if (mimeType?.isMimeTypeImage() == true) {
+        val mediaInfo = (state.attachment as? Attachment.Media)?.localMedia?.info
+        if (mediaInfo?.isImageAttachment() == true) {
             ImageOptimizationSelector(state.mediaOptimizationSelectorState)
-        } else if (mimeType?.isMimeTypeVideo() == true) {
+        } else if (mediaInfo?.mimeType?.isMimeTypeVideo() == true) {
             VideoPresetSelector(state = state.mediaOptimizationSelectorState)
         }
 
