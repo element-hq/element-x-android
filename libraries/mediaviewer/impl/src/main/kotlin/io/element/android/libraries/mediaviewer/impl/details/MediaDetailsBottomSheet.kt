@@ -192,23 +192,26 @@ private fun SenderRow(
                 .weight(1f),
         ) {
             // Name
+            val bestName = mediaInfo.senderName ?: mediaInfo.senderId?.value.orEmpty()
             val avatarColors = AvatarColorsProvider.provide(id)
             Text(
                 modifier = Modifier.clipToBounds(),
-                text = mediaInfo.senderName.orEmpty(),
+                text = bestName,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 color = avatarColors.foreground,
                 style = ElementTheme.typography.fontBodyMdMedium,
             )
             // Id
-            Text(
-                text = mediaInfo.senderId?.value.orEmpty(),
-                color = ElementTheme.colors.textSecondary,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                style = ElementTheme.typography.fontBodyMdRegular,
-            )
+            if (!mediaInfo.senderName.isNullOrEmpty()) {
+                Text(
+                    text = mediaInfo.senderId?.value.orEmpty(),
+                    color = ElementTheme.colors.textSecondary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = ElementTheme.typography.fontBodyMdRegular,
+                )
+            }
         }
     }
 }
