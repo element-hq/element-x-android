@@ -104,7 +104,6 @@ fun MediaDetailsBottomSheet(
                             onViewInTimeline(state.eventId)
                         }
                     )
-                    HorizontalDivider()
                     ListItem(
                         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ShareAndroid())),
                         headlineContent = { Text(stringResource(CommonStrings.action_share)) },
@@ -121,7 +120,6 @@ fun MediaDetailsBottomSheet(
                             onForward(state.eventId)
                         }
                     )
-                    HorizontalDivider()
                     ListItem(
                         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Download())),
                         headlineContent = { Text(stringResource(CommonStrings.action_download)) },
@@ -141,7 +139,6 @@ fun MediaDetailsBottomSheet(
                         MimeTypes.Apk -> stringResource(id = CommonStrings.common_install_apk_android)
                         else -> stringResource(id = CommonStrings.action_open_with)
                     }
-                    HorizontalDivider()
                     ListItem(
                         leadingContent = icon,
                         headlineContent = { Text(wording) },
