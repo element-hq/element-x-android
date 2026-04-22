@@ -84,10 +84,10 @@ class MediaGalleryPresenterTest {
         presenter.test {
             val initialState = awaitFirstItem()
             assertThat(initialState.mode).isEqualTo(MediaGalleryMode.Images)
-            initialState.eventSink(MediaGalleryEvents.ChangeMode(MediaGalleryMode.Files))
+            initialState.eventSink(MediaGalleryEvent.ChangeMode(MediaGalleryMode.Files))
             val state = awaitItem()
             assertThat(state.mode).isEqualTo(MediaGalleryMode.Files)
-            state.eventSink(MediaGalleryEvents.ChangeMode(MediaGalleryMode.Images))
+            state.eventSink(MediaGalleryEvent.ChangeMode(MediaGalleryMode.Images))
             val imageModeState = awaitItem()
             assertThat(imageModeState.mode).isEqualTo(MediaGalleryMode.Images)
         }
@@ -123,7 +123,7 @@ class MediaGalleryPresenterTest {
                 eventId = AN_EVENT_ID,
                 senderId = A_USER_ID,
             )
-            initialState.eventSink(MediaGalleryEvents.OpenInfo(item))
+            initialState.eventSink(MediaGalleryEvent.OpenInfo(item))
             val state = awaitItem()
             assertThat(state.mediaBottomSheetState).isEqualTo(
                 MediaBottomSheetState.MediaDetailsBottomSheetState(
@@ -134,7 +134,7 @@ class MediaGalleryPresenterTest {
                 )
             )
             // Close the bottom sheet
-            state.eventSink(MediaGalleryEvents.CloseBottomSheet)
+            state.eventSink(MediaGalleryEvent.CloseBottomSheet)
             val closedState = awaitItem()
             assertThat(closedState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
         }
@@ -170,7 +170,7 @@ class MediaGalleryPresenterTest {
                 eventId = AN_EVENT_ID,
                 senderId = A_USER_ID_2,
             )
-            initialState.eventSink(MediaGalleryEvents.OpenInfo(item))
+            initialState.eventSink(MediaGalleryEvent.OpenInfo(item))
             val state = awaitItem()
             assertThat(state.mediaBottomSheetState).isEqualTo(
                 MediaBottomSheetState.MediaDetailsBottomSheetState(
@@ -181,7 +181,7 @@ class MediaGalleryPresenterTest {
                 )
             )
             // Close the bottom sheet
-            state.eventSink(MediaGalleryEvents.CloseBottomSheet)
+            state.eventSink(MediaGalleryEvent.CloseBottomSheet)
             val closedState = awaitItem()
             assertThat(closedState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
         }
@@ -199,7 +199,7 @@ class MediaGalleryPresenterTest {
             val initialState = awaitFirstItem()
             // Delete bottom sheet
             val item = aMediaItemImage()
-            initialState.eventSink(MediaGalleryEvents.ConfirmDelete(AN_EVENT_ID, item.mediaInfo, item.thumbnailSource))
+            initialState.eventSink(MediaGalleryEvent.ConfirmDelete(AN_EVENT_ID, item.mediaInfo, item.thumbnailSource))
             val deleteState = awaitItem()
             assertThat(deleteState.mediaBottomSheetState).isEqualTo(
                 MediaBottomSheetState.MediaDeleteConfirmationState(
@@ -209,7 +209,7 @@ class MediaGalleryPresenterTest {
                 )
             )
             // Close the bottom sheet
-            deleteState.eventSink(MediaGalleryEvents.CloseBottomSheet)
+            deleteState.eventSink(MediaGalleryEvent.CloseBottomSheet)
             val deleteClosedState = awaitItem()
             assertThat(deleteClosedState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
         }
@@ -226,7 +226,7 @@ class MediaGalleryPresenterTest {
         )
         presenter.test {
             val initialState = awaitFirstItem()
-            initialState.eventSink(MediaGalleryEvents.Delete(AN_EVENT_ID))
+            initialState.eventSink(MediaGalleryEvent.Delete(AN_EVENT_ID))
             deleteItemLambda.assertions().isCalledOnce().with(value(AN_EVENT_ID))
         }
     }
@@ -236,7 +236,7 @@ class MediaGalleryPresenterTest {
         val presenter = createMediaGalleryPresenter()
         presenter.test {
             val initialState = awaitFirstItem()
-            initialState.eventSink(MediaGalleryEvents.Share(AN_EVENT_ID))
+            initialState.eventSink(MediaGalleryEvent.Share(AN_EVENT_ID))
         }
     }
 
@@ -258,7 +258,7 @@ class MediaGalleryPresenterTest {
         )
         presenter.test {
             val initialState = awaitFirstItem()
-            initialState.eventSink(MediaGalleryEvents.Share(AN_EVENT_ID))
+            initialState.eventSink(MediaGalleryEvent.Share(AN_EVENT_ID))
             val finalState = awaitItem()
             assertThat(finalState.snackbarMessage).isNull()
         }
@@ -283,7 +283,7 @@ class MediaGalleryPresenterTest {
         )
         presenter.test {
             val initialState = awaitFirstItem()
-            initialState.eventSink(MediaGalleryEvents.Share(AN_EVENT_ID))
+            initialState.eventSink(MediaGalleryEvent.Share(AN_EVENT_ID))
             skipItems(1)
             val finalState = awaitItem()
             assertThat(finalState.snackbarMessage).isInstanceOf(SnackbarMessage::class.java)
@@ -295,7 +295,7 @@ class MediaGalleryPresenterTest {
         val presenter = createMediaGalleryPresenter()
         presenter.test {
             val initialState = awaitFirstItem()
-            initialState.eventSink(MediaGalleryEvents.SaveOnDisk(AN_EVENT_ID))
+            initialState.eventSink(MediaGalleryEvent.SaveOnDisk(AN_EVENT_ID))
         }
     }
 
@@ -317,7 +317,7 @@ class MediaGalleryPresenterTest {
         )
         presenter.test {
             val initialState = awaitFirstItem()
-            initialState.eventSink(MediaGalleryEvents.SaveOnDisk(AN_EVENT_ID))
+            initialState.eventSink(MediaGalleryEvent.SaveOnDisk(AN_EVENT_ID))
             skipItems(1)
             val finalState = awaitItem()
             assertThat(finalState.snackbarMessage?.messageResId).isEqualTo(CommonStrings.common_file_saved_on_disk_android)
@@ -343,7 +343,7 @@ class MediaGalleryPresenterTest {
         )
         presenter.test {
             val initialState = awaitFirstItem()
-            initialState.eventSink(MediaGalleryEvents.SaveOnDisk(AN_EVENT_ID))
+            initialState.eventSink(MediaGalleryEvent.SaveOnDisk(AN_EVENT_ID))
             skipItems(1)
             val finalState = awaitItem()
             assertThat(finalState.snackbarMessage).isInstanceOf(SnackbarMessage::class.java)
@@ -373,10 +373,10 @@ class MediaGalleryPresenterTest {
                 eventId = AN_EVENT_ID,
                 senderId = A_USER_ID,
             )
-            initialState.eventSink(MediaGalleryEvents.OpenInfo(item))
+            initialState.eventSink(MediaGalleryEvent.OpenInfo(item))
             val withBottomSheetState = awaitItem()
             assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.MediaDetailsBottomSheetState::class.java)
-            withBottomSheetState.eventSink(MediaGalleryEvents.ViewInTimeline(AN_EVENT_ID))
+            withBottomSheetState.eventSink(MediaGalleryEvent.ViewInTimeline(AN_EVENT_ID))
             val finalState = awaitItem()
             assertThat(finalState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
             onViewInTimelineClickLambda.assertions().isCalledOnce().with(value(AN_EVENT_ID))
@@ -406,10 +406,10 @@ class MediaGalleryPresenterTest {
                 eventId = AN_EVENT_ID,
                 senderId = A_USER_ID,
             )
-            initialState.eventSink(MediaGalleryEvents.OpenInfo(item))
+            initialState.eventSink(MediaGalleryEvent.OpenInfo(item))
             val withBottomSheetState = awaitItem()
             assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.MediaDetailsBottomSheetState::class.java)
-            withBottomSheetState.eventSink(MediaGalleryEvents.Forward(AN_EVENT_ID))
+            withBottomSheetState.eventSink(MediaGalleryEvent.Forward(AN_EVENT_ID))
             val finalState = awaitItem()
             assertThat(finalState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
             onForwardClickLambda.assertions().isCalledOnce().with(value(AN_EVENT_ID))
@@ -427,7 +427,7 @@ class MediaGalleryPresenterTest {
         )
         presenter.test {
             val initialState = awaitFirstItem()
-            initialState.eventSink(MediaGalleryEvents.LoadMore(Timeline.PaginationDirection.BACKWARDS))
+            initialState.eventSink(MediaGalleryEvent.LoadMore(Timeline.PaginationDirection.BACKWARDS))
             loadMoreLambda.assertions().isCalledOnce().with(value(Timeline.PaginationDirection.BACKWARDS))
         }
     }

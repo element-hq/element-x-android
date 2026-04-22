@@ -132,7 +132,7 @@ fun MediaGalleryView(
                         index = mode.ordinal,
                         count = MediaGalleryMode.entries.size,
                         selected = state.mode == mode,
-                        onClick = { state.eventSink(MediaGalleryEvents.ChangeMode(mode)) },
+                        onClick = { state.eventSink(MediaGalleryEvent.ChangeMode(mode)) },
                         text = stringResource(mode.stringResource),
                     )
                 }
@@ -162,23 +162,23 @@ fun MediaGalleryView(
             MediaDetailsBottomSheet(
                 state = bottomSheetState,
                 onViewInTimeline = { eventId ->
-                    state.eventSink(MediaGalleryEvents.ViewInTimeline(eventId))
+                    state.eventSink(MediaGalleryEvent.ViewInTimeline(eventId))
                 },
                 onShare = { eventId ->
-                    state.eventSink(MediaGalleryEvents.Share(eventId))
+                    state.eventSink(MediaGalleryEvent.Share(eventId))
                 },
                 onForward = { eventId ->
-                    state.eventSink(MediaGalleryEvents.Forward(eventId))
+                    state.eventSink(MediaGalleryEvent.Forward(eventId))
                 },
                 onDownload = { eventId ->
-                    state.eventSink(MediaGalleryEvents.SaveOnDisk(eventId))
+                    state.eventSink(MediaGalleryEvent.SaveOnDisk(eventId))
                 },
                 onOpenWith = { eventId ->
-                    state.eventSink(MediaGalleryEvents.OpenWith(eventId))
+                    state.eventSink(MediaGalleryEvent.OpenWith(eventId))
                 },
                 onDelete = { eventId ->
                     state.eventSink(
-                        MediaGalleryEvents.ConfirmDelete(
+                        MediaGalleryEvent.ConfirmDelete(
                             eventId = eventId,
                             mediaInfo = bottomSheetState.mediaInfo,
                             thumbnailSource = bottomSheetState.thumbnailSource,
@@ -186,7 +186,7 @@ fun MediaGalleryView(
                     )
                 },
                 onDismiss = {
-                    state.eventSink(MediaGalleryEvents.CloseBottomSheet)
+                    state.eventSink(MediaGalleryEvent.CloseBottomSheet)
                 },
             )
         }
@@ -194,10 +194,10 @@ fun MediaGalleryView(
             MediaDeleteConfirmationBottomSheet(
                 state = bottomSheetState,
                 onDelete = {
-                    state.eventSink(MediaGalleryEvents.Delete(it))
+                    state.eventSink(MediaGalleryEvent.Delete(it))
                 },
                 onDismiss = {
-                    state.eventSink(MediaGalleryEvents.CloseBottomSheet)
+                    state.eventSink(MediaGalleryEvent.CloseBottomSheet)
                 },
             )
         }
@@ -216,7 +216,7 @@ private fun MediaGalleryPage(
         val loadingItem = groupedMediaItems.dataOrNull()?.getItems(mode)?.singleOrNull() as? MediaItem.LoadingIndicator
         if (loadingItem != null) {
             LaunchedEffect(loadingItem.timestamp) {
-                state.eventSink(MediaGalleryEvents.LoadMore(loadingItem.direction))
+                state.eventSink(MediaGalleryEvent.LoadMore(loadingItem.direction))
             }
         }
         LoadingContent(mode)
@@ -261,7 +261,7 @@ private fun AsyncData<GroupedMediaItems>.isLoadingItems(mode: MediaGalleryMode):
 @Composable
 private fun MediaGalleryImages(
     imagesAndVideos: ImmutableList<MediaItem>,
-    eventSink: (MediaGalleryEvents) -> Unit,
+    eventSink: (MediaGalleryEvent) -> Unit,
     onItemClick: (MediaItem.Event) -> Unit,
 ) {
     if (imagesAndVideos.isEmpty()) {
@@ -282,7 +282,7 @@ private fun MediaGalleryImages(
 @Composable
 private fun MediaGalleryFiles(
     files: ImmutableList<MediaItem>,
-    eventSink: (MediaGalleryEvents) -> Unit,
+    eventSink: (MediaGalleryEvent) -> Unit,
     onItemClick: (MediaItem.Event) -> Unit,
 ) {
     if (files.isEmpty()) {
@@ -303,7 +303,7 @@ private fun MediaGalleryFiles(
 @Composable
 private fun MediaGalleryFilesList(
     files: ImmutableList<MediaItem>,
-    eventSink: (MediaGalleryEvents) -> Unit,
+    eventSink: (MediaGalleryEvent) -> Unit,
     onItemClick: (MediaItem.Event) -> Unit,
 ) {
     val presenterFactories = LocalMediaItemPresenterFactories.current
@@ -321,7 +321,7 @@ private fun MediaGalleryFilesList(
                     file = item,
                     onClick = { onItemClick(item) },
                     onLongClick = {
-                        eventSink(MediaGalleryEvents.OpenInfo(item))
+                        eventSink(MediaGalleryEvent.OpenInfo(item))
                     },
                 )
                 is MediaItem.Audio -> AudioItemView(
@@ -329,7 +329,7 @@ private fun MediaGalleryFilesList(
                     audio = item,
                     onClick = { onItemClick(item) },
                     onLongClick = {
-                        eventSink(MediaGalleryEvents.OpenInfo(item))
+                        eventSink(MediaGalleryEvent.OpenInfo(item))
                     },
                 )
                 is MediaItem.Voice -> {
@@ -339,7 +339,7 @@ private fun MediaGalleryFilesList(
                         state = presenter.present(),
                         voice = item,
                         onLongClick = {
-                            eventSink(MediaGalleryEvents.OpenInfo(item))
+                            eventSink(MediaGalleryEvent.OpenInfo(item))
                         },
                     )
                 }
@@ -364,7 +364,7 @@ private fun MediaGalleryFilesList(
 @Composable
 private fun MediaGalleryImageGrid(
     imagesAndVideos: ImmutableList<MediaItem>,
-    eventSink: (MediaGalleryEvents) -> Unit,
+    eventSink: (MediaGalleryEvent) -> Unit,
     onItemClick: (MediaItem.Event) -> Unit,
 ) {
     LazyVerticalGrid(
@@ -406,7 +406,7 @@ private fun MediaGalleryImageGrid(
                     image = item,
                     onClick = { onItemClick(item) },
                     onLongClick = {
-                        eventSink(MediaGalleryEvents.OpenInfo(item))
+                        eventSink(MediaGalleryEvent.OpenInfo(item))
                     },
                 )
                 is MediaItem.Video -> VideoItemView(
@@ -414,7 +414,7 @@ private fun MediaGalleryImageGrid(
                     video = item,
                     onClick = { onItemClick(item) },
                     onLongClick = {
-                        eventSink(MediaGalleryEvents.OpenInfo(item))
+                        eventSink(MediaGalleryEvent.OpenInfo(item))
                     },
                 )
                 is MediaItem.LoadingIndicator -> LoadingMoreIndicator(
@@ -430,7 +430,7 @@ private fun MediaGalleryImageGrid(
 @Composable
 private fun LoadingMoreIndicator(
     item: MediaItem.LoadingIndicator,
-    eventSink: (MediaGalleryEvents) -> Unit,
+    eventSink: (MediaGalleryEvent) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -455,7 +455,7 @@ private fun LoadingMoreIndicator(
         }
         val latestEventSink by rememberUpdatedState(eventSink)
         LaunchedEffect(item.timestamp) {
-            latestEventSink(MediaGalleryEvents.LoadMore(item.direction))
+            latestEventSink(MediaGalleryEvent.LoadMore(item.direction))
         }
     }
 }
