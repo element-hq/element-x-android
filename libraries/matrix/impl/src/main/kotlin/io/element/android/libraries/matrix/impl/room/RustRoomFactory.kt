@@ -128,19 +128,17 @@ class RustRoomFactory(
                     val timeline = transaction.recordChildTransaction(
                         operation = "sdkRoom.timelineWithConfiguration",
                         description = "Get timeline from the SDK",
-                    ) { timelineTransaction ->
-                        analyticsService.inBridgeSdkSpan(parentTraceId = timelineTransaction.traceId()) {
-                            sdkRoom.timelineWithConfiguration(
-                                TimelineConfiguration(
-                                    focus = TimelineFocus.Live(hideThreadedEvents = hideThreadedEvents),
-                                    filter = eventFilters?.let(TimelineFilter::EventFilter) ?: TimelineFilter.All,
-                                    internalIdPrefix = "live",
-                                    dateDividerMode = DateDividerMode.DAILY,
-                                    trackReadReceipts = TimelineReadReceiptTracking.ALL_EVENTS,
-                                    reportUtds = true,
-                                )
+                    ) {
+                        sdkRoom.timelineWithConfiguration(
+                            TimelineConfiguration(
+                                focus = TimelineFocus.Live(hideThreadedEvents = hideThreadedEvents),
+                                filter = eventFilters?.let(TimelineFilter::EventFilter) ?: TimelineFilter.All,
+                                internalIdPrefix = "live",
+                                dateDividerMode = DateDividerMode.DAILY,
+                                trackReadReceipts = TimelineReadReceiptTracking.ALL_EVENTS,
+                                reportUtds = true,
                             )
-                        }
+                        )
                     }
 
                     GetRoomResult.Joined(
