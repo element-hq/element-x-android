@@ -20,14 +20,15 @@ import io.element.android.features.location.impl.common.permissions.FakePermissi
 import io.element.android.features.location.impl.common.permissions.PermissionsEvents
 import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
+import io.element.android.features.location.test.FakeActiveLiveLocationShareManager
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.location.AssetType
-import io.element.android.libraries.matrix.api.room.location.LastLocation
 import io.element.android.libraries.matrix.api.room.location.LiveLocationShare
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
+import io.element.android.libraries.matrix.test.room.location.aLiveLocationShare
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.test
@@ -60,6 +61,7 @@ class ShowLocationPresenterTest {
         ),
         locationActions: FakeLocationActions = fakeLocationActions,
         joinedRoom: JoinedRoom = FakeJoinedRoom(),
+        liveLocationShareManager: FakeActiveLiveLocationShareManager = FakeActiveLiveLocationShareManager(sessionId = joinedRoom.sessionId),
     ) = ShowLocationPresenter(
         mode = mode,
         permissionsPresenterFactory = { fakePermissionsPresenter },
@@ -68,6 +70,7 @@ class ShowLocationPresenterTest {
         dateFormatter = fakeDateFormatter,
         stringProvider = FakeStringProvider(),
         joinedRoom = joinedRoom,
+        liveLocationShareManager = liveLocationShareManager,
     )
 
     @Test
@@ -205,7 +208,7 @@ class ShowLocationPresenterTest {
             )
         )
         val presenter = createShowLocationPresenter()
-       presenter.test {
+        presenter.test {
             // Skip initial state
             val initialState = awaitItem()
 
@@ -463,24 +466,4 @@ class ShowLocationPresenterTest {
             assertThat(state.isSheetDraggable).isFalse()
         }
     }
-}
-
-private fun aLiveLocationShare(
-    userId: UserId,
-    geoUri: String = "geo:48.8584,2.2945",
-    timestamp: Long = 0L,
-    startTimestamp: Long = 0L,
-    endTimestamp: Long = Long.MAX_VALUE,
-    assetType: AssetType = AssetType.SENDER,
-): LiveLocationShare {
-    return LiveLocationShare(
-        userId = userId,
-        lastLocation = LastLocation(
-            geoUri = geoUri,
-            timestamp = timestamp,
-            assetType = assetType,
-        ),
-        startTimestamp = startTimestamp,
-        endTimestamp = endTimestamp,
-    )
 }

@@ -9,8 +9,11 @@ package io.element.android.libraries.matrix.impl.room.location
 
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.location.LiveLocationShare
+import io.element.android.libraries.matrix.test.AN_EVENT_ID
+import io.element.android.libraries.matrix.test.room.location.aLiveLocationShare
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.emptyFlow
@@ -24,9 +27,9 @@ class TimedLiveLocationSharesFlowTest {
     @Test
     fun `it keeps emitting shares for subsequent expiries without upstream changes`() = runTest {
         val shares = listOf(
-            aLiveLocationShare(userId = "@alice:server", endTimestamp = 1_000),
-            aLiveLocationShare(userId = "@bob:server", endTimestamp = 2_000),
-            aLiveLocationShare(userId = "@carol:server", endTimestamp = 3_000),
+            aLiveLocationShare(userId = UserId("@alice:server"), endTimestamp = 1_000),
+            aLiveLocationShare(userId = UserId("@bob:server"), endTimestamp = 2_000),
+            aLiveLocationShare(userId = UserId("@carol:server"), endTimestamp = 3_000),
         )
 
         flowOf(shares)
@@ -56,8 +59,8 @@ class TimedLiveLocationSharesFlowTest {
     @Test
     fun `it does not double-emit when a share is already expired on receipt`() = runTest {
         val shares = listOf(
-            aLiveLocationShare(userId = "@alice:server", endTimestamp = 500),
-            aLiveLocationShare(userId = "@bob:server", endTimestamp = 2_000),
+            aLiveLocationShare(userId = UserId("@alice:server"), endTimestamp = 500),
+            aLiveLocationShare(userId = UserId("@bob:server"), endTimestamp = 2_000),
         )
 
         flowOf(shares)
@@ -81,8 +84,8 @@ class TimedLiveLocationSharesFlowTest {
         val upstream = MutableSharedFlow<List<LiveLocationShare>>(extraBufferCapacity = 1)
         val initialShares = listOf(aLiveLocationShare(endTimestamp = 10_000))
         val updatedShares = listOf(
-            aLiveLocationShare(userId = "@alice:server", endTimestamp = 10_000),
-            aLiveLocationShare(userId = "@bob:server", endTimestamp = 6_000),
+            aLiveLocationShare(userId = UserId("@alice:server"), endTimestamp = 10_000),
+            aLiveLocationShare(userId = UserId("@bob:server"), endTimestamp = 6_000),
         )
 
         upstream
@@ -132,16 +135,4 @@ class TimedLiveLocationSharesFlowTest {
                 awaitComplete()
             }
     }
-}
-
-private fun aLiveLocationShare(
-    userId: String = "@user:server",
-    endTimestamp: Long,
-): LiveLocationShare {
-    return LiveLocationShare(
-        userId = UserId(userId),
-        lastLocation = null,
-        startTimestamp = 0L,
-        endTimestamp = endTimestamp,
-    )
 }

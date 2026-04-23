@@ -7,6 +7,7 @@
 
 package io.element.android.libraries.matrix.impl.room.location
 
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.location.LastLocation
 import io.element.android.libraries.matrix.api.room.location.LiveLocationShare
@@ -60,6 +61,7 @@ fun RoomInterface.liveLocationSharesFlow(): Flow<List<LiveLocationShare>> {
 
 private fun RustLiveLocationShare.into(): LiveLocationShare {
     return LiveLocationShare(
+        beaconId = EventId(beaconId),
         userId = UserId(userId),
         lastLocation = lastLocation?.let {
             LastLocation(
@@ -69,6 +71,6 @@ private fun RustLiveLocationShare.into(): LiveLocationShare {
             )
         },
         startTimestamp = startTs.toLong(),
-        endTimestamp = (startTs + timeout).toLong()
+        endTimestamp = (startTs + timeout).toLong(),
     )
 }

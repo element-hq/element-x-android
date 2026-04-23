@@ -198,7 +198,7 @@ interface JoinedRoom : BaseRoom {
      * @param durationMillis How long to share location (in milliseconds).
      * @return Result indicating success or failure.
      */
-    suspend fun startLiveLocationShare(durationMillis: Long): Result<Unit>
+    suspend fun startLiveLocationShare(durationMillis: Long): Result<EventId>
 
     /**
      * Stop sharing live location in this room.

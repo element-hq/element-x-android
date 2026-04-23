@@ -68,6 +68,7 @@ internal fun aRustNotificationRoomInfo(
     isDirect: Boolean = false,
     joinRule: JoinRule? = null,
     isSpace: Boolean = false,
+    serviceMembers: List<String> = emptyList(),
 ) = NotificationRoomInfo(
     displayName = displayName,
     avatarUrl = avatarUrl,
@@ -78,6 +79,7 @@ internal fun aRustNotificationRoomInfo(
     isDirect = isDirect,
     joinRule = joinRule,
     isSpace = isSpace,
+    serviceMembers = serviceMembers,
 )
 
 internal fun aRustNotificationEventTimeline(
