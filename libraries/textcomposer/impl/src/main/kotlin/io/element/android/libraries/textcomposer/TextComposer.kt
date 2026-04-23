@@ -679,7 +679,7 @@ private fun TextInputBox(
                         .align(Alignment.CenterEnd),
                     imageVector = CompoundIcons.InfoSolid(),
                     tint = ElementTheme.colors.iconCriticalPrimary,
-                    contentDescription = null,
+                    contentDescription = stringResource(CommonStrings.a11y_info),
                 )
                 if (showBottomSheet) {
                     CaptionWarningBottomSheet(
