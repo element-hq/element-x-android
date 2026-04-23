@@ -59,6 +59,7 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.zIndex
 import coil3.compose.AsyncImage
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -130,6 +131,52 @@ fun MediaViewerView(
                 state.eventSink(MediaViewerEvent.OnNavigateTo(page))
             }
         }
+        // Top bar
+        AnimatedVisibility(
+            modifier = Modifier.zIndex(1f),
+            visible = showOverlay,
+            enter = fadeIn(),
+            exit = fadeOut(),
+        ) {
+            when (currentData) {
+                is MediaViewerPageData.MediaViewerData -> {
+                    MediaViewerTopBar(
+                        data = currentData,
+                        canShowInfo = state.canShowInfo,
+                        onBackClick = onBackClick,
+                        onShareClick = {
+                            state.eventSink(MediaViewerEvent.Share(currentData))
+                        },
+                        onSaveClick = {
+                            state.eventSink(MediaViewerEvent.SaveOnDisk(currentData))
+                        },
+                        onInfoClick = {
+                            state.eventSink(MediaViewerEvent.OpenInfo(currentData))
+                        },
+                    )
+                }
+                else -> {
+                    TopAppBar(
+                        title = {
+                            if (currentData is MediaViewerPageData.Loading) {
+                                Text(
+                                    modifier = Modifier.semantics {
+                                        heading()
+                                    },
+                                    text = stringResource(id = CommonStrings.common_loading_more),
+                                    style = ElementTheme.typography.fontBodyMdMedium,
+                                    color = ElementTheme.colors.textPrimary,
+                                )
+                            }
+                        },
+                        colors = TopAppBarDefaults.topAppBarColors(
+                            containerColor = bgCanvasWithTransparency,
+                        ),
+                        navigationIcon = { BackButton(onClick = onBackClick) },
+                    )
+                }
+            }
+        }
         HorizontalPager(
             state = pagerState,
             modifier = Modifier,
@@ -199,47 +246,6 @@ fun MediaViewerView(
                             }
                         }
                     }
-                }
-            }
-        }
-        // Top bar
-        AnimatedVisibility(visible = showOverlay, enter = fadeIn(), exit = fadeOut()) {
-            when (currentData) {
-                is MediaViewerPageData.MediaViewerData -> {
-                    MediaViewerTopBar(
-                        data = currentData,
-                        canShowInfo = state.canShowInfo,
-                        onBackClick = onBackClick,
-                        onShareClick = {
-                            state.eventSink(MediaViewerEvent.Share(currentData))
-                        },
-                        onSaveClick = {
-                            state.eventSink(MediaViewerEvent.SaveOnDisk(currentData))
-                        },
-                        onInfoClick = {
-                            state.eventSink(MediaViewerEvent.OpenInfo(currentData))
-                        },
-                    )
-                }
-                else -> {
-                    TopAppBar(
-                        title = {
-                            if (currentData is MediaViewerPageData.Loading) {
-                                Text(
-                                    modifier = Modifier.semantics {
-                                        heading()
-                                    },
-                                    text = stringResource(id = CommonStrings.common_loading_more),
-                                    style = ElementTheme.typography.fontBodyMdMedium,
-                                    color = ElementTheme.colors.textPrimary,
-                                )
-                            }
-                        },
-                        colors = TopAppBarDefaults.topAppBarColors(
-                            containerColor = bgCanvasWithTransparency,
-                        ),
-                        navigationIcon = { BackButton(onClick = onBackClick) },
-                    )
                 }
             }
         }
