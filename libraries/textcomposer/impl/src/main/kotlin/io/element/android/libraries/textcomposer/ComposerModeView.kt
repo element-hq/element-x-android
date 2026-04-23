@@ -24,7 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -122,7 +122,7 @@ private fun EditingModeView(
 }
 
 // This combination of density DPI and font scale is an approximation to a screen with little space to display the content
-private const val MAX_SCALING_VALUE = 600f
+private const val MAX_SCALING_VALUE = 3.5f
 
 /**
  * https://www.figma.com/design/G1xy0HDZKJf5TCRFmKb5d5/Compound-Android-Components?node-id=2019-6286
@@ -141,9 +141,9 @@ private fun ReplyToModeView(
             .border(1.dp, ElementTheme.colors.separatorPrimary, RoundedCornerShape(6.dp))
             .padding(4.dp)
     ) {
-        val config = LocalConfiguration.current
         // Larger density DPI and font scale means less space to display the content, so we limit it to 1 line to avoid overflow issues
-        val hasLowResolution = config.densityDpi * config.fontScale > MAX_SCALING_VALUE
+        val currentDensity = LocalDensity.current
+        val hasLowResolution = currentDensity.density * currentDensity.fontScale >= MAX_SCALING_VALUE
         val maxReplyContentLines = if (hasLowResolution) 1 else 2
         InReplyToView(
             inReplyTo = replyToDetails,

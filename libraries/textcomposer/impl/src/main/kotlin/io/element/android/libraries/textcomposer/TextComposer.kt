@@ -29,6 +29,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -50,6 +52,7 @@ import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -991,29 +994,36 @@ internal fun TextComposerVoiceNotEncryptedPreview() = ElementPreview {
     }
 }
 
-@Preview(device = "spec:width=420dp,height=136dp", fontScale = 1.5f)
+@Preview
 @Composable
 internal fun TextComposerScaledDensityWithReplyPreview() {
     ElementPreview {
-        val replyToDetails = InReplyToDetails.Ready(
-            eventId = EventId("\$1234"),
-            senderId = UserId("@alice:example.com"),
-            senderProfile = aProfileDetailsReady(),
-            eventContent = MessageContent(
-                body = "Message which are being replied, and which was long enough to be displayed on two lines (only!).",
-                inReplyTo = null,
-                isEdited = false,
-                threadInfo = null,
-                type = TextMessageType("Message which are being replied, and which was long enough to be displayed on two lines (only!).", null)
+        CompositionLocalProvider(
+            LocalDensity provides Density(
+                density = 3f,
+                fontScale = 1.25f,
             ),
-            textContent = "Message which are being replied, and which was long enough to be displayed on two lines (only!).",
-        )
-        Box {
-            ATextComposer(
-                state = aTextEditorStateMarkdown(initialText = "", initialFocus = true),
-                voiceMessageState = VoiceMessageState.Idle,
-                composerMode = MessageComposerMode.Reply(replyToDetails, hideImage = false),
+        ) {
+            val replyToDetails = InReplyToDetails.Ready(
+                eventId = EventId("\$1234"),
+                senderId = UserId("@alice:example.com"),
+                senderProfile = aProfileDetailsReady(),
+                eventContent = MessageContent(
+                    body = "Message which are being replied, and which was long enough to be displayed on two lines (only!).",
+                    inReplyTo = null,
+                    isEdited = false,
+                    threadInfo = null,
+                    type = TextMessageType("Message which are being replied, and which was long enough to be displayed on two lines (only!).", null)
+                ),
+                textContent = "Message which are being replied, and which was long enough to be displayed on two lines (only!).",
             )
+            Box(modifier = Modifier.width(480.dp).height(120.dp)) {
+                ATextComposer(
+                    state = aTextEditorStateMarkdown(initialText = "", initialFocus = true),
+                    voiceMessageState = VoiceMessageState.Idle,
+                    composerMode = MessageComposerMode.Reply(replyToDetails, hideImage = false),
+                )
+            }
         }
     }
 }
