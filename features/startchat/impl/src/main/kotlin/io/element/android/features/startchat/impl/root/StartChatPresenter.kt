@@ -58,8 +58,6 @@ class StartChatPresenter(
             featureFlagService.isFeatureEnabledFlow(FeatureFlags.RoomDirectorySearch)
         }.collectAsState(initial = false)
 
-        val enableKeyShareOnInvite = featureFlagService.isFeatureEnabledFlow(FeatureFlags.EnableKeyShareOnInvite).collectAsState(false)
-
         fun handleEvent(event: StartChatEvents) {
             when (event) {
                 is StartChatEvents.StartDM -> localCoroutineScope.launch {
@@ -78,7 +76,6 @@ class StartChatPresenter(
             userListState = userListState,
             startDmAction = startDmActionState.value,
             isRoomDirectorySearchEnabled = isRoomDirectorySearchEnabled,
-            enableKeyShareOnInvite = enableKeyShareOnInvite.value,
             eventSink = ::handleEvent,
         )
     }
