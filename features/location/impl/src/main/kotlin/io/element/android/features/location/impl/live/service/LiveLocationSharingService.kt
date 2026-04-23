@@ -45,7 +45,6 @@ class LiveLocationSharingService : Service() {
 
     @Inject lateinit var coordinator: LiveLocationSharingCoordinator
     @Inject lateinit var notificationCreator: LiveLocationSharingNotificationCreator
-
     @AppCoroutineScope
     @Inject lateinit var appCoroutineScope: CoroutineScope
     private lateinit var coroutineScope: CoroutineScope
@@ -71,7 +70,7 @@ class LiveLocationSharingService : Service() {
             val notificationId = NotificationIdProvider.getForegroundServiceNotificationId(ForegroundServiceType.LIVE_LOCATION)
             Timber.d("LiveLocationSharingService starting foreground service with notificationId=$notificationId")
             ServiceCompat.startForeground(
-                /* service = */ this,
+                /* service = */ this@LiveLocationSharingService,
                 /* id = */ notificationId,
                 /* notification = */ notificationCreator.createNotification(),
                 /* foregroundServiceType = */ FOREGROUND_SERVICE_TYPE_LOCATION
@@ -79,7 +78,6 @@ class LiveLocationSharingService : Service() {
             Timber.d("LiveLocationSharingService listening to location updates")
             locationProvider.location
                 .filterNotNull()
-                .debounce(1.seconds)
                 .map { location ->
                     ApiLocation(
                         lat = location.position.latitude,

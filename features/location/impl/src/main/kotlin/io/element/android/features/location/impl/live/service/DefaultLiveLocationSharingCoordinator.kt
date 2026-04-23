@@ -17,26 +17,37 @@ import dev.zacsweers.metro.SingleIn
 import io.element.android.features.location.api.Location
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.core.SessionId
+import io.element.android.services.toolbox.api.systemclock.SystemClock
 import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.concurrent.atomics.AtomicLong
+import kotlin.concurrent.atomics.ExperimentalAtomicApi
+import kotlin.time.Duration.Companion.seconds
 
+private val THROTTLE_WINDOW = 3.seconds
+
+@OptIn(ExperimentalAtomicApi::class)
 @SingleIn(AppScope::class)
 @ContributesBinding(AppScope::class)
 class DefaultLiveLocationSharingCoordinator internal constructor(
     private val startService: () -> Unit,
     private val stopService: () -> Unit,
+    private val nowMillis: () -> Long,
 ) : LiveLocationSharingCoordinator {
+
     @Inject
-    constructor(@ApplicationContext context: Context) : this(
+    constructor(@ApplicationContext context: Context, clock: SystemClock) : this(
         startService = {
             ContextCompat.startForegroundService(context, Intent(context, LiveLocationSharingService::class.java))
         },
         stopService = {
             context.stopService(Intent(context, LiveLocationSharingService::class.java))
         },
+        nowMillis = clock::epochMillis
     )
 
     private val receivers = ConcurrentHashMap<SessionId, LiveLocationReceiver>()
+    private val lastDispatchMillis = AtomicLong(0L)
 
     override fun register(sessionId: SessionId, receiver: LiveLocationReceiver) {
         val wasEmpty = receivers.isEmpty()
@@ -62,6 +73,13 @@ class DefaultLiveLocationSharingCoordinator internal constructor(
     }
 
     override suspend fun dispatch(location: Location) {
+        val currentTimeMillis = nowMillis()
+        val millisSincePrevious = currentTimeMillis - lastDispatchMillis.load()
+        if (millisSincePrevious < THROTTLE_WINDOW.inWholeMilliseconds) {
+            Timber.d("Received location before $THROTTLE_WINDOW, ignore.")
+            return
+        }
+        lastDispatchMillis.store(currentTimeMillis)
         receivers.forEach { (sessionId, receiver) ->
             Timber.d("Dispatch received location for session $sessionId ")
             runCatching {
