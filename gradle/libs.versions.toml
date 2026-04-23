@@ -18,7 +18,7 @@ constraintlayout_compose = "1.1.1"
 lifecycle = "2.10.0"
 activity = "1.13.0"
 media3 = "1.10.0"
-camera = "1.5.3"
+camera = "1.6.0"
 work = "2.11.2"
 
 # Compose
@@ -214,6 +214,7 @@ maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:3.0.2"
 opusencoder = "io.element.android:opusencoder:1.2.0"
 zxing_cpp = "io.github.zxing-cpp:android:3.0.2"
 google_zxing = "com.google.zxing:core:3.5.4"
+google_guava = "com.google.guava:guava:33.5.0-android"
 
 haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }
 haze_materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = "haze" }
