@@ -56,6 +56,7 @@ fun InReplyToView(
     inReplyTo: InReplyToDetails,
     hideImage: Boolean,
     modifier: Modifier = Modifier,
+    maxLines: Int = 2,
 ) {
     when (inReplyTo) {
         is InReplyToDetails.Ready -> {
@@ -63,11 +64,12 @@ fun InReplyToView(
                 senderId = inReplyTo.senderId,
                 senderProfile = inReplyTo.senderProfile,
                 metadata = inReplyTo.metadata(hideImage),
+                maxLines = maxLines,
                 modifier = modifier,
             )
         }
         is InReplyToDetails.Error ->
-            ReplyToErrorContent(data = inReplyTo, modifier = modifier)
+            ReplyToErrorContent(data = inReplyTo, maxLines = maxLines, modifier = modifier)
         is InReplyToDetails.Loading ->
             ReplyToLoadingContent(modifier = modifier)
     }
@@ -78,6 +80,7 @@ private fun ReplyToReadyContent(
     senderId: UserId,
     senderProfile: ProfileDetails,
     metadata: InReplyToMetadata?,
+    maxLines: Int,
     modifier: Modifier = Modifier,
 ) {
     val paddings = if (metadata is InReplyToMetadata.Thumbnail) {
@@ -115,7 +118,7 @@ private fun ReplyToReadyContent(
                     traversalIndex = 1f
                 },
             )
-            ReplyToContentText(metadata)
+            ReplyToContentText(metadata, maxLines)
         }
     }
 }
@@ -140,6 +143,7 @@ private fun ReplyToLoadingContent(
 @Composable
 private fun ReplyToErrorContent(
     data: InReplyToDetails.Error,
+    maxLines: Int,
     modifier: Modifier = Modifier,
 ) {
     val paddings = PaddingValues(horizontal = 12.dp, vertical = 4.dp)
@@ -152,14 +156,17 @@ private fun ReplyToErrorContent(
             text = data.message,
             style = ElementTheme.typography.fontBodyMdRegular,
             color = ElementTheme.colors.textCriticalPrimary,
-            maxLines = 2,
+            maxLines = maxLines,
             overflow = TextOverflow.Ellipsis,
         )
     }
 }
 
 @Composable
-private fun ReplyToContentText(metadata: InReplyToMetadata?) {
+private fun ReplyToContentText(
+    metadata: InReplyToMetadata?,
+    maxLines: Int,
+) {
     val text = when (metadata) {
         InReplyToMetadata.Redacted -> stringResource(id = CommonStrings.common_message_removed)
         InReplyToMetadata.UnableToDecrypt -> stringResource(id = CommonStrings.common_waiting_for_decryption_key)
@@ -200,7 +207,7 @@ private fun ReplyToContentText(metadata: InReplyToMetadata?) {
             fontStyle = fontStyle,
             textAlign = TextAlign.Start,
             color = ElementTheme.colors.textSecondary,
-            maxLines = 2,
+            maxLines = maxLines,
             overflow = TextOverflow.Ellipsis,
         )
     }

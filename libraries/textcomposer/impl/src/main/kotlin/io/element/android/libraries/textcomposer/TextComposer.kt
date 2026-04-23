@@ -29,6 +29,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -40,6 +41,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalHapticFeedback
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.res.stringResource
@@ -50,6 +52,7 @@ import androidx.compose.ui.semantics.onClick
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -66,10 +69,14 @@ import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.IconColorButton
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageContent
+import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetailsProvider
+import io.element.android.libraries.matrix.ui.messages.reply.aProfileDetailsReady
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.textcomposer.components.SendButtonIcon
@@ -181,7 +188,7 @@ fun TextComposer(
                             placeholder = placeholder,
                             registerStateUpdates = true,
                             modifier = Modifier
-                                .padding(top = 6.dp, bottom = 6.dp)
+                                .padding(top = 4.dp, bottom = 6.dp)
                                 .fillMaxWidth(),
                             style = ElementRichTextEditorStyle.composerStyle(hasFocus = state.richTextEditorState.hasFocus),
                             resolveMentionDisplay = resolveMentionDisplay,
@@ -651,10 +658,14 @@ private fun TextInputBox(
                 composerMode = composerMode,
                 onResetComposerMode = onResetComposerMode,
             )
+        } else {
+            // Top padding for the message composer box
+            Spacer(Modifier.height(4.dp))
         }
+
         Box(
             modifier = Modifier
-                .padding(top = 4.dp, bottom = 4.dp, start = 12.dp, end = 12.dp)
+                .padding(top = 1.dp, bottom = 4.dp, start = 12.dp, end = 12.dp)
                 .then(Modifier.testTag(TestTags.textEditor)),
             contentAlignment = Alignment.CenterStart,
         ) {
@@ -664,7 +675,7 @@ private fun TextInputBox(
                 Icon(
                     modifier = Modifier
                         .clickable { showBottomSheet = true }
-                        .padding(horizontal = 8.dp, vertical = 4.dp)
+                        .padding(start = 8.dp, end = 8.dp, top = 4.dp, bottom = 4.dp)
                         .align(Alignment.CenterEnd),
                     imageVector = CompoundIcons.InfoSolid(),
                     tint = ElementTheme.colors.iconCriticalPrimary,
@@ -980,6 +991,40 @@ internal fun TextComposerVoiceNotEncryptedPreview() = ElementPreview {
             voiceMessageState = voiceMessageState,
             composerMode = MessageComposerMode.Normal,
         )
+    }
+}
+
+@Preview
+@Composable
+internal fun TextComposerScaledDensityWithReplyPreview() {
+    ElementPreview {
+        CompositionLocalProvider(
+            LocalDensity provides Density(
+                density = 3f,
+                fontScale = 1.25f,
+            ),
+        ) {
+            val replyToDetails = InReplyToDetails.Ready(
+                eventId = EventId("\$1234"),
+                senderId = UserId("@alice:example.com"),
+                senderProfile = aProfileDetailsReady(),
+                eventContent = MessageContent(
+                    body = "Message which are being replied, and which was long enough to be displayed on two lines (only!).",
+                    inReplyTo = null,
+                    isEdited = false,
+                    threadInfo = null,
+                    type = TextMessageType("Message which are being replied, and which was long enough to be displayed on two lines (only!).", null)
+                ),
+                textContent = "Message which are being replied, and which was long enough to be displayed on two lines (only!).",
+            )
+            Box(modifier = Modifier.width(480.dp).height(120.dp)) {
+                ATextComposer(
+                    state = aTextEditorStateMarkdown(initialText = "", initialFocus = true),
+                    voiceMessageState = VoiceMessageState.Idle,
+                    composerMode = MessageComposerMode.Reply(replyToDetails, hideImage = false),
+                )
+            }
+        }
     }
 }
 
