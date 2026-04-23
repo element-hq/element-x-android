@@ -204,48 +204,42 @@ fun MediaViewerView(
         }
         // Top bar
         AnimatedVisibility(visible = showOverlay, enter = fadeIn(), exit = fadeOut()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .navigationBarsPadding()
-            ) {
-                when (currentData) {
-                    is MediaViewerPageData.MediaViewerData -> {
-                        MediaViewerTopBar(
-                            data = currentData,
-                            canShowInfo = state.canShowInfo,
-                            onBackClick = onBackClick,
-                            onShareClick = {
-                                state.eventSink(MediaViewerEvent.Share(currentData))
-                            },
-                            onSaveClick = {
-                                state.eventSink(MediaViewerEvent.SaveOnDisk(currentData))
-                            },
-                            onInfoClick = {
-                                state.eventSink(MediaViewerEvent.OpenInfo(currentData))
-                            },
-                        )
-                    }
-                    else -> {
-                        TopAppBar(
-                            title = {
-                                if (currentData is MediaViewerPageData.Loading) {
-                                    Text(
-                                        modifier = Modifier.semantics {
-                                            heading()
-                                        },
-                                        text = stringResource(id = CommonStrings.common_loading_more),
-                                        style = ElementTheme.typography.fontBodyMdMedium,
-                                        color = ElementTheme.colors.textPrimary,
-                                    )
-                                }
-                            },
-                            colors = TopAppBarDefaults.topAppBarColors(
-                                containerColor = bgCanvasWithTransparency,
-                            ),
-                            navigationIcon = { BackButton(onClick = onBackClick) },
-                        )
-                    }
+            when (currentData) {
+                is MediaViewerPageData.MediaViewerData -> {
+                    MediaViewerTopBar(
+                        data = currentData,
+                        canShowInfo = state.canShowInfo,
+                        onBackClick = onBackClick,
+                        onShareClick = {
+                            state.eventSink(MediaViewerEvent.Share(currentData))
+                        },
+                        onSaveClick = {
+                            state.eventSink(MediaViewerEvent.SaveOnDisk(currentData))
+                        },
+                        onInfoClick = {
+                            state.eventSink(MediaViewerEvent.OpenInfo(currentData))
+                        },
+                    )
+                }
+                else -> {
+                    TopAppBar(
+                        title = {
+                            if (currentData is MediaViewerPageData.Loading) {
+                                Text(
+                                    modifier = Modifier.semantics {
+                                        heading()
+                                    },
+                                    text = stringResource(id = CommonStrings.common_loading_more),
+                                    style = ElementTheme.typography.fontBodyMdMedium,
+                                    color = ElementTheme.colors.textPrimary,
+                                )
+                            }
+                        },
+                        colors = TopAppBarDefaults.topAppBarColors(
+                            containerColor = bgCanvasWithTransparency,
+                        ),
+                        navigationIcon = { BackButton(onClick = onBackClick) },
+                    )
                 }
             }
         }
