@@ -23,17 +23,21 @@ open class MediaBottomSheetStateDetailsProvider : PreviewParameterProvider<Media
             aMediaBottomSheetStateDetails(
                 mediaInfo = anApkMediaInfo(),
             ),
+            aMediaBottomSheetStateDetails(
+                eventId = null,
+            ),
         )
 }
 
 fun aMediaBottomSheetStateDetails(
+    eventId: EventId? = EventId($$"$eventId"),
     canDelete: Boolean = true,
     mediaInfo: MediaInfo = anImageMediaInfo(
         senderName = "Alice",
         dateSentFull = "December 6, 2024 at 12:59",
     ),
 ) = MediaBottomSheetState.Details(
-    eventId = EventId("\$eventId"),
+    eventId = eventId,
     canDelete = canDelete,
     mediaInfo = mediaInfo,
     thumbnailSource = null,
