@@ -26,7 +26,7 @@ fun isDm(isDirect: Boolean, activeMembersCount: Int): Boolean {
  */
 suspend fun BaseRoom.isDm() = roomInfoFlow.first().isDm
 
-/**
- * Returns whether the [RoomInfo] is from a DM.
- */
-val RoomInfo.isDm get() = isDm(isDirect, activeMembersCount.toInt())
+///**
+// * Returns whether the [RoomInfo] is from a DM.
+// */
+//val RoomInfo.isDm get() = isDm(isDirect, activeMembersCount.toInt())
