@@ -217,12 +217,10 @@ class MessagesPresenter(
         val dmRoomMember by room.getDirectRoomMember(membersState)
         val roomMemberIdentityStateChanges = identityChangeState.roomMemberIdentityStateChanges
 
-        val isKeyShareOnInviteEnabled by featureFlagService.isFeatureEnabledFlow(FeatureFlags.EnableKeyShareOnInvite).collectAsState(initial = false)
         // The top bar should show a "history" icon if:
-        //   * History sharing is enabled,
         //   * The room is encrypted, and:
         //   * The room's history_visibility allows future users to see content.
-        val topBarSharedHistoryIcon = if (isKeyShareOnInviteEnabled) roomInfo.sharedHistoryIcon() else SharedHistoryIcon.NONE
+        val topBarSharedHistoryIcon = roomInfo.sharedHistoryIcon()
 
         LifecycleResumeEffect(dmRoomMember, roomInfo.isEncrypted) {
             if (roomInfo.isEncrypted == true) {
