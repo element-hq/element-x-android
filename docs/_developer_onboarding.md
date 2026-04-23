@@ -144,6 +144,11 @@ Prerequisites:
   export ANDROID_HOME=$HOME/android/sdk
   ```
 
+* On macos ensure gnu-getopt is installed
+  ```
+  brew install gnu-getopt
+  ```
+
 You can then build the Rust SDK by running the script
 [`tools/sdk/build-rust-sdk`](../tools/sdk/build-rust-sdk). Type
 `./tools/sdk/build-rust-sdk --help` for help.
