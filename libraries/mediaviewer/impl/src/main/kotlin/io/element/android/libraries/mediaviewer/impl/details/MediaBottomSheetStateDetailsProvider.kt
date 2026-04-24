@@ -21,7 +21,9 @@ open class MediaBottomSheetStateDetailsProvider : PreviewParameterProvider<Media
                 canDelete = false,
             ),
             aMediaBottomSheetStateDetails(
-                mediaInfo = anApkMediaInfo(),
+                mediaInfo = anApkMediaInfo(
+                    dateSentFull = "December 6, 2024 at 12:59",
+                ),
             ),
             aMediaBottomSheetStateDetails(
                 eventId = null,
