@@ -10,6 +10,7 @@ package io.element.android.libraries.mediaviewer.impl.viewer
 
 import android.net.Uri
 import androidx.activity.ComponentActivity
+import androidx.annotation.StringRes
 import androidx.compose.ui.test.assertHasClickAction
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
@@ -19,7 +20,7 @@ import androidx.compose.ui.test.performTouchInput
 import androidx.compose.ui.test.swipeDown
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.mediaviewer.impl.details.aMediaDetailsBottomSheetState
+import io.element.android.libraries.mediaviewer.impl.details.aMediaBottomSheetStateDetails
 import io.element.android.libraries.mediaviewer.test.viewer.aLocalMedia
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
@@ -43,7 +44,7 @@ class MediaViewerViewTest {
 
     @Test
     fun `clicking on back invokes expected callback`() {
-        val eventsRecorder = EventsRecorder<MediaViewerEvents>()
+        val eventsRecorder = EventsRecorder<MediaViewerEvent>()
         val state = aMediaViewerState(
             eventSink = eventsRecorder
         )
@@ -56,42 +57,54 @@ class MediaViewerViewTest {
         }
         eventsRecorder.assertList(
             listOf(
-                MediaViewerEvents.OnNavigateTo(0),
-                MediaViewerEvents.LoadMedia(state.listData.first() as MediaViewerPageData.MediaViewerData),
+                MediaViewerEvent.OnNavigateTo(0),
+                MediaViewerEvent.LoadMedia(state.listData.first() as MediaViewerPageData.MediaViewerData),
             )
         )
     }
 
     @Test
-    fun `clicking on open emit expected Event`() {
-        val data = aMediaViewerPageData(
-            downloadedMedia = AsyncData.Success(aLocalMedia(uri = mockMediaUrl)),
-        )
-        testMenuAction(
-            data,
-            CommonStrings.action_open_with,
-            MediaViewerEvents.OpenWith(data),
-        )
-    }
-
-    @Test
-    fun `clicking on info emit expected Event`() {
+    fun `clicking on info emits expected Event`() {
         val data = aMediaViewerPageData(
             downloadedMedia = AsyncData.Success(aLocalMedia(uri = mockMediaUrl)),
         )
         testMenuAction(
             data,
             CommonStrings.a11y_view_details,
-            MediaViewerEvents.OpenInfo(data),
+            MediaViewerEvent.OpenInfo(data),
+        )
+    }
+
+    @Test
+    fun `clicking on top action share emits expected Event`() {
+        val data = aMediaViewerPageData(
+            downloadedMedia = AsyncData.Success(aLocalMedia(uri = mockMediaUrl)),
+        )
+        testMenuAction(
+            data,
+            CommonStrings.action_share,
+            MediaViewerEvent.Share(data),
+        )
+    }
+
+    @Test
+    fun `clicking on top action download emits expected Event`() {
+        val data = aMediaViewerPageData(
+            downloadedMedia = AsyncData.Success(aLocalMedia(uri = mockMediaUrl)),
+        )
+        testMenuAction(
+            data,
+            CommonStrings.action_download,
+            MediaViewerEvent.SaveOnDisk(data),
         )
     }
 
     private fun testMenuAction(
         data: MediaViewerPageData.MediaViewerData,
-        contentDescriptionRes: Int,
-        expectedEvent: MediaViewerEvents,
+        @StringRes contentDescriptionRes: Int,
+        expectedEvent: MediaViewerEvent,
     ) {
-        val eventsRecorder = EventsRecorder<MediaViewerEvents>()
+        val eventsRecorder = EventsRecorder<MediaViewerEvent>()
         rule.setMediaViewerView(
             aMediaViewerState(
                 listData = listOf(data),
@@ -102,8 +115,8 @@ class MediaViewerViewTest {
         rule.onNodeWithContentDescription(contentDescription).performClick()
         eventsRecorder.assertList(
             listOf(
-                MediaViewerEvents.OnNavigateTo(0),
-                MediaViewerEvents.LoadMedia(data),
+                MediaViewerEvent.OnNavigateTo(0),
+                MediaViewerEvent.LoadMedia(data),
                 expectedEvent,
             )
         )
@@ -111,44 +124,55 @@ class MediaViewerViewTest {
 
     @Test
     @Config(qualifiers = "h1024dp")
-    fun `clicking on save emit expected Event`() {
+    fun `clicking on download emits expected Event`() {
         val data = aMediaViewerPageData()
         testBottomSheetAction(
             data,
-            CommonStrings.action_save,
-            MediaViewerEvents.SaveOnDisk(data),
+            CommonStrings.action_download,
+            MediaViewerEvent.SaveOnDisk(data),
         )
     }
 
     @Test
     @Config(qualifiers = "h1024dp")
-    fun `clicking on share emit expected Event`() {
+    fun `clicking on share emits expected Event`() {
         val data = aMediaViewerPageData()
         testBottomSheetAction(
             data,
             CommonStrings.action_share,
-            MediaViewerEvents.Share(data),
+            MediaViewerEvent.Share(data),
+        )
+    }
+
+    @Config(qualifiers = "h1024dp")
+    @Test
+    fun `clicking on open in emits expected Event`() {
+        val data = aMediaViewerPageData()
+        testBottomSheetAction(
+            data,
+            CommonStrings.action_open_with,
+            MediaViewerEvent.OpenWith(data),
         )
     }
 
     private fun testBottomSheetAction(
         data: MediaViewerPageData.MediaViewerData,
-        contentDescriptionRes: Int,
-        expectedEvent: MediaViewerEvents,
+        @StringRes textRes: Int,
+        expectedEvent: MediaViewerEvent,
     ) {
-        val eventsRecorder = EventsRecorder<MediaViewerEvents>()
+        val eventsRecorder = EventsRecorder<MediaViewerEvent>()
         rule.setMediaViewerView(
             aMediaViewerState(
                 listData = listOf(data),
-                mediaBottomSheetState = aMediaDetailsBottomSheetState(),
+                mediaBottomSheetState = aMediaBottomSheetStateDetails(),
                 eventSink = eventsRecorder
             ),
         )
-        rule.clickOn(contentDescriptionRes)
+        rule.clickOn(textRes)
         eventsRecorder.assertList(
             listOf(
-                MediaViewerEvents.OnNavigateTo(0),
-                MediaViewerEvents.LoadMedia(data),
+                MediaViewerEvent.OnNavigateTo(0),
+                MediaViewerEvent.LoadMedia(data),
                 expectedEvent,
             )
         )
@@ -156,7 +180,7 @@ class MediaViewerViewTest {
 
     @Test
     fun `clicking on image hides the overlay`() {
-        val eventsRecorder = EventsRecorder<MediaViewerEvents>()
+        val eventsRecorder = EventsRecorder<MediaViewerEvent>()
         val state = aMediaViewerState(
             eventSink = eventsRecorder
         )
@@ -164,7 +188,7 @@ class MediaViewerViewTest {
             state = state,
         )
         // Ensure that the action are visible
-        val contentDescription = rule.activity.getString(CommonStrings.action_open_with)
+        val contentDescription = rule.activity.getString(CommonStrings.action_share)
         rule.onNodeWithContentDescription(contentDescription)
             .assertExists()
             .assertHasClickAction()
@@ -176,15 +200,15 @@ class MediaViewerViewTest {
             .assertDoesNotExist()
         eventsRecorder.assertList(
             listOf(
-                MediaViewerEvents.OnNavigateTo(0),
-                MediaViewerEvents.LoadMedia(state.listData.first() as MediaViewerPageData.MediaViewerData),
+                MediaViewerEvent.OnNavigateTo(0),
+                MediaViewerEvent.LoadMedia(state.listData.first() as MediaViewerPageData.MediaViewerData),
             )
         )
     }
 
     @Test
     fun `clicking swipe on the image invokes the expected callback`() {
-        val eventsRecorder = EventsRecorder<MediaViewerEvents>()
+        val eventsRecorder = EventsRecorder<MediaViewerEvent>()
         val state = aMediaViewerState(
             eventSink = eventsRecorder
         )
@@ -199,15 +223,15 @@ class MediaViewerViewTest {
         }
         eventsRecorder.assertList(
             listOf(
-                MediaViewerEvents.OnNavigateTo(0),
-                MediaViewerEvents.LoadMedia(state.listData.first() as MediaViewerPageData.MediaViewerData),
+                MediaViewerEvent.OnNavigateTo(0),
+                MediaViewerEvent.LoadMedia(state.listData.first() as MediaViewerPageData.MediaViewerData),
             )
         )
     }
 
     @Test
     fun `error case, click on retry emits the expected Event`() {
-        val eventsRecorder = EventsRecorder<MediaViewerEvents>()
+        val eventsRecorder = EventsRecorder<MediaViewerEvent>()
         val data = aMediaViewerPageData(
             downloadedMedia = AsyncData.Failure(IllegalStateException("error")),
         )
@@ -220,16 +244,16 @@ class MediaViewerViewTest {
         rule.clickOn(CommonStrings.action_retry)
         eventsRecorder.assertList(
             listOf(
-                MediaViewerEvents.OnNavigateTo(0),
-                MediaViewerEvents.LoadMedia(data),
-                MediaViewerEvents.LoadMedia(data),
+                MediaViewerEvent.OnNavigateTo(0),
+                MediaViewerEvent.LoadMedia(data),
+                MediaViewerEvent.LoadMedia(data),
             )
         )
     }
 
     @Test
     fun `error case, click on cancel emits the expected Event`() {
-        val eventsRecorder = EventsRecorder<MediaViewerEvents>()
+        val eventsRecorder = EventsRecorder<MediaViewerEvent>()
         val data = aMediaViewerPageData(
             downloadedMedia = AsyncData.Failure(IllegalStateException("error")),
         )
@@ -242,9 +266,9 @@ class MediaViewerViewTest {
         rule.clickOn(CommonStrings.action_cancel)
         eventsRecorder.assertList(
             listOf(
-                MediaViewerEvents.OnNavigateTo(0),
-                MediaViewerEvents.LoadMedia(data),
-                MediaViewerEvents.ClearLoadingError(data)
+                MediaViewerEvent.OnNavigateTo(0),
+                MediaViewerEvent.LoadMedia(data),
+                MediaViewerEvent.ClearLoadingError(data)
             )
         )
     }

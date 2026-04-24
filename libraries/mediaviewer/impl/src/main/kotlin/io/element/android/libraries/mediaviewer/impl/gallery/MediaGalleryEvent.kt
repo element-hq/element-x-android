@@ -14,21 +14,22 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 
-sealed interface MediaGalleryEvents {
-    data class ChangeMode(val mode: MediaGalleryMode) : MediaGalleryEvents
-    data class LoadMore(val direction: Timeline.PaginationDirection) : MediaGalleryEvents
-    data class Share(val eventId: EventId) : MediaGalleryEvents
-    data class Forward(val eventId: EventId) : MediaGalleryEvents
-    data class SaveOnDisk(val eventId: EventId) : MediaGalleryEvents
-    data class OpenInfo(val mediaItem: MediaItem.Event) : MediaGalleryEvents
-    data class ViewInTimeline(val eventId: EventId) : MediaGalleryEvents
+sealed interface MediaGalleryEvent {
+    data class ChangeMode(val mode: MediaGalleryMode) : MediaGalleryEvent
+    data class LoadMore(val direction: Timeline.PaginationDirection) : MediaGalleryEvent
+    data class Share(val eventId: EventId) : MediaGalleryEvent
+    data class Forward(val eventId: EventId) : MediaGalleryEvent
+    data class SaveOnDisk(val eventId: EventId) : MediaGalleryEvent
+    data class OpenWith(val eventId: EventId) : MediaGalleryEvent
+    data class OpenInfo(val mediaItem: MediaItem.Event) : MediaGalleryEvent
+    data class ViewInTimeline(val eventId: EventId) : MediaGalleryEvent
 
     data class ConfirmDelete(
         val eventId: EventId,
         val mediaInfo: MediaInfo,
         val thumbnailSource: MediaSource?,
-    ) : MediaGalleryEvents
+    ) : MediaGalleryEvent
 
-    data object CloseBottomSheet : MediaGalleryEvents
-    data class Delete(val eventId: EventId) : MediaGalleryEvents
+    data object CloseBottomSheet : MediaGalleryEvent
+    data class Delete(val eventId: EventId) : MediaGalleryEvent
 }

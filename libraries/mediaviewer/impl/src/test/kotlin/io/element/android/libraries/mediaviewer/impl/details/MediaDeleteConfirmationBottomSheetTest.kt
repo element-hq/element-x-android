@@ -33,7 +33,7 @@ class MediaDeleteConfirmationBottomSheetTest {
 
     @Test
     fun `clicking on Cancel invokes expected callback`() {
-        val state = aMediaDeleteConfirmationState()
+        val state = aMediaBottomSheetStateDeleteConfirmation()
         ensureCalledOnce { callback ->
             rule.setMediaDeleteConfirmationBottomSheet(
                 state = state,
@@ -45,7 +45,7 @@ class MediaDeleteConfirmationBottomSheetTest {
 
     @Test
     fun `clicking on Remove invokes expected callback`() {
-        val state = aMediaDeleteConfirmationState()
+        val state = aMediaBottomSheetStateDeleteConfirmation()
         ensureCalledOnceWithParam(state.eventId) { callback ->
             rule.setMediaDeleteConfirmationBottomSheet(
                 state = state,
@@ -58,7 +58,7 @@ class MediaDeleteConfirmationBottomSheetTest {
 }
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMediaDeleteConfirmationBottomSheet(
-    state: MediaBottomSheetState.MediaDeleteConfirmationState,
+    state: MediaBottomSheetState.DeleteConfirmation,
     onDelete: (EventId) -> Unit = EnsureNeverCalledWithParam(),
     onDismiss: () -> Unit = EnsureNeverCalled(),
 ) {
