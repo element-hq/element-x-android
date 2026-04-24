@@ -373,11 +373,12 @@ private fun MediaViewerPage(
                     isUserSelected = isUserSelected,
                     audioFocus = audioFocus,
                 )
-                ThumbnailView(
-                    mediaInfo = data.mediaInfo,
-                    thumbnailSource = data.thumbnailSource,
-                    isVisible = showThumbnail,
-                )
+                if (showThumbnail) {
+                    ThumbnailView(
+                        mediaInfo = data.mediaInfo,
+                        thumbnailSource = data.thumbnailSource,
+                    )
+                }
                 if (showError) {
                     ErrorView(
                         errorMessage = stringResource(id = CommonStrings.error_unknown),
@@ -603,7 +604,6 @@ private val maxCaptionHeightLandscape = 128.dp
 @Composable
 private fun ThumbnailView(
     thumbnailSource: MediaSource?,
-    isVisible: Boolean,
     mediaInfo: MediaInfo,
     modifier: Modifier = Modifier,
 ) {
@@ -611,21 +611,19 @@ private fun ThumbnailView(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        if (isVisible) {
-            val mediaRequestData = MediaRequestData(
-                source = thumbnailSource,
-                kind = MediaRequestData.Kind.File(mediaInfo.filename, mediaInfo.mimeType)
-            )
-            val alpha = if (LocalInspectionMode.current) 0.1f else 1f
-            AsyncImage(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .alpha(alpha),
-                model = mediaRequestData,
-                contentScale = ContentScale.Fit,
-                contentDescription = null,
-            )
-        }
+        val mediaRequestData = MediaRequestData(
+            source = thumbnailSource,
+            kind = MediaRequestData.Kind.File(mediaInfo.filename, mediaInfo.mimeType)
+        )
+        val alpha = if (LocalInspectionMode.current) 0.1f else 1f
+        AsyncImage(
+            modifier = Modifier
+                .fillMaxSize()
+                .alpha(alpha),
+            model = mediaRequestData,
+            contentScale = ContentScale.Fit,
+            contentDescription = null,
+        )
     }
 }
 
