@@ -66,10 +66,12 @@ import kotlinx.coroutines.job
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import kotlinx.coroutines.withTimeout
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 import kotlin.coroutines.cancellation.CancellationException
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 @ContributesNode(SessionScope::class)
 @AssistedInject
@@ -187,12 +189,14 @@ class HomeFlowNode(
                     return
                 }
 
+                Timber.d("Loading joined room for roomId=$roomId to navigate to it")
                 val job = sessionCoroutineScope.launch {
                     runCatchingExceptions {
-                        matrixClient.getJoinedRoom(roomId)
+                        withTimeout(10.seconds) { matrixClient.getJoinedRoom(roomId) }
                     }.fold(
                         onSuccess = { joinedRoom ->
                             if (isActive) {
+                                Timber.d("Successfully loaded joined room for roomId=$roomId, navigating to it")
                                 callback.navigateToRoom(roomId, joinedRoom)
                                 loadingJoinedRoomJob.value = AsyncData.Success(coroutineContext.job)
                                 // Wait a bit before resetting the state to avoid allowing to open several rooms
@@ -201,6 +205,7 @@ class HomeFlowNode(
                             }
                         },
                         onFailure = {
+                            Timber.e(it, "Failed to load joined room for roomId=$roomId, navigating without it")
                             // If the operation wasn't cancelled, navigate without the room, using the room id
                             if (it !is CancellationException) {
                                 callback.navigateToRoom(roomId, null)
