@@ -1228,7 +1228,6 @@ class MessagesPresenterTest {
                     initialRoomInfo = aRoomInfo(isEncrypted = true, historyVisibility = RoomHistoryVisibility.Shared),
                 ),
             ),
-            featureFlagService = FakeFeatureFlagService()
         )
         presenter.testWithLifecycleOwner {
             awaitItem()
@@ -1247,7 +1246,6 @@ class MessagesPresenterTest {
                     initialRoomInfo = aRoomInfo(isEncrypted = true, historyVisibility = RoomHistoryVisibility.WorldReadable),
                 ),
             ),
-            featureFlagService = FakeFeatureFlagService()
         )
         presenter.testWithLifecycleOwner {
             awaitItem()
