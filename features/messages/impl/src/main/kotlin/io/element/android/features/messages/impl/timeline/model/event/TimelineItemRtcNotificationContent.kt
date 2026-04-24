@@ -9,7 +9,24 @@
 package io.element.android.features.messages.impl.timeline.model.event
 
 import io.element.android.libraries.matrix.api.notification.CallIntent
+import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 
-class TimelineItemRtcNotificationContent(val callIntent: CallIntent) : TimelineItemEventContent {
-    override val type: String = "org.matrix.msc4075.rtc.notification"
+// For now this is just an enum, but could be a
+// sealed class if we need the list of users who declined.
+enum class RtcNotificationState {
+    /** Some users have declined */
+     Declined,
+
+    /** I have declined this call */
+    DeclinedByMe,
+
+    // Future sates could be `Missed`? `ongoing`...
+    None
+}
+
+class TimelineItemRtcNotificationContent(
+    val callIntent: CallIntent,
+    val state: RtcNotificationState,
+) : TimelineItemEventContent {
+    override val type: String = EventType.RTC_NOTIFICATION
 }

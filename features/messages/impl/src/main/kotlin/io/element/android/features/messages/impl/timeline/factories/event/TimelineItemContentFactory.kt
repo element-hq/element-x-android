@@ -10,6 +10,7 @@ package io.element.android.features.messages.impl.timeline.factories.event
 
 import dev.zacsweers.metro.Inject
 import io.element.android.features.location.api.Location
+import io.element.android.features.messages.impl.timeline.model.event.RtcNotificationState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
@@ -104,7 +105,12 @@ class TimelineItemContentFactory(
             is PollContent -> pollFactory.create(eventId, isEditable, isOutgoing, itemContent)
             is UnableToDecryptContent -> utdFactory.create(itemContent)
             is CallNotifyContent -> TimelineItemRtcNotificationContent(
-                itemContent.callIntent
+                callIntent = itemContent.callIntent,
+                state = when {
+                    itemContent.declinedBy.isEmpty().not() && itemContent.declinedBy.any { it == sessionId } -> RtcNotificationState.DeclinedByMe
+                    itemContent.declinedBy.isEmpty().not() -> RtcNotificationState.Declined
+                    else -> RtcNotificationState.None
+                }
             )
             is UnknownContent -> TimelineItemUnknownContent
             is LiveLocationContent -> {

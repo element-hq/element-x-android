@@ -125,6 +125,7 @@ internal fun TimelineItemRow(
                     is TimelineItemRtcNotificationContent -> {
                         TimelineItemCallNotifyView(
                             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                            timelineRoomInfo = timelineRoomInfo,
                             event = timelineItem,
                             content = timelineItem.content,
                             onLongClick = onLongClick,
