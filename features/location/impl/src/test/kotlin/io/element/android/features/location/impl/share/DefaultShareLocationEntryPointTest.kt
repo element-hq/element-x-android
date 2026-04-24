@@ -23,6 +23,7 @@ import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.node.TestParentNode
+import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
@@ -31,16 +32,17 @@ class DefaultShareLocationEntryPointTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Test
-    fun `test node builder`() {
+    fun `test node builder`() = runTest {
         val entryPoint = DefaultShareLocationEntryPoint()
         val parentNode = TestParentNode.create { buildContext, plugins ->
+            val room = FakeJoinedRoom()
             ShareLocationNode(
                 buildContext = buildContext,
                 plugins = plugins,
                 presenterFactory = { timelineMode: Timeline.Mode ->
                     ShareLocationPresenter(
                         permissionsPresenterFactory = { FakePermissionsPresenter() },
-                        room = FakeJoinedRoom(),
+                        room = room,
                         timelineMode = timelineMode,
                         analyticsService = FakeAnalyticsService(),
                         messageComposerContext = FakeMessageComposerContext(),
@@ -49,7 +51,8 @@ class DefaultShareLocationEntryPointTest {
                         featureFlagService = FakeFeatureFlagService(),
                         client = FakeMatrixClient(),
                         durationFormatter = FakeDurationFormatter(),
-                        liveLocationShareManager = FakeActiveLiveLocationShareManager(),
+                        liveLocationShareManager = FakeActiveLiveLocationShareManager(sessionId = room.sessionId),
+                        sessionCoroutineScope = backgroundScope,
                     )
                 },
                 analyticsService = FakeAnalyticsService(),

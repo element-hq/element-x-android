@@ -520,8 +520,8 @@ class JoinedRustRoom(
 
     override suspend fun startLiveLocationShare(durationMillis: Long): Result<EventId> = withContext(roomDispatcher) {
         runCatchingExceptions {
-            val eventId = innerRoom.startLiveLocationShare(durationMillis.toULong())
-            EventId(eventId)
+            val beaconId = innerRoom.startLiveLocationShare(durationMillis.toULong())
+            EventId(beaconId)
         }
     }
 

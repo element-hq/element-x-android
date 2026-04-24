@@ -50,6 +50,7 @@ class DefaultActiveLiveLocationShareManagerTest {
         assertThat(manager.activeShares.value).containsExactly(
             A_ROOM_ID,
             ActiveLiveLocationShare(
+                sessionId = A_SESSION_ID,
                 roomId = A_ROOM_ID,
                 expiresAt = kotlin.time.Instant.fromEpochMilliseconds(3_600_123L),
             ),
@@ -139,7 +140,6 @@ class DefaultActiveLiveLocationShareManagerTest {
     ): DefaultActiveLiveLocationShareManager {
         return DefaultActiveLiveLocationShareManager(
             matrixClient = client,
-            activeRoomsHolder = activeRoomsHolder,
             coordinator = coordinator,
             clock = clock,
         )

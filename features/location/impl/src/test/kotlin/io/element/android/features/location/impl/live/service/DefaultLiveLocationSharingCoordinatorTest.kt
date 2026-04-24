@@ -46,4 +46,67 @@ class DefaultLiveLocationSharingCoordinatorTest {
 
         assertThat(delivered).containsExactly(Location(lat = 1.0, lon = 2.0, accuracy = 3f))
     }
+
+    @Test
+    fun `dispatch delivers first location immediately`() = runTest {
+        var nowMillis = 1_000L
+        val delivered = mutableListOf<Location>()
+        val coordinator = DefaultLiveLocationSharingCoordinator(
+            startService = { },
+            stopService = { },
+            nowMillis = { nowMillis },
+        )
+
+        coordinator.register(A_SESSION_ID, LiveLocationReceiver { location -> delivered += location })
+
+        val firstLocation = Location(lat = 1.0, lon = 2.0, accuracy = 3f)
+
+        coordinator.dispatch(firstLocation)
+
+        assertThat(delivered).containsExactly(firstLocation)
+    }
+
+    @Test
+    fun `dispatch drops updates inside the throttle window`() = runTest {
+        var nowMillis = 1_000L
+        val delivered = mutableListOf<Location>()
+        val coordinator = DefaultLiveLocationSharingCoordinator(
+            startService = { },
+            stopService = { },
+            nowMillis = { nowMillis },
+        )
+
+        coordinator.register(A_SESSION_ID, LiveLocationReceiver { location -> delivered += location })
+
+        val firstLocation = Location(lat = 1.0, lon = 2.0, accuracy = 3f)
+        val secondLocation = Location(lat = 4.0, lon = 5.0, accuracy = 6f)
+
+        coordinator.dispatch(firstLocation)
+        nowMillis += 500
+        coordinator.dispatch(secondLocation)
+
+        assertThat(delivered).containsExactly(firstLocation)
+    }
+
+    @Test
+    fun `dispatch delivers next update after the throttle window elapses`() = runTest {
+        var nowMillis = 1_000L
+        val delivered = mutableListOf<Location>()
+        val coordinator = DefaultLiveLocationSharingCoordinator(
+            startService = { },
+            stopService = { },
+            nowMillis = { nowMillis },
+        )
+
+        coordinator.register(A_SESSION_ID, LiveLocationReceiver { location -> delivered += location })
+
+        val firstLocation = Location(lat = 1.0, lon = 2.0, accuracy = 3f)
+        val secondLocation = Location(lat = 4.0, lon = 5.0, accuracy = 6f)
+
+        coordinator.dispatch(firstLocation)
+        nowMillis += 1_000
+        coordinator.dispatch(secondLocation)
+
+        assertThat(delivered).containsExactly(firstLocation, secondLocation).inOrder()
+    }
 }

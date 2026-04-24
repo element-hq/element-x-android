@@ -44,6 +44,7 @@ import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
@@ -65,10 +66,10 @@ class ShareLocationPresenterTest {
 
     private val durationFormatter = FakeDurationFormatter()
 
-    private fun createShareLocationPresenter(
+    private fun TestScope.createShareLocationPresenter(
         joinedRoom: JoinedRoom = FakeJoinedRoom(),
         locationActions: FakeLocationActions = fakeLocationActions,
-        liveLocationShareManager: FakeActiveLiveLocationShareManager = FakeActiveLiveLocationShareManager(),
+        liveLocationShareManager: FakeActiveLiveLocationShareManager = FakeActiveLiveLocationShareManager(sessionId = joinedRoom.sessionId),
     ): ShareLocationPresenter = ShareLocationPresenter(
         permissionsPresenterFactory = { fakePermissionsPresenter },
         room = joinedRoom,
@@ -81,6 +82,7 @@ class ShareLocationPresenterTest {
         client = fakeMatrixClient,
         durationFormatter = durationFormatter,
         liveLocationShareManager = liveLocationShareManager,
+        sessionCoroutineScope = backgroundScope,
     )
 
     @Test
@@ -458,7 +460,7 @@ class ShareLocationPresenterTest {
 
     @Test
     fun `StartLiveLocationShare event calls manager startShare`() = runTest {
-        val manager = FakeActiveLiveLocationShareManager()
+        val manager = FakeActiveLiveLocationShareManager(sessionId = A_SESSION_ID)
         val shareLocationPresenter = createShareLocationPresenter(liveLocationShareManager = manager)
         fakePermissionsPresenter.givenState(
             aPermissionsState(
