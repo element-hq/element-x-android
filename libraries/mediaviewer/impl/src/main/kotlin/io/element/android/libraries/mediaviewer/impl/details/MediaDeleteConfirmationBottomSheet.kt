@@ -46,6 +46,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.mediaviewer.impl.R
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.libraries.ui.strings.Strings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -149,7 +150,7 @@ private fun MediaRow(
             )
             // Info
             Text(
-                text = state.mediaInfo.mimeType + " - " + state.mediaInfo.formattedFileSize,
+                text = state.mediaInfo.mimeType + Strings.NICE_SEPARATOR + state.mediaInfo.formattedFileSize,
                 color = ElementTheme.colors.textSecondary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

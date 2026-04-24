@@ -49,6 +49,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.impl.R
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.libraries.ui.strings.Strings
 
 /**
  * Ref: https://www.figma.com/design/pDlJZGBsri47FNTXMnEdXB/Compound-Android-Templates?node-id=2229-149220
@@ -93,7 +94,7 @@ fun MediaDetailsBottomSheet(
             )
             SectionText(
                 title = stringResource(R.string.screen_media_details_file_format),
-                text = state.mediaInfo.mimeType + " - " + state.mediaInfo.formattedFileSize,
+                text = state.mediaInfo.mimeType + Strings.NICE_SEPARATOR + state.mediaInfo.formattedFileSize,
             )
             Spacer(modifier = Modifier.height(16.dp))
             if (state.eventId != null) {
