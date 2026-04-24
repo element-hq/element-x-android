@@ -14,6 +14,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.media.WaveFormSamples
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaviewer.api.MediaInfo
@@ -234,5 +236,7 @@ fun aMediaViewerState(
     snackbarMessage = null,
     canShowInfo = canShowInfo,
     mediaBottomSheetState = mediaBottomSheetState,
+    sessionId = SessionId("@alice:matrix.org"),
+    roomId = RoomId("!room:matrix.org"),
     eventSink = eventSink,
 )

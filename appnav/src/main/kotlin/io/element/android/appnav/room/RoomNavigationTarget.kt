@@ -22,6 +22,9 @@ sealed interface RoomNavigationTarget : Parcelable {
     ) : RoomNavigationTarget
 
     @Parcelize
+    data class MediaViewer(val eventId: EventId) : RoomNavigationTarget
+
+    @Parcelize
     data object Details : RoomNavigationTarget
 
     @Parcelize

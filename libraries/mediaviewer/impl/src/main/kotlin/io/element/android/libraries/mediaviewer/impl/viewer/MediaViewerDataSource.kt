@@ -180,6 +180,12 @@ class MediaViewerDataSource(
         val localMediaState = localMediaStates.getOrPut(data.mediaSource.safeUrl) {
             mutableStateOf(AsyncData.Uninitialized)
         }
+        // Skip if already successfully downloaded or already loading
+        when (localMediaState.value) {
+            is AsyncData.Success -> return
+            is AsyncData.Loading -> return
+            else -> Unit
+        }
         localMediaState.value = AsyncData.Loading()
         mediaLoader
             .downloadMediaFile(

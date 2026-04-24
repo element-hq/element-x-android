@@ -122,6 +122,7 @@ fun MediaPlayerControllerView(
                         )
                     }
                 }
+
                 Text(
                     modifier = Modifier
                         .widthIn(min = 48.dp)

@@ -29,6 +29,7 @@ dependencies {
     implementation(libs.coil.compose)
     implementation(libs.androidx.media3.exoplayer)
     implementation(libs.androidx.media3.ui)
+    implementation(libs.androidx.media3.session)
     implementation(libs.telephoto.zoomableimage)
     implementation(libs.vanniktech.blurhash)
     implementation(libs.telephoto.flick)
@@ -57,7 +58,6 @@ dependencies {
 
     testCommonDependencies(libs, true)
     testImplementation(projects.features.enterprise.test)
-    testImplementation(projects.libraries.audio.test)
     testImplementation(projects.libraries.dateformatter.test)
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.matrix.test)

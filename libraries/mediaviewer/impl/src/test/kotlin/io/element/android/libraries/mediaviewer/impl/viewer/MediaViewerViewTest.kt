@@ -257,7 +257,6 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setMedia
     setSafeContent {
         MediaViewerView(
             state = state,
-            audioFocus = null,
             textFileViewer = { _, _ -> },
             onBackClick = onBackClick,
         )
