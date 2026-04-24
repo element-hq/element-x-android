@@ -15,8 +15,6 @@ import io.element.android.features.startchat.api.ConfirmingStartDmWithMatrixUser
 import io.element.android.features.startchat.api.StartDMAction
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.di.SessionScope
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.StartDMResult
@@ -28,7 +26,6 @@ import io.element.android.services.analytics.api.AnalyticsService
 class DefaultStartDMAction(
     private val matrixClient: MatrixClient,
     private val analyticsService: AnalyticsService,
-    private val featureFlagService: FeatureFlagService,
 ) : StartDMAction {
     override suspend fun execute(
         matrixUser: MatrixUser,
@@ -50,7 +47,7 @@ class DefaultStartDMAction(
                 val identityState = matrixClient.encryptionService.getUserIdentity(matrixUser.userId, fallbackToServer = false).getOrNull()
                 actionState.value = ConfirmingStartDmWithMatrixUser(
                     matrixUser = matrixUser,
-                    isUserIdentityUnknown = featureFlagService.isFeatureEnabled(FeatureFlags.EnableKeyShareOnInvite) && identityState == null
+                    isUserIdentityUnknown = identityState == null
                 )
             }
         }
