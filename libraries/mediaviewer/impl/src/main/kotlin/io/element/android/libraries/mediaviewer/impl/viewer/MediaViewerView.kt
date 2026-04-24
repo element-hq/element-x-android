@@ -233,17 +233,17 @@ fun MediaViewerView(
                             isUserSelected = (state.listData[page] as? MediaViewerPageData.MediaViewerData)?.eventId == state.initiallySelectedEventId,
                         )
                         // Bottom bar
-                        AnimatedVisibility(visible = showOverlay, enter = fadeIn(), exit = fadeOut()) {
-                            Box(
-                                modifier = Modifier.fillMaxSize()
-                            ) {
-                                MediaViewerBottomBar(
-                                    modifier = Modifier.align(Alignment.BottomCenter),
-                                    showDivider = dataForPage.mediaInfo.mimeType.isMimeTypeVideo(),
-                                    caption = dataForPage.mediaInfo.caption,
-                                    onHeightChange = { bottomPaddingInPixels = it },
-                                )
-                            }
+                        AnimatedVisibility(
+                            visible = showOverlay,
+                            enter = fadeIn(),
+                            exit = fadeOut(),
+                            modifier = Modifier.align(Alignment.BottomCenter),
+                        ) {
+                            MediaViewerBottomBar(
+                                showDivider = dataForPage.mediaInfo.mimeType.isMimeTypeVideo(),
+                                caption = dataForPage.mediaInfo.caption,
+                                onHeightChange = { bottomPaddingInPixels = it },
+                            )
                         }
                     }
                 }
