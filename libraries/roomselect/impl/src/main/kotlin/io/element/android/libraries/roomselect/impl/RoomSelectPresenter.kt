@@ -70,16 +70,14 @@ class RoomSelectPresenter(
         fun handleEvent(event: RoomSelectEvents) {
             when (event) {
                 is RoomSelectEvents.SetSelectedRoom -> {
-                    selectedRooms = persistentListOf(event.room)
-                    // Restore for multi-selection
-//                    val index = selectedRooms.indexOfFirst { it.roomId == event.room.roomId }
-//                    selectedRooms = if (index >= 0) {
-//                        selectedRooms.removeAt(index)
-//                    } else {
-//                        selectedRooms.add(event.room)
-//                    }
+                    val index = selectedRooms.indexOfFirst { it.roomId == event.room.roomId }
+                    selectedRooms = if (index >= 0) {
+                        selectedRooms.removeAt(index)
+                    } else {
+                        selectedRooms.add(event.room)
+                    }
                 }
-                RoomSelectEvents.RemoveSelectedRoom -> selectedRooms = persistentListOf()
+                is RoomSelectEvents.RemoveSelectedRoom -> selectedRooms = selectedRooms.remove(event.room)
                 RoomSelectEvents.ToggleSearchActive -> isSearchActive = !isSearchActive
                 is RoomSelectEvents.UpdateVisibleRange -> coroutineScope.launch {
                     dataSource.updateVisibleRange(event.range)

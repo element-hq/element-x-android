@@ -9,6 +9,10 @@
 package io.element.android.libraries.roomselect.impl
 
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateContentSize
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -44,8 +48,8 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.theme.components.Checkbox
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
-import io.element.android.libraries.designsystem.theme.components.RadioButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.SearchBar
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
@@ -71,15 +75,12 @@ fun RoomSelectView(
     onSubmit: (List<RoomId>) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    @Suppress("UNUSED_PARAMETER")
     fun onRoomRemoved(roomInfo: SelectRoomInfo) {
-        // TODO toggle selection when multi-selection is enabled
-        state.eventSink(RoomSelectEvents.RemoveSelectedRoom)
+        state.eventSink(RoomSelectEvents.RemoveSelectedRoom(roomInfo))
     }
 
     @Composable
-    fun SelectedRoomsHelper(isForwarding: Boolean, selectedRooms: ImmutableList<SelectRoomInfo>) {
-        if (isForwarding) return
+    fun SelectedRoomsHelper(selectedRooms: ImmutableList<SelectRoomInfo>) {
         SelectedRooms(
             selectedRooms = selectedRooms,
             onRemoveRoom = ::onRoomRemoved,
@@ -147,11 +148,15 @@ fun RoomSelectView(
             ) { summaries ->
                 LazyColumn(state = lazyListState) {
                     item {
-                        SelectedRoomsHelper(
-                            // TODO state.isForwarding
-                            isForwarding = false,
-                            selectedRooms = state.selectedRooms
-                        )
+                        AnimatedVisibility(
+                            visible = state.selectedRooms.isNotEmpty(),
+                            enter = fadeIn(),
+                            exit = fadeOut()
+                        ) {
+                            SelectedRoomsHelper(
+                                selectedRooms = state.selectedRooms
+                            )
+                        }
                     }
                     items(summaries, key = { it.roomId.value }) { roomSummary ->
                         Column {
@@ -169,12 +174,18 @@ fun RoomSelectView(
             }
 
             if (!state.isSearchActive) {
-                // TODO restore for multi-selection
-//                SelectedRoomsHelper(
-//                    isForwarding = state.isForwarding,
-//                    selectedRooms = state.selectedRooms
-//                )
-                Spacer(modifier = Modifier.height(20.dp))
+                Column(modifier = Modifier.animateContentSize()) {
+                    AnimatedVisibility(
+                        visible = state.selectedRooms.isNotEmpty(),
+                        enter = fadeIn(),
+                        exit = fadeOut()
+                    ) {
+                        SelectedRoomsHelper(selectedRooms = state.selectedRooms)
+                    }
+                    if (state.selectedRooms.isEmpty()) {
+                        Spacer(modifier = Modifier.height(20.dp))
+                    }
+                }
 
                 if (state.resultState is SearchBarResultState.Results) {
                     LazyColumn(state = lazyListState) {
@@ -262,7 +273,10 @@ private fun RoomSummaryView(
                 )
             }
         }
-        RadioButton(selected = isSelected, onClick = { onSelection(roomInfo) })
+        Checkbox(
+            checked = isSelected,
+            onCheckedChange = { onSelection(roomInfo) }
+        )
     }
 }
 
