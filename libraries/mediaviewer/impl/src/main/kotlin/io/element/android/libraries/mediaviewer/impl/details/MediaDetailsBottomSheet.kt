@@ -25,6 +25,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -222,7 +224,10 @@ private fun ColumnScope.Title() {
     Text(
         modifier = Modifier
             .align(Alignment.CenterHorizontally)
-            .padding(top = 16.dp, bottom = 8.dp, start = 16.dp, end = 16.dp),
+            .padding(top = 16.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)
+            .semantics {
+                heading()
+            },
         text = stringResource(R.string.screen_media_details_title),
         textAlign = TextAlign.Center,
         style = ElementTheme.typography.fontBodyLgMedium,
