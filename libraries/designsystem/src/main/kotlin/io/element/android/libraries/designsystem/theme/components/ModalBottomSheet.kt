@@ -108,13 +108,11 @@ fun SheetState.hide(coroutineScope: CoroutineScope, then: suspend () -> Unit) {
     }
 }
 
-// This preview and its screenshots are blank, see: https://issuetracker.google.com/issues/283843380
 @Preview(group = PreviewGroup.BottomSheets)
 @Composable
 internal fun ModalBottomSheetLightPreview() =
     ElementPreviewLight { ContentToPreview() }
 
-// This preview and its screenshots are blank, see: https://issuetracker.google.com/issues/283843380
 @Preview(group = PreviewGroup.BottomSheets)
 @Composable
 internal fun ModalBottomSheetDarkPreview() =
