@@ -29,8 +29,9 @@ class DefaultUnifiedPushGatewayUrlResolver(
     ): String {
         return when (gatewayResult) {
             is UnifiedPushGatewayResolverResult.Error -> {
-                // Use previous gateway if any, or the provided one
-                unifiedPushStore.getPushGateway(instance) ?: gatewayResult.gateway
+                // Use previous gateway if any, or the default one
+                unifiedPushStore.getPushGateway(instance)
+                    ?: defaultPushGatewayHttpUrlProvider.provide()
             }
             UnifiedPushGatewayResolverResult.ErrorInvalidUrl,
             UnifiedPushGatewayResolverResult.NoMatrixGateway -> {
