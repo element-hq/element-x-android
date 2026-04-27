@@ -271,6 +271,7 @@ class WebViewAudioManager(
         Timber.d("Adding callback in controls.onAudioDeviceSelect")
         webView.evaluateJavascript("controls.onAudioDeviceSelect = (id) => { androidNativeBridge.setAudioDevice(id); };", null)
     }
+
     /**
      * Returns the list of available audio devices, sorted by likelihood of it being used for communication.
      *
