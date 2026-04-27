@@ -26,7 +26,7 @@ internal fun aCallScreenState(
     webViewError: String? = null,
     userAgent: String = "",
     isCallActive: Boolean = true,
-    eventSink: (CallScreenEvents) -> Unit = {},
+    eventSink: (CallScreenEvent) -> Unit = {},
 ): CallScreenState {
     return CallScreenState(
         urlState = urlState,

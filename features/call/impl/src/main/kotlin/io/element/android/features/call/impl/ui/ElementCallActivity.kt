@@ -79,7 +79,7 @@ class ElementCallActivity :
 
     private val webViewTarget = mutableStateOf<CallData?>(null)
 
-    private var eventSink: ((CallScreenEvents) -> Unit)? = null
+    private var eventSink: ((CallScreenEvent) -> Unit)? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -172,7 +172,7 @@ class ElementCallActivity :
                 pipEventSink(PictureInPictureEvents.OnPictureInPictureModeChanged(isInPictureInPictureMode))
                 if (!isInPictureInPictureMode && !lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
                     Timber.tag(loggerTag.value).d("Exiting PiP mode: Hangup the call")
-                    eventSink?.invoke(CallScreenEvents.Hangup)
+                    eventSink?.invoke(CallScreenEvent.Hangup)
                 }
             }
             addOnPictureInPictureModeChangedListener(onPictureInPictureModeChangedListener)
@@ -280,7 +280,7 @@ class ElementCallActivity :
     }
 
     override fun hangUp() {
-        eventSink?.invoke(CallScreenEvents.Hangup)
+        eventSink?.invoke(CallScreenEvent.Hangup)
     }
 }
 
