@@ -5,9 +5,9 @@
   <string name="banner_battery_optimization_title_android">"Nu primiți notificări?"</string>
   <string name="banner_new_sound_message">"Sunetul pentru notificări a fost actualizat — mai clar, mai rapid și mai puțin perturbatoar."</string>
   <string name="banner_new_sound_title">"Am reîmprospătat sunetele"</string>
-  <string name="banner_set_up_recovery_content">"Recuperați-vă identitatea criptografică și mesajele anterioare cu o cheie de recuperare dacă ați pierdut toate dispozitivele existente."</string>
-  <string name="banner_set_up_recovery_submit">"Configurați recuperarea"</string>
-  <string name="banner_set_up_recovery_title">"Configurați recuperarea pentru a vă proteja contul"</string>
+  <string name="banner_set_up_recovery_content">"Chaturile dumneavoastră sunt salvate automat cu criptare end-to-end. Pentru a restaura această copie de rezervă și a vă păstra identitatea digitală atunci când pierzdeți accesul la toate dispozitivele dumneavoastră, veți avea nevoie de cheia de recuperare."</string>
+  <string name="banner_set_up_recovery_submit">"Obțineți cheia de recuperare"</string>
+  <string name="banner_set_up_recovery_title">"Faceți un backup al mesajelor"</string>
   <string name="confirm_recovery_key_banner_message">"Backup-ul pentru chat nu este sincronizat. Trebuie să confirmați cheia de recuperare pentru a menține accesul la backup."</string>
   <string name="confirm_recovery_key_banner_primary_button_title">"Introduceți cheia de recuperare"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Ați uitat cheia de recuperare?"</string>

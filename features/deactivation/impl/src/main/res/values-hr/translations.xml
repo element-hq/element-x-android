@@ -10,5 +10,4 @@
   <string name="screen_deactivate_account_list_item_2">"Ukloniti vas iz svih soba za razgovore."</string>
   <string name="screen_deactivate_account_list_item_3">"Izbrisati podatke o vašem računu s našeg poslužitelja identiteta."</string>
   <string name="screen_deactivate_account_list_item_4">"Vaše će poruke i dalje biti vidljive registriranim korisnicima, ali neće biti dostupne novim ili neregistriranim korisnicima ako ih odlučite izbrisati."</string>
-  <string name="screen_deactivate_account_title">"Deaktiviraj račun"</string>
 </resources>

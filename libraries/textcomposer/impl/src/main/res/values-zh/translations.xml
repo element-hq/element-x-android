@@ -20,7 +20,7 @@
   <string name="rich_text_editor_format_underline">"应用下划线格式"</string>
   <string name="rich_text_editor_full_screen_toggle">"切换全屏模式"</string>
   <string name="rich_text_editor_indent">"缩进"</string>
-  <string name="rich_text_editor_inline_code">"应用行内代码格式"</string>
+  <string name="rich_text_editor_inline_code">"应用内联代码格式"</string>
   <string name="rich_text_editor_link">"设置链接"</string>
   <string name="rich_text_editor_numbered_list">"切换编号列表"</string>
   <string name="rich_text_editor_open_compose_options">"打开撰写选项"</string>

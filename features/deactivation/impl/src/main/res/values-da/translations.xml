@@ -10,5 +10,4 @@
   <string name="screen_deactivate_account_list_item_2">"Fjerne dig fra alle samtaler"</string>
   <string name="screen_deactivate_account_list_item_3">"Slette dine kontooplysninger fra vores identitetsserver."</string>
   <string name="screen_deactivate_account_list_item_4">"Dine beskeder vil stadig være synlige for registrerede brugere, men vil ikke være tilgængelige for nye eller uregistrerede brugere, hvis du vælger at slette dem."</string>
-  <string name="screen_deactivate_account_title">"Deaktiver konto"</string>
 </resources>

@@ -86,6 +86,8 @@
   <string name="action_deactivate_account">"アカウントを無効化"</string>
   <string name="action_decline">"拒否"</string>
   <string name="action_decline_and_block">"拒否してブロック"</string>
+  <string name="action_delete">"削除"</string>
+  <string name="action_delete_account">"アカウントを削除"</string>
   <string name="action_delete_poll">"投票を削除"</string>
   <string name="action_deselect_all">"全ての選択を解除"</string>
   <string name="action_disable">"無効化"</string>

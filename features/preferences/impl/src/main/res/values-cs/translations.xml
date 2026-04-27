@@ -11,6 +11,15 @@
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Skrýt avatary v žádostech o pozvání do místnosti"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Skrýt náhledy médií na časové ose"</string>
   <string name="screen_advanced_settings_labs">"Experimentální funkce"</string>
+  <string name="screen_advanced_settings_live_location_section_description">"Vzdálenost, kterou musíte urazit, aby se spustila aktualizace."</string>
+  <string name="screen_advanced_settings_live_location_section_footer">"Ujistěte se, že je pro tuto aplikaci povolena možnost \"Přesná poloha\". Chcete-li změnit oprávnění, přejděte do %1$s."</string>
+  <string name="screen_advanced_settings_live_location_section_footer_link">"Nastavení aplikace"</string>
+  <string name="screen_advanced_settings_live_location_section_title">"Aktuální informace o poloze"</string>
+  <plurals name="screen_advanced_settings_live_location_update_distance">
+    <item quantity="one">"Každý %1$d metr"</item>
+    <item quantity="few">"Každé %1$d metry"</item>
+    <item quantity="other">"Každých %1$d metrů"</item>
+  </plurals>
   <string name="screen_advanced_settings_media_compression_description">"Rychlejší nahrávání fotografií a videí a snížení spotřeby dat"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimalizace kvality médií"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderování a bezpečnost"</string>
