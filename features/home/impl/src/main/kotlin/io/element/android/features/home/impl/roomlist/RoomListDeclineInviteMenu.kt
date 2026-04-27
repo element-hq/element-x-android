@@ -19,10 +19,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.appconfig.ProtectionConfig
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.home.impl.R
 import io.element.android.features.home.impl.model.RoomListRoomSummary
+import io.element.android.libraries.core.extensions.toSafeLength
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -44,7 +47,11 @@ fun RoomListDeclineInviteMenu(
         onDismissRequest = { eventSink(RoomListEvent.HideDeclineInviteMenu) },
     ) {
         RoomListDeclineInviteMenuContent(
-            roomName = menu.roomSummary.name ?: menu.roomSummary.roomId.value,
+            roomName = menu.roomSummary.name?.toSafeLength(
+                maxLength = ProtectionConfig.MAX_ROOM_NAME_LENGTH,
+                ellipsize = true,
+            )
+                ?: menu.roomSummary.roomId.value,
             onDeclineClick = {
                 eventSink(RoomListEvent.HideDeclineInviteMenu)
                 eventSink(RoomListEvent.DeclineInvite(menu.roomSummary, false))
@@ -112,16 +119,15 @@ private fun RoomListDeclineInviteMenuContent(
     }
 }
 
-// TODO This component should be seen in [RoomListView] @Preview but it doesn't show up.
-// see: https://issuetracker.google.com/issues/283843380
-// Remove this preview when the issue is fixed.
 @PreviewsDayNight
 @Composable
-internal fun RoomListDeclineInviteMenuContentPreview() = ElementPreview {
-    RoomListDeclineInviteMenuContent(
-        roomName = "Room name",
-        onCancelClick = {},
-        onDeclineClick = {},
+internal fun RoomListDeclineInviteMenuContentPreview(
+    @PreviewParameter(RoomListStateDeclineInviteMenuShownProvider::class) menu: RoomListState.DeclineInviteMenu.Shown,
+) = ElementPreview {
+    RoomListDeclineInviteMenu(
+        menu = menu,
+        canReportRoom = false,
         onDeclineAndBlockClick = {},
+        eventSink = {},
     )
 }
