@@ -11,11 +11,12 @@
   <string name="screen_media_browser_list_mode_media">"媒体"</string>
   <string name="screen_media_browser_media_empty_state_subtitle">"上传到此房间的图像和视频将在此处显示。"</string>
   <string name="screen_media_browser_media_empty_state_title">"尚未上传任何媒体"</string>
-  <string name="screen_media_browser_title">"媒体和文件"</string>
+  <string name="screen_media_browser_title">"媒体与文件"</string>
   <string name="screen_media_details_file_format">"文件格式"</string>
   <string name="screen_media_details_filename">"文件名"</string>
   <string name="screen_media_details_no_more_files_to_show">"没有更多文件可显示了"</string>
   <string name="screen_media_details_no_more_media_to_show">"没有更多媒体可显示了"</string>
+  <string name="screen_media_details_title">"文件信息"</string>
   <string name="screen_media_details_uploaded_by">"上传者："</string>
   <string name="screen_media_details_uploaded_on">"上传于"</string>
 </resources>

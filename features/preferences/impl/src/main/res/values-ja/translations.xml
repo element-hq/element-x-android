@@ -11,6 +11,13 @@
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"ルームへの招待リクエストにアバターを表示しない"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"タイムラインにメディアのプレビューを表示しない"</string>
   <string name="screen_advanced_settings_labs">"ラボ"</string>
+  <string name="screen_advanced_settings_live_location_section_description">"更新するのに必要な移動距離です。"</string>
+  <string name="screen_advanced_settings_live_location_section_footer">"「正確な位置情報」がこのアプリで使用可能なことを確認してください。権限を変更するには %1$s を開いてください。"</string>
+  <string name="screen_advanced_settings_live_location_section_footer_link">"アプリ設定"</string>
+  <string name="screen_advanced_settings_live_location_section_title">"ライブ位置情報の更新"</string>
+  <plurals name="screen_advanced_settings_live_location_update_distance">
+    <item quantity="other">"%1$dm ごと"</item>
+  </plurals>
   <string name="screen_advanced_settings_media_compression_description">"写真や動画を高速で送信してデータ使用量を減らす"</string>
   <string name="screen_advanced_settings_media_compression_title">"メディアの品質を最適化"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"制限と安全"</string>

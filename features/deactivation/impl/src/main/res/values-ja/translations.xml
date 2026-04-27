@@ -10,5 +10,5 @@
   <string name="screen_deactivate_account_list_item_2">"すべてのチャットルームから退出します。"</string>
   <string name="screen_deactivate_account_list_item_3">"アカウント提供元サーバーからアカウント情報を削除します。"</string>
   <string name="screen_deactivate_account_list_item_4">"あなたの会話は、既存ユーザーには引き続き表示されますが、新規ユーザーには表示されなくなります。"</string>
-  <string name="screen_deactivate_account_title">"アカウントを無効化"</string>
+  <string name="screen_deactivate_account_title">"アカウントを削除"</string>
 </resources>

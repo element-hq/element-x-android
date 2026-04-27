@@ -306,7 +306,7 @@ Motiv:%1$s."</string>
   <string name="common_rich_text_editor">"Editor text avansat"</string>
   <string name="common_room">"Cameră"</string>
   <string name="common_room_name">"Numele camerei"</string>
-  <string name="common_room_name_placeholder">"de exemplu, numele proiectului dvs."</string>
+  <string name="common_room_name_placeholder">"de exemplu, numele proiectului dumneavoastră"</string>
   <plurals name="common_rooms">
     <item quantity="one">"%1$d Camera"</item>
     <item quantity="few">"%1$d Camere"</item>
@@ -332,7 +332,7 @@ Motiv:%1$s."</string>
   <string name="common_share_space">"Partajați spațiul"</string>
   <string name="common_shared_location">"Locație partajată"</string>
   <string name="common_shared_space">"Spațiu comun"</string>
-  <string name="common_signing_out">"Deconectare în curs"</string>
+  <string name="common_signing_out">"Eliminare în curs"</string>
   <string name="common_something_went_wrong">"Ceva nu a mers bine"</string>
   <string name="common_something_went_wrong_message">"Am întâmpinat o problemă. Vă rugăm să încercați din nou."</string>
   <string name="common_space">"Spațiu"</string>
@@ -356,7 +356,7 @@ Motiv:%1$s."</string>
   <string name="common_unable_to_decrypt">"Nu s-a putut decripta"</string>
   <string name="common_unable_to_decrypt_insecure_device">"Trimis de pe un dispozitiv nesigur"</string>
   <string name="common_unable_to_decrypt_no_access">"Nu aveți acces la acest mesaj"</string>
-  <string name="common_unable_to_decrypt_verification_violation">"Identitatea verificată a expeditorului a fost resetată"</string>
+  <string name="common_unable_to_decrypt_verification_violation">"Identitatea digitala verificată a expeditorului a fost resetată"</string>
   <string name="common_unable_to_invite_message">"Nu am putut trimite invitații unuia sau mai multor utilizatori."</string>
   <string name="common_unable_to_invite_title">"Nu s-a putut trimite invitația (invitațiile)"</string>
   <string name="common_unlock">"Deblocare"</string>
@@ -383,8 +383,8 @@ Motiv:%1$s."</string>
   <string name="common_waiting_for_decryption_key">"Mesaj în așteptare"</string>
   <string name="common_you">"Dumneavoastră"</string>
   <string name="crypto_history_visible">"Această cameră a fost configurată astfel încât noii membri să poată citi istoricul. %1$s"</string>
-  <string name="crypto_identity_change_pin_violation">"Identitatea lui %1$s a fost resetată. %2$s"</string>
-  <string name="crypto_identity_change_pin_violation_new">"Identitatea %2$s a lui %1$s a fost resetată. %3$s"</string>
+  <string name="crypto_identity_change_pin_violation">"Identitatea digitala lui %1$s a fost resetată. %2$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"Identitatea digitala %2$s a lui %1$s a fost resetată. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
   <string name="crypto_identity_change_profile_pin_violation">"Identitatea lui %1$s a fost resetată."</string>
   <string name="crypto_identity_change_verification_violation_new">"Identitatea %2$s a lui %1$s a fost resetată. %3$s"</string>
@@ -445,11 +445,11 @@ Sunteți sigur că doriți să continuați?"</string>
     <item quantity="other">"%1$d Mesaje fixate"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Mesaje fixate"</string>
-  <string name="screen_reset_identity_confirmation_subtitle">"Urmează să accesați contul dvs. %1$s pentru a vă reseta identitatea. După aceea, veți fi redirecționat către aplicație."</string>
-  <string name="screen_reset_identity_confirmation_title">"Nu puteți confirma? Accesați contul dvs. pentru a vă reseta identitatea."</string>
+  <string name="screen_reset_identity_confirmation_subtitle">"Urmează să accesați contul dvs. %1$s pentru a vă reseta identitatea digitală. După aceea, veți fi redirecționat către aplicație."</string>
+  <string name="screen_reset_identity_confirmation_title">"Nu puteți confirma? Accesați contul dumneavoastră pentru a vă reseta identitatea digitală."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Retrageți verificarea și trimiteți"</string>
   <string name="screen_resolve_send_failure_changed_identity_subtitle">"Puteți să vă retrageți verificarea și să trimiteți acest mesaj oricum, sau puteți anula pentru moment și să încercați din nou mai târziu după reverificarea lui %1$s."</string>
-  <string name="screen_resolve_send_failure_changed_identity_title">"Mesajul dumneavoastră nu a fost trimis deoarece identitatea verificată a lui %1$s s-a schimbat"</string>
+  <string name="screen_resolve_send_failure_changed_identity_title">"Mesajul dumneavoastră nu a fost trimis deoarece identitatea digitala verificată a lui %1$s s-a schimbat"</string>
   <string name="screen_resolve_send_failure_unsigned_device_primary_button_title">"Trimiteți mesajul oricum"</string>
   <string name="screen_resolve_send_failure_unsigned_device_subtitle">"%1$s utilizează unul sau mai multe dispozitive neverificate. Puteți trimite mesajul oricum sau puteți anula pentru moment și puteți încerca din nou mai târziu, după ce %2$s își va verifica toate dispozitivele."</string>
   <string name="screen_resolve_send_failure_unsigned_device_title">"Mesajul dvs. nu a fost trimis deoarece %1$s nu si-a verificat toate dispozitivele"</string>
@@ -472,12 +472,12 @@ Sunteți sigur că doriți să continuați?"</string>
   <string name="screen_share_open_apple_maps">"Deschideți în Apple Maps"</string>
   <string name="screen_share_open_google_maps">"Deschideți în Google Maps"</string>
   <string name="screen_share_open_osm_maps">"Deschideți în OpenStreetMap"</string>
-  <string name="screen_share_this_location_action">"Distribuiți această locație"</string>
+  <string name="screen_share_this_location_action">"Partajați locația selectată"</string>
   <string name="screen_space_list_description">"Spații pe care le-ați creat sau la care v-ați alăturat."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_parent_space">"Spațiu %1$s"</string>
   <string name="screen_space_list_title">"Spații"</string>
-  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Mesajul nu a fost trimis deoarece identitatea verificată a lui %1$s s-a schimbat."</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Mesajul nu a fost trimis deoarece identitatea digitala verificată a lui %1$s s-a schimbat."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Mesajul nu a fost trimis deoarece %1$s nu a verificat toate dispozitivele."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Mesajul nu a fost trimis deoarece nu ați verificat unul sau mai multe dispozitive."</string>
   <string name="screen_view_location_title">"Locație"</string>
