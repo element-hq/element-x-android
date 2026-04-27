@@ -33,7 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.viewinterop.AndroidView
 import io.element.android.features.call.impl.R
-import io.element.android.features.call.impl.pip.PictureInPictureEvents
+import io.element.android.features.call.impl.pip.PictureInPictureEvent
 import io.element.android.features.call.impl.pip.PictureInPictureState
 import io.element.android.features.call.impl.pip.aPictureInPictureState
 import io.element.android.features.call.impl.utils.InvalidAudioDeviceReason
@@ -66,7 +66,7 @@ internal fun CallScreenView(
 ) {
     fun handleBack() {
         if (pipState.supportPip) {
-            pipState.eventSink.invoke(PictureInPictureEvents.EnterPictureInPicture)
+            pipState.eventSink.invoke(PictureInPictureEvent.EnterPictureInPicture)
         } else {
             state.eventSink(CallScreenEvent.Hangup)
         }
@@ -132,7 +132,7 @@ internal fun CallScreenView(
                     )
                     state.eventSink(CallScreenEvent.SetupMessageChannels(interceptor))
                     val pipController = WebViewPipController(webView)
-                    pipState.eventSink(PictureInPictureEvents.SetPipController(pipController))
+                    pipState.eventSink(PictureInPictureEvent.SetPipController(pipController))
                 },
                 onDestroyWebView = {
                     // Reset audio mode
