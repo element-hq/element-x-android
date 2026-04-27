@@ -75,6 +75,7 @@ fun ResolveVerifiedUserSendFailureView(
                     .navigationBarsPadding(),
                 sheetState = sheetState,
                 onDismissRequest = ::dismiss,
+                scrollable = true,
             ) {
                 IconTitleSubtitleMolecule(
                     modifier = Modifier.padding(24.dp),

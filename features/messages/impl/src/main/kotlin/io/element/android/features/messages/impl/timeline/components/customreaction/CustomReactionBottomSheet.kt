@@ -50,7 +50,8 @@ fun CustomReactionBottomSheet(
         ModalBottomSheet(
             onDismissRequest = ::onDismiss,
             sheetState = sheetState,
-            modifier = modifier
+            modifier = modifier,
+            scrollable = false,
         ) {
             val presenter = remember {
                 EmojiPickerPresenter(

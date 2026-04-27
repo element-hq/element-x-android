@@ -11,6 +11,8 @@ package io.element.android.features.home.impl.roomlist
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -43,6 +45,7 @@ fun RoomListContextMenu(
 ) {
     ModalBottomSheet(
         onDismissRequest = { eventSink(RoomListEvent.HideContextMenu) },
+        scrollable = false,
     ) {
         RoomListModalBottomSheetContent(
             contextMenu = contextMenu,
@@ -91,7 +94,9 @@ private fun RoomListModalBottomSheetContent(
     onReportRoomClick: () -> Unit,
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
+            .verticalScroll(rememberScrollState())
     ) {
         ListItem(
             headlineContent = {

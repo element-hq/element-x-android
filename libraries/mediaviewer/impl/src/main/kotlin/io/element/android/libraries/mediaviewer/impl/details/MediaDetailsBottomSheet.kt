@@ -72,6 +72,7 @@ fun MediaDetailsBottomSheet(
     ModalBottomSheet(
         modifier = modifier,
         onDismissRequest = onDismiss,
+        scrollable = false,
     ) {
         Column(
             modifier = Modifier
