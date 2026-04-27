@@ -20,6 +20,7 @@ enum class RoomListFilter(val stringResource: Int) {
     People(R.string.screen_roomlist_filter_people),
     Rooms(R.string.screen_roomlist_filter_rooms),
     Favourites(R.string.screen_roomlist_filter_favourites),
+    LowPriority(R.string.screen_roomlist_filter_low_priority),
     Invites(R.string.screen_roomlist_filter_invites);
 
     val incompatibleFilters: Set<RoomListFilter>
@@ -27,8 +28,9 @@ enum class RoomListFilter(val stringResource: Int) {
             Rooms -> setOf(People, Invites)
             People -> setOf(Rooms, Invites)
             Unread -> setOf(Invites)
-            Favourites -> setOf(Invites)
-            Invites -> setOf(Rooms, People, Unread, Favourites)
+            Favourites -> setOf(Invites, LowPriority)
+            LowPriority -> setOf(Invites, Favourites)
+            Invites -> setOf(Rooms, People, Unread, Favourites, LowPriority)
         }
 }
 
@@ -38,6 +40,7 @@ fun RoomListFilter.into(): MatrixRoomListFilter {
         RoomListFilter.People -> MatrixRoomListFilter.Category.People
         RoomListFilter.Unread -> MatrixRoomListFilter.Unread
         RoomListFilter.Favourites -> MatrixRoomListFilter.Favorite
+        RoomListFilter.LowPriority -> MatrixRoomListFilter.LowPriority
         RoomListFilter.Invites -> MatrixRoomListFilter.Invite
     }
 }

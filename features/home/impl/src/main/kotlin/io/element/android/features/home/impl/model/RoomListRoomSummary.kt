@@ -38,6 +38,7 @@ data class RoomListRoomSummary(
     val isDirect: Boolean,
     val isDm: Boolean,
     val isFavorite: Boolean,
+    val isLowPriority: Boolean,
     val inviteSender: InviteSender?,
     val isTombstoned: Boolean,
     val heroes: ImmutableList<AvatarData>,

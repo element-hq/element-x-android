@@ -31,6 +31,7 @@ class RoomListFiltersPresenterTest {
                     filterSelectionState(RoomListFilter.People, false),
                     filterSelectionState(RoomListFilter.Rooms, false),
                     filterSelectionState(RoomListFilter.Favourites, false),
+                    filterSelectionState(RoomListFilter.LowPriority, false),
                     filterSelectionState(RoomListFilter.Invites, false),
                 )
             }
@@ -50,6 +51,7 @@ class RoomListFiltersPresenterTest {
                     filterSelectionState(RoomListFilter.Rooms, true),
                     filterSelectionState(RoomListFilter.Unread, false),
                     filterSelectionState(RoomListFilter.Favourites, false),
+                    filterSelectionState(RoomListFilter.LowPriority, false),
                 ).inOrder()
 
                 assertThat(state.selectedFilters()).containsExactly(
@@ -65,6 +67,7 @@ class RoomListFiltersPresenterTest {
                     filterSelectionState(RoomListFilter.People, false),
                     filterSelectionState(RoomListFilter.Rooms, false),
                     filterSelectionState(RoomListFilter.Favourites, false),
+                    filterSelectionState(RoomListFilter.LowPriority, false),
                     filterSelectionState(RoomListFilter.Invites, false),
                 ).inOrder()
                 assertThat(state.selectedFilters()).isEmpty()
@@ -85,6 +88,45 @@ class RoomListFiltersPresenterTest {
             advanceUntilIdle()
             awaitLastSequentialItem().let { state ->
                 assertThat(state.hasAnyFilterSelected).isFalse()
+            }
+        }
+    }
+
+    @Test
+    fun `present - selecting low priority excludes favourites and invites`() = runTest {
+        val presenter = createRoomListFiltersPresenter()
+        presenter.test {
+            awaitItem().eventSink.invoke(RoomListFiltersEvent.ToggleFilter(RoomListFilter.LowPriority))
+            awaitLastSequentialItem().let { state ->
+                assertThat(state.hasAnyFilterSelected).isTrue()
+                assertThat(state.selectedFilters()).containsExactly(RoomListFilter.LowPriority)
+
+                // Verify that Favourites and Invites are not in the filter selection states
+                val filterStates = state.filterSelectionStates
+                assertThat(filterStates.none { it.filter == RoomListFilter.Favourites }).isTrue()
+                assertThat(filterStates.none { it.filter == RoomListFilter.Invites }).isTrue()
+
+                // Verify LowPriority is selected
+                assertThat(filterStates.any { it.filter == RoomListFilter.LowPriority && it.isSelected }).isTrue()
+            }
+        }
+    }
+
+    @Test
+    fun `present - selecting favourites excludes low priority`() = runTest {
+        val presenter = createRoomListFiltersPresenter()
+        presenter.test {
+            awaitItem().eventSink.invoke(RoomListFiltersEvent.ToggleFilter(RoomListFilter.Favourites))
+            awaitLastSequentialItem().let { state ->
+                assertThat(state.hasAnyFilterSelected).isTrue()
+                assertThat(state.selectedFilters()).containsExactly(RoomListFilter.Favourites)
+
+                // Verify that LowPriority is not in the filter selection states
+                val filterStates = state.filterSelectionStates
+                assertThat(filterStates.none { it.filter == RoomListFilter.LowPriority }).isTrue()
+
+                // Verify Favourites is selected
+                assertThat(filterStates.any { it.filter == RoomListFilter.Favourites && it.isSelected }).isTrue()
             }
         }
     }

@@ -104,6 +104,7 @@ internal fun createRoomListRoomSummary(
     activeCallIntent = null,
     isDirect = false,
     isFavorite = isFavorite,
+    isLowPriority = false,
     canonicalAlias = null,
     inviteSender = null,
     isDm = false,

@@ -57,6 +57,15 @@ class RoomListFiltersEmptyStateResourcesTest {
     }
 
     @Test
+    fun `fromSelectedFilters should return exact RoomListFiltersEmptyStateResources when selectedFilters has only low priority filter`() {
+        val selectedFilters = listOf(RoomListFilter.LowPriority)
+        val result = RoomListFiltersEmptyStateResources.fromSelectedFilters(selectedFilters, isSpaceFilterSelected = false)
+        assertThat(result).isNotNull()
+        assertThat(result?.title).isEqualTo(R.string.screen_roomlist_filter_low_priority_empty_state_title)
+        assertThat(result?.subtitle).isEqualTo(R.string.screen_roomlist_filter_mixed_empty_state_subtitle)
+    }
+
+    @Test
     fun `fromSelectedFilters should return exact RoomListFiltersEmptyStateResources when selectedFilters has only invites filter`() {
         val selectedFilters = listOf(RoomListFilter.Invites)
         val result = RoomListFiltersEmptyStateResources.fromSelectedFilters(selectedFilters, isSpaceFilterSelected = false)

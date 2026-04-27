@@ -89,6 +89,7 @@ import org.junit.Rule
 import org.junit.Test
 import kotlin.time.Duration.Companion.seconds
 
+@Suppress("LargeClass")
 class RoomListPresenterTest {
     @get:Rule
     val warmUpRule = WarmUpRule()
@@ -226,6 +227,7 @@ class RoomListPresenterTest {
                             roomName = summary.name,
                             isDm = false,
                             isFavorite = false,
+                            isLowPriority = false,
                             hasNewContent = false,
                             displayClearRoomCacheAction = false,
                         )
@@ -243,6 +245,25 @@ class RoomListPresenterTest {
                             roomName = summary.name,
                             isDm = false,
                             isFavorite = true,
+                            isLowPriority = false,
+                            hasNewContent = false,
+                            displayClearRoomCacheAction = false,
+                        )
+                    )
+            }
+
+            room.givenRoomInfo(
+                aRoomInfo(isLowPriority = true)
+            )
+            awaitItem().also { state ->
+                assertThat(state.contextMenu)
+                    .isEqualTo(
+                        RoomListState.ContextMenu.Shown(
+                            roomId = summary.roomId,
+                            roomName = summary.name,
+                            isDm = false,
+                            isFavorite = false,
+                            isLowPriority = true,
                             hasNewContent = false,
                             displayClearRoomCacheAction = false,
                         )
@@ -270,6 +291,7 @@ class RoomListPresenterTest {
                             roomName = summary.name,
                             isDm = false,
                             isFavorite = false,
+                            isLowPriority = false,
                             // true here.
                             hasNewContent = false,
                             displayClearRoomCacheAction = true,
@@ -299,6 +321,7 @@ class RoomListPresenterTest {
                         roomName = summary.name,
                         isDm = false,
                         isFavorite = false,
+                        isLowPriority = false,
                         hasNewContent = false,
                         displayClearRoomCacheAction = false,
                     )
@@ -408,6 +431,30 @@ class RoomListPresenterTest {
                 Interaction(name = Interaction.Name.MobileRoomListRoomContextMenuFavouriteToggle),
                 Interaction(name = Interaction.Name.MobileRoomListRoomContextMenuFavouriteToggle)
             )
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - when set is low priority event is emitted, then the action is called`() = runTest {
+        val setIsLowPriorityResult = lambdaRecorder { _: Boolean -> Result.success(Unit) }
+        val room = FakeBaseRoom(
+            setIsLowPriorityResult = setIsLowPriorityResult
+        )
+        val client = FakeMatrixClient().apply {
+            givenGetRoomResult(A_ROOM_ID, room)
+        }
+        val presenter = createRoomListPresenter(client = client)
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(RoomListEvent.SetRoomIsLowPriority(A_ROOM_ID, true))
+            setIsLowPriorityResult.assertions().isCalledOnce().with(value(true))
+            initialState.eventSink(RoomListEvent.SetRoomIsLowPriority(A_ROOM_ID, false))
+            setIsLowPriorityResult.assertions().isCalledExactly(2)
+                .withSequence(
+                    listOf(value(true)),
+                    listOf(value(false)),
+                )
             cancelAndIgnoreRemainingEvents()
         }
     }

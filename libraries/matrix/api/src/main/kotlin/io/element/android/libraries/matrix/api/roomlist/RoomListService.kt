@@ -44,11 +44,13 @@ interface RoomListService {
      * Creates a room list that can be used to load more rooms and filter them dynamically.
      * @param pageSize the number of rooms to load at once.
      * @param source the source of the rooms, either all rooms or invites.
+     * @param filter the initial filter to apply before any dynamic updates.
      * @param coroutineScope the coroutine scope to use for the room list operations.
      */
     fun createRoomList(
         pageSize: Int,
         source: RoomList.Source,
+        filter: RoomListFilter,
         coroutineScope: CoroutineScope,
     ): DynamicRoomList
 
