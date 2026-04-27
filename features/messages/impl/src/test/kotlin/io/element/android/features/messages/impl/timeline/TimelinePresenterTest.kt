@@ -20,6 +20,7 @@ import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.typing.aTypingNotificationState
 import io.element.android.features.messages.impl.voicemessages.timeline.FakeRedactedVoiceMessageManager
+import io.element.android.features.messages.impl.voicemessages.timeline.FakeVoiceMessageAutoplayManager
 import io.element.android.features.messages.impl.voicemessages.timeline.RedactedVoiceMessageManager
 import io.element.android.features.messages.impl.voicemessages.timeline.aRedactedMatrixTimeline
 import io.element.android.features.poll.api.actions.EndPollAction
@@ -60,6 +61,7 @@ import io.element.android.libraries.matrix.test.timeline.aMessageContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
+import io.element.android.libraries.voiceplayer.api.VoiceMessageAutoplayManager
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.awaitLastSequentialItem
@@ -1006,6 +1008,7 @@ class TimelinePresenterTest {
             ),
         ),
         redactedVoiceMessageManager: RedactedVoiceMessageManager = FakeRedactedVoiceMessageManager(),
+        voiceMessageAutoplayManager: VoiceMessageAutoplayManager = FakeVoiceMessageAutoplayManager(),
         messagesNavigator: FakeMessagesNavigator = FakeMessagesNavigator(),
         endPollAction: EndPollAction = FakeEndPollAction(),
         sendPollResponseAction: SendPollResponseAction = FakeSendPollResponseAction(),
@@ -1020,6 +1023,7 @@ class TimelinePresenterTest {
             sessionCoroutineScope = this,
             navigator = messagesNavigator,
             redactedVoiceMessageManager = redactedVoiceMessageManager,
+            voiceMessageAutoplayManager = voiceMessageAutoplayManager,
             endPollAction = endPollAction,
             sendPollResponseAction = sendPollResponseAction,
             sessionPreferencesStore = sessionPreferencesStore,

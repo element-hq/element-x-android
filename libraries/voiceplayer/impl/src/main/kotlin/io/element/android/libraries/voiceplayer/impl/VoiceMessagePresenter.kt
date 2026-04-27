@@ -23,6 +23,7 @@ import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.ui.utils.time.formatShort
+import io.element.android.libraries.voiceplayer.api.VoiceMessageAutoplayManager
 import io.element.android.libraries.voiceplayer.api.VoiceMessageEvent
 import io.element.android.libraries.voiceplayer.api.VoiceMessageException
 import io.element.android.libraries.voiceplayer.api.VoiceMessageState
@@ -37,6 +38,7 @@ class VoiceMessagePresenter(
     private val sessionCoroutineScope: CoroutineScope,
     private val voicePlayerStore: VoicePlayerStore,
     private val player: VoiceMessagePlayer,
+    private val autoplayManager: VoiceMessageAutoplayManager,
     private val eventId: EventId?,
     private val duration: Duration,
 ) : Presenter<VoiceMessageState> {
@@ -59,6 +61,15 @@ class VoiceMessagePresenter(
 
         LaunchedEffect(playbackSpeedIndex) {
             player.setPlaybackSpeed(VoicePlayerConfig.availablePlaybackSpeeds[playbackSpeedIndex])
+        }
+
+        // Listen for autoplay reset requests to reset position to 0:00
+        LaunchedEffect(Unit) {
+            autoplayManager.resetRequests.collect { resetEventId ->
+                if (resetEventId == eventId) {
+                    player.seekTo(0L)
+                }
+            }
         }
 
         val buttonType by remember {
@@ -99,6 +110,8 @@ class VoiceMessagePresenter(
             when (event) {
                 is VoiceMessageEvent.PlayPause -> {
                     if (playerState.isPlaying) {
+                        // User manually paused — cancel any ongoing autoplay chain
+                        autoplayManager.cancelAutoplay()
                         player.pause()
                     } else if (playerState.isReady) {
                         player.play()

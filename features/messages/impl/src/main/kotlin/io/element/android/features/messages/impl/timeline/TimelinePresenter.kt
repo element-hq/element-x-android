@@ -32,6 +32,7 @@ import io.element.android.features.messages.impl.timeline.factories.TimelineItem
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactoryConfig
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemTypingNotificationModel
 import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.features.messages.impl.userEventPermissions
@@ -55,6 +56,8 @@ import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
+import io.element.android.libraries.voiceplayer.api.AutoplayTimelineItemInfo
+import io.element.android.libraries.voiceplayer.api.VoiceMessageAutoplayManager
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.DisplayFirstTimelineItems
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.NotificationToMessage
 import io.element.android.services.analytics.api.AnalyticsLongRunningTransaction.OpenRoom
@@ -84,6 +87,7 @@ class TimelinePresenter(
     private val sessionCoroutineScope: CoroutineScope,
     @Assisted private val navigator: MessagesNavigator,
     private val redactedVoiceMessageManager: RedactedVoiceMessageManager,
+    private val voiceMessageAutoplayManager: VoiceMessageAutoplayManager,
     private val sendPollResponseAction: SendPollResponseAction,
     private val endPollAction: EndPollAction,
     private val sessionPreferencesStore: SessionPreferencesStore,
@@ -243,6 +247,33 @@ class TimelinePresenter(
                 .onEach { newTimelineItems ->
                     timelineItemIndexer.process(newTimelineItems)
                     timelineItems = newTimelineItems
+
+                    // Feed autoplay manager with current timeline items
+                    voiceMessageAutoplayManager.updateTimelineItems(
+                        newTimelineItems.map { item ->
+                            when (item) {
+                                is TimelineItem.Event -> {
+                                    val voiceContent = item.content as? TimelineItemVoiceContent
+                                    AutoplayTimelineItemInfo(
+                                        eventId = item.eventId,
+                                        isVoiceMessage = voiceContent != null,
+                                        mediaSource = voiceContent?.mediaSource,
+                                        mimeType = voiceContent?.mimeType,
+                                        filename = voiceContent?.filename,
+                                        duration = voiceContent?.duration,
+                                    )
+                                }
+                                else -> AutoplayTimelineItemInfo(
+                                    eventId = null,
+                                    isVoiceMessage = false,
+                                    mediaSource = null,
+                                    mimeType = null,
+                                    filename = null,
+                                    duration = null,
+                                )
+                            }
+                        }
+                    )
 
                     analyticsService.run {
                         finishLongRunningTransaction(DisplayFirstTimelineItems)
