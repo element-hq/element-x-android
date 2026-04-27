@@ -8,7 +8,7 @@
 package io.element.android.libraries.push.impl.notifications
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.call.api.CallType
+import io.element.android.features.call.api.CallData
 import io.element.android.features.call.test.FakeElementCallEntryPoint
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -104,7 +104,7 @@ class DefaultNotificationResultProcessorTest {
     @Test
     fun `when ringing call PushData is received, the incoming call will be handled`() = runTest {
         val handleIncomingCallLambda = lambdaRecorder<
-            CallType.RoomCall,
+            CallData,
             EventId,
             UserId,
             String?,
@@ -140,7 +140,7 @@ class DefaultNotificationResultProcessorTest {
     fun `when notify call PushData is received, the incoming call will be treated as a normal notification`() = runTest {
         val onNotifiableEventsReceived = lambdaRecorder<List<NotifiableEvent>, Unit> {}
         val handleIncomingCallLambda = lambdaRecorder<
-            CallType.RoomCall,
+            CallData,
             EventId,
             UserId,
             String?,
@@ -176,7 +176,7 @@ class DefaultNotificationResultProcessorTest {
     fun `when notify call PushData is received, the incoming call will be treated as a normal notification even if notification are disabled`() = runTest {
         val onNotifiableEventsReceived = lambdaRecorder<List<NotifiableEvent>, Unit> {}
         val handleIncomingCallLambda = lambdaRecorder<
-            CallType.RoomCall,
+            CallData,
             EventId,
             UserId,
             String?,

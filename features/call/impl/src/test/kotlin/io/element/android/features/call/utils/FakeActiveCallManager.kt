@@ -8,7 +8,7 @@
 
 package io.element.android.features.call.utils
 
-import io.element.android.features.call.api.CallType
+import io.element.android.features.call.api.CallData
 import io.element.android.features.call.impl.notifications.CallNotificationData
 import io.element.android.features.call.impl.utils.ActiveCall
 import io.element.android.features.call.impl.utils.ActiveCallManager
@@ -17,8 +17,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 
 class FakeActiveCallManager(
     var registerIncomingCallResult: (CallNotificationData) -> Unit = {},
-    var hangUpCallResult: (CallType, CallNotificationData?) -> Unit = { _, _ -> },
-    var joinedCallResult: (CallType) -> Unit = {},
+    var hangUpCallResult: (CallData, CallNotificationData?) -> Unit = { _, _ -> },
+    var joinedCallResult: (CallData) -> Unit = {},
 ) : ActiveCallManager {
     override val activeCall = MutableStateFlow<ActiveCall?>(null)
 
@@ -26,12 +26,12 @@ class FakeActiveCallManager(
         registerIncomingCallResult(notificationData)
     }
 
-    override suspend fun hangUpCall(callType: CallType, notificationData: CallNotificationData?) = simulateLongTask {
-        hangUpCallResult(callType, notificationData)
+    override suspend fun hangUpCall(callData: CallData, notificationData: CallNotificationData?) = simulateLongTask {
+        hangUpCallResult(callData, notificationData)
     }
 
-    override suspend fun joinedCall(callType: CallType) = simulateLongTask {
-        joinedCallResult(callType)
+    override suspend fun joinedCall(callData: CallData) = simulateLongTask {
+        joinedCallResult(callData)
     }
 
     fun setActiveCall(value: ActiveCall?) {

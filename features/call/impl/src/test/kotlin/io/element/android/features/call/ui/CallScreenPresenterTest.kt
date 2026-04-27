@@ -13,7 +13,7 @@ import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.MobileScreen
-import io.element.android.features.call.api.CallType
+import io.element.android.features.call.api.CallData
 import io.element.android.features.call.impl.ui.CallScreenEvents
 import io.element.android.features.call.impl.ui.CallScreenNavigator
 import io.element.android.features.call.impl.ui.CallScreenPresenter
@@ -59,38 +59,13 @@ class CallScreenPresenterTest {
     val warmUpRule = WarmUpRule()
 
     @Test
-    fun `present - with CallType ExternalUrl just loads the URL and sets the call as active`() = runTest {
-        val analyticsLambda = lambdaRecorder<MobileScreen.ScreenName, Unit> {}
-        val joinedCallLambda = lambdaRecorder<CallType, Unit> {}
-        val presenter = createCallScreenPresenter(
-            callType = CallType.ExternalUrl("https://call.element.io"),
-            screenTracker = FakeScreenTracker(analyticsLambda),
-            activeCallManager = FakeActiveCallManager(joinedCallResult = joinedCallLambda),
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            // Wait until the URL is loaded
-            advanceTimeBy(1.seconds)
-            skipItems(2)
-            val initialState = awaitItem()
-            assertThat(initialState.urlState).isEqualTo(AsyncData.Success("https://call.element.io"))
-            assertThat(initialState.webViewError).isNull()
-            assertThat(initialState.isInWidgetMode).isFalse()
-            assertThat(initialState.isCallActive).isFalse()
-            analyticsLambda.assertions().isNeverCalled()
-            joinedCallLambda.assertions().isCalledOnce()
-        }
-    }
-
-    @Test
-    fun `present - with CallType RoomCall sets call as active, loads URL and runs WidgetDriver`() = runTest {
+    fun `present - with CallData sets call as active, loads URL and runs WidgetDriver`() = runTest {
         val widgetDriver = FakeMatrixWidgetDriver()
         val widgetProvider = FakeCallWidgetProvider(widgetDriver)
         val analyticsLambda = lambdaRecorder<MobileScreen.ScreenName, Unit> {}
-        val joinedCallLambda = lambdaRecorder<CallType, Unit> {}
+        val joinedCallLambda = lambdaRecorder<CallData, Unit> {}
         val presenter = createCallScreenPresenter(
-            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID, false),
+            callData = CallData(A_SESSION_ID, A_ROOM_ID, false),
             widgetDriver = widgetDriver,
             widgetProvider = widgetProvider,
             screenTracker = FakeScreenTracker(analyticsLambda),
@@ -107,7 +82,6 @@ class CallScreenPresenterTest {
             val initialState = awaitItem()
             assertThat(initialState.urlState).isInstanceOf(AsyncData.Loading::class.java)
             assertThat(initialState.isCallActive).isFalse()
-            assertThat(initialState.isInWidgetMode).isTrue()
             assertThat(widgetProvider.getWidgetCalled).isTrue()
             assertThat(widgetDriver.runCalledCount).isEqualTo(1)
             analyticsLambda.assertions().isCalledOnce().with(value(MobileScreen.ScreenName.RoomCall))
@@ -123,7 +97,7 @@ class CallScreenPresenterTest {
     fun `present - set message interceptor, send and receive messages`() = runTest {
         val widgetDriver = FakeMatrixWidgetDriver()
         val presenter = createCallScreenPresenter(
-            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID, false),
+            callData = CallData(A_SESSION_ID, A_ROOM_ID, false),
             widgetDriver = widgetDriver,
             screenTracker = FakeScreenTracker {},
         )
@@ -154,7 +128,7 @@ class CallScreenPresenterTest {
         val navigator = FakeCallScreenNavigator()
         val widgetDriver = FakeMatrixWidgetDriver()
         val presenter = createCallScreenPresenter(
-            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID, false),
+            callData = CallData(A_SESSION_ID, A_ROOM_ID, false),
             widgetDriver = widgetDriver,
             navigator = navigator,
             dispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
@@ -188,7 +162,7 @@ class CallScreenPresenterTest {
         val navigator = FakeCallScreenNavigator()
         val widgetDriver = FakeMatrixWidgetDriver()
         val presenter = createCallScreenPresenter(
-            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID, false),
+            callData = CallData(A_SESSION_ID, A_ROOM_ID, false),
             widgetDriver = widgetDriver,
             navigator = navigator,
             dispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
@@ -223,7 +197,7 @@ class CallScreenPresenterTest {
         val navigator = FakeCallScreenNavigator()
         val widgetDriver = FakeMatrixWidgetDriver()
         val presenter = createCallScreenPresenter(
-            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID, false),
+            callData = CallData(A_SESSION_ID, A_ROOM_ID, false),
             widgetDriver = widgetDriver,
             navigator = navigator,
             dispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
@@ -260,7 +234,7 @@ class CallScreenPresenterTest {
         val navigator = FakeCallScreenNavigator()
         val widgetDriver = FakeMatrixWidgetDriver()
         val presenter = createCallScreenPresenter(
-            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID, false),
+            callData = CallData(A_SESSION_ID, A_ROOM_ID, false),
             widgetDriver = widgetDriver,
             navigator = navigator,
             dispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
@@ -300,7 +274,7 @@ class CallScreenPresenterTest {
         val matrixClient = FakeMatrixClient(syncService = syncService)
         val appForegroundStateService = FakeAppForegroundStateService()
         val presenter = createCallScreenPresenter(
-            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID, false),
+            callData = CallData(A_SESSION_ID, A_ROOM_ID, false),
             widgetDriver = widgetDriver,
             navigator = navigator,
             dispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
@@ -338,53 +312,8 @@ class CallScreenPresenterTest {
         }
     }
 
-    @Test
-    fun `present - error from WebView are updating the state`() = runTest {
-        val presenter = createCallScreenPresenter(
-            callType = CallType.ExternalUrl("https://call.element.io"),
-            activeCallManager = FakeActiveCallManager(),
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            // Wait until the URL is loaded
-            advanceTimeBy(1.seconds)
-            skipItems(2)
-            val initialState = awaitItem()
-            initialState.eventSink(CallScreenEvents.OnWebViewError("A Webview error"))
-            val finalState = awaitItem()
-            assertThat(finalState.webViewError).isEqualTo("A Webview error")
-        }
-    }
-
-    @Test
-    fun `present - error from WebView are ignored if Element Call is loaded`() = runTest {
-        val presenter = createCallScreenPresenter(
-            callType = CallType.ExternalUrl("https://call.element.io"),
-            activeCallManager = FakeActiveCallManager(),
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
-            // Wait until the URL is loaded
-            skipItems(1)
-            val initialState = awaitItem()
-
-            val messageInterceptor = FakeWidgetMessageInterceptor()
-            initialState.eventSink(CallScreenEvents.SetupMessageChannels(messageInterceptor))
-            // Emit a message
-            messageInterceptor.givenInterceptedMessage("A message")
-            // WebView emits an error, but it will be ignored
-            initialState.eventSink(CallScreenEvents.OnWebViewError("A Webview error"))
-            val finalState = awaitItem()
-            assertThat(finalState.webViewError).isNull()
-
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
     private fun TestScope.createCallScreenPresenter(
-        callType: CallType,
+        callData: CallData,
         navigator: CallScreenNavigator = FakeCallScreenNavigator(),
         widgetDriver: FakeMatrixWidgetDriver = FakeMatrixWidgetDriver(),
         widgetProvider: FakeCallWidgetProvider = FakeCallWidgetProvider(widgetDriver),
@@ -401,7 +330,7 @@ class CallScreenPresenterTest {
         }
         val clock = SystemClock { 0 }
         return CallScreenPresenter(
-            callType = callType,
+            callData = callData,
             navigator = navigator,
             callWidgetProvider = widgetProvider,
             userAgentProvider = userAgentProvider,
