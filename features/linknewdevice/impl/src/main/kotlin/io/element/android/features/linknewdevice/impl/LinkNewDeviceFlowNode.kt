@@ -27,6 +27,7 @@ import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.linknewdevice.api.LinkNewDeviceEntryPoint
+import io.element.android.features.linknewdevice.impl.screens.confirmation.CodeConfirmationNode
 import io.element.android.features.linknewdevice.impl.screens.desktop.DesktopNoticeNode
 import io.element.android.features.linknewdevice.impl.screens.error.ErrorNode
 import io.element.android.features.linknewdevice.impl.screens.error.ErrorScreenType
@@ -108,6 +109,11 @@ class LinkNewDeviceFlowNode(
         ) : NavTarget
 
         @Parcelize
+        data class CodeConfirmation(
+            val code: String,
+        ) : NavTarget
+
+        @Parcelize
         data object MobileEnterNumber : NavTarget
 
         @Parcelize
@@ -166,7 +172,9 @@ class LinkNewDeviceFlowNode(
                 is LinkDesktopStep.Error -> {
                     navigateToError(linkDesktopStep.errorType)
                 }
-                is LinkDesktopStep.EstablishingSecureChannel -> Unit
+                is LinkDesktopStep.EstablishingSecureChannel -> {
+                    backstack.push(NavTarget.CodeConfirmation(linkDesktopStep.checkCodeString))
+                }
                 is LinkDesktopStep.InvalidQrCode -> {
                     // This error will be handled by the ScanQrCodeNode
                 }
@@ -246,6 +254,18 @@ class LinkNewDeviceFlowNode(
                     }
                 }
                 createNode<EnterNumberNode>(buildContext, listOf(callback))
+            }
+            is NavTarget.CodeConfirmation -> {
+                val callback = object : CodeConfirmationNode.Callback {
+                    override fun onCancel() {
+                        // Push error
+                        backstack.push(NavTarget.Error(ErrorScreenType.Cancelled))
+                    }
+                }
+                val inputs = CodeConfirmationNode.Inputs(
+                    code = navTarget.code,
+                )
+                createNode<CodeConfirmationNode>(buildContext, listOf(inputs, callback))
             }
             is NavTarget.MobileShowQrCode -> {
                 val callback = object : ShowQrCodeNode.Callback {

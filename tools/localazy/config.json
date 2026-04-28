@@ -163,7 +163,9 @@
         "screen_qr_code_login_connection_note_secure_state.*",
         "screen_qr_code_login_unknown_error_description",
         "screen_qr_code_login_invalid_scan_state_.*",
-        "screen_qr_code_login_no_camera_permission_state_.*"
+        "screen_qr_code_login_no_camera_permission_state_.*",
+        "screen_qr_code_login_device_code_.*",
+        "screen_qr_code_login_verify_code_loading"
       ]
     },
     {
