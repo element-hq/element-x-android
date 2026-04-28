@@ -14,6 +14,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.fullscreenintent.api.aFullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.preferences.api.store.NotificationSound
 import io.element.android.libraries.pushproviders.api.Distributor
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -45,6 +46,18 @@ open class NotificationSettingsStateProvider : PreviewParameterProvider<Notifica
             aInvalidNotificationSettingsState(fixFailed = true),
             aValidNotificationSettingsState(fullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(permissionGranted = false)),
             aValidNotificationSettingsState(appNotificationEnabled = false),
+            aValidNotificationSettingsState(
+                messageSound = NotificationSound.Custom("content://settings/system/notification_sound"),
+                messageSoundDisplayName = "Pixel notification",
+                callRingtone = NotificationSound.Custom("content://settings/system/ringtone"),
+                callRingtoneDisplayName = "Pixel ringtone",
+            ),
+            aValidNotificationSettingsState(
+                messageSound = NotificationSound.Silent,
+                messageSoundDisplayName = "Silent",
+                callRingtone = NotificationSound.Silent,
+                callRingtoneDisplayName = "Silent",
+            ),
         )
 }
 
@@ -62,6 +75,10 @@ fun aValidNotificationSettingsState(
     ),
     showChangePushProviderDialog: Boolean = false,
     fullScreenIntentPermissionsState: FullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(),
+    messageSound: NotificationSound = NotificationSound.SystemDefault,
+    messageSoundDisplayName: String = "Default",
+    callRingtone: NotificationSound = NotificationSound.SystemDefault,
+    callRingtoneDisplayName: String = "Default",
     eventSink: (NotificationSettingsEvents) -> Unit = {},
 ) = NotificationSettingsState(
     matrixSettings = NotificationSettingsState.MatrixSettings.Valid(
@@ -80,6 +97,10 @@ fun aValidNotificationSettingsState(
     availablePushDistributors = availablePushDistributors.toImmutableList(),
     showChangePushProviderDialog = showChangePushProviderDialog,
     fullScreenIntentPermissionsState = fullScreenIntentPermissionsState,
+    messageSound = messageSound,
+    messageSoundDisplayName = messageSoundDisplayName,
+    callRingtone = callRingtone,
+    callRingtoneDisplayName = callRingtoneDisplayName,
     eventSink = eventSink,
 )
 
@@ -99,6 +120,10 @@ fun aInvalidNotificationSettingsState(
     availablePushDistributors = persistentListOf(),
     showChangePushProviderDialog = false,
     fullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(),
+    messageSound = NotificationSound.SystemDefault,
+    messageSoundDisplayName = "Default",
+    callRingtone = NotificationSound.SystemDefault,
+    callRingtoneDisplayName = "Default",
     eventSink = eventSink,
 )
 

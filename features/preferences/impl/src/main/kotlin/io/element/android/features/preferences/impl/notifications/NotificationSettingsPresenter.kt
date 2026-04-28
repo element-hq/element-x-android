@@ -16,10 +16,12 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
+import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -30,11 +32,16 @@ import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermiss
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.api.store.NotificationSound
 import io.element.android.libraries.push.api.PushService
+import io.element.android.libraries.push.api.notifications.NotificationSoundUpdater
+import io.element.android.libraries.push.api.notifications.SoundDisplayNameResolver
 import io.element.android.libraries.pushproviders.api.Distributor
 import io.element.android.libraries.pushproviders.api.PushProvider
 import io.element.android.libraries.pushstore.api.UserPushStore
 import io.element.android.libraries.pushstore.api.UserPushStoreFactory
+import io.element.android.services.toolbox.api.strings.StringProvider
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
@@ -52,6 +59,10 @@ class NotificationSettingsPresenter(
     private val pushService: PushService,
     private val systemNotificationsEnabledProvider: SystemNotificationsEnabledProvider,
     private val fullScreenIntentPermissionsPresenter: Presenter<FullScreenIntentPermissionsState>,
+    private val appPreferencesStore: AppPreferencesStore,
+    private val notificationSoundUpdater: NotificationSoundUpdater,
+    private val soundDisplayNameResolver: SoundDisplayNameResolver,
+    private val stringProvider: StringProvider,
     @SessionCoroutineScope
     private val sessionCoroutineScope: CoroutineScope,
 ) : Presenter<NotificationSettingsState> {
@@ -109,6 +120,17 @@ class NotificationSettingsPresenter(
 
         var showChangePushProviderDialog by remember { mutableStateOf(false) }
 
+        val messageSound by remember { appPreferencesStore.getMessageSoundFlow() }.collectAsState(initial = NotificationSound.SystemDefault)
+        val callRingtone by remember { appPreferencesStore.getCallRingtoneFlow() }.collectAsState(initial = NotificationSound.SystemDefault)
+        val defaultLabel = stringProvider.getString(R.string.screen_notification_settings_sound_default)
+        val silentLabel = stringProvider.getString(R.string.screen_notification_settings_sound_silent)
+        val messageSoundDisplayName by produceState(initialValue = defaultLabel, messageSound, defaultLabel, silentLabel) {
+            value = resolveDisplayName(messageSound, defaultLabel, silentLabel)
+        }
+        val callRingtoneDisplayName by produceState(initialValue = defaultLabel, callRingtone, defaultLabel, silentLabel) {
+            value = resolveDisplayName(callRingtone, defaultLabel, silentLabel)
+        }
+
         fun CoroutineScope.changePushProvider(
             data: Pair<PushProvider, Distributor>?
         ) = launch {
@@ -157,6 +179,14 @@ class NotificationSettingsPresenter(
                 NotificationSettingsEvents.ChangePushProvider -> showChangePushProviderDialog = true
                 NotificationSettingsEvents.CancelChangePushProvider -> showChangePushProviderDialog = false
                 is NotificationSettingsEvents.SetPushProvider -> localCoroutineScope.changePushProvider(distributors.getOrNull(event.index))
+                is NotificationSettingsEvents.SetMessageSound -> localCoroutineScope.launch {
+                    val newVersion = appPreferencesStore.setMessageSoundAndIncrementVersion(event.sound)
+                    notificationSoundUpdater.recreateNoisyChannel(event.sound, newVersion)
+                }
+                is NotificationSettingsEvents.SetCallRingtone -> localCoroutineScope.launch {
+                    val newVersion = appPreferencesStore.setCallRingtoneAndIncrementVersion(event.sound)
+                    notificationSoundUpdater.recreateRingingCallChannel(event.sound, newVersion)
+                }
             }
         }
 
@@ -171,8 +201,22 @@ class NotificationSettingsPresenter(
             availablePushDistributors = availableDistributors,
             showChangePushProviderDialog = showChangePushProviderDialog,
             fullScreenIntentPermissionsState = key(refreshFullScreenIntentSettings) { fullScreenIntentPermissionsPresenter.present() },
+            messageSound = messageSound,
+            messageSoundDisplayName = messageSoundDisplayName,
+            callRingtone = callRingtone,
+            callRingtoneDisplayName = callRingtoneDisplayName,
             eventSink = ::handleEvent,
         )
+    }
+
+    private suspend fun resolveDisplayName(
+        sound: NotificationSound,
+        defaultLabel: String,
+        silentLabel: String,
+    ): String = when (sound) {
+        NotificationSound.SystemDefault -> defaultLabel
+        NotificationSound.Silent -> silentLabel
+        is NotificationSound.Custom -> soundDisplayNameResolver.resolveCustomSoundTitle(sound.uri) ?: defaultLabel
     }
 
     @OptIn(FlowPreview::class)

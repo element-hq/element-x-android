@@ -12,6 +12,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.preferences.api.store.NotificationSound
 import io.element.android.libraries.pushproviders.api.Distributor
 import kotlinx.collections.immutable.ImmutableList
 
@@ -23,6 +24,10 @@ data class NotificationSettingsState(
     val availablePushDistributors: ImmutableList<Distributor>,
     val showChangePushProviderDialog: Boolean,
     val fullScreenIntentPermissionsState: FullScreenIntentPermissionsState,
+    val messageSound: NotificationSound,
+    val messageSoundDisplayName: String,
+    val callRingtone: NotificationSound,
+    val callRingtoneDisplayName: String,
     val eventSink: (NotificationSettingsEvents) -> Unit,
 ) {
     sealed interface MatrixSettings {

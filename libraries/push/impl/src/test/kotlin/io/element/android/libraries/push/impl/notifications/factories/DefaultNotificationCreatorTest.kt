@@ -378,5 +378,6 @@ fun createNotificationChannels(
         stringProvider = FakeStringProvider(""),
         context = context,
         enterpriseService = enterpriseService,
+        appPreferencesStore = io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore(),
     )
 }

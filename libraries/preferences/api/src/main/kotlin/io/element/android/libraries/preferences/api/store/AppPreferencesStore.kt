@@ -38,5 +38,25 @@ interface AppPreferencesStore {
     suspend fun setTracingLogPacks(targets: Set<TraceLogPack>)
     fun getTracingLogPacksFlow(): Flow<Set<TraceLogPack>>
 
+    fun getMessageSoundFlow(): Flow<NotificationSound>
+
+    /**
+     * Atomically persists [sound] as the user's chosen message sound and bumps the channel version
+     * counter. Returns the new version. Combined into a single transaction so process death
+     * between persistence and channel recreation cannot leave the URI and version out of sync.
+     */
+    suspend fun setMessageSoundAndIncrementVersion(sound: NotificationSound): Int
+
+    fun getCallRingtoneFlow(): Flow<NotificationSound>
+
+    /** See [setMessageSoundAndIncrementVersion]. */
+    suspend fun setCallRingtoneAndIncrementVersion(sound: NotificationSound): Int
+
+    /**
+     * One-shot read of all four notification-sound preferences in a single underlying DataStore
+     * read. Used at app boot when channels are seeded — avoids four separate `runBlocking` reads.
+     */
+    suspend fun getNotificationSoundChannelConfig(): NotificationSoundChannelConfig
+
     suspend fun reset()
 }

@@ -9,6 +9,7 @@
 package io.element.android.features.preferences.impl.notifications
 
 import androidx.activity.ComponentActivity
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
@@ -243,7 +244,7 @@ class NotificationSettingsViewTest {
         )
     }
 
-    @Config(qualifiers = "h1024dp")
+    @Config(qualifiers = "h1280dp")
     @Test
     fun `clicking on Push notification provider emits the expected event`() {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
@@ -278,6 +279,41 @@ class NotificationSettingsViewTest {
                 NotificationSettingsEvents.SetPushProvider(1),
             )
         )
+    }
+
+    @Config(qualifiers = "h1280dp")
+    @Test
+    fun `sounds preference category renders rows with current display names`() {
+        val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
+        rule.setNotificationSettingsView(
+            state = aValidNotificationSettingsState(
+                eventSink = eventsRecorder,
+                messageSoundDisplayName = "Pixel notification",
+                callRingtoneDisplayName = "Pixel ringtone",
+            ),
+        )
+        rule.onNodeWithText(rule.activity.getString(R.string.screen_notification_settings_sounds_section_title))
+            .assertIsDisplayed()
+        rule.onNodeWithText(rule.activity.getString(R.string.screen_notification_settings_message_sound_label))
+            .assertIsDisplayed()
+        rule.onNodeWithText(rule.activity.getString(R.string.screen_notification_settings_call_ringtone_label))
+            .assertIsDisplayed()
+        rule.onNodeWithText("Pixel notification").assertIsDisplayed()
+        rule.onNodeWithText("Pixel ringtone").assertIsDisplayed()
+    }
+
+    @Config(qualifiers = "h1280dp")
+    @Test
+    fun `clicking the message sound row does not synchronously emit a SetMessageSound event`() {
+        val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
+        rule.setNotificationSettingsView(
+            state = aValidNotificationSettingsState(eventSink = eventsRecorder),
+        )
+        // The click hands off to rememberLauncherForActivityResult; SetMessageSound only fires from
+        // the launcher's result callback (covered by Presenter tests + NotificationSoundPickerTest).
+        rule.onNodeWithText(rule.activity.getString(R.string.screen_notification_settings_message_sound_label))
+            .performClick()
+        eventsRecorder.assertSingle(NotificationSettingsEvents.RefreshSystemNotificationsEnabled)
     }
 }
 

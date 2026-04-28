@@ -10,6 +10,7 @@ package io.element.android.libraries.preferences.impl.store
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
@@ -19,8 +20,12 @@ import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.matrix.api.tracing.LogLevel
 import io.element.android.libraries.matrix.api.tracing.TraceLogPack
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.api.store.NotificationSound
+import io.element.android.libraries.preferences.api.store.NotificationSound.Companion.toStored
+import io.element.android.libraries.preferences.api.store.NotificationSoundChannelConfig
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 private val developerModeKey = booleanPreferencesKey("developerMode")
@@ -30,6 +35,10 @@ private val hideInviteAvatarsKey = booleanPreferencesKey("hideInviteAvatars")
 private val timelineMediaPreviewValueKey = stringPreferencesKey("timelineMediaPreviewValue")
 private val logLevelKey = stringPreferencesKey("logLevel")
 private val traceLogPacksKey = stringPreferencesKey("traceLogPacks")
+private val messageSoundUriKey = stringPreferencesKey("notificationMessageSoundUri")
+private val messageSoundChannelVersionKey = intPreferencesKey("notificationMessageSoundChannelVersion")
+private val callRingtoneUriKey = stringPreferencesKey("notificationCallRingtoneUri")
+private val callRingtoneChannelVersionKey = intPreferencesKey("notificationCallRingtoneChannelVersion")
 
 @ContributesBinding(AppScope::class)
 class DefaultAppPreferencesStore(
@@ -142,6 +151,54 @@ class DefaultAppPreferencesStore(
                 ?.toSet()
                 ?: emptySet()
         }
+    }
+
+    override fun getMessageSoundFlow(): Flow<NotificationSound> {
+        return store.data.map { prefs -> NotificationSound.fromStored(prefs[messageSoundUriKey]) }
+    }
+
+    override suspend fun setMessageSoundAndIncrementVersion(sound: NotificationSound): Int {
+        var newVersion = 0
+        store.edit { prefs ->
+            val stored = sound.toStored()
+            if (stored != null) {
+                prefs[messageSoundUriKey] = stored
+            } else {
+                prefs.remove(messageSoundUriKey)
+            }
+            newVersion = (prefs[messageSoundChannelVersionKey] ?: 0) + 1
+            prefs[messageSoundChannelVersionKey] = newVersion
+        }
+        return newVersion
+    }
+
+    override fun getCallRingtoneFlow(): Flow<NotificationSound> {
+        return store.data.map { prefs -> NotificationSound.fromStored(prefs[callRingtoneUriKey]) }
+    }
+
+    override suspend fun setCallRingtoneAndIncrementVersion(sound: NotificationSound): Int {
+        var newVersion = 0
+        store.edit { prefs ->
+            val stored = sound.toStored()
+            if (stored != null) {
+                prefs[callRingtoneUriKey] = stored
+            } else {
+                prefs.remove(callRingtoneUriKey)
+            }
+            newVersion = (prefs[callRingtoneChannelVersionKey] ?: 0) + 1
+            prefs[callRingtoneChannelVersionKey] = newVersion
+        }
+        return newVersion
+    }
+
+    override suspend fun getNotificationSoundChannelConfig(): NotificationSoundChannelConfig {
+        val prefs = store.data.first()
+        return NotificationSoundChannelConfig(
+            messageSound = NotificationSound.fromStored(prefs[messageSoundUriKey]),
+            messageSoundVersion = prefs[messageSoundChannelVersionKey] ?: 0,
+            callRingtone = NotificationSound.fromStored(prefs[callRingtoneUriKey]),
+            callRingtoneVersion = prefs[callRingtoneChannelVersionKey] ?: 0,
+        )
     }
 
     override suspend fun reset() {

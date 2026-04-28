@@ -8,6 +8,8 @@
 
 package io.element.android.features.preferences.impl.notifications
 
+import io.element.android.libraries.preferences.api.store.NotificationSound
+
 sealed interface NotificationSettingsEvents {
     data object RefreshSystemNotificationsEnabled : NotificationSettingsEvents
     data class SetNotificationsEnabled(val enabled: Boolean) : NotificationSettingsEvents
@@ -20,4 +22,6 @@ sealed interface NotificationSettingsEvents {
     data object ChangePushProvider : NotificationSettingsEvents
     data object CancelChangePushProvider : NotificationSettingsEvents
     data class SetPushProvider(val index: Int) : NotificationSettingsEvents
+    data class SetMessageSound(val sound: NotificationSound) : NotificationSettingsEvents
+    data class SetCallRingtone(val sound: NotificationSound) : NotificationSettingsEvents
 }

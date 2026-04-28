@@ -12,8 +12,11 @@ import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.matrix.api.tracing.LogLevel
 import io.element.android.libraries.matrix.api.tracing.TraceLogPack
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.api.store.NotificationSound
+import io.element.android.libraries.preferences.api.store.NotificationSoundChannelConfig
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.updateAndGet
 
 class InMemoryAppPreferencesStore(
     isDeveloperModeEnabled: Boolean = false,
@@ -23,6 +26,10 @@ class InMemoryAppPreferencesStore(
     theme: String? = null,
     logLevel: LogLevel = LogLevel.INFO,
     traceLockPacks: Set<TraceLogPack> = emptySet(),
+    messageSound: NotificationSound = NotificationSound.SystemDefault,
+    messageSoundChannelVersion: Int = 0,
+    callRingtone: NotificationSound = NotificationSound.SystemDefault,
+    callRingtoneChannelVersion: Int = 0,
 ) : AppPreferencesStore {
     private val isDeveloperModeEnabled = MutableStateFlow(isDeveloperModeEnabled)
     private val customElementCallBaseUrl = MutableStateFlow(customElementCallBaseUrl)
@@ -31,6 +38,10 @@ class InMemoryAppPreferencesStore(
     private val tracingLogPacks = MutableStateFlow(traceLockPacks)
     private val hideInviteAvatars = MutableStateFlow(hideInviteAvatars)
     private val timelineMediaPreviewValue = MutableStateFlow(timelineMediaPreviewValue)
+    private val messageSound = MutableStateFlow(messageSound)
+    private val messageSoundChannelVersion = MutableStateFlow(messageSoundChannelVersion)
+    private val callRingtone = MutableStateFlow(callRingtone)
+    private val callRingtoneChannelVersion = MutableStateFlow(callRingtoneChannelVersion)
 
     override suspend fun setDeveloperModeEnabled(enabled: Boolean) {
         isDeveloperModeEnabled.value = enabled
@@ -90,6 +101,33 @@ class InMemoryAppPreferencesStore(
 
     override fun getTracingLogPacksFlow(): Flow<Set<TraceLogPack>> {
         return tracingLogPacks
+    }
+
+    override fun getMessageSoundFlow(): Flow<NotificationSound> {
+        return messageSound
+    }
+
+    override suspend fun setMessageSoundAndIncrementVersion(sound: NotificationSound): Int {
+        messageSound.value = sound
+        return messageSoundChannelVersion.updateAndGet { it + 1 }
+    }
+
+    override fun getCallRingtoneFlow(): Flow<NotificationSound> {
+        return callRingtone
+    }
+
+    override suspend fun setCallRingtoneAndIncrementVersion(sound: NotificationSound): Int {
+        callRingtone.value = sound
+        return callRingtoneChannelVersion.updateAndGet { it + 1 }
+    }
+
+    override suspend fun getNotificationSoundChannelConfig(): NotificationSoundChannelConfig {
+        return NotificationSoundChannelConfig(
+            messageSound = messageSound.value,
+            messageSoundVersion = messageSoundChannelVersion.value,
+            callRingtone = callRingtone.value,
+            callRingtoneVersion = callRingtoneChannelVersion.value,
+        )
     }
 
     override suspend fun reset() {

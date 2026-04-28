@@ -8,6 +8,11 @@
 
 package io.element.android.features.preferences.impl.notifications
 
+import android.app.Activity
+import android.media.RingtoneManager
+import android.provider.Settings
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.progressSemantics
@@ -15,6 +20,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -182,6 +189,7 @@ private fun NotificationSettingsContentView(
                 onCheckedChange = onMentionNotificationsChange
             )
         }
+        SoundsPreferenceCategory(state = state)
         PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_additional_settings_section_title)) {
             // TODO We are removing the call notification toggle until support for call notifications has been added
 //                PreferenceSwitch(
@@ -258,6 +266,64 @@ private fun NotificationSettingsContentView(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun SoundsPreferenceCategory(state: NotificationSettingsState) {
+    val messageSoundContentDescription = stringResource(id = R.string.a11y_notification_sound_picker_open_message_sound)
+    val callRingtoneContentDescription = stringResource(id = R.string.a11y_notification_sound_picker_open_call_ringtone)
+
+    PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_sounds_section_title)) {
+        val messageSoundLauncher = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.StartActivityForResult(),
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val sound = result.data?.toPickedNotificationSound(Settings.System.DEFAULT_NOTIFICATION_URI)
+                if (sound != null) {
+                    state.eventSink(NotificationSettingsEvents.SetMessageSound(sound))
+                }
+            }
+        }
+        ListItem(
+            modifier = Modifier.semantics { contentDescription = messageSoundContentDescription },
+            headlineContent = { Text(stringResource(id = R.string.screen_notification_settings_message_sound_label)) },
+            supportingContent = { Text(state.messageSoundDisplayName) },
+            onClick = {
+                messageSoundLauncher.launch(
+                    buildRingtonePickerIntent(
+                        type = RingtoneManager.TYPE_NOTIFICATION,
+                        current = state.messageSound,
+                        defaultUri = Settings.System.DEFAULT_NOTIFICATION_URI,
+                    )
+                )
+            }
+        )
+
+        val callRingtoneLauncher = rememberLauncherForActivityResult(
+            contract = ActivityResultContracts.StartActivityForResult(),
+        ) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val sound = result.data?.toPickedNotificationSound(Settings.System.DEFAULT_RINGTONE_URI)
+                if (sound != null) {
+                    state.eventSink(NotificationSettingsEvents.SetCallRingtone(sound))
+                }
+            }
+        }
+        ListItem(
+            modifier = Modifier.semantics { contentDescription = callRingtoneContentDescription },
+            headlineContent = { Text(stringResource(id = R.string.screen_notification_settings_call_ringtone_label)) },
+            supportingContent = { Text(state.callRingtoneDisplayName) },
+            onClick = {
+                callRingtoneLauncher.launch(
+                    buildRingtonePickerIntent(
+                        type = RingtoneManager.TYPE_RINGTONE,
+                        current = state.callRingtone,
+                        defaultUri = Settings.System.DEFAULT_RINGTONE_URI,
+                    )
+                )
+            }
+        )
     }
 }
 
