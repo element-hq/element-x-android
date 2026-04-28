@@ -73,8 +73,21 @@ private object HtmlToDomParser {
 
     private val safeList = Safelist()
         .addTags(
-            "a", "b", "strong", "i", "em", "u", "del", "code", "ul", "ol", "li", "pre",
-            "blockquote", "p", "br",
+            "a",
+            "b",
+            "strong",
+            "i",
+            "em",
+            "u",
+            "del",
+            "code",
+            "ul",
+            "ol",
+            "li",
+            "pre",
+            "blockquote",
+            "p",
+            "br",
             // Add custom `mx-reply` tag, even if it's just to remove its contents from the plain text version of the message
             "mx-reply"
         )
