@@ -32,8 +32,12 @@ import io.element.android.features.messages.impl.link.LinkEvent
 import io.element.android.features.messages.impl.link.LinkView
 import io.element.android.features.messages.impl.timeline.TimelineEvent
 import io.element.android.features.messages.impl.timeline.components.TimelineItemRow
+import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionBottomSheet
+import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionEvent
 import io.element.android.features.messages.impl.timeline.components.event.TimelineItemEventContentView
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
+import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryEvent
+import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemPollContent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
@@ -195,11 +199,27 @@ private fun PinnedMessagesListLoaded(
         )
     }
 
+    fun onReactionClick(emoji: String, event: TimelineItem.Event) {
+        event.eventOrTransactionId.let { eventOrTransactionId ->
+            state.eventSink(PinnedMessagesListEvent.ToggleReaction(emoji, eventOrTransactionId))
+        }
+    }
+
+    fun onReactionLongClick(emoji: String, event: TimelineItem.Event) {
+        event.eventId?.let { eventId ->
+            state.reactionSummaryState.eventSink(ReactionSummaryEvent.ShowReactionSummary(eventId, event.reactionsState.reactions, emoji))
+        }
+    }
+
+    fun onMoreReactionsClick(event: TimelineItem.Event) {
+        state.customReactionState.eventSink(CustomReactionEvent.ShowCustomReactionSheet(event))
+    }
+
     ActionListView(
         state = state.actionListState,
         onSelectAction = ::onActionSelected,
-        onCustomReactionClick = {},
-        onEmojiReactionClick = { _, _ -> },
+        onCustomReactionClick = ::onMoreReactionsClick,
+        onEmojiReactionClick = ::onReactionClick,
         onVerifiedUserSendFailureClick = {}
     )
     LazyColumn(
@@ -230,9 +250,9 @@ private fun PinnedMessagesListLoaded(
                 onLongClick = ::onMessageLongClick,
                 displayThreadSummaries = displayThreadSummaries,
                 inReplyToClick = {},
-                onReactionClick = { _, _ -> },
-                onReactionLongClick = { _, _ -> },
-                onMoreReactionsClick = {},
+                onReactionClick = ::onReactionClick,
+                onReactionLongClick = ::onReactionLongClick,
+                onMoreReactionsClick = ::onMoreReactionsClick,
                 onReadReceiptClick = {},
                 onSwipeToReply = {},
                 eventSink = { timelineItemEvent ->
@@ -262,6 +282,13 @@ private fun PinnedMessagesListLoaded(
         state.linkState,
         onLinkValid = onLinkClick,
     )
+    CustomReactionBottomSheet(
+        state = state.customReactionState,
+        onSelectEmoji = { eventOrTransactionId, emoji ->
+            state.eventSink(PinnedMessagesListEvent.ToggleReaction(emoji.unicode, eventOrTransactionId))
+        }
+    )
+    ReactionSummaryView(state = state.reactionSummaryState)
 }
 
 @Composable
