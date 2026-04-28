@@ -59,7 +59,8 @@ fun MediaDeleteConfirmationBottomSheet(
     ModalBottomSheet(
         modifier = modifier,
         onDismissRequest = onDismiss,
-        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        scrollable = false,
     ) {
         Column(
             modifier = Modifier
