@@ -13,7 +13,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.auth.AuthenticationException
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.ClientBuildException
-import org.matrix.rustcomponents.sdk.OidcException
+import org.matrix.rustcomponents.sdk.OAuthException
 
 class AuthenticationExceptionMappingTest {
     @Test
@@ -65,15 +65,15 @@ class AuthenticationExceptionMappingTest {
 
     @Test
     fun `mapping Oidc exceptions map to the Oidc Kotlin`() {
-        assertThat(OidcException.Generic("Generic").mapAuthenticationException())
+        assertThat(OAuthException.Generic("Generic").mapAuthenticationException())
             .isException<AuthenticationException.Oidc>("Generic")
-        assertThat(OidcException.CallbackUrlInvalid("CallbackUrlInvalid").mapAuthenticationException())
+        assertThat(OAuthException.CallbackUrlInvalid("CallbackUrlInvalid").mapAuthenticationException())
             .isException<AuthenticationException.Oidc>("CallbackUrlInvalid")
-        assertThat(OidcException.Cancelled("Cancelled").mapAuthenticationException())
+        assertThat(OAuthException.Cancelled("Cancelled").mapAuthenticationException())
             .isException<AuthenticationException.Oidc>("Cancelled")
-        assertThat(OidcException.MetadataInvalid("MetadataInvalid").mapAuthenticationException())
+        assertThat(OAuthException.MetadataInvalid("MetadataInvalid").mapAuthenticationException())
             .isException<AuthenticationException.Oidc>("MetadataInvalid")
-        assertThat(OidcException.NotSupported("NotSupported").mapAuthenticationException())
+        assertThat(OAuthException.NotSupported("NotSupported").mapAuthenticationException())
             .isException<AuthenticationException.Oidc>("NotSupported")
     }
 
