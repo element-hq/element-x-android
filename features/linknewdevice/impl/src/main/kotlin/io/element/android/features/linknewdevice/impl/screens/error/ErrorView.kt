@@ -67,7 +67,7 @@ private fun titleText(errorScreenType: ErrorScreenType, appName: String) = when 
     ErrorScreenType.Cancelled -> stringResource(R.string.screen_link_new_device_error_request_cancelled_title)
     ErrorScreenType.Declined -> stringResource(R.string.screen_qr_code_login_error_declined_title)
     ErrorScreenType.Expired -> stringResource(R.string.screen_link_new_device_error_request_timeout_title)
-    ErrorScreenType.ProtocolNotSupported -> stringResource(R.string.screen_link_new_device_error_app_not_supported_title)
+    ErrorScreenType.ProtocolNotSupported -> stringResource(R.string.screen_link_new_device_error_app_not_supported_title, appName)
     ErrorScreenType.InsecureChannelDetected -> stringResource(id = R.string.screen_qr_code_login_connection_note_secure_state_title)
     ErrorScreenType.Mismatch2Digits -> stringResource(id = R.string.screen_link_new_device_wrong_number_title)
     ErrorScreenType.SlidingSyncNotAvailable -> stringResource(id = R.string.screen_qr_code_login_error_sliding_sync_not_supported_title, appName)
