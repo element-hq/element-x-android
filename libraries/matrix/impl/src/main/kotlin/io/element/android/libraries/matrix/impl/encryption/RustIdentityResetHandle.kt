@@ -25,7 +25,7 @@ object RustIdentityResetHandleFactory {
         return runCatchingExceptions {
             identityResetHandle?.let {
                 when (val authType = identityResetHandle.authType()) {
-                    is CrossSigningResetAuthType.Oidc -> RustOidcIdentityResetHandle(identityResetHandle, authType.info.approvalUrl)
+                    is CrossSigningResetAuthType.OAuth -> RustOidcIdentityResetHandle(identityResetHandle, authType.info.approvalUrl)
                     // User interactive authentication (user + password)
                     CrossSigningResetAuthType.Uiaa -> RustPasswordIdentityResetHandle(userId, identityResetHandle)
                 }
