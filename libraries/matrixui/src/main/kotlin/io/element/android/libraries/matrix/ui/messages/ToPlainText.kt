@@ -78,6 +78,9 @@ private class PlainTextNodeVisitor : NodeVisitor {
             } else {
                 builder.append("• ")
             }
+        } else if (node is Element && node.tagName() == "mx-reply") {
+            // Remove the fallback reply node and its contents so they aren't added to the plain text message
+            node.remove()
         } else if (node is Element && node.isBlock && builder.lastOrNull() != '\n') {
             builder.append("\n")
         }
