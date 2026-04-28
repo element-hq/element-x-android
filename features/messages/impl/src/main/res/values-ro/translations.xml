@@ -35,7 +35,7 @@
   <string name="screen_room_attachment_source_camera_video">"Înregistrați un videoclip"</string>
   <string name="screen_room_attachment_source_files">"Atașament"</string>
   <string name="screen_room_attachment_source_gallery">"Bibliotecă foto și video"</string>
-  <string name="screen_room_attachment_source_location">"Locație"</string>
+  <string name="screen_room_attachment_source_location">"Partajați locația"</string>
   <string name="screen_room_attachment_source_poll">"Sondaj"</string>
   <string name="screen_room_attachment_text_formatting">"Formatarea textului"</string>
   <string name="screen_room_encrypted_history_banner">"Mesajele anterioare nu sunt momentan disponibile în această cameră"</string>

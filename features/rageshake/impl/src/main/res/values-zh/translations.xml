@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_bug_report_attach_screenshot">"附上截图"</string>
-  <string name="screen_bug_report_contact_me">"如果您有任何后续问题，可以与我联系。"</string>
+  <string name="screen_bug_report_contact_me">"如果有任何后续问题可以联系我。"</string>
   <string name="screen_bug_report_contact_me_title">"联系我"</string>
   <string name="screen_bug_report_edit_screenshot">"编辑截图"</string>
-  <string name="screen_bug_report_editor_description">"请尽可能详细地描述问题。您做了什么？您预期会发生什么？实际发生了什么？"</string>
+  <string name="screen_bug_report_editor_description">"请尽可能详细地描述问题。你做了什么？预期会发生什么？实际上发生了什么？"</string>
   <string name="screen_bug_report_editor_placeholder">"描述问题…"</string>
   <string name="screen_bug_report_editor_supporting">"请尽可能用英文描述。"</string>
   <string name="screen_bug_report_error_description_too_short">"描述太短，请提供详细情况。谢谢！"</string>
   <string name="screen_bug_report_include_crash_logs">"发送崩溃日志"</string>
   <string name="screen_bug_report_include_logs">"允许日志"</string>
-  <string name="screen_bug_report_include_logs_error">"日志文件过大，无法包含在本报告中，请通过其他方式发送给我们。"</string>
+  <string name="screen_bug_report_include_logs_error">"日志文件过大，无法包含在本次报告中，请通过其它方式发送给我们。"</string>
   <string name="screen_bug_report_include_screenshot">"发送屏幕截图"</string>
-  <string name="screen_bug_report_logs_description">"为确认一切正常运行，您的消息中将包含日志。如要发送不带日志的消息，请关闭此设置。"</string>
+  <string name="screen_bug_report_logs_description">"为确认一切正常运行，日志中将包含你的消息。如要发送不含消息的日志，请关闭此设置。"</string>
   <string name="screen_bug_report_rash_logs_alert_title">"%1$s 上次使用时崩溃了。想和我们分享崩溃报告吗？"</string>
-  <string name="screen_bug_report_send_notification_settings_description">"如果您遇到通知问题，上传通知设置可以帮助我们查明根本原因。"</string>
+  <string name="screen_bug_report_send_notification_settings_description">"如果你遭遇通知相关问题，上传通知设置可以帮助我们调查根本原因。请注意：这些规则可能包含私人信息，例如你的显示名称或用于接收通知的关键词。"</string>
   <string name="screen_bug_report_send_notification_settings_title">"发送通知设置"</string>
   <string name="screen_bug_report_view_logs">"查看日志"</string>
 </resources>

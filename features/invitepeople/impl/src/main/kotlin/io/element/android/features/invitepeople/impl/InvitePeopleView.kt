@@ -55,6 +55,7 @@ import io.element.android.libraries.matrix.ui.components.SelectedUsersRowList
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.getBestName
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.libraries.ui.utils.strings.simplePluralStringResource
 import kotlinx.collections.immutable.ImmutableList
 
 @Composable
@@ -261,18 +262,19 @@ private fun InvitePeopleConfirmModal(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         dragHandle = null,
+        scrollable = false,
     ) {
         IconTitleSubtitleMolecule(
-            title = if (users.size > 1) {
-                stringResource(R.string.screen_invite_users_confirm_dialog_title_mutiple_users)
-            } else {
-                stringResource(R.string.screen_invite_users_confirm_dialog_title_one_user)
-            },
-            subTitle = if (users.size > 1) {
-                stringResource(R.string.screen_invite_users_confirm_dialog_subtitle_multiple_users)
-            } else {
-                stringResource(R.string.screen_invite_users_confirm_dialog_subtitle_one_user)
-            },
+            title = simplePluralStringResource(
+                resIdForOne = R.string.screen_invite_users_confirm_dialog_title_one_user,
+                resIdForOthers = R.string.screen_invite_users_confirm_dialog_title_mutiple_users,
+                count = users.size,
+            ),
+            subTitle = simplePluralStringResource(
+                resIdForOne = R.string.screen_invite_users_confirm_dialog_subtitle_one_user,
+                resIdForOthers = R.string.screen_invite_users_confirm_dialog_subtitle_multiple_users,
+                count = users.size,
+            ),
             iconStyle = BigIcon.Style.Default(CompoundIcons.UserAddSolid()),
             modifier = Modifier.padding(
                 top = 32.dp,

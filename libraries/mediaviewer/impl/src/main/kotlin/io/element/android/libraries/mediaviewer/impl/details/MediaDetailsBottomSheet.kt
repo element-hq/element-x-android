@@ -10,11 +10,14 @@ package io.element.android.libraries.mediaviewer.impl.details
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -22,10 +25,15 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.designsystem.colors.AvatarColorsProvider
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
@@ -43,15 +51,20 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.impl.R
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.libraries.ui.strings.Strings
 
+/**
+ * Ref: https://www.figma.com/design/pDlJZGBsri47FNTXMnEdXB/Compound-Android-Templates?node-id=2229-149220
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MediaDetailsBottomSheet(
-    state: MediaBottomSheetState.MediaDetailsBottomSheetState,
+    state: MediaBottomSheetState.Details,
     onViewInTimeline: (EventId) -> Unit,
     onShare: (EventId) -> Unit,
     onForward: (EventId) -> Unit,
     onDownload: (EventId) -> Unit,
+    onOpenWith: (EventId) -> Unit,
     onDelete: (EventId) -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
@@ -59,13 +72,14 @@ fun MediaDetailsBottomSheet(
     ModalBottomSheet(
         modifier = modifier,
         onDismissRequest = onDismiss,
+        scrollable = false,
     ) {
         Column(
             modifier = Modifier
-                .fillMaxWidth(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(24.dp),
+                .fillMaxWidth()
+                .verticalScroll(rememberScrollState()),
         ) {
+            Title()
             Section(
                 title = stringResource(R.string.screen_media_details_uploaded_by),
             ) {
@@ -83,57 +97,75 @@ fun MediaDetailsBottomSheet(
             )
             SectionText(
                 title = stringResource(R.string.screen_media_details_file_format),
-                text = state.mediaInfo.mimeType + " - " + state.mediaInfo.formattedFileSize,
+                text = state.mediaInfo.mimeType + Strings.NICE_SEPARATOR + state.mediaInfo.formattedFileSize,
             )
+            Spacer(modifier = Modifier.height(16.dp))
             if (state.eventId != null) {
-                Column {
+                HorizontalDivider()
+                ListItem(
+                    leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.VisibilityOn())),
+                    headlineContent = { Text(stringResource(CommonStrings.action_view_in_timeline)) },
+                    style = ListItemStyle.Primary,
+                    onClick = {
+                        onViewInTimeline(state.eventId)
+                    }
+                )
+                ListItem(
+                    leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ShareAndroid())),
+                    headlineContent = { Text(stringResource(CommonStrings.action_share)) },
+                    style = ListItemStyle.Primary,
+                    onClick = {
+                        onShare(state.eventId)
+                    }
+                )
+                ListItem(
+                    leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Forward())),
+                    headlineContent = { Text(stringResource(CommonStrings.action_forward)) },
+                    style = ListItemStyle.Primary,
+                    onClick = {
+                        onForward(state.eventId)
+                    }
+                )
+                ListItem(
+                    leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Download())),
+                    headlineContent = { Text(stringResource(CommonStrings.action_download)) },
+                    style = ListItemStyle.Primary,
+                    onClick = {
+                        onDownload(state.eventId)
+                    }
+                )
+                val mimeType = state.mediaInfo.mimeType
+                val icon = when (mimeType) {
+                    MimeTypes.Apk ->
+                        ListItemContent.Icon(IconSource.Resource(R.drawable.ic_apk_install))
+                    else ->
+                        ListItemContent.Icon(IconSource.Vector(CompoundIcons.PopOut()))
+                }
+                val wording = when (mimeType) {
+                    MimeTypes.Apk -> stringResource(id = CommonStrings.common_install_apk_android)
+                    else -> stringResource(id = CommonStrings.action_open_with)
+                }
+                ListItem(
+                    leadingContent = icon,
+                    headlineContent = { Text(wording) },
+                    style = ListItemStyle.Primary,
+                    onClick = {
+                        onOpenWith(state.eventId)
+                    }
+                )
+                if (state.canDelete) {
                     HorizontalDivider()
                     ListItem(
-                        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.VisibilityOn())),
-                        headlineContent = { Text(stringResource(CommonStrings.action_view_in_timeline)) },
-                        style = ListItemStyle.Primary,
+                        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Delete())),
+                        headlineContent = { Text(stringResource(CommonStrings.action_delete)) },
+                        style = ListItemStyle.Destructive,
                         onClick = {
-                            onViewInTimeline(state.eventId)
+                            onDelete(state.eventId)
                         }
                     )
-                    ListItem(
-                        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.ShareAndroid())),
-                        headlineContent = { Text(stringResource(CommonStrings.action_share)) },
-                        style = ListItemStyle.Primary,
-                        onClick = {
-                            onShare(state.eventId)
-                        }
-                    )
-                    ListItem(
-                        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Forward())),
-                        headlineContent = { Text(stringResource(CommonStrings.action_forward)) },
-                        style = ListItemStyle.Primary,
-                        onClick = {
-                            onForward(state.eventId)
-                        }
-                    )
-                    ListItem(
-                        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Download())),
-                        headlineContent = { Text(stringResource(CommonStrings.action_save)) },
-                        style = ListItemStyle.Primary,
-                        onClick = {
-                            onDownload(state.eventId)
-                        }
-                    )
-                    if (state.canDelete) {
-                        HorizontalDivider()
-                        ListItem(
-                            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Delete())),
-                            headlineContent = { Text(stringResource(CommonStrings.action_remove)) },
-                            style = ListItemStyle.Destructive,
-                            onClick = {
-                                onDelete(state.eventId)
-                            }
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(16.dp))
                 }
             }
+            Spacer(modifier = Modifier.height(16.dp))
         }
     }
 }
@@ -164,25 +196,44 @@ private fun SenderRow(
                 .weight(1f),
         ) {
             // Name
+            val bestName = mediaInfo.senderName ?: mediaInfo.senderId?.value.orEmpty()
             val avatarColors = AvatarColorsProvider.provide(id)
             Text(
                 modifier = Modifier.clipToBounds(),
-                text = mediaInfo.senderName.orEmpty(),
+                text = bestName,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
                 color = avatarColors.foreground,
                 style = ElementTheme.typography.fontBodyMdMedium,
             )
             // Id
-            Text(
-                text = mediaInfo.senderId?.value.orEmpty(),
-                color = ElementTheme.colors.textSecondary,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-                style = ElementTheme.typography.fontBodyMdRegular,
-            )
+            if (!mediaInfo.senderName.isNullOrEmpty()) {
+                Text(
+                    text = mediaInfo.senderId?.value.orEmpty(),
+                    color = ElementTheme.colors.textSecondary,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis,
+                    style = ElementTheme.typography.fontBodyMdRegular,
+                )
+            }
         }
     }
+}
+
+@Composable
+private fun ColumnScope.Title() {
+    Text(
+        modifier = Modifier
+            .align(Alignment.CenterHorizontally)
+            .padding(top = 16.dp, bottom = 8.dp, start = 16.dp, end = 16.dp)
+            .semantics {
+                heading()
+            },
+        text = stringResource(R.string.screen_media_details_title),
+        textAlign = TextAlign.Center,
+        style = ElementTheme.typography.fontBodyLgMedium,
+        color = ElementTheme.colors.textPrimary,
+    )
 }
 
 @Composable
@@ -193,12 +244,12 @@ private fun Section(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp),
+            .padding(vertical = 8.dp, horizontal = 16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         Text(
-            text = title.uppercase(),
-            style = ElementTheme.typography.fontBodySmRegular,
+            text = title,
+            style = ElementTheme.typography.fontBodyMdMedium,
             color = ElementTheme.colors.textSecondary,
         )
         content()
@@ -221,13 +272,16 @@ private fun SectionText(
 
 @PreviewsDayNight
 @Composable
-internal fun MediaDetailsBottomSheetPreview() = ElementPreview {
+internal fun MediaDetailsBottomSheetPreview(
+    @PreviewParameter(MediaBottomSheetStateDetailsProvider::class) state: MediaBottomSheetState.Details,
+) = ElementPreview {
     MediaDetailsBottomSheet(
-        state = aMediaDetailsBottomSheetState(),
+        state = state,
         onViewInTimeline = {},
         onShare = {},
         onForward = {},
         onDownload = {},
+        onOpenWith = {},
         onDelete = {},
         onDismiss = {},
     )

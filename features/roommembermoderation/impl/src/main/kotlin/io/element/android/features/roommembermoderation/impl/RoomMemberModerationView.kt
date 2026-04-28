@@ -17,6 +17,8 @@ import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.systemBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -224,9 +226,12 @@ private fun RoomMemberActionsBottomSheet(
                 onDismiss()
             }
         },
+        scrollable = false,
     ) {
         Column(
-            modifier = Modifier.padding(vertical = 16.dp)
+            modifier = Modifier
+                .padding(vertical = 16.dp)
+                .verticalScroll(rememberScrollState())
         ) {
             Avatar(
                 avatarData = user.getAvatarData(size = AvatarSize.RoomListManageUser),

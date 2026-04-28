@@ -17,6 +17,5 @@ data class StartChatState(
     val userListState: UserListState,
     val startDmAction: AsyncAction<RoomId>,
     val isRoomDirectorySearchEnabled: Boolean,
-    val enableKeyShareOnInvite: Boolean,
     val eventSink: (StartChatEvents) -> Unit,
 )

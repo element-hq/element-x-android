@@ -103,7 +103,9 @@ class TimelineItemContentFactory(
             is StickerContent -> stickerFactory.create(itemContent)
             is PollContent -> pollFactory.create(eventId, isEditable, isOutgoing, itemContent)
             is UnableToDecryptContent -> utdFactory.create(itemContent)
-            is CallNotifyContent -> TimelineItemRtcNotificationContent()
+            is CallNotifyContent -> TimelineItemRtcNotificationContent(
+                itemContent.callIntent
+            )
             is UnknownContent -> TimelineItemUnknownContent
             is LiveLocationContent -> {
                 val lastKnownLocation = itemContent.locations.mapNotNull { beacon ->

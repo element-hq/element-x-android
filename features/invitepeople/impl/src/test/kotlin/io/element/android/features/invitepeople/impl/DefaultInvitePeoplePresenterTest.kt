@@ -15,9 +15,6 @@ import io.element.android.features.invitepeople.api.InvitePeopleEvents
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -405,10 +402,14 @@ internal class DefaultInvitePeoplePresenterTest {
         val inviteUserResult = lambdaRecorder<UserId, Result<Unit>> { userId: UserId ->
             Result.success(Unit)
         }
+        val encryptionService = FakeEncryptionService(
+            getUserIdentityResult = { _ -> Result.success(null) },
+        )
         val presenter = createDefaultInvitePeoplePresenter(
             userRepository = repository,
             inviteUserResult = inviteUserResult,
-            coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
+            coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
+            matrixClient = FakeMatrixClient(encryptionService = encryptionService),
         )
         presenter.test {
             val initialState = awaitItem()
@@ -451,13 +452,18 @@ internal class DefaultInvitePeoplePresenterTest {
             Result.failure(AN_EXCEPTION)
         }
         val showErrorResResult = lambdaRecorder<Int, Int, Unit> { _, _ -> }
+
+        val encryptionService = FakeEncryptionService(
+            getUserIdentityResult = { _ -> Result.success(null) },
+        )
         val presenter = createDefaultInvitePeoplePresenter(
             userRepository = repository,
             inviteUserResult = inviteUserResult,
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
             appErrorStateService = FakeAppErrorStateService(
                 showErrorResResult = showErrorResResult,
-            )
+            ),
+            matrixClient = FakeMatrixClient(encryptionService = encryptionService),
         )
         presenter.test {
             val initialState = awaitItem()
@@ -632,15 +638,11 @@ internal class DefaultInvitePeoplePresenterTest {
         val encryptionService = FakeEncryptionService(
             getUserIdentityResult = getUserIdentityResult
         )
-        val featureFlagService = FakeFeatureFlagService().apply {
-            setFeatureEnabled(FeatureFlags.EnableKeyShareOnInvite, true)
-        }
 
         val presenter = createDefaultInvitePeoplePresenter(
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
             inviteUserResult = inviteUserResult,
             matrixClient = FakeMatrixClient(encryptionService = encryptionService),
-            featureFlagService = featureFlagService
         )
         presenter.test {
             val initialState = awaitItem()
@@ -703,15 +705,11 @@ internal class DefaultInvitePeoplePresenterTest {
         val encryptionService = FakeEncryptionService(
             getUserIdentityResult = getUserIdentityResult
         )
-        val featureFlagService = FakeFeatureFlagService().apply {
-            setFeatureEnabled(FeatureFlags.EnableKeyShareOnInvite, true)
-        }
 
         val presenter = createDefaultInvitePeoplePresenter(
             userRepository = repository,
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
             matrixClient = FakeMatrixClient(encryptionService = encryptionService),
-            featureFlagService = featureFlagService
         )
         presenter.test {
             val initialState = awaitItemAsDefault()
@@ -790,14 +788,10 @@ internal class DefaultInvitePeoplePresenterTest {
         val encryptionService = FakeEncryptionService(
             getUserIdentityResult = getUserIdentityResult
         )
-        val featureFlagService = FakeFeatureFlagService().apply {
-            setFeatureEnabled(FeatureFlags.EnableKeyShareOnInvite, true)
-        }
 
         val presenter = createDefaultInvitePeoplePresenter(
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
             matrixClient = FakeMatrixClient(encryptionService = encryptionService),
-            featureFlagService = featureFlagService
         )
         presenter.test {
             val initialState = awaitItem()
@@ -878,7 +872,6 @@ fun TestScope.createDefaultInvitePeoplePresenter(
     userRepository: UserRepository = FakeUserRepository(),
     coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
     appErrorStateService: AppErrorStateService = FakeAppErrorStateService(),
-    featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
     matrixClient: MatrixClient = FakeMatrixClient(),
 ): DefaultInvitePeoplePresenter {
     return DefaultInvitePeoplePresenter(
@@ -888,7 +881,6 @@ fun TestScope.createDefaultInvitePeoplePresenter(
         coroutineDispatchers = coroutineDispatchers,
         sessionCoroutineScope = backgroundScope,
         appErrorStateService = appErrorStateService,
-        featureFlagService = featureFlagService,
         matrixClient = matrixClient,
     )
 }

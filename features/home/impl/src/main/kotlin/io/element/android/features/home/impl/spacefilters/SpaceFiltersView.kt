@@ -81,7 +81,8 @@ fun SpaceFiltersView(
                 if (state is SpaceFiltersState.Selecting) {
                     state.eventSink(SpaceFiltersEvent.Selecting.Cancel)
                 }
-            }
+            },
+            scrollable = false,
         ) {
             Box(
                 modifier = Modifier

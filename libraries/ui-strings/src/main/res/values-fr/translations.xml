@@ -88,6 +88,8 @@
   <string name="action_deactivate_account">"Désactiver le compte"</string>
   <string name="action_decline">"Refuser"</string>
   <string name="action_decline_and_block">"Refuser et bloquer"</string>
+  <string name="action_delete">"Supprimer"</string>
+  <string name="action_delete_account">"Supprimer le compte"</string>
   <string name="action_delete_poll">"Supprimer le sondage"</string>
   <string name="action_deselect_all">"Tout désélectionner"</string>
   <string name="action_disable">"Désactiver"</string>

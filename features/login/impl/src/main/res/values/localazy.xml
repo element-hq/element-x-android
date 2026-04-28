@@ -28,7 +28,7 @@
   <string name="screen_change_server_subtitle">"What is the address of your server?"</string>
   <string name="screen_change_server_title">"Select your server"</string>
   <string name="screen_create_account_title">"Create account"</string>
-  <string name="screen_login_error_deactivated_account">"This account has been deactivated."</string>
+  <string name="screen_login_error_deactivated_account">"This account has been deleted."</string>
   <string name="screen_login_error_invalid_credentials">"Incorrect username and/or password"</string>
   <string name="screen_login_error_invalid_user_id">"This is not a valid user identifier. Expected format: ‘@user:homeserver.org’"</string>
   <string name="screen_login_error_refresh_tokens">"This server is configured to use refresh tokens. These aren\'t supported when using password based login."</string>

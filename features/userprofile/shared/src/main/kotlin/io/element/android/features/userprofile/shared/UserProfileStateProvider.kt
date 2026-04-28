@@ -61,6 +61,5 @@ fun aUserProfileState(
     dmRoomId = dmRoomId,
     canCall = canCall,
     snackbarMessage = snackbarMessage,
-    enableKeyShareOnInvite = false,
     eventSink = eventSink,
 )

@@ -27,7 +27,7 @@ internal fun Session.toSessionData(
     accessToken = accessToken,
     refreshToken = refreshToken,
     homeserverUrl = homeserverUrl ?: this.homeserverUrl,
-    oidcData = oidcData,
+    oidcData = oauthData,
     loginTimestamp = Date(),
     isTokenValid = isTokenValid,
     loginType = loginType,

@@ -9,6 +9,7 @@
 package io.element.android.libraries.matrix.impl.fixtures.factories
 
 import io.element.android.libraries.matrix.api.core.ThreadId
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiTimelineEvent
 import io.element.android.libraries.matrix.test.A_ROOM_NAME
 import io.element.android.libraries.matrix.test.A_USER_NAME
@@ -68,7 +69,8 @@ internal fun aRustNotificationRoomInfo(
     isDirect: Boolean = false,
     joinRule: JoinRule? = null,
     isSpace: Boolean = false,
-    serviceMembers: List<String> = emptyList(),
+    serviceMembers: List<UserId> = emptyList(),
+    activeServiceMemberCount: Int = 0,
 ) = NotificationRoomInfo(
     displayName = displayName,
     avatarUrl = avatarUrl,
@@ -79,7 +81,8 @@ internal fun aRustNotificationRoomInfo(
     isDirect = isDirect,
     joinRule = joinRule,
     isSpace = isSpace,
-    serviceMembers = serviceMembers,
+    serviceMembers = serviceMembers.map { it.value },
+    activeServiceMembersCount = activeServiceMemberCount.toULong(),
 )
 
 internal fun aRustNotificationEventTimeline(

@@ -9,7 +9,7 @@
 package io.element.android.libraries.matrix.impl.auth
 
 import io.element.android.libraries.matrix.api.auth.OidcPrompt
-import org.matrix.rustcomponents.sdk.OidcPrompt as RustOidcPrompt
+import org.matrix.rustcomponents.sdk.OAuthPrompt as RustOidcPrompt
 
 internal fun OidcPrompt.toRustPrompt(): RustOidcPrompt {
     return when (this) {

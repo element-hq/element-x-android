@@ -260,8 +260,8 @@ class RustMatrixAuthenticationService(
         return withContext(coroutineDispatchers.io) {
             runCatchingExceptions {
                 val client = currentClient ?: error("You need to call `setHomeserver()` first")
-                val oAuthAuthorizationData = client.urlForOidc(
-                    oidcConfiguration = oidcConfigurationProvider.get(),
+                val oAuthAuthorizationData = client.urlForOauth(
+                    oauthConfiguration = oidcConfigurationProvider.get(),
                     prompt = prompt.toRustPrompt(),
                     loginHint = loginHint,
                     // If we want to restore a previous session for which we have encryption keys, we can pass the deviceId here. At the moment, we don't
@@ -282,7 +282,7 @@ class RustMatrixAuthenticationService(
         return withContext(coroutineDispatchers.io) {
             runCatchingExceptions {
                 pendingOAuthAuthorizationData?.use {
-                    currentClient?.abortOidcAuth(it)
+                    currentClient?.abortOauthAuth(it)
                 }
                 pendingOAuthAuthorizationData = null
             }.mapFailure { failure ->
@@ -304,7 +304,7 @@ class RustMatrixAuthenticationService(
             runCatchingExceptions {
                 val client = currentClient ?: error("You need to call `setHomeserver()` first")
                 val currentSessionPaths = sessionPaths ?: error("You need to call `setHomeserver()` first")
-                client.loginWithOidcCallback(
+                client.loginWithOauthCallback(
                     callbackUrl = callbackUrl,
                 )
                 // Free the pending data since we won't use it to abort the flow anymore
@@ -368,7 +368,7 @@ class RustMatrixAuthenticationService(
                     qrCodeData = sdkQrCodeLoginData,
                 )
                 client.newLoginWithQrCodeHandler(
-                    oidcConfiguration = oidcConfiguration,
+                    oauthConfiguration = oidcConfiguration,
                 ).use {
                     it.scan(
                         qrCodeData = qrCodeData.rustQrCodeData,

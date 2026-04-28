@@ -105,6 +105,11 @@ class RustMatrixClientFactory(
     suspend fun create(client: Client): RustMatrixClient {
         val (anonymizedAccessToken, anonymizedRefreshToken) = client.session().anonymizedTokens()
 
+        // Must be called before creating the sync service, timelines etc.
+        if (featureFlagService.isFeatureEnabled(FeatureFlags.AutomaticBackPagination)) {
+            client.enableAutomaticBackpagination()
+        }
+
         client.setUtdDelegate(UtdTracker(analyticsService))
 
         val syncService = client.syncService()
@@ -162,7 +167,7 @@ class RustMatrixClientFactory(
                     }
                 )
             )
-            .enableShareHistoryOnInvite(featureFlagService.isFeatureEnabled(FeatureFlags.EnableKeyShareOnInvite))
+            .enableShareHistoryOnInvite(true)
             .threadsEnabled(featureFlagService.isFeatureEnabled(FeatureFlags.Threads), threadSubscriptions = false)
             .requestConfig(
                 RequestConfig(
@@ -209,5 +214,5 @@ fun SessionData.toSession() = Session(
     deviceId = deviceId,
     homeserverUrl = homeserverUrl,
     slidingSyncVersion = SlidingSyncVersion.NATIVE,
-    oidcData = oidcData,
+    oauthData = oidcData,
 )

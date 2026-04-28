@@ -18,7 +18,7 @@ class FakeFfiHomeserverLoginDetails(
     private val supportsSsoLogin: Boolean = false,
 ) : HomeserverLoginDetails(NoHandle) {
     override fun url(): String = url
-    override fun supportsOidcLogin(): Boolean = supportsOidcLogin
+    override fun supportsOauthLogin(): Boolean = supportsOidcLogin
     override fun supportsPasswordLogin(): Boolean = supportsPasswordLogin
     override fun supportsSsoLogin(): Boolean = supportsSsoLogin
 }

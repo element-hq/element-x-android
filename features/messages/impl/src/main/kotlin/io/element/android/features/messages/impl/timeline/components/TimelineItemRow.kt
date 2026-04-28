@@ -72,7 +72,6 @@ internal fun TimelineItemRow(
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
-    onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
     eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit =
@@ -127,9 +126,8 @@ internal fun TimelineItemRow(
                         TimelineItemCallNotifyView(
                             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
                             event = timelineItem,
-                            roomCallState = timelineRoomInfo.roomCallState,
+                            content = timelineItem.content,
                             onLongClick = onLongClick,
-                            onJoinCallClick = onJoinCallClick,
                         )
                     }
                     else -> {

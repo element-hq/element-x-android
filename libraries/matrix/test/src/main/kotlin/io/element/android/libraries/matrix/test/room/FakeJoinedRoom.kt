@@ -34,6 +34,7 @@ import io.element.android.libraries.matrix.api.roomdirectory.RoomVisibility
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetDriver
 import io.element.android.libraries.matrix.api.widget.MatrixWidgetSettings
+import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.threads.FakeThreadsListService
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
@@ -239,7 +240,7 @@ class FakeJoinedRoom(
     }
 
     override suspend fun startLiveLocationShare(durationMillis: Long): Result<EventId> = simulateLongTask {
-        startLiveLocationShareResult(durationMillis)
+        startLiveLocationShareResult(durationMillis).map { AN_EVENT_ID }
     }
 
     override suspend fun stopLiveLocationShare(): Result<Unit> = simulateLongTask {

@@ -1,74 +1,74 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="notification_channel_call">"通话"</string>
-  <string name="notification_channel_listening_for_events">"监听事件"</string>
+  <string name="notification_channel_listening_for_events">"正在监听事件"</string>
   <string name="notification_channel_noisy">"嘈杂通知"</string>
-  <string name="notification_channel_ringing_calls">"来电振铃"</string>
+  <string name="notification_channel_ringing_calls">"响铃通话"</string>
   <string name="notification_channel_silent">"静默通知"</string>
   <plurals name="notification_compat_summary_line_for_room">
-    <item quantity="other">"%1$s：%2$d 条消息"</item>
+    <item quantity="other">"%1$s：%2$d 个消息"</item>
   </plurals>
   <plurals name="notification_compat_summary_title">
-    <item quantity="other">"%d 条通知"</item>
+    <item quantity="other">"%d 个通知"</item>
   </plurals>
-  <string name="notification_error_unified_push_unregistered_android">"统一推送通知分发器注册失败，您将无法再接收通知。请检查应用的通知设置及推送分发器的状态。"</string>
-  <string name="notification_fallback_content">"您有新消息。"</string>
+  <string name="notification_error_unified_push_unregistered_android">"UnifiedPush 分发器注册失败，你将无法再接收通知。请检查 app 的通知设置及推送分发器的状态。"</string>
+  <string name="notification_fallback_content">"你有新消息。"</string>
   <plurals name="notification_fallback_n_content">
-    <item quantity="other">"您有 %d 条新消息。"</item>
+    <item quantity="other">"你有 %d 条新消息。"</item>
   </plurals>
   <string name="notification_incoming_audio_call">"📞 来电"</string>
   <string name="notification_incoming_call">"📹 来电"</string>
-  <string name="notification_inline_reply_failed">"** 无法发送——请打开聊天室"</string>
+  <string name="notification_inline_reply_failed">"** 无法发送——请打开房间"</string>
   <string name="notification_invitation_action_join">"加入"</string>
   <string name="notification_invitation_action_reject">"拒绝"</string>
   <plurals name="notification_invitations">
     <item quantity="other">"%d 个邀请"</item>
   </plurals>
-  <string name="notification_invite_body">"邀请您聊天"</string>
-  <string name="notification_invite_body_with_sender">"%1$s 邀您聊天"</string>
+  <string name="notification_invite_body">"已邀请你聊天"</string>
+  <string name="notification_invite_body_with_sender">"%1$s 已邀请你聊天"</string>
   <string name="notification_mentioned_you_body">"提到了你：%1$s"</string>
   <string name="notification_new_messages">"新消息"</string>
   <plurals name="notification_new_messages_for_room">
-    <item quantity="other">"%d 条新消息"</item>
+    <item quantity="other">"%d 个新消息"</item>
   </plurals>
-  <string name="notification_reaction_body">"使用 %1$s 回应"</string>
-  <string name="notification_room_action_mark_as_read">"标记为已读"</string>
+  <string name="notification_reaction_body">"已使用 %1$s 反应"</string>
+  <string name="notification_room_action_mark_as_read">"设为已读"</string>
   <string name="notification_room_action_quick_reply">"快速回复"</string>
-  <string name="notification_room_invite_body">"邀请你加入聊天室"</string>
-  <string name="notification_room_invite_body_with_sender">"%1$s 邀请您加入房间"</string>
+  <string name="notification_room_invite_body">"邀请你加入房间"</string>
+  <string name="notification_room_invite_body_with_sender">"%1$s 已邀请你加入房间"</string>
   <string name="notification_sender_me">"我"</string>
-  <string name="notification_sender_mention_reply">"%1$s提及或回复"</string>
-  <string name="notification_space_invite_body">"已邀请您加入该空间"</string>
-  <string name="notification_space_invite_body_with_sender">"%1$s 邀请您加入该空间"</string>
-  <string name="notification_test_push_notification_content">"您正在查看通知！点击我！"</string>
-  <string name="notification_thread_in_room">"线程 %1$s"</string>
+  <string name="notification_sender_mention_reply">"%1$s 个提及或回复"</string>
+  <string name="notification_space_invite_body">"已邀请你加入空间"</string>
+  <string name="notification_space_invite_body_with_sender">"%1$s 邀请你加入空间"</string>
+  <string name="notification_test_push_notification_content">"你正在查看通知！点击我！"</string>
+  <string name="notification_thread_in_room">"位于 %1$s 中的消息列"</string>
   <string name="notification_ticker_text_dm">"%1$s：%2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
-    <item quantity="other">"%d 条未读消息"</item>
+    <item quantity="other">"%d 个未读消息"</item>
   </plurals>
   <string name="notification_unread_notified_messages_and_invitation">"%1$s 和 %2$s"</string>
   <string name="notification_unread_notified_messages_in_room">"%2$s 中的 %1$s"</string>
   <string name="notification_unread_notified_messages_in_room_and_invitation">"在 %2$s 和 %3$s 中的 %1$s"</string>
   <plurals name="notification_unread_notified_messages_in_room_rooms">
-    <item quantity="other">"%d 个聊天室"</item>
+    <item quantity="other">"%d 个房间"</item>
   </plurals>
   <string name="push_distributor_background_sync_android">"后台同步"</string>
-  <string name="push_distributor_firebase_android">"谷歌服务"</string>
+  <string name="push_distributor_firebase_android">"Google 服务"</string>
   <string name="push_no_valid_google_play_services_apk_android">"找不到有效的 Google Play 服务。通知可能无法正常工作。"</string>
-  <string name="troubleshoot_notifications_test_blocked_users_description">"检查被阻止的用户"</string>
+  <string name="troubleshoot_notifications_test_blocked_users_description">"检查被屏蔽的用户"</string>
   <string name="troubleshoot_notifications_test_blocked_users_quick_fix">"查看被屏蔽的用户"</string>
   <string name="troubleshoot_notifications_test_blocked_users_result_none">"未屏蔽任何用户。"</string>
   <plurals name="troubleshoot_notifications_test_blocked_users_result_some">
-    <item quantity="other">"您已屏蔽 %1$d 位用户。您将不再收到这些用户的推送通知。"</item>
+    <item quantity="other">"你已屏蔽 %1$d 位用户。将不再收到这些用户的通知。"</item>
   </plurals>
   <string name="troubleshoot_notifications_test_blocked_users_title">"已屏蔽用户"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"获取当前推送提供者的名称。"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"未选择任何推送提供者。"</string>
-  <string name="troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found">"当前推送提供商：%1$s和当前分销商：%2$s . 但经销商%3$s未找到。应用程序可能已被卸载？"</string>
-  <string name="troubleshoot_notifications_test_current_push_provider_failure_no_distributor">"当前推送提供商：%1$s ，但尚未配置分销商。"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found">"当前推送提供这：%1$s 及当前分发器：%2$s . 但未找到分发器 %3$s。该 app 可能已被卸载？"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_no_distributor">"当前推送提供者：%1$s ，但尚未配置分发器。"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"当前推送提供者：%1$s。"</string>
-  <string name="troubleshoot_notifications_test_current_push_provider_success_with_distributor">"当前推送提供商：%1$s （%2$s ）"</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_success_with_distributor">"当前推送提供者：%1$s（%2$s）"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_title">"当前推送提供者"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_description">"确保应用程序至少有一个推送提供者。"</string>
   <string name="troubleshoot_notifications_test_detect_push_provider_failure">"未找到推送提供者。"</string>

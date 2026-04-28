@@ -19,7 +19,6 @@ import kotlinx.coroutines.flow.buffer
 import kotlinx.coroutines.flow.callbackFlow
 import org.matrix.rustcomponents.sdk.LiveLocationShareUpdate
 import org.matrix.rustcomponents.sdk.LiveLocationsListener
-import org.matrix.rustcomponents.sdk.LiveLocationsObserverInterface
 import org.matrix.rustcomponents.sdk.RoomInterface
 import org.matrix.rustcomponents.sdk.LiveLocationShare as RustLiveLocationShare
 

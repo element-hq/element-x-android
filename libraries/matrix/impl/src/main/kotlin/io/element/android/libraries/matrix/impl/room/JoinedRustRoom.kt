@@ -520,9 +520,8 @@ class JoinedRustRoom(
 
     override suspend fun startLiveLocationShare(durationMillis: Long): Result<EventId> = withContext(roomDispatcher) {
         runCatchingExceptions {
-            val beaconId = innerRoom.startLiveLocationShare(durationMillis.toULong())
-            EventId(beaconId)
-        }
+            innerRoom.startLiveLocationShare(durationMillis.toULong())
+        }.map(::EventId)
     }
 
     override suspend fun stopLiveLocationShare(): Result<Unit> = withContext(roomDispatcher) {
@@ -551,7 +550,7 @@ class JoinedRustRoom(
 
     override fun destroy() {
         baseRoom.destroy()
-        liveInnerTimeline.destroy()
+        liveTimeline.close()
         threadsListService.destroy()
         Timber.d("Room $roomId destroyed")
     }
