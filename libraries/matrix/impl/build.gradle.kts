@@ -31,6 +31,7 @@ dependencies {
     implementation(projects.libraries.rustlsTls)
 
     implementation(projects.appconfig)
+    implementation(projects.features.enterprise.api)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.di)
     implementation(projects.libraries.featureflag.api)

@@ -14,4 +14,5 @@ data class ElementWellKnown(
     val rageshakeUrl: String?,
     val brandColor: String?,
     val notificationSound: String?,
+    val identityProviderAppScheme: String?,
 )

@@ -16,6 +16,7 @@ import kotlinx.coroutines.flow.Flow
 interface EnterpriseService {
     val isEnterpriseBuild: Boolean
     suspend fun isEnterpriseUser(sessionId: SessionId): Boolean
+    suspend fun tweakMasUrl(url: String, homeserver: String): String
     fun defaultHomeserverList(): List<String>
     suspend fun isAllowedToConnectToHomeserver(homeserverUrl: String): Boolean
 
