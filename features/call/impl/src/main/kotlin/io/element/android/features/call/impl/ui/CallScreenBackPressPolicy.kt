@@ -6,7 +6,6 @@
  */
 
 package io.element.android.features.call.impl.ui
-
 internal sealed interface CallScreenBackPressAction {
 
     data object DispatchEscapeToWebView : CallScreenBackPressAction

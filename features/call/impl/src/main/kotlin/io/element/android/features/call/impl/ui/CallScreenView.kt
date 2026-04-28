@@ -68,15 +68,12 @@ internal fun CallScreenView(
 
     fun handleBack(fromNative: Boolean = false) {
         when (CallScreenBackPressPolicy.resolve(supportPip = pipState.supportPip, hasWebView = callWebView!=null,fromNative)) {
-            CallScreenBackPressAction.EnterPictureInPicture -> {
+            CallScreenBackPressAction.EnterPictureInPicture ->
                 pipState.eventSink(PictureInPictureEvents.EnterPictureInPicture)
-            }
-            CallScreenBackPressAction.DispatchEscapeToWebView -> {
+            CallScreenBackPressAction.DispatchEscapeToWebView ->
                 callWebView?.dispatchEscKeyEvent()
-            }
-            CallScreenBackPressAction.Hangup -> {
+            CallScreenBackPressAction.Hangup ->
                 state.eventSink(CallScreenEvents.Hangup)
-            }
         }
     }
 
@@ -144,9 +141,7 @@ internal fun CallScreenView(
                     pipState.eventSink(PictureInPictureEvents.SetPipController(pipController))
                 },
                 onDestroyWebView = {
-                    if (callWebView === it) {
-                        callWebView = null
-                    }
+                    callWebView = null
                     // Reset audio mode
                     webViewAudioManager?.onCallStopped()
                 }
