@@ -176,7 +176,7 @@ class DefaultSessionWellknownRetrieverTest {
                 Result.success("{}".toByteArray())
             },
             cacheStore = cacheStore,
-            jsonProvider = JsonProvider { throw Exception("Failed to parse JSON") }
+            jsonProvider = JsonProvider { error("Failed to parse JSON") }
         )
         assertThat(sut.getElementWellKnown()).isInstanceOf(WellknownRetrieverResult.Error::class.java)
         // Ensure that the cache is deleted after the failure to parse it
