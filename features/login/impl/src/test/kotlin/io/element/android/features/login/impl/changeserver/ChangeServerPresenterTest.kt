@@ -50,7 +50,7 @@ class ChangeServerPresenterTest {
     fun `present - change server ok`() = runTest {
         val authenticationService = FakeMatrixAuthenticationService(
             setHomeserverResult = {
-                Result.success(aMatrixHomeServerDetails(supportsOidcLogin = true))
+                Result.success(aMatrixHomeServerDetails(supportsOAuthLogin = true))
             },
         )
         createPresenter(

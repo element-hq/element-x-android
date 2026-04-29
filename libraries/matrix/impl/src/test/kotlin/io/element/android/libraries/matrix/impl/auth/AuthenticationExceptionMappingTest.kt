@@ -64,17 +64,17 @@ class AuthenticationExceptionMappingTest {
     }
 
     @Test
-    fun `mapping Oidc exceptions map to the Oidc Kotlin`() {
+    fun `mapping Oidc exceptions map to the OAuth Kotlin`() {
         assertThat(OAuthException.Generic("Generic").mapAuthenticationException())
-            .isException<AuthenticationException.Oidc>("Generic")
+            .isException<AuthenticationException.OAuth>("Generic")
         assertThat(OAuthException.CallbackUrlInvalid("CallbackUrlInvalid").mapAuthenticationException())
-            .isException<AuthenticationException.Oidc>("CallbackUrlInvalid")
+            .isException<AuthenticationException.OAuth>("CallbackUrlInvalid")
         assertThat(OAuthException.Cancelled("Cancelled").mapAuthenticationException())
-            .isException<AuthenticationException.Oidc>("Cancelled")
+            .isException<AuthenticationException.OAuth>("Cancelled")
         assertThat(OAuthException.MetadataInvalid("MetadataInvalid").mapAuthenticationException())
-            .isException<AuthenticationException.Oidc>("MetadataInvalid")
+            .isException<AuthenticationException.OAuth>("MetadataInvalid")
         assertThat(OAuthException.NotSupported("NotSupported").mapAuthenticationException())
-            .isException<AuthenticationException.Oidc>("NotSupported")
+            .isException<AuthenticationException.OAuth>("NotSupported")
     }
 
     private inline fun <reified T> ThrowableSubject.isException(message: String) {

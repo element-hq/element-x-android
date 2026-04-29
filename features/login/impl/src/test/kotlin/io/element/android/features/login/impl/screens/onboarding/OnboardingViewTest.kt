@@ -19,7 +19,7 @@ import com.google.testing.junit.testparameterinjector.TestParameter
 import io.element.android.features.login.impl.R
 import io.element.android.features.login.impl.login.LoginMode
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.matrix.api.auth.OidcDetails
+import io.element.android.libraries.matrix.api.auth.OAuthDetails
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
@@ -224,14 +224,14 @@ class OnboardingViewTest {
     @Test
     fun `when success Oidc - the expected callback is invoked and the event is received`() {
         val eventSink = EventsRecorder<OnBoardingEvents>()
-        val oidcDetails = OidcDetails("aUrl")
-        ensureCalledOnceWithParam(oidcDetails) { callback ->
+        val oAuthDetails = OAuthDetails("aUrl")
+        ensureCalledOnceWithParam(oAuthDetails) { callback ->
             rule.setOnboardingView(
                 state = anOnBoardingState(
-                    loginMode = AsyncData.Success(LoginMode.Oidc(oidcDetails)),
+                    loginMode = AsyncData.Success(LoginMode.OAuth(oAuthDetails)),
                     eventSink = eventSink,
                 ),
-                onOidcDetails = callback,
+                onOAuthDetails = callback,
             )
         }
         eventSink.assertSingle(OnBoardingEvents.ClearError)
@@ -240,8 +240,8 @@ class OnboardingViewTest {
     @Test
     fun `when success AccountCreation - the expected callback is invoked and the event is received`() {
         val eventSink = EventsRecorder<OnBoardingEvents>()
-        val oidcDetails = OidcDetails("aUrl")
-        ensureCalledOnceWithParam(oidcDetails.url) { callback ->
+        val oAuthDetails = OAuthDetails("aUrl")
+        ensureCalledOnceWithParam(oAuthDetails.url) { callback ->
             rule.setOnboardingView(
                 state = anOnBoardingState(
                     loginMode = AsyncData.Success(LoginMode.AccountCreation("aUrl")),
@@ -261,7 +261,7 @@ class OnboardingViewTest {
         onSignIn: (Boolean) -> Unit = EnsureNeverCalledWithParam(),
         onCreateAccount: () -> Unit = EnsureNeverCalled(),
         onReportProblem: () -> Unit = EnsureNeverCalled(),
-        onOidcDetails: (OidcDetails) -> Unit = EnsureNeverCalledWithParam(),
+        onOAuthDetails: (OAuthDetails) -> Unit = EnsureNeverCalledWithParam(),
         onNeedLoginPassword: () -> Unit = EnsureNeverCalled(),
         onLearnMoreClick: () -> Unit = EnsureNeverCalled(),
         onCreateAccountContinue: (url: String) -> Unit = EnsureNeverCalledWithParam(),
@@ -275,7 +275,7 @@ class OnboardingViewTest {
                 onSignIn = onSignIn,
                 onCreateAccount = onCreateAccount,
                 onReportProblem = onReportProblem,
-                onOidcDetails = onOidcDetails,
+                onOAuthDetails = onOAuthDetails,
                 onNeedLoginPassword = onNeedLoginPassword,
                 onLearnMoreClick = onLearnMoreClick,
                 onCreateAccountContinue = onCreateAccountContinue,
