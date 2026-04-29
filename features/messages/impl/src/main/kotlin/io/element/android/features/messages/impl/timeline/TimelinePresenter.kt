@@ -185,8 +185,10 @@ class TimelinePresenter(
                         sendPollResponseAction.execute(
                             timeline = this,
                             pollStartId = event.pollStartId,
-                            answerId = event.answerId
-                        )
+                            answerIds = event.answerIds
+                        ).onFailure { error ->
+                            Timber.tag(tag).e(error, "Failed to send poll response")
+                        }
                     }
                 }
                 is TimelineEvent.EndPoll -> sessionCoroutineScope.launch {

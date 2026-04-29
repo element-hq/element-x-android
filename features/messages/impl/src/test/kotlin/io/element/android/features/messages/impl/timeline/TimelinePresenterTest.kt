@@ -428,7 +428,7 @@ class TimelinePresenterTest {
         )
         presenter.test {
             val initialState = awaitFirstItem()
-            initialState.eventSink.invoke(TimelineEvent.SelectPollAnswer(AN_EVENT_ID, "anAnswerId"))
+            initialState.eventSink.invoke(TimelineEvent.SelectPollAnswer(AN_EVENT_ID, listOf("anAnswerId")))
         }
         delay(1)
         sendPollResponseAction.verifyExecutionCount(1)
