@@ -48,6 +48,7 @@ dependencies {
     implementation(libs.kotlinx.collections.immutable)
 
     testCommonDependencies(libs)
+    testImplementation(projects.features.enterprise.test)
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.preferences.test)
