@@ -12,8 +12,8 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.auth.ElementClassicSession
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
-import io.element.android.libraries.matrix.api.auth.OidcDetails
-import io.element.android.libraries.matrix.api.auth.OidcPrompt
+import io.element.android.libraries.matrix.api.auth.OAuthDetails
+import io.element.android.libraries.matrix.api.auth.OAuthPrompt
 import io.element.android.libraries.matrix.api.auth.external.ExternalSession
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
 import io.element.android.libraries.matrix.api.auth.qrlogin.QrCodeLoginStep
@@ -26,7 +26,7 @@ import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.simulateLongTask
 
-val A_OIDC_DATA = OidcDetails(url = "a-url")
+val AN_OAUTH_DATA = OAuthDetails(url = "a-url")
 
 class FakeMatrixAuthenticationService(
     var matrixClientResult: ((SessionId) -> Result<MatrixClient>)? = null,
@@ -37,8 +37,8 @@ class FakeMatrixAuthenticationService(
     private val setElementClassicSessionResult: (ElementClassicSession?) -> Unit = { lambdaError() },
     private val doSecretsContainBackupKeyResult: (UserId, String, String) -> Boolean = { _, _, _ -> lambdaError() },
 ) : MatrixAuthenticationService {
-    private var oidcError: Throwable? = null
-    private var oidcCancelError: Throwable? = null
+    private var oAuthError: Throwable? = null
+    private var oAuthCancelError: Throwable? = null
     private var loginError: Throwable? = null
     private var matrixClient: MatrixClient? = null
     private var onAuthenticationListener: ((MatrixClient) -> Unit)? = null
@@ -70,18 +70,18 @@ class FakeMatrixAuthenticationService(
         return importCreatedSessionLambda(externalSession)
     }
 
-    override suspend fun getOidcUrl(
-        prompt: OidcPrompt,
+    override suspend fun getOAuthUrl(
+        prompt: OAuthPrompt,
         loginHint: String?,
-    ): Result<OidcDetails> = simulateLongTask {
-        oidcError?.let { Result.failure(it) } ?: Result.success(A_OIDC_DATA)
+    ): Result<OAuthDetails> = simulateLongTask {
+        oAuthError?.let { Result.failure(it) } ?: Result.success(AN_OAUTH_DATA)
     }
 
-    override suspend fun cancelOidcLogin(): Result<Unit> {
-        return oidcCancelError?.let { Result.failure(it) } ?: Result.success(Unit)
+    override suspend fun cancelOAuthLogin(): Result<Unit> {
+        return oAuthCancelError?.let { Result.failure(it) } ?: Result.success(Unit)
     }
 
-    override suspend fun loginWithOidc(callbackUrl: String): Result<SessionId> = simulateLongTask {
+    override suspend fun loginWithOAuth(callbackUrl: String): Result<SessionId> = simulateLongTask {
         loginError?.let { Result.failure(it) } ?: run {
             onAuthenticationListener?.invoke(matrixClient ?: FakeMatrixClient())
             Result.success(A_USER_ID)
@@ -97,12 +97,12 @@ class FakeMatrixAuthenticationService(
         onAuthenticationListener = lambda
     }
 
-    fun givenOidcError(throwable: Throwable?) {
-        oidcError = throwable
+    fun givenOAuthError(throwable: Throwable?) {
+        oAuthError = throwable
     }
 
-    fun givenOidcCancelError(throwable: Throwable?) {
-        oidcCancelError = throwable
+    fun givenOAuthCancelError(throwable: Throwable?) {
+        oAuthCancelError = throwable
     }
 
     fun givenLoginError(throwable: Throwable?) {

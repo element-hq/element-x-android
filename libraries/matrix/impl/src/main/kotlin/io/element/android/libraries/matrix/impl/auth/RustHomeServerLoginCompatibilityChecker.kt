@@ -31,7 +31,7 @@ class RustHomeServerLoginCompatibilityChecker(
                 it.homeserverLoginDetails()
             }
             .use {
-                Timber.d("Homeserver $url | OIDC: ${it.supportsOauthLogin()} | Password: ${it.supportsPasswordLogin()} | SSO: ${it.supportsSsoLogin()}")
+                Timber.d("Homeserver $url | OAuth: ${it.supportsOauthLogin()} | Password: ${it.supportsPasswordLogin()} | SSO: ${it.supportsSsoLogin()}")
                 it.supportsOauthLogin() || it.supportsPasswordLogin()
             }
     }

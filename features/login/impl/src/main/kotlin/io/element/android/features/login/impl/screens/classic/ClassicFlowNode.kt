@@ -31,7 +31,7 @@ import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.appyx.rememberFaderOrSliderTransitionHandler
 import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.createNode
-import io.element.android.libraries.matrix.api.auth.OidcDetails
+import io.element.android.libraries.matrix.api.auth.OAuthDetails
 import io.element.android.libraries.matrix.api.core.UserId
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -54,7 +54,7 @@ class ClassicFlowNode(
     interface Callback : Plugin {
         fun navigateToOnBoarding(allowBackNavigation: Boolean)
         fun navigateToLoginPassword()
-        fun navigateToOidc(oidcDetails: OidcDetails)
+        fun navigateToOAuth(oAuthDetails: OAuthDetails)
         fun navigateToCreateAccount(url: String)
     }
 
@@ -111,8 +111,8 @@ class ClassicFlowNode(
                         callback.navigateToLoginPassword()
                     }
 
-                    override fun navigateToOidc(oidcDetails: OidcDetails) {
-                        callback.navigateToOidc(oidcDetails)
+                    override fun navigateToOAuth(oAuthDetails: OAuthDetails) {
+                        callback.navigateToOAuth(oAuthDetails)
                     }
 
                     override fun navigateToCreateAccount(url: String) {

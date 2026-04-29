@@ -49,7 +49,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Text
-import io.element.android.libraries.matrix.api.auth.OidcDetails
+import io.element.android.libraries.matrix.api.auth.OAuthDetails
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -59,7 +59,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun LoginWithClassicView(
     state: LoginWithClassicState,
     onOtherOptionsClick: () -> Unit,
-    onOidcDetails: (OidcDetails) -> Unit,
+    onOAuthDetails: (OAuthDetails) -> Unit,
     onNeedLoginPassword: () -> Unit,
     onLearnMoreClick: () -> Unit,
     onCreateAccountContinue: (url: String) -> Unit,
@@ -200,7 +200,7 @@ fun LoginWithClassicView(
             state.eventSink(LoginWithClassicEvent.ClearError)
         },
         onLearnMoreClick = onLearnMoreClick,
-        onOidcDetails = onOidcDetails,
+        onOAuthDetails = onOAuthDetails,
         onNeedLoginPassword = onNeedLoginPassword,
         onCreateAccountContinue = onCreateAccountContinue,
     )
@@ -212,7 +212,7 @@ internal fun LoginWithClassicViewPreview(@PreviewParameter(LoginWithClassicState
     LoginWithClassicView(
         state = state,
         onOtherOptionsClick = {},
-        onOidcDetails = {},
+        onOAuthDetails = {},
         onNeedLoginPassword = {},
         onLearnMoreClick = {},
         onCreateAccountContinue = {},
