@@ -79,7 +79,7 @@ fun TimelineItemImageView(
             Modifier
         }
         TimelineItemAspectRatioBox(
-            modifier = containerModifier.blurHashBackground(content.blurhash, alpha = 0.9f),
+            modifier = containerModifier.blurHashBackground(content.blurhash, alpha = 0.9f).align(Alignment.CenterHorizontally),
             aspectRatio = coerceRatioWhenHidingContent(content.aspectRatio, hideMediaContent),
         ) {
             ProtectedView(
@@ -123,7 +123,10 @@ fun TimelineItemImageView(
                 LocalContentColor provides ElementTheme.colors.textPrimary,
                 LocalTextStyle provides ElementTheme.typography.fontBodyLgRegular
             ) {
-                val aspectRatio = content.aspectRatio ?: DEFAULT_ASPECT_RATIO
+                val width = content.width ?: 0
+                val height = content.height ?: 0
+                // if image is narrow and tall use DEFAULT_ASPECT_RATIO
+                val aspectRatio = if (width < height / 3) DEFAULT_ASPECT_RATIO else content.aspectRatio?: DEFAULT_ASPECT_RATIO
                 EditorStyledText(
                     modifier = Modifier
                         .padding(horizontal = 4.dp) // This is (12.dp - 8.dp) contentPadding from CommonLayout
