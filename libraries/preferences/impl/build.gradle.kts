@@ -1,3 +1,4 @@
+import extension.testCommonDependencies
 import extension.setupDependencyInjection
 
 /*
@@ -25,4 +26,7 @@ dependencies {
     implementation(projects.libraries.di)
     implementation(projects.libraries.core)
     implementation(projects.libraries.matrix.api)
+
+    testCommonDependencies(libs)
+    testImplementation(projects.libraries.preferences.test)
 }

@@ -10,6 +10,7 @@ package io.element.android.libraries.preferences.impl.store
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
@@ -28,6 +29,7 @@ private val customElementCallBaseUrlKey = stringPreferencesKey("elementCallBaseU
 private val themeKey = stringPreferencesKey("theme")
 private val hideInviteAvatarsKey = booleanPreferencesKey("hideInviteAvatars")
 private val timelineMediaPreviewValueKey = stringPreferencesKey("timelineMediaPreviewValue")
+private val liveLocationMinimumDistanceUpdateKey = intPreferencesKey("liveLocationMinimumDistanceUpdate")
 private val logLevelKey = stringPreferencesKey("logLevel")
 private val traceLogPacksKey = stringPreferencesKey("traceLogPacks")
 
@@ -76,6 +78,18 @@ class DefaultAppPreferencesStore(
     override fun getThemeFlow(): Flow<String?> {
         return store.data.map { prefs ->
             prefs[themeKey]
+        }
+    }
+
+    override suspend fun setLiveLocationMinimumDistanceUpdate(value: Int) {
+        store.edit { prefs ->
+            prefs[liveLocationMinimumDistanceUpdateKey] = value
+        }
+    }
+
+    override fun getLiveLocationMinimumDistanceUpdateFlow(): Flow<Int> {
+        return store.data.map { prefs ->
+            prefs[liveLocationMinimumDistanceUpdateKey] ?: 10
         }
     }
 

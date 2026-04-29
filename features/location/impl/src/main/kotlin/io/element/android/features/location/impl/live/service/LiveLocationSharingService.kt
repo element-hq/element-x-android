@@ -18,7 +18,9 @@ import io.element.android.features.location.impl.di.LocationBindings
 import io.element.android.features.location.impl.live.notification.LiveLocationSharingNotificationCreator
 import io.element.android.libraries.architecture.bindings
 import io.element.android.libraries.core.coroutine.childScope
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.annotations.AppCoroutineScope
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.push.api.notifications.ForegroundServiceType
 import io.element.android.libraries.push.api.notifications.NotificationIdProvider
 import io.element.android.services.appnavstate.api.AppForegroundStateService
@@ -26,11 +28,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import org.maplibre.compose.location.AndroidLocationProvider
 import org.maplibre.compose.location.DesiredAccuracy
 import timber.log.Timber
@@ -41,11 +45,11 @@ class LiveLocationSharingService : Service() {
 
     companion object {
         private const val UPDATE_INTERVAL_IN_SECOND = 60
-        private const val MIN_DISTANCE_METERS = 10f
     }
 
     @Inject lateinit var coordinator: LiveLocationSharingCoordinator
     @Inject lateinit var notificationCreator: LiveLocationSharingNotificationCreator
+    @Inject lateinit var appPreferencesStore: AppPreferencesStore
 
     @Inject lateinit var appForegroundStateService: AppForegroundStateService
     @AppCoroutineScope
@@ -63,14 +67,6 @@ class LiveLocationSharingService : Service() {
             bindings<LocationBindings>().inject(this)
             appForegroundStateService.updateIsSharingLiveLocation(true)
             coroutineScope = appCoroutineScope.childScope(Dispatchers.Default, "LiveLocationSharingService")
-            Timber.d("LiveLocationSharingService creating location provider with updateInterval=${UPDATE_INTERVAL_IN_SECOND}s, minDistance=${MIN_DISTANCE_METERS}m")
-            val locationProvider = AndroidLocationProvider(
-                context = applicationContext,
-                updateInterval = UPDATE_INTERVAL_IN_SECOND.seconds,
-                minDistanceMeters = MIN_DISTANCE_METERS,
-                desiredAccuracy = DesiredAccuracy.Balanced,
-                coroutineScope = coroutineScope
-            )
             val notificationId = NotificationIdProvider.getForegroundServiceNotificationId(ForegroundServiceType.LIVE_LOCATION)
             Timber.d("LiveLocationSharingService starting foreground service with notificationId=$notificationId")
             ServiceCompat.startForeground(
@@ -79,22 +75,42 @@ class LiveLocationSharingService : Service() {
                 /* notification = */ notificationCreator.createNotification(),
                 /* foregroundServiceType = */ FOREGROUND_SERVICE_TYPE_LOCATION
             )
-            Timber.d("LiveLocationSharingService listening to location updates")
-            locationProvider.location
-                .filterNotNull()
-                .map { location ->
-                    ApiLocation(
-                        lat = location.position.latitude,
-                        lon = location.position.longitude,
-                        accuracy = location.accuracy.toFloat(),
-                    )
+            coroutineScope.launch {
+                runCatchingExceptions {
+                    startLocationUpdatesListener()
+                }.onFailure {
+                    Timber.e(it, "Failed to start observing location service")
+                    stopSelf()
                 }
-                .onEach(coordinator::dispatch)
-                .launchIn(coroutineScope)
+            }
         }.onFailure {
             Timber.e(it, "Failed to start live location sharing service")
             stopSelf()
         }
+    }
+
+    private suspend fun startLocationUpdatesListener() = coroutineScope {
+        val minDistanceMeters = appPreferencesStore.getLiveLocationMinimumDistanceUpdateFlow().first()
+        Timber.d("LiveLocationSharingService creating location provider with updateInterval=${UPDATE_INTERVAL_IN_SECOND}s, minDistance=${minDistanceMeters}m")
+        val locationProvider = AndroidLocationProvider(
+            context = applicationContext,
+            updateInterval = UPDATE_INTERVAL_IN_SECOND.seconds,
+            minDistanceMeters = minDistanceMeters.toFloat(),
+            desiredAccuracy = DesiredAccuracy.Balanced,
+            coroutineScope = coroutineScope
+        )
+        Timber.d("LiveLocationSharingService listening to location updates")
+        locationProvider.location
+            .filterNotNull()
+            .map { location ->
+                ApiLocation(
+                    lat = location.position.latitude,
+                    lon = location.position.longitude,
+                    accuracy = location.accuracy.toFloat(),
+                )
+            }
+            .onEach(coordinator::dispatch)
+            .launchIn(this)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
