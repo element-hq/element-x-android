@@ -127,12 +127,12 @@ private fun getIcon(
 internal fun TimelineItemCallNotifyViewPreview() = ElementPreview {
     Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         listOf(
-            (aTimelineRoomInfo() to TimelineItemRtcNotificationContent(CallIntent.AUDIO, RtcNotificationState.None)),
-            (aTimelineRoomInfo() to TimelineItemRtcNotificationContent(CallIntent.VIDEO, RtcNotificationState.None)),
-            (aTimelineRoomInfo(isDm = true) to TimelineItemRtcNotificationContent(CallIntent.AUDIO, RtcNotificationState.Declined)),
-            (aTimelineRoomInfo(isDm = true) to TimelineItemRtcNotificationContent(CallIntent.VIDEO, RtcNotificationState.Declined)),
-            (aTimelineRoomInfo(isDm = true) to TimelineItemRtcNotificationContent(CallIntent.VIDEO, RtcNotificationState.DeclinedByMe)),
-            (aTimelineRoomInfo(isDm = false) to TimelineItemRtcNotificationContent(CallIntent.VIDEO, RtcNotificationState.None)),
+            aTimelineRoomInfo() to TimelineItemRtcNotificationContent(CallIntent.AUDIO, RtcNotificationState.None),
+            aTimelineRoomInfo() to TimelineItemRtcNotificationContent(CallIntent.VIDEO, RtcNotificationState.None),
+            aTimelineRoomInfo(isDm = true) to TimelineItemRtcNotificationContent(CallIntent.AUDIO, RtcNotificationState.Declined),
+            aTimelineRoomInfo(isDm = true) to TimelineItemRtcNotificationContent(CallIntent.VIDEO, RtcNotificationState.Declined),
+            aTimelineRoomInfo(isDm = true) to TimelineItemRtcNotificationContent(CallIntent.VIDEO, RtcNotificationState.DeclinedByMe),
+            aTimelineRoomInfo(isDm = false) to TimelineItemRtcNotificationContent(CallIntent.VIDEO, RtcNotificationState.None),
         ).forEach { (info, content) ->
             TimelineItemCallNotifyView(
                 timelineRoomInfo = info,
