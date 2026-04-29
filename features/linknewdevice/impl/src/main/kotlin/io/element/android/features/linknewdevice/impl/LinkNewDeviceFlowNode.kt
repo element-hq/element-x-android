@@ -196,12 +196,17 @@ class LinkNewDeviceFlowNode(
             is ErrorType.UnsupportedProtocol -> ErrorScreenType.ProtocolNotSupported
             is ErrorType.Cancelled -> ErrorScreenType.Cancelled
             is ErrorType.ConnectionInsecure -> ErrorScreenType.InsecureChannelDetected
-            is ErrorType.Expired, is ErrorType.NotFound, is ErrorType.DeviceNotFound -> ErrorScreenType.Expired
-            // TODO: we should show other_device_already_signed_in screen with checkmark when available
+            is ErrorType.Expired,
+            is ErrorType.NotFound,
+            is ErrorType.DeviceNotFound -> ErrorScreenType.Expired
+            // TODO we should show other_device_already_signed_in screen with checkmark when available
             // See: https://github.com/element-hq/element-x-android/issues/6678
             is ErrorType.OtherDeviceAlreadySignedIn -> ErrorScreenType.UnknownError
-            is ErrorType.UnsupportedQrCodeType -> ErrorScreenType.UnknownError // TODO: check if we expect to hit this here or if it should be caught earlier on
-            is ErrorType.MissingSecretsBackup, is ErrorType.DeviceIdAlreadyInUse, is ErrorType.Unknown -> ErrorScreenType.UnknownError
+            // TODO check if we expect to hit this here or if it should be caught earlier on
+            is ErrorType.UnsupportedQrCodeType -> ErrorScreenType.UnknownError
+            is ErrorType.MissingSecretsBackup,
+            is ErrorType.DeviceIdAlreadyInUse,
+            is ErrorType.Unknown -> ErrorScreenType.UnknownError
         }
         // It is OK to push on backstack, since when user leaves the error screen, a new root will be set,
         // or the whole flow will be popped.
