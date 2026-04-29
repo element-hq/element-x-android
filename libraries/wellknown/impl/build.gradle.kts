@@ -33,9 +33,13 @@ dependencies {
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.network)
+    implementation(projects.libraries.cachestore.api)
+    implementation(projects.services.toolbox.api)
 
     testCommonDependencies(libs)
     testImplementation(libs.coroutines.core)
+    testImplementation(projects.libraries.cachestore.test)
     testImplementation(projects.libraries.matrix.test)
+    testImplementation(projects.libraries.wellknown.test)
     testImplementation(projects.services.toolbox.test)
 }
