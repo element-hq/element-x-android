@@ -23,6 +23,7 @@ import io.element.android.features.messages.impl.timeline.model.anAggregatedReac
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemReadMarkerModel
 import io.element.android.features.messages.impl.timeline.model.virtual.aTimelineItemDaySeparatorModel
 import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.features.messages.impl.typing.aTypingNotificationState
@@ -57,6 +58,10 @@ fun aTimelineState(
     resolveVerifiedUserSendFailureState: ResolveVerifiedUserSendFailureState = aResolveVerifiedUserSendFailureState(),
     displayThreadSummaries: Boolean = false,
     displayFloatingDateBadge: Boolean = false,
+    displayJumpToUnread: Boolean = true,
+    readMarkerIndex: Int = -1,
+    unreadMessagesCount: Int = 0,
+    newMessagesCount: Int = 0,
     eventSink: (TimelineEvent) -> Unit = {},
 ): TimelineState {
     val focusedEventId = timelineItems.filterIsInstance<TimelineItem.Event>().getOrNull(focusedEventIndex)?.eventId
@@ -77,7 +82,18 @@ fun aTimelineState(
         resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailureState,
         displayThreadSummaries = displayThreadSummaries,
         displayFloatingDateBadge = displayFloatingDateBadge,
+        displayJumpToUnread = displayJumpToUnread,
+        readMarkerIndex = readMarkerIndex,
+        unreadMessagesCount = unreadMessagesCount,
+        newMessagesCount = newMessagesCount,
         eventSink = eventSink,
+    )
+}
+
+internal fun aTimelineItemReadMarker(): TimelineItem.Virtual {
+    return TimelineItem.Virtual(
+        id = UniqueId(UUID.randomUUID().toString()),
+        model = TimelineItemReadMarkerModel,
     )
 }
 

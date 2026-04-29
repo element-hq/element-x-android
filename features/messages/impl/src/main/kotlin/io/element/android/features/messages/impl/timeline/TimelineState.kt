@@ -35,6 +35,10 @@ data class TimelineState(
     val resolveVerifiedUserSendFailureState: ResolveVerifiedUserSendFailureState,
     val displayThreadSummaries: Boolean,
     val displayFloatingDateBadge: Boolean,
+    val displayJumpToUnread: Boolean,
+    val readMarkerIndex: Int,
+    val unreadMessagesCount: Int,
+    val newMessagesCount: Int,
     val eventSink: (TimelineEvent) -> Unit,
 ) {
     private val lastTimelineEvent = timelineItems.firstOrNull { it is TimelineItem.Event } as? TimelineItem.Event

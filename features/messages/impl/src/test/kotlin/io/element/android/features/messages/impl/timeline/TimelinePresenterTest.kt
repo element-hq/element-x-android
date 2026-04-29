@@ -42,6 +42,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
 import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
 import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
+import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
@@ -58,12 +59,14 @@ import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermiss
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
+import io.element.android.libraries.matrix.test.timeline.item.event.aRoomMembershipContent
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
+import io.element.android.tests.testutils.consumeItemsUntilTimeout
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaError
@@ -360,6 +363,305 @@ class TimelinePresenterTest {
             consumeItemsUntilPredicate { it.timelineItems.size == 4 }
             awaitLastSequentialItem().also { state ->
                 assertThat(state.newEventState).isEqualTo(NewEventState.FromOther)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - unreadMessagesCount counts message-content items between newest and read marker, excluding state events`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val presenter = createTimelinePresenter(timeline)
+        presenter.test {
+            val initialState = awaitFirstItem()
+            assertThat(initialState.readMarkerIndex).isEqualTo(-1)
+            assertThat(initialState.unreadMessagesCount).isEqualTo(0)
+            // SDK delivers items oldest-first; the factory reverses so output index 0 is the newest.
+            // After processing: [msg-newest, membership, msg-2, read-marker, msg-old]
+            timelineItems.emit(
+                listOf(
+                    MatrixTimelineItem.Event(UniqueId("msg-old"), anEventTimelineItem(content = aMessageContent())),
+                    MatrixTimelineItem.Virtual(UniqueId("read-marker"), VirtualTimelineItem.ReadMarker),
+                    MatrixTimelineItem.Event(UniqueId("msg-2"), anEventTimelineItem(content = aMessageContent())),
+                    MatrixTimelineItem.Event(UniqueId("membership"), anEventTimelineItem(content = aRoomMembershipContent())),
+                    MatrixTimelineItem.Event(UniqueId("msg-newest"), anEventTimelineItem(content = aMessageContent())),
+                )
+            )
+            consumeItemsUntilPredicate { it.readMarkerIndex >= 0 }.last().also { state ->
+                // 2 message items above the marker; the membership state event is skipped.
+                assertThat(state.readMarkerIndex).isEqualTo(3)
+                assertThat(state.unreadMessagesCount).isEqualTo(2)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - unreadMessagesCount excludes own messages and PAGINATION-origin events`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val presenter = createTimelinePresenter(timeline)
+        presenter.test {
+            awaitFirstItem()
+            // After processing (factory reverses): [other-newest, own-msg, paginated, read-marker, msg-old]
+            timelineItems.emit(
+                listOf(
+                    MatrixTimelineItem.Event(UniqueId("msg-old"), anEventTimelineItem(content = aMessageContent())),
+                    MatrixTimelineItem.Virtual(UniqueId("read-marker"), VirtualTimelineItem.ReadMarker),
+                    MatrixTimelineItem.Event(
+                        UniqueId("paginated"),
+                        anEventTimelineItem(content = aMessageContent()).copy(origin = TimelineItemEventOrigin.PAGINATION),
+                    ),
+                    MatrixTimelineItem.Event(UniqueId("own-msg"), anEventTimelineItem(content = aMessageContent(), isOwn = true)),
+                    MatrixTimelineItem.Event(UniqueId("other-newest"), anEventTimelineItem(content = aMessageContent())),
+                )
+            )
+            consumeItemsUntilPredicate { it.readMarkerIndex >= 0 }.last().also { state ->
+                assertThat(state.readMarkerIndex).isEqualTo(3)
+                // Only `other-newest` counts: own-msg and paginated are filtered out.
+                assertThat(state.unreadMessagesCount).isEqualTo(1)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - readMarkerIndex is -1 when no read marker present`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val presenter = createTimelinePresenter(timeline)
+        presenter.test {
+            val initialState = awaitFirstItem()
+            assertThat(initialState.readMarkerIndex).isEqualTo(-1)
+            assertThat(initialState.unreadMessagesCount).isEqualTo(0)
+            timelineItems.emit(
+                listOf(
+                    MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(content = aMessageContent())),
+                    MatrixTimelineItem.Event(UniqueId("2"), anEventTimelineItem(content = aMessageContent())),
+                )
+            )
+            consumeItemsUntilPredicate { it.timelineItems.size == 2 }.last().also { state ->
+                assertThat(state.readMarkerIndex).isEqualTo(-1)
+                assertThat(state.unreadMessagesCount).isEqualTo(0)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - newMessagesCount increments by N when N events from others arrive in one batch`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val presenter = createTimelinePresenter(timeline)
+        presenter.test {
+            val initialState = awaitFirstItem()
+            assertThat(initialState.newMessagesCount).isEqualTo(0)
+            // Seed prevMostRecentItemId so subsequent emissions count as new events.
+            timelineItems.emit(
+                listOf(MatrixTimelineItem.Event(UniqueId("seed"), anEventTimelineItem(content = aMessageContent())))
+            )
+            consumeItemsUntilPredicate { it.timelineItems.size == 1 }
+            // Three new events from another user arrive in a single batch.
+            timelineItems.getAndUpdate { items ->
+                items + listOf(
+                    MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(content = aMessageContent())),
+                    MatrixTimelineItem.Event(UniqueId("2"), anEventTimelineItem(content = aMessageContent())),
+                    MatrixTimelineItem.Event(UniqueId("3"), anEventTimelineItem(content = aMessageContent())),
+                )
+            }
+            consumeItemsUntilPredicate { it.newMessagesCount == 3 }.last().also { state ->
+                assertThat(state.newMessagesCount).isEqualTo(3)
+                assertThat(state.newEventState).isEqualTo(NewEventState.FromOther)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - newMessagesCount resets to 0 on OnScrollFinished firstIndex 0`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(
+            timelineItems = timelineItems,
+            markAsReadResult = { Result.success(Unit) },
+        )
+        val presenter = createTimelinePresenter(timeline)
+        presenter.test {
+            val initialState = awaitFirstItem()
+            timelineItems.emit(
+                listOf(MatrixTimelineItem.Event(UniqueId("seed"), anEventTimelineItem(content = aMessageContent())))
+            )
+            consumeItemsUntilPredicate { it.timelineItems.size == 1 }
+            timelineItems.getAndUpdate { items ->
+                items + listOf(MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(content = aMessageContent())))
+            }
+            val countedState = consumeItemsUntilPredicate { it.newMessagesCount == 1 }.last()
+            assertThat(countedState.newMessagesCount).isEqualTo(1)
+            initialState.eventSink.invoke(TimelineEvent.OnScrollFinished(0))
+            consumeItemsUntilPredicate { it.newMessagesCount == 0 }.last().also { state ->
+                assertThat(state.newMessagesCount).isEqualTo(0)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - newMessagesCount resets to 0 when latest event is from me`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val presenter = createTimelinePresenter(timeline)
+        presenter.test {
+            awaitFirstItem()
+            timelineItems.emit(
+                listOf(MatrixTimelineItem.Event(UniqueId("seed"), anEventTimelineItem(content = aMessageContent())))
+            )
+            consumeItemsUntilPredicate { it.timelineItems.size == 1 }
+            // First, an event from another user increments the count.
+            timelineItems.getAndUpdate { items ->
+                items + listOf(MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(content = aMessageContent())))
+            }
+            consumeItemsUntilPredicate { it.newMessagesCount == 1 }
+            // Then the local user sends a message: count should reset.
+            timelineItems.getAndUpdate { items ->
+                items + listOf(
+                    MatrixTimelineItem.Event(UniqueId("2"), anEventTimelineItem(content = aMessageContent(), isOwn = true)),
+                )
+            }
+            consumeItemsUntilPredicate {
+                it.newEventState == NewEventState.FromMe && it.newMessagesCount == 0
+            }.last().also { state ->
+                assertThat(state.newMessagesCount).isEqualTo(0)
+                assertThat(state.newEventState).isEqualTo(NewEventState.FromMe)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - newMessagesCount does not reset on OnScrollFinished firstIndex other than 0`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val presenter = createTimelinePresenter(timeline)
+        presenter.test {
+            val initialState = awaitFirstItem()
+            timelineItems.emit(
+                listOf(MatrixTimelineItem.Event(UniqueId("seed"), anEventTimelineItem(content = aMessageContent())))
+            )
+            consumeItemsUntilPredicate { it.timelineItems.size == 1 }
+            timelineItems.getAndUpdate { items ->
+                items + listOf(MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(content = aMessageContent())))
+            }
+            consumeItemsUntilPredicate { it.newMessagesCount == 1 }
+            // Scrolling stops above the bottom: the count must NOT reset.
+            initialState.eventSink.invoke(TimelineEvent.OnScrollFinished(5))
+            advanceUntilIdle()
+            // No state should emit with newMessagesCount == 0.
+            val drained = consumeItemsUntilTimeout()
+            assertThat(drained.any { it.newMessagesCount == 0 }).isFalse()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - newMessagesCount does not increment for events with PAGINATION origin`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val presenter = createTimelinePresenter(timeline)
+        presenter.test {
+            awaitFirstItem()
+            timelineItems.emit(
+                listOf(MatrixTimelineItem.Event(UniqueId("seed"), anEventTimelineItem(content = aMessageContent())))
+            )
+            consumeItemsUntilPredicate { it.timelineItems.size == 1 }
+            // A back-paginated event arrives. It should not bump the badge.
+            timelineItems.getAndUpdate { items ->
+                items + listOf(
+                    MatrixTimelineItem.Event(
+                        UniqueId("paginated"),
+                        anEventTimelineItem(content = aMessageContent()).copy(origin = TimelineItemEventOrigin.PAGINATION),
+                    )
+                )
+            }
+            consumeItemsUntilPredicate { it.timelineItems.size == 2 }.last().also { state ->
+                assertThat(state.newMessagesCount).isEqualTo(0)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - newMessagesCount does not increment for state events`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val presenter = createTimelinePresenter(timeline)
+        presenter.test {
+            awaitFirstItem()
+            timelineItems.emit(
+                listOf(MatrixTimelineItem.Event(UniqueId("seed"), anEventTimelineItem(content = aMessageContent())))
+            )
+            consumeItemsUntilPredicate { it.timelineItems.size == 1 }
+            // A membership change arrives. It should not bump the badge.
+            timelineItems.getAndUpdate { items ->
+                items + listOf(
+                    MatrixTimelineItem.Event(UniqueId("membership"), anEventTimelineItem(content = aRoomMembershipContent())),
+                )
+            }
+            consumeItemsUntilPredicate { it.timelineItems.size == 2 }.last().also { state ->
+                assertThat(state.newMessagesCount).isEqualTo(0)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - readMarkerIndex is 0 when the read marker is the only item`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val presenter = createTimelinePresenter(timeline)
+        presenter.test {
+            awaitFirstItem()
+            timelineItems.emit(
+                listOf(MatrixTimelineItem.Virtual(UniqueId("read-marker"), VirtualTimelineItem.ReadMarker))
+            )
+            consumeItemsUntilPredicate { it.readMarkerIndex >= 0 }.last().also { state ->
+                assertThat(state.readMarkerIndex).isEqualTo(0)
+                assertThat(state.unreadMessagesCount).isEqualTo(0)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - newMessagesCount accumulates across multiple batches as prevMostRecentItemId advances`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val presenter = createTimelinePresenter(timeline)
+        presenter.test {
+            awaitFirstItem()
+            // Seed prevMostRecentItemId so subsequent emissions count as new events.
+            timelineItems.emit(
+                listOf(MatrixTimelineItem.Event(UniqueId("seed"), anEventTimelineItem(content = aMessageContent())))
+            )
+            consumeItemsUntilPredicate { it.timelineItems.size == 1 }
+            // Batch 1: 1 new event → count = 1.
+            timelineItems.getAndUpdate { items ->
+                items + listOf(MatrixTimelineItem.Event(UniqueId("b1-1"), anEventTimelineItem(content = aMessageContent())))
+            }
+            consumeItemsUntilPredicate { it.newMessagesCount == 1 }
+            // Batch 2: 2 more new events → count = 3.
+            timelineItems.getAndUpdate { items ->
+                items + listOf(
+                    MatrixTimelineItem.Event(UniqueId("b2-1"), anEventTimelineItem(content = aMessageContent())),
+                    MatrixTimelineItem.Event(UniqueId("b2-2"), anEventTimelineItem(content = aMessageContent())),
+                )
+            }
+            consumeItemsUntilPredicate { it.newMessagesCount == 3 }
+            // Batch 3: 1 more new event → count = 4.
+            timelineItems.getAndUpdate { items ->
+                items + listOf(MatrixTimelineItem.Event(UniqueId("b3-1"), anEventTimelineItem(content = aMessageContent())))
+            }
+            consumeItemsUntilPredicate { it.newMessagesCount == 4 }.last().also { state ->
+                assertThat(state.newMessagesCount).isEqualTo(4)
             }
             cancelAndIgnoreRemainingEvents()
         }

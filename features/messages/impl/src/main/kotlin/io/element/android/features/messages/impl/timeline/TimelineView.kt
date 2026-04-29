@@ -14,10 +14,14 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -39,15 +43,18 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
@@ -70,15 +77,18 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.animateScrollToItemCenter
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
+import io.element.android.libraries.ui.strings.CommonPlurals
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.time.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
@@ -106,6 +116,7 @@ fun TimelineView(
     modifier: Modifier = Modifier,
     lazyListState: LazyListState = rememberLazyListState(),
     forceJumpToBottomVisibility: Boolean = false,
+    forceJumpToReadMarkerVisibility: Boolean = false,
     nestedScrollConnection: NestedScrollConnection = rememberNestedScrollInteropConnection(),
     floatingDateTopOffset: Dp = 0.dp,
 ) {
@@ -205,9 +216,15 @@ fun TimelineView(
                 hasAnyEvent = state.hasAnyEvent,
                 lazyListState = lazyListState,
                 forceJumpToBottomVisibility = forceJumpToBottomVisibility,
+                forceJumpToReadMarkerVisibility = forceJumpToReadMarkerVisibility,
                 newEventState = state.newEventState,
                 isLive = state.isLive,
                 focusRequestState = state.focusRequestState,
+                readMarkerIndex = state.readMarkerIndex,
+                unreadMessagesCount = state.unreadMessagesCount,
+                newMessagesCount = state.newMessagesCount,
+                displayJumpToUnread = state.displayJumpToUnread,
+                topInset = floatingDateTopOffset,
                 onScrollFinishAt = ::onScrollFinishAt,
                 onJumpToLive = ::onJumpToLive,
                 onFocusEventRender = ::onFocusEventRender,
@@ -289,7 +306,13 @@ private fun BoxScope.TimelineScrollHelper(
     newEventState: NewEventState,
     isLive: Boolean,
     forceJumpToBottomVisibility: Boolean,
+    forceJumpToReadMarkerVisibility: Boolean,
     focusRequestState: FocusRequestState,
+    readMarkerIndex: Int,
+    unreadMessagesCount: Int,
+    newMessagesCount: Int,
+    displayJumpToUnread: Boolean,
+    topInset: Dp,
     onScrollFinishAt: (Int) -> Unit,
     onJumpToLive: () -> Unit,
     onFocusEventRender: () -> Unit,
@@ -301,6 +324,19 @@ private fun BoxScope.TimelineScrollHelper(
             lazyListState.firstVisibleItemIndex < 3 && isLive
         }
     }
+    val isReadMarkerOffTop by remember {
+        derivedStateOf {
+            if (!displayJumpToUnread || readMarkerIndex < 0) {
+                false
+            } else if (forceJumpToReadMarkerVisibility) {
+                true
+            } else {
+                val lastVisibleIndex = lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: return@derivedStateOf false
+                readMarkerIndex > lastVisibleIndex
+            }
+        }
+    }
+    val isJumpToBottomVisible = !canAutoScroll || forceJumpToBottomVisibility || !isLive
     var jumpToLiveHandled by remember { mutableStateOf(true) }
 
     /**
@@ -324,6 +360,13 @@ private fun BoxScope.TimelineScrollHelper(
         } else {
             jumpToLiveHandled = false
             onJumpToLive()
+        }
+    }
+
+    fun jumpToReadMarker() {
+        if (readMarkerIndex < 0) return
+        coroutineScope.launch {
+            lazyListState.animateScrollToItemCenter(readMarkerIndex)
         }
     }
 
@@ -358,19 +401,41 @@ private fun BoxScope.TimelineScrollHelper(
         }
     }
 
-    JumpToBottomButton(
-        // Use inverse of canAutoScroll otherwise we might briefly see the before the scroll animation is triggered
-        isVisible = !canAutoScroll || forceJumpToBottomVisibility || !isLive,
+    TimelineFab(
+        icon = CompoundIcons.ChevronDown(),
+        contentDescription = stringResource(id = CommonStrings.a11y_jump_to_bottom),
+        isVisible = isJumpToBottomVisible,
+        // Hide the badge entirely when the feature is off, regardless of the count value.
+        count = if (displayJumpToUnread) newMessagesCount else 0,
         modifier = Modifier
             .align(Alignment.BottomEnd)
             .padding(end = 24.dp, bottom = 12.dp),
-        onClick = { jumpToBottom() },
+        onClick = ::jumpToBottom,
+    )
+    val jumpToUnreadDescription = if (unreadMessagesCount > 0) {
+        pluralStringResource(CommonPlurals.a11y_jump_to_unread_messages_count, unreadMessagesCount, unreadMessagesCount)
+    } else {
+        stringResource(id = CommonStrings.a11y_jump_to_unread_messages)
+    }
+    TimelineFab(
+        icon = CompoundIcons.ChevronUp(),
+        contentDescription = jumpToUnreadDescription,
+        isVisible = isReadMarkerOffTop,
+        count = unreadMessagesCount,
+        // Top padding includes [topInset] so the FAB sits below any pinned-events banner.
+        modifier = Modifier
+            .align(Alignment.TopEnd)
+            .padding(end = 24.dp, top = topInset + 12.dp),
+        onClick = ::jumpToReadMarker,
     )
 }
 
 @Composable
-private fun JumpToBottomButton(
+private fun TimelineFab(
+    icon: ImageVector,
+    contentDescription: String,
     isVisible: Boolean,
+    count: Int,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -380,22 +445,64 @@ private fun JumpToBottomButton(
         enter = scaleIn(animationSpec = tween(100)),
         exit = scaleOut(animationSpec = tween(100)),
     ) {
-        FloatingActionButton(
-            onClick = onClick,
-            elevation = FloatingActionButtonDefaults.elevation(4.dp, 4.dp, 4.dp, 4.dp),
-            shape = CircleShape,
-            modifier = Modifier.size(36.dp),
-            containerColor = ElementTheme.colors.bgSubtleSecondary,
-            contentColor = ElementTheme.colors.iconSecondary,
-        ) {
-            Icon(
+        Box {
+            FloatingActionButton(
+                onClick = onClick,
+                elevation = FloatingActionButtonDefaults.elevation(4.dp, 4.dp, 4.dp, 4.dp),
+                shape = CircleShape,
+                modifier = Modifier.size(36.dp),
+                containerColor = ElementTheme.colors.bgSubtleSecondary,
+                contentColor = ElementTheme.colors.iconSecondary,
+            ) {
+                Icon(
+                    modifier = Modifier.size(24.dp),
+                    imageVector = icon,
+                    contentDescription = contentDescription,
+                )
+            }
+            TimelineCountBadge(
+                count = count,
                 modifier = Modifier
-                    .size(24.dp)
-                    .rotate(90f),
-                imageVector = CompoundIcons.ArrowRight(),
-                contentDescription = stringResource(id = CommonStrings.a11y_jump_to_bottom)
+                    .align(Alignment.TopEnd)
+                    .offset { IntOffset(x = 4.dp.roundToPx(), y = -4.dp.roundToPx()) },
             )
         }
+    }
+}
+
+/**
+ * Small accent badge overlaid on a timeline FAB. Shows the count when it's between 1 and 9, otherwise a dot.
+ * Renders nothing when [count] is zero or negative.
+ */
+@Composable
+private fun TimelineCountBadge(
+    count: Int,
+    modifier: Modifier = Modifier,
+) {
+    if (count <= 0) return
+    if (count <= 9) {
+        Box(
+            modifier = modifier
+                .defaultMinSize(minWidth = 16.dp, minHeight = 16.dp)
+                .background(color = ElementTheme.colors.bgActionPrimaryRest, shape = CircleShape)
+                .border(width = 2.dp, color = ElementTheme.colors.iconOnSolidPrimary, shape = CircleShape)
+                .padding(horizontal = 4.dp),
+            contentAlignment = Alignment.Center,
+        ) {
+            Text(
+                text = count.toString(),
+                color = ElementTheme.colors.textOnSolidPrimary,
+                style = ElementTheme.typography.fontBodyXsMedium,
+                textAlign = TextAlign.Center,
+            )
+        }
+    } else {
+        Box(
+            modifier = modifier
+                .size(12.dp)
+                .background(color = ElementTheme.colors.bgActionPrimaryRest, shape = CircleShape)
+                .border(width = 2.dp, color = ElementTheme.colors.iconOnSolidPrimary, shape = CircleShape),
+        )
     }
 }
 
@@ -432,4 +539,62 @@ internal fun TimelineViewPreview(
             forceJumpToBottomVisibility = true,
         )
     }
+}
+
+@Composable
+private fun TimelineViewWithReadMarker(
+    unreadMessagesCount: Int,
+    newMessagesCount: Int,
+) {
+    val readMarker = aTimelineItemReadMarker()
+    val timelineItems = persistentListOf<TimelineItem>(
+        aTimelineItemEvent(isMine = false),
+        aTimelineItemEvent(isMine = false),
+        aTimelineItemEvent(isMine = true),
+        readMarker,
+        aTimelineItemEvent(isMine = false),
+        aTimelineItemEvent(isMine = false),
+    )
+    CompositionLocalProvider(
+        LocalTimelineItemPresenterFactories provides aFakeTimelineItemPresenterFactories(),
+    ) {
+        TimelineView(
+            state = aTimelineState(
+                timelineItems = timelineItems,
+                readMarkerIndex = timelineItems.indexOf(readMarker),
+                unreadMessagesCount = unreadMessagesCount,
+                newMessagesCount = newMessagesCount,
+            ),
+            timelineProtectionState = aTimelineProtectionState(),
+            onUserDataClick = {},
+            onLinkClick = {},
+            onContentClick = {},
+            onMessageLongClick = {},
+            onSwipeToReply = {},
+            onReactionClick = { _, _ -> },
+            onReactionLongClick = { _, _ -> },
+            onMoreReactionsClick = {},
+            onReadReceiptClick = {},
+            forceJumpToBottomVisibility = true,
+            forceJumpToReadMarkerVisibility = true,
+        )
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineViewWithReadMarkerNoBadgesPreview() = ElementPreview {
+    TimelineViewWithReadMarker(unreadMessagesCount = 0, newMessagesCount = 0)
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineViewWithReadMarkerPreview() = ElementPreview {
+    TimelineViewWithReadMarker(unreadMessagesCount = 3, newMessagesCount = 12)
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineViewWithReadMarkerDotBadgesPreview() = ElementPreview {
+    TimelineViewWithReadMarker(unreadMessagesCount = 47, newMessagesCount = 99)
 }

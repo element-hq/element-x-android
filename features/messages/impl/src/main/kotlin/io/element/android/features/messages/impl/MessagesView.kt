@@ -500,7 +500,10 @@ private fun MessagesViewContent(
                 pinnedMessagesCount = (state.pinnedMessagesBannerState as? PinnedMessagesBannerState.Visible)?.pinnedMessagesCount() ?: 0,
             )
             val density = LocalDensity.current
-            var pinnedBannerHeightDp by remember { mutableStateOf(0.dp) }
+            // Combined height of every banner overlaid above the timeline (pinned messages,
+            // knock requests). Used to push both the floating date badge and the jump-to-unread
+            // FAB below any banner that's currently showing.
+            var topBannersHeightDp by remember { mutableStateOf(0.dp) }
 
             TimelineView(
                 state = state.timelineState,
@@ -516,28 +519,31 @@ private fun MessagesViewContent(
                 onReadReceiptClick = onReadReceiptClick,
                 forceJumpToBottomVisibility = forceJumpToBottomVisibility,
                 nestedScrollConnection = scrollBehavior.nestedScrollConnection,
-                floatingDateTopOffset = pinnedBannerHeightDp,
+                floatingDateTopOffset = topBannersHeightDp,
             )
 
             if (state.timelineState.timelineMode !is Timeline.Mode.Thread) {
-                AnimatedVisibility(
-                    visible = state.pinnedMessagesBannerState is PinnedMessagesBannerState.Visible && scrollBehavior.isVisible,
-                    modifier = Modifier.onSizeChanged { pinnedBannerHeightDp = with(density) { it.height.toDp() } },
-                    enter = expandVertically(),
-                    exit = shrinkVertically(),
+                Column(
+                    modifier = Modifier.onSizeChanged { topBannersHeightDp = with(density) { it.height.toDp() } },
                 ) {
-                    fun focusOnPinnedEvent(eventId: EventId) {
-                        state.timelineState.eventSink(
-                            TimelineEvent.FocusOnEvent(eventId = eventId, debounce = FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS.milliseconds)
+                    AnimatedVisibility(
+                        visible = state.pinnedMessagesBannerState is PinnedMessagesBannerState.Visible && scrollBehavior.isVisible,
+                        enter = expandVertically(),
+                        exit = shrinkVertically(),
+                    ) {
+                        fun focusOnPinnedEvent(eventId: EventId) {
+                            state.timelineState.eventSink(
+                                TimelineEvent.FocusOnEvent(eventId = eventId, debounce = FOCUS_ON_PINNED_EVENT_DEBOUNCE_DURATION_IN_MILLIS.milliseconds)
+                            )
+                        }
+                        PinnedMessagesBannerView(
+                            state = state.pinnedMessagesBannerState,
+                            onClick = ::focusOnPinnedEvent,
+                            onViewAllClick = onViewAllPinnedMessagesClick,
                         )
                     }
-                    PinnedMessagesBannerView(
-                        state = state.pinnedMessagesBannerState,
-                        onClick = ::focusOnPinnedEvent,
-                        onViewAllClick = onViewAllPinnedMessagesClick,
-                    )
+                    knockRequestsBannerView()
                 }
-                knockRequestsBannerView()
             }
         }
     }

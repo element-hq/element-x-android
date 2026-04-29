@@ -10,16 +10,19 @@ package io.element.android.features.messages.impl.timeline
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.Snapshot
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
@@ -32,6 +35,8 @@ import io.element.android.features.messages.impl.timeline.factories.TimelineItem
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactoryConfig
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.event.isMessageContent
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemReadMarkerModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemTypingNotificationModel
 import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.features.messages.impl.userEventPermissions
@@ -133,6 +138,7 @@ class TimelinePresenter(
         val prevMostRecentItemId = rememberSaveable { mutableStateOf<UniqueId?>(null) }
 
         val newEventState = remember { mutableStateOf(NewEventState.None) }
+        val newMessagesCount = remember { mutableIntStateOf(0) }
         val messageShieldDialogData: MutableState<MessageShieldData?> = remember { mutableStateOf(null) }
 
         val resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailurePresenter.present()
@@ -152,6 +158,9 @@ class TimelinePresenter(
         val displayFloatingDateBadge by produceState(false) {
             value = featureFlagService.isFeatureEnabled(FeatureFlags.FloatingDateBadge)
         }
+        val displayJumpToUnread by produceState(false) {
+            value = featureFlagService.isFeatureEnabled(FeatureFlags.JumpToUnread)
+        }
 
         fun handleEvent(event: TimelineEvent) {
             when (event) {
@@ -168,6 +177,7 @@ class TimelinePresenter(
                     if (isLive) {
                         if (event.firstIndex == 0) {
                             newEventState.value = NewEventState.None
+                            newMessagesCount.intValue = 0
                         }
                         Timber.tag(tag).d("## sendReadReceiptIfNeeded firstVisibleIndex: ${event.firstIndex}")
                         sessionCoroutineScope.sendReadReceiptIfNeeded(
@@ -268,7 +278,39 @@ class TimelinePresenter(
         }
 
         LaunchedEffect(timelineItems.size) {
-            computeNewItemState(timelineItems, prevMostRecentItemId, newEventState)
+            computeNewItemState(timelineItems, prevMostRecentItemId, newEventState, newMessagesCount)
+        }
+
+        // Read marker position + unread count, scanned off the main thread. The UI gates display via
+        // [displayJumpToUnread]; the values are always computed so the state stays up to date if the
+        // feature flag flips at runtime.
+        val readMarkerIndex = remember { mutableIntStateOf(-1) }
+        val unreadMessagesCount = remember { mutableIntStateOf(0) }
+        LaunchedEffect(timelineItems) {
+            val items = timelineItems
+            withContext(dispatchers.computation) {
+                var markerIdx = -1
+                var unread = 0
+                for ((i, item) in items.withIndex()) {
+                    if ((item as? TimelineItem.Virtual)?.model is TimelineItemReadMarkerModel) {
+                        markerIdx = i
+                        break
+                    }
+                    if (item is TimelineItem.Event &&
+                        !item.isMine &&
+                        item.origin != TimelineItemEventOrigin.PAGINATION &&
+                        item.content.isMessageContent()
+                    ) {
+                        unread++
+                    }
+                }
+                // Apply both writes atomically so consumers never see a half-updated pair
+                // (e.g. a non-negative markerIdx with the previous unread count).
+                Snapshot.withMutableSnapshot {
+                    readMarkerIndex.intValue = markerIdx
+                    unreadMessagesCount.intValue = if (markerIdx < 0) 0 else unread
+                }
+            }
         }
 
         LaunchedEffect(timelineItems.size, focusRequestState.value) {
@@ -320,6 +362,10 @@ class TimelinePresenter(
             resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailureState,
             displayThreadSummaries = displayThreadSummaries,
             displayFloatingDateBadge = displayFloatingDateBadge,
+            displayJumpToUnread = displayJumpToUnread,
+            readMarkerIndex = readMarkerIndex.intValue,
+            unreadMessagesCount = unreadMessagesCount.intValue,
+            newMessagesCount = newMessagesCount.intValue,
             eventSink = ::handleEvent,
         )
     }
@@ -377,11 +423,17 @@ class TimelinePresenter(
      * This method compute the hasNewItem state passed as a [MutableState] each time the timeline items size changes.
      * Basically, if we got new timeline event from sync or local, either from us or another user, we update the state so we tell we have new items.
      * The state never goes back to None from this method, but need to be reset from somewhere else.
+     *
+     * It also maintains [newMessagesCount], counting how many incoming messages from other users have arrived in
+     * each batch since [prevMostRecentItemId] — this drives the badge on the scroll-to-bottom button. The count is
+     * reset to zero when the most recent event is from the local user (they're back to active engagement); the
+     * scroll-finish handler resets it when the user returns to the bottom of the timeline.
      */
     private suspend fun computeNewItemState(
         timelineItems: ImmutableList<TimelineItem>,
         prevMostRecentItemId: MutableState<UniqueId?>,
-        newEventState: MutableState<NewEventState>
+        newEventState: MutableState<NewEventState>,
+        newMessagesCount: MutableIntState,
     ) = withContext(dispatchers.computation) {
         // FromMe is prioritized over FromOther, so skip if we already have a FromMe
         if (newEventState.value == NewEventState.FromMe) {
@@ -405,6 +457,22 @@ class TimelinePresenter(
                 NewEventState.FromMe
             } else {
                 NewEventState.FromOther
+            }
+            if (fromMe) {
+                newMessagesCount.intValue = 0
+            } else {
+                var delta = 0
+                for (item in timelineItems) {
+                    if (item.identifier() == prevMostRecentItemIdValue) break
+                    if (item is TimelineItem.Event &&
+                        item.origin != TimelineItemEventOrigin.PAGINATION &&
+                        !item.isMine &&
+                        item.content.isMessageContent()
+                    ) {
+                        delta++
+                    }
+                }
+                newMessagesCount.intValue += delta
             }
         }
         prevMostRecentItemId.value = newMostRecentItemId

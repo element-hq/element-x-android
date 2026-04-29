@@ -136,6 +136,13 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
+    JumpToUnread(
+        key = "feature.jump_to_unread",
+        title = "Jump to unread messages",
+        description = "Show a button to jump to the read marker, plus a count badge on the scroll-to-bottom button when new messages arrive while scrolled away.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
     SlashCommand(
         key = "feature.slash_command",
         title = "Parse slash commands in the message composer",
