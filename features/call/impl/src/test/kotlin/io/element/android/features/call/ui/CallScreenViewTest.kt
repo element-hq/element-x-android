@@ -26,6 +26,7 @@ import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.element.android.features.call.impl.ui.JavascriptBackHandler
 import org.junit.Assert.assertEquals
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.Implementation
@@ -49,13 +50,13 @@ class CallScreenViewTest {
 
         rule.pressBackKey()
 
-        callEvents.assertSingle(CallScreenEvents.Hangup)
+        callEvents.assertEmpty()
     }
 
     @Config(shadows = [RecordingShadowWebView::class])
     @Test
     fun `pressing back key dispatches escape key events to web view when pip is unsupported`() {
-        RecordingShadowWebView.clearDispatchedEvents()
+
 
         rule.setCallScreenView(
             state = aCallScreenState(),
@@ -75,7 +76,7 @@ class CallScreenViewTest {
     @Config(shadows = [RecordingShadowWebView::class])
     @Test
     fun `web view javascript back handler emits pip event when pip is supported`() {
-        RecordingShadowWebView.clearDispatchedEvents()
+
         val pipEvents = EventsRecorder<PictureInPictureEvents>()
 
         rule.setCallScreenView(
@@ -119,26 +120,19 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setCallS
 internal class RecordingShadowWebView : ShadowWebView() {
     companion object {
         val dispatchedEvents = mutableListOf<KeyEvent>()
-        private var backHandlerJavascriptInterface: Any? = null
+        private var backHandlerJavascriptInterface: JavascriptBackHandler? = null
 
-        fun clearDispatchedEvents() {
+        @Resetter
+        @JvmStatic
+        @Suppress("unused")
+        fun resetRecordedEvents() {
             dispatchedEvents.clear()
             backHandlerJavascriptInterface = null
         }
 
         fun invokeJavascriptBackHandler() {
             val backHandler = checkNotNull(backHandlerJavascriptInterface) { "Expected backHandler JavaScript interface to be registered" }
-            backHandler.javaClass.getDeclaredMethod("onBackPressed").apply {
-                isAccessible = true
-                invoke(backHandler)
-            }
-        }
-
-        @Resetter
-        @JvmStatic
-        fun resetRecordedEvents() {
-            dispatchedEvents.clear()
-            backHandlerJavascriptInterface = null
+            backHandler.onBackPressed()
         }
     }
 
@@ -146,12 +140,13 @@ internal class RecordingShadowWebView : ShadowWebView() {
     protected override fun addJavascriptInterface(`object`: Any, name: String) {
         super.addJavascriptInterface(`object`, name)
         if (name == "backHandler") {
-            backHandlerJavascriptInterface = `object`
+            backHandlerJavascriptInterface = `object` as? JavascriptBackHandler
         }
     }
 
     @Implementation
-    protected fun dispatchKeyEvent(event: KeyEvent): Boolean {
+    @Suppress("unused")
+    fun dispatchKeyEvent(event: KeyEvent): Boolean {
         dispatchedEvents += KeyEvent(event)
         return false
     }

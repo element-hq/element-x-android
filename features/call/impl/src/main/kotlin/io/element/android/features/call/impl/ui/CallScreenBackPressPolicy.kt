@@ -10,7 +10,6 @@ internal sealed interface CallScreenBackPressAction {
 
     data object DispatchEscapeToWebView : CallScreenBackPressAction
     data object EnterPictureInPicture : CallScreenBackPressAction
-    data object Hangup : CallScreenBackPressAction
 }
 
 internal object CallScreenBackPressPolicy {
@@ -18,11 +17,11 @@ internal object CallScreenBackPressPolicy {
         supportPip: Boolean,
         hasWebView: Boolean,
         fromNative: Boolean,
-    ): CallScreenBackPressAction {
+    ): CallScreenBackPressAction? {
         return when {
             hasWebView && fromNative -> CallScreenBackPressAction.DispatchEscapeToWebView
             hasWebView && supportPip -> CallScreenBackPressAction.EnterPictureInPicture
-            else -> CallScreenBackPressAction.Hangup
+            else -> null
         }
     }
 }

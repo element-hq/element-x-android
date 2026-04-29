@@ -72,8 +72,7 @@ internal fun CallScreenView(
                 pipState.eventSink(PictureInPictureEvents.EnterPictureInPicture)
             CallScreenBackPressAction.DispatchEscapeToWebView ->
                 callWebView?.dispatchEscKeyEvent()
-            CallScreenBackPressAction.Hangup ->
-                state.eventSink(CallScreenEvents.Hangup)
+            null-> Timber.d("Back press with unsupported pip is a no-op")
         }
     }
 
@@ -257,10 +256,8 @@ private fun WebView.setup(
 
 private fun WebView.addBackHandler(onBackPressed: () -> Unit) {
     addJavascriptInterface(
-        object {
-            @Suppress("unused")
-            @JavascriptInterface
-            fun onBackPressed() = onBackPressed()
+        JavascriptBackHandler {
+            onBackPressed()
         },
         "backHandler"
     )
@@ -288,4 +285,9 @@ internal fun CallScreenViewPreview(
 @Composable
 internal fun InvalidAudioDeviceDialogPreview() = ElementPreview {
     InvalidAudioDeviceDialog(invalidAudioDeviceReason = InvalidAudioDeviceReason.BT_AUDIO_DEVICE_DISABLED) {}
+}
+
+internal fun interface JavascriptBackHandler {
+    @JavascriptInterface
+    fun onBackPressed()
 }
