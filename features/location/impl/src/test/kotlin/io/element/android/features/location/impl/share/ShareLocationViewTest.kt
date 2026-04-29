@@ -144,6 +144,38 @@ class ShareLocationViewTest {
         rule.clickOn(CommonStrings.action_cancel)
         eventsRecorder.assertSingle(ShareLocationEvent.DismissDialog)
     }
+
+    @Test
+    fun `when disclaimer is displayed user can accept`() {
+        val eventsRecorder = EventsRecorder<ShareLocationEvent>()
+        rule.setShareLocationView(
+            aShareLocationState(
+                dialogState = ShareLocationState.Dialog.LiveLocationDisclaimer,
+                eventSink = eventsRecorder,
+                canShareLiveLocation = true,
+            ),
+            navigateUp = EnsureNeverCalled(),
+        )
+
+        rule.clickOn(CommonStrings.action_accept)
+        eventsRecorder.assertSingle(ShareLocationEvent.AcceptLiveLocationDisclaimer)
+    }
+
+    @Test
+    fun `when disclaimer is displayed user can decline`() {
+        val eventsRecorder = EventsRecorder<ShareLocationEvent>()
+        rule.setShareLocationView(
+            aShareLocationState(
+                dialogState = ShareLocationState.Dialog.LiveLocationDisclaimer,
+                eventSink = eventsRecorder,
+                canShareLiveLocation = true,
+            ),
+            navigateUp = EnsureNeverCalled(),
+        )
+
+        rule.clickOn(CommonStrings.action_decline)
+        eventsRecorder.assertSingle(ShareLocationEvent.DismissDialog)
+    }
 }
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setShareLocationView(

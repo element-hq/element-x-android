@@ -58,6 +58,12 @@ class ShareLocationStateProvider : PreviewParameterProvider<ShareLocationState> 
                 canShareLiveLocation = true,
             ),
             aShareLocationState(
+                dialogState = ShareLocationState.Dialog.LiveLocationDisclaimer,
+                trackUserPosition = true,
+                hasLocationPermission = true,
+                canShareLiveLocation = true,
+            ),
+            aShareLocationState(
                 dialogState = ShareLocationState.Dialog.LiveLocationDurations(
                     persistentListOf(
                         LiveLocationDuration(15.minutes, "15 minutes"),

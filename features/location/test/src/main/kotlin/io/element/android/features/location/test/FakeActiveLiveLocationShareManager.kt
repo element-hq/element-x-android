@@ -9,6 +9,7 @@ package io.element.android.features.location.test
 
 import io.element.android.features.location.api.live.ActiveLiveLocationShare
 import io.element.android.features.location.api.live.ActiveLiveLocationShareManager
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.tests.testutils.lambda.lambdaError
@@ -21,8 +22,8 @@ import kotlin.time.Instant
 
 class FakeActiveLiveLocationShareManager(
     private val sessionId: SessionId,
-    val startShareLambda: (roomId: RoomId, duration: Duration) -> Result<Unit> = lambdaError(),
-    val stopShareLambda: (roomId: RoomId) -> Result<Unit> = lambdaError(),
+    val startShareLambda: (roomId: RoomId, duration: Duration) -> Result<Unit> = { _, _ -> lambdaError() },
+    val stopShareLambda: (roomId: RoomId) -> Result<Unit> = { _ -> lambdaError() },
 ) : ActiveLiveLocationShareManager {
     val startShareCalls = mutableListOf<Triple<SessionId, RoomId, Long>>()
 
@@ -30,10 +31,12 @@ class FakeActiveLiveLocationShareManager(
     override val activeShares: StateFlow<Map<RoomId, ActiveLiveLocationShare>> = _activeShares
 
     override suspend fun startShare(roomId: RoomId, duration: Duration): Result<Unit> = simulateLongTask {
+        startShareCalls += Triple(sessionId, roomId, duration.inWholeMilliseconds)
         startShareLambda(roomId, duration).onSuccess {
             _activeShares.update {
+                val beaconId = EventId("\$fake-live-location-${startShareCalls.size}:${sessionId.value.substringAfter(':')}")
                 it + (roomId to ActiveLiveLocationShare(
-                    sessionId = sessionId,
+                    beaconId = beaconId,
                     roomId = roomId,
                     expiresAt = Instant.fromEpochMilliseconds(System.currentTimeMillis() + duration.inWholeMilliseconds),
                 ))

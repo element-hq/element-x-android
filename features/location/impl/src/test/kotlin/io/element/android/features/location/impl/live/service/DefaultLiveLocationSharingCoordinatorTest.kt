@@ -22,6 +22,7 @@ class DefaultLiveLocationSharingCoordinatorTest {
         val coordinator = DefaultLiveLocationSharingCoordinator(
             startService = { startCount++ },
             stopService = { stopCount++ },
+            nowMillis = { 0L },
         )
 
         coordinator.register(A_SESSION_ID, LiveLocationReceiver { })
@@ -37,6 +38,7 @@ class DefaultLiveLocationSharingCoordinatorTest {
         val coordinator = DefaultLiveLocationSharingCoordinator(
             startService = { },
             stopService = { },
+            nowMillis = { 0L },
         )
 
         coordinator.register(A_SESSION_ID, LiveLocationReceiver { error("boom") })

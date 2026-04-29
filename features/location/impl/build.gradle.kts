@@ -42,7 +42,9 @@ dependencies {
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.dateformatter.api)
+    implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.push.api)
+    implementation(libs.androidx.datastore.preferences)
     implementation(libs.datetime)
 
     testCommonDependencies(libs, true)
@@ -53,5 +55,6 @@ dependencies {
     testImplementation(projects.services.analytics.test)
     testImplementation(projects.features.messages.test)
     testImplementation(projects.libraries.featureflag.test)
+    testImplementation(projects.libraries.preferences.test)
     testImplementation(projects.features.location.test)
 }

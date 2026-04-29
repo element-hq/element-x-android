@@ -24,6 +24,7 @@ data class ShareLocationState(
     sealed interface Dialog {
         data object None : Dialog
         data class Constraints(val state: LocationConstraintsDialogState) : Dialog
+        data object LiveLocationDisclaimer : Dialog
         data class LiveLocationDurations(val durations: ImmutableList<LiveLocationDuration>) : Dialog
     }
 }

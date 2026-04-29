@@ -14,6 +14,7 @@ import io.element.android.features.location.impl.live.service.FakeLiveLocationSh
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID_2
@@ -36,7 +37,7 @@ class DefaultActiveLiveLocationShareManagerTest {
     fun `starting the first share registers the manager and adds an active share`() = runTest {
         val coordinator = FakeLiveLocationSharingCoordinator()
         val room = FakeJoinedRoom(
-            startLiveLocationShareResult = { Result.success(Unit) },
+            startLiveLocationShareResult = { Result.success(AN_EVENT_ID) },
         )
         val manager = aManager(
             client = FakeMatrixClient(sessionId = A_SESSION_ID).also { it.givenGetRoomResult(A_ROOM_ID, room) },
@@ -50,7 +51,7 @@ class DefaultActiveLiveLocationShareManagerTest {
         assertThat(manager.activeShares.value).containsExactly(
             A_ROOM_ID,
             ActiveLiveLocationShare(
-                sessionId = A_SESSION_ID,
+                beaconId = AN_EVENT_ID,
                 roomId = A_ROOM_ID,
                 expiresAt = kotlin.time.Instant.fromEpochMilliseconds(3_600_123L),
             ),
@@ -62,7 +63,7 @@ class DefaultActiveLiveLocationShareManagerTest {
     fun `stopping the last share unregisters the manager`() = runTest {
         val coordinator = FakeLiveLocationSharingCoordinator()
         val room = FakeJoinedRoom(
-            startLiveLocationShareResult = { Result.success(Unit) },
+            startLiveLocationShareResult = { Result.success(AN_EVENT_ID) },
             stopLiveLocationShareResult = { Result.success(Unit) },
         )
         val manager = aManager(
@@ -83,14 +84,14 @@ class DefaultActiveLiveLocationShareManagerTest {
     fun `onLocationUpdate prefers ActiveRoomsHolder before sdk lookup`() = runTest {
         val sentByHeldRoom = mutableListOf<String>()
         val heldRoom = FakeJoinedRoom(
-            startLiveLocationShareResult = { Result.success(Unit) },
+            startLiveLocationShareResult = { Result.success(AN_EVENT_ID) },
             sendLiveLocationResult = { geoUri ->
                 sentByHeldRoom += geoUri
                 Result.success(Unit)
             },
         )
         val clientRoom = FakeJoinedRoom(
-            startLiveLocationShareResult = { Result.success(Unit) },
+            startLiveLocationShareResult = { Result.success(AN_EVENT_ID) },
             sendLiveLocationResult = { error("client room should not send live location") },
         )
         val manager = aManager(
@@ -111,7 +112,7 @@ class DefaultActiveLiveLocationShareManagerTest {
             client = FakeMatrixClient(sessionId = A_SESSION_ID).also {
                 it.givenGetRoomResult(
                     A_ROOM_ID,
-                    FakeJoinedRoom(startLiveLocationShareResult = { Result.success(Unit) }),
+                    FakeJoinedRoom(startLiveLocationShareResult = { Result.success(AN_EVENT_ID) }),
                 )
             },
             coordinator = coordinator,
@@ -120,7 +121,7 @@ class DefaultActiveLiveLocationShareManagerTest {
             client = FakeMatrixClient(sessionId = A_SESSION_ID_2).also {
                 it.givenGetRoomResult(
                     A_ROOM_ID,
-                    FakeJoinedRoom(startLiveLocationShareResult = { Result.success(Unit) }),
+                    FakeJoinedRoom(startLiveLocationShareResult = { Result.success(AN_EVENT_ID) }),
                 )
             },
             coordinator = coordinator,

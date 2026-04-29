@@ -30,13 +30,12 @@ import io.element.android.features.location.impl.common.permissions.PermissionsE
 import io.element.android.features.location.impl.common.permissions.PermissionsPresenter
 import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.features.location.impl.common.toDialogState
-import io.element.android.features.location.impl.share.ShareLocationState.Dialog.Constraints
+import io.element.android.features.location.impl.live.LiveLocationStore
 import io.element.android.features.messages.api.MessageComposerContext
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.dateformatter.api.DurationFormatter
-import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
@@ -47,8 +46,6 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
@@ -68,7 +65,7 @@ class ShareLocationPresenter(
     private val client: MatrixClient,
     private val durationFormatter: DurationFormatter,
     private val liveLocationShareManager: ActiveLiveLocationShareManager,
-    @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
+    private val liveLocationStore: LiveLocationStore,
 ) : Presenter<ShareLocationState> {
     @AssistedFactory
     fun interface Factory {
@@ -93,8 +90,27 @@ class ShareLocationPresenter(
 
         fun checkLocationConstraints() {
             val locationConstraints = checkLocationConstraints(permissionsState, locationActions)
-            dialogState = Constraints(locationConstraints.toDialogState())
+            dialogState = ShareLocationState.Dialog.Constraints(locationConstraints.toDialogState())
             trackUserPosition = locationConstraints is LocationConstraintsCheck.Success
+        }
+
+        suspend fun computeDialogState(): ShareLocationState.Dialog {
+            val hasAcceptedDisclaimer = liveLocationStore.hasAcceptedLiveLocationDisclaimer()
+            val constraintsResult = checkLocationConstraints(permissionsState, locationActions)
+            return when {
+                !hasAcceptedDisclaimer -> {
+                    ShareLocationState.Dialog.LiveLocationDisclaimer
+                }
+                constraintsResult is LocationConstraintsCheck.Success -> {
+                    val durations = LIVE_LOCATION_DURATIONS.map {
+                        LiveLocationDuration(duration = it, formatted = durationFormatter.format(it))
+                    }
+                    ShareLocationState.Dialog.LiveLocationDurations(durations.toImmutableList())
+                }
+                else -> {
+                    ShareLocationState.Dialog.Constraints(constraintsResult.toDialogState())
+                }
+            }
         }
 
         LaunchedEffect(permissionsState.permissions) { checkLocationConstraints() }
@@ -115,16 +131,14 @@ class ShareLocationPresenter(
                     locationActions.openLocationSettings()
                     dialogState = ShareLocationState.Dialog.None
                 }
-                ShareLocationEvent.ShowLiveLocationDurationPicker -> {
-                    val constraintsResult = checkLocationConstraints(permissionsState, locationActions)
-                    dialogState = if (constraintsResult is LocationConstraintsCheck.Success) {
-                        val durations = LIVE_LOCATION_DURATIONS.map {
-                            LiveLocationDuration(duration = it, formatted = durationFormatter.format(it))
+                ShareLocationEvent.InitiateLiveLocationShare -> scope.launch {
+                    dialogState = computeDialogState()
+                }
+                ShareLocationEvent.AcceptLiveLocationDisclaimer -> scope.launch {
+                    liveLocationStore.setAcceptedLiveLocationDisclaimer()
+                        .onSuccess {
+                            dialogState = computeDialogState()
                         }
-                        ShareLocationState.Dialog.LiveLocationDurations(durations.toImmutableList())
-                    } else {
-                        Constraints(constraintsResult.toDialogState())
-                    }
                 }
                 is ShareLocationEvent.StartLiveLocationShare -> scope.launch {
                     dialogState = ShareLocationState.Dialog.None

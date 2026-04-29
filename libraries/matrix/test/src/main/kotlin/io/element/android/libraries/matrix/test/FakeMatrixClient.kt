@@ -33,6 +33,7 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.NotJoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomInfo
 import io.element.android.libraries.matrix.api.room.RoomMembershipObserver
+import io.element.android.libraries.matrix.api.room.location.BeaconInfoUpdate
 import io.element.android.libraries.matrix.api.room.alias.ResolvedRoomAlias
 import io.element.android.libraries.matrix.api.roomdirectory.RoomDirectoryService
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
@@ -107,6 +108,7 @@ class FakeMatrixClient(
     private val canReportRoomLambda: () -> Boolean = { false },
     private val isLivekitRtcSupportedLambda: () -> Boolean = { false },
     override val ignoredUsersFlow: StateFlow<ImmutableList<UserId>> = MutableStateFlow(persistentListOf()),
+    override val ownBeaconInfoUpdates: Flow<BeaconInfoUpdate> = emptyFlow(),
     private val getMaxUploadSizeResult: () -> Result<Long> = { lambdaError() },
     private val getJoinedRoomIdsResult: () -> Result<Set<RoomId>> = { Result.success(emptySet()) },
     private val getRecentEmojisLambda: () -> Result<List<String>> = { Result.success(emptyList()) },

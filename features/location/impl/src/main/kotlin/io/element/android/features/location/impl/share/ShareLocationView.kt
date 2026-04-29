@@ -47,6 +47,7 @@ import io.element.android.libraries.designsystem.components.LocationPin
 import io.element.android.libraries.designsystem.components.PinVariant
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.ListDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.list.RadioButtonListItem
@@ -80,6 +81,13 @@ fun ShareLocationView(
             onRequestPermissions = { state.eventSink(ShareLocationEvent.RequestPermissions) },
             onOpenAppSettings = { state.eventSink(ShareLocationEvent.OpenAppSettings) },
             onOpenLocationSettings = { state.eventSink(ShareLocationEvent.OpenLocationSettings) },
+            onDismiss = { state.eventSink(ShareLocationEvent.DismissDialog) },
+        )
+        ShareLocationState.Dialog.LiveLocationDisclaimer -> ConfirmationDialog(
+            content = stringResource(R.string.screen_share_location_live_location_disclaimer_title),
+            submitText = stringResource(CommonStrings.action_accept),
+            cancelText = stringResource(CommonStrings.action_decline),
+            onSubmitClick = { state.eventSink(ShareLocationEvent.AcceptLiveLocationDisclaimer) },
             onDismiss = { state.eventSink(ShareLocationEvent.DismissDialog) },
         )
         is ShareLocationState.Dialog.LiveLocationDurations -> LiveLocationDurationDialog(
@@ -198,7 +206,7 @@ private fun BottomSheetContent(
     }
     if (state.canShareLiveLocation) {
         ShareLiveLocationItem {
-            state.eventSink(ShareLocationEvent.ShowLiveLocationDurationPicker)
+            state.eventSink(ShareLocationEvent.InitiateLiveLocationShare)
         }
     }
 }
