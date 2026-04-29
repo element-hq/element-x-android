@@ -11,6 +11,7 @@ package io.element.android.libraries.matrix.ui.messages
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
+import io.element.android.libraries.matrix.api.timeline.item.event.MessageTypeWithAttachment
 import io.element.android.libraries.matrix.api.timeline.item.event.TextMessageType
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
@@ -25,6 +26,19 @@ import org.jsoup.select.NodeVisitor
 fun TextMessageType.toPlainText(
     permalinkParser: PermalinkParser,
 ) = formatted?.toPlainText(permalinkParser) ?: body
+
+/**
+ * Converts the HTML string in [MessageTypeWithAttachment.formattedCaption] to a plain text representation by parsing it and removing all formatting.
+ * If the caption is not formatted or the format is not [MessageFormat.HTML], the [MessageTypeWithAttachment.caption] is returned instead.
+ * If there is no caption, returns [default].
+ */
+fun MessageTypeWithAttachment.toPlainText(
+    permalinkParser: PermalinkParser,
+    default: String = filename,
+): String {
+    val plainTextFromFormatted = formattedCaption?.toPlainText(permalinkParser)
+    return plainTextFromFormatted ?: caption ?: default
+}
 
 /**
  * Converts the HTML string in [FormattedBody.body] to a plain text representation by parsing it and removing all formatting.
