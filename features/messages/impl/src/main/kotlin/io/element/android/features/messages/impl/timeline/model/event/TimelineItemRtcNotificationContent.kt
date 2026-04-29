@@ -11,17 +11,12 @@ package io.element.android.features.messages.impl.timeline.model.event
 import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 
-// For now this is just an enum, but could be a
-// sealed class if we need the list of users who declined.
-enum class RtcNotificationState {
-    /** Some users have declined */
-     Declined,
+// State of the call, for now only isDeclined but in the future could be missed, active.
+sealed class RtcNotificationState {
+    /** Some users have declined, byMe indicates if the current user is one of them. */
+    data class Declined(val byMe: Boolean) : RtcNotificationState()
 
-    /** I have declined this call */
-    DeclinedByMe,
-
-    // Future sates could be `Missed`? `ongoing`...
-    None
+    object Started : RtcNotificationState()
 }
 
 class TimelineItemRtcNotificationContent(

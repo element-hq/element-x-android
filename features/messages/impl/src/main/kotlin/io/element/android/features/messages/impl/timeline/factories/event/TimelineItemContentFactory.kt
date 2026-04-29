@@ -106,10 +106,10 @@ class TimelineItemContentFactory(
             is UnableToDecryptContent -> utdFactory.create(itemContent)
             is CallNotifyContent -> TimelineItemRtcNotificationContent(
                 callIntent = itemContent.callIntent,
-                state = when {
-                    itemContent.declinedBy.isEmpty().not() && itemContent.declinedBy.any { it == sessionId } -> RtcNotificationState.DeclinedByMe
-                    itemContent.declinedBy.isEmpty().not() -> RtcNotificationState.Declined
-                    else -> RtcNotificationState.None
+                state = if (itemContent.declinedBy.isNotEmpty()) {
+                    RtcNotificationState.Declined(itemContent.declinedBy.any { it == sessionId })
+                } else {
+                    RtcNotificationState.Started
                 }
             )
             is UnknownContent -> TimelineItemUnknownContent

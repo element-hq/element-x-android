@@ -96,9 +96,10 @@ private fun getTextRes(
     content: TimelineItemRtcNotificationContent
 ): Int = if (timelineRoomInfo.isDm) {
     when (content.state) {
-        RtcNotificationState.Declined -> CommonStrings.common_call_declined
-        RtcNotificationState.DeclinedByMe -> CommonStrings.common_call_you_declined
-        RtcNotificationState.None -> CommonStrings.common_call_started
+        is RtcNotificationState.Declined -> {
+            if (content.state.byMe) CommonStrings.common_call_you_declined else CommonStrings.common_call_declined
+        }
+        RtcNotificationState.Started -> CommonStrings.common_call_started
     }
 } else {
     // Only show declined info in DMs
@@ -110,10 +111,7 @@ private fun getIcon(
     timelineRoomInfo: TimelineRoomInfo,
     content: TimelineItemRtcNotificationContent
 ): ImageVector {
-    val showAsDeclined = timelineRoomInfo.isDm && (
-        content.state == RtcNotificationState.Declined ||
-            content.state == RtcNotificationState.DeclinedByMe
-        )
+    val showAsDeclined = timelineRoomInfo.isDm && content.state is RtcNotificationState.Declined
     val icon = if (showAsDeclined) {
         if (content.callIntent == CallIntent.AUDIO) CompoundIcons.VoiceCallDeclinedSolid() else CompoundIcons.VideoCallDeclinedSolid()
     } else {
@@ -127,12 +125,12 @@ private fun getIcon(
 internal fun TimelineItemCallNotifyViewPreview() = ElementPreview {
     Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
         listOf(
-            aTimelineRoomInfo() to TimelineItemRtcNotificationContent(CallIntent.AUDIO, RtcNotificationState.None),
-            aTimelineRoomInfo() to TimelineItemRtcNotificationContent(CallIntent.VIDEO, RtcNotificationState.None),
-            aTimelineRoomInfo(isDm = true) to TimelineItemRtcNotificationContent(CallIntent.AUDIO, RtcNotificationState.Declined),
-            aTimelineRoomInfo(isDm = true) to TimelineItemRtcNotificationContent(CallIntent.VIDEO, RtcNotificationState.Declined),
-            aTimelineRoomInfo(isDm = true) to TimelineItemRtcNotificationContent(CallIntent.VIDEO, RtcNotificationState.DeclinedByMe),
-            aTimelineRoomInfo(isDm = false) to TimelineItemRtcNotificationContent(CallIntent.VIDEO, RtcNotificationState.None),
+            aTimelineRoomInfo() to TimelineItemRtcNotificationContent(CallIntent.AUDIO, RtcNotificationState.Started),
+            aTimelineRoomInfo() to TimelineItemRtcNotificationContent(CallIntent.VIDEO, RtcNotificationState.Started),
+            aTimelineRoomInfo(isDm = true) to TimelineItemRtcNotificationContent(CallIntent.AUDIO, RtcNotificationState.Declined(false)),
+            aTimelineRoomInfo(isDm = true) to TimelineItemRtcNotificationContent(CallIntent.VIDEO, RtcNotificationState.Declined(false)),
+            aTimelineRoomInfo(isDm = true) to TimelineItemRtcNotificationContent(CallIntent.VIDEO, RtcNotificationState.Declined(true)),
+            aTimelineRoomInfo(isDm = false) to TimelineItemRtcNotificationContent(CallIntent.VIDEO, RtcNotificationState.Started),
         ).forEach { (info, content) ->
             TimelineItemCallNotifyView(
                 timelineRoomInfo = info,
