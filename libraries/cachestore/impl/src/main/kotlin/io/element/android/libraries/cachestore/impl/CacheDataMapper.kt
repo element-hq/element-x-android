@@ -8,20 +8,19 @@
 package io.element.android.libraries.cachestore.impl
 
 import io.element.android.libraries.cachestore.api.CacheData
-import java.util.Date
 import io.element.android.libraries.cachestore.CacheData as DbCacheData
 
 internal fun CacheData.toDbModel(key: String): DbCacheData {
     return DbCacheData(
         key = key,
         value_ = value,
-        updatedAt = updatedAt.time,
+        updatedAt = updatedAt,
     )
 }
 
 internal fun DbCacheData.toApiModel(): CacheData {
     return CacheData(
         value = value_,
-        updatedAt = Date(updatedAt),
+        updatedAt = updatedAt,
     )
 }
