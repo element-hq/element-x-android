@@ -14,20 +14,20 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.call.impl.pip.PictureInPictureEvents
 import io.element.android.features.call.impl.pip.aPictureInPictureState
 import io.element.android.features.call.impl.ui.CallScreenEvents
 import io.element.android.features.call.impl.ui.CallScreenView
+import io.element.android.features.call.impl.ui.JavascriptBackHandler
 import io.element.android.features.call.impl.ui.aCallScreenState
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.pressBackKey
+import org.junit.Assert.assertEquals
 import org.junit.Rule
 import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
-import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.element.android.features.call.impl.ui.JavascriptBackHandler
-import org.junit.Assert.assertEquals
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.Implementation
 import org.robolectric.annotation.Implements
@@ -56,8 +56,6 @@ class CallScreenViewTest {
     @Config(shadows = [RecordingShadowWebView::class])
     @Test
     fun `pressing back key dispatches escape key events to web view when pip is unsupported`() {
-
-
         rule.setCallScreenView(
             state = aCallScreenState(),
             useInspectionMode = false,
@@ -76,7 +74,6 @@ class CallScreenViewTest {
     @Config(shadows = [RecordingShadowWebView::class])
     @Test
     fun `web view javascript back handler emits pip event when pip is supported`() {
-
         val pipEvents = EventsRecorder<PictureInPictureEvents>()
 
         rule.setCallScreenView(
@@ -151,4 +148,3 @@ internal class RecordingShadowWebView : ShadowWebView() {
         return false
     }
 }
-
