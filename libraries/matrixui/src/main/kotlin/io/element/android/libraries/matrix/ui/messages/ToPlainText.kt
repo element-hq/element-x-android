@@ -51,6 +51,8 @@ fun Document.toPlainText(): String {
     return visitor.build()
 }
 
+private const val FALLBACK_REPLY_NODE_TAG = "mx-reply"
+
 private class PlainTextNodeVisitor : NodeVisitor {
     private val builder = StringBuilder()
 
@@ -78,7 +80,7 @@ private class PlainTextNodeVisitor : NodeVisitor {
             } else {
                 builder.append("• ")
             }
-        } else if (node is Element && node.tagName() == "mx-reply") {
+        } else if (node is Element && node.tagName() == FALLBACK_REPLY_NODE_TAG) {
             // Remove the fallback reply node and its contents so they aren't added to the plain text message
             node.remove()
         } else if (node is Element && node.isBlock && builder.lastOrNull() != '\n') {
