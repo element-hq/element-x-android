@@ -151,10 +151,7 @@ class LinkNewDeviceFlowNode(
                     LinkMobileStep.Starting -> {
                         // This step is not received at the moment, so do nothing
                     }
-                    LinkMobileStep.SyncingSecrets -> {
-                        // LinkMobileStep.Done is not received at the moment, so consider that the flow is done here
-                        callback.onDone()
-                    }
+                    LinkMobileStep.SyncingSecrets -> Unit
                     is LinkMobileStep.WaitingForAuth -> {
                         navigateToBrowser(linkMobileStep.verificationUri)
                     }
