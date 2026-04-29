@@ -7,11 +7,14 @@
 
 package io.element.android.features.call.ui
 
+import android.view.KeyEvent
+import android.webkit.WebView
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import io.element.android.features.call.impl.pip.PictureInPictureEvents
 import io.element.android.features.call.impl.pip.aPictureInPictureState
 import io.element.android.features.call.impl.ui.CallScreenEvents
 import io.element.android.features.call.impl.ui.CallScreenView
@@ -23,6 +26,12 @@ import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import org.junit.Assert.assertEquals
+import org.robolectric.annotation.Config
+import org.robolectric.annotation.Implementation
+import org.robolectric.annotation.Implements
+import org.robolectric.annotation.Resetter
+import org.robolectric.shadows.ShadowWebView
 
 @RunWith(AndroidJUnit4::class)
 class CallScreenViewTest {
@@ -35,27 +44,116 @@ class CallScreenViewTest {
 
         rule.setCallScreenView(
             state = aCallScreenState(eventSink = callEvents),
+            useInspectionMode = true,
         )
 
         rule.pressBackKey()
 
         callEvents.assertSingle(CallScreenEvents.Hangup)
     }
+
+    @Config(shadows = [RecordingShadowWebView::class])
+    @Test
+    fun `pressing back key dispatches escape key events to web view when pip is unsupported`() {
+        RecordingShadowWebView.clearDispatchedEvents()
+
+        rule.setCallScreenView(
+            state = aCallScreenState(),
+            useInspectionMode = false,
+        )
+
+        rule.pressBackKey()
+
+        val dispatchedEvents = RecordingShadowWebView.dispatchedEvents
+        assertEquals(2, dispatchedEvents.size)
+        assertEquals(KeyEvent.ACTION_DOWN, dispatchedEvents[0].action)
+        assertEquals(KeyEvent.KEYCODE_ESCAPE, dispatchedEvents[0].keyCode)
+        assertEquals(KeyEvent.ACTION_UP, dispatchedEvents[1].action)
+        assertEquals(KeyEvent.KEYCODE_ESCAPE, dispatchedEvents[1].keyCode)
+    }
+
+    @Config(shadows = [RecordingShadowWebView::class])
+    @Test
+    fun `web view javascript back handler emits pip event when pip is supported`() {
+        RecordingShadowWebView.clearDispatchedEvents()
+        val pipEvents = EventsRecorder<PictureInPictureEvents>()
+
+        rule.setCallScreenView(
+            state = aCallScreenState(),
+            useInspectionMode = false,
+            pipState = aPictureInPictureState(
+                supportPip = true,
+                eventSink = pipEvents,
+            ),
+        )
+
+        rule.runOnIdle {
+            RecordingShadowWebView.invokeJavascriptBackHandler()
+        }
+
+        pipEvents.assertSize(2)
+        pipEvents.assertTrue(0) { it is PictureInPictureEvents.SetPipController }
+        pipEvents.assertTrue(1) { it is PictureInPictureEvents.EnterPictureInPicture }
+    }
 }
 
 private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setCallScreenView(
     state: io.element.android.features.call.impl.ui.CallScreenState,
+    useInspectionMode: Boolean,
+    pipState: io.element.android.features.call.impl.pip.PictureInPictureState = aPictureInPictureState(supportPip = false),
 ) {
     setContent {
-        // Force inspection mode so AndroidView is not created and BackHandler goes through native fallback.
-        CompositionLocalProvider(LocalInspectionMode provides true) {
+        // Inspection mode disables AndroidView creation; keep it configurable per test.
+        CompositionLocalProvider(LocalInspectionMode provides useInspectionMode) {
             CallScreenView(
                 state = state,
-                pipState = aPictureInPictureState(supportPip = false),
+                pipState = pipState,
                 onConsoleMessage = {},
                 requestPermissions = { _, _ -> },
             )
         }
+    }
+}
+
+@Implements(WebView::class)
+internal class RecordingShadowWebView : ShadowWebView() {
+    companion object {
+        val dispatchedEvents = mutableListOf<KeyEvent>()
+        private var backHandlerJavascriptInterface: Any? = null
+
+        fun clearDispatchedEvents() {
+            dispatchedEvents.clear()
+            backHandlerJavascriptInterface = null
+        }
+
+        fun invokeJavascriptBackHandler() {
+            val backHandler = checkNotNull(backHandlerJavascriptInterface) { "Expected backHandler JavaScript interface to be registered" }
+            backHandler.javaClass.getDeclaredMethod("onBackPressed").apply {
+                isAccessible = true
+                invoke(backHandler)
+            }
+        }
+
+        @Resetter
+        @JvmStatic
+        fun resetRecordedEvents() {
+            dispatchedEvents.clear()
+            backHandlerJavascriptInterface = null
+        }
+    }
+
+    @Implementation
+    protected override fun addJavascriptInterface(`object`: Any, name: String) {
+        super.addJavascriptInterface(`object`, name)
+        if (name == "backHandler") {
+            backHandlerJavascriptInterface = `object`
+        }
+    }
+
+    @Implementation
+    protected fun dispatchKeyEvent(event: KeyEvent): Boolean {
+        dispatchedEvents += KeyEvent(event)
+        return false
     }
 }
 
