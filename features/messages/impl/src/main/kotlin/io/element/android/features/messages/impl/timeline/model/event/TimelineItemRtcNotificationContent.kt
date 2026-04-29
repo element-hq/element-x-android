@@ -12,11 +12,11 @@ import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.timeline.item.event.EventType
 
 // State of the call, for now only isDeclined but in the future could be missed, active.
-sealed class RtcNotificationState {
+sealed interface RtcNotificationState {
     /** Some users have declined, byMe indicates if the current user is one of them. */
-    data class Declined(val byMe: Boolean) : RtcNotificationState()
+    data class Declined(val byMe: Boolean) : RtcNotificationState
 
-    object Started : RtcNotificationState()
+    object Started : RtcNotificationState
 }
 
 class TimelineItemRtcNotificationContent(
