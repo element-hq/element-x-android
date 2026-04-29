@@ -199,9 +199,7 @@ class LinkNewDeviceFlowNode(
             is ErrorType.Expired,
             is ErrorType.NotFound,
             is ErrorType.DeviceNotFound -> ErrorScreenType.Expired
-            // TODO we should show other_device_already_signed_in screen with checkmark when available
-            // See: https://github.com/element-hq/element-x-android/issues/6678
-            is ErrorType.OtherDeviceAlreadySignedIn -> ErrorScreenType.UnknownError
+            is ErrorType.OtherDeviceAlreadySignedIn -> ErrorScreenType.OtherDeviceAlreadySignedIn
             // TODO check if we expect to hit this here or if it should be caught earlier on
             is ErrorType.UnsupportedQrCodeType -> ErrorScreenType.UnknownError
             is ErrorType.MissingSecretsBackup,
