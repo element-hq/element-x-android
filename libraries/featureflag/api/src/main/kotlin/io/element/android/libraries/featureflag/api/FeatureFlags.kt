@@ -139,7 +139,8 @@ enum class FeatureFlags(
     JumpToUnread(
         key = "feature.jump_to_unread",
         title = "Jump to unread messages",
-        description = "Show a button to jump to the read marker, plus a count badge on the scroll-to-bottom button when new messages arrive while scrolled away.",
+        description = "Show a button to jump to the read marker, plus a count badge on the scroll-to-bottom button " +
+            "when new messages arrive while scrolled away.",
         defaultValue = { false },
         isFinished = false,
     ),

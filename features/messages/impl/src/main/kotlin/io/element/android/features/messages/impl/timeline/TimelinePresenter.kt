@@ -296,11 +296,7 @@ class TimelinePresenter(
                         markerIdx = i
                         break
                     }
-                    if (item is TimelineItem.Event &&
-                        !item.isMine &&
-                        item.origin != TimelineItemEventOrigin.PAGINATION &&
-                        item.content.isMessageContent()
-                    ) {
+                    if (item is TimelineItem.Event && item.isCountableNewMessage()) {
                         unread++
                     }
                 }
@@ -464,11 +460,7 @@ class TimelinePresenter(
                 var delta = 0
                 for (item in timelineItems) {
                     if (item.identifier() == prevMostRecentItemIdValue) break
-                    if (item is TimelineItem.Event &&
-                        item.origin != TimelineItemEventOrigin.PAGINATION &&
-                        !item.isMine &&
-                        item.content.isMessageContent()
-                    ) {
+                    if (item is TimelineItem.Event && item.isCountableNewMessage()) {
                         delta++
                     }
                 }
@@ -517,6 +509,16 @@ private fun FocusRequestState.onFocusEventRender(): FocusRequestState {
         is FocusRequestState.Success -> copy(rendered = true)
         else -> this
     }
+}
+
+/**
+ * Whether this event should be counted toward the unread / new-message badges: a user-facing
+ * message from someone other than the local user, that wasn't pulled in via back-pagination.
+ */
+private fun TimelineItem.Event.isCountableNewMessage(): Boolean {
+    return !isMine &&
+        origin != TimelineItemEventOrigin.PAGINATION &&
+        content.isMessageContent()
 }
 
 // Workaround for not having the server names available, get possible server names from the user ids of the room members

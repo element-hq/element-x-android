@@ -598,7 +598,7 @@ internal fun TimelineViewWithReadMarkerPreview() = ElementPreview {
 @PreviewsDayNight
 @Composable
 internal fun TimelineViewWithReadMarkerDotBadgesPreview() = ElementPreview {
-    TimelineViewWithReadMarker(unreadMessagesCount = 47, newMessagesCount = 99)
+    TimelineViewWithReadMarker(unreadMessagesCount = 47, newMessagesCount = 0)
 }
 
 @PreviewsDayNight
