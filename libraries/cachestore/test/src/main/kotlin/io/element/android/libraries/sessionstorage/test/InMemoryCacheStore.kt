@@ -26,4 +26,8 @@ class InMemoryCacheStore(
     override suspend fun deleteData(key: String) {
         dataMap.remove(key)
     }
+
+    override suspend fun deleteAll() {
+        dataMap.clear()
+    }
 }

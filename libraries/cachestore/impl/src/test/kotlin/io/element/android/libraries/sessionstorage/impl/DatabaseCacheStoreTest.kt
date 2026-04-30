@@ -65,4 +65,22 @@ class DatabaseCacheStoreTest {
         databaseCacheStore.deleteData(A_KEY)
         assertThat(database.cacheDataQueries.selectData(A_KEY).executeAsOneOrNull()).isNull()
     }
+
+    @Test
+    fun `deleteAll deletes all the data`() = runTest {
+        // Assert that no data is stored for the key
+        assertThat(database.cacheDataQueries.selectData(A_KEY).executeAsOneOrNull()).isNull()
+        // Store data
+        databaseCacheStore.storeData(A_KEY, CacheData(A_DATA_1, 1))
+        assertThat(database.cacheDataQueries.selectData(A_KEY).executeAsOneOrNull()).isEqualTo(
+            DbCacheData(
+                key = A_KEY,
+                value_ = A_DATA_1,
+                updatedAt = 1,
+            )
+        )
+        // Delete all data
+        databaseCacheStore.deleteAll()
+        assertThat(database.cacheDataQueries.selectData(A_KEY).executeAsOneOrNull()).isNull()
+    }
 }

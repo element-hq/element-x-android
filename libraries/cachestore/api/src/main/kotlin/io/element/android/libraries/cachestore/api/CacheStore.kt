@@ -11,4 +11,5 @@ interface CacheStore {
     suspend fun storeData(key: String, data: CacheData)
     suspend fun getData(key: String): CacheData?
     suspend fun deleteData(key: String)
+    suspend fun deleteAll()
 }

@@ -27,10 +27,14 @@ class DatabaseCacheStore(
     override suspend fun storeData(key: String, data: CacheData) {
         database.cacheDataQueries.insertData(
             data.toDbModel(key)
-        )
+        ).await()
     }
 
     override suspend fun deleteData(key: String) {
-        database.cacheDataQueries.deleteData(key)
+        database.cacheDataQueries.deleteData(key).await()
+    }
+
+    override suspend fun deleteAll() {
+        database.cacheDataQueries.deleteAll().await()
     }
 }
