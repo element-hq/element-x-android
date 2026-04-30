@@ -24,9 +24,18 @@ data class NotificationSettingsState(
     val availablePushDistributors: ImmutableList<Distributor>,
     val showChangePushProviderDialog: Boolean,
     val fullScreenIntentPermissionsState: FullScreenIntentPermissionsState,
+    /** Persisted message-sound choice. The corresponding [messageSoundDisplayName] is its label. */
     val messageSound: NotificationSound,
+    /**
+     * Label for [messageSound]. For [NotificationSound.SystemDefault] / [NotificationSound.Silent]
+     * this is set synchronously from string resources. For [NotificationSound.Custom] it's
+     * resolved asynchronously via [io.element.android.libraries.push.api.notifications.SoundDisplayNameResolver],
+     * so the field starts empty and updates once the lookup settles.
+     */
     val messageSoundDisplayName: String,
+    /** Persisted call-ringtone choice. The corresponding [callRingtoneDisplayName] is its label. */
     val callRingtone: NotificationSound,
+    /** See [messageSoundDisplayName] — same async-resolution contract. */
     val callRingtoneDisplayName: String,
     val eventSink: (NotificationSettingsEvents) -> Unit,
 ) {

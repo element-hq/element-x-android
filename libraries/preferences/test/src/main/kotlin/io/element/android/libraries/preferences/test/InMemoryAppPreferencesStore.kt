@@ -14,8 +14,10 @@ import io.element.android.libraries.matrix.api.tracing.TraceLogPack
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.api.store.NotificationSound
 import io.element.android.libraries.preferences.api.store.NotificationSoundChannelConfig
+import io.element.android.libraries.preferences.api.store.NotificationSoundUnavailableState
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.flow.updateAndGet
 
 class InMemoryAppPreferencesStore(
@@ -25,23 +27,25 @@ class InMemoryAppPreferencesStore(
     timelineMediaPreviewValue: MediaPreviewValue? = null,
     theme: String? = null,
     logLevel: LogLevel = LogLevel.INFO,
-    traceLockPacks: Set<TraceLogPack> = emptySet(),
+    traceLogPacks: Set<TraceLogPack> = emptySet(),
     messageSound: NotificationSound = NotificationSound.SystemDefault,
     messageSoundChannelVersion: Int = 0,
     callRingtone: NotificationSound = NotificationSound.SystemDefault,
     callRingtoneChannelVersion: Int = 0,
+    notificationSoundUnavailableState: NotificationSoundUnavailableState = NotificationSoundUnavailableState.None,
 ) : AppPreferencesStore {
     private val isDeveloperModeEnabled = MutableStateFlow(isDeveloperModeEnabled)
     private val customElementCallBaseUrl = MutableStateFlow(customElementCallBaseUrl)
     private val theme = MutableStateFlow(theme)
     private val logLevel = MutableStateFlow(logLevel)
-    private val tracingLogPacks = MutableStateFlow(traceLockPacks)
+    private val tracingLogPacks = MutableStateFlow(traceLogPacks)
     private val hideInviteAvatars = MutableStateFlow(hideInviteAvatars)
     private val timelineMediaPreviewValue = MutableStateFlow(timelineMediaPreviewValue)
     private val messageSound = MutableStateFlow(messageSound)
     private val messageSoundChannelVersion = MutableStateFlow(messageSoundChannelVersion)
     private val callRingtone = MutableStateFlow(callRingtone)
     private val callRingtoneChannelVersion = MutableStateFlow(callRingtoneChannelVersion)
+    private val notificationSoundUnavailableState = MutableStateFlow(notificationSoundUnavailableState)
 
     override suspend fun setDeveloperModeEnabled(enabled: Boolean) {
         isDeveloperModeEnabled.value = enabled
@@ -128,6 +132,22 @@ class InMemoryAppPreferencesStore(
             callRingtone = callRingtone.value,
             callRingtoneVersion = callRingtoneChannelVersion.value,
         )
+    }
+
+    override fun getNotificationSoundUnavailableStateFlow(): Flow<NotificationSoundUnavailableState> {
+        return notificationSoundUnavailableState
+    }
+
+    override suspend fun setNotificationSoundUnavailableState(state: NotificationSoundUnavailableState) {
+        notificationSoundUnavailableState.value = state
+    }
+
+    override suspend fun clearMessageSoundUnavailable() {
+        notificationSoundUnavailableState.update { it.withoutMessageSound() }
+    }
+
+    override suspend fun clearCallRingtoneUnavailable() {
+        notificationSoundUnavailableState.update { it.withoutCallRingtone() }
     }
 
     override suspend fun reset() {

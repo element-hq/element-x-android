@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2025 Element Creations Ltd.
+  ~ Copyright 2025 New Vector Ltd.
+  ~
+  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+  ~ Please see LICENSE files in the repository root for full details.
+  -->
+<resources>
+    <string name="screen_room_list_sound_unavailable_title">Notification sound unavailable</string>
+    <string name="screen_room_list_sound_unavailable_message_only">Your previously selected message sound is not available.</string>
+    <string name="screen_room_list_sound_unavailable_call_only">Your previously selected call ringtone is not available.</string>
+    <string name="screen_room_list_sound_unavailable_both">Your previously selected notification sounds are not available.</string>
+    <string name="screen_room_list_sound_unavailable_action">Choose a new sound</string>
+</resources>

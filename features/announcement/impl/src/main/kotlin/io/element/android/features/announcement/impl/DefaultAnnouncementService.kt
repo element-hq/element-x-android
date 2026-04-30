@@ -20,7 +20,6 @@ import io.element.android.features.announcement.impl.store.AnnouncementStore
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOf
 
 @ContributesBinding(AppScope::class)
 class DefaultAnnouncementService(
@@ -33,6 +32,9 @@ class DefaultAnnouncementService(
             Announcement.NewNotificationSound -> {
                 announcementStore.setAnnouncementStatus(Announcement.NewNotificationSound, AnnouncementStatus.Show)
             }
+            Announcement.SoundUnavailable -> {
+                announcementStore.setAnnouncementStatus(Announcement.SoundUnavailable, AnnouncementStatus.Show)
+            }
         }
     }
 
@@ -42,12 +44,15 @@ class DefaultAnnouncementService(
 
     override fun announcementsToShowFlow(): Flow<List<Announcement>> {
         return combine(
-            flowOf(Unit),
             announcementStore.announcementStatusFlow(Announcement.NewNotificationSound),
-        ) { _, newNotificationSoundStatus ->
+            announcementStore.announcementStatusFlow(Announcement.SoundUnavailable),
+        ) { newNotificationSoundStatus, soundUnavailableStatus ->
             buildList {
                 if (newNotificationSoundStatus == AnnouncementStatus.Show) {
                     add(Announcement.NewNotificationSound)
+                }
+                if (soundUnavailableStatus == AnnouncementStatus.Show) {
+                    add(Announcement.SoundUnavailable)
                 }
             }
         }

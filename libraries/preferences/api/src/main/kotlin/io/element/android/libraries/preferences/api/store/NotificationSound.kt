@@ -8,9 +8,12 @@
 
 package io.element.android.libraries.preferences.api.store
 
+import androidx.compose.runtime.Immutable
+
 /**
  * The user's choice of notification sound for a notification channel.
  */
+@Immutable
 sealed interface NotificationSound {
     /** Use the channel's bundled default sound (the in-app message sound or the system ringtone). */
     data object SystemDefault : NotificationSound

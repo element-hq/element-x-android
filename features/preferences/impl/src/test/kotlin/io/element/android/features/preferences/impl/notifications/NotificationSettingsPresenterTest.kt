@@ -19,6 +19,7 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.api.store.NotificationSound
+import io.element.android.libraries.preferences.api.store.NotificationSoundUnavailableState
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.push.api.PushService
 import io.element.android.libraries.push.api.notifications.NotificationSoundUpdater
@@ -35,7 +36,10 @@ import io.element.android.tests.testutils.consumeItemsUntilPredicate
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import kotlin.time.Duration.Companion.milliseconds
@@ -463,6 +467,112 @@ class NotificationSettingsPresenterTest {
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `present - SetMessageSound transitions Both unavailable state to CallRingtone`() = runTest {
+        val appPreferencesStore = InMemoryAppPreferencesStore(
+            notificationSoundUnavailableState = NotificationSoundUnavailableState.Both,
+        )
+        val presenter = createNotificationSettingsPresenter(
+            appPreferencesStore = appPreferencesStore,
+            notificationSoundUpdater = FakeNotificationSoundUpdater(
+                recreateNoisyChannelLambda = { _, _ -> },
+            ),
+        )
+        presenter.test {
+            val initialState = consumeItemsUntilPredicate {
+                it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
+            }.last()
+
+            initialState.eventSink(NotificationSettingsEvents.SetMessageSound(NotificationSound.Custom("content://valid")))
+            // Drain the side-effect launched on sessionCoroutineScope (the test's backgroundScope).
+            advanceUntilIdle()
+
+            // Only the message-sound bit is dropped; the call-ringtone half stays so the home
+            // banner downgrades from Both to CallRingtone instead of disappearing.
+            assertThat(appPreferencesStore.getNotificationSoundUnavailableStateFlow().first())
+                .isEqualTo(NotificationSoundUnavailableState.CallRingtone)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `present - SetCallRingtone transitions Both unavailable state to MessageSound`() = runTest {
+        val appPreferencesStore = InMemoryAppPreferencesStore(
+            notificationSoundUnavailableState = NotificationSoundUnavailableState.Both,
+        )
+        val presenter = createNotificationSettingsPresenter(
+            appPreferencesStore = appPreferencesStore,
+            notificationSoundUpdater = FakeNotificationSoundUpdater(
+                recreateRingingCallChannelLambda = { _, _ -> },
+            ),
+        )
+        presenter.test {
+            val initialState = consumeItemsUntilPredicate {
+                it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
+            }.last()
+
+            initialState.eventSink(NotificationSettingsEvents.SetCallRingtone(NotificationSound.Custom("content://valid-ringtone")))
+            advanceUntilIdle()
+
+            assertThat(appPreferencesStore.getNotificationSoundUnavailableStateFlow().first())
+                .isEqualTo(NotificationSoundUnavailableState.MessageSound)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - SetMessageSound surfaces DataStore failure via changeNotificationSettingAction`() = runTest {
+        val backing = InMemoryAppPreferencesStore()
+        val store = object : AppPreferencesStore by backing {
+            override suspend fun setMessageSoundAndIncrementVersion(sound: NotificationSound): Int {
+                error("Simulated DataStore failure")
+            }
+        }
+        val presenter = createNotificationSettingsPresenter(appPreferencesStore = store)
+        presenter.test {
+            val initialState = consumeItemsUntilPredicate {
+                it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
+            }.last()
+
+            initialState.eventSink(NotificationSettingsEvents.SetMessageSound(NotificationSound.Custom("content://x")))
+
+            val errorState = consumeItemsUntilPredicate {
+                it.changeNotificationSettingAction.isFailure()
+            }.last()
+            assertThat(errorState.changeNotificationSettingAction.isFailure()).isTrue()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - SystemDefault and Silent display names do not invoke the resolver`() = runTest {
+        val resolverCalls = mutableListOf<String>()
+        val presenter = createNotificationSettingsPresenter(
+            appPreferencesStore = InMemoryAppPreferencesStore(
+                messageSound = NotificationSound.SystemDefault,
+                callRingtone = NotificationSound.Silent,
+            ),
+            soundDisplayNameResolver = FakeSoundDisplayNameResolver(
+                resolveLambda = { uri ->
+                    resolverCalls += uri
+                    "Should not appear"
+                },
+            ),
+        )
+        presenter.test {
+            // The synchronous branches (SystemDefault / Silent) feed the label directly without
+            // routing through produceState — so the resolver is never invoked, and the label
+            // never flashes from the default to itself.
+            consumeItemsUntilPredicate {
+                it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
+            }.last()
+            assertThat(resolverCalls).isEmpty()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
     @Test
     fun `present - resolves Custom display name via SoundDisplayNameResolver`() = runTest {
         val resolverCalls = mutableListOf<String>()
@@ -482,6 +592,31 @@ class NotificationSettingsPresenterTest {
             }.last()
             assertThat(state.messageSoundDisplayName).isEqualTo("Pixel notification")
             assertThat(resolverCalls).contains("content://media/42")
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - Custom display name falls back to default label when resolver returns null`() = runTest {
+        val resolverCalls = mutableListOf<String>()
+        val presenter = createNotificationSettingsPresenter(
+            appPreferencesStore = InMemoryAppPreferencesStore(messageSound = NotificationSound.Custom("content://gone")),
+            soundDisplayNameResolver = FakeSoundDisplayNameResolver(
+                resolveLambda = { uri ->
+                    resolverCalls += uri
+                    null
+                },
+            ),
+        )
+        presenter.test {
+            // FakeStringProvider returns "A string" for any resource, so the default-sound label
+            // resolves to "A string" — confirming the ?: defaultLabel branch is taken.
+            val state = consumeItemsUntilPredicate {
+                it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid &&
+                    it.messageSoundDisplayName == "A string"
+            }.last()
+            assertThat(state.messageSoundDisplayName).isEqualTo("A string")
+            assertThat(resolverCalls).contains("content://gone")
             cancelAndIgnoreRemainingEvents()
         }
     }

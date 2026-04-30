@@ -62,6 +62,7 @@ import io.element.android.libraries.matrix.test.roomlist.FakeRoomListService
 import io.element.android.libraries.matrix.test.sync.FakeSyncService
 import io.element.android.libraries.matrix.test.verification.FakeSessionVerificationService
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.api.store.NotificationSoundUnavailableState
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
@@ -84,6 +85,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceTimeBy
+import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -653,6 +655,127 @@ class RoomListPresenterTest {
         }
     }
 
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `present - sound unavailable banner reflects which sound failed`() = runTest {
+        val roomSummary = aRoomSummary(currentUserMembership = CurrentUserMembership.INVITED)
+        val roomList = FakeDynamicRoomList(
+            summaries = MutableStateFlow(listOf(roomSummary)),
+            loadingState = MutableStateFlow(RoomList.LoadingState.Loaded(1)),
+        )
+        val matrixClient = FakeMatrixClient(
+            roomListService = FakeRoomListService(
+                createRoomListLambda = { roomList },
+                subscribeToVisibleRoomsLambda = lambdaRecorder { _: List<RoomId> -> },
+            ),
+        )
+        val onAnnouncementDismissedResult = lambdaRecorder<Announcement, Unit> { }
+        val announcementService = FakeAnnouncementService(
+            onAnnouncementDismissedResult = onAnnouncementDismissedResult,
+        )
+        val appPreferencesStore = InMemoryAppPreferencesStore(
+            notificationSoundUnavailableState = NotificationSoundUnavailableState.MessageSound,
+        )
+        val presenter = createRoomListPresenter(
+            client = matrixClient,
+            announcementService = announcementService,
+            appPreferencesStore = appPreferencesStore,
+        )
+        presenter.test {
+            // No banner before the announcement is shown, even though the persisted state is set.
+            val initial = consumeItemsUntilPredicate { it.contentState is RoomListContentState.Rooms }.last()
+            assertThat(initial.contentAsRooms().soundUnavailableState).isEqualTo(NotificationSoundUnavailableState.None)
+
+            announcementService.emitAnnouncementsToShow(listOf(Announcement.SoundUnavailable))
+            val onlyMessage = consumeItemsUntilPredicate {
+                it.contentAsRooms().soundUnavailableState == NotificationSoundUnavailableState.MessageSound
+            }.last()
+            assertThat(onlyMessage.contentAsRooms().soundUnavailableState).isEqualTo(NotificationSoundUnavailableState.MessageSound)
+
+            appPreferencesStore.setNotificationSoundUnavailableState(NotificationSoundUnavailableState.Both)
+            val both = consumeItemsUntilPredicate {
+                it.contentAsRooms().soundUnavailableState == NotificationSoundUnavailableState.Both
+            }.last()
+            assertThat(both.contentAsRooms().soundUnavailableState).isEqualTo(NotificationSoundUnavailableState.Both)
+
+            both.eventSink(RoomListEvent.DismissSoundUnavailableBanner)
+            // Dismissal now runs on appCoroutineScope (so it survives composition cancellation).
+            // Let the queued coroutines run before we assert their effects.
+            runCurrent()
+            onAnnouncementDismissedResult.assertions().isCalledOnce().with(value(Announcement.SoundUnavailable))
+            // Dismissal resets the persisted state so the next boot starts clean.
+            assertThat(appPreferencesStore.getNotificationSoundUnavailableStateFlow().first()).isEqualTo(NotificationSoundUnavailableState.None)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - sound unavailable banner with only call flag renders CallRingtone variant`() = runTest {
+        val roomSummary = aRoomSummary(currentUserMembership = CurrentUserMembership.INVITED)
+        val roomList = FakeDynamicRoomList(
+            summaries = MutableStateFlow(listOf(roomSummary)),
+            loadingState = MutableStateFlow(RoomList.LoadingState.Loaded(1)),
+        )
+        val matrixClient = FakeMatrixClient(
+            roomListService = FakeRoomListService(
+                createRoomListLambda = { roomList },
+                subscribeToVisibleRoomsLambda = lambdaRecorder { _: List<RoomId> -> },
+            ),
+        )
+        val announcementService = FakeAnnouncementService(
+            initialAnnouncementsToShowFlowValue = listOf(Announcement.SoundUnavailable),
+        )
+        val appPreferencesStore = InMemoryAppPreferencesStore(
+            notificationSoundUnavailableState = NotificationSoundUnavailableState.CallRingtone,
+        )
+        val presenter = createRoomListPresenter(
+            client = matrixClient,
+            announcementService = announcementService,
+            appPreferencesStore = appPreferencesStore,
+        )
+        presenter.test {
+            val state = consumeItemsUntilPredicate {
+                it.contentState is RoomListContentState.Rooms &&
+                    it.contentAsRooms().soundUnavailableState == NotificationSoundUnavailableState.CallRingtone
+            }.last()
+            assertThat(state.contentAsRooms().soundUnavailableState).isEqualTo(NotificationSoundUnavailableState.CallRingtone)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - sound unavailable banner is hidden when announcement is not shown even if flags set`() = runTest {
+        val roomSummary = aRoomSummary(currentUserMembership = CurrentUserMembership.INVITED)
+        val roomList = FakeDynamicRoomList(
+            summaries = MutableStateFlow(listOf(roomSummary)),
+            loadingState = MutableStateFlow(RoomList.LoadingState.Loaded(1)),
+        )
+        val matrixClient = FakeMatrixClient(
+            roomListService = FakeRoomListService(
+                createRoomListLambda = { roomList },
+                subscribeToVisibleRoomsLambda = lambdaRecorder { _: List<RoomId> -> },
+            ),
+        )
+        // Announcement service starts with no announcements to show — gating the banner regardless
+        // of the persisted state. This proves the home presenter does NOT silently surface the
+        // banner from stale state after dismissal cleared the announcement but before the state
+        // was also cleared (the auto-resolve path).
+        val announcementService = FakeAnnouncementService()
+        val appPreferencesStore = InMemoryAppPreferencesStore(
+            notificationSoundUnavailableState = NotificationSoundUnavailableState.Both,
+        )
+        val presenter = createRoomListPresenter(
+            client = matrixClient,
+            announcementService = announcementService,
+            appPreferencesStore = appPreferencesStore,
+        )
+        presenter.test {
+            val state = consumeItemsUntilPredicate { it.contentState is RoomListContentState.Rooms }.last()
+            assertThat(state.contentAsRooms().soundUnavailableState).isEqualTo(NotificationSoundUnavailableState.None)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
     private fun TestScope.createRoomListPresenter(
         client: MatrixClient = FakeMatrixClient(),
         leaveRoomState: LeaveRoomState = aLeaveRoomState(),
@@ -696,5 +819,6 @@ class RoomListPresenterTest {
         seenInvitesStore = seenInvitesStore,
         announcementService = announcementService,
         coldStartWatcher = FakeAnalyticsColdStartWatcher(),
+        appCoroutineScope = backgroundScope,
     )
 }

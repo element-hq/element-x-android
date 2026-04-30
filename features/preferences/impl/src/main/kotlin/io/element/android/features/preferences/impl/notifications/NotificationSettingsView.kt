@@ -20,8 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -271,9 +269,6 @@ private fun NotificationSettingsContentView(
 
 @Composable
 private fun SoundsPreferenceCategory(state: NotificationSettingsState) {
-    val messageSoundContentDescription = stringResource(id = R.string.a11y_notification_sound_picker_open_message_sound)
-    val callRingtoneContentDescription = stringResource(id = R.string.a11y_notification_sound_picker_open_call_ringtone)
-
     PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_sounds_section_title)) {
         val messageSoundLauncher = rememberLauncherForActivityResult(
             contract = ActivityResultContracts.StartActivityForResult(),
@@ -286,7 +281,6 @@ private fun SoundsPreferenceCategory(state: NotificationSettingsState) {
             }
         }
         ListItem(
-            modifier = Modifier.semantics { contentDescription = messageSoundContentDescription },
             headlineContent = { Text(stringResource(id = R.string.screen_notification_settings_message_sound_label)) },
             supportingContent = { Text(state.messageSoundDisplayName) },
             onClick = {
@@ -311,7 +305,6 @@ private fun SoundsPreferenceCategory(state: NotificationSettingsState) {
             }
         }
         ListItem(
-            modifier = Modifier.semantics { contentDescription = callRingtoneContentDescription },
             headlineContent = { Text(stringResource(id = R.string.screen_notification_settings_call_ringtone_label)) },
             supportingContent = { Text(state.callRingtoneDisplayName) },
             onClick = {

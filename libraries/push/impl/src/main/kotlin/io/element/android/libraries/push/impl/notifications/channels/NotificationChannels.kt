@@ -25,15 +25,23 @@ import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
 import dev.zacsweers.metro.binding
 import io.element.android.appconfig.NotificationConfig
+import io.element.android.features.announcement.api.Announcement
+import io.element.android.features.announcement.api.AnnouncementService
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.libraries.core.extensions.runCatchingExceptions
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.api.store.NotificationSound
+import io.element.android.libraries.preferences.api.store.NotificationSoundChannelConfig
+import io.element.android.libraries.preferences.api.store.NotificationSoundUnavailableState
 import io.element.android.libraries.push.api.notifications.NotificationSoundUpdater
+import io.element.android.libraries.push.api.notifications.SoundDisplayNameResolver
 import io.element.android.libraries.push.impl.R
 import io.element.android.services.toolbox.api.strings.StringProvider
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import timber.log.Timber
 
@@ -95,6 +103,10 @@ class DefaultNotificationChannels(
     private val context: Context,
     private val enterpriseService: EnterpriseService,
     private val appPreferencesStore: AppPreferencesStore,
+    private val soundDisplayNameResolver: SoundDisplayNameResolver,
+    private val announcementService: AnnouncementService,
+    @AppCoroutineScope
+    private val appCoroutineScope: CoroutineScope,
 ) : NotificationChannels {
     @Volatile private var currentNoisyChannelId: String = NOISY_NOTIFICATION_CHANNEL_ID_BASE
     @Volatile private var currentRingingCallChannelId: String = RINGING_CALL_NOTIFICATION_CHANNEL_ID_BASE
@@ -119,11 +131,13 @@ class DefaultNotificationChannels(
         val accentColor = NotificationConfig.NOTIFICATION_ACCENT_COLOR
 
         // Read the user's persisted sound preferences synchronously so the channels created on
-        // app boot match what the user has chosen. Reading from DataStore here is acceptable
-        // because this runs once at app start during DI graph construction. A single read pulls
-        // all four values out of the same Preferences snapshot — see DataStore docs on
-        // synchronous-at-startup reads.
-        val config = runBlocking { appPreferencesStore.getNotificationSoundChannelConfig() }
+        // app boot match what the user has chosen. A single DataStore read pulls all four values
+        // out of the same Preferences snapshot. Probing custom URIs for resolvability is moved
+        // off this thread (see [scheduleSanitizeUnavailableSounds] below) — that path can do
+        // multiple ContentResolver lookups and would risk an ANR on cold start.
+        val config = runBlocking {
+            appPreferencesStore.getNotificationSoundChannelConfig()
+        }
 
         currentNoisyChannelId = noisyNotificationChannelId(config.messageSoundVersion)
         currentRingingCallChannelId = ringingCallNotificationChannelId(config.callRingtoneVersion)
@@ -200,6 +214,17 @@ class DefaultNotificationChannels(
                 accentColor = accentColor,
             )
         )
+
+        // Probe persisted Custom URIs for resolvability off the calling thread. Unresolvable
+        // sounds are reverted to SystemDefault and a one-time banner is shown via the home
+        // screen.
+        scheduleSanitizeUnavailableSounds(config)
+    }
+
+    private fun scheduleSanitizeUnavailableSounds(config: NotificationSoundChannelConfig) {
+        appCoroutineScope.launch {
+            sanitizeUnavailableSounds(config)
+        }
     }
 
     private fun buildNoisyChannel(channelId: String, soundUri: Uri?, accentColor: Int): NotificationChannelCompat {
@@ -257,18 +282,74 @@ class DefaultNotificationChannels(
         is NotificationSound.Custom -> parseUriOrFallback(sound.uri) { Settings.System.DEFAULT_RINGTONE_URI }
     }
 
-    private fun bundledMessageSoundUri(): Uri = Uri.Builder()
-        .scheme(ContentResolver.SCHEME_ANDROID_RESOURCE)
-        // Strangely we have to provide a "//" before the package name
-        .path("//" + context.packageName + "/" + R.raw.message)
-        .build()
+    private fun bundledMessageSoundUri(): Uri =
+        "${ContentResolver.SCHEME_ANDROID_RESOURCE}://${context.packageName}/${R.raw.message}".toUri()
 
+    /**
+     * Parses [uriString] into a [Uri], or returns the [fallback] on failure. Note that for both
+     * the noisy and ringing-call channels, the fallback is the **same** URI that [resolveNoisySoundUri]
+     * / [resolveRingingSoundUri] would return for [NotificationSound.SystemDefault] — so a malformed
+     * persisted URI lands the user in the same audible state as if they had picked SystemDefault.
+     * The display name layer agrees because [SoundDisplayNameResolver.resolveCustomSoundTitle] also
+     * returns null for the same input, falling through to the default label. Sanitization on the
+     * next launch promotes the persisted state from `Custom("…")` back to [NotificationSound.SystemDefault].
+     */
     private inline fun parseUriOrFallback(uriString: String, fallback: () -> Uri): Uri =
         runCatchingExceptions { uriString.toUri() }
             .getOrElse {
                 Timber.w(it, "Failed to parse persisted sound URI; falling back to default")
                 fallback()
             }
+
+    /**
+     * Probes each Custom URI via [SoundDisplayNameResolver] (the same path used by the settings
+     * screen). If the underlying ringtone is no longer resolvable — file deleted, app uninstalled,
+     * permission revoked — reverts the affected sound to [NotificationSound.SystemDefault] (which
+     * also recreates the channel with the bumped version) and posts a one-time banner via
+     * [AnnouncementService]. The persisted [NotificationSoundUnavailableState] is read by the
+     * home screen to render the appropriate variant of the banner.
+     *
+     * Ordering: URI resets and channel recreation happen FIRST. If they throw, the persisted
+     * unavailable-state stays at its prior value — next boot will re-detect and retry. The state
+     * write and the announcement are at the tail so the user never sees a banner pointing at a
+     * URI we failed to actually reset. The full body is wrapped in [runCatchingExceptions] so any
+     * failure is logged and retried on the next launch instead of crashing app start.
+     */
+    internal suspend fun sanitizeUnavailableSounds(config: NotificationSoundChannelConfig) {
+        runCatchingExceptions {
+            val messageUnavailable = (config.messageSound as? NotificationSound.Custom)?.let {
+                soundDisplayNameResolver.resolveCustomSoundTitle(it.uri) == null
+            } ?: false
+            val callUnavailable = (config.callRingtone as? NotificationSound.Custom)?.let {
+                soundDisplayNameResolver.resolveCustomSoundTitle(it.uri) == null
+            } ?: false
+
+            val state = NotificationSoundUnavailableState.from(messageUnavailable, callUnavailable)
+            if (state == NotificationSoundUnavailableState.None) {
+                return@runCatchingExceptions
+            }
+
+            Timber.w(
+                "Detected unavailable notification sound(s); reverting to default. " +
+                    "message=$messageUnavailable call=$callUnavailable"
+            )
+
+            if (messageUnavailable) {
+                val newVersion = appPreferencesStore.setMessageSoundAndIncrementVersion(NotificationSound.SystemDefault)
+                recreateNoisyChannel(NotificationSound.SystemDefault, newVersion)
+            }
+            if (callUnavailable) {
+                val newVersion = appPreferencesStore.setCallRingtoneAndIncrementVersion(NotificationSound.SystemDefault)
+                recreateRingingCallChannel(NotificationSound.SystemDefault, newVersion)
+            }
+
+            // Single atomic write — the banner can never observe a half-set state.
+            appPreferencesStore.setNotificationSoundUnavailableState(state)
+            announcementService.showAnnouncement(Announcement.SoundUnavailable)
+        }.onFailure {
+            Timber.w(it, "Failed to sanitize unavailable notification sounds; will retry on next launch")
+        }
+    }
 
     private fun deleteStaleVersionedChannels(baseId: String, currentId: String) {
         if (!supportNotificationChannels()) return
@@ -302,10 +383,14 @@ class DefaultNotificationChannels(
         synchronized(recreateLock) {
             val accentColor = NotificationConfig.NOTIFICATION_ACCENT_COLOR
             val newChannelId = noisyNotificationChannelId(version)
-            currentNoisyChannelId = newChannelId
+            // Create the channel BEFORE publishing the new id to lock-free readers. If the
+            // assignment landed first, a reader between the two lines would receive an id for a
+            // channel that does not yet exist on NotificationManager — and on Android O+ a notify()
+            // against a missing channel id is silently dropped, losing the notification.
             notificationManager.createNotificationChannel(
                 buildNoisyChannel(newChannelId, resolveNoisySoundUri(sound), accentColor)
             )
+            currentNoisyChannelId = newChannelId
             deleteStaleVersionedChannels(NOISY_NOTIFICATION_CHANNEL_ID_BASE, newChannelId)
         }
     }
@@ -315,10 +400,11 @@ class DefaultNotificationChannels(
         synchronized(recreateLock) {
             val accentColor = NotificationConfig.NOTIFICATION_ACCENT_COLOR
             val newChannelId = ringingCallNotificationChannelId(version)
-            currentRingingCallChannelId = newChannelId
+            // See recreateNoisyChannel: the channel must exist before the id is published.
             notificationManager.createNotificationChannel(
                 buildRingingCallChannel(newChannelId, resolveRingingSoundUri(sound), accentColor)
             )
+            currentRingingCallChannelId = newChannelId
             deleteStaleVersionedChannels(RINGING_CALL_NOTIFICATION_CHANNEL_ID_BASE, newChannelId)
         }
     }

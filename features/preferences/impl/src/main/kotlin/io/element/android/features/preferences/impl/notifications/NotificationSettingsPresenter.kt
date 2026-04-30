@@ -124,12 +124,8 @@ class NotificationSettingsPresenter(
         val callRingtone by remember { appPreferencesStore.getCallRingtoneFlow() }.collectAsState(initial = NotificationSound.SystemDefault)
         val defaultLabel = stringProvider.getString(R.string.screen_notification_settings_sound_default)
         val silentLabel = stringProvider.getString(R.string.screen_notification_settings_sound_silent)
-        val messageSoundDisplayName by produceState(initialValue = defaultLabel, messageSound, defaultLabel, silentLabel) {
-            value = resolveDisplayName(messageSound, defaultLabel, silentLabel)
-        }
-        val callRingtoneDisplayName by produceState(initialValue = defaultLabel, callRingtone, defaultLabel, silentLabel) {
-            value = resolveDisplayName(callRingtone, defaultLabel, silentLabel)
-        }
+        val messageSoundDisplayName = resolveSoundDisplayName(messageSound, defaultLabel, silentLabel)
+        val callRingtoneDisplayName = resolveSoundDisplayName(callRingtone, defaultLabel, silentLabel)
 
         fun CoroutineScope.changePushProvider(
             data: Pair<PushProvider, Distributor>?
@@ -179,13 +175,27 @@ class NotificationSettingsPresenter(
                 NotificationSettingsEvents.ChangePushProvider -> showChangePushProviderDialog = true
                 NotificationSettingsEvents.CancelChangePushProvider -> showChangePushProviderDialog = false
                 is NotificationSettingsEvents.SetPushProvider -> localCoroutineScope.changePushProvider(distributors.getOrNull(event.index))
-                is NotificationSettingsEvents.SetMessageSound -> localCoroutineScope.launch {
-                    val newVersion = appPreferencesStore.setMessageSoundAndIncrementVersion(event.sound)
-                    notificationSoundUpdater.recreateNoisyChannel(event.sound, newVersion)
+                is NotificationSettingsEvents.SetMessageSound -> sessionCoroutineScope.launch {
+                    runCatchingExceptions {
+                        val newVersion = appPreferencesStore.setMessageSoundAndIncrementVersion(event.sound)
+                        notificationSoundUpdater.recreateNoisyChannel(event.sound, newVersion)
+                        // Auto-resolve: a successful pick drops the message-sound bit from the
+                        // persisted unavailable state. If the call-ringtone half is still set the
+                        // banner downgrades from Both → CallRingtone; otherwise it disappears once
+                        // the user dismisses the announcement.
+                        appPreferencesStore.clearMessageSoundUnavailable()
+                    }.onFailure { failure ->
+                        changeNotificationSettingAction.value = AsyncAction.Failure(failure)
+                    }
                 }
-                is NotificationSettingsEvents.SetCallRingtone -> localCoroutineScope.launch {
-                    val newVersion = appPreferencesStore.setCallRingtoneAndIncrementVersion(event.sound)
-                    notificationSoundUpdater.recreateRingingCallChannel(event.sound, newVersion)
+                is NotificationSettingsEvents.SetCallRingtone -> sessionCoroutineScope.launch {
+                    runCatchingExceptions {
+                        val newVersion = appPreferencesStore.setCallRingtoneAndIncrementVersion(event.sound)
+                        notificationSoundUpdater.recreateRingingCallChannel(event.sound, newVersion)
+                        appPreferencesStore.clearCallRingtoneUnavailable()
+                    }.onFailure { failure ->
+                        changeNotificationSettingAction.value = AsyncAction.Failure(failure)
+                    }
                 }
             }
         }
@@ -209,14 +219,25 @@ class NotificationSettingsPresenter(
         )
     }
 
-    private suspend fun resolveDisplayName(
+    /**
+     * Returns the display name for [sound] without flashing the wrong label. SystemDefault and
+     * Silent resolve synchronously; only Custom triggers a [produceState] lookup, and the row
+     * shows an empty label until the lookup settles instead of the default-sound label.
+     */
+    @Composable
+    private fun resolveSoundDisplayName(
         sound: NotificationSound,
         defaultLabel: String,
         silentLabel: String,
     ): String = when (sound) {
         NotificationSound.SystemDefault -> defaultLabel
         NotificationSound.Silent -> silentLabel
-        is NotificationSound.Custom -> soundDisplayNameResolver.resolveCustomSoundTitle(sound.uri) ?: defaultLabel
+        is NotificationSound.Custom -> {
+            val resolved by produceState(initialValue = "", sound.uri, defaultLabel) {
+                value = soundDisplayNameResolver.resolveCustomSoundTitle(sound.uri) ?: defaultLabel
+            }
+            resolved
+        }
     }
 
     @OptIn(FlowPreview::class)

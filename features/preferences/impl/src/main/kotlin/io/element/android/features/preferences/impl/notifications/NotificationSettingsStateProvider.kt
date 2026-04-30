@@ -47,9 +47,10 @@ open class NotificationSettingsStateProvider : PreviewParameterProvider<Notifica
             aValidNotificationSettingsState(fullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(permissionGranted = false)),
             aValidNotificationSettingsState(appNotificationEnabled = false),
             aValidNotificationSettingsState(
-                messageSound = NotificationSound.Custom("content://settings/system/notification_sound"),
+                // Sentinel URIs — previews shouldn't depend on the host's content provider.
+                messageSound = NotificationSound.Custom("preview://message-sound"),
                 messageSoundDisplayName = "Pixel notification",
-                callRingtone = NotificationSound.Custom("content://settings/system/ringtone"),
+                callRingtone = NotificationSound.Custom("preview://call-ringtone"),
                 callRingtoneDisplayName = "Pixel ringtone",
             ),
             aValidNotificationSettingsState(
