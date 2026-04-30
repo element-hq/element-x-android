@@ -206,14 +206,14 @@ internal fun TimelineImageWithCaptionRowPreview() = ElementPreview {
 
 @PreviewsDayNight
 @Composable
-internal fun TimelineNarrowImageWithCaptionRowPreview() = ElementPreview {
+internal fun ATimelineItemEventRowPreview() = ElementPreview {
     Column {
         sequenceOf(false, true).forEach { isMine ->
             ATimelineItemEventRow(
                 event = aTimelineItemEvent(
                     isMine = isMine,
                     content = aTimelineItemImageContent(
-                        filename = "narrow_image.jpg",
+                        filename = "image.jpg",
                         caption = "A long caption that may wrap into several lines",
                         width = 80,
                         height = 300,
@@ -227,7 +227,7 @@ internal fun TimelineNarrowImageWithCaptionRowPreview() = ElementPreview {
             event = aTimelineItemEvent(
                 isMine = false,
                 content = aTimelineItemImageContent(
-                    filename = "narrow_image.jpg",
+                    filename = "image.jpg",
                     caption = "Narrow image with null aspectRatio",
                     width = 80,
                     height = 300,
