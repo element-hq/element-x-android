@@ -10,6 +10,7 @@ package io.element.android.features.preferences.impl.notifications
 
 import android.app.Activity
 import android.media.RingtoneManager
+import android.net.Uri
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -19,6 +20,7 @@ import androidx.compose.foundation.progressSemantics
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -46,6 +48,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsEvents
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.preferences.api.store.NotificationSound
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.toImmutableList
 
@@ -270,53 +273,55 @@ private fun NotificationSettingsContentView(
 @Composable
 private fun SoundsPreferenceCategory(state: NotificationSettingsState) {
     PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_sounds_section_title)) {
-        val messageSoundLauncher = rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.StartActivityForResult(),
-        ) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val sound = result.data?.toPickedNotificationSound(Settings.System.DEFAULT_NOTIFICATION_URI)
-                if (sound != null) {
-                    state.eventSink(NotificationSettingsEvents.SetMessageSound(sound))
-                }
-            }
-        }
+        val onMessageSoundClick = rememberSoundPickerOnClick(
+            type = RingtoneManager.TYPE_NOTIFICATION,
+            current = state.messageSound,
+            defaultUri = Settings.System.DEFAULT_NOTIFICATION_URI,
+            onSoundPicked = { sound -> state.eventSink(NotificationSettingsEvents.SetMessageSound(sound)) },
+        )
         ListItem(
             headlineContent = { Text(stringResource(id = R.string.screen_notification_settings_message_sound_label)) },
             supportingContent = { Text(state.messageSoundDisplayName) },
-            onClick = {
-                messageSoundLauncher.launch(
-                    buildRingtonePickerIntent(
-                        type = RingtoneManager.TYPE_NOTIFICATION,
-                        current = state.messageSound,
-                        defaultUri = Settings.System.DEFAULT_NOTIFICATION_URI,
-                    )
-                )
-            }
+            onClick = onMessageSoundClick,
         )
 
-        val callRingtoneLauncher = rememberLauncherForActivityResult(
-            contract = ActivityResultContracts.StartActivityForResult(),
-        ) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                val sound = result.data?.toPickedNotificationSound(Settings.System.DEFAULT_RINGTONE_URI)
-                if (sound != null) {
-                    state.eventSink(NotificationSettingsEvents.SetCallRingtone(sound))
-                }
-            }
-        }
+        val onCallRingtoneClick = rememberSoundPickerOnClick(
+            type = RingtoneManager.TYPE_RINGTONE,
+            current = state.callRingtone,
+            defaultUri = Settings.System.DEFAULT_RINGTONE_URI,
+            onSoundPicked = { sound -> state.eventSink(NotificationSettingsEvents.SetCallRingtone(sound)) },
+        )
         ListItem(
             headlineContent = { Text(stringResource(id = R.string.screen_notification_settings_call_ringtone_label)) },
             supportingContent = { Text(state.callRingtoneDisplayName) },
-            onClick = {
-                callRingtoneLauncher.launch(
-                    buildRingtonePickerIntent(
-                        type = RingtoneManager.TYPE_RINGTONE,
-                        current = state.callRingtone,
-                        defaultUri = Settings.System.DEFAULT_RINGTONE_URI,
-                    )
-                )
-            }
+            onClick = onCallRingtoneClick,
         )
+    }
+}
+
+@Composable
+private fun rememberSoundPickerOnClick(
+    type: Int,
+    current: NotificationSound,
+    defaultUri: Uri,
+    onSoundPicked: (NotificationSound) -> Unit,
+): () -> Unit {
+    // Paparazzi previews don't provide a LocalActivityResultRegistryOwner, which
+    // rememberLauncherForActivityResult requires. Skip the launcher in inspection mode and
+    // return a no-op click handler — previews don't need to launch the picker.
+    if (LocalInspectionMode.current) return {}
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(),
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val sound = result.data?.toPickedNotificationSound(defaultUri)
+            if (sound != null) {
+                onSoundPicked(sound)
+            }
+        }
+    }
+    return {
+        launcher.launch(buildRingtonePickerIntent(type = type, current = current, defaultUri = defaultUri))
     }
 }
 
