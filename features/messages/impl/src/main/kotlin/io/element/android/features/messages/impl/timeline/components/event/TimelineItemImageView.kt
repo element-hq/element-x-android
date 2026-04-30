@@ -126,7 +126,7 @@ fun TimelineItemImageView(
                 val width = content.width ?: 0
                 val height = content.height ?: 0
                 // if image is narrow and tall use DEFAULT_ASPECT_RATIO
-                val aspectRatio = if (width < height / 3) DEFAULT_ASPECT_RATIO else content.aspectRatio?: DEFAULT_ASPECT_RATIO
+                val aspectRatio = if (width < height / 3) DEFAULT_ASPECT_RATIO else content.aspectRatio ?: DEFAULT_ASPECT_RATIO
                 EditorStyledText(
                     modifier = Modifier
                         .padding(horizontal = 4.dp) // This is (12.dp - 8.dp) contentPadding from CommonLayout
@@ -196,6 +196,41 @@ internal fun TimelineImageWithCaptionRowPreview() = ElementPreview {
                 content = aTimelineItemImageContent(
                     filename = "image.jpg",
                     caption = "Image with null aspectRatio",
+                    aspectRatio = null,
+                ),
+                groupPosition = TimelineItemGroupPosition.Last,
+            ),
+        )
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineNarrowImageWithCaptionRowPreview() = ElementPreview {
+    Column {
+        sequenceOf(false, true).forEach { isMine ->
+            ATimelineItemEventRow(
+                event = aTimelineItemEvent(
+                    isMine = isMine,
+                    content = aTimelineItemImageContent(
+                        filename = "narrow_image.jpg",
+                        caption = "A long caption that may wrap into several lines",
+                        width = 80,
+                        height = 300,
+                        aspectRatio = 80f / 300f,
+                    ),
+                    groupPosition = TimelineItemGroupPosition.Last,
+                ),
+            )
+        }
+        ATimelineItemEventRow(
+            event = aTimelineItemEvent(
+                isMine = false,
+                content = aTimelineItemImageContent(
+                    filename = "narrow_image.jpg",
+                    caption = "Narrow image with null aspectRatio",
+                    width = 80,
+                    height = 300,
                     aspectRatio = null,
                 ),
                 groupPosition = TimelineItemGroupPosition.Last,
