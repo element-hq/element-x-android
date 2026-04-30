@@ -10,9 +10,16 @@ package io.element.android.features.preferences.impl.advanced
 
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.semantics.ProgressBarRangeInfo
+import androidx.compose.ui.semantics.SemanticsActions
+import androidx.compose.ui.semantics.SemanticsProperties
+import androidx.compose.ui.test.SemanticsMatcher
+import androidx.compose.ui.test.assert
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performSemanticsAction
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Interaction
@@ -245,6 +252,61 @@ class AdvancedSettingsViewTest {
         // The options should be disabled, so clicking should not emit any events
         rule.clickOn(R.string.screen_advanced_settings_show_media_timeline_always_hide)
         rule.clickOn(R.string.screen_advanced_settings_show_media_timeline_private_rooms)
+    }
+
+    @Test
+    @Config(qualifiers = "h1080dp")
+    fun `live location updates section is shown below show media in timeline`() {
+        rule.setAdvancedSettingsView(
+            state = aAdvancedSettingsState(
+                liveLocationMinimumDistanceUpdate = 50,
+            ),
+        )
+
+        rule.run {
+            onNodeWithText(activity.getString(R.string.screen_advanced_settings_show_media_timeline_title)).assertExists()
+            onNodeWithText(activity.getString(R.string.screen_advanced_settings_live_location_updates_title)).assertExists()
+            onNodeWithText(activity.getString(R.string.screen_advanced_settings_live_location_updates_value, 50)).assertExists()
+        }
+    }
+
+    @Test
+    @Config(qualifiers = "h1080dp")
+    fun `live location updates section is hidden when value is unavailable`() {
+        rule.setAdvancedSettingsView(
+            state = aAdvancedSettingsState(
+                liveLocationMinimumDistanceUpdate = null,
+            ),
+        )
+
+        rule.run {
+            onNodeWithText(activity.getString(R.string.screen_advanced_settings_show_media_timeline_title)).assertExists()
+            assertNoNodeWithText(R.string.screen_advanced_settings_live_location_updates_title)
+        }
+    }
+
+    @Test
+    @Config(qualifiers = "h1080dp")
+    fun `changing live location slider emits the save event when drag finishes`() {
+        val eventsRecorder = EventsRecorder<AdvancedSettingsEvents>()
+        rule.setAdvancedSettingsView(
+            state = aAdvancedSettingsState(
+                liveLocationMinimumDistanceUpdate = 10,
+                eventSink = eventsRecorder,
+            ),
+        )
+
+        rule.onNodeWithText(rule.activity.getString(R.string.screen_advanced_settings_live_location_updates_value, 10)).assertExists()
+        rule.onNodeWithTag("live_location_updates_slider")
+            .assert(
+                SemanticsMatcher.expectValue(
+                    SemanticsProperties.ProgressBarRangeInfo,
+                    ProgressBarRangeInfo(current = 10f, range = 1f..100f, steps = 98),
+                )
+            )
+            .performSemanticsAction(SemanticsActions.SetProgress) { it(42f) }
+
+        eventsRecorder.assertSingle(AdvancedSettingsEvents.SetLiveLocationMinimumDistanceUpdate(42))
     }
 }
 

@@ -8,15 +8,24 @@
 
 package io.element.android.features.preferences.impl.advanced
 
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.SliderDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.preferences.impl.R
@@ -33,10 +42,12 @@ import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.text.stringWithLink
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.ListSectionHeader
 import io.element.android.libraries.designsystem.theme.components.ListSupportingText
 import io.element.android.libraries.designsystem.theme.components.ListSupportingTextDefaults
+import io.element.android.libraries.designsystem.theme.components.Slider
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.snackbar.LocalSnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
@@ -47,11 +58,13 @@ import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.compose.LocalAnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
+import kotlin.math.roundToInt
 
 @Composable
 fun AdvancedSettingsView(
     state: AdvancedSettingsState,
     onBackClick: () -> Unit,
+    onOpenAppSettingsClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val analyticsService = LocalAnalyticsService.current
@@ -190,6 +203,15 @@ fun AdvancedSettingsView(
         }
 
         ModerationAndSafety(state)
+        if (state.liveLocationMinimumDistanceUpdate != null) {
+            LiveLocationUpdatesSection(
+                value = state.liveLocationMinimumDistanceUpdate,
+                onValueSaved = { value ->
+                    state.eventSink(AdvancedSettingsEvents.SetLiveLocationMinimumDistanceUpdate(value))
+                },
+                onOpenAppPermissionsClick = onOpenAppSettingsClick,
+            )
+        }
     }
 }
 
@@ -314,6 +336,79 @@ private fun ModerationAndSafety(
     }
 }
 
+@Composable
+private fun LiveLocationUpdatesSection(
+    value: Int,
+    onValueSaved: (Int) -> Unit,
+    onOpenAppPermissionsClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+
+    PreferenceCategory(
+        modifier = modifier,
+        showTopDivider = true,
+    ) {
+        ListSectionHeader(
+            title = stringResource(R.string.screen_advanced_settings_live_location_section_title),
+            description = {
+                ListSupportingText(
+                    text = stringResource(R.string.screen_advanced_settings_live_location_section_description),
+                    contentPadding = ListSupportingTextDefaults.Padding.None,
+                )
+            }
+        )
+        var sliderValue by remember(value) { mutableIntStateOf(value) }
+        Column(
+            modifier = Modifier.padding(vertical = 12.dp, horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp)
+        ) {
+            Text(
+                text = pluralStringResource(
+                    R.plurals.screen_advanced_settings_live_location_update_distance,
+                    sliderValue,
+                    sliderValue,
+                ),
+                style = ElementTheme.typography.fontBodyLgRegular,
+                color = ElementTheme.colors.textPrimary,
+            )
+            val valueRange = 1f..100f
+            val start = valueRange.start.toInt()
+            val end = valueRange.endInclusive.toInt()
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Text("${start}m", color = ElementTheme.colors.textSecondary, style = ElementTheme.typography.fontBodyMdRegular)
+                Slider(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(horizontal = 12.dp),
+                    value = sliderValue.toFloat(),
+                    onValueChange = { sliderValue = it.roundToInt() },
+                    onValueChangeFinish = {
+                        onValueSaved(sliderValue)
+                    },
+                    valueRange = valueRange,
+                    colors = SliderDefaults.colors(
+                        thumbColor = ElementTheme.colors.iconAccentPrimary,
+                        activeTrackColor = ElementTheme.colors.iconAccentPrimary,
+                        inactiveTrackColor = ElementTheme.colors.bgBadgeAccent,
+                        inactiveTickColor = ElementTheme.colors.iconAccentPrimary,
+                    )
+                )
+                Text("${end}m", color = ElementTheme.colors.textSecondary, style = ElementTheme.typography.fontBodyMdRegular)
+            }
+        }
+        val footerText = stringWithLink(
+            textRes = R.string.screen_advanced_settings_live_location_section_footer,
+            url = "",
+            linkTextRes = R.string.screen_advanced_settings_live_location_section_footer_link,
+            onLinkClick = { onOpenAppPermissionsClick() },
+        )
+        ListSupportingText(
+            annotatedString = footerText,
+            contentPadding = ListSupportingTextDefaults.Padding.Default,
+        )
+    }
+}
+
 @PreviewWithLargeHeight
 @Composable
 internal fun AdvancedSettingsViewLightPreview(@PreviewParameter(AdvancedSettingsStateProvider::class) state: AdvancedSettingsState) =
@@ -334,7 +429,8 @@ internal fun AdvancedSettingsViewBlackPreview(@PreviewParameter(AdvancedSettings
 private fun ContentToPreview(state: AdvancedSettingsState) {
     AdvancedSettingsView(
         state = state,
-        onBackClick = { }
+        onBackClick = { },
+        onOpenAppSettingsClick = {}
     )
 }
 

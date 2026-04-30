@@ -18,11 +18,16 @@ import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -210,6 +215,46 @@ class AdvancedSettingsPresenterTest {
     }
 
     @Test
+    fun `present - exposes live location minimum distance from app preferences`() = runTest {
+        val appPreferencesStore = InMemoryAppPreferencesStore(
+            liveLocationMinimumDistanceUpdate = 50,
+        )
+        val presenter = createAdvancedSettingsPresenter(appPreferencesStore = appPreferencesStore)
+
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+
+            with(awaitItem()) {
+                assertThat(liveLocationMinimumDistanceUpdate).isEqualTo(50)
+            }
+        }
+    }
+
+    @Test
+    fun `present - saving live location minimum distance updates app preferences`() = runTest {
+        val appPreferencesStore = InMemoryAppPreferencesStore(
+            liveLocationMinimumDistanceUpdate = 10,
+        )
+        val presenter = createAdvancedSettingsPresenter(appPreferencesStore = appPreferencesStore)
+
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+
+            with(awaitItem()) {
+                assertThat(liveLocationMinimumDistanceUpdate).isEqualTo(10)
+                eventSink(AdvancedSettingsEvents.SetLiveLocationMinimumDistanceUpdate(42))
+            }
+            with(awaitItem()) {
+                assertThat(liveLocationMinimumDistanceUpdate).isEqualTo(42)
+            }
+        }
+    }
+
+    @Test
     fun `present - black theme option shown when feature flag enabled`() = runTest {
         val presenter = createAdvancedSettingsPresenter(
             featureFlagService = FakeFeatureFlagService().apply {
@@ -338,7 +383,7 @@ class AdvancedSettingsPresenterTest {
     }
 
     private fun CoroutineScope.createAdvancedSettingsPresenter(
-        appPreferencesStore: InMemoryAppPreferencesStore = InMemoryAppPreferencesStore(),
+        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
         sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
         mediaPreviewConfigStateStore: MediaPreviewConfigStateStore = FakeMediaPreviewConfigStateStore(),
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),

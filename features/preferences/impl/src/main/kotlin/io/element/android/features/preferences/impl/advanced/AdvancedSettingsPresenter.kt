@@ -27,6 +27,11 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flatMap
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 @Inject
@@ -52,6 +57,17 @@ class AdvancedSettingsPresenter(
         val theme = remember(isBlackThemeAllowed) {
             appPreferencesStore.getThemeFlow().mapToTheme(isBlackThemeAllowed)
         }.collectAsState(initial = Theme.System)
+        val liveLocationMinimumDistanceUpdate by produceState<Int?>(null) {
+            featureFlagService.isFeatureEnabledFlow(FeatureFlags.LiveLocationSharing)
+                .flatMapLatest { isEnabled ->
+                    if (isEnabled) {
+                        appPreferencesStore.getLiveLocationMinimumDistanceUpdateFlow()
+                    } else {
+                        emptyFlow()
+                    }
+                }
+                .collect { value = it }
+        }
 
         val mediaPreviewConfigState = mediaPreviewConfigStateStore.state()
 
@@ -117,6 +133,9 @@ class AdvancedSettingsPresenter(
                 }
                 is AdvancedSettingsEvents.SetHideInviteAvatars -> mediaPreviewConfigStateStore.setHideInviteAvatars(event.value)
                 is AdvancedSettingsEvents.SetTimelineMediaPreviewValue -> mediaPreviewConfigStateStore.setTimelineMediaPreviewValue(event.value)
+                is AdvancedSettingsEvents.SetLiveLocationMinimumDistanceUpdate -> sessionCoroutineScope.launch {
+                    appPreferencesStore.setLiveLocationMinimumDistanceUpdate(event.value)
+                }
                 is AdvancedSettingsEvents.SetCompressImages -> sessionCoroutineScope.launch {
                     sessionPreferencesStore.setOptimizeImages(event.compress)
                 }
@@ -133,6 +152,7 @@ class AdvancedSettingsPresenter(
             theme = themeOption,
             availableThemeOptions = availableThemeOptions,
             mediaPreviewConfigState = mediaPreviewConfigState,
+            liveLocationMinimumDistanceUpdate = liveLocationMinimumDistanceUpdate,
             eventSink = ::handleEvent,
         )
     }
