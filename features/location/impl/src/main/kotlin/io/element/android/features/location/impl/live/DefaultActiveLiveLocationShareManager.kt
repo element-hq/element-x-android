@@ -23,7 +23,6 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.location.LiveLocationException
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.NonCancellable
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
@@ -37,7 +36,6 @@ import java.util.concurrent.ConcurrentHashMap
 import kotlin.concurrent.atomics.AtomicReference
 import kotlin.concurrent.atomics.ExperimentalAtomicApi
 import kotlin.time.Duration
-import kotlin.time.Duration.Companion.seconds
 import kotlin.time.Instant
 
 @OptIn(ExperimentalAtomicApi::class)
@@ -119,27 +117,18 @@ class DefaultActiveLiveLocationShareManager(
         }
     }
 
-    private suspend fun sendLiveLocation(roomId: RoomId, location: Location, retryCount: Int = 3): Result<Unit> {
+    private suspend fun sendLiveLocation(roomId: RoomId, location: Location): Result<Unit> {
         val room = activeRooms.getOrPut(roomId) {
             matrixClient.getJoinedRoom(roomId) ?: return Result.failure(IllegalStateException("No room found for $roomId"))
         }
         return room.sendLiveLocation(location.toGeoUri())
             .recoverCatching { exception ->
                 when (exception) {
-                    is LiveLocationException.Network -> {
-                        if (retryCount > 0) {
-                            Timber.d("ActiveLiveLocationShareManager failed to send location to room $roomId, retry...")
-                            delay(3.seconds)
-                            sendLiveLocation(roomId, location, retryCount - 1).getOrThrow()
-                        } else {
-                            stopShare(roomId)
-                            throw exception
-                        }
-                    }
-                    else -> {
-                        stopShare(roomId)
+                    is LiveLocationException.NotLive -> {
+                        stopLocalShare(roomId)
                         throw exception
                     }
+                    else -> throw exception
                 }
             }
     }
