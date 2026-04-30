@@ -35,6 +35,7 @@ dependencies {
     implementation(projects.libraries.testtags)
     implementation(projects.libraries.uiStrings)
     implementation(projects.libraries.dateformatter.api)
+    implementation(projects.libraries.sessionStorage.api)
     implementation(projects.libraries.workmanager.api)
     api(projects.features.logout.api)
 

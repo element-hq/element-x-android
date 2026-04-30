@@ -15,6 +15,7 @@ android {
 }
 
 dependencies {
+    implementation(libs.coroutines.core)
     api(projects.libraries.mediaupload.api)
     implementation(projects.libraries.core)
     implementation(projects.tests.testutils)

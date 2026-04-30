@@ -15,6 +15,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
     api(projects.features.poll.api)
     implementation(libs.kotlinx.collections.immutable)
