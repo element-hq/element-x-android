@@ -49,9 +49,9 @@ dependencies {
     implementation(projects.libraries.core)
     implementation(projects.services.analytics.api)
     implementation(libs.serialization.json)
-    api(projects.libraries.sessionStorage.api)
+    implementation(projects.libraries.sessionStorage.api)
     implementation(libs.coroutines.core)
-    api(projects.libraries.architecture)
+    implementation(projects.libraries.architecture)
 
     testCommonDependencies(libs)
     testImplementation(projects.libraries.matrix.test)
