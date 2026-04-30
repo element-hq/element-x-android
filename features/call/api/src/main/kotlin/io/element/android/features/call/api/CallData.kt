@@ -14,22 +14,9 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import kotlinx.parcelize.Parcelize
 
-sealed interface CallType : NodeInputs, Parcelable {
-    @Parcelize
-    data class ExternalUrl(val url: String) : CallType {
-        override fun toString(): String {
-            return "ExternalUrl"
-        }
-    }
-
-    @Parcelize
-    data class RoomCall(
-        val sessionId: SessionId,
-        val roomId: RoomId,
-        val isAudioCall: Boolean
-    ) : CallType {
-        override fun toString(): String {
-            return "RoomCall(sessionId=$sessionId, roomId=$roomId, isAudioCall=$isAudioCall)"
-        }
-    }
-}
+@Parcelize
+data class CallData(
+    val sessionId: SessionId,
+    val roomId: RoomId,
+    val isAudioCall: Boolean
+) : NodeInputs, Parcelable

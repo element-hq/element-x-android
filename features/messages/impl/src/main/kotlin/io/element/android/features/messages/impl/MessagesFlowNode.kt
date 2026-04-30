@@ -24,7 +24,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.annotations.ContributesNode
-import io.element.android.features.call.api.CallType
+import io.element.android.features.call.api.CallData
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.forward.api.ForwardEntryPoint
 import io.element.android.features.knockrequests.api.list.KnockRequestsListEntryPoint
@@ -277,13 +277,13 @@ class MessagesFlowNode(
                     }
 
                     override fun navigateToRoomCall(roomId: RoomId, isAudioCall: Boolean) {
-                        val callType = CallType.RoomCall(
+                        val callData = CallData(
                             sessionId = sessionId,
                             roomId = roomId,
-                            isAudioCall = isAudioCall
+                            isAudioCall = isAudioCall,
                         )
                         analyticsService.captureInteraction(Interaction.Name.MobileRoomCallButton)
-                        elementCallEntryPoint.startCall(callType)
+                        elementCallEntryPoint.startCall(callData)
                     }
 
                     override fun navigateToPinnedMessagesList() {
@@ -506,13 +506,13 @@ class MessagesFlowNode(
                     }
 
                     override fun navigateToRoomCall(roomId: RoomId, isAudioCall: Boolean) {
-                        val callType = CallType.RoomCall(
+                        val callData = CallData(
                             sessionId = sessionId,
                             roomId = roomId,
                             isAudioCall = isAudioCall
                         )
                         analyticsService.captureInteraction(Interaction.Name.MobileRoomCallButton)
-                        elementCallEntryPoint.startCall(callType)
+                        elementCallEntryPoint.startCall(callData)
                     }
 
                     override fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?) {

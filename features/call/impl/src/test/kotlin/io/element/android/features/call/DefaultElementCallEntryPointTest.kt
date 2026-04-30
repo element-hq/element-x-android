@@ -11,7 +11,7 @@ package io.element.android.features.call
 import android.content.Intent
 import androidx.test.platform.app.InstrumentationRegistry
 import com.google.common.truth.Truth.assertThat
-import io.element.android.features.call.api.CallType
+import io.element.android.features.call.api.CallData
 import io.element.android.features.call.impl.DefaultElementCallEntryPoint
 import io.element.android.features.call.impl.notifications.CallNotificationData
 import io.element.android.features.call.impl.ui.ElementCallActivity
@@ -37,7 +37,7 @@ class DefaultElementCallEntryPointTest {
     @Test
     fun `startCall - starts ElementCallActivity setup with the needed extras`() = runTest {
         val entryPoint = createEntryPoint()
-        entryPoint.startCall(CallType.RoomCall(A_SESSION_ID, A_ROOM_ID, isAudioCall = false))
+        entryPoint.startCall(CallData(A_SESSION_ID, A_ROOM_ID, isAudioCall = false))
 
         val expectedIntent = Intent(InstrumentationRegistry.getInstrumentation().targetContext, ElementCallActivity::class.java)
         val intent = shadowOf(RuntimeEnvironment.getApplication()).nextStartedActivity
@@ -53,7 +53,7 @@ class DefaultElementCallEntryPointTest {
         val entryPoint = createEntryPoint(activeCallManager = activeCallManager)
 
         entryPoint.handleIncomingCall(
-            callType = CallType.RoomCall(A_SESSION_ID, A_ROOM_ID, isAudioCall = false),
+            callData = CallData(A_SESSION_ID, A_ROOM_ID, isAudioCall = false),
             eventId = AN_EVENT_ID,
             senderId = A_USER_ID_2,
             roomName = "roomName",

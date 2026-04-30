@@ -18,9 +18,9 @@ import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.element.android.features.call.impl.pip.PictureInPictureEvents
+import io.element.android.features.call.impl.pip.PictureInPictureEvent
 import io.element.android.features.call.impl.pip.aPictureInPictureState
-import io.element.android.features.call.impl.ui.CallScreenEvents
+import io.element.android.features.call.impl.ui.CallScreenEvent
 import io.element.android.features.call.impl.ui.CallScreenView
 import io.element.android.features.call.impl.ui.JavascriptBackHandler
 import io.element.android.features.call.impl.ui.aCallScreenState
@@ -39,7 +39,7 @@ import org.robolectric.shadows.ShadowWebView
 class CallScreenViewTest {
     @Test
     fun `pressing back key triggers hangup when no web view is available and pip is unsupported`() = runAndroidComposeUiTest {
-        val callEvents = EventsRecorder<CallScreenEvents>()
+        val callEvents = EventsRecorder<CallScreenEvent>()
 
         setCallScreenView(
             state = aCallScreenState(eventSink = callEvents),
@@ -72,7 +72,7 @@ class CallScreenViewTest {
     @Config(shadows = [RecordingShadowWebView::class])
     @Test
     fun `web view javascript back handler emits pip event when pip is supported`() = runAndroidComposeUiTest {
-        val pipEvents = EventsRecorder<PictureInPictureEvents>()
+        val pipEvents = EventsRecorder<PictureInPictureEvent>()
 
         setCallScreenView(
             state = aCallScreenState(),
@@ -88,8 +88,8 @@ class CallScreenViewTest {
         }
 
         pipEvents.assertSize(2)
-        pipEvents.assertTrue(0) { it is PictureInPictureEvents.SetPipController }
-        pipEvents.assertTrue(1) { it is PictureInPictureEvents.EnterPictureInPicture }
+        pipEvents.assertTrue(0) { it is PictureInPictureEvent.SetPipController }
+        pipEvents.assertTrue(1) { it is PictureInPictureEvent.EnterPictureInPicture }
     }
 }
 
