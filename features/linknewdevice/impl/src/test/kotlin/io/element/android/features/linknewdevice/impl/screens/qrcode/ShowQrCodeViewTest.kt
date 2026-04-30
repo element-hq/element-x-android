@@ -5,36 +5,34 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.features.linknewdevice.impl.screens.qrcode
 
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBackKey
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class ShowQrCodeViewTest {
-    @get:Rule
-    val rule = createAndroidComposeRule<ComponentActivity>()
-
     @Test
-    fun `on back pressed - calls the expected callback`() {
+    fun `on back pressed - calls the expected callback`() = runAndroidComposeUiTest {
         ensureCalledOnce { callback ->
-            rule.setView(
+            setView(
                 onBackClick = callback
             )
-            rule.pressBackKey()
+            pressBackKey()
         }
     }
 
-    private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setView(
+    private fun AndroidComposeUiTest<ComponentActivity>.setView(
         onBackClick: () -> Unit = EnsureNeverCalled(),
     ) {
         setContent {

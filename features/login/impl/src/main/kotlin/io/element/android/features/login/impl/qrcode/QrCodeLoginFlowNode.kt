@@ -135,8 +135,8 @@ class QrCodeLoginFlowNode(
                                 is QrLoginException.SlidingSyncNotAvailable -> {
                                     backstack.replace(NavTarget.Error(QrCodeErrorScreenType.SlidingSyncNotAvailable))
                                 }
-                                is QrLoginException.OidcMetadataInvalid -> {
-                                    Timber.e(error, "OIDC metadata is invalid")
+                                is QrLoginException.OAuthMetadataInvalid -> {
+                                    Timber.e(error, "OAuth metadata is invalid")
                                     backstack.replace(NavTarget.Error(QrCodeErrorScreenType.UnknownError))
                                 }
                                 QrLoginException.CheckCodeAlreadySent,

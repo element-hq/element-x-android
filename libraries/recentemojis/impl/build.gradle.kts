@@ -21,6 +21,7 @@ setupDependencyInjection()
 
 dependencies {
     api(projects.libraries.recentemojis.api)
+    implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
     implementation(libs.kotlinx.collections.immutable)
     implementation(libs.matrix.emojibase.bindings)

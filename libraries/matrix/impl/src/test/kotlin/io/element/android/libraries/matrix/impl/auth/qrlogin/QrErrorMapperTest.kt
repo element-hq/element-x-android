@@ -32,7 +32,7 @@ class QrErrorMapperTest {
         assertThat(QrErrorMapper.map(RustHumanQrLoginException.OtherDeviceNotSignedIn())).isEqualTo(QrLoginException.OtherDeviceNotSignedIn)
         assertThat(QrErrorMapper.map(RustHumanQrLoginException.LinkingNotSupported())).isEqualTo(QrLoginException.LinkingNotSupported)
         assertThat(QrErrorMapper.map(RustHumanQrLoginException.Unknown())).isEqualTo(QrLoginException.Unknown)
-        assertThat(QrErrorMapper.map(RustHumanQrLoginException.OAuthMetadataInvalid())).isEqualTo(QrLoginException.OidcMetadataInvalid)
+        assertThat(QrErrorMapper.map(RustHumanQrLoginException.OAuthMetadataInvalid())).isEqualTo(QrLoginException.OAuthMetadataInvalid)
         assertThat(QrErrorMapper.map(RustHumanQrLoginException.SlidingSyncNotAvailable())).isEqualTo(QrLoginException.SlidingSyncNotAvailable)
     }
 }

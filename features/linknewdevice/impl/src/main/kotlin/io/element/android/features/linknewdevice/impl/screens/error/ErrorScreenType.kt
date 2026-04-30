@@ -21,6 +21,9 @@ sealed interface ErrorScreenType : NodeInputs, Parcelable {
     data object Expired : ErrorScreenType
 
     @Parcelize
+    data object OtherDeviceAlreadySignedIn : ErrorScreenType
+
+    @Parcelize
     data object Mismatch2Digits : ErrorScreenType
 
     @Parcelize

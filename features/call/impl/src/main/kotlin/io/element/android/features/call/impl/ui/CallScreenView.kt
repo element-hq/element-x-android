@@ -33,7 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.viewinterop.AndroidView
 import io.element.android.features.call.impl.R
-import io.element.android.features.call.impl.pip.PictureInPictureEvents
+import io.element.android.features.call.impl.pip.PictureInPictureEvent
 import io.element.android.features.call.impl.pip.PictureInPictureState
 import io.element.android.features.call.impl.pip.aPictureInPictureState
 import io.element.android.features.call.impl.utils.InvalidAudioDeviceReason
@@ -64,11 +64,15 @@ internal fun CallScreenView(
     requestPermissions: (Array<String>, RequestPermissionCallback) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    fun handleBack() {
-        if (pipState.supportPip) {
-            pipState.eventSink.invoke(PictureInPictureEvents.EnterPictureInPicture)
-        } else {
-            state.eventSink(CallScreenEvents.Hangup)
+    var callWebView by remember { mutableStateOf<WebView?>(null) }
+
+    fun handleBack(fromNative: Boolean = false) {
+        when (CallScreenBackPressPolicy.resolve(supportPip = pipState.supportPip, hasWebView = callWebView != null, fromNative)) {
+            CallScreenBackPressAction.EnterPictureInPicture ->
+                pipState.eventSink(PictureInPictureEvent.EnterPictureInPicture)
+            CallScreenBackPressAction.DispatchEscapeToWebView ->
+                callWebView?.dispatchEscKeyEvent()
+            null -> Timber.d("Back press with unsupported pip is a no-op")
         }
     }
 
@@ -76,7 +80,7 @@ internal fun CallScreenView(
         modifier = modifier,
     ) { padding ->
         BackHandler {
-            handleBack()
+            handleBack(fromNative = true)
         }
         if (state.webViewError != null) {
             ErrorDialog(
@@ -84,7 +88,7 @@ internal fun CallScreenView(
                     append(stringResource(CommonStrings.error_unknown))
                     state.webViewError.takeIf { it.isNotEmpty() }?.let { append("\n\n").append(it) }
                 },
-                onSubmit = { state.eventSink(CallScreenEvents.Hangup) },
+                onSubmit = { state.eventSink(CallScreenEvent.Hangup) },
             )
         } else {
             var webViewAudioManager by remember { mutableStateOf<WebViewAudioManager?>(null) }
@@ -111,6 +115,7 @@ internal fun CallScreenView(
                 },
                 onConsoleMessage = onConsoleMessage,
                 onCreateWebView = { webView ->
+                    callWebView = webView
                     webView.addBackHandler(onBackPressed = ::handleBack)
                     val interceptor = WebViewWidgetMessageInterceptor(
                         webView = webView,
@@ -123,18 +128,19 @@ internal fun CallScreenView(
                                 Timber.d("Can't start in-call audio mode since the app is already in it.")
                             }
                         },
-                        onError = { state.eventSink(CallScreenEvents.OnWebViewError(it)) },
+                        onError = { state.eventSink(CallScreenEvent.OnWebViewError(it)) },
                     )
                     webViewAudioManager = WebViewAudioManager(
                         webView = webView,
                         coroutineScope = coroutineScope,
                         onInvalidAudioDeviceAdded = { invalidAudioDeviceReason = it },
                     )
-                    state.eventSink(CallScreenEvents.SetupMessageChannels(interceptor))
+                    state.eventSink(CallScreenEvent.SetupMessageChannels(interceptor))
                     val pipController = WebViewPipController(webView)
-                    pipState.eventSink(PictureInPictureEvents.SetPipController(pipController))
+                    pipState.eventSink(PictureInPictureEvent.SetPipController(pipController))
                 },
                 onDestroyWebView = {
+                    callWebView = null
                     // Reset audio mode
                     webViewAudioManager?.onCallStopped()
                 }
@@ -143,13 +149,15 @@ internal fun CallScreenView(
                 AsyncData.Uninitialized,
                 is AsyncData.Loading ->
                     ProgressDialog(text = stringResource(id = CommonStrings.common_please_wait))
+
                 is AsyncData.Failure -> {
                     Timber.e(state.urlState.error, "WebView failed to load URL: ${state.urlState.error.message}")
                     ErrorDialog(
                         content = state.urlState.error.message.orEmpty(),
-                        onSubmit = { state.eventSink(CallScreenEvents.Hangup) },
+                        onSubmit = { state.eventSink(CallScreenEvent.Hangup) },
                     )
                 }
+
                 is AsyncData.Success -> Unit
             }
         }
@@ -248,13 +256,16 @@ private fun WebView.setup(
 
 private fun WebView.addBackHandler(onBackPressed: () -> Unit) {
     addJavascriptInterface(
-        object {
-            @Suppress("unused")
-            @JavascriptInterface
-            fun onBackPressed() = onBackPressed()
+        JavascriptBackHandler {
+            onBackPressed()
         },
         "backHandler"
     )
+}
+
+private fun WebView.dispatchEscKeyEvent() {
+    dispatchKeyEvent(android.view.KeyEvent(android.view.KeyEvent.ACTION_DOWN, android.view.KeyEvent.KEYCODE_ESCAPE))
+    dispatchKeyEvent(android.view.KeyEvent(android.view.KeyEvent.ACTION_UP, android.view.KeyEvent.KEYCODE_ESCAPE))
 }
 
 @PreviewsDayNight
@@ -274,4 +285,9 @@ internal fun CallScreenViewPreview(
 @Composable
 internal fun InvalidAudioDeviceDialogPreview() = ElementPreview {
     InvalidAudioDeviceDialog(invalidAudioDeviceReason = InvalidAudioDeviceReason.BT_AUDIO_DEVICE_DISABLED) {}
+}
+
+internal fun interface JavascriptBackHandler {
+    @JavascriptInterface
+    fun onBackPressed()
 }

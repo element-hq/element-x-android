@@ -30,11 +30,11 @@ fun Throwable.mapAuthenticationException(): AuthenticationException {
             is ClientBuildException.EventCache -> AuthenticationException.Generic(message)
         }
         is OAuthException -> when (this) {
-            is OAuthException.Generic -> AuthenticationException.Oidc(message)
-            is OAuthException.CallbackUrlInvalid -> AuthenticationException.Oidc(message)
-            is OAuthException.Cancelled -> AuthenticationException.Oidc(message)
-            is OAuthException.MetadataInvalid -> AuthenticationException.Oidc(message)
-            is OAuthException.NotSupported -> AuthenticationException.Oidc(message)
+            is OAuthException.Generic -> AuthenticationException.OAuth(message)
+            is OAuthException.CallbackUrlInvalid -> AuthenticationException.OAuth(message)
+            is OAuthException.Cancelled -> AuthenticationException.OAuth(message)
+            is OAuthException.MetadataInvalid -> AuthenticationException.OAuth(message)
+            is OAuthException.NotSupported -> AuthenticationException.OAuth(message)
         }
         else -> AuthenticationException.Generic(message)
     }
