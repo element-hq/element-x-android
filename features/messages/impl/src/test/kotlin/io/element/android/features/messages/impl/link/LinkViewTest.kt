@@ -6,11 +6,14 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.features.messages.impl.link
 
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -19,51 +22,46 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.wysiwyg.link.Link
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class LinkViewTest {
-    @get:Rule
-    val rule = createAndroidComposeRule<ComponentActivity>()
-
     @Test
-    fun `clicking on cancel emits the expected event`() {
+    fun `clicking on cancel emits the expected event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<LinkEvent>()
-        rule.setLinkView(
+        setLinkView(
             aLinkState(
                 linkClick = ConfirmingLinkClick(aLink),
                 eventSink = eventsRecorder,
             ),
         )
-        rule.clickOn(CommonStrings.action_cancel)
+        clickOn(CommonStrings.action_cancel)
         eventsRecorder.assertSingle(
             LinkEvent.Cancel
         )
     }
 
     @Test
-    fun `clicking on continue emits the expected event`() {
+    fun `clicking on continue emits the expected event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<LinkEvent>()
-        rule.setLinkView(
+        setLinkView(
             aLinkState(
                 linkClick = ConfirmingLinkClick(aLink),
                 eventSink = eventsRecorder,
             ),
         )
-        rule.clickOn(CommonStrings.action_continue)
+        clickOn(CommonStrings.action_continue)
         eventsRecorder.assertSingle(
             LinkEvent.Confirm
         )
     }
 
     @Test
-    fun `success state invokes the callback and emits the expected event`() {
+    fun `success state invokes the callback and emits the expected event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<LinkEvent>()
         ensureCalledOnceWithParam(aLink) { callback ->
-            rule.setLinkView(
+            setLinkView(
                 aLinkState(
                     linkClick = AsyncAction.Success(aLink),
                     eventSink = eventsRecorder,
@@ -77,7 +75,7 @@ class LinkViewTest {
     }
 }
 
-private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setLinkView(
+private fun AndroidComposeUiTest<ComponentActivity>.setLinkView(
     state: LinkState,
     onLinkValid: (Link) -> Unit = EnsureNeverCalledWithParam(),
 ) {

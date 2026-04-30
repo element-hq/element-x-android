@@ -6,13 +6,16 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.features.messages.impl.pinned.banner
 
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onRoot
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -22,49 +25,45 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class PinnedMessagesBannerViewTest {
-    @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
-
     @Test
-    fun `clicking on the banner invoke expected callback`() {
+    fun `clicking on the banner invoke expected callback`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<PinnedMessagesBannerEvent>()
         val state = aLoadedPinnedMessagesBannerState(
             eventSink = eventsRecorder
         )
         val pinnedEventId = state.currentPinnedMessage.eventId
         ensureCalledOnceWithParam(pinnedEventId) { callback ->
-            rule.setPinnedMessagesBannerView(
+            setPinnedMessagesBannerView(
                 state = state,
                 onClick = callback
             )
-            rule.onRoot().performClick()
+            onRoot().performClick()
             eventsRecorder.assertSingle(PinnedMessagesBannerEvent.MoveToNextPinned)
         }
     }
 
     @Test
-    fun `clicking on view all emit the expected event`() {
+    fun `clicking on view all emit the expected event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<PinnedMessagesBannerEvent>(expectEvents = true)
         val state = aLoadedPinnedMessagesBannerState(
             eventSink = eventsRecorder
         )
         ensureCalledOnce { callback ->
-            rule.setPinnedMessagesBannerView(
+            setPinnedMessagesBannerView(
                 state = state,
                 onViewAllClick = callback
             )
-            rule.clickOn(CommonStrings.screen_room_pinned_banner_view_all_button_title)
+            clickOn(CommonStrings.screen_room_pinned_banner_view_all_button_title)
         }
     }
 }
 
-private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setPinnedMessagesBannerView(
+private fun AndroidComposeUiTest<ComponentActivity>.setPinnedMessagesBannerView(
     state: PinnedMessagesBannerState,
     onClick: (EventId) -> Unit = EnsureNeverCalledWithParam(),
     onViewAllClick: () -> Unit = EnsureNeverCalled(),
