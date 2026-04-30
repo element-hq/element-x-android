@@ -23,7 +23,7 @@ import io.element.android.libraries.featureflag.test.FakeFeature
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.indicator.api.IndicatorService
 import io.element.android.libraries.indicator.test.FakeIndicatorService
-import io.element.android.libraries.matrix.api.oidc.AccountManagementAction
+import io.element.android.libraries.matrix.api.oauth.AccountManagementAction
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_AVATAR_URL
 import io.element.android.libraries.matrix.test.A_SESSION_ID

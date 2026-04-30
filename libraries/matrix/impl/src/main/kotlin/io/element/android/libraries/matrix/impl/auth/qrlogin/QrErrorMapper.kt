@@ -42,7 +42,7 @@ object QrErrorMapper {
         is RustHumanQrLoginException.OtherDeviceNotSignedIn -> QrLoginException.OtherDeviceNotSignedIn
         is RustHumanQrLoginException.LinkingNotSupported -> QrLoginException.LinkingNotSupported
         is RustHumanQrLoginException.Unknown -> QrLoginException.Unknown
-        is RustHumanQrLoginException.OidcMetadataInvalid -> QrLoginException.OidcMetadataInvalid
+        is RustHumanQrLoginException.OAuthMetadataInvalid -> QrLoginException.OAuthMetadataInvalid
         is RustHumanQrLoginException.SlidingSyncNotAvailable -> QrLoginException.SlidingSyncNotAvailable
         is RustHumanQrLoginException.CheckCodeAlreadySent -> QrLoginException.CheckCodeAlreadySent
         is RustHumanQrLoginException.CheckCodeCannotBeSent -> QrLoginException.CheckCodeCannotBeSent

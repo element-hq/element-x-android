@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -74,11 +76,13 @@ fun CreateDmConfirmationBottomSheet(
         modifier = modifier,
         onDismissRequest = onDismiss,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        scrollable = false,
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 24.dp, bottom = 16.dp, start = 16.dp, end = 16.dp),
+                .padding(top = 24.dp, bottom = 16.dp, start = 16.dp, end = 16.dp)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             if (isUserIdentityUnknown) {
@@ -148,9 +152,11 @@ fun CreateDmConfirmationBottomSheet(
 
 @PreviewsDayNight
 @Composable
-internal fun CreateDmConfirmationBottomSheetPreview(@PreviewParameter(
-    CreateDmConfirmationBottomSheetStateProvider::class
-) state: CreateDmConfirmationBottomSheetState) = ElementPreview {
+internal fun CreateDmConfirmationBottomSheetPreview(
+    @PreviewParameter(
+        CreateDmConfirmationBottomSheetStateProvider::class
+    ) state: CreateDmConfirmationBottomSheetState
+) = ElementPreview {
     CreateDmConfirmationBottomSheet(
         matrixUser = state.matrixUser,
         isUserIdentityUnknown = state.isUserIdentityUnknown,
@@ -166,7 +172,7 @@ data class CreateDmConfirmationBottomSheetState(
 
 class CreateDmConfirmationBottomSheetStateProvider : PreviewParameterProvider<CreateDmConfirmationBottomSheetState> {
     override val values = sequenceOf(
-            CreateDmConfirmationBottomSheetState(matrixUser = aMatrixUser(), isUserIdentityUnknown = false),
-            CreateDmConfirmationBottomSheetState(matrixUser = aMatrixUser(), isUserIdentityUnknown = true),
-        )
+        CreateDmConfirmationBottomSheetState(matrixUser = aMatrixUser(), isUserIdentityUnknown = false),
+        CreateDmConfirmationBottomSheetState(matrixUser = aMatrixUser(), isUserIdentityUnknown = true),
+    )
 }

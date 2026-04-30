@@ -13,7 +13,7 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.auth.AuthenticationException
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.ClientBuildException
-import org.matrix.rustcomponents.sdk.OidcException
+import org.matrix.rustcomponents.sdk.OAuthException
 
 class AuthenticationExceptionMappingTest {
     @Test
@@ -64,17 +64,17 @@ class AuthenticationExceptionMappingTest {
     }
 
     @Test
-    fun `mapping Oidc exceptions map to the Oidc Kotlin`() {
-        assertThat(OidcException.Generic("Generic").mapAuthenticationException())
-            .isException<AuthenticationException.Oidc>("Generic")
-        assertThat(OidcException.CallbackUrlInvalid("CallbackUrlInvalid").mapAuthenticationException())
-            .isException<AuthenticationException.Oidc>("CallbackUrlInvalid")
-        assertThat(OidcException.Cancelled("Cancelled").mapAuthenticationException())
-            .isException<AuthenticationException.Oidc>("Cancelled")
-        assertThat(OidcException.MetadataInvalid("MetadataInvalid").mapAuthenticationException())
-            .isException<AuthenticationException.Oidc>("MetadataInvalid")
-        assertThat(OidcException.NotSupported("NotSupported").mapAuthenticationException())
-            .isException<AuthenticationException.Oidc>("NotSupported")
+    fun `mapping Oidc exceptions map to the OAuth Kotlin`() {
+        assertThat(OAuthException.Generic("Generic").mapAuthenticationException())
+            .isException<AuthenticationException.OAuth>("Generic")
+        assertThat(OAuthException.CallbackUrlInvalid("CallbackUrlInvalid").mapAuthenticationException())
+            .isException<AuthenticationException.OAuth>("CallbackUrlInvalid")
+        assertThat(OAuthException.Cancelled("Cancelled").mapAuthenticationException())
+            .isException<AuthenticationException.OAuth>("Cancelled")
+        assertThat(OAuthException.MetadataInvalid("MetadataInvalid").mapAuthenticationException())
+            .isException<AuthenticationException.OAuth>("MetadataInvalid")
+        assertThat(OAuthException.NotSupported("NotSupported").mapAuthenticationException())
+            .isException<AuthenticationException.OAuth>("NotSupported")
     }
 
     private inline fun <reified T> ThrowableSubject.isException(message: String) {

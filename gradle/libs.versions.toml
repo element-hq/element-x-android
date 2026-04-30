@@ -51,7 +51,7 @@ telephoto = "0.19.0"
 haze = "1.7.2"
 
 # Dependency analysis
-dependencyAnalysis = "3.7.0"
+dependencyAnalysis = "3.9.0"
 
 # DI
 metro = "0.13.2"
@@ -178,7 +178,7 @@ test_detekt_test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version
 # https://github.com/matrix-org/matrix-rust-components-kotlin/commits/main/sdk/sdk-android/src/main/kotlin/org/matrix/rustcomponents/sdk/matrix_sdk_ffi.kt
 # All new features should not be implemented in the pull request that upgrades the version, developers should
 # only fix API breaks and may add some TODOs.
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.04.21"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.04.27"
 
 # Others
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
@@ -191,7 +191,7 @@ serialization_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-jso
 kotlinx_collections_immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.4.0"
 showkase = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
 showkase_processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }
-jsoup = "org.jsoup:jsoup:1.21.2"
+jsoup = "org.jsoup:jsoup:1.22.2"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:2.2.0"
 timber = "com.jakewharton.timber:timber:5.0.1"
@@ -222,7 +222,7 @@ color_picker = "io.mhssn:colorpicker:1.0.0"
 
 # Analytics
 posthog = "com.posthog:posthog-android:3.39.0"
-sentry = "io.sentry:sentry-android:8.39.1"
+sentry = "io.sentry:sentry-android:8.40.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.33.2"
 
@@ -234,7 +234,7 @@ sigpwned_emoji4j = "com.sigpwned:emoji4j-core:16.0.0"
 metro_runtime = { module = "dev.zacsweers.metro:runtime", version.ref = "metro" }
 
 # Element Call
-element_call_embedded = "io.element.android:element-call-embedded:0.19.1"
+element_call_embedded = "io.element.android:element-call-embedded:0.19.2"
 
 # Auto services
 google_autoservice = { module = "com.google.auto.service:auto-service", version.ref = "autoservice" }

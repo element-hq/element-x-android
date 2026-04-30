@@ -16,7 +16,7 @@ import androidx.compose.ui.test.performClick
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.login.impl.accountprovider.anAccountProvider
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.matrix.api.auth.OidcDetails
+import io.element.android.libraries.matrix.api.auth.OAuthDetails
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
@@ -84,7 +84,7 @@ class ChooseAccountProviderViewTest {
     private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setChooseAccountProviderView(
         state: ChooseAccountProviderState,
         onBackClick: () -> Unit = EnsureNeverCalled(),
-        onOidcDetails: (OidcDetails) -> Unit = EnsureNeverCalledWithParam(),
+        onOAuthDetails: (OAuthDetails) -> Unit = EnsureNeverCalledWithParam(),
         onNeedLoginPassword: () -> Unit = EnsureNeverCalled(),
         onLearnMoreClick: () -> Unit = EnsureNeverCalled(),
         onCreateAccountContinue: (url: String) -> Unit = EnsureNeverCalledWithParam(),
@@ -93,7 +93,7 @@ class ChooseAccountProviderViewTest {
             ChooseAccountProviderView(
                 state = state,
                 onBackClick = onBackClick,
-                onOidcDetails = onOidcDetails,
+                onOAuthDetails = onOAuthDetails,
                 onNeedLoginPassword = onNeedLoginPassword,
                 onLearnMoreClick = onLearnMoreClick,
                 onCreateAccountContinue = onCreateAccountContinue,

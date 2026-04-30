@@ -214,5 +214,5 @@ fun SessionData.toSession() = Session(
     deviceId = deviceId,
     homeserverUrl = homeserverUrl,
     slidingSyncVersion = SlidingSyncVersion.NATIVE,
-    oidcData = oidcData,
+    oauthData = oAuthData,
 )

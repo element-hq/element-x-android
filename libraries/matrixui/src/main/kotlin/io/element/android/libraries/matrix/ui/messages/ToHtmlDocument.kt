@@ -12,8 +12,10 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkData
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
 import io.element.android.libraries.matrix.api.timeline.item.event.MessageFormat
-import io.element.android.wysiwyg.utils.HtmlToDomParser
+import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
+import org.jsoup.nodes.Document.OutputSettings
+import org.jsoup.safety.Safelist
 
 /**
  * Converts the HTML string [FormattedBody.body] to a [Document] by parsing it.
@@ -34,9 +36,9 @@ fun FormattedBody.toHtmlDocument(
         ?.trimEnd()
         ?.let { formattedBody ->
             val dom = if (prefix != null) {
-                HtmlToDomParser.document("$prefix $formattedBody")
+                CustomHtmlToDomParser.document("$prefix $formattedBody")
             } else {
-                HtmlToDomParser.document(formattedBody)
+                CustomHtmlToDomParser.document(formattedBody)
             }
 
             // Prepend `@` to mentions
@@ -59,4 +61,36 @@ private fun fixMentions(
             }
         }
     }
+}
+
+/** Custom Html to DOM parser, based on the one included in the rich text editor library. */
+private object CustomHtmlToDomParser {
+    fun document(html: String): Document {
+        val outputSettings = OutputSettings().prettyPrint(false).indentAmount(0)
+        val cleanHtml = Jsoup.clean(html, "", safeList, outputSettings)
+        return Jsoup.parse(cleanHtml)
+    }
+
+    private val safeList = Safelist()
+        .addTags(
+            "a",
+            "b",
+            "strong",
+            "i",
+            "em",
+            "u",
+            "del",
+            "code",
+            "ul",
+            "ol",
+            "li",
+            "pre",
+            "blockquote",
+            "p",
+            "br",
+            // Add custom `mx-reply` tag, even if it's just to remove its contents from the plain text version of the message
+            "mx-reply"
+        )
+        .addAttributes("a", "href", "data-mention-type", "contenteditable")
+        .addAttributes("ol", "start")
 }
