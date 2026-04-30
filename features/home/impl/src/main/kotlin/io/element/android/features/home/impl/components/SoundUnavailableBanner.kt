@@ -52,7 +52,7 @@ internal fun SoundUnavailableBanner(
     )
 }
 
-internal class SoundUnavailableBannerStateProvider : PreviewParameterProvider<NotificationSoundUnavailableState> {
+internal class NotificationSoundUnavailableStateProvider : PreviewParameterProvider<NotificationSoundUnavailableState> {
     override val values: Sequence<NotificationSoundUnavailableState>
         get() = sequenceOf(
             NotificationSoundUnavailableState.MessageSound,
@@ -64,7 +64,7 @@ internal class SoundUnavailableBannerStateProvider : PreviewParameterProvider<No
 @PreviewsDayNight
 @Composable
 internal fun SoundUnavailableBannerPreview(
-    @PreviewParameter(SoundUnavailableBannerStateProvider::class) state: NotificationSoundUnavailableState,
+    @PreviewParameter(NotificationSoundUnavailableStateProvider::class) state: NotificationSoundUnavailableState,
 ) = ElementPreview {
     SoundUnavailableBanner(
         state = state,
