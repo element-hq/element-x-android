@@ -23,7 +23,6 @@ import io.element.android.features.messages.impl.timeline.model.anAggregatedReac
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemStateEventContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
-import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemReadMarkerModel
 import io.element.android.features.messages.impl.timeline.model.virtual.aTimelineItemDaySeparatorModel
 import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.features.messages.impl.typing.aTypingNotificationState
@@ -87,13 +86,6 @@ fun aTimelineState(
         unreadMessagesCount = unreadMessagesCount,
         newMessagesCount = newMessagesCount,
         eventSink = eventSink,
-    )
-}
-
-internal fun aTimelineItemReadMarker(): TimelineItem.Virtual {
-    return TimelineItem.Virtual(
-        id = UniqueId(UUID.randomUUID().toString()),
-        model = TimelineItemReadMarkerModel,
     )
 }
 

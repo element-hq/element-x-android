@@ -546,12 +546,11 @@ private fun TimelineViewWithReadMarker(
     unreadMessagesCount: Int,
     newMessagesCount: Int,
 ) {
-    val readMarker = aTimelineItemReadMarker()
     val timelineItems = persistentListOf<TimelineItem>(
         aTimelineItemEvent(isMine = false),
         aTimelineItemEvent(isMine = false),
         aTimelineItemEvent(isMine = true),
-        readMarker,
+        aTimelineItemEvent(isMine = false),
         aTimelineItemEvent(isMine = false),
         aTimelineItemEvent(isMine = false),
     )
@@ -561,7 +560,10 @@ private fun TimelineViewWithReadMarker(
         TimelineView(
             state = aTimelineState(
                 timelineItems = timelineItems,
-                readMarkerIndex = timelineItems.indexOf(readMarker),
+                // Index points past the loaded items, mirroring the real-world state the FAB
+                // represents: the user has scrolled past the read marker, so it's no longer in
+                // view. The actual scroll target doesn't matter for a static preview.
+                readMarkerIndex = timelineItems.size,
                 unreadMessagesCount = unreadMessagesCount,
                 newMessagesCount = newMessagesCount,
             ),
@@ -590,7 +592,7 @@ internal fun TimelineViewWithReadMarkerNoBadgesPreview() = ElementPreview {
 @PreviewsDayNight
 @Composable
 internal fun TimelineViewWithReadMarkerPreview() = ElementPreview {
-    TimelineViewWithReadMarker(unreadMessagesCount = 3, newMessagesCount = 12)
+    TimelineViewWithReadMarker(unreadMessagesCount = 3, newMessagesCount = 0)
 }
 
 @PreviewsDayNight
