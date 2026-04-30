@@ -15,9 +15,6 @@ import androidx.core.graphics.createBitmap
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.androidutils.service.ServiceBinder
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.auth.ElementClassicSession
 import io.element.android.libraries.matrix.api.auth.HomeServerLoginCompatibilityChecker
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
@@ -109,21 +106,6 @@ class DefaultElementClassicConnectionTest {
             connection.requestSession()
             runCurrent()
             expectNoEvents()
-        }
-    }
-
-    @Test
-    fun `requestSession when the feature is disabled emits an error`() = runTest {
-        val connection = createDefaultElementClassicConnection(
-            matrixAuthenticationService = FakeMatrixAuthenticationService(
-                setElementClassicSessionResult = {},
-            ),
-            isFeatureEnabled = false,
-        )
-        connection.stateFlow.test {
-            assertThat(awaitItem()).isEqualTo(ElementClassicConnectionState.Idle)
-            connection.requestSession()
-            assertThat(awaitItem()).isInstanceOf(ElementClassicConnectionState.Error::class.java)
         }
     }
 
@@ -514,17 +496,10 @@ class DefaultElementClassicConnectionTest {
         homeServerLoginCompatibilityChecker: HomeServerLoginCompatibilityChecker = FakeHomeServerLoginCompatibilityChecker(
             checkResult = { Result.success(true) }
         ),
-        isFeatureEnabled: Boolean = true,
-        featureFlagService: FeatureFlagService = FakeFeatureFlagService(
-            initialState = mapOf(
-                FeatureFlags.SignInWithClassic.key to isFeatureEnabled,
-            )
-        ),
     ) = DefaultElementClassicConnection(
         serviceBinder = serviceBinder,
         coroutineScope = coroutineScope,
         matrixAuthenticationService = matrixAuthenticationService,
         homeServerLoginCompatibilityChecker = homeServerLoginCompatibilityChecker,
-        featureFlagService = featureFlagService,
     )
 }

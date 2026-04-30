@@ -100,13 +100,6 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
-    SignInWithClassic(
-        key = "feature.signin_with_classic",
-        title = "Sign in with Element Classic",
-        description = "Allow the application to sign in to the current Element Classic account.",
-        defaultValue = { false },
-        isFinished = false,
-    ),
     AllowBlackTheme(
         key = "feature.allow_black_theme",
         title = "Allow black theme",
