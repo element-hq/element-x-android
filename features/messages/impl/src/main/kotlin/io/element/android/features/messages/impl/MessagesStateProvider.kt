@@ -79,6 +79,7 @@ open class MessagesStateProvider : PreviewParameterProvider<MessagesState> {
                     currentPinnedMessageIndex = 0,
                 ),
             ),
+            aMessagesState(isCurrentlySharingLiveLocationInRoom = true),
             aMessagesState(successorRoom = SuccessorRoom(RoomId("!id:domain"), null)),
             aMessagesState(
                 timelineState = aTimelineState(
@@ -126,6 +127,7 @@ fun aMessagesState(
         hasThreads = false,
         hasUnreadThreads = false,
     ),
+    isCurrentlySharingLiveLocationInRoom: Boolean = false,
     eventSink: (MessagesEvent) -> Unit = {},
 ) = MessagesState(
     roomId = RoomId("!id:domain"),
@@ -155,6 +157,7 @@ fun aMessagesState(
     topBarSharedHistoryIcon = topBarSharedHistoryIcon,
     successorRoom = successorRoom,
     threads = threads,
+    showLiveLocationShareBanner = isCurrentlySharingLiveLocationInRoom,
     eventSink = eventSink,
 )
 

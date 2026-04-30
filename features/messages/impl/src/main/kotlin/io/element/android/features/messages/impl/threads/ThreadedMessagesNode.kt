@@ -134,6 +134,7 @@ class ThreadedMessagesNode(
         fun navigateToSendLocation()
         fun navigateToCreatePoll()
         fun navigateToEditPoll(eventId: EventId)
+        fun navigateToCurrentLiveLocation()
         fun navigateToRoomCall(roomId: RoomId, isAudioCall: Boolean)
         fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?)
         fun navigateToDeveloperSettings()
@@ -244,6 +245,11 @@ class ThreadedMessagesNode(
 
     override fun navigateToDeveloperSettings() {
         callback.navigateToDeveloperSettings()
+    }
+
+    override fun navigateToCurrentLiveLocation() {
+        //Shouldn't happen
+        callback.navigateToCurrentLiveLocation()
     }
 
     override fun close() = navigateUp()

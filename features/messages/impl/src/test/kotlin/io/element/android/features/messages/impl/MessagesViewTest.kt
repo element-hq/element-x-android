@@ -58,11 +58,11 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.tombstone.SuccessorRoom
 import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
+import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisplayName
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.testtags.TestTags
-import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureCalledOnceWithTwoParamsAndResult
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
@@ -643,6 +643,50 @@ class MessagesViewTest {
         rule.setMessagesView(state = state)
         rule.assertNoNodeWithText(R.string.screen_room_timeline_tombstoned_room_message)
         rule.assertNoNodeWithText(R.string.screen_room_timeline_tombstoned_room_action)
+    }
+
+    @Test
+    fun `live location banner is visible when current room is sharing`() {
+        val state = aMessagesState(isCurrentlySharingLiveLocationInRoom = true)
+        rule.setMessagesView(state = state)
+
+        rule.onNodeWithText(rule.activity.getString(CommonStrings.screen_room_live_location_banner)).assertExists()
+        rule.onNodeWithText(rule.activity.getString(CommonStrings.action_stop)).assertExists()
+    }
+
+    @Test
+    fun `live location banner is hidden when current room is not sharing`() {
+        val state = aMessagesState(isCurrentlySharingLiveLocationInRoom = false)
+        rule.setMessagesView(state = state)
+
+        rule.onNodeWithText(rule.activity.getString(CommonStrings.screen_room_live_location_banner)).assertDoesNotExist()
+    }
+
+    @Test
+    fun `clicking stop on live location banner emits expected event`() {
+        val eventsRecorder = EventsRecorder<MessagesEvent>()
+        val state = aMessagesState(
+            isCurrentlySharingLiveLocationInRoom = true,
+            eventSink = eventsRecorder,
+        )
+        rule.setMessagesView(state = state)
+
+        rule.onNodeWithText(rule.activity.getString(CommonStrings.action_stop)).performClick()
+
+        eventsRecorder.assertSingle(MessagesEvent.StopLiveLocationShare)
+    }
+
+    @Test
+    fun `clicking live location banner emit expected event`() {
+        val eventsRecorder = EventsRecorder<MessagesEvent>()
+        val state = aMessagesState(
+            isCurrentlySharingLiveLocationInRoom = true,
+            eventSink = eventsRecorder,
+        )
+        rule.setMessagesView(state = state)
+
+        rule.onNodeWithText(rule.activity.getString(CommonStrings.screen_room_live_location_banner)).performClick()
+        eventsRecorder.assertSingle(MessagesEvent.ShowLiveLocationShare)
     }
 }
 

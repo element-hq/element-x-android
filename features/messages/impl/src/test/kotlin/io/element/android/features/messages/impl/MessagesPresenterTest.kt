@@ -18,6 +18,7 @@ import io.element.android.features.messages.impl.actionlist.ActionListState
 import io.element.android.features.messages.impl.actionlist.anActionListState
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.crypto.identity.anIdentityChangeState
+import io.element.android.features.location.test.FakeActiveLiveLocationShareManager
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.link.aLinkState
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvent
@@ -120,6 +121,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 @Suppress("LargeClass")
 class MessagesPresenterTest {
@@ -140,6 +142,42 @@ class MessagesPresenterTest {
             assertThat(initialState.snackbarMessage).isNull()
             assertThat(initialState.inviteProgress).isEqualTo(AsyncData.Uninitialized)
             assertThat(initialState.showReinvitePrompt).isFalse()
+            assertThat(initialState.showLiveLocationShareBanner).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - exposes live location sharing banner visibility for current room`() = runTest {
+        val liveLocationShareManager = FakeActiveLiveLocationShareManager(
+            sessionId = A_SESSION_ID,
+            startShareLambda = { _, _ -> Result.success(Unit) },
+        )
+        liveLocationShareManager.startShare(A_ROOM_ID, 60.seconds)
+        val presenter = createMessagesPresenter(liveLocationShareManager = liveLocationShareManager)
+
+        presenter.testWithLifecycleOwner {
+            val state = consumeItemsUntilTimeout().last()
+            assertThat(state.showLiveLocationShareBanner).isTrue()
+        }
+    }
+
+    @Test
+    fun `present - stop live location share delegates to manager for current room`() = runTest {
+        val stopShareCalls = mutableListOf<RoomId>()
+        val liveLocationShareManager = FakeActiveLiveLocationShareManager(
+            sessionId = A_SESSION_ID,
+            stopShareLambda = { roomId ->
+                stopShareCalls += roomId
+                Result.success(Unit)
+            },
+        )
+        val presenter = createMessagesPresenter(liveLocationShareManager = liveLocationShareManager)
+
+        presenter.testWithLifecycleOwner {
+            val state = consumeItemsUntilTimeout().last()
+            state.eventSink(MessagesEvent.StopLiveLocationShare)
+            advanceUntilIdle()
+            assertThat(stopShareCalls).containsExactly(A_ROOM_ID)
         }
     }
 
@@ -1347,6 +1385,7 @@ class MessagesPresenterTest {
         actionListEventSink: (ActionListEvent) -> Unit = {},
         addRecentEmoji: AddRecentEmoji = AddRecentEmoji { _ -> lambdaError() },
         markAsFullyRead: MarkAsFullyRead = FakeMarkAsFullyRead(),
+        liveLocationShareManager: FakeActiveLiveLocationShareManager = FakeActiveLiveLocationShareManager(sessionId = joinedRoom.sessionId),
     ): MessagesPresenter {
         return MessagesPresenter(
             navigator = navigator,
@@ -1376,6 +1415,7 @@ class MessagesPresenterTest {
             featureFlagService = featureFlagService,
             addRecentEmoji = addRecentEmoji,
             markAsFullyRead = markAsFullyRead,
+            liveLocationShareManager = liveLocationShareManager,
             sessionCoroutineScope = backgroundScope,
         )
     }
