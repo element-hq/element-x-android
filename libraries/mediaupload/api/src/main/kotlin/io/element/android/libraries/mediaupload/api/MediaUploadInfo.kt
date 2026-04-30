@@ -10,6 +10,7 @@ package io.element.android.libraries.mediaupload.api
 
 import io.element.android.libraries.matrix.api.media.AudioInfo
 import io.element.android.libraries.matrix.api.media.FileInfo
+import io.element.android.libraries.matrix.api.media.GalleryItemInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.VideoInfo
 import java.io.File
@@ -30,4 +31,41 @@ fun MediaUploadInfo.allFiles(): List<File> {
         (this@allFiles as? MediaUploadInfo.Image)?.thumbnailFile,
         (this@allFiles as? MediaUploadInfo.Video)?.thumbnailFile,
     )
+}
+
+fun MediaUploadInfo.toGalleryItemInfo(caption: String?, formattedCaption: String?): GalleryItemInfo {
+    return when (this) {
+        is MediaUploadInfo.Image -> GalleryItemInfo.Image(
+            file = file,
+            imageInfo = imageInfo,
+            thumbnailFile = thumbnailFile,
+            caption = caption,
+            formattedCaption = null,
+        )
+        is MediaUploadInfo.Video -> GalleryItemInfo.Video(
+            file = file,
+            videoInfo = videoInfo,
+            thumbnailFile = thumbnailFile,
+            caption = caption,
+            formattedCaption = null,
+        )
+        is MediaUploadInfo.Audio -> GalleryItemInfo.Audio(
+            file = file,
+            audioInfo = audioInfo,
+            caption = caption,
+            formattedCaption = null,
+        )
+        is MediaUploadInfo.VoiceMessage -> GalleryItemInfo.Audio(
+            file = file,
+            audioInfo = audioInfo,
+            caption = caption,
+            formattedCaption = null,
+        )
+        is MediaUploadInfo.AnyFile -> GalleryItemInfo.MediaFile(
+            file = file,
+            fileInfo = fileInfo,
+            caption = caption,
+            formattedCaption = null,
+        )
+    }
 }

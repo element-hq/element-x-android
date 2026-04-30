@@ -11,6 +11,7 @@ package io.element.android.libraries.mediaviewer.impl.viewer
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 import io.element.android.libraries.mediaviewer.impl.model.eventId
+import io.element.android.libraries.mediaviewer.impl.model.mediaSource
 
 /**
  * x and y are loading items.
@@ -50,11 +51,14 @@ class PagerKeysHandler {
         if (cachedData.mediaItems.isEmpty()) {
             cachedData = Data(mediaItems, 0)
         } else {
-            // Search a common item in both lists, i.e. an item with the same eventId
-            val itemInCacheIndex = cachedData.mediaItems.indexOfFirst { mediaItem ->
-                mediaItem is MediaItem.Event && mediaItems
+            // Search a common item in both lists using eventId + mediaSource to handle gallery items
+            val itemInCacheIndex = cachedData.mediaItems.indexOfFirst { cachedItem ->
+                cachedItem is MediaItem.Event && mediaItems
                     .filterIsInstance<MediaItem.Event>()
-                    .any { mediaItem.eventId() == it.eventId() }
+                    .any { newItem ->
+                        cachedItem.eventId() == newItem.eventId() &&
+                            cachedItem.mediaSource().safeUrl == newItem.mediaSource().safeUrl
+                    }
             }
             cachedData = if (itemInCacheIndex == -1) {
                 // If the item is not found, start with a new cache
@@ -62,13 +66,16 @@ class PagerKeysHandler {
             } else {
                 val cachedItem = cachedData.mediaItems[itemInCacheIndex]
                 val eventId = (cachedItem as? MediaItem.Event)?.eventId()
-                if (eventId == null) {
+                val cachedSourceUrl = (cachedItem as? MediaItem.Event)?.mediaSource()?.safeUrl
+                if (eventId == null || cachedSourceUrl == null) {
                     // Should not happen, but in this case, start with a new cache
                     Data(mediaItems, 0)
                 } else {
                     // Search the index of the item in the new list
                     val itemIndex = mediaItems.indexOfFirst { mediaItem ->
-                        mediaItem is MediaItem.Event && mediaItem.eventId() == eventId
+                        mediaItem is MediaItem.Event &&
+                            mediaItem.eventId() == eventId &&
+                            mediaItem.mediaSource().safeUrl == cachedSourceUrl
                     }
                     if (itemIndex == -1) {
                         // If the item is not found, start with a new cache

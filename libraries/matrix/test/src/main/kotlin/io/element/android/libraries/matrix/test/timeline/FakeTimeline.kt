@@ -293,6 +293,29 @@ class FakeTimeline(
         )
     }
 
+    var sendGalleryLambda: (
+        items: List<io.element.android.libraries.matrix.api.media.GalleryItemInfo>,
+        caption: String?,
+        formattedCaption: String?,
+        inReplyToEventId: EventId?,
+    ) -> Result<MediaUploadHandler> = { _, _, _, _ ->
+        Result.success(FakeMediaUploadHandler())
+    }
+
+    override suspend fun sendGallery(
+        items: List<io.element.android.libraries.matrix.api.media.GalleryItemInfo>,
+        caption: String?,
+        formattedCaption: String?,
+        inReplyToEventId: EventId?,
+    ): Result<MediaUploadHandler> = simulateLongTask {
+        sendGalleryLambda(
+            items,
+            caption,
+            formattedCaption,
+            inReplyToEventId,
+        )
+    }
+
     var sendLocationLambda: (
         body: String,
         geoUri: String,

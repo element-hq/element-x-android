@@ -39,7 +39,7 @@ open class AttachmentsPreviewStateProvider : PreviewParameterProvider<Attachment
                 )
             ),
             anAttachmentsPreviewState(sendActionState = SendActionState.Sending.Processing(displayProgress = true)),
-            anAttachmentsPreviewState(sendActionState = SendActionState.Sending.ReadyToUpload(aMediaUploadInfo())),
+            anAttachmentsPreviewState(sendActionState = SendActionState.Sending.ReadyToUpload(listOf(aMediaUploadInfo()))),
             anAttachmentsPreviewState(sendActionState = SendActionState.Sending.Uploading(aMediaUploadInfo())),
             anAttachmentsPreviewState(sendActionState = SendActionState.Failure(RuntimeException("error"), aMediaUploadInfo())),
             anAttachmentsPreviewState(displayFileTooLargeError = true),
@@ -67,8 +67,10 @@ fun anAttachmentsPreviewState(
     mediaOptimizationSelectorState: MediaOptimizationSelectorState = aMediaOptimisationSelectorState(),
     displayFileTooLargeError: Boolean = false,
 ) = AttachmentsPreviewState(
-    attachment = Attachment.Media(
-        localMedia = LocalMedia("file://path".toUri(), mediaInfo),
+    attachments = persistentListOf(
+        Attachment.Media(
+            localMedia = LocalMedia("file://path".toUri(), mediaInfo),
+        ),
     ),
     sendActionState = sendActionState,
     textEditorState = textEditorState,

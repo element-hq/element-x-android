@@ -15,9 +15,11 @@ import io.element.android.features.messages.impl.timeline.components.layout.Cont
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.rememberPresenter
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemGalleryContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
@@ -40,6 +42,7 @@ fun TimelineItemEventContentView(
     content: TimelineItemEventContent,
     hideMediaContent: Boolean,
     onContentClick: (() -> Unit)?,
+    onGalleryItemClick: ((Int) -> Unit)? = null,
     onLongClick: (() -> Unit)?,
     onShowContentClick: () -> Unit,
     onLinkClick: (Link) -> Unit,
@@ -88,6 +91,21 @@ fun TimelineItemEventContentView(
             onLinkClick = onLinkClick,
             onLinkLongClick = onLinkLongClick,
             onContentLayoutChange = onContentLayoutChange,
+            modifier = modifier,
+        )
+        is TimelineItemGalleryContent -> TimelineItemGalleryView(
+            content = content,
+            onContentClick = { index -> onGalleryItemClick?.invoke(index) },
+            onLongClick = onLongClick,
+            onLinkClick = onLinkClick,
+            onLinkLongClick = onLinkLongClick,
+            onContentLayoutChange = {},
+            modifier = modifier,
+        )
+        is TimelineItemAttachmentsContent -> TimelineItemAttachmentsListView(
+            content = content,
+            onContentClick = { index -> onGalleryItemClick?.invoke(index) },
+            onContentLayoutChange = {},
             modifier = modifier,
         )
         is TimelineItemStickerContent -> TimelineItemStickerView(

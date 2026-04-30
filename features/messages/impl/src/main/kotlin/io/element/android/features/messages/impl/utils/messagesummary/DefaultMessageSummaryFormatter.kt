@@ -11,9 +11,11 @@ package io.element.android.features.messages.impl.utils.messagesummary
 import android.content.Context
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemFileContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemGalleryContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLegacyCallInviteContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemLocationContent
@@ -55,6 +57,16 @@ class DefaultMessageSummaryFormatter(
             is TimelineItemVideoContent -> context.getString(CommonStrings.common_video)
             is TimelineItemFileContent -> context.getString(CommonStrings.common_file)
             is TimelineItemAudioContent -> context.getString(CommonStrings.common_audio)
+            is TimelineItemGalleryContent -> context.getString(CommonStrings.common_image)
+            is TimelineItemAttachmentsContent -> {
+                val count = content.attachments.size
+                val extensions = content.attachments.take(3).joinToString(", ") { it.fileExtension }
+                if (count == 1) {
+                    extensions
+                } else {
+                    "$extensions +${count - 3}"
+                }
+            }
             is TimelineItemLegacyCallInviteContent -> context.getString(CommonStrings.common_unsupported_call)
             is TimelineItemRtcNotificationContent -> context.getString(CommonStrings.common_call_started)
         }

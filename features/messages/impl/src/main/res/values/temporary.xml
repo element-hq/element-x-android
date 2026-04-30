@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="screen_attachments_preview_gallery_badge_a11y">
+        <item quantity="one">"%1$d item selected"</item>
+        <item quantity="other">"%1$d items selected"</item>
+    </plurals>
+    <string name="common_attachments">Attachments</string>
+</resources>

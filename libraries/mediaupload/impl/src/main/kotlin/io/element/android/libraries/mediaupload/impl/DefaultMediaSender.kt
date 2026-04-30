@@ -27,6 +27,7 @@ import io.element.android.libraries.mediaupload.api.MediaSender
 import io.element.android.libraries.mediaupload.api.MediaSenderFactory
 import io.element.android.libraries.mediaupload.api.MediaSenderRoomFactory
 import io.element.android.libraries.mediaupload.api.MediaUploadInfo
+import io.element.android.libraries.mediaupload.api.toGalleryItemInfo
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Job
 import timber.log.Timber
@@ -165,6 +166,29 @@ class DefaultMediaSender(
                 )
             }
             .handleSendResult(mediaId(uri))
+    }
+
+    override suspend fun sendGallery(
+        mediaUploadInfos: List<MediaUploadInfo>,
+        caption: String?,
+        formattedCaption: String?,
+        inReplyToEventId: EventId?,
+    ): Result<Unit> {
+        val galleryLogId = "gallery[${mediaUploadInfos.size} items]"
+        Timber.d("Sending $galleryLogId")
+        return getTimeline().flatMap { timeline ->
+            val galleryItems = mediaUploadInfos.map { it.toGalleryItemInfo(null, null) }
+            timeline.sendGallery(
+                items = galleryItems,
+                caption = caption,
+                formattedCaption = formattedCaption,
+                inReplyToEventId = inReplyToEventId,
+            )
+        }
+            .flatMapCatching { uploadHandler ->
+                uploadHandler.await()
+            }
+            .handleSendResult(galleryLogId)
     }
 
     private fun Result<Unit>.handleSendResult(mediaId: String) = this

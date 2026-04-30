@@ -13,6 +13,8 @@ import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageT
 import io.element.android.libraries.matrix.api.timeline.item.event.EmoteMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FileMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.FormattedBody
+import io.element.android.libraries.matrix.api.timeline.item.event.GalleryItemType
+import io.element.android.libraries.matrix.api.timeline.item.event.GalleryMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.ImageMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.InReplyTo
 import io.element.android.libraries.matrix.api.timeline.item.event.LocationMessageType
@@ -31,11 +33,9 @@ import org.matrix.rustcomponents.sdk.MessageType
 import org.matrix.rustcomponents.sdk.MsgLikeKind
 import org.matrix.rustcomponents.sdk.use
 import org.matrix.rustcomponents.sdk.FormattedBody as RustFormattedBody
+import org.matrix.rustcomponents.sdk.GalleryItemType as RustGalleryItemType
 import org.matrix.rustcomponents.sdk.MessageFormat as RustMessageFormat
 import org.matrix.rustcomponents.sdk.MessageType as RustMessageType
-
-// https://github.com/Johennes/matrix-spec-proposals/blob/johannes/msgtype-galleries/proposals/4274-inline-media-galleries.md#unstable-prefix
-private const val MSG_TYPE_GALLERY_UNSTABLE = "dm.filament.gallery"
 
 class EventMessageMapper {
     private val inReplyToMapper by lazy { InReplyToMapper(TimelineEventContentMapper()) }
@@ -124,8 +124,64 @@ class EventMessageMapper {
             OtherMessageType(type.msgtype, type.body)
         }
         is MessageType.Gallery -> {
-            // TODO expose the GalleryType.
-            OtherMessageType(MSG_TYPE_GALLERY_UNSTABLE, type.content.body)
+            GalleryMessageType(
+                body = type.content.body,
+                formatted = type.content.formatted?.map(),
+                items = type.content.itemtypes.map { mapGalleryItemType(it) },
+            )
+        }
+    }
+
+    private fun mapGalleryItemType(type: RustGalleryItemType): GalleryItemType = when (type) {
+        is RustGalleryItemType.Image -> {
+            GalleryItemType.Image(
+                content = ImageMessageType(
+                    filename = type.content.filename,
+                    caption = type.content.caption,
+                    formattedCaption = type.content.formattedCaption?.map(),
+                    source = type.content.source.map(),
+                    info = type.content.info?.map(),
+                )
+            )
+        }
+        is RustGalleryItemType.Audio -> {
+            GalleryItemType.Audio(
+                content = AudioMessageType(
+                    filename = type.content.filename,
+                    caption = type.content.caption,
+                    formattedCaption = type.content.formattedCaption?.map(),
+                    source = type.content.source.map(),
+                    info = type.content.info?.map(),
+                )
+            )
+        }
+        is RustGalleryItemType.Video -> {
+            GalleryItemType.Video(
+                content = VideoMessageType(
+                    filename = type.content.filename,
+                    caption = type.content.caption,
+                    formattedCaption = type.content.formattedCaption?.map(),
+                    source = type.content.source.map(),
+                    info = type.content.info?.map(),
+                )
+            )
+        }
+        is RustGalleryItemType.File -> {
+            GalleryItemType.File(
+                content = FileMessageType(
+                    filename = type.content.filename,
+                    caption = type.content.caption,
+                    formattedCaption = type.content.formattedCaption?.map(),
+                    source = type.content.source.map(),
+                    info = type.content.info?.map(),
+                )
+            )
+        }
+        is RustGalleryItemType.Other -> {
+            GalleryItemType.Other(
+                itemtype = type.itemtype,
+                body = type.body,
+            )
         }
     }
 }

@@ -11,6 +11,8 @@ package io.element.android.features.messages.impl.timeline.model
 import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.timeline.components.MessageShieldData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemGalleryContent
+import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAttachmentsContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemStickerContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemTextBasedContent
@@ -124,6 +126,8 @@ sealed interface TimelineItem {
             is TimelineItemStickerContent -> content.formattedCaption == null && content.caption == null
             is TimelineItemImageContent -> content.formattedCaption == null && content.caption == null
             is TimelineItemVideoContent -> content.formattedCaption == null && content.caption == null
+            is TimelineItemGalleryContent -> false
+            is TimelineItemAttachmentsContent -> false
             else -> true
         }
 
