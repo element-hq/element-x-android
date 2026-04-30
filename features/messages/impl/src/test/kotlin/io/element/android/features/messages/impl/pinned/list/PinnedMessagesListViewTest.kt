@@ -6,16 +6,19 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.features.messages.impl.pinned.list
 
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.longClick
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onFirst
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performTouchInput
+import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.messages.impl.actionlist.ActionListEvent
 import io.element.android.features.messages.impl.actionlist.anActionListState
@@ -31,33 +34,28 @@ import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBack
 import io.element.android.tests.testutils.setSafeContent
 import io.element.android.wysiwyg.link.Link
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class PinnedMessagesListViewTest {
-    @get:Rule
-    val rule = createAndroidComposeRule<ComponentActivity>()
-
     @Test
-    fun `clicking on back calls the expected callback`() {
+    fun `clicking on back calls the expected callback`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<PinnedMessagesListEvent>(expectEvents = false)
         val state = aLoadedPinnedMessagesListState(
             eventSink = eventsRecorder
         )
         ensureCalledOnce { callback ->
-            rule.setPinnedMessagesListView(
+            setPinnedMessagesListView(
                 state = state,
                 onBackClick = callback
             )
-            rule.pressBack()
+            pressBack()
         }
     }
 
     @Test
-    fun `click on an event calls the expected callback`() {
+    fun `click on an event calls the expected callback`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<PinnedMessagesListEvent>(expectEvents = false)
         val content = aTimelineItemFileContent()
         val state = aLoadedPinnedMessagesListState(
@@ -67,16 +65,16 @@ class PinnedMessagesListViewTest {
 
         val event = state.timelineItems.first() as TimelineItem.Event
         ensureCalledOnceWithParam(event) { callback ->
-            rule.setPinnedMessagesListView(
+            setPinnedMessagesListView(
                 state = state,
                 onEventClick = callback
             )
-            rule.onAllNodesWithText(content.filename).onFirst().performClick()
+            onAllNodesWithText(content.filename).onFirst().performClick()
         }
     }
 
     @Test
-    fun `long click on an event emits the expected event`() {
+    fun `long click on an event emits the expected event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<ActionListEvent>(expectEvents = true)
         val content = aTimelineItemFileContent()
         val state = aLoadedPinnedMessagesListState(
@@ -84,10 +82,10 @@ class PinnedMessagesListViewTest {
             actionListState = anActionListState(eventSink = eventsRecorder)
         )
 
-        rule.setPinnedMessagesListView(
+        setPinnedMessagesListView(
             state = state,
         )
-        rule.onAllNodesWithText(content.filename).onFirst()
+        onAllNodesWithText(content.filename).onFirst()
             .performTouchInput {
                 longClick()
             }
@@ -96,7 +94,7 @@ class PinnedMessagesListViewTest {
     }
 }
 
-private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setPinnedMessagesListView(
+private fun AndroidComposeUiTest<ComponentActivity>.setPinnedMessagesListView(
     state: PinnedMessagesListState,
     onBackClick: () -> Unit = EnsureNeverCalled(),
     onEventClick: (event: TimelineItem.Event) -> Unit = EnsureNeverCalledWithParam(),
