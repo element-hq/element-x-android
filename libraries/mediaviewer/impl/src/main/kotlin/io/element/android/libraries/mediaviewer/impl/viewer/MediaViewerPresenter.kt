@@ -88,7 +88,7 @@ class MediaViewerPresenter(
         var mediaBottomSheetState by remember { mutableStateOf<MediaBottomSheetState>(MediaBottomSheetState.Hidden) }
 
         DisposableEffect(Unit) {
-            dataSource.setup()
+            dataSource.setup(coroutineScope)
             onDispose {
                 dataSource.dispose()
             }

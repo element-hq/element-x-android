@@ -5,13 +5,16 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.features.space.impl.addroom
 
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
@@ -22,77 +25,73 @@ import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBack
 import kotlinx.collections.immutable.toImmutableList
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 class AddRoomToSpaceViewTest {
-    @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
-
     @Test
-    fun `clicking back when search inactive emits Dismiss and invokes onBackClick`() {
+    fun `clicking back when search inactive emits Dismiss and invokes onBackClick`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<AddRoomToSpaceEvent>()
         ensureCalledOnce {
-            rule.setAddRoomToSpaceView(
+            setAddRoomToSpaceView(
                 anAddRoomToSpaceState(
                     isSearchActive = false,
                     eventSink = eventsRecorder,
                 ),
                 onBackClick = it,
             )
-            rule.pressBack()
+            pressBack()
         }
         eventsRecorder.assertSingle(AddRoomToSpaceEvent.Dismiss)
     }
 
     @Test
-    fun `clicking back when search active emits CloseSearch event`() {
+    fun `clicking back when search active emits CloseSearch event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<AddRoomToSpaceEvent>()
-        rule.setAddRoomToSpaceView(
+        setAddRoomToSpaceView(
             anAddRoomToSpaceState(
                 isSearchActive = true,
                 eventSink = eventsRecorder,
             ),
         )
-        rule.pressBack()
+        pressBack()
         eventsRecorder.assertSingle(AddRoomToSpaceEvent.OnSearchActiveChanged(false))
     }
 
     @Test
-    fun `clicking save emits Save event`() {
+    fun `clicking save emits Save event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<AddRoomToSpaceEvent>()
-        rule.setAddRoomToSpaceView(
+        setAddRoomToSpaceView(
             anAddRoomToSpaceState(
                 selectedRooms = aSelectRoomInfoList().take(1).toImmutableList(),
                 eventSink = eventsRecorder,
             ),
         )
-        rule.clickOn(CommonStrings.action_save)
+        clickOn(CommonStrings.action_save)
         eventsRecorder.assertSingle(AddRoomToSpaceEvent.Save)
     }
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `clicking room in suggestions emits ToggleRoom event`() {
+    fun `clicking room in suggestions emits ToggleRoom event`() = runAndroidComposeUiTest {
         val suggestions = aSelectRoomInfoList()
         val eventsRecorder = EventsRecorder<AddRoomToSpaceEvent>()
-        rule.setAddRoomToSpaceView(
+        setAddRoomToSpaceView(
             anAddRoomToSpaceState(
                 suggestions = suggestions,
                 eventSink = eventsRecorder,
             ),
         )
-        rule.onNodeWithText(suggestions.first().name!!).performClick()
+        onNodeWithText(suggestions.first().name!!).performClick()
         eventsRecorder.assertSingle(AddRoomToSpaceEvent.ToggleRoom(suggestions.first()))
     }
 
     @Test
-    fun `onRoomsAdded called when saveAction is Success`() {
+    fun `onRoomsAdded called when saveAction is Success`() = runAndroidComposeUiTest {
         ensureCalledOnce {
-            rule.setAddRoomToSpaceView(
+            setAddRoomToSpaceView(
                 anAddRoomToSpaceState(
                     saveAction = AsyncAction.Success(Unit),
                 ),
@@ -103,10 +102,10 @@ class AddRoomToSpaceViewTest {
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `displaying search results sends UpdateSearchVisibleRange event`() {
+    fun `displaying search results sends UpdateSearchVisibleRange event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<AddRoomToSpaceEvent>()
         val rooms = aSelectRoomInfoList()
-        rule.setAddRoomToSpaceView(
+        setAddRoomToSpaceView(
             anAddRoomToSpaceState(
                 isSearchActive = true,
                 searchResults = SearchBarResultState.Results(rooms),
@@ -117,7 +116,7 @@ class AddRoomToSpaceViewTest {
     }
 }
 
-private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setAddRoomToSpaceView(
+private fun AndroidComposeUiTest<ComponentActivity>.setAddRoomToSpaceView(
     state: AddRoomToSpaceState,
     onBackClick: () -> Unit = EnsureNeverCalled(),
     onRoomsAdded: () -> Unit = EnsureNeverCalled(),

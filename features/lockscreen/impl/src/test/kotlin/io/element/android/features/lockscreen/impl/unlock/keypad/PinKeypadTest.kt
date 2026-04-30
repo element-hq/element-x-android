@@ -6,60 +6,57 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.features.lockscreen.impl.unlock.keypad
 
 import android.view.KeyEvent
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.input.key.Key
+import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isRoot
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performKeyInput
 import androidx.compose.ui.test.pressKey
 import androidx.compose.ui.test.requestFocus
+import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import androidx.compose.ui.unit.dp
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EventsRecorder
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class PinKeypadTest {
-    @get:Rule
-    val rule = createAndroidComposeRule<ComponentActivity>()
-
     @Test
-    fun `clicking on a number emits the expected event`() {
+    fun `clicking on a number emits the expected event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<PinKeypadModel>()
-        rule.setPinKeyPad(onClick = eventsRecorder)
-        rule.onNode(hasText("1")).performClick()
+        setPinKeyPad(onClick = eventsRecorder)
+        onNode(hasText("1")).performClick()
         eventsRecorder.assertSingle(PinKeypadModel.Number('1'))
     }
 
     @Test
-    fun `clicking on the delete previous character button emits the expected event`() {
+    fun `clicking on the delete previous character button emits the expected event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<PinKeypadModel>()
-        rule.setPinKeyPad(onClick = eventsRecorder)
-        rule.onNode(hasContentDescription(rule.activity.getString(CommonStrings.a11y_delete))).performClick()
+        setPinKeyPad(onClick = eventsRecorder)
+        onNode(hasContentDescription(activity!!.getString(CommonStrings.a11y_delete))).performClick()
         eventsRecorder.assertSingle(PinKeypadModel.Back)
     }
 
     @OptIn(ExperimentalTestApi::class)
     @Test
-    fun `typing using the hardware keyboard emits the expected events`() {
+    fun `typing using the hardware keyboard emits the expected events`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<PinKeypadModel>()
-        rule.setPinKeyPad(onClick = eventsRecorder)
-        rule.onNodeWithText("1").requestFocus()
-        rule.onAllNodes(isRoot())[0].performKeyInput {
+        setPinKeyPad(onClick = eventsRecorder)
+        onNodeWithText("1").requestFocus()
+        onAllNodes(isRoot())[0].performKeyInput {
             val keys = listOf(
                 Key.A,
                 Key.NumPad1,
@@ -118,7 +115,7 @@ class PinKeypadTest {
         )
     }
 
-    private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setPinKeyPad(
+    private fun AndroidComposeUiTest<ComponentActivity>.setPinKeyPad(
         onClick: (PinKeypadModel) -> Unit = EnsureNeverCalledWithParam(),
     ) {
         setContent {

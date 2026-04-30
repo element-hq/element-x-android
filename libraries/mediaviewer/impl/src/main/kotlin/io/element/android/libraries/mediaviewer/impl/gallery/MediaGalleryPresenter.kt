@@ -78,7 +78,7 @@ class MediaGalleryPresenter(
             .collectAsState(AsyncData.Uninitialized)
 
         LaunchedEffect(Unit) {
-            mediaGalleryDataSource.start()
+            mediaGalleryDataSource.start(this)
         }
 
         val permissions by room.permissionsAsState(MediaPermissions.DEFAULT) { perms ->

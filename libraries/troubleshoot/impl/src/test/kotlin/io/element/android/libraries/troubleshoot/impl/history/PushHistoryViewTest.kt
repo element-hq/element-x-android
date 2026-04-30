@@ -6,14 +6,17 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.libraries.troubleshoot.impl.history
 
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_FORMATTED_DATE
@@ -23,67 +26,62 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class PushHistoryViewTest {
-    @get:Rule
-    val rule = createAndroidComposeRule<ComponentActivity>()
-
     @Test
-    fun `clicking on Reset sends a PushHistoryEvents`() {
+    fun `clicking on Reset sends a PushHistoryEvents`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<PushHistoryEvents>()
-        rule.setPushHistoryView(
+        setPushHistoryView(
             aPushHistoryState(
                 pushCounter = 123,
                 eventSink = eventsRecorder,
             ),
         )
-        val menuContentDescription = rule.activity.getString(CommonStrings.a11y_user_menu)
-        rule.onNodeWithContentDescription(menuContentDescription).performClick()
-        rule.clickOn(CommonStrings.action_reset)
+        val menuContentDescription = activity!!.getString(CommonStrings.a11y_user_menu)
+        onNodeWithContentDescription(menuContentDescription).performClick()
+        clickOn(CommonStrings.action_reset)
         eventsRecorder.assertSingle(PushHistoryEvents.Reset(requiresConfirmation = true))
         // Also check that the push counter is rendered
-        rule.onNodeWithText("123").assertExists()
+        onNodeWithText("123").assertExists()
     }
 
     @Test
-    fun `clicking on show only errors sends a PushHistoryEvents(true)`() {
+    fun `clicking on show only errors sends a PushHistoryEvents(true)`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<PushHistoryEvents>()
-        rule.setPushHistoryView(
+        setPushHistoryView(
             aPushHistoryState(
                 showOnlyErrors = false,
                 eventSink = eventsRecorder,
             ),
         )
-        val menuContentDescription = rule.activity.getString(CommonStrings.a11y_user_menu)
-        rule.onNodeWithContentDescription(menuContentDescription).performClick()
-        rule.onNodeWithText("Show only errors").performClick()
+        val menuContentDescription = activity!!.getString(CommonStrings.a11y_user_menu)
+        onNodeWithContentDescription(menuContentDescription).performClick()
+        onNodeWithText("Show only errors").performClick()
         eventsRecorder.assertSingle(PushHistoryEvents.SetShowOnlyErrors(showOnlyErrors = true))
     }
 
     @Test
-    fun `clicking on show only errors sends a PushHistoryEvents(false)`() {
+    fun `clicking on show only errors sends a PushHistoryEvents(false)`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<PushHistoryEvents>()
-        rule.setPushHistoryView(
+        setPushHistoryView(
             aPushHistoryState(
                 showOnlyErrors = true,
                 eventSink = eventsRecorder,
             ),
         )
-        val menuContentDescription = rule.activity.getString(CommonStrings.a11y_user_menu)
-        rule.onNodeWithContentDescription(menuContentDescription).performClick()
-        rule.onNodeWithText("Show only errors").performClick()
+        val menuContentDescription = activity!!.getString(CommonStrings.a11y_user_menu)
+        onNodeWithContentDescription(menuContentDescription).performClick()
+        onNodeWithText("Show only errors").performClick()
         eventsRecorder.assertSingle(PushHistoryEvents.SetShowOnlyErrors(showOnlyErrors = false))
     }
 
     @Test
-    fun `clicking on an invalid event has no effect`() {
+    fun `clicking on an invalid event has no effect`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<PushHistoryEvents>(expectEvents = false)
-        rule.setPushHistoryView(
+        setPushHistoryView(
             aPushHistoryState(
                 pushHistoryItems = listOf(
                     aPushHistoryItem(
@@ -93,14 +91,14 @@ class PushHistoryViewTest {
                 eventSink = eventsRecorder,
             ),
         )
-        rule.onNodeWithText(A_FORMATTED_DATE).performClick()
+        onNodeWithText(A_FORMATTED_DATE).performClick()
         // No callback invoked
     }
 
     @Test
-    fun `clicking on a valid event emits the expected Event`() {
+    fun `clicking on a valid event emits the expected Event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<PushHistoryEvents>()
-        rule.setPushHistoryView(
+        setPushHistoryView(
             aPushHistoryState(
                 pushHistoryItems = listOf(
                     aPushHistoryItem(
@@ -113,7 +111,7 @@ class PushHistoryViewTest {
                 eventSink = eventsRecorder,
             ),
         )
-        rule.onNodeWithText(A_FORMATTED_DATE).performClick()
+        onNodeWithText(A_FORMATTED_DATE).performClick()
         eventsRecorder.assertSingle(
             PushHistoryEvents.NavigateTo(
                 sessionId = A_SESSION_ID,
@@ -124,7 +122,7 @@ class PushHistoryViewTest {
     }
 }
 
-private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setPushHistoryView(
+private fun AndroidComposeUiTest<ComponentActivity>.setPushHistoryView(
     state: PushHistoryState,
     onBackClick: () -> Unit = EnsureNeverCalled(),
 ) {

@@ -14,6 +14,7 @@ android {
 }
 
 dependencies {
+    implementation(projects.libraries.architecture)
     implementation(projects.features.preferences.api)
     implementation(projects.tests.testutils)
 }

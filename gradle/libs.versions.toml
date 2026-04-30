@@ -5,9 +5,9 @@
 # Project
 android_gradle_plugin = "8.13.2"
 # When updating this, please also update the version in the file ./idea/kotlinc.xml
-kotlin = "2.3.20"
+kotlin = "2.3.21"
 kotlinpoet = "2.3.0"
-ksp = "2.3.6"
+ksp = "2.3.7"
 firebaseAppDistribution = "5.2.1"
 
 # AndroidX
@@ -22,7 +22,7 @@ camera = "1.6.0"
 work = "2.11.2"
 
 # Compose
-compose_bom = "2026.03.01"
+compose_bom = "2026.04.01"
 
 # Coroutines
 coroutines = "1.10.2"
