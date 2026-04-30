@@ -18,9 +18,8 @@ CREATE TABLE CacheData (
 selectData:
 SELECT * FROM CacheData WHERE key = ?;
 
--- insert or update data by key
 insertData:
-INSERT INTO CacheData VALUES ? ON CONFLICT(key) DO UPDATE SET value = excluded.value, updatedAt = excluded.updatedAt;
+INSERT OR REPLACE INTO CacheData VALUES ?;
 
 deleteData:
 DELETE FROM CacheData WHERE key = ?;
