@@ -44,6 +44,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import kotlin.time.Duration.Companion.milliseconds
 
+@Suppress("LargeClass")
 class NotificationSettingsPresenterTest {
     @Test
     fun `present - ensures initial state is correct`() = runTest {
