@@ -278,9 +278,10 @@ class TimelinePresenter(
             computeNewItemState(timelineItems, prevMostRecentItemId, newEventState)
         }
 
-        // Read marker position + unread count, scanned off the main thread. The UI gates display via
-        // [displayJumpToUnread]; the values are always computed so the state stays up to date if the
-        // feature flag flips at runtime.
+        // Keyed on the full [timelineItems] reference (not just .size) so we re-scan when the
+        // read marker advances in place — the SDK swaps the marker virtual item to a new position
+        // without changing the list length, e.g. when [markRoomAsFullyRead] is sent while at the
+        // bottom of the room.
         val readMarkerIndex = remember { mutableIntStateOf(-1) }
         val unreadMessagesCount = remember { mutableIntStateOf(0) }
         LaunchedEffect(timelineItems) {

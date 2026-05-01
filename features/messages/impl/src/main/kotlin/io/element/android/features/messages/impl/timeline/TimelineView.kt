@@ -322,15 +322,15 @@ private fun BoxScope.TimelineScrollHelper(
             lazyListState.firstVisibleItemIndex < 3 && isLive
         }
     }
-    val isReadMarkerOffTop by remember {
+    val isJumpToUnreadVisible by remember {
         derivedStateOf {
-            if (!displayJumpToUnread || readMarkerIndex < 0) {
-                false
-            } else if (forceJumpToReadMarkerVisibility) {
-                true
-            } else {
-                val lastVisibleIndex = lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: return@derivedStateOf false
-                readMarkerIndex > lastVisibleIndex
+            when {
+                forceJumpToReadMarkerVisibility -> true
+                !displayJumpToUnread || readMarkerIndex < 0 -> false
+                else -> {
+                    val lastVisibleIndex = lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: return@derivedStateOf false
+                    readMarkerIndex > lastVisibleIndex
+                }
             }
         }
     }
@@ -402,7 +402,7 @@ private fun BoxScope.TimelineScrollHelper(
         }
     }
 
-    TimelineFab(
+    JumpToPositionButton(
         icon = CompoundIcons.ChevronDown(),
         contentDescription = stringResource(id = CommonStrings.a11y_jump_to_bottom),
         isVisible = isJumpToBottomVisible,
@@ -418,10 +418,10 @@ private fun BoxScope.TimelineScrollHelper(
     } else {
         stringResource(id = CommonStrings.a11y_jump_to_unread_messages)
     }
-    TimelineFab(
+    JumpToPositionButton(
         icon = CompoundIcons.ChevronUp(),
         contentDescription = jumpToUnreadDescription,
-        isVisible = isReadMarkerOffTop,
+        isVisible = isJumpToUnreadVisible,
         count = unreadMessagesCount,
         // Top padding includes [topInset] so the FAB sits below any pinned-events banner.
         modifier = Modifier
@@ -432,7 +432,7 @@ private fun BoxScope.TimelineScrollHelper(
 }
 
 @Composable
-private fun TimelineFab(
+private fun JumpToPositionButton(
     icon: ImageVector,
     contentDescription: String,
     isVisible: Boolean,
@@ -480,9 +480,9 @@ private fun TimelineCountBadge(
     count: Int,
     modifier: Modifier = Modifier,
 ) {
-    if (count <= 0) return
-    if (count <= 9) {
-        Box(
+    when {
+        count <= 0 -> return
+        count <= 9 -> Box(
             modifier = modifier
                 .defaultMinSize(minWidth = 16.dp, minHeight = 16.dp)
                 .background(color = ElementTheme.colors.bgActionPrimaryRest, shape = CircleShape)
@@ -497,8 +497,7 @@ private fun TimelineCountBadge(
                 textAlign = TextAlign.Center,
             )
         }
-    } else {
-        Box(
+        else -> Box(
             modifier = modifier
                 .size(12.dp)
                 .background(color = ElementTheme.colors.bgActionPrimaryRest, shape = CircleShape)
@@ -592,7 +591,7 @@ internal fun TimelineViewWithReadMarkerNoBadgesPreview() = ElementPreview {
 
 @PreviewsDayNight
 @Composable
-internal fun TimelineViewWithReadMarkerPreview() = ElementPreview {
+internal fun TimelineViewWithReadMarkerNumericBadgePreview() = ElementPreview {
     TimelineViewWithReadMarker(unreadMessagesCount = 3, newMessagesCount = 0)
 }
 

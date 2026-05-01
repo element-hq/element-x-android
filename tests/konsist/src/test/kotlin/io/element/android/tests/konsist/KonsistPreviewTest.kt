@@ -163,6 +163,7 @@ class KonsistPreviewTest {
         "TimelineViewWithReadMarkerBothCountsPreview",
         "TimelineViewWithReadMarkerDotBadgesPreview",
         "TimelineViewWithReadMarkerNoBadgesPreview",
+        "TimelineViewWithReadMarkerNumericBadgePreview",
         "UserAvatarColorsPreview",
         "UserProfileHeaderSectionWithVerificationViolationPreview",
         "VoiceItemViewPlayPreview",
