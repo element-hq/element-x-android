@@ -121,7 +121,7 @@ class RoomListPresenter(
         // coherent banner state. Reading them as separate collectAsState values would let the
         // banner flicker (e.g. Both → None) when dismissal clears the announcement and the state
         // in sequence.
-        val soundUnavailableState by remember {
+        val notificationSoundUnavailableState by remember {
             combine(
                 announcementService.announcementsToShowFlow(),
                 appPreferencesStore.getNotificationSoundUnavailableStateFlow(),
@@ -189,7 +189,7 @@ class RoomListPresenter(
         val contentState = roomListContentState(
             securityBannerDismissed,
             showNewNotificationSoundBanner,
-            soundUnavailableState,
+            notificationSoundUnavailableState,
         )
 
         val canReportRoom by produceState(false) { value = client.canReportRoom() }
@@ -248,7 +248,7 @@ class RoomListPresenter(
     private fun roomListContentState(
         securityBannerDismissed: Boolean,
         showNewNotificationSoundBanner: Boolean,
-        soundUnavailableState: NotificationSoundUnavailableState,
+        notificationSoundUnavailableState: NotificationSoundUnavailableState,
     ): RoomListContentState {
         val roomSummaries by produceState(initialValue = AsyncData.Loading()) {
             roomListDataSource.roomSummariesFlow.collect { value = AsyncData.Success(it) }
@@ -277,7 +277,7 @@ class RoomListPresenter(
                 RoomListContentState.Rooms(
                     securityBannerState = securityBannerState,
                     showNewNotificationSoundBanner = showNewNotificationSoundBanner,
-                    soundUnavailableState = soundUnavailableState,
+                    notificationSoundUnavailableState = notificationSoundUnavailableState,
                     fullScreenIntentPermissionsState = fullScreenIntentPermissionsPresenter.present(),
                     batteryOptimizationState = batteryOptimizationPresenter.present(),
                     summaries = roomSummaries.dataOrNull().orEmpty().toImmutableList(),

@@ -32,7 +32,7 @@ open class RoomListContentStateProvider : PreviewParameterProvider<RoomListConte
                 showNewNotificationSoundBanner = true,
             ),
             aRoomsContentState(
-                soundUnavailableState = NotificationSoundUnavailableState.Both,
+                notificationSoundUnavailableState = NotificationSoundUnavailableState.Both,
             ),
         )
 }
@@ -40,7 +40,7 @@ open class RoomListContentStateProvider : PreviewParameterProvider<RoomListConte
 internal fun aRoomsContentState(
     securityBannerState: SecurityBannerState = SecurityBannerState.None,
     showNewNotificationSoundBanner: Boolean = false,
-    soundUnavailableState: NotificationSoundUnavailableState = NotificationSoundUnavailableState.None,
+    notificationSoundUnavailableState: NotificationSoundUnavailableState = NotificationSoundUnavailableState.None,
     summaries: ImmutableList<RoomListRoomSummary> = aRoomListRoomSummaryList(),
     fullScreenIntentPermissionsState: FullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(),
     batteryOptimizationState: BatteryOptimizationState = aBatteryOptimizationState(),
@@ -48,7 +48,7 @@ internal fun aRoomsContentState(
 ) = RoomListContentState.Rooms(
     securityBannerState = securityBannerState,
     showNewNotificationSoundBanner = showNewNotificationSoundBanner,
-    soundUnavailableState = soundUnavailableState,
+    notificationSoundUnavailableState = notificationSoundUnavailableState,
     fullScreenIntentPermissionsState = fullScreenIntentPermissionsState,
     batteryOptimizationState = batteryOptimizationState,
     summaries = summaries,

@@ -14,6 +14,7 @@ import android.net.Uri
 import android.provider.Settings
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.progressSemantics
@@ -28,6 +29,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.androidutils.system.startNotificationSettingsIntent
@@ -45,6 +47,8 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -289,7 +293,6 @@ private fun SoundsPreferenceCategory(state: NotificationSettingsState) {
         )
         if (state.messageSound.wasReverted) {
             SoundRevertedAlert(
-                onChooseClick = onMessageSoundClick,
                 onDismissClick = { state.eventSink(NotificationSettingsEvents.DismissMessageSoundRevertedAlert) },
             )
         }
@@ -307,7 +310,6 @@ private fun SoundsPreferenceCategory(state: NotificationSettingsState) {
         )
         if (state.callRingtone.wasReverted) {
             SoundRevertedAlert(
-                onChooseClick = onCallRingtoneClick,
                 onDismissClick = { state.eventSink(NotificationSettingsEvents.DismissCallRingtoneRevertedAlert) },
             )
         }
@@ -316,20 +318,27 @@ private fun SoundsPreferenceCategory(state: NotificationSettingsState) {
 
 @Composable
 private fun SoundRevertedAlert(
-    onChooseClick: () -> Unit,
     onDismissClick: () -> Unit,
 ) {
-    Announcement(
+    ListItem(
         modifier = Modifier
-            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .background(ElementTheme.colors.bgSubtleSecondary)
             .semantics { liveRegion = LiveRegionMode.Polite },
-        title = stringResource(R.string.screen_notification_settings_sound_reverted_alert_title),
-        description = stringResource(R.string.screen_notification_settings_sound_reverted_alert_description),
-        type = AnnouncementType.Actionable(
-            actionText = stringResource(R.string.screen_notification_settings_sound_reverted_alert_action),
-            onActionClick = onChooseClick,
-            onDismissClick = onDismissClick,
-        ),
+        headlineContent = {
+            Text(
+                text = stringResource(R.string.screen_notification_settings_sound_reverted_alert_message),
+                style = ElementTheme.typography.fontBodyMdRegular,
+                color = ElementTheme.colors.textSecondary,
+            )
+        },
+        trailingContent = ListItemContent.Custom { _ ->
+            IconButton(onClick = onDismissClick) {
+                Icon(
+                    imageVector = CompoundIcons.Close(),
+                    contentDescription = stringResource(CommonStrings.action_close),
+                )
+            }
+        },
     )
 }
 

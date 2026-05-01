@@ -685,19 +685,19 @@ class RoomListPresenterTest {
         presenter.test {
             // No banner before the announcement is shown, even though the persisted state is set.
             val initial = consumeItemsUntilPredicate { it.contentState is RoomListContentState.Rooms }.last()
-            assertThat(initial.contentAsRooms().soundUnavailableState).isEqualTo(NotificationSoundUnavailableState.None)
+            assertThat(initial.contentAsRooms().notificationSoundUnavailableState).isEqualTo(NotificationSoundUnavailableState.None)
 
             announcementService.emitAnnouncementsToShow(listOf(Announcement.SoundUnavailable))
             val onlyMessage = consumeItemsUntilPredicate {
-                it.contentAsRooms().soundUnavailableState == NotificationSoundUnavailableState.MessageSound
+                it.contentAsRooms().notificationSoundUnavailableState == NotificationSoundUnavailableState.MessageSound
             }.last()
-            assertThat(onlyMessage.contentAsRooms().soundUnavailableState).isEqualTo(NotificationSoundUnavailableState.MessageSound)
+            assertThat(onlyMessage.contentAsRooms().notificationSoundUnavailableState).isEqualTo(NotificationSoundUnavailableState.MessageSound)
 
             appPreferencesStore.setNotificationSoundUnavailableState(NotificationSoundUnavailableState.Both)
             val both = consumeItemsUntilPredicate {
-                it.contentAsRooms().soundUnavailableState == NotificationSoundUnavailableState.Both
+                it.contentAsRooms().notificationSoundUnavailableState == NotificationSoundUnavailableState.Both
             }.last()
-            assertThat(both.contentAsRooms().soundUnavailableState).isEqualTo(NotificationSoundUnavailableState.Both)
+            assertThat(both.contentAsRooms().notificationSoundUnavailableState).isEqualTo(NotificationSoundUnavailableState.Both)
 
             both.eventSink(RoomListEvent.DismissSoundUnavailableBanner)
             // Dismissal now runs on appCoroutineScope (so it survives composition cancellation).
@@ -737,9 +737,9 @@ class RoomListPresenterTest {
         presenter.test {
             val state = consumeItemsUntilPredicate {
                 it.contentState is RoomListContentState.Rooms &&
-                    it.contentAsRooms().soundUnavailableState == NotificationSoundUnavailableState.CallRingtone
+                    it.contentAsRooms().notificationSoundUnavailableState == NotificationSoundUnavailableState.CallRingtone
             }.last()
-            assertThat(state.contentAsRooms().soundUnavailableState).isEqualTo(NotificationSoundUnavailableState.CallRingtone)
+            assertThat(state.contentAsRooms().notificationSoundUnavailableState).isEqualTo(NotificationSoundUnavailableState.CallRingtone)
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -772,7 +772,7 @@ class RoomListPresenterTest {
         )
         presenter.test {
             val state = consumeItemsUntilPredicate { it.contentState is RoomListContentState.Rooms }.last()
-            assertThat(state.contentAsRooms().soundUnavailableState).isEqualTo(NotificationSoundUnavailableState.None)
+            assertThat(state.contentAsRooms().notificationSoundUnavailableState).isEqualTo(NotificationSoundUnavailableState.None)
             cancelAndIgnoreRemainingEvents()
         }
     }
