@@ -37,9 +37,9 @@ class SingleMediaGalleryDataSourceTest {
     val warmUpRule = WarmUpRule()
 
     @Test
-    fun `function start is no op`() {
+    fun `function start is no op`() = runTest {
         val sut = SingleMediaGalleryDataSource(aGroupedMediaItems())
-        sut.start()
+        sut.start(backgroundScope)
     }
 
     @Test

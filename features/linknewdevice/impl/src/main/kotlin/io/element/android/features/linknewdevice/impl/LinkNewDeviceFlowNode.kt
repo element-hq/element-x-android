@@ -151,10 +151,7 @@ class LinkNewDeviceFlowNode(
                     LinkMobileStep.Starting -> {
                         // This step is not received at the moment, so do nothing
                     }
-                    LinkMobileStep.SyncingSecrets -> {
-                        // LinkMobileStep.Done is not received at the moment, so consider that the flow is done here
-                        callback.onDone()
-                    }
+                    LinkMobileStep.SyncingSecrets -> Unit
                     is LinkMobileStep.WaitingForAuth -> {
                         navigateToBrowser(linkMobileStep.verificationUri)
                     }
@@ -191,20 +188,20 @@ class LinkNewDeviceFlowNode(
 
     private fun navigateToError(errorType: ErrorType) {
         // Map the error to an error screen
-        // TODO Update this mapping
         val error = when (errorType) {
-            is ErrorType.DeviceIdAlreadyInUse -> ErrorScreenType.UnknownError
-            is ErrorType.InvalidCheckCode -> ErrorScreenType.InsecureChannelDetected
-            is ErrorType.MissingSecretsBackup -> ErrorScreenType.UnknownError
-            is ErrorType.NotFound -> ErrorScreenType.Expired
-            is ErrorType.DeviceNotFound -> ErrorScreenType.UnknownError
-            is ErrorType.Unknown -> ErrorScreenType.UnknownError
-            is ErrorType.UnsupportedProtocol -> ErrorScreenType.UnknownError
-            is ErrorType.Cancelled -> ErrorScreenType.UnknownError
+            is ErrorType.InvalidCheckCode -> ErrorScreenType.Mismatch2Digits
+            is ErrorType.UnsupportedProtocol -> ErrorScreenType.ProtocolNotSupported
+            is ErrorType.Cancelled -> ErrorScreenType.Cancelled
             is ErrorType.ConnectionInsecure -> ErrorScreenType.InsecureChannelDetected
-            is ErrorType.Expired -> ErrorScreenType.Expired
-            is ErrorType.OtherDeviceAlreadySignedIn -> ErrorScreenType.UnknownError
+            is ErrorType.Expired,
+            is ErrorType.NotFound,
+            is ErrorType.DeviceNotFound -> ErrorScreenType.Expired
+            is ErrorType.OtherDeviceAlreadySignedIn -> ErrorScreenType.OtherDeviceAlreadySignedIn
+            // TODO check if we expect to hit this here or if it should be caught earlier on
             is ErrorType.UnsupportedQrCodeType -> ErrorScreenType.UnknownError
+            is ErrorType.MissingSecretsBackup,
+            is ErrorType.DeviceIdAlreadyInUse,
+            is ErrorType.Unknown -> ErrorScreenType.UnknownError
         }
         // It is OK to push on backstack, since when user leaves the error screen, a new root will be set,
         // or the whole flow will be popped.

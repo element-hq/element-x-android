@@ -10,7 +10,7 @@ package io.element.android.libraries.matrix.impl.encryption
 
 import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.encryption.IdentityOidcResetHandle
+import io.element.android.libraries.matrix.api.encryption.IdentityOAuthResetHandle
 import io.element.android.libraries.matrix.api.encryption.IdentityPasswordResetHandle
 import io.element.android.libraries.matrix.api.encryption.IdentityResetHandle
 import org.matrix.rustcomponents.sdk.AuthData
@@ -25,7 +25,7 @@ object RustIdentityResetHandleFactory {
         return runCatchingExceptions {
             identityResetHandle?.let {
                 when (val authType = identityResetHandle.authType()) {
-                    is CrossSigningResetAuthType.OAuth -> RustOidcIdentityResetHandle(identityResetHandle, authType.info.approvalUrl)
+                    is CrossSigningResetAuthType.OAuth -> RustIdentityOAuthResetHandle(identityResetHandle, authType.info.approvalUrl)
                     // User interactive authentication (user + password)
                     CrossSigningResetAuthType.Uiaa -> RustPasswordIdentityResetHandle(userId, identityResetHandle)
                 }
@@ -47,11 +47,11 @@ class RustPasswordIdentityResetHandle(
     }
 }
 
-class RustOidcIdentityResetHandle(
+class RustIdentityOAuthResetHandle(
     private val identityResetHandle: org.matrix.rustcomponents.sdk.IdentityResetHandle,
     override val url: String,
-) : IdentityOidcResetHandle {
-    override suspend fun resetOidc(): Result<Unit> {
+) : IdentityOAuthResetHandle {
+    override suspend fun resetOAuth(): Result<Unit> {
         return runCatchingExceptions { identityResetHandle.reset(null) }
     }
 

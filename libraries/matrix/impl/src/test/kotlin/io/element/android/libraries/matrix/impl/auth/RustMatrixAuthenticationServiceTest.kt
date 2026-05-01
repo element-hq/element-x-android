@@ -16,7 +16,7 @@ import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClient
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClientBuilder
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiHomeserverLoginDetails
 import io.element.android.libraries.matrix.impl.paths.SessionPathsFactory
-import io.element.android.libraries.matrix.test.auth.FakeOidcRedirectUrlProvider
+import io.element.android.libraries.matrix.test.auth.FakeOAuthRedirectUrlProvider
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
@@ -64,9 +64,9 @@ class RustMatrixAuthenticationServiceTest {
             sessionStore = sessionStore,
             rustMatrixClientFactory = rustMatrixClientFactory,
             passphraseGenerator = FakePassphraseGenerator(),
-            oidcConfigurationProvider = OidcConfigurationProvider(
+            oAuthConfigurationProvider = OAuthConfigurationProvider(
                 buildMeta = aBuildMeta(),
-                oidcRedirectUrlProvider = FakeOidcRedirectUrlProvider(),
+                oAuthRedirectUrlProvider = FakeOAuthRedirectUrlProvider(),
             ),
         )
     }
