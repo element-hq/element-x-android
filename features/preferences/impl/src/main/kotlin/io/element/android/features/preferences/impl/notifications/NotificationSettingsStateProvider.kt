@@ -59,6 +59,10 @@ open class NotificationSettingsStateProvider : PreviewParameterProvider<Notifica
                 callRingtone = NotificationSound.Silent,
                 callRingtoneDisplayName = "Silent",
             ),
+            aValidNotificationSettingsState(
+                messageSoundWasReverted = true,
+                callRingtoneWasReverted = true,
+            ),
         )
 }
 
@@ -78,8 +82,10 @@ fun aValidNotificationSettingsState(
     fullScreenIntentPermissionsState: FullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(),
     messageSound: NotificationSound = NotificationSound.SystemDefault,
     messageSoundDisplayName: String = "Default",
+    messageSoundWasReverted: Boolean = false,
     callRingtone: NotificationSound = NotificationSound.SystemDefault,
     callRingtoneDisplayName: String = "Default",
+    callRingtoneWasReverted: Boolean = false,
     eventSink: (NotificationSettingsEvents) -> Unit = {},
 ) = NotificationSettingsState(
     matrixSettings = NotificationSettingsState.MatrixSettings.Valid(
@@ -98,10 +104,16 @@ fun aValidNotificationSettingsState(
     availablePushDistributors = availablePushDistributors.toImmutableList(),
     showChangePushProviderDialog = showChangePushProviderDialog,
     fullScreenIntentPermissionsState = fullScreenIntentPermissionsState,
-    messageSound = messageSound,
-    messageSoundDisplayName = messageSoundDisplayName,
-    callRingtone = callRingtone,
-    callRingtoneDisplayName = callRingtoneDisplayName,
+    messageSound = NotificationSettingsState.SoundChannelUiState(
+        sound = messageSound,
+        displayName = messageSoundDisplayName,
+        wasReverted = messageSoundWasReverted,
+    ),
+    callRingtone = NotificationSettingsState.SoundChannelUiState(
+        sound = callRingtone,
+        displayName = callRingtoneDisplayName,
+        wasReverted = callRingtoneWasReverted,
+    ),
     eventSink = eventSink,
 )
 
@@ -121,10 +133,16 @@ fun aInvalidNotificationSettingsState(
     availablePushDistributors = persistentListOf(),
     showChangePushProviderDialog = false,
     fullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(),
-    messageSound = NotificationSound.SystemDefault,
-    messageSoundDisplayName = "Default",
-    callRingtone = NotificationSound.SystemDefault,
-    callRingtoneDisplayName = "Default",
+    messageSound = NotificationSettingsState.SoundChannelUiState(
+        sound = NotificationSound.SystemDefault,
+        displayName = "Default",
+        wasReverted = false,
+    ),
+    callRingtone = NotificationSettingsState.SoundChannelUiState(
+        sound = NotificationSound.SystemDefault,
+        displayName = "Default",
+        wasReverted = false,
+    ),
     eventSink = eventSink,
 )
 

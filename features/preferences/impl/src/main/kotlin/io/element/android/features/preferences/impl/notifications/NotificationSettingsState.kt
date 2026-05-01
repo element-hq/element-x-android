@@ -24,19 +24,10 @@ data class NotificationSettingsState(
     val availablePushDistributors: ImmutableList<Distributor>,
     val showChangePushProviderDialog: Boolean,
     val fullScreenIntentPermissionsState: FullScreenIntentPermissionsState,
-    /** Persisted message-sound choice. The corresponding [messageSoundDisplayName] is its label. */
-    val messageSound: NotificationSound,
-    /**
-     * Label for [messageSound]. For [NotificationSound.SystemDefault] / [NotificationSound.Silent]
-     * this is set synchronously from string resources. For [NotificationSound.Custom] it's
-     * resolved asynchronously via [io.element.android.libraries.push.api.notifications.SoundDisplayNameResolver],
-     * so the field starts empty and updates once the lookup settles.
-     */
-    val messageSoundDisplayName: String,
-    /** Persisted call-ringtone choice. The corresponding [callRingtoneDisplayName] is its label. */
-    val callRingtone: NotificationSound,
-    /** See [messageSoundDisplayName] — same async-resolution contract. */
-    val callRingtoneDisplayName: String,
+    /** UI state for the message-sound row: the user's choice, its label, and an alert flag. */
+    val messageSound: SoundChannelUiState,
+    /** UI state for the call-ringtone row — same contract as [messageSound]. */
+    val callRingtone: SoundChannelUiState,
     val eventSink: (NotificationSettingsEvents) -> Unit,
 ) {
     sealed interface MatrixSettings {
@@ -57,6 +48,23 @@ data class NotificationSettingsState(
     data class AppSettings(
         val systemNotificationsEnabled: Boolean,
         val appNotificationsEnabled: Boolean,
+    )
+
+    /**
+     * UI state for one of the two sound rows (message sound, call ringtone).
+     *
+     * @property sound the user's persisted choice.
+     * @property displayName label for [sound]. SystemDefault and Silent resolve synchronously from
+     *   string resources; Custom is resolved asynchronously and starts empty until the lookup
+     *   settles.
+     * @property wasReverted true when a previously persisted Custom URI failed to resolve while
+     *   this screen was open and was auto-reverted to SystemDefault. Drives an inline alert under
+     *   the row. Cleared by picking a new sound or dismissing the alert.
+     */
+    data class SoundChannelUiState(
+        val sound: NotificationSound,
+        val displayName: String,
+        val wasReverted: Boolean,
     )
 
     /**

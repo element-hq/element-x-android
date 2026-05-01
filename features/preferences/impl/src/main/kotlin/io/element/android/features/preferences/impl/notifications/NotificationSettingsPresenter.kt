@@ -49,6 +49,7 @@ import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 
 @Inject
@@ -123,9 +124,49 @@ class NotificationSettingsPresenter(
         val messageSound by remember { appPreferencesStore.getMessageSoundFlow() }.collectAsState(initial = NotificationSound.SystemDefault)
         val callRingtone by remember { appPreferencesStore.getCallRingtoneFlow() }.collectAsState(initial = NotificationSound.SystemDefault)
         val defaultLabel = stringProvider.getString(R.string.screen_notification_settings_sound_default)
-        val silentLabel = stringProvider.getString(R.string.screen_notification_settings_sound_silent)
-        val messageSoundDisplayName = resolveSoundDisplayName(messageSound, defaultLabel, silentLabel)
-        val callRingtoneDisplayName = resolveSoundDisplayName(callRingtone, defaultLabel, silentLabel)
+        val messageSoundProbe = probeSound(messageSound, defaultLabel)
+        val callRingtoneProbe = probeSound(callRingtone, defaultLabel)
+
+        // Mid-session detection: if a previously persisted Custom URI fails to resolve while this
+        // screen is open, auto-revert to SystemDefault and surface an inline alert under the row.
+        // The home banner (driven by boot-time sanitization) is intentionally not used here — the
+        // user is already on the screen where the fix lives. The flag is in-memory only; once the
+        // sound is reverted to SystemDefault, the resolver path won't run again for that channel.
+        var messageSoundWasReverted by remember { mutableStateOf(false) }
+        var callRingtoneWasReverted by remember { mutableStateOf(false) }
+
+        LaunchedEffect(messageSound, messageSoundProbe.isUnavailable) {
+            if (messageSound is NotificationSound.Custom && messageSoundProbe.isUnavailable) {
+                messageSoundWasReverted = true
+                // Hand off to sessionCoroutineScope (not LaunchedEffect's own scope) so the persisted
+                // revert and channel recreate complete even if the user navigates away mid-flight.
+                sessionCoroutineScope.launch {
+                    runCatchingExceptions {
+                        val newVersion = appPreferencesStore.setMessageSoundAndIncrementVersion(NotificationSound.SystemDefault)
+                        notificationSoundUpdater.recreateNoisyChannel(NotificationSound.SystemDefault, newVersion)
+                        // Also drop any pre-existing persisted unavailable bit for this channel —
+                        // the boot-time banner has done its job; the inline alert takes over.
+                        appPreferencesStore.clearMessageSoundUnavailable()
+                    }.onFailure { failure ->
+                        Timber.w(failure, "Failed to auto-revert unresolved message sound")
+                    }
+                }
+            }
+        }
+        LaunchedEffect(callRingtone, callRingtoneProbe.isUnavailable) {
+            if (callRingtone is NotificationSound.Custom && callRingtoneProbe.isUnavailable) {
+                callRingtoneWasReverted = true
+                sessionCoroutineScope.launch {
+                    runCatchingExceptions {
+                        val newVersion = appPreferencesStore.setCallRingtoneAndIncrementVersion(NotificationSound.SystemDefault)
+                        notificationSoundUpdater.recreateRingingCallChannel(NotificationSound.SystemDefault, newVersion)
+                        appPreferencesStore.clearCallRingtoneUnavailable()
+                    }.onFailure { failure ->
+                        Timber.w(failure, "Failed to auto-revert unresolved call ringtone")
+                    }
+                }
+            }
+        }
 
         fun CoroutineScope.changePushProvider(
             data: Pair<PushProvider, Distributor>?
@@ -175,27 +216,40 @@ class NotificationSettingsPresenter(
                 NotificationSettingsEvents.ChangePushProvider -> showChangePushProviderDialog = true
                 NotificationSettingsEvents.CancelChangePushProvider -> showChangePushProviderDialog = false
                 is NotificationSettingsEvents.SetPushProvider -> localCoroutineScope.changePushProvider(distributors.getOrNull(event.index))
-                is NotificationSettingsEvents.SetMessageSound -> sessionCoroutineScope.launch {
-                    runCatchingExceptions {
-                        val newVersion = appPreferencesStore.setMessageSoundAndIncrementVersion(event.sound)
-                        notificationSoundUpdater.recreateNoisyChannel(event.sound, newVersion)
-                        // Auto-resolve: a successful pick drops the message-sound bit from the
-                        // persisted unavailable state. If the call-ringtone half is still set the
-                        // banner downgrades from Both → CallRingtone; otherwise it disappears once
-                        // the user dismisses the announcement.
-                        appPreferencesStore.clearMessageSoundUnavailable()
-                    }.onFailure { failure ->
-                        changeNotificationSettingAction.value = AsyncAction.Failure(failure)
+                is NotificationSettingsEvents.SetMessageSound -> {
+                    // Explicit pick clears the inline reverted-alert; the user has acknowledged.
+                    messageSoundWasReverted = false
+                    sessionCoroutineScope.launch {
+                        runCatchingExceptions {
+                            val newVersion = appPreferencesStore.setMessageSoundAndIncrementVersion(event.sound)
+                            notificationSoundUpdater.recreateNoisyChannel(event.sound, newVersion)
+                            // Auto-resolve: a successful pick drops the message-sound bit from the
+                            // persisted unavailable state. If the call-ringtone half is still set the
+                            // banner downgrades from Both → CallRingtone; otherwise it disappears once
+                            // the user dismisses the announcement.
+                            appPreferencesStore.clearMessageSoundUnavailable()
+                        }.onFailure { failure ->
+                            changeNotificationSettingAction.value = AsyncAction.Failure(failure)
+                        }
                     }
                 }
-                is NotificationSettingsEvents.SetCallRingtone -> sessionCoroutineScope.launch {
-                    runCatchingExceptions {
-                        val newVersion = appPreferencesStore.setCallRingtoneAndIncrementVersion(event.sound)
-                        notificationSoundUpdater.recreateRingingCallChannel(event.sound, newVersion)
-                        appPreferencesStore.clearCallRingtoneUnavailable()
-                    }.onFailure { failure ->
-                        changeNotificationSettingAction.value = AsyncAction.Failure(failure)
+                is NotificationSettingsEvents.SetCallRingtone -> {
+                    callRingtoneWasReverted = false
+                    sessionCoroutineScope.launch {
+                        runCatchingExceptions {
+                            val newVersion = appPreferencesStore.setCallRingtoneAndIncrementVersion(event.sound)
+                            notificationSoundUpdater.recreateRingingCallChannel(event.sound, newVersion)
+                            appPreferencesStore.clearCallRingtoneUnavailable()
+                        }.onFailure { failure ->
+                            changeNotificationSettingAction.value = AsyncAction.Failure(failure)
+                        }
                     }
+                }
+                NotificationSettingsEvents.DismissMessageSoundRevertedAlert -> {
+                    messageSoundWasReverted = false
+                }
+                NotificationSettingsEvents.DismissCallRingtoneRevertedAlert -> {
+                    callRingtoneWasReverted = false
                 }
             }
         }
@@ -211,34 +265,60 @@ class NotificationSettingsPresenter(
             availablePushDistributors = availableDistributors,
             showChangePushProviderDialog = showChangePushProviderDialog,
             fullScreenIntentPermissionsState = key(refreshFullScreenIntentSettings) { fullScreenIntentPermissionsPresenter.present() },
-            messageSound = messageSound,
-            messageSoundDisplayName = messageSoundDisplayName,
-            callRingtone = callRingtone,
-            callRingtoneDisplayName = callRingtoneDisplayName,
+            messageSound = NotificationSettingsState.SoundChannelUiState(
+                sound = messageSound,
+                displayName = messageSoundProbe.displayName,
+                wasReverted = messageSoundWasReverted,
+            ),
+            callRingtone = NotificationSettingsState.SoundChannelUiState(
+                sound = callRingtone,
+                displayName = callRingtoneProbe.displayName,
+                wasReverted = callRingtoneWasReverted,
+            ),
             eventSink = ::handleEvent,
         )
     }
 
     /**
-     * Returns the display name for [sound] without flashing the wrong label. SystemDefault and
-     * Silent resolve synchronously; only Custom triggers a [produceState] lookup, and the row
-     * shows an empty label until the lookup settles instead of the default-sound label.
+     * Probes [sound] once to derive both its display label and a flag for whether the underlying
+     * Custom URI is unresolvable. SystemDefault and Silent resolve synchronously and are never
+     * unavailable; only Custom hits [produceState] and the resolver. Unifying both into a single
+     * lookup avoids probing the resolver twice per recomposition.
+     *
+     * The row shows an empty label until the lookup settles instead of flashing the default label
+     * for Custom sounds.
      */
     @Composable
-    private fun resolveSoundDisplayName(
+    private fun probeSound(
         sound: NotificationSound,
         defaultLabel: String,
-        silentLabel: String,
-    ): String = when (sound) {
-        NotificationSound.SystemDefault -> defaultLabel
-        NotificationSound.Silent -> silentLabel
+    ): SoundProbeResult = when (sound) {
+        NotificationSound.SystemDefault -> SoundProbeResult(displayName = defaultLabel, isUnavailable = false)
+        NotificationSound.Silent -> SoundProbeResult(
+            displayName = stringProvider.getString(R.string.screen_notification_settings_sound_silent),
+            isUnavailable = false,
+        )
         is NotificationSound.Custom -> {
-            val resolved by produceState(initialValue = "", sound.uri, defaultLabel) {
-                value = soundDisplayNameResolver.resolveCustomSoundTitle(sound.uri) ?: defaultLabel
+            val resolved by produceState(
+                initialValue = SoundProbeResult(displayName = "", isUnavailable = false),
+                sound.uri,
+                defaultLabel,
+            ) {
+                val title = soundDisplayNameResolver.resolveCustomSoundTitle(sound.uri)
+                value = if (title == null) {
+                    SoundProbeResult(displayName = defaultLabel, isUnavailable = true)
+                } else {
+                    SoundProbeResult(displayName = title, isUnavailable = false)
+                }
             }
             resolved
         }
     }
+
+    private data class SoundProbeResult(
+        val displayName: String,
+        val isUnavailable: Boolean,
+    )
 
     @OptIn(FlowPreview::class)
     private fun CoroutineScope.observeNotificationSettings(

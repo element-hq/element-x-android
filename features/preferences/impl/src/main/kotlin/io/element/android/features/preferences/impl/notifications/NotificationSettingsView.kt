@@ -22,6 +22,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
@@ -275,28 +278,59 @@ private fun SoundsPreferenceCategory(state: NotificationSettingsState) {
     PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_sounds_section_title)) {
         val onMessageSoundClick = rememberSoundPickerOnClick(
             type = RingtoneManager.TYPE_NOTIFICATION,
-            current = state.messageSound,
+            current = state.messageSound.sound,
             defaultUri = Settings.System.DEFAULT_NOTIFICATION_URI,
             onSoundPicked = { sound -> state.eventSink(NotificationSettingsEvents.SetMessageSound(sound)) },
         )
         ListItem(
             headlineContent = { Text(stringResource(id = R.string.screen_notification_settings_message_sound_label)) },
-            supportingContent = { Text(state.messageSoundDisplayName) },
+            supportingContent = { Text(state.messageSound.displayName) },
             onClick = onMessageSoundClick,
         )
+        if (state.messageSound.wasReverted) {
+            SoundRevertedAlert(
+                onChooseClick = onMessageSoundClick,
+                onDismissClick = { state.eventSink(NotificationSettingsEvents.DismissMessageSoundRevertedAlert) },
+            )
+        }
 
         val onCallRingtoneClick = rememberSoundPickerOnClick(
             type = RingtoneManager.TYPE_RINGTONE,
-            current = state.callRingtone,
+            current = state.callRingtone.sound,
             defaultUri = Settings.System.DEFAULT_RINGTONE_URI,
             onSoundPicked = { sound -> state.eventSink(NotificationSettingsEvents.SetCallRingtone(sound)) },
         )
         ListItem(
             headlineContent = { Text(stringResource(id = R.string.screen_notification_settings_call_ringtone_label)) },
-            supportingContent = { Text(state.callRingtoneDisplayName) },
+            supportingContent = { Text(state.callRingtone.displayName) },
             onClick = onCallRingtoneClick,
         )
+        if (state.callRingtone.wasReverted) {
+            SoundRevertedAlert(
+                onChooseClick = onCallRingtoneClick,
+                onDismissClick = { state.eventSink(NotificationSettingsEvents.DismissCallRingtoneRevertedAlert) },
+            )
+        }
     }
+}
+
+@Composable
+private fun SoundRevertedAlert(
+    onChooseClick: () -> Unit,
+    onDismissClick: () -> Unit,
+) {
+    Announcement(
+        modifier = Modifier
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .semantics { liveRegion = LiveRegionMode.Polite },
+        title = stringResource(R.string.screen_notification_settings_sound_reverted_alert_title),
+        description = stringResource(R.string.screen_notification_settings_sound_reverted_alert_description),
+        type = AnnouncementType.Actionable(
+            actionText = stringResource(R.string.screen_notification_settings_sound_reverted_alert_action),
+            onActionClick = onChooseClick,
+            onDismissClick = onDismissClick,
+        ),
+    )
 }
 
 @Composable

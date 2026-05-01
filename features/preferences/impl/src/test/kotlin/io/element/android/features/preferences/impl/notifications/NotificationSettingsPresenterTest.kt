@@ -380,12 +380,12 @@ class NotificationSettingsPresenterTest {
             val initialState = consumeItemsUntilPredicate {
                 it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
             }.last()
-            assertThat(initialState.messageSound).isEqualTo(NotificationSound.SystemDefault)
+            assertThat(initialState.messageSound.sound).isEqualTo(NotificationSound.SystemDefault)
 
             initialState.eventSink(NotificationSettingsEvents.SetMessageSound(customSound))
 
-            val updatedState = consumeItemsUntilPredicate { it.messageSound == customSound }.last()
-            assertThat(updatedState.messageSound).isEqualTo(customSound)
+            val updatedState = consumeItemsUntilPredicate { it.messageSound.sound == customSound }.last()
+            assertThat(updatedState.messageSound.sound).isEqualTo(customSound)
             assertThat(appPreferencesStore.getNotificationSoundChannelConfig().messageSoundVersion).isEqualTo(1)
             recreateRecorder.assertions().isCalledOnce().with(value(customSound), value(1))
             cancelAndIgnoreRemainingEvents()
@@ -406,12 +406,12 @@ class NotificationSettingsPresenterTest {
             val initialState = consumeItemsUntilPredicate {
                 it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
             }.last()
-            assertThat(initialState.callRingtone).isEqualTo(NotificationSound.SystemDefault)
+            assertThat(initialState.callRingtone.sound).isEqualTo(NotificationSound.SystemDefault)
 
             initialState.eventSink(NotificationSettingsEvents.SetCallRingtone(NotificationSound.Silent))
 
-            val updatedState = consumeItemsUntilPredicate { it.callRingtone == NotificationSound.Silent }.last()
-            assertThat(updatedState.callRingtone).isEqualTo(NotificationSound.Silent)
+            val updatedState = consumeItemsUntilPredicate { it.callRingtone.sound == NotificationSound.Silent }.last()
+            assertThat(updatedState.callRingtone.sound).isEqualTo(NotificationSound.Silent)
             assertThat(appPreferencesStore.getNotificationSoundChannelConfig().callRingtoneVersion).isEqualTo(1)
             recreateRecorder.assertions().isCalledOnce().with(value(NotificationSound.Silent), value(1))
             cancelAndIgnoreRemainingEvents()
@@ -434,11 +434,11 @@ class NotificationSettingsPresenterTest {
             }.last()
 
             initialState.eventSink(NotificationSettingsEvents.SetMessageSound(NotificationSound.Custom("content://a")))
-            consumeItemsUntilPredicate { it.messageSound == NotificationSound.Custom("content://a") }
+            consumeItemsUntilPredicate { it.messageSound.sound == NotificationSound.Custom("content://a") }
             initialState.eventSink(NotificationSettingsEvents.SetMessageSound(NotificationSound.Custom("content://b")))
-            consumeItemsUntilPredicate { it.messageSound == NotificationSound.Custom("content://b") }
+            consumeItemsUntilPredicate { it.messageSound.sound == NotificationSound.Custom("content://b") }
             initialState.eventSink(NotificationSettingsEvents.SetMessageSound(NotificationSound.SystemDefault))
-            consumeItemsUntilPredicate { it.messageSound == NotificationSound.SystemDefault }
+            consumeItemsUntilPredicate { it.messageSound.sound == NotificationSound.SystemDefault }
 
             assertThat(versions).containsExactly(1, 2, 3).inOrder()
             cancelAndIgnoreRemainingEvents()
@@ -458,9 +458,9 @@ class NotificationSettingsPresenterTest {
         presenter.test {
             consumeItemsUntilPredicate {
                 it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid &&
-                    it.messageSound == NotificationSound.Custom("content://existing")
+                    it.messageSound.sound == NotificationSound.Custom("content://existing")
             }.last().eventSink(NotificationSettingsEvents.SetMessageSound(NotificationSound.SystemDefault))
-            consumeItemsUntilPredicate { it.messageSound == NotificationSound.SystemDefault }
+            consumeItemsUntilPredicate { it.messageSound.sound == NotificationSound.SystemDefault }
             assertThat(appPreferencesStore.getNotificationSoundChannelConfig().messageSound).isEqualTo(NotificationSound.SystemDefault)
             recreateRecorder.assertions().isCalledOnce().with(value(NotificationSound.SystemDefault), value(1))
             cancelAndIgnoreRemainingEvents()
@@ -588,10 +588,117 @@ class NotificationSettingsPresenterTest {
         presenter.test {
             val state = consumeItemsUntilPredicate {
                 it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid &&
-                    it.messageSoundDisplayName == "Pixel notification"
+                    it.messageSound.displayName == "Pixel notification"
             }.last()
-            assertThat(state.messageSoundDisplayName).isEqualTo("Pixel notification")
+            assertThat(state.messageSound.displayName).isEqualTo("Pixel notification")
             assertThat(resolverCalls).contains("content://media/42")
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `present - mid-session detection reverts unresolvable Custom messageSound and flags the row`() = runTest {
+        val recreateRecorder = lambdaRecorder<NotificationSound, Int, Unit> { _, _ -> }
+        val appPreferencesStore = InMemoryAppPreferencesStore(
+            messageSound = NotificationSound.Custom("content://gone"),
+        )
+        val presenter = createNotificationSettingsPresenter(
+            appPreferencesStore = appPreferencesStore,
+            notificationSoundUpdater = FakeNotificationSoundUpdater(
+                recreateNoisyChannelLambda = { sound, version -> recreateRecorder(sound, version) },
+            ),
+            soundDisplayNameResolver = FakeSoundDisplayNameResolver(resolveLambda = { null }),
+        )
+        presenter.test {
+            // Once produceState reports the Custom URI as unavailable, the LaunchedEffect flips the
+            // flag and kicks off the revert side-effect on the session scope.
+            val flagged = consumeItemsUntilPredicate { it.messageSound.wasReverted }.last()
+            assertThat(flagged.messageSound.wasReverted).isTrue()
+            advanceUntilIdle()
+            // Stored sound and channel are now SystemDefault.
+            assertThat(appPreferencesStore.getNotificationSoundChannelConfig().messageSound).isEqualTo(NotificationSound.SystemDefault)
+            recreateRecorder.assertions().isCalledOnce().with(value(NotificationSound.SystemDefault), value(1))
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `present - SetMessageSound clears the reverted-alert flag`() = runTest {
+        val appPreferencesStore = InMemoryAppPreferencesStore(
+            messageSound = NotificationSound.Custom("content://gone"),
+        )
+        val presenter = createNotificationSettingsPresenter(
+            appPreferencesStore = appPreferencesStore,
+            notificationSoundUpdater = FakeNotificationSoundUpdater(
+                recreateNoisyChannelLambda = { _, _ -> },
+            ),
+            // Only the original URI is unresolvable; a fresh pick should not re-trigger detection.
+            soundDisplayNameResolver = FakeSoundDisplayNameResolver(resolveLambda = { uri ->
+                if (uri == "content://gone") null else "Valid sound"
+            }),
+        )
+        presenter.test {
+            val flagged = consumeItemsUntilPredicate { it.messageSound.wasReverted }.last()
+            assertThat(flagged.messageSound.wasReverted).isTrue()
+            advanceUntilIdle()
+
+            flagged.eventSink(NotificationSettingsEvents.SetMessageSound(NotificationSound.Custom("content://valid")))
+            val cleared = consumeItemsUntilPredicate { !it.messageSound.wasReverted }.last()
+            assertThat(cleared.messageSound.wasReverted).isFalse()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `present - DismissMessageSoundRevertedAlert clears the flag without changing the sound`() = runTest {
+        val appPreferencesStore = InMemoryAppPreferencesStore(
+            messageSound = NotificationSound.Custom("content://gone"),
+        )
+        val presenter = createNotificationSettingsPresenter(
+            appPreferencesStore = appPreferencesStore,
+            notificationSoundUpdater = FakeNotificationSoundUpdater(
+                recreateNoisyChannelLambda = { _, _ -> },
+            ),
+            soundDisplayNameResolver = FakeSoundDisplayNameResolver(resolveLambda = { null }),
+        )
+        presenter.test {
+            val flagged = consumeItemsUntilPredicate { it.messageSound.wasReverted }.last()
+            assertThat(flagged.messageSound.wasReverted).isTrue()
+            advanceUntilIdle()
+            assertThat(appPreferencesStore.getNotificationSoundChannelConfig().messageSound).isEqualTo(NotificationSound.SystemDefault)
+
+            flagged.eventSink(NotificationSettingsEvents.DismissMessageSoundRevertedAlert)
+            val cleared = consumeItemsUntilPredicate { !it.messageSound.wasReverted }.last()
+            assertThat(cleared.messageSound.wasReverted).isFalse()
+            // Sound stays at the auto-reverted SystemDefault value.
+            assertThat(cleared.messageSound.sound).isEqualTo(NotificationSound.SystemDefault)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `present - mid-session detection reverts unresolvable Custom callRingtone and flags the row`() = runTest {
+        val recreateRecorder = lambdaRecorder<NotificationSound, Int, Unit> { _, _ -> }
+        val appPreferencesStore = InMemoryAppPreferencesStore(
+            callRingtone = NotificationSound.Custom("content://gone-ringtone"),
+        )
+        val presenter = createNotificationSettingsPresenter(
+            appPreferencesStore = appPreferencesStore,
+            notificationSoundUpdater = FakeNotificationSoundUpdater(
+                recreateRingingCallChannelLambda = { sound, version -> recreateRecorder(sound, version) },
+            ),
+            soundDisplayNameResolver = FakeSoundDisplayNameResolver(resolveLambda = { null }),
+        )
+        presenter.test {
+            val flagged = consumeItemsUntilPredicate { it.callRingtone.wasReverted }.last()
+            assertThat(flagged.callRingtone.wasReverted).isTrue()
+            advanceUntilIdle()
+            assertThat(appPreferencesStore.getNotificationSoundChannelConfig().callRingtone).isEqualTo(NotificationSound.SystemDefault)
+            recreateRecorder.assertions().isCalledOnce().with(value(NotificationSound.SystemDefault), value(1))
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -613,9 +720,9 @@ class NotificationSettingsPresenterTest {
             // resolves to "A string" — confirming the ?: defaultLabel branch is taken.
             val state = consumeItemsUntilPredicate {
                 it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid &&
-                    it.messageSoundDisplayName == "A string"
+                    it.messageSound.displayName == "A string"
             }.last()
-            assertThat(state.messageSoundDisplayName).isEqualTo("A string")
+            assertThat(state.messageSound.displayName).isEqualTo("A string")
             assertThat(resolverCalls).contains("content://gone")
             cancelAndIgnoreRemainingEvents()
         }
