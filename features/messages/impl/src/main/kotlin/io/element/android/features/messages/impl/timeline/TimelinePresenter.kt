@@ -14,14 +14,12 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshots.Snapshot
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
@@ -32,6 +30,7 @@ import io.element.android.features.messages.impl.crypto.sendfailure.resolve.Reso
 import io.element.android.features.messages.impl.timeline.components.MessageShieldData
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactoryConfig
+import io.element.android.features.messages.impl.timeline.model.JumpToUnreadState
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.isMessageContent
@@ -282,11 +281,14 @@ class TimelinePresenter(
         // read marker advances in place — the SDK swaps the marker virtual item to a new position
         // without changing the list length, e.g. when [markRoomAsFullyRead] is sent while at the
         // bottom of the room.
-        val readMarkerIndex = remember { mutableIntStateOf(-1) }
-        val unreadMessagesCount = remember { mutableIntStateOf(0) }
-        LaunchedEffect(timelineItems) {
+        val jumpToUnreadState = remember { mutableStateOf<JumpToUnreadState>(JumpToUnreadState.Disabled) }
+        LaunchedEffect(timelineItems, displayJumpToUnread) {
+            if (!displayJumpToUnread) {
+                jumpToUnreadState.value = JumpToUnreadState.Disabled
+                return@LaunchedEffect
+            }
             val items = timelineItems
-            withContext(dispatchers.computation) {
+            jumpToUnreadState.value = withContext(dispatchers.computation) {
                 var markerIdx = -1
                 var unread = 0
                 for ((i, item) in items.withIndex()) {
@@ -298,12 +300,7 @@ class TimelinePresenter(
                         unread++
                     }
                 }
-                // Apply both writes atomically so consumers never see a half-updated pair
-                // (e.g. a non-negative markerIdx with the previous unread count).
-                Snapshot.withMutableSnapshot {
-                    readMarkerIndex.intValue = markerIdx
-                    unreadMessagesCount.intValue = if (markerIdx < 0) 0 else unread
-                }
+                if (markerIdx < 0) JumpToUnreadState.NoMarker else JumpToUnreadState.Loaded(markerIdx, unread)
             }
         }
 
@@ -356,9 +353,7 @@ class TimelinePresenter(
             resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailureState,
             displayThreadSummaries = displayThreadSummaries,
             displayFloatingDateBadge = displayFloatingDateBadge,
-            displayJumpToUnread = displayJumpToUnread,
-            readMarkerIndex = readMarkerIndex.intValue,
-            unreadMessagesCount = unreadMessagesCount.intValue,
+            jumpToUnreadState = jumpToUnreadState.value,
             eventSink = ::handleEvent,
         )
     }

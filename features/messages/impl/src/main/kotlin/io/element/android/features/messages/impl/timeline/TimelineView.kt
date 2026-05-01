@@ -65,6 +65,7 @@ import io.element.android.features.messages.impl.timeline.components.toText
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.aFakeTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.focus.FocusRequestStateView
+import io.element.android.features.messages.impl.timeline.model.JumpToUnreadState
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
@@ -220,9 +221,7 @@ fun TimelineView(
                 newEventState = state.newEventState,
                 isLive = state.isLive,
                 focusRequestState = state.focusRequestState,
-                readMarkerIndex = state.readMarkerIndex,
-                unreadMessagesCount = state.unreadMessagesCount,
-                displayJumpToUnread = state.displayJumpToUnread,
+                jumpToUnreadState = state.jumpToUnreadState,
                 topInset = floatingDateTopOffset,
                 onScrollFinishAt = ::onScrollFinishAt,
                 onJumpToLive = ::onJumpToLive,
@@ -307,9 +306,7 @@ private fun BoxScope.TimelineScrollHelper(
     forceJumpToBottomVisibility: Boolean,
     forceJumpToReadMarkerVisibility: Boolean,
     focusRequestState: FocusRequestState,
-    readMarkerIndex: Int,
-    unreadMessagesCount: Int,
-    displayJumpToUnread: Boolean,
+    jumpToUnreadState: JumpToUnreadState,
     topInset: Dp,
     onScrollFinishAt: (Int) -> Unit,
     onJumpToLive: () -> Unit,
@@ -326,10 +323,10 @@ private fun BoxScope.TimelineScrollHelper(
         derivedStateOf {
             when {
                 forceJumpToReadMarkerVisibility -> true
-                !displayJumpToUnread || readMarkerIndex < 0 -> false
+                jumpToUnreadState !is JumpToUnreadState.Loaded -> false
                 else -> {
                     val lastVisibleIndex = lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: return@derivedStateOf false
-                    readMarkerIndex > lastVisibleIndex
+                    jumpToUnreadState.markerIndex > lastVisibleIndex
                 }
             }
         }
@@ -362,9 +359,9 @@ private fun BoxScope.TimelineScrollHelper(
     }
 
     fun jumpToReadMarker() {
-        if (readMarkerIndex < 0) return
+        val loaded = jumpToUnreadState as? JumpToUnreadState.Loaded ?: return
         coroutineScope.launch {
-            lazyListState.animateScrollToItemCenter(readMarkerIndex)
+            lazyListState.animateScrollToItemCenter(loaded.markerIndex)
         }
     }
 
@@ -407,14 +404,15 @@ private fun BoxScope.TimelineScrollHelper(
         contentDescription = stringResource(id = CommonStrings.a11y_jump_to_bottom),
         isVisible = isJumpToBottomVisible,
         // Hide the badge entirely when the feature is off, regardless of the count value.
-        count = if (displayJumpToUnread) newEventState.messageCount else 0,
+        count = if (jumpToUnreadState is JumpToUnreadState.Disabled) 0 else newEventState.messageCount,
         modifier = Modifier
             .align(Alignment.BottomEnd)
             .padding(end = 24.dp, bottom = 12.dp),
         onClick = ::jumpToBottom,
     )
-    val jumpToUnreadDescription = if (unreadMessagesCount > 0) {
-        pluralStringResource(CommonPlurals.a11y_jump_to_unread_messages_count, unreadMessagesCount, unreadMessagesCount)
+    val unreadCount = (jumpToUnreadState as? JumpToUnreadState.Loaded)?.unreadCount ?: 0
+    val jumpToUnreadDescription = if (unreadCount > 0) {
+        pluralStringResource(CommonPlurals.a11y_jump_to_unread_messages_count, unreadCount, unreadCount)
     } else {
         stringResource(id = CommonStrings.a11y_jump_to_unread_messages)
     }
@@ -422,7 +420,7 @@ private fun BoxScope.TimelineScrollHelper(
         icon = CompoundIcons.ChevronUp(),
         contentDescription = jumpToUnreadDescription,
         isVisible = isJumpToUnreadVisible,
-        count = unreadMessagesCount,
+        count = unreadCount,
         // Top padding includes [topInset] so the FAB sits below any pinned-events banner.
         modifier = Modifier
             .align(Alignment.TopEnd)
@@ -563,8 +561,7 @@ private fun TimelineViewWithReadMarker(
                 // Index points past the loaded items, mirroring the real-world state the FAB
                 // represents: the user has scrolled past the read marker, so it's no longer in
                 // view. The actual scroll target doesn't matter for a static preview.
-                readMarkerIndex = timelineItems.size,
-                unreadMessagesCount = unreadMessagesCount,
+                jumpToUnreadState = JumpToUnreadState.Loaded(markerIndex = timelineItems.size, unreadCount = unreadMessagesCount),
                 newEventState = if (newMessagesCount > 0) NewEventState.FromOther(newMessagesCount) else NewEventState.None,
             ),
             timelineProtectionState = aTimelineProtectionState(),

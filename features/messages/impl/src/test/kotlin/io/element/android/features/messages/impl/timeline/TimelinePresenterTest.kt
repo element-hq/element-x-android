@@ -16,6 +16,7 @@ import io.element.android.features.messages.impl.fixtures.aMessageEvent
 import io.element.android.features.messages.impl.fixtures.aTimelineItemsFactoryCreator
 import io.element.android.features.messages.impl.timeline.components.MessageShieldData
 import io.element.android.features.messages.impl.timeline.components.aCriticalShield
+import io.element.android.features.messages.impl.timeline.model.JumpToUnreadState
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.typing.aTypingNotificationState
@@ -27,6 +28,7 @@ import io.element.android.features.poll.api.actions.SendPollResponseAction
 import io.element.android.features.poll.test.actions.FakeEndPollAction
 import io.element.android.features.poll.test.actions.FakeSendPollResponseAction
 import io.element.android.features.roomcall.api.aStandByCallState
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -372,14 +374,15 @@ class TimelinePresenterTest {
     }
 
     @Test
-    fun `present - unreadMessagesCount counts message-content items between newest and read marker, excluding state events`() = runTest {
+    fun `present - jumpToUnreadState reports loaded marker and unread count, excluding state events`() = runTest {
         val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
         val timeline = FakeTimeline(timelineItems = timelineItems)
-        val presenter = createTimelinePresenter(timeline)
+        val presenter = createTimelinePresenter(
+            timeline = timeline,
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.JumpToUnread.key to true)),
+        )
         presenter.test {
-            val initialState = awaitFirstItem()
-            assertThat(initialState.readMarkerIndex).isEqualTo(-1)
-            assertThat(initialState.unreadMessagesCount).isEqualTo(0)
+            awaitFirstItem()
             // SDK delivers items oldest-first; the factory reverses so output index 0 is the newest.
             // After processing: [msg-newest, membership, msg-2, read-marker, msg-old]
             timelineItems.emit(
@@ -391,20 +394,22 @@ class TimelinePresenterTest {
                     MatrixTimelineItem.Event(UniqueId("msg-newest"), anEventTimelineItem(content = aMessageContent())),
                 )
             )
-            consumeItemsUntilPredicate { it.readMarkerIndex >= 0 }.last().also { state ->
+            consumeItemsUntilPredicate { it.jumpToUnreadState is JumpToUnreadState.Loaded }.last().also { state ->
                 // 2 message items above the marker; the membership state event is skipped.
-                assertThat(state.readMarkerIndex).isEqualTo(3)
-                assertThat(state.unreadMessagesCount).isEqualTo(2)
+                assertThat(state.jumpToUnreadState).isEqualTo(JumpToUnreadState.Loaded(markerIndex = 3, unreadCount = 2))
             }
             cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
-    fun `present - unreadMessagesCount excludes own messages and PAGINATION-origin events`() = runTest {
+    fun `present - jumpToUnreadState count excludes own messages and PAGINATION-origin events`() = runTest {
         val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
         val timeline = FakeTimeline(timelineItems = timelineItems)
-        val presenter = createTimelinePresenter(timeline)
+        val presenter = createTimelinePresenter(
+            timeline = timeline,
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.JumpToUnread.key to true)),
+        )
         presenter.test {
             awaitFirstItem()
             // After processing (factory reverses): [other-newest, own-msg, paginated, read-marker, msg-old]
@@ -420,33 +425,34 @@ class TimelinePresenterTest {
                     MatrixTimelineItem.Event(UniqueId("other-newest"), anEventTimelineItem(content = aMessageContent())),
                 )
             )
-            consumeItemsUntilPredicate { it.readMarkerIndex >= 0 }.last().also { state ->
-                assertThat(state.readMarkerIndex).isEqualTo(3)
+            consumeItemsUntilPredicate { it.jumpToUnreadState is JumpToUnreadState.Loaded }.last().also { state ->
                 // Only `other-newest` counts: own-msg and paginated are filtered out.
-                assertThat(state.unreadMessagesCount).isEqualTo(1)
+                assertThat(state.jumpToUnreadState).isEqualTo(JumpToUnreadState.Loaded(markerIndex = 3, unreadCount = 1))
             }
             cancelAndIgnoreRemainingEvents()
         }
     }
 
     @Test
-    fun `present - readMarkerIndex is -1 when no read marker present`() = runTest {
+    fun `present - jumpToUnreadState is NoMarker when no read marker present`() = runTest {
         val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
         val timeline = FakeTimeline(timelineItems = timelineItems)
-        val presenter = createTimelinePresenter(timeline)
+        val presenter = createTimelinePresenter(
+            timeline = timeline,
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.JumpToUnread.key to true)),
+        )
         presenter.test {
-            val initialState = awaitFirstItem()
-            assertThat(initialState.readMarkerIndex).isEqualTo(-1)
-            assertThat(initialState.unreadMessagesCount).isEqualTo(0)
+            awaitFirstItem()
             timelineItems.emit(
                 listOf(
                     MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(content = aMessageContent())),
                     MatrixTimelineItem.Event(UniqueId("2"), anEventTimelineItem(content = aMessageContent())),
                 )
             )
-            consumeItemsUntilPredicate { it.timelineItems.size == 2 }.last().also { state ->
-                assertThat(state.readMarkerIndex).isEqualTo(-1)
-                assertThat(state.unreadMessagesCount).isEqualTo(0)
+            consumeItemsUntilPredicate {
+                it.timelineItems.size == 2 && it.jumpToUnreadState == JumpToUnreadState.NoMarker
+            }.last().also { state ->
+                assertThat(state.jumpToUnreadState).isEqualTo(JumpToUnreadState.NoMarker)
             }
             cancelAndIgnoreRemainingEvents()
         }
@@ -614,18 +620,20 @@ class TimelinePresenterTest {
     }
 
     @Test
-    fun `present - readMarkerIndex is 0 when the read marker is the only item`() = runTest {
+    fun `present - jumpToUnreadState markerIndex is 0 when the read marker is the only item`() = runTest {
         val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
         val timeline = FakeTimeline(timelineItems = timelineItems)
-        val presenter = createTimelinePresenter(timeline)
+        val presenter = createTimelinePresenter(
+            timeline = timeline,
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.JumpToUnread.key to true)),
+        )
         presenter.test {
             awaitFirstItem()
             timelineItems.emit(
                 listOf(MatrixTimelineItem.Virtual(UniqueId("read-marker"), VirtualTimelineItem.ReadMarker))
             )
-            consumeItemsUntilPredicate { it.readMarkerIndex >= 0 }.last().also { state ->
-                assertThat(state.readMarkerIndex).isEqualTo(0)
-                assertThat(state.unreadMessagesCount).isEqualTo(0)
+            consumeItemsUntilPredicate { it.jumpToUnreadState is JumpToUnreadState.Loaded }.last().also { state ->
+                assertThat(state.jumpToUnreadState).isEqualTo(JumpToUnreadState.Loaded(markerIndex = 0, unreadCount = 0))
             }
             cancelAndIgnoreRemainingEvents()
         }

@@ -11,6 +11,7 @@ package io.element.android.features.messages.impl.timeline
 import androidx.compose.runtime.Immutable
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureState
 import io.element.android.features.messages.impl.timeline.components.MessageShieldData
+import io.element.android.features.messages.impl.timeline.model.JumpToUnreadState
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.typing.TypingNotificationState
@@ -35,9 +36,7 @@ data class TimelineState(
     val resolveVerifiedUserSendFailureState: ResolveVerifiedUserSendFailureState,
     val displayThreadSummaries: Boolean,
     val displayFloatingDateBadge: Boolean,
-    val displayJumpToUnread: Boolean,
-    val readMarkerIndex: Int,
-    val unreadMessagesCount: Int,
+    val jumpToUnreadState: JumpToUnreadState,
     val eventSink: (TimelineEvent) -> Unit,
 ) {
     private val lastTimelineEvent = timelineItems.firstOrNull { it is TimelineItem.Event } as? TimelineItem.Event
