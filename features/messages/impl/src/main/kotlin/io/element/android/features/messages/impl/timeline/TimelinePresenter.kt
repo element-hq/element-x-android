@@ -10,7 +10,6 @@ package io.element.android.features.messages.impl.timeline
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.MutableIntState
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
@@ -137,8 +136,7 @@ class TimelinePresenter(
 
         val prevMostRecentItemId = rememberSaveable { mutableStateOf<UniqueId?>(null) }
 
-        val newEventState = remember { mutableStateOf(NewEventState.None) }
-        val newMessagesCount = remember { mutableIntStateOf(0) }
+        val newEventState = remember { mutableStateOf<NewEventState>(NewEventState.None) }
         val messageShieldDialogData: MutableState<MessageShieldData?> = remember { mutableStateOf(null) }
 
         val resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailurePresenter.present()
@@ -177,7 +175,6 @@ class TimelinePresenter(
                     if (isLive) {
                         if (event.firstIndex == 0) {
                             newEventState.value = NewEventState.None
-                            newMessagesCount.intValue = 0
                         }
                         Timber.tag(tag).d("## sendReadReceiptIfNeeded firstVisibleIndex: ${event.firstIndex}")
                         sessionCoroutineScope.sendReadReceiptIfNeeded(
@@ -278,7 +275,7 @@ class TimelinePresenter(
         }
 
         LaunchedEffect(timelineItems.size) {
-            computeNewItemState(timelineItems, prevMostRecentItemId, newEventState, newMessagesCount)
+            computeNewItemState(timelineItems, prevMostRecentItemId, newEventState)
         }
 
         // Read marker position + unread count, scanned off the main thread. The UI gates display via
@@ -361,7 +358,6 @@ class TimelinePresenter(
             displayJumpToUnread = displayJumpToUnread,
             readMarkerIndex = readMarkerIndex.intValue,
             unreadMessagesCount = unreadMessagesCount.intValue,
-            newMessagesCount = newMessagesCount.intValue,
             eventSink = ::handleEvent,
         )
     }
@@ -420,16 +416,14 @@ class TimelinePresenter(
      * Basically, if we got new timeline event from sync or local, either from us or another user, we update the state so we tell we have new items.
      * The state never goes back to None from this method, but need to be reset from somewhere else.
      *
-     * It also maintains [newMessagesCount], counting how many incoming messages from other users have arrived in
-     * each batch since [prevMostRecentItemId] — this drives the badge on the scroll-to-bottom button. The count is
-     * reset to zero when the most recent event is from the local user (they're back to active engagement); the
-     * scroll-finish handler resets it when the user returns to the bottom of the timeline.
+     * The [NewEventState.FromOther] variant carries the running count of incoming messages from other users
+     * since [prevMostRecentItemId] last advanced to a local-user event or the timeline returned to the bottom
+     * — this drives the badge on the scroll-to-bottom button.
      */
     private suspend fun computeNewItemState(
         timelineItems: ImmutableList<TimelineItem>,
         prevMostRecentItemId: MutableState<UniqueId?>,
         newEventState: MutableState<NewEventState>,
-        newMessagesCount: MutableIntState,
     ) = withContext(dispatchers.computation) {
         // FromMe is prioritized over FromOther, so skip if we already have a FromMe
         if (newEventState.value == NewEventState.FromMe) {
@@ -448,14 +442,8 @@ class TimelinePresenter(
 
         if (hasNewEvent) {
             // Scroll to bottom if the new event is from me, even if sent from another device
-            val fromMe = newMostRecentItem.isMine
-            newEventState.value = if (fromMe) {
-                NewEventState.FromMe
-            } else {
-                NewEventState.FromOther
-            }
-            if (fromMe) {
-                newMessagesCount.intValue = 0
+            if (newMostRecentItem.isMine) {
+                newEventState.value = NewEventState.FromMe
             } else {
                 var delta = 0
                 for (item in timelineItems) {
@@ -464,7 +452,8 @@ class TimelinePresenter(
                         delta++
                     }
                 }
-                newMessagesCount.intValue += delta
+                val previousCount = (newEventState.value as? NewEventState.FromOther)?.messageCount ?: 0
+                newEventState.value = NewEventState.FromOther(previousCount + delta)
             }
         }
         prevMostRecentItemId.value = newMostRecentItemId

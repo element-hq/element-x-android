@@ -222,7 +222,6 @@ fun TimelineView(
                 focusRequestState = state.focusRequestState,
                 readMarkerIndex = state.readMarkerIndex,
                 unreadMessagesCount = state.unreadMessagesCount,
-                newMessagesCount = state.newMessagesCount,
                 displayJumpToUnread = state.displayJumpToUnread,
                 topInset = floatingDateTopOffset,
                 onScrollFinishAt = ::onScrollFinishAt,
@@ -310,7 +309,6 @@ private fun BoxScope.TimelineScrollHelper(
     focusRequestState: FocusRequestState,
     readMarkerIndex: Int,
     unreadMessagesCount: Int,
-    newMessagesCount: Int,
     displayJumpToUnread: Boolean,
     topInset: Dp,
     onScrollFinishAt: (Int) -> Unit,
@@ -386,8 +384,11 @@ private fun BoxScope.TimelineScrollHelper(
     }
 
     LaunchedEffect(canAutoScroll, newEventState) {
-        val shouldScrollToBottom = isScrollFinished &&
-            (canAutoScroll && newEventState == NewEventState.FromOther || newEventState == NewEventState.FromMe)
+        val shouldScrollToBottom = isScrollFinished && when (newEventState) {
+            is NewEventState.FromOther -> canAutoScroll
+            NewEventState.FromMe -> true
+            NewEventState.None -> false
+        }
         if (shouldScrollToBottom) {
             scrollToBottom(force = true)
         }
@@ -406,7 +407,7 @@ private fun BoxScope.TimelineScrollHelper(
         contentDescription = stringResource(id = CommonStrings.a11y_jump_to_bottom),
         isVisible = isJumpToBottomVisible,
         // Hide the badge entirely when the feature is off, regardless of the count value.
-        count = if (displayJumpToUnread) newMessagesCount else 0,
+        count = if (displayJumpToUnread) newEventState.messageCount else 0,
         modifier = Modifier
             .align(Alignment.BottomEnd)
             .padding(end = 24.dp, bottom = 12.dp),
@@ -565,7 +566,7 @@ private fun TimelineViewWithReadMarker(
                 // view. The actual scroll target doesn't matter for a static preview.
                 readMarkerIndex = timelineItems.size,
                 unreadMessagesCount = unreadMessagesCount,
-                newMessagesCount = newMessagesCount,
+                newEventState = if (newMessagesCount > 0) NewEventState.FromOther(newMessagesCount) else NewEventState.None,
             ),
             timelineProtectionState = aTimelineProtectionState(),
             onUserDataClick = {},

@@ -60,7 +60,7 @@ fun aTimelineState(
     displayJumpToUnread: Boolean = true,
     readMarkerIndex: Int = -1,
     unreadMessagesCount: Int = 0,
-    newMessagesCount: Int = 0,
+    newEventState: NewEventState = NewEventState.None,
     eventSink: (TimelineEvent) -> Unit = {},
 ): TimelineState {
     val focusedEventId = timelineItems.filterIsInstance<TimelineItem.Event>().getOrNull(focusedEventIndex)?.eventId
@@ -74,7 +74,7 @@ fun aTimelineState(
         timelineMode = timelineMode,
         timelineRoomInfo = timelineRoomInfo,
         renderReadReceipts = renderReadReceipts,
-        newEventState = NewEventState.None,
+        newEventState = newEventState,
         isLive = isLive,
         focusRequestState = focusRequestState,
         messageShieldDialogData = messageShield?.let { MessageShieldData(it) },
@@ -84,7 +84,6 @@ fun aTimelineState(
         displayJumpToUnread = displayJumpToUnread,
         readMarkerIndex = readMarkerIndex,
         unreadMessagesCount = unreadMessagesCount,
-        newMessagesCount = newMessagesCount,
         eventSink = eventSink,
     )
 }
