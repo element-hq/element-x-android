@@ -35,6 +35,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -62,11 +63,12 @@ class MediaViewerDataSource(
     private val localMediaStates: MutableMap<String, MutableState<AsyncData<LocalMedia>>> =
         mutableMapOf()
 
-    fun setup() {
-        galleryDataSource.start()
+    fun setup(coroutineScope: CoroutineScope) {
+        galleryDataSource.start(coroutineScope)
     }
 
     fun dispose() {
+        Timber.d("Disposing MediaViewerDataSource, closing ${mediaFiles.size} media files")
         mediaFiles.forEach { it.close() }
         mediaFiles.clear()
         localMediaStates.clear()

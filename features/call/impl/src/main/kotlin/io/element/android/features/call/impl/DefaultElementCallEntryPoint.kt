@@ -11,7 +11,7 @@ package io.element.android.features.call.impl
 import android.content.Context
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.features.call.api.CallType
+import io.element.android.features.call.api.CallData
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.call.impl.notifications.CallNotificationData
 import io.element.android.features.call.impl.utils.ActiveCallManager
@@ -30,12 +30,12 @@ class DefaultElementCallEntryPoint(
         const val REQUEST_CODE = 2255
     }
 
-    override fun startCall(callType: CallType) {
-        context.startActivity(IntentProvider.createIntent(context, callType))
+    override fun startCall(callData: CallData) {
+        context.startActivity(IntentProvider.createIntent(context, callData))
     }
 
     override suspend fun handleIncomingCall(
-        callType: CallType.RoomCall,
+        callData: CallData,
         eventId: EventId,
         senderId: UserId,
         roomName: String?,
@@ -47,8 +47,8 @@ class DefaultElementCallEntryPoint(
         textContent: String?,
     ) {
         val incomingCallNotificationData = CallNotificationData(
-            sessionId = callType.sessionId,
-            roomId = callType.roomId,
+            sessionId = callData.sessionId,
+            roomId = callData.roomId,
             eventId = eventId,
             senderId = senderId,
             roomName = roomName,
@@ -58,7 +58,7 @@ class DefaultElementCallEntryPoint(
             expirationTimestamp = expirationTimestamp,
             notificationChannelId = notificationChannelId,
             textContent = textContent,
-            audioOnly = callType.isAudioCall
+            audioOnly = callData.isAudioCall,
         )
         activeCallManager.registerIncomingCall(notificationData = incomingCallNotificationData)
     }

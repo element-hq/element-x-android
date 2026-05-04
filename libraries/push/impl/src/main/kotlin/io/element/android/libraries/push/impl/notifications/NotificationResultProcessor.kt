@@ -10,7 +10,7 @@ package io.element.android.libraries.push.impl.notifications
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
-import io.element.android.features.call.api.CallType
+import io.element.android.features.call.api.CallData
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.core.EventId
@@ -215,9 +215,9 @@ class DefaultNotificationResultProcessor(
     private suspend fun handleRingingCallEvent(notifiableEvent: NotifiableRingingCallEvent) {
         Timber.i("## handleInternal() : Incoming call.")
         elementCallEntryPoint.handleIncomingCall(
-            callType = CallType.RoomCall(
-                notifiableEvent.sessionId,
-                notifiableEvent.roomId,
+            callData = CallData(
+                sessionId = notifiableEvent.sessionId,
+                roomId = notifiableEvent.roomId,
                 isAudioCall = notifiableEvent.callIntent == CallIntent.AUDIO
             ),
             eventId = notifiableEvent.eventId,

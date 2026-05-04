@@ -8,16 +8,16 @@
 
 package io.element.android.features.call.test
 
-import io.element.android.features.call.api.CallType
+import io.element.android.features.call.api.CallData
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.tests.testutils.lambda.lambdaError
 
 class FakeElementCallEntryPoint(
-    var startCallResult: (CallType) -> Unit = { lambdaError() },
+    var startCallResult: (CallData) -> Unit = { lambdaError() },
     var handleIncomingCallResult: (
-        CallType.RoomCall,
+        CallData,
         EventId,
         UserId,
         String?,
@@ -27,12 +27,12 @@ class FakeElementCallEntryPoint(
         String?,
     ) -> Unit = { _, _, _, _, _, _, _, _ -> lambdaError() }
 ) : ElementCallEntryPoint {
-    override fun startCall(callType: CallType) {
-        startCallResult(callType)
+    override fun startCall(callData: CallData) {
+        startCallResult(callData)
     }
 
     override suspend fun handleIncomingCall(
-        callType: CallType.RoomCall,
+        callData: CallData,
         eventId: EventId,
         senderId: UserId,
         roomName: String?,
@@ -44,7 +44,7 @@ class FakeElementCallEntryPoint(
         textContent: String?,
     ) {
         handleIncomingCallResult(
-            callType,
+            callData,
             eventId,
             senderId,
             roomName,

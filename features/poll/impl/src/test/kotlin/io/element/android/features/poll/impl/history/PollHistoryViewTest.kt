@@ -6,13 +6,16 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.features.poll.impl.history
 
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.poll.api.pollcontent.aPollContentState
 import io.element.android.features.poll.impl.R
@@ -26,34 +29,29 @@ import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBack
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 class PollHistoryViewTest {
-    @get:Rule
-    val rule = createAndroidComposeRule<ComponentActivity>()
-
     @Test
-    fun `clicking on back invokes the expected callback`() {
+    fun `clicking on back invokes the expected callback`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<PollHistoryEvents>(expectEvents = false)
         ensureCalledOnce {
-            rule.setPollHistoryViewView(
+            setPollHistoryViewView(
                 aPollHistoryState(
                     eventSink = eventsRecorder
                 ),
                 goBack = it
             )
-            rule.pressBack()
+            pressBack()
         }
     }
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `clicking on edit poll invokes the expected callback`() {
+    fun `clicking on edit poll invokes the expected callback`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<PollHistoryEvents>(expectEvents = false)
         val eventId = EventId("\$anEventId")
         val state = aPollHistoryState(
@@ -69,17 +67,17 @@ class PollHistoryViewTest {
             eventSink = eventsRecorder
         )
         ensureCalledOnceWithParam(eventId) {
-            rule.setPollHistoryViewView(
+            setPollHistoryViewView(
                 state = state,
                 onEditPoll = it
             )
-            rule.clickOn(CommonStrings.action_edit_poll)
+            clickOn(CommonStrings.action_edit_poll)
         }
     }
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `clicking on poll end emits the expected Event`() {
+    fun `clicking on poll end emits the expected Event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<PollHistoryEvents>()
         val eventId = EventId("\$anEventId")
         val state = aPollHistoryState(
@@ -95,16 +93,16 @@ class PollHistoryViewTest {
             ),
             eventSink = eventsRecorder
         )
-        rule.setPollHistoryViewView(
+        setPollHistoryViewView(
             state = state,
         )
-        rule.clickOn(CommonStrings.action_end_poll)
+        clickOn(CommonStrings.action_end_poll)
         // Cancel the dialog
-        rule.clickOn(CommonStrings.action_cancel)
+        clickOn(CommonStrings.action_cancel)
         // Do it again, and confirm the dialog
-        rule.clickOn(CommonStrings.action_end_poll)
+        clickOn(CommonStrings.action_end_poll)
         eventsRecorder.assertEmpty()
-        rule.clickOn(CommonStrings.action_ok)
+        clickOn(CommonStrings.action_ok)
         eventsRecorder.assertSingle(
             PollHistoryEvents.EndPoll(eventId)
         )
@@ -112,7 +110,7 @@ class PollHistoryViewTest {
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `clicking on poll answer emits the expected Event`() {
+    fun `clicking on poll answer emits the expected Event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<PollHistoryEvents>()
         val eventId = EventId("\$anEventId")
         val state = aPollHistoryState(
@@ -129,10 +127,10 @@ class PollHistoryViewTest {
             eventSink = eventsRecorder
         )
         val answer = state.pollHistoryItems.ongoing.first().state.answerItems.first().answer
-        rule.setPollHistoryViewView(
+        setPollHistoryViewView(
             state = state,
         )
-        rule.onNodeWithText(
+        onNodeWithText(
             text = answer.text,
             useUnmergedTree = true,
         ).performClick()
@@ -142,14 +140,14 @@ class PollHistoryViewTest {
     }
 
     @Test
-    fun `clicking on past tab emits the expected Event`() {
+    fun `clicking on past tab emits the expected Event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<PollHistoryEvents>()
-        rule.setPollHistoryViewView(
+        setPollHistoryViewView(
             aPollHistoryState(
                 eventSink = eventsRecorder
             ),
         )
-        rule.clickOn(R.string.screen_polls_history_filter_past)
+        clickOn(R.string.screen_polls_history_filter_past)
         eventsRecorder.assertSingle(
             PollHistoryEvents.SelectFilter(filter = PollHistoryFilter.PAST)
         )
@@ -157,22 +155,22 @@ class PollHistoryViewTest {
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `clicking on load more emits the expected Event`() {
+    fun `clicking on load more emits the expected Event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<PollHistoryEvents>()
-        rule.setPollHistoryViewView(
+        setPollHistoryViewView(
             aPollHistoryState(
                 hasMoreToLoad = true,
                 eventSink = eventsRecorder,
             ),
         )
-        rule.clickOn(CommonStrings.action_load_more)
+        clickOn(CommonStrings.action_load_more)
         eventsRecorder.assertSingle(
             PollHistoryEvents.LoadMore
         )
     }
 }
 
-private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setPollHistoryViewView(
+private fun AndroidComposeUiTest<ComponentActivity>.setPollHistoryViewView(
     state: PollHistoryState,
     onEditPoll: (EventId) -> Unit = EnsureNeverCalledWithParam(),
     goBack: () -> Unit = EnsureNeverCalled(),

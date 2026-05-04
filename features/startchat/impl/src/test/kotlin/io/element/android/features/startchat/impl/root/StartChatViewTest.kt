@@ -6,13 +6,16 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.features.startchat.impl.root
 
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.startchat.impl.R
 import io.element.android.features.startchat.impl.userlist.aRecentDirectRoomList
@@ -27,70 +30,65 @@ import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBack
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 class StartChatViewTest {
-    @get:Rule
-    val rule = createAndroidComposeRule<ComponentActivity>()
-
     @Test
-    fun `clicking on back invokes the expected callback`() {
+    fun `clicking on back invokes the expected callback`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<StartChatEvents>(expectEvents = false)
         ensureCalledOnce {
-            rule.setStartChatView(
+            setStartChatView(
                 aCreateRoomRootState(
                     eventSink = eventsRecorder,
                 ),
                 onCloseClick = it
             )
-            rule.pressBack()
+            pressBack()
         }
     }
 
     @Test
-    fun `clicking on New room invokes the expected callback`() {
+    fun `clicking on New room invokes the expected callback`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<StartChatEvents>(expectEvents = false)
         ensureCalledOnce {
-            rule.setStartChatView(
+            setStartChatView(
                 aCreateRoomRootState(
                     eventSink = eventsRecorder,
                 ),
                 onNewRoomClick = it
             )
-            rule.clickOn(R.string.screen_create_room_action_create_room)
+            clickOn(R.string.screen_create_room_action_create_room)
         }
     }
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `clicking on Invite people invokes the expected callback`() {
+    fun `clicking on Invite people invokes the expected callback`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<StartChatEvents>(expectEvents = false)
         ensureCalledOnce {
-            rule.setStartChatView(
+            setStartChatView(
                 aCreateRoomRootState(
                     applicationName = "test",
                     eventSink = eventsRecorder,
                 ),
                 onInviteFriendsClick = it
             )
-            val text = rule.activity.getString(CommonStrings.action_invite_friends_to_app, "test")
-            rule.onNodeWithText(text).performClick()
+            val text = activity!!.getString(CommonStrings.action_invite_friends_to_app, "test")
+            onNodeWithText(text).performClick()
         }
     }
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `clicking on a user suggestion invokes the expected callback`() {
+    fun `clicking on a user suggestion invokes the expected callback`() = runAndroidComposeUiTest {
         val recentDirectRoomList = aRecentDirectRoomList()
         val firstRoom = recentDirectRoomList[0]
         val eventsRecorder = EventsRecorder<StartChatEvents>(expectEvents = false)
         ensureCalledOnceWithParam(firstRoom.roomId) {
-            rule.setStartChatView(
+            setStartChatView(
                 aCreateRoomRootState(
                     userListState = aUserListState(
                         recentDirectRooms = recentDirectRoomList
@@ -99,42 +97,42 @@ class StartChatViewTest {
                 ),
                 onOpenDM = it
             )
-            rule.onNodeWithText(firstRoom.matrixUser.getBestName()).performClick()
+            onNodeWithText(firstRoom.matrixUser.getBestName()).performClick()
         }
     }
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `clicking on Join room by address invokes the expected callback`() {
+    fun `clicking on Join room by address invokes the expected callback`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<StartChatEvents>(expectEvents = false)
         ensureCalledOnce {
-            rule.setStartChatView(
+            setStartChatView(
                 aCreateRoomRootState(
                     eventSink = eventsRecorder,
                 ),
                 onJoinRoomByAddressClick = it
             )
-            rule.clickOn(R.string.screen_start_chat_join_room_by_address_action)
+            clickOn(R.string.screen_start_chat_join_room_by_address_action)
         }
     }
 
     @Test
-    fun `clicking on room directory invokes the expected callback`() {
+    fun `clicking on room directory invokes the expected callback`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<StartChatEvents>(expectEvents = false)
         ensureCalledOnce {
-            rule.setStartChatView(
+            setStartChatView(
                 aCreateRoomRootState(
                     eventSink = eventsRecorder,
                     isRoomDirectorySearchEnabled = true
                 ),
                 onRoomDirectorySearchClick = it
             )
-            rule.clickOn(R.string.screen_room_directory_search_title)
+            clickOn(R.string.screen_room_directory_search_title)
         }
     }
 }
 
-private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setStartChatView(
+private fun AndroidComposeUiTest<ComponentActivity>.setStartChatView(
     state: StartChatState,
     onCloseClick: () -> Unit = EnsureNeverCalled(),
     onNewRoomClick: () -> Unit = EnsureNeverCalled(),
