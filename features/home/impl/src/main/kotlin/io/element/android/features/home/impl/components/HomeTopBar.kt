@@ -237,6 +237,7 @@ private fun SpaceFilterButton(
             else -> Unit
         }
     }
+
     val isSelected = spaceFiltersState is SpaceFiltersState.Selected
     IconButton(
         onClick = ::onClick,
@@ -320,7 +321,15 @@ private fun AccountIcon(
             Avatar(
                 avatarData = avatarData,
                 avatarType = AvatarType.User,
-                contentDescription = if (isCurrentAccount) stringResource(CommonStrings.common_settings) else null,
+                contentDescription = if (isCurrentAccount) {
+                    if (showAvatarIndicator) {
+                        stringResource(CommonStrings.a11y_settings_with_required_action)
+                    } else {
+                        stringResource(CommonStrings.common_settings)
+                    }
+                } else {
+                    null
+                },
             )
             if (showAvatarIndicator) {
                 RedIndicatorAtom(
