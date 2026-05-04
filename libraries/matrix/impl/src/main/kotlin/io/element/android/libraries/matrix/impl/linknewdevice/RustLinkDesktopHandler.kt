@@ -75,6 +75,10 @@ class RustLinkDesktopHandler(
         GrantQrLoginProgress.SyncingSecrets -> LinkDesktopStep.SyncingSecrets
         is GrantQrLoginProgress.WaitingForAuth -> LinkDesktopStep.WaitingForAuth(
             verificationUri = verificationUri,
+            continuationMessageSender = RustContinuationMessageSender(
+                inner = continuationSender,
+                sessionDispatcher = sessionDispatcher,
+            )
         )
         is GrantQrLoginProgress.EstablishingSecureChannel -> LinkDesktopStep.EstablishingSecureChannel(
             checkCode = checkCode,

@@ -54,8 +54,10 @@ import io.element.android.libraries.matrix.api.linknewdevice.LinkMobileStep
 import io.element.android.libraries.matrix.api.logs.LoggerTags
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
@@ -102,6 +104,7 @@ class LinkNewDeviceFlowNode(
                 @Suppress("AssignedValueIsNeverRead")
                 linkDesktopHandlerJob = observeLinkNewDesktopHandler()
             },
+            onResume = ::onResume,
             onDestroy = {
                 linkMobileHandlerJob?.cancel()
                 linkDesktopHandlerJob?.cancel()
@@ -207,6 +210,18 @@ class LinkNewDeviceFlowNode(
             }
         }
             .launchIn(sessionCoroutineScope)
+    }
+
+    private fun onResume() = sessionCoroutineScope.launch {
+        // Application is resumed, if the step is waiting for auth, send the confirmation
+        (linkNewMobileHandler.stepFlow.first() as? LinkMobileStep.WaitingForAuth)?.let {
+            Timber.tag(tag.value).d("Resuming while waiting for auth on mobile, sending confirmation")
+            it.continuationMessageSender.confirm()
+        }
+        (linkNewDesktopHandler.stepFlow.value as? LinkDesktopStep.WaitingForAuth)?.let {
+            Timber.tag(tag.value).d("Resuming while waiting for auth on desktop, sending confirmation")
+            it.continuationMessageSender.confirm()
+        }
     }
 
     private fun navigateToError(errorType: ErrorType) {
