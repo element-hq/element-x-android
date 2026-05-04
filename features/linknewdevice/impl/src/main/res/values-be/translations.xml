@@ -17,6 +17,8 @@
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"Калі вы сутыкнуліся з той жа праблемай, паспрабуйце іншую сетку Wi-Fi або скарыстайцеся мабільнымі дадзенымі замест Wi-Fi."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Калі гэта не дапамагло, увайдзіце ўручную"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Злучэнне небяспечнае"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"Вам будзе прапанавана ўвесці дзве лічбы, паказаныя на гэтай прыладзе."</string>
+  <string name="screen_qr_code_login_device_code_title">"Увядзіце наступны нумар на іншай прыладзе."</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"Уваход быў адменены на іншай прыладзе."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Запыт на ўваход скасаваны"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"Уваход на іншай прыладзе быў адхілены."</string>
@@ -35,4 +37,5 @@
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Каб працягнуць, вам неабходна дазволіць %1$s выкарыстоўваць камеру вашай прылады."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Дазвольце доступ да камеры для сканіравання QR-кода"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Адбылася нечаканая памылка. Калі ласка, паспрабуйце яшчэ раз."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"У чаканні іншай прылады"</string>
 </resources>

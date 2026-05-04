@@ -24,7 +24,7 @@
   <string name="screen_login_error_invalid_credentials">"Няправільнае імя карыстальніка і/або пароль"</string>
   <string name="screen_login_error_invalid_user_id">"Гэта несапраўдны ідэнтыфікатар карыстальніка. Чаканы фармат: ‘@user:homeserver.org’"</string>
   <string name="screen_login_error_refresh_tokens">"Гэты сервер настроены на выкарыстанне маркераў абнаўлення. Яны не падтрымліваюцца пры ўваходзе на аснове пароля."</string>
-  <string name="screen_login_error_unsupported_authentication">"Выбраны хатні сервер не падтрымлівае пароль або ўваход у OIDC. Калі ласка, звярніцеся да адміністратара або абярыце іншы хатні сервер."</string>
+  <string name="screen_login_error_unsupported_authentication">"Выбраны хатні сервер не падтрымлівае пароль або ўваход у OAuth. Калі ласка, звярніцеся да адміністратара або абярыце іншы хатні сервер."</string>
   <string name="screen_login_form_header">"Увядзіце свае даныя"</string>
   <string name="screen_login_subtitle">"Matrix - гэта адкрытая сетка для бяспечнай, дэцэнтралізаванай сувязі."</string>
   <string name="screen_login_title">"Сардэчна запрашаем!"</string>

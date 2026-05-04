@@ -21,18 +21,18 @@
 %1$s"</string>
   <string name="screen_change_server_error_no_sliding_sync_message">"所选账户提供者不支持滑动同步。需要升级服务器才能使用 %1$s。"</string>
   <string name="screen_change_server_error_unauthorized_homeserver">"%1$s 不允许连接到 %2$s。"</string>
-  <string name="screen_change_server_error_unauthorized_homeserver_content">"本应用已配置为允许访问：%1$s 。"</string>
+  <string name="screen_change_server_error_unauthorized_homeserver_content">"此 app 已配置为允许访问：%1$s。"</string>
   <string name="screen_change_server_error_unauthorized_homeserver_title">"账户提供者 %1$s 不被允许。"</string>
   <string name="screen_change_server_form_header">"主服务器 URL"</string>
   <string name="screen_change_server_form_notice">"输入域名地址。"</string>
   <string name="screen_change_server_subtitle">"你的服务器地址是什么？"</string>
   <string name="screen_change_server_title">"选择服务器"</string>
   <string name="screen_create_account_title">"创建账户"</string>
-  <string name="screen_login_error_deactivated_account">"该账户已被停用。"</string>
+  <string name="screen_login_error_deactivated_account">"此账户已被删除。"</string>
   <string name="screen_login_error_invalid_credentials">"用户名与（或）密码不正确"</string>
   <string name="screen_login_error_invalid_user_id">"这不是合法的用户 ID。预期格式：“@user:homeserver.org”。"</string>
   <string name="screen_login_error_refresh_tokens">"此服务器使用刷新令牌。使用密码登录时不支持这些功能。"</string>
-  <string name="screen_login_error_unsupported_authentication">"该服务器不支持密码登录与 OIDC 登录。请联系服务器管理员或选择另一服务器。"</string>
+  <string name="screen_login_error_unsupported_authentication">"该服务器不支持密码登录与 OAuth 登录。请联系服务器管理员或选择另一服务器。"</string>
   <string name="screen_login_form_header">"输入详细信息"</string>
   <string name="screen_login_subtitle">"Matrix 是一个用于安全、去中心化通信的开放网络。"</string>
   <string name="screen_login_title">"欢迎回来！"</string>
@@ -51,7 +51,7 @@
   <string name="screen_onboarding_sign_in_with_qr_code">"使用二维码登录"</string>
   <string name="screen_onboarding_sign_up">"创建账户"</string>
   <string name="screen_onboarding_welcome_back">"欢迎回来"</string>
-  <string name="screen_onboarding_welcome_message">"欢迎使用 %1$s，快而简约的消息应用。"</string>
+  <string name="screen_onboarding_welcome_message">"欢迎使用迄今最快的 %1$s，速度与简洁的极致。"</string>
   <string name="screen_onboarding_welcome_subtitle">"欢迎使用 %1$s，速度与简洁的极致。"</string>
   <string name="screen_onboarding_welcome_title">"融入 Element"</string>
   <string name="screen_qr_code_login_connecting_subtitle">"建立安全连接"</string>

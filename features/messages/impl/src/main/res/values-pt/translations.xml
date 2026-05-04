@@ -35,7 +35,7 @@
   <string name="screen_room_attachment_source_camera_video">"Gravar vídeo"</string>
   <string name="screen_room_attachment_source_files">"Anexo"</string>
   <string name="screen_room_attachment_source_gallery">"Biblioteca de fotos e vídeos"</string>
-  <string name="screen_room_attachment_source_location">"Localização"</string>
+  <string name="screen_room_attachment_source_location">"Partilhar localização"</string>
   <string name="screen_room_attachment_source_poll">"Sondagem"</string>
   <string name="screen_room_attachment_text_formatting">"Formatação de texto"</string>
   <string name="screen_room_encrypted_history_banner">"De momento, o histórico de mensagens está indisponível."</string>

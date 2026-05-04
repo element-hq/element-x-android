@@ -16,6 +16,7 @@
   <string name="screen_media_details_filename">"Filnavn"</string>
   <string name="screen_media_details_no_more_files_to_show">"Ikke flere filer at vise"</string>
   <string name="screen_media_details_no_more_media_to_show">"Ikke flere medier at vise"</string>
+  <string name="screen_media_details_title">"Filoplysninger"</string>
   <string name="screen_media_details_uploaded_by">"Uploadet af"</string>
   <string name="screen_media_details_uploaded_on">"Uploadet på"</string>
 </resources>

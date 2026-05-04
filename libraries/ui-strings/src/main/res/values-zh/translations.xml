@@ -40,7 +40,7 @@
   </plurals>
   <string name="a11y_read_receipts_single">"%1$s 已读"</string>
   <string name="a11y_read_receipts_tap_to_show_all">"点击以显示全部"</string>
-  <string name="a11y_remove_reaction">"撤回反应 %1$s"</string>
+  <string name="a11y_remove_reaction">"移除反应：%1$s"</string>
   <string name="a11y_remove_reaction_with">"移除反应：%1$s"</string>
   <string name="a11y_room_avatar">"房间头像"</string>
   <string name="a11y_send_files">"发送文件"</string>
@@ -110,9 +110,9 @@
   <string name="action_go_to_settings">"前往设置"</string>
   <string name="action_ignore">"忽略"</string>
   <string name="action_invite">"邀请"</string>
-  <string name="action_invite_friends">"邀请朋友"</string>
-  <string name="action_invite_friends_to_app">"邀请别人加入 %1$s"</string>
-  <string name="action_invite_people_to_app">"邀请别人加入 %1$s"</string>
+  <string name="action_invite_friends">"邀请人员"</string>
+  <string name="action_invite_friends_to_app">"邀请人员加入 %1$s"</string>
+  <string name="action_invite_people_to_app">"邀请人员加入 %1$s"</string>
   <string name="action_invites_list">"邀请"</string>
   <string name="action_join">"加入"</string>
   <string name="action_learn_more">"了解更多"</string>
@@ -145,7 +145,7 @@
   <string name="action_reply">"回复"</string>
   <string name="action_reply_in_thread">"在消息列中回复"</string>
   <string name="action_report">"举报"</string>
-  <string name="action_report_bug">"报告错误"</string>
+  <string name="action_report_bug">"报告 bug"</string>
   <string name="action_report_content">"举报内容"</string>
   <string name="action_report_dm">"举报对话"</string>
   <string name="action_report_room">"举报房间"</string>
@@ -165,8 +165,8 @@
   <string name="action_share_live_location">"共享实时位置"</string>
   <string name="action_show">"显示"</string>
   <string name="action_sign_in_again">"再次登录"</string>
-  <string name="action_signout">"删除此设备"</string>
-  <string name="action_signout_anyway">"仍要删除此设备"</string>
+  <string name="action_signout">"移除此设备"</string>
+  <string name="action_signout_anyway">"仍要移除此设备"</string>
   <string name="action_skip">"跳过"</string>
   <string name="action_start">"开始"</string>
   <string name="action_start_chat">"开始聊天"</string>
@@ -238,7 +238,7 @@
 原因：%1$s。"</string>
   <string name="common_everyone">"所有人"</string>
   <string name="common_failed">"失败"</string>
-  <string name="common_favourite">"收藏夹"</string>
+  <string name="common_favourite">"收藏"</string>
   <string name="common_favourited">"已收藏"</string>
   <string name="common_file">"文件"</string>
   <string name="common_file_deleted">"文件已删除"</string>
@@ -285,7 +285,7 @@
   <string name="common_or">"或"</string>
   <string name="common_other_options">"其它选项"</string>
   <string name="common_password">"密码"</string>
-  <string name="common_people">"用户"</string>
+  <string name="common_people">"人员"</string>
   <string name="common_permalink">"永久链接"</string>
   <string name="common_permission">"权限"</string>
   <string name="common_pinned">"已置顶"</string>
@@ -408,7 +408,7 @@
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"由于你当时不在房间内，%1$s（%2$s）已将消息向你共享。"</string>
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"由于你当时不在房间内，%1$s 已将消息向你共享。"</string>
   <string name="crypto_history_visible">"此房间已配置为允许新成员阅读历史。%1$s"</string>
-  <string name="crypto_identity_change_pin_violation">"%1$s的数字身份已重置。%2$s"</string>
+  <string name="crypto_identity_change_pin_violation">"%1$s 的数字身份已重置。%2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"%1$s %2$s 的数字身份已重置。%3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
   <string name="crypto_identity_change_profile_pin_violation">"%1$s 的数字身份已重置。"</string>
@@ -440,7 +440,7 @@
   <string name="error_account_creation_not_possible">"你的主服务器需要升级，以支持 Matrix 认证服务和账户创建。"</string>
   <string name="error_failed_creating_the_permalink">"永久链接创建失败"</string>
   <string name="error_failed_loading_map">"%1$s 无法加载地图，请稍后再试。"</string>
-  <string name="error_failed_loading_messages">"加载消息失败"</string>
+  <string name="error_failed_loading_messages">"消息加载失败"</string>
   <string name="error_failed_locating_user">"%1$s 无法访问你的位置，请稍后再试。"</string>
   <string name="error_failed_uploading_voice_message">"无法上传语音消息。"</string>
   <string name="error_invalid_invite">"该房间已不存在或邀请已失效。"</string>
@@ -495,7 +495,7 @@
   <string name="screen_room_live_location_banner">"共享实时位置"</string>
   <string name="screen_room_permalink_same_room_android">"已经位于此房间！"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s / %2$s"</string>
-  <string name="screen_room_pinned_banner_indicator_description">"置顶消息 %1$s"</string>
+  <string name="screen_room_pinned_banner_indicator_description">"%1$s 个已置顶的消息"</string>
   <string name="screen_room_pinned_banner_loading_description">"正在加载消息…"</string>
   <string name="screen_room_pinned_banner_view_all_button_title">"查看全部"</string>
   <string name="screen_room_title">"聊天"</string>
@@ -511,9 +511,9 @@
   <string name="screen_space_list_empty_state_title">"创建空间以组织房间"</string>
   <string name="screen_space_list_parent_space">"空间 %1$s"</string>
   <string name="screen_space_list_title">"空间"</string>
-  <string name="screen_static_location_sheet_timestamp_description">"共享于%1$s"</string>
+  <string name="screen_static_location_sheet_timestamp_description">"已共享 %1$s"</string>
   <string name="screen_static_location_sheet_title">"在地图上"</string>
-  <string name="screen_timeline_item_menu_send_failure_changed_identity">"消息未发送，因为%1$s的已验证数字身份已被重置。"</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"消息未能发送，因为 %1$s 的已验证数字身份已被重置。"</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"消息未能发送，因为 %1$s 尚未验证所有设备。"</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"消息未能发送，因为你有尚未验证的设备。"</string>
   <string name="screen_view_location_title">"位置"</string>

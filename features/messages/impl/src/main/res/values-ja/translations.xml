@@ -34,7 +34,7 @@
   <string name="screen_room_attachment_source_camera_photo">"写真を撮影"</string>
   <string name="screen_room_attachment_source_camera_video">"動画を撮影"</string>
   <string name="screen_room_attachment_source_files">"添付ファイル"</string>
-  <string name="screen_room_attachment_source_gallery">"アルバムの写真・動画"</string>
+  <string name="screen_room_attachment_source_gallery">"アルバムの写真と動画"</string>
   <string name="screen_room_attachment_source_location">"場所を共有"</string>
   <string name="screen_room_attachment_source_poll">"投票"</string>
   <string name="screen_room_attachment_text_formatting">"書式設定"</string>

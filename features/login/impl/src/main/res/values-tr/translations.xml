@@ -28,7 +28,7 @@
   <string name="screen_login_error_invalid_credentials">"Yanlış kullanıcı adı ve/veya şifre"</string>
   <string name="screen_login_error_invalid_user_id">"Bu geçerli bir kullanıcı tanımlayıcısı değil. Kullanılması gereken biçim: \'@user:homeserver.org\'"</string>
   <string name="screen_login_error_refresh_tokens">"Bu sunucu, yenileme belirteçlerini kullanacak şekilde yapılandırılmıştır. Parola tabanlı oturum açma kullanılırken bunlar desteklenmez."</string>
-  <string name="screen_login_error_unsupported_authentication">"Seçilen ana sunucu parola veya OIDC oturum açmayı desteklemiyor. Lütfen yöneticinizle iletişime geçin veya başka bir ana sunucu seçin."</string>
+  <string name="screen_login_error_unsupported_authentication">"Seçilen ana sunucu parola veya OAuth oturum açmayı desteklemiyor. Lütfen yöneticinizle iletişime geçin veya başka bir ana sunucu seçin."</string>
   <string name="screen_login_form_header">"Bilgilerinizi girin"</string>
   <string name="screen_login_subtitle">"Matrix, güvenli, merkezi olmayan iletişim için açık bir ağdır."</string>
   <string name="screen_login_title">"Tekrar hoş geldiniz!"</string>
