@@ -54,6 +54,7 @@ import io.element.android.features.ftue.api.state.FtueService
 import io.element.android.features.ftue.api.state.FtueState
 import io.element.android.features.home.api.HomeEntryPoint
 import io.element.android.features.linknewdevice.api.LinkNewDeviceEntryPoint
+import io.element.android.features.location.api.live.ActiveLiveLocationShareManager
 import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.features.networkmonitor.api.NetworkStatus
 import io.element.android.features.networkmonitor.api.ui.ConnectivityIndicatorContainer
@@ -151,6 +152,7 @@ class LoggedInFlowNode(
     private val analyticsService: AnalyticsService,
     private val analyticsRoomListStateWatcher: AnalyticsRoomListStateWatcher,
     private val createRoomEntryPoint: CreateRoomEntryPoint,
+    private val activeLiveLocationShareManager: ActiveLiveLocationShareManager,
 ) : BaseFlowNode<LoggedInFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Placeholder,
@@ -219,7 +221,7 @@ class LoggedInFlowNode(
                 loggedInFlowProcessor.observeEvents(sessionCoroutineScope)
                 matrixClient.sessionVerificationService.setListener(verificationListener)
                 mediaPreviewConfigMigration()
-
+                activeLiveLocationShareManager.setup()
                 sessionCoroutineScope.launch {
                     // Wait for the network to be connected before pre-fetching the max file upload size
                     networkMonitor.connectivity.first { networkStatus -> networkStatus == NetworkStatus.Connected }

@@ -13,8 +13,10 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlin.time.Duration
 
 interface ActiveLiveLocationShareManager {
-    /** All currently active live location shares, keyed by RoomId. */
-    val activeShares: StateFlow<Map<RoomId, ActiveLiveLocationShare>>
+    /** All rooms currently sharing live location on this device. */
+    val activeShares: StateFlow<Set<RoomId>>
+
+    fun setup()
 
     /**
      * Starts live location sharing in the given room.
@@ -32,5 +34,5 @@ interface ActiveLiveLocationShareManager {
 }
 
 fun ActiveLiveLocationShareManager.isCurrentlySharing(roomId: RoomId): StateFlow<Boolean> {
-    return activeShares.mapState { it.contains(roomId) }
+    return activeShares.mapState { roomId in it }
 }

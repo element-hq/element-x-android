@@ -7,9 +7,7 @@
 
 package io.element.android.features.location.test
 
-import io.element.android.features.location.api.live.ActiveLiveLocationShare
 import io.element.android.features.location.api.live.ActiveLiveLocationShareManager
-import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.tests.testutils.lambda.lambdaError
@@ -18,28 +16,27 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlin.time.Duration
-import kotlin.time.Instant
 
 class FakeActiveLiveLocationShareManager(
     private val sessionId: SessionId,
+    val setupLambda: () -> Unit = { lambdaError() },
     val startShareLambda: (roomId: RoomId, duration: Duration) -> Result<Unit> = { _, _ -> lambdaError() },
     val stopShareLambda: (roomId: RoomId) -> Result<Unit> = { _ -> lambdaError() },
 ) : ActiveLiveLocationShareManager {
     val startShareCalls = mutableListOf<Triple<SessionId, RoomId, Long>>()
 
-    private val _activeShares = MutableStateFlow(emptyMap<RoomId, ActiveLiveLocationShare>())
-    override val activeShares: StateFlow<Map<RoomId, ActiveLiveLocationShare>> = _activeShares
+    private val _activeShares = MutableStateFlow(emptySet<RoomId>())
+    override val activeShares: StateFlow<Set<RoomId>> = _activeShares
+
+    override fun setup() {
+        setupLambda()
+    }
 
     override suspend fun startShare(roomId: RoomId, duration: Duration): Result<Unit> = simulateLongTask {
         startShareCalls += Triple(sessionId, roomId, duration.inWholeMilliseconds)
         startShareLambda(roomId, duration).onSuccess {
             _activeShares.update {
-                val beaconId = EventId("\$fake-live-location-${startShareCalls.size}:${sessionId.value.substringAfter(':')}")
-                it + (roomId to ActiveLiveLocationShare(
-                    beaconId = beaconId,
-                    roomId = roomId,
-                    expiresAt = Instant.fromEpochMilliseconds(System.currentTimeMillis() + duration.inWholeMilliseconds),
-                ))
+                it + roomId
             }
         }
     }
