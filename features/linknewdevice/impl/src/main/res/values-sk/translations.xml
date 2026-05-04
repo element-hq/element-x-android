@@ -34,6 +34,8 @@
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"Ak narazíte na rovnaký problém, vyskúšajte inú sieť Wi-Fi alebo namiesto siete Wi-Fi použite mobilné dáta"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Ak to nefunguje, prihláste sa manuálne"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Pripojenie nie je bezpečené"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"Budete požiadaní o zadanie dvoch číslic zobrazených na tomto zariadení."</string>
+  <string name="screen_qr_code_login_device_code_title">"Zadajte nižšie uvedené číslo na vašom druhom zariadení"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"Prihlásenie bolo zrušené na druhom zariadení."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Žiadosť o prihlásenie bola zrušená"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"Prihlásenie bolo zamietnuté na druhom zariadení."</string>
@@ -54,4 +56,5 @@ Skúste sa prihlásiť manuálne alebo naskenujte QR kód pomocou iného zariade
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Ak chcete pokračovať, musíte udeliť povolenie aplikácii %1$s používať fotoaparát vášho zariadenia."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Povoľte prístup k fotoaparátu na naskenovanie QR kódu"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Vyskytla sa neočakávaná chyba. Prosím, skúste to znova."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"Čaká sa na vaše druhé zariadenie"</string>
 </resources>

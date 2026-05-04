@@ -13,6 +13,7 @@
   <string name="a11y_encryption_details">"暗号化の詳細"</string>
   <string name="a11y_expand_message_text_field">"入力欄を拡大"</string>
   <string name="a11y_hide_password">"パスワードを非表示"</string>
+  <string name="a11y_info">"情報"</string>
   <string name="a11y_join_call">"通話に参加"</string>
   <string name="a11y_jump_to_bottom">"一番下へ"</string>
   <string name="a11y_move_the_map_to_my_location">"現在地に移動"</string>
@@ -46,6 +47,7 @@
   <string name="a11y_send_files">"ファイルを送信"</string>
   <string name="a11y_sender_location">"送信者の位置情報"</string>
   <string name="a11y_session_verification_time_limited_action_required">"1分以内に検証を完了してください"</string>
+  <string name="a11y_settings_with_required_action">"処置が必要な設定"</string>
   <string name="a11y_show_password">"パスワードを表示"</string>
   <string name="a11y_start_call">"通話を開始"</string>
   <string name="a11y_start_video_call">"ビデオ通話を開始"</string>
@@ -67,6 +69,7 @@
   <string name="action_call">"通話"</string>
   <string name="action_cancel">"キャンセル"</string>
   <string name="action_cancel_for_now">"今回のみキャンセル"</string>
+  <string name="action_choose_file">"ファイルを選択"</string>
   <string name="action_choose_photo">"写真を選択"</string>
   <string name="action_clear">"クリア"</string>
   <string name="action_close">"閉じる"</string>
@@ -94,6 +97,7 @@
   <string name="action_discard">"破棄"</string>
   <string name="action_dismiss">"無視"</string>
   <string name="action_done">"完了"</string>
+  <string name="action_download">"ダウンロード"</string>
   <string name="action_edit">"編集"</string>
   <string name="action_edit_caption">"キャプションを編集"</string>
   <string name="action_edit_poll">"投票を編集"</string>
@@ -196,12 +200,14 @@
   <string name="common_android_fetching_notifications_title">"通知を同期中…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"あなたがルームを退出"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"セッションからログアウトされました"</string>
-  <string name="common_appearance">"外観"</string>
+  <string name="common_appearance">"テーマ"</string>
   <string name="common_audio">"音声"</string>
   <string name="common_beta">"ベータ版"</string>
   <string name="common_blocked_users">"ブロックしたユーザー"</string>
   <string name="common_bubbles">"ふきだし"</string>
+  <string name="common_call_declined">"通話を拒否しました"</string>
   <string name="common_call_started">"通話を開始しました"</string>
+  <string name="common_call_you_declined">"通話を拒否しました"</string>
   <string name="common_chat_backup">"チャットをバックアップ"</string>
   <string name="common_copied_to_clipboard">"クリップボードにコピーしました"</string>
   <string name="common_copyright">"著作権"</string>

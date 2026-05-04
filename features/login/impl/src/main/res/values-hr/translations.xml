@@ -32,7 +32,7 @@
   <string name="screen_login_error_invalid_credentials">"Netočno korisničko ime i/ili zaporka"</string>
   <string name="screen_login_error_invalid_user_id">"To nije valjani identifikator korisnika. Očekivani oblik: ‘@korisnik:matičniposlužitelj.org’"</string>
   <string name="screen_login_error_refresh_tokens">"Ovaj je poslužitelj konfiguriran za korištenje tokena za osvježavanje. Oni nisu podržani kada se upotrebljava prijava temeljena na zaporki."</string>
-  <string name="screen_login_error_unsupported_authentication">"Odabrani matični poslužitelj ne podržava zaporku ili OIDC prijavu. Obratite se administratoru ili odaberite drugi matični poslužitelj."</string>
+  <string name="screen_login_error_unsupported_authentication">"Odabrani matični poslužitelj ne podržava zaporku ili OAuth prijavu. Obratite se administratoru ili odaberite drugi matični poslužitelj."</string>
   <string name="screen_login_form_header">"Unesite svoje podatke"</string>
   <string name="screen_login_subtitle">"Matrix je otvorena mreža za sigurnu, decentraliziranu komunikaciju."</string>
   <string name="screen_login_title">"Dobro došli natrag!"</string>

@@ -31,7 +31,7 @@
   <string name="screen_login_error_deactivated_account">"Ši paskyra buvo išjungta."</string>
   <string name="screen_login_error_invalid_credentials">"Neteisingas vartotojo vardas ir (arba) slaptažodis"</string>
   <string name="screen_login_error_invalid_user_id">"Tai nėra tinkamas vartotojo vardas. Reikalingas formatas: \'@vartotojas:serveris.org\'"</string>
-  <string name="screen_login_error_unsupported_authentication">"Pasirinktas serveris nepalaiko slaptažodžio ar OIDC prisijungimo. Susisiekite su serverio administracija arba pasirinkite kitą serverį."</string>
+  <string name="screen_login_error_unsupported_authentication">"Pasirinktas serveris nepalaiko slaptažodžio ar OAuth prisijungimo. Susisiekite su serverio administracija arba pasirinkite kitą serverį."</string>
   <string name="screen_login_form_header">"Įveskite savo duomenis"</string>
   <string name="screen_login_subtitle">"Matrix yra atviras tinklas, skirtas saugiam, decentralizuotam bendravimui."</string>
   <string name="screen_login_title">"Sveiki sugrįžę!"</string>

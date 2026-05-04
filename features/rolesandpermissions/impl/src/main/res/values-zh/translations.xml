@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_room_change_permissions_administrators">"管理员"</string>
-  <string name="screen_room_change_permissions_ban_people">"封禁成员"</string>
+  <string name="screen_room_change_permissions_ban_people">"封禁人员"</string>
   <string name="screen_room_change_permissions_change_settings">"更改设置"</string>
   <string name="screen_room_change_permissions_delete_messages">"移除消息"</string>
   <string name="screen_room_change_permissions_everyone">"成员"</string>
@@ -39,7 +39,7 @@
   <string name="screen_room_change_role_unsaved_changes_title">"保存更改？"</string>
   <string name="screen_room_member_list_banned_empty">"暂无被封禁的用户。"</string>
   <plurals name="screen_room_member_list_banned_header_title">
-    <item quantity="other">"%1$d 被禁用"</item>
+    <item quantity="other">"%1$d 人被封禁"</item>
   </plurals>
   <string name="screen_room_member_list_empty_search_subtitle">"检查拼写或尝试新搜索"</string>
   <string name="screen_room_member_list_empty_search_title">"未找到 “%1$s” 相关结果"</string>

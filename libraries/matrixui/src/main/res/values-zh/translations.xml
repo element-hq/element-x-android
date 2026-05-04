@@ -5,5 +5,5 @@
   <string name="screen_bottom_sheet_create_dm_title">"发送邀请？"</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_content">"你与此人暂无任何聊天。请确认对方被邀请后再继续。"</string>
   <string name="screen_bottom_sheet_create_dm_unknown_user_title">"是否与新联系人开始聊天？"</string>
-  <string name="screen_invites_invited_you">"%1$s （%2$s）邀请了你"</string>
+  <string name="screen_invites_invited_you">"%1$s（%2$s）邀请了你"</string>
 </resources>

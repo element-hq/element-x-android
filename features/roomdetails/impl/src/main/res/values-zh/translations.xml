@@ -9,7 +9,7 @@
   <string name="screen_notification_settings_mentions_only_disclaimer">"主服务器不支持在加密房间中的此选项，因此在某些房间你可能无法收到通知。"</string>
   <string name="screen_polls_history_title">"投票"</string>
   <string name="screen_room_change_permissions_administrators">"管理员"</string>
-  <string name="screen_room_change_permissions_ban_people">"封禁成员"</string>
+  <string name="screen_room_change_permissions_ban_people">"封禁人员"</string>
   <string name="screen_room_change_permissions_delete_messages">"移除消息"</string>
   <string name="screen_room_change_permissions_everyone">"成员"</string>
   <string name="screen_room_change_permissions_invite_people">"邀请人员"</string>
@@ -55,7 +55,7 @@
   <string name="screen_room_details_error_unmuting">"无法取消静音此房间，请重试。"</string>
   <string name="screen_room_details_invite_people_dont_close">"完成之前请勿关闭 app。"</string>
   <string name="screen_room_details_invite_people_preparing">"正在准备邀请…"</string>
-  <string name="screen_room_details_invite_people_title">"邀请朋友"</string>
+  <string name="screen_room_details_invite_people_title">"邀请人员"</string>
   <string name="screen_room_details_leave_conversation_title">"离开聊天"</string>
   <string name="screen_room_details_leave_room_title">"离开房间"</string>
   <string name="screen_room_details_media_gallery_title">"媒体与文件"</string>
@@ -75,7 +75,7 @@
   <string name="screen_room_details_updating_room">"正在更新房间…"</string>
   <string name="screen_room_member_list_banned_empty">"暂无被封禁的用户。"</string>
   <plurals name="screen_room_member_list_banned_header_title">
-    <item quantity="other">"%1$d 被禁用"</item>
+    <item quantity="other">"%1$d 人被封禁"</item>
   </plurals>
   <string name="screen_room_member_list_empty_search_subtitle">"检查拼写或尝试新搜索"</string>
   <string name="screen_room_member_list_empty_search_title">"未找到 “%1$s” 相关结果"</string>
@@ -145,7 +145,7 @@
   <string name="screen_security_and_privacy_room_access_anyone_option_title">"任何人"</string>
   <string name="screen_security_and_privacy_room_access_footer">"选择哪些无需邀请即可加入此房间的空间成员。%1$s"</string>
   <string name="screen_security_and_privacy_room_access_footer_manage_spaces_action">"管理空间"</string>
-  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"仅限受邀者加入。"</string>
+  <string name="screen_security_and_privacy_room_access_invite_only_option_description">"仅限受邀人员加入。"</string>
   <string name="screen_security_and_privacy_room_access_invite_only_option_title">"仅限受邀者"</string>
   <string name="screen_security_and_privacy_room_access_section_header">"访问权限"</string>
   <string name="screen_security_and_privacy_room_access_space_members_option_multiple_parents_description">"任何位于已授权空间的成员均可加入。"</string>

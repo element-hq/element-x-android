@@ -13,7 +13,7 @@
   <string name="screen_bug_report_include_logs_error">"日志文件过大，无法包含在本次报告中，请通过其它方式发送给我们。"</string>
   <string name="screen_bug_report_include_screenshot">"发送屏幕截图"</string>
   <string name="screen_bug_report_logs_description">"为确认一切正常运行，日志中将包含你的消息。如要发送不含消息的日志，请关闭此设置。"</string>
-  <string name="screen_bug_report_rash_logs_alert_title">"%1$s 上次使用时崩溃了。想和我们分享崩溃报告吗？"</string>
+  <string name="screen_bug_report_rash_logs_alert_title">"%1$s 上次使用时曾崩溃过。是否与我们分享崩溃报告？"</string>
   <string name="screen_bug_report_send_notification_settings_description">"如果你遭遇通知相关问题，上传通知设置可以帮助我们调查根本原因。请注意：这些规则可能包含私人信息，例如你的显示名称或用于接收通知的关键词。"</string>
   <string name="screen_bug_report_send_notification_settings_title">"发送通知设置"</string>
   <string name="screen_bug_report_view_logs">"查看日志"</string>

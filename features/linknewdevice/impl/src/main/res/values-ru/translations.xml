@@ -34,6 +34,8 @@
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"Если вы столкнулись с той же проблемой, попробуйте сменить точку доступа Wi-Fi или используйте мобильные данные"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Если это не помогло, войдите вручную"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Соединение не защищено"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"Вам нужно будет ввести две цифры, показанные на этом устройстве."</string>
+  <string name="screen_qr_code_login_device_code_title">"Введите показанный номер на своем другом устройстве"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"Вход на другом устройстве был отменен."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Запрос на вход отменен"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"Вход в систему был отклонен на другом устройстве."</string>
@@ -54,4 +56,5 @@
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Чтобы продолжить, вам необходимо разрешить %1$s использовать камеру вашего устройства."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Разрешите доступ к камере для сканирования QR-кода"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Произошла непредвиденная ошибка. Пожалуйста, попробуйте еще раз."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"Ожидание другого устройства"</string>
 </resources>

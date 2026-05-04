@@ -32,7 +32,7 @@
   <string name="screen_login_error_invalid_credentials">"Nesprávné uživatelské jméno nebo heslo"</string>
   <string name="screen_login_error_invalid_user_id">"Toto není platný identifikátor uživatele. Očekávaný formát: \'@user:homeserver.org\'"</string>
   <string name="screen_login_error_refresh_tokens">"Tento server je nakonfigurován tak, aby používal obnovovací tokeny. Ty nejsou podporovány při použití přihlašovacích údajů založených na hesle."</string>
-  <string name="screen_login_error_unsupported_authentication">"Vybraný domovský server nepodporuje přihlášení pomocí hesla nebo OIDC. Kontaktujte prosím svého správce nebo vyberte jiný domovský server."</string>
+  <string name="screen_login_error_unsupported_authentication">"Vybraný domovský server nepodporuje přihlášení pomocí hesla nebo OAuth. Kontaktujte prosím svého správce nebo vyberte jiný domovský server."</string>
   <string name="screen_login_form_header">"Zadejte své údaje"</string>
   <string name="screen_login_subtitle">"Matrix je otevřená síť pro bezpečnou a decentralizovanou komunikaci."</string>
   <string name="screen_login_title">"Vítejte zpět!"</string>
