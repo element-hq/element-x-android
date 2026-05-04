@@ -14,9 +14,12 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.linknewdevice.ErrorType
 import io.element.android.libraries.matrix.api.linknewdevice.LinkMobileStep
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiCheckCodeSender
+import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiContinuationMessageSender
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiGrantLoginWithQrCodeHandler
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiQrCodeData
 import io.element.android.libraries.matrix.test.QR_CODE_DATA_RECIPROCATE
+import io.element.android.tests.testutils.ExpectedResult
+import io.element.android.tests.testutils.match
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -50,18 +53,22 @@ class RustLinkMobileHandlerTest {
             runCurrent()
             // progress from the handler is mapped and emitted
             listOf(
-                GrantGeneratedQrLoginProgress.Starting to LinkMobileStep.Starting::class.java,
-                GrantGeneratedQrLoginProgress.SyncingSecrets to LinkMobileStep.SyncingSecrets::class.java,
-                GrantGeneratedQrLoginProgress.WaitingForAuth("aVerificationUri")
-                    to LinkMobileStep.WaitingForAuth::class.java,
+                GrantGeneratedQrLoginProgress.Starting to ExpectedResult(LinkMobileStep.Starting),
+                GrantGeneratedQrLoginProgress.SyncingSecrets to ExpectedResult(LinkMobileStep.SyncingSecrets),
+                GrantGeneratedQrLoginProgress.OpeningVerificationUri(
+                    verificationUri = "aVerificationUri",
+                    continuationSender = FakeFfiContinuationMessageSender(),
+                ) to ExpectedResult(LinkMobileStep.OpeningVerificationUri::class.java),
+                GrantGeneratedQrLoginProgress.WaitingForAuth(FakeFfiContinuationMessageSender())
+                    to ExpectedResult(LinkMobileStep.WaitingForAuth::class.java),
                 GrantGeneratedQrLoginProgress.QrScanned(FakeFfiCheckCodeSender())
-                    to LinkMobileStep.QrScanned::class.java,
+                    to ExpectedResult(LinkMobileStep.QrScanned::class.java),
                 GrantGeneratedQrLoginProgress.QrReady(FakeFfiQrCodeData(toBytesResult = { QR_CODE_DATA_RECIPROCATE }))
-                    to LinkMobileStep.QrReady::class.java,
-                GrantGeneratedQrLoginProgress.Done to LinkMobileStep.Done::class.java,
-            ).forEach { (progress, expectedStepClass) ->
+                    to ExpectedResult(LinkMobileStep.QrReady::class.java),
+                GrantGeneratedQrLoginProgress.Done to ExpectedResult(LinkMobileStep.Done),
+            ).forEach { (progress, expectedResult) ->
                 handler.emitGenerateProgress(progress)
-                assertThat(awaitItem()).isInstanceOf(expectedStepClass)
+                assertThat(awaitItem()).match(expectedResult)
             }
             // generate returns, no new event is emitted
             completable.complete(Unit)

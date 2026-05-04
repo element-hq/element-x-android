@@ -49,8 +49,10 @@ import io.element.android.libraries.matrix.api.linknewdevice.LinkMobileStep
 import io.element.android.libraries.matrix.api.logs.LoggerTags
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 import timber.log.Timber
 
@@ -91,6 +93,7 @@ class LinkNewDeviceFlowNode(
                 @Suppress("AssignedValueIsNeverRead")
                 linkDesktopHandlerJob = observeLinkNewDesktopHandler()
             },
+            onResume = ::onResume,
             onDestroy = {
                 linkMobileHandlerJob?.cancel()
                 linkDesktopHandlerJob?.cancel()
@@ -152,8 +155,13 @@ class LinkNewDeviceFlowNode(
                         // This step is not received at the moment, so do nothing
                     }
                     LinkMobileStep.SyncingSecrets -> Unit
-                    is LinkMobileStep.WaitingForAuth -> {
+                    is LinkMobileStep.OpeningVerificationUri -> {
+                        // Confirm right now, we do not have a confirmation dialog on Android
+                        linkMobileStep.continuationMessageSender.confirm()
                         navigateToBrowser(linkMobileStep.verificationUri)
+                    }
+                    is LinkMobileStep.WaitingForAuth -> {
+                        // Just wait for the application to be resumed
                     }
                 }
             }
@@ -178,12 +186,29 @@ class LinkNewDeviceFlowNode(
                 LinkDesktopStep.Starting -> Unit
                 LinkDesktopStep.SyncingSecrets -> Unit
                 LinkDesktopStep.Uninitialized -> Unit
-                is LinkDesktopStep.WaitingForAuth -> {
+                is LinkDesktopStep.OpeningVerificationUri -> {
+                    // Confirm right now, we do not have a confirmation dialog on Android
+                    linkDesktopStep.continuationMessageSender.confirm()
                     navigateToBrowser(linkDesktopStep.verificationUri)
+                }
+                is LinkDesktopStep.WaitingForAuth -> {
+                    // Just wait for the application to be resumed
                 }
             }
         }
             .launchIn(sessionCoroutineScope)
+    }
+
+    private fun onResume() = sessionCoroutineScope.launch {
+        // Application is resumed, if the step is waiting for auth, send the confirmation
+        (linkNewMobileHandler.stepFlow.first() as? LinkMobileStep.WaitingForAuth)?.let {
+            Timber.tag(tag.value).d("Resuming while waiting for auth on mobile, sending confirmation")
+            it.continuationMessageSender.confirm()
+        }
+        (linkNewDesktopHandler.stepFlow.value as? LinkDesktopStep.WaitingForAuth)?.let {
+            Timber.tag(tag.value).d("Resuming while waiting for auth on desktop, sending confirmation")
+            it.continuationMessageSender.confirm()
+        }
     }
 
     private fun navigateToError(errorType: ErrorType) {
