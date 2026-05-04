@@ -120,6 +120,7 @@ private fun aSpaceInfo(
         activeMembersCount = 5,
         invitedMembersCount = 0,
         joinedMembersCount = 5,
+        serviceMembers = persistentListOf(),
         roomPowerLevels = null,
         highlightCount = 0,
         notificationCount = 0,
