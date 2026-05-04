@@ -50,6 +50,8 @@ import io.element.android.libraries.core.extensions.toSafeLength
 import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
 import io.element.android.libraries.designsystem.atomic.molecules.InviteButtonsRowMolecule
 import io.element.android.libraries.designsystem.components.avatar.Avatar
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -74,6 +76,7 @@ internal fun RoomSummaryRow(
     room: RoomListRoomSummary,
     hideInviteAvatars: Boolean,
     isInviteSeen: Boolean,
+    spaceAvatarData: AvatarData?,
     onClick: (RoomListRoomSummary) -> Unit,
     eventSink: (RoomListEvent) -> Unit,
     modifier: Modifier = Modifier,
@@ -92,7 +95,7 @@ internal fun RoomSummaryRow(
                         Timber.d("Long click on invite room")
                     },
                 ) {
-                    InviteNameAndIndicatorRow(name = room.name, isInviteSeen = isInviteSeen)
+                    InviteNameAndIndicatorRow(name = room.name, isInviteSeen = isInviteSeen, spaceAvatarData = spaceAvatarData)
                     InviteSubtitle(isDm = room.isDm, inviteSender = room.inviteSender)
                     if (!room.isDm && room.inviteSender != null) {
                         Spacer(modifier = Modifier.height(4.dp))
@@ -124,7 +127,8 @@ internal fun RoomSummaryRow(
                     NameAndTimestampRow(
                         name = room.name,
                         timestamp = room.timestamp,
-                        isHighlighted = room.isHighlighted
+                        isHighlighted = room.isHighlighted,
+                        spaceAvatarData = spaceAvatarData,
                     )
                     MessagePreviewAndIndicatorRow(room = room)
                 }
@@ -140,7 +144,8 @@ internal fun RoomSummaryRow(
                     NameAndTimestampRow(
                         name = room.name,
                         timestamp = null,
-                        isHighlighted = room.isHighlighted
+                        isHighlighted = room.isHighlighted,
+                        spaceAvatarData = spaceAvatarData,
                     )
                     if (room.canonicalAlias != null) {
                         Text(
@@ -216,6 +221,7 @@ private fun NameAndTimestampRow(
     name: String?,
     timestamp: String?,
     isHighlighted: Boolean,
+    spaceAvatarData: AvatarData?,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -235,6 +241,15 @@ private fun NameAndTimestampRow(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
+            // Space avatar
+            if (spaceAvatarData != null) {
+                Spacer(modifier = Modifier.width(8.dp))
+                Avatar(
+                    avatarData = spaceAvatarData,
+                    avatarType = AvatarType.Space(),
+                    forcedAvatarSize = AvatarSize.SpaceAvatarInRoomList.dp,
+                )
+            }
         }
         // Timestamp
         Text(
@@ -373,22 +388,36 @@ private fun MessagePreviewAndIndicatorRow(
 private fun InviteNameAndIndicatorRow(
     name: String?,
     isInviteSeen: Boolean,
-    modifier: Modifier = Modifier,
+    spaceAvatarData: AvatarData?,
+    modifier: Modifier = Modifier
 ) {
     Row(
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = spacedBy(16.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Text(
+        Row(
             modifier = Modifier.weight(1f),
-            style = ElementTheme.typography.fontBodyLgMedium,
-            text = name?.toSafeLength(ellipsize = true) ?: stringResource(id = CommonStrings.common_no_room_name),
-            fontStyle = FontStyle.Italic.takeIf { name == null },
-            color = ElementTheme.colors.roomListRoomName,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Text(
+                modifier = Modifier.weight(1f),
+                style = ElementTheme.typography.fontBodyLgMedium,
+                text = name?.toSafeLength(ellipsize = true) ?: stringResource(id = CommonStrings.common_no_room_name),
+                fontStyle = FontStyle.Italic.takeIf { name == null },
+                color = ElementTheme.colors.roomListRoomName,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            if (spaceAvatarData != null) {
+                Spacer(modifier = Modifier.width(8.dp))
+                Avatar(
+                    avatarData = spaceAvatarData,
+                    avatarType = AvatarType.Space(),
+                    forcedAvatarSize = AvatarSize.SpaceAvatarInRoomList.dp,
+                )
+            }
+        }
         if (!isInviteSeen) {
             UnreadIndicatorAtom(
                 color = ElementTheme.colors.unreadIndicator
@@ -436,8 +465,8 @@ internal fun RoomSummaryRowPreview(@PreviewParameter(RoomListRoomSummaryProvider
     RoomSummaryRow(
         room = data,
         hideInviteAvatars = false,
-        // Set isInviteSeen to true for the preview when the room has name "Bob"
         isInviteSeen = data.name == "Bob",
+        spaceAvatarData = null,
         onClick = {},
         eventSink = {},
     )

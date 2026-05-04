@@ -24,6 +24,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -47,6 +48,8 @@ import io.element.android.features.home.impl.roomlist.RoomListEvent
 import io.element.android.features.home.impl.roomlist.SecurityBannerState
 import io.element.android.features.home.impl.spacefilters.SpaceFiltersState
 import io.element.android.features.home.impl.spacefilters.anUnselectedSpaceFiltersState
+import io.element.android.libraries.designsystem.components.avatar.AvatarData
+import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Button
@@ -54,8 +57,12 @@ import io.element.android.libraries.designsystem.theme.components.HorizontalDivi
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.OnVisibleRangeChangeEffect
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.spaces.SpaceServiceFilter
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.toImmutableMap
 
 @Composable
 fun RoomListContentView(
@@ -197,6 +204,7 @@ private fun RoomsView(
         RoomsViewList(
             state = state,
             hideInvitesAvatars = hideInvitesAvatars,
+            spaceFiltersState = spaceFiltersState,
             eventSink = eventSink,
             onSetUpRecoveryClick = onSetUpRecoveryClick,
             onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
@@ -212,6 +220,7 @@ private fun RoomsView(
 private fun RoomsViewList(
     state: RoomListContentState.Rooms,
     hideInvitesAvatars: Boolean,
+    spaceFiltersState: SpaceFiltersState,
     eventSink: (RoomListEvent) -> Unit,
     onSetUpRecoveryClick: () -> Unit,
     onConfirmRecoveryKeyClick: () -> Unit,
@@ -220,6 +229,13 @@ private fun RoomsViewList(
     lazyListState: LazyListState,
     modifier: Modifier = Modifier,
 ) {
+    val roomToSpaceAvatarMap = remember(spaceFiltersState.availableFilters) {
+        if (spaceFiltersState is SpaceFiltersState.Disabled) {
+            emptyMap<RoomId, AvatarData>()
+        } else {
+            buildRoomToSpaceAvatarMap(spaceFiltersState.availableFilters)
+        }
+    }
     OnVisibleRangeChangeEffect(lazyListState) { visibleRange ->
         eventSink(RoomListEvent.UpdateVisibleRange(visibleRange))
     }
@@ -273,6 +289,7 @@ private fun RoomsViewList(
                 hideInviteAvatars = hideInvitesAvatars,
                 isInviteSeen = room.displayType == RoomSummaryDisplayType.INVITE &&
                     state.seenRoomInvites.contains(room.roomId),
+                spaceAvatarData = roomToSpaceAvatarMap[room.roomId],
                 onClick = onRoomClick,
                 eventSink = eventSink,
             )
@@ -350,4 +367,24 @@ internal fun RoomListContentViewPreview(@PreviewParameter(RoomListContentStatePr
         lazyListState = rememberLazyListState(),
         contentPadding = PaddingValues(0.dp),
     )
+}
+
+private fun buildRoomToSpaceAvatarMap(
+    availableFilters: ImmutableList<SpaceServiceFilter>,
+): ImmutableMap<RoomId, AvatarData> {
+    val map = mutableMapOf<RoomId, AvatarData>()
+    for (filter in availableFilters) {
+        val spaceAvatarData = AvatarData(
+            id = filter.spaceRoom.roomId.value,
+            name = filter.spaceRoom.displayName,
+            url = filter.spaceRoom.avatarUrl,
+            size = AvatarSize.SpaceAvatarInRoomList,
+        )
+        for (roomId in filter.descendants) {
+            if (roomId !in map) {
+                map[roomId] = spaceAvatarData
+            }
+        }
+    }
+    return map.toImmutableMap()
 }
