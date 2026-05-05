@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2026 Element Creations Ltd.
+  ~
+  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+  ~ Please see LICENSE files in the repository root for full details.
+  -->
+
+<resources>
+    <string name="screen_alpha_tab_messages">"消息"</string>
+    <string name="screen_alpha_tab_contacts">"通讯录"</string>
+    <string name="screen_alpha_tab_discover">"发现"</string>
+    <string name="screen_alpha_tab_me">"我"</string>
+    <string name="screen_alpha_tab_coming_soon">"这里还在建设中，敬请期待。"</string>
+    <string name="screen_alpha_me_settings">"设置"</string>
+</resources>

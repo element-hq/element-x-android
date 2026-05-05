@@ -32,6 +32,7 @@ import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.MobileScreen
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.home.api.HomeEntryPoint
+import io.element.android.features.home.impl.alpha.AlphaHomeShell
 import io.element.android.features.home.impl.components.RoomListMenuAction
 import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.features.home.impl.roomlist.RoomListEvent
@@ -215,35 +216,39 @@ class HomeFlowNode(
                 loadingJoinedRoomJob.value = AsyncData.Loading(job)
             }
 
-            HomeView(
-                homeState = state,
-                onRoomClick = ::navigateToRoom,
+            AlphaHomeShell(
                 onSettingsClick = callback::navigateToSettings,
-                onStartChatClick = callback::navigateToCreateRoom,
-                onCreateSpaceClick = callback::navigateToCreateSpace,
-                onSetUpRecoveryClick = callback::navigateToSetUpRecovery,
-                onConfirmRecoveryKeyClick = callback::navigateToEnterRecoveryKey,
-                onRoomSettingsClick = callback::navigateToRoomSettings,
-                onMenuActionClick = { onMenuActionClick(activity, it) },
-                onReportRoomClick = ::navigateToReportRoom,
-                onDeclineInviteAndBlockUser = ::navigateToDeclineInviteAndBlockUser,
                 modifier = modifier,
-                acceptDeclineInviteView = {
-                    acceptDeclineInviteView.Render(
-                        state = state.roomListState.acceptDeclineInviteState,
-                        onAcceptInviteSuccess = ::navigateToRoom,
-                        onDeclineInviteSuccess = { },
-                        modifier = Modifier
-                    )
-                },
-                leaveRoomView = {
-                    leaveRoomRenderer.Render(
-                        state = state.roomListState.leaveRoomState,
-                        onSelectNewOwners = ::navigateToSelectNewOwnersWhenLeavingRoom,
-                        modifier = Modifier
-                    )
-                }
-            )
+            ) {
+                HomeView(
+                    homeState = state,
+                    onRoomClick = ::navigateToRoom,
+                    onSettingsClick = callback::navigateToSettings,
+                    onStartChatClick = callback::navigateToCreateRoom,
+                    onCreateSpaceClick = callback::navigateToCreateSpace,
+                    onSetUpRecoveryClick = callback::navigateToSetUpRecovery,
+                    onConfirmRecoveryKeyClick = callback::navigateToEnterRecoveryKey,
+                    onRoomSettingsClick = callback::navigateToRoomSettings,
+                    onMenuActionClick = { onMenuActionClick(activity, it) },
+                    onReportRoomClick = ::navigateToReportRoom,
+                    onDeclineInviteAndBlockUser = ::navigateToDeclineInviteAndBlockUser,
+                    acceptDeclineInviteView = {
+                        acceptDeclineInviteView.Render(
+                            state = state.roomListState.acceptDeclineInviteState,
+                            onAcceptInviteSuccess = ::navigateToRoom,
+                            onDeclineInviteSuccess = { },
+                            modifier = Modifier
+                        )
+                    },
+                    leaveRoomView = {
+                        leaveRoomRenderer.Render(
+                            state = state.roomListState.leaveRoomState,
+                            onSelectNewOwners = ::navigateToSelectNewOwnersWhenLeavingRoom,
+                            modifier = Modifier
+                        )
+                    }
+                )
+            }
             directLogoutView.Render(state.directLogoutState)
         }
     }
