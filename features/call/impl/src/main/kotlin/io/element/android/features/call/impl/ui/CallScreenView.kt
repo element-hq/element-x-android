@@ -256,9 +256,7 @@ private fun WebView.setup(
 
 private fun WebView.addBackHandler(onBackPressed: () -> Unit) {
     addJavascriptInterface(
-        JavascriptBackHandler {
-            onBackPressed()
-        },
+        JavascriptBackHandlerBridge(callback = onBackPressed),
         "backHandler"
     )
 }
@@ -287,7 +285,11 @@ internal fun InvalidAudioDeviceDialogPreview() = ElementPreview {
     InvalidAudioDeviceDialog(invalidAudioDeviceReason = InvalidAudioDeviceReason.BT_AUDIO_DEVICE_DISABLED) {}
 }
 
-internal fun interface JavascriptBackHandler {
+internal class JavascriptBackHandlerBridge(
+    private val callback: () -> Unit,
+) {
     @JavascriptInterface
-    fun onBackPressed()
+    fun onBackPressed() {
+        callback()
+    }
 }
