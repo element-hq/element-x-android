@@ -30,7 +30,7 @@ fun MatrixUserRow(
 ) = UserRow(
     avatarData = matrixUser.getAvatarData(avatarSize),
     name = matrixUser.getBestName(),
-    subtext = if (matrixUser.displayName.isNullOrEmpty()) null else matrixUser.userId.value,
+    subtext = null,
     modifier = modifier,
     verticalSpaceWidth = verticalSpaceWidth,
     trailingContent = trailingContent,

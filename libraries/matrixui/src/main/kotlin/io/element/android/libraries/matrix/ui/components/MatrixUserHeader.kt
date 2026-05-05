@@ -66,10 +66,11 @@ fun MatrixUserHeader(
                 overflow = TextOverflow.Ellipsis,
                 color = ElementTheme.colors.textPrimary,
             )
-            // Id
+            // Localpart (Alpha ID) — show the bare handle, hide the `@user:server` form
+            // because the demo is non-federated and the full MXID is just visual noise.
             if (matrixUser.displayName.isNullOrEmpty().not()) {
                 Text(
-                    text = matrixUser.userId.value,
+                    text = matrixUser.userId.value.removePrefix("@").substringBefore(":"),
                     style = ElementTheme.typography.fontBodyMdRegular,
                     color = ElementTheme.colors.textSecondary,
                     maxLines = 1,

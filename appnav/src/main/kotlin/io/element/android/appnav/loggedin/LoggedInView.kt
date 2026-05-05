@@ -18,22 +18,20 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.lifecycle.Lifecycle
 import io.element.android.appnav.R
-import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.dialogs.ErrorDialog
-import io.element.android.libraries.designsystem.components.dialogs.ErrorDialogWithDoNotShowAgain
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
-import io.element.android.libraries.matrix.api.exception.isNetworkError
-import io.element.android.libraries.push.api.PusherRegistrationFailure
-import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 fun LoggedInView(
     state: LoggedInState,
-    navigateToNotificationTroubleshoot: () -> Unit,
+    @Suppress("UNUSED_PARAMETER") navigateToNotificationTroubleshoot: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    // Push registration is expected to fail in the Alpha demo — Synapse runs without
+    // a Sygnal push gateway and the bundled Firebase config is a placeholder. The
+    // troubleshooter dialog is intentionally not surfaced here.
     OnLifecycleEvent { _, event ->
          if (event == Lifecycle.Event.ON_RESUME) {
             state.eventSink(LoggedInEvents.CheckSlidingSyncProxyAvailability)
@@ -49,29 +47,6 @@ fun LoggedInView(
             isVisible = state.showSyncSpinner,
         )
     }
-    when (state.pusherRegistrationState) {
-        is AsyncData.Uninitialized,
-        is AsyncData.Loading,
-        is AsyncData.Success -> Unit
-        is AsyncData.Failure -> {
-            state.pusherRegistrationState.errorOrNull()
-                ?.takeIf { !state.ignoreRegistrationError }
-                ?.getReason()
-                ?.let { reason ->
-                    ErrorDialogWithDoNotShowAgain(
-                        content = stringResource(id = CommonStrings.common_error_registering_pusher_android, reason),
-                        cancelText = stringResource(id = CommonStrings.common_settings),
-                        onDismiss = {
-                            state.eventSink(LoggedInEvents.CloseErrorDialog(it))
-                        },
-                        onCancel = {
-                            state.eventSink(LoggedInEvents.CloseErrorDialog(false))
-                            navigateToNotificationTroubleshoot()
-                        }
-                    )
-                }
-        }
-    }
 
     // Set the force migration dialog here so it's always displayed over every screen
     if (state.forceNativeSlidingSyncMigration) {
@@ -81,23 +56,6 @@ fun LoggedInView(
                 state.eventSink(LoggedInEvents.LogoutAndMigrateToNativeSlidingSync)
             }
         )
-    }
-}
-
-private fun Throwable.getReason(): String? {
-    return when (this) {
-        is PusherRegistrationFailure.RegistrationFailure -> {
-            if (isRegisteringAgain && clientException.isNetworkError()) {
-                // When registering again, ignore network error
-                null
-            } else {
-                clientException.message ?: "Unknown error"
-            }
-        }
-        is PusherRegistrationFailure.AccountNotVerified -> null
-        is PusherRegistrationFailure.NoDistributorsAvailable -> "No distributors available"
-        is PusherRegistrationFailure.NoProvidersAvailable -> "No providers available"
-        else -> "Other error: $message"
     }
 }
 
