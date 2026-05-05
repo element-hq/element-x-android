@@ -12,7 +12,6 @@ import io.element.android.features.messages.impl.crypto.sendfailure.resolve.Reso
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.aResolveVerifiedUserSendFailureState
 import io.element.android.features.messages.impl.timeline.components.MessageShieldData
 import io.element.android.features.messages.impl.timeline.components.receipt.aReadReceiptData
-import io.element.android.features.messages.impl.timeline.model.JumpToUnreadState
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.ReadReceiptData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -58,7 +57,8 @@ fun aTimelineState(
     resolveVerifiedUserSendFailureState: ResolveVerifiedUserSendFailureState = aResolveVerifiedUserSendFailureState(),
     displayThreadSummaries: Boolean = false,
     displayFloatingDateBadge: Boolean = false,
-    jumpToUnreadState: JumpToUnreadState = JumpToUnreadState.NoMarker,
+    displayJumpToUnread: Boolean = false,
+    readMarkerIndex: Int? = null,
     newEventState: NewEventState = NewEventState.None,
     eventSink: (TimelineEvent) -> Unit = {},
 ): TimelineState {
@@ -80,7 +80,8 @@ fun aTimelineState(
         resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailureState,
         displayThreadSummaries = displayThreadSummaries,
         displayFloatingDateBadge = displayFloatingDateBadge,
-        jumpToUnreadState = jumpToUnreadState,
+        displayJumpToUnread = displayJumpToUnread,
+        readMarkerIndex = readMarkerIndex,
         eventSink = eventSink,
     )
 }

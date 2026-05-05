@@ -19,7 +19,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
@@ -49,9 +48,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
-import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
@@ -65,7 +62,6 @@ import io.element.android.features.messages.impl.timeline.components.toText
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.aFakeTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.focus.FocusRequestStateView
-import io.element.android.features.messages.impl.timeline.model.JumpToUnreadState
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
@@ -78,14 +74,12 @@ import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
 import io.element.android.libraries.designsystem.theme.components.Icon
-import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.animateScrollToItemCenter
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
-import io.element.android.libraries.ui.strings.CommonPlurals
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.time.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
@@ -221,8 +215,8 @@ fun TimelineView(
                 newEventState = state.newEventState,
                 isLive = state.isLive,
                 focusRequestState = state.focusRequestState,
-                jumpToUnreadState = state.jumpToUnreadState,
-                topInset = floatingDateTopOffset,
+                displayJumpToUnread = state.displayJumpToUnread,
+                readMarkerIndex = state.readMarkerIndex,
                 onScrollFinishAt = ::onScrollFinishAt,
                 onJumpToLive = ::onJumpToLive,
                 onFocusEventRender = ::onFocusEventRender,
@@ -306,8 +300,8 @@ private fun BoxScope.TimelineScrollHelper(
     forceJumpToBottomVisibility: Boolean,
     forceJumpToReadMarkerVisibility: Boolean,
     focusRequestState: FocusRequestState,
-    jumpToUnreadState: JumpToUnreadState,
-    topInset: Dp,
+    displayJumpToUnread: Boolean,
+    readMarkerIndex: Int?,
     onScrollFinishAt: (Int) -> Unit,
     onJumpToLive: () -> Unit,
     onFocusEventRender: () -> Unit,
@@ -321,14 +315,10 @@ private fun BoxScope.TimelineScrollHelper(
     }
     val isJumpToUnreadVisible by remember {
         derivedStateOf {
-            when {
-                forceJumpToReadMarkerVisibility -> true
-                jumpToUnreadState !is JumpToUnreadState.Loaded -> false
-                else -> {
-                    val lastVisibleIndex = lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: return@derivedStateOf false
-                    jumpToUnreadState.markerIndex > lastVisibleIndex
-                }
-            }
+            if (forceJumpToReadMarkerVisibility) return@derivedStateOf true
+            val markerIndex = readMarkerIndex ?: return@derivedStateOf false
+            val lastVisibleIndex = lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: return@derivedStateOf false
+            markerIndex > lastVisibleIndex
         }
     }
     val isJumpToBottomVisible = !canAutoScroll || forceJumpToBottomVisibility || !isLive
@@ -359,9 +349,9 @@ private fun BoxScope.TimelineScrollHelper(
     }
 
     fun jumpToReadMarker() {
-        val loaded = jumpToUnreadState as? JumpToUnreadState.Loaded ?: return
+        val markerIndex = readMarkerIndex ?: return
         coroutineScope.launch {
-            lazyListState.animateScrollToItemCenter(loaded.markerIndex)
+            lazyListState.animateScrollToItemCenter(markerIndex)
         }
     }
 
@@ -403,28 +393,21 @@ private fun BoxScope.TimelineScrollHelper(
         icon = CompoundIcons.ChevronDown(),
         contentDescription = stringResource(id = CommonStrings.a11y_jump_to_bottom),
         isVisible = isJumpToBottomVisible,
-        // Hide the badge entirely when the feature is off, regardless of the count value.
-        count = if (jumpToUnreadState is JumpToUnreadState.Disabled) 0 else newEventState.messageCount,
+        hasUnread = displayJumpToUnread && newEventState is NewEventState.FromOther,
         modifier = Modifier
             .align(Alignment.BottomEnd)
             .padding(end = 24.dp, bottom = 12.dp),
         onClick = ::jumpToBottom,
     )
-    val unreadCount = (jumpToUnreadState as? JumpToUnreadState.Loaded)?.unreadCount ?: 0
-    val jumpToUnreadDescription = if (unreadCount > 0) {
-        pluralStringResource(CommonPlurals.a11y_jump_to_unread_messages_count, unreadCount, unreadCount)
-    } else {
-        stringResource(id = CommonStrings.a11y_jump_to_unread_messages)
-    }
     JumpToPositionButton(
         icon = CompoundIcons.ChevronUp(),
-        contentDescription = jumpToUnreadDescription,
+        contentDescription = stringResource(id = CommonStrings.a11y_jump_to_unread_messages),
         isVisible = isJumpToUnreadVisible,
-        count = unreadCount,
-        // Top padding includes [topInset] so the FAB sits below any pinned-events banner.
+        hasUnread = true,
+        // Stacked directly above the scroll-to-bottom FAB: 12dp base + 36dp FAB + 8dp gap.
         modifier = Modifier
-            .align(Alignment.TopEnd)
-            .padding(end = 24.dp, top = topInset + 12.dp),
+            .align(Alignment.BottomEnd)
+            .padding(end = 24.dp, bottom = 56.dp),
         onClick = ::jumpToReadMarker,
     )
 }
@@ -434,7 +417,7 @@ private fun JumpToPositionButton(
     icon: ImageVector,
     contentDescription: String,
     isVisible: Boolean,
-    count: Int,
+    hasUnread: Boolean,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -459,8 +442,8 @@ private fun JumpToPositionButton(
                     contentDescription = contentDescription,
                 )
             }
-            TimelineCountBadge(
-                count = count,
+            TimelineUnreadIndicator(
+                isVisible = hasUnread,
                 modifier = Modifier
                     .align(Alignment.TopEnd)
                     .offset { IntOffset(x = 4.dp.roundToPx(), y = -4.dp.roundToPx()) },
@@ -469,39 +452,18 @@ private fun JumpToPositionButton(
     }
 }
 
-/**
- * Small accent badge overlaid on a timeline FAB. Shows the count when it's between 1 and 9, otherwise a dot.
- * Renders nothing when [count] is zero or negative.
- */
 @Composable
-private fun TimelineCountBadge(
-    count: Int,
+private fun TimelineUnreadIndicator(
+    isVisible: Boolean,
     modifier: Modifier = Modifier,
 ) {
-    when {
-        count <= 0 -> return
-        count <= 9 -> Box(
-            modifier = modifier
-                .defaultMinSize(minWidth = 16.dp, minHeight = 16.dp)
-                .background(color = ElementTheme.colors.bgActionPrimaryRest, shape = CircleShape)
-                .border(width = 2.dp, color = ElementTheme.colors.iconOnSolidPrimary, shape = CircleShape)
-                .padding(horizontal = 4.dp),
-            contentAlignment = Alignment.Center,
-        ) {
-            Text(
-                text = count.toString(),
-                color = ElementTheme.colors.textOnSolidPrimary,
-                style = ElementTheme.typography.fontBodyXsMedium,
-                textAlign = TextAlign.Center,
-            )
-        }
-        else -> Box(
-            modifier = modifier
-                .size(12.dp)
-                .background(color = ElementTheme.colors.bgActionPrimaryRest, shape = CircleShape)
-                .border(width = 2.dp, color = ElementTheme.colors.iconOnSolidPrimary, shape = CircleShape),
-        )
-    }
+    if (!isVisible) return
+    Box(
+        modifier = modifier
+            .size(12.dp)
+            .background(color = ElementTheme.colors.iconSuccessPrimary, shape = CircleShape)
+            .border(width = 2.dp, color = ElementTheme.colors.bgCanvasDefault, shape = CircleShape),
+    )
 }
 
 @PreviewsDayNight
@@ -541,8 +503,8 @@ internal fun TimelineViewPreview(
 
 @Composable
 private fun TimelineViewWithReadMarker(
-    unreadMessagesCount: Int,
-    newMessagesCount: Int,
+    hasUnreadAbove: Boolean,
+    hasUnreadBelow: Boolean,
 ) {
     val timelineItems = persistentListOf<TimelineItem>(
         aTimelineItemEvent(isMine = false),
@@ -558,11 +520,12 @@ private fun TimelineViewWithReadMarker(
         TimelineView(
             state = aTimelineState(
                 timelineItems = timelineItems,
+                displayJumpToUnread = true,
                 // Index points past the loaded items, mirroring the real-world state the FAB
                 // represents: the user has scrolled past the read marker, so it's no longer in
                 // view. The actual scroll target doesn't matter for a static preview.
-                jumpToUnreadState = JumpToUnreadState.Loaded(markerIndex = timelineItems.size, unreadCount = unreadMessagesCount),
-                newEventState = if (newMessagesCount > 0) NewEventState.FromOther(newMessagesCount) else NewEventState.None,
+                readMarkerIndex = if (hasUnreadAbove) timelineItems.size else null,
+                newEventState = if (hasUnreadBelow) NewEventState.FromOther else NewEventState.None,
             ),
             timelineProtectionState = aTimelineProtectionState(),
             onUserDataClick = {},
@@ -582,24 +545,12 @@ private fun TimelineViewWithReadMarker(
 
 @PreviewsDayNight
 @Composable
-internal fun TimelineViewWithReadMarkerNoBadgesPreview() = ElementPreview {
-    TimelineViewWithReadMarker(unreadMessagesCount = 0, newMessagesCount = 0)
+internal fun TimelineViewWithReadMarkerNoIndicatorsPreview() = ElementPreview {
+    TimelineViewWithReadMarker(hasUnreadAbove = false, hasUnreadBelow = false)
 }
 
 @PreviewsDayNight
 @Composable
-internal fun TimelineViewWithReadMarkerNumericBadgePreview() = ElementPreview {
-    TimelineViewWithReadMarker(unreadMessagesCount = 3, newMessagesCount = 0)
-}
-
-@PreviewsDayNight
-@Composable
-internal fun TimelineViewWithReadMarkerDotBadgesPreview() = ElementPreview {
-    TimelineViewWithReadMarker(unreadMessagesCount = 47, newMessagesCount = 0)
-}
-
-@PreviewsDayNight
-@Composable
-internal fun TimelineViewWithReadMarkerBothCountsPreview() = ElementPreview {
-    TimelineViewWithReadMarker(unreadMessagesCount = 5, newMessagesCount = 3)
+internal fun TimelineViewWithReadMarkerBothIndicatorsPreview() = ElementPreview {
+    TimelineViewWithReadMarker(hasUnreadAbove = true, hasUnreadBelow = true)
 }

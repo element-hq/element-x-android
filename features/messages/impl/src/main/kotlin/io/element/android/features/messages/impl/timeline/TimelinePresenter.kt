@@ -30,10 +30,8 @@ import io.element.android.features.messages.impl.crypto.sendfailure.resolve.Reso
 import io.element.android.features.messages.impl.timeline.components.MessageShieldData
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactoryConfig
-import io.element.android.features.messages.impl.timeline.model.JumpToUnreadState
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.timeline.model.event.isMessageContent
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemReadMarkerModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemTypingNotificationModel
 import io.element.android.features.messages.impl.typing.TypingNotificationState
@@ -281,26 +279,16 @@ class TimelinePresenter(
         // read marker advances in place — the SDK swaps the marker virtual item to a new position
         // without changing the list length, e.g. when [markRoomAsFullyRead] is sent while at the
         // bottom of the room.
-        val jumpToUnreadState = remember { mutableStateOf<JumpToUnreadState>(JumpToUnreadState.Disabled) }
+        val readMarkerIndex = remember { mutableStateOf<Int?>(null) }
         LaunchedEffect(timelineItems, displayJumpToUnread) {
             if (!displayJumpToUnread) {
-                jumpToUnreadState.value = JumpToUnreadState.Disabled
+                readMarkerIndex.value = null
                 return@LaunchedEffect
             }
             val items = timelineItems
-            jumpToUnreadState.value = withContext(dispatchers.computation) {
-                var markerIdx = -1
-                var unread = 0
-                for ((i, item) in items.withIndex()) {
-                    if ((item as? TimelineItem.Virtual)?.model is TimelineItemReadMarkerModel) {
-                        markerIdx = i
-                        break
-                    }
-                    if (item is TimelineItem.Event && item.isCountableNewMessage()) {
-                        unread++
-                    }
-                }
-                if (markerIdx < 0) JumpToUnreadState.NoMarker else JumpToUnreadState.Loaded(markerIdx, unread)
+            readMarkerIndex.value = withContext(dispatchers.computation) {
+                items.indexOfFirst { (it as? TimelineItem.Virtual)?.model is TimelineItemReadMarkerModel }
+                    .takeIf { it >= 0 }
             }
         }
 
@@ -353,7 +341,8 @@ class TimelinePresenter(
             resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailureState,
             displayThreadSummaries = displayThreadSummaries,
             displayFloatingDateBadge = displayFloatingDateBadge,
-            jumpToUnreadState = jumpToUnreadState.value,
+            displayJumpToUnread = displayJumpToUnread,
+            readMarkerIndex = readMarkerIndex.value,
             eventSink = ::handleEvent,
         )
     }
@@ -411,10 +400,6 @@ class TimelinePresenter(
      * This method compute the hasNewItem state passed as a [MutableState] each time the timeline items size changes.
      * Basically, if we got new timeline event from sync or local, either from us or another user, we update the state so we tell we have new items.
      * The state never goes back to None from this method, but need to be reset from somewhere else.
-     *
-     * The [NewEventState.FromOther] variant carries the running count of incoming messages from other users
-     * since [prevMostRecentItemId] last advanced to a local-user event or the timeline returned to the bottom
-     * — this drives the badge on the scroll-to-bottom button.
      */
     private suspend fun computeNewItemState(
         timelineItems: ImmutableList<TimelineItem>,
@@ -438,19 +423,7 @@ class TimelinePresenter(
 
         if (hasNewEvent) {
             // Scroll to bottom if the new event is from me, even if sent from another device
-            if (newMostRecentItem.isMine) {
-                newEventState.value = NewEventState.FromMe
-            } else {
-                var delta = 0
-                for (item in timelineItems) {
-                    if (item.identifier() == prevMostRecentItemIdValue) break
-                    if (item is TimelineItem.Event && item.isCountableNewMessage()) {
-                        delta++
-                    }
-                }
-                val previousCount = (newEventState.value as? NewEventState.FromOther)?.messageCount ?: 0
-                newEventState.value = NewEventState.FromOther(previousCount + delta)
-            }
+            newEventState.value = if (newMostRecentItem.isMine) NewEventState.FromMe else NewEventState.FromOther
         }
         prevMostRecentItemId.value = newMostRecentItemId
     }
@@ -494,16 +467,6 @@ private fun FocusRequestState.onFocusEventRender(): FocusRequestState {
         is FocusRequestState.Success -> copy(rendered = true)
         else -> this
     }
-}
-
-/**
- * Whether this event should be counted toward the unread / new-message badges: a user-facing
- * message from someone other than the local user, that wasn't pulled in via back-pagination.
- */
-private fun TimelineItem.Event.isCountableNewMessage(): Boolean {
-    return !isMine &&
-        origin != TimelineItemEventOrigin.PAGINATION &&
-        content.isMessageContent()
 }
 
 // Workaround for not having the server names available, get possible server names from the user ids of the room members

@@ -13,15 +13,10 @@ import androidx.compose.runtime.Immutable
 /**
  * Model if there is a new event in the timeline and if it is from me or from other.
  * This can be used to scroll to the bottom of the list when a new event is added.
- *
- * [FromOther] also carries the running count of incoming messages from other users since the
- * timeline was last at the bottom — used to drive the badge on the scroll-to-bottom button.
  */
 @Immutable
 sealed interface NewEventState {
-    val messageCount: Int get() = 0
-
     data object None : NewEventState
     data object FromMe : NewEventState
-    data class FromOther(override val messageCount: Int) : NewEventState
+    data object FromOther : NewEventState
 }

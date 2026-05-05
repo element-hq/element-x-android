@@ -99,28 +99,6 @@ fun TimelineItemEventContent.isEdited(): Boolean = when (this) {
  */
 fun TimelineItemEventContent.isRedacted(): Boolean = this is TimelineItemRedactedContent
 
-/**
- * Whether the event content is a user-facing message that should be counted toward unread totals.
- * Excludes state events, profile changes, membership changes, redactions, and unknown content.
- */
-fun TimelineItemEventContent.isMessageContent(): Boolean = when (this) {
-    is TimelineItemTextBasedContent,
-    is TimelineItemAudioContent,
-    is TimelineItemEncryptedContent,
-    is TimelineItemFileContent,
-    is TimelineItemImageContent,
-    is TimelineItemStickerContent,
-    is TimelineItemLocationContent,
-    is TimelineItemPollContent,
-    is TimelineItemVoiceContent,
-    is TimelineItemVideoContent,
-    is TimelineItemLegacyCallInviteContent,
-    is TimelineItemRtcNotificationContent -> true
-    is TimelineItemStateContent,
-    is TimelineItemRedactedContent,
-    TimelineItemUnknownContent -> false
-}
-
 fun TimelineItemEventContentWithAttachment.duration(): Duration? {
     return when (this) {
         is TimelineItemAudioContent -> duration
