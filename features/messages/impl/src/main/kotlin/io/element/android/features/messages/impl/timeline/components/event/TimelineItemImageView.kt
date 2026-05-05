@@ -58,6 +58,7 @@ import io.element.android.libraries.ui.utils.time.isTalkbackActive
 import io.element.android.wysiwyg.compose.EditorStyledText
 import io.element.android.wysiwyg.link.Link
 
+private const val TALL_IMAGE_RATIO_DIVISOR = 3
 @Composable
 fun TimelineItemImageView(
     content: TimelineItemImageContent,
@@ -126,7 +127,11 @@ fun TimelineItemImageView(
                 val width = content.width ?: 0
                 val height = content.height ?: 0
                 // if image is narrow and tall use DEFAULT_ASPECT_RATIO
-                val aspectRatio = if (width < height / 3) DEFAULT_ASPECT_RATIO else content.aspectRatio ?: DEFAULT_ASPECT_RATIO
+                val aspectRatio = if (width < height / TALL_IMAGE_RATIO_DIVISOR) {
+                    DEFAULT_ASPECT_RATIO
+                } else {
+                    content.aspectRatio ?: DEFAULT_ASPECT_RATIO
+                }
                 EditorStyledText(
                     modifier = Modifier
                         .padding(horizontal = 4.dp) // This is (12.dp - 8.dp) contentPadding from CommonLayout
