@@ -15,8 +15,15 @@ import androidx.compose.runtime.Immutable
  */
 @Immutable
 sealed interface NotificationSound {
-    /** Use the channel's bundled default sound (the in-app message sound or the system ringtone). */
+    /** Use the system's default tone for this channel (e.g. notification or ringtone). */
     data object SystemDefault : NotificationSound
+
+    /**
+     * Use the bundled in-app sound. Semantically meaningful only for the noisy message channel,
+     * where it resolves to `R.raw.message`; the ringing-call channel has no bundled tone and
+     * treats this the same as [SystemDefault].
+     */
+    data object ElementDefault : NotificationSound
 
     /** Produce no sound. */
     data object Silent : NotificationSound
@@ -26,18 +33,21 @@ sealed interface NotificationSound {
 
     companion object {
         // String? round-trip used by [AppPreferencesStore]:
-        //   null -> SystemDefault, "silent" -> Silent, else -> Custom(uri).
+        //   null -> SystemDefault, "silent" -> Silent, "element_default" -> ElementDefault, else -> Custom(uri).
         private const val STORED_SILENT = "silent"
+        private const val STORED_ELEMENT_DEFAULT = "element_default"
 
         fun fromStored(value: String?): NotificationSound = when (value) {
             null -> SystemDefault
             STORED_SILENT -> Silent
+            STORED_ELEMENT_DEFAULT -> ElementDefault
             else -> Custom(value)
         }
 
         fun NotificationSound.toStored(): String? = when (this) {
             SystemDefault -> null
             Silent -> STORED_SILENT
+            ElementDefault -> STORED_ELEMENT_DEFAULT
             is Custom -> uri
         }
     }

@@ -147,7 +147,7 @@ class NotificationChannelsTest {
 
     @Test
     @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
-    fun `recreateNoisyChannel - SystemDefault falls back to bundled default sound`() {
+    fun `recreateNoisyChannel - SystemDefault uses Android system notification URI`() {
         val captured = slot<NotificationChannelCompat>()
         val notificationManager = mockk<NotificationManagerCompat>(relaxed = true) {
             every { notificationChannels } returns emptyList()
@@ -155,7 +155,22 @@ class NotificationChannelsTest {
         }
         val channels = createNotificationChannels(notificationManager = notificationManager)
 
-        channels.recreateNoisyChannel(sound = NotificationSound.SystemDefault, version = 1)
+        channels.recreateNoisyChannel(sound = NotificationSound.SystemDefault, version = 2)
+
+        assertThat(captured.captured.sound).isEqualTo(Settings.System.DEFAULT_NOTIFICATION_URI)
+    }
+
+    @Test
+    @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
+    fun `recreateNoisyChannel - ElementDefault uses bundled message URI`() {
+        val captured = slot<NotificationChannelCompat>()
+        val notificationManager = mockk<NotificationManagerCompat>(relaxed = true) {
+            every { notificationChannels } returns emptyList()
+            every { createNotificationChannel(capture(captured)) } returns Unit
+        }
+        val channels = createNotificationChannels(notificationManager = notificationManager)
+
+        channels.recreateNoisyChannel(sound = NotificationSound.ElementDefault, version = 1)
 
         assertThat(captured.captured.sound?.scheme).isEqualTo("android.resource")
     }
@@ -250,9 +265,7 @@ class NotificationChannelsTest {
 
     @Test
     @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
-    fun `readNoisyChannelSound - classifies the bundled message URI as Custom`() = runTest {
-        // The noisy channel's "default" is our bundled message.mp3, not a system tone, so the
-        // picker row needs to surface it as Custom rather than mislabel it as system Default.
+    fun `readNoisyChannelSound - classifies the bundled message URI as ElementDefault`() = runTest {
         val context = RuntimeEnvironment.getApplication()
         val ourBundled = "android.resource://${context.packageName}/${io.element.android.libraries.push.impl.R.raw.message}".toUri()
         val channel = mockk<android.app.NotificationChannel>(relaxed = true) {
@@ -266,7 +279,111 @@ class NotificationChannelsTest {
 
         val result = channels.readNoisyChannelSound()
 
-        assertThat(result).isEqualTo(NotificationSound.Custom(ourBundled.toString()))
+        assertThat(result).isEqualTo(NotificationSound.ElementDefault)
+    }
+
+    @Test
+    @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
+    fun `readNoisyChannelSound - classifies DEFAULT_NOTIFICATION_URI as SystemDefault`() = runTest {
+        val channel = mockk<android.app.NotificationChannel>(relaxed = true) {
+            every { sound } returns Settings.System.DEFAULT_NOTIFICATION_URI
+        }
+        val notificationManager = mockk<NotificationManagerCompat>(relaxed = true) {
+            every { notificationChannels } returns emptyList()
+            every { getNotificationChannel(NOISY_NOTIFICATION_CHANNEL_ID_BASE) } returns channel
+        }
+        val channels = createNotificationChannels(notificationManager = notificationManager)
+
+        val result = channels.readNoisyChannelSound()
+
+        assertThat(result).isEqualTo(NotificationSound.SystemDefault)
+    }
+
+    @Test
+    @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
+    fun `init - migrates legacy SystemDefault message sound to ElementDefault when version is 0`() = runTest {
+        val notificationManager = mockk<NotificationManagerCompat>(relaxed = true) {
+            every { notificationChannels } returns emptyList()
+        }
+        val appPreferencesStore = InMemoryAppPreferencesStore(
+            messageSound = NotificationSound.SystemDefault,
+            messageSoundChannelVersion = 0,
+        )
+
+        createNotificationChannels(
+            notificationManager = notificationManager,
+            appPreferencesStore = appPreferencesStore,
+        )
+
+        val config = appPreferencesStore.getNotificationSoundChannelConfig()
+        assertThat(config.messageSound).isEqualTo(NotificationSound.ElementDefault)
+        assertThat(config.messageSoundVersion).isEqualTo(1)
+    }
+
+    @Test
+    @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
+    fun `init - migration is idempotent across multiple instantiations`() = runTest {
+        val notificationManager = mockk<NotificationManagerCompat>(relaxed = true) {
+            every { notificationChannels } returns emptyList()
+        }
+        val appPreferencesStore = InMemoryAppPreferencesStore(
+            messageSound = NotificationSound.SystemDefault,
+            messageSoundChannelVersion = 0,
+        )
+
+        // First boot: migrate.
+        createNotificationChannels(notificationManager = notificationManager, appPreferencesStore = appPreferencesStore)
+        val afterFirst = appPreferencesStore.getNotificationSoundChannelConfig()
+        assertThat(afterFirst.messageSound).isEqualTo(NotificationSound.ElementDefault)
+        assertThat(afterFirst.messageSoundVersion).isEqualTo(1)
+
+        // Second boot: gate (version == 0) no longer matches, so the version must not bump again.
+        createNotificationChannels(notificationManager = notificationManager, appPreferencesStore = appPreferencesStore)
+        val afterSecond = appPreferencesStore.getNotificationSoundChannelConfig()
+        assertThat(afterSecond.messageSound).isEqualTo(NotificationSound.ElementDefault)
+        assertThat(afterSecond.messageSoundVersion).isEqualTo(1)
+    }
+
+    @Test
+    @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
+    fun `init - does not re-migrate when message version is non-zero`() = runTest {
+        val notificationManager = mockk<NotificationManagerCompat>(relaxed = true) {
+            every { notificationChannels } returns emptyList()
+        }
+        val appPreferencesStore = InMemoryAppPreferencesStore(
+            messageSound = NotificationSound.SystemDefault,
+            messageSoundChannelVersion = 5,
+        )
+
+        createNotificationChannels(
+            notificationManager = notificationManager,
+            appPreferencesStore = appPreferencesStore,
+        )
+
+        val config = appPreferencesStore.getNotificationSoundChannelConfig()
+        assertThat(config.messageSound).isEqualTo(NotificationSound.SystemDefault)
+        assertThat(config.messageSoundVersion).isEqualTo(5)
+    }
+
+    @Test
+    @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
+    fun `init - does not migrate when persisted message sound is not SystemDefault`() = runTest {
+        val notificationManager = mockk<NotificationManagerCompat>(relaxed = true) {
+            every { notificationChannels } returns emptyList()
+        }
+        val appPreferencesStore = InMemoryAppPreferencesStore(
+            messageSound = NotificationSound.Silent,
+            messageSoundChannelVersion = 0,
+        )
+
+        createNotificationChannels(
+            notificationManager = notificationManager,
+            appPreferencesStore = appPreferencesStore,
+        )
+
+        val config = appPreferencesStore.getNotificationSoundChannelConfig()
+        assertThat(config.messageSound).isEqualTo(NotificationSound.Silent)
+        assertThat(config.messageSoundVersion).isEqualTo(0)
     }
 
     @Test
@@ -338,7 +455,10 @@ class NotificationChannelsTest {
     private fun createNotificationChannels(
         notificationManager: NotificationManagerCompat = mockk(relaxed = true),
         enterpriseService: EnterpriseService = FakeEnterpriseService(),
-        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
+        // Default to ElementDefault so the legacy `(SystemDefault, version=0)` migration gate
+        // doesn't fire and silently rewrite the prefs store. Tests that exercise the migration
+        // construct their own store explicitly.
+        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(messageSound = NotificationSound.ElementDefault),
     ) = DefaultNotificationChannels(
         notificationManager = notificationManager,
         stringProvider = FakeStringProvider(),

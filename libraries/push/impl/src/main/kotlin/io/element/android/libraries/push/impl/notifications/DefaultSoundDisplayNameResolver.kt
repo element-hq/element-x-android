@@ -24,8 +24,13 @@ class DefaultSoundDisplayNameResolver(
     @ApplicationContext private val context: Context,
 ) : SoundDisplayNameResolver {
     override suspend fun resolveCustomSoundTitle(uri: String): String? = withContext(Dispatchers.IO) {
+        val parsed = runCatchingExceptions { uri.toUri() }.getOrNull() ?: return@withContext null
+        // Probing our own FileProvider URI yields the internal filename ("call_sound.ogg"),
+        // not a user-meaningful tone name — better to fall through to the localised "Custom"
+        // label in the UI.
+        if (parsed.authority == context.notificationSoundFileProviderAuthority()) return@withContext null
         runCatchingExceptions {
-            RingtoneManager.getRingtone(context, uri.toUri())?.getTitle(context)
+            RingtoneManager.getRingtone(context, parsed)?.getTitle(context)
         }.getOrNull()
     }
 }

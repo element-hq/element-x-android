@@ -19,6 +19,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -57,6 +58,7 @@ import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermiss
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
 import io.element.android.libraries.preferences.api.store.NotificationSound
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -280,21 +282,31 @@ private fun NotificationSettingsContentView(
 @Composable
 private fun SoundsPreferenceCategory(state: NotificationSettingsState) {
     PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_sounds_section_title)) {
-        val onMessageSoundClick = rememberSoundPickerOnClick(
+        val launchMessageSoundPicker = rememberSoundPickerOnClick(
             type = RingtoneManager.TYPE_NOTIFICATION,
             current = state.messageSound.sound,
             defaultUri = Settings.System.DEFAULT_NOTIFICATION_URI,
             onSoundPicked = { sound -> state.eventSink(NotificationSettingsEvents.SetMessageSound(sound)) },
         )
+        // Skip the initial 0 emission so the picker doesn't auto-open on screen entry; only
+        // increments fired by LaunchMessageSoundPicker should launch it.
+        LaunchedEffect(state.pendingMessageSoundPickerLaunch) {
+            if (state.pendingMessageSoundPickerLaunch > 0) {
+                launchMessageSoundPicker()
+            }
+        }
         ListItem(
             headlineContent = { Text(stringResource(id = R.string.screen_notification_settings_message_sound_label)) },
             supportingContent = { Text(state.messageSound.displayName) },
-            onClick = onMessageSoundClick,
+            onClick = { state.eventSink(NotificationSettingsEvents.ShowMessageSoundDialog) },
         )
         if (state.messageSound.copyError) {
             SoundCopyErrorRow(
                 onDismissClick = { state.eventSink(NotificationSettingsEvents.DismissMessageSoundCopyError) },
             )
+        }
+        if (state.showMessageSoundDialog) {
+            MessageSoundDialog(state)
         }
 
         val onCallRingtoneClick = rememberSoundPickerOnClick(
@@ -317,6 +329,43 @@ private fun SoundsPreferenceCategory(state: NotificationSettingsState) {
 }
 
 @Composable
+private fun MessageSoundDialog(state: NotificationSettingsState) {
+    val initialSelection = when (state.messageSound.sound) {
+        NotificationSound.ElementDefault -> 0
+        NotificationSound.SystemDefault -> 1
+        else -> null
+    }
+    // When the user is on Custom or Silent, no preset row is selected — surface the current
+    // sound as a subtitle so screen readers (and sighted users) still have state context.
+    val subtitle = if (initialSelection == null) {
+        stringResource(
+            id = R.string.screen_notification_settings_message_sound_dialog_current_subtitle,
+            state.messageSound.displayName,
+        )
+    } else {
+        null
+    }
+    SingleSelectionDialog(
+        title = stringResource(id = R.string.screen_notification_settings_message_sound_dialog_title),
+        subtitle = subtitle,
+        options = persistentListOf(
+            ListOption(title = stringResource(id = R.string.screen_notification_settings_sound_element_default)),
+            ListOption(title = stringResource(id = R.string.screen_notification_settings_sound_system_default)),
+            ListOption(title = stringResource(id = R.string.screen_notification_settings_message_sound_dialog_choose_other)),
+        ),
+        initialSelection = initialSelection,
+        onSelectOption = { index ->
+            when (index) {
+                0 -> state.eventSink(NotificationSettingsEvents.SelectMessageSoundPreset(NotificationSound.ElementDefault))
+                1 -> state.eventSink(NotificationSettingsEvents.SelectMessageSoundPreset(NotificationSound.SystemDefault))
+                else -> state.eventSink(NotificationSettingsEvents.LaunchMessageSoundPicker)
+            }
+        },
+        onDismissRequest = { state.eventSink(NotificationSettingsEvents.DismissMessageSoundDialog) },
+    )
+}
+
+@Composable
 private fun SoundCopyErrorRow(
     onDismissClick: () -> Unit,
 ) {
@@ -335,7 +384,7 @@ private fun SoundCopyErrorRow(
             IconButton(onClick = onDismissClick) {
                 Icon(
                     imageVector = CompoundIcons.Close(),
-                    contentDescription = stringResource(CommonStrings.action_close),
+                    contentDescription = stringResource(R.string.screen_notification_settings_sound_copy_error_dismiss_a11y),
                 )
             }
         },

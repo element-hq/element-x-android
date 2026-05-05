@@ -299,15 +299,21 @@ class NotificationSettingsViewTest {
 
     @Config(qualifiers = "h1280dp")
     @Test
-    fun `clicking the message sound row does not synchronously emit a SetMessageSound event`() = runAndroidComposeUiTest {
+    fun `clicking the message sound row opens the preset dialog`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
         setNotificationSettingsView(
             state = aValidNotificationSettingsState(eventSink = eventsRecorder),
         )
-        // The click hands off to rememberLauncherForActivityResult; SetMessageSound only fires from
-        // the launcher's result callback (covered by Presenter tests + NotificationSoundPickerTest).
+        // The click now opens the in-app preset dialog instead of launching the system picker
+        // directly; the picker only fires from the dialog's "Choose another sound..." option
+        // (covered by Presenter tests + NotificationSoundPickerTest).
         onNodeWithText("Message sound").performClick()
-        eventsRecorder.assertSingle(NotificationSettingsEvents.RefreshSystemNotificationsEnabled)
+        eventsRecorder.assertList(
+            listOf(
+                NotificationSettingsEvents.RefreshSystemNotificationsEnabled,
+                NotificationSettingsEvents.ShowMessageSoundDialog,
+            )
+        )
     }
 }
 

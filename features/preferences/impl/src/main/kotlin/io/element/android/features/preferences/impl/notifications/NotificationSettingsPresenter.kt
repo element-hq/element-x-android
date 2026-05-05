@@ -49,9 +49,12 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 
@@ -71,6 +74,14 @@ class NotificationSettingsPresenter(
     @SessionCoroutineScope
     private val sessionCoroutineScope: CoroutineScope,
 ) : Presenter<NotificationSettingsState> {
+    // Serializes the pick → copy → persist → recreate pipeline per slot. The copier already locks
+    // its `<slot>.tmp` file, but the persist+recreate window outside the copier is unprotected;
+    // without this, two rapid picks (e.g. an automation or accessibility service firing back-to-
+    // back events) could interleave and leave the channel id pointing at the older version while
+    // DataStore reflects the newer one.
+    private val messageSoundLock = Mutex()
+    private val callRingtoneLock = Mutex()
+
     @Composable
     override fun present(): NotificationSettingsState {
         val userPushStore = remember { userPushStoreFactory.getOrCreate(matrixClient.sessionId) }
@@ -129,28 +140,22 @@ class NotificationSettingsPresenter(
         val callRingtone by remember { appPreferencesStore.getCallRingtoneFlow() }.collectAsState(initial = NotificationSound.SystemDefault)
         val persistedMessageSoundTitle by remember { appPreferencesStore.getMessageSoundDisplayNameFlow() }.collectAsState(initial = null)
         val persistedCallRingtoneTitle by remember { appPreferencesStore.getCallRingtoneDisplayNameFlow() }.collectAsState(initial = null)
-        val defaultLabel = stringProvider.getString(R.string.screen_notification_settings_sound_default)
+        val defaultLabel = stringProvider.getString(R.string.screen_notification_settings_sound_system_default)
 
-        // One-shot classification for users who customised the channel via Android system settings
-        // before the in-app picker existed (channel version 0, persisted SystemDefault). Cleared
+        // One-shot classification for the call-ringtone slot only: users who customised the
+        // channel via Android system settings before the in-app picker existed (channel version 0,
+        // persisted SystemDefault) get reflected here. The message-sound equivalent is handled by
+        // the eager migration in DefaultNotificationChannels.createNotificationChannels(). Cleared
         // on any in-app pick so a stale read can't bleed into the row after the recreate.
-        var legacyMessageSound by remember { mutableStateOf<NotificationSound?>(null) }
         var legacyCallRingtone by remember { mutableStateOf<NotificationSound?>(null) }
         LaunchedEffect(Unit) {
             val config = appPreferencesStore.getNotificationSoundChannelConfig()
-            if (config.messageSound == NotificationSound.SystemDefault && config.messageSoundVersion == 0) {
-                legacyMessageSound = notificationSoundUpdater.readNoisyChannelSound()
-            }
             if (config.callRingtone == NotificationSound.SystemDefault && config.callRingtoneVersion == 0) {
                 legacyCallRingtone = notificationSoundUpdater.readRingingCallChannelSound()
             }
         }
 
-        val effectiveMessageSound = if (messageSound == NotificationSound.SystemDefault) {
-            legacyMessageSound ?: messageSound
-        } else {
-            messageSound
-        }
+        val effectiveMessageSound = messageSound
         val effectiveCallRingtone = if (callRingtone == NotificationSound.SystemDefault) {
             legacyCallRingtone ?: callRingtone
         } else {
@@ -162,6 +167,8 @@ class NotificationSettingsPresenter(
 
         var messageSoundCopyError by remember { mutableStateOf(false) }
         var callRingtoneCopyError by remember { mutableStateOf(false) }
+        var showMessageSoundDialog by remember { mutableStateOf(false) }
+        var pendingMessageSoundPickerLaunch by remember { mutableIntStateOf(0) }
 
         fun CoroutineScope.changePushProvider(
             data: Pair<PushProvider, Distributor>?
@@ -211,46 +218,38 @@ class NotificationSettingsPresenter(
                 NotificationSettingsEvents.ChangePushProvider -> showChangePushProviderDialog = true
                 NotificationSettingsEvents.CancelChangePushProvider -> showChangePushProviderDialog = false
                 is NotificationSettingsEvents.SetPushProvider -> localCoroutineScope.changePushProvider(distributors.getOrNull(event.index))
-                is NotificationSettingsEvents.SetMessageSound -> {
-                    // Clear the legacy hint synchronously so the row reflects the pick before
-                    // the async copy/persist finishes.
-                    legacyMessageSound = null
-                    sessionCoroutineScope.launch {
-                        val resolved = resolvePickedSound(event.sound, SoundSlot.Message) {
-                            messageSoundCopyError = true
-                        } ?: return@launch
-                        runCatchingExceptions {
-                            messageSoundCopyError = false
-                            val newVersion = appPreferencesStore.setMessageSoundAndIncrementVersion(resolved.first, resolved.second)
-                            notificationSoundUpdater.recreateNoisyChannel(resolved.first, newVersion)
-                            // SystemDefault / Silent picks bypass the copier, so they don't sweep
-                            // the prior Custom file inline. Drop it now that the new channel no
-                            // longer references it.
-                            if (resolved.first !is NotificationSound.Custom) {
-                                notificationSoundCopier.deleteStoredSoundFor(SoundSlot.Message)
-                            }
-                        }.onFailure { failure ->
-                            changeNotificationSettingAction.value = AsyncAction.Failure(failure)
-                        }
-                    }
+                is NotificationSettingsEvents.SetMessageSound -> applyMessageSound(
+                    sound = event.sound,
+                    sessionCoroutineScope = sessionCoroutineScope,
+                    onCopyError = { messageSoundCopyError = true },
+                    onCopySuccess = { messageSoundCopyError = false },
+                    onChannelFailure = { failure -> changeNotificationSettingAction.value = AsyncAction.Failure(failure) },
+                )
+                is NotificationSettingsEvents.SelectMessageSoundPreset -> {
+                    showMessageSoundDialog = false
+                    applyMessageSound(
+                        sound = event.sound,
+                        sessionCoroutineScope = sessionCoroutineScope,
+                        onCopyError = { messageSoundCopyError = true },
+                        onCopySuccess = { messageSoundCopyError = false },
+                        onChannelFailure = { failure -> changeNotificationSettingAction.value = AsyncAction.Failure(failure) },
+                    )
+                }
+                NotificationSettingsEvents.ShowMessageSoundDialog -> showMessageSoundDialog = true
+                NotificationSettingsEvents.DismissMessageSoundDialog -> showMessageSoundDialog = false
+                NotificationSettingsEvents.LaunchMessageSoundPicker -> {
+                    showMessageSoundDialog = false
+                    pendingMessageSoundPickerLaunch++
                 }
                 is NotificationSettingsEvents.SetCallRingtone -> {
                     legacyCallRingtone = null
-                    sessionCoroutineScope.launch {
-                        val resolved = resolvePickedSound(event.sound, SoundSlot.Call) {
-                            callRingtoneCopyError = true
-                        } ?: return@launch
-                        runCatchingExceptions {
-                            callRingtoneCopyError = false
-                            val newVersion = appPreferencesStore.setCallRingtoneAndIncrementVersion(resolved.first, resolved.second)
-                            notificationSoundUpdater.recreateRingingCallChannel(resolved.first, newVersion)
-                            if (resolved.first !is NotificationSound.Custom) {
-                                notificationSoundCopier.deleteStoredSoundFor(SoundSlot.Call)
-                            }
-                        }.onFailure { failure ->
-                            changeNotificationSettingAction.value = AsyncAction.Failure(failure)
-                        }
-                    }
+                    applyCallRingtone(
+                        sound = event.sound,
+                        sessionCoroutineScope = sessionCoroutineScope,
+                        onCopyError = { callRingtoneCopyError = true },
+                        onCopySuccess = { callRingtoneCopyError = false },
+                        onChannelFailure = { failure -> changeNotificationSettingAction.value = AsyncAction.Failure(failure) },
+                    )
                 }
                 NotificationSettingsEvents.DismissMessageSoundCopyError -> {
                     messageSoundCopyError = false
@@ -282,8 +281,68 @@ class NotificationSettingsPresenter(
                 displayName = callRingtoneDisplayName,
                 copyError = callRingtoneCopyError,
             ),
+            showMessageSoundDialog = showMessageSoundDialog,
+            pendingMessageSoundPickerLaunch = pendingMessageSoundPickerLaunch,
             eventSink = ::handleEvent,
         )
+    }
+
+    private fun applyMessageSound(
+        sound: NotificationSound,
+        sessionCoroutineScope: CoroutineScope,
+        onCopyError: () -> Unit,
+        onCopySuccess: () -> Unit,
+        onChannelFailure: (Throwable) -> Unit,
+    ) {
+        sessionCoroutineScope.launch {
+            messageSoundLock.withLock {
+                // Re-selecting the current non-Custom sound is a no-op: skip the channel churn
+                // (delete + create round-trips through system_server) and the version bump. Custom
+                // still falls through so the copier refreshes the file from the (possibly updated)
+                // source URI.
+                if (sound !is NotificationSound.Custom && appPreferencesStore.getMessageSoundFlow().first() == sound) {
+                    onCopySuccess()
+                    return@withLock
+                }
+                val resolved = resolvePickedSound(sound, SoundSlot.Message, onCopyError) ?: return@withLock
+                runCatchingExceptions {
+                    onCopySuccess()
+                    val newVersion = appPreferencesStore.setMessageSoundAndIncrementVersion(resolved.first, resolved.second)
+                    notificationSoundUpdater.recreateNoisyChannel(resolved.first, newVersion)
+                    // Non-Custom picks bypass the copier, so they don't sweep the prior Custom file
+                    // inline. Drop it now that the new channel no longer references it.
+                    if (resolved.first !is NotificationSound.Custom) {
+                        notificationSoundCopier.deleteStoredSoundFor(SoundSlot.Message)
+                    }
+                }.onFailure(onChannelFailure)
+            }
+        }
+    }
+
+    private fun applyCallRingtone(
+        sound: NotificationSound,
+        sessionCoroutineScope: CoroutineScope,
+        onCopyError: () -> Unit,
+        onCopySuccess: () -> Unit,
+        onChannelFailure: (Throwable) -> Unit,
+    ) {
+        sessionCoroutineScope.launch {
+            callRingtoneLock.withLock {
+                if (sound !is NotificationSound.Custom && appPreferencesStore.getCallRingtoneFlow().first() == sound) {
+                    onCopySuccess()
+                    return@withLock
+                }
+                val resolved = resolvePickedSound(sound, SoundSlot.Call, onCopyError) ?: return@withLock
+                runCatchingExceptions {
+                    onCopySuccess()
+                    val newVersion = appPreferencesStore.setCallRingtoneAndIncrementVersion(resolved.first, resolved.second)
+                    notificationSoundUpdater.recreateRingingCallChannel(resolved.first, newVersion)
+                    if (resolved.first !is NotificationSound.Custom) {
+                        notificationSoundCopier.deleteStoredSoundFor(SoundSlot.Call)
+                    }
+                }.onFailure(onChannelFailure)
+            }
+        }
     }
 
     /**
@@ -298,6 +357,7 @@ class NotificationSettingsPresenter(
         defaultLabel: String,
     ): String = when (sound) {
         NotificationSound.SystemDefault -> defaultLabel
+        NotificationSound.ElementDefault -> stringProvider.getString(R.string.screen_notification_settings_sound_element_default)
         NotificationSound.Silent -> stringProvider.getString(R.string.screen_notification_settings_sound_silent)
         is NotificationSound.Custom -> {
             val nonBlankPersisted = persistedTitle?.takeUnless { it.isBlank() }

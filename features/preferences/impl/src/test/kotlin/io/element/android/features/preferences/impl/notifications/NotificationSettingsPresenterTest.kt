@@ -549,7 +549,7 @@ class NotificationSettingsPresenterTest {
         val presenter = createNotificationSettingsPresenter(
             // No persisted display name (legacy data path). Resolver returns null. Final fallback
             // is the localised string resource (FakeStringProvider returns "A string" for any
-            // resource id) — never the default label, so the row is not mislabelled as "Default".
+            // resource id) — never the default label, so the row is not mislabelled as "System default".
             appPreferencesStore = InMemoryAppPreferencesStore(messageSound = NotificationSound.Custom("content://gone")),
             soundDisplayNameResolver = FakeSoundDisplayNameResolver(
                 resolveLambda = { uri ->
@@ -566,60 +566,6 @@ class NotificationSettingsPresenterTest {
             }.last()
             assertThat(state.messageSound.displayName).isEqualTo("A string")
             assertThat(resolverCalls).contains("content://gone")
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `present - empty DataStore surfaces channel-derived Custom sound in the row`() = runTest {
-        // Legacy upgrade path: user customised the noisy channel via Android system settings on a
-        // prior version. DataStore has no in-app pick (defaults to SystemDefault). The presenter
-        // reads the live channel sound, classifies it as Custom, and the resolver supplies the title.
-        val resolverCalls = mutableListOf<String>()
-        val channelUri = "content://media/internal/audio/media/42"
-        val presenter = createNotificationSettingsPresenter(
-            appPreferencesStore = InMemoryAppPreferencesStore(messageSound = NotificationSound.SystemDefault),
-            notificationSoundUpdater = FakeNotificationSoundUpdater(
-                readNoisyChannelSoundLambda = { NotificationSound.Custom(channelUri) },
-            ),
-            soundDisplayNameResolver = FakeSoundDisplayNameResolver(
-                resolveLambda = { uri ->
-                    resolverCalls += uri
-                    "Argon"
-                },
-            ),
-        )
-        presenter.test {
-            val state = consumeItemsUntilPredicate {
-                it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid &&
-                    it.messageSound.sound == NotificationSound.Custom(channelUri) &&
-                    it.messageSound.displayName == "Argon"
-            }.last()
-            assertThat(state.messageSound.sound).isEqualTo(NotificationSound.Custom(channelUri))
-            assertThat(state.messageSound.displayName).isEqualTo("Argon")
-            assertThat(resolverCalls).contains(channelUri)
-            cancelAndIgnoreRemainingEvents()
-        }
-    }
-
-    @Test
-    fun `present - empty DataStore surfaces channel-derived Silent in the row`() = runTest {
-        // User set the noisy channel to Silent via Android system settings. Channel read returns
-        // Silent; the row labels it accordingly without a resolver call.
-        val presenter = createNotificationSettingsPresenter(
-            appPreferencesStore = InMemoryAppPreferencesStore(messageSound = NotificationSound.SystemDefault),
-            notificationSoundUpdater = FakeNotificationSoundUpdater(
-                readNoisyChannelSoundLambda = { NotificationSound.Silent },
-            ),
-        )
-        presenter.test {
-            val state = consumeItemsUntilPredicate {
-                it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid &&
-                    it.messageSound.sound == NotificationSound.Silent
-            }.last()
-            assertThat(state.messageSound.sound).isEqualTo(NotificationSound.Silent)
-            // FakeStringProvider returns "A string" for any resource, including the Silent label.
-            assertThat(state.messageSound.displayName).isEqualTo("A string")
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -689,12 +635,12 @@ class NotificationSettingsPresenterTest {
             notificationSoundUpdater = FakeNotificationSoundUpdater(
                 recreateNoisyChannelLambda = { sound, version -> recreateRecorder(sound, version) },
             ),
-            notificationSoundCopier = FakeNotificationSoundCopier { _, _ ->
+            notificationSoundCopier = FakeNotificationSoundCopier(copyLambda = { _, _ ->
                 NotificationSoundCopier.CopyResult.Success(
                     fileProviderUriString = "content://my.app.fileprovider/notification_sounds/message_sound.ogg",
                     displayName = "Cool Tone",
                 )
-            },
+            }),
         )
         presenter.test {
             val initialState = consumeItemsUntilPredicate {
@@ -717,9 +663,9 @@ class NotificationSettingsPresenterTest {
         val appPreferencesStore = InMemoryAppPreferencesStore(messageSound = priorChoice)
         val presenter = createNotificationSettingsPresenter(
             appPreferencesStore = appPreferencesStore,
-            notificationSoundCopier = FakeNotificationSoundCopier { _, _ ->
+            notificationSoundCopier = FakeNotificationSoundCopier(copyLambda = { _, _ ->
                 NotificationSoundCopier.CopyResult.UnplayableSource
-            },
+            }),
         )
         presenter.test {
             val initialState = consumeItemsUntilPredicate {
@@ -747,9 +693,9 @@ class NotificationSettingsPresenterTest {
         val appPreferencesStore = InMemoryAppPreferencesStore(callRingtone = priorChoice)
         val presenter = createNotificationSettingsPresenter(
             appPreferencesStore = appPreferencesStore,
-            notificationSoundCopier = FakeNotificationSoundCopier { _, _ ->
+            notificationSoundCopier = FakeNotificationSoundCopier(copyLambda = { _, _ ->
                 NotificationSoundCopier.CopyResult.UnplayableSource
-            },
+            }),
         )
         presenter.test {
             val initialState = consumeItemsUntilPredicate {
@@ -780,10 +726,10 @@ class NotificationSettingsPresenterTest {
                 recreateNoisyChannelLambda = { _, _ -> },
                 recreateRingingCallChannelLambda = { _, _ -> },
             ),
-            notificationSoundCopier = FakeNotificationSoundCopier { source, _ ->
+            notificationSoundCopier = FakeNotificationSoundCopier(copyLambda = { source, _ ->
                 copierCalls += source
                 NotificationSoundCopier.CopyResult.Success(source, "x")
-            },
+            }),
         )
         presenter.test {
             val initialState = consumeItemsUntilPredicate {
@@ -801,7 +747,13 @@ class NotificationSettingsPresenterTest {
     @Test
     fun `present - non-Custom picks delete the stored slot file`() = runTest {
         val deleteCalls = mutableListOf<NotificationSoundCopier.SoundSlot>()
+        // Start from persisted Custom for both slots so the non-Custom picks below are real
+        // transitions (no-op short-circuit only fires when the new sound equals the persisted one).
         val presenter = createNotificationSettingsPresenter(
+            appPreferencesStore = InMemoryAppPreferencesStore(
+                messageSound = NotificationSound.Custom("content://prior-message"),
+                callRingtone = NotificationSound.Custom("content://prior-call"),
+            ),
             notificationSoundUpdater = FakeNotificationSoundUpdater(
                 recreateNoisyChannelLambda = { _, _ -> },
                 recreateRingingCallChannelLambda = { _, _ -> },
@@ -822,6 +774,90 @@ class NotificationSettingsPresenterTest {
                 NotificationSoundCopier.SoundSlot.Message,
                 NotificationSoundCopier.SoundSlot.Call,
             )
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `present - re-selecting the persisted non-Custom sound is a no-op`() = runTest {
+        val recreateCalls = mutableListOf<Int>()
+        val deleteCalls = mutableListOf<NotificationSoundCopier.SoundSlot>()
+        val copierCalls = mutableListOf<String>()
+        val appPreferencesStore = InMemoryAppPreferencesStore(
+            messageSound = NotificationSound.ElementDefault,
+            messageSoundChannelVersion = 5,
+            callRingtone = NotificationSound.Silent,
+            callRingtoneChannelVersion = 3,
+        )
+        val presenter = createNotificationSettingsPresenter(
+            appPreferencesStore = appPreferencesStore,
+            notificationSoundCopier = FakeNotificationSoundCopier(
+                copyLambda = { source, _ ->
+                    copierCalls += source
+                    NotificationSoundCopier.CopyResult.Success(source, "title")
+                },
+                deleteStoredSoundForLambda = { slot -> deleteCalls += slot },
+            ),
+            notificationSoundUpdater = FakeNotificationSoundUpdater(
+                recreateNoisyChannelLambda = { _, version -> recreateCalls += version },
+                recreateRingingCallChannelLambda = { _, version -> recreateCalls += version },
+            ),
+        )
+        presenter.test {
+            val initial = consumeItemsUntilPredicate {
+                it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
+            }.last()
+
+            // Re-pick the persisted sound for both slots — neither should churn the channel,
+            // bump the version, or hit the copier / delete sweep.
+            initial.eventSink(NotificationSettingsEvents.SelectMessageSoundPreset(NotificationSound.ElementDefault))
+            initial.eventSink(NotificationSettingsEvents.SetCallRingtone(NotificationSound.Silent))
+            advanceUntilIdle()
+
+            val config = appPreferencesStore.getNotificationSoundChannelConfig()
+            assertThat(config.messageSoundVersion).isEqualTo(5)
+            assertThat(config.callRingtoneVersion).isEqualTo(3)
+            assertThat(recreateCalls).isEmpty()
+            assertThat(copierCalls).isEmpty()
+            assertThat(deleteCalls).isEmpty()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `present - rapid back-to-back picks settle in deterministic order`() = runTest {
+        // Defends the persist+recreate window against rapid event firing (e.g. an accessibility
+        // service driving the dialog). The per-slot mutex in the presenter forces copy → persist
+        // → recreate to complete for the first pick before the second begins, so the recreated
+        // version sequence matches the persisted version sequence.
+        val recreatedVersions = mutableListOf<Int>()
+        val copyOrder = mutableListOf<String>()
+        val appPreferencesStore = InMemoryAppPreferencesStore()
+        val presenter = createNotificationSettingsPresenter(
+            appPreferencesStore = appPreferencesStore,
+            notificationSoundCopier = FakeNotificationSoundCopier(copyLambda = { source, _ ->
+                copyOrder += source
+                NotificationSoundCopier.CopyResult.Success(source, "title")
+            }),
+            notificationSoundUpdater = FakeNotificationSoundUpdater(
+                recreateNoisyChannelLambda = { _, version -> recreatedVersions += version },
+            ),
+        )
+        presenter.test {
+            val initial = consumeItemsUntilPredicate {
+                it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
+            }.last()
+            initial.eventSink(NotificationSettingsEvents.SetMessageSound(NotificationSound.Custom("content://A")))
+            initial.eventSink(NotificationSettingsEvents.SetMessageSound(NotificationSound.Custom("content://B")))
+            advanceUntilIdle()
+
+            assertThat(copyOrder).containsExactly("content://A", "content://B").inOrder()
+            assertThat(recreatedVersions).containsExactly(1, 2).inOrder()
+            val config = appPreferencesStore.getNotificationSoundChannelConfig()
+            assertThat(config.messageSoundVersion).isEqualTo(2)
+            assertThat(config.messageSound).isEqualTo(NotificationSound.Custom("content://B"))
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -855,6 +891,92 @@ class NotificationSettingsPresenterTest {
         }
     }
 
+    @Test
+    fun `present - ShowMessageSoundDialog and DismissMessageSoundDialog toggle dialog visibility`() = runTest {
+        val presenter = createNotificationSettingsPresenter()
+        presenter.test {
+            val initial = consumeItemsUntilPredicate {
+                it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
+            }.last()
+            assertThat(initial.showMessageSoundDialog).isFalse()
+
+            initial.eventSink(NotificationSettingsEvents.ShowMessageSoundDialog)
+            val shown = consumeItemsUntilPredicate { it.showMessageSoundDialog }.last()
+            assertThat(shown.showMessageSoundDialog).isTrue()
+
+            shown.eventSink(NotificationSettingsEvents.DismissMessageSoundDialog)
+            val hidden = consumeItemsUntilPredicate { !it.showMessageSoundDialog }.last()
+            assertThat(hidden.showMessageSoundDialog).isFalse()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `present - SelectMessageSoundPreset persists ElementDefault, recreates the channel and closes the dialog`() = runTest {
+        val recreateRecorder = lambdaRecorder<NotificationSound, Int, Unit> { _, _ -> }
+        val appPreferencesStore = InMemoryAppPreferencesStore()
+        val presenter = createNotificationSettingsPresenter(
+            appPreferencesStore = appPreferencesStore,
+            notificationSoundUpdater = FakeNotificationSoundUpdater(
+                recreateNoisyChannelLambda = { sound, version -> recreateRecorder(sound, version) },
+            ),
+        )
+        presenter.test {
+            val initial = consumeItemsUntilPredicate {
+                it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
+            }.last()
+            initial.eventSink(NotificationSettingsEvents.ShowMessageSoundDialog)
+            val shown = consumeItemsUntilPredicate { it.showMessageSoundDialog }.last()
+
+            shown.eventSink(NotificationSettingsEvents.SelectMessageSoundPreset(NotificationSound.ElementDefault))
+            advanceUntilIdle()
+            consumeItemsUntilPredicate {
+                !it.showMessageSoundDialog && it.messageSound.sound == NotificationSound.ElementDefault
+            }
+            assertThat(appPreferencesStore.getNotificationSoundChannelConfig().messageSound)
+                .isEqualTo(NotificationSound.ElementDefault)
+            recreateRecorder.assertions().isCalledOnce().with(value(NotificationSound.ElementDefault), value(1))
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - LaunchMessageSoundPicker increments the picker token and closes the dialog`() = runTest {
+        val presenter = createNotificationSettingsPresenter()
+        presenter.test {
+            val initial = consumeItemsUntilPredicate {
+                it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
+            }.last()
+            assertThat(initial.pendingMessageSoundPickerLaunch).isEqualTo(0)
+            initial.eventSink(NotificationSettingsEvents.ShowMessageSoundDialog)
+            val shown = consumeItemsUntilPredicate { it.showMessageSoundDialog }.last()
+
+            shown.eventSink(NotificationSettingsEvents.LaunchMessageSoundPicker)
+            val launched = consumeItemsUntilPredicate { it.pendingMessageSoundPickerLaunch == 1 }.last()
+            assertThat(launched.showMessageSoundDialog).isFalse()
+            assertThat(launched.pendingMessageSoundPickerLaunch).isEqualTo(1)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - persisted ElementDefault renders Element default label`() = runTest {
+        val presenter = createNotificationSettingsPresenter(
+            appPreferencesStore = InMemoryAppPreferencesStore(messageSound = NotificationSound.ElementDefault),
+        )
+        presenter.test {
+            val state = consumeItemsUntilPredicate {
+                it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid &&
+                    it.messageSound.sound == NotificationSound.ElementDefault
+            }.last()
+            // FakeStringProvider returns "A string" for any resource, so this just verifies the
+            // ElementDefault branch is taken (vs falling through to the Custom resolver path).
+            assertThat(state.messageSound.displayName).isEqualTo("A string")
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
     private fun TestScope.createNotificationSettingsPresenter(
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
         pushService: PushService = FakePushService(),
@@ -863,9 +985,9 @@ class NotificationSettingsPresenterTest {
         notificationSoundUpdater: NotificationSoundUpdater = FakeNotificationSoundUpdater(),
         // Default copier passes the picked URI string straight through as the FileProvider URI
         // and uses the URI string as the display name. Tests that exercise copy failures override.
-        notificationSoundCopier: NotificationSoundCopier = FakeNotificationSoundCopier { source, _ ->
+        notificationSoundCopier: NotificationSoundCopier = FakeNotificationSoundCopier(copyLambda = { source, _ ->
             NotificationSoundCopier.CopyResult.Success(source, source)
-        },
+        }),
         soundDisplayNameResolver: FakeSoundDisplayNameResolver = FakeSoundDisplayNameResolver(),
     ): NotificationSettingsPresenter {
         val matrixClient = FakeMatrixClient(notificationSettingsService = notificationSettingsService)

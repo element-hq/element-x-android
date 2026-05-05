@@ -8,8 +8,11 @@
 
 package io.element.android.libraries.push.impl.notifications.sound
 
+import android.content.ContentResolver
 import android.content.Context
 import android.media.RingtoneManager
+import android.net.Uri
+import android.provider.OpenableColumns
 import android.webkit.MimeTypeMap
 import androidx.core.content.FileProvider
 import androidx.core.net.toUri
@@ -20,6 +23,7 @@ import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.push.api.notifications.sound.NotificationSoundCopier
 import io.element.android.libraries.push.api.notifications.sound.NotificationSoundCopier.CopyResult
 import io.element.android.libraries.push.api.notifications.sound.NotificationSoundCopier.SoundSlot
+import io.element.android.libraries.push.impl.notifications.notificationSoundFileProviderAuthority
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -33,6 +37,16 @@ private const val MAX_BYTES = 5L * 1024 * 1024
 private const val DIRECTORY_NAME = "notification_sounds"
 private const val FALLBACK_EXTENSION = "bin"
 private const val COPY_BUFFER_SIZE = 8 * 1024
+private const val MAX_DISPLAY_NAME_LENGTH = 256
+
+// Defence-in-depth: we only ever expect URIs from the system ringtone picker (content://) or
+// the bundled resource (android.resource://). Reject anything else before doing I/O so a future
+// caller that constructs a NotificationSound.Custom from an untrusted intent can't trick the
+// copier into reading file:// or unrelated providers.
+private val ALLOWED_SOURCE_SCHEMES = setOf(
+    ContentResolver.SCHEME_CONTENT,
+    ContentResolver.SCHEME_ANDROID_RESOURCE,
+)
 
 @ContributesBinding(AppScope::class)
 class DefaultNotificationSoundCopier(
@@ -45,7 +59,9 @@ class DefaultNotificationSoundCopier(
         slotMutexes.getValue(slot).withLock {
             runCatchingExceptions { performCopy(sourceUriString, slot) }
                 .getOrElse { ex ->
-                    Timber.w(ex, "Notification sound copy failed for slot=$slot")
+                    // Don't pass the throwable to Timber: SAF/MediaProvider exceptions sometimes
+                    // embed the source URI (which can carry short-lived auth tokens).
+                    Timber.w("Notification sound copy failed for slot=%s cause=%s", slot, ex::class.simpleName)
                     CopyResult.Failure(ex)
                 }
         }
@@ -74,10 +90,19 @@ class DefaultNotificationSoundCopier(
 
     private fun performCopy(sourceUriString: String, slot: SoundSlot): CopyResult {
         val source = sourceUriString.toUri()
+        if (source.scheme !in ALLOWED_SOURCE_SCHEMES) return CopyResult.UnplayableSource
         // Reject unplayable sources up front instead of persisting a known-broken pick.
         val sourceRingtone = RingtoneManager.getRingtone(context, source)
             ?: return CopyResult.UnplayableSource
-        val displayName = sourceRingtone.getTitle(context)?.takeUnless { it.isBlank() }
+        // Capture the source's display name before copy — once persisted, the row only sees the
+        // FileProvider URI, where Ringtone.getTitle() would resolve to our internal filename
+        // (e.g. "call_sound.ogg"). RingtoneManager → MediaStore TITLE → OpenableColumns covers
+        // system tones, MediaStore-indexed audio, and SAF-picked files respectively. The value
+        // crosses our security boundary (foreign provider → persisted state → UI), so cap and
+        // sanitize it.
+        val displayName = (sourceRingtone.getTitle(context)?.takeUnless { it.isBlank() }
+            ?: queryOpenableDisplayName(source))
+            ?.let(::sanitizeDisplayName)
 
         // MIME comes from an arbitrary content provider; refuse extensions outside the platform
         // table to keep filenames bounded to notification_sounds/.
@@ -97,9 +122,9 @@ class DefaultNotificationSoundCopier(
             ?: return CopyResult.UnplayableSource
         val bytesCopied = try {
             inputStream.use { input -> tmpFile.outputStream().buffered().use { out -> input.copyToCapped(out, MAX_BYTES) } }
-        } catch (overflow: SizeLimitExceeded) {
+        } catch (_: SizeLimitExceeded) {
             tmpFile.delete()
-            Timber.w(overflow, "Notification sound copy aborted: source exceeds %d bytes (slot=%s)", MAX_BYTES, slot)
+            Timber.w("Notification sound copy aborted: source exceeds %d bytes (slot=%s)", MAX_BYTES, slot)
             return CopyResult.FileTooLarge
         }
 
@@ -110,7 +135,7 @@ class DefaultNotificationSoundCopier(
             // and OEM codec quirks).
             val fileProviderUri = FileProvider.getUriForFile(
                 context,
-                "${context.packageName}.fileprovider",
+                context.notificationSoundFileProviderAuthority(),
                 tmpFile,
             )
             if (RingtoneManager.getRingtone(context, fileProviderUri) == null) {
@@ -131,7 +156,7 @@ class DefaultNotificationSoundCopier(
 
             val finalUri = FileProvider.getUriForFile(
                 context,
-                "${context.packageName}.fileprovider",
+                context.notificationSoundFileProviderAuthority(),
                 finalFile,
             )
             Timber.d("Notification sound copied: slot=%s bytes=%d", slot, bytesCopied)
@@ -140,6 +165,31 @@ class DefaultNotificationSoundCopier(
             if (!committed) tmpFile.delete()
         }
     }
+
+    private fun queryOpenableDisplayName(uri: Uri): String? {
+        return runCatchingExceptions {
+            context.contentResolver.query(uri, arrayOf(OpenableColumns.DISPLAY_NAME), null, null, null)
+                ?.use { cursor ->
+                    if (cursor.moveToFirst() && cursor.columnCount > 0) {
+                        cursor.getString(0)?.takeUnless { it.isBlank() }
+                    } else {
+                        null
+                    }
+                }
+        }.getOrNull()
+    }
+}
+
+internal fun sanitizeDisplayName(raw: String): String? {
+    // Display name comes from a foreign content provider; strip C0 / DEL control characters and
+    // cap length so a hostile or malformed value can't bloat persisted state or break UI rendering.
+    val cleaned = buildString(raw.length.coerceAtMost(MAX_DISPLAY_NAME_LENGTH)) {
+        for (ch in raw) {
+            if (length >= MAX_DISPLAY_NAME_LENGTH) break
+            if (ch.code >= 0x20 && ch.code != 0x7F) append(ch)
+        }
+    }.trim()
+    return cleaned.takeUnless { it.isEmpty() }
 }
 
 private class SizeLimitExceeded : IOException("Sound source exceeds the configured size limit")

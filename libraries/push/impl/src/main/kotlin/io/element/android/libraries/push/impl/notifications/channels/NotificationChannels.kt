@@ -122,7 +122,17 @@ class DefaultNotificationChannels(
         // Single-snapshot read; keep this path minimal — extra ContentResolver lookups here would
         // risk a cold-start ANR.
         val config = runBlocking {
-            appPreferencesStore.getNotificationSoundChannelConfig()
+            val initial = appPreferencesStore.getNotificationSoundChannelConfig()
+            // Pre-dialog builds mapped the noisy `SystemDefault` to our bundled message.mp3.
+            // Now `SystemDefault` means Android's system tone, so untouched legacy state would
+            // silently flip sound. Promote it to `ElementDefault` once, gated on version==0 so the
+            // migration is idempotent.
+            if (initial.messageSoundVersion == 0 && initial.messageSound == NotificationSound.SystemDefault) {
+                appPreferencesStore.setMessageSoundAndIncrementVersion(NotificationSound.ElementDefault, title = null)
+                appPreferencesStore.getNotificationSoundChannelConfig()
+            } else {
+                initial
+            }
         }
 
         currentNoisyChannelId = noisyNotificationChannelId(config.messageSoundVersion)
@@ -250,13 +260,16 @@ class DefaultNotificationChannels(
 
     private fun resolveNoisySoundUri(sound: NotificationSound): Uri? = when (sound) {
         NotificationSound.Silent -> null
-        NotificationSound.SystemDefault -> bundledMessageSoundUri()
+        NotificationSound.SystemDefault -> Settings.System.DEFAULT_NOTIFICATION_URI
+        NotificationSound.ElementDefault -> bundledMessageSoundUri()
         is NotificationSound.Custom -> parseUriOrFallback(sound.uri) { bundledMessageSoundUri() }
     }
 
     private fun resolveRingingSoundUri(sound: NotificationSound): Uri? = when (sound) {
         NotificationSound.Silent -> null
-        NotificationSound.SystemDefault -> Settings.System.DEFAULT_RINGTONE_URI
+        // The ringing channel has no bundled tone — treat ElementDefault like SystemDefault here.
+        NotificationSound.SystemDefault,
+        NotificationSound.ElementDefault -> Settings.System.DEFAULT_RINGTONE_URI
         is NotificationSound.Custom -> parseUriOrFallback(sound.uri) { Settings.System.DEFAULT_RINGTONE_URI }
     }
 
@@ -281,7 +294,8 @@ class DefaultNotificationChannels(
     private inline fun parseUriOrFallback(uriString: String, fallback: () -> Uri): Uri =
         runCatchingExceptions { uriString.toUri() }
             .getOrElse {
-                Timber.w(it, "Failed to parse persisted sound URI; falling back to default")
+                // Don't pass the throwable: legacy persisted URIs may carry SAF auth tokens.
+                Timber.w("Failed to parse persisted sound URI; falling back to default cause=%s", it::class.simpleName)
                 fallback()
             }
 
@@ -345,28 +359,32 @@ class DefaultNotificationChannels(
         }
     }
 
-    /**
-     * The noisy-channel "default" is our bundled message.mp3, not a system tone — surface it as
-     * Custom so the picker row reflects what the user actually hears rather than mislabelling it
-     * as Android's system default. Pass null for [ourDefaultUri] to disable the SystemDefault match.
-     */
     override suspend fun readNoisyChannelSound(): NotificationSound? {
-        return readChannelSound(channelId = currentNoisyChannelId, ourDefaultUri = null)
+        return readChannelSound(
+            channelId = currentNoisyChannelId,
+            bundledUri = bundledMessageSoundUri(),
+            systemDefaultUri = Settings.System.DEFAULT_NOTIFICATION_URI,
+        )
     }
 
     override suspend fun readRingingCallChannelSound(): NotificationSound? {
-        return readChannelSound(channelId = currentRingingCallChannelId, ourDefaultUri = Settings.System.DEFAULT_RINGTONE_URI)
+        return readChannelSound(
+            channelId = currentRingingCallChannelId,
+            bundledUri = null,
+            systemDefaultUri = Settings.System.DEFAULT_RINGTONE_URI,
+        )
     }
 
-    /** Classifies the channel's sound URI by comparing against [ourDefaultUri] (null disables the match). */
-    private suspend fun readChannelSound(channelId: String, ourDefaultUri: Uri?): NotificationSound? {
+    /** Classifies the channel's sound URI: null → Silent, bundled → ElementDefault, system default → SystemDefault, else → Custom. */
+    private suspend fun readChannelSound(channelId: String, bundledUri: Uri?, systemDefaultUri: Uri): NotificationSound? {
         if (!supportNotificationChannels()) return null
         val channel = withContext(Dispatchers.IO) {
             notificationManager.getNotificationChannel(channelId)
         } ?: return null
         return when (val sound = channel.sound) {
             null -> NotificationSound.Silent
-            ourDefaultUri -> NotificationSound.SystemDefault
+            bundledUri -> NotificationSound.ElementDefault
+            systemDefaultUri -> NotificationSound.SystemDefault
             else -> NotificationSound.Custom(sound.toString())
         }
     }

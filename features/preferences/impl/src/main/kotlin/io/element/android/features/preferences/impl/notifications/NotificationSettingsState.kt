@@ -26,6 +26,15 @@ data class NotificationSettingsState(
     val fullScreenIntentPermissionsState: FullScreenIntentPermissionsState,
     val messageSound: SoundChannelUiState,
     val callRingtone: SoundChannelUiState,
+    val showMessageSoundDialog: Boolean,
+    /**
+     * One-shot trigger for launching the system ringtone picker. Each
+     * [NotificationSettingsEvents.LaunchMessageSoundPicker] increments the value;
+     * the view watches this in `LaunchedEffect` and calls the launcher whenever it goes above 0.
+     * **Always start at 0** in initial state, providers, and previews — a non-zero seed will
+     * auto-open the picker on screen entry.
+     */
+    val pendingMessageSoundPickerLaunch: Int,
     val eventSink: (NotificationSettingsEvents) -> Unit,
 ) {
     sealed interface MatrixSettings {
