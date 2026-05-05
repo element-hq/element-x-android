@@ -40,31 +40,31 @@ class FakeSessionVerificationService(
     override val sessionVerifiedStatus: StateFlow<SessionVerifiedStatus> = _sessionVerifiedStatus
     override val needsSessionVerification: Flow<Boolean> = _needsSessionVerification
 
-    override suspend fun requestDeviceVerification() {
+    override suspend fun requestDeviceVerification() = simulateLongTask {
         requestDeviceVerificationLambda()
     }
 
-    override suspend fun requestUserVerification(userId: UserId) {
+    override suspend fun requestUserVerification(userId: UserId) = simulateLongTask {
         requestUserVerificationLambda(userId)
     }
 
-    override suspend fun cancelVerification() {
+    override suspend fun cancelVerification() = simulateLongTask {
         cancelVerificationLambda()
     }
 
-    override suspend fun approveVerification() {
+    override suspend fun approveVerification() = simulateLongTask {
         approveVerificationLambda()
     }
 
-    override suspend fun declineVerification() {
+    override suspend fun declineVerification() = simulateLongTask {
         declineVerificationLambda()
     }
 
-    override suspend fun startSasVerification() {
+    override suspend fun startSasVerification() = simulateLongTask {
         startSasVerificationLambda()
     }
 
-    override suspend fun reset(cancelAnyPendingVerificationAttempt: Boolean) {
+    override suspend fun reset(cancelAnyPendingVerificationAttempt: Boolean) = simulateLongTask {
         resetLambda(cancelAnyPendingVerificationAttempt)
     }
 
@@ -75,7 +75,7 @@ class FakeSessionVerificationService(
         this.listener = listener
     }
 
-    override suspend fun acknowledgeVerificationRequest(verificationRequest: VerificationRequest.Incoming) {
+    override suspend fun acknowledgeVerificationRequest(verificationRequest: VerificationRequest.Incoming) = simulateLongTask {
         acknowledgeVerificationRequestLambda(verificationRequest)
     }
 

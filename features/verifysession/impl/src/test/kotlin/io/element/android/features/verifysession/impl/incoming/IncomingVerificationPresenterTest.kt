@@ -99,6 +99,7 @@ class IncomingVerificationPresenterTest {
             emojiState.eventSink(IncomingVerificationViewEvents.ConfirmVerification)
             val emojiWaitingItem = awaitItem()
             assertThat((emojiWaitingItem.step as IncomingVerificationState.Step.Verifying).isWaiting).isTrue()
+            advanceUntilIdle()
             approveVerificationLambda.assertions().isCalledOnce()
             // Remote confirm that the emojis match
             fakeSessionVerificationService.emitVerificationFlowState(
@@ -161,6 +162,7 @@ class IncomingVerificationPresenterTest {
             emojiState.eventSink(IncomingVerificationViewEvents.DeclineVerification)
             val emojiWaitingItem = awaitItem()
             assertThat((emojiWaitingItem.step as IncomingVerificationState.Step.Verifying).isWaiting).isTrue()
+            advanceUntilIdle()
             declineVerificationLambda.assertions().isCalledOnce()
             // Remote confirm that there is a failure
             fakeSessionVerificationService.emitVerificationFlowState(
@@ -260,6 +262,7 @@ class IncomingVerificationPresenterTest {
             emojiState.eventSink(IncomingVerificationViewEvents.GoBack)
             val emojiWaitingItem = awaitItem()
             assertThat((emojiWaitingItem.step as IncomingVerificationState.Step.Verifying).isWaiting).isTrue()
+            advanceUntilIdle()
             declineVerificationLambda.assertions().isCalledOnce()
             // Remote confirm that there is a failure
             fakeSessionVerificationService.emitVerificationFlowState(

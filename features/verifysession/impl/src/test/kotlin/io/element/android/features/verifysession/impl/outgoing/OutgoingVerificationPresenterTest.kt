@@ -27,6 +27,8 @@ import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
@@ -271,6 +273,7 @@ class OutgoingVerificationPresenterTest {
         }
     }
 
+    context(testScope: TestScope)
     private suspend fun ReceiveTurbine<OutgoingVerificationState>.requestVerificationAndAwaitVerifyingState(
         fakeService: FakeSessionVerificationService,
         sessionVerificationData: SessionVerificationData = SessionVerificationData.Emojis(emptyList()),
@@ -278,6 +281,7 @@ class OutgoingVerificationPresenterTest {
         var state = awaitItem()
         assertThat(state.step).isEqualTo(Step.Initial)
         state.eventSink(OutgoingVerificationViewEvents.RequestVerification)
+        testScope.advanceUntilIdle()
         // Await for other device response:
         fakeService.emitVerificationFlowState(VerificationFlowState.DidAcceptVerificationRequest)
         state = awaitItem()
@@ -286,6 +290,7 @@ class OutgoingVerificationPresenterTest {
         state = awaitItem()
         assertThat(state.step).isEqualTo(Step.Ready)
         state.eventSink(OutgoingVerificationViewEvents.StartSasVerification)
+        testScope.advanceUntilIdle()
         // Await for other device response (again):
         fakeService.emitVerificationFlowState(VerificationFlowState.DidStartSasVerification)
         state = awaitItem()
@@ -297,7 +302,7 @@ class OutgoingVerificationPresenterTest {
         return state
     }
 
-    private suspend fun unverifiedSessionService(
+    private fun unverifiedSessionService(
         requestDeviceVerificationLambda: () -> Unit = { lambdaError() },
         requestUserVerificationLambda: (UserId) -> Unit = { lambdaError() },
         cancelVerificationLambda: () -> Unit = { lambdaError() },
@@ -309,6 +314,7 @@ class OutgoingVerificationPresenterTest {
         acceptVerificationRequestLambda: () -> Unit = { lambdaError() },
     ): FakeSessionVerificationService {
         return FakeSessionVerificationService(
+            initialSessionVerifiedStatus = SessionVerifiedStatus.NotVerified,
             requestDeviceVerificationLambda = requestDeviceVerificationLambda,
             requestUserVerificationLambda = requestUserVerificationLambda,
             cancelVerificationLambda = cancelVerificationLambda,
@@ -318,9 +324,7 @@ class OutgoingVerificationPresenterTest {
             resetLambda = resetLambda,
             acknowledgeVerificationRequestLambda = acknowledgeVerificationRequestLambda,
             acceptVerificationRequestLambda = acceptVerificationRequestLambda,
-        ).apply {
-            emitVerifiedStatus(SessionVerifiedStatus.NotVerified)
-        }
+        )
     }
 }
 
