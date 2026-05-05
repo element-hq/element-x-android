@@ -32,7 +32,7 @@
   <string name="screen_login_error_invalid_credentials">"Utilizator și/sau parolă incorecte"</string>
   <string name="screen_login_error_invalid_user_id">"Acesta nu este un identificator de utilizator valid. Format așteptat: „@user:homeserver.org”"</string>
   <string name="screen_login_error_refresh_tokens">"Acest server este configurat pentru a utiliza token-uri de reîmprospătare. Acestea nu sunt acceptate atunci când utilizați autentificare bazată pe parolă."</string>
-  <string name="screen_login_error_unsupported_authentication">"Homeserver-ul selectat nu acceptă autentificarea prin parola sau OIDC. Te rugăm să contactezi administratorul sau să alegi un alt homeserver."</string>
+  <string name="screen_login_error_unsupported_authentication">"Homeserver-ul selectat nu acceptă autentificarea prin parola sau OAuth. Te rugăm să contactezi administratorul sau să alegi un alt homeserver."</string>
   <string name="screen_login_form_header">"Introduceți detaliile"</string>
   <string name="screen_login_subtitle">"Matrix este o rețea deschisă pentru o comunicare sigură și descentralizată."</string>
   <string name="screen_login_title">"Bine ați revenit!"</string>

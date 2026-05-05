@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_account_provider_change">"アカウントの提供元を変更"</string>
+  <string name="screen_account_provider_change">"アカウント提供元を変更"</string>
   <string name="screen_account_provider_form_hint">"ホームサーバーのアドレス"</string>
-  <string name="screen_account_provider_form_notice">"検索用のキーワードまたはドメインのアドレスを入力してください。"</string>
+  <string name="screen_account_provider_form_notice">"検索のキーワードまたはドメインのアドレスを入力してください。"</string>
   <string name="screen_account_provider_form_subtitle">"会社やコミュニティ, 個人のサーバーなどを検索します。"</string>
-  <string name="screen_account_provider_form_title">"アカウントの提供元を検索"</string>
-  <string name="screen_account_provider_signin_subtitle">"メールアプリのように、あなたの会話はここに保管されています。"</string>
+  <string name="screen_account_provider_form_title">"アカウント提供元を検索"</string>
+  <string name="screen_account_provider_signin_subtitle">"メールアプリのように、あなたの会話はこのサーバー上に保管されます。"</string>
   <string name="screen_account_provider_signin_title">"%s にサインインを試みています"</string>
-  <string name="screen_account_provider_signup_subtitle">"メールアプリのように、あなたの会話はここに保管されています。"</string>
-  <string name="screen_account_provider_signup_title">"%s にアカウントの作成を試みています"</string>
+  <string name="screen_account_provider_signup_subtitle">"メールアプリのように、あなたの会話はこのサーバー上に保管されます。"</string>
+  <string name="screen_account_provider_signup_title">"%s 上にアカウントを作成しようとしています"</string>
   <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org は Matrix.org Foundation が運営する、大規模で安全な分散型コミュニケーションを実現する無償のサーバーです。"</string>
   <string name="screen_change_account_provider_other">"その他"</string>
-  <string name="screen_change_account_provider_subtitle">"自身のサーバーや仕事用のアカウントにサインインするには、アカウント提供元のサーバーを指定してください。"</string>
-  <string name="screen_change_account_provider_title">"アカウントの提供元を変更"</string>
+  <string name="screen_change_account_provider_subtitle">"自身のサーバーや仕事用のアカウントにサインインするには、アカウント提供元を変更してください。"</string>
+  <string name="screen_change_account_provider_title">"アカウント提供元を変更"</string>
   <string name="screen_change_server_error_element_pro_required_action_android">"Google Play"</string>
   <string name="screen_change_server_error_element_pro_required_message">"%1$s では Element Pro を使用する必要があります。アプリストアよりダウンロードしてください。"</string>
   <string name="screen_change_server_error_element_pro_required_title">"Element Pro が必要です"</string>
@@ -27,11 +27,11 @@
   <string name="screen_change_server_subtitle">"サーバーのアドレスは何ですか？"</string>
   <string name="screen_change_server_title">"サーバーを選択"</string>
   <string name="screen_create_account_title">"アカウントを作成"</string>
-  <string name="screen_login_error_deactivated_account">"このアカウントは無効化されています。"</string>
+  <string name="screen_login_error_deactivated_account">"アカウントは削除されました。"</string>
   <string name="screen_login_error_invalid_credentials">"ユーザー名またはパスワードが違います"</string>
   <string name="screen_login_error_invalid_user_id">"無効なユーザーIDです。正しい形式は \"@ユーザー:ホームサーバー\" です。"</string>
   <string name="screen_login_error_refresh_tokens">"このサーバーはリフレッシュトークンを使用します。パスワードを使用したログインとは併用できません。"</string>
-  <string name="screen_login_error_unsupported_authentication">"指定したホームサーバはパスワードまたはOIDCによるログインに対応していません。管理者に問い合わせるか、異なるホームサーバーを使用してください。"</string>
+  <string name="screen_login_error_unsupported_authentication">"指定したホームサーバはパスワードまたはOAuthによるログインに対応していません。管理者に問い合わせるか、異なるホームサーバーを使用してください。"</string>
   <string name="screen_login_form_header">"詳細を入力"</string>
   <string name="screen_login_subtitle">"Matrix は安全で分散型のオープンなネットワークです。"</string>
   <string name="screen_login_title">"お待ちしておりました。"</string>
@@ -80,8 +80,8 @@
   <string name="screen_qr_code_login_error_sliding_sync_not_supported_title">"%1$s に非対応"</string>
   <string name="screen_qr_code_login_initial_state_button_title">"読み取る"</string>
   <string name="screen_qr_code_login_initial_state_item_1">"コンピュータで %1$s を開く"</string>
-  <string name="screen_qr_code_login_initial_state_item_2">"アバターをタップしてください"</string>
-  <string name="screen_qr_code_login_initial_state_item_3">"%1$s を選択してください"</string>
+  <string name="screen_qr_code_login_initial_state_item_2">"アバターをタップ"</string>
+  <string name="screen_qr_code_login_initial_state_item_3">"%1$s を選択"</string>
   <string name="screen_qr_code_login_initial_state_item_3_action">"\"新しい端末を追加\""</string>
   <string name="screen_qr_code_login_initial_state_item_4">"この端末でQRコードを読み取る"</string>
   <string name="screen_qr_code_login_initial_state_subtitle">"アカウント提供元が対応する場合にのみ使用できます。"</string>
@@ -98,11 +98,11 @@
   <string name="screen_qr_code_login_verify_code_loading">"一方の端末を待機しています"</string>
   <string name="screen_qr_code_login_verify_code_subtitle">"アカウント提供元が、サインインを検証するために以下の文字列を要求することがあります。"</string>
   <string name="screen_qr_code_login_verify_code_title">"検証コード"</string>
-  <string name="screen_server_confirmation_change_server">"アカウントの提供元を変更"</string>
+  <string name="screen_server_confirmation_change_server">"アカウント提供元を変更"</string>
   <string name="screen_server_confirmation_message_login_element_dot_io">"Element 開発者用の非公開のサーバーです。"</string>
   <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix は安全で分散型のオープンなネットワークです。"</string>
-  <string name="screen_server_confirmation_message_register">"メールアプリのように、あなたの会話はここに保管されています。"</string>
+  <string name="screen_server_confirmation_message_register">"メールアプリのように、あなたの会話はこのサーバー上に保管されます。"</string>
   <string name="screen_server_confirmation_title_login">"%1$s にサインインを試みています"</string>
   <string name="screen_server_confirmation_title_picker_mode">"アカウント提供元を選択"</string>
-  <string name="screen_server_confirmation_title_register">"%1$s 上にアカウントの作成を試みています"</string>
+  <string name="screen_server_confirmation_title_register">"%1$s 上にアカウントを作成しようとしています"</string>
 </resources>

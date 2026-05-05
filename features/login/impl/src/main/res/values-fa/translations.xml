@@ -20,10 +20,10 @@
   <string name="screen_change_server_subtitle">"نشانی کارسازتان چیست؟"</string>
   <string name="screen_change_server_title">"کارسازتان را برگزینید"</string>
   <string name="screen_create_account_title">"ایجاد حساب"</string>
-  <string name="screen_login_error_deactivated_account">"این حساب از کار افتاده است."</string>
+  <string name="screen_login_error_deactivated_account">"این حساب حذف شده است."</string>
   <string name="screen_login_error_invalid_credentials">"نام کاربری یا گذرواژه نامعتبر است"</string>
   <string name="screen_login_error_invalid_user_id">"این یک شناسه کاربری معتبر نیست. قالب صحیح: ‪«@user:homeserver.or"</string>
-  <string name="screen_login_error_unsupported_authentication">"کارساز اصلی انتخاب شده از رمز عبور یا ورود OIDC پشتیبانی نمی کند. لطفا با مدیر خود تماس بگیرید یا یک کارساز خانگی دیگر را انتخاب کنید."</string>
+  <string name="screen_login_error_unsupported_authentication">"کارساز اصلی انتخاب شده از رمز عبور یا ورود OAuth پشتیبانی نمی کند. لطفا با مدیر خود تماس بگیرید یا یک کارساز خانگی دیگر را انتخاب کنید."</string>
   <string name="screen_login_form_header">"جزییاتتان را وارد کنید"</string>
   <string name="screen_login_subtitle">"ماتریکس شبکه‌ای بار برای ارتباطات نامتمرکز و امن است."</string>
   <string name="screen_login_title">"خوش برگشتید!"</string>

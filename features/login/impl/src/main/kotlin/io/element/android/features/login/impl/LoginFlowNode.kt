@@ -50,9 +50,9 @@ import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.annotations.AppCoroutineScope
-import io.element.android.libraries.matrix.api.auth.OidcDetails
-import io.element.android.libraries.oidc.api.OidcAction
-import io.element.android.libraries.oidc.api.OidcActionFlow
+import io.element.android.libraries.matrix.api.auth.OAuthDetails
+import io.element.android.libraries.oauth.api.OAuthAction
+import io.element.android.libraries.oauth.api.OAuthActionFlow
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -64,7 +64,7 @@ class LoginFlowNode(
     @Assisted buildContext: BuildContext,
     @Assisted plugins: List<Plugin>,
     private val accountProviderDataSource: AccountProviderDataSource,
-    private val oidcActionFlow: OidcActionFlow,
+    private val oAuthActionFlow: OAuthActionFlow,
     @AppCoroutineScope
     private val appCoroutineScope: CoroutineScope,
     private val elementClassicConnection: ElementClassicConnection,
@@ -100,7 +100,7 @@ class LoginFlowNode(
                     // by pressing back or by closing the Custom Chrome Tab.
                     lifecycleScope.launch {
                         delay(5000)
-                        oidcActionFlow.post(OidcAction.GoBack(toUnblock = true))
+                        oAuthActionFlow.post(OAuthAction.GoBack(toUnblock = true))
                     }
                 }
             }
@@ -161,8 +161,8 @@ class LoginFlowNode(
                         backstack.push(NavTarget.LoginPassword())
                     }
 
-                    override fun navigateToOidc(oidcDetails: OidcDetails) {
-                        navigateToMas(oidcDetails)
+                    override fun navigateToOAuth(oAuthDetails: OAuthDetails) {
+                        navigateToMas(oAuthDetails)
                     }
 
                     override fun navigateToCreateAccount(url: String) {
@@ -197,8 +197,8 @@ class LoginFlowNode(
                         callback.navigateToBugReport()
                     }
 
-                    override fun navigateToOidc(oidcDetails: OidcDetails) {
-                        navigateToMas(oidcDetails)
+                    override fun navigateToOAuth(oAuthDetails: OAuthDetails) {
+                        navigateToMas(oAuthDetails)
                     }
 
                     override fun navigateToCreateAccount(url: String) {
@@ -243,8 +243,8 @@ class LoginFlowNode(
             }
             NavTarget.ChooseAccountProvider -> {
                 val callback = object : ChooseAccountProviderNode.Callback {
-                    override fun navigateToOidc(oidcDetails: OidcDetails) {
-                        navigateToMas(oidcDetails)
+                    override fun navigateToOAuth(oAuthDetails: OAuthDetails) {
+                        navigateToMas(oAuthDetails)
                     }
 
                     override fun navigateToCreateAccount(url: String) {
@@ -270,8 +270,8 @@ class LoginFlowNode(
                     isAccountCreation = navTarget.isAccountCreation,
                 )
                 val callback = object : ConfirmAccountProviderNode.Callback {
-                    override fun navigateToOidc(oidcDetails: OidcDetails) {
-                        navigateToMas(oidcDetails)
+                    override fun navigateToOAuth(oAuthDetails: OAuthDetails) {
+                        navigateToMas(oAuthDetails)
                     }
 
                     override fun navigateToCreateAccount(url: String) {
@@ -333,10 +333,10 @@ class LoginFlowNode(
         }
     }
 
-    private fun navigateToMas(oidcDetails: OidcDetails) {
+    private fun navigateToMas(oAuthDetails: OAuthDetails) {
         activity?.let {
             externalAppStarted = true
-            it.openUrlInChromeCustomTab(null, darkTheme, oidcDetails.url)
+            it.openUrlInChromeCustomTab(null, darkTheme, oAuthDetails.url)
         }
     }
 

@@ -4,15 +4,15 @@
   <string name="screen_signout_confirmation_dialog_submit">"Dieses Gerät entfernen"</string>
   <string name="screen_signout_confirmation_dialog_title">"Dieses Gerät entfernen"</string>
   <string name="screen_signout_in_progress_dialog_content">"Gerät wird entfernt…"</string>
-  <string name="screen_signout_key_backup_disabled_subtitle">"Du bist dabei, dich von deiner letzten Sitzung abzumelden. Wenn dich jetzt abmeldest, verlierst du den Zugriff auf deine verschlüsselten Nachrichten."</string>
-  <string name="screen_signout_key_backup_disabled_title">"Du hast das Backup deaktiviert"</string>
-  <string name="screen_signout_key_backup_offline_subtitle">"Das Backup deiner Schlüssel lief noch, als du offline gegangen bist. Verbinde dich erneut, damit deine Schlüssel vor dem Abmelden gesichert werden können."</string>
+  <string name="screen_signout_key_backup_disabled_subtitle">"Dies ist dein einziges Gerät. Wenn du es entfernst, benötigst du einen Wiederherstellungsschlüssel, um deine digitale Identität zu bestätigen und deine verschlüsselten Chats bei deiner nächsten Anmeldung wiederherzustellen."</string>
+  <string name="screen_signout_key_backup_disabled_title">"Du bist dabei, den Zugriff auf deine verschlüsselten Chats zu verlieren"</string>
+  <string name="screen_signout_key_backup_offline_subtitle">"Deine Schlüssel wurden noch gesichert, während du offline gegangen bist. Stelle die Verbindung wieder her, damit deine Schlüssel gesichert werden können, bevor du dieses Gerät entfernst."</string>
   <string name="screen_signout_key_backup_offline_title">"Deine Schlüssel werden noch gesichert"</string>
   <string name="screen_signout_key_backup_ongoing_subtitle">"Bitte warte, bis der Vorgang abgeschlossen ist, bevor du dieses Gerät entfernst."</string>
   <string name="screen_signout_key_backup_ongoing_title">"Deine Schlüssel werden noch gesichert"</string>
   <string name="screen_signout_preference_item">"Dieses Gerät entfernen"</string>
-  <string name="screen_signout_recovery_disabled_subtitle">"Du bist dabei, dich von deiner letzten Sitzung abzumelden. Wenn du dich jetzt abmeldest, verlierst du den Zugriff auf deine verschlüsselten Nachrichten."</string>
+  <string name="screen_signout_recovery_disabled_subtitle">"Dies ist dein einziges Gerät. Wenn du es entfernst, benötigst du einen Wiederherstellungsschlüssel, um deine digitale Identität zu bestätigen und deine verschlüsselten Chats bei deiner nächsten Anmeldung wiederherzustellen."</string>
   <string name="screen_signout_recovery_disabled_title">"Du bist dabei, den Zugriff auf deine verschlüsselten Chats zu verlieren"</string>
-  <string name="screen_signout_save_recovery_key_subtitle">"Du bist dabei, dich von deiner letzten Sitzung abzumelden. Wenn du dich jetzt abmeldest, verlierst du möglicherweise den Zugriff auf deine verschlüsselten Nachrichten."</string>
+  <string name="screen_signout_save_recovery_key_subtitle">"Dies ist dein einziges Gerät. Wenn du es entfernst, benötigst du einen Wiederherstellungsschlüssel, um deine digitale Identität zu bestätigen und deine verschlüsselten Chats bei deiner nächsten Anmeldung wiederherzustellen."</string>
   <string name="screen_signout_save_recovery_key_title">"Stelle sicher, dass du Zugriff auf deinen Wiederherstellungsschlüssel hast, bevor du dieses Gerät entfernst"</string>
 </resources>

@@ -31,7 +31,7 @@
   <string name="screen_login_error_invalid_credentials">"Notog\'ri foydalanuvchi nomi va/yoki parol"</string>
   <string name="screen_login_error_invalid_user_id">"Bu haqiqiy foydalanuvchi identifikatori emas. Kutilayotgan format: \'@user:homeserver.org\'"</string>
   <string name="screen_login_error_refresh_tokens">"Ushbu server yangilash tokenlaridan foydalanishga moslashtirilgan. Parolga asoslangan tizimga kirishda bunday tokenlar qoʻllab-quvvatlanmaydi."</string>
-  <string name="screen_login_error_unsupported_authentication">"Tanlangan uy serveri parol yoki OIDC loginni qo\'lab-quvvatlamaydi. Iltimos, administratoringizga murojaat qiling yoki boshqa uy serverini tanlang."</string>
+  <string name="screen_login_error_unsupported_authentication">"Tanlangan uy serveri parol yoki OAuth loginni qo\'lab-quvvatlamaydi. Iltimos, administratoringizga murojaat qiling yoki boshqa uy serverini tanlang."</string>
   <string name="screen_login_form_header">"Tafsilotlaringizni kiriting"</string>
   <string name="screen_login_subtitle">"Matrix xavfsiz, markazlashmagan aloqa uchun ochiq tarmoqdir."</string>
   <string name="screen_login_title">"Qaytib kelganingizdan xursandmiz!"</string>

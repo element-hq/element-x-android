@@ -5,9 +5,9 @@
 # Project
 android_gradle_plugin = "8.13.2"
 # When updating this, please also update the version in the file ./idea/kotlinc.xml
-kotlin = "2.3.20"
+kotlin = "2.3.21"
 kotlinpoet = "2.3.0"
-ksp = "2.3.6"
+ksp = "2.3.7"
 firebaseAppDistribution = "5.2.1"
 
 # AndroidX
@@ -22,7 +22,7 @@ camera = "1.6.0"
 work = "2.11.2"
 
 # Compose
-compose_bom = "2026.03.01"
+compose_bom = "2026.04.01"
 
 # Coroutines
 coroutines = "1.10.2"
@@ -32,7 +32,7 @@ accompanist = "0.37.3"
 
 # Test
 test_core = "1.7.0"
-roborazzi = "1.59.0"
+roborazzi = "1.60.0"
 
 # Jetbrain
 datetime = "0.7.1"
@@ -178,7 +178,7 @@ test_detekt_test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version
 # https://github.com/matrix-org/matrix-rust-components-kotlin/commits/main/sdk/sdk-android/src/main/kotlin/org/matrix/rustcomponents/sdk/matrix_sdk_ffi.kt
 # All new features should not be implemented in the pull request that upgrades the version, developers should
 # only fix API breaks and may add some TODOs.
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.04.27"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.05.4"
 
 # Others
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
@@ -191,7 +191,7 @@ serialization_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-jso
 kotlinx_collections_immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.4.0"
 showkase = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
 showkase_processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }
-jsoup = "org.jsoup:jsoup:1.21.2"
+jsoup = "org.jsoup:jsoup:1.22.2"
 appyx_core = { module = "com.bumble.appyx:core", version.ref = "appyx" }
 molecule-runtime = "app.cash.molecule:molecule-runtime:2.2.0"
 timber = "com.jakewharton.timber:timber:5.0.1"
@@ -221,8 +221,8 @@ haze_materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = 
 color_picker = "io.mhssn:colorpicker:1.0.0"
 
 # Analytics
-posthog = "com.posthog:posthog-android:3.39.0"
-sentry = "io.sentry:sentry-android:8.39.1"
+posthog = "com.posthog:posthog-android:3.43.0"
+sentry = "io.sentry:sentry-android:8.40.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.33.2"
 

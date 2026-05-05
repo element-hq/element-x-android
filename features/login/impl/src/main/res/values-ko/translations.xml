@@ -32,7 +32,7 @@
   <string name="screen_login_error_invalid_credentials">"잘못된 아이디/비밀번호"</string>
   <string name="screen_login_error_invalid_user_id">"이 사용자 ID는 유효하지 않습니다. 예상 형식: ‘@user:homeserver.org’"</string>
   <string name="screen_login_error_refresh_tokens">"이 서버는 새로 고침 토큰을 사용하도록 구성되어 있습니다. 비밀번호 기반 로그인을 사용하는 경우 이 기능은 지원되지 않습니다."</string>
-  <string name="screen_login_error_unsupported_authentication">"선택한 홈 서버는 password 또는 OIDC 로그인을 지원하지 않습니다. 관리자에게 문의하거나 다른 홈 서버를 선택하세요."</string>
+  <string name="screen_login_error_unsupported_authentication">"선택한 홈 서버는 password 또는 OAuth 로그인을 지원하지 않습니다. 관리자에게 문의하거나 다른 홈 서버를 선택하세요."</string>
   <string name="screen_login_form_header">"귀하의 세부 정보를 입력하십시오"</string>
   <string name="screen_login_subtitle">"Matrix 는 안전하고 분산된 커뮤니케이션을 위한 개방형 네트워크입니다."</string>
   <string name="screen_login_title">"다시 돌아온 걸 환영합니다!"</string>

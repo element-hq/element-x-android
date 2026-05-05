@@ -36,7 +36,7 @@ import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.designsystem.components.ProgressDialog
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
-import io.element.android.libraries.matrix.api.encryption.IdentityOidcResetHandle
+import io.element.android.libraries.matrix.api.encryption.IdentityOAuthResetHandle
 import io.element.android.libraries.matrix.api.encryption.IdentityPasswordResetHandle
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Job
@@ -123,12 +123,12 @@ class ResetIdentityFlowNode(
                     null -> {
                         Timber.d("No reset handle return, the reset is done.")
                     }
-                    is IdentityOidcResetHandle -> {
+                    is IdentityOAuthResetHandle -> {
                         Timber.d("Launching reset confirmation in MAS")
                         activity.openUrlInChromeCustomTab(null, darkTheme, handle.url)
-                        Timber.d("Starting resetOidc")
-                        resetJob = launch { handle.resetOidc() }
-                        resetJob?.invokeOnCompletion { Timber.d("resetOidc ended") }
+                        Timber.d("Starting resetOAuth")
+                        resetJob = launch { handle.resetOAuth() }
+                        resetJob?.invokeOnCompletion { Timber.d("resetOAuth ended") }
                     }
                     is IdentityPasswordResetHandle -> backstack.push(NavTarget.ResetPassword)
                 }

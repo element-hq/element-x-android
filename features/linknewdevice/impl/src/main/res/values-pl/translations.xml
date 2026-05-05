@@ -17,6 +17,8 @@
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"Jeśli napotkasz ten sam problem, użyj innej sieci Wi-FI lub danych mobilnych"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Jeśli to nie zadziała, zaloguj się ręcznie"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Połączenie nie jest bezpieczne"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"Zostaniesz poproszony o wprowadzenie dwóch cyfr widocznych na tym urządzeniu."</string>
+  <string name="screen_qr_code_login_device_code_title">"Wprowadź numer poniżej na innym urządzeniu"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"Logowanie zostało anulowane na drugim urządzeniu."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Prośba o logowanie została anulowana"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"Logowanie zostało odrzucone na drugim urządzeniu."</string>
@@ -35,4 +37,5 @@ Spróbuj zalogować się ręcznie lub zeskanuj kod QR na innym urządzeniu."</st
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Musisz przyznać uprawnienia %1$s do korzystania z kamery, aby kontynuować."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Zezwól na dostęp do kamery, aby zeskanować kod QR"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Wystąpił nieoczekiwany błąd. Spróbuj ponownie."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"Oczekiwanie na drugie urządzenie"</string>
 </resources>

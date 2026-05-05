@@ -44,6 +44,7 @@ dependencies {
     implementation(projects.libraries.dateformatter.api)
     implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.push.api)
+    implementation(projects.libraries.sessionStorage.api)
     implementation(libs.androidx.datastore.preferences)
     implementation(libs.datetime)
 

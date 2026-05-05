@@ -14,6 +14,7 @@
   <string name="a11y_encryption_details">"Titkosítás részletei"</string>
   <string name="a11y_expand_message_text_field">"Üzenet szövegmezőjének kibontása"</string>
   <string name="a11y_hide_password">"Jelszó elrejtése"</string>
+  <string name="a11y_info">"Információ"</string>
   <string name="a11y_join_call">"Csatlakozás a híváshoz"</string>
   <string name="a11y_jump_to_bottom">"Ugrás az aljára"</string>
   <string name="a11y_move_the_map_to_my_location">"Térkép áthelyezése a jelenlegi helyre"</string>
@@ -48,6 +49,7 @@
   <string name="a11y_send_files">"Fájlküldés"</string>
   <string name="a11y_sender_location">"Felhasználó tartózkodási helye"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Időkorlátos művelet szükséges, egy perce van az ellenőrzésre"</string>
+  <string name="a11y_settings_with_required_action">"Beállítások, beavatkozás szükséges"</string>
   <string name="a11y_show_password">"Jelszó megjelenítése"</string>
   <string name="a11y_start_call">"Hanghívás indítása"</string>
   <string name="a11y_start_video_call">"Videohívás indítása"</string>
@@ -88,12 +90,15 @@
   <string name="action_deactivate_account">"Fiók deaktiválása"</string>
   <string name="action_decline">"Elutasítás"</string>
   <string name="action_decline_and_block">"Elutasítás és letiltás"</string>
+  <string name="action_delete">"Törlés"</string>
+  <string name="action_delete_account">"Fiók törlése"</string>
   <string name="action_delete_poll">"Szavazás törlése"</string>
   <string name="action_deselect_all">"Kijelölés megszüntetése"</string>
   <string name="action_disable">"Letiltás"</string>
   <string name="action_discard">"Elvetés"</string>
   <string name="action_dismiss">"Eltüntetés"</string>
   <string name="action_done">"Kész"</string>
+  <string name="action_download">"Letöltés"</string>
   <string name="action_edit">"Szerkesztés"</string>
   <string name="action_edit_caption">"Felirat szerkesztése"</string>
   <string name="action_edit_poll">"Szavazás szerkesztése"</string>
@@ -201,7 +206,9 @@
   <string name="common_beta">"Béta"</string>
   <string name="common_blocked_users">"Letiltott felhasználók"</string>
   <string name="common_bubbles">"Buborékok"</string>
+  <string name="common_call_declined">"Hívás elutasítva"</string>
   <string name="common_call_started">"A hívás elindult"</string>
+  <string name="common_call_you_declined">"Elutasított egy hívást"</string>
   <string name="common_chat_backup">"Csevegés biztonsági mentése"</string>
   <string name="common_copied_to_clipboard">"A vágólapra másolva"</string>
   <string name="common_copyright">"Szerzői jogok"</string>

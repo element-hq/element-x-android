@@ -14,6 +14,7 @@
   <string name="a11y_encryption_details">"Détails du chiffrement"</string>
   <string name="a11y_expand_message_text_field">"Augmenter la taille du composeur"</string>
   <string name="a11y_hide_password">"Masquer le mot de passe"</string>
+  <string name="a11y_info">"Info"</string>
   <string name="a11y_join_call">"Rejoindre l’appel"</string>
   <string name="a11y_jump_to_bottom">"Retourner à la fin de la conversation"</string>
   <string name="a11y_move_the_map_to_my_location">"Déplacer la carte vers ma position"</string>
@@ -48,6 +49,7 @@
   <string name="a11y_send_files">"Envoyer des fichiers"</string>
   <string name="a11y_sender_location">"Position de l’expéditeur"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Action limitée dans le temps requise, vous avez une minute pour effectuer la vérification"</string>
+  <string name="a11y_settings_with_required_action">"Paramètres, action requise"</string>
   <string name="a11y_show_password">"Afficher le mot de passe"</string>
   <string name="a11y_start_call">"Démarrer un appel"</string>
   <string name="a11y_start_video_call">"Passer un appel vidéo"</string>
@@ -96,6 +98,7 @@
   <string name="action_discard">"Annuler"</string>
   <string name="action_dismiss">"Ignorer"</string>
   <string name="action_done">"Terminé"</string>
+  <string name="action_download">"Télécharger"</string>
   <string name="action_edit">"Modifier"</string>
   <string name="action_edit_caption">"Modifier la légende"</string>
   <string name="action_edit_poll">"Modifier le sondage"</string>
@@ -203,7 +206,9 @@
   <string name="common_beta">"Bêta"</string>
   <string name="common_blocked_users">"Utilisateurs bloqués"</string>
   <string name="common_bubbles">"Bulles"</string>
+  <string name="common_call_declined">"Appel rejeté"</string>
   <string name="common_call_started">"Appel démarré"</string>
+  <string name="common_call_you_declined">"Vous avez rejeté un appel"</string>
   <string name="common_chat_backup">"Sauvegarde des discussions"</string>
   <string name="common_copied_to_clipboard">"Copié dans le presse-papiers"</string>
   <string name="common_copyright">"Droits d’auteur"</string>

@@ -112,19 +112,19 @@ interface IdentityPasswordResetHandle : IdentityResetHandle {
 }
 
 /**
- * A handle to reset the user's identity with an OIDC login type.
+ * A handle to reset the user's identity with an OAuth login type.
  */
-interface IdentityOidcResetHandle : IdentityResetHandle {
+interface IdentityOAuthResetHandle : IdentityResetHandle {
     /**
      * The URL to open in a webview/custom tab to reset the identity.
      */
     val url: String
 
     /**
-     * Reset the identity using the OIDC flow.
+     * Reset the identity using the OAuth flow.
      *
      * This method will block the coroutine it's running on and keep polling indefinitely until either the coroutine is cancelled, the [cancel] method is
      * called, or the identity is reset.
      */
-    suspend fun resetOidc(): Result<Unit>
+    suspend fun resetOAuth(): Result<Unit>
 }

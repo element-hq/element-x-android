@@ -41,7 +41,7 @@ sealed class ChangeServerError : Exception() {
                     // AccountAlreadyLoggedIn error should not happen at this point
                     is AuthenticationException.AccountAlreadyLoggedIn -> Error(messageStr = error.message)
                     is AuthenticationException.Generic -> Error(messageStr = error.message)
-                    is AuthenticationException.Oidc -> Error(messageStr = error.message)
+                    is AuthenticationException.OAuth -> Error(messageStr = error.message)
                 }
             }
             is AccountProviderAccessException.NeedElementProException -> NeedElementPro(
