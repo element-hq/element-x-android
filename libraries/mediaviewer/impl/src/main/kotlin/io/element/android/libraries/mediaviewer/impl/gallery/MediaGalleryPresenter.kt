@@ -78,7 +78,7 @@ class MediaGalleryPresenter(
             .collectAsState(AsyncData.Uninitialized)
 
         LaunchedEffect(Unit) {
-            mediaGalleryDataSource.start()
+            mediaGalleryDataSource.start(this)
         }
 
         val permissions by room.permissionsAsState(MediaPermissions.DEFAULT) { perms ->
@@ -88,39 +88,45 @@ class MediaGalleryPresenter(
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
         localMediaActions.Configure()
 
-        fun handleEvent(event: MediaGalleryEvents) {
+        fun handleEvent(event: MediaGalleryEvent) {
             when (event) {
-                is MediaGalleryEvents.ChangeMode -> {
+                is MediaGalleryEvent.ChangeMode -> {
                     mode = event.mode
                 }
-                is MediaGalleryEvents.LoadMore -> coroutineScope.launch {
+                is MediaGalleryEvent.LoadMore -> coroutineScope.launch {
                     mediaGalleryDataSource.loadMore(event.direction)
                 }
-                is MediaGalleryEvents.Delete -> coroutineScope.launch {
+                is MediaGalleryEvent.Delete -> coroutineScope.launch {
                     mediaGalleryDataSource.deleteItem(event.eventId)
                 }
-                is MediaGalleryEvents.SaveOnDisk -> coroutineScope.launch {
+                is MediaGalleryEvent.SaveOnDisk -> coroutineScope.launch {
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
                     groupedMediaItems.dataOrNull().find(event.eventId)?.let {
                         saveOnDisk(it)
                     }
                 }
-                is MediaGalleryEvents.Share -> coroutineScope.launch {
+                is MediaGalleryEvent.OpenWith -> coroutineScope.launch {
+                    mediaBottomSheetState = MediaBottomSheetState.Hidden
+                    groupedMediaItems.dataOrNull().find(event.eventId)?.let {
+                        openWith(it)
+                    }
+                }
+                is MediaGalleryEvent.Share -> coroutineScope.launch {
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
                     groupedMediaItems.dataOrNull().find(event.eventId)?.let {
                         share(it)
                     }
                 }
-                is MediaGalleryEvents.Forward -> {
+                is MediaGalleryEvent.Forward -> {
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
                     navigator.onForwardClick(event.eventId)
                 }
-                is MediaGalleryEvents.ViewInTimeline -> {
+                is MediaGalleryEvent.ViewInTimeline -> {
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
                     navigator.onViewInTimelineClick(event.eventId)
                 }
-                is MediaGalleryEvents.OpenInfo -> coroutineScope.launch {
-                    mediaBottomSheetState = MediaBottomSheetState.MediaDetailsBottomSheetState(
+                is MediaGalleryEvent.OpenInfo -> coroutineScope.launch {
+                    mediaBottomSheetState = MediaBottomSheetState.Details(
                         eventId = event.mediaItem.eventId(),
                         canDelete = when (event.mediaItem.mediaInfo().senderId) {
                             null -> false
@@ -137,14 +143,14 @@ class MediaGalleryPresenter(
                         },
                     )
                 }
-                is MediaGalleryEvents.ConfirmDelete -> {
-                    mediaBottomSheetState = MediaBottomSheetState.MediaDeleteConfirmationState(
+                is MediaGalleryEvent.ConfirmDelete -> {
+                    mediaBottomSheetState = MediaBottomSheetState.DeleteConfirmation(
                         eventId = event.eventId,
                         mediaInfo = event.mediaInfo,
                         thumbnailSource = event.thumbnailSource,
                     )
                 }
-                MediaGalleryEvents.CloseBottomSheet -> {
+                MediaGalleryEvent.CloseBottomSheet -> {
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
                 }
             }
@@ -193,6 +199,17 @@ class MediaGalleryPresenter(
         downloadMedia(mediaItem)
             .mapCatchingExceptions { localMedia ->
                 localMediaActions.share(localMedia)
+            }
+            .onFailure {
+                val snackbarMessage = SnackbarMessage(mediaActionsError(it))
+                snackbarDispatcher.post(snackbarMessage)
+            }
+    }
+
+    private suspend fun openWith(mediaItem: MediaItem.Event) {
+        downloadMedia(mediaItem)
+            .mapCatchingExceptions { localMedia ->
+                localMediaActions.open(localMedia)
             }
             .onFailure {
                 val snackbarMessage = SnackbarMessage(mediaActionsError(it))

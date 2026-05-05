@@ -38,6 +38,8 @@ import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.libraries.ui.utils.a11y.hasExternalKeyboard
+import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 
 @ContributesNode(RoomScope::class)
 @AssistedInject
@@ -50,7 +52,7 @@ class PinnedMessagesListNode(
     private val permalinkParser: PermalinkParser,
 ) : Node(buildContext, plugins = plugins), PinnedMessagesListNavigator {
     interface Callback : Plugin {
-        fun handleEventClick(event: TimelineItem.Event)
+        fun handleEventClick(event: TimelineItem.Event, canUseOverlay: Boolean)
         fun navigateToRoomMemberDetails(userId: UserId)
         fun viewInTimeline(eventId: EventId)
         fun handlePermalinkClick(data: PermalinkData.RoomLink)
@@ -103,6 +105,7 @@ class PinnedMessagesListNode(
 
     @Composable
     override fun View(modifier: Modifier) {
+        val canUseOverlay = !isTalkbackActive() && !hasExternalKeyboard()
         CompositionLocalProvider(
             LocalTimelineItemPresenterFactories provides timelineItemPresenterFactories,
         ) {
@@ -113,7 +116,9 @@ class PinnedMessagesListNode(
             PinnedMessagesListView(
                 state = state,
                 onBackClick = ::navigateUp,
-                onEventClick = callback::handleEventClick,
+                onEventClick = {
+                    callback.handleEventClick(it, canUseOverlay)
+                },
                 onUserDataClick = { callback.navigateToRoomMemberDetails(it.userId) },
                 onLinkClick = { link -> onLinkClick(context, link.url) },
                 onLinkLongClick = {

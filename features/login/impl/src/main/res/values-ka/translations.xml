@@ -23,7 +23,7 @@
   <string name="screen_login_error_invalid_credentials">"არასწორი მომხმარებლის სახელი და/ან პაროლი"</string>
   <string name="screen_login_error_invalid_user_id">"მოცემული მომხმარებლის იდენტიფიკატორი არასწორია. დასაშვები ფორმატი: ‘@user:homeserver.org’"</string>
   <string name="screen_login_error_refresh_tokens">"ეს სერვერი კონფიგურირებულია განახლების გასაღებების გამოსაყენებლად. პაროლზე დაფუძნებული შეცვლისას ისინი მხარდაჭერილი არაა."</string>
-  <string name="screen_login_error_unsupported_authentication">"მოცემული სახლის სერვერი მხარს არ უჭერს პაროლით ან OIDC-ით შესვლას. გთხოვთ, დაუკავშირდეთ თქვენს ადმინისტრატორს ან აარჩიეთ სხვა სახლის სერვერი."</string>
+  <string name="screen_login_error_unsupported_authentication">"მოცემული სახლის სერვერი მხარს არ უჭერს პაროლით ან OAuth-ით შესვლას. გთხოვთ, დაუკავშირდეთ თქვენს ადმინისტრატორს ან აარჩიეთ სხვა სახლის სერვერი."</string>
   <string name="screen_login_form_header">"შეიყვანეთ თქვენი დეტალები"</string>
   <string name="screen_login_subtitle">"Matrix არის ღია ქსელი უსაფრთხო, დეცენტრალიზებული კომუნიკაციისთვის."</string>
   <string name="screen_login_title">"კეთილი იყოს თქვენი მობრძანება!"</string>

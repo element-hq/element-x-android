@@ -17,6 +17,8 @@
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"Si te encuentras con el mismo problema, prueba con una red wifi diferente o usa tus datos móviles en lugar de wifi"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Si eso no funciona, inicia sesión manualmente"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"La conexión no es segura"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"Se te pedirá que introduzcas los dos dígitos mostrados en este dispositivo."</string>
+  <string name="screen_qr_code_login_device_code_title">"Introduce el número que aparece a continuación en tu otro dispositivo"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"El inicio de sesión se canceló en el otro dispositivo."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Solicitud de inicio de sesión cancelada"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"El inicio de sesión se rechazó en el otro dispositivo."</string>
@@ -35,4 +37,5 @@ Intenta iniciar sesión manualmente o escanea el código QR con otro dispositivo
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Tienes que dar permiso a %1$s para que utilice la cámara de tu dispositivo y así poder continuar."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Permite el acceso a la cámara para escanear el código QR"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Se ha producido un error inesperado. Vuelve a intentarlo."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"A la espera de tu otro dispositivo"</string>
 </resources>

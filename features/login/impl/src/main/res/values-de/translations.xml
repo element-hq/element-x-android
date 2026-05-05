@@ -28,11 +28,11 @@
   <string name="screen_change_server_subtitle">"Wie lautet die Adresse deines Servers?"</string>
   <string name="screen_change_server_title">"Wähle deinen Server aus"</string>
   <string name="screen_create_account_title">"Konto erstellen"</string>
-  <string name="screen_login_error_deactivated_account">"Dieses Konto wurde deaktiviert."</string>
+  <string name="screen_login_error_deactivated_account">"Dieses Konto wurde gelöscht."</string>
   <string name="screen_login_error_invalid_credentials">"Falscher Nutzername und/oder Passwort"</string>
   <string name="screen_login_error_invalid_user_id">"Dies ist keine gültige Nutzerkennung. Erwartetes Format: \'@nutzer:homeserver.org\'"</string>
   <string name="screen_login_error_refresh_tokens">"Dieser Server ist so konfiguriert, dass er Refresh-Tokens verwendet. Diese werden für die passwortbasierte Anmeldung nicht unterstützt."</string>
-  <string name="screen_login_error_unsupported_authentication">"Der ausgewählte Homeserver unterstützt weder den Login per Passwort noch per OIDC. Bitte kontaktiere deinen Administrator oder wähle einen anderen Homeserver."</string>
+  <string name="screen_login_error_unsupported_authentication">"Der ausgewählte Homeserver unterstützt weder den Login per Passwort noch per OAuth. Bitte kontaktiere deinen Administrator oder wähle einen anderen Homeserver."</string>
   <string name="screen_login_form_header">"Gib deine Daten ein"</string>
   <string name="screen_login_subtitle">"Matrix ist ein offenes Netzwerk für eine sichere, dezentrale Kommunikation."</string>
   <string name="screen_login_title">"Willkommen zurück!"</string>

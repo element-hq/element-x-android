@@ -75,7 +75,7 @@
                     android:scheme="elementx" />
             </intent-filter>
             <!--
-              Oidc redirection
+              OAuth redirection
             -->
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />

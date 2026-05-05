@@ -17,6 +17,8 @@
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"Om du stöter på samma problem, prova ett annat wifi-nätverk eller använd din mobildata istället för wifi"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Om det inte fungerar, logga in manuellt"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Anslutningen är inte säker"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"Du kommer att bli ombedd att ange de två siffrorna som visas på den här enheten."</string>
+  <string name="screen_qr_code_login_device_code_title">"Ange numret nedan på din andra enhet"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"Inloggningen avbröts på den andra enheten."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Inloggningsförfrågan avbröts"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"Inloggningen avvisades på den andra enheten."</string>
@@ -35,4 +37,5 @@ Prova att logga in manuellt eller skanna QR-koden med en annan enhet."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Du måste ge tillstånd för %1$s att använda enhetens kamera för att kunna fortsätta."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Tillåt kameraåtkomst för att skanna QR-koden"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Ett oväntat fel inträffade. Vänligen försök igen."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"Väntar på din andra enhet"</string>
 </resources>

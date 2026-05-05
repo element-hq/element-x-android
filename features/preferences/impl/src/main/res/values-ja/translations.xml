@@ -11,9 +11,16 @@
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"ルームへの招待リクエストにアバターを表示しない"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"タイムラインにメディアのプレビューを表示しない"</string>
   <string name="screen_advanced_settings_labs">"ラボ"</string>
-  <string name="screen_advanced_settings_media_compression_description">"写真や動画を高速で送信してデータ使用量を減らす"</string>
+  <string name="screen_advanced_settings_live_location_section_description">"更新するのに必要な移動距離です。"</string>
+  <string name="screen_advanced_settings_live_location_section_footer">"「正確な位置情報」がこのアプリで使用可能なことを確認してください。権限を変更するには %1$s を開いてください。"</string>
+  <string name="screen_advanced_settings_live_location_section_footer_link">"アプリ設定"</string>
+  <string name="screen_advanced_settings_live_location_section_title">"ライブ位置情報の更新"</string>
+  <plurals name="screen_advanced_settings_live_location_update_distance">
+    <item quantity="other">"%1$dm ごと"</item>
+  </plurals>
+  <string name="screen_advanced_settings_media_compression_description">"写真や動画を高速で送信してデータ使用量を減らします。"</string>
   <string name="screen_advanced_settings_media_compression_title">"メディアの品質を最適化"</string>
-  <string name="screen_advanced_settings_moderation_and_safety_section_title">"制限と安全"</string>
+  <string name="screen_advanced_settings_moderation_and_safety_section_title">"セキュリティと制限"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_description">"自動的に画像を最適化してアップロード時間とファイルサイズを削減します。"</string>
   <string name="screen_advanced_settings_optimise_image_upload_quality_title">"画像のアップロード画質を最適化"</string>
   <string name="screen_advanced_settings_optimise_video_upload_quality_description">"%1$s 変更するにはタップしてください。"</string>
@@ -46,7 +53,7 @@
   <string name="screen_edit_profile_updating_details">"プロフィールを更新中…"</string>
   <string name="screen_labs_enable_threads">"スレッドへの返信を有効化"</string>
   <string name="screen_labs_enable_threads_description">"変更を適用するためにアプリケーションは再起動します。"</string>
-  <string name="screen_labs_header_description">"開発段階の最新機能を試します。未完成のため変更や不安定な挙動を生じる可能性があります。"</string>
+  <string name="screen_labs_header_description">"開発段階の最新機能を試すことができます。未完成のため、変更や不安定な挙動が生じる可能性があります。"</string>
   <string name="screen_labs_header_title">"探究したいですか？"</string>
   <string name="screen_labs_title">"ラボ"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"追加設定"</string>
@@ -61,7 +68,7 @@
   <string name="screen_notification_settings_edit_mode_all_messages">"すべてのメッセージ"</string>
   <string name="screen_notification_settings_edit_mode_mentions_and_keywords">"メンションとキーワードのみ"</string>
   <string name="screen_notification_settings_edit_screen_direct_section_header">"ダイレクトチャットで以下の通知を受け取る"</string>
-  <string name="screen_notification_settings_edit_screen_group_section_header">"グループチャットでは以下の通知を受け取る"</string>
+  <string name="screen_notification_settings_edit_screen_group_section_header">"グループチャットで以下の通知を受け取る"</string>
   <string name="screen_notification_settings_enable_notifications">"この端末で通知を受け取る"</string>
   <string name="screen_notification_settings_failed_fixing_configuration">"設定が修正されていません。再試行してください。"</string>
   <string name="screen_notification_settings_group_chats">"グループチャット"</string>
@@ -70,7 +77,7 @@
   <string name="screen_notification_settings_mentions_section_title">"メンション"</string>
   <string name="screen_notification_settings_mode_all">"すべて"</string>
   <string name="screen_notification_settings_mode_mentions">"メンション"</string>
-  <string name="screen_notification_settings_notification_section_title">"以下を通知する"</string>
+  <string name="screen_notification_settings_notification_section_title">"以下を通知"</string>
   <string name="screen_notification_settings_room_mention_label">@ルームで通知を受け取る</string>
   <string name="screen_notification_settings_system_notifications_action_required">"通知を受け取るには、%1$s を変更してください。"</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"システム設定"</string>

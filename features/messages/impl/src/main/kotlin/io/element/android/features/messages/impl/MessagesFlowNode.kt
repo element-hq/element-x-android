@@ -24,7 +24,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.annotations.ContributesNode
-import io.element.android.features.call.api.CallType
+import io.element.android.features.call.api.CallData
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.forward.api.ForwardEntryPoint
 import io.element.android.features.knockrequests.api.list.KnockRequestsListEntryPoint
@@ -143,6 +143,7 @@ class MessagesFlowNode(
             val mediaInfo: MediaInfo,
             val mediaSource: MediaSource,
             val thumbnailSource: MediaSource?,
+            val canUseOverlay: Boolean,
         ) : NavTarget
 
         @Parcelize
@@ -227,10 +228,11 @@ class MessagesFlowNode(
                         callback.navigateToRoomDetails()
                     }
 
-                    override fun handleEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event): Boolean {
+                    override fun handleEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event, canUseOverlay: Boolean): Boolean {
                         return processEventClick(
                             timelineMode = timelineMode,
                             event = event,
+                            canUseOverlay = canUseOverlay,
                         )
                     }
 
@@ -277,13 +279,13 @@ class MessagesFlowNode(
                     }
 
                     override fun navigateToRoomCall(roomId: RoomId, isAudioCall: Boolean) {
-                        val callType = CallType.RoomCall(
+                        val callData = CallData(
                             sessionId = sessionId,
                             roomId = roomId,
-                            isAudioCall = isAudioCall
+                            isAudioCall = isAudioCall,
                         )
                         analyticsService.captureInteraction(Interaction.Name.MobileRoomCallButton)
-                        elementCallEntryPoint.startCall(callType)
+                        elementCallEntryPoint.startCall(callData)
                     }
 
                     override fun navigateToPinnedMessagesList() {
@@ -320,7 +322,11 @@ class MessagesFlowNode(
                 )
                 val callback = object : MediaViewerEntryPoint.Callback {
                     override fun onDone() {
-                        overlay.hide()
+                        if (navTarget.canUseOverlay) {
+                            overlay.hide()
+                        } else {
+                            backstack.pop()
+                        }
                     }
 
                     override fun viewInTimeline(eventId: EventId) {
@@ -414,10 +420,11 @@ class MessagesFlowNode(
             }
             NavTarget.PinnedMessagesList -> {
                 val callback = object : PinnedMessagesListNode.Callback {
-                    override fun handleEventClick(event: TimelineItem.Event) {
+                    override fun handleEventClick(event: TimelineItem.Event, canUseOverlay: Boolean) {
                         processEventClick(
                             timelineMode = Timeline.Mode.PinnedEvents,
                             event = event,
+                            canUseOverlay = canUseOverlay,
                         )
                     }
 
@@ -456,10 +463,11 @@ class MessagesFlowNode(
                     focusedEventId = navTarget.focusedEventId,
                 )
                 val callback = object : ThreadedMessagesNode.Callback {
-                    override fun handleEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event): Boolean {
+                    override fun handleEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event, canUseOverlay: Boolean): Boolean {
                         return processEventClick(
                             timelineMode = timelineMode,
                             event = event,
+                            canUseOverlay = canUseOverlay,
                         )
                     }
 
@@ -506,13 +514,13 @@ class MessagesFlowNode(
                     }
 
                     override fun navigateToRoomCall(roomId: RoomId, isAudioCall: Boolean) {
-                        val callType = CallType.RoomCall(
+                        val callData = CallData(
                             sessionId = sessionId,
                             roomId = roomId,
                             isAudioCall = isAudioCall
                         )
                         analyticsService.captureInteraction(Interaction.Name.MobileRoomCallButton)
-                        elementCallEntryPoint.startCall(callType)
+                        elementCallEntryPoint.startCall(callData)
                     }
 
                     override fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?) {
@@ -547,6 +555,7 @@ class MessagesFlowNode(
     private fun processEventClick(
         timelineMode: Timeline.Mode,
         event: TimelineItem.Event,
+        canUseOverlay: Boolean,
     ): Boolean {
         val navTarget = when (event.content) {
             is TimelineItemImageContent -> {
@@ -556,6 +565,7 @@ class MessagesFlowNode(
                     content = event.content,
                     mediaSource = event.content.mediaSource,
                     thumbnailSource = event.content.thumbnailSource,
+                    canUseOverlay = canUseOverlay,
                 )
             }
             is TimelineItemVideoContent -> {
@@ -565,6 +575,7 @@ class MessagesFlowNode(
                     content = event.content,
                     mediaSource = event.content.mediaSource,
                     thumbnailSource = event.content.thumbnailSource,
+                    canUseOverlay = canUseOverlay,
                 )
             }
             is TimelineItemFileContent -> {
@@ -574,6 +585,7 @@ class MessagesFlowNode(
                     content = event.content,
                     mediaSource = event.content.mediaSource,
                     thumbnailSource = event.content.thumbnailSource,
+                    canUseOverlay = canUseOverlay,
                 )
             }
             is TimelineItemAudioContent -> {
@@ -583,6 +595,7 @@ class MessagesFlowNode(
                     content = event.content,
                     mediaSource = event.content.mediaSource,
                     thumbnailSource = null,
+                    canUseOverlay = canUseOverlay,
                 )
             }
             is TimelineItemLocationContent -> {
@@ -603,7 +616,11 @@ class MessagesFlowNode(
         }
         return when (navTarget) {
             is NavTarget.MediaViewer -> {
-                overlay.show(navTarget)
+                if (canUseOverlay) {
+                    overlay.show(navTarget)
+                } else {
+                    backstack.push(navTarget)
+                }
                 true
             }
             is NavTarget.LocationViewer -> {
@@ -620,6 +637,7 @@ class MessagesFlowNode(
         content: TimelineItemEventContentWithAttachment,
         mediaSource: MediaSource,
         thumbnailSource: MediaSource?,
+        canUseOverlay: Boolean,
     ): NavTarget {
         return NavTarget.MediaViewer(
             mode = mode,
@@ -647,6 +665,7 @@ class MessagesFlowNode(
             ),
             mediaSource = mediaSource,
             thumbnailSource = thumbnailSource,
+            canUseOverlay = canUseOverlay,
         )
     }
 

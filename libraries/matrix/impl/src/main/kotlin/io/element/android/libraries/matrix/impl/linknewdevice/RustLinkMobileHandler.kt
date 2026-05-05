@@ -49,6 +49,8 @@ class RustLinkMobileHandler(
                     }
                 }
             )
+            // We emit Done in case the progress listener was deallocated before generate() sent the Done
+            _linkMobileStep.emit(LinkMobileStep.Done)
         } catch (e: HumanQrGrantLoginException) {
             Timber.tag(tag.value).w(e, "Error during QR login grant")
             _linkMobileStep.emit(LinkMobileStep.Error(e.map()))

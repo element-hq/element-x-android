@@ -32,7 +32,7 @@
   <string name="screen_login_error_invalid_credentials">"Λανθασμένο όνομα χρήστη ή κωδικός πρόσβασης"</string>
   <string name="screen_login_error_invalid_user_id">"Αυτό δεν είναι έγκυρο αναγνωριστικό χρήστη. Αναμενόμενη μορφή: \'@χρήστης:homeserver.org\'"</string>
   <string name="screen_login_error_refresh_tokens">"Αυτός ο διακομιστής έχει ρυθμιστεί ώστε να χρησιμοποιεί διακριτικά ανανέωσης. Αυτά δεν υποστηρίζονται όταν χρησιμοποιείς σύνδεση μέσω κωδικού πρόσβασης."</string>
-  <string name="screen_login_error_unsupported_authentication">"Ο επιλεγμένος οικιακός διακομιστής δεν υποστηρίζει κωδικό πρόσβασης ή σύνδεση OIDC. Επικοινωνήστε με τον διαχειριστή σου ή επέλεξε άλλο οικιακό διακομιστή."</string>
+  <string name="screen_login_error_unsupported_authentication">"Ο επιλεγμένος οικιακός διακομιστής δεν υποστηρίζει κωδικό πρόσβασης ή σύνδεση OAuth. Επικοινωνήστε με τον διαχειριστή σου ή επέλεξε άλλο οικιακό διακομιστή."</string>
   <string name="screen_login_form_header">"Εισήγαγε τα στοιχεία σου"</string>
   <string name="screen_login_subtitle">"Το Matrix είναι ένα ανοιχτό δίκτυο για ασφαλή, αποκεντρωμένη επικοινωνία."</string>
   <string name="screen_login_title">"Καλωσόρισες ξανά!"</string>

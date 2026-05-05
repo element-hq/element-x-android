@@ -11,6 +11,14 @@
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Hide avatars in room invite requests"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Hide media previews in timeline"</string>
   <string name="screen_advanced_settings_labs">"Labs"</string>
+  <string name="screen_advanced_settings_live_location_section_description">"The distance you have to move to trigger an update."</string>
+  <string name="screen_advanced_settings_live_location_section_footer">"Make sure \"Precise Location” is enabled for this app. To change the permission go to %1$s."</string>
+  <string name="screen_advanced_settings_live_location_section_footer_link">"App Settings"</string>
+  <string name="screen_advanced_settings_live_location_section_title">"Live location updates"</string>
+  <plurals name="screen_advanced_settings_live_location_update_distance">
+    <item quantity="one">"Every %1$d meter"</item>
+    <item quantity="other">"Every %1$d meters"</item>
+  </plurals>
   <string name="screen_advanced_settings_media_compression_description">"Upload photos and videos faster and reduce data usage"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimise media quality"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderation and Safety"</string>

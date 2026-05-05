@@ -32,5 +32,5 @@ Pilih sesuatu yang mudah untuk diingat. Jika Anda lupa PIN ini, Anda akan dikelu
   </plurals>
   <string name="screen_app_lock_use_biometric_android">"Gunakan biometrik"</string>
   <string name="screen_app_lock_use_pin_android">"Gunakan PIN"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Mengeluarkan dari akun…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Mengeluarkan device dari akun…"</string>
 </resources>

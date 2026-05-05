@@ -29,7 +29,7 @@
   <string name="screen_login_error_invalid_credentials">"Usuario y/o contraseña incorrectos"</string>
   <string name="screen_login_error_invalid_user_id">"Este no es un id de usuario válido. Formato esperado: \'@user:homeserver.org\'"</string>
   <string name="screen_login_error_refresh_tokens">"Este servidor está configurado para utilizar tokens de actualización. Estos no son compatibles cuando se utiliza el inicio de sesión basado en contraseña."</string>
-  <string name="screen_login_error_unsupported_authentication">"El servidor base seleccionado no admite el inicio de sesión usando contraseña ni OIDC. Ponte en contacto con tu administrador o elige otro servidor base."</string>
+  <string name="screen_login_error_unsupported_authentication">"El servidor base seleccionado no admite el inicio de sesión usando contraseña ni OAuth. Ponte en contacto con tu administrador o elige otro servidor base."</string>
   <string name="screen_login_form_header">"Introduce tus datos"</string>
   <string name="screen_login_subtitle">"Matrix es una red abierta para una comunicación segura y descentralizada."</string>
   <string name="screen_login_title">"¡Hola de nuevo!"</string>

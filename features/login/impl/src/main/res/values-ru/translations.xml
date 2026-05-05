@@ -32,7 +32,7 @@
   <string name="screen_login_error_invalid_credentials">"Неверное имя пользователя и/или пароль"</string>
   <string name="screen_login_error_invalid_user_id">"Это некорректный идентификатор пользователя. Правильный формат: @user:homeserver.org"</string>
   <string name="screen_login_error_refresh_tokens">"Этот сервер настроен на использование токенов обновления. Они не поддерживаются при использовании входа на основе пароля."</string>
-  <string name="screen_login_error_unsupported_authentication">"Выбранный сервер не поддерживает вход по паролю и OIDC. Пожалуйста, свяжитесь с администратором или выберите другой сервер."</string>
+  <string name="screen_login_error_unsupported_authentication">"Выбранный сервер не поддерживает вход по паролю и OAuth. Пожалуйста, свяжитесь с администратором или выберите другой сервер."</string>
   <string name="screen_login_form_header">"Введите свои данные"</string>
   <string name="screen_login_subtitle">"Matrix — это открытая сеть для безопасной децентрализованной связи."</string>
   <string name="screen_login_title">"Рады видеть вас снова!"</string>

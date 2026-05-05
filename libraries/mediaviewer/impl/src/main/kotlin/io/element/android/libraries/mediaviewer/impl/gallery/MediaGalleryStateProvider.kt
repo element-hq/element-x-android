@@ -13,7 +13,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.media.WaveFormSamples
 import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
-import io.element.android.libraries.mediaviewer.impl.details.aMediaDetailsBottomSheetState
+import io.element.android.libraries.mediaviewer.impl.details.aMediaBottomSheetStateDetails
 import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 import io.element.android.libraries.mediaviewer.impl.model.aMediaItemAudio
@@ -79,7 +79,7 @@ open class MediaGalleryStateProvider : PreviewParameterProvider<MediaGalleryStat
                     )
                 ),
             ),
-            aMediaGalleryState(mediaBottomSheetState = aMediaDetailsBottomSheetState()),
+            aMediaGalleryState(mediaBottomSheetState = aMediaBottomSheetStateDetails()),
             aMediaGalleryState(
                 groupedMediaItems = AsyncData.Failure(Exception("Failed to load media")),
             ),

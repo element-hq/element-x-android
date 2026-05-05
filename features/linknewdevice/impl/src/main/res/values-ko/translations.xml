@@ -34,6 +34,8 @@
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"동일한 문제를 겪으신 경우 다른 Wi-Fi 네트워크를 사용해 보거나 Wi-Fi 대신 모바일 데이터를 사용해 보세요."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"만약 작동하지 않는 경우, 수동으로 로그인하세요."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"연결이 안전하지 않습니다"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"이 장치에 표시된 두 자리 숫자를 입력하라는 메시지가 표시됩니다."</string>
+  <string name="screen_qr_code_login_device_code_title">"다른 device 에 아래 번호를 입력하세요"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"다른 기기에서 로그인이 취소되었습니다."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"로그인 요청이 취소되었습니다"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"다른 기기에서 로그인이 거부되었습니다."</string>
@@ -54,4 +56,5 @@
   <string name="screen_qr_code_login_no_camera_permission_state_description">"계속하려면 %1$s 가 기기의 카메라를 사용할 수 있도록 권한을 부여해야 합니다."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"카메라 액세스를 허용하여 QR 코드를 스캔하세요"</string>
   <string name="screen_qr_code_login_unknown_error_description">"예기치 않은 오류가 발생했습니다. 다시 시도해 주세요."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"다른 기기를 기다리고 있습니다"</string>
 </resources>

@@ -65,7 +65,6 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.viewfolder.api.TextFileViewer
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.audio.api.AudioFocus
-import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.designsystem.components.async.AsyncFailure
 import io.element.android.libraries.designsystem.components.async.AsyncLoading
@@ -85,7 +84,6 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
-import io.element.android.libraries.mediaviewer.impl.R
 import io.element.android.libraries.mediaviewer.impl.details.MediaBottomSheetState
 import io.element.android.libraries.mediaviewer.impl.details.MediaDeleteConfirmationBottomSheet
 import io.element.android.libraries.mediaviewer.impl.details.MediaDetailsBottomSheet
@@ -101,6 +99,9 @@ import me.saket.telephoto.zoomable.rememberZoomableState
 
 val topAppBarHeight = 88.dp
 
+/**
+ * Ref: https://www.figma.com/design/pDlJZGBsri47FNTXMnEdXB/Compound-Android-Templates?node-id=3361-16623
+ */
 @Composable
 fun MediaViewerView(
     state: MediaViewerState,
@@ -119,94 +120,11 @@ fun MediaViewerView(
     Scaffold(
         modifier,
         containerColor = Color.Transparent,
-        snackbarHost = { SnackbarHost(snackbarHostState) },
-    ) {
-        val pagerState = rememberPagerState(state.currentIndex, 0f) {
-            state.listData.size
-        }
-        LaunchedEffect(pagerState) {
-            snapshotFlow { pagerState.currentPage }.collect { page ->
-                state.eventSink(MediaViewerEvents.OnNavigateTo(page))
-            }
-        }
-        HorizontalPager(
-            state = pagerState,
-            modifier = Modifier,
-            // Pre-load previous and next pages
-            beyondViewportPageCount = 1,
-            key = { index -> state.listData[index].pagerKey },
-        ) { page ->
-            when (val dataForPage = state.listData[page]) {
-                is MediaViewerPageData.Failure -> {
-                    MediaViewerErrorPage(
-                        throwable = dataForPage.throwable,
-                        onDismiss = onBackClick,
-                    )
-                }
-                is MediaViewerPageData.Loading -> {
-                    LaunchedEffect(dataForPage.timestamp) {
-                        state.eventSink(MediaViewerEvents.LoadMore(dataForPage.direction))
-                    }
-                    MediaViewerLoadingPage(
-                        onDismiss = onBackClick,
-                    )
-                }
-                is MediaViewerPageData.MediaViewerData -> {
-                    var bottomPaddingInPixels by remember { mutableIntStateOf(defaultBottomPaddingInPixels) }
-                    LaunchedEffect(Unit) {
-                        state.eventSink(MediaViewerEvents.LoadMedia(dataForPage))
-                    }
-                    Box(
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        val isDisplayed = remember(pagerState.settledPage) {
-                            // This 'item provider' lambda will be called when the data source changes with an outdated `settlePage` value
-                            // So we need to update this value only when the `settledPage` value changes. It seems like a bug that needs to be fixed in Compose.
-                            page == pagerState.settledPage
-                        }
-                        val navigationBarPadding = WindowInsets.navigationBars.getBottom(LocalDensity.current)
-                        MediaViewerPage(
-                            isDisplayed = isDisplayed,
-                            showOverlay = showOverlay,
-                            bottomPaddingInPixels = (bottomPaddingInPixels - navigationBarPadding).coerceAtLeast(0),
-                            data = dataForPage,
-                            textFileViewer = textFileViewer,
-                            onDismiss = onBackClick,
-                            onRetry = {
-                                state.eventSink(MediaViewerEvents.LoadMedia(dataForPage))
-                            },
-                            onDismissError = {
-                                state.eventSink(MediaViewerEvents.ClearLoadingError(dataForPage))
-                            },
-                            onShowOverlayChange = {
-                                showOverlay = it
-                            },
-                            audioFocus = audioFocus,
-                            isUserSelected = (state.listData[page] as? MediaViewerPageData.MediaViewerData)?.eventId == state.initiallySelectedEventId,
-                        )
-                        // Bottom bar
-                        AnimatedVisibility(visible = showOverlay, enter = fadeIn(), exit = fadeOut()) {
-                            Box(
-                                modifier = Modifier.fillMaxSize()
-                            ) {
-                                MediaViewerBottomBar(
-                                    modifier = Modifier.align(Alignment.BottomCenter),
-                                    showDivider = dataForPage.mediaInfo.mimeType.isMimeTypeVideo(),
-                                    caption = dataForPage.mediaInfo.caption,
-                                    onHeightChange = { bottomPaddingInPixels = it },
-                                )
-                            }
-                        }
-                    }
-                }
-            }
-        }
-        // Top bar
-        AnimatedVisibility(visible = showOverlay, enter = fadeIn(), exit = fadeOut()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .navigationBarsPadding()
+        topBar = {
+            AnimatedVisibility(
+                visible = showOverlay,
+                enter = fadeIn(),
+                exit = fadeOut(),
             ) {
                 when (currentData) {
                     is MediaViewerPageData.MediaViewerData -> {
@@ -214,10 +132,15 @@ fun MediaViewerView(
                             data = currentData,
                             canShowInfo = state.canShowInfo,
                             onBackClick = onBackClick,
-                            onInfoClick = {
-                                state.eventSink(MediaViewerEvents.OpenInfo(currentData))
+                            onShareClick = {
+                                state.eventSink(MediaViewerEvent.Share(currentData))
                             },
-                            eventSink = state.eventSink
+                            onSaveClick = {
+                                state.eventSink(MediaViewerEvent.SaveOnDisk(currentData))
+                            },
+                            onInfoClick = {
+                                state.eventSink(MediaViewerEvent.OpenInfo(currentData))
+                            },
                         )
                     }
                     else -> {
@@ -242,34 +165,121 @@ fun MediaViewerView(
                     }
                 }
             }
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+    ) {
+        val pagerState = rememberPagerState(state.currentIndex, 0f) {
+            state.listData.size
+        }
+        LaunchedEffect(pagerState) {
+            snapshotFlow { pagerState.currentPage }.collect { page ->
+                state.eventSink(MediaViewerEvent.OnNavigateTo(page))
+            }
+        }
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier,
+            // Pre-load previous and next pages
+            beyondViewportPageCount = 1,
+            key = { index -> state.listData[index].pagerKey },
+        ) { page ->
+            when (val dataForPage = state.listData[page]) {
+                is MediaViewerPageData.Failure -> {
+                    MediaViewerErrorPage(
+                        throwable = dataForPage.throwable,
+                        onDismiss = onBackClick,
+                    )
+                }
+                is MediaViewerPageData.Loading -> {
+                    LaunchedEffect(dataForPage.timestamp) {
+                        state.eventSink(MediaViewerEvent.LoadMore(dataForPage.direction))
+                    }
+                    MediaViewerLoadingPage(
+                        onDismiss = onBackClick,
+                    )
+                }
+                is MediaViewerPageData.MediaViewerData -> {
+                    var bottomPaddingInPixels by remember { mutableIntStateOf(defaultBottomPaddingInPixels) }
+                    LaunchedEffect(Unit) {
+                        state.eventSink(MediaViewerEvent.LoadMedia(dataForPage))
+                    }
+                    Box(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        val isDisplayed = remember(pagerState.settledPage) {
+                            // This 'item provider' lambda will be called when the data source changes with an outdated `settlePage` value
+                            // So we need to update this value only when the `settledPage` value changes. It seems like a bug that needs to be fixed in Compose.
+                            page == pagerState.settledPage
+                        }
+                        val navigationBarPadding = WindowInsets.navigationBars.getBottom(LocalDensity.current)
+                        MediaViewerPage(
+                            isDisplayed = isDisplayed,
+                            showOverlay = showOverlay,
+                            bottomPaddingInPixels = (bottomPaddingInPixels - navigationBarPadding).coerceAtLeast(0),
+                            data = dataForPage,
+                            textFileViewer = textFileViewer,
+                            onDismiss = onBackClick,
+                            onRetry = {
+                                state.eventSink(MediaViewerEvent.LoadMedia(dataForPage))
+                            },
+                            onDismissError = {
+                                state.eventSink(MediaViewerEvent.ClearLoadingError(dataForPage))
+                            },
+                            onShowOverlayChange = {
+                                showOverlay = it
+                            },
+                            audioFocus = audioFocus,
+                            isUserSelected = (state.listData[page] as? MediaViewerPageData.MediaViewerData)?.eventId == state.initiallySelectedEventId,
+                        )
+                        // Bottom bar
+                        AnimatedVisibility(
+                            visible = showOverlay,
+                            enter = fadeIn(),
+                            exit = fadeOut(),
+                            modifier = Modifier.align(Alignment.BottomCenter),
+                        ) {
+                            MediaViewerBottomBar(
+                                showDivider = dataForPage.mediaInfo.mimeType.isMimeTypeVideo(),
+                                caption = dataForPage.mediaInfo.caption,
+                                onHeightChange = { bottomPaddingInPixels = it },
+                            )
+                        }
+                    }
+                }
+            }
         }
     }
 
     when (val bottomSheetState = state.mediaBottomSheetState) {
         MediaBottomSheetState.Hidden -> Unit
-        is MediaBottomSheetState.MediaDetailsBottomSheetState -> {
+        is MediaBottomSheetState.Details -> {
             MediaDetailsBottomSheet(
                 state = bottomSheetState,
                 onViewInTimeline = {
-                    state.eventSink(MediaViewerEvents.ViewInTimeline(it))
+                    state.eventSink(MediaViewerEvent.ViewInTimeline(it))
                 },
                 onShare = {
                     (currentData as? MediaViewerPageData.MediaViewerData)?.let {
-                        state.eventSink(MediaViewerEvents.Share(currentData))
+                        state.eventSink(MediaViewerEvent.Share(currentData))
                     }
                 },
                 onForward = {
-                    state.eventSink(MediaViewerEvents.Forward(it))
+                    state.eventSink(MediaViewerEvent.Forward(it))
                 },
                 onDownload = {
                     (currentData as? MediaViewerPageData.MediaViewerData)?.let {
-                        state.eventSink(MediaViewerEvents.SaveOnDisk(currentData))
+                        state.eventSink(MediaViewerEvent.SaveOnDisk(currentData))
+                    }
+                },
+                onOpenWith = {
+                    (currentData as? MediaViewerPageData.MediaViewerData)?.let {
+                        state.eventSink(MediaViewerEvent.OpenWith(currentData))
                     }
                 },
                 onDelete = { eventId ->
                     (currentData as? MediaViewerPageData.MediaViewerData)?.let {
                         state.eventSink(
-                            MediaViewerEvents.ConfirmDelete(
+                            MediaViewerEvent.ConfirmDelete(
                                 eventId,
                                 currentData,
                             )
@@ -277,18 +287,18 @@ fun MediaViewerView(
                     }
                 },
                 onDismiss = {
-                    state.eventSink(MediaViewerEvents.CloseBottomSheet)
+                    state.eventSink(MediaViewerEvent.CloseBottomSheet)
                 },
             )
         }
-        is MediaBottomSheetState.MediaDeleteConfirmationState -> {
+        is MediaBottomSheetState.DeleteConfirmation -> {
             MediaDeleteConfirmationBottomSheet(
                 state = bottomSheetState,
                 onDelete = {
-                    state.eventSink(MediaViewerEvents.Delete(it))
+                    state.eventSink(MediaViewerEvent.Delete(it))
                 },
                 onDismiss = {
-                    state.eventSink(MediaViewerEvents.CloseBottomSheet)
+                    state.eventSink(MediaViewerEvent.CloseBottomSheet)
                 },
             )
         }
@@ -362,11 +372,12 @@ private fun MediaViewerPage(
                     isUserSelected = isUserSelected,
                     audioFocus = audioFocus,
                 )
-                ThumbnailView(
-                    mediaInfo = data.mediaInfo,
-                    thumbnailSource = data.thumbnailSource,
-                    isVisible = showThumbnail,
-                )
+                if (showThumbnail) {
+                    ThumbnailView(
+                        mediaInfo = data.mediaInfo,
+                        thumbnailSource = data.thumbnailSource,
+                    )
+                }
                 if (showError) {
                     ErrorView(
                         errorMessage = stringResource(id = CommonStrings.error_unknown),
@@ -457,12 +468,12 @@ private fun MediaViewerTopBar(
     data: MediaViewerPageData.MediaViewerData,
     canShowInfo: Boolean,
     onBackClick: () -> Unit,
+    onShareClick: () -> Unit,
+    onSaveClick: () -> Unit,
     onInfoClick: () -> Unit,
-    eventSink: (MediaViewerEvents) -> Unit,
 ) {
     val downloadedMedia by data.downloadedMedia
     val actionsEnabled = downloadedMedia.isSuccess()
-    val mimeType = data.mediaInfo.mimeType
     val senderName = data.mediaInfo.senderName
     val dateSent = data.mediaInfo.dateSent
     TopAppBar(
@@ -498,21 +509,22 @@ private fun MediaViewerTopBar(
         navigationIcon = { BackButton(onClick = onBackClick) },
         actions = {
             IconButton(
+                onClick = onShareClick,
                 enabled = actionsEnabled,
-                onClick = {
-                    eventSink(MediaViewerEvents.OpenWith(data))
-                },
             ) {
-                when (mimeType) {
-                    MimeTypes.Apk -> Icon(
-                        resourceId = R.drawable.ic_apk_install,
-                        contentDescription = stringResource(id = CommonStrings.common_install_apk_android)
-                    )
-                    else -> Icon(
-                        imageVector = CompoundIcons.PopOut(),
-                        contentDescription = stringResource(id = CommonStrings.action_open_with)
-                    )
-                }
+                Icon(
+                    imageVector = CompoundIcons.ShareAndroid(),
+                    contentDescription = stringResource(id = CommonStrings.action_share),
+                )
+            }
+            IconButton(
+                onClick = onSaveClick,
+                enabled = actionsEnabled,
+            ) {
+                Icon(
+                    imageVector = CompoundIcons.Download(),
+                    contentDescription = stringResource(id = CommonStrings.action_download),
+                )
             }
             if (canShowInfo) {
                 IconButton(
@@ -591,7 +603,6 @@ private val maxCaptionHeightLandscape = 128.dp
 @Composable
 private fun ThumbnailView(
     thumbnailSource: MediaSource?,
-    isVisible: Boolean,
     mediaInfo: MediaInfo,
     modifier: Modifier = Modifier,
 ) {
@@ -599,21 +610,19 @@ private fun ThumbnailView(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        if (isVisible) {
-            val mediaRequestData = MediaRequestData(
-                source = thumbnailSource,
-                kind = MediaRequestData.Kind.File(mediaInfo.filename, mediaInfo.mimeType)
-            )
-            val alpha = if (LocalInspectionMode.current) 0.1f else 1f
-            AsyncImage(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .alpha(alpha),
-                model = mediaRequestData,
-                contentScale = ContentScale.Fit,
-                contentDescription = null,
-            )
-        }
+        val mediaRequestData = MediaRequestData(
+            source = thumbnailSource,
+            kind = MediaRequestData.Kind.File(mediaInfo.filename, mediaInfo.mimeType)
+        )
+        val alpha = if (LocalInspectionMode.current) 0.1f else 1f
+        AsyncImage(
+            modifier = Modifier
+                .fillMaxSize()
+                .alpha(alpha),
+            model = mediaRequestData,
+            contentScale = ContentScale.Fit,
+            contentDescription = null,
+        )
     }
 }
 

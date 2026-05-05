@@ -226,7 +226,7 @@ class MediaViewerPresenterTest {
             )
             val updatedState = awaitItem()
             updatedState.eventSink(
-                MediaViewerEvents.LoadMedia(
+                MediaViewerEvent.LoadMedia(
                     aMediaViewerPageData(
                         mediaSource = MediaSource(aUrl)
                     )
@@ -266,16 +266,16 @@ class MediaViewerPresenterTest {
             )
             val updatedState = awaitItem()
             updatedState.eventSink(
-                MediaViewerEvents.OpenInfo(
+                MediaViewerEvent.OpenInfo(
                     aMediaViewerPageData(
                         mediaSource = MediaSource(aUrl)
                     )
                 )
             )
             val withInfoState = awaitItem()
-            assertThat(withInfoState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.MediaDetailsBottomSheetState::class.java)
+            assertThat(withInfoState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.Details::class.java)
             withInfoState.eventSink(
-                MediaViewerEvents.CloseBottomSheet
+                MediaViewerEvent.CloseBottomSheet
             )
             val finalState = awaitItem()
             assertThat(finalState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
@@ -306,7 +306,7 @@ class MediaViewerPresenterTest {
             )
             val updatedState = awaitItem()
             updatedState.eventSink(
-                MediaViewerEvents.ClearLoadingError(
+                MediaViewerEvent.ClearLoadingError(
                     aMediaViewerPageData(
                         mediaSource = MediaSource(aUrl)
                     )
@@ -339,7 +339,7 @@ class MediaViewerPresenterTest {
             )
             val updatedState = awaitItem()
             updatedState.eventSink(
-                MediaViewerEvents.Share(
+                MediaViewerEvent.Share(
                     aMediaViewerPageData(
                         mediaSource = MediaSource(aUrl)
                     )
@@ -372,7 +372,7 @@ class MediaViewerPresenterTest {
             )
             val updatedState = awaitItem()
             updatedState.eventSink(
-                MediaViewerEvents.SaveOnDisk(
+                MediaViewerEvent.SaveOnDisk(
                     aMediaViewerPageData(
                         mediaSource = MediaSource(aUrl)
                     )
@@ -405,7 +405,7 @@ class MediaViewerPresenterTest {
             )
             val updatedState = awaitItem()
             updatedState.eventSink(
-                MediaViewerEvents.OpenWith(
+                MediaViewerEvent.OpenWith(
                     aMediaViewerPageData(
                         mediaSource = MediaSource(aUrl)
                     )
@@ -438,7 +438,7 @@ class MediaViewerPresenterTest {
             )
             val updatedState = awaitItem()
             updatedState.eventSink(
-                MediaViewerEvents.ConfirmDelete(
+                MediaViewerEvent.ConfirmDelete(
                     eventId = AN_EVENT_ID,
                     data = aMediaViewerPageData(
                         mediaSource = MediaSource(aUrl)
@@ -446,9 +446,9 @@ class MediaViewerPresenterTest {
                 )
             )
             val withBottomSheetState = awaitItem()
-            assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.MediaDeleteConfirmationState::class.java)
+            assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.DeleteConfirmation::class.java)
             withBottomSheetState.eventSink(
-                MediaViewerEvents.CloseBottomSheet
+                MediaViewerEvent.CloseBottomSheet
             )
             val finalState = awaitItem()
             assertThat(finalState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
@@ -498,7 +498,7 @@ class MediaViewerPresenterTest {
             )
             val updatedState = awaitItem()
             updatedState.eventSink(
-                MediaViewerEvents.ConfirmDelete(
+                MediaViewerEvent.ConfirmDelete(
                     eventId = AN_EVENT_ID,
                     data = aMediaViewerPageData(
                         mediaSource = MediaSource(aUrl)
@@ -506,9 +506,9 @@ class MediaViewerPresenterTest {
                 )
             )
             val withBottomSheetState = awaitItem()
-            assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.MediaDeleteConfirmationState::class.java)
+            assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.DeleteConfirmation::class.java)
             updatedState.eventSink(
-                MediaViewerEvents.Delete(
+                MediaViewerEvent.Delete(
                     eventId = AN_EVENT_ID,
                 )
             )
@@ -551,7 +551,7 @@ class MediaViewerPresenterTest {
             )
             val updatedState = awaitItem()
             updatedState.eventSink(
-                MediaViewerEvents.OnNavigateTo(1)
+                MediaViewerEvent.OnNavigateTo(1)
             )
             val finalState = awaitItem()
             assertThat(finalState.currentIndex).isEqualTo(1)
@@ -606,7 +606,7 @@ class MediaViewerPresenterTest {
             val updatedState = awaitItem()
             // User navigate to the last item (forward loading indicator)
             updatedState.eventSink(
-                MediaViewerEvents.OnNavigateTo(2)
+                MediaViewerEvent.OnNavigateTo(2)
             )
             // data source claims that there is no more items to load forward
             mediaGalleryDataSource.emitGroupedMediaItems(
@@ -680,7 +680,7 @@ class MediaViewerPresenterTest {
             val updatedState = awaitItem()
             // User navigate to the first item (backward loading indicator)
             updatedState.eventSink(
-                MediaViewerEvents.OnNavigateTo(0)
+                MediaViewerEvent.OnNavigateTo(0)
             )
             // data source claims that there is no more items to load backward
             mediaGalleryDataSource.emitGroupedMediaItems(
@@ -728,7 +728,7 @@ class MediaViewerPresenterTest {
             val updatedState = awaitItem()
             // User navigate to the media
             updatedState.eventSink(
-                MediaViewerEvents.OnNavigateTo(1)
+                MediaViewerEvent.OnNavigateTo(1)
             )
             skipItems(1)
             // data source claims that there is no more items to load at all
@@ -771,7 +771,7 @@ class MediaViewerPresenterTest {
             )
             val updatedState = awaitItem()
             updatedState.eventSink(
-                MediaViewerEvents.LoadMore(Timeline.PaginationDirection.BACKWARDS)
+                MediaViewerEvent.LoadMore(Timeline.PaginationDirection.BACKWARDS)
             )
             loadMoreLambda.assertions().isCalledOnce().with(value(Timeline.PaginationDirection.BACKWARDS))
         }
@@ -796,10 +796,10 @@ class MediaViewerPresenterTest {
         )
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink(MediaViewerEvents.OpenInfo(aMediaViewerPageData()))
+            initialState.eventSink(MediaViewerEvent.OpenInfo(aMediaViewerPageData()))
             val withBottomSheetState = awaitItem()
-            assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.MediaDetailsBottomSheetState::class.java)
-            initialState.eventSink(MediaViewerEvents.ViewInTimeline(AN_EVENT_ID))
+            assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.Details::class.java)
+            initialState.eventSink(MediaViewerEvent.ViewInTimeline(AN_EVENT_ID))
             val finalState = awaitItem()
             assertThat(finalState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
             onViewInTimelineClickLambda.assertions().isCalledOnce().with(value(AN_EVENT_ID))
@@ -825,10 +825,10 @@ class MediaViewerPresenterTest {
         )
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink(MediaViewerEvents.OpenInfo(aMediaViewerPageData()))
+            initialState.eventSink(MediaViewerEvent.OpenInfo(aMediaViewerPageData()))
             val withBottomSheetState = awaitItem()
-            assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.MediaDetailsBottomSheetState::class.java)
-            initialState.eventSink(MediaViewerEvents.Forward(AN_EVENT_ID))
+            assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.Details::class.java)
+            initialState.eventSink(MediaViewerEvent.Forward(AN_EVENT_ID))
             val finalState = awaitItem()
             assertThat(finalState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
             onForwardClickLambda.assertions().isCalledOnce()
@@ -856,10 +856,10 @@ class MediaViewerPresenterTest {
         )
         presenter.test {
             val initialState = awaitItem()
-            initialState.eventSink(MediaViewerEvents.OpenInfo(aMediaViewerPageData()))
+            initialState.eventSink(MediaViewerEvent.OpenInfo(aMediaViewerPageData()))
             val withBottomSheetState = awaitItem()
-            assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.MediaDetailsBottomSheetState::class.java)
-            initialState.eventSink(MediaViewerEvents.Forward(AN_EVENT_ID))
+            assertThat(withBottomSheetState.mediaBottomSheetState).isInstanceOf(MediaBottomSheetState.Details::class.java)
+            initialState.eventSink(MediaViewerEvent.Forward(AN_EVENT_ID))
             val finalState = awaitItem()
             assertThat(finalState.mediaBottomSheetState).isEqualTo(MediaBottomSheetState.Hidden)
             onForwardClickLambda.assertions().isCalledOnce()

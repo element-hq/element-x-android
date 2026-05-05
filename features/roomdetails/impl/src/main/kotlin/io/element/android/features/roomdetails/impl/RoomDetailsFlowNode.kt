@@ -25,7 +25,7 @@ import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.annotations.ContributesNode
 import io.element.android.appconfig.LearnMoreConfig
-import io.element.android.features.call.api.CallType
+import io.element.android.features.call.api.CallData
 import io.element.android.features.call.api.ElementCallEntryPoint
 import io.element.android.features.knockrequests.api.list.KnockRequestsListEntryPoint
 import io.element.android.features.messages.api.MessagesEntryPoint
@@ -225,13 +225,13 @@ class RoomDetailsFlowNode(
                     }
 
                     override fun navigateToRoomCall(callIntent: CallIntent) {
-                        val inputs = CallType.RoomCall(
+                        val callData = CallData(
                             sessionId = room.sessionId,
                             roomId = room.roomId,
                             isAudioCall = callIntent == CallIntent.AUDIO
                         )
                         analyticsService.captureInteraction(Interaction.Name.MobileRoomCallButton)
-                        elementCallEntryPoint.startCall(inputs)
+                        elementCallEntryPoint.startCall(callData)
                     }
 
                     override fun navigateToReportRoom() {
@@ -288,7 +288,7 @@ class RoomDetailsFlowNode(
 
                     override fun startCall(dmRoomId: RoomId, callIntent: CallIntent) {
                         elementCallEntryPoint.startCall(
-                            CallType.RoomCall(
+                            CallData(
                                 roomId = dmRoomId,
                                 sessionId = room.sessionId,
                                 isAudioCall = callIntent == CallIntent.AUDIO

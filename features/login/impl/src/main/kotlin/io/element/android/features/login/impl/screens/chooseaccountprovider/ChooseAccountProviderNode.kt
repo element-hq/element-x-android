@@ -20,7 +20,7 @@ import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.features.login.impl.util.openLearnMorePage
 import io.element.android.libraries.architecture.callback
-import io.element.android.libraries.matrix.api.auth.OidcDetails
+import io.element.android.libraries.matrix.api.auth.OAuthDetails
 
 @ContributesNode(AppScope::class)
 @AssistedInject
@@ -31,7 +31,7 @@ class ChooseAccountProviderNode(
 ) : Node(buildContext, plugins = plugins) {
     interface Callback : Plugin {
         fun navigateToLoginPassword()
-        fun navigateToOidc(oidcDetails: OidcDetails)
+        fun navigateToOAuth(oAuthDetails: OAuthDetails)
         fun navigateToCreateAccount(url: String)
     }
 
@@ -45,7 +45,7 @@ class ChooseAccountProviderNode(
             state = state,
             modifier = modifier,
             onBackClick = ::navigateUp,
-            onOidcDetails = callback::navigateToOidc,
+            onOAuthDetails = callback::navigateToOAuth,
             onNeedLoginPassword = callback::navigateToLoginPassword,
             onLearnMoreClick = { openLearnMorePage(context) },
             onCreateAccountContinue = callback::navigateToCreateAccount,

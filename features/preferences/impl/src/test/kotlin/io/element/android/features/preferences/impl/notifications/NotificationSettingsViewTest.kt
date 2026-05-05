@@ -6,13 +6,16 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.features.preferences.impl.notifications
 
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.architecture.AsyncAction
@@ -25,76 +28,71 @@ import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressBack
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 class NotificationSettingsViewTest {
-    @get:Rule
-    val rule = createAndroidComposeRule<ComponentActivity>()
-
     @Test
-    fun `clicking on back invokes the expected callback`() {
+    fun `clicking on back invokes the expected callback`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
         ensureCalledOnce {
-            rule.setNotificationSettingsView(
+            setNotificationSettingsView(
                 state = aValidNotificationSettingsState(
                     eventSink = eventsRecorder
                 ),
                 onBackClick = it
             )
-            rule.pressBack()
+            pressBack()
         }
         eventsRecorder.assertSingle(NotificationSettingsEvents.RefreshSystemNotificationsEnabled)
     }
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `clicking on troubleshoot notification invokes the expected callback`() {
+    fun `clicking on troubleshoot notification invokes the expected callback`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
         ensureCalledOnce {
-            rule.setNotificationSettingsView(
+            setNotificationSettingsView(
                 state = aValidNotificationSettingsState(
                     eventSink = eventsRecorder
                 ),
                 onTroubleshootNotificationsClick = it
             )
-            rule.clickOn(R.string.troubleshoot_notifications_entry_point_title)
+            clickOn(R.string.troubleshoot_notifications_entry_point_title)
         }
         eventsRecorder.assertSingle(NotificationSettingsEvents.RefreshSystemNotificationsEnabled)
     }
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `clicking on group chats invokes the expected callback`() {
+    fun `clicking on group chats invokes the expected callback`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
         ensureCalledOnceWithParam(false) {
-            rule.setNotificationSettingsView(
+            setNotificationSettingsView(
                 state = aValidNotificationSettingsState(
                     eventSink = eventsRecorder
                 ),
                 onOpenEditDefault = it
             )
-            rule.clickOn(R.string.screen_notification_settings_group_chats)
+            clickOn(R.string.screen_notification_settings_group_chats)
         }
         eventsRecorder.assertSingle(NotificationSettingsEvents.RefreshSystemNotificationsEnabled)
     }
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `clicking on direct chats invokes the expected callback`() {
+    fun `clicking on direct chats invokes the expected callback`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
         ensureCalledOnceWithParam(true) {
-            rule.setNotificationSettingsView(
+            setNotificationSettingsView(
                 state = aValidNotificationSettingsState(
                     eventSink = eventsRecorder
                 ),
                 onOpenEditDefault = it
             )
-            rule.clickOn(R.string.screen_notification_settings_direct_chats)
+            clickOn(R.string.screen_notification_settings_direct_chats)
         }
         eventsRecorder.assertSingle(NotificationSettingsEvents.RefreshSystemNotificationsEnabled)
     }
@@ -111,15 +109,15 @@ class NotificationSettingsViewTest {
         testNotificationToggle(false)
     }
 
-    private fun testNotificationToggle(initialState: Boolean) {
+    private fun testNotificationToggle(initialState: Boolean) = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
-        rule.setNotificationSettingsView(
+        setNotificationSettingsView(
             state = aValidNotificationSettingsState(
                 appNotificationEnabled = initialState,
                 eventSink = eventsRecorder
             ),
         )
-        rule.clickOn(R.string.screen_notification_settings_enable_notifications)
+        clickOn(R.string.screen_notification_settings_enable_notifications)
         eventsRecorder.assertList(
             listOf(
                 NotificationSettingsEvents.RefreshSystemNotificationsEnabled,
@@ -140,15 +138,15 @@ class NotificationSettingsViewTest {
         testAtRoomToggle(false)
     }
 
-    private fun testAtRoomToggle(initialState: Boolean) {
+    private fun testAtRoomToggle(initialState: Boolean) = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
-        rule.setNotificationSettingsView(
+        setNotificationSettingsView(
             state = aValidNotificationSettingsState(
                 atRoomNotificationsEnabled = initialState,
                 eventSink = eventsRecorder
             ),
         )
-        rule.clickOn(R.string.screen_notification_settings_room_mention_label)
+        clickOn(R.string.screen_notification_settings_room_mention_label)
         eventsRecorder.assertList(
             listOf(
                 NotificationSettingsEvents.RefreshSystemNotificationsEnabled,
@@ -169,15 +167,15 @@ class NotificationSettingsViewTest {
         testInvitationToggle(false)
     }
 
-    private fun testInvitationToggle(initialState: Boolean) {
+    private fun testInvitationToggle(initialState: Boolean) = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
-        rule.setNotificationSettingsView(
+        setNotificationSettingsView(
             state = aValidNotificationSettingsState(
                 inviteForMeNotificationsEnabled = initialState,
                 eventSink = eventsRecorder
             ),
         )
-        rule.clickOn(R.string.screen_notification_settings_invite_for_me_label)
+        clickOn(R.string.screen_notification_settings_invite_for_me_label)
         eventsRecorder.assertList(
             listOf(
                 NotificationSettingsEvents.RefreshSystemNotificationsEnabled,
@@ -188,15 +186,15 @@ class NotificationSettingsViewTest {
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `with an error configuration, clicking on continue emits the expected events`() {
+    fun `with an error configuration, clicking on continue emits the expected events`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
-        rule.setNotificationSettingsView(
+        setNotificationSettingsView(
             state = aValidNotificationSettingsState(
                 changeNotificationSettingAction = AsyncAction.Failure(AN_EXCEPTION),
                 eventSink = eventsRecorder
             ),
         )
-        rule.clickOn(CommonStrings.action_ok)
+        clickOn(CommonStrings.action_ok)
         eventsRecorder.assertList(
             listOf(
                 NotificationSettingsEvents.RefreshSystemNotificationsEnabled,
@@ -207,15 +205,15 @@ class NotificationSettingsViewTest {
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `with invalid configuration, clicking on continue emits the expected events`() {
+    fun `with invalid configuration, clicking on continue emits the expected events`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
-        rule.setNotificationSettingsView(
+        setNotificationSettingsView(
             state = aInvalidNotificationSettingsState(
                 fixFailed = false,
                 eventSink = eventsRecorder
             ),
         )
-        rule.clickOn(CommonStrings.action_continue)
+        clickOn(CommonStrings.action_continue)
         eventsRecorder.assertList(
             listOf(
                 NotificationSettingsEvents.RefreshSystemNotificationsEnabled,
@@ -226,15 +224,15 @@ class NotificationSettingsViewTest {
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `with invalid configuration and error, clicking on OK emits the expected events`() {
+    fun `with invalid configuration and error, clicking on OK emits the expected events`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
-        rule.setNotificationSettingsView(
+        setNotificationSettingsView(
             state = aInvalidNotificationSettingsState(
                 fixFailed = true,
                 eventSink = eventsRecorder
             ),
         )
-        rule.clickOn(CommonStrings.action_ok)
+        clickOn(CommonStrings.action_ok)
         eventsRecorder.assertList(
             listOf(
                 NotificationSettingsEvents.RefreshSystemNotificationsEnabled,
@@ -245,14 +243,14 @@ class NotificationSettingsViewTest {
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `clicking on Push notification provider emits the expected event`() {
+    fun `clicking on Push notification provider emits the expected event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
-        rule.setNotificationSettingsView(
+        setNotificationSettingsView(
             state = aValidNotificationSettingsState(
                 eventSink = eventsRecorder
             ),
         )
-        rule.clickOn(R.string.screen_advanced_settings_push_provider_android)
+        clickOn(R.string.screen_advanced_settings_push_provider_android)
         eventsRecorder.assertList(
             listOf(
                 NotificationSettingsEvents.RefreshSystemNotificationsEnabled,
@@ -262,16 +260,16 @@ class NotificationSettingsViewTest {
     }
 
     @Test
-    fun `clicking on a push provider emits the expected event`() {
+    fun `clicking on a push provider emits the expected event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
-        rule.setNotificationSettingsView(
+        setNotificationSettingsView(
             state = aValidNotificationSettingsState(
                 eventSink = eventsRecorder,
                 showChangePushProviderDialog = true,
                 availablePushDistributors = listOf(aDistributor("P1"), aDistributor("P2"))
             ),
         )
-        rule.onNodeWithText("P2").performClick()
+        onNodeWithText("P2").performClick()
         eventsRecorder.assertList(
             listOf(
                 NotificationSettingsEvents.RefreshSystemNotificationsEnabled,
@@ -281,7 +279,7 @@ class NotificationSettingsViewTest {
     }
 }
 
-private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setNotificationSettingsView(
+private fun AndroidComposeUiTest<ComponentActivity>.setNotificationSettingsView(
     state: NotificationSettingsState,
     onOpenEditDefault: (isOneToOne: Boolean) -> Unit = EnsureNeverCalledWithParam(),
     onTroubleshootNotificationsClick: () -> Unit = EnsureNeverCalled(),

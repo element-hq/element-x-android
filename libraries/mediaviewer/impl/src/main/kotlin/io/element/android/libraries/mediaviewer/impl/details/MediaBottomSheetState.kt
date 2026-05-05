@@ -15,15 +15,15 @@ import io.element.android.libraries.mediaviewer.api.MediaInfo
 sealed interface MediaBottomSheetState {
     data object Hidden : MediaBottomSheetState
 
-    data class MediaDeleteConfirmationState(
-        val eventId: EventId,
+    data class Details(
+        val eventId: EventId?,
+        val canDelete: Boolean,
         val mediaInfo: MediaInfo,
         val thumbnailSource: MediaSource?,
     ) : MediaBottomSheetState
 
-    data class MediaDetailsBottomSheetState(
-        val eventId: EventId?,
-        val canDelete: Boolean,
+    data class DeleteConfirmation(
+        val eventId: EventId,
         val mediaInfo: MediaInfo,
         val thumbnailSource: MediaSource?,
     ) : MediaBottomSheetState

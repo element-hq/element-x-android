@@ -11,6 +11,14 @@
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Skjul avatarer i anmodninger om invitation til rum"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Skjul forhåndsvisning af medier i tidslinjen"</string>
   <string name="screen_advanced_settings_labs">"Laboratorier"</string>
+  <string name="screen_advanced_settings_live_location_section_description">"Den afstand, du skal tilbagelægge for at udløse en opdatering."</string>
+  <string name="screen_advanced_settings_live_location_section_footer">"Sørg for, at \"nøjagtig placering\" er aktiveret for denne app. For at ændre på tilladelsen skal du gå til %1$s."</string>
+  <string name="screen_advanced_settings_live_location_section_footer_link">"App-indstillinger"</string>
+  <string name="screen_advanced_settings_live_location_section_title">"Live placeringsopdateringer"</string>
+  <plurals name="screen_advanced_settings_live_location_update_distance">
+    <item quantity="one">"Hver %1$d meter"</item>
+    <item quantity="other">"Hver %1$d meter"</item>
+  </plurals>
   <string name="screen_advanced_settings_media_compression_description">"Upload fotos og videoer hurtigere, og reducér dataforbrug"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimér mediekvaliteten"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderation og sikkerhed"</string>

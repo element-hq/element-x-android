@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
@@ -54,18 +56,17 @@ import io.element.android.libraries.ui.strings.CommonStrings
 @Composable
 fun CreateDmConfirmationBottomSheet(
     matrixUser: MatrixUser,
-    enableKeyShareOnInvite: Boolean,
     isUserIdentityUnknown: Boolean,
     onSendInvite: () -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val titleContent = if (enableKeyShareOnInvite && isUserIdentityUnknown) {
+    val titleContent = if (isUserIdentityUnknown) {
         stringResource(R.string.screen_bottom_sheet_create_dm_unknown_user_title)
     } else {
         stringResource(R.string.screen_bottom_sheet_create_dm_title)
     }
-    val descriptionContent = if (enableKeyShareOnInvite && isUserIdentityUnknown) {
+    val descriptionContent = if (isUserIdentityUnknown) {
         stringResource(R.string.screen_bottom_sheet_create_dm_unknown_user_content)
     } else {
         stringResource(R.string.screen_bottom_sheet_create_dm_message, matrixUser.getFullName())
@@ -75,11 +76,13 @@ fun CreateDmConfirmationBottomSheet(
         modifier = modifier,
         onDismissRequest = onDismiss,
         sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        scrollable = false,
     ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top = 24.dp, bottom = 16.dp, start = 16.dp, end = 16.dp),
+                .padding(top = 24.dp, bottom = 16.dp, start = 16.dp, end = 16.dp)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             if (isUserIdentityUnknown) {
@@ -149,12 +152,13 @@ fun CreateDmConfirmationBottomSheet(
 
 @PreviewsDayNight
 @Composable
-internal fun CreateDmConfirmationBottomSheetPreview(@PreviewParameter(
-    CreateDmConfirmationBottomSheetStateProvider::class
-) state: CreateDmConfirmationBottomSheetState) = ElementPreview {
+internal fun CreateDmConfirmationBottomSheetPreview(
+    @PreviewParameter(
+        CreateDmConfirmationBottomSheetStateProvider::class
+    ) state: CreateDmConfirmationBottomSheetState
+) = ElementPreview {
     CreateDmConfirmationBottomSheet(
         matrixUser = state.matrixUser,
-        enableKeyShareOnInvite = state.enableKeyShareOnInvite,
         isUserIdentityUnknown = state.isUserIdentityUnknown,
         onSendInvite = {},
         onDismiss = {},
@@ -163,14 +167,12 @@ internal fun CreateDmConfirmationBottomSheetPreview(@PreviewParameter(
 
 data class CreateDmConfirmationBottomSheetState(
     val matrixUser: MatrixUser,
-    val enableKeyShareOnInvite: Boolean,
     val isUserIdentityUnknown: Boolean,
 )
 
 class CreateDmConfirmationBottomSheetStateProvider : PreviewParameterProvider<CreateDmConfirmationBottomSheetState> {
     override val values = sequenceOf(
-        CreateDmConfirmationBottomSheetState(matrixUser = aMatrixUser(), enableKeyShareOnInvite = false, isUserIdentityUnknown = false),
-            CreateDmConfirmationBottomSheetState(matrixUser = aMatrixUser(), enableKeyShareOnInvite = true, isUserIdentityUnknown = false),
-            CreateDmConfirmationBottomSheetState(matrixUser = aMatrixUser(), enableKeyShareOnInvite = true, isUserIdentityUnknown = true),
-        )
+        CreateDmConfirmationBottomSheetState(matrixUser = aMatrixUser(), isUserIdentityUnknown = false),
+        CreateDmConfirmationBottomSheetState(matrixUser = aMatrixUser(), isUserIdentityUnknown = true),
+    )
 }
