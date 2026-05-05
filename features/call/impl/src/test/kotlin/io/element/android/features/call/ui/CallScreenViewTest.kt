@@ -18,7 +18,6 @@ import io.element.android.features.call.impl.pip.PictureInPictureEvents
 import io.element.android.features.call.impl.pip.aPictureInPictureState
 import io.element.android.features.call.impl.ui.CallScreenEvents
 import io.element.android.features.call.impl.ui.CallScreenView
-import io.element.android.features.call.impl.ui.JavascriptBackHandlerBridge
 import io.element.android.features.call.impl.ui.aCallScreenState
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.pressBackKey
@@ -27,6 +26,7 @@ import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import io.element.android.features.call.impl.ui.JavascriptBackHandler
 import org.junit.Assert.assertEquals
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.Implementation
@@ -120,7 +120,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setCallS
 internal class RecordingShadowWebView : ShadowWebView() {
     companion object {
         val dispatchedEvents = mutableListOf<KeyEvent>()
-        private var backHandlerJavascriptInterface: JavascriptBackHandlerBridge? = null
+        private var backHandlerJavascriptInterface: JavascriptBackHandler? = null
 
         @Resetter
         @JvmStatic
@@ -140,7 +140,7 @@ internal class RecordingShadowWebView : ShadowWebView() {
     protected override fun addJavascriptInterface(`object`: Any, name: String) {
         super.addJavascriptInterface(`object`, name)
         if (name == "backHandler") {
-            backHandlerJavascriptInterface = `object` as? JavascriptBackHandlerBridge
+            backHandlerJavascriptInterface = `object` as? JavascriptBackHandler
         }
     }
 

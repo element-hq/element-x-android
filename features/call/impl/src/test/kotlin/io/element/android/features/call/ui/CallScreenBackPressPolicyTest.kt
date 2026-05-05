@@ -43,7 +43,7 @@ class CallScreenBackPressPolicyTest {
             fromNative = true,
         )
 
-        assertThat(result).isEqualTo(null)
+        assertThat(result).isNull()
     }
 
     @Test
@@ -54,7 +54,7 @@ class CallScreenBackPressPolicyTest {
             fromNative = true,
         )
 
-        assertThat(result).isEqualTo(null)
+        assertThat(result).isNull()
     }
 
     @Test
@@ -75,7 +75,7 @@ class CallScreenBackPressPolicyTest {
             fromNative = false,
         )
 
-        assertThat(result).isEqualTo(null)
+        assertThat(result).isNull()
     }
 
     @Test
@@ -85,13 +85,12 @@ class CallScreenBackPressPolicyTest {
             hasWebView = false,
             fromNative = false,
         )
-        assertThat(withPipSupport).isEqualTo(null)
+        assertThat(withPipSupport).isNull()
         val withOutPipSupport = CallScreenBackPressPolicy.resolve(
             supportPip = false,
             hasWebView = false,
             fromNative = false,
         )
-        assertThat(withOutPipSupport).isEqualTo(null)
+        assertThat(withOutPipSupport).isNull()
     }
 }
-
