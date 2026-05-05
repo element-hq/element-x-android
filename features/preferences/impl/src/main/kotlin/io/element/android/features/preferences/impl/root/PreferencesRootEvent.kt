@@ -13,4 +13,7 @@ import io.element.android.libraries.matrix.api.core.SessionId
 sealed interface PreferencesRootEvent {
     data object OnVersionInfoClick : PreferencesRootEvent
     data class SwitchToSession(val sessionId: SessionId) : PreferencesRootEvent
+    data object OpenLanguageDialog : PreferencesRootEvent
+    data object DismissLanguageDialog : PreferencesRootEvent
+    data class SelectLanguage(val tag: String?) : PreferencesRootEvent
 }

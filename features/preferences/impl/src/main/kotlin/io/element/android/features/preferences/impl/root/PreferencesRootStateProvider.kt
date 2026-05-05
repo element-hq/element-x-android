@@ -87,6 +87,8 @@ fun aPreferencesRootState(
     showLabsItem: Boolean = false,
     directLogoutState: DirectLogoutState = aDirectLogoutState(),
     snackbarMessage: SnackbarMessage? = null,
+    currentLanguageTag: String? = null,
+    isLanguageDialogVisible: Boolean = false,
     eventSink: (PreferencesRootEvent) -> Unit = {},
 ) = PreferencesRootState(
     myUser = myUser,
@@ -106,5 +108,7 @@ fun aPreferencesRootState(
     showLabsItem = showLabsItem,
     directLogoutState = directLogoutState,
     snackbarMessage = snackbarMessage,
+    currentLanguageTag = currentLanguageTag,
+    isLanguageDialogVisible = isLanguageDialogVisible,
     eventSink = eventSink,
 )

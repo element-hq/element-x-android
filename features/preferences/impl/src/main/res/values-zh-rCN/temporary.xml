@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2026 Element Creations Ltd.
+  ~
+  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+  ~ Please see LICENSE files in the repository root for full details.
+  -->
+
+<resources>
+    <string name="screen_app_language_title">"应用语言"</string>
+    <string name="screen_app_language_subtitle">"选择此应用使用的语言"</string>
+    <string name="screen_app_language_system_default">"跟随系统"</string>
+</resources>

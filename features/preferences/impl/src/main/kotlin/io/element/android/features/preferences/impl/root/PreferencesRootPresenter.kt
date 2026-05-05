@@ -18,6 +18,7 @@ import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import dev.zacsweers.metro.Inject
 import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.preferences.impl.utils.ShowDeveloperSettingsProvider
@@ -122,6 +123,10 @@ class PreferencesRootPresenter(
 
         val showDeveloperSettings by showDeveloperSettingsProvider.showDeveloperSettings.collectAsState()
 
+        val context = LocalContext.current
+        var isLanguageDialogVisible by remember { mutableStateOf(false) }
+        var currentLanguageTag by remember { mutableStateOf(AppLocale.current(context)) }
+
         fun handleEvent(event: PreferencesRootEvent) {
             when (event) {
                 is PreferencesRootEvent.OnVersionInfoClick -> {
@@ -129,6 +134,17 @@ class PreferencesRootPresenter(
                 }
                 is PreferencesRootEvent.SwitchToSession -> coroutineScope.launch {
                     sessionStore.setLatestSession(event.sessionId.value)
+                }
+                is PreferencesRootEvent.OpenLanguageDialog -> {
+                    isLanguageDialogVisible = true
+                }
+                is PreferencesRootEvent.DismissLanguageDialog -> {
+                    isLanguageDialogVisible = false
+                }
+                is PreferencesRootEvent.SelectLanguage -> {
+                    AppLocale.set(context, event.tag)
+                    currentLanguageTag = event.tag
+                    isLanguageDialogVisible = false
                 }
             }
         }
@@ -151,6 +167,8 @@ class PreferencesRootPresenter(
             showLabsItem = showLabsItem,
             directLogoutState = directLogoutState,
             snackbarMessage = snackbarMessage,
+            currentLanguageTag = currentLanguageTag,
+            isLanguageDialogVisible = isLanguageDialogVisible,
             eventSink = ::handleEvent,
         )
     }

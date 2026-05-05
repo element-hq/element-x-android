@@ -25,8 +25,11 @@ import io.element.android.features.preferences.impl.R
 import io.element.android.features.preferences.impl.user.UserPreferences
 import io.element.android.libraries.architecture.coverage.ExcludeFromCoverage
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.components.dialogs.ListOption
+import io.element.android.libraries.designsystem.components.dialogs.SingleSelectionDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
+import kotlinx.collections.immutable.toImmutableList
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.preview.ElementPreviewLight
 import io.element.android.libraries.designsystem.preview.PreviewWithLargeHeight
@@ -243,6 +246,7 @@ private fun ColumnScope.GeneralSection(
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Settings())),
         onClick = onOpenAdvancedSettings,
     )
+    LanguageRow(state = state)
     if (state.showLabsItem) {
         ListItem(
             headlineContent = { Text(stringResource(id = R.string.screen_labs_title)) },
@@ -287,6 +291,42 @@ private fun ColumnScope.GeneralSection(
     // Put developer settings at the end, so nothing bad happens if the user clicks 8 times to enable the entry
     if (state.showDeveloperSettings) {
         DeveloperPreferencesView(onOpenDeveloperSettings)
+    }
+}
+
+@Composable
+private fun LanguageRow(state: PreferencesRootState) {
+    val choices = remember { AppLocale.choices }
+    val systemDefaultLabel = stringResource(id = R.string.screen_app_language_system_default)
+    val selectedIndex = remember(state.currentLanguageTag) {
+        val tag = state.currentLanguageTag
+        choices.indexOfFirst { it.tag.equals(tag, ignoreCase = true) }.takeIf { it >= 0 } ?: 0
+    }
+    val trailingLabel = remember(selectedIndex, systemDefaultLabel) {
+        choices[selectedIndex].let { if (it.tag == null) systemDefaultLabel else it.displayName }
+    }
+    ListItem(
+        headlineContent = { Text(stringResource(id = R.string.screen_app_language_title)) },
+        supportingContent = { Text(stringResource(id = R.string.screen_app_language_subtitle)) },
+        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Translate())),
+        trailingContent = ListItemContent.Text(trailingLabel),
+        onClick = { state.eventSink(PreferencesRootEvent.OpenLanguageDialog) },
+    )
+    if (state.isLanguageDialogVisible) {
+        val options = remember(systemDefaultLabel) {
+            choices.map { choice ->
+                ListOption(title = if (choice.tag == null) systemDefaultLabel else choice.displayName)
+            }.toImmutableList()
+        }
+        SingleSelectionDialog(
+            title = stringResource(id = R.string.screen_app_language_title),
+            options = options,
+            initialSelection = selectedIndex,
+            onSelectOption = { index ->
+                state.eventSink(PreferencesRootEvent.SelectLanguage(choices[index].tag))
+            },
+            onDismissRequest = { state.eventSink(PreferencesRootEvent.DismissLanguageDialog) },
+        )
     }
 }
 

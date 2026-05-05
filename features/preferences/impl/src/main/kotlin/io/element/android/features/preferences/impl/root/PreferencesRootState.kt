@@ -32,6 +32,8 @@ data class PreferencesRootState(
     val showLabsItem: Boolean,
     val directLogoutState: DirectLogoutState,
     val snackbarMessage: SnackbarMessage?,
+    val currentLanguageTag: String?,
+    val isLanguageDialogVisible: Boolean,
     val eventSink: (PreferencesRootEvent) -> Unit,
 ) {
     val showBlockedUsersItem = nbOfBlockedUsers > 0
