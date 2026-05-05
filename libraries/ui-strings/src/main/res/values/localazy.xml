@@ -468,6 +468,8 @@ Are you sure you want to continue?"</string>
   <string name="error_unknown">"Sorry, an error occurred"</string>
   <string name="invite_friends_rich_title">"🔐️ Join me on %1$s"</string>
   <string name="invite_friends_text">"Hey, talk to me on %1$s: %2$s"</string>
+  <string name="live_location_sharing_foreground_service_message_android">"Location sharing in progress"</string>
+  <string name="live_location_sharing_foreground_service_title_android">"%1$s Live Location"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake to report bug"</string>
   <string name="screen_bug_report_a11y_screenshot">"Screenshot"</string>

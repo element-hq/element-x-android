@@ -16,11 +16,14 @@ import androidx.annotation.ChecksSdkIntAtLeast
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import dev.zacsweers.metro.Inject
+import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.di.annotations.ApplicationContext
+import io.element.android.libraries.ui.strings.CommonStrings
 
 @Inject
 class LiveLocationSharingNotificationCreator(
     @ApplicationContext private val context: Context,
+    private val buildMeta: BuildMeta,
 ) {
     companion object {
         const val CHANNEL_ID = "LIVE_LOCATION_SHARING"
@@ -32,8 +35,8 @@ class LiveLocationSharingNotificationCreator(
         }
         return NotificationCompat.Builder(context, CHANNEL_ID)
             .setSmallIcon(android.R.drawable.ic_menu_mylocation)
-            .setContentTitle("Sharing live location")
-            .setContentText("Your live location is being shared")
+            .setContentTitle(context.getString(CommonStrings.live_location_sharing_foreground_service_title_android, buildMeta.applicationName))
+            .setContentText(context.getString(CommonStrings.live_location_sharing_foreground_service_message_android))
             .setOngoing(true)
             .build()
     }

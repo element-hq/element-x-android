@@ -11,6 +11,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.window.Dialog
+import io.element.android.features.location.impl.R
 import io.element.android.libraries.designsystem.components.dialogs.AlertDialog
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -45,7 +46,7 @@ fun LocationConstraintsDialog(
             submitText = stringResource(CommonStrings.action_continue),
         )
         LocationConstraintsDialogState.NotEnoughPowerLevel -> AlertDialog(
-            content = "You do not have permissions to share your live location in this room.",
+            content = stringResource(R.string.screen_share_location_live_location_missing_permissions),
             onDismiss = onDismiss
         )
     }
