@@ -194,6 +194,86 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
                     )
                 )
             },
+            anImageMediaInfo(
+                senderName = "Bob",
+                dateSent = "22 NOV, 2024",
+                formattedCaption = "This is a <strong>bold</strong> caption",
+            ).let {
+                aMediaViewerState(
+                    listOf(
+                        aMediaViewerPageData(
+                            downloadedMedia = AsyncData.Success(
+                                LocalMedia(Uri.EMPTY, it)
+                            ),
+                            mediaInfo = it,
+                        )
+                    )
+                )
+            },
+            anImageMediaInfo(
+                senderName = "Charlie",
+                dateSent = "23 NOV, 2024",
+                formattedCaption = "This is an <em>italic</em> caption",
+            ).let {
+                aMediaViewerState(
+                    listOf(
+                        aMediaViewerPageData(
+                            downloadedMedia = AsyncData.Success(
+                                LocalMedia(Uri.EMPTY, it)
+                            ),
+                            mediaInfo = it,
+                        )
+                    )
+                )
+            },
+            anImageMediaInfo(
+                senderName = "Diana",
+                dateSent = "24 NOV, 2024",
+                formattedCaption = "This is a <code>code</code> caption",
+            ).let {
+                aMediaViewerState(
+                    listOf(
+                        aMediaViewerPageData(
+                            downloadedMedia = AsyncData.Success(
+                                LocalMedia(Uri.EMPTY, it)
+                            ),
+                            mediaInfo = it,
+                        )
+                    )
+                )
+            },
+            anImageMediaInfo(
+                senderName = "Eve",
+                dateSent = "25 NOV, 2024",
+                formattedCaption = "<blockquote>This is a quote caption</blockquote>",
+            ).let {
+                aMediaViewerState(
+                    listOf(
+                        aMediaViewerPageData(
+                            downloadedMedia = AsyncData.Success(
+                                LocalMedia(Uri.EMPTY, it)
+                            ),
+                            mediaInfo = it,
+                        )
+                    )
+                )
+            },
+            anImageMediaInfo(
+                senderName = "Frank",
+                dateSent = "26 NOV, 2024",
+                formattedCaption = "This caption has <strong>bold</strong>, <em>italic</em>, and <code>code</code> formatting.",
+            ).let {
+                aMediaViewerState(
+                    listOf(
+                        aMediaViewerPageData(
+                            downloadedMedia = AsyncData.Success(
+                                LocalMedia(Uri.EMPTY, it)
+                            ),
+                            mediaInfo = it,
+                        )
+                    )
+                )
+            },
         )
 }
 
