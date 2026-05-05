@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright 2026 Element Creations Ltd.
+  ~
+  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+  ~ Please see LICENSE files in the repository root for full details.
+  -->
+
+<resources>
+    <string name="screen_onboarding_alpha_title">"歡迎使用 Alpha"</string>
+    <string name="screen_onboarding_alpha_message">"隨時隨地，與你的團隊保持聯繫。"</string>
+</resources>

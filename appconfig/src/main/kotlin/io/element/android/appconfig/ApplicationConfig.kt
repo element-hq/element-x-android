@@ -24,7 +24,7 @@ object ApplicationConfig {
      * Cannot be empty.
      * For Element, the value is "Element".
      */
-    const val PRODUCTION_APPLICATION_NAME: String = "Element"
+    const val PRODUCTION_APPLICATION_NAME: String = "Alpha"
 
     /**
      * Used in the strings to reference the Element Desktop client, for instance Element Web.
