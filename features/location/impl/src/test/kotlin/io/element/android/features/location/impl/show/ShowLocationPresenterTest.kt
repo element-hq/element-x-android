@@ -61,7 +61,7 @@ class ShowLocationPresenterTest {
         ),
         locationActions: FakeLocationActions = fakeLocationActions,
         joinedRoom: JoinedRoom = FakeJoinedRoom(),
-        liveLocationShareManager: FakeActiveLiveLocationShareManager = FakeActiveLiveLocationShareManager(sessionId = joinedRoom.sessionId),
+        liveLocationShareManager: FakeActiveLiveLocationShareManager = FakeActiveLiveLocationShareManager(),
     ) = ShowLocationPresenter(
         mode = mode,
         permissionsPresenterFactory = { fakePermissionsPresenter },

@@ -9,7 +9,6 @@ package io.element.android.features.location.test
 
 import io.element.android.features.location.api.live.ActiveLiveLocationShareManager
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.simulateLongTask
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,24 +17,21 @@ import kotlinx.coroutines.flow.update
 import kotlin.time.Duration
 
 class FakeActiveLiveLocationShareManager(
-    private val sessionId: SessionId,
     val setupLambda: () -> Unit = { lambdaError() },
     val startShareLambda: (roomId: RoomId, duration: Duration) -> Result<Unit> = { _, _ -> lambdaError() },
     val stopShareLambda: (roomId: RoomId) -> Result<Unit> = { _ -> lambdaError() },
 ) : ActiveLiveLocationShareManager {
-    val startShareCalls = mutableListOf<Triple<SessionId, RoomId, Long>>()
 
-    private val _activeShares = MutableStateFlow(emptySet<RoomId>())
-    override val activeShares: StateFlow<Set<RoomId>> = _activeShares
+    private val _sharingRoomIds = MutableStateFlow(emptySet<RoomId>())
+    override val sharingRoomIds: StateFlow<Set<RoomId>> = _sharingRoomIds
 
-    override fun setup() {
+    override suspend fun setup() {
         setupLambda()
     }
 
     override suspend fun startShare(roomId: RoomId, duration: Duration): Result<Unit> = simulateLongTask {
-        startShareCalls += Triple(sessionId, roomId, duration.inWholeMilliseconds)
         startShareLambda(roomId, duration).onSuccess {
-            _activeShares.update {
+            _sharingRoomIds.update {
                 it + roomId
             }
         }
@@ -43,7 +39,7 @@ class FakeActiveLiveLocationShareManager(
 
     override suspend fun stopShare(roomId: RoomId): Result<Unit> = simulateLongTask {
         stopShareLambda(roomId).onSuccess {
-            _activeShares.update {
+            _sharingRoomIds.update {
                 it - roomId
             }
         }

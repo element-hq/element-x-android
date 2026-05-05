@@ -213,6 +213,7 @@ class LoggedInFlowNode(
         super.onBuilt()
         lifecycleScope.launch {
             sessionEnterpriseService.init()
+            activeLiveLocationShareManager.setup()
         }
         lifecycle.subscribe(
             onCreate = {
@@ -221,7 +222,6 @@ class LoggedInFlowNode(
                 loggedInFlowProcessor.observeEvents(sessionCoroutineScope)
                 matrixClient.sessionVerificationService.setListener(verificationListener)
                 mediaPreviewConfigMigration()
-                activeLiveLocationShareManager.setup()
                 sessionCoroutineScope.launch {
                     // Wait for the network to be connected before pre-fetching the max file upload size
                     networkMonitor.connectivity.first { networkStatus -> networkStatus == NetworkStatus.Connected }

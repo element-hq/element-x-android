@@ -20,6 +20,7 @@ import io.element.android.services.toolbox.api.systemclock.SystemClock
 import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.concurrent.atomics.AtomicLong
+import kotlin.concurrent.atomics.AtomicReference
 import kotlin.concurrent.atomics.ExperimentalAtomicApi
 import kotlin.time.Duration.Companion.seconds
 
@@ -45,9 +46,11 @@ class LiveLocationSharingCoordinator internal constructor(
     )
 
     private val receivers = ConcurrentHashMap<SessionId, LiveLocationReceiver>()
-    private val lastDispatchMillis = AtomicLong(0L)
 
-    fun register(sessionId: SessionId, receiver: LiveLocationReceiver) {
+    private val lastDispatchMillis = AtomicLong(0L)
+    private val lastKnownLocation = AtomicReference<Location?>(null)
+
+    suspend fun register(sessionId: SessionId, receiver: LiveLocationReceiver) {
         val wasEmpty = receivers.isEmpty()
         Timber.d("LiveLocationSharingCoordinator registering receiver for session $sessionId (wasEmpty=$wasEmpty)")
         receivers[sessionId] = receiver
@@ -57,12 +60,16 @@ class LiveLocationSharingCoordinator internal constructor(
                 Timber.e(it, "Failed to start live location sharing service")
             }
         }
+        lastKnownLocation.load()?.let {
+            dispatch(it)
+        }
     }
 
     fun unregister(sessionId: SessionId) {
         Timber.d("LiveLocationSharingCoordinator unregistering receiver for session $sessionId")
         receivers.remove(sessionId)
         if (receivers.isEmpty()) {
+            lastKnownLocation.store(null)
             Timber.d("LiveLocationSharingCoordinator stopping service (no more receivers)")
             runCatching(stopService).onFailure {
                 Timber.e(it, "Failed to stop live location sharing service")
@@ -77,6 +84,7 @@ class LiveLocationSharingCoordinator internal constructor(
             Timber.d("Received location before $THROTTLE_WINDOW, ignore.")
             return
         }
+        lastKnownLocation.store(location)
         lastDispatchMillis.store(currentTimeMillis)
         receivers.forEach { (sessionId, receiver) ->
             Timber.d("Dispatch received location for session $sessionId ")

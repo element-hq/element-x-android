@@ -20,6 +20,8 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.location.LiveLocationException
+import io.element.android.libraries.sessionstorage.api.observer.SessionListener
+import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
 import io.element.android.services.toolbox.api.systemclock.SystemClock
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.NonCancellable
@@ -36,10 +38,11 @@ import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
 import kotlin.concurrent.atomics.AtomicBoolean
-import kotlin.concurrent.atomics.AtomicReference
 import kotlin.concurrent.atomics.ExperimentalAtomicApi
 import kotlin.time.Duration
 import kotlin.time.Instant
+
+private typealias ShareId = EventId
 
 @OptIn(ExperimentalAtomicApi::class)
 @SingleIn(SessionScope::class)
@@ -49,24 +52,27 @@ class DefaultActiveLiveLocationShareManager(
     private val coordinator: LiveLocationSharingCoordinator,
     private val liveLocationStore: LiveLocationStore,
     private val clock: SystemClock,
+    private val sessionObserver: SessionObserver,
 ) : ActiveLiveLocationShareManager, LiveLocationReceiver {
 
     private val isSetup = AtomicBoolean(false)
-    private val activeRooms = ConcurrentHashMap<RoomId, JoinedRoom>()
+    private val cachedRooms = ConcurrentHashMap<RoomId, JoinedRoom>()
     private val timeoutJobs = ConcurrentHashMap<RoomId, Job>()
-    private val syncedActiveShareIds = MutableStateFlow<Set<EventId>>(emptySet())
-    private val activeRoomIds = MutableStateFlow<Set<RoomId>>(emptySet())
-    private val lastKnownLocation = AtomicReference<Location?>(null)
-    override val activeShares: StateFlow<Set<RoomId>> = activeRoomIds
+    private val syncedActiveShareIds = MutableStateFlow<Set<ShareId>>(emptySet())
+    private val localSharingRoomIds = MutableStateFlow<Set<RoomId>>(emptySet())
+    override val sharingRoomIds: StateFlow<Set<RoomId>> = localSharingRoomIds
 
-    override fun setup() {
+    override suspend fun setup() = withContext(NonCancellable) {
         if (isSetup.compareAndSet(expectedValue = false, newValue = true)) {
             Timber.d("ActiveLiveLocationShareManager setup manager.")
+
+            recoverPersistedShares()
+
             matrixClient.ownBeaconInfoUpdates
                 .onEach { update ->
                     Timber.d("Received beaconInfoUpdate:$update")
                     // First cancel the local share in this room if any.
-                    if (update.roomId in activeRoomIds.value) {
+                    if (update.roomId in localSharingRoomIds.value) {
                         stopLocalShare(roomId = update.roomId)
                     }
                     syncedActiveShareIds.update {
@@ -79,18 +85,22 @@ class DefaultActiveLiveLocationShareManager(
                 }
                 .launchIn(matrixClient.sessionCoroutineScope)
 
-            matrixClient.sessionCoroutineScope.launch {
-                recoverPersistedShares()
-            }
+            sessionObserver.addListener(object : SessionListener {
+                override suspend fun onSessionDeleted(userId: String, wasLastSession: Boolean) {
+                    if (matrixClient.sessionId.value == userId) {
+                        clear()
+                    }
+                }
+            })
         }
     }
 
     override suspend fun startShare(roomId: RoomId, duration: Duration): Result<Unit> = withContext(NonCancellable) {
         Timber.d("ActiveLiveLocationShareManager starting share for room $roomId with duration ${duration.inWholeSeconds}s")
-        val room = activeRooms.getOrPut(roomId) {
+        val room = cachedRooms.getOrPut(roomId) {
             matrixClient.getJoinedRoom(roomId) ?: return@withContext Result.failure(IllegalStateException("No room found for $roomId"))
         }
-        // Stop the current live location share if any before starting one.
+        // Before starting a new location share, stop the current one if any is active.
         room.stopLiveLocationShare()
 
         room.startLiveLocationShare(duration.inWholeMilliseconds)
@@ -108,7 +118,7 @@ class DefaultActiveLiveLocationShareManager(
 
     override suspend fun stopShare(roomId: RoomId): Result<Unit> = withContext(NonCancellable) {
         Timber.d("ActiveLiveLocationShareManager stopping share for room $roomId")
-        val room = activeRooms.getOrPut(roomId) {
+        val room = cachedRooms.getOrPut(roomId) {
             matrixClient.getJoinedRoom(roomId) ?: return@withContext Result.failure(IllegalStateException("No room found for $roomId"))
         }
         room.stopLiveLocationShare()
@@ -122,10 +132,9 @@ class DefaultActiveLiveLocationShareManager(
     }
 
     override suspend fun onLocationUpdate(location: Location) {
-        val activeSharesCount = activeRoomIds.value.size
+        val activeSharesCount = localSharingRoomIds.value.size
         Timber.d("ActiveLiveLocationShareManager received location update for $activeSharesCount active share(s)")
-        lastKnownLocation.store(location)
-        activeRoomIds.value.forEach { roomId ->
+        localSharingRoomIds.value.forEach { roomId ->
             Timber.d("ActiveLiveLocationShareManager sending location to room $roomId")
             sendLiveLocation(roomId, location).onFailure {
                 Timber.e(it, "ActiveLiveLocationShareManager failed to send location to room $roomId")
@@ -134,7 +143,7 @@ class DefaultActiveLiveLocationShareManager(
     }
 
     private suspend fun sendLiveLocation(roomId: RoomId, location: Location): Result<Unit> {
-        val room = activeRooms.getOrPut(roomId) {
+        val room = cachedRooms.getOrPut(roomId) {
             matrixClient.getJoinedRoom(roomId) ?: return Result.failure(IllegalStateException("No room found for $roomId"))
         }
         return room.sendLiveLocation(location.toGeoUri())
@@ -150,18 +159,14 @@ class DefaultActiveLiveLocationShareManager(
     }
 
     private suspend fun startLocalShare(roomId: RoomId, expiresAt: Instant) {
-        val wasEmpty = activeRoomIds.value.isEmpty()
+        val wasEmpty = localSharingRoomIds.value.isEmpty()
         Timber.d("ActiveLiveLocationShareManager share started successfully for room $roomId (wasEmpty=$wasEmpty)")
-        activeRoomIds.update { it + roomId }
+        localSharingRoomIds.update { it + roomId }
         liveLocationStore.setLiveLocationExpiry(roomId, expiresAt)
         scheduleTimeout(roomId, expiresAt)
         if (wasEmpty) {
             Timber.d("ActiveLiveLocationShareManager registering with coordinator for session ${matrixClient.sessionId}")
             coordinator.register(matrixClient.sessionId, this@DefaultActiveLiveLocationShareManager)
-        }
-        // Send the last received location if any
-        lastKnownLocation.load()?.let { location ->
-            sendLiveLocation(roomId, location)
         }
     }
 
@@ -192,13 +197,26 @@ class DefaultActiveLiveLocationShareManager(
     private suspend fun stopLocalShare(roomId: RoomId) {
         Timber.d("ActiveLiveLocationShareManager stop local share in $roomId")
         timeoutJobs.remove(roomId)?.cancel()
-        activeRooms.remove(roomId)?.close()
-        activeRoomIds.getAndUpdate { it - roomId }
+        localSharingRoomIds.getAndUpdate { it - roomId }
+        cachedRooms.remove(roomId)?.close()
         liveLocationStore.removeLiveLocationExpiry(roomId)
-        if (activeRoomIds.value.isEmpty()) {
+        if (localSharingRoomIds.value.isEmpty()) {
             Timber.d("ActiveLiveLocationShareManager unregistering from coordinator for session ${matrixClient.sessionId}")
             coordinator.unregister(matrixClient.sessionId)
-            lastKnownLocation.store(null)
         }
+    }
+
+    private suspend fun clear() {
+        Timber.d("ActiveLiveLocationShareManager clear state")
+        coordinator.unregister(matrixClient.sessionId)
+        liveLocationStore.clear()
+        for (room in cachedRooms.values) {
+            room.close()
+            timeoutJobs[room.roomId]?.cancel()
+        }
+        timeoutJobs.clear()
+        cachedRooms.clear()
+        localSharingRoomIds.value = emptySet()
+        syncedActiveShareIds.value = emptySet()
     }
 }

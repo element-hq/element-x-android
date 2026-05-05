@@ -75,7 +75,7 @@ class LiveLocationStore(
         return runCatching {
             serialized
                 .split(liveLocationExpiryEntrySeparator)
-                .map { it.split(liveLocationExpiryValueSeparator)}
+                .map { it.split(liveLocationExpiryValueSeparator) }
                 .associate { values ->
                     val roomId = RoomId(values[0])
                     val expiresAtMillis = values[1].toLong()
@@ -88,5 +88,9 @@ class LiveLocationStore(
         return expiries.entries.joinToString(separator = liveLocationExpiryEntrySeparator) { (roomId, expiresAt) ->
             "${roomId.value}$liveLocationExpiryValueSeparator${expiresAt.toEpochMilliseconds()}"
         }
+    }
+
+    suspend fun clear() {
+        store.edit { prefs -> prefs.clear() }
     }
 }
