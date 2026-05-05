@@ -53,7 +53,7 @@ class DefaultShareLocationEntryPointTest {
                         featureFlagService = FakeFeatureFlagService(),
                         client = FakeMatrixClient(),
                         durationFormatter = FakeDurationFormatter(),
-                        liveLocationShareManager = FakeActiveLiveLocationShareManager(sessionId = room.sessionId),
+                        liveLocationShareManager = FakeActiveLiveLocationShareManager(),
                         liveLocationStore = LiveLocationStore(
                             preferenceDataStoreFactory = FakePreferenceDataStoreFactory(),
                             sessionId = room.sessionId,

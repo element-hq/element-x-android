@@ -48,7 +48,7 @@ class DefaultShowLocationEntryPointTest {
                         dateFormatter = FakeDateFormatter(),
                         stringProvider = FakeStringProvider(),
                         joinedRoom = joinedRoom,
-                        liveLocationShareManager = FakeActiveLiveLocationShareManager(sessionId = joinedRoom.sessionId),
+                        liveLocationShareManager = FakeActiveLiveLocationShareManager(),
                     )
                 },
                 analyticsService = FakeAnalyticsService(),

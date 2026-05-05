@@ -56,5 +56,6 @@ dependencies {
     testImplementation(projects.features.messages.test)
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.preferences.test)
+    testImplementation(projects.libraries.sessionStorage.test)
     testImplementation(projects.features.location.test)
 }

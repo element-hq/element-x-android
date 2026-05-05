@@ -10,12 +10,12 @@
 
 package io.element.android.features.location.impl.share
 
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
-import app.cash.turbine.test
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
+import app.cash.molecule.RecompositionMode
+import app.cash.molecule.moleculeFlow
+import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Composer
 import io.element.android.features.location.api.Location
@@ -30,9 +30,8 @@ import io.element.android.features.location.test.FakeActiveLiveLocationShareMana
 import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.libraries.dateformatter.test.FakeDurationFormatter
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
-import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
-import io.element.android.libraries.preferences.test.FakePreferenceDataStoreFactory
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.location.AssetType
@@ -45,8 +44,11 @@ import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
+import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
+import io.element.android.libraries.preferences.test.FakePreferenceDataStoreFactory
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
@@ -58,6 +60,7 @@ import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import kotlin.time.Duration
 import kotlin.time.Duration.Companion.hours
 
 class ShareLocationPresenterTest {
@@ -77,7 +80,7 @@ class ShareLocationPresenterTest {
     private fun TestScope.createShareLocationPresenter(
         joinedRoom: JoinedRoom = FakeJoinedRoom(),
         locationActions: FakeLocationActions = fakeLocationActions,
-        liveLocationShareManager: FakeActiveLiveLocationShareManager = FakeActiveLiveLocationShareManager(sessionId = joinedRoom.sessionId),
+        liveLocationShareManager: FakeActiveLiveLocationShareManager = FakeActiveLiveLocationShareManager(),
         liveLocationStore: LiveLocationStore = createLiveLocationStore(sessionId = joinedRoom.sessionId),
     ): ShareLocationPresenter = ShareLocationPresenter(
         permissionsPresenterFactory = { fakePermissionsPresenter },
@@ -607,7 +610,10 @@ class ShareLocationPresenterTest {
 
     @Test
     fun `StartLiveLocationShare event calls manager startShare`() = runTest {
-        val manager = FakeActiveLiveLocationShareManager(sessionId = A_SESSION_ID)
+        val startShareLambda = lambdaRecorder { _: RoomId, _: Duration -> Result.success(Unit) }
+        val manager = FakeActiveLiveLocationShareManager(
+            startShareLambda = startShareLambda,
+        )
         val shareLocationPresenter = createShareLocationPresenter(liveLocationShareManager = manager)
         fakePermissionsPresenter.givenState(
             aPermissionsState(
@@ -621,12 +627,9 @@ class ShareLocationPresenterTest {
             val state = awaitItem()
             state.eventSink(ShareLocationEvent.StartLiveLocationShare(duration = 1.hours))
             advanceUntilIdle()
-
-            assertThat(manager.startShareCalls.size).isEqualTo(1)
-            val call = manager.startShareCalls[0]
-            assertThat(call.first).isEqualTo(A_SESSION_ID)
-            assertThat(call.second).isEqualTo(A_ROOM_ID)
-            assertThat(call.third).isEqualTo(3_600_000L)
+            assert(startShareLambda).isCalledOnce().with(
+                value(A_ROOM_ID), value(1.hours)
+            )
             cancelAndIgnoreRemainingEvents()
         }
     }
