@@ -68,7 +68,7 @@ internal fun CallScreenView(
         if (pipState.supportPip) {
             pipState.eventSink.invoke(PictureInPictureEvent.EnterPictureInPicture)
         } else {
-            state.eventSink(CallScreenEvents.Hangup)
+            state.eventSink(CallScreenEvent.Hangup)
         }
     }
 
