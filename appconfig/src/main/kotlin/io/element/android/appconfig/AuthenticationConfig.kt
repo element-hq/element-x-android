@@ -9,7 +9,10 @@
 package io.element.android.appconfig
 
 object AuthenticationConfig {
-    const val MATRIX_ORG_URL = "https://matrix.org"
+    // Alpha local Synapse — host LAN IP works from AVD, LDPlayer, and physical
+    // device on same Wi-Fi. Synapse's `public_baseurl` must match this exact URL,
+    // because the Rust SDK follows the base_url returned by /.well-known/matrix/client.
+    const val MATRIX_ORG_URL = "http://192.168.1.65:8008"
 
     /**
      * URL with some docs that explain what's sliding sync and how to add it to your home server.

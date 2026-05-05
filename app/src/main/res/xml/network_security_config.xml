@@ -16,8 +16,10 @@
         <!-- Localhost -->
         <domain includeSubdomains="true">localhost</domain>
         <domain includeSubdomains="true">127.0.0.1</domain>
-        <!-- Localhost for Android emulator -->
+        <!-- Localhost for Android emulator (AVD) -->
         <domain includeSubdomains="true">10.0.2.2</domain>
+        <!-- Host LAN IP for LDPlayer / physical device on same Wi-Fi (Alpha local Synapse) -->
+        <domain includeSubdomains="true">192.168.1.65</domain>
         <!-- Onion services -->
         <domain includeSubdomains="true">onion</domain>
 
