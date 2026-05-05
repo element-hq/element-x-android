@@ -22,12 +22,12 @@ import kotlinx.coroutines.flow.StateFlow
 
 class FakeSessionVerificationService(
     initialSessionVerifiedStatus: SessionVerifiedStatus = SessionVerifiedStatus.Unknown,
-    private val requestCurrentSessionVerificationLambda: () -> Unit = { lambdaError() },
+    private val requestDeviceVerificationLambda: () -> Unit = { lambdaError() },
     private val requestUserVerificationLambda: (UserId) -> Unit = { lambdaError() },
     private val cancelVerificationLambda: () -> Unit = { lambdaError() },
     private val approveVerificationLambda: () -> Unit = { lambdaError() },
     private val declineVerificationLambda: () -> Unit = { lambdaError() },
-    private val startVerificationLambda: () -> Unit = { lambdaError() },
+    private val startSasVerificationLambda: () -> Unit = { lambdaError() },
     private val resetLambda: (Boolean) -> Unit = { lambdaError() },
     private val acknowledgeVerificationRequestLambda: (VerificationRequest.Incoming) -> Unit = { lambdaError() },
     private val acceptVerificationRequestLambda: () -> Unit = { lambdaError() },
@@ -40,8 +40,8 @@ class FakeSessionVerificationService(
     override val sessionVerifiedStatus: StateFlow<SessionVerifiedStatus> = _sessionVerifiedStatus
     override val needsSessionVerification: Flow<Boolean> = _needsSessionVerification
 
-    override suspend fun requestCurrentSessionVerification() {
-        requestCurrentSessionVerificationLambda()
+    override suspend fun requestDeviceVerification() {
+        requestDeviceVerificationLambda()
     }
 
     override suspend fun requestUserVerification(userId: UserId) {
@@ -60,8 +60,8 @@ class FakeSessionVerificationService(
         declineVerificationLambda()
     }
 
-    override suspend fun startVerification() {
-        startVerificationLambda()
+    override suspend fun startSasVerification() {
+        startSasVerificationLambda()
     }
 
     override suspend fun reset(cancelAnyPendingVerificationAttempt: Boolean) {
