@@ -27,7 +27,6 @@ interface HomeEntryPoint : FeatureEntryPoint {
         fun navigateToCreateRoom()
         fun navigateToCreateSpace()
         fun navigateToSettings()
-        fun navigateToGlobalNotificationSettings()
         fun navigateToSetUpRecovery()
         fun navigateToEnterRecoveryKey()
         fun navigateToRoomSettings(roomId: RoomId)

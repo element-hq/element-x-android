@@ -24,9 +24,7 @@ data class NotificationSettingsState(
     val availablePushDistributors: ImmutableList<Distributor>,
     val showChangePushProviderDialog: Boolean,
     val fullScreenIntentPermissionsState: FullScreenIntentPermissionsState,
-    /** UI state for the message-sound row: the user's choice, its label, and an alert flag. */
     val messageSound: SoundChannelUiState,
-    /** UI state for the call-ringtone row — same contract as [messageSound]. */
     val callRingtone: SoundChannelUiState,
     val eventSink: (NotificationSettingsEvents) -> Unit,
 ) {
@@ -51,20 +49,13 @@ data class NotificationSettingsState(
     )
 
     /**
-     * UI state for one of the two sound rows (message sound, call ringtone).
-     *
-     * @property sound the user's persisted choice.
-     * @property displayName label for [sound]. SystemDefault and Silent resolve synchronously from
-     *   string resources; Custom is resolved asynchronously and starts empty until the lookup
-     *   settles.
-     * @property wasReverted true when a previously persisted Custom URI failed to resolve while
-     *   this screen was open and was auto-reverted to SystemDefault. Drives an inline alert under
-     *   the row. Cleared by picking a new sound or dismissing the alert.
+     * UI state for one of the two sound rows (message sound, call ringtone). [copyError] is set
+     * when the last pick failed to copy into app-private storage; the persisted choice stays put.
      */
     data class SoundChannelUiState(
         val sound: NotificationSound,
         val displayName: String,
-        val wasReverted: Boolean,
+        val copyError: Boolean,
     )
 
     /**

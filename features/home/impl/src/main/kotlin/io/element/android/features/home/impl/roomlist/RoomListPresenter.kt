@@ -44,7 +44,6 @@ import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -54,7 +53,6 @@ import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.ui.safety.rememberHideInvitesAvatar
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
-import io.element.android.libraries.preferences.api.store.NotificationSoundUnavailableState
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.push.api.battery.BatteryOptimizationState
 import io.element.android.libraries.push.api.notifications.NotificationCleaner
@@ -66,7 +64,6 @@ import kotlinx.collections.immutable.toImmutableSet
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
@@ -93,8 +90,6 @@ class RoomListPresenter(
     private val announcementService: AnnouncementService,
     private val coldStartWatcher: AnalyticsColdStartWatcher,
     private val spaceFiltersPresenter: Presenter<SpaceFiltersState>,
-    @AppCoroutineScope
-    private val appCoroutineScope: CoroutineScope,
 ) : Presenter<RoomListState> {
     private val encryptionService = client.encryptionService
 
@@ -117,18 +112,6 @@ class RoomListPresenter(
                 announcements.contains(Announcement.NewNotificationSound)
             }
         }.collectAsState(false)
-        // Combine the announcement flow with the persisted state so a single emission produces a
-        // coherent banner state. Reading them as separate collectAsState values would let the
-        // banner flicker (e.g. Both → None) when dismissal clears the announcement and the state
-        // in sequence.
-        val notificationSoundUnavailableState by remember {
-            combine(
-                announcementService.announcementsToShowFlow(),
-                appPreferencesStore.getNotificationSoundUnavailableStateFlow(),
-            ) { announcements, persistedState ->
-                if (announcements.contains(Announcement.SoundUnavailable)) persistedState else NotificationSoundUnavailableState.None
-            }
-        }.collectAsState(NotificationSoundUnavailableState.None)
 
         // Avatar indicator
         val hideInvitesAvatar by client.rememberHideInvitesAvatar()
@@ -145,10 +128,6 @@ class RoomListPresenter(
                 RoomListEvent.DismissBanner -> securityBannerDismissed = true
                 RoomListEvent.DismissNewNotificationSoundBanner -> coroutineScope.launch {
                     announcementService.onAnnouncementDismissed(Announcement.NewNotificationSound)
-                }
-                RoomListEvent.DismissSoundUnavailableBanner -> appCoroutineScope.launch {
-                    announcementService.onAnnouncementDismissed(Announcement.SoundUnavailable)
-                    appPreferencesStore.setNotificationSoundUnavailableState(NotificationSoundUnavailableState.None)
                 }
                 RoomListEvent.ToggleSearchResults -> searchState.eventSink(RoomListSearchEvent.ToggleSearchVisibility)
                 is RoomListEvent.ShowContextMenu -> {
@@ -189,7 +168,6 @@ class RoomListPresenter(
         val contentState = roomListContentState(
             securityBannerDismissed,
             showNewNotificationSoundBanner,
-            notificationSoundUnavailableState,
         )
 
         val canReportRoom by produceState(false) { value = client.canReportRoom() }
@@ -248,7 +226,6 @@ class RoomListPresenter(
     private fun roomListContentState(
         securityBannerDismissed: Boolean,
         showNewNotificationSoundBanner: Boolean,
-        notificationSoundUnavailableState: NotificationSoundUnavailableState,
     ): RoomListContentState {
         val roomSummaries by produceState(initialValue = AsyncData.Loading()) {
             roomListDataSource.roomSummariesFlow.collect { value = AsyncData.Success(it) }
@@ -277,7 +254,6 @@ class RoomListPresenter(
                 RoomListContentState.Rooms(
                     securityBannerState = securityBannerState,
                     showNewNotificationSoundBanner = showNewNotificationSoundBanner,
-                    notificationSoundUnavailableState = notificationSoundUnavailableState,
                     fullScreenIntentPermissionsState = fullScreenIntentPermissionsPresenter.present(),
                     batteryOptimizationState = batteryOptimizationPresenter.present(),
                     summaries = roomSummaries.dataOrNull().orEmpty().toImmutableList(),

@@ -49,7 +49,6 @@ class DefaultHomeEntryPointTest {
             override fun navigateToCreateRoom() = lambdaError()
             override fun navigateToCreateSpace() = lambdaError()
             override fun navigateToSettings() = lambdaError()
-            override fun navigateToGlobalNotificationSettings() = lambdaError()
             override fun navigateToSetUpRecovery() = lambdaError()
             override fun navigateToEnterRecoveryKey() = lambdaError()
             override fun navigateToRoomSettings(roomId: RoomId) = lambdaError()

@@ -369,23 +369,16 @@ fun createNotificationCreator(
     )
 }
 
-@OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 fun createNotificationChannels(
     enterpriseService: EnterpriseService = FakeEnterpriseService(),
 ): NotificationChannels {
     val context = RuntimeEnvironment.getApplication()
+    val notificationManagerCompat = NotificationManagerCompat.from(context)
     return DefaultNotificationChannels(
-        notificationManager = NotificationManagerCompat.from(context),
+        notificationManager = notificationManagerCompat,
         stringProvider = FakeStringProvider(""),
         context = context,
         enterpriseService = enterpriseService,
         appPreferencesStore = io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore(),
-        soundDisplayNameResolver = io.element.android.libraries.push.test.notifications.FakeSoundDisplayNameResolver(
-            resolveLambda = { "Some sound" },
-        ),
-        announcementService = io.element.android.features.rageshake.test.logs.FakeAnnouncementService(
-            showAnnouncementResult = {},
-        ),
-        appCoroutineScope = kotlinx.coroutines.test.TestScope(kotlinx.coroutines.test.UnconfinedTestDispatcher()),
     )
 }

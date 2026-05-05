@@ -20,6 +20,8 @@ class FakeNotificationChannels(
     // test that doesn't expect a channel rebuild loudly fails instead of silently swallowing the call.
     var recreateNoisyChannelLambda: (sound: NotificationSound, version: Int) -> Unit = { _, _ -> lambdaError() },
     var recreateRingingCallChannelLambda: (sound: NotificationSound, version: Int) -> Unit = { _, _ -> lambdaError() },
+    var readNoisyChannelSoundLambda: () -> NotificationSound? = { null },
+    var readRingingCallChannelSoundLambda: () -> NotificationSound? = { null },
 ) : NotificationChannels {
     override fun getChannelForIncomingCall(ring: Boolean): String {
         return channelForIncomingCall(ring)
@@ -40,4 +42,8 @@ class FakeNotificationChannels(
     override fun recreateRingingCallChannel(sound: NotificationSound, version: Int) {
         recreateRingingCallChannelLambda(sound, version)
     }
+
+    override suspend fun readNoisyChannelSound(): NotificationSound? = readNoisyChannelSoundLambda()
+
+    override suspend fun readRingingCallChannelSound(): NotificationSound? = readRingingCallChannelSoundLambda()
 }

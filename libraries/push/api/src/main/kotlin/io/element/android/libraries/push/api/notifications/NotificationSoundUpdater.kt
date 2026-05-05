@@ -11,12 +11,17 @@ package io.element.android.libraries.push.api.notifications
 import io.element.android.libraries.preferences.api.store.NotificationSound
 
 /**
- * Recreates the notification channels backing the noisy-message and ringing-call sounds when the
- * user picks a new sound in settings. Android does not allow [android.app.NotificationChannel.setSound]
- * to be modified after channel creation, so a new versioned channel ID is created instead.
+ * Reads and writes the sound on the message / ringing-call channels. Writes create a new
+ * versioned channel because Android forbids mutating sound after creation.
  */
 interface NotificationSoundUpdater {
     fun recreateNoisyChannel(sound: NotificationSound, version: Int)
 
     fun recreateRingingCallChannel(sound: NotificationSound, version: Int)
+
+    /** Current channel sound classified into [NotificationSound]. Null when the channel doesn't exist. */
+    suspend fun readNoisyChannelSound(): NotificationSound?
+
+    /** See [readNoisyChannelSound]. */
+    suspend fun readRingingCallChannelSound(): NotificationSound?
 }

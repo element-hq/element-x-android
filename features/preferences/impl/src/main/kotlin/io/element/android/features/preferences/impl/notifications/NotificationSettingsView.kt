@@ -291,9 +291,9 @@ private fun SoundsPreferenceCategory(state: NotificationSettingsState) {
             supportingContent = { Text(state.messageSound.displayName) },
             onClick = onMessageSoundClick,
         )
-        if (state.messageSound.wasReverted) {
-            SoundRevertedAlert(
-                onDismissClick = { state.eventSink(NotificationSettingsEvents.DismissMessageSoundRevertedAlert) },
+        if (state.messageSound.copyError) {
+            SoundCopyErrorRow(
+                onDismissClick = { state.eventSink(NotificationSettingsEvents.DismissMessageSoundCopyError) },
             )
         }
 
@@ -308,16 +308,16 @@ private fun SoundsPreferenceCategory(state: NotificationSettingsState) {
             supportingContent = { Text(state.callRingtone.displayName) },
             onClick = onCallRingtoneClick,
         )
-        if (state.callRingtone.wasReverted) {
-            SoundRevertedAlert(
-                onDismissClick = { state.eventSink(NotificationSettingsEvents.DismissCallRingtoneRevertedAlert) },
+        if (state.callRingtone.copyError) {
+            SoundCopyErrorRow(
+                onDismissClick = { state.eventSink(NotificationSettingsEvents.DismissCallRingtoneCopyError) },
             )
         }
     }
 }
 
 @Composable
-private fun SoundRevertedAlert(
+private fun SoundCopyErrorRow(
     onDismissClick: () -> Unit,
 ) {
     ListItem(
@@ -326,7 +326,7 @@ private fun SoundRevertedAlert(
             .semantics { liveRegion = LiveRegionMode.Polite },
         headlineContent = {
             Text(
-                text = stringResource(R.string.screen_notification_settings_sound_reverted_alert_message),
+                text = stringResource(R.string.screen_notification_settings_sound_copy_error_message),
                 style = ElementTheme.typography.fontBodyMdRegular,
                 color = ElementTheme.colors.textSecondary,
             )

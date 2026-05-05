@@ -54,7 +54,6 @@ import io.element.android.libraries.designsystem.theme.components.HorizontalDivi
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.OnVisibleRangeChangeEffect
-import io.element.android.libraries.preferences.api.store.NotificationSoundUnavailableState
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 
@@ -70,7 +69,6 @@ fun RoomListContentView(
     onConfirmRecoveryKeyClick: () -> Unit,
     onRoomClick: (RoomListRoomSummary) -> Unit,
     onCreateRoomClick: () -> Unit,
-    onOpenNotificationSettingsClick: () -> Unit,
     contentPadding: PaddingValues,
     modifier: Modifier = Modifier,
 ) {
@@ -103,7 +101,6 @@ fun RoomListContentView(
                 onSetUpRecoveryClick = onSetUpRecoveryClick,
                 onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
                 onRoomClick = onRoomClick,
-                onOpenNotificationSettingsClick = onOpenNotificationSettingsClick,
                 lazyListState = lazyListState,
                 contentPadding = contentPadding,
             )
@@ -184,7 +181,6 @@ private fun RoomsView(
     onSetUpRecoveryClick: () -> Unit,
     onConfirmRecoveryKeyClick: () -> Unit,
     onRoomClick: (RoomListRoomSummary) -> Unit,
-    onOpenNotificationSettingsClick: () -> Unit,
     contentPadding: PaddingValues,
     lazyListState: LazyListState,
     modifier: Modifier = Modifier,
@@ -205,7 +201,6 @@ private fun RoomsView(
             onSetUpRecoveryClick = onSetUpRecoveryClick,
             onConfirmRecoveryKeyClick = onConfirmRecoveryKeyClick,
             onRoomClick = onRoomClick,
-            onOpenNotificationSettingsClick = onOpenNotificationSettingsClick,
             contentPadding = contentPadding,
             lazyListState = lazyListState,
             modifier = modifier.fillMaxSize(),
@@ -221,7 +216,6 @@ private fun RoomsViewList(
     onSetUpRecoveryClick: () -> Unit,
     onConfirmRecoveryKeyClick: () -> Unit,
     onRoomClick: (RoomListRoomSummary) -> Unit,
-    onOpenNotificationSettingsClick: () -> Unit,
     contentPadding: PaddingValues,
     lazyListState: LazyListState,
     modifier: Modifier = Modifier,
@@ -268,15 +262,6 @@ private fun RoomsViewList(
                     item {
                         NewNotificationSoundBanner(
                             onDismissClick = { eventSink(RoomListEvent.DismissNewNotificationSoundBanner) },
-                        )
-                    }
-                }
-                state.notificationSoundUnavailableState != NotificationSoundUnavailableState.None -> {
-                    item {
-                        SoundUnavailableBanner(
-                            state = state.notificationSoundUnavailableState,
-                            onChooseSoundClick = onOpenNotificationSettingsClick,
-                            onDismissClick = { eventSink(RoomListEvent.DismissSoundUnavailableBanner) },
                         )
                     }
                 }
@@ -368,7 +353,6 @@ internal fun RoomListContentViewPreview(@PreviewParameter(RoomListContentStatePr
         onConfirmRecoveryKeyClick = {},
         onRoomClick = {},
         onCreateRoomClick = {},
-        onOpenNotificationSettingsClick = {},
         lazyListState = rememberLazyListState(),
         contentPadding = PaddingValues(0.dp),
     )

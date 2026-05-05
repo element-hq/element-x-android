@@ -18,8 +18,8 @@ import io.element.android.features.announcement.impl.fullscreen.FullscreenAnnoun
 import io.element.android.features.announcement.impl.store.AnnouncementStatus
 import io.element.android.features.announcement.impl.store.AnnouncementStore
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 
 @ContributesBinding(AppScope::class)
 class DefaultAnnouncementService(
@@ -32,9 +32,6 @@ class DefaultAnnouncementService(
             Announcement.NewNotificationSound -> {
                 announcementStore.setAnnouncementStatus(Announcement.NewNotificationSound, AnnouncementStatus.Show)
             }
-            Announcement.SoundUnavailable -> {
-                announcementStore.setAnnouncementStatus(Announcement.SoundUnavailable, AnnouncementStatus.Show)
-            }
         }
     }
 
@@ -43,19 +40,14 @@ class DefaultAnnouncementService(
     }
 
     override fun announcementsToShowFlow(): Flow<List<Announcement>> {
-        return combine(
-            announcementStore.announcementStatusFlow(Announcement.NewNotificationSound),
-            announcementStore.announcementStatusFlow(Announcement.SoundUnavailable),
-        ) { newNotificationSoundStatus, soundUnavailableStatus ->
-            buildList {
-                if (newNotificationSoundStatus == AnnouncementStatus.Show) {
-                    add(Announcement.NewNotificationSound)
-                }
-                if (soundUnavailableStatus == AnnouncementStatus.Show) {
-                    add(Announcement.SoundUnavailable)
+        return announcementStore.announcementStatusFlow(Announcement.NewNotificationSound)
+            .map { newNotificationSoundStatus ->
+                buildList {
+                    if (newNotificationSoundStatus == AnnouncementStatus.Show) {
+                        add(Announcement.NewNotificationSound)
+                    }
                 }
             }
-        }
     }
 
     private suspend fun showFullscreenAnnouncement(announcement: Announcement.Fullscreen) {

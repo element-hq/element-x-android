@@ -50,6 +50,8 @@ sealed interface NotificationSound {
 data class NotificationSoundChannelConfig(
     val messageSound: NotificationSound,
     val messageSoundVersion: Int,
+    val messageSoundDisplayName: String?,
     val callRingtone: NotificationSound,
     val callRingtoneVersion: Int,
+    val callRingtoneDisplayName: String?,
 )

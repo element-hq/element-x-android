@@ -15,6 +15,8 @@ import io.element.android.tests.testutils.lambda.lambdaError
 class FakeNotificationSoundUpdater(
     private val recreateNoisyChannelLambda: (sound: NotificationSound, version: Int) -> Unit = { _, _ -> lambdaError() },
     private val recreateRingingCallChannelLambda: (sound: NotificationSound, version: Int) -> Unit = { _, _ -> lambdaError() },
+    private val readNoisyChannelSoundLambda: () -> NotificationSound? = { null },
+    private val readRingingCallChannelSoundLambda: () -> NotificationSound? = { null },
 ) : NotificationSoundUpdater {
     override fun recreateNoisyChannel(sound: NotificationSound, version: Int) {
         recreateNoisyChannelLambda(sound, version)
@@ -23,4 +25,8 @@ class FakeNotificationSoundUpdater(
     override fun recreateRingingCallChannel(sound: NotificationSound, version: Int) {
         recreateRingingCallChannelLambda(sound, version)
     }
+
+    override suspend fun readNoisyChannelSound(): NotificationSound? = readNoisyChannelSoundLambda()
+
+    override suspend fun readRingingCallChannelSound(): NotificationSound? = readRingingCallChannelSoundLambda()
 }

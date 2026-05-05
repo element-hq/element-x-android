@@ -342,10 +342,6 @@ class LoggedInFlowNode(
                         backstack.push(NavTarget.Settings())
                     }
 
-                    override fun navigateToGlobalNotificationSettings() {
-                        backstack.push(NavTarget.Settings(PreferencesEntryPoint.InitialTarget.NotificationSettings))
-                    }
-
                     override fun navigateToCreateRoom() {
                         backstack.push(NavTarget.CreateRoom)
                     }

@@ -60,8 +60,8 @@ open class NotificationSettingsStateProvider : PreviewParameterProvider<Notifica
                 callRingtoneDisplayName = "Silent",
             ),
             aValidNotificationSettingsState(
-                messageSoundWasReverted = true,
-                callRingtoneWasReverted = true,
+                messageSoundCopyError = true,
+                callRingtoneCopyError = true,
             ),
         )
 }
@@ -82,10 +82,10 @@ fun aValidNotificationSettingsState(
     fullScreenIntentPermissionsState: FullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(),
     messageSound: NotificationSound = NotificationSound.SystemDefault,
     messageSoundDisplayName: String = "Default",
-    messageSoundWasReverted: Boolean = false,
+    messageSoundCopyError: Boolean = false,
     callRingtone: NotificationSound = NotificationSound.SystemDefault,
     callRingtoneDisplayName: String = "Default",
-    callRingtoneWasReverted: Boolean = false,
+    callRingtoneCopyError: Boolean = false,
     eventSink: (NotificationSettingsEvents) -> Unit = {},
 ) = NotificationSettingsState(
     matrixSettings = NotificationSettingsState.MatrixSettings.Valid(
@@ -107,12 +107,12 @@ fun aValidNotificationSettingsState(
     messageSound = NotificationSettingsState.SoundChannelUiState(
         sound = messageSound,
         displayName = messageSoundDisplayName,
-        wasReverted = messageSoundWasReverted,
+        copyError = messageSoundCopyError,
     ),
     callRingtone = NotificationSettingsState.SoundChannelUiState(
         sound = callRingtone,
         displayName = callRingtoneDisplayName,
-        wasReverted = callRingtoneWasReverted,
+        copyError = callRingtoneCopyError,
     ),
     eventSink = eventSink,
 )
@@ -136,12 +136,12 @@ fun aInvalidNotificationSettingsState(
     messageSound = NotificationSettingsState.SoundChannelUiState(
         sound = NotificationSound.SystemDefault,
         displayName = "Default",
-        wasReverted = false,
+        copyError = false,
     ),
     callRingtone = NotificationSettingsState.SoundChannelUiState(
         sound = NotificationSound.SystemDefault,
         displayName = "Default",
-        wasReverted = false,
+        copyError = false,
     ),
     eventSink = eventSink,
 )

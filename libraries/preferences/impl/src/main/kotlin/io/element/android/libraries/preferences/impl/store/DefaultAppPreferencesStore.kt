@@ -8,7 +8,6 @@
 
 package io.element.android.libraries.preferences.impl.store
 
-import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
@@ -24,7 +23,6 @@ import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.api.store.NotificationSound
 import io.element.android.libraries.preferences.api.store.NotificationSound.Companion.toStored
 import io.element.android.libraries.preferences.api.store.NotificationSoundChannelConfig
-import io.element.android.libraries.preferences.api.store.NotificationSoundUnavailableState
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
@@ -39,9 +37,10 @@ private val logLevelKey = stringPreferencesKey("logLevel")
 private val traceLogPacksKey = stringPreferencesKey("traceLogPacks")
 private val messageSoundUriKey = stringPreferencesKey("notificationMessageSoundUri")
 private val messageSoundChannelVersionKey = intPreferencesKey("notificationMessageSoundChannelVersion")
+private val messageSoundDisplayNameKey = stringPreferencesKey("notificationMessageSoundDisplayName")
 private val callRingtoneUriKey = stringPreferencesKey("notificationCallRingtoneUri")
 private val callRingtoneChannelVersionKey = intPreferencesKey("notificationCallRingtoneChannelVersion")
-private val notificationSoundUnavailableStateKey = stringPreferencesKey("notificationSoundUnavailableState")
+private val callRingtoneDisplayNameKey = stringPreferencesKey("notificationCallRingtoneDisplayName")
 
 @ContributesBinding(AppScope::class)
 class DefaultAppPreferencesStore(
@@ -160,7 +159,7 @@ class DefaultAppPreferencesStore(
         return store.data.map { prefs -> NotificationSound.fromStored(prefs[messageSoundUriKey]) }
     }
 
-    override suspend fun setMessageSoundAndIncrementVersion(sound: NotificationSound): Int {
+    override suspend fun setMessageSoundAndIncrementVersion(sound: NotificationSound, title: String?): Int {
         var newVersion = 0
         store.edit { prefs ->
             val stored = sound.toStored()
@@ -169,17 +168,27 @@ class DefaultAppPreferencesStore(
             } else {
                 prefs.remove(messageSoundUriKey)
             }
+            // Clear title on non-Custom so the picker doesn't show a stale label after a revert.
+            if (sound is NotificationSound.Custom && !title.isNullOrBlank()) {
+                prefs[messageSoundDisplayNameKey] = title
+            } else {
+                prefs.remove(messageSoundDisplayNameKey)
+            }
             newVersion = (prefs[messageSoundChannelVersionKey] ?: 0) + 1
             prefs[messageSoundChannelVersionKey] = newVersion
         }
         return newVersion
     }
 
+    override fun getMessageSoundDisplayNameFlow(): Flow<String?> {
+        return store.data.map { prefs -> prefs[messageSoundDisplayNameKey] }
+    }
+
     override fun getCallRingtoneFlow(): Flow<NotificationSound> {
         return store.data.map { prefs -> NotificationSound.fromStored(prefs[callRingtoneUriKey]) }
     }
 
-    override suspend fun setCallRingtoneAndIncrementVersion(sound: NotificationSound): Int {
+    override suspend fun setCallRingtoneAndIncrementVersion(sound: NotificationSound, title: String?): Int {
         var newVersion = 0
         store.edit { prefs ->
             val stored = sound.toStored()
@@ -188,10 +197,19 @@ class DefaultAppPreferencesStore(
             } else {
                 prefs.remove(callRingtoneUriKey)
             }
+            if (sound is NotificationSound.Custom && !title.isNullOrBlank()) {
+                prefs[callRingtoneDisplayNameKey] = title
+            } else {
+                prefs.remove(callRingtoneDisplayNameKey)
+            }
             newVersion = (prefs[callRingtoneChannelVersionKey] ?: 0) + 1
             prefs[callRingtoneChannelVersionKey] = newVersion
         }
         return newVersion
+    }
+
+    override fun getCallRingtoneDisplayNameFlow(): Flow<String?> {
+        return store.data.map { prefs -> prefs[callRingtoneDisplayNameKey] }
     }
 
     override suspend fun getNotificationSoundChannelConfig(): NotificationSoundChannelConfig {
@@ -199,47 +217,11 @@ class DefaultAppPreferencesStore(
         return NotificationSoundChannelConfig(
             messageSound = NotificationSound.fromStored(prefs[messageSoundUriKey]),
             messageSoundVersion = prefs[messageSoundChannelVersionKey] ?: 0,
+            messageSoundDisplayName = prefs[messageSoundDisplayNameKey],
             callRingtone = NotificationSound.fromStored(prefs[callRingtoneUriKey]),
             callRingtoneVersion = prefs[callRingtoneChannelVersionKey] ?: 0,
+            callRingtoneDisplayName = prefs[callRingtoneDisplayNameKey],
         )
-    }
-
-    override fun getNotificationSoundUnavailableStateFlow(): Flow<NotificationSoundUnavailableState> {
-        return store.data.map { prefs -> prefs.readNotificationSoundUnavailableState() }
-    }
-
-    override suspend fun setNotificationSoundUnavailableState(state: NotificationSoundUnavailableState) {
-        store.edit { prefs ->
-            if (state == NotificationSoundUnavailableState.None) {
-                prefs.remove(notificationSoundUnavailableStateKey)
-            } else {
-                prefs[notificationSoundUnavailableStateKey] = state.name
-            }
-        }
-    }
-
-    override suspend fun clearMessageSoundUnavailable() {
-        // Atomic read-modify-write inside the same edit block so a concurrent transition cannot
-        // observe an intermediate state.
-        store.edit { prefs ->
-            val next = prefs.readNotificationSoundUnavailableState().withoutMessageSound()
-            if (next == NotificationSoundUnavailableState.None) {
-                prefs.remove(notificationSoundUnavailableStateKey)
-            } else {
-                prefs[notificationSoundUnavailableStateKey] = next.name
-            }
-        }
-    }
-
-    override suspend fun clearCallRingtoneUnavailable() {
-        store.edit { prefs ->
-            val next = prefs.readNotificationSoundUnavailableState().withoutCallRingtone()
-            if (next == NotificationSoundUnavailableState.None) {
-                prefs.remove(notificationSoundUnavailableStateKey)
-            } else {
-                prefs[notificationSoundUnavailableStateKey] = next.name
-            }
-        }
     }
 
     override suspend fun reset() {
@@ -254,10 +236,3 @@ private fun BuildMeta.defaultLogLevel(): LogLevel {
         BuildType.RELEASE -> LogLevel.INFO
     }
 }
-
-// Defaults to None if the persisted name doesn't decode (e.g. an enum value was renamed and the
-// user is upgrading) — same effect as having never had a sanitization fire.
-private fun Preferences.readNotificationSoundUnavailableState(): NotificationSoundUnavailableState =
-    this[notificationSoundUnavailableStateKey]
-        ?.let { stored -> NotificationSoundUnavailableState.entries.firstOrNull { it.name == stored } }
-        ?: NotificationSoundUnavailableState.None

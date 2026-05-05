@@ -13,7 +13,6 @@ import io.element.android.features.home.impl.model.RoomListRoomSummary
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.fullscreenintent.api.aFullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.core.RoomId
-import io.element.android.libraries.preferences.api.store.NotificationSoundUnavailableState
 import io.element.android.libraries.push.api.battery.BatteryOptimizationState
 import io.element.android.libraries.push.api.battery.aBatteryOptimizationState
 import kotlinx.collections.immutable.ImmutableList
@@ -31,16 +30,12 @@ open class RoomListContentStateProvider : PreviewParameterProvider<RoomListConte
             aRoomsContentState(
                 showNewNotificationSoundBanner = true,
             ),
-            aRoomsContentState(
-                notificationSoundUnavailableState = NotificationSoundUnavailableState.Both,
-            ),
         )
 }
 
 internal fun aRoomsContentState(
     securityBannerState: SecurityBannerState = SecurityBannerState.None,
     showNewNotificationSoundBanner: Boolean = false,
-    notificationSoundUnavailableState: NotificationSoundUnavailableState = NotificationSoundUnavailableState.None,
     summaries: ImmutableList<RoomListRoomSummary> = aRoomListRoomSummaryList(),
     fullScreenIntentPermissionsState: FullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(),
     batteryOptimizationState: BatteryOptimizationState = aBatteryOptimizationState(),
@@ -48,7 +43,6 @@ internal fun aRoomsContentState(
 ) = RoomListContentState.Rooms(
     securityBannerState = securityBannerState,
     showNewNotificationSoundBanner = showNewNotificationSoundBanner,
-    notificationSoundUnavailableState = notificationSoundUnavailableState,
     fullScreenIntentPermissionsState = fullScreenIntentPermissionsState,
     batteryOptimizationState = batteryOptimizationState,
     summaries = summaries,

@@ -66,52 +66,6 @@ class DefaultAnnouncementServiceTest {
         }
     }
 
-    @Test
-    fun `when showing SoundUnavailable announcement, status is set to Show even if previously dismissed`() = runTest {
-        val announcementStore = InMemoryAnnouncementStore()
-        val sut = createDefaultAnnouncementService(
-            announcementStore = announcementStore,
-        )
-        assertThat(announcementStore.announcementStatusFlow(Announcement.SoundUnavailable).first()).isEqualTo(AnnouncementStatus.NeverShown)
-        sut.showAnnouncement(Announcement.SoundUnavailable)
-        assertThat(announcementStore.announcementStatusFlow(Announcement.SoundUnavailable).first()).isEqualTo(AnnouncementStatus.Show)
-        sut.onAnnouncementDismissed(Announcement.SoundUnavailable)
-        assertThat(announcementStore.announcementStatusFlow(Announcement.SoundUnavailable).first()).isEqualTo(AnnouncementStatus.Shown)
-        // A subsequent boot detecting another stale URI should re-show the banner.
-        sut.showAnnouncement(Announcement.SoundUnavailable)
-        assertThat(announcementStore.announcementStatusFlow(Announcement.SoundUnavailable).first()).isEqualTo(AnnouncementStatus.Show)
-    }
-
-    @Test
-    fun `showAnnouncement(SoundUnavailable) is idempotent when already in Show`() = runTest {
-        val announcementStore = InMemoryAnnouncementStore()
-        val sut = createDefaultAnnouncementService(announcementStore = announcementStore)
-        sut.showAnnouncement(Announcement.SoundUnavailable)
-        // A second showAnnouncement before the user dismisses the first must not crash, throw, or
-        // flip the state away from Show. Sanitization on subsequent boots can fire repeatedly if
-        // the URI keeps failing — the service has to absorb that without surprise.
-        sut.showAnnouncement(Announcement.SoundUnavailable)
-        sut.showAnnouncement(Announcement.SoundUnavailable)
-        assertThat(announcementStore.announcementStatusFlow(Announcement.SoundUnavailable).first()).isEqualTo(AnnouncementStatus.Show)
-    }
-
-    @Test
-    fun `announcementsToShowFlow surfaces SoundUnavailable independently of NewNotificationSound`() = runTest {
-        val announcementStore = InMemoryAnnouncementStore()
-        val sut = createDefaultAnnouncementService(
-            announcementStore = announcementStore,
-        )
-        sut.announcementsToShowFlow().test {
-            assertThat(awaitItem()).isEmpty()
-            announcementStore.setAnnouncementStatus(Announcement.SoundUnavailable, AnnouncementStatus.Show)
-            assertThat(awaitItem()).containsExactly(Announcement.SoundUnavailable)
-            announcementStore.setAnnouncementStatus(Announcement.NewNotificationSound, AnnouncementStatus.Show)
-            assertThat(awaitItem()).containsExactly(Announcement.NewNotificationSound, Announcement.SoundUnavailable)
-            announcementStore.setAnnouncementStatus(Announcement.SoundUnavailable, AnnouncementStatus.Shown)
-            assertThat(awaitItem()).containsExactly(Announcement.NewNotificationSound)
-        }
-    }
-
     private fun createDefaultAnnouncementService(
         announcementStore: AnnouncementStore = InMemoryAnnouncementStore(),
         announcementPresenter: AnnouncementPresenter = AnnouncementPresenter(announcementStore),

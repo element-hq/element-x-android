@@ -12,5 +12,6 @@
     <string name="screen_notification_settings_call_ringtone_label">Call ringtone</string>
     <string name="screen_notification_settings_sound_default">Default</string>
     <string name="screen_notification_settings_sound_silent">Silent</string>
-    <string name="screen_notification_settings_sound_reverted_alert_message">Your previously selected sound is no longer available; reset to default.</string>
+    <string name="screen_notification_settings_sound_custom_fallback">Custom</string>
+    <string name="screen_notification_settings_sound_copy_error_message">Couldn\'t use this sound. Please try another.</string>
 </resources>

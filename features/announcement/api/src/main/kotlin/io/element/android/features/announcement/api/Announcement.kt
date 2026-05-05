@@ -17,6 +17,4 @@ sealed interface Announcement {
     }
 
     data object NewNotificationSound : Announcement
-
-    data object SoundUnavailable : Announcement
 }
