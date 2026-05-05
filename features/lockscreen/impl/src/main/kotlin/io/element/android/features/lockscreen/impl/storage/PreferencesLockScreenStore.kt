@@ -70,12 +70,6 @@ class PreferencesLockScreenStore(
         }
     }
 
-    override fun hasPinCode(): Flow<Boolean> {
-        return dataStore.data.map { preferences ->
-            preferences[pinCodeKey] != null
-        }
-    }
-
     override fun isBiometricUnlockAllowed(): Flow<Boolean> {
         return dataStore.data.map { preferences ->
             preferences[biometricUnlockKey] ?: false
