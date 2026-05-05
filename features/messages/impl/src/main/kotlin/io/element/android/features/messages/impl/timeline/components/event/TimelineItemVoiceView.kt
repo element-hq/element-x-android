@@ -9,11 +9,9 @@
 package io.element.android.features.messages.impl.timeline.components.event
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -43,8 +41,6 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.components.layout.ContentAvoidingLayoutData
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContentProvider
-import io.element.android.libraries.designsystem.atomic.atoms.PlaybackSpeedButton
-import io.element.android.libraries.designsystem.components.media.WaveformPlaybackView
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
@@ -112,32 +108,16 @@ fun TimelineItemVoiceView(
             }
         }
         Spacer(Modifier.width(8.dp))
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(2.dp),
-        ) {
-            PlaybackSpeedButton(
-                speed = state.playbackSpeed,
-                onClick = { state.eventSink(VoiceMessageEvent.ChangePlaybackSpeed) },
-            )
-            Text(
-                text = state.time,
-                color = ElementTheme.colors.textSecondary,
-                style = ElementTheme.typography.fontBodySmMedium,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-        }
-        Spacer(Modifier.width(8.dp))
-        WaveformPlaybackView(
-            showCursor = state.showCursor,
-            playbackProgress = state.progress,
-            waveform = content.waveform,
-            modifier = Modifier
-                .weight(1f)
-                .height(34.dp),
-            seekEnabled = !isTalkbackActive(),
-            onSeek = { state.eventSink(VoiceMessageEvent.Seek(it)) },
+        // Alpha demo: WeChat-style minimal voice bubble — drop the playback-speed control
+        // and the waveform. Users get a clean [play] [duration] strip; speed and seek go
+        // away as goal-fit features for casual chat.
+        Text(
+            text = state.time,
+            color = ElementTheme.colors.textSecondary,
+            style = ElementTheme.typography.fontBodyMdMedium,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier.padding(end = 8.dp),
         )
     }
 }
