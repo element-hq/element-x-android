@@ -150,10 +150,17 @@ class LoginFlowNode(
             NavTarget.CheckClassicFlow -> {
                 val callback = object : ClassicFlowNode.Callback {
                     override fun navigateToOnBoarding(allowBackNavigation: Boolean) {
+                        // Skip the OnBoarding "Welcome to Alpha / Sign in / Create account / QR"
+                        // chooser — the Alpha demo only ever uses the bundled homeserver
+                        // (AuthenticationConfig.MATRIX_ORG_URL), so we go straight to the
+                        // ConfirmAccountProvider screen, which auto-submits and pushes the
+                        // password form. From the user's perspective this collapses three
+                        // intermediate screens into one short loading flash.
+                        val target = NavTarget.ConfirmAccountProvider(isAccountCreation = false)
                         if (allowBackNavigation) {
-                            backstack.push(NavTarget.OnBoarding(showBackButton = true))
+                            backstack.push(target)
                         } else {
-                            backstack.replace(NavTarget.OnBoarding(showBackButton = false))
+                            backstack.replace(target)
                         }
                     }
 

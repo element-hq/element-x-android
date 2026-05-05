@@ -9,6 +9,7 @@
 package io.element.android.features.login.impl.screens.confirmaccountprovider
 
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -54,6 +55,13 @@ class ConfirmAccountProviderPresenter(
                 }
                 ConfirmAccountProviderEvents.ClearError -> loginHelper.clearError()
             }
+        }
+
+        // Alpha demo: auto-submit on first composition so the user never sees the
+        // "You're about to sign in to <server>" intermediate screen. The hardcoded
+        // homeserver is non-negotiable for this build, so the click is pure friction.
+        LaunchedEffect(Unit) {
+            handleEvent(ConfirmAccountProviderEvents.Continue)
         }
 
         return ConfirmAccountProviderState(
