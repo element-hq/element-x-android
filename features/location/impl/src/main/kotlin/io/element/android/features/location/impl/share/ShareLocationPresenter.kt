@@ -29,12 +29,13 @@ import io.element.android.features.location.impl.common.checkLocationConstraints
 import io.element.android.features.location.impl.common.permissions.PermissionsEvents
 import io.element.android.features.location.impl.common.permissions.PermissionsPresenter
 import io.element.android.features.location.impl.common.permissions.PermissionsState
+import io.element.android.features.location.impl.common.SendLiveLocationPermissions
+import io.element.android.features.location.impl.common.sendLiveLocationPermissions
 import io.element.android.features.location.impl.common.toDialogState
 import io.element.android.features.location.impl.live.LiveLocationStore
 import io.element.android.features.messages.api.MessageComposerContext
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
-import io.element.android.libraries.architecture.runCatchingUpdatingState
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.meta.BuildMeta
@@ -45,11 +46,11 @@ import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.location.AssetType
+import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
@@ -91,17 +92,21 @@ class ShareLocationPresenter(
         }
         val startLiveLocationAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
         val currentUser by client.userProfile.collectAsState()
+        val sendLiveLocationPermissions by room.permissionsAsState(SendLiveLocationPermissions.DEFAULT) { perms ->
+            perms.sendLiveLocationPermissions()
+        }
         val scope = rememberCoroutineScope()
 
         fun checkLocationConstraints() {
-            val locationConstraints = checkLocationConstraints(permissionsState, locationActions)
+            // No need to check SendLiveLocationPermissions here
+            val locationConstraints = checkLocationConstraints(permissionsState, locationActions, SendLiveLocationPermissions.GRANTED)
             dialogState = ShareLocationState.Dialog.Constraints(locationConstraints.toDialogState())
             trackUserPosition = locationConstraints is LocationConstraintsCheck.Success
         }
 
-        suspend fun computeDialogState(): ShareLocationState.Dialog {
+        suspend fun computeLiveLocationDialogState(): ShareLocationState.Dialog {
             val hasAcceptedDisclaimer = liveLocationStore.hasAcceptedLiveLocationDisclaimer()
-            val constraintsResult = checkLocationConstraints(permissionsState, locationActions)
+            val constraintsResult = checkLocationConstraints(permissionsState, locationActions, sendLiveLocationPermissions)
             return when {
                 !hasAcceptedDisclaimer -> {
                     ShareLocationState.Dialog.LiveLocationDisclaimer
@@ -137,12 +142,12 @@ class ShareLocationPresenter(
                     dialogState = ShareLocationState.Dialog.None
                 }
                 ShareLocationEvent.InitiateLiveLocationShare -> scope.launch {
-                    dialogState = computeDialogState()
+                    dialogState = computeLiveLocationDialogState()
                 }
                 ShareLocationEvent.AcceptLiveLocationDisclaimer -> scope.launch {
                     liveLocationStore.setAcceptedLiveLocationDisclaimer()
                         .onSuccess {
-                            dialogState = computeDialogState()
+                            dialogState = computeLiveLocationDialogState()
                         }
                 }
                 is ShareLocationEvent.StartLiveLocationShare -> scope.launch {

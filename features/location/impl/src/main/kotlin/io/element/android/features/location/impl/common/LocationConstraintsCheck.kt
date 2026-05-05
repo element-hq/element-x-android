@@ -16,13 +16,16 @@ sealed interface LocationConstraintsCheck {
     data object PermissionRationale : LocationConstraintsCheck
     data object PermissionDenied : LocationConstraintsCheck
     data object LocationServiceDisabled : LocationConstraintsCheck
+    data object NotEnoughPowerLevel : LocationConstraintsCheck
 }
 
 fun checkLocationConstraints(
     permissionsState: PermissionsState,
     locationActions: LocationActions,
+    sendLiveLocationPermissions: SendLiveLocationPermissions,
 ): LocationConstraintsCheck {
     return when {
+        !sendLiveLocationPermissions.hasAll -> LocationConstraintsCheck.NotEnoughPowerLevel
         permissionsState.isAnyGranted -> {
             if (locationActions.isLocationEnabled()) {
                 LocationConstraintsCheck.Success
@@ -41,5 +44,6 @@ fun LocationConstraintsCheck.toDialogState(): LocationConstraintsDialogState {
         LocationConstraintsCheck.PermissionRationale -> LocationConstraintsDialogState.PermissionRationale
         LocationConstraintsCheck.PermissionDenied -> LocationConstraintsDialogState.PermissionDenied
         LocationConstraintsCheck.LocationServiceDisabled -> LocationConstraintsDialogState.LocationServiceDisabled
+        LocationConstraintsCheck.NotEnoughPowerLevel -> LocationConstraintsDialogState.NotEnoughPowerLevel
     }
 }

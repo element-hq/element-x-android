@@ -10,6 +10,8 @@ package io.element.android.features.location.impl.common.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.window.Dialog
+import io.element.android.libraries.designsystem.components.dialogs.AlertDialog
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.ui.strings.CommonStrings
 
@@ -42,6 +44,10 @@ fun LocationConstraintsDialog(
             onDismiss = onDismiss,
             submitText = stringResource(CommonStrings.action_continue),
         )
+        LocationConstraintsDialogState.NotEnoughPowerLevel -> AlertDialog(
+            content = "You do not have permissions to share your live location in this room.",
+            onDismiss = onDismiss
+        )
     }
 }
 
@@ -51,4 +57,5 @@ sealed interface LocationConstraintsDialogState {
     data object PermissionRationale : LocationConstraintsDialogState
     data object PermissionDenied : LocationConstraintsDialogState
     data object LocationServiceDisabled : LocationConstraintsDialogState
+    data object NotEnoughPowerLevel: LocationConstraintsDialogState
 }
