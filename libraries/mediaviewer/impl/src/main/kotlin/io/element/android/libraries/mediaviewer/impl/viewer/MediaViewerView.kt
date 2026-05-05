@@ -182,6 +182,7 @@ fun MediaViewerView(
             // Pre-load previous and next pages
             beyondViewportPageCount = 1,
             key = { index -> state.listData[index].pagerKey },
+            reverseLayout = true,
         ) { page ->
             when (val dataForPage = state.listData[page]) {
                 is MediaViewerPageData.Failure -> {
