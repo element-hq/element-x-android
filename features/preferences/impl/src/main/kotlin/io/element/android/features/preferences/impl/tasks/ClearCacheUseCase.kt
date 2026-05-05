@@ -11,7 +11,6 @@ package io.element.android.features.preferences.impl.tasks
 import android.content.Context
 import coil3.SingletonImageLoader
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Provider
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.preferences.impl.DefaultCacheService
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -33,7 +32,7 @@ class DefaultClearCacheUseCase(
     private val matrixClient: MatrixClient,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val defaultCacheService: DefaultCacheService,
-    private val okHttpClient: Provider<OkHttpClient>,
+    private val okHttpClient: () -> OkHttpClient,
     private val pushService: PushService,
     private val seenInvitesStore: SeenInvitesStore,
     private val activeRoomsHolder: ActiveRoomsHolder,
