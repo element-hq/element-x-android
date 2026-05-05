@@ -32,7 +32,10 @@ import io.element.android.features.location.impl.common.permissions.PermissionsS
 import io.element.android.features.location.impl.common.toDialogState
 import io.element.android.features.location.impl.live.LiveLocationStore
 import io.element.android.features.messages.api.MessageComposerContext
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.Presenter
+import io.element.android.libraries.architecture.runCatchingUpdatingState
+import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.dateformatter.api.DurationFormatter
@@ -46,6 +49,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.textcomposer.model.MessageComposerMode
 import io.element.android.services.analytics.api.AnalyticsService
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
@@ -85,6 +89,7 @@ class ShareLocationPresenter(
         var dialogState: ShareLocationState.Dialog by remember {
             mutableStateOf(ShareLocationState.Dialog.None)
         }
+        val startLiveLocationAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
         val currentUser by client.userProfile.collectAsState()
         val scope = rememberCoroutineScope()
 
@@ -142,10 +147,12 @@ class ShareLocationPresenter(
                 }
                 is ShareLocationEvent.StartLiveLocationShare -> scope.launch {
                     dialogState = ShareLocationState.Dialog.None
-                    liveLocationShareManager.startShare(
-                        roomId = room.roomId,
-                        duration = event.duration,
-                    )
+                    startLiveLocationAction.runUpdatingState {
+                        liveLocationShareManager.startShare(
+                            roomId = room.roomId,
+                            duration = event.duration,
+                        )
+                    }
                 }
                 ShareLocationEvent.RequestPermissions -> {
                     dialogState = ShareLocationState.Dialog.None
@@ -161,6 +168,7 @@ class ShareLocationPresenter(
             hasLocationPermission = permissionsState.isAnyGranted,
             canShareLiveLocation = isLiveLocationSharingEnabled,
             appName = appName,
+            startLiveLocationAction = startLiveLocationAction.value,
             eventSink = ::handleEvent,
         )
     }

@@ -16,6 +16,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.SheetValue
@@ -43,8 +44,13 @@ import io.element.android.features.location.impl.common.ui.LocationFloatingActio
 import io.element.android.features.location.impl.common.ui.MapBottomSheetScaffold
 import io.element.android.features.location.impl.common.ui.UserLocationPuck
 import io.element.android.features.location.impl.common.ui.rememberUserLocationState
+import io.element.android.features.location.impl.share.ShareLocationEvent.StartLiveLocationShare
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.LocationPin
 import io.element.android.libraries.designsystem.components.PinVariant
+import io.element.android.libraries.designsystem.components.async.AsyncIndicator
+import io.element.android.libraries.designsystem.components.async.AsyncIndicatorHost
+import io.element.android.libraries.designsystem.components.async.rememberAsyncIndicatorState
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
@@ -93,8 +99,7 @@ fun ShareLocationView(
         is ShareLocationState.Dialog.LiveLocationDurations -> LiveLocationDurationDialog(
             durations = dialogState.durations,
             onSelectDuration = { duration ->
-                state.eventSink(ShareLocationEvent.StartLiveLocationShare(duration))
-                navigateUp()
+                state.eventSink(StartLiveLocationShare(duration))
             },
             onDismiss = { state.eventSink(ShareLocationEvent.DismissDialog) },
         )
@@ -164,8 +169,44 @@ fun ShareLocationView(
                     .align(Alignment.TopEnd)
                     .padding(all = 16.dp),
             )
+            StartLiveLocationActionView(state.startLiveLocationAction, navigateUp)
         }
     )
+}
+
+@Composable
+private fun StartLiveLocationActionView(
+    action: AsyncAction<Unit>,
+    onActionSuccess: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier = modifier) {
+        val asyncIndicatorState = rememberAsyncIndicatorState()
+        AsyncIndicatorHost(state = asyncIndicatorState)
+
+        when (action) {
+            is AsyncAction.Loading -> {
+                LaunchedEffect(action) {
+                    asyncIndicatorState.enqueue {
+                        AsyncIndicator.Loading(text = stringResource(CommonStrings.common_waiting_live_location))
+                    }
+                }
+            }
+            is AsyncAction.Failure -> {
+                LaunchedEffect(action) {
+                    asyncIndicatorState.enqueue(AsyncIndicator.DURATION_SHORT) {
+                        AsyncIndicator.Failure(
+                            text = stringResource(CommonStrings.common_something_went_wrong),
+                        )
+                    }
+                }
+            }
+            is AsyncAction.Success -> {
+                LaunchedEffect(action) { onActionSuccess() }
+            }
+            else -> Unit
+        }
+    }
 }
 
 @Composable

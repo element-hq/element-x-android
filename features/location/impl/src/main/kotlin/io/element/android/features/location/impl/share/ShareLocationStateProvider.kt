@@ -10,6 +10,7 @@ package io.element.android.features.location.impl.share
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.persistentListOf
@@ -85,6 +86,7 @@ fun aShareLocationState(
     hasLocationPermission: Boolean = false,
     canShareLiveLocation: Boolean = false,
     appName: String = APP_NAME,
+    startLiveLocationAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     eventSink: (ShareLocationEvent) -> Unit = {},
 ): ShareLocationState {
     return ShareLocationState(
@@ -94,6 +96,7 @@ fun aShareLocationState(
         hasLocationPermission = hasLocationPermission,
         canShareLiveLocation = canShareLiveLocation,
         appName = appName,
+        startLiveLocationAction = startLiveLocationAction,
         eventSink = eventSink
     )
 }
