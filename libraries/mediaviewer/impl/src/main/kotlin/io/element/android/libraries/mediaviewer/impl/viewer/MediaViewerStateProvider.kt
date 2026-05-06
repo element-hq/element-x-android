@@ -13,6 +13,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.media.WaveFormSamples
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -179,7 +180,7 @@ open class MediaViewerStateProvider : PreviewParameterProvider<MediaViewerState>
                 )
             ),
             anImageMediaInfo(
-                senderName = "Alice",
+                senderName = USER_NAME_ALICE,
                 dateSent = "21 NOV, 2024",
                 caption = LONG_CAPTION,
             ).let {

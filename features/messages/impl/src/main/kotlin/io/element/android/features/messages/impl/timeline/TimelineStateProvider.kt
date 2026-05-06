@@ -29,6 +29,8 @@ import io.element.android.features.messages.impl.typing.aTypingNotificationState
 import io.element.android.features.roomcall.api.aStandByCallState
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.preview.ROOM_NAME
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.TransactionId
 import io.element.android.libraries.matrix.api.core.UniqueId
@@ -143,7 +145,7 @@ internal fun aTimelineItemEvent(
     isMine: Boolean = false,
     isEditable: Boolean = false,
     canBeRepliedTo: Boolean = false,
-    senderDisplayName: String = "Sender",
+    senderDisplayName: String = USER_NAME_ALICE,
     displayNameAmbiguous: Boolean = false,
     content: TimelineItemEventContent = aTimelineItemTextContent(),
     groupPosition: TimelineItemGroupPosition = TimelineItemGroupPosition.None,
@@ -253,7 +255,7 @@ internal fun aGroupedEvents(
 }
 
 internal fun aTimelineRoomInfo(
-    name: String = "Room name",
+    name: String = ROOM_NAME,
     isDm: Boolean = false,
     userHasPermissionToSendMessage: Boolean = true,
     pinnedEventIds: List<EventId> = emptyList(),

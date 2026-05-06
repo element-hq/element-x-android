@@ -13,6 +13,7 @@ import io.element.android.features.location.api.Location
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import kotlinx.collections.immutable.toImmutableList
@@ -69,7 +70,7 @@ fun aShowLocationState(
 
 fun aLocationShareItem(
     userId: UserId = UserId("@alice:matrix.org"),
-    displayName: String = "Alice",
+    displayName: String = USER_NAME_ALICE,
     avatarData: AvatarData = AvatarData(
         id = userId.value,
         name = displayName,

@@ -30,6 +30,10 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
+import io.element.android.libraries.designsystem.preview.USER_NAME_BOB
+import io.element.android.libraries.designsystem.preview.USER_NAME_CHARLIE
+import io.element.android.libraries.designsystem.preview.USER_NAME_DAVID
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.spaces.SpaceRoomVisibility
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -120,10 +124,10 @@ internal fun SpaceHeaderViewPreview() = ElementPreview {
         topicMaxLines = 2,
         visibility = SpaceRoomVisibility.Public,
         heroes = persistentListOf(
-            aMatrixUser(id = "@1:d", displayName = "Alice", avatarUrl = "aUrl"),
-            aMatrixUser(id = "@2:d", displayName = "Bob"),
-            aMatrixUser(id = "@3:d", displayName = "Charlie", avatarUrl = "aUrl"),
-            aMatrixUser(id = "@4:d", displayName = "Dave"),
+            aMatrixUser(id = "@1:d", displayName = USER_NAME_ALICE, avatarUrl = "aUrl"),
+            aMatrixUser(id = "@2:d", displayName = USER_NAME_BOB),
+            aMatrixUser(id = "@3:d", displayName = USER_NAME_CHARLIE, avatarUrl = "aUrl"),
+            aMatrixUser(id = "@4:d", displayName = USER_NAME_DAVID),
         ),
         numberOfMembers = 999,
     )

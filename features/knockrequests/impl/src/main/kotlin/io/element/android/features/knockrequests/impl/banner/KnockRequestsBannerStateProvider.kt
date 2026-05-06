@@ -11,6 +11,9 @@ package io.element.android.features.knockrequests.impl.banner
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.knockrequests.impl.data.KnockRequestPresentable
 import io.element.android.features.knockrequests.impl.data.aKnockRequestPresentable
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
+import io.element.android.libraries.designsystem.preview.USER_NAME_BOB
+import io.element.android.libraries.designsystem.preview.USER_NAME_CHARLIE
 import kotlinx.collections.immutable.toImmutableList
 
 class KnockRequestsBannerStateProvider : PreviewParameterProvider<KnockRequestsBannerState> {
@@ -29,15 +32,15 @@ class KnockRequestsBannerStateProvider : PreviewParameterProvider<KnockRequestsB
             aKnockRequestsBannerState(
                 knockRequests = listOf(
                     aKnockRequestPresentable(),
-                    aKnockRequestPresentable(displayName = "Alice")
+                    aKnockRequestPresentable(displayName = USER_NAME_ALICE)
                 )
             ),
             aKnockRequestsBannerState(
                 knockRequests = listOf(
                     aKnockRequestPresentable(),
-                    aKnockRequestPresentable(displayName = "Alice"),
-                    aKnockRequestPresentable(displayName = "Bob"),
-                    aKnockRequestPresentable(displayName = "Charlie")
+                    aKnockRequestPresentable(displayName = USER_NAME_ALICE),
+                    aKnockRequestPresentable(displayName = USER_NAME_BOB),
+                    aKnockRequestPresentable(displayName = USER_NAME_CHARLIE)
                 )
             ),
             aKnockRequestsBannerState(

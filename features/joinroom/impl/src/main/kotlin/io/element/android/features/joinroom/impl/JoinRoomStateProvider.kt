@@ -15,6 +15,9 @@ import io.element.android.features.invite.api.acceptdecline.anAcceptDeclineInvit
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.preview.ROOM_NAME
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
+import io.element.android.libraries.designsystem.preview.USER_NAME_BOB
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.RoomIdOrAlias
@@ -134,8 +137,8 @@ open class JoinRoomStateProvider : PreviewParameterProvider<JoinRoomState> {
                     joinAuthorisationStatus = JoinAuthorisationStatus.IsBanned(
                         banSender = InviteSender(
                             userId = UserId("@alice:domain"),
-                            displayName = "Alice",
-                            avatarData = AvatarData("alice", "Alice", size = AvatarSize.InviteSender),
+                            displayName = USER_NAME_ALICE,
+                            avatarData = AvatarData("alice", USER_NAME_ALICE, size = AvatarSize.InviteSender),
                             membershipChangeReason = "spamming"
                         ),
                         reason = "spamming",
@@ -222,7 +225,7 @@ fun aJoinRoomState(
 
 internal fun anInviteSender(
     userId: UserId = UserId("@bob:domain"),
-    displayName: String = "Bob",
+    displayName: String = USER_NAME_BOB,
     avatarData: AvatarData = AvatarData(userId.value, displayName, size = AvatarSize.InviteSender),
     membershipChangeReason: String? = null,
 ) = InviteSender(
@@ -234,7 +237,7 @@ internal fun anInviteSender(
 
 internal fun anInviteData(
     roomId: RoomId = A_ROOM_ID,
-    roomName: String = "Room name",
+    roomName: String = ROOM_NAME,
     isDm: Boolean = false,
 ) = InviteData(
     roomId = roomId,
