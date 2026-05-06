@@ -126,10 +126,7 @@ class RoomDetailsViewTest {
                 state = aRoomDetailsState(
                     eventSink = EventsRecorder(expectEvents = false),
                     canInvite = true,
-                    roomType = RoomDetailsType.Dm(
-                        aRoomMember(UserId("@me:local.org")),
-                        aRoomMember(UserId("@other:local.org"))
-                    ),
+                    roomType = RoomDetailsType.Dm(aRoomMember(UserId("@other:local.org"))),
                 ),
                 onJoinCallClick = callback,
             )
@@ -232,10 +229,7 @@ class RoomDetailsViewTest {
     fun `click on avatar test on DM`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<RoomDetailsEvent>(expectEvents = false)
         val state = aRoomDetailsState(
-            roomType = RoomDetailsType.Dm(
-                aRoomMember(),
-                aDmRoomMember(avatarUrl = "an_avatar_url"),
-            ),
+            roomType = RoomDetailsType.Dm(aDmRoomMember(avatarUrl = "an_avatar_url"),),
             roomName = "Daniel",
             eventSink = eventsRecorder,
         )
@@ -244,7 +238,7 @@ class RoomDetailsViewTest {
             state = state,
             openAvatarPreview = callback,
         )
-        onNodeWithTag(TestTags.memberDetailAvatar.value).performClick()
+        onNodeWithTag(TestTags.roomDetailAvatar.value).performClick()
         callback.assertSuccess()
     }
 
