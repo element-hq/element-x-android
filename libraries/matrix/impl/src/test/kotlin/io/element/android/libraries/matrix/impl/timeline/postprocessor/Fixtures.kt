@@ -12,12 +12,14 @@ import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.MembershipChange
 import io.element.android.libraries.matrix.api.timeline.item.event.OtherState
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.StateContent
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.A_USER_ID_2
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
+import io.element.android.libraries.matrix.test.timeline.aProfileChangeMessageContent
 import io.element.android.libraries.matrix.test.timeline.item.event.aRoomMembershipContent
 
 internal val timelineStartEvent = MatrixTimelineItem.Virtual(
@@ -35,6 +37,14 @@ internal val roomCreatorJoinEvent = MatrixTimelineItem.Event(
 internal val otherMemberJoinEvent = MatrixTimelineItem.Event(
     uniqueId = UniqueId("m.room.member_other"),
     event = anEventTimelineItem(content = aRoomMembershipContent(userId = A_USER_ID_2, change = MembershipChange.JOINED))
+)
+internal val otherMemberLeaveEvent = MatrixTimelineItem.Event(
+    uniqueId = UniqueId("m.room.member_leave"),
+    event = anEventTimelineItem(content = aRoomMembershipContent(userId = A_USER_ID_2, change = MembershipChange.LEFT))
+)
+internal val profileChangeEvent = MatrixTimelineItem.Event(
+    uniqueId = UniqueId("m.room.member_profile"),
+    event = anEventTimelineItem(content = aProfileChangeMessageContent(displayName = "New Name", prevDisplayName = "Old Name"))
 )
 internal val messageEvent = MatrixTimelineItem.Event(
     uniqueId = UniqueId("m.room.message"),
