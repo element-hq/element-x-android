@@ -10,6 +10,8 @@
 
 package io.element.android.features.space.impl.root
 
+import androidx.compose.foundation.text.input.clearText
+import androidx.compose.foundation.text.input.rememberTextFieldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -115,14 +117,27 @@ class SpacePresenter(
         // Track locally removed rooms for partial failure cases
         var removedRoomIds by remember { mutableStateOf<Set<RoomId>>(emptySet()) }
 
+        // Search mode state
+        var isSearchMode by remember { mutableStateOf(false) }
+        val searchQuery = rememberTextFieldState()
+
         val filteredChildren by remember {
             derivedStateOf {
                 val notRemoved = children.filterNot { it.roomId in removedRoomIds }
-                if (isManageMode) {
+                val baseList = if (isManageMode) {
                     // In manage mode, only show rooms (not spaces)
-                    notRemoved.filter { !it.isSpace }.toImmutableList()
+                    notRemoved.filter { !it.isSpace }
                 } else {
-                    notRemoved.toImmutableList()
+                    notRemoved.toList()
+                }
+                if (isSearchMode && searchQuery.text.isNotBlank()) {
+                    val query = searchQuery.text.toString().lowercase()
+                    baseList.filter {
+                        it.displayName.lowercase().contains(query) ||
+                            it.canonicalAlias?.value?.lowercase()?.contains(query) == true
+                    }.toImmutableList()
+                } else {
+                    baseList.toImmutableList()
                 }
             }
         }
@@ -219,6 +234,14 @@ class SpacePresenter(
                 SpaceEvents.ClearRemoveAction -> {
                     removeRoomsAction = AsyncAction.Uninitialized
                 }
+                // Search mode events
+                SpaceEvents.EnterSearchMode -> {
+                    isSearchMode = true
+                }
+                SpaceEvents.ExitSearchMode -> {
+                    isSearchMode = false
+                    searchQuery.clearText()
+                }
             }
         }
         return SpaceState(
@@ -235,6 +258,8 @@ class SpacePresenter(
             selectedRoomIds = selectedRoomIds.toImmutableSet(),
             canEditSpaceGraph = canEditSpaceGraph,
             removeRoomsAction = removeRoomsAction,
+            isSearchMode = isSearchMode,
+            searchQuery = searchQuery,
             eventSink = ::handleEvent,
         )
     }

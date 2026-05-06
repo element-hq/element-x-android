@@ -8,6 +8,7 @@
 
 package io.element.android.features.space.impl.root
 
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.runtime.Immutable
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.libraries.architecture.AsyncAction
@@ -32,6 +33,8 @@ data class SpaceState(
     val selectedRoomIds: ImmutableSet<RoomId>,
     val canEditSpaceGraph: Boolean,
     val removeRoomsAction: AsyncAction<Unit>,
+    val isSearchMode: Boolean,
+    val searchQuery: TextFieldState,
     val eventSink: (SpaceEvents) -> Unit
 ) {
     fun isJoining(spaceId: RoomId): Boolean = joinActions[spaceId] == AsyncAction.Loading
