@@ -108,10 +108,10 @@ private fun PinUnlockPage(
 ) {
     BoxWithConstraints {
         val commonModifier = Modifier
-            .fillMaxSize()
-            .systemBarsPadding()
-            .imePadding()
-            .padding(all = 20.dp)
+                .fillMaxSize()
+                .systemBarsPadding()
+                .imePadding()
+                .padding(all = 20.dp)
 
         val header = @Composable {
             PinUnlockHeader(
@@ -147,8 +147,8 @@ private fun PinUnlockPage(
                             state.eventSink(PinUnlockEvent.OnPinEntryChanged(it))
                         },
                         modifier = Modifier
-                            .focusRequester(focusRequester)
-                            .fillMaxWidth()
+                                .focusRequester(focusRequester)
+                                .fillMaxWidth()
                     )
                 }
             } else {
@@ -217,8 +217,8 @@ private fun PinUnlockCompactView(
         }
         BoxWithConstraints(
             modifier = Modifier
-                .weight(1f)
-                .fillMaxHeight(),
+                    .weight(1f)
+                    .fillMaxHeight(),
             contentAlignment = Alignment.Center,
         ) {
             content()
@@ -239,9 +239,9 @@ private fun PinUnlockExpandedView(
         header()
         BoxWithConstraints(
             modifier = Modifier
-                .weight(1f)
-                .fillMaxWidth()
-                .padding(top = 40.dp),
+                    .weight(1f)
+                    .fillMaxWidth()
+                    .padding(top = 40.dp),
         ) {
             content()
         }
@@ -274,8 +274,8 @@ private fun PinDot(
     }
     Box(
         modifier = Modifier
-            .size(14.dp)
-            .background(backgroundColor, CircleShape)
+                .size(14.dp)
+                .background(backgroundColor, CircleShape)
     )
 }
 
@@ -311,14 +311,26 @@ private fun PinUnlockHeader(
         )
         Spacer(Modifier.height(8.dp))
         val remainingAttempts = state.remainingAttempts.dataOrNull()
-        val subtitle = if (remainingAttempts != null) {
-            if (state.showWrongPinTitle) {
-                pluralStringResource(id = R.plurals.screen_app_lock_subtitle_wrong_pin, count = remainingAttempts, remainingAttempts)
-            } else {
-                pluralStringResource(id = R.plurals.screen_app_lock_subtitle, count = remainingAttempts, remainingAttempts)
+        val subtitle = when {
+            state.isUnlocked -> {
+                // Hide any previous error
+                ""
             }
-        } else {
-            ""
+            remainingAttempts != null ->
+                if (state.showWrongPinTitle) {
+                    pluralStringResource(
+                        id = R.plurals.screen_app_lock_subtitle_wrong_pin,
+                        count = remainingAttempts,
+                        remainingAttempts,
+                    )
+                } else {
+                    pluralStringResource(
+                        id = R.plurals.screen_app_lock_subtitle,
+                        count = remainingAttempts,
+                        remainingAttempts,
+                    )
+                }
+            else -> ""
         }
         val subtitleColor = if (state.showWrongPinTitle) {
             ElementTheme.colors.textCriticalPrimary
