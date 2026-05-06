@@ -12,6 +12,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.preferences.api.store.NotificationSound
 import io.element.android.libraries.pushproviders.api.Distributor
 import kotlinx.collections.immutable.ImmutableList
 
@@ -23,6 +24,17 @@ data class NotificationSettingsState(
     val availablePushDistributors: ImmutableList<Distributor>,
     val showChangePushProviderDialog: Boolean,
     val fullScreenIntentPermissionsState: FullScreenIntentPermissionsState,
+    val messageSound: SoundChannelUiState,
+    val callRingtone: SoundChannelUiState,
+    val showMessageSoundDialog: Boolean,
+    /**
+     * One-shot trigger for launching the system ringtone picker. Each
+     * [NotificationSettingsEvents.LaunchMessageSoundPicker] increments the value;
+     * the view watches this in `LaunchedEffect` and calls the launcher whenever it goes above 0.
+     * **Always start at 0** in initial state, providers, and previews — a non-zero seed will
+     * auto-open the picker on screen entry.
+     */
+    val pendingMessageSoundPickerLaunch: Int,
     val eventSink: (NotificationSettingsEvents) -> Unit,
 ) {
     sealed interface MatrixSettings {
@@ -43,6 +55,16 @@ data class NotificationSettingsState(
     data class AppSettings(
         val systemNotificationsEnabled: Boolean,
         val appNotificationsEnabled: Boolean,
+    )
+
+    /**
+     * UI state for one of the two sound rows (message sound, call ringtone). [copyError] is set
+     * when the last pick failed to copy into app-private storage; the persisted choice stays put.
+     */
+    data class SoundChannelUiState(
+        val sound: NotificationSound,
+        val displayName: String,
+        val copyError: Boolean,
     )
 
     /**

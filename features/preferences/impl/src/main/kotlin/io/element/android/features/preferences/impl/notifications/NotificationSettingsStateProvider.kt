@@ -14,6 +14,7 @@ import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.fullscreenintent.api.aFullScreenIntentPermissionsState
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.preferences.api.store.NotificationSound
 import io.element.android.libraries.pushproviders.api.Distributor
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
@@ -45,6 +46,28 @@ open class NotificationSettingsStateProvider : PreviewParameterProvider<Notifica
             aInvalidNotificationSettingsState(fixFailed = true),
             aValidNotificationSettingsState(fullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(permissionGranted = false)),
             aValidNotificationSettingsState(appNotificationEnabled = false),
+            aValidNotificationSettingsState(
+                // Sentinel URIs — previews shouldn't depend on the host's content provider.
+                messageSound = NotificationSound.Custom("preview://message-sound"),
+                messageSoundDisplayName = "Pixel notification",
+                callRingtone = NotificationSound.Custom("preview://call-ringtone"),
+                callRingtoneDisplayName = "Pixel ringtone",
+            ),
+            aValidNotificationSettingsState(
+                messageSound = NotificationSound.Silent,
+                messageSoundDisplayName = "Silent",
+                callRingtone = NotificationSound.Silent,
+                callRingtoneDisplayName = "Silent",
+            ),
+            aValidNotificationSettingsState(
+                messageSoundCopyError = true,
+                callRingtoneCopyError = false,
+            ),
+            aValidNotificationSettingsState(
+                messageSound = NotificationSound.ElementDefault,
+                messageSoundDisplayName = "Element default",
+            ),
+            aValidNotificationSettingsState(showMessageSoundDialog = true),
         )
 }
 
@@ -62,6 +85,14 @@ fun aValidNotificationSettingsState(
     ),
     showChangePushProviderDialog: Boolean = false,
     fullScreenIntentPermissionsState: FullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(),
+    messageSound: NotificationSound = NotificationSound.SystemDefault,
+    messageSoundDisplayName: String = "Element default",
+    messageSoundCopyError: Boolean = false,
+    callRingtone: NotificationSound = NotificationSound.SystemDefault,
+    callRingtoneDisplayName: String = "System default",
+    callRingtoneCopyError: Boolean = false,
+    showMessageSoundDialog: Boolean = false,
+    pendingMessageSoundPickerLaunch: Int = 0,
     eventSink: (NotificationSettingsEvents) -> Unit = {},
 ) = NotificationSettingsState(
     matrixSettings = NotificationSettingsState.MatrixSettings.Valid(
@@ -80,6 +111,18 @@ fun aValidNotificationSettingsState(
     availablePushDistributors = availablePushDistributors.toImmutableList(),
     showChangePushProviderDialog = showChangePushProviderDialog,
     fullScreenIntentPermissionsState = fullScreenIntentPermissionsState,
+    messageSound = NotificationSettingsState.SoundChannelUiState(
+        sound = messageSound,
+        displayName = messageSoundDisplayName,
+        copyError = messageSoundCopyError,
+    ),
+    callRingtone = NotificationSettingsState.SoundChannelUiState(
+        sound = callRingtone,
+        displayName = callRingtoneDisplayName,
+        copyError = callRingtoneCopyError,
+    ),
+    showMessageSoundDialog = showMessageSoundDialog,
+    pendingMessageSoundPickerLaunch = pendingMessageSoundPickerLaunch,
     eventSink = eventSink,
 )
 
@@ -99,6 +142,18 @@ fun aInvalidNotificationSettingsState(
     availablePushDistributors = persistentListOf(),
     showChangePushProviderDialog = false,
     fullScreenIntentPermissionsState = aFullScreenIntentPermissionsState(),
+    messageSound = NotificationSettingsState.SoundChannelUiState(
+        sound = NotificationSound.SystemDefault,
+        displayName = "System default",
+        copyError = false,
+    ),
+    callRingtone = NotificationSettingsState.SoundChannelUiState(
+        sound = NotificationSound.SystemDefault,
+        displayName = "System default",
+        copyError = false,
+    ),
+    showMessageSoundDialog = false,
+    pendingMessageSoundPickerLaunch = 0,
     eventSink = eventSink,
 )
 

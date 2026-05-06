@@ -38,5 +38,27 @@ interface AppPreferencesStore {
     suspend fun setTracingLogPacks(targets: Set<TraceLogPack>)
     fun getTracingLogPacksFlow(): Flow<Set<TraceLogPack>>
 
+    fun getMessageSoundFlow(): Flow<NotificationSound>
+
+    /**
+     * Atomically persists [sound] (with copy-time [title] for Custom; cleared otherwise) and
+     * bumps the channel version. Single transaction so process death can't desync URI and version.
+     */
+    suspend fun setMessageSoundAndIncrementVersion(sound: NotificationSound, title: String?): Int
+
+    /** Title captured at copy time. Null for SystemDefault / Silent or pre-title persisted data. */
+    fun getMessageSoundDisplayNameFlow(): Flow<String?>
+
+    fun getCallRingtoneFlow(): Flow<NotificationSound>
+
+    /** See [setMessageSoundAndIncrementVersion]. */
+    suspend fun setCallRingtoneAndIncrementVersion(sound: NotificationSound, title: String?): Int
+
+    /** See [getMessageSoundDisplayNameFlow]. */
+    fun getCallRingtoneDisplayNameFlow(): Flow<String?>
+
+    /** Single-snapshot read of all sound prefs; used at boot to seed channels without N reads. */
+    suspend fun getNotificationSoundChannelConfig(): NotificationSoundChannelConfig
+
     suspend fun reset()
 }

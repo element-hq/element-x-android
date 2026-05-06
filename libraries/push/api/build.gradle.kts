@@ -20,5 +20,6 @@ dependencies {
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.matrix.api)
     implementation(projects.libraries.matrixmedia.api)
+    implementation(projects.libraries.preferences.api)
     implementation(projects.libraries.pushproviders.api)
 }

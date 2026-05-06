@@ -8,16 +8,29 @@
 
 package io.element.android.features.preferences.impl.notifications
 
+import android.app.Activity
+import android.media.RingtoneManager
+import android.net.Uri
+import android.provider.Settings
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.liveRegion
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.preferences.impl.R
 import io.element.android.libraries.androidutils.system.startNotificationSettingsIntent
@@ -35,13 +48,17 @@ import io.element.android.libraries.designsystem.components.preferences.Preferen
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
+import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsEvents
 import io.element.android.libraries.matrix.api.room.RoomNotificationMode
+import io.element.android.libraries.preferences.api.store.NotificationSound
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 
 /**
@@ -182,6 +199,7 @@ private fun NotificationSettingsContentView(
                 onCheckedChange = onMentionNotificationsChange
             )
         }
+        SoundsPreferenceCategory(state = state)
         PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_additional_settings_section_title)) {
             // TODO We are removing the call notification toggle until support for call notifications has been added
 //                PreferenceSwitch(
@@ -258,6 +276,144 @@ private fun NotificationSettingsContentView(
                 )
             }
         }
+    }
+}
+
+@Composable
+private fun SoundsPreferenceCategory(state: NotificationSettingsState) {
+    PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_sounds_section_title)) {
+        val launchMessageSoundPicker = rememberSoundPickerOnClick(
+            type = RingtoneManager.TYPE_NOTIFICATION,
+            current = state.messageSound.sound,
+            defaultUri = Settings.System.DEFAULT_NOTIFICATION_URI,
+            onSoundPicked = { sound -> state.eventSink(NotificationSettingsEvents.SetMessageSound(sound)) },
+        )
+        // Skip the initial 0 emission so the picker doesn't auto-open on screen entry; only
+        // increments fired by LaunchMessageSoundPicker should launch it.
+        LaunchedEffect(state.pendingMessageSoundPickerLaunch) {
+            if (state.pendingMessageSoundPickerLaunch > 0) {
+                launchMessageSoundPicker()
+            }
+        }
+        ListItem(
+            headlineContent = { Text(stringResource(id = R.string.screen_notification_settings_message_sound_label)) },
+            supportingContent = { Text(state.messageSound.displayName) },
+            onClick = { state.eventSink(NotificationSettingsEvents.ShowMessageSoundDialog) },
+        )
+        if (state.messageSound.copyError) {
+            SoundCopyErrorRow(
+                onDismissClick = { state.eventSink(NotificationSettingsEvents.DismissMessageSoundCopyError) },
+            )
+        }
+        if (state.showMessageSoundDialog) {
+            MessageSoundDialog(state)
+        }
+
+        val onCallRingtoneClick = rememberSoundPickerOnClick(
+            type = RingtoneManager.TYPE_RINGTONE,
+            current = state.callRingtone.sound,
+            defaultUri = Settings.System.DEFAULT_RINGTONE_URI,
+            onSoundPicked = { sound -> state.eventSink(NotificationSettingsEvents.SetCallRingtone(sound)) },
+        )
+        ListItem(
+            headlineContent = { Text(stringResource(id = R.string.screen_notification_settings_call_ringtone_label)) },
+            supportingContent = { Text(state.callRingtone.displayName) },
+            onClick = onCallRingtoneClick,
+        )
+        if (state.callRingtone.copyError) {
+            SoundCopyErrorRow(
+                onDismissClick = { state.eventSink(NotificationSettingsEvents.DismissCallRingtoneCopyError) },
+            )
+        }
+    }
+}
+
+@Composable
+private fun MessageSoundDialog(state: NotificationSettingsState) {
+    val initialSelection = when (state.messageSound.sound) {
+        NotificationSound.ElementDefault -> 0
+        NotificationSound.SystemDefault -> 1
+        else -> null
+    }
+    // When the user is on Custom or Silent, no preset row is selected — surface the current
+    // sound as a subtitle so screen readers (and sighted users) still have state context.
+    val subtitle = if (initialSelection == null) {
+        stringResource(
+            id = R.string.screen_notification_settings_message_sound_dialog_current_subtitle,
+            state.messageSound.displayName,
+        )
+    } else {
+        null
+    }
+    SingleSelectionDialog(
+        title = stringResource(id = R.string.screen_notification_settings_message_sound_dialog_title),
+        subtitle = subtitle,
+        options = persistentListOf(
+            ListOption(title = stringResource(id = R.string.screen_notification_settings_sound_element_default)),
+            ListOption(title = stringResource(id = R.string.screen_notification_settings_sound_system_default)),
+            ListOption(title = stringResource(id = R.string.screen_notification_settings_message_sound_dialog_choose_other)),
+        ),
+        initialSelection = initialSelection,
+        onSelectOption = { index ->
+            when (index) {
+                0 -> state.eventSink(NotificationSettingsEvents.SelectMessageSoundPreset(NotificationSound.ElementDefault))
+                1 -> state.eventSink(NotificationSettingsEvents.SelectMessageSoundPreset(NotificationSound.SystemDefault))
+                else -> state.eventSink(NotificationSettingsEvents.LaunchMessageSoundPicker)
+            }
+        },
+        onDismissRequest = { state.eventSink(NotificationSettingsEvents.DismissMessageSoundDialog) },
+    )
+}
+
+@Composable
+private fun SoundCopyErrorRow(
+    onDismissClick: () -> Unit,
+) {
+    ListItem(
+        modifier = Modifier
+            .background(ElementTheme.colors.bgSubtleSecondary)
+            .semantics { liveRegion = LiveRegionMode.Polite },
+        headlineContent = {
+            Text(
+                text = stringResource(R.string.screen_notification_settings_sound_copy_error_message),
+                style = ElementTheme.typography.fontBodyMdRegular,
+                color = ElementTheme.colors.textSecondary,
+            )
+        },
+        trailingContent = ListItemContent.Custom { _ ->
+            IconButton(onClick = onDismissClick) {
+                Icon(
+                    imageVector = CompoundIcons.Close(),
+                    contentDescription = stringResource(R.string.screen_notification_settings_sound_copy_error_dismiss_a11y),
+                )
+            }
+        },
+    )
+}
+
+@Composable
+private fun rememberSoundPickerOnClick(
+    type: Int,
+    current: NotificationSound,
+    defaultUri: Uri,
+    onSoundPicked: (NotificationSound) -> Unit,
+): () -> Unit {
+    // Paparazzi previews don't provide a LocalActivityResultRegistryOwner, which
+    // rememberLauncherForActivityResult requires. Skip the launcher in inspection mode and
+    // return a no-op click handler — previews don't need to launch the picker.
+    if (LocalInspectionMode.current) return {}
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(),
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
+            val sound = result.data?.toPickedNotificationSound(defaultUri)
+            if (sound != null) {
+                onSoundPicked(sound)
+            }
+        }
+    }
+    return {
+        launcher.launch(buildRingtonePickerIntent(type = type, current = current, defaultUri = defaultUri))
     }
 }
 
