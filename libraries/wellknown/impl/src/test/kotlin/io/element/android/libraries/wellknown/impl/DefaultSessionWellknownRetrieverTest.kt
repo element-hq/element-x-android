@@ -80,7 +80,8 @@ class DefaultSessionWellknownRetrieverTest {
                     "registration_helper_url": "a_registration_url",
                     "enforce_element_pro": true,
                     "rageshake_url": "a_rageshake_url",
-                    "other": true
+                    // Note the trailing comma, and the comment!
+                    "other": true,
                 }""".trimIndent().toByteArray()
                 )
             },
