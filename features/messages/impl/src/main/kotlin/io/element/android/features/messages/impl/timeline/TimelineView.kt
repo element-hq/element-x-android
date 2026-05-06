@@ -339,7 +339,7 @@ private fun BoxScope.TimelineScrollHelper(
             lazyListState.firstVisibleItemIndex < 3 && isLive
         }
     }
-    val isJumpToUnreadVisible by remember {
+    val isJumpToUnreadVisible by remember(readMarkerIndex, forceJumpToReadMarkerVisibility) {
         derivedStateOf {
             if (forceJumpToReadMarkerVisibility) return@derivedStateOf true
             val markerIndex = readMarkerIndex ?: return@derivedStateOf false
@@ -418,28 +418,30 @@ private fun BoxScope.TimelineScrollHelper(
     Column(
         modifier = Modifier
             .align(Alignment.BottomEnd)
-            .padding(end = 24.dp, bottom = 24.dp)
+            .padding(end = 24.dp, bottom = 16.dp)
     ) {
         JumpToPositionButton(
             icon = CompoundIcons.ChevronUp(),
             contentDescription = stringResource(id = CommonStrings.a11y_jump_to_unread_messages),
-            modifier = Modifier.padding(bottom = if (isJumpToBottomVisible) 12.dp else 0.dp),
+            modifier = Modifier.padding(bottom = 12.dp),
             isVisible = isJumpToUnreadVisible,
             hasUnread = true,
             onClick = ::jumpToReadMarker,
             onMarkAsRead = onMarkAllAsRead,
             testTag = TestTags.jumpToUnreadButton,
         )
-        JumpToPositionButton(
-            icon = CompoundIcons.ChevronDown(),
-            contentDescription = stringResource(id = CommonStrings.a11y_jump_to_bottom),
-            isVisible = isJumpToBottomVisible,
-            hasUnread = displayJumpToUnread && newEventState is NewEventState.FromOther,
-            onClick = ::jumpToBottom,
-            onMarkAsRead = onMarkAllAsRead,
-            testTag = TestTags.jumpToBottomButton,
-            dotAlignment = Alignment.BottomCenter,
-        )
+        Box(modifier = Modifier.size(36.dp)) {
+            JumpToPositionButton(
+                icon = CompoundIcons.ChevronDown(),
+                contentDescription = stringResource(id = CommonStrings.a11y_jump_to_bottom),
+                isVisible = isJumpToBottomVisible,
+                hasUnread = displayJumpToUnread && newEventState is NewEventState.FromOther,
+                onClick = ::jumpToBottom,
+                onMarkAsRead = onMarkAllAsRead,
+                testTag = TestTags.jumpToBottomButton,
+                dotAlignment = Alignment.BottomCenter,
+            )
+        }
     }
 }
 
