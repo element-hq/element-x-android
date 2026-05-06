@@ -13,13 +13,9 @@ import com.google.common.truth.Truth.assertThat
 import io.element.android.features.preferences.impl.developer.tracing.LogLevelItem
 import io.element.android.features.rageshake.api.preferences.aRageshakePreferencesState
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.featureflag.api.Feature
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeature
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
-import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.lambda.lambdaRecorder
@@ -65,18 +61,6 @@ class AppDeveloperSettingsPresenterTest {
             }
             getAvailableFeaturesResult.assertions().isCalledOnce()
                 .with(value(false), value(false))
-        }
-    }
-
-    @Test
-    fun `present - ensures Room directory search is not present on release Google Play builds`() = runTest {
-        val buildMeta = aBuildMeta(buildType = BuildType.RELEASE, flavorDescription = "GooglePlay")
-        val presenter = createAppDeveloperSettingsPresenter(buildMeta = buildMeta)
-        presenter.test {
-            skipItems(1)
-            awaitItem().also { state ->
-                assertThat(state.features).doesNotContain(FeatureFlags.RoomDirectorySearch)
-            }
         }
     }
 
@@ -156,13 +140,11 @@ class AppDeveloperSettingsPresenterTest {
             }
         ),
         preferencesStore: InMemoryAppPreferencesStore = InMemoryAppPreferencesStore(),
-        buildMeta: BuildMeta = aBuildMeta(),
     ): AppDeveloperSettingsPresenter {
         return AppDeveloperSettingsPresenter(
             featureFlagService = featureFlagService,
             rageshakePresenter = { aRageshakePreferencesState() },
             appPreferencesStore = preferencesStore,
-            buildMeta = buildMeta,
         )
     }
 }
