@@ -37,6 +37,7 @@ class KeyStoreSecretKeyRepository(
 ) : SecretKeyRepository {
     private val hasKeyMap = ConcurrentHashMap<String, MutableStateFlow<Boolean>>()
 
+    @Suppress("RunCatchingNotAllowed")
     override fun hasKey(alias: String): Flow<Boolean> {
         return hasKeyMap.getOrPut(alias) {
             MutableStateFlow(runCatching { keyStore.containsAlias(alias) }.getOrDefault(false))

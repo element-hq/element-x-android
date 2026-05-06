@@ -72,7 +72,7 @@ class PinUnlockPresenter(
                 if (pinCodeSize == null) {
                     // No pin code set, deleted store? Force sign out
                     showSignOutPrompt = true
-                    throw Exception("No pin code size found")
+                    error("No pin code size found")
                 } else {
                     PinEntry.createEmpty(pinCodeSize)
                 }
