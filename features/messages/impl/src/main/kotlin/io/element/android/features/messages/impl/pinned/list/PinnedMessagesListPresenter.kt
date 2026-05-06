@@ -29,6 +29,8 @@ import io.element.android.features.messages.impl.actionlist.model.TimelineItemAc
 import io.element.android.features.messages.impl.link.LinkState
 import io.element.android.features.messages.impl.pinned.DefaultPinnedEventsTimelineProvider
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
+import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
+import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactory
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactoryConfig
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
@@ -47,6 +49,7 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
 import io.element.android.libraries.matrix.api.room.roomMembers
+import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
@@ -71,6 +74,8 @@ class PinnedMessagesListPresenter(
     private val linkPresenter: Presenter<LinkState>,
     private val snackbarDispatcher: SnackbarDispatcher,
     @Assisted private val actionListPresenter: Presenter<ActionListState>,
+    private val customReactionPresenter: Presenter<CustomReactionState>,
+    private val reactionSummaryPresenter: Presenter<ReactionSummaryState>,
     @SessionCoroutineScope
     private val sessionCoroutineScope: CoroutineScope,
     private val analyticsService: AnalyticsService,
@@ -88,7 +93,7 @@ class PinnedMessagesListPresenter(
     private val timelineItemsFactory: TimelineItemsFactory = timelineItemsFactoryCreator.create(
         config = TimelineItemsFactoryConfig(
             computeReadReceipts = false,
-            computeReactions = false,
+            computeReactions = true,
         )
     )
 
@@ -96,6 +101,9 @@ class PinnedMessagesListPresenter(
     override fun present(): PinnedMessagesListState {
         htmlConverterProvider.Update()
         val roomInfo by room.roomInfoFlow.collectAsState()
+        val userEventPermissions by room.permissionsAsState(UserEventPermissions.DEFAULT) { perms ->
+            perms.userEventPermissions()
+        }
         val timelineRoomInfo by remember {
             derivedStateOf {
                 TimelineRoomInfo(
@@ -103,7 +111,7 @@ class PinnedMessagesListPresenter(
                     name = roomInfo.name,
                     // We don't need to compute those values
                     userHasPermissionToSendMessage = false,
-                    userHasPermissionToSendReaction = false,
+                    userHasPermissionToSendReaction = userEventPermissions.canSendReaction,
                     // We do not care about the call state here.
                     roomCallState = aStandByCallState(),
                     // don't compute this value or the pin icon will be shown
@@ -119,9 +127,8 @@ class PinnedMessagesListPresenter(
         }
         val timelineProtectionState = timelineProtectionPresenter.present()
         val linkState = linkPresenter.present()
-        val userEventPermissions by room.permissionsAsState(UserEventPermissions.DEFAULT) { perms ->
-            perms.userEventPermissions()
-        }
+        val customReactionState = customReactionPresenter.present()
+        val reactionSummaryState = reactionSummaryPresenter.present()
 
         val displayThreadSummaries by featureFlagService.isFeatureEnabledFlow(FeatureFlags.Threads).collectAsState(false)
 
@@ -138,6 +145,7 @@ class PinnedMessagesListPresenter(
             when (event) {
                 is PinnedMessagesListEvent.HandleAction -> sessionCoroutineScope.handleTimelineAction(event.action, event.event)
                 is PinnedMessagesListEvent.OpenThread -> navigator.navigateToThread(event.threadRootId)
+                is PinnedMessagesListEvent.ToggleReaction -> sessionCoroutineScope.toggleReaction(event.emoji, event.eventOrTransactionId)
             }
         }
 
@@ -148,8 +156,18 @@ class PinnedMessagesListPresenter(
             displayThreadSummaries = displayThreadSummaries,
             userEventPermissions = userEventPermissions,
             timelineItems = pinnedMessageItems,
+            customReactionState = customReactionState,
+            reactionSummaryState = reactionSummaryState,
             eventSink = ::handleEvent,
         )
+    }
+
+    private fun CoroutineScope.toggleReaction(emoji: String, eventOrTransactionId: EventOrTransactionId) {
+        launch {
+            timelineProvider.invokeOnTimeline {
+                toggleReaction(emoji, eventOrTransactionId)
+            }
+        }
     }
 
     private fun CoroutineScope.handleTimelineAction(
@@ -233,6 +251,8 @@ class PinnedMessagesListPresenter(
         linkState: LinkState,
         userEventPermissions: UserEventPermissions,
         timelineItems: AsyncData<ImmutableList<TimelineItem>>,
+        customReactionState: CustomReactionState,
+        reactionSummaryState: ReactionSummaryState,
         eventSink: (PinnedMessagesListEvent) -> Unit
     ): PinnedMessagesListState {
         return when (timelineItems) {
@@ -251,6 +271,8 @@ class PinnedMessagesListPresenter(
                         userEventPermissions = userEventPermissions,
                         timelineItems = timelineItems.data,
                         actionListState = actionListState,
+                        customReactionState = customReactionState,
+                        reactionSummaryState = reactionSummaryState,
                         eventSink = eventSink
                     )
                 }
