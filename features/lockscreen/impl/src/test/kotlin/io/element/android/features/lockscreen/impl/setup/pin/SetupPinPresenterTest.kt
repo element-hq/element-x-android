@@ -59,7 +59,7 @@ class SetupPinPresenterTest {
             awaitLastSequentialItem().also { state ->
                 state.choosePinEntry.assertText(forbiddenPin)
                 assertThat(state.setupPinFailure).isEqualTo(SetupPinFailure.ForbiddenPin)
-                state.eventSink(SetupPinEvents.ClearFailure)
+                state.eventSink(SetupPinEvent.ClearFailure)
             }
             awaitLastSequentialItem().also { state ->
                 state.choosePinEntry.assertEmpty()
@@ -78,7 +78,7 @@ class SetupPinPresenterTest {
                 state.choosePinEntry.assertText(completePin)
                 state.confirmPinEntry.assertText(mismatchedPin)
                 assertThat(state.setupPinFailure).isEqualTo(SetupPinFailure.PinsDoNotMatch)
-                state.eventSink(SetupPinEvents.ClearFailure)
+                state.eventSink(SetupPinEvent.ClearFailure)
             }
             awaitLastSequentialItem().also { state ->
                 state.choosePinEntry.assertEmpty()
@@ -104,7 +104,7 @@ class SetupPinPresenterTest {
     }
 
     private fun SetupPinState.onPinEntryChanged(pinEntry: String) {
-        eventSink(SetupPinEvents.OnPinEntryChanged(pinEntry, isConfirmationStep))
+        eventSink(SetupPinEvent.OnPinEntryChanged(pinEntry, isConfirmationStep))
     }
 
     private fun createSetupPinPresenter(
