@@ -13,8 +13,7 @@ import io.element.android.libraries.matrix.ui.model.SelectRoomInfo
 sealed interface RoomSelectEvents {
     data class SetSelectedRoom(val room: SelectRoomInfo) : RoomSelectEvents
 
-    // TODO remove to restore multi-selection
-    data object RemoveSelectedRoom : RoomSelectEvents
+    data class RemoveSelectedRoom(val room: SelectRoomInfo) : RoomSelectEvents
     data object ToggleSearchActive : RoomSelectEvents
     data class UpdateVisibleRange(val range: IntRange) : RoomSelectEvents
 }
