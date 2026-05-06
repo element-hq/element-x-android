@@ -78,6 +78,8 @@ dependencies {
     implementation(libs.matrix.emojibase.bindings)
     implementation(projects.features.knockrequests.api)
     implementation(projects.features.roommembermoderation.api)
+    implementation(projects.features.mediapreview.api)
+    implementation(projects.features.mediapreview.impl)
 
     testCommonDependencies(libs, true)
     testImplementation(projects.libraries.matrix.test)

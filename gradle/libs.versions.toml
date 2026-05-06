@@ -120,6 +120,8 @@ androidx_preference = "androidx.preference:preference:1.2.1"
 androidx_webkit = "androidx.webkit:webkit:1.15.0"
 
 androidx_compose_bom = { module = "androidx.compose:compose-bom", version.ref = "compose_bom" }
+androidx_compose_foundation = "androidx.compose.foundation:foundation:1.10.0"
+androidx_compose_foundation_layout = "androidx.compose.foundation:foundation-layout:1.10.0"
 androidx_compose_material3 = { module = "androidx.compose.material3:material3", version = '1.5.0-alpha15' }
 androidx_compose_material3_windowsizeclass = { module = "androidx.compose.material3:material3-window-size-class" }
 androidx_compose_material3_adaptive = "androidx.compose.material3:material3-adaptive-android:1.0.0-alpha06"

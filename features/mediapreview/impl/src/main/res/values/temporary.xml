@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_media_upload_preview_optimize_image_quality_title">"Optimise image quality"</string>
+  <string name="screen_media_upload_preview_change_video_quality_prompt">"Tap to change the video upload quality"</string>
+  <string name="screen_media_upload_preview_image_optimization">"Optimise image quality"</string>
+  <string name="screen_media_upload_preview_image_optimization_summary">"Reduce file size before uploading"</string>
+  <string name="screen_media_upload_preview_video_quality">"Video quality"</string>
+  <string name="dialog_video_quality_selector_subtitle_no_file_size">"Select the quality of the video you want to upload."</string>
+  <string name="dialog_video_quality_selector_subtitle_file_size">" The max file size allowed is: %1$s"</string>
+</resources>

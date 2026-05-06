@@ -32,9 +32,11 @@ import io.element.android.features.location.api.LocationService
 import io.element.android.features.location.api.ShareLocationEntryPoint
 import io.element.android.features.location.api.ShowLocationEntryPoint
 import io.element.android.features.location.api.ShowLocationMode
+import io.element.android.features.mediapreview.api.MediaPreviewConfig
+import io.element.android.features.mediapreview.api.MediaPreviewEntryPoint
+import io.element.android.features.mediapreview.api.SendMode
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.messages.impl.attachments.Attachment
-import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewNode
 import io.element.android.features.messages.impl.pinned.DefaultPinnedEventsTimelineProvider
 import io.element.android.features.messages.impl.pinned.list.PinnedMessagesListNode
 import io.element.android.features.messages.impl.report.ReportMessageNode
@@ -73,7 +75,7 @@ import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.core.toRoomIdOrAlias
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.permalink.PermalinkData
-import io.element.android.libraries.matrix.api.room.BaseRoom
+import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.room.joinedRoomMembers
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
@@ -83,6 +85,7 @@ import io.element.android.libraries.matrix.ui.messages.RoomMemberProfilesCache
 import io.element.android.libraries.matrix.ui.messages.RoomNamesCache
 import io.element.android.libraries.mediaviewer.api.MediaInfo
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
+import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.textcomposer.mentions.LocalMentionSpanUpdater
 import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
 import io.element.android.libraries.textcomposer.mentions.MentionSpanUpdater
@@ -94,6 +97,7 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
+import timber.log.Timber
 import kotlin.time.Duration.Companion.milliseconds
 
 @ContributesNode(RoomScope::class)
@@ -108,10 +112,11 @@ class MessagesFlowNode(
     private val createPollEntryPoint: CreatePollEntryPoint,
     private val elementCallEntryPoint: ElementCallEntryPoint,
     private val mediaViewerEntryPoint: MediaViewerEntryPoint,
+    private val mediaPreviewEntryPoint: MediaPreviewEntryPoint,
     private val forwardEntryPoint: ForwardEntryPoint,
     private val analyticsService: AnalyticsService,
     private val locationService: LocationService,
-    private val room: BaseRoom,
+    private val room: JoinedRoom,
     private val roomMemberProfilesCache: RoomMemberProfilesCache,
     private val roomNamesCache: RoomNamesCache,
     private val mentionSpanUpdater: MentionSpanUpdater,
@@ -346,12 +351,47 @@ class MessagesFlowNode(
                 )
             }
             is NavTarget.AttachmentPreview -> {
-                val inputs = AttachmentsPreviewNode.Inputs(
-                    attachment = navTarget.attachment,
-                    timelineMode = navTarget.timelineMode,
-                    inReplyToEventId = navTarget.inReplyToEventId,
+                val attachment = navTarget.attachment
+                val localMedia: LocalMedia? = if (attachment is Attachment.Media) {
+                    attachment.localMedia
+                } else {
+                    Timber.w("Unhandled attachment type: $attachment")
+                    null
+                }
+                if (localMedia == null) {
+                    return@resolve this
+                }
+                val previewCallback = object : MediaPreviewEntryPoint.Callback {
+                    override fun onSend(
+                        caption: String?,
+                        optimizeImage: Boolean,
+                        videoPreset: io.element.android.libraries.preferences.api.store.VideoCompressionPreset?,
+                        onComplete: () -> Unit,
+                    ) {
+                        // Handled by MediaPreviewPresenter - it preProcesses and sends automatically for PREPROCESS mode
+                        // Just pop back when complete signal is received
+                        onComplete()
+                        backstack.pop()
+                    }
+
+                    override fun onCancel() {
+                        backstack.pop()
+                    }
+                }
+                mediaPreviewEntryPoint.createNode(
+                    parentNode = this,
+                    buildContext = buildContext,
+                    params = MediaPreviewEntryPoint.Params(
+                        localMedia = localMedia,
+                        config = MediaPreviewConfig(
+                            sendMode = SendMode.PREPROCESS,
+                            timelineMode = navTarget.timelineMode,
+                            inReplyToEventId = navTarget.inReplyToEventId,
+                            joinedRoom = room,
+                        ),
+                    ),
+                    callback = previewCallback,
                 )
-                createNode<AttachmentsPreviewNode>(buildContext, listOf(inputs))
             }
             is NavTarget.LocationViewer -> {
                 val inputs = ShowLocationEntryPoint.Inputs(navTarget.mode)

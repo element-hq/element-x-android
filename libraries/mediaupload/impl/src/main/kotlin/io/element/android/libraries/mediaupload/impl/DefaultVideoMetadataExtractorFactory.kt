@@ -6,43 +6,29 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.features.messages.impl.attachments.video
+package io.element.android.libraries.mediaupload.impl
 
 import android.content.Context
 import android.media.MediaMetadataRetriever
 import android.net.Uri
 import android.util.Size
-import dev.zacsweers.metro.AppScope
-import dev.zacsweers.metro.Assisted
-import dev.zacsweers.metro.AssistedFactory
-import dev.zacsweers.metro.AssistedInject
-import dev.zacsweers.metro.ContributesBinding
 import io.element.android.libraries.core.extensions.runCatchingExceptions
-import io.element.android.libraries.di.annotations.ApplicationContext
+import io.element.android.libraries.mediaupload.api.VideoMetadataExtractor
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 
-interface VideoMetadataExtractor : AutoCloseable {
-    fun getSize(): Result<Size>
-    fun getDuration(): Result<Duration>
-    interface Factory {
-        fun create(uri: Uri): VideoMetadataExtractor
+class DefaultVideoMetadataExtractorFactory(
+    private val context: Context,
+) : VideoMetadataExtractor.Factory {
+    override fun create(uri: Uri): VideoMetadataExtractor {
+        return DefaultVideoMetadataExtractor(context, uri)
     }
 }
 
-@ContributesBinding(AppScope::class)
-@AssistedInject
-class DefaultVideoMetadataExtractor(
-    @ApplicationContext private val context: Context,
-    @Assisted private val uri: Uri,
+private class DefaultVideoMetadataExtractor(
+    private val context: Context,
+    private val uri: Uri,
 ) : VideoMetadataExtractor {
-    @ContributesBinding(AppScope::class)
-    @AssistedFactory
-    interface Factory : VideoMetadataExtractor.Factory {
-        override fun create(uri: Uri): DefaultVideoMetadataExtractor
-    }
-
-    // Don't use `by lazy` so we can catch any exceptions thrown during initialization
     private val mediaMetadataRetriever = lazy {
         MediaMetadataRetriever().apply {
             setDataSource(context, uri)
@@ -55,7 +41,7 @@ class DefaultVideoMetadataExtractor(
 
         @Suppress("ComplexCondition")
         if (width != null && width > 0 && height != null && height > 0) {
-           Size(width, height)
+            Size(width, height)
         } else {
             error("Could not retrieve video size from metadata for $uri")
         }

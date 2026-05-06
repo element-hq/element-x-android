@@ -7,4 +7,5 @@
 
 <resources>
     <string name="common_black">"Black"</string>
+    <string name="common_unknown_error">"Unknown error"</string>
 </resources>
