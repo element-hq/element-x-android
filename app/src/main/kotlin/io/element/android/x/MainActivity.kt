@@ -42,6 +42,8 @@ import io.element.android.libraries.designsystem.utils.snackbar.LocalSnackbarDis
 import io.element.android.services.analytics.compose.LocalAnalyticsService
 import io.element.android.x.di.AppBindings
 import io.element.android.x.intent.SafeUriHandler
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 import timber.log.Timber
 
@@ -61,6 +63,9 @@ class MainActivity : NodeActivity() {
         setContent {
             MainContent(appBindings)
         }
+
+        val activity = this
+        GlobalScope.async { appBindings.x509Provider().initKeyAlias(activity) }
     }
 
     @Composable

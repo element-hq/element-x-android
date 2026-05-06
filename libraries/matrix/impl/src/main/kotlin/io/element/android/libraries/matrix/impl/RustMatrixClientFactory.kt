@@ -24,6 +24,7 @@ import io.element.android.libraries.matrix.impl.proxy.ProxyProvider
 import io.element.android.libraries.matrix.impl.room.TimelineEventFilterFactory
 import io.element.android.libraries.matrix.impl.storage.SqliteStoreBuilderProvider
 import io.element.android.libraries.matrix.impl.util.anonymizedTokens
+import io.element.android.libraries.matrix.impl.x509.X509Provider
 import io.element.android.libraries.network.useragent.UserAgentProvider
 import io.element.android.libraries.sessionstorage.api.SessionData
 import io.element.android.libraries.sessionstorage.api.SessionStore
@@ -66,6 +67,7 @@ class RustMatrixClientFactory(
     private val clientBuilderProvider: ClientBuilderProvider,
     private val sqliteStoreBuilderProvider: SqliteStoreBuilderProvider,
     private val workManagerScheduler: WorkManagerScheduler,
+    private val x509Provider: X509Provider,
 ) {
     private val sessionDelegate = RustClientSessionDelegate(
         sessionStore = sessionStore,
@@ -140,7 +142,7 @@ class RustMatrixClientFactory(
         passphrase: String?,
         slidingSyncType: ClientBuilderSlidingSync,
     ): ClientBuilder {
-        return clientBuilderProvider.provide()
+        var builder = clientBuilderProvider.provide()
             .run {
                 sqliteStoreBuilderProvider.provide(sessionPaths)
                     .passphrase(passphrase)
@@ -180,8 +182,19 @@ class RustMatrixClientFactory(
                 )
             )
             // Make sure all built clients use the single process cross-process lock config
-            .crossProcessLockConfig(CrossProcessLockConfig.SingleProcess)
-            .run {
+            .crossProcessLockConfig(CrossProcessLockConfig.SingleProcess);
+
+        var x509keyPair = x509Provider.getX509KeyPair()
+        if (x509keyPair != null) {
+            builder = builder.withX509Sign(x509keyPair)
+        }
+
+        var x509TrustRoot = x509Provider.getX509TustRoot();
+        if (x509TrustRoot != null) {
+            builder = builder.withX509Verify(x509TrustRoot)
+        }
+
+        return builder.run {
                 // Apply sliding sync version settings
                 when (slidingSyncType) {
                     ClientBuilderSlidingSync.Restored -> this
