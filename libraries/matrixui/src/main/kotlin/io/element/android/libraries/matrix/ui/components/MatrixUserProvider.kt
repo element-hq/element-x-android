@@ -44,7 +44,7 @@ fun aMatrixUser(
     displayName: String? = USER_NAME_ALICE,
     avatarUrl: String? = null,
 ) = MatrixUser(
-    userId = UserId(id ?: "@${displayName?.lowercase() ?: "id_of_alice"}:server.org"),
+    userId = UserId(id ?: "@${displayName?.lowercase()?.replace(" ", "_") ?: "id_of_alice"}:server.org"),
     displayName = displayName,
     avatarUrl = avatarUrl,
 )

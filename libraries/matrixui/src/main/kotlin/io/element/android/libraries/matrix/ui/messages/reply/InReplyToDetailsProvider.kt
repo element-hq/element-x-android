@@ -9,7 +9,7 @@
 package io.element.android.libraries.matrix.ui.messages.reply
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
+import io.element.android.libraries.designsystem.preview.USER_NAME_SENDER
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.media.MediaSource
@@ -160,7 +160,7 @@ private fun aInReplyToDetails(
 )
 
 fun aProfileDetailsReady(
-    displayName: String? = USER_NAME_ALICE,
+    displayName: String? = USER_NAME_SENDER,
     displayNameAmbiguous: Boolean = false,
     avatarUrl: String? = null,
 ) = ProfileDetails.Ready(
