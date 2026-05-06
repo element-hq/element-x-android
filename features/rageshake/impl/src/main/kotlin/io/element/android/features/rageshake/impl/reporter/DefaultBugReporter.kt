@@ -14,7 +14,6 @@ import androidx.core.net.toFile
 import androidx.core.net.toUri
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Provider
 import dev.zacsweers.metro.SingleIn
 import io.element.android.appconfig.RageshakeConfig
 import io.element.android.features.rageshake.api.logs.createWriteToFilesConfiguration
@@ -77,7 +76,7 @@ class DefaultBugReporter(
     private val screenshotHolder: ScreenshotHolder,
     private val crashDataStore: CrashDataStore,
     private val coroutineDispatchers: CoroutineDispatchers,
-    private val okHttpClient: Provider<OkHttpClient>,
+    private val okHttpClient: () -> OkHttpClient,
     private val userAgentProvider: UserAgentProvider,
     private val sessionStore: SessionStore,
     private val buildMeta: BuildMeta,
