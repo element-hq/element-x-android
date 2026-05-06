@@ -69,7 +69,7 @@ fun PinUnlockView(
 ) {
     OnLifecycleEvent { _, event ->
         when (event) {
-            Lifecycle.Event.ON_RESUME -> state.eventSink.invoke(PinUnlockEvents.OnUseBiometric)
+            Lifecycle.Event.ON_RESUME -> state.eventSink.invoke(PinUnlockEvent.OnUseBiometric)
             else -> Unit
         }
     }
@@ -78,8 +78,8 @@ fun PinUnlockView(
         if (state.showSignOutPrompt) {
             SignOutPrompt(
                 isCancellable = state.isSignOutPromptCancellable,
-                onSignOut = { state.eventSink(PinUnlockEvents.SignOut) },
-                onDismiss = { state.eventSink(PinUnlockEvents.ClearSignOutPrompt) },
+                onSignOut = { state.eventSink(PinUnlockEvent.SignOut) },
+                onDismiss = { state.eventSink(PinUnlockEvent.ClearSignOutPrompt) },
             )
         }
         when (state.signOutAction) {
@@ -95,7 +95,7 @@ fun PinUnlockView(
         if (state.showBiometricUnlockError) {
             ErrorDialog(
                 content = state.biometricUnlockErrorMessage ?: "",
-                onSubmit = { state.eventSink(PinUnlockEvents.ClearBiometricError) }
+                onSubmit = { state.eventSink(PinUnlockEvent.ClearBiometricError) }
             )
         }
     }
@@ -125,10 +125,10 @@ private fun PinUnlockPage(
                 modifier = Modifier.padding(top = 24.dp),
                 showBiometricUnlock = state.showBiometricUnlock,
                 onUseBiometric = {
-                    state.eventSink(PinUnlockEvents.OnUseBiometric)
+                    state.eventSink(PinUnlockEvent.OnUseBiometric)
                 },
                 onForgotPin = {
-                    state.eventSink(PinUnlockEvents.OnForgetPin)
+                    state.eventSink(PinUnlockEvent.OnForgetPin)
                 },
             )
         }
@@ -144,7 +144,7 @@ private fun PinUnlockPage(
                         pinEntry = pinEntry,
                         isSecured = true,
                         onValueChange = {
-                            state.eventSink(PinUnlockEvents.OnPinEntryChanged(it))
+                            state.eventSink(PinUnlockEvent.OnPinEntryChanged(it))
                         },
                         modifier = Modifier
                             .focusRequester(focusRequester)
@@ -154,7 +154,7 @@ private fun PinUnlockPage(
             } else {
                 PinKeypad(
                     onClick = {
-                        state.eventSink(PinUnlockEvents.OnPinKeypadPressed(it))
+                        state.eventSink(PinUnlockEvent.OnPinKeypadPressed(it))
                     },
                     maxWidth = constraints.maxWidth,
                     maxHeight = constraints.maxHeight,

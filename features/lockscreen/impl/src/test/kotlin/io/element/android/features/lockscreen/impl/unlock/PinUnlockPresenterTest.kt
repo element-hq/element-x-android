@@ -46,17 +46,17 @@ class PinUnlockPresenterTest {
             awaitItem().also { state ->
                 assertThat(state.pinEntry).isInstanceOf(AsyncData.Success::class.java)
                 assertThat(state.remainingAttempts).isInstanceOf(AsyncData.Success::class.java)
-                state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('1')))
-                state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('2')))
+                state.eventSink(PinUnlockEvent.OnPinKeypadPressed(PinKeypadModel.Number('1')))
+                state.eventSink(PinUnlockEvent.OnPinKeypadPressed(PinKeypadModel.Number('2')))
             }
             skipItems(1)
             awaitItem().also { state ->
                 state.pinEntry.assertText(halfCompletePin)
-                state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('3')))
-                state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Back))
-                state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Empty))
-                state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('3')))
-                state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('5')))
+                state.eventSink(PinUnlockEvent.OnPinKeypadPressed(PinKeypadModel.Number('3')))
+                state.eventSink(PinUnlockEvent.OnPinKeypadPressed(PinKeypadModel.Back))
+                state.eventSink(PinUnlockEvent.OnPinKeypadPressed(PinKeypadModel.Empty))
+                state.eventSink(PinUnlockEvent.OnPinKeypadPressed(PinKeypadModel.Number('3')))
+                state.eventSink(PinUnlockEvent.OnPinKeypadPressed(PinKeypadModel.Number('5')))
             }
             skipItems(4)
             awaitItem().also { state ->
@@ -77,10 +77,10 @@ class PinUnlockPresenterTest {
             }
             val numberOfAttempts = initialState.remainingAttempts.dataOrNull() ?: 0
             repeat(numberOfAttempts) {
-                initialState.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('1')))
-                initialState.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('2')))
-                initialState.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('3')))
-                initialState.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('4')))
+                initialState.eventSink(PinUnlockEvent.OnPinKeypadPressed(PinKeypadModel.Number('1')))
+                initialState.eventSink(PinUnlockEvent.OnPinKeypadPressed(PinKeypadModel.Number('2')))
+                initialState.eventSink(PinUnlockEvent.OnPinKeypadPressed(PinKeypadModel.Number('3')))
+                initialState.eventSink(PinUnlockEvent.OnPinKeypadPressed(PinKeypadModel.Number('4')))
             }
             skipItems(4 * numberOfAttempts + 2)
             awaitItem().also { state ->
@@ -101,20 +101,20 @@ class PinUnlockPresenterTest {
             awaitItem().also { state ->
                 assertThat(state.pinEntry).isInstanceOf(AsyncData.Success::class.java)
                 assertThat(state.remainingAttempts).isInstanceOf(AsyncData.Success::class.java)
-                state.eventSink(PinUnlockEvents.OnForgetPin)
+                state.eventSink(PinUnlockEvent.OnForgetPin)
             }
             awaitItem().also { state ->
                 assertThat(state.showSignOutPrompt).isTrue()
                 assertThat(state.isSignOutPromptCancellable).isTrue()
-                state.eventSink(PinUnlockEvents.ClearSignOutPrompt)
+                state.eventSink(PinUnlockEvent.ClearSignOutPrompt)
             }
             awaitItem().also { state ->
                 assertThat(state.showSignOutPrompt).isFalse()
-                state.eventSink(PinUnlockEvents.OnForgetPin)
+                state.eventSink(PinUnlockEvent.OnForgetPin)
             }
             awaitItem().also { state ->
                 assertThat(state.showSignOutPrompt).isTrue()
-                state.eventSink(PinUnlockEvents.SignOut)
+                state.eventSink(PinUnlockEvent.SignOut)
             }
             skipItems(2)
             awaitItem().also { state ->
