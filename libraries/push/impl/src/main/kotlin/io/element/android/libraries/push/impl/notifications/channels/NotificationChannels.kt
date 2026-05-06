@@ -262,19 +262,24 @@ class DefaultNotificationChannels(
         NotificationSound.Silent -> null
         NotificationSound.SystemDefault -> Settings.System.DEFAULT_NOTIFICATION_URI
         NotificationSound.ElementDefault -> bundledMessageSoundUri()
+        NotificationSound.ElementFade -> bundledFadeSoundUri()
         is NotificationSound.Custom -> parseUriOrFallback(sound.uri) { bundledMessageSoundUri() }
     }
 
     private fun resolveRingingSoundUri(sound: NotificationSound): Uri? = when (sound) {
         NotificationSound.Silent -> null
-        // The ringing channel has no bundled tone — treat ElementDefault like SystemDefault here.
+        // The ringing channel has no bundled tone — treat ElementDefault and ElementFade like SystemDefault here.
         NotificationSound.SystemDefault,
-        NotificationSound.ElementDefault -> Settings.System.DEFAULT_RINGTONE_URI
+        NotificationSound.ElementDefault,
+        NotificationSound.ElementFade -> Settings.System.DEFAULT_RINGTONE_URI
         is NotificationSound.Custom -> parseUriOrFallback(sound.uri) { Settings.System.DEFAULT_RINGTONE_URI }
     }
 
     private fun bundledMessageSoundUri(): Uri =
         "${ContentResolver.SCHEME_ANDROID_RESOURCE}://${context.packageName}/${R.raw.message}".toUri()
+
+    private fun bundledFadeSoundUri(): Uri =
+        "${ContentResolver.SCHEME_ANDROID_RESOURCE}://${context.packageName}/${R.raw.element_fade}".toUri()
 
     /**
      * Lets system_server ("android") and SystemUI read our FileProvider sound URI; no-op otherwise.
@@ -363,6 +368,7 @@ class DefaultNotificationChannels(
         return readChannelSound(
             channelId = currentNoisyChannelId,
             bundledUri = bundledMessageSoundUri(),
+            bundledFadeUri = bundledFadeSoundUri(),
             systemDefaultUri = Settings.System.DEFAULT_NOTIFICATION_URI,
         )
     }
@@ -371,12 +377,22 @@ class DefaultNotificationChannels(
         return readChannelSound(
             channelId = currentRingingCallChannelId,
             bundledUri = null,
+            bundledFadeUri = null,
             systemDefaultUri = Settings.System.DEFAULT_RINGTONE_URI,
         )
     }
 
-    /** Classifies the channel's sound URI: null → Silent, bundled → ElementDefault, system default → SystemDefault, else → Custom. */
-    private suspend fun readChannelSound(channelId: String, bundledUri: Uri?, systemDefaultUri: Uri): NotificationSound? {
+    /**
+     * Classifies the channel's sound URI: null → Silent, bundled → ElementDefault, bundled fade →
+     * ElementFade, system default → SystemDefault, else → Custom. Both bundled URIs are nullable
+     * because the ringing channel has no bundled tones.
+     */
+    private suspend fun readChannelSound(
+        channelId: String,
+        bundledUri: Uri?,
+        bundledFadeUri: Uri?,
+        systemDefaultUri: Uri,
+    ): NotificationSound? {
         if (!supportNotificationChannels()) return null
         val channel = withContext(Dispatchers.IO) {
             notificationManager.getNotificationChannel(channelId)
@@ -384,6 +400,7 @@ class DefaultNotificationChannels(
         return when (val sound = channel.sound) {
             null -> NotificationSound.Silent
             bundledUri -> NotificationSound.ElementDefault
+            bundledFadeUri -> NotificationSound.ElementFade
             systemDefaultUri -> NotificationSound.SystemDefault
             else -> NotificationSound.Custom(sound.toString())
         }

@@ -29,10 +29,11 @@ internal fun buildRingtonePickerIntent(
     putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true)
     putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, defaultUri)
     val existingUri: Uri? = when (current) {
-        // ElementDefault means "bundled message.mp3", which the system picker can't enumerate.
-        // Fall back to the picker's "Default" row so the user has something selected.
+        // ElementDefault and ElementFade refer to bundled raw resources, which the system picker
+        // can't enumerate. Fall back to the picker's "Default" row so the user has something selected.
         NotificationSound.SystemDefault,
-        NotificationSound.ElementDefault -> defaultUri
+        NotificationSound.ElementDefault,
+        NotificationSound.ElementFade -> defaultUri
         NotificationSound.Silent -> null
         is NotificationSound.Custom -> current.uri.toUri()
     }

@@ -30,6 +30,11 @@ class NotificationSoundStorageTest {
     }
 
     @Test
+    fun `fromStored - element_fade sentinel maps to ElementFade`() {
+        assertThat(NotificationSound.fromStored("element_fade")).isEqualTo(NotificationSound.ElementFade)
+    }
+
+    @Test
     fun `fromStored - any other string is treated as a Custom URI`() {
         assertThat(NotificationSound.fromStored("content://media/42"))
             .isEqualTo(NotificationSound.Custom("content://media/42"))
@@ -43,6 +48,11 @@ class NotificationSoundStorageTest {
     @Test
     fun `toStored - ElementDefault encodes as element_default`() {
         assertThat(NotificationSound.ElementDefault.toStored()).isEqualTo("element_default")
+    }
+
+    @Test
+    fun `toStored - ElementFade encodes as element_fade`() {
+        assertThat(NotificationSound.ElementFade.toStored()).isEqualTo("element_fade")
     }
 
     @Test
@@ -60,6 +70,7 @@ class NotificationSoundStorageTest {
         val variants = listOf(
             NotificationSound.SystemDefault,
             NotificationSound.ElementDefault,
+            NotificationSound.ElementFade,
             NotificationSound.Silent,
             NotificationSound.Custom("content://media/42"),
         )

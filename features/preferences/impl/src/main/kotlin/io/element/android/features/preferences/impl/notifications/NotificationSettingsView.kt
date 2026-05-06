@@ -332,7 +332,8 @@ private fun SoundsPreferenceCategory(state: NotificationSettingsState) {
 private fun MessageSoundDialog(state: NotificationSettingsState) {
     val initialSelection = when (state.messageSound.sound) {
         NotificationSound.ElementDefault -> 0
-        NotificationSound.SystemDefault -> 1
+        NotificationSound.ElementFade -> 1
+        NotificationSound.SystemDefault -> 2
         else -> null
     }
     // When the user is on Custom or Silent, no preset row is selected — surface the current
@@ -350,6 +351,7 @@ private fun MessageSoundDialog(state: NotificationSettingsState) {
         subtitle = subtitle,
         options = persistentListOf(
             ListOption(title = stringResource(id = R.string.screen_notification_settings_sound_element_default)),
+            ListOption(title = stringResource(id = R.string.screen_notification_settings_sound_element_fade)),
             ListOption(title = stringResource(id = R.string.screen_notification_settings_sound_system_default)),
             ListOption(title = stringResource(id = R.string.screen_notification_settings_message_sound_dialog_choose_other)),
         ),
@@ -357,7 +359,8 @@ private fun MessageSoundDialog(state: NotificationSettingsState) {
         onSelectOption = { index ->
             when (index) {
                 0 -> state.eventSink(NotificationSettingsEvents.SelectMessageSoundPreset(NotificationSound.ElementDefault))
-                1 -> state.eventSink(NotificationSettingsEvents.SelectMessageSoundPreset(NotificationSound.SystemDefault))
+                1 -> state.eventSink(NotificationSettingsEvents.SelectMessageSoundPreset(NotificationSound.ElementFade))
+                2 -> state.eventSink(NotificationSettingsEvents.SelectMessageSoundPreset(NotificationSound.SystemDefault))
                 else -> state.eventSink(NotificationSettingsEvents.LaunchMessageSoundPicker)
             }
         },

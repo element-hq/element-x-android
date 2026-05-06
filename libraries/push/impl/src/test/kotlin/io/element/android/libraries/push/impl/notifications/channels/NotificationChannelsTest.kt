@@ -177,6 +177,23 @@ class NotificationChannelsTest {
 
     @Test
     @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
+    fun `recreateNoisyChannel - ElementFade uses bundled fade URI`() {
+        val captured = slot<NotificationChannelCompat>()
+        val notificationManager = mockk<NotificationManagerCompat>(relaxed = true) {
+            every { notificationChannels } returns emptyList()
+            every { createNotificationChannel(capture(captured)) } returns Unit
+        }
+        val channels = createNotificationChannels(notificationManager = notificationManager)
+
+        channels.recreateNoisyChannel(sound = NotificationSound.ElementFade, version = 1)
+
+        val context = RuntimeEnvironment.getApplication()
+        val expected = "android.resource://${context.packageName}/${io.element.android.libraries.push.impl.R.raw.element_fade}".toUri()
+        assertThat(captured.captured.sound).isEqualTo(expected)
+    }
+
+    @Test
+    @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
     fun `recreateNoisyChannel - deletes prior versioned channels`() {
         val priorChannel = mockk<android.app.NotificationChannel>(relaxed = true) {
             every { id } returns "${NOISY_NOTIFICATION_CHANNEL_ID_BASE}_v3"
@@ -280,6 +297,25 @@ class NotificationChannelsTest {
         val result = channels.readNoisyChannelSound()
 
         assertThat(result).isEqualTo(NotificationSound.ElementDefault)
+    }
+
+    @Test
+    @Config(sdk = [Build.VERSION_CODES.TIRAMISU])
+    fun `readNoisyChannelSound - classifies the bundled fade URI as ElementFade`() = runTest {
+        val context = RuntimeEnvironment.getApplication()
+        val ourFade = "android.resource://${context.packageName}/${io.element.android.libraries.push.impl.R.raw.element_fade}".toUri()
+        val channel = mockk<android.app.NotificationChannel>(relaxed = true) {
+            every { sound } returns ourFade
+        }
+        val notificationManager = mockk<NotificationManagerCompat>(relaxed = true) {
+            every { notificationChannels } returns emptyList()
+            every { getNotificationChannel(NOISY_NOTIFICATION_CHANNEL_ID_BASE) } returns channel
+        }
+        val channels = createNotificationChannels(notificationManager = notificationManager)
+
+        val result = channels.readNoisyChannelSound()
+
+        assertThat(result).isEqualTo(NotificationSound.ElementFade)
     }
 
     @Test

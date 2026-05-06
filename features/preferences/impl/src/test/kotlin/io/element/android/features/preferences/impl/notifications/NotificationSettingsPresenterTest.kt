@@ -521,6 +521,30 @@ class NotificationSettingsPresenterTest {
     }
 
     @Test
+    fun `present - ElementDefault and ElementFade display names do not invoke the resolver`() = runTest {
+        val resolverCalls = mutableListOf<String>()
+        val presenter = createNotificationSettingsPresenter(
+            appPreferencesStore = InMemoryAppPreferencesStore(
+                messageSound = NotificationSound.ElementFade,
+                callRingtone = NotificationSound.ElementDefault,
+            ),
+            soundDisplayNameResolver = FakeSoundDisplayNameResolver(
+                resolveLambda = { uri ->
+                    resolverCalls += uri
+                    "Should not appear"
+                },
+            ),
+        )
+        presenter.test {
+            consumeItemsUntilPredicate {
+                it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
+            }.last()
+            assertThat(resolverCalls).isEmpty()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
     fun `present - resolves Custom display name via SoundDisplayNameResolver`() = runTest {
         val resolverCalls = mutableListOf<String>()
         val presenter = createNotificationSettingsPresenter(
