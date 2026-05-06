@@ -42,7 +42,6 @@ import io.element.android.features.location.impl.common.ui.LocationConstraintsDi
 import io.element.android.features.location.impl.common.ui.LocationFloatingActionButton
 import io.element.android.features.location.impl.common.ui.MapBottomSheetScaffold
 import io.element.android.features.location.impl.common.ui.UserLocationPuck
-import io.element.android.features.location.impl.common.ui.rememberUserLocationState
 import io.element.android.features.location.impl.share.ShareLocationEvent.StartLiveLocationShare
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.LocationPin
@@ -69,6 +68,7 @@ import org.maplibre.compose.camera.CameraMoveReason
 import org.maplibre.compose.camera.CameraState
 import org.maplibre.compose.camera.rememberCameraState
 import org.maplibre.compose.location.UserLocationState
+import org.maplibre.compose.location.rememberUserLocationState
 import kotlin.time.Duration
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -108,7 +108,7 @@ fun ShareLocationView(
         bottomSheetState = rememberStandardBottomSheetState(initialValue = SheetValue.Expanded)
     )
     val cameraState = rememberCameraState(firstPosition = MapDefaults.defaultCameraPosition)
-    val userLocationState = rememberUserLocationState(state.hasLocationPermission)
+    val userLocationState = rememberUserLocationState(state.locationProvider)
 
     LaunchedEffect(cameraState.isCameraMoving) {
         if (cameraState.moveReason == CameraMoveReason.GESTURE) {

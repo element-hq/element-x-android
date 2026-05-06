@@ -120,7 +120,6 @@ class ShareLocationViewTest {
         setShareLocationView(
             aShareLocationState(
                 dialogState = ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.LocationServiceDisabled),
-                hasLocationPermission = true,
                 eventSink = eventsRecorder
             ),
             navigateUp = EnsureNeverCalled(),
@@ -135,7 +134,6 @@ class ShareLocationViewTest {
         setShareLocationView(
             aShareLocationState(
                 dialogState = ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.LocationServiceDisabled),
-                hasLocationPermission = true,
                 eventSink = eventsRecorder
             ),
             navigateUp = EnsureNeverCalled(),
@@ -150,8 +148,8 @@ class ShareLocationViewTest {
         setShareLocationView(
             aShareLocationState(
                 dialogState = ShareLocationState.Dialog.LiveLocationDisclaimer,
-                eventSink = eventsRecorder,
                 canShareLiveLocation = true,
+                eventSink = eventsRecorder,
             ),
             navigateUp = EnsureNeverCalled(),
         )
@@ -166,8 +164,8 @@ class ShareLocationViewTest {
         setShareLocationView(
             aShareLocationState(
                 dialogState = ShareLocationState.Dialog.LiveLocationDisclaimer,
-                eventSink = eventsRecorder,
                 canShareLiveLocation = true,
+                eventSink = eventsRecorder,
             ),
             navigateUp = EnsureNeverCalled(),
         )
