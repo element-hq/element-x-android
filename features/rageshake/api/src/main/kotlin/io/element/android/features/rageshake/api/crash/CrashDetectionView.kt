@@ -43,7 +43,7 @@ private fun CrashDetectionContent(
     onDismiss: () -> Unit = { },
 ) {
     ConfirmationDialog(
-        title = stringResource(id = CommonStrings.action_report_bug),
+        title = stringResource(id = CommonStrings.common_report_a_problem),
         content = stringResource(id = R.string.crash_detection_dialog_content, appName),
         submitText = stringResource(id = CommonStrings.action_yes),
         cancelText = stringResource(id = CommonStrings.action_no),
