@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -91,9 +92,12 @@ internal fun MessagesViewTopBar(
                     modifier = titleModifier
                 )
 
+                val iconModifier = Modifier.size(16.dp)
+
                 when (dmUserIdentityState) {
                     IdentityState.Verified -> {
                         Icon(
+                            modifier = iconModifier,
                             imageVector = CompoundIcons.Verified(),
                             tint = ElementTheme.colors.iconSuccessPrimary,
                             contentDescription = null,
@@ -101,6 +105,7 @@ internal fun MessagesViewTopBar(
                     }
                     IdentityState.VerificationViolation -> {
                         Icon(
+                            modifier = iconModifier,
                             imageVector = CompoundIcons.ErrorSolid(),
                             tint = ElementTheme.colors.iconCriticalPrimary,
                             contentDescription = null,
@@ -112,11 +117,13 @@ internal fun MessagesViewTopBar(
                 when (sharedHistoryIcon) {
                     SharedHistoryIcon.NONE -> Unit
                     SharedHistoryIcon.SHARED -> Icon(
+                        modifier = iconModifier,
                         imageVector = CompoundIcons.History(),
                         tint = ElementTheme.colors.iconInfoPrimary,
                         contentDescription = stringResource(CommonStrings.common_shared_history),
                     )
                     SharedHistoryIcon.WORLD_READABLE -> Icon(
+                        modifier = iconModifier,
                         imageVector = CompoundIcons.UserProfileSolid(),
                         tint = ElementTheme.colors.iconInfoPrimary,
                         contentDescription = stringResource(CommonStrings.common_world_readable_history),
@@ -150,7 +157,7 @@ private fun RoomAvatarAndNameRow(
         )
         Text(
             modifier = Modifier
-                .padding(horizontal = 8.dp)
+                .padding(start = 8.dp)
                 .semantics {
                     heading()
                 },

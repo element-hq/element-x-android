@@ -289,6 +289,8 @@ class MessagesPresenter(
                             }
                         }
                         navigator.close()
+                    }.invokeOnCompletion {
+                        markingAsReadAndExiting.set(false)
                     }
                 }
             }
