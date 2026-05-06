@@ -32,6 +32,7 @@ class DefaultMediaViewerEntryPoint : MediaViewerEntryPoint {
                 filename = filename,
                 fileSize = null,
                 caption = null,
+                formattedCaption = null,
                 mimeType = mimeType,
                 formattedFileSize = "",
                 fileExtension = "",

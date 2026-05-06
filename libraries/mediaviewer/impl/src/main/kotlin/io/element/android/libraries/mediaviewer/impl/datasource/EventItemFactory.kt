@@ -8,8 +8,10 @@
 
 package io.element.android.libraries.mediaviewer.impl.datasource
 
+import androidx.core.text.toSpannable
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
+import io.element.android.libraries.androidutils.text.safeLinkify
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.dateformatter.api.toHumanReadableDuration
@@ -98,6 +100,7 @@ class EventItemFactory(
                             filename = type.filename,
                             fileSize = type.info?.size,
                             caption = type.caption,
+                            formattedCaption = type.formattedCaption?.body,
                             mimeType = type.info?.mimetype.orEmpty(),
                             formattedFileSize = type.info?.size?.let { fileSizeFormatter.format(it) }.orEmpty(),
                             fileExtension = fileExtensionExtractor.extractFromName(type.filename),
@@ -118,6 +121,7 @@ class EventItemFactory(
                             filename = type.filename,
                             fileSize = type.info?.size,
                             caption = type.caption,
+                            formattedCaption = type.formattedCaption?.body,
                             mimeType = type.info?.mimetype.orEmpty(),
                             formattedFileSize = type.info?.size?.let { fileSizeFormatter.format(it) }.orEmpty(),
                             fileExtension = fileExtensionExtractor.extractFromName(type.filename),
@@ -139,6 +143,7 @@ class EventItemFactory(
                             filename = type.filename,
                             fileSize = type.info?.size,
                             caption = type.caption,
+                            formattedCaption = type.formattedCaption?.body,
                             mimeType = type.info?.mimetype.orEmpty(),
                             formattedFileSize = type.info?.size?.let { fileSizeFormatter.format(it) }.orEmpty(),
                             fileExtension = fileExtensionExtractor.extractFromName(type.filename),
@@ -160,6 +165,7 @@ class EventItemFactory(
                             filename = type.filename,
                             fileSize = type.info?.size,
                             caption = type.caption,
+                            formattedCaption = type.formattedCaption?.body,
                             mimeType = type.info?.mimetype.orEmpty(),
                             formattedFileSize = type.info?.size?.let { fileSizeFormatter.format(it) }.orEmpty(),
                             fileExtension = fileExtensionExtractor.extractFromName(type.filename),
@@ -181,6 +187,7 @@ class EventItemFactory(
                             filename = type.filename,
                             fileSize = type.info?.size,
                             caption = type.caption,
+                            formattedCaption = type.formattedCaption?.body,
                             mimeType = type.info?.mimetype.orEmpty(),
                             formattedFileSize = type.info?.size?.let { fileSizeFormatter.format(it) }.orEmpty(),
                             fileExtension = fileExtensionExtractor.extractFromName(type.filename),
@@ -202,6 +209,7 @@ class EventItemFactory(
                             filename = type.filename,
                             fileSize = type.info?.size,
                             caption = type.caption,
+                            formattedCaption = type.formattedCaption?.body,
                             mimeType = type.info?.mimetype.orEmpty(),
                             formattedFileSize = type.info?.size?.let { fileSizeFormatter.format(it) }.orEmpty(),
                             fileExtension = fileExtensionExtractor.extractFromName(type.filename),

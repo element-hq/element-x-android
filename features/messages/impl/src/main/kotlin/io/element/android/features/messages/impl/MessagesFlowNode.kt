@@ -646,6 +646,7 @@ class MessagesFlowNode(
                 filename = content.filename,
                 fileSize = content.fileSize,
                 caption = content.caption,
+                formattedCaption = content.formattedCaption,
                 mimeType = content.mimeType,
                 formattedFileSize = content.formattedFileSize,
                 fileExtension = content.fileExtension,
