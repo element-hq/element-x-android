@@ -32,4 +32,3 @@ fun RoomPermissions.sendLiveLocationPermissions(): SendLiveLocationPermissions {
         canSendBeacon = canOwnUserSendMessage(MessageEventType.Beacon),
     )
 }
-

@@ -13,6 +13,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.androidutils.hash.hash
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -21,10 +22,8 @@ import kotlinx.coroutines.flow.first
 import timber.log.Timber
 import kotlin.time.Instant
 
-private val acceptedLiveLocationDisclaimerKey = booleanPreferencesKey("live_location_disclaimer_accepted")
-private val liveLocationExpiriesKey = stringPreferencesKey("live_location_expiries")
-private const val liveLocationExpiryEntrySeparator = ","
-private const val liveLocationExpiryValueSeparator = "="
+private const val LIVE_LOCATION_EXPIRY_ENTRY_SEPARATOR = ","
+private const val LIVE_LOCATION_EXPIRY_VALUE_SEPARATOR = "="
 
 @Inject
 @SingleIn(SessionScope::class)
@@ -33,32 +32,34 @@ class LiveLocationStore(
     sessionId: SessionId,
 ) {
     private val store = preferenceDataStoreFactory.create("location_${sessionId.value.hash().take(16)}")
+    private val acceptedLiveLocationDisclaimerKey = booleanPreferencesKey("live_location_disclaimer_accepted")
+    private val liveLocationExpiriesKey = stringPreferencesKey("live_location_expiries")
 
-    suspend fun hasAcceptedLiveLocationDisclaimer(): Boolean = runCatching {
+    suspend fun hasAcceptedLiveLocationDisclaimer(): Boolean = runCatchingExceptions {
         store.data.first()[acceptedLiveLocationDisclaimerKey] ?: false
     }.getOrDefault(false)
 
-    suspend fun setAcceptedLiveLocationDisclaimer(): Result<Unit> = runCatching {
+    suspend fun setAcceptedLiveLocationDisclaimer(): Result<Unit> = runCatchingExceptions {
         store.edit { prefs ->
             prefs[acceptedLiveLocationDisclaimerKey] = true
         }
     }
 
-    suspend fun getLiveLocationExpiries(): Map<RoomId, Instant> = runCatching {
+    suspend fun getLiveLocationExpiries(): Map<RoomId, Instant> = runCatchingExceptions {
         val serialized = store.data.first()[liveLocationExpiriesKey].orEmpty()
         decodeLiveLocationExpiries(serialized)
     }.onFailure { error ->
         Timber.e(error, "Failed to decode live location expiry payload")
     }.getOrDefault(emptyMap())
 
-    suspend fun setLiveLocationExpiry(roomId: RoomId, expiresAt: Instant): Result<Unit> = runCatching {
+    suspend fun setLiveLocationExpiry(roomId: RoomId, expiresAt: Instant): Result<Unit> = runCatchingExceptions {
         store.edit { prefs ->
             val current = decodeLiveLocationExpiries(prefs[liveLocationExpiriesKey])
             prefs[liveLocationExpiriesKey] = encodeLiveLocationExpiries(current + (roomId to expiresAt))
         }
     }
 
-    suspend fun removeLiveLocationExpiry(roomId: RoomId): Result<Unit> = runCatching {
+    suspend fun removeLiveLocationExpiry(roomId: RoomId): Result<Unit> = runCatchingExceptions {
         store.edit { prefs ->
             val current = decodeLiveLocationExpiries(prefs[liveLocationExpiriesKey])
             val updated = current - roomId
@@ -72,10 +73,10 @@ class LiveLocationStore(
 
     private fun decodeLiveLocationExpiries(serialized: String?): Map<RoomId, Instant> {
         if (serialized.isNullOrBlank()) return emptyMap()
-        return runCatching {
+        return runCatchingExceptions {
             serialized
-                .split(liveLocationExpiryEntrySeparator)
-                .map { it.split(liveLocationExpiryValueSeparator) }
+                .split(LIVE_LOCATION_EXPIRY_ENTRY_SEPARATOR)
+                .map { it.split(LIVE_LOCATION_EXPIRY_VALUE_SEPARATOR) }
                 .associate { values ->
                     val roomId = RoomId(values[0])
                     val expiresAtMillis = values[1].toLong()
@@ -85,8 +86,8 @@ class LiveLocationStore(
     }
 
     private fun encodeLiveLocationExpiries(expiries: Map<RoomId, Instant>): String {
-        return expiries.entries.joinToString(separator = liveLocationExpiryEntrySeparator) { (roomId, expiresAt) ->
-            "${roomId.value}$liveLocationExpiryValueSeparator${expiresAt.toEpochMilliseconds()}"
+        return expiries.entries.joinToString(separator = LIVE_LOCATION_EXPIRY_ENTRY_SEPARATOR) { (roomId, expiresAt) ->
+            "${roomId.value}$LIVE_LOCATION_EXPIRY_VALUE_SEPARATOR${expiresAt.toEpochMilliseconds()}"
         }
     }
 

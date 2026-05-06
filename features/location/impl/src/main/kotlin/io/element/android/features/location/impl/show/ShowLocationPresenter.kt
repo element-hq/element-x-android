@@ -25,6 +25,7 @@ import io.element.android.features.location.api.ShowLocationMode
 import io.element.android.features.location.api.live.ActiveLiveLocationShareManager
 import io.element.android.features.location.impl.common.LocationConstraintsCheck
 import io.element.android.features.location.impl.common.MapDefaults
+import io.element.android.features.location.impl.common.SendLiveLocationPermissions
 import io.element.android.features.location.impl.common.actions.LocationActions
 import io.element.android.features.location.impl.common.checkLocationConstraints
 import io.element.android.features.location.impl.common.permissions.PermissionsEvents
@@ -32,7 +33,6 @@ import io.element.android.features.location.impl.common.permissions.PermissionsP
 import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.features.location.impl.common.toDialogState
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
-import io.element.android.features.location.impl.common.SendLiveLocationPermissions
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.mapState
 import io.element.android.libraries.core.meta.BuildMeta

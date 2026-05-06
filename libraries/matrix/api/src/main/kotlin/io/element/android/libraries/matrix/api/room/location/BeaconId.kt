@@ -7,10 +7,6 @@
 
 package io.element.android.libraries.matrix.api.room.location
 
-import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.EventId
 
-data class BeaconInfoUpdate(
-    val roomId: RoomId,
-    val beaconId: BeaconId,
-    val isLive: Boolean,
-)
+typealias BeaconId = EventId

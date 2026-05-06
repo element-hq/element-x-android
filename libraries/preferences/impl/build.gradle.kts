@@ -1,5 +1,5 @@
-import extension.testCommonDependencies
 import extension.setupDependencyInjection
+import extension.testCommonDependencies
 
 /*
  * Copyright (c) 2025 Element Creations Ltd.

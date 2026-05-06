@@ -39,7 +39,7 @@ data class LocationShareItem(
     val isLive: Boolean,
     val assetType: AssetType?,
     val isOwnUser: Boolean
-){
+) {
     val canStopSharing = isLive && isOwnUser
 }
 

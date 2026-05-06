@@ -10,7 +10,6 @@ package io.element.android.features.location.impl.common.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.window.Dialog
 import io.element.android.features.location.impl.R
 import io.element.android.libraries.designsystem.components.dialogs.AlertDialog
 import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
@@ -58,5 +57,5 @@ sealed interface LocationConstraintsDialogState {
     data object PermissionRationale : LocationConstraintsDialogState
     data object PermissionDenied : LocationConstraintsDialogState
     data object LocationServiceDisabled : LocationConstraintsDialogState
-    data object NotEnoughPowerLevel: LocationConstraintsDialogState
+    data object NotEnoughPowerLevel : LocationConstraintsDialogState
 }

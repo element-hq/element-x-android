@@ -9,7 +9,6 @@ package io.element.android.features.location.impl.show
 
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.core.UserId
-import io.element.android.libraries.matrix.api.room.location.LiveLocationShare
 import io.element.android.libraries.matrix.test.room.location.aLiveLocationShare
 import org.junit.Test
 

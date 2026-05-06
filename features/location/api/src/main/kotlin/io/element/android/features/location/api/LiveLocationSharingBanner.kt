@@ -93,7 +93,7 @@ private fun Modifier.drawBannerBorder(borderColor: Color): Modifier = drawBehind
 
 @PreviewsDayNight
 @Composable
-private fun LiveLocationSharingBannerPreview() = ElementPreview {
+internal fun LiveLocationSharingBannerPreview() = ElementPreview {
     LiveLocationSharingBanner(
         onClick = {},
         onStopClick = {},

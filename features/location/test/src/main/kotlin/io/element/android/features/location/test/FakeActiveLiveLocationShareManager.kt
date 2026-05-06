@@ -21,7 +21,6 @@ class FakeActiveLiveLocationShareManager(
     val startShareLambda: (roomId: RoomId, duration: Duration) -> Result<Unit> = { _, _ -> lambdaError() },
     val stopShareLambda: (roomId: RoomId) -> Result<Unit> = { _ -> lambdaError() },
 ) : ActiveLiveLocationShareManager {
-
     private val _sharingRoomIds = MutableStateFlow(emptySet<RoomId>())
     override val sharingRoomIds: StateFlow<Set<RoomId>> = _sharingRoomIds
 

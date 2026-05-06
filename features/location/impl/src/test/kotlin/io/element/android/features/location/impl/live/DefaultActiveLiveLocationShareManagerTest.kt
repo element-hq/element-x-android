@@ -64,7 +64,7 @@ class DefaultActiveLiveLocationShareManagerTest {
                 sessionId = A_SESSION_ID,
                 sessionCoroutineScope = backgroundScope,
                 ownBeaconInfoUpdates = beaconInfoUpdates,
-            ).also { it.givenGetRoomResult(A_ROOM_ID, room) },
+            ).apply { givenGetRoomResult(A_ROOM_ID, room) },
             coordinator = coordinator,
             clock = FakeSystemClock(epochMillisResult = 123L),
         )
@@ -97,7 +97,7 @@ class DefaultActiveLiveLocationShareManagerTest {
                 sessionId = A_SESSION_ID,
                 sessionCoroutineScope = backgroundScope,
                 ownBeaconInfoUpdates = beaconInfoUpdates,
-            ).also { it.givenGetRoomResult(A_ROOM_ID, room) },
+            ).apply { givenGetRoomResult(A_ROOM_ID, room) },
             coordinator = coordinator,
         )
         advanceUntilIdle()
@@ -124,8 +124,8 @@ class DefaultActiveLiveLocationShareManagerTest {
                 sessionId = A_SESSION_ID,
                 sessionCoroutineScope = backgroundScope,
                 ownBeaconInfoUpdates = beaconInfoUpdatesOne,
-            ).also {
-                it.givenGetRoomResult(
+            ).apply {
+                givenGetRoomResult(
                     A_ROOM_ID,
                     FakeJoinedRoom(
                         startLiveLocationShareResult = { Result.success(AN_EVENT_ID) },
@@ -140,8 +140,8 @@ class DefaultActiveLiveLocationShareManagerTest {
                 sessionId = A_SESSION_ID_2,
                 sessionCoroutineScope = backgroundScope,
                 ownBeaconInfoUpdates = beaconInfoUpdatesTwo,
-            ).also {
-                it.givenGetRoomResult(
+            ).apply {
+                givenGetRoomResult(
                     A_ROOM_ID,
                     FakeJoinedRoom(
                         startLiveLocationShareResult = { Result.success(AN_EVENT_ID) },
@@ -171,8 +171,8 @@ class DefaultActiveLiveLocationShareManagerTest {
                 sessionId = A_SESSION_ID,
                 sessionCoroutineScope = backgroundScope,
                 ownBeaconInfoUpdates = beaconInfoUpdates,
-            ).also {
-                it.givenGetRoomResult(
+            ).apply {
+                givenGetRoomResult(
                     A_ROOM_ID,
                     FakeJoinedRoom(
                         startLiveLocationShareResult = { Result.success(AN_EVENT_ID) },
@@ -203,8 +203,8 @@ class DefaultActiveLiveLocationShareManagerTest {
                 sessionId = A_SESSION_ID,
                 sessionCoroutineScope = backgroundScope,
                 ownBeaconInfoUpdates = beaconInfoUpdates,
-            ).also {
-                it.givenGetRoomResult(
+            ).apply {
+                givenGetRoomResult(
                     A_ROOM_ID,
                     FakeJoinedRoom(
                         startLiveLocationShareResult = { Result.success(AN_EVENT_ID) },
@@ -237,8 +237,8 @@ class DefaultActiveLiveLocationShareManagerTest {
             client = FakeMatrixClient(
                 sessionId = A_SESSION_ID,
                 sessionCoroutineScope = backgroundScope,
-            ).also {
-                it.givenGetRoomResult(A_ROOM_ID, FakeJoinedRoom())
+            ).apply {
+                givenGetRoomResult(A_ROOM_ID, FakeJoinedRoom())
             },
             coordinator = createCoordinator(
                 startService = startServiceRecorder,
@@ -263,8 +263,8 @@ class DefaultActiveLiveLocationShareManagerTest {
             client = FakeMatrixClient(
                 sessionId = A_SESSION_ID,
                 sessionCoroutineScope = backgroundScope,
-            ).also {
-                it.givenGetRoomResult(
+            ).apply {
+                givenGetRoomResult(
                     A_ROOM_ID,
                     FakeJoinedRoom(stopLiveLocationShareResult = stopLiveLocationShareResult),
                 )
@@ -287,8 +287,8 @@ class DefaultActiveLiveLocationShareManagerTest {
             client = FakeMatrixClient(
                 sessionId = A_SESSION_ID,
                 sessionCoroutineScope = backgroundScope,
-            ).also {
-                it.givenGetRoomResult(A_ROOM_ID, room)
+            ).apply {
+                givenGetRoomResult(A_ROOM_ID, room)
             },
             coordinator = createCoordinator(),
             liveLocationStore = liveLocationStore,
@@ -313,8 +313,8 @@ class DefaultActiveLiveLocationShareManagerTest {
                 sessionId = A_SESSION_ID,
                 sessionCoroutineScope = backgroundScope,
                 ownBeaconInfoUpdates = beaconInfoUpdates,
-            ).also {
-                it.givenGetRoomResult(
+            ).apply {
+                givenGetRoomResult(
                     A_ROOM_ID,
                     FakeJoinedRoom(
                         startLiveLocationShareResult = { Result.success(AN_EVENT_ID) },
@@ -351,8 +351,8 @@ class DefaultActiveLiveLocationShareManagerTest {
             client = FakeMatrixClient(
                 sessionId = A_SESSION_ID,
                 sessionCoroutineScope = backgroundScope,
-            ).also {
-                it.givenGetRoomResult(
+            ).apply {
+                givenGetRoomResult(
                     A_ROOM_ID,
                     FakeJoinedRoom(
                         stopLiveLocationShareResult = stopLiveLocationShareLambda
@@ -385,8 +385,8 @@ class DefaultActiveLiveLocationShareManagerTest {
                 sessionId = A_SESSION_ID,
                 sessionCoroutineScope = backgroundScope,
                 ownBeaconInfoUpdates = beaconInfoUpdates,
-            ).also {
-                it.givenGetRoomResult(
+            ).apply {
+                givenGetRoomResult(
                     A_ROOM_ID,
                     FakeJoinedRoom(
                         startLiveLocationShareResult = { Result.success(AN_EVENT_ID) },

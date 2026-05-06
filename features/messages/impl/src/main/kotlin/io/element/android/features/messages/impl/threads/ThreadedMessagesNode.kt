@@ -250,7 +250,7 @@ class ThreadedMessagesNode(
     }
 
     override fun navigateToCurrentLiveLocation() {
-        //Shouldn't happen
+        // Shouldn't happen
         callback.navigateToCurrentLiveLocation()
     }
 

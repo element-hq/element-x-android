@@ -14,6 +14,7 @@ import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.features.location.api.Location
+import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.services.toolbox.api.systemclock.SystemClock
@@ -33,7 +34,6 @@ class LiveLocationSharingCoordinator internal constructor(
     private val stopService: () -> Unit,
     private val nowMillis: () -> Long,
 ) {
-
     @Inject
     constructor(@ApplicationContext context: Context, clock: SystemClock) : this(
         startService = {
@@ -56,7 +56,7 @@ class LiveLocationSharingCoordinator internal constructor(
         receivers[sessionId] = receiver
         if (wasEmpty) {
             Timber.d("LiveLocationSharingCoordinator starting service")
-            runCatching(startService).onFailure {
+            runCatchingExceptions(startService).onFailure {
                 Timber.e(it, "Failed to start live location sharing service")
             }
         }
@@ -71,7 +71,7 @@ class LiveLocationSharingCoordinator internal constructor(
         if (receivers.isEmpty()) {
             lastKnownLocation.store(null)
             Timber.d("LiveLocationSharingCoordinator stopping service (no more receivers)")
-            runCatching(stopService).onFailure {
+            runCatchingExceptions(stopService).onFailure {
                 Timber.e(it, "Failed to stop live location sharing service")
             }
         }
@@ -88,7 +88,7 @@ class LiveLocationSharingCoordinator internal constructor(
         lastDispatchMillis.store(currentTimeMillis)
         receivers.forEach { (sessionId, receiver) ->
             Timber.d("Dispatch received location for session $sessionId ")
-            runCatching {
+            runCatchingExceptions {
                 receiver.onLocationUpdate(location)
             }.onFailure {
                 Timber.e(it, "Failed to dispatch live location update for session $sessionId")

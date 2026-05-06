@@ -62,7 +62,6 @@ fun aTimelineItemLocationContent(
     mode = mode,
 )
 
-
 fun aLocation() = Location(
     lat = 52.2445,
     lon = 0.7186,

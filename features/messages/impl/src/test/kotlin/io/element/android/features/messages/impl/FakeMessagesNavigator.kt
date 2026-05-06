@@ -28,7 +28,7 @@ class FakeMessagesNavigator(
     private val navigateToDeveloperSettingsLambda: () -> Unit = { lambdaError() },
     private val onOpenThreadLambda: (threadRootId: ThreadId, focusedEventId: EventId?) -> Unit = { _, _ -> lambdaError() },
     private val closeLambda: () -> Unit = { lambdaError() },
-    private val  navigateToCurrentLiveLocationLambda: ()->Unit = {lambdaError()},
+    private val navigateToCurrentLiveLocationLambda: () -> Unit = { lambdaError() },
 ) : MessagesNavigator {
     override fun navigateToEventDebugInfo(eventId: EventId?, debugInfo: TimelineItemDebugInfo) {
         onShowEventDebugInfoClickLambda(eventId, debugInfo)

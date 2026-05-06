@@ -17,5 +17,5 @@ sealed interface ShowLocationEvent {
     data object RequestPermissions : ShowLocationEvent
     data object OpenAppSettings : ShowLocationEvent
     data object OpenLocationSettings : ShowLocationEvent
-    data object StopLocationSharing: ShowLocationEvent
+    data object StopLocationSharing : ShowLocationEvent
 }

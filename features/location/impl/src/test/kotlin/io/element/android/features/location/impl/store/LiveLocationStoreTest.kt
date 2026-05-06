@@ -9,16 +9,15 @@ package io.element.android.features.location.impl.store
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
-import androidx.datastore.preferences.core.emptyPreferences
 import androidx.datastore.preferences.core.mutablePreferencesOf
 import androidx.datastore.preferences.core.stringPreferencesKey
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.location.impl.live.LiveLocationStore
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
-import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import io.element.android.libraries.preferences.test.FakePreferenceDataStoreFactory
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -26,7 +25,7 @@ import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import kotlin.time.Instant
 
-class DefaultLiveLocationStoreTest {
+class LiveLocationStoreTest {
     private val preferenceDataStoreFactory = FakePreferenceDataStoreFactory()
 
     @Test

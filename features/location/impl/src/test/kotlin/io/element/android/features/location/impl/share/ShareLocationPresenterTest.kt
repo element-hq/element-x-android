@@ -34,6 +34,8 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.room.MessageEventType
+import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -43,6 +45,7 @@ import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
+import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
 import io.element.android.libraries.preferences.test.FakePreferenceDataStoreFactory
@@ -318,7 +321,11 @@ class ShareLocationPresenterTest {
 
     @Test
     fun `ShowLiveLocationDurationPicker shows duration dialog when constraints pass`() = runTest {
-        val joinedRoom = FakeJoinedRoom()
+        val joinedRoom = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
+                roomPermissions = grantedSendLiveLocationPermissions()
+            )
+        )
         val locationStore = createLiveLocationStore(sessionId = joinedRoom.sessionId).apply {
             setAcceptedLiveLocationDisclaimer().getOrThrow()
         }
@@ -364,7 +371,11 @@ class ShareLocationPresenterTest {
 
     @Test
     fun `AcceptLiveLocationDisclaimer persists acceptance and shows durations`() = runTest {
-        val joinedRoom = FakeJoinedRoom()
+        val joinedRoom = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
+                roomPermissions = grantedSendLiveLocationPermissions()
+            )
+        )
         val locationStore = createLiveLocationStore(sessionId = joinedRoom.sessionId)
         val presenter = createShareLocationPresenter(joinedRoom = joinedRoom, liveLocationStore = locationStore)
         fakePermissionsPresenter.givenState(
@@ -417,7 +428,11 @@ class ShareLocationPresenterTest {
 
     @Test
     fun `ShowLiveLocationDurationPicker bypasses disclaimer when already accepted`() = runTest {
-        val joinedRoom = FakeJoinedRoom()
+        val joinedRoom = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
+                roomPermissions = grantedSendLiveLocationPermissions()
+            )
+        )
         val locationStore = createLiveLocationStore(sessionId = joinedRoom.sessionId).apply {
             setAcceptedLiveLocationDisclaimer().getOrThrow()
         }
@@ -470,7 +485,11 @@ class ShareLocationPresenterTest {
 
     @Test
     fun `ShowLiveLocationDurationPicker shows constraint dialog when permissions denied`() = runTest {
-        val joinedRoom = FakeJoinedRoom()
+        val joinedRoom = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
+                roomPermissions = grantedSendLiveLocationPermissions()
+            )
+        )
         val locationStore = createLiveLocationStore(sessionId = joinedRoom.sessionId).apply {
             setAcceptedLiveLocationDisclaimer().getOrThrow()
         }
@@ -628,7 +647,8 @@ class ShareLocationPresenterTest {
             state.eventSink(ShareLocationEvent.StartLiveLocationShare(duration = 1.hours))
             advanceUntilIdle()
             assert(startShareLambda).isCalledOnce().with(
-                value(A_ROOM_ID), value(1.hours)
+                value(A_ROOM_ID),
+                value(1.hours)
             )
             cancelAndIgnoreRemainingEvents()
         }
@@ -651,7 +671,7 @@ private fun createFailingLiveLocationStore(sessionId: SessionId = A_SESSION_ID):
             override val data: Flow<Preferences> = flowOf(emptyPreferences())
 
             override suspend fun updateData(transform: suspend (t: Preferences) -> Preferences): Preferences {
-                throw IllegalStateException("boom")
+                error("Failed to update preferences")
             }
         }
     }
@@ -660,3 +680,8 @@ private fun createFailingLiveLocationStore(sessionId: SessionId = A_SESSION_ID):
         preferenceDataStoreFactory = failingPreferenceDataStoreFactory,
     )
 }
+
+private fun grantedSendLiveLocationPermissions(): FakeRoomPermissions = FakeRoomPermissions(
+    canSendState = { it is StateEventType.BeaconInfo },
+    canSendMessage = { it is MessageEventType.Beacon }
+)

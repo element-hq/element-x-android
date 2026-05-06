@@ -42,7 +42,6 @@ import kotlin.time.Duration.Companion.seconds
 import io.element.android.features.location.api.Location as ApiLocation
 
 class LiveLocationSharingService : Service() {
-
     companion object {
         private const val UPDATE_INTERVAL_IN_SECOND = 60
     }
@@ -63,17 +62,21 @@ class LiveLocationSharingService : Service() {
     override fun onCreate() {
         super.onCreate()
         Timber.d("LiveLocationSharingService onCreate")
-        runCatching {
+        runCatchingExceptions {
             bindings<LocationBindings>().inject(this)
             appForegroundStateService.updateIsSharingLiveLocation(true)
             coroutineScope = appCoroutineScope.childScope(Dispatchers.Default, "LiveLocationSharingService")
             val notificationId = NotificationIdProvider.getForegroundServiceNotificationId(ForegroundServiceType.LIVE_LOCATION)
             Timber.d("LiveLocationSharingService starting foreground service with notificationId=$notificationId")
             ServiceCompat.startForeground(
-                /* service = */ this@LiveLocationSharingService,
-                /* id = */ notificationId,
-                /* notification = */ notificationCreator.createNotification(),
-                /* foregroundServiceType = */ FOREGROUND_SERVICE_TYPE_LOCATION
+                // service =
+                this@LiveLocationSharingService,
+                // id =
+                notificationId,
+                // notification =
+                notificationCreator.createNotification(),
+                // foregroundServiceType =
+                FOREGROUND_SERVICE_TYPE_LOCATION
             )
             coroutineScope.launch {
                 runCatchingExceptions {

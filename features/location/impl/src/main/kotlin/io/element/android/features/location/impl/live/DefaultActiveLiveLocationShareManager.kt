@@ -16,9 +16,9 @@ import io.element.android.features.location.impl.live.service.LiveLocationReceiv
 import io.element.android.features.location.impl.live.service.LiveLocationSharingCoordinator
 import io.element.android.libraries.di.SessionScope
 import io.element.android.libraries.matrix.api.MatrixClient
-import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.room.location.BeaconId
 import io.element.android.libraries.matrix.api.room.location.LiveLocationException
 import io.element.android.libraries.sessionstorage.api.observer.SessionListener
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
@@ -42,8 +42,6 @@ import kotlin.concurrent.atomics.ExperimentalAtomicApi
 import kotlin.time.Duration
 import kotlin.time.Instant
 
-private typealias ShareId = EventId
-
 @OptIn(ExperimentalAtomicApi::class)
 @SingleIn(SessionScope::class)
 @ContributesBinding(SessionScope::class, binding = binding<ActiveLiveLocationShareManager>())
@@ -54,11 +52,10 @@ class DefaultActiveLiveLocationShareManager(
     private val clock: SystemClock,
     private val sessionObserver: SessionObserver,
 ) : ActiveLiveLocationShareManager, LiveLocationReceiver {
-
     private val isSetup = AtomicBoolean(false)
     private val cachedRooms = ConcurrentHashMap<RoomId, JoinedRoom>()
     private val timeoutJobs = ConcurrentHashMap<RoomId, Job>()
-    private val syncedActiveShareIds = MutableStateFlow<Set<ShareId>>(emptySet())
+    private val syncedActiveShareIds = MutableStateFlow<Set<BeaconId>>(emptySet())
     private val localSharingRoomIds = MutableStateFlow<Set<RoomId>>(emptySet())
     override val sharingRoomIds: StateFlow<Set<RoomId>> = localSharingRoomIds
 
@@ -109,7 +106,8 @@ class DefaultActiveLiveLocationShareManager(
                 syncedActiveShareIds.first { beaconIds -> beaconIds.contains(beaconId) }
                 val expiresAt = Instant.fromEpochMilliseconds(clock.epochMillis() + duration.inWholeMilliseconds)
                 startLocalShare(roomId, expiresAt)
-            }.onFailure {
+            }
+            .onFailure {
                 Timber.e(it, "ActiveLiveLocationShareManager failed to start share for room $roomId")
                 stopLocalShare(roomId)
             }
@@ -124,9 +122,11 @@ class DefaultActiveLiveLocationShareManager(
         room.stopLiveLocationShare()
             .onSuccess {
                 Timber.d("ActiveLiveLocationShareManager share stopped successfully for room $roomId")
-            }.onFailure {
+            }
+            .onFailure {
                 Timber.e(it, "ActiveLiveLocationShareManager failed to stop share for room $roomId")
-            }.also {
+            }
+            .also {
                 stopLocalShare(roomId)
             }
     }
@@ -136,9 +136,10 @@ class DefaultActiveLiveLocationShareManager(
         Timber.d("ActiveLiveLocationShareManager received location update for $activeSharesCount active share(s)")
         localSharingRoomIds.value.forEach { roomId ->
             Timber.d("ActiveLiveLocationShareManager sending location to room $roomId")
-            sendLiveLocation(roomId, location).onFailure {
-                Timber.e(it, "ActiveLiveLocationShareManager failed to send location to room $roomId")
-            }
+            sendLiveLocation(roomId, location)
+                .onFailure {
+                    Timber.e(it, "ActiveLiveLocationShareManager failed to send location to room $roomId")
+                }
         }
     }
 
@@ -185,12 +186,13 @@ class DefaultActiveLiveLocationShareManager(
 
     private fun scheduleTimeout(roomId: RoomId, expiresAt: Instant) {
         timeoutJobs.remove(roomId)?.cancel()
-        val delayMillis = (expiresAt.toEpochMilliseconds() - clock.epochMillis())
+        val delayMillis = expiresAt.toEpochMilliseconds() - clock.epochMillis()
         timeoutJobs[roomId] = matrixClient.sessionCoroutineScope.launch {
             delay(delayMillis)
-            stopShare(roomId).onFailure { error ->
-                Timber.e(error, "ActiveLiveLocationShareManager failed to stop timed out share for room $roomId")
-            }
+            stopShare(roomId)
+                .onFailure { error ->
+                    Timber.e(error, "ActiveLiveLocationShareManager failed to stop timed out share for room $roomId")
+                }
         }
     }
 

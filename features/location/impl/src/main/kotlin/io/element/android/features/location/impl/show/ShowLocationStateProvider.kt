@@ -90,5 +90,4 @@ fun aLocationShareItem(
     isLive = isLive,
     assetType = assetType,
     isOwnUser = isOwnUser,
-
 )

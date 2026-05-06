@@ -343,7 +343,6 @@ private fun LiveLocationUpdatesSection(
     onOpenAppPermissionsClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-
     PreferenceCategory(
         modifier = modifier,
         showTopDivider = true,

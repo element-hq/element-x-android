@@ -13,7 +13,6 @@ import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.ProcessLifecycleOwner
 import io.element.android.services.appnavstate.api.AppForegroundStateService
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 
 class DefaultAppForegroundStateService : AppForegroundStateService {
     override val isInForeground = MutableStateFlow(false)
@@ -21,7 +20,7 @@ class DefaultAppForegroundStateService : AppForegroundStateService {
     override val isSyncingNotificationEvent = MutableStateFlow(false)
     override val hasRingingCall = MutableStateFlow(false)
 
-    override val isSharingLiveLocation= MutableStateFlow<Boolean>(false)
+    override val isSharingLiveLocation = MutableStateFlow<Boolean>(false)
 
     private val appLifecycle: Lifecycle by lazy { ProcessLifecycleOwner.get().lifecycle }
 
