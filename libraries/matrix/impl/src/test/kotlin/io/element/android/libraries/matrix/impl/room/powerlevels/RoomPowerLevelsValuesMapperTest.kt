@@ -30,6 +30,8 @@ class RoomPowerLevelsValuesMapperTest {
                     roomAvatar = 9,
                     roomTopic = 10,
                     spaceChild = 11,
+                    beacon = 12,
+                    beaconInfo = 13,
                 )
             )
         ).isEqualTo(
@@ -44,6 +46,8 @@ class RoomPowerLevelsValuesMapperTest {
                 roomAvatar = 9,
                 roomTopic = 10,
                 spaceChild = 11,
+                beacon = 12,
+                beaconInfo = 13,
             )
         )
     }

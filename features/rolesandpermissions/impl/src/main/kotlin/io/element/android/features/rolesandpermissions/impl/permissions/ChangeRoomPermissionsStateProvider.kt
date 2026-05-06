@@ -63,5 +63,8 @@ private fun previewPermissions(): RoomPowerLevelsValues {
         // SpaceManagement section
         spaceChild = RoomMember.Role.Moderator.powerLevel,
         stateDefault = RoomMember.Role.Moderator.powerLevel,
+        // Live location beacon section
+        beacon = RoomMember.Role.Admin.powerLevel,
+        beaconInfo = RoomMember.Role.Moderator.powerLevel,
     )
 }

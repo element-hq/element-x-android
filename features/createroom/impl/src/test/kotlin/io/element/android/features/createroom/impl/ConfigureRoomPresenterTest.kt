@@ -301,7 +301,9 @@ class ConfigureRoomPresenterTest {
                     roomName = 0,
                     roomAvatar = 0,
                     roomTopic = 0,
-                    spaceChild = 0
+                    spaceChild = 0,
+                    beacon = 0,
+                    beaconInfo = 0,
                 ),
                 users = persistentMapOf(),
             )
