@@ -90,7 +90,7 @@ enum class FeatureFlags(
         title = "Multi accounts",
         description = "Allow the application to connect to multiple accounts at the same time." +
             "\n\nWARNING: this feature is EXPERIMENTAL and UNSTABLE.",
-        defaultValue = { false },
+        defaultValue = { true },
         isFinished = false,
     ),
     QrCodeLogin(
