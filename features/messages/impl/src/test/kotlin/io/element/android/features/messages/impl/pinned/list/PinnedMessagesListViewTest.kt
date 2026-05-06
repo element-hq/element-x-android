@@ -108,6 +108,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setPinnedMessagesListView(
             onBackClick = onBackClick,
             onEventClick = onEventClick,
             onUserDataClick = onUserDataClick,
+            onMemberClick = {},
             onLinkClick = onLinkClick,
             onLinkLongClick = onLinkLongClick,
         )

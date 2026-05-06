@@ -120,6 +120,7 @@ class PinnedMessagesListNode(
                     callback.handleEventClick(it, canUseOverlay)
                 },
                 onUserDataClick = { callback.navigateToRoomMemberDetails(it.userId) },
+                onMemberClick = {},
                 onLinkClick = { link -> onLinkClick(context, link.url) },
                 onLinkLongClick = {
                     view.performHapticFeedback(

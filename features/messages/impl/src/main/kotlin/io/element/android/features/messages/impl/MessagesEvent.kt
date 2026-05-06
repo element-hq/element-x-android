@@ -10,6 +10,7 @@ package io.element.android.features.messages.impl
 
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemAction
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.item.event.EventOrTransactionId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 
@@ -18,6 +19,7 @@ sealed interface MessagesEvent {
     data class ToggleReaction(val emoji: String, val eventOrTransactionId: EventOrTransactionId) : MessagesEvent
     data class InviteDialogDismissed(val action: InviteDialogAction) : MessagesEvent
     data class OnUserClicked(val user: MatrixUser) : MessagesEvent
+    data class OnMemberClicked(val userId: UserId) : MessagesEvent
     data object MarkAsFullyReadAndExit : MessagesEvent
 }
 
