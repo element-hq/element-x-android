@@ -69,7 +69,13 @@ class PinUnlockPresenter(
         LaunchedEffect(Unit) {
             suspend {
                 val pinCodeSize = pinCodeManager.getPinCodeSize()
-                PinEntry.createEmpty(pinCodeSize)
+                if (pinCodeSize == null) {
+                    // No pin code set, deleted store? Force sign out
+                    showSignOutPrompt = true
+                    throw Exception("No pin code size found")
+                } else {
+                    PinEntry.createEmpty(pinCodeSize)
+                }
             }.runCatchingUpdatingState(pinEntryState)
         }
         LaunchedEffect(biometricUnlock) {

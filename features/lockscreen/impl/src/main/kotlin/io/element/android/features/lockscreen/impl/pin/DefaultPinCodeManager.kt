@@ -41,8 +41,8 @@ class DefaultPinCodeManager(
         return secretKeyRepository.hasKey(SECRET_KEY_ALIAS)
     }
 
-    override suspend fun getPinCodeSize(): Int {
-        val encryptedPinCode = lockScreenStore.getEncryptedCode() ?: return 0
+    override suspend fun getPinCodeSize(): Int? {
+        val encryptedPinCode = lockScreenStore.getEncryptedCode() ?: return null
         val secretKey = secretKeyRepository.getOrCreateKey(SECRET_KEY_ALIAS, false)
         val decryptedPinCode = encryptionDecryptionService.decrypt(secretKey, EncryptionResult.fromBase64(encryptedPinCode))
         return decryptedPinCode.size
