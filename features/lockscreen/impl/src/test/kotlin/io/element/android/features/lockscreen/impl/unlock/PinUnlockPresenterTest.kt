@@ -16,6 +16,7 @@ import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManagerCall
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.pin.model.assertText
+import io.element.android.features.lockscreen.impl.pin.storage.InMemoryLockScreenStore
 import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypadModel
 import io.element.android.features.logout.test.FakeLogoutUseCase
 import io.element.android.libraries.architecture.AsyncAction
@@ -124,6 +125,28 @@ class PinUnlockPresenterTest {
         }
     }
 
+    @Test
+    fun `present - pin is configured, but deleted in store, sign out prompt will be shown`() = runTest {
+        val lockScreenStore = InMemoryLockScreenStore()
+        val pinCodeManager = aPinCodeManager(
+            lockScreenStore = lockScreenStore,
+        )
+        val presenter = createPinUnlockPresenter(
+            pinCodeManager = pinCodeManager,
+        )
+        // Delete the pin code from the store
+        lockScreenStore.deleteEncryptedPinCode()
+        presenter.test {
+            skipItems(1)
+            awaitItem().also { state ->
+                assertThat(state.pinEntry).isInstanceOf(AsyncData.Failure::class.java)
+                assertThat(state.showSignOutPrompt).isTrue()
+                assertThat(state.isSignOutPromptCancellable).isFalse()
+                assertThat(state.remainingAttempts.dataOrNull()).isEqualTo(3)
+            }
+        }
+    }
+
     private fun AsyncData<PinEntry>.assertText(text: String) {
         dataOrNull()?.assertText(text)
     }
@@ -131,9 +154,10 @@ class PinUnlockPresenterTest {
     private suspend fun TestScope.createPinUnlockPresenter(
         biometricAuthenticatorManager: BiometricAuthenticatorManager = FakeBiometricAuthenticatorManager(),
         callback: PinCodeManager.Callback = DefaultPinCodeManagerCallback(),
-        logoutUseCase: FakeLogoutUseCase = FakeLogoutUseCase(logoutLambda = { "" }),
+        logoutUseCase: FakeLogoutUseCase = FakeLogoutUseCase(logoutLambda = {}),
+        pinCodeManager: PinCodeManager = aPinCodeManager()
     ): PinUnlockPresenter {
-        val pinCodeManager = aPinCodeManager().apply {
+        pinCodeManager.apply {
             addCallback(callback)
             createPinCode(completePin)
         }
