@@ -77,7 +77,7 @@ private fun RageshakeDialogContent(
     onYesClick: () -> Unit = { },
 ) {
     ConfirmationDialog(
-        title = stringResource(id = CommonStrings.action_report_bug),
+        title = stringResource(id = CommonStrings.common_report_a_problem),
         content = stringResource(id = R.string.rageshake_detection_dialog_content),
         thirdButtonText = stringResource(id = CommonStrings.action_disable),
         submitText = stringResource(id = CommonStrings.action_yes),
