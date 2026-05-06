@@ -10,8 +10,10 @@ package io.element.android.features.messages.impl.timeline
 
 import android.view.HapticFeedbackConstants
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
@@ -34,6 +36,7 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -48,18 +51,26 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
-import androidx.compose.ui.unit.DpOffset
 import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntRect
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupPositionProvider
+import androidx.compose.ui.window.PopupProperties
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureView
@@ -80,7 +91,6 @@ import io.element.android.libraries.designsystem.components.dialogs.AlertDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.roundToPx
-import io.element.android.libraries.designsystem.theme.components.DropdownMenu
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.animateScrollToItemCenter
@@ -448,8 +458,8 @@ private fun JumpToPositionButton(
     AnimatedVisibility(
         modifier = modifier,
         visible = isVisible,
-        enter = scaleIn(animationSpec = tween(100)),
-        exit = scaleOut(animationSpec = tween(100)),
+        enter = scaleIn(animationSpec = tween(220), initialScale = 0.8f) + fadeIn(animationSpec = tween(220)),
+        exit = scaleOut(animationSpec = tween(180), targetScale = 0.8f) + fadeOut(animationSpec = tween(180)),
     ) {
         var menuExpanded by remember { mutableStateOf(false) }
         Box {
@@ -473,34 +483,60 @@ private fun JumpToPositionButton(
                     contentDescription = contentDescription,
                     tint = ElementTheme.colors.iconSecondary,
                 )
-                DropdownMenu(
-                    expanded = menuExpanded,
-                    onDismissRequest = { menuExpanded = false },
-                    minWidth = 0.dp,
-                    offset = DpOffset(x = -44.dp, y = 40.dp)
-                ) {
-                    // Hand-rolled instead of DropdownMenuItem: padding here is tighter
-                    // than DropdownMenuItem's 12.dp default to match the Figma spec.
-                    Row(
-                        modifier = Modifier
-                            .clickable {
-                                menuExpanded = false
-                                onMarkAsRead()
-                            }
-                            .padding(horizontal = 12.dp, vertical = 8.dp),
-                        verticalAlignment = Alignment.CenterVertically,
+                val menuTransitionState = remember { MutableTransitionState(false) }
+                    .apply { targetState = menuExpanded }
+                if (menuTransitionState.currentState || menuTransitionState.targetState) {
+                    val gapPx = with(LocalDensity.current) { 8.dp.roundToPx() }
+                    val positionProvider = remember(gapPx) { CenterStartOfAnchorPositionProvider(gapPx) }
+                    Popup(
+                        popupPositionProvider = positionProvider,
+                        onDismissRequest = { menuExpanded = false },
+                        properties = PopupProperties(focusable = true),
                     ) {
-                        Icon(
-                            imageVector = CompoundIcons.MarkAsRead(),
-                            contentDescription = null,
-                            tint = ElementTheme.colors.iconPrimary,
-                        )
-                        Spacer(modifier = Modifier.width(8.dp))
-                        Text(
-                            text = stringResource(id = CommonStrings.action_mark_as_read),
-                            color = ElementTheme.colors.textPrimary,
-                            style = ElementTheme.typography.fontBodyLgRegular,
-                        )
+                        // Anchor the scale to the right-center edge so the menu visually grows
+                        // outward from the FAB it's attached to.
+                        val transformOrigin = TransformOrigin(pivotFractionX = 1f, pivotFractionY = 0.5f)
+                        AnimatedVisibility(
+                            visibleState = menuTransitionState,
+                            enter = scaleIn(
+                                animationSpec = tween(180),
+                                initialScale = 0.9f,
+                                transformOrigin = transformOrigin,
+                            ) + fadeIn(animationSpec = tween(180)),
+                            exit = scaleOut(
+                                animationSpec = tween(140),
+                                targetScale = 0.9f,
+                                transformOrigin = transformOrigin,
+                            ) + fadeOut(animationSpec = tween(140)),
+                        ) {
+                            // Hand-rolled instead of DropdownMenuItem: padding here is tighter
+                            // than DropdownMenuItem's 12.dp default to match the Figma spec.
+                            Row(
+                                modifier = Modifier
+                                    .shadow(elevation = 1.dp, shape = RoundedCornerShape(8.dp))
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .background(ElementTheme.colors.bgCanvasDefaultLevel1)
+                                    .border(1.dp, ElementTheme.colors.borderDisabled, RoundedCornerShape(8.dp))
+                                    .clickable {
+                                        menuExpanded = false
+                                        onMarkAsRead()
+                                    }
+                                    .padding(horizontal = 12.dp, vertical = 12.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Icon(
+                                    imageVector = CompoundIcons.MarkAsRead(),
+                                    contentDescription = null,
+                                    tint = ElementTheme.colors.iconTertiary,
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(
+                                    text = stringResource(id = CommonStrings.action_mark_as_read),
+                                    color = ElementTheme.colors.textPrimary,
+                                    style = ElementTheme.typography.fontBodyLgRegular,
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -616,4 +652,27 @@ internal fun TimelineViewWithReadMarkerNoIndicatorsPreview() = ElementPreview {
 @Composable
 internal fun TimelineViewWithReadMarkerBothIndicatorsPreview() = ElementPreview {
     TimelineViewWithReadMarker(hasUnreadAbove = true, hasUnreadBelow = true)
+}
+
+/**
+ * Anchors the popup so its right edge sits [gapPx] to the left of the anchor and its vertical
+ * center matches the anchor's. Adapts to localized menu widths and FAB size; coerced to stay
+ * on-screen.
+ */
+private class CenterStartOfAnchorPositionProvider(
+    private val gapPx: Int,
+) : PopupPositionProvider {
+    override fun calculatePosition(
+        anchorBounds: IntRect,
+        windowSize: IntSize,
+        layoutDirection: LayoutDirection,
+        popupContentSize: IntSize,
+    ): IntOffset {
+        val x = anchorBounds.left - popupContentSize.width - gapPx
+        val y = anchorBounds.top + (anchorBounds.height - popupContentSize.height) / 2
+        return IntOffset(
+            x = x.coerceIn(0, (windowSize.width - popupContentSize.width).coerceAtLeast(0)),
+            y = y.coerceIn(0, (windowSize.height - popupContentSize.height).coerceAtLeast(0)),
+        )
+    }
 }
