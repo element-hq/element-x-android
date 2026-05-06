@@ -82,5 +82,7 @@ class PreferencesLockScreenStore(
         }
     }
 
-    private fun Preferences.getRemainingPinCodeAttemptsNumber() = this[remainingAttemptsKey] ?: lockScreenConfig.maxPinCodeAttemptsBeforeLogout
+    private fun Preferences.getRemainingPinCodeAttemptsNumber() =
+        this[remainingAttemptsKey]?.coerceIn(0, lockScreenConfig.maxPinCodeAttemptsBeforeLogout)
+            ?: lockScreenConfig.maxPinCodeAttemptsBeforeLogout
 }
