@@ -8,10 +8,8 @@
 
 package io.element.android.libraries.mediaviewer.impl.datasource
 
-import androidx.core.text.toSpannable
 import dev.zacsweers.metro.Inject
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
-import io.element.android.libraries.androidutils.text.safeLinkify
 import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.dateformatter.api.toHumanReadableDuration
