@@ -35,6 +35,7 @@ fun DropdownMenuItem(
     leadingIcon: @Composable (() -> Unit)? = null,
     trailingIcon: @Composable (() -> Unit)? = null,
     enabled: Boolean = true,
+    contentPadding: PaddingValues = DropDownMenuItemDefaults.contentPadding,
     interactionSource: MutableInteractionSource = remember { MutableInteractionSource() },
 ) {
     androidx.compose.material3.DropdownMenuItem(
@@ -49,7 +50,7 @@ fun DropdownMenuItem(
         trailingIcon = trailingIcon,
         enabled = enabled,
         colors = DropDownMenuItemDefaults.colors(),
-        contentPadding = DropDownMenuItemDefaults.contentPadding,
+        contentPadding = contentPadding,
         interactionSource = interactionSource
     )
 }

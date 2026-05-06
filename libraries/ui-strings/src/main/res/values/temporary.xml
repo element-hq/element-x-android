@@ -7,6 +7,7 @@
 
 <resources>
     <string name="common_black">"Black"</string>
+    <string name="action_mark_as_read">"Mark as read"</string>
     <string name="a11y_jump_to_unread_messages">"Jump to unread messages"</string>
     <plurals name="a11y_jump_to_unread_messages_count">
         <item quantity="one">"Jump to %1$d unread message"</item>

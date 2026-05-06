@@ -95,6 +95,7 @@ class TimelinePresenter(
     private val roomCallStatePresenter: Presenter<RoomCallState>,
     private val featureFlagService: FeatureFlagService,
     private val analyticsService: AnalyticsService,
+    private val markAsFullyRead: MarkAsFullyRead,
 ) : Presenter<TimelineState> {
     private val tag = "TimelinePresenter"
 
@@ -224,6 +225,13 @@ class TimelinePresenter(
                     timelineController.focusOnLive()
                 }
                 TimelineEvent.HideShieldDialog -> messageShieldDialogData.value = null
+                TimelineEvent.MarkAllAsRead -> sessionCoroutineScope.launch {
+                    val latestEventId = room.liveTimeline.getLatestEventId().getOrElse {
+                        Timber.tag(tag).w(it, "Failed to get latest event id to mark as fully read")
+                        return@launch
+                    } ?: return@launch
+                    markAsFullyRead(room.roomId, latestEventId)
+                }
                 is TimelineEvent.ShowShieldDialog -> messageShieldDialogData.value = event.messageShieldData
                 is TimelineEvent.ComputeVerifiedUserSendFailure -> {
                     resolveVerifiedUserSendFailureState.eventSink(ResolveVerifiedUserSendFailureEvent.ComputeForMessage(event.event))

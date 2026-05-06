@@ -1206,6 +1206,38 @@ class TimelinePresenterTest {
         }
     }
 
+    @Test
+    fun `present - MarkAllAsRead invokes markAsFullyRead with latest event id`() = runTest {
+        val markAsFullyReadRecorder = lambdaRecorder<RoomId, EventId, Unit> { _, _ -> }
+        val presenter = createTimelinePresenter(
+            timeline = FakeTimeline(getLatestEventIdResult = { Result.success(AN_EVENT_ID) }),
+            markAsFullyRead = FakeMarkAsFullyRead(markAsFullyReadRecorder),
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink(TimelineEvent.MarkAllAsRead)
+            advanceUntilIdle()
+            markAsFullyReadRecorder.assertions().isCalledOnce().with(value(A_ROOM_ID), value(AN_EVENT_ID))
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - MarkAllAsRead does not invoke markAsFullyRead when latest event id lookup fails`() = runTest {
+        val markAsFullyReadRecorder = lambdaRecorder<RoomId, EventId, Unit> { _, _ -> }
+        val presenter = createTimelinePresenter(
+            timeline = FakeTimeline(getLatestEventIdResult = { Result.failure(RuntimeException("boom")) }),
+            markAsFullyRead = FakeMarkAsFullyRead(markAsFullyReadRecorder),
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink(TimelineEvent.MarkAllAsRead)
+            advanceUntilIdle()
+            markAsFullyReadRecorder.assertions().isNeverCalled()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
     private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
         return awaitItem()
     }
@@ -1244,6 +1276,7 @@ class TimelinePresenterTest {
         sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
         timelineItemIndexer: TimelineItemIndexer = TimelineItemIndexer(),
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
+        markAsFullyRead: MarkAsFullyRead = FakeMarkAsFullyRead { _, _ -> },
     ): TimelinePresenter {
         return TimelinePresenter(
             timelineItemsFactoryCreator = aTimelineItemsFactoryCreator(),
@@ -1262,6 +1295,7 @@ class TimelinePresenterTest {
             roomCallStatePresenter = { aStandByCallState() },
             featureFlagService = featureFlagService,
             analyticsService = FakeAnalyticsService(),
+            markAsFullyRead = markAsFullyRead,
         )
     }
 }
