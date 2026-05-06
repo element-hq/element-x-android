@@ -8,9 +8,6 @@
 
 package io.element.android.features.lockscreen.impl.setup.pin
 
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.lockscreen.impl.LockScreenConfig
 import io.element.android.features.lockscreen.impl.fixtures.aLockScreenConfig
@@ -24,6 +21,7 @@ import io.element.android.features.lockscreen.impl.setup.pin.validation.SetupPin
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
+import io.element.android.tests.testutils.test
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -43,9 +41,7 @@ class SetupPinPresenterTest {
             }
         }
         val presenter = createSetupPinPresenter(callback)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             awaitItem().also { state ->
                 state.choosePinEntry.assertEmpty()
                 state.confirmPinEntry.assertEmpty()

@@ -8,9 +8,6 @@
 
 package io.element.android.features.lockscreen.impl.unlock
 
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.lockscreen.impl.biometric.BiometricAuthenticatorManager
 import io.element.android.features.lockscreen.impl.biometric.FakeBiometricAuthenticatorManager
@@ -25,6 +22,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.test
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -36,9 +34,7 @@ class PinUnlockPresenterTest {
     @Test
     fun `present - success verify flow`() = runTest {
         val presenter = createPinUnlockPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             awaitItem().also { state ->
                 assertThat(state.pinEntry).isInstanceOf(AsyncData.Uninitialized::class.java)
                 assertThat(state.showWrongPinTitle).isFalse()
@@ -73,9 +69,7 @@ class PinUnlockPresenterTest {
     @Test
     fun `present - failure verify flow`() = runTest {
         val presenter = createPinUnlockPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(1)
             val initialState = awaitItem().also { state ->
                 assertThat(state.pinEntry).isInstanceOf(AsyncData.Success::class.java)
@@ -102,9 +96,7 @@ class PinUnlockPresenterTest {
         val signOutLambda = lambdaRecorder<Boolean, Unit> {}
         val signOut = FakeLogoutUseCase(signOutLambda)
         val presenter = createPinUnlockPresenter(logoutUseCase = signOut)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(1)
             awaitItem().also { state ->
                 assertThat(state.pinEntry).isInstanceOf(AsyncData.Success::class.java)
