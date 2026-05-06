@@ -48,7 +48,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -88,6 +87,7 @@ import io.element.android.libraries.designsystem.utils.animateScrollToItemCenter
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.testtags.TestTag
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -418,6 +418,7 @@ private fun BoxScope.TimelineScrollHelper(
             hasUnread = true,
             onClick = ::jumpToReadMarker,
             onMarkAsRead = onMarkAllAsRead,
+            testTag = TestTags.jumpToUnreadButton,
         )
         JumpToPositionButton(
             icon = CompoundIcons.ChevronDown(),
@@ -426,6 +427,7 @@ private fun BoxScope.TimelineScrollHelper(
             hasUnread = displayJumpToUnread && newEventState is NewEventState.FromOther,
             onClick = ::jumpToBottom,
             onMarkAsRead = onMarkAllAsRead,
+            testTag = TestTags.jumpToBottomButton,
             dotAlignment = Alignment.BottomCenter,
         )
     }
@@ -439,6 +441,7 @@ private fun JumpToPositionButton(
     hasUnread: Boolean,
     onClick: () -> Unit,
     onMarkAsRead: () -> Unit,
+    testTag: TestTag,
     modifier: Modifier = Modifier,
     dotAlignment: Alignment = Alignment.TopCenter,
 ) {
@@ -453,15 +456,15 @@ private fun JumpToPositionButton(
             Box(
                 modifier = Modifier
                     .size(36.dp)
-                    .shadow(elevation = 0.dp, shape = CircleShape)
                     .background(color = ElementTheme.colors.bgCanvasDefault, shape = CircleShape)
                     .clip(CircleShape)
                     .border(1.dp, ElementTheme.colors.borderDisabled, CircleShape)
                     .combinedClickable(
                         onClick = onClick,
                         onLongClick = { menuExpanded = true },
+                        onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
                     )
-                    .testTag(TestTags.floatingActionButton),
+                    .testTag(testTag),
                 contentAlignment = Alignment.Center,
             ) {
                 Icon(
@@ -476,6 +479,8 @@ private fun JumpToPositionButton(
                     minWidth = 0.dp,
                     offset = DpOffset(x = -44.dp, y = 40.dp)
                 ) {
+                    // Hand-rolled instead of DropdownMenuItem: padding here is tighter
+                    // than DropdownMenuItem's 12.dp default to match the Figma spec.
                     Row(
                         modifier = Modifier
                             .clickable {

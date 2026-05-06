@@ -1238,6 +1238,22 @@ class TimelinePresenterTest {
         }
     }
 
+    @Test
+    fun `present - MarkAllAsRead does not invoke markAsFullyRead when there is no latest event`() = runTest {
+        val markAsFullyReadRecorder = lambdaRecorder<RoomId, EventId, Unit> { _, _ -> }
+        val presenter = createTimelinePresenter(
+            timeline = FakeTimeline(getLatestEventIdResult = { Result.success(null) }),
+            markAsFullyRead = FakeMarkAsFullyRead(markAsFullyReadRecorder),
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink(TimelineEvent.MarkAllAsRead)
+            advanceUntilIdle()
+            markAsFullyReadRecorder.assertions().isNeverCalled()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
     private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
         return awaitItem()
     }

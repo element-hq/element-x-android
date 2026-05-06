@@ -287,6 +287,11 @@ class TimelinePresenter(
         // read marker advances in place — the SDK swaps the marker virtual item to a new position
         // without changing the list length, e.g. when [markRoomAsFullyRead] is sent while at the
         // bottom of the room.
+        //
+        // Limitation: when the read marker is outside the loaded window (gaps, pagination), this
+        // returns null and the jump-to-unread button stays hidden. Proper fix needs an SDK
+        // accessor for the m.fully_read marker plus FocusedOnEvent navigation on click; gated
+        // behind FeatureFlags.JumpToUnread until that lands.
         val readMarkerIndex = remember { mutableStateOf<Int?>(null) }
         LaunchedEffect(timelineItems, displayJumpToUnread) {
             if (!displayJumpToUnread) {
