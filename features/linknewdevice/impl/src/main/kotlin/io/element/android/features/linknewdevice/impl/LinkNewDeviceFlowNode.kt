@@ -26,6 +26,7 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.enterprise.api.SessionEnterpriseService
 import io.element.android.features.linknewdevice.api.LinkNewDeviceEntryPoint
 import io.element.android.features.linknewdevice.impl.screens.confirmation.CodeConfirmationNode
 import io.element.android.features.linknewdevice.impl.screens.desktop.DesktopNoticeNode
@@ -65,6 +66,7 @@ class LinkNewDeviceFlowNode(
     private val sessionCoroutineScope: CoroutineScope,
     private val linkNewMobileHandler: LinkNewMobileHandler,
     private val linkNewDesktopHandler: LinkNewDesktopHandler,
+    private val sessionEnterpriseService: SessionEnterpriseService,
 ) : BaseFlowNode<LinkNewDeviceFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
@@ -298,8 +300,12 @@ class LinkNewDeviceFlowNode(
         }
     }
 
-    private fun navigateToBrowser(url: String) {
-        activity?.openUrlInChromeCustomTab(null, darkTheme, url)
+    private suspend fun navigateToBrowser(url: String) {
+        activity?.openUrlInChromeCustomTab(
+            session = null,
+            darkTheme = darkTheme,
+            url = sessionEnterpriseService.tweakMasUrl(url),
+        )
     }
 
     @Composable

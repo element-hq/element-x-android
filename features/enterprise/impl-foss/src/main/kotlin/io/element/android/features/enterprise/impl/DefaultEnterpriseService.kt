@@ -23,7 +23,7 @@ class DefaultEnterpriseService : EnterpriseService {
     override val isEnterpriseBuild = false
 
     override suspend fun isEnterpriseUser(sessionId: SessionId) = false
-
+    override suspend fun tweakMasUrl(url: String, homeserver: String) = url
     override fun defaultHomeserverList(): List<String> = emptyList()
     override suspend fun isAllowedToConnectToHomeserver(homeserverUrl: String) = true
 

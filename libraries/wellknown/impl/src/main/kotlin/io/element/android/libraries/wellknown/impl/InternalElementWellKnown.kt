@@ -32,4 +32,6 @@ data class InternalElementWellKnown(
     val brandColor: String? = null,
     @SerialName("notification_sound")
     val notificationSound: String? = null,
+    @SerialName("idp_app_scheme")
+    val identityProviderAppScheme: String? = null,
 )

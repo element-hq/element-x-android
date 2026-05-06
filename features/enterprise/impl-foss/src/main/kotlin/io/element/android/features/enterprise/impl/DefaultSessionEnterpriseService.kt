@@ -15,5 +15,6 @@ import io.element.android.libraries.di.SessionScope
 @ContributesBinding(SessionScope::class)
 class DefaultSessionEnterpriseService : SessionEnterpriseService {
     override suspend fun init() = Unit
+    override suspend fun tweakMasUrl(url: String): String = url
     override suspend fun isElementCallAvailable(): Boolean = true
 }
