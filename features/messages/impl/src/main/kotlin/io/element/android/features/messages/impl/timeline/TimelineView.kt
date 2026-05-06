@@ -10,22 +10,33 @@ package io.element.android.features.messages.impl.timeline
 
 import android.view.HapticFeedbackConstants
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxScope
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -39,16 +50,27 @@ import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.rotate
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.TransformOrigin
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.input.nestedscroll.NestedScrollConnection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalView
 import androidx.compose.ui.platform.rememberNestedScrollInteropConnection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.IntRect
+import androidx.compose.ui.unit.IntSize
+import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.Popup
+import androidx.compose.ui.window.PopupPositionProvider
+import androidx.compose.ui.window.PopupProperties
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureView
@@ -68,17 +90,20 @@ import io.element.android.libraries.androidutils.system.copyToClipboard
 import io.element.android.libraries.designsystem.components.dialogs.AlertDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
-import io.element.android.libraries.designsystem.theme.components.FloatingActionButton
+import io.element.android.libraries.designsystem.text.roundToPx
 import io.element.android.libraries.designsystem.theme.components.Icon
+import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.animateScrollToItemCenter
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.testtags.TestTag
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
+import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
@@ -106,6 +131,7 @@ fun TimelineView(
     modifier: Modifier = Modifier,
     lazyListState: LazyListState = rememberLazyListState(),
     forceJumpToBottomVisibility: Boolean = false,
+    forceJumpToReadMarkerVisibility: Boolean = false,
     nestedScrollConnection: NestedScrollConnection = rememberNestedScrollInteropConnection(),
     floatingDateTopOffset: Dp = 0.dp,
 ) {
@@ -123,6 +149,10 @@ fun TimelineView(
 
     fun onJumpToLive() {
         state.eventSink(TimelineEvent.JumpToLive)
+    }
+
+    fun onMarkAllAsRead() {
+        state.eventSink(TimelineEvent.MarkAllAsRead)
     }
 
     val context = LocalContext.current
@@ -205,12 +235,16 @@ fun TimelineView(
                 hasAnyEvent = state.hasAnyEvent,
                 lazyListState = lazyListState,
                 forceJumpToBottomVisibility = forceJumpToBottomVisibility,
+                forceJumpToReadMarkerVisibility = forceJumpToReadMarkerVisibility,
                 newEventState = state.newEventState,
                 isLive = state.isLive,
                 focusRequestState = state.focusRequestState,
+                displayJumpToUnread = state.displayJumpToUnread,
+                readMarkerIndex = state.readMarkerIndex,
                 onScrollFinishAt = ::onScrollFinishAt,
                 onJumpToLive = ::onJumpToLive,
                 onFocusEventRender = ::onFocusEventRender,
+                onMarkAllAsRead = ::onMarkAllAsRead,
             )
 
             if (state.displayFloatingDateBadge && useReverseLayout) {
@@ -289,10 +323,14 @@ private fun BoxScope.TimelineScrollHelper(
     newEventState: NewEventState,
     isLive: Boolean,
     forceJumpToBottomVisibility: Boolean,
+    forceJumpToReadMarkerVisibility: Boolean,
     focusRequestState: FocusRequestState,
+    displayJumpToUnread: Boolean,
+    readMarkerIndex: Int?,
     onScrollFinishAt: (Int) -> Unit,
     onJumpToLive: () -> Unit,
     onFocusEventRender: () -> Unit,
+    onMarkAllAsRead: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val isScrollFinished by remember { derivedStateOf { !lazyListState.isScrollInProgress } }
@@ -301,6 +339,15 @@ private fun BoxScope.TimelineScrollHelper(
             lazyListState.firstVisibleItemIndex < 3 && isLive
         }
     }
+    val isJumpToUnreadVisible by remember {
+        derivedStateOf {
+            if (forceJumpToReadMarkerVisibility) return@derivedStateOf true
+            val markerIndex = readMarkerIndex ?: return@derivedStateOf false
+            val lastVisibleIndex = lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: return@derivedStateOf false
+            markerIndex > lastVisibleIndex
+        }
+    }
+    val isJumpToBottomVisible = !canAutoScroll || forceJumpToBottomVisibility || !isLive
     var jumpToLiveHandled by remember { mutableStateOf(true) }
 
     /**
@@ -327,6 +374,13 @@ private fun BoxScope.TimelineScrollHelper(
         }
     }
 
+    fun jumpToReadMarker() {
+        val markerIndex = readMarkerIndex ?: return
+        coroutineScope.launch {
+            lazyListState.animateScrollToItemCenter(markerIndex)
+        }
+    }
+
     LaunchedEffect(jumpToLiveHandled, isLive) {
         if (!jumpToLiveHandled && isLive) {
             lazyListState.scrollToItem(0)
@@ -343,8 +397,11 @@ private fun BoxScope.TimelineScrollHelper(
     }
 
     LaunchedEffect(canAutoScroll, newEventState) {
-        val shouldScrollToBottom = isScrollFinished &&
-            (canAutoScroll && newEventState == NewEventState.FromOther || newEventState == NewEventState.FromMe)
+        val shouldScrollToBottom = isScrollFinished && when (newEventState) {
+            is NewEventState.FromOther -> canAutoScroll
+            NewEventState.FromMe -> true
+            NewEventState.None -> false
+        }
         if (shouldScrollToBottom) {
             scrollToBottom(force = true)
         }
@@ -358,45 +415,154 @@ private fun BoxScope.TimelineScrollHelper(
         }
     }
 
-    JumpToBottomButton(
-        // Use inverse of canAutoScroll otherwise we might briefly see the before the scroll animation is triggered
-        isVisible = !canAutoScroll || forceJumpToBottomVisibility || !isLive,
+    Column(
         modifier = Modifier
             .align(Alignment.BottomEnd)
-            .padding(end = 24.dp, bottom = 12.dp),
-        onClick = { jumpToBottom() },
-    )
+            .padding(end = 24.dp, bottom = 24.dp)
+    ) {
+        JumpToPositionButton(
+            icon = CompoundIcons.ChevronUp(),
+            contentDescription = stringResource(id = CommonStrings.a11y_jump_to_unread_messages),
+            modifier = Modifier.padding(bottom = if (isJumpToBottomVisible) 12.dp else 0.dp),
+            isVisible = isJumpToUnreadVisible,
+            hasUnread = true,
+            onClick = ::jumpToReadMarker,
+            onMarkAsRead = onMarkAllAsRead,
+            testTag = TestTags.jumpToUnreadButton,
+        )
+        JumpToPositionButton(
+            icon = CompoundIcons.ChevronDown(),
+            contentDescription = stringResource(id = CommonStrings.a11y_jump_to_bottom),
+            isVisible = isJumpToBottomVisible,
+            hasUnread = displayJumpToUnread && newEventState is NewEventState.FromOther,
+            onClick = ::jumpToBottom,
+            onMarkAsRead = onMarkAllAsRead,
+            testTag = TestTags.jumpToBottomButton,
+            dotAlignment = Alignment.BottomCenter,
+        )
+    }
 }
 
 @Composable
-private fun JumpToBottomButton(
+private fun JumpToPositionButton(
+    icon: ImageVector,
+    contentDescription: String,
     isVisible: Boolean,
+    hasUnread: Boolean,
     onClick: () -> Unit,
+    onMarkAsRead: () -> Unit,
+    testTag: TestTag,
     modifier: Modifier = Modifier,
+    dotAlignment: Alignment = Alignment.TopCenter,
 ) {
     AnimatedVisibility(
         modifier = modifier,
         visible = isVisible,
-        enter = scaleIn(animationSpec = tween(100)),
-        exit = scaleOut(animationSpec = tween(100)),
+        enter = scaleIn(animationSpec = tween(220), initialScale = 0.8f) + fadeIn(animationSpec = tween(220)),
+        exit = scaleOut(animationSpec = tween(180), targetScale = 0.8f) + fadeOut(animationSpec = tween(180)),
     ) {
-        FloatingActionButton(
-            onClick = onClick,
-            elevation = FloatingActionButtonDefaults.elevation(4.dp, 4.dp, 4.dp, 4.dp),
-            shape = CircleShape,
-            modifier = Modifier.size(36.dp),
-            containerColor = ElementTheme.colors.bgSubtleSecondary,
-            contentColor = ElementTheme.colors.iconSecondary,
-        ) {
-            Icon(
+        var menuExpanded by remember { mutableStateOf(false) }
+        Box {
+            Box(
                 modifier = Modifier
-                    .size(24.dp)
-                    .rotate(90f),
-                imageVector = CompoundIcons.ArrowRight(),
-                contentDescription = stringResource(id = CommonStrings.a11y_jump_to_bottom)
+                    .size(36.dp)
+                    .background(color = ElementTheme.colors.bgCanvasDefault, shape = CircleShape)
+                    .clip(CircleShape)
+                    .border(1.dp, ElementTheme.colors.borderDisabled, CircleShape)
+                    .combinedClickable(
+                        onClick = onClick,
+                        onLongClick = { menuExpanded = true },
+                        onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
+                    )
+                    .testTag(testTag),
+                contentAlignment = Alignment.Center,
+            ) {
+                Icon(
+                    modifier = Modifier.size(24.dp),
+                    imageVector = icon,
+                    contentDescription = contentDescription,
+                    tint = ElementTheme.colors.iconSecondary,
+                )
+                val menuTransitionState = remember { MutableTransitionState(false) }
+                    .apply { targetState = menuExpanded }
+                if (menuTransitionState.currentState || menuTransitionState.targetState) {
+                    val gapPx = with(LocalDensity.current) { 8.dp.roundToPx() }
+                    val positionProvider = remember(gapPx) { CenterStartOfAnchorPositionProvider(gapPx) }
+                    Popup(
+                        popupPositionProvider = positionProvider,
+                        onDismissRequest = { menuExpanded = false },
+                        properties = PopupProperties(focusable = true),
+                    ) {
+                        // Anchor the scale to the right-center edge so the menu visually grows
+                        // outward from the FAB it's attached to.
+                        val transformOrigin = TransformOrigin(pivotFractionX = 1f, pivotFractionY = 0.5f)
+                        AnimatedVisibility(
+                            visibleState = menuTransitionState,
+                            enter = scaleIn(
+                                animationSpec = tween(180),
+                                initialScale = 0.9f,
+                                transformOrigin = transformOrigin,
+                            ) + fadeIn(animationSpec = tween(180)),
+                            exit = scaleOut(
+                                animationSpec = tween(140),
+                                targetScale = 0.9f,
+                                transformOrigin = transformOrigin,
+                            ) + fadeOut(animationSpec = tween(140)),
+                        ) {
+                            // Hand-rolled instead of DropdownMenuItem: padding here is tighter
+                            // than DropdownMenuItem's 12.dp default to match the Figma spec.
+                            Row(
+                                modifier = Modifier
+                                    .shadow(elevation = 1.dp, shape = RoundedCornerShape(8.dp))
+                                    .clip(RoundedCornerShape(8.dp))
+                                    .background(ElementTheme.colors.bgCanvasDefaultLevel1)
+                                    .border(1.dp, ElementTheme.colors.borderDisabled, RoundedCornerShape(8.dp))
+                                    .clickable {
+                                        menuExpanded = false
+                                        onMarkAsRead()
+                                    }
+                                    .padding(horizontal = 12.dp, vertical = 12.dp),
+                                verticalAlignment = Alignment.CenterVertically,
+                            ) {
+                                Icon(
+                                    imageVector = CompoundIcons.MarkAsRead(),
+                                    contentDescription = null,
+                                    tint = ElementTheme.colors.iconTertiary,
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Text(
+                                    text = stringResource(id = CommonStrings.action_mark_as_read),
+                                    color = ElementTheme.colors.textPrimary,
+                                    style = ElementTheme.typography.fontBodyLgRegular,
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+            val dotYOffset = if (dotAlignment == Alignment.BottomCenter) 4.dp else (-4).dp
+            TimelineUnreadIndicator(
+                isVisible = hasUnread,
+                modifier = Modifier
+                    .align(dotAlignment)
+                    .offset { IntOffset(x = 0, y = dotYOffset.roundToPx()) },
             )
         }
     }
+}
+
+@Composable
+private fun TimelineUnreadIndicator(
+    isVisible: Boolean,
+    modifier: Modifier = Modifier,
+) {
+    if (!isVisible) return
+    Box(
+        modifier = modifier
+            .size(12.dp)
+            .background(color = ElementTheme.colors.iconSuccessPrimary, shape = CircleShape)
+            .border(width = 2.dp, color = ElementTheme.colors.bgCanvasDefault, shape = CircleShape),
+    )
 }
 
 @PreviewsDayNight
@@ -430,6 +596,83 @@ internal fun TimelineViewPreview(
             onMoreReactionsClick = {},
             onReadReceiptClick = {},
             forceJumpToBottomVisibility = true,
+        )
+    }
+}
+
+@Composable
+private fun TimelineViewWithReadMarker(
+    hasUnreadAbove: Boolean,
+    hasUnreadBelow: Boolean,
+) {
+    val timelineItems = persistentListOf<TimelineItem>(
+        aTimelineItemEvent(isMine = false),
+        aTimelineItemEvent(isMine = false),
+        aTimelineItemEvent(isMine = true),
+        aTimelineItemEvent(isMine = false),
+        aTimelineItemEvent(isMine = false),
+        aTimelineItemEvent(isMine = false),
+    )
+    CompositionLocalProvider(
+        LocalTimelineItemPresenterFactories provides aFakeTimelineItemPresenterFactories(),
+    ) {
+        TimelineView(
+            state = aTimelineState(
+                timelineItems = timelineItems,
+                displayJumpToUnread = true,
+                // Index points past the loaded items, mirroring the real-world state the FAB
+                // represents: the user has scrolled past the read marker, so it's no longer in
+                // view. The actual scroll target doesn't matter for a static preview.
+                readMarkerIndex = if (hasUnreadAbove) timelineItems.size else null,
+                newEventState = if (hasUnreadBelow) NewEventState.FromOther else NewEventState.None,
+            ),
+            timelineProtectionState = aTimelineProtectionState(),
+            onUserDataClick = {},
+            onLinkClick = {},
+            onContentClick = {},
+            onMessageLongClick = {},
+            onSwipeToReply = {},
+            onReactionClick = { _, _ -> },
+            onReactionLongClick = { _, _ -> },
+            onMoreReactionsClick = {},
+            onReadReceiptClick = {},
+            forceJumpToBottomVisibility = true,
+            forceJumpToReadMarkerVisibility = true,
+        )
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineViewWithReadMarkerNoIndicatorsPreview() = ElementPreview {
+    TimelineViewWithReadMarker(hasUnreadAbove = false, hasUnreadBelow = false)
+}
+
+@PreviewsDayNight
+@Composable
+internal fun TimelineViewWithReadMarkerBothIndicatorsPreview() = ElementPreview {
+    TimelineViewWithReadMarker(hasUnreadAbove = true, hasUnreadBelow = true)
+}
+
+/**
+ * Anchors the popup so its right edge sits [gapPx] to the left of the anchor and its vertical
+ * center matches the anchor's. Adapts to localized menu widths and FAB size; coerced to stay
+ * on-screen.
+ */
+private class CenterStartOfAnchorPositionProvider(
+    private val gapPx: Int,
+) : PopupPositionProvider {
+    override fun calculatePosition(
+        anchorBounds: IntRect,
+        windowSize: IntSize,
+        layoutDirection: LayoutDirection,
+        popupContentSize: IntSize,
+    ): IntOffset {
+        val x = anchorBounds.left - popupContentSize.width - gapPx
+        val y = anchorBounds.top + (anchorBounds.height - popupContentSize.height) / 2
+        return IntOffset(
+            x = x.coerceIn(0, (windowSize.width - popupContentSize.width).coerceAtLeast(0)),
+            y = y.coerceIn(0, (windowSize.height - popupContentSize.height).coerceAtLeast(0)),
         )
     }
 }

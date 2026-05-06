@@ -27,6 +27,7 @@ import io.element.android.features.poll.api.actions.SendPollResponseAction
 import io.element.android.features.poll.test.actions.FakeEndPollAction
 import io.element.android.features.poll.test.actions.FakeSendPollResponseAction
 import io.element.android.features.roomcall.api.aStandByCallState
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -42,6 +43,7 @@ import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.EventReaction
 import io.element.android.libraries.matrix.api.timeline.item.event.ReactionSender
 import io.element.android.libraries.matrix.api.timeline.item.event.Receipt
+import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import io.element.android.libraries.matrix.api.timeline.item.virtual.VirtualTimelineItem
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.AN_EVENT_ID_2
@@ -58,12 +60,14 @@ import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermiss
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
 import io.element.android.libraries.matrix.test.timeline.aMessageContent
 import io.element.android.libraries.matrix.test.timeline.anEventTimelineItem
+import io.element.android.libraries.matrix.test.timeline.item.event.aRoomMembershipContent
 import io.element.android.libraries.matrix.ui.components.aMatrixUserList
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
 import io.element.android.tests.testutils.awaitLastSequentialItem
 import io.element.android.tests.testutils.consumeItemsUntilPredicate
+import io.element.android.tests.testutils.consumeItemsUntilTimeout
 import io.element.android.tests.testutils.lambda.any
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaError
@@ -360,6 +364,234 @@ class TimelinePresenterTest {
             consumeItemsUntilPredicate { it.timelineItems.size == 4 }
             awaitLastSequentialItem().also { state ->
                 assertThat(state.newEventState).isEqualTo(NewEventState.FromOther)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - readMarkerIndex points at the read marker virtual item`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val presenter = createTimelinePresenter(
+            timeline = timeline,
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.JumpToUnread.key to true)),
+        )
+        presenter.test {
+            awaitFirstItem()
+            // SDK delivers items oldest-first; the factory reverses so output index 0 is the newest.
+            // After processing: [msg-newest, membership, msg-2, read-marker, msg-old]
+            timelineItems.emit(
+                listOf(
+                    MatrixTimelineItem.Event(UniqueId("msg-old"), anEventTimelineItem(content = aMessageContent())),
+                    MatrixTimelineItem.Virtual(UniqueId("read-marker"), VirtualTimelineItem.ReadMarker),
+                    MatrixTimelineItem.Event(UniqueId("msg-2"), anEventTimelineItem(content = aMessageContent())),
+                    MatrixTimelineItem.Event(UniqueId("membership"), anEventTimelineItem(content = aRoomMembershipContent())),
+                    MatrixTimelineItem.Event(UniqueId("msg-newest"), anEventTimelineItem(content = aMessageContent())),
+                )
+            )
+            consumeItemsUntilPredicate { it.readMarkerIndex != null }.last().also { state ->
+                assertThat(state.readMarkerIndex).isEqualTo(3)
+                assertThat(state.displayJumpToUnread).isTrue()
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - readMarkerIndex is null when no read marker present`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val presenter = createTimelinePresenter(
+            timeline = timeline,
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.JumpToUnread.key to true)),
+        )
+        presenter.test {
+            awaitFirstItem()
+            timelineItems.emit(
+                listOf(
+                    MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(content = aMessageContent())),
+                    MatrixTimelineItem.Event(UniqueId("2"), anEventTimelineItem(content = aMessageContent())),
+                )
+            )
+            consumeItemsUntilPredicate {
+                it.timelineItems.size == 2 && it.readMarkerIndex == null
+            }.last().also { state ->
+                assertThat(state.readMarkerIndex).isNull()
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - readMarkerIndex stays null when JumpToUnread feature flag is disabled`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val presenter = createTimelinePresenter(
+            timeline = timeline,
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.JumpToUnread.key to false)),
+        )
+        presenter.test {
+            awaitFirstItem()
+            timelineItems.emit(
+                listOf(
+                    MatrixTimelineItem.Event(UniqueId("msg-old"), anEventTimelineItem(content = aMessageContent())),
+                    MatrixTimelineItem.Virtual(UniqueId("read-marker"), VirtualTimelineItem.ReadMarker),
+                    MatrixTimelineItem.Event(UniqueId("msg-newest"), anEventTimelineItem(content = aMessageContent())),
+                )
+            )
+            consumeItemsUntilPredicate { it.timelineItems.size == 3 }.last().also { state ->
+                assertThat(state.displayJumpToUnread).isFalse()
+                assertThat(state.readMarkerIndex).isNull()
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - newEventState becomes FromOther when an event from another user arrives`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val presenter = createTimelinePresenter(timeline)
+        presenter.test {
+            val initialState = awaitFirstItem()
+            assertThat(initialState.newEventState).isEqualTo(NewEventState.None)
+            // Seed prevMostRecentItemId so subsequent emissions count as new events.
+            timelineItems.emit(
+                listOf(MatrixTimelineItem.Event(UniqueId("seed"), anEventTimelineItem(content = aMessageContent())))
+            )
+            consumeItemsUntilPredicate { it.timelineItems.size == 1 }
+            timelineItems.getAndUpdate { items ->
+                items + listOf(MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(content = aMessageContent())))
+            }
+            consumeItemsUntilPredicate { it.newEventState == NewEventState.FromOther }.last().also { state ->
+                assertThat(state.newEventState).isEqualTo(NewEventState.FromOther)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - newEventState resets to None on OnScrollFinished firstIndex 0`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(
+            timelineItems = timelineItems,
+            markAsReadResult = { Result.success(Unit) },
+        )
+        val presenter = createTimelinePresenter(timeline)
+        presenter.test {
+            val initialState = awaitFirstItem()
+            timelineItems.emit(
+                listOf(MatrixTimelineItem.Event(UniqueId("seed"), anEventTimelineItem(content = aMessageContent())))
+            )
+            consumeItemsUntilPredicate { it.timelineItems.size == 1 }
+            timelineItems.getAndUpdate { items ->
+                items + listOf(MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(content = aMessageContent())))
+            }
+            consumeItemsUntilPredicate { it.newEventState == NewEventState.FromOther }
+            initialState.eventSink.invoke(TimelineEvent.OnScrollFinished(0))
+            consumeItemsUntilPredicate { it.newEventState == NewEventState.None }.last().also { state ->
+                assertThat(state.newEventState).isEqualTo(NewEventState.None)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - newEventState transitions to FromMe when latest event is from me`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val presenter = createTimelinePresenter(timeline)
+        presenter.test {
+            awaitFirstItem()
+            timelineItems.emit(
+                listOf(MatrixTimelineItem.Event(UniqueId("seed"), anEventTimelineItem(content = aMessageContent())))
+            )
+            consumeItemsUntilPredicate { it.timelineItems.size == 1 }
+            // First, an event from another user moves us to FromOther.
+            timelineItems.getAndUpdate { items ->
+                items + listOf(MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(content = aMessageContent())))
+            }
+            consumeItemsUntilPredicate { it.newEventState == NewEventState.FromOther }
+            // Then the local user sends a message: state moves to FromMe.
+            timelineItems.getAndUpdate { items ->
+                items + listOf(
+                    MatrixTimelineItem.Event(UniqueId("2"), anEventTimelineItem(content = aMessageContent(), isOwn = true)),
+                )
+            }
+            consumeItemsUntilPredicate { it.newEventState == NewEventState.FromMe }.last().also { state ->
+                assertThat(state.newEventState).isEqualTo(NewEventState.FromMe)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - newEventState does not reset on OnScrollFinished firstIndex other than 0`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val presenter = createTimelinePresenter(timeline)
+        presenter.test {
+            val initialState = awaitFirstItem()
+            timelineItems.emit(
+                listOf(MatrixTimelineItem.Event(UniqueId("seed"), anEventTimelineItem(content = aMessageContent())))
+            )
+            consumeItemsUntilPredicate { it.timelineItems.size == 1 }
+            timelineItems.getAndUpdate { items ->
+                items + listOf(MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(content = aMessageContent())))
+            }
+            consumeItemsUntilPredicate { it.newEventState == NewEventState.FromOther }
+            // Scrolling stops above the bottom: state must NOT reset.
+            initialState.eventSink.invoke(TimelineEvent.OnScrollFinished(5))
+            advanceUntilIdle()
+            val drained = consumeItemsUntilTimeout()
+            assertThat(drained.any { it.newEventState == NewEventState.None }).isFalse()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - newEventState stays None for events with PAGINATION origin`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val presenter = createTimelinePresenter(timeline)
+        presenter.test {
+            awaitFirstItem()
+            timelineItems.emit(
+                listOf(MatrixTimelineItem.Event(UniqueId("seed"), anEventTimelineItem(content = aMessageContent())))
+            )
+            consumeItemsUntilPredicate { it.timelineItems.size == 1 }
+            // A back-paginated event arrives. It should not flip newEventState.
+            timelineItems.getAndUpdate { items ->
+                items + listOf(
+                    MatrixTimelineItem.Event(
+                        UniqueId("paginated"),
+                        anEventTimelineItem(content = aMessageContent()).copy(origin = TimelineItemEventOrigin.PAGINATION),
+                    )
+                )
+            }
+            consumeItemsUntilPredicate { it.timelineItems.size == 2 }.last().also { state ->
+                assertThat(state.newEventState).isEqualTo(NewEventState.None)
+            }
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - readMarkerIndex is 0 when the read marker is the only item`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(timelineItems = timelineItems)
+        val presenter = createTimelinePresenter(
+            timeline = timeline,
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.JumpToUnread.key to true)),
+        )
+        presenter.test {
+            awaitFirstItem()
+            timelineItems.emit(
+                listOf(MatrixTimelineItem.Virtual(UniqueId("read-marker"), VirtualTimelineItem.ReadMarker))
+            )
+            consumeItemsUntilPredicate { it.readMarkerIndex != null }.last().also { state ->
+                assertThat(state.readMarkerIndex).isEqualTo(0)
             }
             cancelAndIgnoreRemainingEvents()
         }
@@ -974,6 +1206,54 @@ class TimelinePresenterTest {
         }
     }
 
+    @Test
+    fun `present - MarkAllAsRead invokes markAsFullyRead with latest event id`() = runTest {
+        val markAsFullyReadRecorder = lambdaRecorder<RoomId, EventId, Unit> { _, _ -> }
+        val presenter = createTimelinePresenter(
+            timeline = FakeTimeline(getLatestEventIdResult = { Result.success(AN_EVENT_ID) }),
+            markAsFullyRead = FakeMarkAsFullyRead(markAsFullyReadRecorder),
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink(TimelineEvent.MarkAllAsRead)
+            advanceUntilIdle()
+            markAsFullyReadRecorder.assertions().isCalledOnce().with(value(A_ROOM_ID), value(AN_EVENT_ID))
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - MarkAllAsRead does not invoke markAsFullyRead when latest event id lookup fails`() = runTest {
+        val markAsFullyReadRecorder = lambdaRecorder<RoomId, EventId, Unit> { _, _ -> }
+        val presenter = createTimelinePresenter(
+            timeline = FakeTimeline(getLatestEventIdResult = { Result.failure(RuntimeException("boom")) }),
+            markAsFullyRead = FakeMarkAsFullyRead(markAsFullyReadRecorder),
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink(TimelineEvent.MarkAllAsRead)
+            advanceUntilIdle()
+            markAsFullyReadRecorder.assertions().isNeverCalled()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - MarkAllAsRead does not invoke markAsFullyRead when there is no latest event`() = runTest {
+        val markAsFullyReadRecorder = lambdaRecorder<RoomId, EventId, Unit> { _, _ -> }
+        val presenter = createTimelinePresenter(
+            timeline = FakeTimeline(getLatestEventIdResult = { Result.success(null) }),
+            markAsFullyRead = FakeMarkAsFullyRead(markAsFullyReadRecorder),
+        )
+        presenter.test {
+            val initialState = awaitFirstItem()
+            initialState.eventSink(TimelineEvent.MarkAllAsRead)
+            advanceUntilIdle()
+            markAsFullyReadRecorder.assertions().isNeverCalled()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
     private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
         return awaitItem()
     }
@@ -1012,6 +1292,7 @@ class TimelinePresenterTest {
         sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
         timelineItemIndexer: TimelineItemIndexer = TimelineItemIndexer(),
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
+        markAsFullyRead: MarkAsFullyRead = FakeMarkAsFullyRead { _, _ -> },
     ): TimelinePresenter {
         return TimelinePresenter(
             timelineItemsFactoryCreator = aTimelineItemsFactoryCreator(),
@@ -1030,6 +1311,7 @@ class TimelinePresenterTest {
             roomCallStatePresenter = { aStandByCallState() },
             featureFlagService = featureFlagService,
             analyticsService = FakeAnalyticsService(),
+            markAsFullyRead = markAsFullyRead,
         )
     }
 }

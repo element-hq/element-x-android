@@ -90,7 +90,7 @@ enum class FeatureFlags(
         title = "Multi accounts",
         description = "Allow the application to connect to multiple accounts at the same time." +
             "\n\nWARNING: this feature is EXPERIMENTAL and UNSTABLE.",
-        defaultValue = { false },
+        defaultValue = { true },
         isFinished = false,
     ),
     QrCodeLogin(
@@ -133,6 +133,14 @@ enum class FeatureFlags(
         key = "feature.floating_date_badge",
         title = "Display sticky date headers in the timeline",
         description = "When scrolling, a sticky date badge will be displayed so you can easily know on which date the messages you're seeing were sent.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    JumpToUnread(
+        key = "feature.jump_to_unread",
+        title = "Jump to unread messages",
+        description = "Show a button to jump to the read marker, plus a count badge on the scroll-to-bottom button " +
+            "when new messages arrive while scrolled away.",
         defaultValue = { false },
         isFinished = false,
     ),

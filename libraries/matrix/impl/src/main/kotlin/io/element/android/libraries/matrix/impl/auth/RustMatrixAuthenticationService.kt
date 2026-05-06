@@ -125,8 +125,25 @@ class RustMatrixAuthenticationService(
         withContext(coroutineDispatchers.io) {
             val emptySessionPath = rotateSessionPath()
             runCatchingExceptions {
-                val client = makeClient(sessionPaths = emptySessionPath) {
-                    serverNameOrHomeserverUrl(homeserver)
+                // Try Matrix-spec discovery first (.well-known/matrix/client). If the server
+                // doesn't expose well-known (common on internal / k3s deploys), fall back to
+                // treating the input as a direct homeserver URL.
+                val client = try {
+                    makeClient(sessionPaths = emptySessionPath) {
+                        serverNameOrHomeserverUrl(homeserver)
+                    }
+                } catch (cancellation: CancellationException) {
+                    throw cancellation
+                } catch (discoveryFailure: Exception) {
+                    Timber.w(discoveryFailure, "Discovery failed for $homeserver, falling back to direct URL")
+                    val directUrl = if (homeserver.startsWith("http://") || homeserver.startsWith("https://")) {
+                        homeserver
+                    } else {
+                        "https://$homeserver"
+                    }
+                    makeClient(sessionPaths = emptySessionPath) {
+                        homeserverUrl(directUrl)
+                    }
                 }
 
                 currentClient = client

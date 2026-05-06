@@ -99,6 +99,12 @@ object TestTags {
     val floatingActionButton = TestTag("floating-action-button")
 
     /**
+     * Timeline jump-to-position buttons (long-press exposes "Mark as read").
+     */
+    val jumpToUnreadButton = TestTag("jump-to-unread-button")
+    val jumpToBottomButton = TestTag("jump-to-bottom-button")
+
+    /**
      * Timeline.
      */
     val timeline = TestTag("timeline")

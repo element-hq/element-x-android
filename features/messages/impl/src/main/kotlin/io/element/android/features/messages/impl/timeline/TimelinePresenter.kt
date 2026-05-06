@@ -32,6 +32,7 @@ import io.element.android.features.messages.impl.timeline.factories.TimelineItem
 import io.element.android.features.messages.impl.timeline.factories.TimelineItemsFactoryConfig
 import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemReadMarkerModel
 import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemTypingNotificationModel
 import io.element.android.features.messages.impl.typing.TypingNotificationState
 import io.element.android.features.messages.impl.userEventPermissions
@@ -94,6 +95,7 @@ class TimelinePresenter(
     private val roomCallStatePresenter: Presenter<RoomCallState>,
     private val featureFlagService: FeatureFlagService,
     private val analyticsService: AnalyticsService,
+    private val markAsFullyRead: MarkAsFullyRead,
 ) : Presenter<TimelineState> {
     private val tag = "TimelinePresenter"
 
@@ -132,7 +134,7 @@ class TimelinePresenter(
 
         val prevMostRecentItemId = rememberSaveable { mutableStateOf<UniqueId?>(null) }
 
-        val newEventState = remember { mutableStateOf(NewEventState.None) }
+        val newEventState = remember { mutableStateOf<NewEventState>(NewEventState.None) }
         val messageShieldDialogData: MutableState<MessageShieldData?> = remember { mutableStateOf(null) }
 
         val resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailurePresenter.present()
@@ -151,6 +153,9 @@ class TimelinePresenter(
         }
         val displayFloatingDateBadge by produceState(false) {
             value = featureFlagService.isFeatureEnabled(FeatureFlags.FloatingDateBadge)
+        }
+        val displayJumpToUnread by produceState(false) {
+            value = featureFlagService.isFeatureEnabled(FeatureFlags.JumpToUnread)
         }
 
         fun handleEvent(event: TimelineEvent) {
@@ -220,6 +225,13 @@ class TimelinePresenter(
                     timelineController.focusOnLive()
                 }
                 TimelineEvent.HideShieldDialog -> messageShieldDialogData.value = null
+                TimelineEvent.MarkAllAsRead -> sessionCoroutineScope.launch {
+                    val latestEventId = room.liveTimeline.getLatestEventId().getOrElse {
+                        Timber.tag(tag).w(it, "Failed to get latest event id to mark as fully read")
+                        return@launch
+                    } ?: return@launch
+                    markAsFullyRead(room.roomId, latestEventId)
+                }
                 is TimelineEvent.ShowShieldDialog -> messageShieldDialogData.value = event.messageShieldData
                 is TimelineEvent.ComputeVerifiedUserSendFailure -> {
                     resolveVerifiedUserSendFailureState.eventSink(ResolveVerifiedUserSendFailureEvent.ComputeForMessage(event.event))
@@ -271,6 +283,28 @@ class TimelinePresenter(
             computeNewItemState(timelineItems, prevMostRecentItemId, newEventState)
         }
 
+        // Keyed on the full [timelineItems] reference (not just .size) so we re-scan when the
+        // read marker advances in place — the SDK swaps the marker virtual item to a new position
+        // without changing the list length, e.g. when [markRoomAsFullyRead] is sent while at the
+        // bottom of the room.
+        //
+        // Limitation: when the read marker is outside the loaded window (gaps, pagination), this
+        // returns null and the jump-to-unread button stays hidden. Proper fix needs an SDK
+        // accessor for the m.fully_read marker plus FocusedOnEvent navigation on click; gated
+        // behind FeatureFlags.JumpToUnread until that lands.
+        val readMarkerIndex = remember { mutableStateOf<Int?>(null) }
+        LaunchedEffect(timelineItems, displayJumpToUnread) {
+            if (!displayJumpToUnread) {
+                readMarkerIndex.value = null
+                return@LaunchedEffect
+            }
+            val items = timelineItems
+            readMarkerIndex.value = withContext(dispatchers.computation) {
+                items.indexOfFirst { (it as? TimelineItem.Virtual)?.model is TimelineItemReadMarkerModel }
+                    .takeIf { it >= 0 }
+            }
+        }
+
         LaunchedEffect(timelineItems.size, focusRequestState.value) {
             val currentFocusRequestState = focusRequestState.value
             if (currentFocusRequestState is FocusRequestState.Success && !currentFocusRequestState.rendered) {
@@ -320,6 +354,8 @@ class TimelinePresenter(
             resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailureState,
             displayThreadSummaries = displayThreadSummaries,
             displayFloatingDateBadge = displayFloatingDateBadge,
+            displayJumpToUnread = displayJumpToUnread,
+            readMarkerIndex = readMarkerIndex.value,
             eventSink = ::handleEvent,
         )
     }
@@ -381,7 +417,7 @@ class TimelinePresenter(
     private suspend fun computeNewItemState(
         timelineItems: ImmutableList<TimelineItem>,
         prevMostRecentItemId: MutableState<UniqueId?>,
-        newEventState: MutableState<NewEventState>
+        newEventState: MutableState<NewEventState>,
     ) = withContext(dispatchers.computation) {
         // FromMe is prioritized over FromOther, so skip if we already have a FromMe
         if (newEventState.value == NewEventState.FromMe) {
@@ -400,12 +436,7 @@ class TimelinePresenter(
 
         if (hasNewEvent) {
             // Scroll to bottom if the new event is from me, even if sent from another device
-            val fromMe = newMostRecentItem.isMine
-            newEventState.value = if (fromMe) {
-                NewEventState.FromMe
-            } else {
-                NewEventState.FromOther
-            }
+            newEventState.value = if (newMostRecentItem.isMine) NewEventState.FromMe else NewEventState.FromOther
         }
         prevMostRecentItemId.value = newMostRecentItemId
     }

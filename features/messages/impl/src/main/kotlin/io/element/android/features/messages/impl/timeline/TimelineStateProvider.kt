@@ -57,6 +57,9 @@ fun aTimelineState(
     resolveVerifiedUserSendFailureState: ResolveVerifiedUserSendFailureState = aResolveVerifiedUserSendFailureState(),
     displayThreadSummaries: Boolean = false,
     displayFloatingDateBadge: Boolean = false,
+    displayJumpToUnread: Boolean = false,
+    readMarkerIndex: Int? = null,
+    newEventState: NewEventState = NewEventState.None,
     eventSink: (TimelineEvent) -> Unit = {},
 ): TimelineState {
     val focusedEventId = timelineItems.filterIsInstance<TimelineItem.Event>().getOrNull(focusedEventIndex)?.eventId
@@ -70,13 +73,15 @@ fun aTimelineState(
         timelineMode = timelineMode,
         timelineRoomInfo = timelineRoomInfo,
         renderReadReceipts = renderReadReceipts,
-        newEventState = NewEventState.None,
+        newEventState = newEventState,
         isLive = isLive,
         focusRequestState = focusRequestState,
         messageShieldDialogData = messageShield?.let { MessageShieldData(it) },
         resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailureState,
         displayThreadSummaries = displayThreadSummaries,
         displayFloatingDateBadge = displayFloatingDateBadge,
+        displayJumpToUnread = displayJumpToUnread,
+        readMarkerIndex = readMarkerIndex,
         eventSink = eventSink,
     )
 }
