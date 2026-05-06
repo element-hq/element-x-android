@@ -31,7 +31,7 @@ class SetupBiometricPresenterTest {
         presenter.test {
             awaitItem().also { state ->
                 assertThat(state.isBiometricSetupDone).isFalse()
-                state.eventSink(SetupBiometricEvents.AllowBiometric)
+                state.eventSink(SetupBiometricEvent.AllowBiometric)
             }
             awaitItem().also { state ->
                 assertThat(state.isBiometricSetupDone).isTrue()
@@ -50,7 +50,7 @@ class SetupBiometricPresenterTest {
         presenter.test {
             awaitItem().also { state ->
                 assertThat(state.isBiometricSetupDone).isFalse()
-                state.eventSink(SetupBiometricEvents.AllowBiometric)
+                state.eventSink(SetupBiometricEvent.AllowBiometric)
             }
         }
         assertThat(lockScreenStore.isBiometricUnlockAllowed().first()).isFalse()
@@ -63,7 +63,7 @@ class SetupBiometricPresenterTest {
         presenter.test {
             awaitItem().also { state ->
                 assertThat(state.isBiometricSetupDone).isFalse()
-                state.eventSink(SetupBiometricEvents.UsePin)
+                state.eventSink(SetupBiometricEvent.UsePin)
             }
             awaitItem().also { state ->
                 assertThat(state.isBiometricSetupDone).isTrue()
