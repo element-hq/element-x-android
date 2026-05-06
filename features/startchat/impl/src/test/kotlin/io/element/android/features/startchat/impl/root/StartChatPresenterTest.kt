@@ -17,8 +17,6 @@ import io.element.android.features.startchat.impl.userlist.FakeUserListPresenter
 import io.element.android.features.startchat.impl.userlist.FakeUserListPresenterFactory
 import io.element.android.features.startchat.impl.userlist.UserListDataStore
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
@@ -155,34 +153,16 @@ class StartChatPresenterTest {
             )
         }
     }
-
-    @Test
-    fun `present - room directory search`() = runTest {
-        val presenter = createStartChatPresenter(isRoomDirectorySearchEnabled = true)
-        presenter.test {
-            skipItems(1)
-            awaitItem().let { state ->
-                assertThat(state.isRoomDirectorySearchEnabled).isTrue()
-            }
-        }
-    }
 }
 
 internal fun createStartChatPresenter(
     startDMAction: StartDMAction = FakeStartDMAction(),
-    isRoomDirectorySearchEnabled: Boolean = false,
 ): StartChatPresenter {
-    val featureFlagService = FakeFeatureFlagService(
-        initialState = mapOf(
-            FeatureFlags.RoomDirectorySearch.key to isRoomDirectorySearchEnabled,
-        ),
-    )
     return StartChatPresenter(
         presenterFactory = FakeUserListPresenterFactory(FakeUserListPresenter()),
         userRepository = FakeUserRepository(),
         userListDataStore = UserListDataStore(),
         startDMAction = startDMAction,
-        featureFlagService = featureFlagService,
         buildMeta = aBuildMeta(),
     )
 }
