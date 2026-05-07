@@ -34,6 +34,7 @@ fun aSpaceRoom(
     topic: String? = null,
     worldReadable: Boolean = false,
     isDirect: Boolean? = null,
+    isDm: Boolean? = null,
     via: List<String> = emptyList(),
 ) = SpaceRoom(
     rawName = rawName,
@@ -51,5 +52,6 @@ fun aSpaceRoom(
     topic = topic,
     worldReadable = worldReadable,
     via = via.toImmutableList(),
-    isDirect = isDirect
+    isDirect = isDirect,
+    isDm = isDm,
 )
