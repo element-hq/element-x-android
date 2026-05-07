@@ -87,7 +87,6 @@ fun AppDeveloperSettingsView(
                 onClick = onOpenShowkase
             )
         }
-        
         RageshakePreferencesView(
             state = state.rageshakeState,
         )
