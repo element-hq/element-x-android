@@ -25,6 +25,7 @@ import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.emptyFlow
@@ -54,6 +55,8 @@ class AdvancedSettingsPresenter(
         val theme = remember(isBlackThemeAllowed) {
             appPreferencesStore.getThemeFlow().mapToTheme(isBlackThemeAllowed)
         }.collectAsState(initial = Theme.System)
+
+        @OptIn(ExperimentalCoroutinesApi::class)
         val liveLocationMinimumDistanceUpdate by produceState<Int?>(null) {
             featureFlagService.isFeatureEnabledFlow(FeatureFlags.LiveLocationSharing)
                 .flatMapLatest { isEnabled ->
