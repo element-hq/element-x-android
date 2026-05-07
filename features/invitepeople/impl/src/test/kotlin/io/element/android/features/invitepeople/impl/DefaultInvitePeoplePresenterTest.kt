@@ -320,7 +320,7 @@ internal class DefaultInvitePeoplePresenterTest {
             val initialState = awaitItemAsDefault()
             skipItems(1)
 
-            val selectedUser = aMatrixUser()
+            val selectedUser = aMatrixUser(displayName = "John Doe")
 
             initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(selectedUser))
 
@@ -358,7 +358,7 @@ internal class DefaultInvitePeoplePresenterTest {
             val initialState = awaitItemAsDefault()
             skipItems(1)
 
-            val selectedUser = aMatrixUser()
+            val selectedUser = aMatrixUser(displayName = "John Doe")
 
             // Given a query is made
             initialState.searchQuery.setTextAndPlaceCursorAtEnd("some query")
