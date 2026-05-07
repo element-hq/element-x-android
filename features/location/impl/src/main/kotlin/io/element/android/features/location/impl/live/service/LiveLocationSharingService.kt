@@ -14,7 +14,6 @@ import android.content.pm.ServiceInfo.FOREGROUND_SERVICE_TYPE_LOCATION
 import android.os.IBinder
 import androidx.core.app.ServiceCompat
 import dev.zacsweers.metro.Inject
-import io.element.android.features.location.impl.common.location.DeviceLocationProvider
 import io.element.android.features.location.impl.di.LocationBindings
 import io.element.android.features.location.impl.live.notification.LiveLocationSharingNotificationCreator
 import io.element.android.libraries.architecture.bindings
@@ -31,22 +30,29 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import org.maplibre.compose.location.AndroidLocationProvider
+import org.maplibre.compose.location.DesiredAccuracy
 import timber.log.Timber
+import kotlin.time.Duration.Companion.seconds
 import io.element.android.features.location.api.Location as ApiLocation
 
 class LiveLocationSharingService : Service() {
+    companion object {
+        private const val UPDATE_INTERVAL_IN_SECOND = 60
+    }
+
     @Inject lateinit var coordinator: LiveLocationSharingCoordinator
     @Inject lateinit var notificationCreator: LiveLocationSharingNotificationCreator
     @Inject lateinit var appPreferencesStore: AppPreferencesStore
-    @Inject lateinit var appForegroundStateService: AppForegroundStateService
 
+    @Inject lateinit var appForegroundStateService: AppForegroundStateService
     @AppCoroutineScope
     @Inject lateinit var appCoroutineScope: CoroutineScope
-    @Inject lateinit var locationProvider: DeviceLocationProvider
     private lateinit var coroutineScope: CoroutineScope
 
     override fun onBind(p0: Intent?): IBinder? = null
@@ -87,6 +93,15 @@ class LiveLocationSharingService : Service() {
     }
 
     private suspend fun startLocationUpdatesListener() = coroutineScope {
+        val minDistanceMeters = appPreferencesStore.getLiveLocationMinimumDistanceUpdateFlow().first()
+        Timber.d("LiveLocationSharingService creating location provider with updateInterval=${UPDATE_INTERVAL_IN_SECOND}s, minDistance=${minDistanceMeters}m")
+        val locationProvider = AndroidLocationProvider(
+            context = applicationContext,
+            updateInterval = UPDATE_INTERVAL_IN_SECOND.seconds,
+            minDistanceMeters = minDistanceMeters.toFloat(),
+            desiredAccuracy = DesiredAccuracy.Balanced,
+            coroutineScope = coroutineScope
+        )
         Timber.d("LiveLocationSharingService listening to location updates")
         locationProvider.location
             .filterNotNull()

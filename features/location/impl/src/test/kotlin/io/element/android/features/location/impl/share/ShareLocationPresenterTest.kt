@@ -21,7 +21,6 @@ import im.vector.app.features.analytics.plan.Composer
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.impl.aPermissionsState
 import io.element.android.features.location.impl.common.actions.FakeLocationActions
-import io.element.android.features.location.impl.common.location.NoopDeviceLocationProvider
 import io.element.android.features.location.impl.common.permissions.FakePermissionsPresenter
 import io.element.android.features.location.impl.common.permissions.PermissionsEvents
 import io.element.android.features.location.impl.common.permissions.PermissionsState
@@ -99,7 +98,6 @@ class ShareLocationPresenterTest {
         durationFormatter = durationFormatter,
         liveLocationShareManager = liveLocationShareManager,
         liveLocationStore = liveLocationStore,
-        locationProvider = NoopDeviceLocationProvider(),
     )
 
     @Test
@@ -116,6 +114,7 @@ class ShareLocationPresenterTest {
             skipItems(1)
             val state = awaitItem()
             assertThat(state.trackUserLocation).isTrue()
+            assertThat(state.hasLocationPermission).isTrue()
             assertThat(state.dialogState).isEqualTo(ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.None))
         }
     }
@@ -136,6 +135,7 @@ class ShareLocationPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.trackUserLocation).isTrue()
+            assertThat(initialState.hasLocationPermission).isTrue()
             assertThat(initialState.dialogState).isEqualTo(ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.None))
         }
     }
@@ -156,6 +156,7 @@ class ShareLocationPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.trackUserLocation).isFalse()
+            assertThat(initialState.hasLocationPermission).isFalse()
             assertThat(initialState.dialogState).isEqualTo(
                 ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.PermissionDenied)
             )
@@ -176,6 +177,7 @@ class ShareLocationPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.trackUserLocation).isFalse()
+            assertThat(initialState.hasLocationPermission).isFalse()
             assertThat(initialState.dialogState).isEqualTo(
                 ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.PermissionRationale)
             )
@@ -197,6 +199,7 @@ class ShareLocationPresenterTest {
             skipItems(1)
             val initialState = awaitItem()
             assertThat(initialState.trackUserLocation).isFalse()
+            assertThat(initialState.hasLocationPermission).isTrue()
             assertThat(initialState.dialogState).isEqualTo(
                 ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.LocationServiceDisabled)
             )

@@ -43,6 +43,7 @@ import io.element.android.features.location.impl.common.ui.LocationPinMarkers
 import io.element.android.features.location.impl.common.ui.LocationShareRow
 import io.element.android.features.location.impl.common.ui.MapBottomSheetScaffold
 import io.element.android.features.location.impl.common.ui.UserLocationPuck
+import io.element.android.features.location.impl.common.ui.rememberUserLocationState
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -53,7 +54,6 @@ import kotlinx.coroutines.launch
 import org.maplibre.compose.camera.CameraMoveReason
 import org.maplibre.compose.camera.CameraPosition
 import org.maplibre.compose.camera.rememberCameraState
-import org.maplibre.compose.location.rememberUserLocationState
 import org.maplibre.spatialk.geojson.Position
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -90,7 +90,7 @@ fun ShowLocationView(
         }
     }
 
-    val userLocationState = rememberUserLocationState(state.locationProvider)
+    val userLocationState = rememberUserLocationState(state.hasLocationPermission)
     val scaffoldState = rememberBottomSheetScaffoldState(
         bottomSheetState = rememberStandardBottomSheetState(SheetValue.Expanded)
     )
@@ -131,8 +131,8 @@ fun ShowLocationView(
                     style = ElementTheme.typography.fontBodyLgMedium,
                     color = ElementTheme.colors.textPrimary,
                     modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(all = 16.dp),
+                        .fillMaxWidth()
+                        .padding(all = 16.dp),
                     textAlign = TextAlign.Center,
                 )
             } else {
@@ -180,8 +180,8 @@ fun ShowLocationView(
                 isMapCenteredOnUser = state.isTrackMyLocation,
                 onClick = { state.eventSink(ShowLocationEvent.TrackMyLocation(true)) },
                 modifier = Modifier
-                        .align(Alignment.TopEnd)
-                        .padding(all = 16.dp),
+                    .align(Alignment.TopEnd)
+                    .padding(all = 16.dp),
             )
         }
     )

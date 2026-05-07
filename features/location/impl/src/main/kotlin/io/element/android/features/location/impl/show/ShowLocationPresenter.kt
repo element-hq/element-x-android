@@ -28,7 +28,6 @@ import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.SendLiveLocationPermissions
 import io.element.android.features.location.impl.common.actions.LocationActions
 import io.element.android.features.location.impl.common.checkLocationConstraints
-import io.element.android.features.location.impl.common.location.DeviceLocationProvider
 import io.element.android.features.location.impl.common.permissions.PermissionsEvents
 import io.element.android.features.location.impl.common.permissions.PermissionsPresenter
 import io.element.android.features.location.impl.common.permissions.PermissionsState
@@ -61,7 +60,6 @@ class ShowLocationPresenter(
     private val stringProvider: StringProvider,
     private val joinedRoom: JoinedRoom,
     private val liveLocationShareManager: ActiveLiveLocationShareManager,
-    private val locationProvider: DeviceLocationProvider,
 ) : Presenter<ShowLocationState> {
     @AssistedFactory
     fun interface Factory {
@@ -81,7 +79,6 @@ class ShowLocationPresenter(
         }
 
         LaunchedEffect(permissionsState.permissions) {
-            locationProvider.onPermissionStatusRefreshed()
             if (permissionsState.isAnyGranted) {
                 dialogState = LocationConstraintsDialogState.None
             }
@@ -191,12 +188,12 @@ class ShowLocationPresenter(
         }
 
         return ShowLocationState(
-            isLive = mode is ShowLocationMode.Live,
             dialogState = dialogState,
             locationShares = locationShares,
             focusedLocation = focusedLocation,
+            hasLocationPermission = permissionsState.isAnyGranted,
             isTrackMyLocation = isTrackMyLocation,
-            locationProvider = locationProvider,
+            isLive = mode is ShowLocationMode.Live,
             appName = appName,
             eventSink = ::handleEvent,
         )

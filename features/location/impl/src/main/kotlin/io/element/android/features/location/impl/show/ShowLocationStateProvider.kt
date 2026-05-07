@@ -10,7 +10,6 @@ package io.element.android.features.location.impl.show
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.location.api.Location
-import io.element.android.features.location.impl.common.location.NoopDeviceLocationProvider
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
@@ -32,9 +31,13 @@ class ShowLocationStateProvider : PreviewParameterProvider<ShowLocationState> {
             ),
             aShowLocationState(
                 constraintsDialogState = LocationConstraintsDialogState.LocationServiceDisabled,
+                hasLocationPermission = true,
             ),
-            aShowLocationState(),
             aShowLocationState(
+                hasLocationPermission = true,
+            ),
+            aShowLocationState(
+                hasLocationPermission = true,
                 isTrackMyLocation = true,
             ),
         )
@@ -47,18 +50,19 @@ fun aShowLocationState(
     constraintsDialogState: LocationConstraintsDialogState = LocationConstraintsDialogState.None,
     locationShares: List<LocationShareItem> = listOf(aLocationShareItem(isLive = isLive)),
     focusedLocation: LocationShareItem? = locationShares.firstOrNull(),
+    hasLocationPermission: Boolean = false,
     isTrackMyLocation: Boolean = false,
     appName: String = APP_NAME,
     eventSink: (ShowLocationEvent) -> Unit = {},
 ): ShowLocationState {
     return ShowLocationState(
-        isLive = isLive,
         dialogState = constraintsDialogState,
         locationShares = locationShares.toImmutableList(),
         focusedLocation = focusedLocation,
+        hasLocationPermission = hasLocationPermission,
         isTrackMyLocation = isTrackMyLocation,
-        locationProvider = NoopDeviceLocationProvider(),
         appName = appName,
+        isLive = isLive,
         eventSink = eventSink,
     )
 }

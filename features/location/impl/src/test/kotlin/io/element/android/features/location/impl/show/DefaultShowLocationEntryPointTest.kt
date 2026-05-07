@@ -15,7 +15,6 @@ import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.ShowLocationEntryPoint
 import io.element.android.features.location.api.ShowLocationMode
 import io.element.android.features.location.impl.common.actions.FakeLocationActions
-import io.element.android.features.location.impl.common.location.NoopDeviceLocationProvider
 import io.element.android.features.location.impl.common.permissions.FakePermissionsPresenter
 import io.element.android.features.location.test.FakeActiveLiveLocationShareManager
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
@@ -25,7 +24,6 @@ import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.services.toolbox.test.strings.FakeStringProvider
 import io.element.android.tests.testutils.node.TestParentNode
-import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
 
@@ -34,7 +32,7 @@ class DefaultShowLocationEntryPointTest {
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
     @Test
-    fun `test node builder`() = runTest {
+    fun `test node builder`() {
         val entryPoint = DefaultShowLocationEntryPoint()
         val parentNode = TestParentNode.create { buildContext, plugins ->
             val joinedRoom = FakeJoinedRoom()
@@ -51,7 +49,6 @@ class DefaultShowLocationEntryPointTest {
                         stringProvider = FakeStringProvider(),
                         joinedRoom = joinedRoom,
                         liveLocationShareManager = FakeActiveLiveLocationShareManager(),
-                        locationProvider = NoopDeviceLocationProvider(),
                     )
                 },
                 analyticsService = FakeAnalyticsService(),

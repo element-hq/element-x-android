@@ -12,7 +12,6 @@ import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.bumble.appyx.core.modality.BuildContext
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.location.impl.common.actions.FakeLocationActions
-import io.element.android.features.location.impl.common.location.NoopDeviceLocationProvider
 import io.element.android.features.location.impl.common.permissions.FakePermissionsPresenter
 import io.element.android.features.location.impl.live.LiveLocationStore
 import io.element.android.features.location.test.FakeActiveLiveLocationShareManager
@@ -59,7 +58,6 @@ class DefaultShareLocationEntryPointTest {
                             preferenceDataStoreFactory = FakePreferenceDataStoreFactory(),
                             sessionId = room.sessionId,
                         ),
-                        locationProvider = NoopDeviceLocationProvider(),
                     )
                 },
                 analyticsService = FakeAnalyticsService(),

@@ -27,7 +27,6 @@ import io.element.android.features.location.impl.common.MapDefaults
 import io.element.android.features.location.impl.common.SendLiveLocationPermissions
 import io.element.android.features.location.impl.common.actions.LocationActions
 import io.element.android.features.location.impl.common.checkLocationConstraints
-import io.element.android.features.location.impl.common.location.DeviceLocationProvider
 import io.element.android.features.location.impl.common.permissions.PermissionsEvents
 import io.element.android.features.location.impl.common.permissions.PermissionsPresenter
 import io.element.android.features.location.impl.common.permissions.PermissionsState
@@ -72,7 +71,6 @@ class ShareLocationPresenter(
     private val durationFormatter: DurationFormatter,
     private val liveLocationShareManager: ActiveLiveLocationShareManager,
     private val liveLocationStore: LiveLocationStore,
-    private val locationProvider: DeviceLocationProvider,
 ) : Presenter<ShareLocationState> {
     @AssistedFactory
     fun interface Factory {
@@ -125,10 +123,7 @@ class ShareLocationPresenter(
             }
         }
 
-        LaunchedEffect(permissionsState.permissions) {
-            locationProvider.onPermissionStatusRefreshed()
-            checkLocationConstraints()
-        }
+        LaunchedEffect(permissionsState.permissions) { checkLocationConstraints() }
 
         fun handleEvent(event: ShareLocationEvent) {
             when (event) {
@@ -175,9 +170,9 @@ class ShareLocationPresenter(
             currentUser = currentUser,
             dialogState = dialogState,
             trackUserLocation = trackUserPosition,
-            appName = appName,
+            hasLocationPermission = permissionsState.isAnyGranted,
             canShareLiveLocation = isLiveLocationSharingEnabled,
-            locationProvider = locationProvider,
+            appName = appName,
             startLiveLocationAction = startLiveLocationAction.value,
             eventSink = ::handleEvent,
         )

@@ -9,7 +9,6 @@
 package io.element.android.features.location.impl.share
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
-import io.element.android.features.location.impl.common.location.NoopDeviceLocationProvider
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.UserId
@@ -23,27 +22,46 @@ private const val APP_NAME = "ApplicationName"
 class ShareLocationStateProvider : PreviewParameterProvider<ShareLocationState> {
     override val values: Sequence<ShareLocationState>
         get() = sequenceOf(
-            aShareLocationState(),
+            aShareLocationState(
+                dialogState = ShareLocationState.Dialog.None,
+                trackUserPosition = false,
+                hasLocationPermission = false,
+            ),
             aShareLocationState(
                 dialogState = ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.PermissionDenied),
+                trackUserPosition = false,
+                hasLocationPermission = false,
             ),
             aShareLocationState(
                 dialogState = ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.PermissionRationale),
+                trackUserPosition = false,
+                hasLocationPermission = false,
             ),
             aShareLocationState(
                 dialogState = ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.LocationServiceDisabled),
-            ),
-            aShareLocationState(),
-            aShareLocationState(
-                trackUserPosition = true,
+                trackUserPosition = false,
+                hasLocationPermission = true,
             ),
             aShareLocationState(
+                dialogState = ShareLocationState.Dialog.None,
+                trackUserPosition = false,
+                hasLocationPermission = true,
+            ),
+            aShareLocationState(
+                dialogState = ShareLocationState.Dialog.None,
                 trackUserPosition = true,
+                hasLocationPermission = true,
+            ),
+            aShareLocationState(
+                dialogState = ShareLocationState.Dialog.None,
+                trackUserPosition = true,
+                hasLocationPermission = true,
                 canShareLiveLocation = true,
             ),
             aShareLocationState(
                 dialogState = ShareLocationState.Dialog.LiveLocationDisclaimer,
                 trackUserPosition = true,
+                hasLocationPermission = true,
                 canShareLiveLocation = true,
             ),
             aShareLocationState(
@@ -55,6 +73,7 @@ class ShareLocationStateProvider : PreviewParameterProvider<ShareLocationState> 
                     )
                 ),
                 trackUserPosition = true,
+                hasLocationPermission = true,
                 canShareLiveLocation = true,
             ),
         )
@@ -64,6 +83,7 @@ fun aShareLocationState(
     currentUser: MatrixUser = MatrixUser(UserId("@user:matrix.org")),
     dialogState: ShareLocationState.Dialog = ShareLocationState.Dialog.None,
     trackUserPosition: Boolean = false,
+    hasLocationPermission: Boolean = false,
     canShareLiveLocation: Boolean = false,
     appName: String = APP_NAME,
     startLiveLocationAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
@@ -73,9 +93,9 @@ fun aShareLocationState(
         currentUser = currentUser,
         dialogState = dialogState,
         trackUserLocation = trackUserPosition,
-        appName = appName,
+        hasLocationPermission = hasLocationPermission,
         canShareLiveLocation = canShareLiveLocation,
-        locationProvider = NoopDeviceLocationProvider(),
+        appName = appName,
         startLiveLocationAction = startLiveLocationAction,
         eventSink = eventSink
     )
