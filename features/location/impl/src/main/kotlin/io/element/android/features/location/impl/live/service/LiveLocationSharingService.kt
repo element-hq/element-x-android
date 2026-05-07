@@ -43,7 +43,6 @@ import io.element.android.features.location.api.Location as ApiLocation
 private const val UPDATE_INTERVAL_IN_SECOND = 10
 
 class LiveLocationSharingService : Service() {
-
     @Inject lateinit var coordinator: LiveLocationSharingCoordinator
     @Inject lateinit var notificationCreator: LiveLocationSharingNotificationCreator
     @Inject lateinit var appPreferencesStore: AppPreferencesStore

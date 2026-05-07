@@ -23,7 +23,6 @@ import org.maplibre.compose.location.UserLocationState
 import org.maplibre.compose.location.rememberAndroidLocationProvider
 import org.maplibre.compose.location.rememberNullLocationProvider
 import org.maplibre.compose.location.rememberUserLocationState
-import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
 @Composable
