@@ -26,31 +26,30 @@ import io.element.android.libraries.push.api.notifications.NotificationIdProvide
 import io.element.android.services.appnavstate.api.AppForegroundStateService
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.flow.filterNotNull
-import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import org.maplibre.compose.location.AndroidLocationProvider
 import org.maplibre.compose.location.DesiredAccuracy
 import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 import io.element.android.features.location.api.Location as ApiLocation
 
+private const val UPDATE_INTERVAL_IN_SECOND = 10
+
 class LiveLocationSharingService : Service() {
-    companion object {
-        private const val UPDATE_INTERVAL_IN_SECOND = 60
-    }
 
     @Inject lateinit var coordinator: LiveLocationSharingCoordinator
     @Inject lateinit var notificationCreator: LiveLocationSharingNotificationCreator
     @Inject lateinit var appPreferencesStore: AppPreferencesStore
 
     @Inject lateinit var appForegroundStateService: AppForegroundStateService
+
     @AppCoroutineScope
     @Inject lateinit var appCoroutineScope: CoroutineScope
     private lateinit var coroutineScope: CoroutineScope
@@ -78,32 +77,27 @@ class LiveLocationSharingService : Service() {
                 // foregroundServiceType =
                 FOREGROUND_SERVICE_TYPE_LOCATION
             )
-            coroutineScope.launch {
-                runCatchingExceptions {
-                    startLocationUpdatesListener()
-                }.onFailure {
-                    Timber.e(it, "Failed to start observing location service")
-                    stopSelf()
-                }
-            }
+            startLocationUpdatesListener()
         }.onFailure {
             Timber.e(it, "Failed to start live location sharing service")
             stopSelf()
         }
     }
 
-    private suspend fun startLocationUpdatesListener() = coroutineScope {
-        val minDistanceMeters = appPreferencesStore.getLiveLocationMinimumDistanceUpdateFlow().first()
-        Timber.d("LiveLocationSharingService creating location provider with updateInterval=${UPDATE_INTERVAL_IN_SECOND}s, minDistance=${minDistanceMeters}m")
-        val locationProvider = AndroidLocationProvider(
-            context = applicationContext,
-            updateInterval = UPDATE_INTERVAL_IN_SECOND.seconds,
-            minDistanceMeters = minDistanceMeters.toFloat(),
-            desiredAccuracy = DesiredAccuracy.Balanced,
-            coroutineScope = coroutineScope
-        )
+    @OptIn(ExperimentalCoroutinesApi::class)
+    private fun startLocationUpdatesListener() {
         Timber.d("LiveLocationSharingService listening to location updates")
-        locationProvider.location
+        appPreferencesStore.getLiveLocationMinimumDistanceUpdateFlow()
+            .flatMapLatest { minDistanceMeters ->
+                val locationProvider = AndroidLocationProvider(
+                    context = applicationContext,
+                    updateInterval = UPDATE_INTERVAL_IN_SECOND.seconds,
+                    minDistanceMeters = minDistanceMeters.toFloat(),
+                    desiredAccuracy = DesiredAccuracy.Balanced,
+                    coroutineScope = coroutineScope
+                )
+                locationProvider.location
+            }
             .filterNotNull()
             .map { location ->
                 ApiLocation(
@@ -113,7 +107,7 @@ class LiveLocationSharingService : Service() {
                 )
             }
             .onEach(coordinator::dispatch)
-            .launchIn(this)
+            .launchIn(coroutineScope)
     }
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {

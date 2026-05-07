@@ -24,6 +24,7 @@ import org.maplibre.compose.location.rememberAndroidLocationProvider
 import org.maplibre.compose.location.rememberNullLocationProvider
 import org.maplibre.compose.location.rememberUserLocationState
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun UserLocationPuck(
@@ -72,9 +73,9 @@ fun rememberUserLocationState(hasLocationPermission: Boolean): UserLocationState
         rememberNullLocationProvider()
     } else {
         rememberAndroidLocationProvider(
-            updateInterval = 1.minutes,
-            desiredAccuracy = DesiredAccuracy.Balanced,
-            minDistanceMeters = 50f,
+            updateInterval = 5.seconds,
+            desiredAccuracy = DesiredAccuracy.High,
+            minDistanceMeters = 5f,
         )
     }
     return rememberUserLocationState(locationProvider)
