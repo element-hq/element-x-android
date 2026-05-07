@@ -134,6 +134,9 @@ class ElementCallActivity :
                     requestPermissions = { permissions, callback ->
                         requestPermissionCallback = callback
                         requestPermissionsLauncher.launch(permissions)
+                    },
+                    onCallEnded = {
+                        state.eventSink(CallScreenEvent.CallEnded)
                     }
                 )
             }
@@ -201,6 +204,10 @@ class ElementCallActivity :
 
     override fun close() {
         finish()
+    }
+
+    override fun onCallEnded() {
+        eventSink?.invoke(CallScreenEvent.CallEnded)
     }
 
     private fun setCallData(intent: Intent?) {

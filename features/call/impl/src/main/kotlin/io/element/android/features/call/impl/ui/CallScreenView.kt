@@ -54,6 +54,7 @@ typealias RequestPermissionCallback = (Array<String>) -> Unit
 
 interface CallScreenNavigator {
     fun close()
+    fun onCallEnded()
 }
 
 @Composable
@@ -62,6 +63,7 @@ internal fun CallScreenView(
     pipState: PictureInPictureState,
     onConsoleMessage: (ConsoleMessage) -> Unit,
     requestPermissions: (Array<String>, RequestPermissionCallback) -> Unit,
+    onCallEnded: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun handleBack() {
@@ -84,7 +86,10 @@ internal fun CallScreenView(
                     append(stringResource(CommonStrings.error_unknown))
                     state.webViewError.takeIf { it.isNotEmpty() }?.let { append("\n\n").append(it) }
                 },
-                onSubmit = { state.eventSink(CallScreenEvent.Hangup) },
+                onSubmit = {
+                    state.eventSink(CallScreenEvent.Hangup)
+                    onCallEnded()
+                },
             )
         } else {
             var webViewAudioManager by remember { mutableStateOf<WebViewAudioManager?>(null) }
@@ -147,7 +152,10 @@ internal fun CallScreenView(
                     Timber.e(state.urlState.error, "WebView failed to load URL: ${state.urlState.error.message}")
                     ErrorDialog(
                         content = state.urlState.error.message.orEmpty(),
-                        onSubmit = { state.eventSink(CallScreenEvent.Hangup) },
+                        onSubmit = {
+                            state.eventSink(CallScreenEvent.Hangup)
+                            onCallEnded()
+                        },
                     )
                 }
                 is AsyncData.Success -> Unit
@@ -267,6 +275,7 @@ internal fun CallScreenViewPreview(
         pipState = aPictureInPictureState(),
         requestPermissions = { _, _ -> },
         onConsoleMessage = {},
+        onCallEnded = {},
     )
 }
 

@@ -13,8 +13,14 @@ import io.element.android.features.call.impl.ui.CallScreenNavigator
 class FakeCallScreenNavigator : CallScreenNavigator {
     var closeCalled = false
         private set
+    var onCallEndedCalled = false
+        private set
 
     override fun close() {
         closeCalled = true
+    }
+
+    override fun onCallEnded() {
+        onCallEndedCalled = true
     }
 }

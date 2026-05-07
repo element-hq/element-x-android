@@ -167,10 +167,12 @@ class CallScreenPresenter(
                             // If we don't get it in time, we close the screen anyway
                             delay(2.seconds)
                             close(callWidgetDriver.value, navigator)
+                            navigator.onCallEnded()
                         }
                     } else {
                         coroutineScope.launch {
                             close(callWidgetDriver.value, navigator)
+                            navigator.onCallEnded()
                         }
                     }
                 }
@@ -182,6 +184,10 @@ class CallScreenPresenter(
                         webViewError = event.description.orEmpty()
                     }
                     // Else ignore the error, give a chance the Element Call to recover by itself.
+                }
+                is CallScreenEvent.CallEnded -> {
+                    messageInterceptor.value = null
+                    navigator.close()
                 }
             }
         }
