@@ -134,7 +134,11 @@ class FakeJoinedRoom(
     }
 
     override suspend fun updateRoomNotificationSettings(): Result<Unit> = simulateLongTask {
-        val notificationSettings = roomNotificationSettingsService.getRoomNotificationSettings(roomId, info().isEncrypted.orFalse(), isOneToOne).getOrThrow()
+        val notificationSettings = roomNotificationSettingsService.getRoomNotificationSettings(
+            roomId = roomId,
+            isEncrypted = info().isEncrypted.orFalse(),
+            isOneToOne = isDm(),
+        ).getOrThrow()
         (roomNotificationSettingsStateFlow as MutableStateFlow).value = RoomNotificationSettingsState.Ready(notificationSettings)
         return Result.success(Unit)
     }

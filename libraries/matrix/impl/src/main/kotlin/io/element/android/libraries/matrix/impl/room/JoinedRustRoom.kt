@@ -346,7 +346,7 @@ class JoinedRustRoom(
         roomNotificationSettingsStateFlow.value = RoomNotificationSettingsState.Pending(prevRoomNotificationSettings = currentRoomNotificationSettings)
         runCatchingExceptions {
             val isEncrypted = roomInfoFlow.value.isEncrypted ?: getUpdatedIsEncrypted().getOrThrow()
-            notificationSettingsService.getRoomNotificationSettings(roomId, isEncrypted, isOneToOne).getOrThrow()
+            notificationSettingsService.getRoomNotificationSettings(roomId = roomId, isEncrypted = isEncrypted, isOneToOne = isDm()).getOrThrow()
         }.map {
             roomNotificationSettingsStateFlow.value = RoomNotificationSettingsState.Ready(it)
         }.onFailure {

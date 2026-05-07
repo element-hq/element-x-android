@@ -199,7 +199,7 @@ class RoomDetailsPresenterTest {
             givenRoomInfo(
                 aRoomInfo(
                     isEncrypted = true,
-                    isDirect = true,
+                    isDm = true,
                 )
             )
         }
@@ -289,7 +289,7 @@ class RoomDetailsPresenterTest {
             givenRoomInfo(
                 aRoomInfo(
                     isEncrypted = true,
-                    isDirect = true,
+                    isDm = true,
                 )
             )
         }
@@ -312,7 +312,6 @@ class RoomDetailsPresenterTest {
         val myRoomMember = aRoomMember(A_SESSION_ID)
         val otherRoomMember = aRoomMember(A_USER_ID_2)
         val room = aJoinedRoom(
-            isDirect = true,
             topic = null,
             roomPermissions = roomPermissions(),
             userDisplayNameResult = { Result.success(A_USER_NAME) },
@@ -330,7 +329,7 @@ class RoomDetailsPresenterTest {
 
             givenRoomInfo(
                 aRoomInfo(
-                    isDirect = true,
+                    isDm = true,
                     activeMembersCount = 2,
                     topic = null,
                 )

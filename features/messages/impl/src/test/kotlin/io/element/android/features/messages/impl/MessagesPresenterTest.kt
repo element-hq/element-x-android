@@ -563,7 +563,7 @@ class MessagesPresenterTest {
             baseRoom = FakeBaseRoom(
                 roomPermissions = roomPermissions(),
             ).apply {
-                givenRoomInfo(aRoomInfo(isDirect = true, joinedMembersCount = 1, activeMembersCount = 1))
+                givenRoomInfo(aRoomInfo(isDm = true, joinedMembersCount = 1, activeMembersCount = 1))
             },
             typingNoticeResult = { Result.success(Unit) },
         )
@@ -1077,7 +1077,7 @@ class MessagesPresenterTest {
                     canRedactOwn = true,
                     canPinUnpin = true,
                 ),
-                initialRoomInfo = aRoomInfo(isDirect = true, isEncrypted = true)
+                initialRoomInfo = aRoomInfo(isDm = true, isEncrypted = true)
             ).apply {
                 givenRoomMembersState(RoomMembersState.Ready(persistentListOf(aRoomMember(userId = A_SESSION_ID), aRoomMember(userId = A_USER_ID_2))))
             },

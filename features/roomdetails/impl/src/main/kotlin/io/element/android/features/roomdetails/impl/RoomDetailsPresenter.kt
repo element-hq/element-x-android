@@ -145,7 +145,7 @@ class RoomDetailsPresenter(
                 }
                 RoomDetailsEvent.UnmuteNotification -> {
                     scope.launch(dispatchers.io) {
-                        notificationSettingsService.unmuteRoom(room.roomId, isEncrypted, room.isOneToOne)
+                        notificationSettingsService.unmuteRoom(room.roomId, isEncrypted, room.isDm())
                     }
                 }
                 is RoomDetailsEvent.SetFavorite -> scope.setFavorite(event.isFavorite)
