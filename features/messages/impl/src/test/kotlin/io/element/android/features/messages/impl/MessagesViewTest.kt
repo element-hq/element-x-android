@@ -645,46 +645,40 @@ class MessagesViewTest {
     }
 
     @Test
-    fun `live location banner is visible when current room is sharing`() {
+    fun `live location banner is visible when current room is sharing`() = runAndroidComposeUiTest {
         val state = aMessagesState(isCurrentlySharingLiveLocationInRoom = true)
-        rule.setMessagesView(state = state)
-
-        rule.onNodeWithText(rule.activity.getString(CommonStrings.screen_room_live_location_banner)).assertExists()
-        rule.onNodeWithText(rule.activity.getString(CommonStrings.action_stop)).assertExists()
+        setMessagesView(state = state)
+        onNodeWithText(activity!!.getString(CommonStrings.screen_room_live_location_banner)).assertExists()
     }
 
     @Test
-    fun `live location banner is hidden when current room is not sharing`() {
+    fun `live location banner is hidden when current room is not sharing`() = runAndroidComposeUiTest {
         val state = aMessagesState(isCurrentlySharingLiveLocationInRoom = false)
-        rule.setMessagesView(state = state)
-
-        rule.onNodeWithText(rule.activity.getString(CommonStrings.screen_room_live_location_banner)).assertDoesNotExist()
+        setMessagesView(state = state)
+        onNodeWithText(activity!!.getString(CommonStrings.screen_room_live_location_banner)).assertDoesNotExist()
     }
 
     @Test
-    fun `clicking stop on live location banner emits expected event`() {
+    fun `clicking stop on live location banner emits expected event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<MessagesEvent>()
         val state = aMessagesState(
             isCurrentlySharingLiveLocationInRoom = true,
             eventSink = eventsRecorder,
         )
-        rule.setMessagesView(state = state)
-
-        rule.onNodeWithText(rule.activity.getString(CommonStrings.action_stop)).performClick()
-
+        setMessagesView(state = state)
+        clickOn(CommonStrings.action_stop)
         eventsRecorder.assertSingle(MessagesEvent.StopLiveLocationShare)
     }
 
     @Test
-    fun `clicking live location banner emit expected event`() {
+    fun `clicking live location banner emit expected event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<MessagesEvent>()
         val state = aMessagesState(
             isCurrentlySharingLiveLocationInRoom = true,
             eventSink = eventsRecorder,
         )
-        rule.setMessagesView(state = state)
-
-        rule.onNodeWithText(rule.activity.getString(CommonStrings.screen_room_live_location_banner)).performClick()
+        setMessagesView(state = state)
+        clickOn(CommonStrings.screen_room_live_location_banner)
         eventsRecorder.assertSingle(MessagesEvent.ShowLiveLocationShare)
     }
 }

@@ -211,11 +211,34 @@ class AdvancedSettingsPresenterTest {
     }
 
     @Test
+    fun `present - live location minimum distance is null when feature is disabled`() = runTest {
+        val appPreferencesStore = InMemoryAppPreferencesStore(
+            liveLocationMinimumDistanceUpdate = 50,
+        )
+        val featureFlagService = FakeFeatureFlagService().apply {
+            setFeatureEnabled(FeatureFlags.LiveLocationSharing, false)
+        }
+        val presenter = createAdvancedSettingsPresenter(appPreferencesStore = appPreferencesStore, featureFlagService = featureFlagService)
+
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            with(awaitItem()) {
+                assertThat(liveLocationMinimumDistanceUpdate).isNull()
+            }
+        }
+    }
+
+    @Test
     fun `present - exposes live location minimum distance from app preferences`() = runTest {
         val appPreferencesStore = InMemoryAppPreferencesStore(
             liveLocationMinimumDistanceUpdate = 50,
         )
-        val presenter = createAdvancedSettingsPresenter(appPreferencesStore = appPreferencesStore)
+        val featureFlagService = FakeFeatureFlagService().apply {
+            setFeatureEnabled(FeatureFlags.LiveLocationSharing, true)
+        }
+        val presenter = createAdvancedSettingsPresenter(appPreferencesStore = appPreferencesStore, featureFlagService = featureFlagService)
 
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
@@ -233,7 +256,10 @@ class AdvancedSettingsPresenterTest {
         val appPreferencesStore = InMemoryAppPreferencesStore(
             liveLocationMinimumDistanceUpdate = 10,
         )
-        val presenter = createAdvancedSettingsPresenter(appPreferencesStore = appPreferencesStore)
+        val featureFlagService = FakeFeatureFlagService().apply {
+            setFeatureEnabled(FeatureFlags.LiveLocationSharing, true)
+        }
+        val presenter = createAdvancedSettingsPresenter(appPreferencesStore = appPreferencesStore, featureFlagService = featureFlagService)
 
         moleculeFlow(RecompositionMode.Immediate) {
             presenter.present()
