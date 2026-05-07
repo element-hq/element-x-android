@@ -11,6 +11,7 @@ package io.element.android.libraries.matrix.impl.auth
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
+import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.extensions.runCatchingExceptions
@@ -66,6 +67,7 @@ class RustMatrixAuthenticationService(
     private val rustMatrixClientFactory: RustMatrixClientFactory,
     private val passphraseGenerator: PassphraseGenerator,
     private val oAuthConfigurationProvider: OAuthConfigurationProvider,
+    private val enterpriseService: EnterpriseService,
 ) : MatrixAuthenticationService {
     // Any existing Element Classic session that we want to try to import secrets from during login.
     private var elementClassicSession: ElementClassicSession? = null
@@ -269,6 +271,12 @@ class RustMatrixAuthenticationService(
                     additionalScopes = emptyList(),
                 )
                 val url = oAuthAuthorizationData.loginUrl()
+                    .let {
+                        enterpriseService.tweakMasUrl(
+                            url = it,
+                            homeserver = client.server() ?: client.homeserver(),
+                        )
+                    }
                 pendingOAuthAuthorizationData = oAuthAuthorizationData
                 OAuthDetails(url)
             }.mapFailure { failure ->

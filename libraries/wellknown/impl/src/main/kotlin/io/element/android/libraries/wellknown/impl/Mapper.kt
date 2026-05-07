@@ -16,4 +16,5 @@ internal fun InternalElementWellKnown.map() = ElementWellKnown(
     rageshakeUrl = rageshakeUrl,
     brandColor = brandColor,
     notificationSound = notificationSound,
+    identityProviderAppScheme = identityProviderAppScheme,
 )
