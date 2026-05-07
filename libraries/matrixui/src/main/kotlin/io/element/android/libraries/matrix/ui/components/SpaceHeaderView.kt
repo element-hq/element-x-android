@@ -30,6 +30,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.SPACE_NAME
 import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.designsystem.preview.USER_NAME_BOB
 import io.element.android.libraries.designsystem.preview.USER_NAME_CHARLIE
@@ -119,7 +120,7 @@ internal fun SpaceHeaderViewPreview() = ElementPreview {
             size = AvatarSize.SpaceHeader,
         ),
         alias = RoomAlias("#spaceAlias:matrix.org"),
-        name = "Space name",
+        name = SPACE_NAME,
         topic = "Space topic: " + LoremIpsum(40).values.first(),
         topicMaxLines = 2,
         visibility = SpaceRoomVisibility.Public,

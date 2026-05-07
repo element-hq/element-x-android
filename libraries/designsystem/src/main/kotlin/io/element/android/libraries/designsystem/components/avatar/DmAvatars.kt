@@ -29,6 +29,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.LayoutDirection
 import io.element.android.libraries.designsystem.preview.ElementThemedPreview
 import io.element.android.libraries.designsystem.preview.PreviewGroup
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
+import io.element.android.libraries.designsystem.preview.USER_NAME_BOB
 import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
@@ -116,12 +118,12 @@ internal fun DmAvatarsPreview() = ElementThemedPreview {
     DmAvatars(
         userAvatarData = anAvatarData(
             id = "Alice",
-            name = "Alice",
+            name = USER_NAME_ALICE,
             size = size,
         ),
         otherUserAvatarData = anAvatarData(
             id = "Bob",
-            name = "Bob",
+            name = USER_NAME_BOB,
             size = size,
         ),
         openAvatarPreview = {},

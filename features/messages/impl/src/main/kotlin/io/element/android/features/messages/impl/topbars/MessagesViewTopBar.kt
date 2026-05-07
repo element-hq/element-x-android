@@ -43,6 +43,7 @@ import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.ROOM_NAME
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -175,9 +176,9 @@ private fun RoomAvatarAndNameRow(
 internal fun MessagesViewTopBarPreview() = ElementPreview {
     @Composable
     fun AMessagesViewTopBar(
-        roomName: String? = "Room name",
+        roomName: String? = ROOM_NAME,
         roomAvatar: AvatarData = anAvatarData(
-            name = "Room name",
+            name = ROOM_NAME,
             size = AvatarSize.TimelineRoom,
         ),
         isTombstoned: Boolean = false,
