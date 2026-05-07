@@ -40,7 +40,7 @@ class DefaultAppPreferencesStoreTest {
             preferenceDataStoreFactory = FakePreferenceDataStoreFactory(),
         )
 
-        assertThat(store.getLiveLocationMinimumDistanceUpdateFlow().first()).isEqualTo(10)
+        assertThat(store.getLiveLocationMinimumDistanceInMetersUpdateFlow().first()).isEqualTo(10)
     }
 
     @Test
@@ -50,8 +50,8 @@ class DefaultAppPreferencesStoreTest {
             preferenceDataStoreFactory = FakePreferenceDataStoreFactory(),
         )
 
-        store.setLiveLocationMinimumDistanceUpdate(25)
+        store.setLiveLocationMinimumDistanceInMetersUpdate(25)
 
-        assertThat(store.getLiveLocationMinimumDistanceUpdateFlow().first()).isEqualTo(25)
+        assertThat(store.getLiveLocationMinimumDistanceInMetersUpdateFlow().first()).isEqualTo(25)
     }
 }

@@ -87,7 +87,7 @@ class LiveLocationSharingService : Service() {
     @OptIn(ExperimentalCoroutinesApi::class)
     private fun startLocationUpdatesListener() {
         Timber.d("LiveLocationSharingService listening to location updates")
-        appPreferencesStore.getLiveLocationMinimumDistanceUpdateFlow()
+        appPreferencesStore.getLiveLocationMinimumDistanceInMetersUpdateFlow()
             .flatMapLatest { minDistanceMeters ->
                 val locationProvider = AndroidLocationProvider(
                     context = applicationContext,

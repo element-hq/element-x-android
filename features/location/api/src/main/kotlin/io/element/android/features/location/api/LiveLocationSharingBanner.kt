@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2025 Element Creations Ltd.
- * Copyright 2025 New Vector Ltd.
+ * Copyright (c) 2026 Element Creations Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
@@ -75,12 +74,12 @@ fun LiveLocationSharingBanner(
 }
 
 private fun Modifier.drawBannerBorder(borderColor: Color): Modifier = drawBehind {
-    val strokeWidth = 0.5.dp.toPx()
+    val strokeWidth = 1.dp.toPx()
     val bottomY = size.height - strokeWidth / 2
     drawLine(
         color = borderColor,
-        start = Offset(0f, 0f),
-        end = Offset(size.width, 0f),
+        start = Offset(0f, strokeWidth / 2),
+        end = Offset(size.width, strokeWidth / 2),
         strokeWidth = strokeWidth,
     )
     drawLine(

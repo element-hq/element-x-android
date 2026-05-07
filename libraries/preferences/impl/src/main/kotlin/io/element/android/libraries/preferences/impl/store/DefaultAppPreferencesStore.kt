@@ -81,13 +81,13 @@ class DefaultAppPreferencesStore(
         }
     }
 
-    override suspend fun setLiveLocationMinimumDistanceUpdate(value: Int) {
+    override suspend fun setLiveLocationMinimumDistanceInMetersUpdate(value: Int) {
         store.edit { prefs ->
             prefs[liveLocationMinimumDistanceUpdateKey] = value
         }
     }
 
-    override fun getLiveLocationMinimumDistanceUpdateFlow(): Flow<Int> {
+    override fun getLiveLocationMinimumDistanceInMetersUpdateFlow(): Flow<Int> {
         return store.data.map { prefs ->
             prefs[liveLocationMinimumDistanceUpdateKey] ?: 10
         }

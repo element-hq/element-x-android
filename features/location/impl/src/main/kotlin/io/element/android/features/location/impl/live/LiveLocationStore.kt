@@ -9,7 +9,7 @@ package io.element.android.features.location.impl.live
 
 import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
-import androidx.datastore.preferences.core.stringPreferencesKey
+import androidx.datastore.preferences.core.stringSetPreferencesKey
 import dev.zacsweers.metro.Inject
 import dev.zacsweers.metro.SingleIn
 import io.element.android.libraries.androidutils.hash.hash
@@ -22,7 +22,6 @@ import kotlinx.coroutines.flow.first
 import timber.log.Timber
 import kotlin.time.Instant
 
-private const val LIVE_LOCATION_EXPIRY_ENTRY_SEPARATOR = ","
 private const val LIVE_LOCATION_EXPIRY_VALUE_SEPARATOR = "="
 
 @Inject
@@ -33,7 +32,7 @@ class LiveLocationStore(
 ) {
     private val store = preferenceDataStoreFactory.create("location_${sessionId.value.hash().take(16)}")
     private val acceptedLiveLocationDisclaimerKey = booleanPreferencesKey("live_location_disclaimer_accepted")
-    private val liveLocationExpiriesKey = stringPreferencesKey("live_location_expiries")
+    private val liveLocationExpiriesKey = stringSetPreferencesKey("live_location_expiries")
 
     suspend fun hasAcceptedLiveLocationDisclaimer(): Boolean = runCatchingExceptions {
         store.data.first()[acceptedLiveLocationDisclaimerKey] ?: false
@@ -54,14 +53,14 @@ class LiveLocationStore(
 
     suspend fun setLiveLocationExpiry(roomId: RoomId, expiresAt: Instant): Result<Unit> = runCatchingExceptions {
         store.edit { prefs ->
-            val current = decodeLiveLocationExpiries(prefs[liveLocationExpiriesKey])
+            val current = decodeLiveLocationExpiries(prefs[liveLocationExpiriesKey].orEmpty())
             prefs[liveLocationExpiriesKey] = encodeLiveLocationExpiries(current + (roomId to expiresAt))
         }
     }
 
     suspend fun removeLiveLocationExpiry(roomId: RoomId): Result<Unit> = runCatchingExceptions {
         store.edit { prefs ->
-            val current = decodeLiveLocationExpiries(prefs[liveLocationExpiriesKey])
+            val current = decodeLiveLocationExpiries(prefs[liveLocationExpiriesKey].orEmpty())
             val updated = current - roomId
             if (updated.isEmpty()) {
                 prefs.remove(liveLocationExpiriesKey)
@@ -71,11 +70,9 @@ class LiveLocationStore(
         }
     }
 
-    private fun decodeLiveLocationExpiries(serialized: String?): Map<RoomId, Instant> {
-        if (serialized.isNullOrBlank()) return emptyMap()
+    private fun decodeLiveLocationExpiries(serialized: Set<String>): Map<RoomId, Instant> {
         return runCatchingExceptions {
             serialized
-                .split(LIVE_LOCATION_EXPIRY_ENTRY_SEPARATOR)
                 .map { it.split(LIVE_LOCATION_EXPIRY_VALUE_SEPARATOR) }
                 .associate { values ->
                     val roomId = RoomId(values[0])
@@ -85,10 +82,10 @@ class LiveLocationStore(
         }.getOrDefault(emptyMap())
     }
 
-    private fun encodeLiveLocationExpiries(expiries: Map<RoomId, Instant>): String {
-        return expiries.entries.joinToString(separator = LIVE_LOCATION_EXPIRY_ENTRY_SEPARATOR) { (roomId, expiresAt) ->
+    private fun encodeLiveLocationExpiries(expiries: Map<RoomId, Instant>): Set<String> {
+        return expiries.entries.map { (roomId, expiresAt) ->
             "${roomId.value}$LIVE_LOCATION_EXPIRY_VALUE_SEPARATOR${expiresAt.toEpochMilliseconds()}"
-        }
+        }.toSet()
     }
 
     suspend fun clear() {

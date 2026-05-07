@@ -61,7 +61,7 @@ class AdvancedSettingsPresenter(
             featureFlagService.isFeatureEnabledFlow(FeatureFlags.LiveLocationSharing)
                 .flatMapLatest { isEnabled ->
                     if (isEnabled) {
-                        appPreferencesStore.getLiveLocationMinimumDistanceUpdateFlow()
+                        appPreferencesStore.getLiveLocationMinimumDistanceInMetersUpdateFlow()
                     } else {
                         emptyFlow()
                     }
@@ -134,7 +134,7 @@ class AdvancedSettingsPresenter(
                 is AdvancedSettingsEvents.SetHideInviteAvatars -> mediaPreviewConfigStateStore.setHideInviteAvatars(event.value)
                 is AdvancedSettingsEvents.SetTimelineMediaPreviewValue -> mediaPreviewConfigStateStore.setTimelineMediaPreviewValue(event.value)
                 is AdvancedSettingsEvents.SetLiveLocationMinimumDistanceUpdate -> sessionCoroutineScope.launch {
-                    appPreferencesStore.setLiveLocationMinimumDistanceUpdate(event.value)
+                    appPreferencesStore.setLiveLocationMinimumDistanceInMetersUpdate(event.value)
                 }
                 is AdvancedSettingsEvents.SetCompressImages -> sessionCoroutineScope.launch {
                     sessionPreferencesStore.setOptimizeImages(event.compress)

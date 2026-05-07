@@ -48,7 +48,8 @@ class LiveLocationSharingNotificationCreator(
             notificationManager.createNotificationChannel(
                 NotificationChannel(
                     CHANNEL_ID,
-                    "Live Location Sharing",
+                    context.getString(CommonStrings.live_location_sharing_foreground_service_channel_title_android)
+                        .ifEmpty { "Live Location Sharing" },
                     NotificationManager.IMPORTANCE_LOW,
                 )
             )

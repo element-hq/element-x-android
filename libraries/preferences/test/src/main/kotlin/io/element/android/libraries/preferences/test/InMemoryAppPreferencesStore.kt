@@ -58,11 +58,11 @@ class InMemoryAppPreferencesStore(
         return theme
     }
 
-    override suspend fun setLiveLocationMinimumDistanceUpdate(value: Int) {
+    override suspend fun setLiveLocationMinimumDistanceInMetersUpdate(value: Int) {
         liveLocationMinimumDistanceUpdate.value = value
     }
 
-    override fun getLiveLocationMinimumDistanceUpdateFlow(): Flow<Int> {
+    override fun getLiveLocationMinimumDistanceInMetersUpdateFlow(): Flow<Int> {
         return liveLocationMinimumDistanceUpdate
     }
 

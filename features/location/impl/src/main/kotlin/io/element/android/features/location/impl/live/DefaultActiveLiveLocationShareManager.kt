@@ -82,13 +82,15 @@ class DefaultActiveLiveLocationShareManager(
                 }
                 .launchIn(matrixClient.sessionCoroutineScope)
 
-            sessionObserver.addListener(object : SessionListener {
-                override suspend fun onSessionDeleted(userId: String, wasLastSession: Boolean) {
-                    if (matrixClient.sessionId.value == userId) {
-                        clear()
-                    }
-                }
-            })
+            sessionObserver.addListener(sessionListener)
+        }
+    }
+
+    private val sessionListener: SessionListener = object : SessionListener {
+        override suspend fun onSessionDeleted(userId: String, wasLastSession: Boolean) {
+            if (matrixClient.sessionId.value == userId) {
+                clear()
+            }
         }
     }
 
@@ -210,6 +212,7 @@ class DefaultActiveLiveLocationShareManager(
 
     private suspend fun clear() {
         Timber.d("ActiveLiveLocationShareManager clear state")
+        sessionObserver.removeListener(sessionListener)
         coordinator.unregister(matrixClient.sessionId)
         liveLocationStore.clear()
         for (room in cachedRooms.values) {
