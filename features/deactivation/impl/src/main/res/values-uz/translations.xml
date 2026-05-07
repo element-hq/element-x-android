@@ -10,5 +10,4 @@
   <string name="screen_deactivate_account_list_item_2">"Sizni barcha chat xonalaridan olib tashlash."</string>
   <string name="screen_deactivate_account_list_item_3">"Hisobingiz haqidagi axborotni identifikatsiya serverimizdan o‘chirib tashlang."</string>
   <string name="screen_deactivate_account_list_item_4">"Xabarlaringiz ro‘yxatdan o‘tgan foydalanuvchilarga ko‘rinadi, lekin ularni o‘chirishni tanlasangiz, yangi yoki ro‘yxatdan o‘tmagan foydalanuvchilarga ko‘rinmaydi."</string>
-  <string name="screen_deactivate_account_title">"Hisobni faolsizlantirish"</string>
 </resources>

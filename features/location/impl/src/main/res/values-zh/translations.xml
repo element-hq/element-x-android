@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_share_location_live_location_disclaimer_title">"你实时位置历史将存储在房间中，并于会话结束后对其他成员可见。"</string>
+  <string name="screen_share_location_live_location_duration_picker_title">"选择共享实时位置的时长。"</string>
+</resources>

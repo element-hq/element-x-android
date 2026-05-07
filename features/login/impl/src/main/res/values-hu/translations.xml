@@ -28,11 +28,11 @@
   <string name="screen_change_server_subtitle">"Mi a kiszolgálója címe?"</string>
   <string name="screen_change_server_title">"Válassza ki a kiszolgálóját"</string>
   <string name="screen_create_account_title">"Fiók létrehozása"</string>
-  <string name="screen_login_error_deactivated_account">"Ez a fiók deaktiválva lett."</string>
+  <string name="screen_login_error_deactivated_account">"Ez a fiók törölve lett."</string>
   <string name="screen_login_error_invalid_credentials">"Helytelen felhasználónév vagy jelszó"</string>
   <string name="screen_login_error_invalid_user_id">"Ez nem érvényes felhasználóazonosító. A várt formátum: „@user:homeserver.org”"</string>
   <string name="screen_login_error_refresh_tokens">"Ez a kiszolgáló frissítési tokenek használatára van beállítva. Ezek jelszó alapú bejelentkezés esetén nem támogatottak."</string>
-  <string name="screen_login_error_unsupported_authentication">"A kiválasztott Matrix-kiszolgáló nem támogatja a jelszavas vagy OIDC-alapú bejelentkezést. Lépjen kapcsolatba a kiszolgáló adminisztrátorával, vagy válasszon másik Matrix-kiszolgálót."</string>
+  <string name="screen_login_error_unsupported_authentication">"A kiválasztott Matrix-kiszolgáló nem támogatja a jelszavas vagy OAuth-alapú bejelentkezést. Lépjen kapcsolatba a kiszolgáló adminisztrátorával, vagy válasszon másik Matrix-kiszolgálót."</string>
   <string name="screen_login_form_header">"Adja meg adatait"</string>
   <string name="screen_login_subtitle">"A Matrix egy nyitott hálózat a biztonságos, decentralizált kommunikációhoz."</string>
   <string name="screen_login_title">"Örülünk, hogy visszatért!"</string>

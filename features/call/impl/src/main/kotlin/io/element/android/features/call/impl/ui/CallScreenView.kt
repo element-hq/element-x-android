@@ -33,7 +33,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.viewinterop.AndroidView
 import io.element.android.features.call.impl.R
-import io.element.android.features.call.impl.pip.PictureInPictureEvents
+import io.element.android.features.call.impl.pip.PictureInPictureEvent
 import io.element.android.features.call.impl.pip.PictureInPictureState
 import io.element.android.features.call.impl.pip.aPictureInPictureState
 import io.element.android.features.call.impl.utils.InvalidAudioDeviceReason
@@ -66,9 +66,9 @@ internal fun CallScreenView(
 ) {
     fun handleBack() {
         if (pipState.supportPip) {
-            pipState.eventSink.invoke(PictureInPictureEvents.EnterPictureInPicture)
+            pipState.eventSink.invoke(PictureInPictureEvent.EnterPictureInPicture)
         } else {
-            state.eventSink(CallScreenEvents.Hangup)
+            state.eventSink(CallScreenEvent.Hangup)
         }
     }
 
@@ -84,7 +84,7 @@ internal fun CallScreenView(
                     append(stringResource(CommonStrings.error_unknown))
                     state.webViewError.takeIf { it.isNotEmpty() }?.let { append("\n\n").append(it) }
                 },
-                onSubmit = { state.eventSink(CallScreenEvents.Hangup) },
+                onSubmit = { state.eventSink(CallScreenEvent.Hangup) },
             )
         } else {
             var webViewAudioManager by remember { mutableStateOf<WebViewAudioManager?>(null) }
@@ -123,16 +123,16 @@ internal fun CallScreenView(
                                 Timber.d("Can't start in-call audio mode since the app is already in it.")
                             }
                         },
-                        onError = { state.eventSink(CallScreenEvents.OnWebViewError(it)) },
+                        onError = { state.eventSink(CallScreenEvent.OnWebViewError(it)) },
                     )
                     webViewAudioManager = WebViewAudioManager(
                         webView = webView,
                         coroutineScope = coroutineScope,
                         onInvalidAudioDeviceAdded = { invalidAudioDeviceReason = it },
                     )
-                    state.eventSink(CallScreenEvents.SetupMessageChannels(interceptor))
+                    state.eventSink(CallScreenEvent.SetupMessageChannels(interceptor))
                     val pipController = WebViewPipController(webView)
-                    pipState.eventSink(PictureInPictureEvents.SetPipController(pipController))
+                    pipState.eventSink(PictureInPictureEvent.SetPipController(pipController))
                 },
                 onDestroyWebView = {
                     // Reset audio mode
@@ -147,7 +147,7 @@ internal fun CallScreenView(
                     Timber.e(state.urlState.error, "WebView failed to load URL: ${state.urlState.error.message}")
                     ErrorDialog(
                         content = state.urlState.error.message.orEmpty(),
-                        onSubmit = { state.eventSink(CallScreenEvents.Hangup) },
+                        onSubmit = { state.eventSink(CallScreenEvent.Hangup) },
                     )
                 }
                 is AsyncData.Success -> Unit

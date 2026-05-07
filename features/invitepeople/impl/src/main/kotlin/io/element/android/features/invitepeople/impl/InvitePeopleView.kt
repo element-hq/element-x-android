@@ -262,6 +262,7 @@ private fun InvitePeopleConfirmModal(
     ModalBottomSheet(
         onDismissRequest = onDismiss,
         dragHandle = null,
+        scrollable = false,
     ) {
         IconTitleSubtitleMolecule(
             title = simplePluralStringResource(

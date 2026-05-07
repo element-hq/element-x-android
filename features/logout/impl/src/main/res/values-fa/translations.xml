@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_signout_confirmation_dialog_content">"مطمئنید که می‌خواهید از حسابتان خارج شوید؟"</string>
-  <string name="screen_signout_confirmation_dialog_submit">"خروج"</string>
-  <string name="screen_signout_confirmation_dialog_title">"خروج"</string>
-  <string name="screen_signout_in_progress_dialog_content">"خارج شدن…"</string>
+  <string name="screen_signout_confirmation_dialog_content">"مطمئنید که می‌خواهید این افزاره را بردارید؟"</string>
+  <string name="screen_signout_confirmation_dialog_submit">"برداشتن این افزاره"</string>
+  <string name="screen_signout_confirmation_dialog_title">"برداشتن این افزاره"</string>
+  <string name="screen_signout_in_progress_dialog_content">"برداشتن افزاره…"</string>
   <string name="screen_signout_key_backup_disabled_subtitle">"دارید از واپسین نشستتان خارج می‌شوید. اگر اکنون خارج شوید پیام‌های رمزنگاشته‌تان را از دست خواهید داد."</string>
   <string name="screen_signout_key_backup_disabled_title">"پشتیبان را خاموش کرده‌اید"</string>
   <string name="screen_signout_key_backup_offline_subtitle">"در هنگامی که آفلاین شدید، کلیدهای شما هنوز در حال پشتیبان‌گیری بودند. دوباره متصل شوید ، تا قبل از خروج از کلیدهایتان نسخه پشتیبان‌ گرفته شود."</string>
   <string name="screen_signout_key_backup_offline_title">"کلیدهایتان هنوز در حال پشتیبان گیریند"</string>
   <string name="screen_signout_key_backup_ongoing_subtitle">"لطفاً پیش از خروج منتظر پایانش شوید."</string>
   <string name="screen_signout_key_backup_ongoing_title">"کلیدهایتان هنوز در حال پشتیبان گیریند"</string>
-  <string name="screen_signout_preference_item">"خروج"</string>
+  <string name="screen_signout_preference_item">"برداشتن این افزاره"</string>
   <string name="screen_signout_recovery_disabled_subtitle">"شما در آستانه خروج از آخرین جلسه خود هستید. اگر اکنون از سیستم خارج شوید، دسترسی به پیام های رمزگذاری شده تان را از دست خواهید داد."</string>
   <string name="screen_signout_recovery_disabled_title">"بازگردانی برپا نشده"</string>
   <string name="screen_signout_save_recovery_key_subtitle">"دارید از واپسین نشستتان خارج می‌شوید. اگر اکنون خارج شوید ممکن است پیام‌های رمزنگاشته‌تان را از دست بدهید."</string>

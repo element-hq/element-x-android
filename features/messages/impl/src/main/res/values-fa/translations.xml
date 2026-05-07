@@ -27,7 +27,7 @@
   <string name="screen_room_attachment_source_camera_video">"ضبط ویدیو"</string>
   <string name="screen_room_attachment_source_files">"پیوست"</string>
   <string name="screen_room_attachment_source_gallery">"کتابخانهٔ عکس و ویدیو"</string>
-  <string name="screen_room_attachment_source_location">"مکان"</string>
+  <string name="screen_room_attachment_source_location">"هم‌رسانی مکان"</string>
   <string name="screen_room_attachment_source_poll">"نظرسنجی"</string>
   <string name="screen_room_attachment_text_formatting">"قالب‌بندی متن"</string>
   <string name="screen_room_encrypted_history_banner">"تاریخچه پیام درحال حاضر دردسترس نیست."</string>

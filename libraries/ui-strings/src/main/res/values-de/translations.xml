@@ -447,6 +447,7 @@ Möchtest du wirklich fortfahren?"</string>
   <string name="error_failed_locating_user">"%1$s konnte nicht auf deinen Standort zugreifen. Bitte versuche es später erneut."</string>
   <string name="error_failed_uploading_voice_message">"Fehler beim Hochladen der Sprachnachricht."</string>
   <string name="error_invalid_invite">"Der Chat existiert nicht mehr oder die Einladung ist nicht mehr gültig."</string>
+  <string name="error_location_service_disabled_android">"Bitte aktiviere dein GPS, um auf standortbezogene Funktionen zugreifen zu können."</string>
   <string name="error_message_not_found">"Nachricht nicht gefunden"</string>
   <string name="error_missing_location_auth_android">"%1$s hat keine Berechtigung, auf deinen Standort zuzugreifen. Du kannst den Zugriff in den Einstellungen aktivieren."</string>
   <string name="error_missing_location_rationale_android">"%1$s hat keine Berechtigung, auf deinen Standort zuzugreifen. Erlaube unten den Zugriff."</string>
@@ -473,7 +474,7 @@ Möchtest du wirklich fortfahren?"</string>
     <item quantity="other">"%1$d fixierte Nachrichten"</item>
   </plurals>
   <string name="screen_pinned_timeline_screen_title_empty">"Fixierte Nachrichten"</string>
-  <string name="screen_reset_identity_confirmation_subtitle">"Du wirst jetzt zu deinem %1$s Konto geleitet, um deine Identität zurückzusetzen. Danach wirst du zur App zurückgebracht."</string>
+  <string name="screen_reset_identity_confirmation_subtitle">"Du wirst gleich zu deinem %1$s Konto weitergeleitet, um deine digitale Identität zurückzusetzen. Danach kehrst du zur App zurück."</string>
   <string name="screen_reset_identity_confirmation_title">"Bestätigung nicht möglich? Rufe dein Konto auf, um deine digitale Identität zurückzusetzen."</string>
   <string name="screen_resolve_send_failure_changed_identity_primary_button_title">"Verifizierung zurückziehen und senden"</string>
   <string name="screen_resolve_send_failure_changed_identity_subtitle">"Du kannst deine Verifizierung zurückziehen und diese Nachricht trotzdem senden, oder du kannst vorerst abbrechen und es später noch einmal versuchen, nachdem du %1$s erneut verifiziert hast."</string>
@@ -509,7 +510,7 @@ Möchtest du wirklich fortfahren?"</string>
   <string name="screen_space_list_title">"Spaces"</string>
   <string name="screen_static_location_sheet_timestamp_description">"Geteilt %1$s"</string>
   <string name="screen_static_location_sheet_title">"Auf der Karte"</string>
-  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Nachricht nicht gesendet, weil sich die verifizierte Identität von %1$s geändert hat."</string>
+  <string name="screen_timeline_item_menu_send_failure_changed_identity">"Die Nachricht wurde nicht gesendet, da die verifizierte digitale Identität von %1$s zurückgesetzt wurde."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Die Nachricht wurde nicht gesendet, weil %1$s nicht alle Geräte verifiziert hat."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Die Nachricht wurde nicht gesendet, weil du eines oder mehrere deiner Geräte nicht verifiziert hast."</string>
   <string name="screen_view_location_title">"Standort"</string>
@@ -519,5 +520,5 @@ Möchtest du wirklich fortfahren?"</string>
   <string name="timeline_decryption_failure_historical_event_unverified_device">"Für den Zugriff auf den Nachrichtenverlauf musst du dieses Gerät verifizieren"</string>
   <string name="timeline_decryption_failure_historical_event_user_not_joined">"Du hast keinen Zugriff auf diese Nachricht."</string>
   <string name="timeline_decryption_failure_unable_to_decrypt">"Nachricht kann nicht entschlüsselt werden"</string>
-  <string name="timeline_decryption_failure_withheld_unverified">"Diese Nachricht wurde entweder blockiert, weil du dein Gerät nicht verifiziert hast oder weil der Absender deine Identität verifizieren muss."</string>
+  <string name="timeline_decryption_failure_withheld_unverified">"Diese Nachricht wurde entweder blockiert, weil du dein Gerät nicht verifiziert hast, oder weil der Absender deine digitale Identität verifizieren muss."</string>
 </resources>

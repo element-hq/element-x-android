@@ -52,6 +52,7 @@
   <string name="a11y_session_verification_time_limited_action_required">"Vyžaduje se časově omezená akce, na ověření máte jednu minutu"</string>
   <string name="a11y_show_password">"Zobrazit heslo"</string>
   <string name="a11y_start_call">"Zahájit hovor"</string>
+  <string name="a11y_start_video_call">"Zahájit videohovor"</string>
   <string name="a11y_start_voice_call">"Zahájit hlasový hovor"</string>
   <string name="a11y_tombstoned_room">"Místnost s náhrobkem"</string>
   <string name="a11y_user_avatar">"Avatar uživatele"</string>
@@ -89,12 +90,15 @@
   <string name="action_deactivate_account">"Deaktivovat účet"</string>
   <string name="action_decline">"Odmítnout"</string>
   <string name="action_decline_and_block">"Odmítnout a zablokovat"</string>
+  <string name="action_delete">"Smazat"</string>
+  <string name="action_delete_account">"Smazat účet"</string>
   <string name="action_delete_poll">"Odstranit hlasování"</string>
   <string name="action_deselect_all">"Odznačit vše"</string>
   <string name="action_disable">"Zakázat"</string>
   <string name="action_discard">"Vyřadit"</string>
   <string name="action_dismiss">"Zavřít"</string>
   <string name="action_done">"Hotovo"</string>
+  <string name="action_download">"Stáhnout"</string>
   <string name="action_edit">"Upravit"</string>
   <string name="action_edit_caption">"Upravit titulek"</string>
   <string name="action_edit_poll">"Upravit hlasování"</string>
@@ -473,6 +477,14 @@ Opravdu chcete pokračovat?"</string>
   <string name="screen_create_poll_options_section_title">"Možnosti"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Odstranit %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Nastavení"</string>
+  <string name="screen_live_location_sheet_nobody_sharing">"Nikdo nesdílí svou polohu"</string>
+  <string name="screen_live_location_sheet_sharing_live_location">"Sdílení aktuální polohy"</string>
+  <plurals name="screen_live_location_sheet_subtitle">
+    <item quantity="one">"%1$d osoba"</item>
+    <item quantity="few">"%1$d osoby"</item>
+    <item quantity="other">"%1$d lidí"</item>
+  </plurals>
+  <string name="screen_live_location_sheet_title">"Na mapě"</string>
   <string name="screen_media_picker_error_failed_selection">"Výběr média se nezdařil, zkuste to prosím znovu."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Přidržte zprávu a vyberte „%1$s“, kterou chcete zahrnout sem."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Připněte důležité zprávy, aby je bylo možné snadno najít"</string>
@@ -498,6 +510,7 @@ Opravdu chcete pokračovat?"</string>
   <string name="screen_room_event_pill">"Zpráva v %1$s"</string>
   <string name="screen_room_grouped_state_events_expand">"Rozbalit"</string>
   <string name="screen_room_grouped_state_events_reduce">"Zmenšit"</string>
+  <string name="screen_room_live_location_banner">"Sdílení aktuální polohy"</string>
   <string name="screen_room_permalink_same_room_android">"Již si prohlížíte tuto místnost!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s z %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s Připnuté zprávy"</string>

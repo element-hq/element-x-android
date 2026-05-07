@@ -145,7 +145,7 @@
   <string name="action_share_link">"هم‌رسانی پیوند"</string>
   <string name="action_show">"نمایش"</string>
   <string name="action_sign_in_again">"ورود دوباره"</string>
-  <string name="action_signout">"خروج"</string>
+  <string name="action_signout">"برداشتن این افزاره"</string>
   <string name="action_signout_anyway">"خروج به هر صورت"</string>
   <string name="action_skip">"پرش"</string>
   <string name="action_start">"آغاز"</string>
@@ -389,7 +389,7 @@
   <string name="screen_share_open_apple_maps">"گشودن در نقشه‌های اپل"</string>
   <string name="screen_share_open_google_maps">"گشودن در نقشه‌های گوگل"</string>
   <string name="screen_share_open_osm_maps">"گشودن در اوپن‌استریت‌مپ"</string>
-  <string name="screen_share_this_location_action">"هم‌رسانی این مکان"</string>
+  <string name="screen_share_this_location_action">"هم‌رسانی مکان گزیده"</string>
   <string name="screen_space_list_description">"فضاهایی که ساخته یا پیوسته‌اید."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_parent_space">"‏%1$s فضا"</string>

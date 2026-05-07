@@ -5,15 +5,18 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.features.location.impl.share
 
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.libraries.testtags.TestTags
@@ -23,102 +26,98 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBack
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class ShareLocationViewTest {
-    @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
-
     @Test
-    fun `test back action`() {
+    fun `test back action`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<ShareLocationEvent>(expectEvents = false)
         ensureCalledOnce { callback ->
-            rule.setShareLocationView(
+            setShareLocationView(
                 state = aShareLocationState(
                     eventSink = eventsRecorder
                 ),
                 navigateUp = callback,
             )
-            rule.pressBack()
+            pressBack()
         }
     }
 
     @Test
-    fun `test fab click`() {
+    fun `test fab click`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<ShareLocationEvent>()
-        rule.setShareLocationView(
+        setShareLocationView(
             aShareLocationState(
                 eventSink = eventsRecorder
             ),
             navigateUp = EnsureNeverCalled(),
         )
-        rule.onNodeWithTag(TestTags.floatingActionButton.value).performClick()
+        onNodeWithTag(TestTags.floatingActionButton.value).performClick()
         eventsRecorder.assertSingle(ShareLocationEvent.StartTrackingUserLocation)
     }
 
     @Test
-    fun `when permission denied is displayed user can open the settings`() {
+    fun `when permission denied is displayed user can open the settings`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<ShareLocationEvent>()
-        rule.setShareLocationView(
+        setShareLocationView(
             aShareLocationState(
                 dialogState = ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.PermissionDenied),
                 eventSink = eventsRecorder
             ),
             navigateUp = EnsureNeverCalled(),
         )
-        rule.clickOn(CommonStrings.action_continue)
+        clickOn(CommonStrings.action_continue)
         eventsRecorder.assertSingle(ShareLocationEvent.OpenAppSettings)
     }
 
     @Test
-    fun `when permission denied is displayed user can close the dialog`() {
+    fun `when permission denied is displayed user can close the dialog`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<ShareLocationEvent>()
-        rule.setShareLocationView(
+        setShareLocationView(
             aShareLocationState(
                 dialogState = ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.PermissionDenied),
                 eventSink = eventsRecorder
             ),
             navigateUp = EnsureNeverCalled(),
         )
-        rule.clickOn(CommonStrings.action_cancel)
+        clickOn(CommonStrings.action_cancel)
         eventsRecorder.assertSingle(ShareLocationEvent.DismissDialog)
     }
 
     @Test
-    fun `when permission rationale is displayed user can request permissions`() {
+    fun `when permission rationale is displayed user can request permissions`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<ShareLocationEvent>()
-        rule.setShareLocationView(
+        setShareLocationView(
             aShareLocationState(
                 dialogState = ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.PermissionRationale),
                 eventSink = eventsRecorder
             ),
             navigateUp = EnsureNeverCalled(),
         )
-        rule.clickOn(CommonStrings.action_continue)
+        clickOn(CommonStrings.action_continue)
         eventsRecorder.assertSingle(ShareLocationEvent.RequestPermissions)
     }
 
     @Test
-    fun `when permission rationale is displayed user can close the dialog`() {
+    fun `when permission rationale is displayed user can close the dialog`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<ShareLocationEvent>()
-        rule.setShareLocationView(
+        setShareLocationView(
             aShareLocationState(
                 dialogState = ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.PermissionRationale),
                 eventSink = eventsRecorder
             ),
             navigateUp = EnsureNeverCalled(),
         )
-        rule.clickOn(CommonStrings.action_cancel)
+        clickOn(CommonStrings.action_cancel)
         eventsRecorder.assertSingle(ShareLocationEvent.DismissDialog)
     }
 
     @Test
-    fun `when location service disabled is displayed user can open location settings`() {
+    fun `when location service disabled is displayed user can open location settings`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<ShareLocationEvent>()
-        rule.setShareLocationView(
+        setShareLocationView(
             aShareLocationState(
                 dialogState = ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.LocationServiceDisabled),
                 hasLocationPermission = true,
@@ -126,14 +125,14 @@ class ShareLocationViewTest {
             ),
             navigateUp = EnsureNeverCalled(),
         )
-        rule.clickOn(CommonStrings.action_continue)
+        clickOn(CommonStrings.action_continue)
         eventsRecorder.assertSingle(ShareLocationEvent.OpenLocationSettings)
     }
 
     @Test
-    fun `when location service disabled is displayed user can close the dialog`() {
+    fun `when location service disabled is displayed user can close the dialog`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<ShareLocationEvent>()
-        rule.setShareLocationView(
+        setShareLocationView(
             aShareLocationState(
                 dialogState = ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.LocationServiceDisabled),
                 hasLocationPermission = true,
@@ -141,12 +140,12 @@ class ShareLocationViewTest {
             ),
             navigateUp = EnsureNeverCalled(),
         )
-        rule.clickOn(CommonStrings.action_cancel)
+        clickOn(CommonStrings.action_cancel)
         eventsRecorder.assertSingle(ShareLocationEvent.DismissDialog)
     }
 }
 
-private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setShareLocationView(
+private fun AndroidComposeUiTest<ComponentActivity>.setShareLocationView(
     state: ShareLocationState,
     navigateUp: () -> Unit = EnsureNeverCalled(),
 ) {

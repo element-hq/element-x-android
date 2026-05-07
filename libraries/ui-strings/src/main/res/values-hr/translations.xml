@@ -15,6 +15,7 @@
   <string name="a11y_encryption_details">"Pojedinosti o šifriranju"</string>
   <string name="a11y_expand_message_text_field">"Proširi tekstno polje poruke"</string>
   <string name="a11y_hide_password">"Sakrij zaporku"</string>
+  <string name="a11y_info">"Informacije"</string>
   <string name="a11y_join_call">"Pridruži se pozivu"</string>
   <string name="a11y_jump_to_bottom">"Idi na dno"</string>
   <string name="a11y_move_the_map_to_my_location">"Pomakni kartu na moju lokaciju"</string>
@@ -50,6 +51,7 @@
   <string name="a11y_send_files">"Pošalji datoteke"</string>
   <string name="a11y_sender_location">"Lokacija pošiljatelja"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Potrebna je vremenski ograničena radnja, imate jednu minutu za potvrdu"</string>
+  <string name="a11y_settings_with_required_action">"Postavke, potrebna je radnja"</string>
   <string name="a11y_show_password">"Prikaži zaporku"</string>
   <string name="a11y_start_call">"Započni poziv"</string>
   <string name="a11y_start_video_call">"Započni videopoziv"</string>
@@ -90,12 +92,15 @@
   <string name="action_deactivate_account">"Deaktiviraj račun"</string>
   <string name="action_decline">"Odbij"</string>
   <string name="action_decline_and_block">"Odbij i blokiraj"</string>
+  <string name="action_delete">"Izbriši"</string>
+  <string name="action_delete_account">"Izbriši račun"</string>
   <string name="action_delete_poll">"Izbriši anketu"</string>
   <string name="action_deselect_all">"Poništi sve odabire"</string>
   <string name="action_disable">"Onemogući"</string>
   <string name="action_discard">"Odbaci"</string>
   <string name="action_dismiss">"Odbaci"</string>
   <string name="action_done">"Gotovo"</string>
+  <string name="action_download">"Preuzmi"</string>
   <string name="action_edit">"Uredi"</string>
   <string name="action_edit_caption">"Uredi opis"</string>
   <string name="action_edit_poll">"Uredi anketu"</string>
@@ -203,7 +208,9 @@
   <string name="common_beta">"Beta"</string>
   <string name="common_blocked_users">"Blokirani korisnici"</string>
   <string name="common_bubbles">"Mjehurići"</string>
+  <string name="common_call_declined">"Poziv je odbijen"</string>
   <string name="common_call_started">"Poziv je započeo"</string>
+  <string name="common_call_you_declined">"Odbili ste poziv"</string>
   <string name="common_chat_backup">"Sigurnosna kopija razgovora"</string>
   <string name="common_copied_to_clipboard">"Kopirano u međuspremnik"</string>
   <string name="common_copyright">"Autorsko pravo"</string>
@@ -475,6 +482,14 @@ Jeste li sigurni da želite nastaviti?"</string>
   <string name="screen_create_poll_options_section_title">"Mogućnosti"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Ukloni %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Postavke"</string>
+  <string name="screen_live_location_sheet_nobody_sharing">"Nitko ne dijeli svoju lokaciju"</string>
+  <string name="screen_live_location_sheet_sharing_live_location">"Dijeljenje lokacije uživo"</string>
+  <plurals name="screen_live_location_sheet_subtitle">
+    <item quantity="one">"%1$d osoba"</item>
+    <item quantity="few">"%1$d osoba"</item>
+    <item quantity="other">"%1$d ljudi"</item>
+  </plurals>
+  <string name="screen_live_location_sheet_title">"Na karti"</string>
   <string name="screen_media_picker_error_failed_selection">"Odabir medija nije uspio, pokušajte ponovno."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Pritisnite poruku i odaberite “%1$s” kako biste uključili ovdje."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Prikvačite važne poruke kako bi ih se lakše moglo pronaći"</string>

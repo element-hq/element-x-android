@@ -11,6 +11,7 @@ package io.element.android.libraries.matrix.impl.auth
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
+import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.extensions.mapFailure
 import io.element.android.libraries.core.extensions.runCatchingExceptions
@@ -19,8 +20,8 @@ import io.element.android.libraries.matrix.api.auth.AuthenticationException
 import io.element.android.libraries.matrix.api.auth.ElementClassicSession
 import io.element.android.libraries.matrix.api.auth.MatrixAuthenticationService
 import io.element.android.libraries.matrix.api.auth.MatrixHomeServerDetails
-import io.element.android.libraries.matrix.api.auth.OidcDetails
-import io.element.android.libraries.matrix.api.auth.OidcPrompt
+import io.element.android.libraries.matrix.api.auth.OAuthDetails
+import io.element.android.libraries.matrix.api.auth.OAuthPrompt
 import io.element.android.libraries.matrix.api.auth.SessionRestorationException
 import io.element.android.libraries.matrix.api.auth.external.ExternalSession
 import io.element.android.libraries.matrix.api.auth.qrlogin.MatrixQrCodeLoginData
@@ -65,7 +66,8 @@ class RustMatrixAuthenticationService(
     private val sessionStore: SessionStore,
     private val rustMatrixClientFactory: RustMatrixClientFactory,
     private val passphraseGenerator: PassphraseGenerator,
-    private val oidcConfigurationProvider: OidcConfigurationProvider,
+    private val oAuthConfigurationProvider: OAuthConfigurationProvider,
+    private val enterpriseService: EnterpriseService,
 ) : MatrixAuthenticationService {
     // Any existing Element Classic session that we want to try to import secrets from during login.
     private var elementClassicSession: ElementClassicSession? = null
@@ -253,15 +255,15 @@ class RustMatrixAuthenticationService(
 
     private var pendingOAuthAuthorizationData: OAuthAuthorizationData? = null
 
-    override suspend fun getOidcUrl(
-        prompt: OidcPrompt,
+    override suspend fun getOAuthUrl(
+        prompt: OAuthPrompt,
         loginHint: String?,
-    ): Result<OidcDetails> {
+    ): Result<OAuthDetails> {
         return withContext(coroutineDispatchers.io) {
             runCatchingExceptions {
                 val client = currentClient ?: error("You need to call `setHomeserver()` first")
-                val oAuthAuthorizationData = client.urlForOidc(
-                    oidcConfiguration = oidcConfigurationProvider.get(),
+                val oAuthAuthorizationData = client.urlForOauth(
+                    oauthConfiguration = oAuthConfigurationProvider.get(),
                     prompt = prompt.toRustPrompt(),
                     loginHint = loginHint,
                     // If we want to restore a previous session for which we have encryption keys, we can pass the deviceId here. At the moment, we don't
@@ -269,24 +271,30 @@ class RustMatrixAuthenticationService(
                     additionalScopes = emptyList(),
                 )
                 val url = oAuthAuthorizationData.loginUrl()
+                    .let {
+                        enterpriseService.tweakMasUrl(
+                            url = it,
+                            homeserver = client.server() ?: client.homeserver(),
+                        )
+                    }
                 pendingOAuthAuthorizationData = oAuthAuthorizationData
-                OidcDetails(url)
+                OAuthDetails(url)
             }.mapFailure { failure ->
-                Timber.e(failure, "Failed to get OIDC URL")
+                Timber.e(failure, "Failed to get OAuth URL")
                 failure.mapAuthenticationException()
             }
         }
     }
 
-    override suspend fun cancelOidcLogin(): Result<Unit> {
+    override suspend fun cancelOAuthLogin(): Result<Unit> {
         return withContext(coroutineDispatchers.io) {
             runCatchingExceptions {
                 pendingOAuthAuthorizationData?.use {
-                    currentClient?.abortOidcAuth(it)
+                    currentClient?.abortOauthAuth(it)
                 }
                 pendingOAuthAuthorizationData = null
             }.mapFailure { failure ->
-                Timber.e(failure, "Failed to cancel OIDC login")
+                Timber.e(failure, "Failed to cancel OAuth login")
                 failure.mapAuthenticationException()
             }
         }
@@ -297,14 +305,14 @@ class RustMatrixAuthenticationService(
     }
 
     /**
-     * callbackUrl should be the uriRedirect from OidcClientMetadata (with all the parameters).
+     * callbackUrl should be the `url` from `OAuthAction` (with all the parameters).
      */
-    override suspend fun loginWithOidc(callbackUrl: String): Result<SessionId> {
+    override suspend fun loginWithOAuth(callbackUrl: String): Result<SessionId> {
         return withContext(coroutineDispatchers.io) {
             runCatchingExceptions {
                 val client = currentClient ?: error("You need to call `setHomeserver()` first")
                 val currentSessionPaths = sessionPaths ?: error("You need to call `setHomeserver()` first")
-                client.loginWithOidcCallback(
+                client.loginWithOauthCallback(
                     callbackUrl = callbackUrl,
                 )
                 // Free the pending data since we won't use it to abort the flow anymore
@@ -330,7 +338,7 @@ class RustMatrixAuthenticationService(
 
                 SessionId(sessionData.userId)
             }.mapFailure { failure ->
-                Timber.e(failure, "Failed to login with OIDC")
+                Timber.e(failure, "Failed to login with OAuth")
                 failure.mapAuthenticationException()
             }
         }
@@ -355,7 +363,7 @@ class RustMatrixAuthenticationService(
         withContext(coroutineDispatchers.io) {
             val sdkQrCodeLoginData = (qrCodeData as SdkQrCodeLoginData).rustQrCodeData
             val emptySessionPaths = rotateSessionPath()
-            val oidcConfiguration = oidcConfigurationProvider.get()
+            val oAuthConfiguration = oAuthConfigurationProvider.get()
             val progressListener = object : QrLoginProgressListener {
                 override fun onUpdate(state: QrLoginProgress) {
                     Timber.d("QR Code login progress: $state")
@@ -368,7 +376,7 @@ class RustMatrixAuthenticationService(
                     qrCodeData = sdkQrCodeLoginData,
                 )
                 client.newLoginWithQrCodeHandler(
-                    oidcConfiguration = oidcConfiguration,
+                    oauthConfiguration = oAuthConfiguration,
                 ).use {
                     it.scan(
                         qrCodeData = qrCodeData.rustQrCodeData,

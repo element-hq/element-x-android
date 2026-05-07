@@ -30,6 +30,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import io.element.android.compound.theme.ElementTheme
@@ -45,11 +46,12 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.mediaviewer.impl.R
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.libraries.ui.strings.Strings
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MediaDeleteConfirmationBottomSheet(
-    state: MediaBottomSheetState.MediaDeleteConfirmationState,
+    state: MediaBottomSheetState.DeleteConfirmation,
     onDelete: (EventId) -> Unit,
     onDismiss: () -> Unit,
     modifier: Modifier = Modifier,
@@ -57,7 +59,8 @@ fun MediaDeleteConfirmationBottomSheet(
     ModalBottomSheet(
         modifier = modifier,
         onDismissRequest = onDismiss,
-        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+        sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true),
+        scrollable = false,
     ) {
         Column(
             modifier = Modifier
@@ -105,7 +108,7 @@ fun MediaDeleteConfirmationBottomSheet(
 
 @Composable
 private fun MediaRow(
-    state: MediaBottomSheetState.MediaDeleteConfirmationState,
+    state: MediaBottomSheetState.DeleteConfirmation,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -148,7 +151,7 @@ private fun MediaRow(
             )
             // Info
             Text(
-                text = state.mediaInfo.mimeType + " - " + state.mediaInfo.formattedFileSize,
+                text = state.mediaInfo.mimeType + Strings.NICE_SEPARATOR + state.mediaInfo.formattedFileSize,
                 color = ElementTheme.colors.textSecondary,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -160,9 +163,11 @@ private fun MediaRow(
 
 @PreviewsDayNight
 @Composable
-internal fun MediaDeleteConfirmationBottomSheetPreview() = ElementPreview {
+internal fun MediaDeleteConfirmationBottomSheetPreview(
+    @PreviewParameter(provider = MediaBottomSheetStateDeleteConfirmationProvider::class) state: MediaBottomSheetState.DeleteConfirmation,
+) = ElementPreview {
     MediaDeleteConfirmationBottomSheet(
-        state = aMediaDeleteConfirmationState(),
+        state = state,
         onDelete = {},
         onDismiss = {},
     )

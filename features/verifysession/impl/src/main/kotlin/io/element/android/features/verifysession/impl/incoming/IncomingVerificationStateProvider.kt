@@ -12,6 +12,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.verifysession.impl.incoming.IncomingVerificationState.Step
 import io.element.android.features.verifysession.impl.ui.aDecimalsSessionVerificationData
 import io.element.android.features.verifysession.impl.ui.aEmojisSessionVerificationData
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.matrix.api.core.DeviceId
 import io.element.android.libraries.matrix.api.core.FlowId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -59,7 +60,7 @@ internal fun anIncomingSessionVerificationRequest() = VerificationRequest.Incomi
     details = SessionVerificationRequestDetails(
         senderProfile = MatrixUser(
             userId = UserId("@alice:example.com"),
-            displayName = "Alice",
+            displayName = USER_NAME_ALICE,
             avatarUrl = null,
         ),
         flowId = FlowId("1234"),
@@ -73,7 +74,7 @@ internal fun anIncomingUserVerificationRequest() = VerificationRequest.Incoming.
     details = SessionVerificationRequestDetails(
         senderProfile = MatrixUser(
             userId = UserId("@alice:example.com"),
-            displayName = "Alice",
+            displayName = USER_NAME_ALICE,
             avatarUrl = null,
         ),
         flowId = FlowId("1234"),

@@ -6,17 +6,20 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.features.login.impl.screens.chooseaccountprovider
 
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.login.impl.accountprovider.anAccountProvider
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.matrix.api.auth.OidcDetails
+import io.element.android.libraries.matrix.api.auth.OAuthDetails
 import io.element.android.libraries.matrix.test.AN_EXCEPTION
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.tests.testutils.EnsureNeverCalled
@@ -25,36 +28,31 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBack
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 class ChooseAccountProviderViewTest {
-    @get:Rule
-    val rule = createAndroidComposeRule<ComponentActivity>()
-
     @Test
-    fun `clicking on back invokes the expected callback`() {
+    fun `clicking on back invokes the expected callback`() = runAndroidComposeUiTest {
         val eventSink = EventsRecorder<ChooseAccountProviderEvents>(expectEvents = false)
         ensureCalledOnce {
-            rule.setChooseAccountProviderView(
+            setChooseAccountProviderView(
                 state = aChooseAccountProviderState(
                     eventSink = eventSink,
                 ),
                 onBackClick = it,
             )
-            rule.pressBack()
+            pressBack()
         }
     }
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `selecting an account provider emits the the expected event`() {
+    fun `selecting an account provider emits the the expected event`() = runAndroidComposeUiTest {
         val eventSink = EventsRecorder<ChooseAccountProviderEvents>()
-        rule.setChooseAccountProviderView(
+        setChooseAccountProviderView(
             state = aChooseAccountProviderState(
                 accountProviders = listOf(
                     ChooseAccountProviderPresenterTest.accountProvider1,
@@ -64,27 +62,27 @@ class ChooseAccountProviderViewTest {
                 eventSink = eventSink,
             ),
         )
-        rule.onNodeWithText(ChooseAccountProviderPresenterTest.accountProvider1.title).performClick()
+        onNodeWithText(ChooseAccountProviderPresenterTest.accountProvider1.title).performClick()
         eventSink.assertSingle(ChooseAccountProviderEvents.SelectAccountProvider(ChooseAccountProviderPresenterTest.accountProvider1))
     }
 
     @Test
-    fun `when error is displayed - closing the dialog emits the expected event`() {
+    fun `when error is displayed - closing the dialog emits the expected event`() = runAndroidComposeUiTest {
         val eventSink = EventsRecorder<ChooseAccountProviderEvents>()
-        rule.setChooseAccountProviderView(
+        setChooseAccountProviderView(
             state = aChooseAccountProviderState(
                 loginMode = AsyncData.Failure(AN_EXCEPTION),
                 eventSink = eventSink,
             ),
         )
-        rule.clickOn(CommonStrings.action_ok)
+        clickOn(CommonStrings.action_ok)
         eventSink.assertSingle(ChooseAccountProviderEvents.ClearError)
     }
 
-    private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setChooseAccountProviderView(
+    private fun AndroidComposeUiTest<ComponentActivity>.setChooseAccountProviderView(
         state: ChooseAccountProviderState,
         onBackClick: () -> Unit = EnsureNeverCalled(),
-        onOidcDetails: (OidcDetails) -> Unit = EnsureNeverCalledWithParam(),
+        onOAuthDetails: (OAuthDetails) -> Unit = EnsureNeverCalledWithParam(),
         onNeedLoginPassword: () -> Unit = EnsureNeverCalled(),
         onLearnMoreClick: () -> Unit = EnsureNeverCalled(),
         onCreateAccountContinue: (url: String) -> Unit = EnsureNeverCalledWithParam(),
@@ -93,7 +91,7 @@ class ChooseAccountProviderViewTest {
             ChooseAccountProviderView(
                 state = state,
                 onBackClick = onBackClick,
-                onOidcDetails = onOidcDetails,
+                onOAuthDetails = onOAuthDetails,
                 onNeedLoginPassword = onNeedLoginPassword,
                 onLearnMoreClick = onLearnMoreClick,
                 onCreateAccountContinue = onCreateAccountContinue,

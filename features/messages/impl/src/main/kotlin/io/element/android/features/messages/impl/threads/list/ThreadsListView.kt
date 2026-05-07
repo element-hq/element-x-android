@@ -43,6 +43,8 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.ROOM_NAME
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -303,7 +305,7 @@ internal fun ThreadsListViewPreview() {
         ThreadsListView(
             state = ThreadsListState(
                 roomId = RoomId("!room-id:server"),
-                roomName = "Room name",
+                roomName = ROOM_NAME,
                 roomAvatarUrl = null,
                 threads = List(10) { aThreadListRowItem(threadId = ThreadId("\$thread-$it")) }.toImmutableList(),
                 isRoomTombstoned = false,
@@ -360,7 +362,7 @@ fun aThreadListItem(
 fun aThreadListItemEvent(
     threadId: ThreadId = ThreadId("\$a-thread-id"),
     senderId: UserId = UserId("@a-user-id:server"),
-    senderProfile: ProfileDetails = ProfileDetails.Ready(displayName = "Alice", displayNameAmbiguous = false, avatarUrl = null),
+    senderProfile: ProfileDetails = ProfileDetails.Ready(displayName = USER_NAME_ALICE, displayNameAmbiguous = false, avatarUrl = null),
     isOwn: Boolean = false,
     content: EventContent = MessageContent(
         body = "Hello world!",

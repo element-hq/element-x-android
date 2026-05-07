@@ -10,7 +10,7 @@
   <string name="screen_room_change_permissions_moderators">"مدیرن و ناظران"</string>
   <string name="screen_room_change_permissions_remove_people">"برداشتن افراد و رد درخواست‌های پیوستن"</string>
   <string name="screen_room_change_permissions_room_avatar">"تغییر چهرک اتاق"</string>
-  <string name="screen_room_change_permissions_room_details">"ویرایش اتاق"</string>
+  <string name="screen_room_change_permissions_room_details">"ویرایش جزییات"</string>
   <string name="screen_room_change_permissions_room_name">"تغییر نام اتاق"</string>
   <string name="screen_room_change_permissions_room_topic">"دگرگونی موضوع اتاق"</string>
   <string name="screen_room_change_permissions_send_messages">"فرستادن پیام‌ها"</string>

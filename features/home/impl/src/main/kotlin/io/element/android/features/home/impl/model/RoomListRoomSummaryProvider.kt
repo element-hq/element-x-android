@@ -11,6 +11,10 @@ package io.element.android.features.home.impl.model
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.preview.LAST_MESSAGE
+import io.element.android.libraries.designsystem.preview.ROOM_NAME
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
+import io.element.android.libraries.designsystem.preview.USER_NAME_BOB
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -85,16 +89,16 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
                     displayType = RoomSummaryDisplayType.INVITE,
                     inviteSender = anInviteSender(
                         userId = UserId("@alice:matrix.org"),
-                        displayName = "Alice",
+                        displayName = USER_NAME_ALICE,
                     ),
                     canonicalAlias = RoomAlias("#alias:matrix.org"),
                 ),
                 aRoomListRoomSummary(
-                    name = "Bob",
+                    name = USER_NAME_BOB,
                     displayType = RoomSummaryDisplayType.INVITE,
                     inviteSender = anInviteSender(
                         userId = UserId("@bob:matrix.org"),
-                        displayName = "Bob",
+                        displayName = USER_NAME_BOB,
                     ),
                     isDm = true,
                 ),
@@ -103,7 +107,7 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
                     displayType = RoomSummaryDisplayType.INVITE,
                     inviteSender = anInviteSender(
                         userId = UserId("@bob:matrix.org"),
-                        displayName = "Bob",
+                        displayName = USER_NAME_BOB,
                     ),
                 ),
                 aRoomListRoomSummary(
@@ -111,7 +115,7 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
                     displayType = RoomSummaryDisplayType.INVITE,
                     inviteSender = anInviteSender(
                         userId = UserId("@bob:matrix.org"),
-                        displayName = "Bob",
+                        displayName = USER_NAME_BOB,
                     ),
                     isSpace = true
                 ),
@@ -147,7 +151,7 @@ open class RoomListRoomSummaryProvider : PreviewParameterProvider<RoomListRoomSu
 
 internal fun anInviteSender(
     userId: UserId = UserId("@bob:domain"),
-    displayName: String = "Bob",
+    displayName: String = USER_NAME_BOB,
     avatarData: AvatarData = AvatarData(userId.value, displayName, size = AvatarSize.InviteSender),
 ) = InviteSender(
     userId = userId,
@@ -158,12 +162,12 @@ internal fun anInviteSender(
 
 internal fun aRoomListRoomSummary(
     id: String = "!roomId:domain",
-    name: String? = "Room name",
+    name: String? = ROOM_NAME,
     numberOfUnreadMessages: Long = 0,
     numberOfUnreadMentions: Long = 0,
     numberOfUnreadNotifications: Long = 0,
     isMarkedUnread: Boolean = false,
-    latestEvent: LatestEvent = LatestEvent.Synced("Last message"),
+    latestEvent: LatestEvent = LatestEvent.Synced(LAST_MESSAGE),
     timestamp: String? = latestEvent.takeIf { it !is LatestEvent.None }?.let { "88:88" },
     notificationMode: RoomNotificationMode? = null,
     hasRoomCall: Boolean = false,

@@ -32,7 +32,7 @@
   <string name="screen_login_error_invalid_credentials">"Nieprawidłowa nazwa użytkownika i/lub hasło"</string>
   <string name="screen_login_error_invalid_user_id">"To nie jest prawidłowy identyfikator użytkownika. Oczekiwany format: \'@user:homeserver.org\'"</string>
   <string name="screen_login_error_refresh_tokens">"Ten serwer został skonfigurowany do korzystania z tokenów odświeżania. Nie są one obsługiwane, gdy korzystasz z hasła."</string>
-  <string name="screen_login_error_unsupported_authentication">"Wybrany serwer domowy nie obsługuje uwierzytelniania hasłem, ani OIDC. Skontaktuj się z jego administratorem lub wybierz inny serwer domowy."</string>
+  <string name="screen_login_error_unsupported_authentication">"Wybrany serwer domowy nie obsługuje uwierzytelniania hasłem, ani OAuth. Skontaktuj się z jego administratorem lub wybierz inny serwer domowy."</string>
   <string name="screen_login_form_header">"Wprowadź swoje dane"</string>
   <string name="screen_login_subtitle">"Matrix to otwarta sieć do bezpiecznej i zdecentralizowanej komunikacji."</string>
   <string name="screen_login_title">"Witaj ponownie!"</string>

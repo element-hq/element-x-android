@@ -24,6 +24,7 @@ internal fun aRustRoomMember(
     isIgnored: Boolean = false,
     role: RoomMemberRole = RoomMemberRole.USER,
     membershipChangeReason: String? = null,
+    isServiceMember: Boolean = false,
 ) = RoomMember(
     userId = userId.value,
     displayName = displayName,
@@ -34,4 +35,5 @@ internal fun aRustRoomMember(
     isIgnored = isIgnored,
     suggestedRoleForPowerLevel = role,
     membershipChangeReason = membershipChangeReason,
+    isServiceMember = isServiceMember,
 )

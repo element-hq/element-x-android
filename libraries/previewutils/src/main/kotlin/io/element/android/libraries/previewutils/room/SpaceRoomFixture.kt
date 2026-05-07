@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.previewutils.room
 
+import io.element.android.libraries.designsystem.preview.SPACE_NAME
 import io.element.android.libraries.matrix.api.core.RoomAlias
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
@@ -19,7 +20,7 @@ import kotlinx.collections.immutable.toImmutableList
 
 fun aSpaceRoom(
     rawName: String? = null,
-    displayName: String = "Space name",
+    displayName: String = SPACE_NAME,
     avatarUrl: String? = null,
     canonicalAlias: RoomAlias? = null,
     childrenCount: Int = 0,

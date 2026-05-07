@@ -121,7 +121,6 @@ fun aRoomDetailsState(
     canReportRoom: Boolean = true,
     isTombstoned: Boolean = false,
     showDebugInfo: Boolean = false,
-    enableKeyShareOnInvite: Boolean = false,
     roomHistoryVisibility: RoomHistoryVisibility = RoomHistoryVisibility.Shared,
     eventSink: (RoomDetailsEvent) -> Unit = {},
 ) = RoomDetailsState(
@@ -153,7 +152,6 @@ fun aRoomDetailsState(
     isTombstoned = isTombstoned,
     showDebugInfo = showDebugInfo,
     roomVersion = "12",
-    enableKeyShareOnInvite = enableKeyShareOnInvite,
     roomHistoryVisibility = roomHistoryVisibility,
     eventSink = eventSink,
 )
@@ -195,6 +193,5 @@ fun aSharedHistoryRoomDetailsState(
     roomHistoryVisibility: RoomHistoryVisibility
 ) = aRoomDetailsState(
     isEncrypted = true,
-    enableKeyShareOnInvite = true,
     roomHistoryVisibility = roomHistoryVisibility,
 )

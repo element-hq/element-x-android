@@ -79,7 +79,7 @@ class QrCodeLoginFlowNodeTest {
         qrCodeLoginManager.currentLoginStep.value = QrCodeLoginStep.Failed(QrLoginException.ConnectionInsecure)
         assertThat(flowNode.currentNavTarget()).isEqualTo(QrCodeLoginFlowNode.NavTarget.Error(QrCodeErrorScreenType.InsecureChannelDetected))
 
-        qrCodeLoginManager.currentLoginStep.value = QrCodeLoginStep.Failed(QrLoginException.OidcMetadataInvalid)
+        qrCodeLoginManager.currentLoginStep.value = QrCodeLoginStep.Failed(QrLoginException.OAuthMetadataInvalid)
         assertThat(flowNode.currentNavTarget()).isEqualTo(QrCodeLoginFlowNode.NavTarget.Error(QrCodeErrorScreenType.UnknownError))
 
         qrCodeLoginManager.currentLoginStep.value = QrCodeLoginStep.Failed(QrLoginException.Unknown)

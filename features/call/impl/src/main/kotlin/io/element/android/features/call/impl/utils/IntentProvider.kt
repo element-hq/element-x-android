@@ -12,21 +12,21 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.PendingIntentCompat
-import io.element.android.features.call.api.CallType
+import io.element.android.features.call.api.CallData
 import io.element.android.features.call.impl.DefaultElementCallEntryPoint
 import io.element.android.features.call.impl.ui.ElementCallActivity
 
 internal object IntentProvider {
-    fun createIntent(context: Context, callType: CallType): Intent = Intent(context, ElementCallActivity::class.java).apply {
-        putExtra(DefaultElementCallEntryPoint.EXTRA_CALL_TYPE, callType)
+    fun createIntent(context: Context, callData: CallData): Intent = Intent(context, ElementCallActivity::class.java).apply {
+        putExtra(DefaultElementCallEntryPoint.EXTRA_CALL_TYPE, callData)
         addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_NO_USER_ACTION)
     }
 
-    fun getPendingIntent(context: Context, callType: CallType): PendingIntent {
+    fun getPendingIntent(context: Context, callData: CallData): PendingIntent {
         return PendingIntentCompat.getActivity(
             context,
             DefaultElementCallEntryPoint.REQUEST_CODE,
-            createIntent(context, callType),
+            createIntent(context, callData),
             PendingIntent.FLAG_CANCEL_CURRENT,
             false
         )!!

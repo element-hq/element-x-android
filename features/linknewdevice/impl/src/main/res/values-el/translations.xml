@@ -34,6 +34,8 @@
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"Εάν αντιμετωπίσεις το ίδιο πρόβλημα, δοκίμασε ένα διαφορετικό δίκτυο wifi ή χρησιμοποίησε τα δεδομένα του κινητού σου αντί για wifi"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Εάν δεν λειτουργήσει, συνδέσου χειροκίνητα"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Η σύνδεση δεν είναι ασφαλής"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"Θα σου ζητηθεί να εισάγεις τα δύο ψηφία που εμφανίζονται σε αυτήν τη συσκευή."</string>
+  <string name="screen_qr_code_login_device_code_title">"Εισήγαγε τον παρακάτω αριθμό στην άλλη συσκευή σου"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"Η σύνδεση ακυρώθηκε στην άλλη συσκευή."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Το αίτημα σύνδεσης ακυρώθηκε"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"Η σύνδεση απορρίφθηκε στην άλλη συσκευή."</string>
@@ -54,4 +56,5 @@
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Πρέπει να δώσεις άδεια για %1$s για να χρησιμοποιήσεις την κάμερα της συσκευής σου και να συνεχίσεις."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Επέτρεψε την πρόσβαση της κάμερας για σάρωση του κωδικού QR"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Παρουσιάστηκε ένα απροσδόκητο σφάλμα. Παρακαλώ προσπάθησε ξανά."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"Αναμονή για την άλλη σου συσκευή"</string>
 </resources>

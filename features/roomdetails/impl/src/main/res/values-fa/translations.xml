@@ -14,7 +14,7 @@
   <string name="screen_room_change_permissions_moderators">"مدیرن و ناظران"</string>
   <string name="screen_room_change_permissions_remove_people">"برداشتن افراد و رد درخواست‌های پیوستن"</string>
   <string name="screen_room_change_permissions_room_avatar">"تغییر چهرک اتاق"</string>
-  <string name="screen_room_change_permissions_room_details">"ویرایش اتاق"</string>
+  <string name="screen_room_change_permissions_room_details">"ویرایش جزییات"</string>
   <string name="screen_room_change_permissions_room_name">"تغییر نام اتاق"</string>
   <string name="screen_room_change_permissions_room_topic">"دگرگونی موضوع اتاق"</string>
   <string name="screen_room_change_permissions_send_messages">"فرستادن پیام‌ها"</string>
@@ -40,7 +40,7 @@
   <string name="screen_room_details_badge_encrypted">"رمز شده"</string>
   <string name="screen_room_details_badge_not_encrypted">"رمزنگاری نشده"</string>
   <string name="screen_room_details_badge_public">"اتاق عمومی"</string>
-  <string name="screen_room_details_edit_room_title">"ویرایش اتاق"</string>
+  <string name="screen_room_details_edit_room_title">"ویرایش جزییات"</string>
   <string name="screen_room_details_edition_error">"خطایی ناشناخته رخ داد و اطّلاعات قابل تغییر نبودند."</string>
   <string name="screen_room_details_edition_error_title">"ناتوان در به‌روز رسانی اتاق"</string>
   <string name="screen_room_details_encryption_enabled_subtitle">"پیام‌ها با قفل محافظت می‌شوند. فقط شما و گیرندگان، کلیدهای منحصر به فرد برای باز کردن قفل آنها را دارید."</string>

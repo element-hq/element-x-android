@@ -148,7 +148,9 @@ class ChangeRoomPermissionsPresenterTest {
                         roomName = Moderator.powerLevel,
                         roomAvatar = Moderator.powerLevel,
                         roomTopic = Moderator.powerLevel,
-                        spaceChild = initialPermissions.spaceChild
+                        spaceChild = initialPermissions.spaceChild,
+                        beacon = initialPermissions.beacon,
+                        beaconInfo = initialPermissions.beaconInfo,
                     )
                 )
             }

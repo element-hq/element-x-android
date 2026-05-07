@@ -15,6 +15,6 @@ android {
 
 dependencies {
     api(libs.androidx.workmanager.runtime)
-
+    implementation(projects.libraries.architecture)
     implementation(projects.libraries.matrix.api)
 }

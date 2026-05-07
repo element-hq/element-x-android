@@ -13,6 +13,8 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -74,7 +76,8 @@ internal fun AttachmentsBottomSheet(
             sheetState = rememberModalBottomSheetState(
                 skipPartiallyExpanded = true
             ),
-            onDismissRequest = { isVisible = false }
+            onDismissRequest = { isVisible = false },
+            scrollable = false,
         ) {
             AttachmentSourcePickerMenu(
                 state = state,
@@ -97,6 +100,7 @@ private fun AttachmentSourcePickerMenu(
         modifier = Modifier
             .navigationBarsPadding()
             .imePadding()
+            .verticalScroll(rememberScrollState())
     ) {
         ListItem(
             modifier = Modifier.clickable { state.eventSink(MessageComposerEvent.PickAttachmentSource.PhotoFromCamera) },

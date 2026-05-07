@@ -41,7 +41,14 @@ sdkArg=""
 
 ## Argument parsing
 
-TEMP=$(getopt -o 'rs:b:at:h' --long 'remote,sdk:,branch:,build-app,target-arch:,help' -- "$@")
+# Use GNU getopt (required for --long support on macOS)
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    GNU_GETOPT="$(brew --prefix gnu-getopt)/bin/getopt"
+else
+    GNU_GETOPT="getopt"
+fi
+
+TEMP=$("$GNU_GETOPT" -o 'rs:b:at:h' --long 'remote,sdk:,branch:,build-app,target-arch:,help' -- "$@")
 
 if [ $? -ne 0 ]; then
     echo 'Terminating...' >&2
@@ -53,32 +60,32 @@ unset TEMP
 
 while true; do
     case "$1" in
-        'r'|'--remote')
+        '-r'|'--remote')
             buildLocal=1
             shift
             continue
         ;;
-        's'|'--sdk')
+        '-s'|'--sdk')
             sdkArg="$2"
             shift 2
             continue
         ;;
-        'b'|'--branch')
+        '-b'|'--branch')
             rustSdkBranch="$2"
             shift 2
             continue
         ;;
-        'a'|'--build-app')
+        '-a'|'--build-app')
             buildApp=0
             shift
             continue
         ;;
-        't'|'--target-arch')
+        '-t'|'--target-arch')
             target_arch="$2"
             shift 2
             continue
         ;;
-        'h'|'--help')
+        '-h'|'--help')
             cat << END
 SYNOPSIS
 

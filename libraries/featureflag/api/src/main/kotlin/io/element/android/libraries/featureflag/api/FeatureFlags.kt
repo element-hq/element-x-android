@@ -22,13 +22,6 @@ enum class FeatureFlags(
     override val isFinished: Boolean,
     override val isInLabs: Boolean = false,
 ) : Feature {
-    RoomDirectorySearch(
-        key = "feature.roomdirectorysearch",
-        title = "Room directory search",
-        description = "Allow user to search for public rooms in their homeserver",
-        defaultValue = { false },
-        isFinished = false,
-    ),
     ShowBlockedUsersDetails(
         key = "feature.showBlockedUsersDetails",
         title = "Show blocked users details",
@@ -49,17 +42,6 @@ enum class FeatureFlags(
         description = "This setting controls how end-to-end encryption (E2E) keys are shared." +
             " Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners." +
             " You'll have to stop and re-open the app manually for that setting to take effect.",
-        defaultValue = { false },
-        isFinished = false,
-    ),
-    EnableKeyShareOnInvite(
-        key = "feature.enableKeyShareOnInvite",
-        title = "Share encrypted history with new members",
-        description = "When inviting a user to an encrypted room that has history visibility set to \"shared\"," +
-            " share encrypted history with that user, and accept encrypted history when you are invited to such a room." +
-            "\nRequires an app restart to take effect." +
-            "\n\nWARNING: this feature is EXPERIMENTAL and not all security precautions are implemented." +
-            " Do not enable on production accounts.",
         defaultValue = { false },
         isFinished = false,
     ),

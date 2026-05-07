@@ -14,6 +14,7 @@
   <string name="a11y_encryption_details">"Encryption details"</string>
   <string name="a11y_expand_message_text_field">"Expand message text field"</string>
   <string name="a11y_hide_password">"Hide password"</string>
+  <string name="a11y_info">"Info"</string>
   <string name="a11y_join_call">"Join call"</string>
   <string name="a11y_jump_to_bottom">"Jump to bottom"</string>
   <string name="a11y_move_the_map_to_my_location">"Move the map to my location"</string>
@@ -48,6 +49,7 @@
   <string name="a11y_send_files">"Send files"</string>
   <string name="a11y_sender_location">"Sender location"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Time limited action required, you have one minute to verify"</string>
+  <string name="a11y_settings_with_required_action">"Settings, action required"</string>
   <string name="a11y_show_password">"Show password"</string>
   <string name="a11y_start_call">"Start a call"</string>
   <string name="a11y_start_video_call">"Start a video call"</string>
@@ -69,6 +71,7 @@
   <string name="action_call">"Call"</string>
   <string name="action_cancel">"Cancel"</string>
   <string name="action_cancel_for_now">"Cancel for now"</string>
+  <string name="action_choose_file">"Choose file"</string>
   <string name="action_choose_photo">"Choose photo"</string>
   <string name="action_clear">"Clear"</string>
   <string name="action_close">"Close"</string>
@@ -96,6 +99,7 @@
   <string name="action_discard">"Discard"</string>
   <string name="action_dismiss">"Dismiss"</string>
   <string name="action_done">"Done"</string>
+  <string name="action_download">"Download"</string>
   <string name="action_edit">"Edit"</string>
   <string name="action_edit_caption">"Edit caption"</string>
   <string name="action_edit_poll">"Edit poll"</string>
@@ -203,7 +207,9 @@
   <string name="common_beta">"Beta"</string>
   <string name="common_blocked_users">"Blocked users"</string>
   <string name="common_bubbles">"Bubbles"</string>
+  <string name="common_call_declined">"Call declined"</string>
   <string name="common_call_started">"Call started"</string>
+  <string name="common_call_you_declined">"You declined a call"</string>
   <string name="common_chat_backup">"Chat backup"</string>
   <string name="common_copied_to_clipboard">"Copied to clipboard"</string>
   <string name="common_copyright">"Copyright"</string>

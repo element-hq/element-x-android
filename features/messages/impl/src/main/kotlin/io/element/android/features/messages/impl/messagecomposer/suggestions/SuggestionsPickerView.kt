@@ -33,6 +33,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType.Ro
 import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.USER_NAME_BOB
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.RoomAlias
@@ -198,7 +199,7 @@ internal fun SuggestionsPickerViewPreview() {
             suggestions = persistentListOf(
                 ResolvedSuggestion.AtRoom,
                 ResolvedSuggestion.Member(roomMember),
-                ResolvedSuggestion.Member(roomMember.copy(userId = UserId("@bob:server.org"), displayName = "Bob")),
+                ResolvedSuggestion.Member(roomMember.copy(userId = UserId("@bob:server.org"), displayName = USER_NAME_BOB)),
                 ResolvedSuggestion.Alias(
                     roomAlias = anAlias,
                     roomId = RoomId("!room:matrix.org"),

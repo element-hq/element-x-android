@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiCheckCodeS
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiGrantLoginWithQrCodeHandler
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiQrCodeData
 import io.element.android.libraries.matrix.test.QR_CODE_DATA_RECIPROCATE
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -30,7 +31,13 @@ import org.matrix.rustcomponents.sdk.HumanQrGrantLoginException
 class RustLinkMobileHandlerTest {
     @Test
     fun `start function works as expected`() = runTest {
-        val handler = FakeFfiGrantLoginWithQrCodeHandler()
+        val completable = CompletableDeferred<Unit>()
+        val handler = FakeFfiGrantLoginWithQrCodeHandler(
+            generateResult = {
+                // Ensure that the coroutine is hold
+                completable.await()
+            }
+        )
         val sut = createRustLinkMobileHandler(
             handler,
         )
@@ -56,6 +63,36 @@ class RustLinkMobileHandlerTest {
                 handler.emitGenerateProgress(progress)
                 assertThat(awaitItem()).isInstanceOf(expectedStepClass)
             }
+            // generate returns, no new event is emitted
+            completable.complete(Unit)
+            expectNoEvents()
+        }
+    }
+
+    @Test
+    fun `when generates does not emits the Done state, the code emits it`() = runTest {
+        val completable = CompletableDeferred<Unit>()
+        val handler = FakeFfiGrantLoginWithQrCodeHandler(
+            generateResult = {
+                // Ensure that the coroutine is hold
+                completable.await()
+            }
+        )
+        val sut = createRustLinkMobileHandler(
+            handler,
+        )
+        sut.linkMobileStep.test {
+            val initialItem = awaitItem()
+            assertThat(initialItem).isEqualTo(LinkMobileStep.Uninitialized)
+            backgroundScope.launch {
+                sut.start()
+            }
+            runCurrent()
+            handler.emitGenerateProgress(GrantGeneratedQrLoginProgress.Starting)
+            assertThat(awaitItem()).isEqualTo(LinkMobileStep.Starting)
+            // generate returns, Done event is emitted
+            completable.complete(Unit)
+            assertThat(awaitItem()).isEqualTo(LinkMobileStep.Done)
         }
     }
 

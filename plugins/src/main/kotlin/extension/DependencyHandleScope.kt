@@ -104,6 +104,7 @@ fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:architecture"))
     implementation(project(":libraries:dateformatter:impl"))
     implementation(project(":libraries:di"))
+    implementation(project(":libraries:cachestore:impl"))
     implementation(project(":libraries:session-storage:impl"))
     implementation(project(":libraries:mediapickers:impl"))
     implementation(project(":libraries:mediaupload:impl"))
@@ -120,7 +121,7 @@ fun DependencyHandlerScope.allLibrariesImpl() {
     implementation(project(":libraries:troubleshoot:impl"))
     implementation(project(":libraries:fullscreenintent:impl"))
     implementation(project(":libraries:wellknown:impl"))
-    implementation(project(":libraries:oidc:impl"))
+    implementation(project(":libraries:oauth:impl"))
     implementation(project(":libraries:workmanager:impl"))
     implementation(project(":libraries:recentemojis:impl"))
 }

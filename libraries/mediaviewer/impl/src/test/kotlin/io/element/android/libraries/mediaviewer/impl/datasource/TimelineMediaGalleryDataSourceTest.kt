@@ -80,7 +80,7 @@ class TimelineMediaGalleryDataSourceTest {
                     roomCoroutineScope = backgroundScope,
                 )
             )
-            sut.start()
+            sut.start(backgroundScope)
             assertThat(sut.getLastData()).isEqualTo(AsyncData.Uninitialized)
             sut.groupedMediaItemsFlow().test {
                 assertThat(awaitItem().isLoading()).isTrue()
@@ -95,7 +95,7 @@ class TimelineMediaGalleryDataSourceTest {
                 )
                 assertThat(sut.getLastData().isSuccess()).isTrue()
                 // Also test that starting again should have no effect
-                sut.start()
+                sut.start(backgroundScope)
             }
         }
         // Ensure that the timeline has been closed on flow completion
@@ -117,7 +117,7 @@ class TimelineMediaGalleryDataSourceTest {
                 roomCoroutineScope = backgroundScope,
             )
         )
-        sut.start()
+        sut.start(backgroundScope)
         sut.groupedMediaItemsFlow().test {
             skipItems(2)
             sut.loadMore(Timeline.PaginationDirection.BACKWARDS)
@@ -140,7 +140,7 @@ class TimelineMediaGalleryDataSourceTest {
                 roomCoroutineScope = backgroundScope,
             )
         )
-        sut.start()
+        sut.start(backgroundScope)
         sut.groupedMediaItemsFlow().test {
             skipItems(2)
             sut.deleteItem(AN_EVENT_ID)
@@ -159,7 +159,7 @@ class TimelineMediaGalleryDataSourceTest {
                 roomCoroutineScope = backgroundScope,
             )
         )
-        sut.start()
+        sut.start(backgroundScope)
         sut.groupedMediaItemsFlow().test {
             assertThat(awaitItem().isLoading()).isTrue()
             assertThat(sut.getLastData().isLoading()).isTrue()
@@ -181,7 +181,7 @@ class TimelineMediaGalleryDataSourceTest {
                 roomCoroutineScope = backgroundScope,
             )
         )
-        sut.start()
+        sut.start(backgroundScope)
         sut.groupedMediaItemsFlow().test {
             assertThat(awaitItem().isLoading()).isTrue()
             assertThat(sut.getLastData().isLoading()).isTrue()

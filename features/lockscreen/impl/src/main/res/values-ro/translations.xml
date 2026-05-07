@@ -23,7 +23,7 @@ Alegeți ceva memorabil. Dacă uitați acest PIN, veți fi deconectat din aplica
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"Vă rugăm să introduceți același cod PIN de două ori"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"Codurile PIN nu corespund"</string>
   <string name="screen_app_lock_signout_alert_message">"Va trebui să vă reconectați și să creați un cod PIN nou pentru a continua"</string>
-  <string name="screen_app_lock_signout_alert_title">"Sunteți deconectat"</string>
+  <string name="screen_app_lock_signout_alert_title">"Acest device este în curs de eliminare"</string>
   <plurals name="screen_app_lock_subtitle">
     <item quantity="one">"Aveți %1$d încercare de deblocare"</item>
     <item quantity="few">"Aveți %1$d încercări de deblocare"</item>
