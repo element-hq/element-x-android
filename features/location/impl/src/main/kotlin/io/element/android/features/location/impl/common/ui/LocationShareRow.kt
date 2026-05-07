@@ -31,6 +31,8 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
+import io.element.android.libraries.designsystem.preview.USER_NAME_BOB
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -116,10 +118,10 @@ internal fun LocationShareRowPreview() = ElementPreview {
         LocationShareRow(
             item = LocationShareItem(
                 userId = UserId("@alice:matrix.org"),
-                displayName = "Alice",
+                displayName = USER_NAME_ALICE,
                 avatarData = AvatarData(
                     id = "@alice:matrix.org",
-                    name = "Alice",
+                    name = USER_NAME_ALICE,
                     url = null,
                     size = AvatarSize.UserListItem,
                 ),
@@ -133,10 +135,10 @@ internal fun LocationShareRowPreview() = ElementPreview {
         LocationShareRow(
             item = LocationShareItem(
                 userId = UserId("@bob:matrix.org"),
-                displayName = "Bob",
+                displayName = USER_NAME_BOB,
                 avatarData = AvatarData(
                     id = "@bob:matrix.org",
-                    name = "Bob",
+                    name = USER_NAME_BOB,
                     url = null,
                     size = AvatarSize.UserListItem,
                 ),

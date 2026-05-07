@@ -10,6 +10,7 @@ package io.element.android.features.preferences.impl.user.editprofile
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.designsystem.preview.USER_NAME_JOHN_DOE
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.ui.media.AvatarAction
 import io.element.android.libraries.permissions.api.PermissionsState
@@ -28,7 +29,7 @@ open class EditUserProfileStateProvider : PreviewParameterProvider<EditUserProfi
 
 fun aEditUserProfileState(
     userId: UserId = UserId("@john.doe:matrix.org"),
-    displayName: String = "John Doe",
+    displayName: String = USER_NAME_JOHN_DOE,
     userAvatarUrl: String? = null,
     avatarActions: List<AvatarAction> = emptyList(),
     saveButtonEnabled: Boolean = true,
