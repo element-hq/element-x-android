@@ -199,10 +199,10 @@ class DefaultActiveLiveLocationShareManager(
     private suspend fun stopLocalShare(roomId: RoomId) {
         Timber.d("ActiveLiveLocationShareManager stop local share in $roomId")
         timeoutJobs.remove(roomId)?.cancel()
-        localSharingRoomIds.getAndUpdate { it - roomId }
+        val wasSharing = localSharingRoomIds.getAndUpdate { it - roomId }.isNotEmpty()
         cachedRooms.remove(roomId)?.close()
         liveLocationStore.removeLiveLocationExpiry(roomId)
-        if (localSharingRoomIds.value.isEmpty()) {
+        if (wasSharing && localSharingRoomIds.value.isEmpty()) {
             Timber.d("ActiveLiveLocationShareManager unregistering from coordinator for session ${matrixClient.sessionId}")
             coordinator.unregister(matrixClient.sessionId)
         }
