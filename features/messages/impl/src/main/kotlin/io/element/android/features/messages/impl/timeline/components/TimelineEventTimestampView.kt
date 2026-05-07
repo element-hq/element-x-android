@@ -74,7 +74,7 @@ fun TimelineEventTimestampView(
                 ) {
                     eventSink(TimelineEvent.ComputeVerifiedUserSendFailure(event))
                 }
-            else -> null
+            else -> Modifier
         }
     }
     Row(
@@ -82,7 +82,7 @@ fun TimelineEventTimestampView(
             .padding(PaddingValues(start = TimelineEventTimestampViewDefaults.spacing))
             // For a better click target, make the corners rounded
             .clip(RoundedCornerShape(8.dp))
-            .then(clickableModifier ?: Modifier)
+            .then(clickableModifier)
             .then(modifier),
         verticalAlignment = Alignment.CenterVertically,
     ) {
