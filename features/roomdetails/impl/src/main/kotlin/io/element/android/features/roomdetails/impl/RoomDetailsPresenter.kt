@@ -47,7 +47,6 @@ import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.powerlevels.canEditRolesAndPermissions
 import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
-import io.element.android.libraries.matrix.ui.room.getCurrentRoomMember
 import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
 import io.element.android.libraries.matrix.ui.room.roomMemberIdentityStateChange
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
@@ -99,9 +98,8 @@ class RoomDetailsPresenter(
         val canonicalAlias by remember { derivedStateOf { roomInfo.canonicalAlias } }
         val isEncrypted by remember { derivedStateOf { roomInfo.isEncrypted == true } }
         val dmMember by room.getDirectRoomMember(membersState)
-        val currentMember by room.getCurrentRoomMember(membersState)
         val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMember)
-        val roomType = getRoomType(dmMember, currentMember)
+        val roomType = getRoomType(dmMember)
         val roomCallState = roomCallStatePresenter.present()
         val joinedMemberCount by remember { derivedStateOf { roomInfo.joinedMembersCount } }
 
@@ -210,15 +208,9 @@ class RoomDetailsPresenter(
     }
 
     @Composable
-    private fun getRoomType(
-        dmMember: RoomMember?,
-        currentMember: RoomMember?,
-    ): RoomDetailsType = remember(dmMember, currentMember) {
-        if (dmMember != null && currentMember != null) {
-            RoomDetailsType.Dm(
-                me = currentMember,
-                otherMember = dmMember,
-            )
+    private fun getRoomType(dmMember: RoomMember?): RoomDetailsType = remember(dmMember) {
+        if (dmMember != null) {
+            RoomDetailsType.Dm(otherMember = dmMember)
         } else {
             RoomDetailsType.Room
         }

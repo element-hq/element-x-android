@@ -13,7 +13,6 @@ import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
 import io.element.android.features.roomcall.api.RoomCallState
 import io.element.android.features.roomcall.api.aStandByCallState
-import io.element.android.features.roomdetails.impl.members.aRoomMember
 import io.element.android.features.userprofile.api.UserProfileState
 import io.element.android.features.userprofile.api.UserProfileVerificationState
 import io.element.android.features.userprofile.shared.aUserProfileState
@@ -179,10 +178,7 @@ fun aDmRoomDetailsState(
     roomName = roomName,
     isPublic = false,
     isEncrypted = isEncrypted,
-    roomType = RoomDetailsType.Dm(
-        me = aRoomMember(),
-        otherMember = aDmRoomMember(isIgnored = isDmMemberIgnored),
-    ),
+    roomType = RoomDetailsType.Dm(otherMember = aDmRoomMember(isIgnored = isDmMemberIgnored)),
     roomMemberDetailsState = aUserProfileState(
         isBlocked = AsyncData.Success(isDmMemberIgnored),
         verificationState = dmRoomMemberVerificationState,

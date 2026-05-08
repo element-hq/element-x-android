@@ -206,12 +206,7 @@ class RoomDetailsPresenterTest {
         val presenter = createRoomDetailsPresenter(room)
         presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
             val initialState = awaitItem()
-            assertThat(initialState.roomType).isEqualTo(
-                RoomDetailsType.Dm(
-                    me = myRoomMember,
-                    otherMember = otherRoomMember,
-                )
-            )
+            assertThat(initialState.roomType).isEqualTo(RoomDetailsType.Dm(otherMember = otherRoomMember))
             cancelAndIgnoreRemainingEvents()
         }
     }
