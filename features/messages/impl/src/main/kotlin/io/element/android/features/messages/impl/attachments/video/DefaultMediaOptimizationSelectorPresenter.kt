@@ -37,6 +37,7 @@ import kotlin.math.roundToLong
 @AssistedInject
 class DefaultMediaOptimizationSelectorPresenter(
     @Assisted private val localMedia: LocalMedia,
+    @Assisted private val sendAsFile: Boolean,
     private val maxUploadSizeProvider: MaxUploadSizeProvider,
     private val featureFlagService: FeatureFlagService,
     private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
@@ -47,6 +48,7 @@ class DefaultMediaOptimizationSelectorPresenter(
     interface Factory : MediaOptimizationSelectorPresenter.Factory {
         override fun create(
             localMedia: LocalMedia,
+            sendAsFile: Boolean,
         ): DefaultMediaOptimizationSelectorPresenter
     }
 
@@ -55,7 +57,9 @@ class DefaultMediaOptimizationSelectorPresenter(
     @Composable
     override fun present(): MediaOptimizationSelectorState {
         val displayMediaSelectorViews by produceState<Boolean?>(null) {
-            value = featureFlagService.isFeatureEnabled(FeatureFlags.SelectableMediaQuality)
+            // When sending as a raw file, never show the optimization selector: the user
+            // explicitly opted into uploading the original.
+            value = !sendAsFile && featureFlagService.isFeatureEnabled(FeatureFlags.SelectableMediaQuality)
         }
 
         var displayVideoPresetSelectorDialog by remember { mutableStateOf(false) }
@@ -123,6 +127,17 @@ class DefaultMediaOptimizationSelectorPresenter(
         var selectedVideoOptimizationPreset by remember { mutableStateOf<AsyncData<VideoCompressionPreset>>(AsyncData.Loading()) }
 
         LaunchedEffect(videoSizeEstimations.dataOrNull()) {
+            if (sendAsFile) {
+                // Send-as-file path: pin to no image compression, and pick the highest-quality
+                // video preset that still fits the upload limit (we have no true "do not re-encode
+                // video" path in the pre-processor right now).
+                selectedImageOptimization = AsyncData.Success(false)
+                selectedVideoOptimizationPreset = findBestVideoPreset(
+                    defaultVideoPreset = VideoCompressionPreset.HIGH,
+                    videoSizeEstimations = videoSizeEstimations,
+                )
+                return@LaunchedEffect
+            }
             val mediaOptimizationConfig = mediaOptimizationConfigProvider.get()
             selectedImageOptimization = AsyncData.Success(mediaOptimizationConfig.compressImages)
             // Find the best video preset based on the default preset and the video size estimations

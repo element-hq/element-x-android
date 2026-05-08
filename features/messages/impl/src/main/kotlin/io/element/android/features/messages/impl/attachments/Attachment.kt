@@ -16,5 +16,11 @@ import kotlinx.parcelize.Parcelize
 @Immutable
 sealed interface Attachment : Parcelable {
     @Parcelize
-    data class Media(val localMedia: LocalMedia) : Attachment
+    data class Media(
+        val localMedia: LocalMedia,
+        // When true, the media was picked through the "Files" picker and should be
+        // uploaded without any optimization (image compression / video re-encoding pass).
+        // See https://github.com/element-hq/element-x-android/issues/6365
+        val sendAsFile: Boolean = false,
+    ) : Attachment
 }

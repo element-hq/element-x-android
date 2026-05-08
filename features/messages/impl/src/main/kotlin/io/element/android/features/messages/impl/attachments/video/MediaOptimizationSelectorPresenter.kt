@@ -15,6 +15,7 @@ fun interface MediaOptimizationSelectorPresenter : Presenter<MediaOptimizationSe
     interface Factory {
         fun create(
             localMedia: LocalMedia,
+            sendAsFile: Boolean,
         ): MediaOptimizationSelectorPresenter
     }
 }

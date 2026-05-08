@@ -210,15 +210,60 @@ class DefaultMediaOptimizationSelectorPresenterTest {
         }
     }
 
+    @Test
+    fun `present - sendAsFile hides selector views and disables image compression for images`() = runTest {
+        val presenter = createDefaultMediaOptimizationSelectorPresenter(
+            localMedia = aLocalMedia(mockMediaUrl, anImageMediaInfo()),
+            // Even with the feature flag on, sendAsFile must hide the selector.
+            featureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.SelectableMediaQuality.key to true)),
+            // And it must override the user's "optimize images" preference.
+            mediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
+            sendAsFile = true,
+        )
+        presenter.test {
+            // Initial loading state
+            skipItems(1)
+            awaitItem().run {
+                assertThat(displayMediaSelectorViews).isFalse()
+                assertThat(isImageOptimizationEnabled).isFalse()
+            }
+        }
+    }
+
+    @Test
+    fun `present - sendAsFile picks HIGH video preset when the video fits the upload limit`() = runTest {
+        val presenter = createDefaultMediaOptimizationSelectorPresenter(
+            // Plenty of room: even HIGH preset will fit.
+            maxUploadSizeProvider = MaxUploadSizeProvider { Result.success(Long.MAX_VALUE) },
+            mediaExtractorFactory = FakeVideoMetadataExtractorFactory(
+                FakeVideoMetadataExtractor(
+                    sizeResult = Result.success(Size(1920, 1080)),
+                    duration = Result.success(10.minutes)
+                )
+            ),
+            sendAsFile = true,
+        )
+        presenter.test {
+            // Initial loading state, then the one with size estimations loaded.
+            skipItems(1)
+            awaitItem().run {
+                assertThat(displayMediaSelectorViews).isFalse()
+                assertThat(selectedVideoPreset).isEqualTo(VideoCompressionPreset.HIGH)
+            }
+        }
+    }
+
     private fun createDefaultMediaOptimizationSelectorPresenter(
         localMedia: LocalMedia = aLocalMedia(mockMediaUrl, aVideoMediaInfo()),
         maxUploadSizeProvider: MaxUploadSizeProvider = MaxUploadSizeProvider { Result.success(1_000L) },
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.SelectableMediaQuality.key to true)),
         mediaExtractorFactory: FakeVideoMetadataExtractorFactory = FakeVideoMetadataExtractorFactory(),
         mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
+        sendAsFile: Boolean = false,
     ): DefaultMediaOptimizationSelectorPresenter {
         return DefaultMediaOptimizationSelectorPresenter(
             localMedia = localMedia,
+            sendAsFile = sendAsFile,
             maxUploadSizeProvider = maxUploadSizeProvider,
             featureFlagService = featureFlagService,
             mediaExtractorFactory = mediaExtractorFactory,

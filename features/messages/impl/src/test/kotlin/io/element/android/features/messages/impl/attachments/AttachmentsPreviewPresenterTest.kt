@@ -548,10 +548,41 @@ class AttachmentsPreviewPresenterTest {
         }
     }
 
+    @Test
+    fun `present - sendAsFile attachment is pre-processed without image compression`() = runTest {
+        // Even though the user has enabled "Optimize media quality" globally, picking the file
+        // through the Files picker (sendAsFile = true) must skip compression. Regression test
+        // for https://github.com/element-hq/element-x-android/issues/6365
+        val mediaPreProcessor = FakeMediaPreProcessor()
+        val presenter = createAttachmentsPreviewPresenter(
+            sendAsFile = true,
+            mediaPreProcessor = mediaPreProcessor,
+            // Selector views are hidden in the sendAsFile flow, which triggers the auto pre-process path.
+            displayMediaQualitySelectorViews = false,
+            mediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(
+                config = MediaOptimizationConfig(
+                    compressImages = true,
+                    videoCompressionPreset = VideoCompressionPreset.STANDARD,
+                )
+            ),
+        )
+
+        presenter.test {
+            consumeItemsUntilPredicate { mediaPreProcessor.processCallCount > 0 }
+            assertThat(mediaPreProcessor.lastMediaOptimizationConfig).isEqualTo(
+                MediaOptimizationConfig(
+                    compressImages = false,
+                    videoCompressionPreset = VideoCompressionPreset.HIGH,
+                )
+            )
+        }
+    }
+
     private fun TestScope.createAttachmentsPreviewPresenter(
         localMedia: LocalMedia = aLocalMedia(
             uri = mockMediaUrl,
         ),
+        sendAsFile: Boolean = false,
         room: JoinedRoom = FakeJoinedRoom(),
         timelineMode: Timeline.Mode = Timeline.Mode.Live,
         permalinkBuilder: PermalinkBuilder = FakePermalinkBuilder(),
@@ -575,7 +606,7 @@ class AttachmentsPreviewPresenterTest {
         mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
     ): AttachmentsPreviewPresenter {
         return AttachmentsPreviewPresenter(
-            attachment = aMediaAttachment(localMedia),
+            attachment = aMediaAttachment(localMedia, sendAsFile = sendAsFile),
             onDoneListener = onDoneListener,
             mediaSenderFactory = MediaSenderFactory { timelineMode ->
                 DefaultMediaSender(

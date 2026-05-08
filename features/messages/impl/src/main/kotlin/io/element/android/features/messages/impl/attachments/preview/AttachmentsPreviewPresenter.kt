@@ -96,7 +96,10 @@ class AttachmentsPreviewPresenter(
 
         val mediaAttachment = attachment as Attachment.Media
         val mediaOptimizationSelectorPresenter = remember {
-            mediaOptimizationSelectorPresenterFactory.create(mediaAttachment.localMedia)
+            mediaOptimizationSelectorPresenterFactory.create(
+                localMedia = mediaAttachment.localMedia,
+                sendAsFile = mediaAttachment.sendAsFile,
+            )
         }
         val mediaOptimizationSelectorState by rememberUpdatedState(mediaOptimizationSelectorPresenter.present())
 
@@ -109,9 +112,18 @@ class AttachmentsPreviewPresenter(
             // to prepare it for sending. This is done to avoid blocking the UI thread when the
             // user clicks on the send button.
             if (mediaOptimizationSelectorState.displayMediaSelectorViews == false) {
+                val config = if (mediaAttachment.sendAsFile) {
+                    // Send-as-file: never compress images; videos use HIGH (best available) preset.
+                    MediaOptimizationConfig(
+                        compressImages = false,
+                        videoCompressionPreset = VideoCompressionPreset.HIGH,
+                    )
+                } else {
+                    mediaOptimizationConfigProvider.get()
+                }
                 preprocessMediaJob = preProcessAttachment(
                     attachment = attachment,
-                    mediaOptimizationConfig = mediaOptimizationConfigProvider.get(),
+                    mediaOptimizationConfig = config,
                     displayProgress = false,
                     sendActionState = sendActionState,
                 )
