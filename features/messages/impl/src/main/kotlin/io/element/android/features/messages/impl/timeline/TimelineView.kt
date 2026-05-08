@@ -54,6 +54,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureView
 import io.element.android.features.messages.impl.timeline.components.FloatingDateBadgeOverlay
 import io.element.android.features.messages.impl.timeline.components.TimelineItemRow
+import io.element.android.features.messages.impl.timeline.components.TimelineItemVirtualRow
 import io.element.android.features.messages.impl.timeline.components.toText
 import io.element.android.features.messages.impl.timeline.di.LocalTimelineItemPresenterFactories
 import io.element.android.features.messages.impl.timeline.di.aFakeTimelineItemPresenterFactories
@@ -62,6 +63,7 @@ import io.element.android.features.messages.impl.timeline.model.NewEventState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContentProvider
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemLoadingIndicatorModel
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
 import io.element.android.libraries.androidutils.system.copyToClipboard
@@ -72,6 +74,7 @@ import io.element.android.libraries.designsystem.theme.components.FloatingAction
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.utils.animateScrollToItemCenter
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.UniqueId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.testtags.TestTags
@@ -161,6 +164,20 @@ fun TimelineView(
                 reverseLayout = useReverseLayout,
                 contentPadding = PaddingValues(top = 64.dp, bottom = 8.dp),
             ) {
+                // If the timeline is empty, we show a loading indicator to avoid showing an empty screen and to trigger the initial back pagination.
+                if (state.timelineItems.isEmpty()) {
+                    item {
+                        TimelineItemVirtualRow(
+                            virtual = TimelineItem.Virtual(
+                                id = UniqueId(value = "empty"),
+                                model = TimelineItemLoadingIndicatorModel(direction = Timeline.PaginationDirection.BACKWARDS, timestamp = 0L)
+                            ),
+                            timelineRoomInfo = state.timelineRoomInfo,
+                            eventSink = state.eventSink
+                        )
+                    }
+                }
+
                 items(
                     items = state.timelineItems,
                     contentType = { timelineItem -> timelineItem.contentType() },
