@@ -208,8 +208,15 @@ fun RoomDetailsView(
                         onClick = onSecurityAndPrivacyClick
                     )
                 }
+            }
 
-                state.roomMemberDetailsState?.let { dmMemberDetails ->
+            state.roomMemberDetailsState?.let { dmMemberDetails ->
+                if (state.canInvite) {
+                    PreferenceCategory {
+                        InviteItem(invitePeople = invitePeople)
+                    }
+                }
+                PreferenceCategory {
                     ProfileItem(
                         verificationState = dmMemberDetails.verificationState,
                         onClick = { onProfileClick(dmMemberDetails.userId) }
@@ -374,14 +381,14 @@ private fun MainActionsSection(
                 onClick = { onCall(CallIntent.VIDEO) },
             )
         }
+        if (state.canInvite) {
+            MainActionButton(
+                title = stringResource(CommonStrings.action_invite),
+                imageVector = CompoundIcons.UserAdd(),
+                onClick = onInvitePeople,
+            )
+        }
         if (state.roomType is RoomDetailsType.Room) {
-            if (state.canInvite) {
-                MainActionButton(
-                    title = stringResource(CommonStrings.action_invite),
-                    imageVector = CompoundIcons.UserAdd(),
-                    onClick = onInvitePeople,
-                )
-            }
             // Share CTA should be hidden for DMs
             MainActionButton(
                 title = stringResource(CommonStrings.action_share),
@@ -690,6 +697,17 @@ private fun MembersItem(
             ListItemContent.Text(memberCount.toString())
         },
         onClick = openRoomMemberList,
+    )
+}
+
+@Composable
+private fun InviteItem(
+    invitePeople: () -> Unit,
+) {
+    ListItem(
+        headlineContent = { Text(stringResource(R.string.screen_room_details_invite_title)) },
+        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.UserAdd())),
+        onClick = invitePeople,
     )
 }
 

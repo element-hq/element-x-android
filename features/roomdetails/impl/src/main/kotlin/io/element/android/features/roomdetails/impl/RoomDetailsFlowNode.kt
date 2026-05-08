@@ -64,9 +64,11 @@ import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import kotlinx.parcelize.Parcelize
+import kotlin.time.Duration.Companion.milliseconds
 
 @ContributesNode(RoomScope::class)
 @AssistedInject
@@ -263,7 +265,17 @@ class RoomDetailsFlowNode(
             }
 
             NavTarget.InviteMembers -> {
-                createNode<RoomInviteMembersNode>(buildContext)
+                val callback = object : RoomInviteMembersNode.Callback {
+                    override fun openCreatedRoom(roomId: RoomId) {
+                        navigateUp()
+                        room.roomCoroutineScope.launch {
+                            // Wait a bit for the screen up navigation is dispatched so the 'navigate to room' action doesn't cancel it
+                            delay(200.milliseconds)
+                            callback.navigateToRoom(roomId, emptyList())
+                        }
+                    }
+                }
+                createNode<RoomInviteMembersNode>(buildContext, plugins = listOf(callback))
             }
 
             is NavTarget.RoomNotificationSettings -> {

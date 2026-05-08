@@ -25,6 +25,7 @@ private data class PreviewInvitePeopleState(
     override val canInvite: Boolean,
     override val isSearchActive: Boolean,
     override val sendInvitesAction: AsyncAction<Unit>,
+    override val createRoomFromDmAction: AsyncAction<Nothing>,
     override val eventSink: (InvitePeopleEvents) -> Unit,
 ) : InvitePeopleState
 
@@ -32,10 +33,12 @@ private fun aPreviewInvitePeopleState(
     canInvite: Boolean = false,
     isSearchActive: Boolean = false,
     sendInvitesAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    createRoomFromDmAction: AsyncAction<Nothing> = AsyncAction.Uninitialized,
     eventSink: (InvitePeopleEvents) -> Unit = {},
 ) = PreviewInvitePeopleState(
     canInvite = canInvite,
     isSearchActive = isSearchActive,
     sendInvitesAction = sendInvitesAction,
+    createRoomFromDmAction = createRoomFromDmAction,
     eventSink = eventSink
 )

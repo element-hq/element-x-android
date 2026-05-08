@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -105,7 +106,7 @@ private fun InvitePeopleContentView(
         }
 
         InvitePeopleSearchBar(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier.imePadding().fillMaxWidth(),
             queryState = state.searchQuery,
             showLoader = state.showSearchLoader,
             selectedUsers = state.selectedUsers,
