@@ -31,8 +31,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -59,10 +62,12 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.core.text.toSpannable
 import coil3.compose.AsyncImage
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.viewfolder.api.TextFileViewer
+import io.element.android.libraries.androidutils.text.safeLinkify
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
@@ -91,7 +96,9 @@ import io.element.android.libraries.mediaviewer.impl.local.LocalMediaView
 import io.element.android.libraries.mediaviewer.impl.local.PlayableState
 import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaViewState
 import io.element.android.libraries.mediaviewer.impl.util.bgCanvasWithTransparency
+import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.wysiwyg.compose.EditorStyledText
 import kotlinx.coroutines.delay
 import me.saket.telephoto.zoomable.OverzoomEffect
 import me.saket.telephoto.zoomable.ZoomSpec
@@ -242,6 +249,7 @@ fun MediaViewerView(
                             MediaViewerBottomBar(
                                 showDivider = dataForPage.mediaInfo.mimeType.isMimeTypeVideo(),
                                 caption = dataForPage.mediaInfo.caption,
+                                formattedCaption = dataForPage.mediaInfo.formattedCaption,
                                 onHeightChange = { bottomPaddingInPixels = it },
                             )
                         }
@@ -545,6 +553,7 @@ private fun MediaViewerTopBar(
 @Composable
 private fun MediaViewerBottomBar(
     caption: String?,
+    formattedCaption: CharSequence?,
     showDivider: Boolean,
     onHeightChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -557,7 +566,7 @@ private fun MediaViewerBottomBar(
                 onHeightChange(it.height)
             },
     ) {
-        if (caption != null) {
+        if (caption != null || formattedCaption != null) {
             if (showDivider) {
                 HorizontalDivider()
             }
@@ -568,15 +577,28 @@ private fun MediaViewerBottomBar(
                     .fillMaxWidth()
                     .heightIn(max = if (hasCompactHeightWindowSize()) maxCaptionHeightLandscape else maxCaptionHeightPortrait),
             ) {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                        .verticalScroll(scrollState)
-                        .navigationBarsPadding(),
-                    text = caption,
-                    style = ElementTheme.typography.fontBodyLgRegular,
-                )
+                val textToRender = when {
+                    formattedCaption != null -> formattedCaption
+                    caption != null -> caption.safeLinkify().toSpannable()
+                    else -> null
+                }
+                if (textToRender != null) {
+                    CompositionLocalProvider(
+                        LocalContentColor provides ElementTheme.colors.textPrimary,
+                        LocalTextStyle provides ElementTheme.typography.fontBodyLgRegular
+                    ) {
+                        EditorStyledText(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                                .verticalScroll(scrollState)
+                                .navigationBarsPadding(),
+                            text = textToRender,
+                            style = ElementRichTextEditorStyle.textStyle(),
+                            releaseOnDetach = false,
+                        )
+                    }
+                }
                 if (showBottomShadow) {
                     Box(
                         modifier = Modifier
