@@ -69,7 +69,7 @@ internal fun CallScreenView(
     fun handleBack(fromNative: Boolean = false) {
         when (CallScreenBackPressPolicy.resolve(supportPip = pipState.supportPip, hasWebView = callWebView != null, fromNative)) {
             CallScreenBackPressAction.EnterPictureInPicture ->
-                pipState.eventSink(PictureInPictureEvents.EnterPictureInPicture)
+                pipState.eventSink(PictureInPictureEvent.EnterPictureInPicture)
             CallScreenBackPressAction.DispatchEscapeToWebView ->
                 callWebView?.dispatchEscKeyEvent()
             null -> Timber.d("Back press with unsupported pip is a no-op")
