@@ -47,6 +47,7 @@
   <string name="screen_room_details_error_muting">"No se ha podido silenciar esta sala, inténtalo de nuevo."</string>
   <string name="screen_room_details_error_unmuting">"Error al dejar de silenciar esta sala, por favor inténtalo de nuevo."</string>
   <string name="screen_room_details_invite_people_title">"Invitar personas"</string>
+  <string name="screen_room_details_invite_title">"Invitar"</string>
   <string name="screen_room_details_leave_conversation_title">"Salir de la conversación"</string>
   <string name="screen_room_details_leave_room_title">"Salir de la sala"</string>
   <string name="screen_room_details_media_gallery_title">"Medios y archivos"</string>

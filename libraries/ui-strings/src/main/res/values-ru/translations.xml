@@ -323,7 +323,6 @@
     <item quantity="many">"%1$d ответов"</item>
   </plurals>
   <string name="common_replying_to">"Отвечает %1$s"</string>
-  <string name="common_report_a_bug">"Сообщить об ошибке"</string>
   <string name="common_report_a_problem">"Сообщить о проблеме"</string>
   <string name="common_report_submitted">"Отчет отправлен"</string>
   <string name="common_rich_text_editor">"Форматирование"</string>

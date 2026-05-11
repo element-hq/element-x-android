@@ -97,6 +97,7 @@ class AndroidLocalMediaFactory(
                 filename = fileName,
                 fileSize = fileSize,
                 caption = caption,
+                formattedCaption = null,
                 formattedFileSize = calculatedFormattedFileSize,
                 fileExtension = fileExtension,
                 senderId = senderId,

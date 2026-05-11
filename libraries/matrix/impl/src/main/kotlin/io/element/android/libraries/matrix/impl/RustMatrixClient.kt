@@ -70,6 +70,7 @@ import io.element.android.libraries.matrix.impl.room.RustRoomFactory
 import io.element.android.libraries.matrix.impl.room.TimelineEventFilterFactory
 import io.element.android.libraries.matrix.impl.room.history.map
 import io.element.android.libraries.matrix.impl.room.join.map
+import io.element.android.libraries.matrix.impl.room.location.map
 import io.element.android.libraries.matrix.impl.room.preview.RoomPreviewInfoMapper
 import io.element.android.libraries.matrix.impl.roomdirectory.RustRoomDirectoryService
 import io.element.android.libraries.matrix.impl.roomdirectory.map
@@ -113,6 +114,8 @@ import kotlinx.coroutines.withContext
 import kotlinx.coroutines.withTimeout
 import org.matrix.rustcomponents.sdk.AuthData
 import org.matrix.rustcomponents.sdk.AuthDataPasswordDetails
+import org.matrix.rustcomponents.sdk.BeaconInfoListener
+import org.matrix.rustcomponents.sdk.BeaconInfoUpdate
 import org.matrix.rustcomponents.sdk.Client
 import org.matrix.rustcomponents.sdk.ClientException
 import org.matrix.rustcomponents.sdk.IgnoredUsersListener
@@ -206,6 +209,15 @@ class RustMatrixClient(
         sessionDispatcher = sessionDispatcher,
         analyticsService = analyticsService,
     )
+
+    override val ownBeaconInfoUpdates = mxCallbackFlow {
+        val listener = object : BeaconInfoListener {
+            override fun onUpdate(update: BeaconInfoUpdate) {
+                trySend(update.map())
+            }
+        }
+        innerClient.subscribeToOwnBeaconInfoUpdates(listener)
+    }
 
     override val sessionVerificationService = RustSessionVerificationService(
         client = innerClient,

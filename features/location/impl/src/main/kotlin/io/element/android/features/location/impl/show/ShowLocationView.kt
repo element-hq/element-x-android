@@ -147,6 +147,7 @@ fun ShowLocationView(
                         LocationShareRow(
                             item = locationShare,
                             onShareClick = { state.eventSink(ShowLocationEvent.Share(locationShare.location)) },
+                            onStopClick = { state.eventSink(ShowLocationEvent.StopLocationSharing) },
                             modifier = Modifier.clickable {
                                 state.eventSink(ShowLocationEvent.TrackMyLocation(false))
                                 val position = CameraPosition(

@@ -72,9 +72,10 @@ data class TimelineItemLocationContent(
             val isActive: Boolean,
             val endsAt: String,
             val endTimestamp: Long,
-            val canStop: Boolean = false,
+            val isOwnUser: Boolean,
         ) : Mode {
             val isLoading = lastKnownLocation == null && isActive
+            val canStopSharing = isActive && isOwnUser
         }
     }
 

@@ -11,6 +11,15 @@
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Sakrij avatare u zahtjevima za poziv u sobu"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Sakrij preglede medija na vremenskoj traci"</string>
   <string name="screen_advanced_settings_labs">"Laboratoriji"</string>
+  <string name="screen_advanced_settings_live_location_section_description">"Udaljenost koju morate prijeći da biste pokrenuli ažuriranje."</string>
+  <string name="screen_advanced_settings_live_location_section_footer">"Provjerite je li \"Precizna lokacija\" omogućena za ovu aplikaciju. Za promjenu dopuštenja idite na %1$s ."</string>
+  <string name="screen_advanced_settings_live_location_section_footer_link">"Postavke aplikacije"</string>
+  <string name="screen_advanced_settings_live_location_section_title">"Ažuriranja lokacije uživo"</string>
+  <plurals name="screen_advanced_settings_live_location_update_distance">
+    <item quantity="one">"Svaki %1$d metar"</item>
+    <item quantity="few">"Svaki %1$d metar"</item>
+    <item quantity="other">"Svaki %1$d metara"</item>
+  </plurals>
   <string name="screen_advanced_settings_media_compression_description">"Brže prenesite fotografije i videozapise te smanjite potrošnju podataka"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimiziraj kvalitetu medija"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderiranje i sigurnost"</string>

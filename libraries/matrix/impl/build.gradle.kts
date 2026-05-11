@@ -31,6 +31,7 @@ dependencies {
     implementation(projects.libraries.rustlsTls)
 
     implementation(projects.appconfig)
+    implementation(projects.features.enterprise.api)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.architecture)
     implementation(projects.libraries.di)
@@ -49,6 +50,7 @@ dependencies {
     implementation(libs.kotlinx.collections.immutable)
 
     testCommonDependencies(libs)
+    testImplementation(projects.features.enterprise.test)
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.preferences.test)

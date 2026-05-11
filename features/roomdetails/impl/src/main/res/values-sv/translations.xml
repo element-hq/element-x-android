@@ -53,6 +53,7 @@
   <string name="screen_room_details_invite_people_dont_close">"Stäng inte appen förrän det är klart."</string>
   <string name="screen_room_details_invite_people_preparing">"Förbereder inbjudningar …"</string>
   <string name="screen_room_details_invite_people_title">"Bjud in personer"</string>
+  <string name="screen_room_details_invite_title">"Bjud in"</string>
   <string name="screen_room_details_leave_conversation_title">"Lämna konversation"</string>
   <string name="screen_room_details_leave_room_title">"Lämna rum"</string>
   <string name="screen_room_details_media_gallery_title">"Media och filer"</string>

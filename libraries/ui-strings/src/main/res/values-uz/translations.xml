@@ -317,7 +317,6 @@ Sababi:%1$s."</string>
     <item quantity="other">"%1$d ta javob"</item>
   </plurals>
   <string name="common_replying_to">"%1$sga Javob berilmoqda"</string>
-  <string name="common_report_a_bug">"Xato haqida xabar bering"</string>
   <string name="common_report_a_problem">"Muammo haqida xabar bering"</string>
   <string name="common_report_submitted">"Hisobot topshirildi"</string>
   <string name="common_rich_text_editor">"Boy matn muharriri"</string>
@@ -410,6 +409,7 @@ Sababi:%1$s."</string>
   <string name="common_world_readable_history">"Tarixni hamma ko‘rishi mumkin"</string>
   <string name="common_you">"Siz"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) bu xabarni ulashdi, chunki u yuborilganda siz xonada emas edingiz."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s bu xabar yuborilgan paytda siz xonada bo‘lmaganingiz uchun uni ulashdi."</string>
   <string name="crypto_history_visible">"Siz yuborgan xabarlar bu xonaga taklif qilingan yangi a’zolarga ulashiladi. %1$s"</string>
   <string name="crypto_identity_change_pin_violation">"%1$sning raqamli identifikatori qayta tiklandi.%2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"%1$sning%2$s raqamli identifikatsiya qayta tiklandi.%3$s"</string>
