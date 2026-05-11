@@ -54,8 +54,8 @@ class DefaultRoomLatestEventFormatter(
     private val roomMembershipContentFormatter: RoomMembershipContentFormatter,
     private val profileChangeContentFormatter: ProfileChangeContentFormatter,
     private val stateContentFormatter: StateContentFormatter,
-    private val permalinkParser: PermalinkParser,
     private val rtcNotificationContentFormatter: RtcNotificationContentFormatter,
+    private val permalinkParser: PermalinkParser,
 ) : RoomLatestEventFormatter {
     override fun format(
         latestEvent: LatestEventValue.Local,
