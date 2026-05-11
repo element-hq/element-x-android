@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_signout_confirmation_dialog_content">"Ви впевнені, що бажаєте вийти?"</string>
+  <string name="screen_signout_confirmation_dialog_content">"Ви впевнені, що хочете видалити цей пристрій?"</string>
   <string name="screen_signout_confirmation_dialog_submit">"Вийти"</string>
   <string name="screen_signout_confirmation_dialog_title">"Вийти"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Вихід…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Видалення пристрою…"</string>
   <string name="screen_signout_key_backup_disabled_subtitle">"Ви збираєтеся вийти зі свого останнього сеансу. Якщо ви вийдете зараз, ви втратите доступ до своїх зашифрованих повідомлень."</string>
   <string name="screen_signout_key_backup_disabled_title">"Ви вимкнули резервне копіювання"</string>
   <string name="screen_signout_key_backup_offline_subtitle">"Коли ви вийшли з мережі, резервна копія ваших ключів все ще створювалася. Повторно під\'єднайтеся, щоб зберегти резервну копію ключів перед виходом."</string>

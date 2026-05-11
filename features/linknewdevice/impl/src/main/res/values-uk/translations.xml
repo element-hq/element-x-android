@@ -26,6 +26,7 @@
   <string name="screen_link_new_device_root_loading_qr_code">"Завантаження QR-коду…"</string>
   <string name="screen_link_new_device_root_mobile_device">"Мобільний пристрій"</string>
   <string name="screen_link_new_device_root_title">"Який тип пристрою ви хочете під\'єднати?"</string>
+  <string name="screen_link_new_device_wrong_number_subtitle">"Спробуйте ще раз і переконайтеся, що ви правильно ввели двозначний код. Якщо цифри все одно не збігаються, зверніться до свого провайдера облікового запису."</string>
   <string name="screen_link_new_device_wrong_number_title">"Цифри не збігаються"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Не вдалося встановити безпечне з\'єднання з новим пристроєм. Ваші наявні пристрої досі в безпеці, і вам не потрібно про них турбуватися."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_header">"Що тепер?"</string>

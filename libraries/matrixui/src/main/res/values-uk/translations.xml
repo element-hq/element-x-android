@@ -3,5 +3,7 @@
   <string name="screen_bottom_sheet_create_dm_confirmation_button_title">"Надіслати запрошення"</string>
   <string name="screen_bottom_sheet_create_dm_message">"Хочете розпочати бесіду з %1$s?"</string>
   <string name="screen_bottom_sheet_create_dm_title">"Надіслати запрошення?"</string>
+  <string name="screen_bottom_sheet_create_dm_unknown_user_content">"Наразі у вас немає чатів із цим користувачем. Підтвердьте запрошення, перш ніж продовжити."</string>
+  <string name="screen_bottom_sheet_create_dm_unknown_user_title">"Розпочати чат із цим новим контактом?"</string>
   <string name="screen_invites_invited_you">"%1$s (%2$s) запрошує вас"</string>
 </resources>

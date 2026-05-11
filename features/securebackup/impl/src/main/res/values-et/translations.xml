@@ -61,9 +61,9 @@
   <string name="screen_recovery_key_setup_title">"Seadista andmete taastamine"</string>
   <string name="screen_reset_encryption_confirmation_alert_action">"Jah, lähtesta nüüd"</string>
   <string name="screen_reset_encryption_confirmation_alert_subtitle">"See tegevus on tagasipöördumatu."</string>
-  <string name="screen_reset_encryption_confirmation_alert_title">"Kas sa oled kindel, et soovid oma andmete krüptimist lähtestada?"</string>
+  <string name="screen_reset_encryption_confirmation_alert_title">"Kas sa oled kindel, et soovid oma võrguidentiteeti lähtestada?"</string>
   <string name="screen_reset_encryption_password_error">"Tekkis teadmata viga. Palun kontrolli, kas sinu kasutajakonto salasõna on õige ja proovi uuesti."</string>
   <string name="screen_reset_encryption_password_placeholder">"Sisesta…"</string>
-  <string name="screen_reset_encryption_password_subtitle">"Palun kinnita, et soovid oma andmete krüptimist lähtestada."</string>
+  <string name="screen_reset_encryption_password_subtitle">"Palun kinnita, et soovid oma võrguidentiteedi lähtestada."</string>
   <string name="screen_reset_encryption_password_title">"Jätkamaks sisesta oma kasutajakonto salasõna"</string>
 </resources>

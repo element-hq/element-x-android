@@ -311,7 +311,6 @@
     <item quantity="other">"%1$d 個回覆"</item>
   </plurals>
   <string name="common_replying_to">"正在回覆%1$s"</string>
-  <string name="common_report_a_bug">"回報程式錯誤"</string>
   <string name="common_report_a_problem">"回報問題"</string>
   <string name="common_report_submitted">"已遞交報告"</string>
   <string name="common_rich_text_editor">"格式化文字編輯器"</string>

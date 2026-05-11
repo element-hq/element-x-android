@@ -310,7 +310,6 @@
     <item quantity="other">"%1$d 답변"</item>
   </plurals>
   <string name="common_replying_to">"%1$s님에게 답장하는 중"</string>
-  <string name="common_report_a_bug">"버그 보고"</string>
   <string name="common_report_a_problem">"문제 보고"</string>
   <string name="common_report_submitted">"보고 제출됨"</string>
   <string name="common_rich_text_editor">"리치 텍스트 편집기"</string>

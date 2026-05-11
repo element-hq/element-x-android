@@ -291,7 +291,6 @@ Razão: %1$s."</string>
     <item quantity="other">"%1$d respostas"</item>
   </plurals>
   <string name="common_replying_to">"Em resposta a %1$s"</string>
-  <string name="common_report_a_bug">"Comunicar falha"</string>
   <string name="common_report_a_problem">"Comunicar um problema"</string>
   <string name="common_report_submitted">"Denúncia submetida"</string>
   <string name="common_rich_text_editor">"Editor de texto rico"</string>

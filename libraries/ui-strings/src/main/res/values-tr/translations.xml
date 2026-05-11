@@ -264,7 +264,6 @@ Neden: %1$s."</string>
   <string name="common_recovery_key">"Kurtarma anahtarı"</string>
   <string name="common_refreshing">"Yenileniyor…"</string>
   <string name="common_replying_to">"Cevaplamak için %1$s"</string>
-  <string name="common_report_a_bug">"Hata bildir"</string>
   <string name="common_report_a_problem">"Sorun bildir"</string>
   <string name="common_report_submitted">"Rapor gönderildi"</string>
   <string name="common_rich_text_editor">"Zengin metin editörü"</string>

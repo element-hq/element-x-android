@@ -4,10 +4,12 @@
   <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_action">"Заблокувати"</string>
   <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_description">"Він не зможе приєднатися до цієї кімнати знову, якщо його запросять."</string>
   <string name="screen_bottom_sheet_manage_room_member_ban_member_confirmation_title">"Ви точно хочете заблокувати цього користувача?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_ban_member_from_space_confirmation_description">"Вони не зможуть знову приєднатися до цього простору, навіть якщо їх запросять, але збережуть своє членство в будь-яких кімнатах або підпросторах."</string>
   <string name="screen_bottom_sheet_manage_room_member_banning_user">"Блокування %1$s"</string>
   <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_action">"Вилучити"</string>
   <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_description">"Вони зможуть знову приєднатися до цієї кімнати, якщо їх запросять."</string>
   <string name="screen_bottom_sheet_manage_room_member_kick_member_confirmation_title">"Ви дійсно хочете вилучити цього учасника?"</string>
+  <string name="screen_bottom_sheet_manage_room_member_kick_member_from_space_confirmation_description">"Вони зможуть знову приєднатися до цього простору, якщо їх запросять, і збережуть своє членство в будь-яких кімнатах або підпросторах."</string>
   <string name="screen_bottom_sheet_manage_room_member_member_user_info">"Переглянути профіль"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove">"Вилучити користувача"</string>
   <string name="screen_bottom_sheet_manage_room_member_remove_confirmation_title">"Вилучити учасника та заборонити приєднання в майбутньому?"</string>

@@ -56,6 +56,7 @@
   <string name="screen_room_details_invite_people_dont_close">"Не закрывайте приложение, пока не закончите."</string>
   <string name="screen_room_details_invite_people_preparing">"Подготовка приглашений…"</string>
   <string name="screen_room_details_invite_people_title">"Пригласить в комнату"</string>
+  <string name="screen_room_details_invite_title">"Пригласить"</string>
   <string name="screen_room_details_leave_conversation_title">"Покинуть беседу"</string>
   <string name="screen_room_details_leave_room_title">"Покинуть комнату"</string>
   <string name="screen_room_details_media_gallery_title">"Медиа и файлы"</string>
