@@ -604,6 +604,9 @@ internal fun TimelineViewPreview(
     }
 }
 
+// The jump-to-unread FAB's indicator is always rendered when the FAB is visible — in
+// production the FAB only appears when unread content exists above. So `hasUnreadAbove`
+// here only varies the scroll-target state, not the upper indicator's visibility.
 @Composable
 private fun TimelineViewWithReadMarker(
     hasUnreadAbove: Boolean,
@@ -648,7 +651,7 @@ private fun TimelineViewWithReadMarker(
 
 @PreviewsDayNight
 @Composable
-internal fun TimelineViewWithReadMarkerNoIndicatorsPreview() = ElementPreview {
+internal fun TimelineViewWithReadMarkerJumpToUnreadIndicatorOnlyPreview() = ElementPreview {
     TimelineViewWithReadMarker(hasUnreadAbove = false, hasUnreadBelow = false)
 }
 
