@@ -154,9 +154,9 @@ class EditDefaultNotificationSettingPresenter(
     private fun CoroutineScope.setDefaultNotificationMode(mode: RoomNotificationMode, action: MutableState<AsyncAction<Unit>>) = launch {
         action.runUpdatingStateNoSuccess {
             // On modern clients, we don't have different settings for encrypted and non-encrypted rooms (Legacy clients did).
-            notificationSettingsService.setDefaultRoomNotificationMode(isEncrypted = true, mode = mode, isOneToOne = isDm)
+            notificationSettingsService.setDefaultRoomNotificationMode(isEncrypted = true, mode = mode, isDM = isDm)
                 .map {
-                    notificationSettingsService.setDefaultRoomNotificationMode(isEncrypted = false, mode = mode, isOneToOne = isDm)
+                    notificationSettingsService.setDefaultRoomNotificationMode(isEncrypted = false, mode = mode, isDM = isDm)
                 }
         }
     }
