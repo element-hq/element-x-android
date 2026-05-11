@@ -61,13 +61,12 @@ interface BaseRoom : Closeable {
      */
     fun info(): RoomInfo = roomInfoFlow.value
 
-    fun predecessorRoom(): PredecessorRoom?
-
     /**
-     * A one-to-one is a room with exactly 2 members.
-     * See [the Matrix spec](https://spec.matrix.org/latest/client-server-api/#default-underride-rules).
+     * Returns whether the [BaseRoom] is a DM, with an updated state from the latest [RoomInfo].
      */
-    val isOneToOne: Boolean get() = info().activeMembersCount == 2L
+    fun isDm() = roomInfoFlow.value.isDm
+
+    fun predecessorRoom(): PredecessorRoom?
 
     /**
      * Try to load the room members and update the membersFlow.

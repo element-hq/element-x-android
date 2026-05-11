@@ -42,7 +42,6 @@ import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.powerlevels.canEditRolesAndPermissions
 import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
@@ -53,7 +52,6 @@ import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
@@ -145,7 +143,7 @@ class RoomDetailsPresenter(
                 }
                 RoomDetailsEvent.UnmuteNotification -> {
                     scope.launch(dispatchers.io) {
-                        notificationSettingsService.unmuteRoom(room.roomId, isEncrypted, room.isOneToOne)
+                        notificationSettingsService.unmuteRoom(room.roomId, isEncrypted, room.isDm())
                     }
                 }
                 is RoomDetailsEvent.SetFavorite -> scope.setFavorite(event.isFavorite)
@@ -184,7 +182,7 @@ class RoomDetailsPresenter(
             isFavorite = isFavorite,
             displayRolesAndPermissionsSettings = !isDm && permissions.canEditRolesAndPermissions,
             isPublic = joinRule == JoinRule.Public,
-            heroes = roomInfo.heroes.toImmutableList(),
+            heroes = roomInfo.heroes,
             pinnedMessagesCount = pinnedMessagesCount,
             snackbarMessage = snackbarMessage,
             canShowKnockRequests = canShowKnockRequests,
