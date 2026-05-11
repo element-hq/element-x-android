@@ -430,6 +430,8 @@ private fun BoxScope.TimelineScrollHelper(
             onMarkAsRead = onMarkAllAsRead,
             testTag = TestTags.jumpToUnreadButton,
         )
+        // Reserves space for the jump to bottom button so the jump to unread button above
+        // stays in the same position regardless of whether the jump to bottom button is visible.
         Box(modifier = Modifier.size(36.dp)) {
             JumpToPositionButton(
                 icon = CompoundIcons.ChevronDown(),
