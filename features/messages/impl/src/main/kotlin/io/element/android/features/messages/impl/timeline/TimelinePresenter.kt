@@ -228,7 +228,7 @@ class TimelinePresenter(
                 TimelineEvent.MarkAllAsRead -> sessionCoroutineScope.launch {
                     val latestEventId = room.liveTimeline.getLatestEventId().getOrElse {
                         Timber.tag(tag).w(it, "Failed to get latest event id to mark as fully read")
-                        return@launch
+                        null
                     } ?: return@launch
                     markAsFullyRead(room.roomId, latestEventId)
                 }
