@@ -55,7 +55,12 @@ class DefaultClearCacheUseCase(
         // Clear OkHttp cache
         okHttpClient().cache?.delete()
         // Clear app cache
-        context.cacheDir.deleteRecursively()
+        context.cacheDir?.listFiles {
+            // But keep the logs
+            it.name != "logs"
+        }?.onEach {
+            it.deleteRecursively()
+        }
         // Clear some settings
         seenInvitesStore.clear()
         // Ensure any error will be displayed again
