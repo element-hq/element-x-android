@@ -8,6 +8,7 @@
 
 package io.element.android.features.messages.impl.timeline.components
 
+import androidx.annotation.StringRes
 import androidx.compose.foundation.border
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -91,6 +92,7 @@ internal fun TimelineItemCallNotifyView(
     }
 }
 
+@StringRes
 private fun getTextRes(
     timelineRoomInfo: TimelineRoomInfo,
     content: TimelineItemRtcNotificationContent
