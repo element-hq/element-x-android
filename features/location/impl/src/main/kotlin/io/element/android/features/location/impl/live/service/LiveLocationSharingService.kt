@@ -68,13 +68,13 @@ class LiveLocationSharingService : Service() {
             Timber.d("LiveLocationSharingService starting foreground service with notificationId=$notificationId")
             ServiceCompat.startForeground(
                 // service =
-                this@LiveLocationSharingService,
+                this,
                 // id =
                 notificationId,
                 // notification =
                 notificationCreator.createNotification(),
                 // foregroundServiceType =
-                FOREGROUND_SERVICE_TYPE_LOCATION
+                FOREGROUND_SERVICE_TYPE_LOCATION,
             )
             startLocationUpdatesListener()
         }.onFailure {

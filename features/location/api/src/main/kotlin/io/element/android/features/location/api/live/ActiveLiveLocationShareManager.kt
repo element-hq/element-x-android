@@ -16,6 +16,11 @@ interface ActiveLiveLocationShareManager {
     /** All rooms currently sharing live location on this device. */
     val sharingRoomIds: StateFlow<Set<RoomId>>
 
+    /**
+     * Initializes the manager.
+     * This will restart or stop current location sharing and set the listener on the SDK
+     * and the session manager.
+     */
     suspend fun setup()
 
     /**
