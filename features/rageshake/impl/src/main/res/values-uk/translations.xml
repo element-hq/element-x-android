@@ -14,5 +14,7 @@
   <string name="screen_bug_report_include_screenshot">"Надіслати знімок екрана"</string>
   <string name="screen_bug_report_logs_description">"Журнали будуть додані до вашого повідомлення, щоб переконатися, що все працює належним чином. Щоб надіслати повідомлення без журналів, вимкніть це налаштування."</string>
   <string name="screen_bug_report_rash_logs_alert_title">"Стався збій %1$s під час останнього користування. Хочете поділитися з нами звітом про збій?"</string>
+  <string name="screen_bug_report_send_notification_settings_description">"Якщо у вас виникають проблеми зі сповіщеннями, надсилання нам правил push-сповіщень допоможе нам визначити першопричину. Зверніть увагу, що ці правила можуть містити приватну інформацію, таку як ваше ім’я користувача або ключові слова, за якими ви отримували сповіщення."</string>
+  <string name="screen_bug_report_send_notification_settings_title">"Налаштування сповіщень"</string>
   <string name="screen_bug_report_view_logs">"Переглянути журнали"</string>
 </resources>

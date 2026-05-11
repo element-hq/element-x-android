@@ -323,7 +323,6 @@
     <item quantity="other">"%1$d svar"</item>
   </plurals>
   <string name="common_replying_to">"Svarer til %1$s"</string>
-  <string name="common_report_a_bug">"Rapportér en fejl"</string>
   <string name="common_report_a_problem">"Anmeld et problem"</string>
   <string name="common_report_submitted">"Anmeldelsen er indsendt"</string>
   <string name="common_rich_text_editor">"Rich text editor"</string>

@@ -324,7 +324,6 @@ Důvod: %1$s."</string>
     <item quantity="other">"%1$d odpovědí"</item>
   </plurals>
   <string name="common_replying_to">"Odpověď na %1$s"</string>
-  <string name="common_report_a_bug">"Nahlásit chybu"</string>
   <string name="common_report_a_problem">"Nahlásit problém"</string>
   <string name="common_report_submitted">"Zpráva odeslána"</string>
   <string name="common_rich_text_editor">"Editor formátovaného textu"</string>

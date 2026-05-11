@@ -309,7 +309,6 @@ Rheswm: %1$s."</string>
     <item quantity="other">"%1$d ateb"</item>
   </plurals>
   <string name="common_replying_to">"Yn ymateb i %1$s"</string>
-  <string name="common_report_a_bug">"Adrodd ar wall"</string>
   <string name="common_report_a_problem">"Adrodd am broblem"</string>
   <string name="common_report_submitted">"Adroddiad wedi ei gyflwyno"</string>
   <string name="common_rich_text_editor">"Golygydd testun cyfoethog"</string>

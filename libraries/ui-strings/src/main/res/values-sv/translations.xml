@@ -281,7 +281,6 @@ Anledning:%1$s."</string>
     <item quantity="other">"%1$d svar"</item>
   </plurals>
   <string name="common_replying_to">"Svarar till %1$s"</string>
-  <string name="common_report_a_bug">"Rapportera en bugg"</string>
   <string name="common_report_a_problem">"Rapportera ett problem"</string>
   <string name="common_report_submitted">"Rapport inskickad"</string>
   <string name="common_rich_text_editor">"Riktextredigerare"</string>

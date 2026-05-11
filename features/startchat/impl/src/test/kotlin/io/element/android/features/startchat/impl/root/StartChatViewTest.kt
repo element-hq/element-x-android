@@ -123,7 +123,6 @@ class StartChatViewTest {
             setStartChatView(
                 aCreateRoomRootState(
                     eventSink = eventsRecorder,
-                    isRoomDirectorySearchEnabled = true
                 ),
                 onRoomDirectorySearchClick = it
             )

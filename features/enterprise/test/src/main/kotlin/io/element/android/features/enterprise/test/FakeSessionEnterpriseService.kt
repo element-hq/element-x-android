@@ -14,8 +14,13 @@ import io.element.android.tests.testutils.simulateLongTask
 
 class FakeSessionEnterpriseService(
     private val isElementCallAvailableResult: () -> Boolean = { lambdaError() },
+    private val tweakMasUrlResult: (String) -> String = { lambdaError() },
 ) : SessionEnterpriseService {
     override suspend fun init() {
+    }
+
+    override suspend fun tweakMasUrl(url: String): String = simulateLongTask {
+        tweakMasUrlResult(url)
     }
 
     override suspend fun isElementCallAvailable(): Boolean = simulateLongTask {

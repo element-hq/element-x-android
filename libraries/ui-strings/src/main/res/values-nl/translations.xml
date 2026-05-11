@@ -250,7 +250,6 @@ Reden: %1$s."</string>
     <item quantity="other">"%1$d antwoorden"</item>
   </plurals>
   <string name="common_replying_to">"Reageren op %1$s"</string>
-  <string name="common_report_a_bug">"Een fout melden"</string>
   <string name="common_report_a_problem">"Meld een probleem"</string>
   <string name="common_report_submitted">"Melding ingediend"</string>
   <string name="common_rich_text_editor">"Uitgebreide tekstverwerker"</string>

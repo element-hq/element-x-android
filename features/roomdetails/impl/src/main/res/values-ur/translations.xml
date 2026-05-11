@@ -43,6 +43,7 @@
   <string name="screen_room_details_error_muting">"اس کمرے کو خاموش کرنے میں ناکام، برائے مہربانی دوبارہ کوشش کریں۔"</string>
   <string name="screen_room_details_error_unmuting">"اس کمرے کو غیر خاموش کرنے میں ناکام، برائے مہربانی دوبارہ کوشش کریں۔"</string>
   <string name="screen_room_details_invite_people_title">"لوگوں کو مدعو کریں"</string>
+  <string name="screen_room_details_invite_title">"مدعو کریں"</string>
   <string name="screen_room_details_leave_conversation_title">"گفتگو چھوڑیں"</string>
   <string name="screen_room_details_leave_room_title">"کمرہ چھوڑ دیں"</string>
   <string name="screen_room_details_notification_mode_custom">"حسب ضرورت"</string>

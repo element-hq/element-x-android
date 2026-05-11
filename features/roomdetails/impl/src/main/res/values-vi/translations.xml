@@ -46,6 +46,7 @@
   <string name="screen_room_details_error_muting">"Không thể tắt tiếng phòng này, vui lòng thử lại."</string>
   <string name="screen_room_details_error_unmuting">"Không thể bật tiếng cho phòng này. Vui lòng thử lại."</string>
   <string name="screen_room_details_invite_people_title">"Mời ai đó"</string>
+  <string name="screen_room_details_invite_title">"Mời"</string>
   <string name="screen_room_details_leave_conversation_title">"Rời khỏi cuộc trò chuyện"</string>
   <string name="screen_room_details_leave_room_title">"Rời phòng"</string>
   <string name="screen_room_details_notification_mode_custom">"Tùy chỉnh"</string>

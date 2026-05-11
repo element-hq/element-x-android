@@ -56,6 +56,7 @@
   <string name="screen_room_details_invite_people_dont_close">"Nezavírejte aplikaci, dokud neskončíte."</string>
   <string name="screen_room_details_invite_people_preparing">"Příprava pozvánek…"</string>
   <string name="screen_room_details_invite_people_title">"Pozvat přátele"</string>
+  <string name="screen_room_details_invite_title">"Pozvat"</string>
   <string name="screen_room_details_leave_conversation_title">"Opustit konverzaci"</string>
   <string name="screen_room_details_leave_room_title">"Opustit místnost"</string>
   <string name="screen_room_details_media_gallery_title">"Média a soubory"</string>

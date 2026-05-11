@@ -7,7 +7,7 @@
   <string name="banner_new_sound_title">"Oleme sinu helisid värskendanud"</string>
   <string name="banner_set_up_recovery_content">"Loo uus taastevõti, mida saad kasutada oma krüptitud sõnumite ajaloo taastamisel olukorras, kus kaotad ligipääsu oma seadmetele."</string>
   <string name="banner_set_up_recovery_submit">"Seadista andmete taastamine"</string>
-  <string name="banner_set_up_recovery_title">"Seadista taastamine"</string>
+  <string name="banner_set_up_recovery_title">"Varunda oma vestlused"</string>
   <string name="confirm_recovery_key_banner_message">"Säilitamaks ligipääsu vestluste ja krüptovõtmete varukoopiale, palun sisesta kinnituseks oma taastevõti."</string>
   <string name="confirm_recovery_key_banner_primary_button_title">"Sisesta oma taastevõti"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Kas unustasid oma taastevõtme?"</string>

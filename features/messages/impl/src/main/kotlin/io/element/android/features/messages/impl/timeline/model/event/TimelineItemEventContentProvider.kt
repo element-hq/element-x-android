@@ -27,7 +27,7 @@ class TimelineItemEventContentProvider : PreviewParameterProvider<TimelineItemEv
         aTimelineItemAudioContent(),
         aTimelineItemAudioContent("An even bigger bigger bigger bigger bigger bigger bigger sound name which doesn't fit .mp3"),
         aTimelineItemVoiceContent(),
-        aTimelineItemLocationContent(),
+        aTimelineItemLocationContent(mode = aStaticLocationMode()),
         aTimelineItemPollContent(),
         aTimelineItemNoticeContent(),
         aTimelineItemRedactedContent(),
@@ -36,7 +36,7 @@ class TimelineItemEventContentProvider : PreviewParameterProvider<TimelineItemEv
         aTimelineItemTextContent().copy(isEdited = true),
         aTimelineItemTextContent(body = AN_EMOJI_ONLY_TEXT),
         aTimelineItemLocationContent(
-            mode = TimelineItemLocationContent.Mode.Live(isActive = true, endsAt = "Ends at 12:34", endTimestamp = 0L, lastKnownLocation = null)
+            mode = aLiveLocationMode(isActive = true, endsAt = "Ends at 12:34", endTimestamp = 0L, lastKnownLocation = null)
         ),
     )
 }

@@ -58,6 +58,7 @@ import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import io.element.android.wysiwyg.compose.EditorStyledText
 import io.element.android.wysiwyg.link.Link
 
+private const val TALL_IMAGE_RATIO_DIVISOR = 3
 @Composable
 fun TimelineItemImageView(
     content: TimelineItemImageContent,
@@ -79,7 +80,7 @@ fun TimelineItemImageView(
             Modifier
         }
         TimelineItemAspectRatioBox(
-            modifier = containerModifier.blurHashBackground(content.blurhash, alpha = 0.9f),
+            modifier = containerModifier.blurHashBackground(content.blurhash, alpha = 0.9f).align(Alignment.CenterHorizontally),
             aspectRatio = coerceRatioWhenHidingContent(content.aspectRatio, hideMediaContent),
         ) {
             ProtectedView(
@@ -123,7 +124,14 @@ fun TimelineItemImageView(
                 LocalContentColor provides ElementTheme.colors.textPrimary,
                 LocalTextStyle provides ElementTheme.typography.fontBodyLgRegular
             ) {
-                val aspectRatio = content.aspectRatio ?: DEFAULT_ASPECT_RATIO
+                val width = content.width ?: 0
+                val height = content.height ?: 0
+                // if image is narrow and tall use DEFAULT_ASPECT_RATIO
+                val aspectRatio = if (width < height / TALL_IMAGE_RATIO_DIVISOR) {
+                    DEFAULT_ASPECT_RATIO
+                } else {
+                    content.aspectRatio ?: DEFAULT_ASPECT_RATIO
+                }
                 EditorStyledText(
                     modifier = Modifier
                         .padding(horizontal = 4.dp) // This is (12.dp - 8.dp) contentPadding from CommonLayout
@@ -193,6 +201,41 @@ internal fun TimelineImageWithCaptionRowPreview() = ElementPreview {
                 content = aTimelineItemImageContent(
                     filename = "image.jpg",
                     caption = "Image with null aspectRatio",
+                    aspectRatio = null,
+                ),
+                groupPosition = TimelineItemGroupPosition.Last,
+            ),
+        )
+    }
+}
+
+@PreviewsDayNight
+@Composable
+internal fun ATimelineItemEventRowPreview() = ElementPreview {
+    Column {
+        sequenceOf(false, true).forEach { isMine ->
+            ATimelineItemEventRow(
+                event = aTimelineItemEvent(
+                    isMine = isMine,
+                    content = aTimelineItemImageContent(
+                        filename = "image.jpg",
+                        caption = "A long caption that may wrap into several lines",
+                        width = 80,
+                        height = 300,
+                        aspectRatio = 80f / 300f,
+                    ),
+                    groupPosition = TimelineItemGroupPosition.Last,
+                ),
+            )
+        }
+        ATimelineItemEventRow(
+            event = aTimelineItemEvent(
+                isMine = false,
+                content = aTimelineItemImageContent(
+                    filename = "image.jpg",
+                    caption = "Narrow image with null aspectRatio",
+                    width = 80,
+                    height = 300,
                     aspectRatio = null,
                 ),
                 groupPosition = TimelineItemGroupPosition.Last,

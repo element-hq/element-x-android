@@ -56,5 +56,13 @@
   <string name="screen_room_timeline_tombstoned_room_message">"این اتاق جایگزین شده و دیگر فعّال نیست"</string>
   <string name="screen_room_timeline_upgraded_room_action">"دیدن پیام‌های قدیمی"</string>
   <string name="screen_room_timeline_upgraded_room_message">"این اتاق ادامهٔ اتاقی دیگر است"</string>
+  <plurals name="screen_room_typing_many_members">
+    <item quantity="one">"%1$s، %2$s و %3$d سایر"</item>
+    <item quantity="other">"%1$s، %2$s و %3$d موارد دیگر"</item>
+  </plurals>
+  <plurals name="screen_room_typing_notification">
+    <item quantity="one">"%1$s در حال تایپ است"</item>
+    <item quantity="other">"%1$s در حال تایپ هستند"</item>
+  </plurals>
   <string name="screen_room_typing_two_members">"%1$s و %2$s"</string>
 </resources>

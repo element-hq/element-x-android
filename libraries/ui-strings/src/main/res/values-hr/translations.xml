@@ -330,7 +330,6 @@ Razlog: %1$s ."</string>
     <item quantity="other">"%1$d odgovora"</item>
   </plurals>
   <string name="common_replying_to">"Odgovara korisniku %1$s"</string>
-  <string name="common_report_a_bug">"Prijavi pogrešku"</string>
   <string name="common_report_a_problem">"Prijavi problem"</string>
   <string name="common_report_submitted">"Prijava je podnesena"</string>
   <string name="common_rich_text_editor">"Uređivač obogaćenog teksta"</string>
