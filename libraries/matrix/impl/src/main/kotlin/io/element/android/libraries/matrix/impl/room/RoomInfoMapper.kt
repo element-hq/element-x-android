@@ -58,6 +58,7 @@ class RoomInfoMapper {
             activeMembersCount = it.activeMembersCount.toLong(),
             invitedMembersCount = it.invitedMembersCount.toLong(),
             joinedMembersCount = it.joinedMembersCount.toLong(),
+            serviceMembers = it.serviceMembers.map(::UserId).toImmutableList(),
             roomPowerLevels = it.powerLevels?.let(::mapPowerLevels),
             highlightCount = it.highlightCount.toLong(),
             notificationCount = it.notificationCount.toLong(),

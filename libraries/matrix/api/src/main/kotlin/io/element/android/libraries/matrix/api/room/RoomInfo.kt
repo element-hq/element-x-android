@@ -47,6 +47,7 @@ data class RoomInfo(
     val activeMembersCount: Long,
     val invitedMembersCount: Long,
     val joinedMembersCount: Long,
+    val serviceMembers: ImmutableList<UserId>,
     val roomPowerLevels: RoomPowerLevels?,
     val highlightCount: Long,
     val notificationCount: Long,

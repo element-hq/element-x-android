@@ -18,7 +18,8 @@ import org.matrix.rustcomponents.sdk.RoomInfo
  */
 fun RoomInfo.elementHeroes(): List<MatrixUser> {
     return heroes
-        .takeIf { isDirect && activeMembersCount.toLong() == 2L }
+        .takeIf { isDirect && (activeMembersCount - serviceMembers.size.toULong()) == 2UL }
+        ?.filter { !serviceMembers.contains(it.userId) }
         ?.takeIf { it.size == 1 }
         ?.map { it.map() }
         .orEmpty()
