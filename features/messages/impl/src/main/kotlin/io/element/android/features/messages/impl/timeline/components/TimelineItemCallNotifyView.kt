@@ -125,21 +125,23 @@ private fun getIcon(
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemCallNotifyViewPreview() = ElementPreview {
-    Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        listOf(
-            aTimelineRoomInfo() to TimelineItemRtcNotificationContent(CallIntent.AUDIO, RtcNotificationState.Started),
-            aTimelineRoomInfo() to TimelineItemRtcNotificationContent(CallIntent.VIDEO, RtcNotificationState.Started),
-            aTimelineRoomInfo(isDm = true) to TimelineItemRtcNotificationContent(CallIntent.AUDIO, RtcNotificationState.Declined(false)),
-            aTimelineRoomInfo(isDm = true) to TimelineItemRtcNotificationContent(CallIntent.VIDEO, RtcNotificationState.Declined(false)),
-            aTimelineRoomInfo(isDm = true) to TimelineItemRtcNotificationContent(CallIntent.VIDEO, RtcNotificationState.Declined(true)),
-            aTimelineRoomInfo(isDm = false) to TimelineItemRtcNotificationContent(CallIntent.VIDEO, RtcNotificationState.Started),
-        ).forEach { (info, content) ->
-            TimelineItemCallNotifyView(
-                timelineRoomInfo = info,
-                event = aTimelineItemEvent(content = content),
-                content = content,
-                onLongClick = {},
-            )
+    Column(modifier = Modifier.padding(2.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+        listOf(false, true).forEach { isDm ->
+            listOf(CallIntent.AUDIO, CallIntent.VIDEO).forEach { callIntent ->
+                listOf(
+                    RtcNotificationState.Started,
+                    RtcNotificationState.Declined(byMe = false),
+                    RtcNotificationState.Declined(byMe = true),
+                ).forEach { state ->
+                    val content = TimelineItemRtcNotificationContent(callIntent, state)
+                    TimelineItemCallNotifyView(
+                        timelineRoomInfo = aTimelineRoomInfo(isDm = isDm),
+                        event = aTimelineItemEvent(content = content),
+                        content = content,
+                        onLongClick = {},
+                    )
+                }
+            }
         }
     }
 }
