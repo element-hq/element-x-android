@@ -643,6 +643,44 @@ class MessagesViewTest {
         assertNoNodeWithText(R.string.screen_room_timeline_tombstoned_room_message)
         assertNoNodeWithText(R.string.screen_room_timeline_tombstoned_room_action)
     }
+
+    @Test
+    fun `live location banner is visible when current room is sharing`() = runAndroidComposeUiTest {
+        val state = aMessagesState(isCurrentlySharingLiveLocationInRoom = true)
+        setMessagesView(state = state)
+        onNodeWithText(activity!!.getString(CommonStrings.screen_room_live_location_banner)).assertExists()
+    }
+
+    @Test
+    fun `live location banner is hidden when current room is not sharing`() = runAndroidComposeUiTest {
+        val state = aMessagesState(isCurrentlySharingLiveLocationInRoom = false)
+        setMessagesView(state = state)
+        onNodeWithText(activity!!.getString(CommonStrings.screen_room_live_location_banner)).assertDoesNotExist()
+    }
+
+    @Test
+    fun `clicking stop on live location banner emits expected event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<MessagesEvent>()
+        val state = aMessagesState(
+            isCurrentlySharingLiveLocationInRoom = true,
+            eventSink = eventsRecorder,
+        )
+        setMessagesView(state = state)
+        clickOn(CommonStrings.action_stop)
+        eventsRecorder.assertSingle(MessagesEvent.StopLiveLocationShare)
+    }
+
+    @Test
+    fun `clicking live location banner emit expected event`() = runAndroidComposeUiTest {
+        val eventsRecorder = EventsRecorder<MessagesEvent>()
+        val state = aMessagesState(
+            isCurrentlySharingLiveLocationInRoom = true,
+            eventSink = eventsRecorder,
+        )
+        setMessagesView(state = state)
+        clickOn(CommonStrings.screen_room_live_location_banner)
+        eventsRecorder.assertSingle(MessagesEvent.ShowLiveLocationShare)
+    }
 }
 
 private fun AndroidComposeUiTest<ComponentActivity>.setMessagesView(

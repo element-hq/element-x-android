@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -44,6 +45,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun LocationShareRow(
     item: LocationShareItem,
     onShareClick: () -> Unit,
+    onStopClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -101,11 +103,24 @@ fun LocationShareRow(
                 )
             }
         }
+        if (item.canStopSharing) {
+            IconButton(
+                onClick = onStopClick,
+                colors = IconButtonDefaults.iconButtonColors(
+                    containerColor = ElementTheme.colors.bgCriticalPrimary,
+                    contentColor = ElementTheme.colors.iconOnSolidPrimary,
+                )
+            ) {
+                Icon(
+                    imageVector = CompoundIcons.Stop(),
+                    contentDescription = stringResource(CommonStrings.action_stop),
+                )
+            }
+        }
         IconButton(onClick = onShareClick) {
             Icon(
                 imageVector = CompoundIcons.ShareAndroid(),
                 contentDescription = stringResource(CommonStrings.action_share),
-                tint = ElementTheme.colors.iconPrimary,
             )
         }
     }
@@ -128,8 +143,10 @@ internal fun LocationShareRowPreview() = ElementPreview {
                 formattedTimestamp = "Shared 1 min ago",
                 isLive = true,
                 assetType = AssetType.SENDER,
-                location = Location(0.0, 0.0)
+                location = Location(0.0, 0.0),
+                isOwnUser = true,
             ),
+            onStopClick = {},
             onShareClick = {},
         )
         LocationShareRow(
@@ -145,8 +162,10 @@ internal fun LocationShareRowPreview() = ElementPreview {
                 isLive = false,
                 assetType = AssetType.PIN,
                 formattedTimestamp = "Shared 5 hours ago",
-                location = Location(0.0, 0.0)
+                location = Location(0.0, 0.0),
+                isOwnUser = false
             ),
+            onStopClick = {},
             onShareClick = {},
         )
     }

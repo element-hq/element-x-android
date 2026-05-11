@@ -23,6 +23,9 @@ interface AppPreferencesStore {
     suspend fun setTheme(theme: String)
     fun getThemeFlow(): Flow<String?>
 
+    suspend fun setLiveLocationMinimumDistanceInMetersUpdate(value: Int)
+    fun getLiveLocationMinimumDistanceInMetersUpdateFlow(): Flow<Int>
+
     @Deprecated("Use MediaPreviewService instead. Kept only for migration.")
     suspend fun setHideInviteAvatars(hide: Boolean?)
     @Deprecated("Use MediaPreviewService instead. Kept only for migration.")

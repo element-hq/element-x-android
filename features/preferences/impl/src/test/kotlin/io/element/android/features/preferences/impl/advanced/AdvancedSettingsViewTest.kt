@@ -250,6 +250,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setAdvancedSettingsView(
     state: AdvancedSettingsState,
     analyticsService: AnalyticsService = FakeAnalyticsService(),
     onBackClick: () -> Unit = EnsureNeverCalled(),
+    onOpenAppSettings: () -> Unit = EnsureNeverCalled(),
 ) {
     setContent {
         CompositionLocalProvider(
@@ -258,6 +259,7 @@ private fun AndroidComposeUiTest<ComponentActivity>.setAdvancedSettingsView(
             AdvancedSettingsView(
                 state = state,
                 onBackClick = onBackClick,
+                onOpenAppSettingsClick = onOpenAppSettings
             )
         }
     }

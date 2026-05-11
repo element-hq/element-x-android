@@ -17,6 +17,7 @@ import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.media.MediaPreviewValue
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
 import io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore
 import io.element.android.libraries.preferences.test.InMemorySessionPreferencesStore
@@ -210,6 +211,72 @@ class AdvancedSettingsPresenterTest {
     }
 
     @Test
+    fun `present - live location minimum distance is null when feature is disabled`() = runTest {
+        val appPreferencesStore = InMemoryAppPreferencesStore(
+            liveLocationMinimumDistanceUpdate = 50,
+        )
+        val featureFlagService = FakeFeatureFlagService().apply {
+            setFeatureEnabled(FeatureFlags.LiveLocationSharing, false)
+        }
+        val presenter = createAdvancedSettingsPresenter(appPreferencesStore = appPreferencesStore, featureFlagService = featureFlagService)
+
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+            with(awaitItem()) {
+                assertThat(liveLocationMinimumDistanceUpdate).isNull()
+            }
+        }
+    }
+
+    @Test
+    fun `present - exposes live location minimum distance from app preferences`() = runTest {
+        val appPreferencesStore = InMemoryAppPreferencesStore(
+            liveLocationMinimumDistanceUpdate = 50,
+        )
+        val featureFlagService = FakeFeatureFlagService().apply {
+            setFeatureEnabled(FeatureFlags.LiveLocationSharing, true)
+        }
+        val presenter = createAdvancedSettingsPresenter(appPreferencesStore = appPreferencesStore, featureFlagService = featureFlagService)
+
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+
+            with(awaitItem()) {
+                assertThat(liveLocationMinimumDistanceUpdate).isEqualTo(50)
+            }
+        }
+    }
+
+    @Test
+    fun `present - saving live location minimum distance updates app preferences`() = runTest {
+        val appPreferencesStore = InMemoryAppPreferencesStore(
+            liveLocationMinimumDistanceUpdate = 10,
+        )
+        val featureFlagService = FakeFeatureFlagService().apply {
+            setFeatureEnabled(FeatureFlags.LiveLocationSharing, true)
+        }
+        val presenter = createAdvancedSettingsPresenter(appPreferencesStore = appPreferencesStore, featureFlagService = featureFlagService)
+
+        moleculeFlow(RecompositionMode.Immediate) {
+            presenter.present()
+        }.test {
+            skipItems(1)
+
+            with(awaitItem()) {
+                assertThat(liveLocationMinimumDistanceUpdate).isEqualTo(10)
+                eventSink(AdvancedSettingsEvents.SetLiveLocationMinimumDistanceUpdate(42))
+            }
+            with(awaitItem()) {
+                assertThat(liveLocationMinimumDistanceUpdate).isEqualTo(42)
+            }
+        }
+    }
+
+    @Test
     fun `present - black theme option shown when feature flag enabled`() = runTest {
         val presenter = createAdvancedSettingsPresenter(
             featureFlagService = FakeFeatureFlagService().apply {
@@ -338,7 +405,7 @@ class AdvancedSettingsPresenterTest {
     }
 
     private fun CoroutineScope.createAdvancedSettingsPresenter(
-        appPreferencesStore: InMemoryAppPreferencesStore = InMemoryAppPreferencesStore(),
+        appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
         sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
         mediaPreviewConfigStateStore: MediaPreviewConfigStateStore = FakeMediaPreviewConfigStateStore(),
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),

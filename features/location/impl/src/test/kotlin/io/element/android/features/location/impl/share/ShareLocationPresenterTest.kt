@@ -10,6 +10,9 @@
 
 package io.element.android.features.location.impl.share
 
+import androidx.datastore.core.DataStore
+import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.emptyPreferences
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
 import app.cash.turbine.test
@@ -22,28 +25,46 @@ import io.element.android.features.location.impl.common.permissions.FakePermissi
 import io.element.android.features.location.impl.common.permissions.PermissionsEvents
 import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
+import io.element.android.features.location.impl.live.LiveLocationStore
+import io.element.android.features.location.test.FakeActiveLiveLocationShareManager
 import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.libraries.dateformatter.test.FakeDurationFormatter
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
+import io.element.android.libraries.matrix.api.core.RoomId
+import io.element.android.libraries.matrix.api.core.SessionId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
+import io.element.android.libraries.matrix.api.room.MessageEventType
+import io.element.android.libraries.matrix.api.room.StateEventType
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.Timeline
+import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_SESSION_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.core.aBuildMeta
+import io.element.android.libraries.matrix.test.room.FakeBaseRoom
 import io.element.android.libraries.matrix.test.room.FakeJoinedRoom
+import io.element.android.libraries.matrix.test.room.powerlevels.FakeRoomPermissions
 import io.element.android.libraries.matrix.test.timeline.FakeTimeline
+import io.element.android.libraries.preferences.api.store.PreferenceDataStoreFactory
+import io.element.android.libraries.preferences.test.FakePreferenceDataStoreFactory
 import io.element.android.services.analytics.test.FakeAnalyticsService
 import io.element.android.tests.testutils.WarmUpRule
+import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.lambda.value
 import io.element.android.tests.testutils.test
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import org.junit.Rule
 import org.junit.Test
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.hours
 
 class ShareLocationPresenterTest {
     @get:Rule
@@ -59,9 +80,11 @@ class ShareLocationPresenterTest {
 
     private val durationFormatter = FakeDurationFormatter()
 
-    private fun createShareLocationPresenter(
+    private fun TestScope.createShareLocationPresenter(
         joinedRoom: JoinedRoom = FakeJoinedRoom(),
         locationActions: FakeLocationActions = fakeLocationActions,
+        liveLocationShareManager: FakeActiveLiveLocationShareManager = FakeActiveLiveLocationShareManager(),
+        liveLocationStore: LiveLocationStore = createLiveLocationStore(sessionId = joinedRoom.sessionId),
     ): ShareLocationPresenter = ShareLocationPresenter(
         permissionsPresenterFactory = { fakePermissionsPresenter },
         room = joinedRoom,
@@ -73,6 +96,8 @@ class ShareLocationPresenterTest {
         featureFlagService = fakeFeatureFlagService,
         client = fakeMatrixClient,
         durationFormatter = durationFormatter,
+        liveLocationShareManager = liveLocationShareManager,
+        liveLocationStore = liveLocationStore,
     )
 
     @Test
@@ -296,7 +321,15 @@ class ShareLocationPresenterTest {
 
     @Test
     fun `ShowLiveLocationDurationPicker shows duration dialog when constraints pass`() = runTest {
-        val shareLocationPresenter = createShareLocationPresenter()
+        val joinedRoom = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
+                roomPermissions = grantedSendLiveLocationPermissions()
+            )
+        )
+        val locationStore = createLiveLocationStore(sessionId = joinedRoom.sessionId).apply {
+            setAcceptedLiveLocationDisclaimer().getOrThrow()
+        }
+        val shareLocationPresenter = createShareLocationPresenter(joinedRoom = joinedRoom, liveLocationStore = locationStore)
         fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.AllGranted,
@@ -307,7 +340,7 @@ class ShareLocationPresenterTest {
         shareLocationPresenter.test {
             skipItems(1)
             val initialState = awaitItem()
-            initialState.eventSink(ShareLocationEvent.ShowLiveLocationDurationPicker)
+            initialState.eventSink(ShareLocationEvent.InitiateLiveLocationShare)
             val durationDialogState = awaitItem()
 
             assertThat(durationDialogState.dialogState).isInstanceOf(ShareLocationState.Dialog.LiveLocationDurations::class.java)
@@ -316,8 +349,154 @@ class ShareLocationPresenterTest {
     }
 
     @Test
+    fun `ShowLiveLocationDurationPicker shows disclaimer when acceptance is missing`() = runTest {
+        val presenter = createShareLocationPresenter()
+        fakePermissionsPresenter.givenState(
+            aPermissionsState(
+                permissions = PermissionsState.Permissions.AllGranted,
+                shouldShowRationale = false,
+            )
+        )
+
+        presenter.test {
+            skipItems(1)
+            val state = awaitItem()
+
+            state.eventSink(ShareLocationEvent.InitiateLiveLocationShare)
+            val dialogState = awaitItem()
+
+            assertThat(dialogState.dialogState).isEqualTo(ShareLocationState.Dialog.LiveLocationDisclaimer)
+        }
+    }
+
+    @Test
+    fun `AcceptLiveLocationDisclaimer persists acceptance and shows durations`() = runTest {
+        val joinedRoom = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
+                roomPermissions = grantedSendLiveLocationPermissions()
+            )
+        )
+        val locationStore = createLiveLocationStore(sessionId = joinedRoom.sessionId)
+        val presenter = createShareLocationPresenter(joinedRoom = joinedRoom, liveLocationStore = locationStore)
+        fakePermissionsPresenter.givenState(
+            aPermissionsState(
+                permissions = PermissionsState.Permissions.AllGranted,
+                shouldShowRationale = false,
+            )
+        )
+
+        presenter.test {
+            skipItems(1)
+            val state = awaitItem()
+            state.eventSink(ShareLocationEvent.InitiateLiveLocationShare)
+            awaitItem()
+
+            state.eventSink(ShareLocationEvent.AcceptLiveLocationDisclaimer)
+            val durationState = awaitItem()
+
+            assertThat(locationStore.hasAcceptedLiveLocationDisclaimer()).isTrue()
+            assertThat(durationState.dialogState).isInstanceOf(ShareLocationState.Dialog.LiveLocationDurations::class.java)
+        }
+    }
+
+    @Test
+    fun `AcceptLiveLocationDisclaimer keeps disclaimer gate active when persistence fails`() = runTest {
+        val joinedRoom = FakeJoinedRoom()
+        val presenter = createShareLocationPresenter(
+            joinedRoom = joinedRoom,
+            liveLocationStore = createFailingLiveLocationStore(sessionId = joinedRoom.sessionId),
+        )
+        fakePermissionsPresenter.givenState(
+            aPermissionsState(
+                permissions = PermissionsState.Permissions.AllGranted,
+                shouldShowRationale = false,
+            )
+        )
+
+        presenter.test {
+            skipItems(1)
+            val state = awaitItem()
+            state.eventSink(ShareLocationEvent.InitiateLiveLocationShare)
+            val disclaimerState = awaitItem()
+
+            disclaimerState.eventSink(ShareLocationEvent.AcceptLiveLocationDisclaimer)
+            advanceUntilIdle()
+
+            expectNoEvents()
+        }
+    }
+
+    @Test
+    fun `ShowLiveLocationDurationPicker bypasses disclaimer when already accepted`() = runTest {
+        val joinedRoom = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
+                roomPermissions = grantedSendLiveLocationPermissions()
+            )
+        )
+        val locationStore = createLiveLocationStore(sessionId = joinedRoom.sessionId).apply {
+            setAcceptedLiveLocationDisclaimer().getOrThrow()
+        }
+        val presenter = createShareLocationPresenter(joinedRoom = joinedRoom, liveLocationStore = locationStore)
+        fakePermissionsPresenter.givenState(
+            aPermissionsState(
+                permissions = PermissionsState.Permissions.AllGranted,
+                shouldShowRationale = false,
+            )
+        )
+
+        presenter.test {
+            skipItems(1)
+            val state = awaitItem()
+
+            state.eventSink(ShareLocationEvent.InitiateLiveLocationShare)
+            val durationState = awaitItem()
+
+            assertThat(durationState.dialogState).isInstanceOf(ShareLocationState.Dialog.LiveLocationDurations::class.java)
+        }
+    }
+
+    @Test
+    fun `ShowLiveLocationDurationPicker uses the active session disclaimer state`() = runTest {
+        val joinedRoom = FakeJoinedRoom(baseRoom = FakeBaseRoom(sessionId = SessionId("@alice:server")))
+        createLiveLocationStore(sessionId = SessionId("@bob:server"))
+            .setAcceptedLiveLocationDisclaimer()
+            .getOrThrow()
+        val presenter = createShareLocationPresenter(
+            joinedRoom = joinedRoom,
+            liveLocationStore = createLiveLocationStore(sessionId = joinedRoom.sessionId),
+        )
+        fakePermissionsPresenter.givenState(
+            aPermissionsState(
+                permissions = PermissionsState.Permissions.AllGranted,
+                shouldShowRationale = false,
+            )
+        )
+
+        presenter.test {
+            skipItems(1)
+            val state = awaitItem()
+
+            state.eventSink(ShareLocationEvent.InitiateLiveLocationShare)
+            val dialogState = awaitItem()
+
+            assertThat(dialogState.dialogState).isEqualTo(ShareLocationState.Dialog.LiveLocationDisclaimer)
+        }
+    }
+
+    @Test
     fun `ShowLiveLocationDurationPicker shows constraint dialog when permissions denied`() = runTest {
-        val shareLocationPresenter = createShareLocationPresenter()
+        val joinedRoom = FakeJoinedRoom(
+            baseRoom = FakeBaseRoom(
+                roomPermissions = grantedSendLiveLocationPermissions()
+            )
+        )
+        val locationStore = createLiveLocationStore(sessionId = joinedRoom.sessionId).apply {
+            setAcceptedLiveLocationDisclaimer().getOrThrow()
+        }
+        val shareLocationPresenter = createShareLocationPresenter(
+            joinedRoom = joinedRoom,
+            liveLocationStore = locationStore,
+        )
         fakePermissionsPresenter.givenState(
             aPermissionsState(
                 permissions = PermissionsState.Permissions.NoneGranted,
@@ -332,7 +511,7 @@ class ShareLocationPresenterTest {
             initialState.eventSink(ShareLocationEvent.DismissDialog)
             val dismissedState = awaitItem()
 
-            dismissedState.eventSink(ShareLocationEvent.ShowLiveLocationDurationPicker)
+            dismissedState.eventSink(ShareLocationEvent.InitiateLiveLocationShare)
             val constraintDialogState = awaitItem()
 
             assertThat(constraintDialogState.dialogState).isEqualTo(
@@ -447,4 +626,62 @@ class ShareLocationPresenterTest {
             cancelAndIgnoreRemainingEvents()
         }
     }
+
+    @Test
+    fun `StartLiveLocationShare event calls manager startShare`() = runTest {
+        val startShareLambda = lambdaRecorder { _: RoomId, _: Duration -> Result.success(Unit) }
+        val manager = FakeActiveLiveLocationShareManager(
+            startShareLambda = startShareLambda,
+        )
+        val shareLocationPresenter = createShareLocationPresenter(liveLocationShareManager = manager)
+        fakePermissionsPresenter.givenState(
+            aPermissionsState(
+                permissions = PermissionsState.Permissions.AllGranted,
+                shouldShowRationale = false,
+            )
+        )
+
+        shareLocationPresenter.test {
+            skipItems(1)
+            val state = awaitItem()
+            state.eventSink(ShareLocationEvent.StartLiveLocationShare(duration = 1.hours))
+            advanceUntilIdle()
+            assert(startShareLambda).isCalledOnce().with(
+                value(A_ROOM_ID),
+                value(1.hours)
+            )
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
 }
+
+private fun createLiveLocationStore(
+    sessionId: SessionId = A_SESSION_ID,
+    preferenceDataStoreFactory: PreferenceDataStoreFactory = FakePreferenceDataStoreFactory(),
+): LiveLocationStore {
+    return LiveLocationStore(
+        preferenceDataStoreFactory = preferenceDataStoreFactory,
+        sessionId = sessionId,
+    )
+}
+
+private fun createFailingLiveLocationStore(sessionId: SessionId = A_SESSION_ID): LiveLocationStore {
+    val failingPreferenceDataStoreFactory = object : PreferenceDataStoreFactory {
+        override fun create(name: String): DataStore<Preferences> = object : DataStore<Preferences> {
+            override val data: Flow<Preferences> = flowOf(emptyPreferences())
+
+            override suspend fun updateData(transform: suspend (t: Preferences) -> Preferences): Preferences {
+                error("Failed to update preferences")
+            }
+        }
+    }
+    return createLiveLocationStore(
+        sessionId = sessionId,
+        preferenceDataStoreFactory = failingPreferenceDataStoreFactory,
+    )
+}
+
+private fun grantedSendLiveLocationPermissions(): FakeRoomPermissions = FakeRoomPermissions(
+    canSendState = { it is StateEventType.BeaconInfo },
+    canSendMessage = { it is MessageEventType.Beacon }
+)
