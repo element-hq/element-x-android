@@ -69,6 +69,7 @@
   <string name="action_call">"Helista"</string>
   <string name="action_cancel">"Loobu"</string>
   <string name="action_cancel_for_now">"Hetkel jäta tegemata"</string>
+  <string name="action_choose_file">"Vali fail"</string>
   <string name="action_choose_photo">"Vali foto"</string>
   <string name="action_clear">"Selge"</string>
   <string name="action_close">"Sulge"</string>
@@ -88,12 +89,15 @@
   <string name="action_deactivate_account">"Eemalda konto kasutusest"</string>
   <string name="action_decline">"Keeldu"</string>
   <string name="action_decline_and_block">"Keeldu ja blokeeri"</string>
+  <string name="action_delete">"Kustuta"</string>
+  <string name="action_delete_account">"Kustuta kasutajakonto"</string>
   <string name="action_delete_poll">"Kustuta küsitlus"</string>
   <string name="action_deselect_all">"Eemalda kõik valikud"</string>
   <string name="action_disable">"Lülita välja"</string>
   <string name="action_discard">"Loobu"</string>
   <string name="action_dismiss">"Lõpeta"</string>
   <string name="action_done">"Valmis"</string>
+  <string name="action_download">"Laadi alla"</string>
   <string name="action_edit">"Muuda"</string>
   <string name="action_edit_caption">"Muuda selgitust"</string>
   <string name="action_edit_poll">"Muuda küsitlust"</string>
@@ -201,7 +205,9 @@
   <string name="common_beta">"Beetaversioon"</string>
   <string name="common_blocked_users">"Blokeeritud kasutajad"</string>
   <string name="common_bubbles">"Mullid"</string>
+  <string name="common_call_declined">"Osapool keeldus kõnest"</string>
   <string name="common_call_started">"Kõne algas"</string>
+  <string name="common_call_you_declined">"Sa keeldusid kõnest"</string>
   <string name="common_chat_backup">"Vestluse varukoopia"</string>
   <string name="common_copied_to_clipboard">"Kopeeritud lõikelauale"</string>
   <string name="common_copyright">"Autoriõigused"</string>
@@ -253,6 +259,8 @@ Põhjus: %1$s."</string>
   <string name="common_line_copied_to_clipboard">"Rida on kopeeritud lõikelauale"</string>
   <string name="common_link_copied_to_clipboard">"Link on kopeeritud lõikelauale"</string>
   <string name="common_link_new_device">"Seo uus seade"</string>
+  <string name="common_live_location">"Asukoha jagamine reaalajas"</string>
+  <string name="common_live_location_ended">"Reaalajas asukoha jagamine on lõppenud"</string>
   <string name="common_loading">"Laadime…"</string>
   <string name="common_loading_more">"Laadime veel…"</string>
   <plurals name="common_many_members">
@@ -279,6 +287,7 @@ Põhjus: %1$s."</string>
   <string name="common_offline">"Võrgust väljas"</string>
   <string name="common_open_source_licenses">"Avatud lähtekoodiga litsentsid"</string>
   <string name="common_or">"või"</string>
+  <string name="common_other_options">"Muud valikud"</string>
   <string name="common_password">"Salasõna"</string>
   <string name="common_people">"Inimesed"</string>
   <string name="common_permalink">"Püsilink"</string>
@@ -313,7 +322,6 @@ Põhjus: %1$s."</string>
     <item quantity="other">"%1$d vastust"</item>
   </plurals>
   <string name="common_replying_to">"Vastates kasutajale %1$s"</string>
-  <string name="common_report_a_bug">"Teata veast"</string>
   <string name="common_report_a_problem">"Teata veast"</string>
   <string name="common_report_submitted">"Veateade on saadetud"</string>
   <string name="common_rich_text_editor">"Vormindatud teksti toimeti"</string>
@@ -401,6 +409,7 @@ Põhjus: %1$s."</string>
   <string name="common_voice_message">"Häälsõnum"</string>
   <string name="common_waiting">"Ootame…"</string>
   <string name="common_waiting_for_decryption_key">"Ootame selle sõnumi dekrüptimisvõtit"</string>
+  <string name="common_waiting_live_location">"Ootan asukoha jagamist reaalajas…"</string>
   <string name="common_world_readable_history">"Kõik võivad ajalugu näha"</string>
   <string name="common_you">"Sina"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"Kuna sind polnud saatmise ajal jututoas, siis %1$s (%2$s) jagas seda sõnumit sinuga."</string>
@@ -461,6 +470,11 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="screen_create_poll_settings_section_title">"Seadistused"</string>
   <string name="screen_live_location_sheet_nobody_sharing">"Mitte keegi ei jaga oma asukohta"</string>
   <string name="screen_live_location_sheet_sharing_live_location">"Asukoht on jagamisel reaalajas"</string>
+  <plurals name="screen_live_location_sheet_subtitle">
+    <item quantity="one">"%1$d isik"</item>
+    <item quantity="other">"%1$d isikut"</item>
+  </plurals>
+  <string name="screen_live_location_sheet_title">"Kaardil"</string>
   <string name="screen_media_picker_error_failed_selection">"Meediafaili valimine ei õnnestunud. Palun proovi uuesti."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Siia lisamiseks vajuta sõnumil ja vali „%1$s“."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Et olulisi sõnumeid oleks lihtsam leida, tõsta nad esile"</string>
@@ -485,6 +499,7 @@ Kas sa oled kindel, et soovid jätkata?"</string>
   <string name="screen_room_event_pill">"Sõnum jututoas %1$s"</string>
   <string name="screen_room_grouped_state_events_expand">"Näita rohkem"</string>
   <string name="screen_room_grouped_state_events_reduce">"Näita vähem"</string>
+  <string name="screen_room_live_location_banner">"Asukoht on jagamisel reaalajas"</string>
   <string name="screen_room_permalink_same_room_android">"Sa juba vaatad seda jututuba!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s / %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s esiletõstetud sõnumit"</string>

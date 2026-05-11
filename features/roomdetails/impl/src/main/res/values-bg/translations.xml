@@ -33,6 +33,7 @@
   <string name="screen_room_details_error_muting">"Неуспешно заглушаване на тази стая, моля, опитайте отново."</string>
   <string name="screen_room_details_error_unmuting">"Неуспешно раззаглушаване на тази стая, моля, опитайте отново."</string>
   <string name="screen_room_details_invite_people_title">"Поканване на хора"</string>
+  <string name="screen_room_details_invite_title">"Поканване"</string>
   <string name="screen_room_details_leave_conversation_title">"Напускане на разговора"</string>
   <string name="screen_room_details_leave_room_title">"Напускане на стаята"</string>
   <string name="screen_room_details_media_gallery_title">"Медия и файлове"</string>

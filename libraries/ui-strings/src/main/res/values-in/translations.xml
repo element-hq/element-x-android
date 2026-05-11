@@ -275,7 +275,6 @@ Alasan: %1$s."</string>
     <item quantity="other">"%1$d balasan"</item>
   </plurals>
   <string name="common_replying_to">"Membalas %1$s"</string>
-  <string name="common_report_a_bug">"Laporkan kutu"</string>
   <string name="common_report_a_problem">"Laporkan masalah"</string>
   <string name="common_report_submitted">"Laporan terkirim"</string>
   <string name="common_rich_text_editor">"Penyunting teks kaya"</string>

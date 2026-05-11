@@ -310,7 +310,6 @@ Lý do: %1$s ."</string>
     <item quantity="other">"%1$d trả lời"</item>
   </plurals>
   <string name="common_replying_to">"Đang trả lời cho %1$s"</string>
-  <string name="common_report_a_bug">"Báo cáo lỗi"</string>
   <string name="common_report_a_problem">"Báo cáo sự cố"</string>
   <string name="common_report_submitted">"Đã gửi báo cáo"</string>
   <string name="common_rich_text_editor">"Trình soạn thảo văn bản nâng cao"</string>

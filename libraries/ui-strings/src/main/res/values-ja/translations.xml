@@ -319,7 +319,6 @@
     <item quantity="other">"%1$d 件の返信"</item>
   </plurals>
   <string name="common_replying_to">"%1$s に返信"</string>
-  <string name="common_report_a_bug">"バグを報告"</string>
   <string name="common_report_a_problem">"問題を報告"</string>
   <string name="common_report_submitted">"報告は送信されました"</string>
   <string name="common_rich_text_editor">"リッチテキストエディター"</string>

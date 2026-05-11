@@ -13,6 +13,7 @@
   <string name="a11y_encryption_details">"加密详情"</string>
   <string name="a11y_expand_message_text_field">"展开消息文本框"</string>
   <string name="a11y_hide_password">"隐藏密码"</string>
+  <string name="a11y_info">"信息"</string>
   <string name="a11y_join_call">"加入通话"</string>
   <string name="a11y_jump_to_bottom">"跳转到底部"</string>
   <string name="a11y_move_the_map_to_my_location">"将地图移动到我的位置"</string>
@@ -67,6 +68,7 @@
   <string name="action_call">"通话"</string>
   <string name="action_cancel">"取消"</string>
   <string name="action_cancel_for_now">"暂时取消"</string>
+  <string name="action_choose_file">"选择文件"</string>
   <string name="action_choose_photo">"选择照片"</string>
   <string name="action_clear">"清除"</string>
   <string name="action_close">"关闭"</string>
@@ -125,7 +127,7 @@
   <string name="action_manage_account_and_devices">"管理账户与设备"</string>
   <string name="action_manage_devices">"管理设备"</string>
   <string name="action_manage_rooms">"管理房间"</string>
-  <string name="action_message">"发送消息给"</string>
+  <string name="action_message">"发送消息"</string>
   <string name="action_minimize">"最小化"</string>
   <string name="action_next">"下一步"</string>
   <string name="action_no">"否"</string>
@@ -316,7 +318,6 @@
     <item quantity="other">"%1$d 个回复"</item>
   </plurals>
   <string name="common_replying_to">"正在回复 %1$s"</string>
-  <string name="common_report_a_bug">"报告 bug"</string>
   <string name="common_report_a_problem">"报告问题"</string>
   <string name="common_report_submitted">"报告已提交"</string>
   <string name="common_rich_text_editor">"富文本编辑器"</string>
@@ -456,6 +457,8 @@
   <string name="error_unknown">"抱歉，发生了错误"</string>
   <string name="invite_friends_rich_title">"🔐️ 在 %1$s 中与我一起"</string>
   <string name="invite_friends_text">"嗨！请通过 %1$s 与我联系：%2$s"</string>
+  <string name="live_location_sharing_foreground_service_channel_title_android">"正在共享实时位置"</string>
+  <string name="live_location_sharing_foreground_service_message_android">"位置共享正在进行"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"摇一摇以报告 bug"</string>
   <string name="screen_bug_report_a11y_screenshot">"屏幕截图"</string>

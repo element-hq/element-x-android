@@ -316,7 +316,6 @@ Grund: %1$s."</string>
     <item quantity="other">"%1$d Antworten"</item>
   </plurals>
   <string name="common_replying_to">"%1$s antworten"</string>
-  <string name="common_report_a_bug">"Einen Fehler melden"</string>
   <string name="common_report_a_problem">"Ein Problem melden"</string>
   <string name="common_report_submitted">"Bericht eingereicht"</string>
   <string name="common_rich_text_editor">"Rich-Text-Editor"</string>

@@ -23,7 +23,7 @@
   <string name="screen_app_lock_setup_pin_mismatch_dialog_content">"لطفاً یک پین را دو بار وارد کنید"</string>
   <string name="screen_app_lock_setup_pin_mismatch_dialog_title">"پین‌ها مطابق نیستند"</string>
   <string name="screen_app_lock_signout_alert_message">"برای ادامه باید دوباره وارد شده و پینی جدید ایجاد کنید"</string>
-  <string name="screen_app_lock_signout_alert_title">"دارید خارج می‌شوید"</string>
+  <string name="screen_app_lock_signout_alert_title">"این دستگاه در حال حذف شدن است"</string>
   <plurals name="screen_app_lock_subtitle">
     <item quantity="one">"شما %1$d تلاش برای باز کردن قفل دارید"</item>
     <item quantity="other">"شما %1$d تلاش برای باز کردن قفل دارید"</item>
