@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Adăugați o reacție: %1$s"</string>
+  <string name="a11y_address">"Adresă"</string>
   <string name="a11y_avatar">"Imagine de profil"</string>
   <string name="a11y_collapse_message_text_field">"Micșorați câmpul mesajului"</string>
   <string name="a11y_delete">"Ștergere"</string>
@@ -300,7 +301,6 @@ Motiv:%1$s."</string>
     <item quantity="other">"%1$d răspunsuri"</item>
   </plurals>
   <string name="common_replying_to">"Răspuns pentru %1$s"</string>
-  <string name="common_report_a_bug">"Raportați o eroare"</string>
   <string name="common_report_a_problem">"Raportați o problemă"</string>
   <string name="common_report_submitted">"Raport trimis"</string>
   <string name="common_rich_text_editor">"Editor text avansat"</string>

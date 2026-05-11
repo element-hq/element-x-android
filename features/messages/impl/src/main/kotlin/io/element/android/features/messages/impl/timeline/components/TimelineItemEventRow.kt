@@ -92,6 +92,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.modifiers.niceClickable
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.designsystem.swipe.SwipeableActionsState
 import io.element.android.libraries.designsystem.swipe.rememberSwipeableActionsState
 import io.element.android.libraries.designsystem.text.toPx
@@ -863,7 +864,7 @@ internal fun TimelineItemEventRowWithThreadSummaryPreview() = ElementPreview {
                                     ),
                                     senderId = UserId("@user:id"),
                                     senderProfile = ProfileDetails.Ready(
-                                        displayName = "Alice",
+                                        displayName = USER_NAME_ALICE,
                                         avatarUrl = null,
                                         displayNameAmbiguous = false,
                                     ),
@@ -898,7 +899,7 @@ internal fun ThreadSummaryViewPreview() {
                     ),
                     senderId = UserId("@user:id"),
                     senderProfile = ProfileDetails.Ready(
-                        displayName = "Alice",
+                        displayName = USER_NAME_ALICE,
                         avatarUrl = null,
                         displayNameAmbiguous = true,
                     ),

@@ -146,7 +146,7 @@
   <string name="action_show">"نمایش"</string>
   <string name="action_sign_in_again">"ورود دوباره"</string>
   <string name="action_signout">"برداشتن این افزاره"</string>
-  <string name="action_signout_anyway">"خروج به هر صورت"</string>
+  <string name="action_signout_anyway">"به هر حال این دستگاه را حذف کنید"</string>
   <string name="action_skip">"پرش"</string>
   <string name="action_start">"آغاز"</string>
   <string name="action_start_chat">"آغاز گپ"</string>
@@ -225,6 +225,10 @@
   <string name="common_link_copied_to_clipboard">"پیوند در تخته‌گیره رونوشت شد"</string>
   <string name="common_loading">"بار کردن…"</string>
   <string name="common_loading_more">"بار کردن بیش‌تر…"</string>
+  <plurals name="common_many_members">
+    <item quantity="one">"%d دیگر"</item>
+    <item quantity="other">"%d دیگران"</item>
+  </plurals>
   <plurals name="common_member_count">
     <item quantity="one">"%1$d عضو"</item>
     <item quantity="other">"%1$d عضو"</item>
@@ -270,7 +274,6 @@
   <string name="common_recovery_key">"کلید بازیابی"</string>
   <string name="common_refreshing">"تازه سازی…"</string>
   <string name="common_replying_to">"پاسخ دادن به %1$s"</string>
-  <string name="common_report_a_bug">"گزارش یک اشکال"</string>
   <string name="common_report_a_problem">"گزارش مشکل"</string>
   <string name="common_report_submitted">"گزارش ثبت شد"</string>
   <string name="common_rich_text_editor">"ویرایشگر متن غنی"</string>

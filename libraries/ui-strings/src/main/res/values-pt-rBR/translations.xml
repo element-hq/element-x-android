@@ -300,7 +300,6 @@ Motivo:​ %1$s."</string>
     <item quantity="other">"%1$d respostas"</item>
   </plurals>
   <string name="common_replying_to">"Respondendo a %1$s"</string>
-  <string name="common_report_a_bug">"Denunciar um bug"</string>
   <string name="common_report_a_problem">"Relatar um problema"</string>
   <string name="common_report_submitted">"Relatório enviado"</string>
   <string name="common_rich_text_editor">"Editor de rich text"</string>

@@ -324,7 +324,6 @@ Raison : %1$s."</string>
     <item quantity="other">"%1$d réponses"</item>
   </plurals>
   <string name="common_replying_to">"En réponse à %1$s"</string>
-  <string name="common_report_a_bug">"Signaler un problème"</string>
   <string name="common_report_a_problem">"Remonter un problème"</string>
   <string name="common_report_submitted">"Rapport soumis"</string>
   <string name="common_rich_text_editor">"Éditeur de texte enrichi"</string>

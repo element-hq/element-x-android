@@ -56,6 +56,7 @@
   <string name="screen_room_details_invite_people_dont_close">"Ne fermez pas l’application avant que l’opération soit terminée."</string>
   <string name="screen_room_details_invite_people_preparing">"Préparation des invitations…"</string>
   <string name="screen_room_details_invite_people_title">"Inviter des amis"</string>
+  <string name="screen_room_details_invite_title">"Inviter"</string>
   <string name="screen_room_details_leave_conversation_title">"Quitter la discussion"</string>
   <string name="screen_room_details_leave_room_title">"Quitter le salon"</string>
   <string name="screen_room_details_media_gallery_title">"Médias et fichiers"</string>

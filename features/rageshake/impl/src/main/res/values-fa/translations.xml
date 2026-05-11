@@ -7,6 +7,7 @@
   <string name="screen_bug_report_editor_description">"لطفاً مشکل را شرح دهید. چه‌کار کردید؟ انتظار داشتید چه بشود؟ ولی چه شد؟ لطفاً‌تا جای ممکن وارد جزییات شوید."</string>
   <string name="screen_bug_report_editor_placeholder">"شرح مشکل…"</string>
   <string name="screen_bug_report_editor_supporting">"ترجیحاً توضیحات را به زبان انگلیسی بنویسید."</string>
+  <string name="screen_bug_report_error_description_too_short">"توضیحات خیلی کوتاه است، لطفاً جزئیات بیشتری در مورد آنچه اتفاق افتاده ارائه دهید. متشکرم!"</string>
   <string name="screen_bug_report_include_crash_logs">"ارسال رخدادنگارهای خطا"</string>
   <string name="screen_bug_report_include_logs">"اجازه به گزارش‌ها"</string>
   <string name="screen_bug_report_include_screenshot">"ارسال تصویر صفحه"</string>

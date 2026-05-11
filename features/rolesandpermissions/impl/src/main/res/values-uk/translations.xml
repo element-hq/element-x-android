@@ -38,6 +38,11 @@
   <string name="screen_room_change_role_unsaved_changes_description">"У вас є не збережені зміни."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Зберегти зміни?"</string>
   <string name="screen_room_member_list_banned_empty">"Немає заблокованих користувачів."</string>
+  <plurals name="screen_room_member_list_banned_header_title">
+    <item quantity="one">"%1$d Заблокований"</item>
+    <item quantity="few">"%1$d Заблоковано"</item>
+    <item quantity="many">"%1$d Заблоковано"</item>
+  </plurals>
   <string name="screen_room_member_list_empty_search_subtitle">"Перевірте правопис або спробуйте новий пошук"</string>
   <string name="screen_room_member_list_empty_search_title">"Немає результатів за запитом «%1$s»"</string>
   <plurals name="screen_room_member_list_header_title">

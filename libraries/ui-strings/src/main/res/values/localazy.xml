@@ -325,7 +325,6 @@ Reason: %1$s."</string>
     <item quantity="other">"%1$d replies"</item>
   </plurals>
   <string name="common_replying_to">"Replying to %1$s"</string>
-  <string name="common_report_a_bug">"Report a bug"</string>
   <string name="common_report_a_problem">"Report a problem"</string>
   <string name="common_report_submitted">"Report submitted"</string>
   <string name="common_rich_text_editor">"Rich text editor"</string>

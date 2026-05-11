@@ -317,7 +317,6 @@ Syy: %1$s."</string>
     <item quantity="other">"%1$d vastausta"</item>
   </plurals>
   <string name="common_replying_to">"Vastataan käyttäjälle %1$s"</string>
-  <string name="common_report_a_bug">"Ilmoita virheestä"</string>
   <string name="common_report_a_problem">"Ilmoita ongelmasta"</string>
   <string name="common_report_submitted">"Ilmoitus lähetetty"</string>
   <string name="common_rich_text_editor">"Rikastettu tekstieditori"</string>

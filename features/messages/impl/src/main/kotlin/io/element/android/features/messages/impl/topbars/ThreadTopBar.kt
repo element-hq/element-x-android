@@ -31,6 +31,7 @@ import io.element.android.libraries.designsystem.components.avatar.anAvatarData
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.ROOM_NAME
 import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -96,9 +97,9 @@ internal fun ThreadTopBar(
 internal fun ThreadTopBarPreview() = ElementPreview {
     @Composable
     fun AThreadTopBar(
-        roomName: String? = "Room name",
+        roomName: String? = ROOM_NAME,
         roomAvatarData: AvatarData = anAvatarData(
-            name = "Room name",
+            name = ROOM_NAME,
             size = AvatarSize.TimelineRoom,
         ),
         isTombstoned: Boolean = false,
@@ -123,7 +124,7 @@ internal fun ThreadTopBarPreview() = ElementPreview {
         HorizontalDivider()
         AThreadTopBar(
             roomAvatarData = anAvatarData(
-                name = "Room name",
+                name = ROOM_NAME,
                 url = "https://some-avatar.jpg",
                 size = AvatarSize.TimelineRoom,
             ),

@@ -13,6 +13,7 @@
   <string name="screen_session_verification_cancelled_subtitle">"يه چيزي درست به نظر نمياد یا زمان درخواست به پایان رسید یا درخواست رد شد."</string>
   <string name="screen_session_verification_compare_emojis_subtitle">"تأیید تطابق شکلک‌های زیر با شکلک‌های نشان داده شده روی افزارهٔ دیگرتان."</string>
   <string name="screen_session_verification_compare_emojis_title">"مقایسهٔ شکلک‌ها"</string>
+  <string name="screen_session_verification_compare_numbers_subtitle">"تأیید کنید که اعداد زیر با اعداد نشان داده شده در جلسه دیگر شما مطابقت دارند."</string>
   <string name="screen_session_verification_compare_numbers_title">"مقایسهٔ اعداد"</string>
   <string name="screen_session_verification_complete_subtitle">"اکنون می‌توانید روی افزارهٔ دیگرتان با امنیت پیام فرستاده و بخوانید."</string>
   <string name="screen_session_verification_device_verified">"افزاره تأیید شده"</string>

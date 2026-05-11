@@ -56,6 +56,7 @@
   <string name="screen_room_details_invite_people_dont_close">"Ära sulge rakendust enne, kui tegevus on lõppenud."</string>
   <string name="screen_room_details_invite_people_preparing">"Valmistan kutseid ette…"</string>
   <string name="screen_room_details_invite_people_title">"Kutsu osalejaid"</string>
+  <string name="screen_room_details_invite_title">"Kutsu"</string>
   <string name="screen_room_details_leave_conversation_title">"Lahku vestlusest"</string>
   <string name="screen_room_details_leave_room_title">"Lahku jututoast"</string>
   <string name="screen_room_details_media_gallery_title">"Meedia ja failid"</string>
