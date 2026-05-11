@@ -104,7 +104,7 @@ private fun getTextRes(
         RtcNotificationState.Started -> CommonStrings.common_call_started
     }
 } else {
-    // Only show declined info in DMs
+    // In Rooms, do not show declined info.
     CommonStrings.common_call_started
 }
 
