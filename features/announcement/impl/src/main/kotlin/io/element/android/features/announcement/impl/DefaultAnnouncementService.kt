@@ -18,8 +18,9 @@ import io.element.android.features.announcement.impl.fullscreen.FullscreenAnnoun
 import io.element.android.features.announcement.impl.store.AnnouncementStatus
 import io.element.android.features.announcement.impl.store.AnnouncementStore
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.flowOf
 
 @ContributesBinding(AppScope::class)
 class DefaultAnnouncementService(
@@ -40,14 +41,16 @@ class DefaultAnnouncementService(
     }
 
     override fun announcementsToShowFlow(): Flow<List<Announcement>> {
-        return announcementStore.announcementStatusFlow(Announcement.NewNotificationSound)
-            .map { newNotificationSoundStatus ->
-                buildList {
-                    if (newNotificationSoundStatus == AnnouncementStatus.Show) {
-                        add(Announcement.NewNotificationSound)
-                    }
+        return combine(
+            flowOf(Unit),
+            announcementStore.announcementStatusFlow(Announcement.NewNotificationSound),
+        ) { _, newNotificationSoundStatus ->
+            buildList {
+                if (newNotificationSoundStatus == AnnouncementStatus.Show) {
+                    add(Announcement.NewNotificationSound)
                 }
             }
+        }
     }
 
     private suspend fun showFullscreenAnnouncement(announcement: Announcement.Fullscreen) {
