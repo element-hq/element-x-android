@@ -31,8 +31,11 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -59,10 +62,12 @@ import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import androidx.core.text.toSpannable
 import coil3.compose.AsyncImage
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.viewfolder.api.TextFileViewer
+import io.element.android.libraries.androidutils.text.safeLinkify
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
@@ -91,7 +96,9 @@ import io.element.android.libraries.mediaviewer.impl.local.LocalMediaView
 import io.element.android.libraries.mediaviewer.impl.local.PlayableState
 import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaViewState
 import io.element.android.libraries.mediaviewer.impl.util.bgCanvasWithTransparency
+import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
 import io.element.android.libraries.ui.strings.CommonStrings
+import io.element.android.wysiwyg.compose.EditorStyledText
 import kotlinx.coroutines.delay
 import me.saket.telephoto.zoomable.OverzoomEffect
 import me.saket.telephoto.zoomable.ZoomSpec
@@ -120,6 +127,52 @@ fun MediaViewerView(
     Scaffold(
         modifier,
         containerColor = Color.Transparent,
+        topBar = {
+            AnimatedVisibility(
+                visible = showOverlay,
+                enter = fadeIn(),
+                exit = fadeOut(),
+            ) {
+                when (currentData) {
+                    is MediaViewerPageData.MediaViewerData -> {
+                        MediaViewerTopBar(
+                            data = currentData,
+                            canShowInfo = state.canShowInfo,
+                            onBackClick = onBackClick,
+                            onShareClick = {
+                                state.eventSink(MediaViewerEvent.Share(currentData))
+                            },
+                            onSaveClick = {
+                                state.eventSink(MediaViewerEvent.SaveOnDisk(currentData))
+                            },
+                            onInfoClick = {
+                                state.eventSink(MediaViewerEvent.OpenInfo(currentData))
+                            },
+                        )
+                    }
+                    else -> {
+                        TopAppBar(
+                            title = {
+                                if (currentData is MediaViewerPageData.Loading) {
+                                    Text(
+                                        modifier = Modifier.semantics {
+                                            heading()
+                                        },
+                                        text = stringResource(id = CommonStrings.common_loading_more),
+                                        style = ElementTheme.typography.fontBodyMdMedium,
+                                        color = ElementTheme.colors.textPrimary,
+                                    )
+                                }
+                            },
+                            colors = TopAppBarDefaults.topAppBarColors(
+                                containerColor = bgCanvasWithTransparency,
+                            ),
+                            navigationIcon = { BackButton(onClick = onBackClick) },
+                        )
+                    }
+                }
+            }
+        },
         snackbarHost = { SnackbarHost(snackbarHostState) },
     ) {
         val pagerState = rememberPagerState(state.currentIndex, 0f) {
@@ -136,6 +189,7 @@ fun MediaViewerView(
             // Pre-load previous and next pages
             beyondViewportPageCount = 1,
             key = { index -> state.listData[index].pagerKey },
+            reverseLayout = true,
         ) { page ->
             when (val dataForPage = state.listData[page]) {
                 is MediaViewerPageData.Failure -> {
@@ -186,65 +240,19 @@ fun MediaViewerView(
                             isUserSelected = (state.listData[page] as? MediaViewerPageData.MediaViewerData)?.eventId == state.initiallySelectedEventId,
                         )
                         // Bottom bar
-                        AnimatedVisibility(visible = showOverlay, enter = fadeIn(), exit = fadeOut()) {
-                            Box(
-                                modifier = Modifier.fillMaxSize()
-                            ) {
-                                MediaViewerBottomBar(
-                                    modifier = Modifier.align(Alignment.BottomCenter),
-                                    showDivider = dataForPage.mediaInfo.mimeType.isMimeTypeVideo(),
-                                    caption = dataForPage.mediaInfo.caption,
-                                    onHeightChange = { bottomPaddingInPixels = it },
-                                )
-                            }
+                        AnimatedVisibility(
+                            visible = showOverlay,
+                            enter = fadeIn(),
+                            exit = fadeOut(),
+                            modifier = Modifier.align(Alignment.BottomCenter),
+                        ) {
+                            MediaViewerBottomBar(
+                                showDivider = dataForPage.mediaInfo.mimeType.isMimeTypeVideo(),
+                                caption = dataForPage.mediaInfo.caption,
+                                formattedCaption = dataForPage.mediaInfo.formattedCaption,
+                                onHeightChange = { bottomPaddingInPixels = it },
+                            )
                         }
-                    }
-                }
-            }
-        }
-        // Top bar
-        AnimatedVisibility(visible = showOverlay, enter = fadeIn(), exit = fadeOut()) {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .navigationBarsPadding()
-            ) {
-                when (currentData) {
-                    is MediaViewerPageData.MediaViewerData -> {
-                        MediaViewerTopBar(
-                            data = currentData,
-                            canShowInfo = state.canShowInfo,
-                            onBackClick = onBackClick,
-                            onShareClick = {
-                                state.eventSink(MediaViewerEvent.Share(currentData))
-                            },
-                            onSaveClick = {
-                                state.eventSink(MediaViewerEvent.SaveOnDisk(currentData))
-                            },
-                            onInfoClick = {
-                                state.eventSink(MediaViewerEvent.OpenInfo(currentData))
-                            },
-                        )
-                    }
-                    else -> {
-                        TopAppBar(
-                            title = {
-                                if (currentData is MediaViewerPageData.Loading) {
-                                    Text(
-                                        modifier = Modifier.semantics {
-                                            heading()
-                                        },
-                                        text = stringResource(id = CommonStrings.common_loading_more),
-                                        style = ElementTheme.typography.fontBodyMdMedium,
-                                        color = ElementTheme.colors.textPrimary,
-                                    )
-                                }
-                            },
-                            colors = TopAppBarDefaults.topAppBarColors(
-                                containerColor = bgCanvasWithTransparency,
-                            ),
-                            navigationIcon = { BackButton(onClick = onBackClick) },
-                        )
                     }
                 }
             }
@@ -373,11 +381,12 @@ private fun MediaViewerPage(
                     isUserSelected = isUserSelected,
                     audioFocus = audioFocus,
                 )
-                ThumbnailView(
-                    mediaInfo = data.mediaInfo,
-                    thumbnailSource = data.thumbnailSource,
-                    isVisible = showThumbnail,
-                )
+                if (showThumbnail) {
+                    ThumbnailView(
+                        mediaInfo = data.mediaInfo,
+                        thumbnailSource = data.thumbnailSource,
+                    )
+                }
                 if (showError) {
                     ErrorView(
                         errorMessage = stringResource(id = CommonStrings.error_unknown),
@@ -544,6 +553,7 @@ private fun MediaViewerTopBar(
 @Composable
 private fun MediaViewerBottomBar(
     caption: String?,
+    formattedCaption: CharSequence?,
     showDivider: Boolean,
     onHeightChange: (Int) -> Unit,
     modifier: Modifier = Modifier,
@@ -556,7 +566,7 @@ private fun MediaViewerBottomBar(
                 onHeightChange(it.height)
             },
     ) {
-        if (caption != null) {
+        if (caption != null || formattedCaption != null) {
             if (showDivider) {
                 HorizontalDivider()
             }
@@ -567,15 +577,28 @@ private fun MediaViewerBottomBar(
                     .fillMaxWidth()
                     .heightIn(max = if (hasCompactHeightWindowSize()) maxCaptionHeightLandscape else maxCaptionHeightPortrait),
             ) {
-                Text(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                        .verticalScroll(scrollState)
-                        .navigationBarsPadding(),
-                    text = caption,
-                    style = ElementTheme.typography.fontBodyLgRegular,
-                )
+                val textToRender = when {
+                    formattedCaption != null -> formattedCaption
+                    caption != null -> caption.safeLinkify().toSpannable()
+                    else -> null
+                }
+                if (textToRender != null) {
+                    CompositionLocalProvider(
+                        LocalContentColor provides ElementTheme.colors.textPrimary,
+                        LocalTextStyle provides ElementTheme.typography.fontBodyLgRegular
+                    ) {
+                        EditorStyledText(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
+                                .verticalScroll(scrollState)
+                                .navigationBarsPadding(),
+                            text = textToRender,
+                            style = ElementRichTextEditorStyle.textStyle(),
+                            releaseOnDetach = false,
+                        )
+                    }
+                }
                 if (showBottomShadow) {
                     Box(
                         modifier = Modifier
@@ -603,7 +626,6 @@ private val maxCaptionHeightLandscape = 128.dp
 @Composable
 private fun ThumbnailView(
     thumbnailSource: MediaSource?,
-    isVisible: Boolean,
     mediaInfo: MediaInfo,
     modifier: Modifier = Modifier,
 ) {
@@ -611,21 +633,19 @@ private fun ThumbnailView(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        if (isVisible) {
-            val mediaRequestData = MediaRequestData(
-                source = thumbnailSource,
-                kind = MediaRequestData.Kind.File(mediaInfo.filename, mediaInfo.mimeType)
-            )
-            val alpha = if (LocalInspectionMode.current) 0.1f else 1f
-            AsyncImage(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .alpha(alpha),
-                model = mediaRequestData,
-                contentScale = ContentScale.Fit,
-                contentDescription = null,
-            )
-        }
+        val mediaRequestData = MediaRequestData(
+            source = thumbnailSource,
+            kind = MediaRequestData.Kind.File(mediaInfo.filename, mediaInfo.mimeType)
+        )
+        val alpha = if (LocalInspectionMode.current) 0.1f else 1f
+        AsyncImage(
+            modifier = Modifier
+                .fillMaxSize()
+                .alpha(alpha),
+            model = mediaRequestData,
+            contentScale = ContentScale.Fit,
+            contentDescription = null,
+        )
     }
 }
 

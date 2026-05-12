@@ -46,6 +46,7 @@
   <string name="screen_room_details_error_muting">"Bu odayı sessize alma başarısız oldu, lütfen tekrar deneyin."</string>
   <string name="screen_room_details_error_unmuting">"Bu odanın sesi açılamadı, lütfen tekrar deneyin."</string>
   <string name="screen_room_details_invite_people_title">"Kişileri davet et"</string>
+  <string name="screen_room_details_invite_title">"Davet et"</string>
   <string name="screen_room_details_leave_conversation_title">"Sohbeti bırak"</string>
   <string name="screen_room_details_leave_room_title">"Odadan ayrıl"</string>
   <string name="screen_room_details_media_gallery_title">"Medya ve dosyalar"</string>

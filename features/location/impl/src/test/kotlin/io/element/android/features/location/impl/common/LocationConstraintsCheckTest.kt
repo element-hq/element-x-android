@@ -21,7 +21,7 @@ class LocationConstraintsCheckTest {
         )
         val locationActions = FakeLocationActions(isLocationEnabled = true)
 
-        val result = checkLocationConstraints(permissionsState, locationActions)
+        val result = checkLocationConstraints(permissionsState, locationActions, SendLiveLocationPermissions.GRANTED)
 
         assertThat(result).isEqualTo(LocationConstraintsCheck.Success)
     }
@@ -33,7 +33,7 @@ class LocationConstraintsCheckTest {
         )
         val locationActions = FakeLocationActions(isLocationEnabled = true)
 
-        val result = checkLocationConstraints(permissionsState, locationActions)
+        val result = checkLocationConstraints(permissionsState, locationActions, SendLiveLocationPermissions.GRANTED)
 
         assertThat(result).isEqualTo(LocationConstraintsCheck.Success)
     }
@@ -45,7 +45,7 @@ class LocationConstraintsCheckTest {
         )
         val locationActions = FakeLocationActions(isLocationEnabled = false)
 
-        val result = checkLocationConstraints(permissionsState, locationActions)
+        val result = checkLocationConstraints(permissionsState, locationActions, SendLiveLocationPermissions.GRANTED)
 
         assertThat(result).isEqualTo(LocationConstraintsCheck.LocationServiceDisabled)
     }
@@ -58,7 +58,7 @@ class LocationConstraintsCheckTest {
         )
         val locationActions = FakeLocationActions(isLocationEnabled = true)
 
-        val result = checkLocationConstraints(permissionsState, locationActions)
+        val result = checkLocationConstraints(permissionsState, locationActions, SendLiveLocationPermissions.GRANTED)
 
         assertThat(result).isEqualTo(LocationConstraintsCheck.PermissionRationale)
     }
@@ -71,8 +71,20 @@ class LocationConstraintsCheckTest {
         )
         val locationActions = FakeLocationActions(isLocationEnabled = true)
 
-        val result = checkLocationConstraints(permissionsState, locationActions)
+        val result = checkLocationConstraints(permissionsState, locationActions, SendLiveLocationPermissions.GRANTED)
 
         assertThat(result).isEqualTo(LocationConstraintsCheck.PermissionDenied)
+    }
+
+    @Test
+    fun `checkLocationConstraints returns NotEnoughPowerLevel when send permissions are not granted`() {
+        val permissionsState = aPermissionsState(
+            permissions = PermissionsState.Permissions.NoneGranted,
+            shouldShowRationale = false,
+        )
+        val locationActions = FakeLocationActions(isLocationEnabled = true)
+        val result = checkLocationConstraints(permissionsState, locationActions, SendLiveLocationPermissions.DEFAULT)
+
+        assertThat(result).isEqualTo(LocationConstraintsCheck.NotEnoughPowerLevel)
     }
 }

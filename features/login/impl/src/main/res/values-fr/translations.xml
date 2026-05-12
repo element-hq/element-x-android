@@ -28,11 +28,11 @@
   <string name="screen_change_server_subtitle">"Quelle est l’adresse de votre serveur ?"</string>
   <string name="screen_change_server_title">"Choisissez votre serveur"</string>
   <string name="screen_create_account_title">"Créer un compte"</string>
-  <string name="screen_login_error_deactivated_account">"Ce compte a été désactivé."</string>
+  <string name="screen_login_error_deactivated_account">"Ce compte a été supprimé."</string>
   <string name="screen_login_error_invalid_credentials">"Nom d’utilisateur et/ou mot de passe incorrects"</string>
   <string name="screen_login_error_invalid_user_id">"Il ne s’agit pas d’un identifiant utilisateur valide. Format attendu : « @user:homeserver.org »"</string>
   <string name="screen_login_error_refresh_tokens">"Ce serveur est configuré pour utiliser des tokens d’actualisation. Ils ne sont pas pris en charge lors de l’utilisation d’une connexion basée sur un mot de passe."</string>
-  <string name="screen_login_error_unsupported_authentication">"Le serveur d’accueil sélectionné ne prend pas en charge le mot de passe ou la connexion OIDC. Contactez votre administrateur ou choisissez un autre serveur d’accueil."</string>
+  <string name="screen_login_error_unsupported_authentication">"Le serveur d’accueil sélectionné ne prend pas en charge le mot de passe ou la connexion OAuth. Contactez votre administrateur ou choisissez un autre serveur d’accueil."</string>
   <string name="screen_login_form_header">"Saisissez vos identifiants"</string>
   <string name="screen_login_subtitle">"Matrix est un réseau ouvert pour une communication sécurisée et décentralisée."</string>
   <string name="screen_login_title">"Content de vous revoir !"</string>

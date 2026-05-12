@@ -34,6 +34,8 @@
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"如果遇到同样的问题，请尝试使用不同的 WiFi 网络或使用移动数据代替 WiFi"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"如果不起作用，请手动登录"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"连接不安全"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"你将被要求输入此设备上显示的两位数字。"</string>
+  <string name="screen_qr_code_login_device_code_title">"在你的其它设备上输入以下数字"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"登录被另一台设备取消"</string>
   <string name="screen_qr_code_login_error_cancelled_title">"登录请求已取消"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"另一设备上的登录请求已被拒绝。"</string>
@@ -54,4 +56,5 @@
   <string name="screen_qr_code_login_no_camera_permission_state_description">"你需要授予 %1$s 使用设备摄像头的权限才能继续。"</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"允许访问摄像头以扫描二维码"</string>
   <string name="screen_qr_code_login_unknown_error_description">"发生了意外错误。请再试一次。"</string>
+  <string name="screen_qr_code_login_verify_code_loading">"正在等待其它设备"</string>
 </resources>

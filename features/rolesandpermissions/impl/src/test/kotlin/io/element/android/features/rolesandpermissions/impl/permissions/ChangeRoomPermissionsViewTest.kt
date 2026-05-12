@@ -6,11 +6,14 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.features.rolesandpermissions.impl.permissions
 
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.features.rolesandpermissions.impl.R
 import io.element.android.libraries.architecture.AsyncAction
@@ -23,84 +26,80 @@ import io.element.android.tests.testutils.pressBack
 import io.element.android.tests.testutils.pressBackKey
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.persistentMapOf
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class ChangeRoomPermissionsViewTest {
-    @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
-
     @Test
-    fun `click on back icon invokes Exit`() {
+    fun `click on back icon invokes Exit`() = runAndroidComposeUiTest {
         val recorder = EventsRecorder<ChangeRoomPermissionsEvent>()
-        rule.setChangeRoomPermissionsRule(
+        setChangeRoomPermissionsRule(
             state = aChangeRoomPermissionsState(
                 eventSink = recorder
             )
         )
-        rule.pressBack()
+        pressBack()
         recorder.assertSingle(ChangeRoomPermissionsEvent.Exit)
     }
 
     @Test
-    fun `click on back key invokes Exit`() {
+    fun `click on back key invokes Exit`() = runAndroidComposeUiTest {
         val recorder = EventsRecorder<ChangeRoomPermissionsEvent>()
-        rule.setChangeRoomPermissionsRule(
+        setChangeRoomPermissionsRule(
             state = aChangeRoomPermissionsState(
                 eventSink = recorder
             )
         )
-        rule.pressBackKey()
+        pressBackKey()
         recorder.assertSingle(ChangeRoomPermissionsEvent.Exit)
     }
 
     @Test
-    fun `when confirming exit with pending changes, using the back key actually exits`() {
+    fun `when confirming exit with pending changes, using the back key actually exits`() = runAndroidComposeUiTest {
         val recorder = EventsRecorder<ChangeRoomPermissionsEvent>()
-        rule.setChangeRoomPermissionsRule(
+        setChangeRoomPermissionsRule(
             state = aChangeRoomPermissionsState(
                 hasChanges = true,
                 eventSink = recorder,
             ),
         )
-        rule.pressBackKey()
+        pressBackKey()
         recorder.assertSingle(ChangeRoomPermissionsEvent.Exit)
     }
 
     @Test
-    fun `when confirming exit with pending changes, clicking on 'discard' button in the dialog actually exits`() {
+    fun `when confirming exit with pending changes, clicking on 'discard' button in the dialog actually exits`() = runAndroidComposeUiTest {
         val recorder = EventsRecorder<ChangeRoomPermissionsEvent>()
-        rule.setChangeRoomPermissionsRule(
+        setChangeRoomPermissionsRule(
             state = aChangeRoomPermissionsState(
                 hasChanges = true,
                 saveAction = AsyncAction.ConfirmingCancellation,
                 eventSink = recorder,
             ),
         )
-        rule.clickOn(CommonStrings.action_discard)
+        clickOn(CommonStrings.action_discard)
         recorder.assertSingle(ChangeRoomPermissionsEvent.Exit)
     }
 
     @Test
-    fun `when confirming exit with pending changes, clicking on 'save' button in the dialog saves the changes`() {
+    fun `when confirming exit with pending changes, clicking on 'save' button in the dialog saves the changes`() = runAndroidComposeUiTest {
         val recorder = EventsRecorder<ChangeRoomPermissionsEvent>()
-        rule.setChangeRoomPermissionsRule(
+        setChangeRoomPermissionsRule(
             state = aChangeRoomPermissionsState(
                 hasChanges = true,
                 saveAction = AsyncAction.ConfirmingCancellation,
                 eventSink = recorder,
             ),
         )
-        rule.clickOn(CommonStrings.action_save, inDialog = true)
+        clickOn(CommonStrings.action_save, inDialog = true)
         recorder.assertSingle(ChangeRoomPermissionsEvent.Save)
     }
 
     @Test
-    fun `click on a role item triggers ChangeRole event`() {
+    fun `click on a role item triggers ChangeRole event`() = runAndroidComposeUiTest {
         val recorder = EventsRecorder<ChangeRoomPermissionsEvent>()
-        rule.setChangeRoomPermissionsRule(
+        setChangeRoomPermissionsRule(
             state = aChangeRoomPermissionsState(
                 itemsBySection = persistentMapOf(
                     // Makes sure there is only one item to click on
@@ -109,70 +108,70 @@ class ChangeRoomPermissionsViewTest {
                 eventSink = recorder,
             )
         )
-        rule.clickOn(R.string.screen_room_change_permissions_room_name)
-        rule.clickOn(R.string.screen_room_change_permissions_everyone)
+        clickOn(R.string.screen_room_change_permissions_room_name)
+        clickOn(R.string.screen_room_change_permissions_everyone)
         recorder.assertSingle(
             ChangeRoomPermissionsEvent.ChangeMinimumRoleForAction(RoomPermissionType.ROOM_NAME, SelectableRole.Everyone),
         )
     }
 
     @Test
-    fun `click on the Save menu item triggers Save event`() {
+    fun `click on the Save menu item triggers Save event`() = runAndroidComposeUiTest {
         val recorder = EventsRecorder<ChangeRoomPermissionsEvent>()
-        rule.setChangeRoomPermissionsRule(
+        setChangeRoomPermissionsRule(
             state = aChangeRoomPermissionsState(
                 hasChanges = true,
                 eventSink = recorder,
             ),
         )
-        rule.clickOn(CommonStrings.action_save)
+        clickOn(CommonStrings.action_save)
         recorder.assertSingle(ChangeRoomPermissionsEvent.Save)
     }
 
     @Test
-    fun `a successful save exits the screen`() {
+    fun `a successful save exits the screen`() = runAndroidComposeUiTest {
         ensureCalledOnceWithParam(true) { callback ->
-            rule.setChangeRoomPermissionsRule(
+            setChangeRoomPermissionsRule(
                 state = aChangeRoomPermissionsState(
                     hasChanges = true,
                     saveAction = AsyncAction.Success(true),
                 ),
                 onComplete = callback,
             )
-            rule.clickOn(CommonStrings.action_save)
+            clickOn(CommonStrings.action_save)
         }
     }
 
     @Test
-    fun `a cancellation exits the screen`() {
+    fun `a cancellation exits the screen`() = runAndroidComposeUiTest {
         ensureCalledOnceWithParam(false) { callback ->
-            rule.setChangeRoomPermissionsRule(
+            setChangeRoomPermissionsRule(
                 state = aChangeRoomPermissionsState(
                     hasChanges = true,
                     saveAction = AsyncAction.Success(false),
                 ),
                 onComplete = callback,
             )
-            rule.clickOn(CommonStrings.action_save)
+            clickOn(CommonStrings.action_save)
         }
     }
 
     @Test
-    fun `click on the Ok option in save error dialog triggers ResetPendingAction event`() {
+    fun `click on the Ok option in save error dialog triggers ResetPendingAction event`() = runAndroidComposeUiTest {
         val recorder = EventsRecorder<ChangeRoomPermissionsEvent>()
-        rule.setChangeRoomPermissionsRule(
+        setChangeRoomPermissionsRule(
             state = aChangeRoomPermissionsState(
                 hasChanges = true,
                 saveAction = AsyncAction.Failure(IllegalStateException("Failed to set room power levels")),
                 eventSink = recorder,
             ),
         )
-        rule.clickOn(CommonStrings.action_ok)
+        clickOn(CommonStrings.action_ok)
         recorder.assertSingle(ChangeRoomPermissionsEvent.ResetPendingActions)
     }
 }
 
-private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setChangeRoomPermissionsRule(
+private fun AndroidComposeUiTest<ComponentActivity>.setChangeRoomPermissionsRule(
     state: ChangeRoomPermissionsState = aChangeRoomPermissionsState(),
     onComplete: (Boolean) -> Unit = EnsureNeverCalledWithParam(),
 ) {

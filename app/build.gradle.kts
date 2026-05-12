@@ -103,13 +103,13 @@ android {
     logger.warnInBox("Building ${defaultConfig.applicationId} ($baseAppName) [$buildType]")
 
     buildTypes {
-        val oidcRedirectSchemeBase = BuildTimeConfig.METADATA_HOST_REVERSED ?: "io.element.android"
+        val oAuthRedirectSchemeBase = BuildTimeConfig.METADATA_HOST_REVERSED ?: "io.element.android"
         getByName("debug") {
             resValue("string", "app_name", "$baseAppName dbg")
             resValue(
                 "string",
                 "login_redirect_scheme",
-                "$oidcRedirectSchemeBase.debug",
+                "$oAuthRedirectSchemeBase.debug",
             )
             applicationIdSuffix = ".debug"
             signingConfig = signingConfigs.getByName("debug")
@@ -120,7 +120,7 @@ android {
             resValue(
                 "string",
                 "login_redirect_scheme",
-                oidcRedirectSchemeBase,
+                oAuthRedirectSchemeBase,
             )
             signingConfig = signingConfigs.getByName("debug")
 
@@ -157,7 +157,7 @@ android {
             resValue(
                 "string",
                 "login_redirect_scheme",
-                "$oidcRedirectSchemeBase.nightly",
+                "$oAuthRedirectSchemeBase.nightly",
             )
             matchingFallbacks += listOf("release")
             signingConfig = signingConfigs.getByName("nightly")

@@ -98,13 +98,13 @@ class LeaveSpacePresenterTest {
                         listOf(
                             aLeaveSpaceRoom(spaceRoom = aSpace),
                             aLeaveSpaceRoom(
-                                spaceRoom = aSpaceRoom(roomId = A_ROOM_ID, isDirect = false)
+                                spaceRoom = aSpaceRoom(roomId = A_ROOM_ID, isDm = false)
                             ),
                             aLeaveSpaceRoom(
-                                spaceRoom = aSpaceRoom(roomId = A_ROOM_ID_2, isDirect = true)
+                                spaceRoom = aSpaceRoom(roomId = A_ROOM_ID_2, isDm = true)
                             ),
                             aLeaveSpaceRoom(
-                                spaceRoom = aSpaceRoom(roomId = A_ROOM_ID_3, isDirect = null)
+                                spaceRoom = aSpaceRoom(roomId = A_ROOM_ID_3, isDm = null)
                             ),
                         )
                     )

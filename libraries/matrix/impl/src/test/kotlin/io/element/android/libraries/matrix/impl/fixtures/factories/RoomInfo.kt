@@ -62,6 +62,8 @@ internal fun aRustRoomInfo(
     serviceMembers: List<String> = emptyList(),
     isLowPriority: Boolean = false,
     activeRoomCallConsensusIntent: RtcCallIntentConsensus = RtcCallIntentConsensus.None,
+    activeServiceMembersCount: Int = 0,
+    isDm: Boolean = false,
 ) = RoomInfo(
     id = id,
     displayName = displayName,
@@ -101,4 +103,6 @@ internal fun aRustRoomInfo(
     serviceMembers = serviceMembers,
     isLowPriority = isLowPriority,
     activeRoomCallConsensusIntent = activeRoomCallConsensusIntent,
+    activeServiceMembersCount = activeServiceMembersCount.toULong(),
+    isDm = isDm,
 )

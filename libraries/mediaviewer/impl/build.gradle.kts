@@ -25,6 +25,9 @@ android {
 setupDependencyInjection()
 
 dependencies {
+    implementation(libs.matrix.richtexteditor.compose)
+    implementation(libs.matrix.richtexteditor)
+    implementation(projects.libraries.textcomposer.impl)
     implementation(libs.coroutines.core)
     implementation(libs.coil.compose)
     implementation(libs.androidx.media3.exoplayer)

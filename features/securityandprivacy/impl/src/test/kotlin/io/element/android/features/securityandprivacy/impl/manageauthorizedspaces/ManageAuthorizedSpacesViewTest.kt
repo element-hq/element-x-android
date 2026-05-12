@@ -6,13 +6,16 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.features.securityandprivacy.impl.manageauthorizedspaces
 
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.spaces.SpaceRoom
@@ -24,26 +27,22 @@ import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.pressBack
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableSet
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class ManageAuthorizedSpacesViewTest {
-    @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
-
     @Test
-    fun `clicking back emits Cancel event`() {
+    fun `clicking back emits Cancel event`() = runAndroidComposeUiTest {
         val recorder = EventsRecorder<ManageAuthorizedSpacesEvent>()
         val state = aManageAuthorizedSpacesState(eventSink = recorder)
-        rule.setManageAuthorizedSpacesView(state)
-        rule.pressBack()
+        setManageAuthorizedSpacesView(state)
+        pressBack()
         recorder.assertSingle(ManageAuthorizedSpacesEvent.Cancel)
     }
 
     @Test
-    fun `clicking space checkbox emits ToggleSpace event`() {
+    fun `clicking space checkbox emits ToggleSpace event`() = runAndroidComposeUiTest {
         val roomId = A_ROOM_ID
         val space = aSpaceRoom(roomId = roomId, displayName = "Test Space")
         val recorder = EventsRecorder<ManageAuthorizedSpacesEvent>()
@@ -51,37 +50,37 @@ class ManageAuthorizedSpacesViewTest {
             selectableSpaces = listOf(space),
             eventSink = recorder
         )
-        rule.setManageAuthorizedSpacesView(state)
-        rule.onNodeWithText("Test Space").performClick()
+        setManageAuthorizedSpacesView(state)
+        onNodeWithText("Test Space").performClick()
         recorder.assertSingle(ManageAuthorizedSpacesEvent.ToggleSpace(roomId))
     }
 
     @Test
-    fun `clicking done button emits Done event`() {
+    fun `clicking done button emits Done event`() = runAndroidComposeUiTest {
         val recorder = EventsRecorder<ManageAuthorizedSpacesEvent>()
         val state = aManageAuthorizedSpacesState(
             selectedIds = listOf(A_ROOM_ID),
             eventSink = recorder
         )
-        rule.setManageAuthorizedSpacesView(state)
-        rule.clickOn(CommonStrings.action_done)
+        setManageAuthorizedSpacesView(state)
+        clickOn(CommonStrings.action_done)
         recorder.assertSingle(ManageAuthorizedSpacesEvent.Done)
     }
 
     @Test
-    fun `done button is disabled when no spaces selected`() {
+    fun `done button is disabled when no spaces selected`() = runAndroidComposeUiTest {
         val recorder = EventsRecorder<ManageAuthorizedSpacesEvent>(expectEvents = false)
         val state = aManageAuthorizedSpacesState(
             selectedIds = emptyList(),
             eventSink = recorder
         )
-        rule.setManageAuthorizedSpacesView(state)
-        rule.clickOn(CommonStrings.action_done)
+        setManageAuthorizedSpacesView(state)
+        clickOn(CommonStrings.action_done)
         recorder.assertEmpty()
     }
 }
 
-private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setManageAuthorizedSpacesView(
+private fun AndroidComposeUiTest<ComponentActivity>.setManageAuthorizedSpacesView(
     state: ManageAuthorizedSpacesState = aManageAuthorizedSpacesState(
         eventSink = EventsRecorder(expectEvents = false)
     ),

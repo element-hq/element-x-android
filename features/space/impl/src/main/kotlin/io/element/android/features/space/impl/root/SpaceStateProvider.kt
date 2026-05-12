@@ -109,6 +109,7 @@ private fun aSpaceInfo(
         avatarUrl = null,
         isPublic = true,
         isDirect = false,
+        isDm = false,
         isEncrypted = false,
         joinRule = joinRule,
         isSpace = true,

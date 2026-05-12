@@ -10,6 +10,7 @@ package io.element.android.features.location.impl.share
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.persistentListOf
@@ -52,6 +53,18 @@ class ShareLocationStateProvider : PreviewParameterProvider<ShareLocationState> 
                 hasLocationPermission = true,
             ),
             aShareLocationState(
+                dialogState = ShareLocationState.Dialog.None,
+                trackUserPosition = true,
+                hasLocationPermission = true,
+                canShareLiveLocation = true,
+            ),
+            aShareLocationState(
+                dialogState = ShareLocationState.Dialog.LiveLocationDisclaimer,
+                trackUserPosition = true,
+                hasLocationPermission = true,
+                canShareLiveLocation = true,
+            ),
+            aShareLocationState(
                 dialogState = ShareLocationState.Dialog.LiveLocationDurations(
                     persistentListOf(
                         LiveLocationDuration(15.minutes, "15 minutes"),
@@ -73,6 +86,7 @@ fun aShareLocationState(
     hasLocationPermission: Boolean = false,
     canShareLiveLocation: Boolean = false,
     appName: String = APP_NAME,
+    startLiveLocationAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     eventSink: (ShareLocationEvent) -> Unit = {},
 ): ShareLocationState {
     return ShareLocationState(
@@ -82,6 +96,7 @@ fun aShareLocationState(
         hasLocationPermission = hasLocationPermission,
         canShareLiveLocation = canShareLiveLocation,
         appName = appName,
+        startLiveLocationAction = startLiveLocationAction,
         eventSink = eventSink
     )
 }

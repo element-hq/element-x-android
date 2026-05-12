@@ -18,7 +18,7 @@ import io.element.android.libraries.cryptography.api.SecretKeyRepository
 import kotlinx.coroutines.flow.Flow
 import java.util.concurrent.CopyOnWriteArrayList
 
-private const val SECRET_KEY_ALIAS = "elementx.SECRET_KEY_ALIAS_PIN_CODE"
+internal const val SECRET_KEY_ALIAS = "elementx.SECRET_KEY_ALIAS_PIN_CODE"
 
 @ContributesBinding(AppScope::class)
 @SingleIn(AppScope::class)
@@ -38,11 +38,11 @@ class DefaultPinCodeManager(
     }
 
     override fun hasPinCode(): Flow<Boolean> {
-        return lockScreenStore.hasPinCode()
+        return secretKeyRepository.hasKey(SECRET_KEY_ALIAS)
     }
 
-    override suspend fun getPinCodeSize(): Int {
-        val encryptedPinCode = lockScreenStore.getEncryptedCode() ?: return 0
+    override suspend fun getPinCodeSize(): Int? {
+        val encryptedPinCode = lockScreenStore.getEncryptedCode() ?: return null
         val secretKey = secretKeyRepository.getOrCreateKey(SECRET_KEY_ALIAS, false)
         val decryptedPinCode = encryptionDecryptionService.decrypt(secretKey, EncryptionResult.fromBase64(encryptedPinCode))
         return decryptedPinCode.size
@@ -79,6 +79,7 @@ class DefaultPinCodeManager(
     override suspend fun deletePinCode() {
         lockScreenStore.deleteEncryptedPinCode()
         lockScreenStore.resetCounter()
+        secretKeyRepository.deleteKey(SECRET_KEY_ALIAS)
         callbacks.forEach { it.onPinCodeRemoved() }
     }
 

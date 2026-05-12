@@ -53,6 +53,7 @@
   <string name="screen_room_details_invite_people_dont_close">"Não feches a aplicação até concluir."</string>
   <string name="screen_room_details_invite_people_preparing">"A preparar convites…"</string>
   <string name="screen_room_details_invite_people_title">"Convidar pessoas"</string>
+  <string name="screen_room_details_invite_title">"Convidar"</string>
   <string name="screen_room_details_leave_conversation_title">"Sair da conversa"</string>
   <string name="screen_room_details_leave_room_title">"Sair da sala"</string>
   <string name="screen_room_details_media_gallery_title">"Multimédia e ficheiros"</string>

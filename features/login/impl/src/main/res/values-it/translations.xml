@@ -28,11 +28,11 @@
   <string name="screen_change_server_subtitle">"Qual è l\'indirizzo del tuo server?"</string>
   <string name="screen_change_server_title">"Seleziona il tuo server"</string>
   <string name="screen_create_account_title">"Crea account"</string>
-  <string name="screen_login_error_deactivated_account">"Questo account è stato disattivato."</string>
+  <string name="screen_login_error_deactivated_account">"Questo account è stato eliminato."</string>
   <string name="screen_login_error_invalid_credentials">"Nome utente e/o password errati"</string>
   <string name="screen_login_error_invalid_user_id">"Questo non è un identità utente valida. il formato atteso é: \'@user:homeserver.org\'"</string>
   <string name="screen_login_error_refresh_tokens">"Questo server è configurato per usare i token di aggiornamento. Non sono supportati quando si usa l\'accesso basato su password."</string>
-  <string name="screen_login_error_unsupported_authentication">"L\'homeserver selezionato non supporta la password o l\'accesso OIDC. Contatta il tuo amministratore o scegli un altro homeserver."</string>
+  <string name="screen_login_error_unsupported_authentication">"L\'homeserver selezionato non supporta la password o l\'accesso OAuth. Contatta il tuo amministratore o scegli un altro homeserver."</string>
   <string name="screen_login_form_header">"Inserisci i tuoi dati"</string>
   <string name="screen_login_subtitle">"Matrix è una rete aperta per comunicazioni sicure e decentralizzate."</string>
   <string name="screen_login_title">"Bentornato!"</string>
@@ -45,6 +45,7 @@
   <string name="screen_missing_key_backup_step_5">"Torna a %1$s"</string>
   <string name="screen_missing_key_backup_title">"Abilita l\'archivio delle chiavi prima di procedere con %1$s"</string>
   <string name="screen_onboarding_app_version">"Versione %1$s"</string>
+  <string name="screen_onboarding_checking_account">"Verifica dell\'account"</string>
   <string name="screen_onboarding_sign_in_manually">"Accedi manualmente"</string>
   <string name="screen_onboarding_sign_in_to">"Accedi a %1$s"</string>
   <string name="screen_onboarding_sign_in_with_qr_code">"Accedi con codice QR"</string>

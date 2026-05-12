@@ -8,6 +8,7 @@
 
 package io.element.android.libraries.cryptography.api
 
+import kotlinx.coroutines.flow.Flow
 import javax.crypto.SecretKey
 
 /**
@@ -15,16 +16,18 @@ import javax.crypto.SecretKey
  * Implementation should be able to store the generated key securely.
  */
 interface SecretKeyRepository {
+    fun hasKey(alias: String): Flow<Boolean>
+
     /**
      * Get or create a secret key for a given alias.
      * @param alias the alias to use
      * @param requiresUserAuthentication true if the key should be protected by user authentication
      */
-    fun getOrCreateKey(alias: String, requiresUserAuthentication: Boolean): SecretKey
+    suspend fun getOrCreateKey(alias: String, requiresUserAuthentication: Boolean): SecretKey
 
     /**
      * Delete the secret key for a given alias.
      * @param alias the alias to use
      */
-    fun deleteKey(alias: String)
+    suspend fun deleteKey(alias: String)
 }

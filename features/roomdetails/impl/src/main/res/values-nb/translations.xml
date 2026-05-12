@@ -56,6 +56,7 @@
   <string name="screen_room_details_invite_people_dont_close">"Ikke lukk appen før den er ferdig."</string>
   <string name="screen_room_details_invite_people_preparing">"Forbereder invitasjoner…"</string>
   <string name="screen_room_details_invite_people_title">"Inviter folk"</string>
+  <string name="screen_room_details_invite_title">"Inviter"</string>
   <string name="screen_room_details_leave_conversation_title">"Forlat samtalen"</string>
   <string name="screen_room_details_leave_room_title">"Forlat rommet"</string>
   <string name="screen_room_details_media_gallery_title">"Medier og filer"</string>

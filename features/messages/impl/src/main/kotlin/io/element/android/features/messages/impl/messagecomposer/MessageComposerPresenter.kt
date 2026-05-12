@@ -57,7 +57,6 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
 import io.element.android.libraries.matrix.api.room.getDirectRoomMember
-import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.powerlevels.use
 import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId

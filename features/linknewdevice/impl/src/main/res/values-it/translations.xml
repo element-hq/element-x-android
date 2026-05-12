@@ -34,6 +34,8 @@
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"Se riscontri lo stesso problema, prova con un altra rete wifi o usa i dati mobili al posto del wifi."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Se il problema persiste, accedi manualmente"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"La connessione non è sicura"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"Ti verrà chiesto di inserire le due cifre mostrate su questo dispositivo."</string>
+  <string name="screen_qr_code_login_device_code_title">"Inserisci il numero qui sotto sull\'altro dispositivo"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"L\'accesso è stato annullato sull\'altro dispositivo."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Richiesta di accesso annullata"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"L\'accesso è stato rifiutato sull\'altro dispositivo."</string>
@@ -54,4 +56,5 @@ Prova ad accedere manualmente o scansiona il codice QR con un altro dispositivo.
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Per continuare, è necessario fornire l\'autorizzazione a %1$s per utilizzare la fotocamera del dispositivo."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Consenti l\'accesso alla fotocamera per la scansione del codice QR"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Si è verificato un errore inatteso. Riprova."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"In attesa dell\'altro dispositivo"</string>
 </resources>

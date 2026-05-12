@@ -14,7 +14,7 @@
   <string name="notification_error_unified_push_unregistered_android">"UnifiedPush 分发器注册失败，你将无法再接收通知。请检查 app 的通知设置及推送分发器的状态。"</string>
   <string name="notification_fallback_content">"你有新消息。"</string>
   <plurals name="notification_fallback_n_content">
-    <item quantity="other">"你有 %d 条新消息。"</item>
+    <item quantity="other">"你有 %d 个新消息。"</item>
   </plurals>
   <string name="notification_incoming_audio_call">"📞 来电"</string>
   <string name="notification_incoming_call">"📹 来电"</string>

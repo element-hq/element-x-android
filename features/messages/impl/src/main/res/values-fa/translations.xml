@@ -27,7 +27,7 @@
   <string name="screen_room_attachment_source_camera_video">"ضبط ویدیو"</string>
   <string name="screen_room_attachment_source_files">"پیوست"</string>
   <string name="screen_room_attachment_source_gallery">"کتابخانهٔ عکس و ویدیو"</string>
-  <string name="screen_room_attachment_source_location">"مکان"</string>
+  <string name="screen_room_attachment_source_location">"هم‌رسانی مکان"</string>
   <string name="screen_room_attachment_source_poll">"نظرسنجی"</string>
   <string name="screen_room_attachment_text_formatting">"قالب‌بندی متن"</string>
   <string name="screen_room_encrypted_history_banner">"تاریخچه پیام درحال حاضر دردسترس نیست."</string>
@@ -56,5 +56,13 @@
   <string name="screen_room_timeline_tombstoned_room_message">"این اتاق جایگزین شده و دیگر فعّال نیست"</string>
   <string name="screen_room_timeline_upgraded_room_action">"دیدن پیام‌های قدیمی"</string>
   <string name="screen_room_timeline_upgraded_room_message">"این اتاق ادامهٔ اتاقی دیگر است"</string>
+  <plurals name="screen_room_typing_many_members">
+    <item quantity="one">"%1$s، %2$s و %3$d سایر"</item>
+    <item quantity="other">"%1$s، %2$s و %3$d موارد دیگر"</item>
+  </plurals>
+  <plurals name="screen_room_typing_notification">
+    <item quantity="one">"%1$s در حال تایپ است"</item>
+    <item quantity="other">"%1$s در حال تایپ هستند"</item>
+  </plurals>
   <string name="screen_room_typing_two_members">"%1$s و %2$s"</string>
 </resources>

@@ -22,13 +22,6 @@ enum class FeatureFlags(
     override val isFinished: Boolean,
     override val isInLabs: Boolean = false,
 ) : Feature {
-    RoomDirectorySearch(
-        key = "feature.roomdirectorysearch",
-        title = "Room directory search",
-        description = "Allow user to search for public rooms in their homeserver",
-        defaultValue = { false },
-        isFinished = false,
-    ),
     ShowBlockedUsersDetails(
         key = "feature.showBlockedUsersDetails",
         title = "Show blocked users details",

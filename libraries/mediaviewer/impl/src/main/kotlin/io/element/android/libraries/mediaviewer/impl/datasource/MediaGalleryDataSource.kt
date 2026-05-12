@@ -17,6 +17,7 @@ import io.element.android.libraries.matrix.api.room.BaseRoom
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -27,10 +28,11 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onCompletion
 import kotlinx.coroutines.flow.onEach
+import timber.log.Timber
 import java.util.concurrent.atomic.AtomicBoolean
 
 interface MediaGalleryDataSource {
-    fun start()
+    fun start(coroutineScope: CoroutineScope)
     fun groupedMediaItemsFlow(): Flow<AsyncData<GroupedMediaItems>>
     fun getLastData(): AsyncData<GroupedMediaItems>
     suspend fun loadMore(direction: Timeline.PaginationDirection)
@@ -58,7 +60,7 @@ class TimelineMediaGalleryDataSource(
     private val isStarted = AtomicBoolean(false)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    override fun start() {
+    override fun start(coroutineScope: CoroutineScope) {
         if (!isStarted.compareAndSet(false, true)) {
             return
         }
@@ -96,9 +98,12 @@ class TimelineMediaGalleryDataSource(
             groupedMediaItemsFlow.emit(AsyncData.Success(groupedMediaItems))
         }
             .onCompletion {
-                timeline?.close()
+                timeline?.let {
+                    Timber.d("Timeline media gallery data source flow completed for room ${room.roomId}, closing timeline")
+                    it.close()
+                }
             }
-            .launchIn(room.roomCoroutineScope)
+            .launchIn(coroutineScope)
     }
 
     override suspend fun loadMore(direction: Timeline.PaginationDirection) {

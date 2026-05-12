@@ -223,7 +223,7 @@ class NotificationSettingsPresenter(
                 notificationSettingsService.setDefaultRoomNotificationMode(
                     isEncrypted = encryptedGroupDefaultMode != RoomNotificationMode.ALL_MESSAGES,
                     mode = RoomNotificationMode.ALL_MESSAGES,
-                    isOneToOne = false,
+                    isDM = false,
                 )
             }
 
@@ -234,7 +234,7 @@ class NotificationSettingsPresenter(
                 notificationSettingsService.setDefaultRoomNotificationMode(
                     isEncrypted = encryptedOneToOneDefaultMode != RoomNotificationMode.ALL_MESSAGES,
                     mode = RoomNotificationMode.ALL_MESSAGES,
-                    isOneToOne = true,
+                    isDM = true,
                 )
             }
         }.fold(

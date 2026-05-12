@@ -47,8 +47,8 @@ import io.element.android.libraries.designsystem.theme.messageFromMeBackground
 import io.element.android.libraries.designsystem.theme.messageFromOtherBackground
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
+import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import io.element.android.libraries.ui.utils.graphics.drawInLayer
-import io.element.android.libraries.ui.utils.time.isTalkbackActive
 
 private val BUBBLE_RADIUS = 12.dp
 private val avatarRadius = AvatarSize.TimelineSender.dp / 2
