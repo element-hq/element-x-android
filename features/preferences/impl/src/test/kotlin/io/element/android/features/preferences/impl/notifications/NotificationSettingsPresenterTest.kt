@@ -985,6 +985,110 @@ class NotificationSettingsPresenterTest {
     }
 
     @Test
+    fun `present - ShowCallRingtoneDialog and DismissCallRingtoneDialog toggle dialog visibility`() = runTest {
+        val presenter = createNotificationSettingsPresenter()
+        presenter.test {
+            val initial = consumeItemsUntilPredicate {
+                it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
+            }.last()
+            assertThat(initial.showCallRingtoneDialog).isFalse()
+
+            initial.eventSink(NotificationSettingsEvents.ShowCallRingtoneDialog)
+            val shown = consumeItemsUntilPredicate { it.showCallRingtoneDialog }.last()
+            assertThat(shown.showCallRingtoneDialog).isTrue()
+
+            shown.eventSink(NotificationSettingsEvents.DismissCallRingtoneDialog)
+            val hidden = consumeItemsUntilPredicate { !it.showCallRingtoneDialog }.last()
+            assertThat(hidden.showCallRingtoneDialog).isFalse()
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `present - SelectCallRingtonePreset persists SystemDefault, recreates the channel and closes the dialog`() = runTest {
+        val recreateRecorder = lambdaRecorder<NotificationSound, Int, Unit> { _, _ -> }
+        val appPreferencesStore = InMemoryAppPreferencesStore(callRingtone = NotificationSound.Silent)
+        val presenter = createNotificationSettingsPresenter(
+            appPreferencesStore = appPreferencesStore,
+            notificationSoundUpdater = FakeNotificationSoundUpdater(
+                recreateRingingCallChannelLambda = { sound, version -> recreateRecorder(sound, version) },
+            ),
+        )
+        presenter.test {
+            val initial = consumeItemsUntilPredicate {
+                it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid &&
+                    it.callRingtone.sound == NotificationSound.Silent
+            }.last()
+            initial.eventSink(NotificationSettingsEvents.ShowCallRingtoneDialog)
+            val shown = consumeItemsUntilPredicate { it.showCallRingtoneDialog }.last()
+
+            shown.eventSink(NotificationSettingsEvents.SelectCallRingtonePreset(NotificationSound.SystemDefault))
+            advanceUntilIdle()
+            consumeItemsUntilPredicate {
+                !it.showCallRingtoneDialog && it.callRingtone.sound == NotificationSound.SystemDefault
+            }
+            assertThat(appPreferencesStore.getNotificationSoundChannelConfig().callRingtone)
+                .isEqualTo(NotificationSound.SystemDefault)
+            recreateRecorder.assertions().isCalledOnce().with(value(NotificationSound.SystemDefault), value(1))
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - LaunchCallRingtonePicker increments the picker token and closes the dialog`() = runTest {
+        val presenter = createNotificationSettingsPresenter()
+        presenter.test {
+            val initial = consumeItemsUntilPredicate {
+                it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid
+            }.last()
+            assertThat(initial.pendingCallRingtonePickerLaunch).isEqualTo(0)
+            initial.eventSink(NotificationSettingsEvents.ShowCallRingtoneDialog)
+            val shown = consumeItemsUntilPredicate { it.showCallRingtoneDialog }.last()
+
+            shown.eventSink(NotificationSettingsEvents.LaunchCallRingtonePicker)
+            val launched = consumeItemsUntilPredicate { it.pendingCallRingtonePickerLaunch == 1 }.last()
+            assertThat(launched.showCallRingtoneDialog).isFalse()
+            assertThat(launched.pendingCallRingtonePickerLaunch).isEqualTo(1)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `present - SelectCallRingtonePreset clears legacy ringtone classification`() = runTest {
+        // Legacy state: persisted SystemDefault + channel version 0 means the presenter probes the
+        // channel and surfaces whatever Android system has. We seed that probe with Silent so the
+        // initial row reads Silent even though DataStore holds SystemDefault. A preset pick must
+        // null the legacy classifier; otherwise re-reading state would still resolve to Silent
+        // after the SystemDefault selection persists.
+        val appPreferencesStore = InMemoryAppPreferencesStore(
+            callRingtone = NotificationSound.SystemDefault,
+            callRingtoneChannelVersion = 0,
+        )
+        val presenter = createNotificationSettingsPresenter(
+            appPreferencesStore = appPreferencesStore,
+            notificationSoundUpdater = FakeNotificationSoundUpdater(
+                recreateRingingCallChannelLambda = { _, _ -> },
+                readRingingCallChannelSoundLambda = { NotificationSound.Silent },
+            ),
+        )
+        presenter.test {
+            val initial = consumeItemsUntilPredicate {
+                it.matrixSettings is NotificationSettingsState.MatrixSettings.Valid &&
+                    it.callRingtone.sound == NotificationSound.Silent
+            }.last()
+            initial.eventSink(NotificationSettingsEvents.SelectCallRingtonePreset(NotificationSound.SystemDefault))
+            advanceUntilIdle()
+            val after = consumeItemsUntilPredicate {
+                it.callRingtone.sound == NotificationSound.SystemDefault
+            }.last()
+            assertThat(after.callRingtone.sound).isEqualTo(NotificationSound.SystemDefault)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
     fun `present - persisted ElementDefault renders Element default label`() = runTest {
         val presenter = createNotificationSettingsPresenter(
             appPreferencesStore = InMemoryAppPreferencesStore(messageSound = NotificationSound.ElementDefault),

@@ -309,21 +309,31 @@ private fun SoundsPreferenceCategory(state: NotificationSettingsState) {
             MessageSoundDialog(state)
         }
 
-        val onCallRingtoneClick = rememberSoundPickerOnClick(
+        val launchCallRingtonePicker = rememberSoundPickerOnClick(
             type = RingtoneManager.TYPE_RINGTONE,
             current = state.callRingtone.sound,
             defaultUri = Settings.System.DEFAULT_RINGTONE_URI,
             onSoundPicked = { sound -> state.eventSink(NotificationSettingsEvents.SetCallRingtone(sound)) },
         )
+        // Skip the initial 0 emission so the picker doesn't auto-open on screen entry; only
+        // increments fired by LaunchCallRingtonePicker should launch it.
+        LaunchedEffect(state.pendingCallRingtonePickerLaunch) {
+            if (state.pendingCallRingtonePickerLaunch > 0) {
+                launchCallRingtonePicker()
+            }
+        }
         ListItem(
             headlineContent = { Text(stringResource(id = R.string.screen_notification_settings_call_ringtone_label)) },
             supportingContent = { Text(state.callRingtone.displayName) },
-            onClick = onCallRingtoneClick,
+            onClick = { state.eventSink(NotificationSettingsEvents.ShowCallRingtoneDialog) },
         )
         if (state.callRingtone.copyError) {
             SoundCopyErrorRow(
                 onDismissClick = { state.eventSink(NotificationSettingsEvents.DismissCallRingtoneCopyError) },
             )
+        }
+        if (state.showCallRingtoneDialog) {
+            CallRingtoneDialog(state)
         }
     }
 }
@@ -365,6 +375,38 @@ private fun MessageSoundDialog(state: NotificationSettingsState) {
             }
         },
         onDismissRequest = { state.eventSink(NotificationSettingsEvents.DismissMessageSoundDialog) },
+    )
+}
+
+@Composable
+private fun CallRingtoneDialog(state: NotificationSettingsState) {
+    val initialSelection = when (state.callRingtone.sound) {
+        NotificationSound.SystemDefault -> 0
+        else -> null
+    }
+    val subtitle = if (initialSelection == null) {
+        stringResource(
+            id = R.string.screen_notification_settings_message_sound_dialog_current_subtitle,
+            state.callRingtone.displayName,
+        )
+    } else {
+        null
+    }
+    SingleSelectionDialog(
+        title = stringResource(id = R.string.screen_notification_settings_call_ringtone_label),
+        subtitle = subtitle,
+        options = persistentListOf(
+            ListOption(title = stringResource(id = R.string.screen_notification_settings_sound_system_default)),
+            ListOption(title = stringResource(id = R.string.screen_notification_settings_message_sound_dialog_choose_other)),
+        ),
+        initialSelection = initialSelection,
+        onSelectOption = { index ->
+            when (index) {
+                0 -> state.eventSink(NotificationSettingsEvents.SelectCallRingtonePreset(NotificationSound.SystemDefault))
+                else -> state.eventSink(NotificationSettingsEvents.LaunchCallRingtonePicker)
+            }
+        },
+        onDismissRequest = { state.eventSink(NotificationSettingsEvents.DismissCallRingtoneDialog) },
     )
 }
 

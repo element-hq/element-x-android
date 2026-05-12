@@ -27,6 +27,7 @@ data class NotificationSettingsState(
     val messageSound: SoundChannelUiState,
     val callRingtone: SoundChannelUiState,
     val showMessageSoundDialog: Boolean,
+    val showCallRingtoneDialog: Boolean,
     /**
      * One-shot trigger for launching the system ringtone picker. Each
      * [NotificationSettingsEvents.LaunchMessageSoundPicker] increments the value;
@@ -35,6 +36,12 @@ data class NotificationSettingsState(
      * auto-open the picker on screen entry.
      */
     val pendingMessageSoundPickerLaunch: Int,
+    /**
+     * One-shot trigger for launching the system ringtone picker from the call ringtone dialog.
+     * Same contract as [pendingMessageSoundPickerLaunch]: **always start at 0**, or the picker
+     * auto-opens on screen entry.
+     */
+    val pendingCallRingtonePickerLaunch: Int,
     val eventSink: (NotificationSettingsEvents) -> Unit,
 ) {
     sealed interface MatrixSettings {

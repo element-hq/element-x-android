@@ -169,6 +169,8 @@ class NotificationSettingsPresenter(
         var callRingtoneCopyError by remember { mutableStateOf(false) }
         var showMessageSoundDialog by remember { mutableStateOf(false) }
         var pendingMessageSoundPickerLaunch by remember { mutableIntStateOf(0) }
+        var showCallRingtoneDialog by remember { mutableStateOf(false) }
+        var pendingCallRingtonePickerLaunch by remember { mutableIntStateOf(0) }
 
         fun CoroutineScope.changePushProvider(
             data: Pair<PushProvider, Distributor>?
@@ -251,6 +253,23 @@ class NotificationSettingsPresenter(
                         onChannelFailure = { failure -> changeNotificationSettingAction.value = AsyncAction.Failure(failure) },
                     )
                 }
+                is NotificationSettingsEvents.SelectCallRingtonePreset -> {
+                    showCallRingtoneDialog = false
+                    legacyCallRingtone = null
+                    applyCallRingtone(
+                        sound = event.sound,
+                        sessionCoroutineScope = sessionCoroutineScope,
+                        onCopyError = { callRingtoneCopyError = true },
+                        onCopySuccess = { callRingtoneCopyError = false },
+                        onChannelFailure = { failure -> changeNotificationSettingAction.value = AsyncAction.Failure(failure) },
+                    )
+                }
+                NotificationSettingsEvents.ShowCallRingtoneDialog -> showCallRingtoneDialog = true
+                NotificationSettingsEvents.DismissCallRingtoneDialog -> showCallRingtoneDialog = false
+                NotificationSettingsEvents.LaunchCallRingtonePicker -> {
+                    showCallRingtoneDialog = false
+                    pendingCallRingtonePickerLaunch++
+                }
                 NotificationSettingsEvents.DismissMessageSoundCopyError -> {
                     messageSoundCopyError = false
                 }
@@ -282,7 +301,9 @@ class NotificationSettingsPresenter(
                 copyError = callRingtoneCopyError,
             ),
             showMessageSoundDialog = showMessageSoundDialog,
+            showCallRingtoneDialog = showCallRingtoneDialog,
             pendingMessageSoundPickerLaunch = pendingMessageSoundPickerLaunch,
+            pendingCallRingtonePickerLaunch = pendingCallRingtonePickerLaunch,
             eventSink = ::handleEvent,
         )
     }

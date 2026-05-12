@@ -68,6 +68,12 @@ open class NotificationSettingsStateProvider : PreviewParameterProvider<Notifica
                 messageSoundDisplayName = "Element default",
             ),
             aValidNotificationSettingsState(showMessageSoundDialog = true),
+            aValidNotificationSettingsState(showCallRingtoneDialog = true),
+            aValidNotificationSettingsState(
+                callRingtone = NotificationSound.Custom("preview://call-ringtone"),
+                callRingtoneDisplayName = "Pixel ringtone",
+                showCallRingtoneDialog = true,
+            ),
         )
 }
 
@@ -92,7 +98,9 @@ fun aValidNotificationSettingsState(
     callRingtoneDisplayName: String = "System default",
     callRingtoneCopyError: Boolean = false,
     showMessageSoundDialog: Boolean = false,
+    showCallRingtoneDialog: Boolean = false,
     pendingMessageSoundPickerLaunch: Int = 0,
+    pendingCallRingtonePickerLaunch: Int = 0,
     eventSink: (NotificationSettingsEvents) -> Unit = {},
 ) = NotificationSettingsState(
     matrixSettings = NotificationSettingsState.MatrixSettings.Valid(
@@ -122,7 +130,9 @@ fun aValidNotificationSettingsState(
         copyError = callRingtoneCopyError,
     ),
     showMessageSoundDialog = showMessageSoundDialog,
+    showCallRingtoneDialog = showCallRingtoneDialog,
     pendingMessageSoundPickerLaunch = pendingMessageSoundPickerLaunch,
+    pendingCallRingtonePickerLaunch = pendingCallRingtonePickerLaunch,
     eventSink = eventSink,
 )
 
@@ -153,7 +163,9 @@ fun aInvalidNotificationSettingsState(
         copyError = false,
     ),
     showMessageSoundDialog = false,
+    showCallRingtoneDialog = false,
     pendingMessageSoundPickerLaunch = 0,
+    pendingCallRingtonePickerLaunch = 0,
     eventSink = eventSink,
 )
 
