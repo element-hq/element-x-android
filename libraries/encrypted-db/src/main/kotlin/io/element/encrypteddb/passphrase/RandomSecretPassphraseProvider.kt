@@ -10,6 +10,7 @@ package io.element.encrypteddb.passphrase
 
 import android.content.Context
 import io.element.encrypteddb.crypto.EncryptedFile
+import io.element.encrypteddb.utils.doKeyDerivation
 import java.io.File
 import java.security.SecureRandom
 
@@ -35,9 +36,13 @@ class RandomSecretPassphraseProvider(
         }
     }
 
+    override fun reset(): Boolean {
+        return file.delete()
+    }
+
     private fun generateSecret(): ByteArray {
         val buffer = ByteArray(size = secretSize)
         SecureRandom().nextBytes(buffer)
-        return buffer
+        return buffer.doKeyDerivation(length = 256)
     }
 }

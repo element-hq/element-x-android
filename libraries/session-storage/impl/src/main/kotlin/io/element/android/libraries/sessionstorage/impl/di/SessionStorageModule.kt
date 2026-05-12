@@ -18,6 +18,7 @@ import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.sessionstorage.impl.SessionDatabase
 import io.element.encrypteddb.SqlCipherDriverFactory
 import io.element.encrypteddb.passphrase.RandomSecretPassphraseProvider
+import io.element.encrypteddb.utils.ReplaceDatabaseKey
 
 @BindingContainer
 @ContributesTo(AppScope::class)
@@ -36,9 +37,19 @@ object SessionStorageModule {
             parentDir.mkdirs()
         }
 
+        val rekeyMigrationVersion = 11L
         val passphraseProvider = RandomSecretPassphraseProvider(context, secretFile)
         val driver = SqlCipherDriverFactory(passphraseProvider)
-            .create(SessionDatabase.Schema, "$name.db", context)
+            .create(
+                schema = SessionDatabase.Schema,
+                name = "$name.db",
+                context = context,
+            ) { db, oldVersion, newVersion ->
+                if (rekeyMigrationVersion in oldVersion..newVersion) {
+                    ReplaceDatabaseKey(passphraseProvider).replaceKey(name, db)
+                }
+            }
+
         return SessionDatabase(driver)
     }
 }

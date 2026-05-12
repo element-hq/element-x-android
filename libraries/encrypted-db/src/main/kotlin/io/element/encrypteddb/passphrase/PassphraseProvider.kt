@@ -16,4 +16,6 @@ interface PassphraseProvider {
      * Returns a passphrase for SQLCipher in [ByteArray] format.
      */
     fun getPassphrase(): ByteArray
+
+    fun reset(): Boolean
 }
