@@ -193,7 +193,6 @@
   <string name="common_advanced_settings">"Kengaytirilgan sozlamalar"</string>
   <string name="common_an_image">"rasm"</string>
   <string name="common_analytics">"Analitika"</string>
-  <string name="common_android_fetching_notifications_title">"Bildirishnomalar sinxronlanmoqda…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Siz xonani tark etdingiz"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Siz sessiyadan chiqdingiz"</string>
   <string name="common_appearance">"Ko\'rinish"</string>
@@ -237,6 +236,7 @@ Sababi:%1$s."</string>
   <string name="common_failed">"Xatolikka uchradi"</string>
   <string name="common_favourite">"Sevimli"</string>
   <string name="common_favourited">"Sevimli"</string>
+  <string name="common_fetching_notifications_title_android">"Bildirishnomalar sinxronlanmoqda…"</string>
   <string name="common_file">"Fayl"</string>
   <string name="common_file_deleted">"Fayl o\'chirildi"</string>
   <string name="common_file_saved">"Fayl saqlandi"</string>

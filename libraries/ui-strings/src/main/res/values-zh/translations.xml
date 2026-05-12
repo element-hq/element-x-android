@@ -196,7 +196,6 @@
   <string name="common_advanced_settings">"高级设置"</string>
   <string name="common_an_image">"一张图片"</string>
   <string name="common_analytics">"分析"</string>
-  <string name="common_android_fetching_notifications_title">"正在同步通知…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"你离开了房间"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"你已注销会话"</string>
   <string name="common_appearance">"外观"</string>
@@ -242,6 +241,7 @@
   <string name="common_failed">"失败"</string>
   <string name="common_favourite">"收藏"</string>
   <string name="common_favourited">"已收藏"</string>
+  <string name="common_fetching_notifications_title_android">"正在同步通知…"</string>
   <string name="common_file">"文件"</string>
   <string name="common_file_deleted">"文件已删除"</string>
   <string name="common_file_saved">"文件已保存"</string>

@@ -199,7 +199,6 @@
   <string name="common_advanced_settings">"Speciális beállítások"</string>
   <string name="common_an_image">"egy kép"</string>
   <string name="common_analytics">"Elemzések"</string>
-  <string name="common_android_fetching_notifications_title">"Értesítések szinkronizálása…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Elhagyta a szobát"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Ki lett jelentkeztetve a munkamenetből"</string>
   <string name="common_appearance">"Megjelenítés"</string>
@@ -245,6 +244,7 @@ Ok: %1$s."</string>
   <string name="common_failed">"Sikertelen"</string>
   <string name="common_favourite">"Kedvenc"</string>
   <string name="common_favourited">"Kedvencnek jelölve"</string>
+  <string name="common_fetching_notifications_title_android">"Értesítések szinkronizálása…"</string>
   <string name="common_file">"Fájl"</string>
   <string name="common_file_deleted">"Fájl törölve"</string>
   <string name="common_file_saved">"A fájl mentve"</string>

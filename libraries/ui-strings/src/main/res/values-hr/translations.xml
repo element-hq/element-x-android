@@ -200,7 +200,6 @@
   <string name="common_advanced_settings">"Napredne postavke"</string>
   <string name="common_an_image">"slika"</string>
   <string name="common_analytics">"Analitika"</string>
-  <string name="common_android_fetching_notifications_title">"Sinkronizacija obavijesti…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Napustili ste sobu"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Odjavljeni ste iz sesije"</string>
   <string name="common_appearance">"Izgled"</string>
@@ -246,6 +245,7 @@ Razlog: %1$s ."</string>
   <string name="common_failed">"Nije uspjelo"</string>
   <string name="common_favourite">"Favorit"</string>
   <string name="common_favourited">"Označeno kao favorit"</string>
+  <string name="common_fetching_notifications_title_android">"Sinkronizacija obavijesti…"</string>
   <string name="common_file">"Datoteka"</string>
   <string name="common_file_deleted">"Datoteka je izbrisana"</string>
   <string name="common_file_saved">"Datoteka je spremljena"</string>
