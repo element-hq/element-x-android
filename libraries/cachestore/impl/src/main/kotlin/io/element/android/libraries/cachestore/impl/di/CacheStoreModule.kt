@@ -17,6 +17,7 @@ import io.element.android.libraries.cachestore.impl.CacheDatabase
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.encrypteddb.SqlCipherDriverFactory
 import io.element.encrypteddb.passphrase.RandomSecretPassphraseProvider
+import io.element.encrypteddb.utils.ReplaceDatabaseKey
 
 @BindingContainer
 @ContributesTo(AppScope::class)
@@ -35,9 +36,19 @@ object CacheStoreModule {
             parentDir.mkdirs()
         }
 
+        val rekeyMigrationVersion = 2L
         val passphraseProvider = RandomSecretPassphraseProvider(context, secretFile)
         val driver = SqlCipherDriverFactory(passphraseProvider)
-            .create(CacheDatabase.Schema, "$name.db", context)
+            .create(
+                schema = CacheDatabase.Schema,
+                name = "$name.db",
+                context = context
+            ) { db, oldVersion, newVersion ->
+                if (rekeyMigrationVersion in oldVersion..newVersion) {
+                    ReplaceDatabaseKey(passphraseProvider).replaceKey(name, db)
+                }
+            }
+
         return CacheDatabase(driver)
     }
 }
