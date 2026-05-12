@@ -26,6 +26,7 @@ import io.element.android.libraries.featureflag.api.FeatureFlagService
 import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.mediaupload.api.MaxUploadSizeProvider
 import io.element.android.libraries.mediaupload.api.MediaOptimizationConfigProvider
+import io.element.android.libraries.mediaupload.api.VideoMetadataExtractor
 import io.element.android.libraries.mediaupload.api.compressorHelper
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.preferences.api.store.VideoCompressionPreset
