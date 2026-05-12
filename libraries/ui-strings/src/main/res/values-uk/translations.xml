@@ -220,7 +220,6 @@
   <string name="common_current_user_left_room">"Виходить з кімнати"</string>
   <string name="common_current_user_left_space">"Вийшов із простору"</string>
   <string name="common_current_user_rejected_invite">"Запрошення відхилено"</string>
-  <string name="common_dark">"Темна"</string>
   <string name="common_decryption_error">"Помилка розшифрування"</string>
   <string name="common_description">"Опис"</string>
   <string name="common_developer_options">"Налаштування розробника"</string>
@@ -260,7 +259,6 @@
   <string name="common_invite_unknown_profile">"Цей Matrix-ID не знайдено, тому запрошення може не бути отримано."</string>
   <string name="common_leaving_room">"Вихід з кімнати"</string>
   <string name="common_leaving_space">"Вихід з простору"</string>
-  <string name="common_light">"Світла"</string>
   <string name="common_line_copied_to_clipboard">"Рядок скопійовано до буфера обміну"</string>
   <string name="common_link_copied_to_clipboard">"Посилання скопійовано в буфер обміну"</string>
   <string name="common_link_new_device">"Під\'єднати новий пристрій"</string>
@@ -387,7 +385,6 @@
   <string name="common_suggested">"Запропоновано"</string>
   <string name="common_suggestions">"Пропозиції"</string>
   <string name="common_syncing">"Синхронізація"</string>
-  <string name="common_system">"Системна"</string>
   <string name="common_text">"Текст"</string>
   <string name="common_third_party_notices">"Повідомлення третіх сторін"</string>
   <string name="common_thread">"Гілка"</string>
