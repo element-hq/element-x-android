@@ -35,8 +35,6 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.utils.snackbar.LocalSnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
@@ -61,7 +59,6 @@ import kotlinx.coroutines.launch
 class RoomDetailsPresenter(
     private val client: MatrixClient,
     private val room: JoinedRoom,
-    private val featureFlagService: FeatureFlagService,
     private val notificationSettingsService: NotificationSettingsService,
     private val roomMembersDetailsPresenterFactory: RoomMemberDetailsPresenter.Factory,
     private val leaveRoomPresenter: Presenter<LeaveRoomState>,
@@ -110,14 +107,11 @@ class RoomDetailsPresenter(
             }
         }
 
-        val isKnockRequestsEnabled by remember {
-            featureFlagService.isFeatureEnabledFlow(FeatureFlags.Knock)
-        }.collectAsState(false)
         val knockRequestsCount by produceState<Int?>(null) {
             room.knockRequestsFlow.collect { value = it.size }
         }
         val canShowKnockRequests by remember {
-            derivedStateOf { isKnockRequestsEnabled && permissions.knockRequestsPermissions.hasAny && joinRule == JoinRule.Knock }
+            derivedStateOf { permissions.knockRequestsPermissions.hasAny && joinRule == JoinRule.Knock }
         }
         val canShowSecurityAndPrivacy by remember {
             derivedStateOf { !isDm && permissions.securityAndPrivacyPermissions.hasAny(isSpace = false, joinRule = joinRule) }
