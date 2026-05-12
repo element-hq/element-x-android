@@ -1,5 +1,5 @@
 -- Migrate DB from version 1
--- Dummy migration to trigger a re-key
+-- Initial schema for CacheData table
 
 CREATE TABLE IF NOT EXISTS CacheData (
     key TEXT NOT NULL PRIMARY KEY,
