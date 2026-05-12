@@ -58,7 +58,7 @@ class FetchPushForegroundService : Service() {
         NotificationManagerCompat.from(this).createNotificationChannelsCompat(
             listOf(
                 NotificationChannelCompat.Builder(CHANNEL_ID, NotificationManagerCompat.IMPORTANCE_LOW)
-                    .setName(getString(CommonStrings.common_android_fetching_notifications_title))
+                    .setName(getString(CommonStrings.common_android_fetching_notifications_title).ifEmpty { "Syncing notifications…" })
                     .setVibrationEnabled(false)
                     .setSound(null, null)
                     .build()
