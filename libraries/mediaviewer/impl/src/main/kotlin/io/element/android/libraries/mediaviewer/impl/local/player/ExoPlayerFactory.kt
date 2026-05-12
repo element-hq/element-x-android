@@ -19,15 +19,15 @@ import androidx.media3.exoplayer.ExoPlayer
 
 @OptIn(UnstableApi::class)
 @Composable
-fun rememberExoPlayer(enableMidiRenderer: Boolean = false): ExoPlayer {
+fun rememberExoPlayer(forAudioOnly: Boolean): ExoPlayer {
     return if (LocalInspectionMode.current) {
         remember {
             ExoPlayerForPreview()
         }
     } else {
         val context = LocalContext.current
-        remember(context, enableMidiRenderer) {
-            if (enableMidiRenderer) {
+        remember {
+            if (forAudioOnly) {
                 // Required for media3-exoplayer-midi to decode MIDI samples produced by DefaultExtractorsFactory.
                 val renderersFactory = DefaultRenderersFactory(context)
                     .setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON)

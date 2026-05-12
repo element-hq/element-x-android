@@ -9,11 +9,8 @@
 package io.element.android.libraries.mediaplayer.impl
 
 import android.content.Context
-import androidx.annotation.OptIn
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
-import androidx.media3.common.util.UnstableApi
-import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
 import dev.zacsweers.metro.BindingContainer
 import dev.zacsweers.metro.ContributesTo
@@ -49,19 +46,10 @@ interface SimplePlayer {
 @ContributesTo(RoomScope::class)
 @BindingContainer
 object SimplePlayerModule {
-    @OptIn(UnstableApi::class)
     @Provides
     fun simplePlayerProvider(
         @ApplicationContext context: Context,
-    ): SimplePlayer {
-        // Required for media3-exoplayer-midi to decode MIDI samples produced by DefaultExtractorsFactory.
-        val renderersFactory = DefaultRenderersFactory(context)
-            .setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON)
-        return DefaultSimplePlayer(
-            ExoPlayer.Builder(context, renderersFactory)
-                .build()
-        )
-    }
+    ): SimplePlayer = DefaultSimplePlayer(ExoPlayer.Builder(context).build())
 }
 
 /**
