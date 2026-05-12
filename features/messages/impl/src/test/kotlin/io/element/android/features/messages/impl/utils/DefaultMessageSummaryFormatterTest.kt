@@ -33,33 +33,36 @@ class DefaultMessageSummaryFormatterTest {
     @Test
     @Config(qualifiers = "en")
     fun `format call notification started`() {
-        val expected = formatter.format(TimelineItemRtcNotificationContent(
-            callIntent = CallIntent.VIDEO,
-            state = RtcNotificationState.Started
-        ))
-
+        val expected = formatter.format(
+            TimelineItemRtcNotificationContent(
+                callIntent = CallIntent.VIDEO,
+                state = RtcNotificationState.Started
+            )
+        )
         assertThat(expected).isEqualTo("Call started")
     }
 
     @Test
     @Config(qualifiers = "en")
     fun `format call notification declined by me`() {
-        val expected = formatter.format(TimelineItemRtcNotificationContent(
-            callIntent = CallIntent.VIDEO,
-            state = RtcNotificationState.Declined(byMe = true)
-        ))
-
+        val expected = formatter.format(
+            TimelineItemRtcNotificationContent(
+                callIntent = CallIntent.VIDEO,
+                state = RtcNotificationState.Declined(byMe = true)
+            )
+        )
         assertThat(expected).isEqualTo("You declined a call")
     }
 
     @Test
     @Config(qualifiers = "en")
     fun `format call notification declined`() {
-        val expected = formatter.format(TimelineItemRtcNotificationContent(
-            callIntent = CallIntent.VIDEO,
-            state = RtcNotificationState.Declined(byMe = false)
-        ))
-
+        val expected = formatter.format(
+            TimelineItemRtcNotificationContent(
+                callIntent = CallIntent.VIDEO,
+                state = RtcNotificationState.Declined(byMe = false)
+            )
+        )
         assertThat(expected).isEqualTo("Call declined")
     }
 
@@ -69,7 +72,6 @@ class DefaultMessageSummaryFormatterTest {
         val expected = formatter.format(
             aLocationContent(isLive = true)
         )
-
         assertThat(expected).isEqualTo("Shared live location")
     }
 
@@ -79,27 +81,26 @@ class DefaultMessageSummaryFormatterTest {
         val expected = formatter.format(
             aLocationContent(isLive = false)
         )
-
         assertThat(expected).isEqualTo("Shared location")
     }
 }
 
-private fun aLocationContent(isLive: Boolean): TimelineItemLocationContent = TimelineItemLocationContent(
+private fun aLocationContent(isLive: Boolean) = TimelineItemLocationContent(
     senderId = A_USER_ID,
     senderProfile = aProfileDetails(),
     description = null,
     assetType = null,
     mode = if (isLive) {
         Mode.Live(
-        lastKnownLocation = Location.fromGeoUri("geo:1,5"),
-        isActive = true,
-        endsAt = "",
-        endTimestamp = 0,
-        isOwnUser = true
-    )
+            lastKnownLocation = Location.fromGeoUri("geo:1,5"),
+            isActive = true,
+            endsAt = "",
+            endTimestamp = 0,
+            isOwnUser = true,
+        )
     } else {
         Mode.Static(
-        location = Location.fromGeoUri("geo:1,5")!!
-    )
+            location = Location.fromGeoUri("geo:1,5")!!,
+        )
     }
 )
