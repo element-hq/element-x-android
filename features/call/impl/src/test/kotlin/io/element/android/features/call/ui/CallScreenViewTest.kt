@@ -14,9 +14,9 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.junit4.createAndroidComposeRule
-import io.element.android.features.call.impl.pip.PictureInPictureEvents
+import io.element.android.features.call.impl.pip.PictureInPictureEvent
 import io.element.android.features.call.impl.pip.aPictureInPictureState
-import io.element.android.features.call.impl.ui.CallScreenEvents
+import io.element.android.features.call.impl.ui.CallScreenEvent
 import io.element.android.features.call.impl.ui.CallScreenView
 import io.element.android.features.call.impl.ui.aCallScreenState
 import io.element.android.tests.testutils.EventsRecorder
@@ -26,7 +26,7 @@ import org.junit.Test
 import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import androidx.test.ext.junit.runners.AndroidJUnit4
-import io.element.android.features.call.impl.ui.JavascriptBackHandler
+import io.element.android.features.call.impl.ui.JavascriptBackHandlerBridge
 import org.junit.Assert.assertEquals
 import org.robolectric.annotation.Config
 import org.robolectric.annotation.Implementation
@@ -41,7 +41,7 @@ class CallScreenViewTest {
 
     @Test
     fun `pressing back key triggers hangup when no web view is available and pip is unsupported`() {
-        val callEvents = EventsRecorder<CallScreenEvents>()
+        val callEvents = EventsRecorder<CallScreenEvent>()
 
         rule.setCallScreenView(
             state = aCallScreenState(eventSink = callEvents),
@@ -77,7 +77,7 @@ class CallScreenViewTest {
     @Test
     fun `web view javascript back handler emits pip event when pip is supported`() {
 
-        val pipEvents = EventsRecorder<PictureInPictureEvents>()
+        val pipEvents = EventsRecorder<PictureInPictureEvent>()
 
         rule.setCallScreenView(
             state = aCallScreenState(),
@@ -93,8 +93,8 @@ class CallScreenViewTest {
         }
 
         pipEvents.assertSize(2)
-        pipEvents.assertTrue(0) { it is PictureInPictureEvents.SetPipController }
-        pipEvents.assertTrue(1) { it is PictureInPictureEvents.EnterPictureInPicture }
+        pipEvents.assertTrue(0) { it is PictureInPictureEvent.SetPipController }
+        pipEvents.assertTrue(1) { it is PictureInPictureEvent.EnterPictureInPicture }
     }
 }
 
@@ -120,7 +120,7 @@ private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setCallS
 internal class RecordingShadowWebView : ShadowWebView() {
     companion object {
         val dispatchedEvents = mutableListOf<KeyEvent>()
-        private var backHandlerJavascriptInterface: JavascriptBackHandler? = null
+        private var backHandlerJavascriptInterface: JavascriptBackHandlerBridge? = null
 
         @Resetter
         @JvmStatic
@@ -140,7 +140,7 @@ internal class RecordingShadowWebView : ShadowWebView() {
     protected override fun addJavascriptInterface(`object`: Any, name: String) {
         super.addJavascriptInterface(`object`, name)
         if (name == "backHandler") {
-            backHandlerJavascriptInterface = `object` as? JavascriptBackHandler
+            backHandlerJavascriptInterface = `object` as? JavascriptBackHandlerBridge
         }
     }
 
