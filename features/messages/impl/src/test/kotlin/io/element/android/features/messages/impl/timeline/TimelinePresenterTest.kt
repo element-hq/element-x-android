@@ -10,6 +10,7 @@ package io.element.android.features.messages.impl.timeline
 
 import app.cash.turbine.ReceiveTurbine
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.location.test.FakeActiveLiveLocationShareManager
 import io.element.android.features.messages.impl.FakeMessagesNavigator
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.aResolveVerifiedUserSendFailureState
 import io.element.android.features.messages.impl.fixtures.aMessageEvent
@@ -1292,6 +1293,7 @@ class TimelinePresenterTest {
         sessionPreferencesStore: InMemorySessionPreferencesStore = InMemorySessionPreferencesStore(),
         timelineItemIndexer: TimelineItemIndexer = TimelineItemIndexer(),
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(),
+        liveLocationShareManager: FakeActiveLiveLocationShareManager = FakeActiveLiveLocationShareManager(),
         markAsFullyRead: MarkAsFullyRead = FakeMarkAsFullyRead { _, _ -> },
     ): TimelinePresenter {
         return TimelinePresenter(
@@ -1311,6 +1313,7 @@ class TimelinePresenterTest {
             roomCallStatePresenter = { aStandByCallState() },
             featureFlagService = featureFlagService,
             analyticsService = FakeAnalyticsService(),
+            liveLocationShareManager = liveLocationShareManager,
             markAsFullyRead = markAsFullyRead,
         )
     }

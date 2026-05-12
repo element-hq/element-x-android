@@ -53,6 +53,7 @@
   <string name="screen_room_details_invite_people_dont_close">"Peidiwch â chau\'r ap nes ei fod wedi gorffen."</string>
   <string name="screen_room_details_invite_people_preparing">"Wrthi\'n paratoi gwahoddiadau…"</string>
   <string name="screen_room_details_invite_people_title">"Gwahodd pobl"</string>
+  <string name="screen_room_details_invite_title">"Gwahodd"</string>
   <string name="screen_room_details_leave_conversation_title">"Gadael y sgwrs"</string>
   <string name="screen_room_details_leave_room_title">"Gadael yr ystafell"</string>
   <string name="screen_room_details_media_gallery_title">"Cyfryngau a ffeiliau"</string>

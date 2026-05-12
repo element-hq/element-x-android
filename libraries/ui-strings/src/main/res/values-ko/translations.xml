@@ -190,7 +190,6 @@
   <string name="common_advanced_settings">"고급 설정"</string>
   <string name="common_an_image">"이미지"</string>
   <string name="common_analytics">"통계"</string>
-  <string name="common_android_fetching_notifications_title">"알림 동기화 중…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"방을 떠남"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"세션에서 로그아웃되었습니다."</string>
   <string name="common_appearance">"외관"</string>
@@ -234,6 +233,7 @@
   <string name="common_failed">"실패"</string>
   <string name="common_favourite">"즐겨찾기"</string>
   <string name="common_favourited">"즐겨찾기 됨"</string>
+  <string name="common_fetching_notifications_title_android">"알림 동기화 중…"</string>
   <string name="common_file">"파일"</string>
   <string name="common_file_deleted">"파일 삭제됨"</string>
   <string name="common_file_saved">"파일 저장됨"</string>
@@ -310,7 +310,6 @@
     <item quantity="other">"%1$d 답변"</item>
   </plurals>
   <string name="common_replying_to">"%1$s님에게 답장하는 중"</string>
-  <string name="common_report_a_bug">"버그 보고"</string>
   <string name="common_report_a_problem">"문제 보고"</string>
   <string name="common_report_submitted">"보고 제출됨"</string>
   <string name="common_rich_text_editor">"리치 텍스트 편집기"</string>

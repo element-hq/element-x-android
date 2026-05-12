@@ -56,6 +56,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.features.location.api.LiveLocationSharingBanner
 import io.element.android.features.messages.api.timeline.voicemessages.composer.VoiceMessageComposerEvent
 import io.element.android.features.messages.impl.actionlist.ActionListEvent
 import io.element.android.features.messages.impl.actionlist.ActionListView
@@ -205,15 +206,15 @@ fun MessagesView(
     val expandableState = rememberExpandableBottomSheetLayoutState()
     ExpandableBottomSheetLayout(
         modifier = modifier
-            .fillMaxSize()
-            .imePadding()
-            .systemBarsPadding()
-            .onSizeChanged { size ->
-                // Let the composer takes at max half of the available height.
-                // The value will be different if the soft keyboard is displayed
-                // or not.
-                maxComposerHeightPx = (size.height * 0.5f).toInt()
-            },
+                .fillMaxSize()
+                .imePadding()
+                .systemBarsPadding()
+                .onSizeChanged { size ->
+                    // Let the composer takes at max half of the available height.
+                    // The value will be different if the soft keyboard is displayed
+                    // or not.
+                    maxComposerHeightPx = (size.height * 0.5f).toInt()
+                },
         content = {
             Scaffold(
                 contentWindowInsets = WindowInsets.statusBars,
@@ -250,8 +251,8 @@ fun MessagesView(
                 content = { padding ->
                     Box(
                         modifier = Modifier
-                            .padding(padding)
-                            .consumeWindowInsets(padding)
+                                .padding(padding)
+                                .consumeWindowInsets(padding)
                     ) {
                         MessagesViewContent(
                             state = state,
@@ -288,10 +289,10 @@ fun MessagesView(
 
                         SuggestionsPickerView(
                             modifier = Modifier
-                                .shadow(10.dp)
-                                .background(ElementTheme.colors.bgCanvasDefault)
-                                .align(Alignment.BottomStart)
-                                .heightIn(max = 230.dp),
+                                    .shadow(10.dp)
+                                    .background(ElementTheme.colors.bgCanvasDefault)
+                                    .align(Alignment.BottomStart)
+                                    .heightIn(max = 230.dp),
                             roomId = state.roomId,
                             roomName = state.roomName,
                             roomAvatarData = state.roomAvatar,
@@ -467,9 +468,9 @@ private fun MessagesViewContent(
 ) {
     Box(
         modifier = modifier
-            .fillMaxSize()
-            .navigationBarsPadding()
-            .imePadding(),
+                .fillMaxSize()
+                .navigationBarsPadding()
+                .imePadding(),
     ) {
         AttachmentsBottomSheet(
             state = state.composerState,
@@ -500,9 +501,8 @@ private fun MessagesViewContent(
                 pinnedMessagesCount = (state.pinnedMessagesBannerState as? PinnedMessagesBannerState.Visible)?.pinnedMessagesCount() ?: 0,
             )
             val density = LocalDensity.current
-            // Combined height of every banner overlaid above the timeline (pinned messages,
-            // knock requests). Used to push both the floating date badge and the jump-to-unread
-            // FAB below any banner that's currently showing.
+            // Combined height of the banners overlaid above the timeline. Drives the floating
+            // date badge offset so the badge sits below whichever banners are currently showing.
             var topBannersHeightDp by remember { mutableStateOf(0.dp) }
 
             TimelineView(
@@ -542,9 +542,16 @@ private fun MessagesViewContent(
                             onViewAllClick = onViewAllPinnedMessagesClick,
                         )
                     }
-                    knockRequestsBannerView()
+                    if (state.showLiveLocationShareBanner) {
+                        LiveLocationSharingBanner(
+                            onClick = { state.eventSink(MessagesEvent.ShowLiveLocationShare) },
+                            onStopClick = { state.eventSink(MessagesEvent.StopLiveLocationShare) }
+                        )
+                    }
                 }
             }
+
+            knockRequestsBannerView()
         }
     }
 }
@@ -593,9 +600,9 @@ private fun MessagesViewComposerBottomSheetContents(
 private fun CantSendMessageBanner() {
     Row(
         modifier = Modifier
-            .fillMaxWidth()
-            .background(ElementTheme.colors.bgSubtleSecondary)
-            .padding(16.dp),
+                .fillMaxWidth()
+                .background(ElementTheme.colors.bgSubtleSecondary)
+                .padding(16.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.Center
     ) {

@@ -17,6 +17,8 @@
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"Als je hetzelfde probleem ondervindt, probeer dan een ander wifi-netwerk of gebruik je mobiele data in plaats van wifi."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Als dat niet werkt, log dan handmatig in"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Verbinding niet veilig"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"Daar word je gevraagd om de twee cijfers in te voeren die op dit apparaat worden weergegeven."</string>
+  <string name="screen_qr_code_login_device_code_title">"Voer het onderstaande nummer in op je andere apparaat"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"De aanmelding is geannuleerd op het andere apparaat."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Login verzoek geannuleerd"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"De aanmelding is geweigerd op het andere apparaat."</string>
@@ -35,4 +37,5 @@ Probeer handmatig in te loggen, of scan de QR code met een ander apparaat."</str
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Je moet %1$s toestemming geven om de camera van je apparaat te gebruiken om verder te gaan."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Cameratoegang toestaan om de QR-code te scannen"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Er is een onverwachte fout opgetreden. Probeer het opnieuw."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"Aan het wachten op je andere apparaat"</string>
 </resources>

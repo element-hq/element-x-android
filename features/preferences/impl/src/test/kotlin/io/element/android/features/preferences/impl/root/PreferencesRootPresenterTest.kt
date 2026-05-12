@@ -12,6 +12,8 @@ package io.element.android.features.preferences.impl.root
 
 import app.cash.turbine.ReceiveTurbine
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.enterprise.api.SessionEnterpriseService
+import io.element.android.features.enterprise.test.FakeSessionEnterpriseService
 import io.element.android.features.logout.api.direct.aDirectLogoutState
 import io.element.android.features.preferences.impl.utils.ShowDeveloperSettingsProvider
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
@@ -65,6 +67,9 @@ class PreferencesRootPresenterTest {
         )
         createPresenter(
             matrixClient = matrixClient,
+            sessionEnterpriseService = FakeSessionEnterpriseService(
+                tweakMasUrlResult = { "tweaked $it" },
+            ),
         ).test {
             val initialState = awaitItem()
             assertThat(initialState.myUser).isEqualTo(
@@ -100,7 +105,7 @@ class PreferencesRootPresenterTest {
             val finalState = awaitItem()
             accountManagementUrlResult.assertions().isCalledOnce()
                 .with(value(null))
-            assertThat(finalState.accountManagementUrl).isEqualTo("null url")
+            assertThat(finalState.accountManagementUrl).isEqualTo("tweaked null url")
         }
     }
 
@@ -327,6 +332,7 @@ class PreferencesRootPresenterTest {
         indicatorService: IndicatorService = FakeIndicatorService(),
         featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
         sessionStore: SessionStore = InMemorySessionStore(),
+        sessionEnterpriseService: SessionEnterpriseService = FakeSessionEnterpriseService(),
     ) = PreferencesRootPresenter(
         matrixClient = matrixClient,
         sessionVerificationService = sessionVerificationService,
@@ -339,5 +345,6 @@ class PreferencesRootPresenterTest {
         rageshakeFeatureAvailability = rageshakeFeatureAvailability,
         featureFlagService = featureFlagService,
         sessionStore = sessionStore,
+        sessionEnterpriseService = sessionEnterpriseService,
     )
 }

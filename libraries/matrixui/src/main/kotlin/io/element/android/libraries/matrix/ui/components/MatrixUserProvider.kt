@@ -9,6 +9,17 @@
 package io.element.android.libraries.matrix.ui.components
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
+import io.element.android.libraries.designsystem.preview.USER_NAME_BOB
+import io.element.android.libraries.designsystem.preview.USER_NAME_CAROL
+import io.element.android.libraries.designsystem.preview.USER_NAME_DAVID
+import io.element.android.libraries.designsystem.preview.USER_NAME_EVE
+import io.element.android.libraries.designsystem.preview.USER_NAME_JOHN_DOE
+import io.element.android.libraries.designsystem.preview.USER_NAME_JUSTIN
+import io.element.android.libraries.designsystem.preview.USER_NAME_MALLORY
+import io.element.android.libraries.designsystem.preview.USER_NAME_SUSIE
+import io.element.android.libraries.designsystem.preview.USER_NAME_VICTOR
+import io.element.android.libraries.designsystem.preview.USER_NAME_WALTER
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 
@@ -23,30 +34,30 @@ open class MatrixUserProvider : PreviewParameterProvider<MatrixUser> {
 open class MatrixUserWithAvatarProvider : PreviewParameterProvider<MatrixUser?> {
     override val values: Sequence<MatrixUser?>
         get() = sequenceOf(
-            aMatrixUser(displayName = "John Doe"),
-            aMatrixUser(displayName = "John Doe", avatarUrl = "anUrl"),
+            aMatrixUser(displayName = USER_NAME_JOHN_DOE),
+            aMatrixUser(displayName = USER_NAME_JOHN_DOE, avatarUrl = "anUrl"),
         )
 }
 
 fun aMatrixUser(
-    id: String = "@id_of_alice:server.org",
-    displayName: String? = "Alice",
+    id: String? = null,
+    displayName: String? = USER_NAME_ALICE,
     avatarUrl: String? = null,
 ) = MatrixUser(
-    userId = UserId(id),
+    userId = UserId(id ?: "@${displayName?.lowercase()?.replace(" ", "_") ?: "id"}:server.org"),
     displayName = displayName,
     avatarUrl = avatarUrl,
 )
 
 fun aMatrixUserList() = listOf(
-    aMatrixUser("@alice:server.org", "Alice"),
-    aMatrixUser("@bob:server.org", "Bob"),
-    aMatrixUser("@carol:server.org", "Carol"),
-    aMatrixUser("@david:server.org", "David"),
-    aMatrixUser("@eve:server.org", "Eve"),
-    aMatrixUser("@justin:server.org", "Justin"),
-    aMatrixUser("@mallory:server.org", "Mallory"),
-    aMatrixUser("@susie:server.org", "Susie"),
-    aMatrixUser("@victor:server.org", "Victor"),
-    aMatrixUser("@walter:server.org", "Walter"),
+    aMatrixUser(displayName = USER_NAME_ALICE),
+    aMatrixUser(displayName = USER_NAME_BOB),
+    aMatrixUser(displayName = USER_NAME_CAROL),
+    aMatrixUser(displayName = USER_NAME_DAVID),
+    aMatrixUser(displayName = USER_NAME_EVE),
+    aMatrixUser(displayName = USER_NAME_JUSTIN),
+    aMatrixUser(displayName = USER_NAME_MALLORY),
+    aMatrixUser(displayName = USER_NAME_SUSIE),
+    aMatrixUser(displayName = USER_NAME_VICTOR),
+    aMatrixUser(displayName = USER_NAME_WALTER),
 )

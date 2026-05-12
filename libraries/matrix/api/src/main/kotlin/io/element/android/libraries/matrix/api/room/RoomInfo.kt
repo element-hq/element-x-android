@@ -29,6 +29,7 @@ data class RoomInfo(
     val avatarUrl: String?,
     val isPublic: Boolean?,
     val isDirect: Boolean,
+    val isDm: Boolean,
     val isEncrypted: Boolean?,
     val joinRule: JoinRule?,
     val isSpace: Boolean,

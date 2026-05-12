@@ -9,6 +9,7 @@
 package io.element.android.libraries.mediaviewer.impl.details
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.mediaviewer.api.MediaInfo
@@ -26,7 +27,7 @@ open class MediaBottomSheetStateDeleteConfirmationProvider : PreviewParameterPro
 
 fun aMediaBottomSheetStateDeleteConfirmation(
     mediaInfo: MediaInfo = anImageMediaInfo(
-        senderName = "Alice",
+        senderName = USER_NAME_ALICE,
     ),
     thumbnailSource: MediaSource? = null,
 ) = MediaBottomSheetState.DeleteConfirmation(

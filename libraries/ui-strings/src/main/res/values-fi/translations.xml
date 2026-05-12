@@ -193,7 +193,6 @@
   <string name="common_advanced_settings">"Edistyneet asetukset"</string>
   <string name="common_an_image">"kuva"</string>
   <string name="common_analytics">"Analytiikka"</string>
-  <string name="common_android_fetching_notifications_title">"Synkronoidaan ilmoituksia…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Poistuit huoneesta"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Sinut kirjattiin ulos istunnosta"</string>
   <string name="common_appearance">"Ulkoasu"</string>
@@ -237,6 +236,7 @@ Syy: %1$s."</string>
   <string name="common_failed">"Epäonnistui"</string>
   <string name="common_favourite">"Lisää suosikkeihin"</string>
   <string name="common_favourited">"Lisätty suosikkeihin"</string>
+    <string name="common_fetching_notifications_title_android">"Synkronoidaan ilmoituksia…"</string>
   <string name="common_file">"Tiedosto"</string>
   <string name="common_file_deleted">"Tiedosto poistettu"</string>
   <string name="common_file_saved">"Tiedosto tallennettu"</string>
@@ -317,7 +317,6 @@ Syy: %1$s."</string>
     <item quantity="other">"%1$d vastausta"</item>
   </plurals>
   <string name="common_replying_to">"Vastataan käyttäjälle %1$s"</string>
-  <string name="common_report_a_bug">"Ilmoita virheestä"</string>
   <string name="common_report_a_problem">"Ilmoita ongelmasta"</string>
   <string name="common_report_submitted">"Ilmoitus lähetetty"</string>
   <string name="common_rich_text_editor">"Rikastettu tekstieditori"</string>

@@ -21,14 +21,14 @@
   <string name="screen_invites_decline_direct_chat_message">"你确定要拒绝与 %1$s 私聊？"</string>
   <string name="screen_invites_decline_direct_chat_title">"拒绝聊天"</string>
   <string name="screen_invites_empty_list">"没有邀请"</string>
-  <string name="screen_invites_invited_you">"%1$s （%2$s）邀请了你"</string>
+  <string name="screen_invites_invited_you">"%1$s（%2$s）邀请了你"</string>
   <string name="screen_migration_message">"此为一次性流程，感谢等待。"</string>
   <string name="screen_migration_title">"设置账户。"</string>
   <string name="screen_roomlist_a11y_create_message">"创建新的对话或房间"</string>
   <string name="screen_roomlist_clear_filters">"清除筛选条件"</string>
   <string name="screen_roomlist_empty_message">"通过向某人发送消息来开始。"</string>
   <string name="screen_roomlist_empty_title">"暂无聊天。"</string>
-  <string name="screen_roomlist_filter_favourites">"收藏夹"</string>
+  <string name="screen_roomlist_filter_favourites">"收藏"</string>
   <string name="screen_roomlist_filter_favourites_empty_state_subtitle">"可以在聊天设置里将聊天添加到收藏夹。
 现在可以取消选择筛选器以查看其它对话。"</string>
   <string name="screen_roomlist_filter_favourites_empty_state_title">"你尚未收藏任何聊天"</string>
@@ -38,7 +38,7 @@
   <string name="screen_roomlist_filter_low_priority_empty_state_title">"你暂无任何低优先级聊天"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"你可以取消选择筛选器以查看其它对话"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"你暂无适用于此选项的聊天"</string>
-  <string name="screen_roomlist_filter_people">"用户"</string>
+  <string name="screen_roomlist_filter_people">"人员"</string>
   <string name="screen_roomlist_filter_people_empty_state_title">"你暂无任何私聊"</string>
   <string name="screen_roomlist_filter_rooms">"房间"</string>
   <string name="screen_roomlist_filter_rooms_empty_state_title">"你尚未进入任何房间"</string>

@@ -11,6 +11,14 @@
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Nascondi gli avatar nelle richieste di invito alle stanze"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Nascondi le anteprime dei media nelle conversazioni"</string>
   <string name="screen_advanced_settings_labs">"Labs"</string>
+  <string name="screen_advanced_settings_live_location_section_description">"La distanza che devi percorrere per attivare un aggiornamento."</string>
+  <string name="screen_advanced_settings_live_location_section_footer">"Assicurati che l\'opzione \"Posizione precisa\" sia abilitata per questa app. Per modificare l\'autorizzazione, vai in %1$s."</string>
+  <string name="screen_advanced_settings_live_location_section_footer_link">"Impostazioni app"</string>
+  <string name="screen_advanced_settings_live_location_section_title">"Aggiornamenti posizione in tempo reale"</string>
+  <plurals name="screen_advanced_settings_live_location_update_distance">
+    <item quantity="one">"Ogni %1$d metro"</item>
+    <item quantity="other">"Ogni %1$d metri"</item>
+  </plurals>
   <string name="screen_advanced_settings_media_compression_description">"Carica foto e video più velocemente e riduci l\'utilizzo dei dati"</string>
   <string name="screen_advanced_settings_media_compression_title">"Ottimizza la qualità dei contenuti multimediali"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderazione e Sicurezza"</string>

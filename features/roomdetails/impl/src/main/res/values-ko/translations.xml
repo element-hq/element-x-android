@@ -56,6 +56,7 @@
   <string name="screen_room_details_invite_people_dont_close">"작업이 완료될 때까지 앱을 닫지 마세요."</string>
   <string name="screen_room_details_invite_people_preparing">"초대 준비중…"</string>
   <string name="screen_room_details_invite_people_title">"사람 초대하기"</string>
+  <string name="screen_room_details_invite_title">"초대"</string>
   <string name="screen_room_details_leave_conversation_title">"대화에서 나가기"</string>
   <string name="screen_room_details_leave_room_title">"방 떠나기"</string>
   <string name="screen_room_details_media_gallery_title">"미디어 및 파일"</string>

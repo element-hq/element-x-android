@@ -56,6 +56,7 @@
   <string name="screen_room_details_invite_people_dont_close">"完成前請勿關閉應用程式。"</string>
   <string name="screen_room_details_invite_people_preparing">"正在準備邀請……"</string>
   <string name="screen_room_details_invite_people_title">"邀請夥伴"</string>
+  <string name="screen_room_details_invite_title">"邀請"</string>
   <string name="screen_room_details_leave_conversation_title">"離開對話"</string>
   <string name="screen_room_details_leave_room_title">"離開聊天室"</string>
   <string name="screen_room_details_media_gallery_title">"媒體與檔案"</string>

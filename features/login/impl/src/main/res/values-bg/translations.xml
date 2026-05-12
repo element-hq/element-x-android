@@ -21,7 +21,7 @@
   <string name="screen_login_error_deactivated_account">"Този акаунт бе деактивиран."</string>
   <string name="screen_login_error_invalid_credentials">"Неправилно потребителско име и/или парола"</string>
   <string name="screen_login_error_invalid_user_id">"Това не е валиден потребителски идентификатор. Очакван формат: ‘@user:homeserver.org’"</string>
-  <string name="screen_login_error_unsupported_authentication">"Избраният сървър не поддържа влизане с парола или OIDC. Моля, свържете се с вашия администратор или изберете друг сървър."</string>
+  <string name="screen_login_error_unsupported_authentication">"Избраният сървър не поддържа влизане с парола или OAuth. Моля, свържете се с вашия администратор или изберете друг сървър."</string>
   <string name="screen_login_form_header">"Въведете своите данни"</string>
   <string name="screen_login_subtitle">"Matrix е отворена мрежа за сигурна, децентрализирана комуникация."</string>
   <string name="screen_login_title">"Добре дошли отново!"</string>

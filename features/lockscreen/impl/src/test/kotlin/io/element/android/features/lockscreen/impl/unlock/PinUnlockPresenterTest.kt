@@ -8,9 +8,6 @@
 
 package io.element.android.features.lockscreen.impl.unlock
 
-import app.cash.molecule.RecompositionMode
-import app.cash.molecule.moleculeFlow
-import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.lockscreen.impl.biometric.BiometricAuthenticatorManager
 import io.element.android.features.lockscreen.impl.biometric.FakeBiometricAuthenticatorManager
@@ -19,12 +16,14 @@ import io.element.android.features.lockscreen.impl.pin.DefaultPinCodeManagerCall
 import io.element.android.features.lockscreen.impl.pin.PinCodeManager
 import io.element.android.features.lockscreen.impl.pin.model.PinEntry
 import io.element.android.features.lockscreen.impl.pin.model.assertText
+import io.element.android.features.lockscreen.impl.pin.storage.InMemoryLockScreenStore
 import io.element.android.features.lockscreen.impl.unlock.keypad.PinKeypadModel
 import io.element.android.features.logout.test.FakeLogoutUseCase
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.tests.testutils.lambda.assert
 import io.element.android.tests.testutils.lambda.lambdaRecorder
+import io.element.android.tests.testutils.test
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -36,9 +35,7 @@ class PinUnlockPresenterTest {
     @Test
     fun `present - success verify flow`() = runTest {
         val presenter = createPinUnlockPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             awaitItem().also { state ->
                 assertThat(state.pinEntry).isInstanceOf(AsyncData.Uninitialized::class.java)
                 assertThat(state.showWrongPinTitle).isFalse()
@@ -50,17 +47,17 @@ class PinUnlockPresenterTest {
             awaitItem().also { state ->
                 assertThat(state.pinEntry).isInstanceOf(AsyncData.Success::class.java)
                 assertThat(state.remainingAttempts).isInstanceOf(AsyncData.Success::class.java)
-                state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('1')))
-                state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('2')))
+                state.eventSink(PinUnlockEvent.OnPinKeypadPressed(PinKeypadModel.Number('1')))
+                state.eventSink(PinUnlockEvent.OnPinKeypadPressed(PinKeypadModel.Number('2')))
             }
             skipItems(1)
             awaitItem().also { state ->
                 state.pinEntry.assertText(halfCompletePin)
-                state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('3')))
-                state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Back))
-                state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Empty))
-                state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('3')))
-                state.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('5')))
+                state.eventSink(PinUnlockEvent.OnPinKeypadPressed(PinKeypadModel.Number('3')))
+                state.eventSink(PinUnlockEvent.OnPinKeypadPressed(PinKeypadModel.Back))
+                state.eventSink(PinUnlockEvent.OnPinKeypadPressed(PinKeypadModel.Empty))
+                state.eventSink(PinUnlockEvent.OnPinKeypadPressed(PinKeypadModel.Number('3')))
+                state.eventSink(PinUnlockEvent.OnPinKeypadPressed(PinKeypadModel.Number('5')))
             }
             skipItems(4)
             awaitItem().also { state ->
@@ -73,9 +70,7 @@ class PinUnlockPresenterTest {
     @Test
     fun `present - failure verify flow`() = runTest {
         val presenter = createPinUnlockPresenter()
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(1)
             val initialState = awaitItem().also { state ->
                 assertThat(state.pinEntry).isInstanceOf(AsyncData.Success::class.java)
@@ -83,10 +78,10 @@ class PinUnlockPresenterTest {
             }
             val numberOfAttempts = initialState.remainingAttempts.dataOrNull() ?: 0
             repeat(numberOfAttempts) {
-                initialState.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('1')))
-                initialState.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('2')))
-                initialState.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('3')))
-                initialState.eventSink(PinUnlockEvents.OnPinKeypadPressed(PinKeypadModel.Number('4')))
+                initialState.eventSink(PinUnlockEvent.OnPinKeypadPressed(PinKeypadModel.Number('1')))
+                initialState.eventSink(PinUnlockEvent.OnPinKeypadPressed(PinKeypadModel.Number('2')))
+                initialState.eventSink(PinUnlockEvent.OnPinKeypadPressed(PinKeypadModel.Number('3')))
+                initialState.eventSink(PinUnlockEvent.OnPinKeypadPressed(PinKeypadModel.Number('4')))
             }
             skipItems(4 * numberOfAttempts + 2)
             awaitItem().also { state ->
@@ -102,33 +97,53 @@ class PinUnlockPresenterTest {
         val signOutLambda = lambdaRecorder<Boolean, Unit> {}
         val signOut = FakeLogoutUseCase(signOutLambda)
         val presenter = createPinUnlockPresenter(logoutUseCase = signOut)
-        moleculeFlow(RecompositionMode.Immediate) {
-            presenter.present()
-        }.test {
+        presenter.test {
             skipItems(1)
             awaitItem().also { state ->
                 assertThat(state.pinEntry).isInstanceOf(AsyncData.Success::class.java)
                 assertThat(state.remainingAttempts).isInstanceOf(AsyncData.Success::class.java)
-                state.eventSink(PinUnlockEvents.OnForgetPin)
+                state.eventSink(PinUnlockEvent.OnForgetPin)
             }
             awaitItem().also { state ->
                 assertThat(state.showSignOutPrompt).isTrue()
                 assertThat(state.isSignOutPromptCancellable).isTrue()
-                state.eventSink(PinUnlockEvents.ClearSignOutPrompt)
+                state.eventSink(PinUnlockEvent.ClearSignOutPrompt)
             }
             awaitItem().also { state ->
                 assertThat(state.showSignOutPrompt).isFalse()
-                state.eventSink(PinUnlockEvents.OnForgetPin)
+                state.eventSink(PinUnlockEvent.OnForgetPin)
             }
             awaitItem().also { state ->
                 assertThat(state.showSignOutPrompt).isTrue()
-                state.eventSink(PinUnlockEvents.SignOut)
+                state.eventSink(PinUnlockEvent.SignOut)
             }
             skipItems(2)
             awaitItem().also { state ->
                 assertThat(state.signOutAction).isInstanceOf(AsyncAction.Success::class.java)
             }
             assert(signOutLambda).isCalledOnce()
+        }
+    }
+
+    @Test
+    fun `present - pin is configured, but deleted in store, sign out prompt will be shown`() = runTest {
+        val lockScreenStore = InMemoryLockScreenStore()
+        val pinCodeManager = aPinCodeManager(
+            lockScreenStore = lockScreenStore,
+        )
+        val presenter = createPinUnlockPresenter(
+            pinCodeManager = pinCodeManager,
+        )
+        // Delete the pin code from the store
+        lockScreenStore.deleteEncryptedPinCode()
+        presenter.test {
+            skipItems(1)
+            awaitItem().also { state ->
+                assertThat(state.pinEntry).isInstanceOf(AsyncData.Failure::class.java)
+                assertThat(state.showSignOutPrompt).isTrue()
+                assertThat(state.isSignOutPromptCancellable).isFalse()
+                assertThat(state.remainingAttempts.dataOrNull()).isEqualTo(3)
+            }
         }
     }
 
@@ -139,9 +154,10 @@ class PinUnlockPresenterTest {
     private suspend fun TestScope.createPinUnlockPresenter(
         biometricAuthenticatorManager: BiometricAuthenticatorManager = FakeBiometricAuthenticatorManager(),
         callback: PinCodeManager.Callback = DefaultPinCodeManagerCallback(),
-        logoutUseCase: FakeLogoutUseCase = FakeLogoutUseCase(logoutLambda = { "" }),
+        logoutUseCase: FakeLogoutUseCase = FakeLogoutUseCase(logoutLambda = {}),
+        pinCodeManager: PinCodeManager = aPinCodeManager()
     ): PinUnlockPresenter {
-        val pinCodeManager = aPinCodeManager().apply {
+        pinCodeManager.apply {
             addCallback(callback)
             createPinCode(completePin)
         }

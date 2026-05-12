@@ -231,7 +231,6 @@
     <item quantity="other">"%1$d отговора"</item>
   </plurals>
   <string name="common_replying_to">"В отговор на %1$s"</string>
-  <string name="common_report_a_bug">"Съобщаване за грешка"</string>
   <string name="common_report_a_problem">"Съобщаване за проблем"</string>
   <string name="common_report_submitted">"Докладът е изпратен"</string>
   <string name="common_rich_text_editor">"Редактор на богат текст"</string>

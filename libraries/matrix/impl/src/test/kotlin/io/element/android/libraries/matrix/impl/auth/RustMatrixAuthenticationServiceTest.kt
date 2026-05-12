@@ -9,6 +9,8 @@
 package io.element.android.libraries.matrix.impl.auth
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.enterprise.api.EnterpriseService
+import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.libraries.matrix.impl.ClientBuilderProvider
 import io.element.android.libraries.matrix.impl.FakeClientBuilderProvider
 import io.element.android.libraries.matrix.impl.createRustMatrixClientFactory
@@ -50,6 +52,7 @@ class RustMatrixAuthenticationServiceTest {
     private fun TestScope.createRustMatrixAuthenticationService(
         sessionStore: SessionStore = InMemorySessionStore(),
         clientBuilderProvider: ClientBuilderProvider = FakeClientBuilderProvider(),
+        enterpriseService: EnterpriseService = FakeEnterpriseService(),
     ): RustMatrixAuthenticationService {
         val baseDirectory = File("/base")
         val cacheDirectory = File("/cache")
@@ -68,6 +71,7 @@ class RustMatrixAuthenticationServiceTest {
                 buildMeta = aBuildMeta(),
                 oAuthRedirectUrlProvider = FakeOAuthRedirectUrlProvider(),
             ),
+            enterpriseService = enterpriseService,
         )
     }
 }

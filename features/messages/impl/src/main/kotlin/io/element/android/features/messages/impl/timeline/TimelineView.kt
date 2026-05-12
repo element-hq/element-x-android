@@ -101,7 +101,7 @@ import io.element.android.libraries.testtags.TestTag
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.libraries.ui.utils.time.isTalkbackActive
+import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.coroutines.delay

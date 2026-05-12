@@ -176,14 +176,12 @@ private fun CreateRoomActionButtonsList(
                 onClick = onNewRoomClick,
             )
         }
-        if (state.isRoomDirectorySearchEnabled) {
-            item {
-                CreateRoomActionButton(
-                    iconRes = CompoundDrawables.ic_compound_list_bulleted,
-                    text = stringResource(id = R.string.screen_room_directory_search_title),
-                    onClick = onRoomDirectorySearchClick,
-                )
-            }
+        item {
+            CreateRoomActionButton(
+                iconRes = CompoundDrawables.ic_compound_list_bulleted,
+                text = stringResource(id = R.string.screen_room_directory_search_title),
+                onClick = onRoomDirectorySearchClick,
+            )
         }
         item {
             CreateRoomActionButton(

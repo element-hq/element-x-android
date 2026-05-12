@@ -251,7 +251,6 @@ Motivo: %1$s."</string>
   <string name="common_recovery_key">"Clave de recuperación"</string>
   <string name="common_refreshing">"Recargando…"</string>
   <string name="common_replying_to">"Respondiendo a %1$s"</string>
-  <string name="common_report_a_bug">"Informar de un error"</string>
   <string name="common_report_a_problem">"Informar de un problema"</string>
   <string name="common_report_submitted">"Informe enviado"</string>
   <string name="common_rich_text_editor">"Editor de texto enriquecido"</string>

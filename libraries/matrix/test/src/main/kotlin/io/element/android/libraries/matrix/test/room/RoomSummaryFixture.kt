@@ -120,6 +120,7 @@ fun aRoomSummary(
         privilegedCreatorRole = privilegedCreatorRole,
         isLowPriority = isLowPriority,
         activeCallIntentConsensus = activeCallIntentConsensus,
+        isDm = false,
     ),
     latestEvent = latestEvent,
 )
