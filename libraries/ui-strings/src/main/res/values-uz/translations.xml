@@ -210,7 +210,6 @@
   <string name="common_current_user_left_room">"Xonani tark etdi"</string>
   <string name="common_current_user_left_space">"Tar etilgan maydon"</string>
   <string name="common_current_user_rejected_invite">"Taklif rad etildi"</string>
-  <string name="common_dark">"Tungi"</string>
   <string name="common_decryption_error">"Shifrni ochish xatosi"</string>
   <string name="common_description">"Tavsif"</string>
   <string name="common_developer_options">"Dasturchi variantlari"</string>
@@ -250,7 +249,6 @@ Sababi:%1$s."</string>
   <string name="common_invite_unknown_profile">"Ushbu Matrix identifikatori topilmadi, shuning uchun taklif qabul qilinmasligi mumkin."</string>
   <string name="common_leaving_room">"Xonadan chiqish"</string>
   <string name="common_leaving_space">"Maydonni tark etish"</string>
-  <string name="common_light">"Nur"</string>
   <string name="common_line_copied_to_clipboard">"Satr vaqtinchalik xotiraga nusxalandi"</string>
   <string name="common_link_copied_to_clipboard">"Havola vaqtinchalik xotiraga nusxalandi"</string>
   <string name="common_link_new_device">"Yangi qurilmani ulang"</string>
@@ -370,7 +368,6 @@ Sababi:%1$s."</string>
   <string name="common_suggested">"Tavsiya etilgan"</string>
   <string name="common_suggestions">"Tavsiyalar"</string>
   <string name="common_syncing">"Sinxronlash"</string>
-  <string name="common_system">"Tizim"</string>
   <string name="common_text">"Matn"</string>
   <string name="common_third_party_notices">"Uchinchi tomon bildirishnomalari"</string>
   <string name="common_thread">"Ip"</string>

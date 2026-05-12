@@ -83,6 +83,9 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"系统设置"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"系统通知已关闭"</string>
   <string name="screen_notification_settings_title">"通知"</string>
+  <string name="theme_dark">"深色"</string>
+  <string name="theme_light">"浅色"</string>
+  <string name="theme_system">"系统"</string>
   <string name="troubleshoot_notifications_entry_point_push_history_title">"推送历史"</string>
   <string name="troubleshoot_notifications_entry_point_section">"排查问题"</string>
   <string name="troubleshoot_notifications_entry_point_title">"排查通知问题"</string>

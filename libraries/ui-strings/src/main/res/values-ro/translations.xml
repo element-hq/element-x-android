@@ -198,7 +198,6 @@
   <string name="common_current_user_left_room">"Ați parăsit camera"</string>
   <string name="common_current_user_left_space">"S-a părăsit spațiul"</string>
   <string name="common_current_user_rejected_invite">"Invitația a fost refuzată"</string>
-  <string name="common_dark">"Întunecat"</string>
   <string name="common_decryption_error">"Eroare de decriptare"</string>
   <string name="common_description">"Descriere"</string>
   <string name="common_developer_options">"Opțiuni programator"</string>
@@ -236,7 +235,6 @@ Motiv:%1$s."</string>
   <string name="common_invite_unknown_profile">"Nu am putut valida ID-ul Matrix al acestui utilizator. Este posibil ca invitația să nu fi fost trimisă."</string>
   <string name="common_leaving_room">"Se părăsește conversația"</string>
   <string name="common_leaving_space">"Se părăsește spațiul"</string>
-  <string name="common_light">"Deschis"</string>
   <string name="common_line_copied_to_clipboard">"Linie copiată în clipboard"</string>
   <string name="common_link_copied_to_clipboard">"Linkul a fost copiat în clipboard"</string>
   <string name="common_link_new_device">"Conectați un dispozitiv nou"</string>
@@ -347,7 +345,6 @@ Motiv:%1$s."</string>
   <string name="common_success">"Succes"</string>
   <string name="common_suggestions">"Sugestii"</string>
   <string name="common_syncing">"Se sincronizează…"</string>
-  <string name="common_system">"Sistem"</string>
   <string name="common_text">"Text"</string>
   <string name="common_third_party_notices">"Notificări despre software de la terți"</string>
   <string name="common_thread">"Fir"</string>

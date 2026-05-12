@@ -218,7 +218,6 @@
   <string name="common_current_user_left_room">"Hai lasciato la stanza"</string>
   <string name="common_current_user_left_space">"Hai lasciato lo spazio"</string>
   <string name="common_current_user_rejected_invite">"Invito rifiutato"</string>
-  <string name="common_dark">"Scuro"</string>
   <string name="common_decryption_error">"Errore di decrittazione"</string>
   <string name="common_description">"Descrizione"</string>
   <string name="common_developer_options">"Opzioni sviluppatore"</string>
@@ -258,7 +257,6 @@ Motivo:. %1$s"</string>
   <string name="common_invite_unknown_profile">"Questo ID Matrix non può essere trovato, quindi l\'invito potrebbe non essere ricevuto."</string>
   <string name="common_leaving_room">"Lascio la stanza"</string>
   <string name="common_leaving_space">"Uscendo dallo spazio"</string>
-  <string name="common_light">"Chiaro"</string>
   <string name="common_line_copied_to_clipboard">"Riga copiata negli appunti"</string>
   <string name="common_link_copied_to_clipboard">"Collegamento copiato negli appunti"</string>
   <string name="common_link_new_device">"Collega un nuovo dispositivo"</string>
@@ -378,7 +376,6 @@ Motivo:. %1$s"</string>
   <string name="common_suggested">"Suggeriti"</string>
   <string name="common_suggestions">"Suggerimenti"</string>
   <string name="common_syncing">"Sincronizzazione"</string>
-  <string name="common_system">"Sistema"</string>
   <string name="common_text">"Testo"</string>
   <string name="common_third_party_notices">"Comunicazioni di terze parti"</string>
   <string name="common_thread">"Discussione"</string>

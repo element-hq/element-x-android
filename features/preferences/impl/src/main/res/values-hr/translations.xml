@@ -85,6 +85,9 @@ Ako nastavite, neke od vaših postavki mogu se promijeniti."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"postavke sustava"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Obavijesti sustava su isključene"</string>
   <string name="screen_notification_settings_title">"Obavijesti"</string>
+  <string name="theme_dark">"Tamno"</string>
+  <string name="theme_light">"Svijetlo"</string>
+  <string name="theme_system">"Sustav"</string>
   <string name="troubleshoot_notifications_entry_point_push_history_title">"Povijest push obavijesti"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Rješavanje problema"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Rješavanje problema s obavijestima"</string>

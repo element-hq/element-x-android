@@ -62,7 +62,7 @@ class AdvancedSettingsViewTest {
             ),
         )
         clickOn(CommonStrings.common_appearance)
-        clickOn(CommonStrings.common_dark)
+        clickOn(R.string.theme_dark)
         eventsRecorder.assertSingle(AdvancedSettingsEvents.SetTheme(ThemeOption.Dark))
     }
 
@@ -75,7 +75,7 @@ class AdvancedSettingsViewTest {
         )
         clickOn(CommonStrings.common_appearance)
         run {
-            val text = activity!!.getString(CommonStrings.common_black)
+            val text = activity!!.getString(R.string.theme_black)
             onNodeWithText(text).assertExists()
         }
     }
@@ -88,7 +88,7 @@ class AdvancedSettingsViewTest {
             ),
         )
         clickOn(CommonStrings.common_appearance)
-        assertNoNodeWithText(CommonStrings.common_black)
+        assertNoNodeWithText(R.string.theme_black)
     }
 
     @Test

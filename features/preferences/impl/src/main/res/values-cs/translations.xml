@@ -87,6 +87,9 @@ Pokud budete pokračovat, některá nastavení se mohou změnit."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"systémová nastavení"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Systémová oznámení byla vypnuta"</string>
   <string name="screen_notification_settings_title">"Oznámení"</string>
+  <string name="theme_dark">"Tmavé"</string>
+  <string name="theme_light">"Světlý"</string>
+  <string name="theme_system">"Systém"</string>
   <string name="troubleshoot_notifications_entry_point_push_history_title">"Historie push oznámení"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Odstraňování problémů"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Odstraňování problémů s upozorněními"</string>

@@ -208,7 +208,6 @@
   <string name="common_current_user_left_room">"Đã rời khỏi phòng"</string>
   <string name="common_current_user_left_space">"Rời khỏi không gian"</string>
   <string name="common_current_user_rejected_invite">"Lời mời bị từ chối"</string>
-  <string name="common_dark">"Tối"</string>
   <string name="common_decryption_error">"Lỗi khi giải mã"</string>
   <string name="common_description">"Mô tả"</string>
   <string name="common_developer_options">"Tùy chọn nhà phát triển"</string>
@@ -248,7 +247,6 @@ Lý do: %1$s ."</string>
   <string name="common_invite_unknown_profile">"Không tìm thấy Matrix ID này, nên lời mời có thể chưa được nhận."</string>
   <string name="common_leaving_room">"Rời khỏi phòng"</string>
   <string name="common_leaving_space">"Rời khỏi không gian"</string>
-  <string name="common_light">"Sáng"</string>
   <string name="common_line_copied_to_clipboard">"Đã sao chép dòng"</string>
   <string name="common_link_copied_to_clipboard">"Đã chép liên kết vào bộ nhớ tạm"</string>
   <string name="common_link_new_device">"Liên kết thiết bị mới"</string>
@@ -359,7 +357,6 @@ Lý do: %1$s ."</string>
   <string name="common_suggested">"Gợi ý"</string>
   <string name="common_suggestions">"Gợi ý"</string>
   <string name="common_syncing">"Đang đồng bộ"</string>
-  <string name="common_system">"Hệ thống"</string>
   <string name="common_text">"Văn bản"</string>
   <string name="common_third_party_notices">"Thông báo từ bên thứ ba"</string>
   <string name="common_thread">"Chủ đề"</string>

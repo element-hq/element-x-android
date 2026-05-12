@@ -185,7 +185,6 @@
   <string name="common_current_user_left_room">"اتاق را ترک کرد"</string>
   <string name="common_current_user_left_space">"فضا را ترک کرد"</string>
   <string name="common_current_user_rejected_invite">"دعوت لغو شد"</string>
-  <string name="common_dark">"تیره"</string>
   <string name="common_decryption_error">"خطای رمزگشایی"</string>
   <string name="common_description">"توضیح"</string>
   <string name="common_developer_options">"گزینه‌های توسعه دهنده"</string>
@@ -220,7 +219,6 @@
   <string name="common_invite_unknown_profile">"شناسهٔ ماتریکس نتوانست پیدا شود. ممکن است دعوت نرسیده باشد."</string>
   <string name="common_leaving_room">"ترک کردن اتاق"</string>
   <string name="common_leaving_space">"ترک کردن فضا"</string>
-  <string name="common_light">"روشن"</string>
   <string name="common_line_copied_to_clipboard">"خط در تخته‌گیره رونوشت شد"</string>
   <string name="common_link_copied_to_clipboard">"پیوند در تخته‌گیره رونوشت شد"</string>
   <string name="common_loading">"بار کردن…"</string>
@@ -308,7 +306,6 @@
   <string name="common_success">"موفّقیت"</string>
   <string name="common_suggestions">"پیشنهادها"</string>
   <string name="common_syncing">"هم‌گام ساختن"</string>
-  <string name="common_system">"سامانه"</string>
   <string name="common_text">"متن"</string>
   <string name="common_third_party_notices">"تذکّرهای سوم‌شخص"</string>
   <string name="common_thread">"رشته"</string>
