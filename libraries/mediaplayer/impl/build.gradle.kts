@@ -21,6 +21,7 @@ setupDependencyInjection()
 dependencies {
     api(projects.libraries.mediaplayer.api)
     implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.exoplayer.midi)
 
     implementation(projects.libraries.audio.api)
     implementation(projects.libraries.core)

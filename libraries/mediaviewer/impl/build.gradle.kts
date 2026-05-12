@@ -31,6 +31,7 @@ dependencies {
     implementation(libs.coroutines.core)
     implementation(libs.coil.compose)
     implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.exoplayer.midi)
     implementation(libs.androidx.media3.ui)
     implementation(libs.telephoto.zoomableimage)
     implementation(libs.vanniktech.blurhash)
