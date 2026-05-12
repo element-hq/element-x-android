@@ -192,7 +192,6 @@
   <string name="common_advanced_settings">"Ρυθμίσεις για προχωρημένους"</string>
   <string name="common_an_image">"μια εικόνα"</string>
   <string name="common_analytics">"Στατιστικά στοιχεία"</string>
-  <string name="common_android_fetching_notifications_title">"Συγχρονισμός ειδοποιήσεων…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Αποχωρήσατε από την αίθουσα"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Αποσυνδεθήκατε από την περίοδο λειτουργίας"</string>
   <string name="common_appearance">"Εμφάνιση"</string>
@@ -236,6 +235,7 @@
   <string name="common_failed">"Απέτυχε"</string>
   <string name="common_favourite">"Αγαπημένο"</string>
   <string name="common_favourited">"Είναι αγαπημένο"</string>
+  <string name="common_fetching_notifications_title_android">"Συγχρονισμός ειδοποιήσεων…"</string>
   <string name="common_file">"Αρχείο"</string>
   <string name="common_file_deleted">"Το αρχείο διαγράφηκε"</string>
   <string name="common_file_saved">"Το αρχείο αποθηκεύτηκε"</string>

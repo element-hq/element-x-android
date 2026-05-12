@@ -197,7 +197,6 @@
   <string name="common_advanced_settings">"高度な設定"</string>
   <string name="common_an_image">"画像"</string>
   <string name="common_analytics">"分析"</string>
-  <string name="common_android_fetching_notifications_title">"通知を同期中…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"あなたがルームを退出"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"セッションからログアウトされました"</string>
   <string name="common_appearance">"テーマ"</string>
@@ -243,6 +242,7 @@
   <string name="common_failed">"失敗"</string>
   <string name="common_favourite">"お気に入り"</string>
   <string name="common_favourited">"お気に入り"</string>
+  <string name="common_fetching_notifications_title_android">"通知を同期中…"</string>
   <string name="common_file">"ファイル"</string>
   <string name="common_file_deleted">"ファイルを削除しました"</string>
   <string name="common_file_saved">"ファイルを保存しました"</string>

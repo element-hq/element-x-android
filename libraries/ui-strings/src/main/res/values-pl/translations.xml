@@ -201,7 +201,6 @@
   <string name="common_advanced_settings">"Ustawienia zaawansowane"</string>
   <string name="common_an_image">"obraz"</string>
   <string name="common_analytics">"Dane analityczne"</string>
-  <string name="common_android_fetching_notifications_title">"Synchronizuję powiadomienia…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Opuściłeś pokój"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Zostałeś wylogowany z sesji"</string>
   <string name="common_appearance">"Wygląd"</string>
@@ -247,6 +246,7 @@ Powód: %1$s."</string>
   <string name="common_failed">"Niepowodzenie"</string>
   <string name="common_favourite">"Ulubione"</string>
   <string name="common_favourited">"Ulubione"</string>
+  <string name="common_fetching_notifications_title_android">"Synchronizuję powiadomienia…"</string>
   <string name="common_file">"Plik"</string>
   <string name="common_file_deleted">"Plik usunięty"</string>
   <string name="common_file_saved">"Plik zapisany"</string>

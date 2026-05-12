@@ -197,7 +197,6 @@
   <string name="common_advanced_settings">"Täiendavad seadistused"</string>
   <string name="common_an_image">"pilt"</string>
   <string name="common_analytics">"Analüütika"</string>
-  <string name="common_android_fetching_notifications_title">"Sünkroonin teavitusi…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Sina lahkusid jututoast"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Sa olid sessioonist väljaloginud"</string>
   <string name="common_appearance">"Välimus"</string>
@@ -242,6 +241,7 @@ Põhjus: %1$s."</string>
   <string name="common_failed">"Ei õnnestunud"</string>
   <string name="common_favourite">"Lemmik"</string>
   <string name="common_favourited">"Märgitud lemmikuks"</string>
+  <string name="common_fetching_notifications_title_android">"Sünkroonin teavitusi…"</string>
   <string name="common_file">"Fail"</string>
   <string name="common_file_deleted">"Fail on kustutatud"</string>
   <string name="common_file_saved">"Fail on salvestatud"</string>
