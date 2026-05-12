@@ -59,7 +59,7 @@ class TimelineItemEventFactory(
         currentTimelineItem: MatrixTimelineItem.Event,
         index: Int,
         timelineItems: List<MatrixTimelineItem>,
-        roomMembers: List<RoomMember>,
+        roomMembersById: Map<UserId, RoomMember>,
     ): TimelineItem.Event {
         val currentSender = currentTimelineItem.event.sender
         val groupPosition =
@@ -67,7 +67,7 @@ class TimelineItemEventFactory(
         val (senderProfile, senderAvatarData) = resolveSender(
             sender = currentSender,
             eventSenderProfile = currentTimelineItem.event.senderProfile,
-            roomMembers = roomMembers,
+            roomMembersById = roomMembersById,
         )
         val sentTime = dateFormatter.format(
             timestamp = currentTimelineItem.event.timestamp,
@@ -117,7 +117,7 @@ class TimelineItemEventFactory(
             sentDate = sentDate,
             groupPosition = groupPosition,
             reactionsState = currentTimelineItem.computeReactionsState(),
-            readReceiptState = currentTimelineItem.computeReadReceiptState(roomMembers),
+            readReceiptState = currentTimelineItem.computeReadReceiptState(roomMembersById),
             localSendState = currentTimelineItem.event.localSendState,
             inReplyTo = currentTimelineItem.event.inReplyTo()?.map(permalinkParser = permalinkParser),
             threadInfo = mappedThreadInfo,
@@ -133,19 +133,19 @@ class TimelineItemEventFactory(
     fun update(
         timelineItem: TimelineItem.Event,
         receivedMatrixTimelineItem: MatrixTimelineItem.Event,
-        roomMembers: List<RoomMember>,
+        roomMembersById: Map<UserId, RoomMember>,
     ): TimelineItem.Event {
         // Recompute the sender profile so that avatar / display name updates propagate to rows
         // already in the diff cache. The avatar is also rebuilt because it derives from senderProfile.
         val (senderProfile, senderAvatarData) = resolveSender(
             sender = timelineItem.senderId,
             eventSenderProfile = receivedMatrixTimelineItem.event.senderProfile,
-            roomMembers = roomMembers,
+            roomMembersById = roomMembersById,
         )
         return timelineItem.copy(
             senderProfile = senderProfile,
             senderAvatar = senderAvatarData,
-            readReceiptState = receivedMatrixTimelineItem.computeReadReceiptState(roomMembers),
+            readReceiptState = receivedMatrixTimelineItem.computeReadReceiptState(roomMembersById),
         )
     }
 
@@ -158,10 +158,10 @@ class TimelineItemEventFactory(
     private fun resolveSender(
         sender: UserId,
         eventSenderProfile: ProfileDetails,
-        roomMembers: List<RoomMember>,
+        roomMembersById: Map<UserId, RoomMember>,
     ): Pair<ProfileDetails, AvatarData> {
         val senderProfile = eventSenderProfile.withLiveMemberOverride(
-            roomMembers.find { it.userId == sender }
+            roomMembersById[sender]
         )
         val avatarData = AvatarData(
             id = sender.value,
@@ -212,7 +212,7 @@ class TimelineItemEventFactory(
     }
 
     private fun MatrixTimelineItem.Event.computeReadReceiptState(
-        roomMembers: List<RoomMember>,
+        roomMembersById: Map<UserId, RoomMember>,
     ): TimelineItemReadReceipts {
         if (!config.computeReadReceipts) {
             return TimelineItemReadReceipts(receipts = persistentListOf())
@@ -220,7 +220,7 @@ class TimelineItemEventFactory(
         return TimelineItemReadReceipts(
             receipts = event.receipts
                 .map { receipt ->
-                    val roomMember = roomMembers.find { it.userId == receipt.userId }
+                    val roomMember = roomMembersById[receipt.userId]
                     ReadReceiptData(
                         avatarData = AvatarData(
                             id = receipt.userId.value,

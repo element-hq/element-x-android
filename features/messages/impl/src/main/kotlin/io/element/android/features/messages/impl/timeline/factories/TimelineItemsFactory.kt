@@ -19,6 +19,7 @@ import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.libraries.androidutils.diff.DiffCacheUpdater
 import io.element.android.libraries.androidutils.diff.MutableListDiffCache
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.RoomMember
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import kotlinx.collections.immutable.ImmutableList
@@ -75,19 +76,22 @@ class TimelineItemsFactory(
         timelineItems: List<MatrixTimelineItem>,
         roomMembers: List<RoomMember>,
     ) {
+        // Index the member list once per batch so per-item sender / receipt lookups are O(1)
+        // rather than O(N) — N can reach tens of thousands in large public rooms.
+        val roomMembersById = roomMembers.associateBy { it.userId }
         val newTimelineItemStates = ArrayList<TimelineItem>()
         for (index in diffCache.indices().reversed()) {
             val cacheItem = diffCache.get(index)
             if (cacheItem == null) {
-                buildAndCacheItem(timelineItems, index, roomMembers)?.also { timelineItemState ->
+                buildAndCacheItem(timelineItems, index, roomMembersById)?.also { timelineItemState ->
                     newTimelineItemStates.add(timelineItemState)
                 }
             } else {
-                val updatedItem = if (cacheItem is TimelineItem.Event && roomMembers.isNotEmpty()) {
+                val updatedItem = if (cacheItem is TimelineItem.Event && roomMembersById.isNotEmpty()) {
                     eventItemFactory.update(
                         timelineItem = cacheItem,
                         receivedMatrixTimelineItem = timelineItems[index] as MatrixTimelineItem.Event,
-                        roomMembers = roomMembers
+                        roomMembersById = roomMembersById,
                     )
                 } else {
                     cacheItem
@@ -102,11 +106,11 @@ class TimelineItemsFactory(
     private suspend fun buildAndCacheItem(
         timelineItems: List<MatrixTimelineItem>,
         index: Int,
-        roomMembers: List<RoomMember>,
+        roomMembersById: Map<UserId, RoomMember>,
     ): TimelineItem? {
         val timelineItem =
             when (val currentTimelineItem = timelineItems[index]) {
-                is MatrixTimelineItem.Event -> eventItemFactory.create(currentTimelineItem, index, timelineItems, roomMembers)
+                is MatrixTimelineItem.Event -> eventItemFactory.create(currentTimelineItem, index, timelineItems, roomMembersById)
                 is MatrixTimelineItem.Virtual -> virtualItemFactory.create(currentTimelineItem)
                 MatrixTimelineItem.Other -> null
             }
