@@ -10,6 +10,7 @@ package io.element.android.libraries.matrix.impl.timeline
 
 import androidx.compose.ui.util.fastForEach
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileChangeContent
 import io.element.android.libraries.matrix.api.timeline.item.event.RoomMembershipContent
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -158,7 +159,8 @@ private class DiffingResult(initialItems: List<MatrixTimelineItem>) {
                 if (item.event.origin == TimelineItemEventOrigin.SYNC) {
                     hasNewEventsFromSync = true
                     when (item.event.content) {
-                        is RoomMembershipContent -> hasMembershipChangeEventFromSync = true
+                        is RoomMembershipContent,
+                        is ProfileChangeContent -> hasMembershipChangeEventFromSync = true
                         else -> Unit
                     }
                 }

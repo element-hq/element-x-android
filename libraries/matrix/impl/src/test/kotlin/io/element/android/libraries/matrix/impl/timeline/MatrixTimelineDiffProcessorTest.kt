@@ -8,8 +8,13 @@
 
 package io.element.android.libraries.matrix.impl.timeline
 
+import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
+import io.element.android.libraries.matrix.impl.fixtures.factories.aRustEventTimelineItem
+import io.element.android.libraries.matrix.impl.fixtures.factories.aRustTimelineItemContentMsgLike
+import io.element.android.libraries.matrix.impl.fixtures.factories.aRustTimelineItemContentProfileChange
+import io.element.android.libraries.matrix.impl.fixtures.factories.aRustTimelineItemContentRoomMembership
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiTimelineItem
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
@@ -23,6 +28,7 @@ import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import org.matrix.rustcomponents.sdk.TimelineDiff
+import uniffi.matrix_sdk_ui.EventItemOrigin
 
 class MatrixTimelineDiffProcessorTest {
     private val timelineItems = MutableStateFlow<List<MatrixTimelineItem>>(emptyList())
@@ -153,6 +159,69 @@ class MatrixTimelineDiffProcessorTest {
         assertThat(timelineItems.value).containsExactly(
             MatrixTimelineItem.Other,
         )
+    }
+
+    @Test
+    fun `RoomMembership event from sync emits on the membership change flow`() = runTest {
+        val membershipChangeFlow = MutableSharedFlow<Unit>(replay = 1)
+        val processor = createMatrixTimelineDiffProcessor(membershipChangeEventReceivedFlow = membershipChangeFlow)
+        membershipChangeFlow.test {
+            processor.postDiffs(
+                listOf(
+                    TimelineDiff.PushBack(
+                        FakeFfiTimelineItem(
+                            asEventResult = aRustEventTimelineItem(
+                                origin = EventItemOrigin.SYNC,
+                                content = aRustTimelineItemContentRoomMembership(),
+                            ),
+                        ),
+                    ),
+                )
+            )
+            assertThat(awaitItem()).isEqualTo(Unit)
+        }
+    }
+
+    @Test
+    fun `ProfileChange event from sync emits on the membership change flow`() = runTest {
+        val membershipChangeFlow = MutableSharedFlow<Unit>(replay = 1)
+        val processor = createMatrixTimelineDiffProcessor(membershipChangeEventReceivedFlow = membershipChangeFlow)
+        membershipChangeFlow.test {
+            processor.postDiffs(
+                listOf(
+                    TimelineDiff.PushBack(
+                        FakeFfiTimelineItem(
+                            asEventResult = aRustEventTimelineItem(
+                                origin = EventItemOrigin.SYNC,
+                                content = aRustTimelineItemContentProfileChange(),
+                            ),
+                        ),
+                    ),
+                )
+            )
+            assertThat(awaitItem()).isEqualTo(Unit)
+        }
+    }
+
+    @Test
+    fun `Plain message event does not emit on the membership change flow`() = runTest {
+        val membershipChangeFlow = MutableSharedFlow<Unit>(replay = 1)
+        val processor = createMatrixTimelineDiffProcessor(membershipChangeEventReceivedFlow = membershipChangeFlow)
+        membershipChangeFlow.test {
+            processor.postDiffs(
+                listOf(
+                    TimelineDiff.PushBack(
+                        FakeFfiTimelineItem(
+                            asEventResult = aRustEventTimelineItem(
+                                origin = EventItemOrigin.SYNC,
+                                content = aRustTimelineItemContentMsgLike(),
+                            ),
+                        ),
+                    ),
+                )
+            )
+            expectNoEvents()
+        }
     }
 }
 

@@ -28,10 +28,13 @@ import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.matrix.api.MatrixClient
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.permalink.PermalinkParser
 import io.element.android.libraries.matrix.api.room.RoomMember
+import io.element.android.libraries.matrix.api.room.RoomMembershipState
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.EventThreadInfo
+import io.element.android.libraries.matrix.api.timeline.item.event.ProfileDetails
 import io.element.android.libraries.matrix.api.timeline.item.event.getAvatarUrl
 import io.element.android.libraries.matrix.api.timeline.item.event.getDisambiguatedDisplayName
 import io.element.android.libraries.matrix.ui.messages.reply.map
@@ -61,7 +64,11 @@ class TimelineItemEventFactory(
         val currentSender = currentTimelineItem.event.sender
         val groupPosition =
             computeGroupPosition(currentTimelineItem, timelineItems, index)
-        val senderProfile = currentTimelineItem.event.senderProfile
+        val (senderProfile, senderAvatarData) = resolveSender(
+            sender = currentSender,
+            eventSenderProfile = currentTimelineItem.event.senderProfile,
+            roomMembers = roomMembers,
+        )
         val sentTime = dateFormatter.format(
             timestamp = currentTimelineItem.event.timestamp,
             mode = DateFormatterMode.TimeOnly,
@@ -70,12 +77,6 @@ class TimelineItemEventFactory(
             timestamp = currentTimelineItem.event.timestamp,
             mode = DateFormatterMode.Day,
             useRelative = true,
-        )
-        val senderAvatarData = AvatarData(
-            id = currentSender.value,
-            name = senderProfile.getDisambiguatedDisplayName(currentSender),
-            url = senderProfile.getAvatarUrl(),
-            size = AvatarSize.TimelineSender
         )
         val mappedThreadInfo = when (val threadInfo = currentTimelineItem.event.threadInfo()) {
             is EventThreadInfo.ThreadResponse -> {
@@ -134,9 +135,41 @@ class TimelineItemEventFactory(
         receivedMatrixTimelineItem: MatrixTimelineItem.Event,
         roomMembers: List<RoomMember>,
     ): TimelineItem.Event {
-        return timelineItem.copy(
-            readReceiptState = receivedMatrixTimelineItem.computeReadReceiptState(roomMembers)
+        // Recompute the sender profile so that avatar / display name updates propagate to rows
+        // already in the diff cache. The avatar is also rebuilt because it derives from senderProfile.
+        val (senderProfile, senderAvatarData) = resolveSender(
+            sender = timelineItem.senderId,
+            eventSenderProfile = receivedMatrixTimelineItem.event.senderProfile,
+            roomMembers = roomMembers,
         )
+        return timelineItem.copy(
+            senderProfile = senderProfile,
+            senderAvatar = senderAvatarData,
+            readReceiptState = receivedMatrixTimelineItem.computeReadReceiptState(roomMembers),
+        )
+    }
+
+    /**
+     * Resolves the sender's [ProfileDetails] and [AvatarData] for a timeline event, preferring the
+     * live [RoomMember] over the event-level snapshot so that avatar / display name updates
+     * propagate to existing rows. Falls back to the event snapshot when the sender isn't in the
+     * member list (e.g. they have left the room).
+     */
+    private fun resolveSender(
+        sender: UserId,
+        eventSenderProfile: ProfileDetails,
+        roomMembers: List<RoomMember>,
+    ): Pair<ProfileDetails, AvatarData> {
+        val senderProfile = eventSenderProfile.withLiveMemberOverride(
+            roomMembers.find { it.userId == sender }
+        )
+        val avatarData = AvatarData(
+            id = sender.value,
+            name = senderProfile.getDisambiguatedDisplayName(sender),
+            url = senderProfile.getAvatarUrl(),
+            size = AvatarSize.TimelineSender,
+        )
+        return senderProfile to avatarData
     }
 
     private fun MatrixTimelineItem.Event.computeReactionsState(): TimelineItemReactions {
@@ -254,5 +287,23 @@ class TimelineItemEventFactory(
             }
             else -> TimelineItemGroupPosition.None
         }
+    }
+}
+
+/**
+ * Returns a [ProfileDetails.Ready] sourced from the live [RoomMember] when available, otherwise
+ * the original event-level snapshot. This lets timeline rows reflect avatar / display name updates
+ * that arrived via sync after the event was first cached. Banned members are skipped so the
+ * existing convention of hiding their identity (see [RoomMember.toMatrixUser]) is preserved.
+ */
+internal fun ProfileDetails.withLiveMemberOverride(liveMember: RoomMember?): ProfileDetails {
+    return if (liveMember == null || liveMember.membership == RoomMembershipState.BAN) {
+        this
+    } else {
+        ProfileDetails.Ready(
+            displayName = liveMember.displayName,
+            displayNameAmbiguous = liveMember.isNameAmbiguous,
+            avatarUrl = liveMember.avatarUrl,
+        )
     }
 }

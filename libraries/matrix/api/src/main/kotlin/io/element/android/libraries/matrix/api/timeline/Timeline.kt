@@ -54,6 +54,13 @@ interface Timeline : AutoCloseable {
     }
 
     val mode: Mode
+
+    /**
+     * Emits when a room member event arrives via sync that may have changed the cached member list,
+     * including both actual membership transitions (join/leave/invite/ban) and profile-only changes
+     * (display name / avatar). Subscribers should refetch members so that observers of
+     * [io.element.android.libraries.matrix.api.room.BaseRoom.membersStateFlow] see fresh data.
+     */
     val membershipChangeEventReceived: Flow<Unit>
     val onSyncedEventReceived: Flow<Unit>
     suspend fun sendReadReceipt(eventId: EventId, receiptType: ReceiptType): Result<Unit>
