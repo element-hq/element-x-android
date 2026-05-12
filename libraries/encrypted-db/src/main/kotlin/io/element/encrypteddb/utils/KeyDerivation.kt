@@ -12,6 +12,12 @@ import java.security.SecureRandom
 import javax.crypto.SecretKeyFactory
 import javax.crypto.spec.PBEKeySpec
 
+/**
+ * Derives a key from the given [ByteArray] using PBKDF2 with HMAC-SHA256.
+ * @param length Desired length of the derived key in bits. Default is `256` bits (32 bytes).
+ * @param iterations Number of iterations for the key derivation function. Default is `16,000` iterations.
+ * @return The derived key as a [ByteArray]. If the derivation fails, returns the original [ByteArray].
+ */
 fun ByteArray.doKeyDerivation(
     length: Int = 256,
     iterations: Int = 16_000,
