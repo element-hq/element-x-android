@@ -118,8 +118,8 @@ class ElementCallActivity :
 
             // When the height is compact, hide the system bars by default to maximize the space for the call, using immersive mode
             val hasCompactHeight = hasCompactHeightWindowSize()
-            DisposableEffect(hasCompactHeight) {
-                if (hasCompactHeight) {
+            DisposableEffect(hasCompactHeight, pipState.isInPictureInPicture) {
+                if (hasCompactHeight && !pipState.isInPictureInPicture) {
                     val window = this@ElementCallActivity.window ?: return@DisposableEffect onDispose {}
                     val insetsController = WindowCompat.getInsetsController(window, window.decorView)
                     val systemBarInsets = WindowInsetsCompat.Type.systemBars()
