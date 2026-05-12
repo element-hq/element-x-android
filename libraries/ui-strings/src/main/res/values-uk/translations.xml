@@ -201,7 +201,6 @@
   <string name="common_advanced_settings">"Додаткові налаштування"</string>
   <string name="common_an_image">"зображення"</string>
   <string name="common_analytics">"Аналітика"</string>
-  <string name="common_android_fetching_notifications_title">"Синхронізація сповіщень…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Ви вийшли з кімнати"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Ви вийшли з сеансу"</string>
   <string name="common_appearance">"Тема"</string>
@@ -247,6 +246,7 @@
   <string name="common_failed">"Помилка"</string>
   <string name="common_favourite">"Обране"</string>
   <string name="common_favourited">"Обране"</string>
+  <string name="common_fetching_notifications_title_android">"Синхронізація сповіщень…"</string>
   <string name="common_file">"Файл"</string>
   <string name="common_file_deleted">"Файл видалено"</string>
   <string name="common_file_saved">"Файл збережено"</string>

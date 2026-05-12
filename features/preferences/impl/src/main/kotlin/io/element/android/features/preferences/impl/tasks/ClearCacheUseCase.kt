@@ -11,7 +11,6 @@ package io.element.android.features.preferences.impl.tasks
 import android.content.Context
 import coil3.SingletonImageLoader
 import dev.zacsweers.metro.ContributesBinding
-import dev.zacsweers.metro.Provider
 import io.element.android.features.invite.api.SeenInvitesStore
 import io.element.android.features.preferences.impl.DefaultCacheService
 import io.element.android.libraries.cachestore.api.CacheStore
@@ -34,7 +33,7 @@ class DefaultClearCacheUseCase(
     private val matrixClient: MatrixClient,
     private val coroutineDispatchers: CoroutineDispatchers,
     private val defaultCacheService: DefaultCacheService,
-    private val okHttpClient: Provider<OkHttpClient>,
+    private val okHttpClient: () -> OkHttpClient,
     private val pushService: PushService,
     private val seenInvitesStore: SeenInvitesStore,
     private val activeRoomsHolder: ActiveRoomsHolder,
@@ -55,7 +54,12 @@ class DefaultClearCacheUseCase(
         // Clear OkHttp cache
         okHttpClient().cache?.delete()
         // Clear app cache
-        context.cacheDir.deleteRecursively()
+        context.cacheDir?.listFiles {
+            // But keep the logs
+            it.name != "logs"
+        }?.onEach {
+            it.deleteRecursively()
+        }
         // Clear some settings
         seenInvitesStore.clear()
         // Ensure any error will be displayed again

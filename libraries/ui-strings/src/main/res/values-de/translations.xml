@@ -192,7 +192,6 @@
   <string name="common_advanced_settings">"Erweiterte Einstellungen"</string>
   <string name="common_an_image">"ein Bild"</string>
   <string name="common_analytics">"Analysedaten"</string>
-  <string name="common_android_fetching_notifications_title">"Benachrichtigungen werden synchronisiert…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Du hast den Chat verlassen"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Du wurdest aus der Sitzung abgemeldet."</string>
   <string name="common_appearance">"Erscheinungsbild"</string>
@@ -236,6 +235,7 @@ Grund: %1$s."</string>
   <string name="common_failed">"Fehlgeschlagen"</string>
   <string name="common_favourite">"Favorit"</string>
   <string name="common_favourited">"Favorisiert"</string>
+  <string name="common_fetching_notifications_title_android">"Benachrichtigungen werden synchronisiert…"</string>
   <string name="common_file">"Datei"</string>
   <string name="common_file_deleted">"Datei wurde gelöscht"</string>
   <string name="common_file_saved">"Datei gespeichert"</string>

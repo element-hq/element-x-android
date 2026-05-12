@@ -86,6 +86,7 @@ class RoomInfoMapperTest {
                     privilegedCreatorsRole = true,
                     isLowPriority = true,
                     activeRoomCallConsensusIntent = RtcCallIntentConsensus.Full(RtcCallIntent.AUDIO),
+                    isDm = true,
                 )
             )
         ).isEqualTo(
@@ -136,6 +137,7 @@ class RoomInfoMapperTest {
                 privilegedCreatorRole = true,
                 isLowPriority = true,
                 activeCallIntentConsensus = CallIntentConsensus.Full(CallIntent.AUDIO),
+                isDm = true,
             )
         )
     }
@@ -181,6 +183,7 @@ class RoomInfoMapperTest {
                     privilegedCreatorsRole = true,
                     isLowPriority = true,
                     activeRoomCallConsensusIntent = RtcCallIntentConsensus.None,
+                    isDm = false,
                 )
             )
         ).isEqualTo(
@@ -225,6 +228,7 @@ class RoomInfoMapperTest {
                 privilegedCreatorRole = true,
                 isLowPriority = true,
                 activeCallIntentConsensus = CallIntentConsensus.None,
+                isDm = false,
             )
         )
     }

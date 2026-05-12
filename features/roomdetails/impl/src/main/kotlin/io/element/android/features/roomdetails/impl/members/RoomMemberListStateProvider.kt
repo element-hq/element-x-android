@@ -128,6 +128,7 @@ fun aRoomMember(
     isIgnored: Boolean = false,
     role: RoomMember.Role = RoomMember.Role.User,
     membershipChangeReason: String? = null,
+    isServiceMember: Boolean = false,
 ) = RoomMember(
     userId = userId,
     displayName = displayName,
@@ -138,6 +139,7 @@ fun aRoomMember(
     isIgnored = isIgnored,
     role = role,
     membershipChangeReason = membershipChangeReason,
+    isServiceMember = isServiceMember,
 )
 
 fun aRoomMemberList() = persistentListOf(

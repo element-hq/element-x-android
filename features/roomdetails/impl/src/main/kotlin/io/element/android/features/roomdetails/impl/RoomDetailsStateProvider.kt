@@ -74,6 +74,7 @@ fun aDmRoomMember(
     isIgnored: Boolean = false,
     role: RoomMember.Role = RoomMember.Role.User,
     membershipChangeReason: String? = null,
+    isServiceMember: Boolean = false,
 ) = RoomMember(
     userId = userId,
     displayName = displayName,
@@ -83,7 +84,8 @@ fun aDmRoomMember(
     powerLevel = powerLevel,
     isIgnored = isIgnored,
     role = role,
-    membershipChangeReason = membershipChangeReason
+    membershipChangeReason = membershipChangeReason,
+    isServiceMember = isServiceMember,
 )
 
 fun aRoomDetailsState(

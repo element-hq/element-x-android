@@ -67,7 +67,6 @@ import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.alias.matches
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.TimelineItemDebugInfo
-import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.libraries.ui.utils.a11y.hasExternalKeyboard
 import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import io.element.android.services.analytics.api.AnalyticsService
@@ -88,7 +87,6 @@ class ThreadedMessagesNode(
     private val presenterFactory: MessagesPresenter.Factory,
     private val actionListPresenterFactory: ActionListPresenter.Factory,
     private val timelineItemPresenterFactories: TimelineItemPresenterFactories,
-    private val mediaPlayer: MediaPlayer,
     private val permalinkParser: PermalinkParser,
     private val appNavigationStateService: AppNavigationStateService,
     private val roomMemberModerationRenderer: RoomMemberModerationRenderer,
@@ -157,9 +155,6 @@ class ThreadedMessagesNode(
             onStop = {
                 appNavigationStateService.onLeavingThread(id)
             },
-            onDestroy = {
-                mediaPlayer.close()
-            }
         )
     }
 

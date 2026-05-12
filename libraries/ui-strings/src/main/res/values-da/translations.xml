@@ -198,7 +198,6 @@
   <string name="common_advanced_settings">"Avancerede indstillinger"</string>
   <string name="common_an_image">"et billede"</string>
   <string name="common_analytics">"Analyse-værktøj"</string>
-  <string name="common_android_fetching_notifications_title">"Synkroniserer notifikationer…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Du forlod rummet"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Du blev logget ud af sessionen"</string>
   <string name="common_appearance">"Udseende"</string>
@@ -244,6 +243,7 @@
   <string name="common_failed">"Mislykkedes"</string>
   <string name="common_favourite">"Favorit"</string>
   <string name="common_favourited">"Favoritmarkeret"</string>
+  <string name="common_fetching_notifications_title_android">"Synkroniserer notifikationer…"</string>
   <string name="common_file">"Fil"</string>
   <string name="common_file_deleted">"Fil slettet"</string>
   <string name="common_file_saved">"Fil gemt"</string>

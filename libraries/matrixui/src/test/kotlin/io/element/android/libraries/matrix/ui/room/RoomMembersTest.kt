@@ -30,13 +30,10 @@ class RoomMembersTest {
     private val roomMember3 = aRoomMember(A_USER_ID_3)
 
     @Test
-    fun `getDirectRoomMember emits other member for encrypted DM with 2 joined members`() = runTest {
+    fun `getDirectRoomMember emits other member for encrypted DM`() = runTest {
         val joinedRoom = FakeBaseRoom(
             sessionId = A_USER_ID,
-            initialRoomInfo = aRoomInfo(
-                isDirect = true,
-                joinedMembersCount = 2,
-            )
+            initialRoomInfo = aRoomInfo(isDm = true, isEncrypted = true)
         )
         moleculeFlow(RecompositionMode.Immediate) {
             joinedRoom.getDirectRoomMember(
@@ -51,7 +48,7 @@ class RoomMembersTest {
     fun `getDirectRoomMember emit null if the room is not a dm`() = runTest {
         val joinedRoom = FakeBaseRoom(
             sessionId = A_USER_ID,
-            initialRoomInfo = aRoomInfo(isDirect = false)
+            initialRoomInfo = aRoomInfo(isDm = false)
         )
         moleculeFlow(RecompositionMode.Immediate) {
             joinedRoom.getDirectRoomMember(
@@ -66,10 +63,7 @@ class RoomMembersTest {
     fun `getDirectRoomMember emits other member even if the room is not encrypted`() = runTest {
         val joinedRoom = FakeBaseRoom(
             sessionId = A_USER_ID,
-            initialRoomInfo = aRoomInfo(
-                isDirect = true,
-                activeMembersCount = 2,
-            )
+            initialRoomInfo = aRoomInfo(isDm = true)
         )
         moleculeFlow(RecompositionMode.Immediate) {
             joinedRoom.getDirectRoomMember(
@@ -81,41 +75,10 @@ class RoomMembersTest {
     }
 
     @Test
-    fun `getDirectRoomMember emit null if the room has only 1 member`() = runTest {
-        val joinedRoom = FakeBaseRoom(
-            sessionId = A_USER_ID,
-            initialRoomInfo = aRoomInfo(isDirect = true)
-        )
-        moleculeFlow(RecompositionMode.Immediate) {
-            joinedRoom.getDirectRoomMember(
-                RoomMembersState.Ready(persistentListOf(roomMember1))
-            )
-        }.test {
-            assertThat(awaitItem().value).isNull()
-        }
-    }
-
-    @Test
-    fun `getDirectRoomMember emit null if the room has only 3 members`() = runTest {
-        val joinedRoom = FakeBaseRoom(
-            sessionId = A_USER_ID,
-        ).apply {
-            givenRoomInfo(aRoomInfo(isDirect = true, activeMembersCount = 3L))
-        }
-        moleculeFlow(RecompositionMode.Immediate) {
-            joinedRoom.getDirectRoomMember(
-                RoomMembersState.Ready(persistentListOf(roomMember1, roomMember2, roomMember3))
-            )
-        }.test {
-            assertThat(awaitItem().value).isNull()
-        }
-    }
-
-    @Test
     fun `getDirectRoomMember emit null if the other member is not active`() = runTest {
         val joinedRoom = FakeBaseRoom(
             sessionId = A_USER_ID,
-            initialRoomInfo = aRoomInfo(isDirect = true),
+            initialRoomInfo = aRoomInfo(isDm = true),
         )
         moleculeFlow(RecompositionMode.Immediate) {
             joinedRoom.getDirectRoomMember(
@@ -135,10 +98,7 @@ class RoomMembersTest {
     fun `getDirectRoomMember emit the other member if there are 2 active members`() = runTest {
         val joinedRoom = FakeBaseRoom(
             sessionId = A_USER_ID,
-            initialRoomInfo = aRoomInfo(
-                isDirect = true,
-                activeMembersCount = 2,
-            )
+            initialRoomInfo = aRoomInfo(isDm = true)
         )
         moleculeFlow(RecompositionMode.Immediate) {
             joinedRoom.getDirectRoomMember(
