@@ -102,7 +102,7 @@ enum class FeatureFlags(
     ),
     AllowBlackTheme(
         key = "feature.allow_black_theme",
-        title = "Allow black theme",
+        title = "Black theme",
         description = "Allow selecting the black appearance theme for battery saving on OLED.",
         defaultValue = { false },
         isFinished = false,
