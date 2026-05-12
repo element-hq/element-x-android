@@ -171,7 +171,7 @@ class ShareLocationPresenter(
             dialogState = dialogState,
             trackUserLocation = trackUserPosition,
             hasLocationPermission = permissionsState.isAnyGranted,
-            canShareLiveLocation = isLiveLocationSharingEnabled,
+            canShareLiveLocation = isLiveLocationSharingEnabled && timelineMode.canShareLiveLocation(),
             appName = appName,
             startLiveLocationAction = startLiveLocationAction.value,
             eventSink = ::handleEvent,
@@ -208,6 +208,11 @@ class ShareLocationPresenter(
             else -> Result.success(room.liveTimeline)
         }
     }
+}
+
+private fun Timeline.Mode.canShareLiveLocation() = when (this) {
+    is Timeline.Mode.Thread -> false
+    else -> true
 }
 
 private fun generateBody(uri: String): String = "Location was shared at $uri"

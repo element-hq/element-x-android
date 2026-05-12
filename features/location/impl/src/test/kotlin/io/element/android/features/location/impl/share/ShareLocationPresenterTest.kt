@@ -29,6 +29,7 @@ import io.element.android.features.location.impl.live.LiveLocationStore
 import io.element.android.features.location.test.FakeActiveLiveLocationShareManager
 import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.libraries.dateformatter.test.FakeDurationFormatter
+import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -40,6 +41,7 @@ import io.element.android.libraries.matrix.api.room.location.AssetType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_SESSION_ID
+import io.element.android.libraries.matrix.test.A_THREAD_ID
 import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.FakeMatrixClient
 import io.element.android.libraries.matrix.test.core.aBuildMeta
@@ -82,13 +84,14 @@ class ShareLocationPresenterTest {
 
     private fun TestScope.createShareLocationPresenter(
         joinedRoom: JoinedRoom = FakeJoinedRoom(),
+        timelineMode: Timeline.Mode = Timeline.Mode.Live,
         locationActions: FakeLocationActions = fakeLocationActions,
         liveLocationShareManager: FakeActiveLiveLocationShareManager = FakeActiveLiveLocationShareManager(),
         liveLocationStore: LiveLocationStore = createLiveLocationStore(sessionId = joinedRoom.sessionId),
     ): ShareLocationPresenter = ShareLocationPresenter(
         permissionsPresenterFactory = { fakePermissionsPresenter },
         room = joinedRoom,
-        timelineMode = Timeline.Mode.Live,
+        timelineMode = timelineMode,
         analyticsService = fakeAnalyticsService,
         messageComposerContext = fakeMessageComposerContext,
         locationActions = locationActions,
@@ -651,6 +654,45 @@ class ShareLocationPresenterTest {
                 value(1.hours)
             )
             cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `canShareLiveLocation is false when the feature is disabled`() = runTest {
+        fakeFeatureFlagService.setFeatureEnabled(FeatureFlags.LiveLocationSharing, false)
+        val shareLocationPresenter = createShareLocationPresenter(
+            timelineMode = Timeline.Mode.Live,
+        )
+        shareLocationPresenter.test {
+            skipItems(1)
+            val state = awaitItem()
+            assertThat(state.canShareLiveLocation).isFalse()
+        }
+    }
+
+    @Test
+    fun `canShareLiveLocation is true when the feature is enabled`() = runTest {
+        fakeFeatureFlagService.setFeatureEnabled(FeatureFlags.LiveLocationSharing, true)
+        val shareLocationPresenter = createShareLocationPresenter(
+            timelineMode = Timeline.Mode.Live,
+        )
+        shareLocationPresenter.test {
+            skipItems(1)
+            val state = awaitItem()
+            assertThat(state.canShareLiveLocation).isTrue()
+        }
+    }
+
+    @Test
+    fun `canShareLiveLocation is false in thread timeline`() = runTest {
+        fakeFeatureFlagService.setFeatureEnabled(FeatureFlags.LiveLocationSharing, true)
+        val shareLocationPresenter = createShareLocationPresenter(
+            timelineMode = Timeline.Mode.Thread(A_THREAD_ID),
+        )
+        shareLocationPresenter.test {
+            skipItems(1)
+            val state = awaitItem()
+            assertThat(state.canShareLiveLocation).isFalse()
         }
     }
 }
