@@ -192,7 +192,6 @@
   <string name="common_advanced_settings">"Erweiterte Einstellungen"</string>
   <string name="common_an_image">"ein Bild"</string>
   <string name="common_analytics">"Analysedaten"</string>
-  <string name="common_android_fetching_notifications_title">"Benachrichtigungen werden synchronisiert…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Du hast den Chat verlassen"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Du wurdest aus der Sitzung abgemeldet."</string>
   <string name="common_appearance">"Erscheinungsbild"</string>
@@ -210,7 +209,6 @@
   <string name="common_current_user_left_room">"Hat den Chat verlassen"</string>
   <string name="common_current_user_left_space">"Space verlassen"</string>
   <string name="common_current_user_rejected_invite">"Einladung abgelehnt"</string>
-  <string name="common_dark">"Dunkel"</string>
   <string name="common_decryption_error">"Dekodierungsfehler"</string>
   <string name="common_description">"Beschreibung"</string>
   <string name="common_developer_options">"Entwickleroptionen"</string>
@@ -236,6 +234,7 @@ Grund: %1$s."</string>
   <string name="common_failed">"Fehlgeschlagen"</string>
   <string name="common_favourite">"Favorit"</string>
   <string name="common_favourited">"Favorisiert"</string>
+  <string name="common_fetching_notifications_title_android">"Benachrichtigungen werden synchronisiert…"</string>
   <string name="common_file">"Datei"</string>
   <string name="common_file_deleted">"Datei wurde gelöscht"</string>
   <string name="common_file_saved">"Datei gespeichert"</string>
@@ -249,7 +248,6 @@ Grund: %1$s."</string>
   <string name="common_invite_unknown_profile">"Diese Matrix Kennung wurde nicht gefunden, daher wird die Einladung möglicherweise nicht empfangen."</string>
   <string name="common_leaving_room">"Chat verlassen"</string>
   <string name="common_leaving_space">"Space wird verlassen"</string>
-  <string name="common_light">"Hell"</string>
   <string name="common_line_copied_to_clipboard">"Zeile in die Zwischenablage kopiert"</string>
   <string name="common_link_copied_to_clipboard">"Link in die Zwischenablage kopiert"</string>
   <string name="common_link_new_device">"Neues Gerät verknüpfen"</string>
@@ -316,7 +314,6 @@ Grund: %1$s."</string>
     <item quantity="other">"%1$d Antworten"</item>
   </plurals>
   <string name="common_replying_to">"%1$s antworten"</string>
-  <string name="common_report_a_bug">"Einen Fehler melden"</string>
   <string name="common_report_a_problem">"Ein Problem melden"</string>
   <string name="common_report_submitted">"Bericht eingereicht"</string>
   <string name="common_rich_text_editor">"Rich-Text-Editor"</string>
@@ -370,7 +367,6 @@ Grund: %1$s."</string>
   <string name="common_suggested">"Empfohlen"</string>
   <string name="common_suggestions">"Vorschläge"</string>
   <string name="common_syncing">"Synchronisieren"</string>
-  <string name="common_system">"System"</string>
   <string name="common_text">"Text"</string>
   <string name="common_third_party_notices">"Hinweise von Drittanbietern"</string>
   <string name="common_thread">"Thread"</string>

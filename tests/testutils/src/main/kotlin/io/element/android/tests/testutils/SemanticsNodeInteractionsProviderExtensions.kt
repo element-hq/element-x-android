@@ -23,9 +23,11 @@ import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasTestTag
 import androidx.compose.ui.test.hasText
 import androidx.compose.ui.test.isDialog
+import androidx.compose.ui.test.junit4.AndroidComposeTestRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import io.element.android.libraries.ui.strings.CommonStrings
+import org.junit.rules.TestRule
 
 val trueMatcher = SemanticsMatcher("true matcher") { true }
 
@@ -49,10 +51,25 @@ fun AndroidComposeUiTest<ComponentActivity>.pressBack() {
 }
 
 /**
+ * Press the back button in the app bar.
+ */
+fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.pressBack() {
+    val text = activity.getString(CommonStrings.action_back)
+    onNode(hasContentDescription(text)).performClick()
+}
+
+/**
  * Press the back key.
  */
 fun AndroidComposeUiTest<ComponentActivity>.pressBackKey() {
     activity!!.onBackPressedDispatcher.onBackPressed()
+}
+
+/**
+ * Press the back key.
+ */
+fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.pressBackKey() {
+    activity.onBackPressedDispatcher.onBackPressed()
 }
 
 fun SemanticsNodeInteractionsProvider.pressTag(tag: String) {

@@ -197,7 +197,6 @@
   <string name="common_advanced_settings">"高度な設定"</string>
   <string name="common_an_image">"画像"</string>
   <string name="common_analytics">"分析"</string>
-  <string name="common_android_fetching_notifications_title">"通知を同期中…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"あなたがルームを退出"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"セッションからログアウトされました"</string>
   <string name="common_appearance">"テーマ"</string>
@@ -217,7 +216,6 @@
   <string name="common_current_user_left_room">"ルームを退出しました"</string>
   <string name="common_current_user_left_space">"スペースから退出しました"</string>
   <string name="common_current_user_rejected_invite">"招待は却下されました"</string>
-  <string name="common_dark">"ダーク"</string>
   <string name="common_decryption_error">"復号化エラー"</string>
   <string name="common_description">"詳細"</string>
   <string name="common_developer_options">"開発者向けオプション"</string>
@@ -243,6 +241,7 @@
   <string name="common_failed">"失敗"</string>
   <string name="common_favourite">"お気に入り"</string>
   <string name="common_favourited">"お気に入り"</string>
+  <string name="common_fetching_notifications_title_android">"通知を同期中…"</string>
   <string name="common_file">"ファイル"</string>
   <string name="common_file_deleted">"ファイルを削除しました"</string>
   <string name="common_file_saved">"ファイルを保存しました"</string>
@@ -256,7 +255,6 @@
   <string name="common_invite_unknown_profile">"このMatrix IDは見つからないため、招待が届かない可能性があります。"</string>
   <string name="common_leaving_room">"ルームを退出しています"</string>
   <string name="common_leaving_space">"スペースを退出しています"</string>
-  <string name="common_light">"ライト"</string>
   <string name="common_line_copied_to_clipboard">"行をクリップボードにコピーしました"</string>
   <string name="common_link_copied_to_clipboard">"リンクをクリップボードにコピーしました"</string>
   <string name="common_link_new_device">"新しい端末から接続"</string>
@@ -319,7 +317,6 @@
     <item quantity="other">"%1$d 件の返信"</item>
   </plurals>
   <string name="common_replying_to">"%1$s に返信"</string>
-  <string name="common_report_a_bug">"バグを報告"</string>
   <string name="common_report_a_problem">"問題を報告"</string>
   <string name="common_report_submitted">"報告は送信されました"</string>
   <string name="common_rich_text_editor">"リッチテキストエディター"</string>
@@ -370,7 +367,6 @@
   <string name="common_suggested">"推奨される"</string>
   <string name="common_suggestions">"提案"</string>
   <string name="common_syncing">"同期中"</string>
-  <string name="common_system">"システム"</string>
   <string name="common_text">"テキスト"</string>
   <string name="common_third_party_notices">"第三者に関する通知"</string>
   <string name="common_thread">"スレッド"</string>

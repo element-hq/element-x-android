@@ -195,7 +195,6 @@
   <string name="common_advanced_settings">"Расширенные настройки"</string>
   <string name="common_an_image">"изображение"</string>
   <string name="common_analytics">"Аналитика"</string>
-  <string name="common_android_fetching_notifications_title">"Синхронизация уведомлений…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Вы покинули комнату"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Вы вышли из сессии"</string>
   <string name="common_appearance">"Внешний вид"</string>
@@ -213,7 +212,6 @@
   <string name="common_current_user_left_room">"Покинул комнату"</string>
   <string name="common_current_user_left_space">"Покинуть пространство"</string>
   <string name="common_current_user_rejected_invite">"Приглашение отклонено"</string>
-  <string name="common_dark">"Темная"</string>
   <string name="common_decryption_error">"Ошибка расшифровки"</string>
   <string name="common_description">"Описание"</string>
   <string name="common_developer_options">"Для разработчиков"</string>
@@ -239,6 +237,7 @@
   <string name="common_failed">"Ошибка"</string>
   <string name="common_favourite">"Избранное"</string>
   <string name="common_favourited">"Избранное"</string>
+  <string name="common_fetching_notifications_title_android">"Синхронизация уведомлений…"</string>
   <string name="common_file">"Файл"</string>
   <string name="common_file_deleted">"Файл удалён"</string>
   <string name="common_file_saved">"Файл сохранен"</string>
@@ -252,7 +251,6 @@
   <string name="common_invite_unknown_profile">"Идентификатор Matrix ID не найден, приглашение может быть не получено."</string>
   <string name="common_leaving_room">"Покидаем комнату"</string>
   <string name="common_leaving_space">"Покидаем пространство"</string>
-  <string name="common_light">"Светлое"</string>
   <string name="common_line_copied_to_clipboard">"Строка скопирована в буфер обмена"</string>
   <string name="common_link_copied_to_clipboard">"Ссылка скопирована в буфер обмена"</string>
   <string name="common_link_new_device">"Привязать новое устройство"</string>
@@ -323,7 +321,6 @@
     <item quantity="many">"%1$d ответов"</item>
   </plurals>
   <string name="common_replying_to">"Отвечает %1$s"</string>
-  <string name="common_report_a_bug">"Сообщить об ошибке"</string>
   <string name="common_report_a_problem">"Сообщить о проблеме"</string>
   <string name="common_report_submitted">"Отчет отправлен"</string>
   <string name="common_rich_text_editor">"Форматирование"</string>
@@ -380,7 +377,6 @@
   <string name="common_suggested">"Рекомендуемые"</string>
   <string name="common_suggestions">"Предложения"</string>
   <string name="common_syncing">"Синхронизация"</string>
-  <string name="common_system">"Системное"</string>
   <string name="common_text">"Текст"</string>
   <string name="common_third_party_notices">"Уведомления о третьих лицах"</string>
   <string name="common_thread">"Обсуждение"</string>

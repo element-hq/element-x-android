@@ -15,7 +15,14 @@
     <item quantity="few">"%d сповіщення"</item>
     <item quantity="many">"%d сповіщень"</item>
   </plurals>
+  <string name="notification_error_unified_push_unregistered_android">"Розподільник сповіщень UnifiedPush не вдалося зареєструвати, тому ви більше не отримуватимете сповіщень. Перевірте налаштування сповіщень у додатку та статус розподільника push-сповіщень."</string>
   <string name="notification_fallback_content">"У вас є нові повідомлення."</string>
+  <plurals name="notification_fallback_n_content">
+    <item quantity="one">"У вас %d нове повідомлення."</item>
+    <item quantity="few">"У вас %d нових повідомлення."</item>
+    <item quantity="many">"У вас %d нових повідомлень."</item>
+  </plurals>
+  <string name="notification_incoming_audio_call">"📞 Вхідний дзвінок"</string>
   <string name="notification_incoming_call">"📹 Вхідний виклик"</string>
   <string name="notification_inline_reply_failed">"** Не вдалося надіслати - відкрийте кімнату"</string>
   <string name="notification_invitation_action_join">"Доєднатися"</string>
@@ -41,6 +48,7 @@
   <string name="notification_room_invite_body_with_sender">"%1$s запросив вас приєднатися до кімнати"</string>
   <string name="notification_sender_me">"Я"</string>
   <string name="notification_sender_mention_reply">"%1$s згадували або відповідали"</string>
+  <string name="notification_space_invite_body">"Вас запросили приєднатися до простору"</string>
   <string name="notification_space_invite_body_with_sender">"%1$s запрошує вас приєднатися до простору"</string>
   <string name="notification_test_push_notification_content">"Ви переглядаєте сповіщення! Натисніть тут!"</string>
   <string name="notification_thread_in_room">"Гілка в %1$s"</string>
@@ -62,11 +70,18 @@
   <string name="push_distributor_background_sync_android">"Фонова синхронізація"</string>
   <string name="push_distributor_firebase_android">"Сервіси Google"</string>
   <string name="push_no_valid_google_play_services_apk_android">"Не знайдено дійсних сервісів Google Play. Сповіщення можуть не працювати належним чином."</string>
+  <string name="troubleshoot_notifications_test_blocked_users_description">"Перевірка заблокованих користувачів"</string>
   <string name="troubleshoot_notifications_test_blocked_users_quick_fix">"Переглянути заблокованих користувачів"</string>
   <string name="troubleshoot_notifications_test_blocked_users_result_none">"Немає заблокованих користувачів"</string>
+  <plurals name="troubleshoot_notifications_test_blocked_users_result_some">
+    <item quantity="one">"Ви заблокували %1$d користувача. Ви не отримуватимете сповіщення для цього користувача."</item>
+    <item quantity="few">"Ви заблокували %1$d користувачів. Ви не отримуватимете сповіщення для цих користувачів."</item>
+    <item quantity="many">"Ви заблокували %1$d користувачів. Ви не отримуватимете сповіщення для цих користувачів."</item>
+  </plurals>
   <string name="troubleshoot_notifications_test_blocked_users_title">"Заблоковані користувачі"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_description">"Отримує назву поточного постачальника."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure">"Постачальників push-сповіщень не вибрано."</string>
+  <string name="troubleshoot_notifications_test_current_push_provider_failure_distributor_not_found">"Поточний провайдер push-повідомлень: %1$s та поточний дистриб\'ютор: %2$s. Але дистриб\'ютор %3$s не знайдено. Можливо, додаток було видалено?"</string>
   <string name="troubleshoot_notifications_test_current_push_provider_failure_no_distributor">"Поточний постачальник push-сповіщень: %1$s, але дистриб\'юторів не налаштовано."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success">"Поточний постачальник: %1$s."</string>
   <string name="troubleshoot_notifications_test_current_push_provider_success_with_distributor">"Поточний постачальник push-сповіщень: %1$s (%2$s)"</string>

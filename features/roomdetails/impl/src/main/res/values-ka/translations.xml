@@ -39,6 +39,7 @@
   <string name="screen_room_details_error_muting">"ამ ოთახის დადუმება ვერ მოხერხდა. გთხოვთ, სცადოთ ხელახლა."</string>
   <string name="screen_room_details_error_unmuting">"ამ ოთახის დადუმების მოხსნა ვერ მოხერხდა. გთხოვთ, სცადოთ ხელახლა."</string>
   <string name="screen_room_details_invite_people_title">"ხალხის მოწვევა"</string>
+  <string name="screen_room_details_invite_title">"მოწვევა"</string>
   <string name="screen_room_details_leave_conversation_title">"საუბრის დატოვება"</string>
   <string name="screen_room_details_leave_room_title">"ოთახის დატოვება"</string>
   <string name="screen_room_details_notification_mode_custom">"მორგებული"</string>

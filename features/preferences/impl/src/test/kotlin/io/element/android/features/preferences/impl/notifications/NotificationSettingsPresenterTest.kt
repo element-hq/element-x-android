@@ -61,8 +61,8 @@ class NotificationSettingsPresenterTest {
         val notificationSettingsService = FakeNotificationSettingsService()
         val presenter = createNotificationSettingsPresenter(notificationSettingsService)
         presenter.test {
-            notificationSettingsService.setDefaultRoomNotificationMode(isEncrypted = true, isOneToOne = false, mode = RoomNotificationMode.ALL_MESSAGES)
-            notificationSettingsService.setDefaultRoomNotificationMode(isEncrypted = false, isOneToOne = false, mode = RoomNotificationMode.ALL_MESSAGES)
+            notificationSettingsService.setDefaultRoomNotificationMode(isEncrypted = true, isDM = false, mode = RoomNotificationMode.ALL_MESSAGES)
+            notificationSettingsService.setDefaultRoomNotificationMode(isEncrypted = false, isDM = false, mode = RoomNotificationMode.ALL_MESSAGES)
             val updatedState = consumeItemsUntilPredicate {
                 (it.matrixSettings as? NotificationSettingsState.MatrixSettings.Valid)
                     ?.defaultGroupNotificationMode == RoomNotificationMode.ALL_MESSAGES
@@ -79,12 +79,12 @@ class NotificationSettingsPresenterTest {
         presenter.test {
             notificationSettingsService.setDefaultRoomNotificationMode(
                 isEncrypted = true,
-                isOneToOne = false,
+                isDM = false,
                 mode = RoomNotificationMode.ALL_MESSAGES
             )
             notificationSettingsService.setDefaultRoomNotificationMode(
                 isEncrypted = false,
-                isOneToOne = false,
+                isDM = false,
                 mode = RoomNotificationMode.MENTIONS_AND_KEYWORDS_ONLY
             )
             val updatedState = consumeItemsUntilPredicate {

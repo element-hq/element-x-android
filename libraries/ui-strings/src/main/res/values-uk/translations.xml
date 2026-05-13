@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Додати реакцію: %1$s"</string>
+  <string name="a11y_address">"Адреса"</string>
   <string name="a11y_avatar">"Аватар"</string>
   <string name="a11y_collapse_message_text_field">"Згорнути поле тексту повідомлення"</string>
   <string name="a11y_delete">"Видалити"</string>
@@ -14,6 +15,7 @@
   <string name="a11y_encryption_details">"Подробиці шифрування"</string>
   <string name="a11y_expand_message_text_field">"Розгорнути текстове поле повідомлення"</string>
   <string name="a11y_hide_password">"Cховати пароль"</string>
+  <string name="a11y_info">"Інформація"</string>
   <string name="a11y_join_call">"Приєднатися до виклику"</string>
   <string name="a11y_jump_to_bottom">"Перейти вниз"</string>
   <string name="a11y_move_the_map_to_my_location">"Перемістити карту до мого місця перебування"</string>
@@ -27,9 +29,12 @@
   <string name="a11y_pause">"Пауза"</string>
   <string name="a11y_paused_voice_message">"Голосове повідомлення, тривалість: %1$s, поточна позиція: %2$s"</string>
   <string name="a11y_pin_field">"Поле PIN-коду"</string>
+  <string name="a11y_pinned_location">"Закріплена локація"</string>
   <string name="a11y_play">"Відтворити"</string>
+  <string name="a11y_playback_speed">"Швидкість програвання"</string>
   <string name="a11y_poll">"Опитування"</string>
   <string name="a11y_poll_end">"Опитування завершено"</string>
+  <string name="a11y_qr_code">"QR-код"</string>
   <string name="a11y_react_with">"Реагувати з%1$s"</string>
   <string name="a11y_react_with_other_emojis">"Відреагувати іншими смайликами"</string>
   <string name="a11y_read_receipts_multiple">"Прочитано %1$s та %2$s"</string>
@@ -44,9 +49,13 @@
   <string name="a11y_remove_reaction_with">"Прибрати реакцію %1$s"</string>
   <string name="a11y_room_avatar">"Аватар кімнати"</string>
   <string name="a11y_send_files">"Надіслати файли"</string>
+  <string name="a11y_sender_location">"Локація відправника"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Необхідно виконати дію, обмежену в часі, у вас є одна хвилина для верифікації"</string>
+  <string name="a11y_settings_with_required_action">"Налаштування, потрібні дії"</string>
   <string name="a11y_show_password">"Показати пароль"</string>
   <string name="a11y_start_call">"Розпочати виклик"</string>
+  <string name="a11y_start_video_call">"Розпочати відеодзвінок"</string>
+  <string name="a11y_start_voice_call">"Розпочати голосовий дзвінок"</string>
   <string name="a11y_tombstoned_room">"Кімната більше не використовується"</string>
   <string name="a11y_user_avatar">"Аватар користувача"</string>
   <string name="a11y_user_menu">"Меню користувача"</string>
@@ -64,6 +73,7 @@
   <string name="action_call">"Зателефонувати"</string>
   <string name="action_cancel">"Скасувати"</string>
   <string name="action_cancel_for_now">"Скасувати наразі"</string>
+  <string name="action_choose_file">"Вибрати файл"</string>
   <string name="action_choose_photo">"Вибрати фото"</string>
   <string name="action_clear">"Очистити"</string>
   <string name="action_close">"Закрити"</string>
@@ -83,18 +93,22 @@
   <string name="action_deactivate_account">"Деактивувати обліковий запис"</string>
   <string name="action_decline">"Відхилити"</string>
   <string name="action_decline_and_block">"Відхилити та заблокувати"</string>
+  <string name="action_delete">"Видалити"</string>
+  <string name="action_delete_account">"Видалити обліковий запис"</string>
   <string name="action_delete_poll">"Видалити опитування"</string>
   <string name="action_deselect_all">"Скасувати вибір усіх"</string>
   <string name="action_disable">"Вимкнути"</string>
   <string name="action_discard">"Відкинути"</string>
   <string name="action_dismiss">"Відхилити"</string>
   <string name="action_done">"Готово"</string>
+  <string name="action_download">"Завантажити"</string>
   <string name="action_edit">"Редагувати"</string>
   <string name="action_edit_caption">"Редагувати підпис"</string>
   <string name="action_edit_poll">"Редагувати опитування"</string>
   <string name="action_enable">"Увімкнути"</string>
   <string name="action_end_poll">"Завершити опитування"</string>
   <string name="action_enter_pin">"Введіть PIN-код"</string>
+  <string name="action_explore_public_spaces">"Дізнатися про публічні простори"</string>
   <string name="action_finish">"Завершити"</string>
   <string name="action_forgot_password">"Забули пароль?"</string>
   <string name="action_forward">"Переслати"</string>
@@ -115,6 +129,7 @@
   <string name="action_leave_space">"Вийти з простору"</string>
   <string name="action_load_more">"Завантажити ще"</string>
   <string name="action_manage_account">"Керування обліковим записом"</string>
+  <string name="action_manage_account_and_devices">"Керування обліковим записом і пристроями"</string>
   <string name="action_manage_devices">"Керування пристроями"</string>
   <string name="action_manage_rooms">"Керувати кімнатами"</string>
   <string name="action_message">"Написати"</string>
@@ -154,6 +169,7 @@
   <string name="action_send_voice_message">"Надіслати голосове повідомлення"</string>
   <string name="action_share">"Поділитися"</string>
   <string name="action_share_link">"Поділитися посиланням"</string>
+  <string name="action_share_live_location">"Ділитися місцезнаходженням у реальному часі"</string>
   <string name="action_show">"Показати"</string>
   <string name="action_sign_in_again">"Увійдіть знову"</string>
   <string name="action_signout">"Вийти"</string>
@@ -164,6 +180,7 @@
   <string name="action_start_over">"Почати спочатку"</string>
   <string name="action_start_verification">"Почати верифікацію"</string>
   <string name="action_static_map_load">"Натисніть, щоб завантажити мапу"</string>
+  <string name="action_stop">"Зупинити"</string>
   <string name="action_take_photo">"Зробити фото"</string>
   <string name="action_tap_for_options">"Торкніться, щоб переглянути параметри"</string>
   <string name="action_translate">"Перекласти"</string>
@@ -191,7 +208,9 @@
   <string name="common_beta">"Бета-версія"</string>
   <string name="common_blocked_users">"Заблоковані користувачі"</string>
   <string name="common_bubbles">"Бульбашки"</string>
+  <string name="common_call_declined">"Дзвінок відхилено"</string>
   <string name="common_call_started">"Виклик розпочато"</string>
+  <string name="common_call_you_declined">"Ви відхилили дзвінок"</string>
   <string name="common_chat_backup">"Резервне копіювання бесіди"</string>
   <string name="common_copied_to_clipboard">"Скопійовано до буферу обміну"</string>
   <string name="common_copyright">"Авторське право"</string>
@@ -199,8 +218,8 @@
   <string name="common_creating_space">"Створення простору…"</string>
   <string name="common_current_user_canceled_knock">"Запит скасовано"</string>
   <string name="common_current_user_left_room">"Виходить з кімнати"</string>
+  <string name="common_current_user_left_space">"Вийшов із простору"</string>
   <string name="common_current_user_rejected_invite">"Запрошення відхилено"</string>
-  <string name="common_dark">"Темна"</string>
   <string name="common_decryption_error">"Помилка розшифрування"</string>
   <string name="common_description">"Опис"</string>
   <string name="common_developer_options">"Налаштування розробника"</string>
@@ -216,6 +235,7 @@
   <string name="common_empty_file">"Порожній файл"</string>
   <string name="common_encryption">"Шифрування"</string>
   <string name="common_encryption_enabled">"Шифрування ввімкнено"</string>
+  <string name="common_ends_at">"Завершується о %1$s"</string>
   <string name="common_enter_your_pin">"Введіть свій PIN-код"</string>
   <string name="common_error">"Помилка"</string>
   <string name="common_error_registering_pusher_android">"Сталася помилка, ви можете не отримувати сповіщення про нові повідомлення. Усуньте неполадки зі сповіщеннями в налаштуваннях.
@@ -225,6 +245,7 @@
   <string name="common_failed">"Помилка"</string>
   <string name="common_favourite">"Обране"</string>
   <string name="common_favourited">"Обране"</string>
+  <string name="common_fetching_notifications_title_android">"Синхронізація сповіщень…"</string>
   <string name="common_file">"Файл"</string>
   <string name="common_file_deleted">"Файл видалено"</string>
   <string name="common_file_saved">"Файл збережено"</string>
@@ -238,10 +259,11 @@
   <string name="common_invite_unknown_profile">"Цей Matrix-ID не знайдено, тому запрошення може не бути отримано."</string>
   <string name="common_leaving_room">"Вихід з кімнати"</string>
   <string name="common_leaving_space">"Вихід з простору"</string>
-  <string name="common_light">"Світла"</string>
   <string name="common_line_copied_to_clipboard">"Рядок скопійовано до буфера обміну"</string>
   <string name="common_link_copied_to_clipboard">"Посилання скопійовано в буфер обміну"</string>
   <string name="common_link_new_device">"Під\'єднати новий пристрій"</string>
+  <string name="common_live_location">"Місцезнаходження в реальному часі"</string>
+  <string name="common_live_location_ended">"Показ місцеперебування наживо завершено"</string>
   <string name="common_loading">"Завантаження"</string>
   <string name="common_loading_more">"Завантаження наступних…"</string>
   <plurals name="common_many_members">
@@ -270,6 +292,7 @@
   <string name="common_offline">"Не в мережі"</string>
   <string name="common_open_source_licenses">"Ліцензії відкритого коду"</string>
   <string name="common_or">"або"</string>
+  <string name="common_other_options">"Інші варіанти"</string>
   <string name="common_password">"Пароль"</string>
   <string name="common_people">"Люди"</string>
   <string name="common_permalink">"Постійне посилання"</string>
@@ -288,8 +311,10 @@
   </plurals>
   <string name="common_preparing">"Приготування…"</string>
   <string name="common_privacy_policy">"Політика конфіденційності"</string>
+  <string name="common_private">"Приватний"</string>
   <string name="common_private_room">"Приватна кімната (тільки за запрошенням)"</string>
   <string name="common_private_space">"Приватний простір"</string>
+  <string name="common_public">"Публічний"</string>
   <string name="common_public_room">"Загальнодоступна кімната"</string>
   <string name="common_public_space">"Загальнодоступний простір"</string>
   <string name="common_reaction">"Реакція"</string>
@@ -304,7 +329,6 @@
     <item quantity="many">"%1$d відповідей"</item>
   </plurals>
   <string name="common_replying_to">"Відповідь %1$s"</string>
-  <string name="common_report_a_bug">"Повідомити про ваду"</string>
   <string name="common_report_a_problem">"Повідомити про проблему"</string>
   <string name="common_report_submitted">"Звіт подано"</string>
   <string name="common_rich_text_editor">"Багатоформатний текстовий редактор"</string>
@@ -325,6 +349,11 @@
   <string name="common_security">"Безпека"</string>
   <string name="common_seen_by">"Переглянули"</string>
   <string name="common_select_account">"Вибрати обліковий запис"</string>
+  <plurals name="common_selected_count">
+    <item quantity="one">"%1$d вибраний"</item>
+    <item quantity="few">"%1$d вибрані"</item>
+    <item quantity="many">"%1$d вибрано"</item>
+  </plurals>
   <string name="common_send_to">"Надіслати до"</string>
   <string name="common_sending">"Надсилання…"</string>
   <string name="common_sending_failed">"Не вдалося надіслати"</string>
@@ -334,12 +363,16 @@
   <string name="common_server_unreachable">"Сервер недоступний"</string>
   <string name="common_server_url">"URL-адреса сервера"</string>
   <string name="common_settings">"Налаштування"</string>
+  <string name="common_share_space">"Поділитися простором"</string>
   <string name="common_shared_history">"Нові учасники бачать історію"</string>
+  <string name="common_shared_live_location">"Поділитися місцезнаходженням в реальному часі"</string>
   <string name="common_shared_location">"Поширене розташування"</string>
+  <string name="common_shared_space">"Простір спільного користування"</string>
   <string name="common_signing_out">"Вихід"</string>
   <string name="common_something_went_wrong">"Щось пішло не так"</string>
   <string name="common_something_went_wrong_message">"Ми зіткнулися з проблемою. Будь ласка, повторіть спробу."</string>
   <string name="common_space">"Простір"</string>
+  <string name="common_space_members">"Учасники простору"</string>
   <string name="common_space_topic_placeholder">"Про що цей простір?"</string>
   <plurals name="common_spaces">
     <item quantity="one">"%1$d простір"</item>
@@ -349,12 +382,13 @@
   <string name="common_starting_chat">"Початок бесіди…"</string>
   <string name="common_sticker">"Наліпка"</string>
   <string name="common_success">"Успіх"</string>
+  <string name="common_suggested">"Запропоновано"</string>
   <string name="common_suggestions">"Пропозиції"</string>
   <string name="common_syncing">"Синхронізація"</string>
-  <string name="common_system">"Системна"</string>
   <string name="common_text">"Текст"</string>
   <string name="common_third_party_notices">"Повідомлення третіх сторін"</string>
   <string name="common_thread">"Гілка"</string>
+  <string name="common_threads">"Гілки"</string>
   <string name="common_topic">"Тема"</string>
   <string name="common_topic_placeholder">"Про що ця кімната?"</string>
   <string name="common_unable_to_decrypt">"Неможливо розшифрувати"</string>
@@ -385,14 +419,19 @@
   <string name="common_voice_message">"Голосове повідомлення"</string>
   <string name="common_waiting">"Очікування…"</string>
   <string name="common_waiting_for_decryption_key">"Чекаємо на це повідомлення"</string>
+  <string name="common_waiting_live_location">"Очікування геолокації…"</string>
   <string name="common_world_readable_history">"Будь-хто може переглянути історію"</string>
   <string name="common_you">"Ви"</string>
+  <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) поділився цим повідомленням, оскільки вас не було в кімнаті, коли його надіслали."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s поділився цим повідомленням, оскільки вас не було в кімнаті, коли його надіслали."</string>
+  <string name="crypto_history_visible">"Згідно із налаштувань цієї кімнати, нові учасники можуть переглядати історію. %1$s"</string>
   <string name="crypto_identity_change_pin_violation">"Ідентичність %1$s скинуто. %2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"Ідентичність %1$s %2$s скинуто. %3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
   <string name="crypto_identity_change_profile_pin_violation">"Ідентичність %1$s скинуто."</string>
   <string name="crypto_identity_change_verification_violation_new">"Ідентичність %1$s %2$s скинуто. %3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"Відкликати верифікацію"</string>
+  <string name="dialog_allow_access">"Надати доступ"</string>
   <string name="dialog_confirm_link_message">"Посилання %1$s спрямовує вас на інший сайт %2$s
 
 Ви впевнені, що хочете продовжити?"</string>
@@ -422,6 +461,7 @@
   <string name="error_failed_locating_user">"%1$s не вдалося отримати доступ до вашого розташування. Повторіть спробу пізніше."</string>
   <string name="error_failed_uploading_voice_message">"Не вдалося завантажити голосове повідомлення."</string>
   <string name="error_invalid_invite">"Кімната більше не існує або запрошення не чинне."</string>
+  <string name="error_location_service_disabled_android">"Будь ласка, увімкніть GPS, щоб отримати доступ до функцій, що використовують геолокацію."</string>
   <string name="error_message_not_found">"Повідомлення не знайдено"</string>
   <string name="error_missing_location_auth_android">"%1$s не має дозволу на доступ до вашого розташування. Увімкнути доступ можна в Налаштуваннях."</string>
   <string name="error_missing_location_rationale_android">"%1$s не має дозволу на доступ до вашого розташування. Увімкніть доступ нижче."</string>
@@ -440,6 +480,14 @@
   <string name="screen_create_poll_options_section_title">"Варіанти"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Вилучити %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Налаштування"</string>
+  <string name="screen_live_location_sheet_nobody_sharing">"Ніхто не ділиться своєю геопозицією"</string>
+  <string name="screen_live_location_sheet_sharing_live_location">"Обмін геопозицією"</string>
+  <plurals name="screen_live_location_sheet_subtitle">
+    <item quantity="one">"%1$d особа"</item>
+    <item quantity="few">"%1$d осіб"</item>
+    <item quantity="many">"%1$d осіб"</item>
+  </plurals>
+  <string name="screen_live_location_sheet_title">"На карті"</string>
   <string name="screen_media_picker_error_failed_selection">"Не вдалося вибрати медіафайл, спробуйте ще раз."</string>
   <string name="screen_pinned_timeline_empty_state_description">"Натисніть на повідомлення і виберіть \"%1$s\", щоб додати його сюди."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"Закріпіть важливі повідомлення, щоб їх можна було легко знайти"</string>
@@ -465,6 +513,7 @@
   <string name="screen_room_event_pill">"Повідомлення в %1$s"</string>
   <string name="screen_room_grouped_state_events_expand">"Розгорнути"</string>
   <string name="screen_room_grouped_state_events_reduce">"Згорнути"</string>
+  <string name="screen_room_live_location_banner">"Спільний доступ до місцезнаходження у реальному часі"</string>
   <string name="screen_room_permalink_same_room_android">"Уже переглядаєте цю кімнату!"</string>
   <string name="screen_room_pinned_banner_indicator">"%1$s із %2$s"</string>
   <string name="screen_room_pinned_banner_indicator_description">"%1$s закріплених повідомлень"</string>
@@ -477,10 +526,14 @@
   <string name="screen_share_open_google_maps">"Відкрити в Картах Google"</string>
   <string name="screen_share_open_osm_maps">"Відкрити в OpenStreetMap"</string>
   <string name="screen_share_this_location_action">"Поділитися цим місцем перебування"</string>
+  <string name="screen_sharing_location_option_sheet_title">"Налаштування обміну геопозицією"</string>
   <string name="screen_space_list_description">"Простори, які ви створили або до яких приєдналися."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
+  <string name="screen_space_list_empty_state_title">"Створіть простори для організації кімнат"</string>
   <string name="screen_space_list_parent_space">"Простір %1$s"</string>
   <string name="screen_space_list_title">"Простори"</string>
+  <string name="screen_static_location_sheet_timestamp_description">"Надано доступ %1$s"</string>
+  <string name="screen_static_location_sheet_title">"На карті"</string>
   <string name="screen_timeline_item_menu_send_failure_changed_identity">"Повідомлення не надіслано, оскільки підтверджену особистість %1$s скинуто."</string>
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"Повідомлення не надіслано, оскільки %1$s перевірив не всі пристрої."</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"Повідомлення не надіслано, оскільки ви не підтвердили один або кілька своїх пристроїв."</string>

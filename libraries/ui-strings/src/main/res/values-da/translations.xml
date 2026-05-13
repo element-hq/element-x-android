@@ -198,7 +198,6 @@
   <string name="common_advanced_settings">"Avancerede indstillinger"</string>
   <string name="common_an_image">"et billede"</string>
   <string name="common_analytics">"Analyse-værktøj"</string>
-  <string name="common_android_fetching_notifications_title">"Synkroniserer notifikationer…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Du forlod rummet"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Du blev logget ud af sessionen"</string>
   <string name="common_appearance">"Udseende"</string>
@@ -218,7 +217,6 @@
   <string name="common_current_user_left_room">"Forlod rummet"</string>
   <string name="common_current_user_left_space">"Forlod klynge"</string>
   <string name="common_current_user_rejected_invite">"Invitationen blev afvist"</string>
-  <string name="common_dark">"Mørkt tema"</string>
   <string name="common_decryption_error">"Fejl under dekryptering"</string>
   <string name="common_description">"Beskrivelse"</string>
   <string name="common_developer_options">"Indstillinger for udviklere"</string>
@@ -244,6 +242,7 @@
   <string name="common_failed">"Mislykkedes"</string>
   <string name="common_favourite">"Favorit"</string>
   <string name="common_favourited">"Favoritmarkeret"</string>
+  <string name="common_fetching_notifications_title_android">"Synkroniserer notifikationer…"</string>
   <string name="common_file">"Fil"</string>
   <string name="common_file_deleted">"Fil slettet"</string>
   <string name="common_file_saved">"Fil gemt"</string>
@@ -257,7 +256,6 @@
   <string name="common_invite_unknown_profile">"Dette Matrix-ID kan ikke findes, så invitationen modtages muligvis ikke."</string>
   <string name="common_leaving_room">"Forlader rummet"</string>
   <string name="common_leaving_space">"Forlader klynge"</string>
-  <string name="common_light">"Lyst tema"</string>
   <string name="common_line_copied_to_clipboard">"Linje kopieret til udklipsholder"</string>
   <string name="common_link_copied_to_clipboard">"Linket er kopieret til udklipsholderen"</string>
   <string name="common_link_new_device">"Forbind ny enhed"</string>
@@ -323,7 +321,6 @@
     <item quantity="other">"%1$d svar"</item>
   </plurals>
   <string name="common_replying_to">"Svarer til %1$s"</string>
-  <string name="common_report_a_bug">"Rapportér en fejl"</string>
   <string name="common_report_a_problem">"Anmeld et problem"</string>
   <string name="common_report_submitted">"Anmeldelsen er indsendt"</string>
   <string name="common_rich_text_editor">"Rich text editor"</string>
@@ -377,7 +374,6 @@
   <string name="common_suggested">"Forslag"</string>
   <string name="common_suggestions">"Forslag"</string>
   <string name="common_syncing">"Synkroniserer"</string>
-  <string name="common_system">"System"</string>
   <string name="common_text">"Tekst"</string>
   <string name="common_third_party_notices">"Tredjepartsmeddelelser"</string>
   <string name="common_thread">"Tråd"</string>

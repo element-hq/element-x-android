@@ -76,6 +76,9 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"ρυθμίσεις συστήματος"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Ειδοποιήσεις συστήματος ανενεργές"</string>
   <string name="screen_notification_settings_title">"Ειδοποιήσεις"</string>
+  <string name="theme_dark">"Σκοτεινό"</string>
+  <string name="theme_light">"Φωτεινό"</string>
+  <string name="theme_system">"Σύστημα"</string>
   <string name="troubleshoot_notifications_entry_point_push_history_title">"Ιστορικό push"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Αντιμετώπιση προβλημάτων"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Αντιμετώπιση προβλημάτων ειδοποιήσεων"</string>

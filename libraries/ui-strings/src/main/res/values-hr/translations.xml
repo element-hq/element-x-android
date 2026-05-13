@@ -200,7 +200,6 @@
   <string name="common_advanced_settings">"Napredne postavke"</string>
   <string name="common_an_image">"slika"</string>
   <string name="common_analytics">"Analitika"</string>
-  <string name="common_android_fetching_notifications_title">"Sinkronizacija obavijesti…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Napustili ste sobu"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Odjavljeni ste iz sesije"</string>
   <string name="common_appearance">"Izgled"</string>
@@ -220,7 +219,6 @@
   <string name="common_current_user_left_room">"Napustio/la je sobu"</string>
   <string name="common_current_user_left_space">"Napušteni prostor"</string>
   <string name="common_current_user_rejected_invite">"Poziv je odbijen"</string>
-  <string name="common_dark">"Tamno"</string>
   <string name="common_decryption_error">"Pogreška kod dešifriranja"</string>
   <string name="common_description">"Opis"</string>
   <string name="common_developer_options">"Mogućnosti za razvojne inženjere"</string>
@@ -246,6 +244,7 @@ Razlog: %1$s ."</string>
   <string name="common_failed">"Nije uspjelo"</string>
   <string name="common_favourite">"Favorit"</string>
   <string name="common_favourited">"Označeno kao favorit"</string>
+  <string name="common_fetching_notifications_title_android">"Sinkronizacija obavijesti…"</string>
   <string name="common_file">"Datoteka"</string>
   <string name="common_file_deleted">"Datoteka je izbrisana"</string>
   <string name="common_file_saved">"Datoteka je spremljena"</string>
@@ -259,7 +258,6 @@ Razlog: %1$s ."</string>
   <string name="common_invite_unknown_profile">"Ovaj Matrix ID nije moguće pronaći, pa se pozivnica možda neće primiti."</string>
   <string name="common_leaving_room">"Izlazak iz sobe"</string>
   <string name="common_leaving_space">"Napuštanje prostora"</string>
-  <string name="common_light">"Svijetlo"</string>
   <string name="common_line_copied_to_clipboard">"Redak je kopiran u međuspremnik"</string>
   <string name="common_link_copied_to_clipboard">"Poveznica je kopirana u međuspremnik."</string>
   <string name="common_link_new_device">"Poveži novi uređaj"</string>
@@ -330,7 +328,6 @@ Razlog: %1$s ."</string>
     <item quantity="other">"%1$d odgovora"</item>
   </plurals>
   <string name="common_replying_to">"Odgovara korisniku %1$s"</string>
-  <string name="common_report_a_bug">"Prijavi pogrešku"</string>
   <string name="common_report_a_problem">"Prijavi problem"</string>
   <string name="common_report_submitted">"Prijava je podnesena"</string>
   <string name="common_rich_text_editor">"Uređivač obogaćenog teksta"</string>
@@ -386,7 +383,6 @@ Razlog: %1$s ."</string>
   <string name="common_suggested">"Preporučeno"</string>
   <string name="common_suggestions">"Prijedlozi"</string>
   <string name="common_syncing">"Sinkronizacija"</string>
-  <string name="common_system">"Sustav"</string>
   <string name="common_text">"Tekst"</string>
   <string name="common_third_party_notices">"Obavijesti trećih strana"</string>
   <string name="common_thread">"Nit"</string>

@@ -199,7 +199,6 @@
   <string name="common_advanced_settings">"Advanced settings"</string>
   <string name="common_an_image">"an image"</string>
   <string name="common_analytics">"Analytics"</string>
-  <string name="common_android_fetching_notifications_title">"Syncing notifications…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"You left the room"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"You were logged out of the session"</string>
   <string name="common_appearance">"Appearance"</string>
@@ -219,7 +218,6 @@
   <string name="common_current_user_left_room">"Left room"</string>
   <string name="common_current_user_left_space">"Left space"</string>
   <string name="common_current_user_rejected_invite">"Invite declined"</string>
-  <string name="common_dark">"Dark"</string>
   <string name="common_decryption_error">"Decryption error"</string>
   <string name="common_description">"Description"</string>
   <string name="common_developer_options">"Developer options"</string>
@@ -245,6 +243,7 @@ Reason: %1$s."</string>
   <string name="common_failed">"Failed"</string>
   <string name="common_favourite">"Favourite"</string>
   <string name="common_favourited">"Favourited"</string>
+  <string name="common_fetching_notifications_title_android">"Syncing notifications…"</string>
   <string name="common_file">"File"</string>
   <string name="common_file_deleted">"File deleted"</string>
   <string name="common_file_saved">"File saved"</string>
@@ -258,7 +257,6 @@ Reason: %1$s."</string>
   <string name="common_invite_unknown_profile">"This Matrix ID can\'t be found, so the invite might not be received."</string>
   <string name="common_leaving_room">"Leaving room"</string>
   <string name="common_leaving_space">"Leaving space"</string>
-  <string name="common_light">"Light"</string>
   <string name="common_line_copied_to_clipboard">"Line copied to clipboard"</string>
   <string name="common_link_copied_to_clipboard">"Link copied to clipboard"</string>
   <string name="common_link_new_device">"Link new device"</string>
@@ -325,7 +323,6 @@ Reason: %1$s."</string>
     <item quantity="other">"%1$d replies"</item>
   </plurals>
   <string name="common_replying_to">"Replying to %1$s"</string>
-  <string name="common_report_a_bug">"Report a bug"</string>
   <string name="common_report_a_problem">"Report a problem"</string>
   <string name="common_report_submitted">"Report submitted"</string>
   <string name="common_rich_text_editor">"Rich text editor"</string>
@@ -379,7 +376,6 @@ Reason: %1$s."</string>
   <string name="common_suggested">"Suggested"</string>
   <string name="common_suggestions">"Suggestions"</string>
   <string name="common_syncing">"Syncing"</string>
-  <string name="common_system">"System"</string>
   <string name="common_text">"Text"</string>
   <string name="common_third_party_notices">"Third-party notices"</string>
   <string name="common_thread">"Thread"</string>
@@ -468,6 +464,9 @@ Are you sure you want to continue?"</string>
   <string name="error_unknown">"Sorry, an error occurred"</string>
   <string name="invite_friends_rich_title">"🔐️ Join me on %1$s"</string>
   <string name="invite_friends_text">"Hey, talk to me on %1$s: %2$s"</string>
+  <string name="live_location_sharing_foreground_service_channel_title_android">"Live Location Sharing"</string>
+  <string name="live_location_sharing_foreground_service_message_android">"Location sharing in progress"</string>
+  <string name="live_location_sharing_foreground_service_title_android">"%1$s Live Location"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake to report bug"</string>
   <string name="screen_bug_report_a11y_screenshot">"Screenshot"</string>

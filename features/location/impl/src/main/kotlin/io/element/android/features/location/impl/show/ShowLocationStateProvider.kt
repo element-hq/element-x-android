@@ -81,6 +81,7 @@ fun aLocationShareItem(
     assetType: AssetType? = null,
     formattedTimestamp: String = "Shared 1 min ago",
     location: Location = Location(1.23, 2.34, 4f),
+    isOwnUser: Boolean = false,
 ) = LocationShareItem(
     userId = userId,
     displayName = displayName,
@@ -89,4 +90,5 @@ fun aLocationShareItem(
     location = location,
     isLive = isLive,
     assetType = assetType,
+    isOwnUser = isOwnUser,
 )

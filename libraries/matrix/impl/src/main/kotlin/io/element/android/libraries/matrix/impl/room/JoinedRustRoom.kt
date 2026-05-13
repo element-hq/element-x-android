@@ -45,6 +45,7 @@ import io.element.android.libraries.matrix.impl.room.history.map
 import io.element.android.libraries.matrix.impl.room.join.map
 import io.element.android.libraries.matrix.impl.room.knock.RustKnockRequest
 import io.element.android.libraries.matrix.impl.room.location.liveLocationSharesFlow
+import io.element.android.libraries.matrix.impl.room.location.map
 import io.element.android.libraries.matrix.impl.room.location.timedByExpiry
 import io.element.android.libraries.matrix.impl.room.member.RoomMemberListFetcher
 import io.element.android.libraries.matrix.impl.room.threads.RustThreadsListService
@@ -72,6 +73,7 @@ import kotlinx.coroutines.withContext
 import org.matrix.rustcomponents.sdk.DateDividerMode
 import org.matrix.rustcomponents.sdk.IdentityStatusChangeListener
 import org.matrix.rustcomponents.sdk.KnockRequestsListener
+import org.matrix.rustcomponents.sdk.LiveLocationException
 import org.matrix.rustcomponents.sdk.RoomMessageEventMessageType
 import org.matrix.rustcomponents.sdk.RoomSendQueueUpdate
 import org.matrix.rustcomponents.sdk.SendQueueListener
@@ -346,7 +348,7 @@ class JoinedRustRoom(
         roomNotificationSettingsStateFlow.value = RoomNotificationSettingsState.Pending(prevRoomNotificationSettings = currentRoomNotificationSettings)
         runCatchingExceptions {
             val isEncrypted = roomInfoFlow.value.isEncrypted ?: getUpdatedIsEncrypted().getOrThrow()
-            notificationSettingsService.getRoomNotificationSettings(roomId, isEncrypted, isOneToOne).getOrThrow()
+            notificationSettingsService.getRoomNotificationSettings(roomId = roomId, isEncrypted = isEncrypted, isOneToOne = isDm()).getOrThrow()
         }.map {
             roomNotificationSettingsStateFlow.value = RoomNotificationSettingsState.Ready(it)
         }.onFailure {
@@ -525,12 +527,22 @@ class JoinedRustRoom(
     override suspend fun stopLiveLocationShare(): Result<Unit> = withContext(roomDispatcher) {
         runCatchingExceptions {
             innerRoom.stopLiveLocationShare()
+        }.mapFailure { throwable ->
+            when (throwable) {
+                is LiveLocationException -> throwable.map()
+                else -> throwable
+            }
         }
     }
 
     override suspend fun sendLiveLocation(geoUri: String): Result<Unit> = withContext(roomDispatcher) {
         runCatchingExceptions {
             innerRoom.sendLiveLocation(geoUri)
+        }.mapFailure { throwable ->
+            when (throwable) {
+                is LiveLocationException -> throwable.map()
+                else -> throwable
+            }
         }
     }
 

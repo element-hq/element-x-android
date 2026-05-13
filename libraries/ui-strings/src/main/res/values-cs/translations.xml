@@ -198,7 +198,6 @@
   <string name="common_advanced_settings">"Pokročilá nastavení"</string>
   <string name="common_an_image">"obrázek"</string>
   <string name="common_analytics">"Analytika"</string>
-  <string name="common_android_fetching_notifications_title">"Synchronizace oznámení…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Opustili jste místnost"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Byli jste odhlášeni z relace"</string>
   <string name="common_appearance">"Vzhled"</string>
@@ -216,7 +215,6 @@
   <string name="common_current_user_left_room">"Místnost opuštěna"</string>
   <string name="common_current_user_left_space">"Opustit prostor"</string>
   <string name="common_current_user_rejected_invite">"Pozvánka odmítnuta"</string>
-  <string name="common_dark">"Tmavé"</string>
   <string name="common_decryption_error">"Chyba dešifrování"</string>
   <string name="common_description">"Popis"</string>
   <string name="common_developer_options">"Možnosti pro vývojáře"</string>
@@ -242,6 +240,7 @@ Důvod: %1$s."</string>
   <string name="common_failed">"Selhalo"</string>
   <string name="common_favourite">"Oblíbené"</string>
   <string name="common_favourited">"Oblíbené"</string>
+  <string name="common_fetching_notifications_title_android">"Synchronizace oznámení…"</string>
   <string name="common_file">"Soubor"</string>
   <string name="common_file_deleted">"Soubor smazán"</string>
   <string name="common_file_saved">"Soubor uložen"</string>
@@ -255,7 +254,6 @@ Důvod: %1$s."</string>
   <string name="common_invite_unknown_profile">"Tento Matrix identifikátor nelze najít, takže pozvánka nemusí být přijata."</string>
   <string name="common_leaving_room">"Opuštění místnosti"</string>
   <string name="common_leaving_space">"Opuštění prostoru"</string>
-  <string name="common_light">"Světlý"</string>
   <string name="common_line_copied_to_clipboard">"Řádek zkopírován do schránky"</string>
   <string name="common_link_copied_to_clipboard">"Odkaz zkopírován do schránky"</string>
   <string name="common_link_new_device">"Připojit nové zařízení"</string>
@@ -324,7 +322,6 @@ Důvod: %1$s."</string>
     <item quantity="other">"%1$d odpovědí"</item>
   </plurals>
   <string name="common_replying_to">"Odpověď na %1$s"</string>
-  <string name="common_report_a_bug">"Nahlásit chybu"</string>
   <string name="common_report_a_problem">"Nahlásit problém"</string>
   <string name="common_report_submitted">"Zpráva odeslána"</string>
   <string name="common_rich_text_editor">"Editor formátovaného textu"</string>
@@ -381,7 +378,6 @@ Důvod: %1$s."</string>
   <string name="common_suggested">"Doporučeno"</string>
   <string name="common_suggestions">"Návrhy"</string>
   <string name="common_syncing">"Synchronizace"</string>
-  <string name="common_system">"Systém"</string>
   <string name="common_text">"Text"</string>
   <string name="common_third_party_notices">"Oznámení třetích stran"</string>
   <string name="common_thread">"Vlákno"</string>

@@ -191,7 +191,6 @@
   <string name="common_advanced_settings">"Cài đặt nâng cao"</string>
   <string name="common_an_image">"một hình ảnh"</string>
   <string name="common_analytics">"Phân tích"</string>
-  <string name="common_android_fetching_notifications_title">"Đang đồng bộ thông báo…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Bạn rời phòng"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Bạn đã bị đăng xuất"</string>
   <string name="common_appearance">"Giao diện"</string>
@@ -209,7 +208,6 @@
   <string name="common_current_user_left_room">"Đã rời khỏi phòng"</string>
   <string name="common_current_user_left_space">"Rời khỏi không gian"</string>
   <string name="common_current_user_rejected_invite">"Lời mời bị từ chối"</string>
-  <string name="common_dark">"Tối"</string>
   <string name="common_decryption_error">"Lỗi khi giải mã"</string>
   <string name="common_description">"Mô tả"</string>
   <string name="common_developer_options">"Tùy chọn nhà phát triển"</string>
@@ -235,6 +233,7 @@ Lý do: %1$s ."</string>
   <string name="common_failed">"Thất bại"</string>
   <string name="common_favourite">"Yêu thích"</string>
   <string name="common_favourited">"Được yêu thích"</string>
+  <string name="common_fetching_notifications_title_android">"Đang đồng bộ thông báo…"</string>
   <string name="common_file">"Tập tin"</string>
   <string name="common_file_deleted">"Tệp đã bị xóa"</string>
   <string name="common_file_saved">"Tệp đã được lưu"</string>
@@ -248,7 +247,6 @@ Lý do: %1$s ."</string>
   <string name="common_invite_unknown_profile">"Không tìm thấy Matrix ID này, nên lời mời có thể chưa được nhận."</string>
   <string name="common_leaving_room">"Rời khỏi phòng"</string>
   <string name="common_leaving_space">"Rời khỏi không gian"</string>
-  <string name="common_light">"Sáng"</string>
   <string name="common_line_copied_to_clipboard">"Đã sao chép dòng"</string>
   <string name="common_link_copied_to_clipboard">"Đã chép liên kết vào bộ nhớ tạm"</string>
   <string name="common_link_new_device">"Liên kết thiết bị mới"</string>
@@ -310,7 +308,6 @@ Lý do: %1$s ."</string>
     <item quantity="other">"%1$d trả lời"</item>
   </plurals>
   <string name="common_replying_to">"Đang trả lời cho %1$s"</string>
-  <string name="common_report_a_bug">"Báo cáo lỗi"</string>
   <string name="common_report_a_problem">"Báo cáo sự cố"</string>
   <string name="common_report_submitted">"Đã gửi báo cáo"</string>
   <string name="common_rich_text_editor">"Trình soạn thảo văn bản nâng cao"</string>
@@ -360,7 +357,6 @@ Lý do: %1$s ."</string>
   <string name="common_suggested">"Gợi ý"</string>
   <string name="common_suggestions">"Gợi ý"</string>
   <string name="common_syncing">"Đang đồng bộ"</string>
-  <string name="common_system">"Hệ thống"</string>
   <string name="common_text">"Văn bản"</string>
   <string name="common_third_party_notices">"Thông báo từ bên thứ ba"</string>
   <string name="common_thread">"Chủ đề"</string>

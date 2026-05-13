@@ -193,7 +193,6 @@
   <string name="common_advanced_settings">"Edistyneet asetukset"</string>
   <string name="common_an_image">"kuva"</string>
   <string name="common_analytics">"Analytiikka"</string>
-  <string name="common_android_fetching_notifications_title">"Synkronoidaan ilmoituksia…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Poistuit huoneesta"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Sinut kirjattiin ulos istunnosta"</string>
   <string name="common_appearance">"Ulkoasu"</string>
@@ -211,7 +210,6 @@
   <string name="common_current_user_left_room">"Poistuit huoneesta"</string>
   <string name="common_current_user_left_space">"Poistuit tilasta"</string>
   <string name="common_current_user_rejected_invite">"Kutsu hylätty"</string>
-  <string name="common_dark">"Tumma"</string>
   <string name="common_decryption_error">"Salauksen purkuvirhe"</string>
   <string name="common_description">"Kuvaus"</string>
   <string name="common_developer_options">"Kehittäjän asetukset"</string>
@@ -237,6 +235,7 @@ Syy: %1$s."</string>
   <string name="common_failed">"Epäonnistui"</string>
   <string name="common_favourite">"Lisää suosikkeihin"</string>
   <string name="common_favourited">"Lisätty suosikkeihin"</string>
+    <string name="common_fetching_notifications_title_android">"Synkronoidaan ilmoituksia…"</string>
   <string name="common_file">"Tiedosto"</string>
   <string name="common_file_deleted">"Tiedosto poistettu"</string>
   <string name="common_file_saved">"Tiedosto tallennettu"</string>
@@ -250,7 +249,6 @@ Syy: %1$s."</string>
   <string name="common_invite_unknown_profile">"Tätä Matrix-tunnusta ei löytynyt, joten kutsu ei välttämättä mene perille."</string>
   <string name="common_leaving_room">"Poistutaan huoneesta"</string>
   <string name="common_leaving_space">"Poistutaan tilasta"</string>
-  <string name="common_light">"Vaalea"</string>
   <string name="common_line_copied_to_clipboard">"Rivi kopioitu leikepöydälle"</string>
   <string name="common_link_copied_to_clipboard">"Linkki kopioitu leikepöydälle"</string>
   <string name="common_link_new_device">"Yhdistä uusi laite"</string>
@@ -317,7 +315,6 @@ Syy: %1$s."</string>
     <item quantity="other">"%1$d vastausta"</item>
   </plurals>
   <string name="common_replying_to">"Vastataan käyttäjälle %1$s"</string>
-  <string name="common_report_a_bug">"Ilmoita virheestä"</string>
   <string name="common_report_a_problem">"Ilmoita ongelmasta"</string>
   <string name="common_report_submitted">"Ilmoitus lähetetty"</string>
   <string name="common_rich_text_editor">"Rikastettu tekstieditori"</string>
@@ -371,7 +368,6 @@ Syy: %1$s."</string>
   <string name="common_suggested">"Ehdotettu"</string>
   <string name="common_suggestions">"Ehdotukset"</string>
   <string name="common_syncing">"Synkronoidaan"</string>
-  <string name="common_system">"Järjestelmän oletus"</string>
   <string name="common_text">"Teksti"</string>
   <string name="common_third_party_notices">"Kolmannen osapuolen ilmoitukset"</string>
   <string name="common_thread">"Viestiketju"</string>

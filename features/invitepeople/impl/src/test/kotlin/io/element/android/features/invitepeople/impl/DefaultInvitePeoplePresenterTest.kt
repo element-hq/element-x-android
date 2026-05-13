@@ -540,7 +540,7 @@ internal class DefaultInvitePeoplePresenterTest {
     }
 
     @Test
-    fun `present - suggestions are loaded from recent direct rooms`() = runTest {
+    fun `present - suggestions are loaded from recent DM rooms`() = runTest {
         val dmRoomId = RoomId("!dm_room:server.org")
         val otherUserId = UserId("@frank:server.org")
         val matrixClient = FakeMatrixClient(sessionId = A_USER_ID).apply {
@@ -554,7 +554,7 @@ internal class DefaultInvitePeoplePresenterTest {
                     roomId = dmRoomId,
                     initialRoomInfo = aRoomInfo(
                         id = dmRoomId,
-                        isDirect = true,
+                        isDm = true,
                         activeMembersCount = 2,
                         currentUserMembership = CurrentUserMembership.JOINED,
                     ),
@@ -591,7 +591,7 @@ internal class DefaultInvitePeoplePresenterTest {
                     roomId = dmRoomId,
                     initialRoomInfo = aRoomInfo(
                         id = dmRoomId,
-                        isDirect = true,
+                        isDm = true,
                         activeMembersCount = 2,
                         currentUserMembership = CurrentUserMembership.JOINED,
                     ),

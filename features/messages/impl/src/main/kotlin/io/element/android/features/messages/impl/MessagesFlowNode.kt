@@ -278,6 +278,10 @@ class MessagesFlowNode(
                         backstack.push(NavTarget.EditPoll(Timeline.Mode.Live, eventId))
                     }
 
+                    override fun navigateToCurrentLiveLocation() {
+                        backstack.push(NavTarget.LocationViewer(ShowLocationMode.Live(senderId = sessionId)))
+                    }
+
                     override fun navigateToRoomCall(roomId: RoomId, isAudioCall: Boolean) {
                         val callData = CallData(
                             sessionId = sessionId,
@@ -513,6 +517,10 @@ class MessagesFlowNode(
                         backstack.push(NavTarget.EditPoll(Timeline.Mode.Thread(navTarget.threadRootId), eventId))
                     }
 
+                    override fun navigateToCurrentLiveLocation() {
+                        backstack.push(NavTarget.LocationViewer(ShowLocationMode.Live(senderId = sessionId)))
+                    }
+
                     override fun navigateToRoomCall(roomId: RoomId, isAudioCall: Boolean) {
                         val callData = CallData(
                             sessionId = sessionId,
@@ -646,6 +654,7 @@ class MessagesFlowNode(
                 filename = content.filename,
                 fileSize = content.fileSize,
                 caption = content.caption,
+                formattedCaption = content.formattedCaption,
                 mimeType = content.mimeType,
                 formattedFileSize = content.formattedFileSize,
                 fileExtension = content.fileExtension,

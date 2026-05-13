@@ -153,7 +153,7 @@ class FetchPendingNotificationsWorker(
 
     private suspend fun checkNetworkConnection(requests: List<PushRequest>): Result? {
         val networkTimeoutSpans = requests.mapNotNull { request ->
-            val parent = analyticsService.getLongRunningTransaction(AnalyticsLongRunningTransaction.PushToWorkManager(request.eventId))
+            val parent = analyticsService.getLongRunningTransaction(AnalyticsLongRunningTransaction.PushToNotification(request.eventId))
             parent?.startChild("Waiting for network connectivity", "await_network")
         }
 

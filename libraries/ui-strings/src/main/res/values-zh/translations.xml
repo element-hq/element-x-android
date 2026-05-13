@@ -13,6 +13,7 @@
   <string name="a11y_encryption_details">"加密详情"</string>
   <string name="a11y_expand_message_text_field">"展开消息文本框"</string>
   <string name="a11y_hide_password">"隐藏密码"</string>
+  <string name="a11y_info">"信息"</string>
   <string name="a11y_join_call">"加入通话"</string>
   <string name="a11y_jump_to_bottom">"跳转到底部"</string>
   <string name="a11y_move_the_map_to_my_location">"将地图移动到我的位置"</string>
@@ -67,6 +68,7 @@
   <string name="action_call">"通话"</string>
   <string name="action_cancel">"取消"</string>
   <string name="action_cancel_for_now">"暂时取消"</string>
+  <string name="action_choose_file">"选择文件"</string>
   <string name="action_choose_photo">"选择照片"</string>
   <string name="action_clear">"清除"</string>
   <string name="action_close">"关闭"</string>
@@ -125,7 +127,7 @@
   <string name="action_manage_account_and_devices">"管理账户与设备"</string>
   <string name="action_manage_devices">"管理设备"</string>
   <string name="action_manage_rooms">"管理房间"</string>
-  <string name="action_message">"发送消息给"</string>
+  <string name="action_message">"发送消息"</string>
   <string name="action_minimize">"最小化"</string>
   <string name="action_next">"下一步"</string>
   <string name="action_no">"否"</string>
@@ -194,7 +196,6 @@
   <string name="common_advanced_settings">"高级设置"</string>
   <string name="common_an_image">"一张图片"</string>
   <string name="common_analytics">"分析"</string>
-  <string name="common_android_fetching_notifications_title">"正在同步通知…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"你离开了房间"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"你已注销会话"</string>
   <string name="common_appearance">"外观"</string>
@@ -214,7 +215,6 @@
   <string name="common_current_user_left_room">"离开房间"</string>
   <string name="common_current_user_left_space">"离开空间"</string>
   <string name="common_current_user_rejected_invite">"邀请已拒绝"</string>
-  <string name="common_dark">"深色"</string>
   <string name="common_decryption_error">"解密错误"</string>
   <string name="common_description">"描述"</string>
   <string name="common_developer_options">"开发者选项"</string>
@@ -240,6 +240,7 @@
   <string name="common_failed">"失败"</string>
   <string name="common_favourite">"收藏"</string>
   <string name="common_favourited">"已收藏"</string>
+  <string name="common_fetching_notifications_title_android">"正在同步通知…"</string>
   <string name="common_file">"文件"</string>
   <string name="common_file_deleted">"文件已删除"</string>
   <string name="common_file_saved">"文件已保存"</string>
@@ -253,7 +254,6 @@
   <string name="common_invite_unknown_profile">"找不到此 Matrix ID，因此可能无法收到邀请。"</string>
   <string name="common_leaving_room">"正在离开房间"</string>
   <string name="common_leaving_space">"正在离开空间"</string>
-  <string name="common_light">"浅色"</string>
   <string name="common_line_copied_to_clipboard">"链接已复制到剪贴板"</string>
   <string name="common_link_copied_to_clipboard">"链接已复制到剪贴板"</string>
   <string name="common_link_new_device">"关联新设备"</string>
@@ -316,7 +316,6 @@
     <item quantity="other">"%1$d 个回复"</item>
   </plurals>
   <string name="common_replying_to">"正在回复 %1$s"</string>
-  <string name="common_report_a_bug">"报告 bug"</string>
   <string name="common_report_a_problem">"报告问题"</string>
   <string name="common_report_submitted">"报告已提交"</string>
   <string name="common_rich_text_editor">"富文本编辑器"</string>
@@ -367,7 +366,6 @@
   <string name="common_suggested">"建议"</string>
   <string name="common_suggestions">"建议"</string>
   <string name="common_syncing">"正在同步"</string>
-  <string name="common_system">"系统"</string>
   <string name="common_text">"文本"</string>
   <string name="common_third_party_notices">"第三方通知"</string>
   <string name="common_thread">"消息列"</string>
@@ -456,6 +454,8 @@
   <string name="error_unknown">"抱歉，发生了错误"</string>
   <string name="invite_friends_rich_title">"🔐️ 在 %1$s 中与我一起"</string>
   <string name="invite_friends_text">"嗨！请通过 %1$s 与我联系：%2$s"</string>
+  <string name="live_location_sharing_foreground_service_channel_title_android">"正在共享实时位置"</string>
+  <string name="live_location_sharing_foreground_service_message_android">"位置共享正在进行"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"摇一摇以报告 bug"</string>
   <string name="screen_bug_report_a11y_screenshot">"屏幕截图"</string>
