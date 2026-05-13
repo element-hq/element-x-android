@@ -281,7 +281,7 @@ private fun NotificationSettingsContentView(
 
 @Composable
 private fun SoundsPreferenceCategory(state: NotificationSettingsState) {
-    PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_sounds_section_title)) {
+    PreferenceCategory(title = stringResource(id = R.string.screen_notification_settings_sound_section_title)) {
         val launchMessageSoundPicker = rememberSoundPickerOnClick(
             type = RingtoneManager.TYPE_NOTIFICATION,
             current = state.messageSound.sound,
@@ -420,7 +420,7 @@ private fun SoundCopyErrorRow(
             .semantics { liveRegion = LiveRegionMode.Polite },
         headlineContent = {
             Text(
-                text = stringResource(R.string.screen_notification_settings_sound_copy_error_message),
+                text = stringResource(R.string.screen_notification_settings_sound_set_sound_error_title),
                 style = ElementTheme.typography.fontBodyMdRegular,
                 color = ElementTheme.colors.textSecondary,
             )
@@ -429,7 +429,7 @@ private fun SoundCopyErrorRow(
             IconButton(onClick = onDismissClick) {
                 Icon(
                     imageVector = CompoundIcons.Close(),
-                    contentDescription = stringResource(R.string.screen_notification_settings_sound_copy_error_dismiss_a11y),
+                    contentDescription = stringResource(R.string.screen_notification_settings_sound_set_sound_error_dismiss_a11y),
                 )
             }
         },
