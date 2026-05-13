@@ -350,7 +350,6 @@ class RoomDetailsViewTest {
                 state = aRoomDetailsState(
                     eventSink = EventsRecorder(expectEvents = false),
                     roomType = RoomDetailsType.Dm(
-                        aRoomMember(),
                         aDmRoomMember(userId = UserId("@other:local.org")),
                     ),
                     roomMemberDetailsState = aUserProfileState(userId = A_USER_ID),
