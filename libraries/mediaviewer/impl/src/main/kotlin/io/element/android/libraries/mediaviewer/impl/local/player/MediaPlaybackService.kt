@@ -95,7 +95,11 @@ class MediaPlaybackService : MediaSessionService() {
 
             override fun onPlaybackStateChanged(playbackState: Int) {
                 if (playbackState == Player.STATE_ENDED) {
-                    scope.launch { handlePlaybackEnded() }
+                    if (playlistManager?.hasNext == true) {
+                        scope.launch { handleSkipToNext() }
+                    } else {
+                        scope.launch { handlePlaybackEnded() }
+                    }
                 }
                 // If no embedded metadata was extracted (bare file), inject notification metadata when playback starts
                 if (playbackState == Player.STATE_READY && !hasInjectedNotificationMetadata) {
