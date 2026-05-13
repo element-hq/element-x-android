@@ -31,22 +31,20 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRtcNotificationContent
-import io.element.android.features.roomcall.api.RoomCallState
-import io.element.android.features.roomcall.api.RoomCallStateProvider
 import io.element.android.libraries.designsystem.components.avatar.Avatar
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.modifiers.onKeyboardContextMenuAction
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toDp
+import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.ui.strings.CommonStrings
 
 @Composable
 internal fun TimelineItemCallNotifyView(
     event: TimelineItem.Event,
-    roomCallState: RoomCallState,
+    content: TimelineItemRtcNotificationContent,
     onLongClick: (TimelineItem.Event) -> Unit,
-    onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -81,7 +79,8 @@ internal fun TimelineItemCallNotifyView(
             ) {
                 Icon(
                     modifier = Modifier.size(20.sp.toDp()),
-                    imageVector = CompoundIcons.VideoCallSolid(),
+                    imageVector =
+                        if (content.callIntent == CallIntent.AUDIO) CompoundIcons.VoiceCallSolid() else CompoundIcons.VideoCallSolid(),
                     contentDescription = null,
                     tint = ElementTheme.colors.iconSecondary,
                 )
@@ -94,20 +93,13 @@ internal fun TimelineItemCallNotifyView(
                 )
             }
         }
-        if (roomCallState is RoomCallState.OnGoing) {
-            CallMenuItem(
-                roomCallState = roomCallState,
-                onJoinCallClick = onJoinCallClick,
-            )
-        } else {
-            Text(
-                text = event.sentTime,
-                style = ElementTheme.typography.fontBodyMdRegular,
-                color = ElementTheme.colors.textSecondary,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis,
-            )
-        }
+        Text(
+            text = event.sentTime,
+            style = ElementTheme.typography.fontBodyMdRegular,
+            color = ElementTheme.colors.textSecondary,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+        )
     }
 }
 
@@ -115,16 +107,15 @@ internal fun TimelineItemCallNotifyView(
 @Composable
 internal fun TimelineItemCallNotifyViewPreview() = ElementPreview {
     Column(modifier = Modifier.padding(16.dp), verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        RoomCallStateProvider()
-            .values
-            .filter { it !is RoomCallState.Unavailable }
-            .forEach { roomCallState ->
-                TimelineItemCallNotifyView(
-                    event = aTimelineItemEvent(content = TimelineItemRtcNotificationContent()),
-                    roomCallState = roomCallState,
-                    onLongClick = {},
-                    onJoinCallClick = {},
-                )
-            }
+        listOf(
+            TimelineItemRtcNotificationContent(CallIntent.AUDIO),
+            TimelineItemRtcNotificationContent(CallIntent.VIDEO),
+        ).forEach { content ->
+            TimelineItemCallNotifyView(
+                event = aTimelineItemEvent(content = content),
+                content = content,
+                onLongClick = {},
+            )
+        }
     }
 }

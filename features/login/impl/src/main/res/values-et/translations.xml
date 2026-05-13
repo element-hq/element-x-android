@@ -32,7 +32,7 @@
   <string name="screen_login_error_invalid_credentials">"Vigane kasutajanimi ja/või salasõna"</string>
   <string name="screen_login_error_invalid_user_id">"See ei ole korrektne kasutajanimi. Õige vorming on: „@kasutaja:koduserver.ee“"</string>
   <string name="screen_login_error_refresh_tokens">"See server on seadistatud kasutama tunnusloa põhist sisselogimist. Salasõnaga sisselogimisel see võimalus aga ei ole toetatud."</string>
-  <string name="screen_login_error_unsupported_authentication">"Valitud koduserver ei toeta salasõna ega OIDC-põhist sisselogimist. Lisateavet saad koduserveri haldajalt, aga sa võid ka valida mõne teise serveri."</string>
+  <string name="screen_login_error_unsupported_authentication">"Valitud koduserver ei toeta salasõna ega OAuth-põhist sisselogimist. Lisateavet saad koduserveri haldajalt, aga sa võid ka valida mõne teise serveri."</string>
   <string name="screen_login_form_header">"Sisesta oma andmed"</string>
   <string name="screen_login_subtitle">"Matrix on avatud võrk turvalise ja hajutatud suhtluse jaoks."</string>
   <string name="screen_login_title">"Tere tulemast tagasi!"</string>

@@ -11,6 +11,14 @@
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Profilképek elrejtése a szobameghívókban"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Médiaelőnézetek elrejtése az idővonalon"</string>
   <string name="screen_advanced_settings_labs">"Kísérletek"</string>
+  <string name="screen_advanced_settings_live_location_section_description">"A megtett távolság miután a helyadat frissül."</string>
+  <string name="screen_advanced_settings_live_location_section_footer">"Győződjön meg arról, hogy a „Pontos helymeghatározás” engedélyezve van ehhez az alkalmazáshoz. Az engedély módosításához menjen ide:%1$s ."</string>
+  <string name="screen_advanced_settings_live_location_section_footer_link">"Alkalmazásbeállítások"</string>
+  <string name="screen_advanced_settings_live_location_section_title">"Élő helymeghatározás"</string>
+  <plurals name="screen_advanced_settings_live_location_update_distance">
+    <item quantity="one">"Minden %1$d méter"</item>
+    <item quantity="other">"Minden %1$d méter"</item>
+  </plurals>
   <string name="screen_advanced_settings_media_compression_description">"Töltse fel gyorsabban a fényképeket és videókat, valamint csökkentse az adatforgalmat"</string>
   <string name="screen_advanced_settings_media_compression_title">"Média minőségének optimalizálása"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderálás és biztonság"</string>

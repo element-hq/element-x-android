@@ -13,6 +13,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
 import io.element.android.tests.testutils.lambda.lambdaError
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 
@@ -21,7 +22,7 @@ class FakeMediaGalleryDataSource(
     private val loadMoreLambda: (Timeline.PaginationDirection) -> Unit = { lambdaError() },
     private val deleteItemLambda: (EventId) -> Unit = { lambdaError() },
     ) : MediaGalleryDataSource {
-    override fun start() = startLambda()
+    override fun start(coroutineScope: CoroutineScope) = startLambda()
 
     private val groupedMediaItemsFlow = MutableSharedFlow<AsyncData<GroupedMediaItems>>(
         replay = 1

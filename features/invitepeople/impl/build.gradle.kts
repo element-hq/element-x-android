@@ -33,6 +33,7 @@ dependencies {
     implementation(projects.libraries.matrixui)
     implementation(projects.libraries.designsystem)
     implementation(projects.libraries.uiStrings)
+    implementation(projects.libraries.uiUtils)
     implementation(projects.libraries.androidutils)
     implementation(projects.libraries.usersearch.api)
     implementation(libs.coil.compose)

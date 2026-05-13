@@ -9,6 +9,8 @@
 package io.element.android.libraries.matrix.impl.auth
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.enterprise.api.EnterpriseService
+import io.element.android.features.enterprise.test.FakeEnterpriseService
 import io.element.android.libraries.matrix.impl.ClientBuilderProvider
 import io.element.android.libraries.matrix.impl.FakeClientBuilderProvider
 import io.element.android.libraries.matrix.impl.createRustMatrixClientFactory
@@ -16,7 +18,7 @@ import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClient
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiClientBuilder
 import io.element.android.libraries.matrix.impl.fixtures.fakes.FakeFfiHomeserverLoginDetails
 import io.element.android.libraries.matrix.impl.paths.SessionPathsFactory
-import io.element.android.libraries.matrix.test.auth.FakeOidcRedirectUrlProvider
+import io.element.android.libraries.matrix.test.auth.FakeOAuthRedirectUrlProvider
 import io.element.android.libraries.matrix.test.core.aBuildMeta
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
@@ -50,6 +52,7 @@ class RustMatrixAuthenticationServiceTest {
     private fun TestScope.createRustMatrixAuthenticationService(
         sessionStore: SessionStore = InMemorySessionStore(),
         clientBuilderProvider: ClientBuilderProvider = FakeClientBuilderProvider(),
+        enterpriseService: EnterpriseService = FakeEnterpriseService(),
     ): RustMatrixAuthenticationService {
         val baseDirectory = File("/base")
         val cacheDirectory = File("/cache")
@@ -64,10 +67,11 @@ class RustMatrixAuthenticationServiceTest {
             sessionStore = sessionStore,
             rustMatrixClientFactory = rustMatrixClientFactory,
             passphraseGenerator = FakePassphraseGenerator(),
-            oidcConfigurationProvider = OidcConfigurationProvider(
+            oAuthConfigurationProvider = OAuthConfigurationProvider(
                 buildMeta = aBuildMeta(),
-                oidcRedirectUrlProvider = FakeOidcRedirectUrlProvider(),
+                oAuthRedirectUrlProvider = FakeOAuthRedirectUrlProvider(),
             ),
+            enterpriseService = enterpriseService,
         )
     }
 }

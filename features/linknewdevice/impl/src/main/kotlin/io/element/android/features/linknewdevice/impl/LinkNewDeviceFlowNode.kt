@@ -26,7 +26,9 @@ import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.features.enterprise.api.SessionEnterpriseService
 import io.element.android.features.linknewdevice.api.LinkNewDeviceEntryPoint
+import io.element.android.features.linknewdevice.impl.screens.confirmation.CodeConfirmationNode
 import io.element.android.features.linknewdevice.impl.screens.desktop.DesktopNoticeNode
 import io.element.android.features.linknewdevice.impl.screens.error.ErrorNode
 import io.element.android.features.linknewdevice.impl.screens.error.ErrorScreenType
@@ -64,6 +66,7 @@ class LinkNewDeviceFlowNode(
     private val sessionCoroutineScope: CoroutineScope,
     private val linkNewMobileHandler: LinkNewMobileHandler,
     private val linkNewDesktopHandler: LinkNewDesktopHandler,
+    private val sessionEnterpriseService: SessionEnterpriseService,
 ) : BaseFlowNode<LinkNewDeviceFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
@@ -108,6 +111,11 @@ class LinkNewDeviceFlowNode(
         ) : NavTarget
 
         @Parcelize
+        data class CodeConfirmation(
+            val code: String,
+        ) : NavTarget
+
+        @Parcelize
         data object MobileEnterNumber : NavTarget
 
         @Parcelize
@@ -145,10 +153,7 @@ class LinkNewDeviceFlowNode(
                     LinkMobileStep.Starting -> {
                         // This step is not received at the moment, so do nothing
                     }
-                    LinkMobileStep.SyncingSecrets -> {
-                        // LinkMobileStep.Done is not received at the moment, so consider that the flow is done here
-                        callback.onDone()
-                    }
+                    LinkMobileStep.SyncingSecrets -> Unit
                     is LinkMobileStep.WaitingForAuth -> {
                         navigateToBrowser(linkMobileStep.verificationUri)
                     }
@@ -166,7 +171,9 @@ class LinkNewDeviceFlowNode(
                 is LinkDesktopStep.Error -> {
                     navigateToError(linkDesktopStep.errorType)
                 }
-                is LinkDesktopStep.EstablishingSecureChannel -> Unit
+                is LinkDesktopStep.EstablishingSecureChannel -> {
+                    backstack.push(NavTarget.CodeConfirmation(linkDesktopStep.checkCodeString))
+                }
                 is LinkDesktopStep.InvalidQrCode -> {
                     // This error will be handled by the ScanQrCodeNode
                 }
@@ -183,20 +190,20 @@ class LinkNewDeviceFlowNode(
 
     private fun navigateToError(errorType: ErrorType) {
         // Map the error to an error screen
-        // TODO Update this mapping
         val error = when (errorType) {
-            is ErrorType.DeviceIdAlreadyInUse -> ErrorScreenType.UnknownError
-            is ErrorType.InvalidCheckCode -> ErrorScreenType.InsecureChannelDetected
-            is ErrorType.MissingSecretsBackup -> ErrorScreenType.UnknownError
-            is ErrorType.NotFound -> ErrorScreenType.Expired
-            is ErrorType.DeviceNotFound -> ErrorScreenType.UnknownError
-            is ErrorType.Unknown -> ErrorScreenType.UnknownError
-            is ErrorType.UnsupportedProtocol -> ErrorScreenType.UnknownError
-            is ErrorType.Cancelled -> ErrorScreenType.UnknownError
+            is ErrorType.InvalidCheckCode -> ErrorScreenType.Mismatch2Digits
+            is ErrorType.UnsupportedProtocol -> ErrorScreenType.ProtocolNotSupported
+            is ErrorType.Cancelled -> ErrorScreenType.Cancelled
             is ErrorType.ConnectionInsecure -> ErrorScreenType.InsecureChannelDetected
-            is ErrorType.Expired -> ErrorScreenType.Expired
-            is ErrorType.OtherDeviceAlreadySignedIn -> ErrorScreenType.UnknownError
+            is ErrorType.Expired,
+            is ErrorType.NotFound,
+            is ErrorType.DeviceNotFound -> ErrorScreenType.Expired
+            is ErrorType.OtherDeviceAlreadySignedIn -> ErrorScreenType.OtherDeviceAlreadySignedIn
+            // TODO check if we expect to hit this here or if it should be caught earlier on
             is ErrorType.UnsupportedQrCodeType -> ErrorScreenType.UnknownError
+            is ErrorType.MissingSecretsBackup,
+            is ErrorType.DeviceIdAlreadyInUse,
+            is ErrorType.Unknown -> ErrorScreenType.UnknownError
         }
         // It is OK to push on backstack, since when user leaves the error screen, a new root will be set,
         // or the whole flow will be popped.
@@ -250,6 +257,18 @@ class LinkNewDeviceFlowNode(
                 }
                 createNode<EnterNumberNode>(buildContext, listOf(callback))
             }
+            is NavTarget.CodeConfirmation -> {
+                val callback = object : CodeConfirmationNode.Callback {
+                    override fun onCancel() {
+                        // Push error
+                        backstack.push(NavTarget.Error(ErrorScreenType.Cancelled))
+                    }
+                }
+                val inputs = CodeConfirmationNode.Inputs(
+                    code = navTarget.code,
+                )
+                createNode<CodeConfirmationNode>(buildContext, listOf(inputs, callback))
+            }
             is NavTarget.MobileShowQrCode -> {
                 val callback = object : ShowQrCodeNode.Callback {
                     override fun navigateBack() {
@@ -281,8 +300,12 @@ class LinkNewDeviceFlowNode(
         }
     }
 
-    private fun navigateToBrowser(url: String) {
-        activity?.openUrlInChromeCustomTab(null, darkTheme, url)
+    private suspend fun navigateToBrowser(url: String) {
+        activity?.openUrlInChromeCustomTab(
+            session = null,
+            darkTheme = darkTheme,
+            url = sessionEnterpriseService.tweakMasUrl(url),
+        )
     }
 
     @Composable

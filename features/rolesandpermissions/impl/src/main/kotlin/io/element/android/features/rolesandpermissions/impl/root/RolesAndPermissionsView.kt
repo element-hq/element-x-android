@@ -153,6 +153,7 @@ private fun ChangeOwnRoleBottomSheet(
             .navigationBarsPadding(),
         sheetState = sheetState,
         onDismissRequest = ::dismiss,
+        scrollable = true,
     ) {
         Text(
             modifier = Modifier.padding(14.dp),

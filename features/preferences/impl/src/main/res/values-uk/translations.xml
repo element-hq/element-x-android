@@ -11,6 +11,15 @@
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Сховати аватари у запитах на запрошення до кімнат"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Сховати попередній перегляд медіа у стрічці"</string>
   <string name="screen_advanced_settings_labs">"Лабораторії"</string>
+  <string name="screen_advanced_settings_live_location_section_description">"Відстань, яку потрібно пройти, щоб ініціювати оновлення."</string>
+  <string name="screen_advanced_settings_live_location_section_footer">"Переконайтеся, що для цього додатка увімкнено функцію «Точна геолокація». Щоб змінити дозвіл, перейдіть на сторінку %1$s."</string>
+  <string name="screen_advanced_settings_live_location_section_footer_link">"Налаштування додатка"</string>
+  <string name="screen_advanced_settings_live_location_section_title">"Оновлення місцезнаходження в реальному часі"</string>
+  <plurals name="screen_advanced_settings_live_location_update_distance">
+    <item quantity="one">"Кожен %1$d метр"</item>
+    <item quantity="few">"Кожні %1$d метри"</item>
+    <item quantity="many">"Кожні %1$d метрів"</item>
+  </plurals>
   <string name="screen_advanced_settings_media_compression_description">"Швидше завантажуйте фотографії та відео та зменшуйте використання даних"</string>
   <string name="screen_advanced_settings_media_compression_title">"Оптимізуйте медіаякість"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Модерування й безпека"</string>

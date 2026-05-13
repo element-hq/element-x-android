@@ -30,7 +30,7 @@ data class MediaViewerState(
     val mediaBottomSheetState: MediaBottomSheetState,
     val sessionId: SessionId,
     val roomId: RoomId,
-    val eventSink: (MediaViewerEvents) -> Unit,
+    val eventSink: (MediaViewerEvent) -> Unit,
 )
 
 sealed interface MediaViewerPageData {

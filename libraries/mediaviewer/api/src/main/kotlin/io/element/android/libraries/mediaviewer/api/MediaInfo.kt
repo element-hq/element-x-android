@@ -17,6 +17,7 @@ import kotlinx.parcelize.Parcelize
 data class MediaInfo(
     val filename: String,
     val caption: String?,
+    val formattedCaption: CharSequence? = null,
     val mimeType: String,
     val fileSize: Long?,
     val formattedFileSize: String,
@@ -33,6 +34,7 @@ data class MediaInfo(
 fun anImageMediaInfo(
     senderId: UserId? = UserId("@alice:server.org"),
     caption: String? = null,
+    formattedCaption: CharSequence? = null,
     senderName: String? = null,
     dateSent: String? = null,
     dateSentFull: String? = null,
@@ -40,6 +42,7 @@ fun anImageMediaInfo(
     filename = "an image file.jpg",
     fileSize = 4 * 1024 * 1024,
     caption = caption,
+    formattedCaption = formattedCaption,
     mimeType = MimeTypes.Jpeg,
     formattedFileSize = "4MB",
     fileExtension = "jpg",
@@ -54,6 +57,7 @@ fun anImageMediaInfo(
 
 fun aVideoMediaInfo(
     caption: String? = null,
+    formattedCaption: CharSequence? = null,
     senderName: String? = null,
     dateSent: String? = null,
     dateSentFull: String? = null,
@@ -62,6 +66,7 @@ fun aVideoMediaInfo(
     filename = "a video file.mp4",
     fileSize = 14 * 1024 * 1024,
     caption = caption,
+    formattedCaption = formattedCaption,
     mimeType = MimeTypes.Mp4,
     formattedFileSize = "14MB",
     fileExtension = "mp4",
@@ -77,6 +82,7 @@ fun aVideoMediaInfo(
 fun aPdfMediaInfo(
     filename: String = "a pdf file.pdf",
     caption: String? = null,
+    formattedCaption: CharSequence? = null,
     senderName: String? = null,
     dateSent: String? = null,
     dateSentFull: String? = null,
@@ -84,6 +90,7 @@ fun aPdfMediaInfo(
     filename = filename,
     fileSize = 23 * 1024 * 1024,
     caption = caption,
+    formattedCaption = formattedCaption,
     mimeType = MimeTypes.Pdf,
     formattedFileSize = "23MB",
     fileExtension = "pdf",
@@ -105,6 +112,7 @@ fun anApkMediaInfo(
     filename = "an apk file.apk",
     fileSize = 50 * 1024 * 1024,
     caption = null,
+    formattedCaption = null,
     mimeType = MimeTypes.Apk,
     formattedFileSize = "50MB",
     fileExtension = "apk",
@@ -120,6 +128,7 @@ fun anApkMediaInfo(
 fun anAudioMediaInfo(
     filename: String = "an audio file.mp3",
     caption: String? = null,
+    formattedCaption: CharSequence? = null,
     senderName: String? = null,
     dateSent: String? = null,
     dateSentFull: String? = null,
@@ -129,6 +138,7 @@ fun anAudioMediaInfo(
     filename = filename,
     fileSize = 7 * 1024 * 1024,
     caption = caption,
+    formattedCaption = formattedCaption,
     mimeType = MimeTypes.Mp3,
     formattedFileSize = "7MB",
     fileExtension = "mp3",
@@ -144,6 +154,7 @@ fun anAudioMediaInfo(
 fun aVoiceMediaInfo(
     filename: String = "a voice file.ogg",
     caption: String? = null,
+    formattedCaption: CharSequence? = null,
     senderName: String? = null,
     dateSent: String? = null,
     dateSentFull: String? = null,
@@ -153,6 +164,7 @@ fun aVoiceMediaInfo(
     filename = filename,
     fileSize = 3 * 1024 * 1024,
     caption = caption,
+    formattedCaption = formattedCaption,
     mimeType = MimeTypes.Ogg,
     formattedFileSize = "3MB",
     fileExtension = "ogg",
@@ -168,6 +180,7 @@ fun aVoiceMediaInfo(
 fun aTxtMediaInfo(
     filename: String = "a text file.txt",
     caption: String? = null,
+    formattedCaption: CharSequence? = null,
     senderName: String? = null,
     dateSent: String? = null,
     dateSentFull: String? = null,
@@ -175,6 +188,7 @@ fun aTxtMediaInfo(
     filename = filename,
     fileSize = 2 * 1024,
     caption = caption,
+    formattedCaption = formattedCaption,
     mimeType = MimeTypes.PlainText,
     formattedFileSize = "2kB",
     fileExtension = "txt",

@@ -35,6 +35,7 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
@@ -62,11 +63,12 @@ class MediaViewerDataSource(
     private val localMediaStates: MutableMap<String, MutableState<AsyncData<LocalMedia>>> =
         mutableMapOf()
 
-    fun setup() {
-        galleryDataSource.start()
+    fun setup(coroutineScope: CoroutineScope) {
+        galleryDataSource.start(coroutineScope)
     }
 
     fun dispose() {
+        Timber.d("Disposing MediaViewerDataSource, closing ${mediaFiles.size} media files")
         mediaFiles.forEach { it.close() }
         mediaFiles.clear()
         localMediaStates.clear()
@@ -120,25 +122,11 @@ class MediaViewerDataSource(
      */
     private fun buildMediaViewerPageList(groupedItems: List<MediaItem>) = buildList {
         // Filter out DateSeparator items, we do not need them for the media viewer
-        val itemsNoDateSeparator = groupedItems.filterNot { it is MediaItem.DateSeparator }
-        // Separate loading indicators and media events
-        val loadingIndicators = itemsNoDateSeparator.filterIsInstance<MediaItem.LoadingIndicator>()
-        val mediaEvents = itemsNoDateSeparator.filterIsInstance<MediaItem.Event>()
-        // Determine backward and forward loading indicators
-        val backwardLoading = loadingIndicators.find { it.direction == Timeline.PaginationDirection.BACKWARDS }
-        val forwardLoading = loadingIndicators.find { it.direction == Timeline.PaginationDirection.FORWARDS }
-        // Build ordered list: backward loading, media events (oldest first), forward loading
-        // Media events are currently newest first, reverse to get oldest first
-        val orderedEvents = mediaEvents.reversed()
-        // Create new list of MediaItem in order: backwardLoading, orderedEvents, forwardLoading
-        val orderedItems = buildList {
-            backwardLoading?.let { add(it) }
-            addAll(orderedEvents)
-            forwardLoading?.let { add(it) }
-        }
-        pagerKeysHandler.accept(orderedItems)
-        orderedItems.forEach { mediaItem ->
+        val groupedItemsNoDateSeparator = groupedItems.filterNot { it is MediaItem.DateSeparator }
+        pagerKeysHandler.accept(groupedItemsNoDateSeparator)
+        groupedItemsNoDateSeparator.forEach { mediaItem ->
             when (mediaItem) {
+                is MediaItem.DateSeparator -> Unit
                 is MediaItem.Event -> {
                     val sourceUrl = mediaItem.mediaSource().safeUrl
                     val localMedia = localMediaStates.getOrPut(sourceUrl) {
@@ -162,7 +150,6 @@ class MediaViewerDataSource(
                         pagerKey = pagerKeysHandler.getKey(mediaItem),
                     )
                 )
-                is MediaItem.DateSeparator -> Unit // already filtered out
             }
         }
     }.toImmutableList()

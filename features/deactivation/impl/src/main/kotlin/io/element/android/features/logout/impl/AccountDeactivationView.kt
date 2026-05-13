@@ -135,7 +135,7 @@ private fun ColumnScope.Buttons(
 ) {
     val logoutAction = state.accountDeactivationAction
     Button(
-        text = stringResource(CommonStrings.action_deactivate),
+        text = stringResource(CommonStrings.action_delete),
         showProgress = logoutAction is AsyncAction.Loading,
         destructive = true,
         enabled = state.submitEnabled,

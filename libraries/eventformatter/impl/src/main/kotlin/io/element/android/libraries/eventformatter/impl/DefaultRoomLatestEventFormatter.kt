@@ -139,26 +139,28 @@ class DefaultRoomLatestEventFormatter(
                 messageType.toPlainText(permalinkParser)
             }
             is VideoMessageType -> {
-                messageType.bestDescription.prefixWith(sp.getString(CommonStrings.common_video))
+                messageType.toPlainText(permalinkParser).prefixWith(sp.getString(CommonStrings.common_video))
             }
             is ImageMessageType -> {
-                messageType.bestDescription.prefixWith(sp.getString(CommonStrings.common_image))
+                messageType.toPlainText(permalinkParser).prefixWith(sp.getString(CommonStrings.common_image))
             }
             is StickerMessageType -> {
-                messageType.bestDescription.prefixWith(sp.getString(CommonStrings.common_sticker))
+                messageType.toPlainText(permalinkParser).prefixWith(sp.getString(CommonStrings.common_sticker))
             }
             is LocationMessageType -> {
                 sp.getString(CommonStrings.common_shared_location)
             }
             is FileMessageType -> {
-                messageType.bestDescription.prefixWith(sp.getString(CommonStrings.common_file))
+                messageType.toPlainText(permalinkParser).prefixWith(sp.getString(CommonStrings.common_file))
             }
             is AudioMessageType -> {
-                messageType.bestDescription.prefixWith(sp.getString(CommonStrings.common_audio))
+                messageType.toPlainText(permalinkParser).prefixWith(sp.getString(CommonStrings.common_audio))
             }
             is VoiceMessageType -> {
-                // In this case, do not use bestDescription, because the filename is useless, only use the caption if available.
-                messageType.caption?.prefixWith(sp.getString(CommonStrings.common_voice_message))
+                messageType
+                    .toPlainText(permalinkParser, "")
+                    .takeIf { it.isNotEmpty() }
+                    ?.prefixWith(sp.getString(CommonStrings.common_voice_message))
                     ?: sp.getString(CommonStrings.common_voice_message)
             }
             is OtherMessageType -> {

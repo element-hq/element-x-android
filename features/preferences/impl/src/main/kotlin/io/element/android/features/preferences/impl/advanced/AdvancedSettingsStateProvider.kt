@@ -41,6 +41,7 @@ fun aAdvancedSettingsState(
     availableThemeOptions: ImmutableList<ThemeOption> = ThemeOption.entries.toImmutableList(),
     hideInviteAvatars: Boolean = false,
     timelineMediaPreviewValue: MediaPreviewValue = MediaPreviewValue.On,
+    liveLocationMinimumDistanceUpdate: Int? = 50,
     setTimelineMediaPreviewAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     setHideInviteAvatarsAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
     eventSink: (AdvancedSettingsEvents) -> Unit = {},
@@ -56,5 +57,6 @@ fun aAdvancedSettingsState(
         setTimelineMediaPreviewAction = setTimelineMediaPreviewAction,
         setHideInviteAvatarsAction = setHideInviteAvatarsAction
     ),
+    liveLocationMinimumDistanceUpdate = liveLocationMinimumDistanceUpdate,
     eventSink = eventSink
 )

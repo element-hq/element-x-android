@@ -56,6 +56,7 @@
   <string name="screen_room_details_invite_people_dont_close">"Schließ die App erst, wenn du fertig bist."</string>
   <string name="screen_room_details_invite_people_preparing">"Einladungen werden vorbereitet…"</string>
   <string name="screen_room_details_invite_people_title">"Nutzer einladen"</string>
+  <string name="screen_room_details_invite_title">"Einladen"</string>
   <string name="screen_room_details_leave_conversation_title">"Unterhaltung verlassen"</string>
   <string name="screen_room_details_leave_room_title">"Verlassen"</string>
   <string name="screen_room_details_media_gallery_title">"Medien und Dateien"</string>

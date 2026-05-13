@@ -33,6 +33,8 @@
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"Dacă întâmpinați aceeași problemă, încercați o altă rețea Wi-Fi sau utilizați datele mobile în loc de Wi-Fi."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Dacă nu funcționează, conectați-vă manual"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Conexiunea nu este sigură"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"Vi se va cere să introduceți cele două cifre afișate pe acest dispozitiv."</string>
+  <string name="screen_qr_code_login_device_code_title">"Introduceți numărul de mai jos pe celălalt dispozitiv"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"Autentificarea a fost anulată de pe celălalt dispozitiv."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Cererea de autentificare a fost anulată"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"Autentificarea a fost refuzată pe celălalt dispozitiv."</string>
@@ -51,4 +53,5 @@
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Trebuie să acordați permisiunea ca %1$s să folosească camera dispozitivului pentru a continua."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Permiteți accesul la cameră pentru a scana codul QR"</string>
   <string name="screen_qr_code_login_unknown_error_description">"A apărut o eroare neașteptată. Vă rugăm să încercați din nou."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"În așteptarea celuilalt dispozitiv"</string>
 </resources>

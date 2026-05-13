@@ -56,6 +56,7 @@
   <string name="screen_room_details_invite_people_dont_close">"Tugallanmaguncha ilovani yopmang."</string>
   <string name="screen_room_details_invite_people_preparing">"Taklifnomalar tayyorlanmoqda…"</string>
   <string name="screen_room_details_invite_people_title">"Odamlarni taklif qiling"</string>
+  <string name="screen_room_details_invite_title">"Taklif qilish"</string>
   <string name="screen_room_details_leave_conversation_title">"Suhbatni tark etish"</string>
   <string name="screen_room_details_leave_room_title">"Xonani tark etish"</string>
   <string name="screen_room_details_media_gallery_title">"Media va fayllar"</string>

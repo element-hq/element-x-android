@@ -11,6 +11,14 @@
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Masquer les avatars des salons dans les invitations"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Masquer les aperçus des médias dans les discussions"</string>
   <string name="screen_advanced_settings_labs">"Expérimental"</string>
+  <string name="screen_advanced_settings_live_location_section_description">"Distance à effectuer pour envoyer une mise à jour."</string>
+  <string name="screen_advanced_settings_live_location_section_footer">"Assurez-vous que la « Localisation précise » est activée pour cette application. Pour modifier l’autorisation, aller à: %1$s."</string>
+  <string name="screen_advanced_settings_live_location_section_footer_link">"Paramètres de l’application"</string>
+  <string name="screen_advanced_settings_live_location_section_title">"Mises à jour en direct de la localisation"</string>
+  <plurals name="screen_advanced_settings_live_location_update_distance">
+    <item quantity="one">"%1$d mètre"</item>
+    <item quantity="other">"%1$d mètres"</item>
+  </plurals>
   <string name="screen_advanced_settings_media_compression_description">"Téléchargez des photos et des vidéos plus rapidement et réduisez la consommation de données"</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimisez la qualité des médias"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Modération et sécurité"</string>

@@ -199,19 +199,14 @@ class RoomDetailsPresenterTest {
             givenRoomInfo(
                 aRoomInfo(
                     isEncrypted = true,
-                    isDirect = true,
+                    isDm = true,
                 )
             )
         }
         val presenter = createRoomDetailsPresenter(room)
         presenter.testWithLifecycleOwner(lifecycleOwner = fakeLifecycleOwner) {
             val initialState = awaitItem()
-            assertThat(initialState.roomType).isEqualTo(
-                RoomDetailsType.Dm(
-                    me = myRoomMember,
-                    otherMember = otherRoomMember,
-                )
-            )
+            assertThat(initialState.roomType).isEqualTo(RoomDetailsType.Dm(otherMember = otherRoomMember))
             cancelAndIgnoreRemainingEvents()
         }
     }
@@ -289,7 +284,7 @@ class RoomDetailsPresenterTest {
             givenRoomInfo(
                 aRoomInfo(
                     isEncrypted = true,
-                    isDirect = true,
+                    isDm = true,
                 )
             )
         }
@@ -312,7 +307,6 @@ class RoomDetailsPresenterTest {
         val myRoomMember = aRoomMember(A_SESSION_ID)
         val otherRoomMember = aRoomMember(A_USER_ID_2)
         val room = aJoinedRoom(
-            isDirect = true,
             topic = null,
             roomPermissions = roomPermissions(),
             userDisplayNameResult = { Result.success(A_USER_NAME) },
@@ -330,7 +324,7 @@ class RoomDetailsPresenterTest {
 
             givenRoomInfo(
                 aRoomInfo(
-                    isDirect = true,
+                    isDm = true,
                     activeMembersCount = 2,
                     topic = null,
                 )

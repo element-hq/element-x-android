@@ -13,9 +13,6 @@ import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.CreatedRoom
 import io.element.android.features.startchat.api.ConfirmingStartDmWithMatrixUser
 import io.element.android.libraries.architecture.AsyncAction
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -88,7 +85,7 @@ class DefaultStartDMActionTest {
         val state = mutableStateOf<AsyncAction<RoomId>>(AsyncAction.Uninitialized)
         val matrixUser = aMatrixUser()
         action.execute(matrixUser, false, state)
-        assertThat(state.value).isEqualTo(ConfirmingStartDmWithMatrixUser(matrixUser, isUserIdentityUnknown = false))
+        assertThat(state.value).isEqualTo(ConfirmingStartDmWithMatrixUser(matrixUser, isUserIdentityUnknown = true))
         assertThat(analyticsService.capturedEvents).isEmpty()
     }
 
@@ -107,37 +104,31 @@ class DefaultStartDMActionTest {
     }
 
     @Test
-    fun `when history sharing enabled, user identity fetched and identity unknown`() = runTest {
+    fun `when user identity fetched and identity unknown`() = runTest {
         val getUserIdentityResult = lambdaRecorder<UserId, Result<IdentityState?>> { _ -> Result.success(null) }
         val encryptionService = FakeEncryptionService(getUserIdentityResult = getUserIdentityResult)
         val matrixClient = FakeMatrixClient(encryptionService = encryptionService).apply {
             givenFindDmResult(Result.success(null))
         }
-        val featureFlagService = FakeFeatureFlagService().apply {
-            setFeatureEnabled(FeatureFlags.EnableKeyShareOnInvite, true)
-        }
 
         val action = createStartDMAction(
             matrixClient = matrixClient,
-            featureFlagService = featureFlagService
         )
         val state = mutableStateOf<AsyncAction<RoomId>>(AsyncAction.Uninitialized)
 
         action.execute(aMatrixUser(), false, state)
 
-        assertThat(getUserIdentityResult.assertions().isCalledOnce())
+        getUserIdentityResult.assertions().isCalledOnce()
         assertThat(state.value).isEqualTo(ConfirmingStartDmWithMatrixUser(aMatrixUser(), isUserIdentityUnknown = true))
     }
 
     private fun createStartDMAction(
         matrixClient: MatrixClient = FakeMatrixClient(),
         analyticsService: AnalyticsService = FakeAnalyticsService(),
-        featureFlagService: FeatureFlagService = FakeFeatureFlagService()
     ): DefaultStartDMAction {
         return DefaultStartDMAction(
             matrixClient = matrixClient,
             analyticsService = analyticsService,
-            featureFlagService = featureFlagService,
         )
     }
 }

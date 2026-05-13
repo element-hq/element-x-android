@@ -32,7 +32,7 @@
   <string name="screen_login_error_invalid_credentials">"Feil brukernavn og/eller passord"</string>
   <string name="screen_login_error_invalid_user_id">"Dette er ikke en gyldig brukeridentifikator. Forventet format: \'@bruker:homeserver.org\'"</string>
   <string name="screen_login_error_refresh_tokens">"Denne serveren er konfigurert til å bruke oppdateringstokener. Disse støttes ikke når du bruker passordbasert pålogging."</string>
-  <string name="screen_login_error_unsupported_authentication">"Den valgte hjemmeserveren støtter ikke passord eller OIDC-pålogging. Ta kontakt med administratoren din eller velg en annen hjemmeserver."</string>
+  <string name="screen_login_error_unsupported_authentication">"Den valgte hjemmeserveren støtter ikke passord eller OAuth-pålogging. Ta kontakt med administratoren din eller velg en annen hjemmeserver."</string>
   <string name="screen_login_form_header">"Skriv inn opplysningene dine"</string>
   <string name="screen_login_subtitle">"Matrix er et åpent nettverk for sikker, desentralisert kommunikasjon."</string>
   <string name="screen_login_title">"Velkommen tilbake!"</string>

@@ -120,6 +120,7 @@
   <string name="action_leave_space">"Αποχώρηση από τον χώρο"</string>
   <string name="action_load_more">"Φόρτωσε περισσότερα"</string>
   <string name="action_manage_account">"Διαχείριση λογαριασμού"</string>
+  <string name="action_manage_account_and_devices">"Διαχείριση λογαριασμού και συσκευών"</string>
   <string name="action_manage_devices">"Διαχείριση συσκευών"</string>
   <string name="action_manage_rooms">"Διαχείριση αίθουσών"</string>
   <string name="action_message">"Στείλε"</string>
@@ -170,6 +171,7 @@
   <string name="action_start_over">"Ξανά από την αρχή"</string>
   <string name="action_start_verification">"Έναρξη επαλήθευσης"</string>
   <string name="action_static_map_load">"Πάτα για φόρτωση χάρτη"</string>
+  <string name="action_stop">"Διακοπή"</string>
   <string name="action_take_photo">"Τράβηξε φωτογραφία"</string>
   <string name="action_tap_for_options">"Πάτα για επιλογές"</string>
   <string name="action_translate">"Μετάφραση"</string>
@@ -224,6 +226,7 @@
   <string name="common_empty_file">"Κενό αρχείο"</string>
   <string name="common_encryption">"Κρυπτογράφηση"</string>
   <string name="common_encryption_enabled">"Η κρυπτογράφηση ενεργοποιήθηκε"</string>
+  <string name="common_ends_at">"Τελειώνει στις %1$s"</string>
   <string name="common_enter_your_pin">"Εισήγαγε το PIN σου"</string>
   <string name="common_error">"Σφάλμα"</string>
   <string name="common_error_registering_pusher_android">"Παρουσιάστηκε σφάλμα, ενδέχεται να μην λαμβάνεις ειδοποιήσεις για νέα μηνύματα. Αντιμετώπισε το πρόβλημα με τις ειδοποιήσεις από τις ρυθμίσεις.
@@ -250,6 +253,8 @@
   <string name="common_line_copied_to_clipboard">"Η γραμμή αντιγράφηκε στο πρόχειρο"</string>
   <string name="common_link_copied_to_clipboard">"Ο σύνδεσμος αντιγράφηκε στο πρόχειρο"</string>
   <string name="common_link_new_device">"Σύνδεση νέας συσκευής"</string>
+  <string name="common_live_location">"Ζωντανή τοποθεσία"</string>
+  <string name="common_live_location_ended">"Η ζωντανή τοποθεσία έληξε"</string>
   <string name="common_loading">"Φόρτωση…"</string>
   <string name="common_loading_more">"Φόρτωση περισσότερων…"</string>
   <plurals name="common_many_members">
@@ -311,7 +316,6 @@
     <item quantity="other">"%1$d απαντήσεις"</item>
   </plurals>
   <string name="common_replying_to">"Απάντηση σε %1$s"</string>
-  <string name="common_report_a_bug">"Αναφορά σφάλματος"</string>
   <string name="common_report_a_problem">"Αναφορά προβλήματος"</string>
   <string name="common_report_submitted">"Η αναφορά υποβλήθηκε"</string>
   <string name="common_rich_text_editor">"Επεξεργαστής εμπλουτισμένου κειμένου"</string>
@@ -346,6 +350,7 @@
   <string name="common_settings">"Ρυθμίσεις"</string>
   <string name="common_share_space">"Κοινή χρήση χώρου"</string>
   <string name="common_shared_history">"Τα νέα μέλη βλέπουν το ιστορικό"</string>
+  <string name="common_shared_live_location">"Κοινόχρηστη ζωντανή τοποθεσία"</string>
   <string name="common_shared_location">"Κοινόχρηστη τοποθεσία"</string>
   <string name="common_shared_space">"Κοινόχρηστος χώρος"</string>
   <string name="common_signing_out">"Αφαίρεση συσκευής"</string>
@@ -368,6 +373,7 @@
   <string name="common_text">"Κείμενο"</string>
   <string name="common_third_party_notices">"Ειδοποιήσεις τρίτων"</string>
   <string name="common_thread">"Νήμα"</string>
+  <string name="common_threads">"Νήματα"</string>
   <string name="common_topic">"Θέμα"</string>
   <string name="common_topic_placeholder">"Τι αφορά αυτή η αίθουσα;"</string>
   <string name="common_unable_to_decrypt">"Δεν είναι δυνατή η αποκρυπτογράφηση"</string>
@@ -398,6 +404,7 @@
   <string name="common_voice_message">"Φωνητικό μήνυμα"</string>
   <string name="common_waiting">"Αναμονή…"</string>
   <string name="common_waiting_for_decryption_key">"Αναμονή για αυτό το μήνυμα"</string>
+  <string name="common_waiting_live_location">"Αναμονή για ζωντανή τοποθεσία…"</string>
   <string name="common_world_readable_history">"Οποιοσδήποτε μπορεί να δει το ιστορικό"</string>
   <string name="common_you">"Εσύ"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) μοιράστηκε αυτό το μήνυμα, καθώς δεν ήσασταν στην αίθουσα όταν στάλθηκε."</string>

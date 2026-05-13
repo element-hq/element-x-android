@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,6 +32,8 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
+import io.element.android.libraries.designsystem.preview.USER_NAME_BOB
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Text
@@ -42,6 +45,7 @@ import io.element.android.libraries.ui.strings.CommonStrings
 fun LocationShareRow(
     item: LocationShareItem,
     onShareClick: () -> Unit,
+    onStopClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -99,11 +103,24 @@ fun LocationShareRow(
                 )
             }
         }
+        if (item.canStopSharing) {
+            IconButton(
+                onClick = onStopClick,
+                colors = IconButtonDefaults.iconButtonColors(
+                    containerColor = ElementTheme.colors.bgCriticalPrimary,
+                    contentColor = ElementTheme.colors.iconOnSolidPrimary,
+                )
+            ) {
+                Icon(
+                    imageVector = CompoundIcons.Stop(),
+                    contentDescription = stringResource(CommonStrings.action_stop),
+                )
+            }
+        }
         IconButton(onClick = onShareClick) {
             Icon(
                 imageVector = CompoundIcons.ShareAndroid(),
                 contentDescription = stringResource(CommonStrings.action_share),
-                tint = ElementTheme.colors.iconPrimary,
             )
         }
     }
@@ -116,35 +133,39 @@ internal fun LocationShareRowPreview() = ElementPreview {
         LocationShareRow(
             item = LocationShareItem(
                 userId = UserId("@alice:matrix.org"),
-                displayName = "Alice",
+                displayName = USER_NAME_ALICE,
                 avatarData = AvatarData(
                     id = "@alice:matrix.org",
-                    name = "Alice",
+                    name = USER_NAME_ALICE,
                     url = null,
                     size = AvatarSize.UserListItem,
                 ),
                 formattedTimestamp = "Shared 1 min ago",
                 isLive = true,
                 assetType = AssetType.SENDER,
-                location = Location(0.0, 0.0)
+                location = Location(0.0, 0.0),
+                isOwnUser = true,
             ),
+            onStopClick = {},
             onShareClick = {},
         )
         LocationShareRow(
             item = LocationShareItem(
                 userId = UserId("@bob:matrix.org"),
-                displayName = "Bob",
+                displayName = USER_NAME_BOB,
                 avatarData = AvatarData(
                     id = "@bob:matrix.org",
-                    name = "Bob",
+                    name = USER_NAME_BOB,
                     url = null,
                     size = AvatarSize.UserListItem,
                 ),
                 isLive = false,
                 assetType = AssetType.PIN,
                 formattedTimestamp = "Shared 5 hours ago",
-                location = Location(0.0, 0.0)
+                location = Location(0.0, 0.0),
+                isOwnUser = false
             ),
+            onStopClick = {},
             onShareClick = {},
         )
     }

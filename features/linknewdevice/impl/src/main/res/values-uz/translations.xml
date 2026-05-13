@@ -34,6 +34,8 @@
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"Xuddi shu muammoga duch kelsangiz, boshqa wifi tarmogʻini sinang yoki wifi oʻrniga mobil internetdan foydalaning"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Agar bunisi ishlamasa, oddiy usulda kiring"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Ulanish xavfsiz emas"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"Sizdan ushbu qurilmada koʻrsatilgan ikkita raqamni kiritish soʻraladi."</string>
+  <string name="screen_qr_code_login_device_code_title">"Narigi qurilmada quyidagi raqamni kiriting"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"Boshqa qurilmadan hisobga kirish bekor qilindi."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Tizimga kirish soʻrovi bekor qilindi"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"Boshqa qurilmadan hisobga kirish bekor qilindi."</string>
@@ -54,4 +56,5 @@ Oddiy usulda kiring yoki boshqa qurilma bilan QR kodni skanerlang."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Davom etish uchun %1$s qurilmangiz kamerasidan foydalanishiga ruxsat berishingiz kerak."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"QR kodni skanerlash uchun kameraga ruxsat bering"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Kutilmagan xatolik yuz berdi. Qayta urining."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"Boshqa qurilmangiz kutilmoqda"</string>
 </resources>

@@ -15,6 +15,15 @@ import io.element.android.features.roommembermoderation.api.RoomMemberModeration
 import io.element.android.features.roommembermoderation.api.RoomMemberModerationState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.map
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
+import io.element.android.libraries.designsystem.preview.USER_NAME_BOB
+import io.element.android.libraries.designsystem.preview.USER_NAME_CAROL
+import io.element.android.libraries.designsystem.preview.USER_NAME_DAVID
+import io.element.android.libraries.designsystem.preview.USER_NAME_EVE
+import io.element.android.libraries.designsystem.preview.USER_NAME_MALLORY
+import io.element.android.libraries.designsystem.preview.USER_NAME_SUSIE
+import io.element.android.libraries.designsystem.preview.USER_NAME_VICTOR
+import io.element.android.libraries.designsystem.preview.USER_NAME_WALTER
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.room.RoomMember
@@ -119,6 +128,7 @@ fun aRoomMember(
     isIgnored: Boolean = false,
     role: RoomMember.Role = RoomMember.Role.User,
     membershipChangeReason: String? = null,
+    isServiceMember: Boolean = false,
 ) = RoomMember(
     userId = userId,
     displayName = displayName,
@@ -129,6 +139,7 @@ fun aRoomMember(
     isIgnored = isIgnored,
     role = role,
     membershipChangeReason = membershipChangeReason,
+    isServiceMember = isServiceMember,
 )
 
 fun aRoomMemberList() = persistentListOf(
@@ -143,21 +154,21 @@ fun aRoomMemberList() = persistentListOf(
     aBannedMallory(),
 )
 
-fun anEve(): RoomMember = aRoomMember(UserId("@eve:server.org"), "Eve")
+fun anEve(): RoomMember = aRoomMember(UserId("@eve:server.org"), USER_NAME_EVE)
 
-fun aDavid(): RoomMember = aRoomMember(UserId("@david:server.org"), "David")
+fun aDavid(): RoomMember = aRoomMember(UserId("@david:server.org"), USER_NAME_DAVID)
 
-fun aCarol(): RoomMember = aRoomMember(UserId("@carol:server.org"), "Carol")
+fun aCarol(): RoomMember = aRoomMember(UserId("@carol:server.org"), USER_NAME_CAROL)
 
-fun anAlice() = aRoomMember(UserId("@alice:server.org"), "Alice", role = RoomMember.Role.Admin)
-fun aBob() = aRoomMember(UserId("@bob:server.org"), "Bob", role = RoomMember.Role.Moderator)
+fun anAlice() = aRoomMember(UserId("@alice:server.org"), USER_NAME_ALICE, role = RoomMember.Role.Admin)
+fun aBob() = aRoomMember(UserId("@bob:server.org"), USER_NAME_BOB, role = RoomMember.Role.Moderator)
 
-fun anInvitedVictor() = aRoomMember(UserId("@victor:server.org"), "Victor", membership = RoomMembershipState.INVITE)
+fun anInvitedVictor() = aRoomMember(UserId("@victor:server.org"), USER_NAME_VICTOR, membership = RoomMembershipState.INVITE)
 
-fun anInvitedWalter() = aRoomMember(UserId("@walter:server.org"), "Walter", membership = RoomMembershipState.INVITE)
+fun anInvitedWalter() = aRoomMember(UserId("@walter:server.org"), USER_NAME_WALTER, membership = RoomMembershipState.INVITE)
 
-fun aBannedSusie(): RoomMember = aRoomMember(UserId("@susie:server.org"), "Susie", membership = RoomMembershipState.BAN)
+fun aBannedSusie(): RoomMember = aRoomMember(UserId("@susie:server.org"), USER_NAME_SUSIE, membership = RoomMembershipState.BAN)
 
-fun aBannedMallory(): RoomMember = aRoomMember(UserId("@mallory:server.org"), "Mallory", membership = RoomMembershipState.BAN)
+fun aBannedMallory(): RoomMember = aRoomMember(UserId("@mallory:server.org"), USER_NAME_MALLORY, membership = RoomMembershipState.BAN)
 
 private fun RoomMember.withIdentity(identityState: IdentityState? = null) = RoomMemberWithIdentityState(this, identityState)

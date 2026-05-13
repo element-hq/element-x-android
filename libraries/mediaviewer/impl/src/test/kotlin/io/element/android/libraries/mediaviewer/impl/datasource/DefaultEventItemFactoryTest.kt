@@ -18,6 +18,7 @@ import io.element.android.libraries.matrix.api.media.FileInfo
 import io.element.android.libraries.matrix.api.media.ImageInfo
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.media.VideoInfo
+import io.element.android.libraries.matrix.api.notification.CallIntent
 import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.item.event.AudioMessageType
 import io.element.android.libraries.matrix.api.timeline.item.event.CallNotifyContent
@@ -61,7 +62,7 @@ class DefaultEventItemFactoryTest {
     fun `create check all null cases`() {
         val factory = createEventItemFactory()
         val contents = listOf(
-            CallNotifyContent,
+            CallNotifyContent(callIntent = CallIntent.VIDEO),
             FailedToParseMessageLikeContent("", ""),
             FailedToParseStateContent("", "", ""),
             LegacyCallInviteContent,

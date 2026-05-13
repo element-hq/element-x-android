@@ -44,6 +44,7 @@
   <string name="screen_room_details_error_muting">"Ezin izan da gela mututu; saiatu berriro."</string>
   <string name="screen_room_details_error_unmuting">"Ezin izan da gela mututzeari utzi; saiatu berriro."</string>
   <string name="screen_room_details_invite_people_title">"Gonbidatu jendea"</string>
+  <string name="screen_room_details_invite_title">"Gonbidatu"</string>
   <string name="screen_room_details_leave_conversation_title">"Utzi elkarrizketa"</string>
   <string name="screen_room_details_leave_room_title">"Atera gelatik"</string>
   <string name="screen_room_details_media_gallery_title">"Multimedia eta fitxategiak"</string>

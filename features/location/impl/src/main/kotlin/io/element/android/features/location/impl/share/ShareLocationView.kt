@@ -29,7 +29,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -44,11 +43,16 @@ import io.element.android.features.location.impl.common.ui.LocationFloatingActio
 import io.element.android.features.location.impl.common.ui.MapBottomSheetScaffold
 import io.element.android.features.location.impl.common.ui.UserLocationPuck
 import io.element.android.features.location.impl.common.ui.rememberUserLocationState
-import io.element.android.libraries.androidutils.system.toast
+import io.element.android.features.location.impl.share.ShareLocationEvent.StartLiveLocationShare
+import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.LocationPin
 import io.element.android.libraries.designsystem.components.PinVariant
+import io.element.android.libraries.designsystem.components.async.AsyncIndicator
+import io.element.android.libraries.designsystem.components.async.AsyncIndicatorHost
+import io.element.android.libraries.designsystem.components.async.rememberAsyncIndicatorState
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.components.button.BackButton
+import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.dialogs.ListDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.list.RadioButtonListItem
@@ -74,7 +78,6 @@ fun ShareLocationView(
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val context = LocalContext.current
     when (val dialogState = state.dialogState) {
         ShareLocationState.Dialog.None -> Unit
         is ShareLocationState.Dialog.Constraints -> LocationConstraintsDialog(
@@ -85,12 +88,17 @@ fun ShareLocationView(
             onOpenLocationSettings = { state.eventSink(ShareLocationEvent.OpenLocationSettings) },
             onDismiss = { state.eventSink(ShareLocationEvent.DismissDialog) },
         )
+        ShareLocationState.Dialog.LiveLocationDisclaimer -> ConfirmationDialog(
+            content = stringResource(R.string.screen_share_location_live_location_disclaimer_title),
+            submitText = stringResource(CommonStrings.action_accept),
+            cancelText = stringResource(CommonStrings.action_decline),
+            onSubmitClick = { state.eventSink(ShareLocationEvent.AcceptLiveLocationDisclaimer) },
+            onDismiss = { state.eventSink(ShareLocationEvent.DismissDialog) },
+        )
         is ShareLocationState.Dialog.LiveLocationDurations -> LiveLocationDurationDialog(
             durations = dialogState.durations,
             onSelectDuration = { duration ->
-                state.eventSink(ShareLocationEvent.StartLiveLocationShare(duration))
-                context.toast("Not implemented yet!")
-                navigateUp()
+                state.eventSink(StartLiveLocationShare(duration))
             },
             onDismiss = { state.eventSink(ShareLocationEvent.DismissDialog) },
         )
@@ -160,8 +168,44 @@ fun ShareLocationView(
                     .align(Alignment.TopEnd)
                     .padding(all = 16.dp),
             )
+            StartLiveLocationActionView(state.startLiveLocationAction, navigateUp)
         }
     )
+}
+
+@Composable
+private fun StartLiveLocationActionView(
+    action: AsyncAction<Unit>,
+    onActionSuccess: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Box(modifier = modifier) {
+        val asyncIndicatorState = rememberAsyncIndicatorState()
+        AsyncIndicatorHost(state = asyncIndicatorState)
+
+        when (action) {
+            is AsyncAction.Loading -> {
+                LaunchedEffect(action) {
+                    asyncIndicatorState.enqueue {
+                        AsyncIndicator.Loading(text = stringResource(CommonStrings.common_waiting_live_location))
+                    }
+                }
+            }
+            is AsyncAction.Failure -> {
+                LaunchedEffect(action) {
+                    asyncIndicatorState.enqueue(AsyncIndicator.DURATION_SHORT) {
+                        AsyncIndicator.Failure(
+                            text = stringResource(CommonStrings.common_something_went_wrong),
+                        )
+                    }
+                }
+            }
+            is AsyncAction.Success -> {
+                LaunchedEffect(action) { onActionSuccess() }
+            }
+            else -> Unit
+        }
+    }
 }
 
 @Composable
@@ -202,7 +246,7 @@ private fun BottomSheetContent(
     }
     if (state.canShareLiveLocation) {
         ShareLiveLocationItem {
-            state.eventSink(ShareLocationEvent.ShowLiveLocationDurationPicker)
+            state.eventSink(ShareLocationEvent.InitiateLiveLocationShare)
         }
     }
 }

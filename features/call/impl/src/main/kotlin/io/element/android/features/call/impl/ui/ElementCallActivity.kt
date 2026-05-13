@@ -35,16 +35,14 @@ import androidx.core.util.Consumer
 import androidx.lifecycle.Lifecycle
 import dev.zacsweers.metro.Inject
 import io.element.android.compound.colors.SemanticColorsLightDark
-import io.element.android.features.call.api.CallType
-import io.element.android.features.call.api.CallType.ExternalUrl
+import io.element.android.features.call.api.CallData
 import io.element.android.features.call.impl.DefaultElementCallEntryPoint
 import io.element.android.features.call.impl.di.CallBindings
-import io.element.android.features.call.impl.pip.PictureInPictureEvents
+import io.element.android.features.call.impl.pip.PictureInPictureEvent
 import io.element.android.features.call.impl.pip.PictureInPicturePresenter
 import io.element.android.features.call.impl.pip.PictureInPictureState
 import io.element.android.features.call.impl.pip.PipView
 import io.element.android.features.call.impl.services.CallForegroundService
-import io.element.android.features.call.impl.utils.CallIntentDataParser
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.libraries.androidutils.browser.ConsoleMessageLogger
 import io.element.android.libraries.architecture.Presenter
@@ -64,7 +62,6 @@ class ElementCallActivity :
     AppCompatActivity(),
     CallScreenNavigator,
     PipView {
-    @Inject lateinit var callIntentDataParser: CallIntentDataParser
     @Inject lateinit var presenterFactory: CallScreenPresenter.Factory
     @Inject lateinit var appPreferencesStore: AppPreferencesStore
     @Inject lateinit var featureFlagService: FeatureFlagService
@@ -80,9 +77,9 @@ class ElementCallActivity :
 
     private val requestPermissionsLauncher = registerPermissionResultLauncher()
 
-    private val webViewTarget = mutableStateOf<CallType?>(null)
+    private val webViewTarget = mutableStateOf<CallData?>(null)
 
-    private var eventSink: ((CallScreenEvents) -> Unit)? = null
+    private var eventSink: ((CallScreenEvent) -> Unit)? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -98,7 +95,7 @@ class ElementCallActivity :
             window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
         }
 
-        setCallType(intent)
+        setCallData(intent)
         // If presenter is not created at this point, it means we have no call to display, the Activity is finishing, so return early
         if (!::presenter.isInitialized) {
             return
@@ -111,8 +108,8 @@ class ElementCallActivity :
         setContent {
             val pipState = pictureInPicturePresenter.present()
             ListenToAndroidEvents(pipState)
-            val colors by remember(webViewTarget.value?.getSessionId()) {
-                enterpriseService.semanticColorsFlow(sessionId = webViewTarget.value?.getSessionId())
+            val colors by remember(webViewTarget.value?.sessionId) {
+                enterpriseService.semanticColorsFlow(sessionId = webViewTarget.value?.sessionId)
             }.collectAsState(SemanticColorsLightDark.default)
             ElementThemeApp(
                 appPreferencesStore = appPreferencesStore,
@@ -123,9 +120,8 @@ class ElementCallActivity :
             ) {
                 val state = presenter.present()
                 eventSink = state.eventSink
-                LaunchedEffect(state.isCallActive, state.isInWidgetMode) {
-                    // Note when not in WidgetMode, isCallActive will never be true, so consider the call is active
-                    if (state.isCallActive || !state.isInWidgetMode) {
+                LaunchedEffect(state.isCallActive) {
+                    if (state.isCallActive) {
                         setCallIsActive()
                     }
                 }
@@ -163,7 +159,7 @@ class ElementCallActivity :
                 if (requestPermissionCallback != null) {
                     Timber.tag(loggerTag.value).w("Ignoring onUserLeaveHint event because user is asked to grant permissions")
                 } else {
-                    pipEventSink(PictureInPictureEvents.EnterPictureInPicture)
+                    pipEventSink(PictureInPictureEvent.EnterPictureInPicture)
                 }
             }
             addOnUserLeaveHintListener(listener)
@@ -173,10 +169,10 @@ class ElementCallActivity :
         }
         DisposableEffect(Unit) {
             val onPictureInPictureModeChangedListener = Consumer { _: PictureInPictureModeChangedInfo ->
-                pipEventSink(PictureInPictureEvents.OnPictureInPictureModeChanged(isInPictureInPictureMode))
+                pipEventSink(PictureInPictureEvent.OnPictureInPictureModeChanged(isInPictureInPictureMode))
                 if (!isInPictureInPictureMode && !lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) {
                     Timber.tag(loggerTag.value).d("Exiting PiP mode: Hangup the call")
-                    eventSink?.invoke(CallScreenEvents.Hangup)
+                    eventSink?.invoke(CallScreenEvent.Hangup)
                 }
             }
             addOnPictureInPictureModeChangedListener(onPictureInPictureModeChangedListener)
@@ -188,7 +184,7 @@ class ElementCallActivity :
 
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
-        setCallType(intent)
+        setCallData(intent)
     }
 
     override fun onDestroy() {
@@ -207,25 +203,24 @@ class ElementCallActivity :
         finish()
     }
 
-    private fun setCallType(intent: Intent?) {
-        val callType = intent?.let {
-            IntentCompat.getParcelableExtra(intent, DefaultElementCallEntryPoint.EXTRA_CALL_TYPE, CallType::class.java)
-                ?: intent.dataString?.let(::parseUrl)?.let(::ExternalUrl)
+    private fun setCallData(intent: Intent?) {
+        val callData = intent?.let {
+            IntentCompat.getParcelableExtra(intent, DefaultElementCallEntryPoint.EXTRA_CALL_TYPE, CallData::class.java)
         }
-        val currentCallType = webViewTarget.value
-        if (currentCallType == null) {
-            if (callType == null) {
+        val currentCallData = webViewTarget.value
+        if (currentCallData == null) {
+            if (callData == null) {
                 Timber.tag(loggerTag.value).d("Re-opened the activity but we have no url to load or a cached one, finish the activity")
                 finish()
             } else {
                 Timber.tag(loggerTag.value).d("Set the call type and create the presenter")
-                webViewTarget.value = callType
-                presenter = presenterFactory.create(callType, this)
+                webViewTarget.value = callData
+                presenter = presenterFactory.create(callData, this)
             }
         } else {
-            if (callType == null) {
+            if (callData == null) {
                 Timber.tag(loggerTag.value).d("Coming back from notification, do nothing")
-            } else if (callType != currentCallType) {
+            } else if (callData != currentCallData) {
                 Timber.tag(loggerTag.value).d("User starts another call, restart the Activity")
                 setIntent(intent)
                 recreate()
@@ -235,8 +230,6 @@ class ElementCallActivity :
             }
         }
     }
-
-    private fun parseUrl(url: String?): String? = callIntentDataParser.parse(url)
 
     private fun registerPermissionResultLauncher(): ActivityResultLauncher<Array<String>> {
         return registerForActivityResult(
@@ -287,7 +280,7 @@ class ElementCallActivity :
     }
 
     override fun hangUp() {
-        eventSink?.invoke(CallScreenEvents.Hangup)
+        eventSink?.invoke(CallScreenEvent.Hangup)
     }
 }
 
