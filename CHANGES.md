@@ -1,3 +1,47 @@
+Changes in Element X v26.05.1
+=============================
+
+<!-- Release notes generated using configuration in .github/release.yml at v26.05.1 -->
+
+## What's Changed
+### ✨ Features
+* Make Element Call screen work edge-to-edge by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6634
+### 🙌 Improvements
+* Stop removing the `logs` dir when clearing cache by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6765
+* Adapt to new DM definition changes in the SDK by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6748
+* feat: Update call started timeline item + declined support by @BillCarsonFr in https://github.com/element-hq/element-x-android/pull/6649
+### 🐛 Bugfixes
+* Improve pin code UX by @bmarty in https://github.com/element-hq/element-x-android/pull/6744
+* Use just the other user's avatar for DM details by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6738
+* Improve `FetchPushForegroundService`'s reliability by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6757
+* Prevent user from starting Live Location Sharing in thread by @bmarty in https://github.com/element-hq/element-x-android/pull/6767
+* Fix media playback from the timeline broken when exiting a thread by @bmarty in https://github.com/element-hq/element-x-android/pull/6771
+* Pin code: remove the key if there is no pin code by @bmarty in https://github.com/element-hq/element-x-android/pull/6780
+### 🗣 Translations
+* Sync Strings by @ElementBot in https://github.com/element-hq/element-x-android/pull/6761
+### 🚧 In development 🚧
+* Feature : share live location by @ganfra in https://github.com/element-hq/element-x-android/pull/6741
+### Dependency upgrades
+* Update dependency org.matrix.rustcomponents:sdk-android to v26.05.7 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6746
+* Update actions/add-to-project action to v2 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6758
+* Update dependency io.github.sergio-sastre.ComposablePreviewScanner:android to v0.9.0 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6759
+* Update dependency io.element.android:element-call-embedded to v0.19.3 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6766
+* Update metro to v1 (major) by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6720
+* Update tspascoal/get-user-teams-membership action to v4.0.1 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6750
+* Update plugin sonarqube to v7.3.0.8198 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6743
+* Update plugin dependencycheck to v12.2.2 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6760
+* Update dependency com.google.guava:guava to v33.6.0-android by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6646
+* Update dependency org.matrix.rustcomponents:sdk-android to v26.05.13 by @renovate[bot] in https://github.com/element-hq/element-x-android/pull/6779
+### Others
+* Render media captions formatting in the media viewer by @bxdxnn in https://github.com/element-hq/element-x-android/pull/6729
+* Reduce FeatureFlag `Knock` effect on room creation and room edition forms by @bmarty in https://github.com/element-hq/element-x-android/pull/6768
+* Use the right analytics span as a parent in `checkNetworkConnection` by @jmartinesp in https://github.com/element-hq/element-x-android/pull/6751
+* Add missing strings `theme.black` by @bmarty in https://github.com/element-hq/element-x-android/pull/6772
+* Map back button in web view to esc (revive fixed version of: https://github.com/element-hq/element-x-android/pull/6724) by @toger5 in https://github.com/element-hq/element-x-android/pull/6725
+
+
+**Full Changelog**: https://github.com/element-hq/element-x-android/compare/v26.05.0...v26.05.1
+
 Changes in Element X v26.05.0
 =============================
 
