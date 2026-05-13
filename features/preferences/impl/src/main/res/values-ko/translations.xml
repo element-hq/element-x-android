@@ -77,6 +77,9 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"시스템 설정"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"시스템 알림이 꺼져 있습니다."</string>
   <string name="screen_notification_settings_title">"알림"</string>
+  <string name="theme_dark">"다크"</string>
+  <string name="theme_light">"라이트"</string>
+  <string name="theme_system">"시스템"</string>
   <string name="troubleshoot_notifications_entry_point_push_history_title">"푸시 기록"</string>
   <string name="troubleshoot_notifications_entry_point_section">"문제 해결"</string>
   <string name="troubleshoot_notifications_entry_point_title">"문제 해결 알림"</string>

@@ -169,7 +169,6 @@
   <string name="common_current_user_canceled_knock">"Eskaera bertan behera utzi da"</string>
   <string name="common_current_user_left_room">"Gelatik atera da"</string>
   <string name="common_current_user_rejected_invite">"Gonbidapenari uko egin zaio"</string>
-  <string name="common_dark">"Iluna"</string>
   <string name="common_decryption_error">"Deszifratze-errorea"</string>
   <string name="common_developer_options">"Garapen aukerak"</string>
   <string name="common_device_id">"Gailuaren IDa"</string>
@@ -204,7 +203,6 @@ Arrazoia: %1$s."</string>
   <string name="common_install_apk_android">"Instalatu APK"</string>
   <string name="common_invite_unknown_profile">"Matrix IDa ezin da topatu eta, beraz, litekeena da gonbidapena ez jasotzea."</string>
   <string name="common_leaving_room">"Gelatik ateratzen"</string>
-  <string name="common_light">"Argia"</string>
   <string name="common_line_copied_to_clipboard">"Lerroa arbelean kopiatu da"</string>
   <string name="common_link_copied_to_clipboard">"Esteka arbelean kopiatu da"</string>
   <string name="common_loading">"Kargatzen…"</string>
@@ -287,7 +285,6 @@ Arrazoia: %1$s."</string>
   <string name="common_success">"Arrakasta"</string>
   <string name="common_suggestions">"Iradokizunak"</string>
   <string name="common_syncing">"Sinkronizatzen"</string>
-  <string name="common_system">"Sistema"</string>
   <string name="common_text">"Testua"</string>
   <string name="common_third_party_notices">"Hirugarrenei buruzko oharrak"</string>
   <string name="common_thread">"Haria"</string>

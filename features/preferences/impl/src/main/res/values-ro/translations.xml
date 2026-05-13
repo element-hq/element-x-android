@@ -78,6 +78,9 @@ Dacă continuați, unele dintre setările dumneavoastră pot fi modificate."</st
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"Setări de sistem"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Notificările de sistem sunt dezactivate"</string>
   <string name="screen_notification_settings_title">"Notificări"</string>
+  <string name="theme_dark">"Întunecat"</string>
+  <string name="theme_light">"Deschis"</string>
+  <string name="theme_system">"Sistem"</string>
   <string name="troubleshoot_notifications_entry_point_push_history_title">"Istoricul notificărilor"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Depanare"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Depanați notificările"</string>

@@ -85,6 +85,9 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"системні налаштування"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Системні сповіщення вимкнені"</string>
   <string name="screen_notification_settings_title">"Сповіщення"</string>
+  <string name="theme_dark">"Темна"</string>
+  <string name="theme_light">"Світла"</string>
+  <string name="theme_system">"Системна"</string>
   <string name="troubleshoot_notifications_entry_point_push_history_title">"Історія push-сповіщень"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Усунення несправностей"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Усунення неполадок сповіщень"</string>

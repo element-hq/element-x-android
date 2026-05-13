@@ -216,7 +216,6 @@
   <string name="common_current_user_left_room">"Lahkus jututoast"</string>
   <string name="common_current_user_left_space">"Lahkus kogukonnast"</string>
   <string name="common_current_user_rejected_invite">"Keeldusid kutsest"</string>
-  <string name="common_dark">"Tume"</string>
   <string name="common_decryption_error">"Dekrüptimisviga"</string>
   <string name="common_description">"Kirjeldus"</string>
   <string name="common_developer_options">"Arendaja valikud"</string>
@@ -255,7 +254,6 @@ Põhjus: %1$s."</string>
   <string name="common_invite_unknown_profile">"Sellist Matrix\'i kasutajatunnust ei õnnestu leida, seega sõnumit ilmselt keegi kätte ei saa."</string>
   <string name="common_leaving_room">"Oled lahkumas jututoast"</string>
   <string name="common_leaving_space">"Oled lahkumas kogukonnast"</string>
-  <string name="common_light">"Hele"</string>
   <string name="common_line_copied_to_clipboard">"Rida on kopeeritud lõikelauale"</string>
   <string name="common_link_copied_to_clipboard">"Link on kopeeritud lõikelauale"</string>
   <string name="common_link_new_device">"Seo uus seade"</string>
@@ -374,7 +372,6 @@ Põhjus: %1$s."</string>
   <string name="common_suggested">"Soovitatud"</string>
   <string name="common_suggestions">"Soovitused"</string>
   <string name="common_syncing">"Sünkroniseerime"</string>
-  <string name="common_system">"Süsteem"</string>
   <string name="common_text">"Tekst"</string>
   <string name="common_third_party_notices">"Kolmandate osapoolte teatised"</string>
   <string name="common_thread">"Jutulõng"</string>

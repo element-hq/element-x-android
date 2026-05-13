@@ -219,7 +219,6 @@
   <string name="common_current_user_left_room">"Napustio/la je sobu"</string>
   <string name="common_current_user_left_space">"Napušteni prostor"</string>
   <string name="common_current_user_rejected_invite">"Poziv je odbijen"</string>
-  <string name="common_dark">"Tamno"</string>
   <string name="common_decryption_error">"Pogreška kod dešifriranja"</string>
   <string name="common_description">"Opis"</string>
   <string name="common_developer_options">"Mogućnosti za razvojne inženjere"</string>
@@ -259,7 +258,6 @@ Razlog: %1$s ."</string>
   <string name="common_invite_unknown_profile">"Ovaj Matrix ID nije moguće pronaći, pa se pozivnica možda neće primiti."</string>
   <string name="common_leaving_room">"Izlazak iz sobe"</string>
   <string name="common_leaving_space">"Napuštanje prostora"</string>
-  <string name="common_light">"Svijetlo"</string>
   <string name="common_line_copied_to_clipboard">"Redak je kopiran u međuspremnik"</string>
   <string name="common_link_copied_to_clipboard">"Poveznica je kopirana u međuspremnik."</string>
   <string name="common_link_new_device">"Poveži novi uređaj"</string>
@@ -385,7 +383,6 @@ Razlog: %1$s ."</string>
   <string name="common_suggested">"Preporučeno"</string>
   <string name="common_suggestions">"Prijedlozi"</string>
   <string name="common_syncing">"Sinkronizacija"</string>
-  <string name="common_system">"Sustav"</string>
   <string name="common_text">"Tekst"</string>
   <string name="common_third_party_notices">"Obavijesti trećih strana"</string>
   <string name="common_thread">"Nit"</string>

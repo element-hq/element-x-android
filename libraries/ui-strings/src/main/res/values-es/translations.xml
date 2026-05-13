@@ -165,7 +165,6 @@
   <string name="common_current_user_canceled_knock">"Solicitud cancelada"</string>
   <string name="common_current_user_left_room">"Saliste de la sala"</string>
   <string name="common_current_user_rejected_invite">"Invitación rechazada"</string>
-  <string name="common_dark">"Oscuro"</string>
   <string name="common_decryption_error">"Error de descifrado"</string>
   <string name="common_developer_options">"Opciones de desarrollador"</string>
   <string name="common_device_id">"ID de dispositivo"</string>
@@ -201,7 +200,6 @@ Motivo: %1$s."</string>
   <string name="common_install_apk_android">"Instalar APK"</string>
   <string name="common_invite_unknown_profile">"No se encontró este ID de Matrix, por lo que es posible que no se reciba la invitación."</string>
   <string name="common_leaving_room">"Saliendo de la sala"</string>
-  <string name="common_light">"Claro"</string>
   <string name="common_line_copied_to_clipboard">"Línea copiada al portapapeles"</string>
   <string name="common_link_copied_to_clipboard">"Enlace copiado al portapapeles"</string>
   <string name="common_loading">"Cargando…"</string>
@@ -280,7 +278,6 @@ Motivo: %1$s."</string>
   <string name="common_success">"Terminado"</string>
   <string name="common_suggestions">"Sugerencias"</string>
   <string name="common_syncing">"Sincronizando"</string>
-  <string name="common_system">"Sistema"</string>
   <string name="common_text">"Texto"</string>
   <string name="common_third_party_notices">"Avisos de terceros"</string>
   <string name="common_thread">"Hilo"</string>

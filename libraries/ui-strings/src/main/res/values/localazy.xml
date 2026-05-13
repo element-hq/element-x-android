@@ -218,7 +218,6 @@
   <string name="common_current_user_left_room">"Left room"</string>
   <string name="common_current_user_left_space">"Left space"</string>
   <string name="common_current_user_rejected_invite">"Invite declined"</string>
-  <string name="common_dark">"Dark"</string>
   <string name="common_decryption_error">"Decryption error"</string>
   <string name="common_description">"Description"</string>
   <string name="common_developer_options">"Developer options"</string>
@@ -258,7 +257,6 @@ Reason: %1$s."</string>
   <string name="common_invite_unknown_profile">"This Matrix ID can\'t be found, so the invite might not be received."</string>
   <string name="common_leaving_room">"Leaving room"</string>
   <string name="common_leaving_space">"Leaving space"</string>
-  <string name="common_light">"Light"</string>
   <string name="common_line_copied_to_clipboard">"Line copied to clipboard"</string>
   <string name="common_link_copied_to_clipboard">"Link copied to clipboard"</string>
   <string name="common_link_new_device">"Link new device"</string>
@@ -378,7 +376,6 @@ Reason: %1$s."</string>
   <string name="common_suggested">"Suggested"</string>
   <string name="common_suggestions">"Suggestions"</string>
   <string name="common_syncing">"Syncing"</string>
-  <string name="common_system">"System"</string>
   <string name="common_text">"Text"</string>
   <string name="common_third_party_notices">"Third-party notices"</string>
   <string name="common_thread">"Thread"</string>

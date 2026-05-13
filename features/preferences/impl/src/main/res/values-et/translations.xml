@@ -81,6 +81,9 @@ Kui sa jätkad muutmist, siis võivad muutuda ka need peidetud eelistused."</str
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"süsteemi seadistusi"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Süsteemi teavitused on välja lülitatud"</string>
   <string name="screen_notification_settings_title">"Teavitused"</string>
+  <string name="theme_dark">"Tume"</string>
+  <string name="theme_light">"Hele"</string>
+  <string name="theme_system">"Süsteem"</string>
   <string name="troubleshoot_notifications_entry_point_push_history_title">"Tõuketeadete ajalugu"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Veaotsing"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Teavituste veaotsing"</string>

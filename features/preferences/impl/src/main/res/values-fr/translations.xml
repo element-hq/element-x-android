@@ -84,6 +84,9 @@ Si vous continuez, il est possible que certains de vos paramètres soient modifi
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"paramètres du système"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Les notifications du système sont désactivées"</string>
   <string name="screen_notification_settings_title">"Notifications"</string>
+  <string name="theme_dark">"Sombre"</string>
+  <string name="theme_light">"Clair"</string>
+  <string name="theme_system">"Système"</string>
   <string name="troubleshoot_notifications_entry_point_push_history_title">"Historique des Push"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Dépannage"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Dépanner les notifications"</string>
