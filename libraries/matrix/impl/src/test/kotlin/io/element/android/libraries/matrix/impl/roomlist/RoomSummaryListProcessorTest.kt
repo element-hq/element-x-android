@@ -173,16 +173,42 @@ class RoomSummaryListProcessorTest {
         assertThat(summaries.value[index].roomId).isEqualTo(A_ROOM_ID_3)
     }
 
+    /**
+     * Tracking issue #4182 / #5031: rooms duplicated in the room list.
+     *
+     * If duplicates are present in the upstream summaries flow, the dedupe safety net in
+     * [RoomSummaryListProcessor.updateRoomSummaries] must remove them and report the incident via
+     * [analyticsService.trackError]. Uses an empty update to drive the dedupe path without
+     * passing a Rust Room through the destroy-on-use path.
+     */
+    @Test
+    fun `pre-existing duplicates in summaries are deduped on next update and trackError fires`() = runTest {
+        summaries.value = listOf(
+            aRoomSummary(roomId = A_ROOM_ID),
+            aRoomSummary(roomId = A_ROOM_ID), // simulated SDK-side leak
+            aRoomSummary(roomId = A_ROOM_ID_2),
+        )
+        val analyticsService = FakeAnalyticsService()
+        val processor = createProcessor(analyticsService = analyticsService)
+
+        processor.postUpdate(emptyList())
+
+        assertThat(summaries.value.map { it.roomId }).containsExactly(A_ROOM_ID, A_ROOM_ID_2).inOrder()
+        assertThat(analyticsService.trackedErrors).hasSize(1)
+    }
+
     private fun aRustRoom(roomId: RoomId = A_ROOM_ID) = FakeFfiRoom(
         roomId = roomId,
         latestEventLambda = { LatestEventValue.None }
     )
 
-    private fun TestScope.createProcessor() = RoomSummaryListProcessor(
+    private fun TestScope.createProcessor(
+        analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
+    ) = RoomSummaryListProcessor(
         summaries,
         FakeFfiRoomListService(),
         coroutineContext = StandardTestDispatcher(testScheduler),
         roomSummaryFactory = RoomSummaryFactory(),
-        analyticsService = FakeAnalyticsService(),
+        analyticsService = analyticsService,
     )
 }
