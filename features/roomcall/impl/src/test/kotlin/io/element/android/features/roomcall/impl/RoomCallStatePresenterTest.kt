@@ -89,10 +89,10 @@ class RoomCallStatePresenterTest {
     }
 
     @Test
-    fun `present - initial state - when is direct room`() = runTest {
+    fun `present - initial state - when is DM room`() = runTest {
         val room = FakeJoinedRoom(
             baseRoom = FakeBaseRoom(
-                initialRoomInfo = aRoomInfo(isDirect = true),
+                initialRoomInfo = aRoomInfo(isDm = true),
                 roomPermissions = roomPermissions(true),
             )
         )

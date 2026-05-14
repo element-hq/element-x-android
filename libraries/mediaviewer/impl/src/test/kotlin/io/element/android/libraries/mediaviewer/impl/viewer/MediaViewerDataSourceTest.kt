@@ -50,7 +50,7 @@ class MediaViewerDataSourceTest {
         val sut = createMediaViewerDataSource(
             galleryDataSource = galleryDataSource,
         )
-        sut.setup()
+        sut.setup(backgroundScope)
         startLambda.assertions().isCalledOnce()
     }
 

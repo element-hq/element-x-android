@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-  <string name="screen_deactivate_account_confirmation_dialog_content">"Bitte bestätige, dass du dein Konto deaktivieren möchtest. Dies kann nicht rückgängig gemacht werden."</string>
+  <string name="screen_deactivate_account_confirmation_dialog_content">"Bitte bestätige, dass du dein Konto löschen möchtest. Diese Aktion kann nicht rückgängig gemacht werden."</string>
   <string name="screen_deactivate_account_delete_all_messages">"Lösche alle meine Nachrichten"</string>
   <string name="screen_deactivate_account_delete_all_messages_notice">"Warnung: Künftigen Nutzern werden möglicherweise unvollständige Konversationen angezeigt."</string>
-  <string name="screen_deactivate_account_description">"Dein Konto zu deaktivieren ist %1$s. Folgendes wird passieren:"</string>
+  <string name="screen_deactivate_account_description">"Das Löschen deines Kontos ist %1$s. Es wird:"</string>
   <string name="screen_deactivate_account_description_bold_part">"irreversibel"</string>
   <string name="screen_deactivate_account_list_item_1">"%1$s dein Konto (du kannst dich nicht erneut anmelden und deine ID kann nicht wiederverwendet werden)."</string>
   <string name="screen_deactivate_account_list_item_1_bold_part">"Dauerhaft deaktivieren"</string>
   <string name="screen_deactivate_account_list_item_2">"Du wirst aus allen Chats entfernt."</string>
   <string name="screen_deactivate_account_list_item_3">"Lösche deine Kontoinformationen von unserem Identitätsserver."</string>
   <string name="screen_deactivate_account_list_item_4">"Deine Nachrichten werden für bereits registrierte Nutzer weiterhin sichtbar sein. Für neue oder unregistrierte Nutzer sind sie nicht verfügbar, wenn du sie löschen solltest."</string>
-  <string name="screen_deactivate_account_title">"Nutzerkonto deaktivieren"</string>
+  <string name="screen_deactivate_account_title">"Konto löschen"</string>
 </resources>

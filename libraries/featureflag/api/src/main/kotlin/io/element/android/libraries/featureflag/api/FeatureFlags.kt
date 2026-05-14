@@ -22,13 +22,6 @@ enum class FeatureFlags(
     override val isFinished: Boolean,
     override val isInLabs: Boolean = false,
 ) : Feature {
-    RoomDirectorySearch(
-        key = "feature.roomdirectorysearch",
-        title = "Room directory search",
-        description = "Allow user to search for public rooms in their homeserver",
-        defaultValue = { false },
-        isFinished = false,
-    ),
     ShowBlockedUsersDetails(
         key = "feature.showBlockedUsersDetails",
         title = "Show blocked users details",
@@ -109,7 +102,7 @@ enum class FeatureFlags(
     ),
     AllowBlackTheme(
         key = "feature.allow_black_theme",
-        title = "Allow black theme",
+        title = "Black theme",
         description = "Allow selecting the black appearance theme for battery saving on OLED.",
         defaultValue = { false },
         isFinished = false,

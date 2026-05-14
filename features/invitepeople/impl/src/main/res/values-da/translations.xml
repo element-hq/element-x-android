@@ -2,4 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_invite_users_already_a_member">"Allerede medlem"</string>
   <string name="screen_invite_users_already_invited">"Allerede inviteret"</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_multiple_users">"Du har i øjeblikket ingen chats med disse kontakter. Bekræft deres invitation til dette rum, før du fortsætter."</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_one_user">"Du har i øjeblikket ingen chats med denne kontakt. Bekræft deres invitation til dette rum, før du fortsætter."</string>
+  <string name="screen_invite_users_confirm_dialog_title_mutiple_users">"Inviter nye kontakter til dette rum?"</string>
+  <string name="screen_invite_users_confirm_dialog_title_one_user">"Inviter ny kontakt til dette rum?"</string>
 </resources>

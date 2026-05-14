@@ -16,6 +16,7 @@
   <string name="screen_media_details_filename">"ファイル名"</string>
   <string name="screen_media_details_no_more_files_to_show">"これ以上ファイルはありません"</string>
   <string name="screen_media_details_no_more_media_to_show">"これ以上メディアはありません"</string>
+  <string name="screen_media_details_title">"ファイル情報"</string>
   <string name="screen_media_details_uploaded_by">"アップロード元"</string>
   <string name="screen_media_details_uploaded_on">"アップロード先"</string>
 </resources>

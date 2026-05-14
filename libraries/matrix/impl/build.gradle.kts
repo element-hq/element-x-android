@@ -31,11 +31,14 @@ dependencies {
     implementation(projects.libraries.rustlsTls)
 
     implementation(projects.appconfig)
+    implementation(projects.features.enterprise.api)
     implementation(projects.libraries.androidutils)
+    implementation(projects.libraries.architecture)
     implementation(projects.libraries.di)
     implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.network)
     implementation(projects.libraries.preferences.api)
+    implementation(projects.libraries.sessionStorage.api)
     implementation(projects.libraries.workmanager.api)
     implementation(projects.services.analytics.api)
     implementation(projects.services.toolbox.api)
@@ -47,6 +50,7 @@ dependencies {
     implementation(libs.kotlinx.collections.immutable)
 
     testCommonDependencies(libs)
+    testImplementation(projects.features.enterprise.test)
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.libraries.matrix.test)
     testImplementation(projects.libraries.preferences.test)

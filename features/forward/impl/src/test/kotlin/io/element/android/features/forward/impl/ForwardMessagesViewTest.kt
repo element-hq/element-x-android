@@ -6,11 +6,14 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.features.forward.impl
 
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.core.RoomId
@@ -21,34 +24,30 @@ import io.element.android.tests.testutils.EnsureNeverCalledWithParam
 import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.pressTag
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class ForwardMessagesViewTest {
-    @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
-
     @Test
-    fun `cancel error emits the expected event`() {
+    fun `cancel error emits the expected event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<ForwardMessagesEvents>()
-        rule.setForwardMessagesView(
+        setForwardMessagesView(
             aForwardMessagesState(
                 forwardAction = AsyncAction.Failure(AN_EXCEPTION),
                 eventSink = eventsRecorder
             ),
         )
-        rule.pressTag(TestTags.dialogPositive.value)
+        pressTag(TestTags.dialogPositive.value)
         eventsRecorder.assertSingle(ForwardMessagesEvents.ClearError)
     }
 
     @Test
-    fun `success invokes onForwardSuccess`() {
+    fun `success invokes onForwardSuccess`() = runAndroidComposeUiTest {
         val data = listOf(A_ROOM_ID)
         val eventsRecorder = EventsRecorder<ForwardMessagesEvents>(expectEvents = false)
         ensureCalledOnceWithParam<List<RoomId>?>(data) { callback ->
-            rule.setForwardMessagesView(
+            setForwardMessagesView(
                 aForwardMessagesState(
                     forwardAction = AsyncAction.Success(data),
                     eventSink = eventsRecorder
@@ -59,7 +58,7 @@ class ForwardMessagesViewTest {
     }
 }
 
-private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setForwardMessagesView(
+private fun AndroidComposeUiTest<ComponentActivity>.setForwardMessagesView(
     state: ForwardMessagesState,
     onForwardSuccess: (List<RoomId>) -> Unit = EnsureNeverCalledWithParam(),
 ) {

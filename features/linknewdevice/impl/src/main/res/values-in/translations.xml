@@ -17,6 +17,8 @@
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_2">"Jika Anda mengalami masalah yang sama, coba jaringan Wi-Fi yang berbeda atau gunakan data seluler Anda daripada Wi-Fi"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_item_3">"Jika tidak berhasil, masuk secara manual"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_title">"Koneksi tidak aman"</string>
+  <string name="screen_qr_code_login_device_code_subtitle">"Anda akan diminta untuk memasukkan dua digit yang ditunjukkan di perangkat ini."</string>
+  <string name="screen_qr_code_login_device_code_title">"Masukkan nomor bawah di perangkat Anda yang lain"</string>
   <string name="screen_qr_code_login_error_cancelled_subtitle">"Proses masuk dibatalkan di perangkat lain."</string>
   <string name="screen_qr_code_login_error_cancelled_title">"Permintaan masuk dibatalkan"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"Proses masuk ditolak di perangkat lain."</string>
@@ -35,4 +37,5 @@ Coba masuk secara manual, atau pindai kode QR dengan perangkat lain."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_description">"Anda perlu memberikan izin ke %1$s untuk menggunakan kamera perangkat Anda untuk melanjutkan."</string>
   <string name="screen_qr_code_login_no_camera_permission_state_title">"Izinkan akses kamera untuk memindai kode QR"</string>
   <string name="screen_qr_code_login_unknown_error_description">"Terjadi kesalahan tak terduga. Silakan coba lagi."</string>
+  <string name="screen_qr_code_login_verify_code_loading">"Menunggu perangkat Anda yang lain"</string>
 </resources>

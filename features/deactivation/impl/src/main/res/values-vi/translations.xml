@@ -10,5 +10,4 @@
   <string name="screen_deactivate_account_list_item_2">"Loại bỏ bạn khỏi tất cả các phòng chat."</string>
   <string name="screen_deactivate_account_list_item_3">"Xóa thông tin tài khoản của bạn khỏi máy chủ nhận dạng của chúng tôi."</string>
   <string name="screen_deactivate_account_list_item_4">"Tin nhắn của bạn vẫn sẽ hiển thị cho người dùng đã đăng ký nhưng sẽ không hiển thị cho người dùng mới hoặc chưa đăng ký nếu bạn chọn xóa chúng."</string>
-  <string name="screen_deactivate_account_title">"Vô hiệu hóa tài khoản"</string>
 </resources>

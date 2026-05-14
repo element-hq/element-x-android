@@ -190,7 +190,6 @@
   <string name="common_advanced_settings">"고급 설정"</string>
   <string name="common_an_image">"이미지"</string>
   <string name="common_analytics">"통계"</string>
-  <string name="common_android_fetching_notifications_title">"알림 동기화 중…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"방을 떠남"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"세션에서 로그아웃되었습니다."</string>
   <string name="common_appearance">"외관"</string>
@@ -208,7 +207,6 @@
   <string name="common_current_user_left_room">"방 떠남"</string>
   <string name="common_current_user_left_space">"스페이스 떠남"</string>
   <string name="common_current_user_rejected_invite">"초대 거부됨"</string>
-  <string name="common_dark">"다크"</string>
   <string name="common_decryption_error">"복호화 오류"</string>
   <string name="common_description">"설명"</string>
   <string name="common_developer_options">"개발자 설정"</string>
@@ -234,6 +232,7 @@
   <string name="common_failed">"실패"</string>
   <string name="common_favourite">"즐겨찾기"</string>
   <string name="common_favourited">"즐겨찾기 됨"</string>
+  <string name="common_fetching_notifications_title_android">"알림 동기화 중…"</string>
   <string name="common_file">"파일"</string>
   <string name="common_file_deleted">"파일 삭제됨"</string>
   <string name="common_file_saved">"파일 저장됨"</string>
@@ -247,7 +246,6 @@
   <string name="common_invite_unknown_profile">"Matrix ID를 찾을 수 없기 때문에 초대가 수신되지 않을 수도 있습니다."</string>
   <string name="common_leaving_room">"방을 떠나는 중"</string>
   <string name="common_leaving_space">"스페이스 떠나는 중"</string>
-  <string name="common_light">"라이트"</string>
   <string name="common_line_copied_to_clipboard">"줄이 클립보드에 복사되었습니다."</string>
   <string name="common_link_copied_to_clipboard">"링크가 클립보드에 복사됨"</string>
   <string name="common_link_new_device">"새 기기 연결"</string>
@@ -310,7 +308,6 @@
     <item quantity="other">"%1$d 답변"</item>
   </plurals>
   <string name="common_replying_to">"%1$s님에게 답장하는 중"</string>
-  <string name="common_report_a_bug">"버그 보고"</string>
   <string name="common_report_a_problem">"문제 보고"</string>
   <string name="common_report_submitted">"보고 제출됨"</string>
   <string name="common_rich_text_editor">"리치 텍스트 편집기"</string>
@@ -361,7 +358,6 @@
   <string name="common_suggested">"공유된 스페이스"</string>
   <string name="common_suggestions">"제안"</string>
   <string name="common_syncing">"동기화 중"</string>
-  <string name="common_system">"시스템"</string>
   <string name="common_text">"글자"</string>
   <string name="common_third_party_notices">"제3자 고지"</string>
   <string name="common_thread">"스레드"</string>

@@ -17,6 +17,7 @@ import org.matrix.rustcomponents.sdk.RequestConfig
 import org.matrix.rustcomponents.sdk.SlidingSyncVersionBuilder
 import org.matrix.rustcomponents.sdk.SqliteStoreBuilder
 import uniffi.matrix_sdk.BackupDownloadStrategy
+import uniffi.matrix_sdk_base.DmRoomDefinition
 import uniffi.matrix_sdk_crypto.CollectStrategy
 import uniffi.matrix_sdk_crypto.DecryptionSettings
 
@@ -47,5 +48,6 @@ class FakeFfiClientBuilder(
     override fun sqliteStore(config: SqliteStoreBuilder): ClientBuilder = this
     override fun inMemoryStore(): ClientBuilder = this
     override fun crossProcessLockConfig(crossProcessLockConfig: CrossProcessLockConfig): ClientBuilder = this
+    override fun dmRoomDefinition(dmRoomDefinition: DmRoomDefinition): ClientBuilder = this
     override suspend fun build() = buildResult()
 }

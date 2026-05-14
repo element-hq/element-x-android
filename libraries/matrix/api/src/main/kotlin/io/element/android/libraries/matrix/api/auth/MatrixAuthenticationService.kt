@@ -37,21 +37,21 @@ interface MatrixAuthenticationService {
     suspend fun importCreatedSession(externalSession: ExternalSession): Result<SessionId>
 
     /*
-     * OIDC part.
+     * OAuth part.
      */
 
     /**
-     * Get the Oidc url to display to the user.
+     * Get the OAuth url to display to the user.
      */
-    suspend fun getOidcUrl(
-        prompt: OidcPrompt,
+    suspend fun getOAuthUrl(
+        prompt: OAuthPrompt,
         loginHint: String?,
-    ): Result<OidcDetails>
+    ): Result<OAuthDetails>
 
     /**
-     * Cancel Oidc login sequence.
+     * Cancel OAuth login sequence.
      */
-    suspend fun cancelOidcLogin(): Result<Unit>
+    suspend fun cancelOAuthLogin(): Result<Unit>
 
     /**
      * Set the existing data about Element Classic session, if any.
@@ -68,9 +68,9 @@ interface MatrixAuthenticationService {
     ): Boolean
 
     /**
-     * Attempt to login using the [callbackUrl] provided by the Oidc page.
+     * Attempt to log in using the [callbackUrl] provided by the OAuth page.
      */
-    suspend fun loginWithOidc(callbackUrl: String): Result<SessionId>
+    suspend fun loginWithOAuth(callbackUrl: String): Result<SessionId>
 
     suspend fun loginWithQrCode(qrCodeData: MatrixQrCodeLoginData, progress: (QrCodeLoginStep) -> Unit): Result<SessionId>
 

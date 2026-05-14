@@ -193,7 +193,6 @@
   <string name="common_advanced_settings">"Kengaytirilgan sozlamalar"</string>
   <string name="common_an_image">"rasm"</string>
   <string name="common_analytics">"Analitika"</string>
-  <string name="common_android_fetching_notifications_title">"Bildirishnomalar sinxronlanmoqda…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Siz xonani tark etdingiz"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Siz sessiyadan chiqdingiz"</string>
   <string name="common_appearance">"Ko\'rinish"</string>
@@ -211,7 +210,6 @@
   <string name="common_current_user_left_room">"Xonani tark etdi"</string>
   <string name="common_current_user_left_space">"Tar etilgan maydon"</string>
   <string name="common_current_user_rejected_invite">"Taklif rad etildi"</string>
-  <string name="common_dark">"Tungi"</string>
   <string name="common_decryption_error">"Shifrni ochish xatosi"</string>
   <string name="common_description">"Tavsif"</string>
   <string name="common_developer_options">"Dasturchi variantlari"</string>
@@ -237,6 +235,7 @@ Sababi:%1$s."</string>
   <string name="common_failed">"Xatolikka uchradi"</string>
   <string name="common_favourite">"Sevimli"</string>
   <string name="common_favourited">"Sevimli"</string>
+  <string name="common_fetching_notifications_title_android">"Bildirishnomalar sinxronlanmoqda…"</string>
   <string name="common_file">"Fayl"</string>
   <string name="common_file_deleted">"Fayl o\'chirildi"</string>
   <string name="common_file_saved">"Fayl saqlandi"</string>
@@ -250,7 +249,6 @@ Sababi:%1$s."</string>
   <string name="common_invite_unknown_profile">"Ushbu Matrix identifikatori topilmadi, shuning uchun taklif qabul qilinmasligi mumkin."</string>
   <string name="common_leaving_room">"Xonadan chiqish"</string>
   <string name="common_leaving_space">"Maydonni tark etish"</string>
-  <string name="common_light">"Nur"</string>
   <string name="common_line_copied_to_clipboard">"Satr vaqtinchalik xotiraga nusxalandi"</string>
   <string name="common_link_copied_to_clipboard">"Havola vaqtinchalik xotiraga nusxalandi"</string>
   <string name="common_link_new_device">"Yangi qurilmani ulang"</string>
@@ -317,7 +315,6 @@ Sababi:%1$s."</string>
     <item quantity="other">"%1$d ta javob"</item>
   </plurals>
   <string name="common_replying_to">"%1$sga Javob berilmoqda"</string>
-  <string name="common_report_a_bug">"Xato haqida xabar bering"</string>
   <string name="common_report_a_problem">"Muammo haqida xabar bering"</string>
   <string name="common_report_submitted">"Hisobot topshirildi"</string>
   <string name="common_rich_text_editor">"Boy matn muharriri"</string>
@@ -371,7 +368,6 @@ Sababi:%1$s."</string>
   <string name="common_suggested">"Tavsiya etilgan"</string>
   <string name="common_suggestions">"Tavsiyalar"</string>
   <string name="common_syncing">"Sinxronlash"</string>
-  <string name="common_system">"Tizim"</string>
   <string name="common_text">"Matn"</string>
   <string name="common_third_party_notices">"Uchinchi tomon bildirishnomalari"</string>
   <string name="common_thread">"Ip"</string>
@@ -410,6 +406,7 @@ Sababi:%1$s."</string>
   <string name="common_world_readable_history">"Tarixni hamma ko‘rishi mumkin"</string>
   <string name="common_you">"Siz"</string>
   <string name="crypto_event_key_forwarded_known_profile_dialog_content">"%1$s (%2$s) bu xabarni ulashdi, chunki u yuborilganda siz xonada emas edingiz."</string>
+  <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"%1$s bu xabar yuborilgan paytda siz xonada bo‘lmaganingiz uchun uni ulashdi."</string>
   <string name="crypto_history_visible">"Siz yuborgan xabarlar bu xonaga taklif qilingan yangi a’zolarga ulashiladi. %1$s"</string>
   <string name="crypto_identity_change_pin_violation">"%1$sning raqamli identifikatori qayta tiklandi.%2$s"</string>
   <string name="crypto_identity_change_pin_violation_new">"%1$sning%2$s raqamli identifikatsiya qayta tiklandi.%3$s"</string>

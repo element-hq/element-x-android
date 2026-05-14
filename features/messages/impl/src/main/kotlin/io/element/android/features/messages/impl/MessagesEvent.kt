@@ -20,6 +20,8 @@ sealed interface MessagesEvent {
     data class InviteDialogDismissed(val action: InviteDialogAction) : MessagesEvent
     data class OnUserClicked(val user: MatrixUser) : MessagesEvent
     data class OnMemberClicked(val userId: UserId) : MessagesEvent
+    data object StopLiveLocationShare : MessagesEvent
+    data object ShowLiveLocationShare : MessagesEvent
     data object MarkAsFullyReadAndExit : MessagesEvent
 }
 

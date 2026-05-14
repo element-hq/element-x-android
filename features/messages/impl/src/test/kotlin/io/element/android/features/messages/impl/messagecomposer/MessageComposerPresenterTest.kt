@@ -1066,7 +1066,7 @@ class MessageComposerPresenterTest {
             )
             givenRoomInfo(
                 aRoomInfo(
-                    isDirect = true,
+                    isDm = true,
                     activeMembersCount = 2,
                 )
             )
