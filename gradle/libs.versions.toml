@@ -25,7 +25,7 @@ work = "2.11.2"
 compose_bom = "2026.05.00"
 
 # Coroutines
-coroutines = "1.10.2"
+coroutines = "1.11.0"
 
 # Accompanist
 accompanist = "0.37.3"
@@ -35,7 +35,7 @@ test_core = "1.7.0"
 roborazzi = "1.60.0"
 
 # Jetbrain
-datetime = "0.7.1"
+datetime = "0.8.0"
 serialization_json = "1.11.0"
 
 #other
