@@ -198,4 +198,12 @@ class MediaViewerDataSource(
                 localMediaState.value = AsyncData.Failure(it)
             }
     }
+
+    fun cancelLoadingMedia(data: MediaViewerPageData.MediaViewerData) {
+        if (localMediaStates[data.mediaSource.safeUrl]?.value?.isLoading() == true) {
+            Timber.d("cancelLoadingMedia for ${data.eventId}")
+            mediaFiles.remove(data.mediaSource)?.close()
+            localMediaStates[data.mediaSource.safeUrl]?.value = AsyncData.Uninitialized
+        }
+    }
 }

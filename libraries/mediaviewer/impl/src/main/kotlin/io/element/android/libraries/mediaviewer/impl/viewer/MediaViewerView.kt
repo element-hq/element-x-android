@@ -210,11 +210,12 @@ fun MediaViewerView(
                 is MediaViewerPageData.MediaViewerData -> {
                     var bottomPaddingInPixels by remember { mutableIntStateOf(defaultBottomPaddingInPixels) }
                     Box(
-                        modifier = Modifier.fillMaxSize()
                         modifier = Modifier
                             .onVisibilityChanged(minDurationMs = 200L) { isVisible ->
                                 if (isVisible) {
                                     state.eventSink(MediaViewerEvent.LoadMedia(dataForPage))
+                                } else {
+                                    state.eventSink(MediaViewerEvent.CancelLoadingMedia(dataForPage))
                                 }
                             }
                             .fillMaxSize()

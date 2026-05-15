@@ -100,6 +100,9 @@ class MediaViewerPresenter(
                 is MediaViewerEvent.LoadMedia -> {
                     coroutineScope.downloadMedia(data = event.data)
                 }
+                is MediaViewerEvent.CancelLoadingMedia -> {
+                    dataSource.cancelLoadingMedia(event.data)
+                }
                 is MediaViewerEvent.ClearLoadingError -> {
                     dataSource.clearLoadingError(event.data)
                 }
