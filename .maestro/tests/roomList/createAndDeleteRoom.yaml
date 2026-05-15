@@ -26,6 +26,9 @@ appId: ${MAESTRO_APP_ID}
 - tapOn: "Invite"
 - tapOn:
     id: "confirm_invite_unknown"
+# Close the keyboard if it's still open
+- tapOn: "Back"
+# Go back to the room details screen
 - tapOn: "Back"
 - scrollUntilVisible:
     direction: DOWN
