@@ -24,7 +24,8 @@ appId: ${MAESTRO_APP_ID}
     text: ${MAESTRO_INVITEE2_MXID}
     index: 1
 - tapOn: "Invite"
-- tapOn: "Back"
+- tapOn:
+    id: "confirm_invite_unknown"
 - tapOn: "aRoomName"
 - scrollUntilVisible:
     direction: DOWN
