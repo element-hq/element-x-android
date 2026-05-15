@@ -14,6 +14,8 @@ import io.element.android.features.home.impl.FakeDateTimeObserver
 import io.element.android.libraries.androidutils.system.DateTimeObserver
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
+import io.element.android.libraries.matrix.test.A_ROOM_ID
+import io.element.android.libraries.matrix.test.A_ROOM_ID_2
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.roomlist.FakeDynamicRoomList
@@ -100,11 +102,107 @@ class RoomListDataSourceTest {
         }
     }
 
+    /**
+     * Tracking issue #4182: rooms duplicated in the room list around midnight.
+     *
+     * If the SDK ever leaks a list containing the same roomId twice (the suspected cause of #4182),
+     * the UI mapper's `distinctBy` safety net in [RoomListDataSource.buildAndEmitAllRooms] must
+     * remove the duplicate AND `analyticsService.trackError` must fire so the team can root-cause
+     * it via Sentry.
+     */
+    @Test
+    fun `when SDK summaries source contains duplicate roomIds, UI layer dedupes and reports trackError`() = runTest {
+        val analyticsService = FakeAnalyticsService()
+        val duplicatedSummaries = listOf(
+            aRoomSummary(roomId = A_ROOM_ID),
+            aRoomSummary(roomId = A_ROOM_ID),
+            aRoomSummary(roomId = A_ROOM_ID_2),
+        )
+        val roomList = FakeDynamicRoomList(summaries = MutableStateFlow(duplicatedSummaries))
+        val roomListService = FakeRoomListService(
+            createRoomListLambda = { roomList }
+        ).apply {
+            postState(RoomListService.State.Running)
+        }
+        val roomListDataSource = createRoomListDataSource(
+            roomListService = roomListService,
+            analyticsService = analyticsService,
+        )
+
+        roomListDataSource.roomSummariesFlow.test {
+            roomListDataSource.launchIn(backgroundScope)
+            val list = awaitItem()
+            assertThat(list.map { it.roomId }).containsExactly(A_ROOM_ID, A_ROOM_ID_2).inOrder()
+            assertThat(analyticsService.trackedErrors).hasSize(1)
+        }
+    }
+
+    /**
+     * Tracking issue #4182.
+     *
+     * Targeted scenario: a `DateChanged` tick fires after an initial SDK emit, then a follow-up
+     * SDK emit lands (mimicking "midnight, then a new message arrives"). Even though the diffCache
+     * is bypassed during the rebuild (`useCache = false`), the final state must contain each
+     * roomId exactly once and trackError must not fire on a happy path.
+     */
+    @Test
+    fun `interleaved date change and SDK update with overlapping content does not produce duplicates`() = runTest {
+        val analyticsService = FakeAnalyticsService()
+        val summariesFlow = MutableStateFlow(
+            listOf(
+                aRoomSummary(roomId = A_ROOM_ID),
+                aRoomSummary(roomId = A_ROOM_ID_2),
+            )
+        )
+        val roomList = FakeDynamicRoomList(summaries = summariesFlow)
+        val roomListService = FakeRoomListService(
+            createRoomListLambda = { roomList }
+        ).apply {
+            postState(RoomListService.State.Running)
+        }
+        val dateTimeObserver = FakeDateTimeObserver()
+        val roomListDataSource = createRoomListDataSource(
+            roomListService = roomListService,
+            dateTimeObserver = dateTimeObserver,
+            analyticsService = analyticsService,
+        )
+
+        roomListDataSource.roomSummariesFlow.test {
+            roomListDataSource.launchIn(backgroundScope)
+            val initial = awaitItem()
+            assertThat(initial.map { it.roomId }).containsExactly(A_ROOM_ID, A_ROOM_ID_2).inOrder()
+
+            // Midnight ticks while the cache holds [A_ROOM_ID, A_ROOM_ID_2]
+            dateTimeObserver.given(DateTimeObserver.Event.DateChanged(Instant.MIN, Instant.now()))
+            val afterMidnight = awaitItem()
+            assertThat(afterMidnight.map { it.roomId }).containsExactly(A_ROOM_ID, A_ROOM_ID_2).inOrder()
+
+            // A new message bumps A_ROOM_ID — different unread count makes the StateFlow see this
+            // as a new value
+            summariesFlow.value = listOf(
+                aRoomSummary(roomId = A_ROOM_ID, numUnreadMessages = 1),
+                aRoomSummary(roomId = A_ROOM_ID_2),
+            )
+            val afterMessage = awaitItem()
+            assertThat(afterMessage.map { it.roomId }).containsExactly(A_ROOM_ID, A_ROOM_ID_2).inOrder()
+            assertThat(afterMessage.map { it.roomId }.toSet()).hasSize(afterMessage.size)
+
+            // Second midnight rebuild after the new message
+            dateTimeObserver.given(DateTimeObserver.Event.DateChanged(Instant.MIN, Instant.now()))
+            val afterSecondMidnight = awaitItem()
+            assertThat(afterSecondMidnight.map { it.roomId }).containsExactly(A_ROOM_ID, A_ROOM_ID_2).inOrder()
+            assertThat(afterSecondMidnight.map { it.roomId }.toSet()).hasSize(afterSecondMidnight.size)
+
+            assertThat(analyticsService.trackedErrors).isEmpty()
+        }
+    }
+
     private fun TestScope.createRoomListDataSource(
         roomListService: FakeRoomListService = FakeRoomListService(),
         roomListRoomSummaryFactory: RoomListRoomSummaryFactory = aRoomListRoomSummaryFactory(),
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
         dateTimeObserver: FakeDateTimeObserver = FakeDateTimeObserver(),
+        analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
     ) = RoomListDataSource(
         roomListService = roomListService,
         roomListRoomSummaryFactory = roomListRoomSummaryFactory,
@@ -112,6 +210,6 @@ class RoomListDataSourceTest {
         notificationSettingsService = notificationSettingsService,
         sessionCoroutineScope = backgroundScope,
         dateTimeObserver = dateTimeObserver,
-        analyticsService = FakeAnalyticsService(),
+        analyticsService = analyticsService,
     )
 }
