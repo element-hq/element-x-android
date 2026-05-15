@@ -9,9 +9,9 @@
 package io.element.android.libraries.mediaviewer.impl.local.video
 
 import android.annotation.SuppressLint
+import android.os.Bundle
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
-import androidx.annotation.OptIn
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -31,29 +31,26 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.viewinterop.AndroidView
-import androidx.lifecycle.Lifecycle
 import androidx.media3.common.MediaItem
+import androidx.media3.common.MediaMetadata
 import androidx.media3.common.Player
 import androidx.media3.common.Player.STATE_READY
 import androidx.media3.common.Timeline
-import androidx.media3.common.util.UnstableApi
-import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import io.element.android.compound.theme.ElementTheme
-import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.text.toDp
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.utils.KeepScreenOn
-import io.element.android.libraries.designsystem.utils.OnLifecycleEvent
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.impl.local.LocalMediaViewState
 import io.element.android.libraries.mediaviewer.impl.local.PlayableState
+import io.element.android.libraries.mediaviewer.impl.local.player.LocalMediaPlaybackContext
 import io.element.android.libraries.mediaviewer.impl.local.player.MediaPlayerControllerState
 import io.element.android.libraries.mediaviewer.impl.local.player.MediaPlayerControllerView
-import io.element.android.libraries.mediaviewer.impl.local.player.rememberExoPlayer
+import io.element.android.libraries.mediaviewer.impl.local.player.rememberMediaServicePlayer
 import io.element.android.libraries.mediaviewer.impl.local.player.seekToEnsurePlaying
 import io.element.android.libraries.mediaviewer.impl.local.player.togglePlay
 import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaViewState
@@ -70,48 +67,49 @@ fun MediaVideoView(
     bottomPaddingInPixels: Int,
     localMedia: LocalMedia?,
     autoplay: Boolean,
-    audioFocus: AudioFocus?,
     modifier: Modifier = Modifier,
 ) {
-    val exoPlayer = rememberExoPlayer()
-    ExoPlayerMediaVideoView(
-        isDisplayed = isDisplayed,
-        localMediaViewState = localMediaViewState,
-        bottomPaddingInPixels = bottomPaddingInPixels,
-        exoPlayer = exoPlayer,
-        localMedia = localMedia,
-        autoplay = autoplay,
-        audioFocus = audioFocus,
-        modifier = modifier,
-    )
+    val player = rememberMediaServicePlayer()
+    if (player != null) {
+        ServicePlayerMediaVideoView(
+            isDisplayed = isDisplayed,
+            localMediaViewState = localMediaViewState,
+            bottomPaddingInPixels = bottomPaddingInPixels,
+            player = player,
+            localMedia = localMedia,
+            autoplay = autoplay,
+            modifier = modifier,
+        )
+    }
 }
 
 @SuppressLint("UnsafeOptInUsageError")
 @Composable
-private fun ExoPlayerMediaVideoView(
+private fun ServicePlayerMediaVideoView(
     isDisplayed: Boolean,
     localMediaViewState: LocalMediaViewState,
     bottomPaddingInPixels: Int,
-    exoPlayer: ExoPlayer,
+    player: Player,
     localMedia: LocalMedia?,
     autoplay: Boolean,
-    audioFocus: AudioFocus?,
     modifier: Modifier = Modifier,
 ) {
     var mediaPlayerControllerState: MediaPlayerControllerState by remember {
         mutableStateOf(
             MediaPlayerControllerState(
                 isVisible = true,
-                isPlaying = false,
-                isReady = false,
-                progressInMillis = 0,
-                durationInMillis = 0,
+                isPlaying = player.isPlaying,
+                isReady = player.playbackState == Player.STATE_READY,
+                progressInMillis = player.currentPosition,
+                durationInMillis = player.duration.takeIf { it >= 0 } ?: 0L,
                 canMute = true,
-                isMuted = false,
+                isMuted = player.volume == 0f,
                 seekingToMillis = null,
             )
         )
     }
+    // Track when playback is requested for a specific media ID
+    var pendingPlaybackMediaId by remember { mutableStateOf<String?>(null) }
 
     val playableState: PlayableState.Playable by remember {
         derivedStateOf {
@@ -130,9 +128,19 @@ private fun ExoPlayerMediaVideoView(
             }
 
             override fun onIsPlayingChanged(isPlaying: Boolean) {
+                val currentMediaId = player.currentMediaItem?.mediaId
+                // Show Playing if: actually playing, OR we're transitioning to expected new media
+                val isExpectedMedia = currentMediaId == pendingPlaybackMediaId
+
+                val shouldShowPlaying = isPlaying || isExpectedMedia
+
                 mediaPlayerControllerState = mediaPlayerControllerState.copy(
-                    isPlaying = isPlaying,
+                    isPlaying = shouldShowPlaying,
                 )
+
+                if (isPlaying && isExpectedMedia) {
+                    pendingPlaybackMediaId = null
+                }
             }
 
             override fun onVolumeChanged(volume: Float) {
@@ -143,7 +151,7 @@ private fun ExoPlayerMediaVideoView(
 
             override fun onTimelineChanged(timeline: Timeline, reason: Int) {
                 if (reason == Player.TIMELINE_CHANGE_REASON_SOURCE_UPDATE) {
-                    exoPlayer.duration.takeIf { it >= 0 }
+                    player.duration.takeIf { it >= 0 }
                         ?.let {
                             mediaPlayerControllerState = mediaPlayerControllerState.copy(
                                 durationInMillis = it,
@@ -157,6 +165,14 @@ private fun ExoPlayerMediaVideoView(
                     isReady = playbackState == STATE_READY,
                 )
             }
+
+            override fun onPlayerError(error: androidx.media3.common.PlaybackException) {
+                pendingPlaybackMediaId = null
+                mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                    isPlaying = false,
+                    isReady = false,
+                )
+            }
         }
     }
 
@@ -164,27 +180,75 @@ private fun ExoPlayerMediaVideoView(
 
     LaunchedEffect(autoHideController) {
         delay(5.seconds)
-        if (exoPlayer.isPlaying) {
+        if (player.isPlaying) {
             mediaPlayerControllerState = mediaPlayerControllerState.copy(
                 isVisible = false,
             )
         }
     }
 
+    val playbackContext = LocalMediaPlaybackContext.current
+    val context = LocalContext.current
+    val thumbnailSource = playbackContext.thumbnailSource
+    // Use localMedia.uri and isDisplayed as keys - ensures metadata loads when page becomes visible after settling
     if (localMedia?.uri != null) {
-        LaunchedEffect(localMedia.uri) {
-            val mediaItem = MediaItem.fromUri(localMedia.uri)
-            exoPlayer.setMediaItem(mediaItem)
+        LaunchedEffect(localMedia.uri, isDisplayed, thumbnailSource) {
+            if (!isDisplayed) return@LaunchedEffect
+            // Step 1: Send bare MediaItem with ONLY extras - let ExoPlayer extract embedded metadata
+            // (title/artist/artwork). Service will inject notification metadata after embedded is extracted.
+            val hasValidContext = playbackContext.sessionId.value.isNotEmpty()
+            val extras = if (hasValidContext) {
+                Bundle().apply {
+                    putString("sessionId", playbackContext.sessionId.value)
+                    putString("roomId", playbackContext.roomId.value)
+                    putString("eventId", playbackContext.eventId.value)
+                    // Signal that notification metadata should be injected by the service
+                    putString("notificationTitle", localMedia.info.filename)
+                    putString("notificationArtist", localMedia.info.senderName)
+                    // For video, use thumbnail as notification artwork - pass the URL string
+                    thumbnailSource?.let { putString("notificationThumbnailUrl", it.safeUrl) }
+                }
+            } else {
+                null
+            }
+            // Send minimal MediaItem - no title/artist/artwork so ExoPlayer extracts embedded
+            val mediaMetadata = extras?.let { MediaMetadata.Builder().setExtras(it).build() }
+                ?: MediaMetadata.EMPTY
+            val mediaId = if (hasValidContext) playbackContext.eventId.value else localMedia.uri.toString()
+            val mediaItem = MediaItem.Builder()
+                .setMediaId(mediaId)
+                .setUri(localMedia.uri)
+                .setMediaMetadata(mediaMetadata)
+                .build()
+            if (player.currentMediaItem?.mediaId == mediaId) {
+                // Same item already loaded — don't reset
+                // Sync UI state with actual player state
+                mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                    isPlaying = player.isPlaying,
+                    isReady = player.playbackState == Player.STATE_READY,
+                )
+            } else {
+                // Set pending playback BEFORE changing media to prevent flicker
+                pendingPlaybackMediaId = mediaId
+                player.setMediaItem(mediaItem)
+                player.prepare()
+                // Reset progress when opening a new file
+                mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                    progressInMillis = 0L,
+                    durationInMillis = 0L,
+                )
+            }
         }
+    } else if (!isDisplayed) {
+        // Don't clear media items when not displayed - just don't set new ones
     } else {
-        exoPlayer.setMediaItems(emptyList())
+        // Don't clear media items when localMedia is null - they may still be playing in background
     }
     KeepScreenOn(mediaPlayerControllerState.isPlaying)
     Box(
         modifier = modifier
             .background(ElementTheme.colors.bgSubtlePrimary),
     ) {
-        val context = LocalContext.current
         if (LocalInspectionMode.current) {
             Text(
                 modifier = Modifier
@@ -207,7 +271,7 @@ private fun ExoPlayerMediaVideoView(
                     ),
                 factory = {
                     PlayerView(context).apply {
-                        player = exoPlayer
+                        this.player = player
                         resizeMode = AspectRatioFrameLayout.RESIZE_MODE_FIT
                         layoutParams = FrameLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
                         useController = false
@@ -222,20 +286,23 @@ private fun ExoPlayerMediaVideoView(
             state = mediaPlayerControllerState,
             onTogglePlay = {
                 autoHideController++
-                exoPlayer.togglePlay()
+                player.togglePlay()
             },
             onSeekChange = {
                 autoHideController++
                 mediaPlayerControllerState = mediaPlayerControllerState.copy(
                     seekingToMillis = it.toLong(),
                 )
-                exoPlayer.seekToEnsurePlaying(it.toLong())
+                player.seekToEnsurePlaying(it.toLong())
             },
             onToggleMute = {
                 autoHideController++
-                exoPlayer.volume = if (exoPlayer.volume == 1f) 0f else 1f
+                player.volume = if (player.volume == 1f) 0f else 1f
             },
-            audioFocus = audioFocus,
+            // Pass null: the service's ExoPlayer handles audio focus via handleAudioFocus=true.
+            // Passing audioFocus here would cause a second AudioManager.requestAudioFocus() call
+            // that conflicts with ExoPlayer's internal focus request, instantly pausing playback.
+            audioFocus = null,
             modifier = Modifier
                 .fillMaxWidth()
                 .align(Alignment.BottomCenter)
@@ -243,10 +310,10 @@ private fun ExoPlayerMediaVideoView(
         )
     }
 
-    LaunchedEffect(exoPlayer.isPlaying) {
-        if (exoPlayer.isPlaying) {
+    LaunchedEffect(player.isPlaying, isDisplayed) {
+        if (player.isPlaying) {
             while (true) {
-                val position = exoPlayer.currentPosition
+                val position = player.currentPosition
                 val seekingTo = mediaPlayerControllerState.seekingToMillis
                 mediaPlayerControllerState = mediaPlayerControllerState.copy(
                     progressInMillis = position,
@@ -256,7 +323,7 @@ private fun ExoPlayerMediaVideoView(
             }
         } else {
             // Ensure we render the final state
-            val position = exoPlayer.currentPosition
+            val position = player.currentPosition
             val seekingTo = mediaPlayerControllerState.seekingToMillis
             mediaPlayerControllerState = mediaPlayerControllerState.copy(
                 progressInMillis = position,
@@ -265,8 +332,8 @@ private fun ExoPlayerMediaVideoView(
         }
     }
 
-    ExoPlayerLifecycleHelper(
-        exoPlayer = exoPlayer,
+    PlayerLifecycleHelper(
+        player = player,
         autoplay = autoplay,
         isDisplayed = isDisplayed,
         playerListener = playerListener,
@@ -274,27 +341,22 @@ private fun ExoPlayerMediaVideoView(
     )
 }
 
-@OptIn(UnstableApi::class)
 @Composable
-private fun ExoPlayerLifecycleHelper(
-    exoPlayer: ExoPlayer,
+private fun PlayerLifecycleHelper(
+    player: Player,
     autoplay: Boolean,
     isDisplayed: Boolean,
     playerListener: Player.Listener,
     mediaPlayerControllerState: MediaPlayerControllerState,
 ) {
-    // Prepare and release the exoPlayer with the composable lifecycle
+    // Add and remove listener with the composable lifecycle
     DisposableEffect(Unit) {
-        Timber.d("ExoPlayerMediaVideoView DisposableEffect: initializing exoPlayer")
-        exoPlayer.addListener(playerListener)
-        exoPlayer.prepare()
+        Timber.d("ServicePlayerMediaVideoView DisposableEffect: adding listener")
+        player.addListener(playerListener)
 
         onDispose {
-            Timber.d("Disposing exoplayer")
-            if (!exoPlayer.isReleased) {
-                exoPlayer.removeListener(playerListener)
-                exoPlayer.release()
-            }
+            Timber.d("Disposing player listener")
+            player.removeListener(playerListener)
         }
     }
 
@@ -303,19 +365,10 @@ private fun ExoPlayerLifecycleHelper(
         val isReadyAndNotPlaying = mediaPlayerControllerState.isReady && !mediaPlayerControllerState.isPlaying
         if (needsAutoPlay && isDisplayed && isReadyAndNotPlaying) {
             // When displayed, start autoplaying
-            exoPlayer.play()
+            player.play()
             needsAutoPlay = false
-        } else if (!isDisplayed && mediaPlayerControllerState.isPlaying) {
-            // If not displayed, make sure to pause the video
-            exoPlayer.pause()
         }
-    }
-
-    // Pause playback when lifecycle is paused
-    OnLifecycleEvent { _, event ->
-        if (event == Lifecycle.Event.ON_PAUSE && exoPlayer.isPlaying) {
-            exoPlayer.pause()
-        }
+        // Note: We don't pause when isDisplayed=false because background playback is supported
     }
 }
 
@@ -328,7 +381,6 @@ internal fun MediaVideoViewPreview() = ElementPreview {
         bottomPaddingInPixels = 0,
         localMediaViewState = rememberLocalMediaViewState(),
         localMedia = null,
-        audioFocus = null,
         autoplay = false,
     )
 }

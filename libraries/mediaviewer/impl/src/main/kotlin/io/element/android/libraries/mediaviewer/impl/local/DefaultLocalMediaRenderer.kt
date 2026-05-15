@@ -14,7 +14,6 @@ import androidx.compose.ui.Modifier
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import io.element.android.features.viewfolder.api.TextFileViewer
-import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.api.local.LocalMediaRenderer
 import me.saket.telephoto.zoomable.OverzoomEffect
@@ -24,7 +23,6 @@ import me.saket.telephoto.zoomable.rememberZoomableState
 @ContributesBinding(AppScope::class)
 class DefaultLocalMediaRenderer(
     private val textFileViewer: TextFileViewer,
-    private val audioFocus: AudioFocus,
 ) : LocalMediaRenderer {
     @Composable
     override fun Render(localMedia: LocalMedia) {
@@ -39,7 +37,6 @@ class DefaultLocalMediaRenderer(
             localMedia = localMedia,
             localMediaViewState = localMediaViewState,
             textFileViewer = textFileViewer,
-            audioFocus = audioFocus,
             onClick = {},
         )
     }

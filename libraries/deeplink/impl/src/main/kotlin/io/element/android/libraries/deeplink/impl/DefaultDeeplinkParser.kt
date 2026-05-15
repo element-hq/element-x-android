@@ -41,7 +41,8 @@ class DefaultDeeplinkParser : DeeplinkParser {
                 val roomId = screenPathComponent.let(::RoomId)
                 val threadId = pathBits.elementAtOrNull(2)?.takeIf { it.isNotBlank() }?.let(::ThreadId)
                 val eventId = pathBits.elementAtOrNull(3)?.takeIf { it.isNotBlank() }?.let(::EventId)
-                DeeplinkData.Room(sessionId, roomId, threadId, eventId)
+                val openMedia = getBooleanQueryParameter("media", false)
+                DeeplinkData.Room(sessionId, roomId, threadId, eventId, openMedia)
             }
         }
     }

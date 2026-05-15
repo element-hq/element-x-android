@@ -17,7 +17,6 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -31,6 +30,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.TopAppBarDefaults
@@ -52,7 +53,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.heading
@@ -69,7 +69,6 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.viewfolder.api.TextFileViewer
 import io.element.android.libraries.androidutils.text.safeLinkify
 import io.element.android.libraries.architecture.AsyncData
-import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.designsystem.components.async.AsyncFailure
 import io.element.android.libraries.designsystem.components.async.AsyncLoading
@@ -85,6 +84,7 @@ import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.hasCompactHeightWindowSize
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarHost
 import io.element.android.libraries.designsystem.utils.snackbar.rememberSnackbarHostState
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.ui.media.MediaRequestData
 import io.element.android.libraries.mediaviewer.api.MediaInfo
@@ -94,6 +94,8 @@ import io.element.android.libraries.mediaviewer.impl.details.MediaDeleteConfirma
 import io.element.android.libraries.mediaviewer.impl.details.MediaDetailsBottomSheet
 import io.element.android.libraries.mediaviewer.impl.local.LocalMediaView
 import io.element.android.libraries.mediaviewer.impl.local.PlayableState
+import io.element.android.libraries.mediaviewer.impl.local.player.LocalMediaPlaybackContext
+import io.element.android.libraries.mediaviewer.impl.local.player.MediaPlaybackContext
 import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaViewState
 import io.element.android.libraries.mediaviewer.impl.util.bgCanvasWithTransparency
 import io.element.android.libraries.textcomposer.ElementRichTextEditorStyle
@@ -114,14 +116,13 @@ fun MediaViewerView(
     state: MediaViewerState,
     textFileViewer: TextFileViewer,
     onBackClick: () -> Unit,
-    audioFocus: AudioFocus?,
     modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = rememberSnackbarHostState(snackbarMessage = state.snackbarMessage)
     var showOverlay by remember { mutableStateOf(true) }
 
     val currentData = state.listData.getOrNull(state.currentIndex)
-    val defaultBottomPaddingInPixels = if (LocalInspectionMode.current && !hasCompactHeightWindowSize()) 303 else 0
+    var bottomPaddingInPixels by remember { mutableIntStateOf(0) }
 
     BackHandler { onBackClick() }
     Scaffold(
@@ -207,51 +208,59 @@ fun MediaViewerView(
                     )
                 }
                 is MediaViewerPageData.MediaViewerData -> {
-                    var bottomPaddingInPixels by remember { mutableIntStateOf(defaultBottomPaddingInPixels) }
-                    LaunchedEffect(Unit) {
-                        state.eventSink(MediaViewerEvent.LoadMedia(dataForPage))
-                    }
-                    Box(
-                        modifier = Modifier.fillMaxSize()
-                    ) {
-                        val isDisplayed = remember(pagerState.settledPage) {
-                            // This 'item provider' lambda will be called when the data source changes with an outdated `settlePage` value
-                            // So we need to update this value only when the `settledPage` value changes. It seems like a bug that needs to be fixed in Compose.
-                            page == pagerState.settledPage
-                        }
-                        val navigationBarPadding = WindowInsets.navigationBars.getBottom(LocalDensity.current)
-                        MediaViewerPage(
-                            isDisplayed = isDisplayed,
-                            showOverlay = showOverlay,
-                            bottomPaddingInPixels = (bottomPaddingInPixels - navigationBarPadding).coerceAtLeast(0),
-                            data = dataForPage,
-                            textFileViewer = textFileViewer,
-                            onDismiss = onBackClick,
-                            onRetry = {
-                                state.eventSink(MediaViewerEvent.LoadMedia(dataForPage))
-                            },
-                            onDismissError = {
-                                state.eventSink(MediaViewerEvent.ClearLoadingError(dataForPage))
-                            },
-                            onShowOverlayChange = {
-                                showOverlay = it
-                            },
-                            audioFocus = audioFocus,
-                            isUserSelected = (state.listData[page] as? MediaViewerPageData.MediaViewerData)?.eventId == state.initiallySelectedEventId,
+                    CompositionLocalProvider(
+                        LocalMediaPlaybackContext provides MediaPlaybackContext(
+                            sessionId = state.sessionId,
+                            roomId = state.roomId,
+                            eventId = dataForPage.eventId ?: EventId(""),
+                            thumbnailSource = dataForPage.thumbnailSource,
                         )
-                        // Bottom bar
-                        AnimatedVisibility(
-                            visible = showOverlay,
-                            enter = fadeIn(),
-                            exit = fadeOut(),
-                            modifier = Modifier.align(Alignment.BottomCenter),
+                    ) {
+                        var bottomPaddingInPixels by remember { mutableIntStateOf(defaultBottomPaddingInPixels) }
+                        LaunchedEffect(Unit) {
+                            state.eventSink(MediaViewerEvent.LoadMedia(dataForPage))
+                        }
+                        Box(
+                            modifier = Modifier.fillMaxSize()
                         ) {
-                            MediaViewerBottomBar(
-                                showDivider = dataForPage.mediaInfo.mimeType.isMimeTypeVideo(),
-                                caption = dataForPage.mediaInfo.caption,
-                                formattedCaption = dataForPage.mediaInfo.formattedCaption,
-                                onHeightChange = { bottomPaddingInPixels = it },
+                            val isDisplayed = remember(pagerState.settledPage) {
+                                // This 'item provider' lambda will be called when the data source changes with an outdated `settlePage` value
+                                // So we need to update this value only when the `settledPage` value changes. It seems like a bug that needs to be fixed in Compose.
+                                page == pagerState.settledPage
+                            }
+                            val navigationBarPadding = WindowInsets.navigationBars.getBottom(LocalDensity.current)
+                            MediaViewerPage(
+                                isDisplayed = isDisplayed,
+                                showOverlay = showOverlay,
+                                bottomPaddingInPixels = (bottomPaddingInPixels - navigationBarPadding).coerceAtLeast(0),
+                                data = dataForPage,
+                                textFileViewer = textFileViewer,
+                                onDismiss = onBackClick,
+                                onRetry = {
+                                    state.eventSink(MediaViewerEvent.LoadMedia(dataForPage))
+                                },
+                                onDismissError = {
+                                    state.eventSink(MediaViewerEvent.ClearLoadingError(dataForPage))
+                                },
+                                onShowOverlayChange = {
+                                    showOverlay = it
+                                },
+                                isUserSelected = (state.listData[page] as? MediaViewerPageData.MediaViewerData)?.eventId == state.initiallySelectedEventId,
                             )
+                            // Bottom bar
+                            AnimatedVisibility(
+                                visible = showOverlay,
+                                enter = fadeIn(),
+                                exit = fadeOut(),
+                                modifier = Modifier.align(Alignment.BottomCenter),
+                            ) {
+                                MediaViewerBottomBar(
+                                    showDivider = dataForPage.mediaInfo.mimeType.isMimeTypeVideo(),
+                                    caption = dataForPage.mediaInfo.caption,
+                                    formattedCaption = dataForPage.mediaInfo.formattedCaption,
+                                    onHeightChange = { bottomPaddingInPixels = it },
+                                )
+                            }
                         }
                     }
                 }
@@ -326,7 +335,6 @@ private fun MediaViewerPage(
     onRetry: () -> Unit,
     onDismissError: () -> Unit,
     onShowOverlayChange: (Boolean) -> Unit,
-    audioFocus: AudioFocus?,
     modifier: Modifier = Modifier,
 ) {
     val currentShowOverlay by rememberUpdatedState(showOverlay)
@@ -379,7 +387,6 @@ private fun MediaViewerPage(
                         }
                     },
                     isUserSelected = isUserSelected,
-                    audioFocus = audioFocus,
                 )
                 if (showThumbnail) {
                     ThumbnailView(
@@ -622,6 +629,7 @@ private fun MediaViewerBottomBar(
 
 private val maxCaptionHeightPortrait = 200.dp
 private val maxCaptionHeightLandscape = 128.dp
+private val defaultBottomPaddingInPixels = 0
 
 @Composable
 private fun ThumbnailView(
@@ -668,7 +676,6 @@ private fun ErrorView(
 internal fun MediaViewerViewPreview(@PreviewParameter(MediaViewerStateProvider::class) state: MediaViewerState) = ElementPreviewDark {
     MediaViewerView(
         state = state,
-        audioFocus = null,
         textFileViewer = { _, _ -> },
         onBackClick = {},
     )
@@ -679,7 +686,6 @@ internal fun MediaViewerViewPreview(@PreviewParameter(MediaViewerStateProvider::
 internal fun MediaViewerViewLandscapePreview(@PreviewParameter(MediaViewerStateProvider::class) state: MediaViewerState) = ElementPreviewDark {
     MediaViewerView(
         state = state,
-        audioFocus = null,
         textFileViewer = { _, _ -> },
         onBackClick = {},
     )

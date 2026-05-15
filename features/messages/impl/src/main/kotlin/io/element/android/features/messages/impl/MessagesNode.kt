@@ -99,6 +99,7 @@ class MessagesNode(
 ) : Node(buildContext, plugins = plugins), MessagesNavigator {
     data class Inputs(
         val focusedEventId: EventId?,
+        val openMediaForEventId: EventId? = null,
     ) : NodeInputs
 
     private val inputs = inputs<Inputs>()
@@ -329,6 +330,25 @@ class MessagesNode(
                 if (focusedEventId != null) {
                     state.timelineState.eventSink(TimelineEvent.FocusOnEvent(focusedEventId!!))
                     focusedEventId = null
+                }
+            }
+
+            var openMediaForEventId by rememberSaveable {
+                mutableStateOf(inputs.openMediaForEventId)
+            }
+            LaunchedEffect(openMediaForEventId, state.timelineState.timelineItems) {
+                val eventId = openMediaForEventId ?: return@LaunchedEffect
+                val event = state.timelineState.timelineItems
+                    .filterIsInstance<TimelineItem.Event>()
+                    .firstOrNull { it.eventId == eventId }
+                if (event != null) {
+                    val timelineMode = if (state.timelineState.isLive) {
+                        timelineController.mainTimelineMode()
+                    } else {
+                        timelineController.detachedTimelineMode() ?: return@LaunchedEffect
+                    }
+                    callback.handleEventClick(timelineMode, event, canUseOverlay)
+                    openMediaForEventId = null
                 }
             }
         }

@@ -281,7 +281,6 @@ private fun AndroidComposeUiTest<ComponentActivity>.setMediaViewerView(
     setSafeContent {
         MediaViewerView(
             state = state,
-            audioFocus = null,
             textFileViewer = { _, _ -> },
             onBackClick = onBackClick,
         )

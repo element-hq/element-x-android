@@ -111,6 +111,7 @@ androidx_media3_ui = { module = "androidx.media3:media3-ui", version.ref = "medi
 androidx_media3_transformer = { module = "androidx.media3:media3-transformer", version.ref = "media3" }
 androidx_media3_effect = { module = "androidx.media3:media3-effect", version.ref = "media3" }
 androidx_media3_common = { module = "androidx.media3:media3-common", version.ref = "media3" }
+androidx_media3_session = { module = "androidx.media3:media3-session", version.ref = "media3" }
 androidx_biometric = "androidx.biometric:biometric-ktx:1.4.0-alpha02"
 
 androidx_activity_activity = { module = "androidx.activity:activity", version.ref = "activity" }

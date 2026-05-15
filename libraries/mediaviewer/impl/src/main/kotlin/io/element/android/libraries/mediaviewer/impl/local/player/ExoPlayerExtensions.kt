@@ -9,9 +9,8 @@
 package io.element.android.libraries.mediaviewer.impl.local.player
 
 import androidx.media3.common.Player
-import androidx.media3.exoplayer.ExoPlayer
 
-fun ExoPlayer.togglePlay() {
+fun Player.togglePlay() {
     if (isPlaying) {
         pause()
     } else {
@@ -23,7 +22,7 @@ fun ExoPlayer.togglePlay() {
     }
 }
 
-fun ExoPlayer.seekToEnsurePlaying(positionMs: Long) {
+fun Player.seekToEnsurePlaying(positionMs: Long) {
     if (isPlaying.not()) {
         play()
     }

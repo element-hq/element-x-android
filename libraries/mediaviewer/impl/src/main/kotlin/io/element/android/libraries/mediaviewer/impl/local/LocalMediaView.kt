@@ -11,7 +11,6 @@ package io.element.android.libraries.mediaviewer.impl.local
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import io.element.android.features.viewfolder.api.TextFileViewer
-import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeAudio
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeImage
@@ -29,7 +28,6 @@ import io.element.android.libraries.mediaviewer.impl.local.video.MediaVideoView
 fun LocalMediaView(
     localMedia: LocalMedia?,
     bottomPaddingInPixels: Int,
-    audioFocus: AudioFocus?,
     onClick: () -> Unit,
     textFileViewer: TextFileViewer,
     modifier: Modifier = Modifier,
@@ -52,7 +50,6 @@ fun LocalMediaView(
             bottomPaddingInPixels = bottomPaddingInPixels,
             localMedia = localMedia,
             autoplay = isUserSelected,
-            audioFocus = audioFocus,
             modifier = modifier,
         )
         mimeType == MimeTypes.PlainText -> TextFileView(
@@ -72,7 +69,6 @@ fun LocalMediaView(
             bottomPaddingInPixels = bottomPaddingInPixels,
             localMedia = localMedia,
             info = mediaInfo,
-            audioFocus = audioFocus,
             modifier = modifier,
         )
         else -> MediaFileView(

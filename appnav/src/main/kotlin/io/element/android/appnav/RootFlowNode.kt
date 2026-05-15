@@ -519,9 +519,14 @@ class RootFlowNode(
             when (deeplinkData) {
                 is DeeplinkData.Root -> Unit // The room list will always be shown, observing FtueState
                 is DeeplinkData.Room -> {
+                    val initialElement = if (deeplinkData.openMedia && deeplinkData.eventId != null) {
+                        RoomNavigationTarget.MediaViewer(deeplinkData.eventId!!)
+                    } else {
+                        RoomNavigationTarget.Root(eventId = deeplinkData.threadId?.asEventId() ?: deeplinkData.eventId)
+                    }
                     loggedInFlowNode.attachRoom(
                         roomIdOrAlias = deeplinkData.roomId.toRoomIdOrAlias(),
-                        initialElement = RoomNavigationTarget.Root(eventId = deeplinkData.threadId?.asEventId() ?: deeplinkData.eventId),
+                        initialElement = initialElement,
                         clearBackstack = true,
                     ).maybeAttachThread(deeplinkData.threadId, deeplinkData.eventId)
                 }
