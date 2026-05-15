@@ -12,7 +12,6 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.home.impl.FakeDateTimeObserver
 import io.element.android.libraries.androidutils.system.DateTimeObserver
-import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.test.A_ROOM_ID
@@ -217,7 +216,6 @@ class RoomListDataSourceTest {
             ),
             dateTimeObserver = dateTimeObserver,
         )
-        val testScope = this
         roomListDataSource.roomSummariesFlow.test {
             // Observe room list items changes
             val job = roomListDataSource.launchIn(backgroundScope)
@@ -268,11 +266,10 @@ class RoomListDataSourceTest {
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
         dateTimeObserver: FakeDateTimeObserver = FakeDateTimeObserver(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
-        dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
     ) = RoomListDataSource(
         roomListService = roomListService,
         roomListRoomSummaryFactory = roomListRoomSummaryFactory,
-        coroutineDispatchers = dispatchers,
+        coroutineDispatchers = testCoroutineDispatchers(),
         notificationSettingsService = notificationSettingsService,
         sessionCoroutineScope = backgroundScope,
         dateTimeObserver = dateTimeObserver,
