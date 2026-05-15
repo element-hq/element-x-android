@@ -12,10 +12,12 @@ import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.home.impl.FakeDateTimeObserver
 import io.element.android.libraries.androidutils.system.DateTimeObserver
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.dateformatter.test.FakeDateFormatter
 import io.element.android.libraries.matrix.api.roomlist.RoomListService
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
+import io.element.android.libraries.matrix.test.A_ROOM_ID_3
 import io.element.android.libraries.matrix.test.notificationsettings.FakeNotificationSettingsService
 import io.element.android.libraries.matrix.test.room.aRoomSummary
 import io.element.android.libraries.matrix.test.roomlist.FakeDynamicRoomList
@@ -197,16 +199,80 @@ class RoomListDataSourceTest {
         }
     }
 
+    @Test
+    fun `regression test for race with DateTimeObserver and new items`() = runTest {
+        val roomList = FakeDynamicRoomList(summaries = MutableStateFlow(listOf(aRoomSummary(), aRoomSummary(A_ROOM_ID_2))))
+        val roomListService = FakeRoomListService(
+            createRoomListLambda = { roomList }
+        ).apply {
+            postState(RoomListService.State.Running)
+        }
+        val dateTimeObserver = FakeDateTimeObserver()
+        var dateFormatterResult = "Today"
+        val dateFormatter = FakeDateFormatter({ _, _, _ -> dateFormatterResult })
+        val roomListDataSource = createRoomListDataSource(
+            roomListService = roomListService,
+            roomListRoomSummaryFactory = aRoomListRoomSummaryFactory(
+                dateFormatter = dateFormatter,
+            ),
+            dateTimeObserver = dateTimeObserver,
+        )
+        val testScope = this
+        roomListDataSource.roomSummariesFlow.test {
+            // Observe room list items changes
+            val job = roomListDataSource.launchIn(backgroundScope)
+            // Get the initial room list
+            val initialRoomList = awaitItem()
+            assertThat(initialRoomList).hasSize(2)
+            assertThat(initialRoomList[0].roomId).isEqualTo(A_ROOM_ID)
+            assertThat(initialRoomList[0].timestamp).isEqualTo(dateFormatterResult)
+            assertThat(initialRoomList[1].roomId).isEqualTo(A_ROOM_ID_2)
+            assertThat(initialRoomList[1].timestamp).isEqualTo(dateFormatterResult)
+
+            // Stop processing room list updates so we can force a race condition with the date time observer updates
+            job.cancel()
+
+            // Trigger a date change and a new item at the same time
+            dateFormatterResult = "Yesterday"
+            roomList.summaries.tryEmit(listOf(aRoomSummary(roomId = A_ROOM_ID), aRoomSummary(roomId = A_ROOM_ID_3), aRoomSummary(roomId = A_ROOM_ID_2)))
+            dateTimeObserver.given(DateTimeObserver.Event.DateChanged(Instant.MIN, Instant.now()))
+
+            // The race condition would have caused the cache indices to be corrupted and only 2 items would be emitted
+            val rebuiltRoomList = awaitItem()
+            assertThat(rebuiltRoomList).hasSize(3)
+            assertThat(rebuiltRoomList[0].roomId).isEqualTo(A_ROOM_ID)
+            assertThat(rebuiltRoomList[0].timestamp).isEqualTo(dateFormatterResult)
+            assertThat(rebuiltRoomList[1].roomId).isEqualTo(A_ROOM_ID_3)
+            assertThat(rebuiltRoomList[1].timestamp).isEqualTo(dateFormatterResult)
+            assertThat(rebuiltRoomList[2].roomId).isEqualTo(A_ROOM_ID_2)
+            assertThat(rebuiltRoomList[2].timestamp).isEqualTo(dateFormatterResult)
+
+            // Restart processing room list updates
+            roomListDataSource.launchIn(backgroundScope)
+
+            // Check there is a new list and it's not the same as the previous one
+            val newRoomList = awaitItem()
+            assertThat(newRoomList).hasSize(3)
+            assertThat(newRoomList[0].roomId).isEqualTo(A_ROOM_ID)
+            assertThat(newRoomList[0].timestamp).isEqualTo(dateFormatterResult)
+            assertThat(newRoomList[1].roomId).isEqualTo(A_ROOM_ID_3)
+            assertThat(newRoomList[1].timestamp).isEqualTo(dateFormatterResult)
+            assertThat(newRoomList[2].roomId).isEqualTo(A_ROOM_ID_2)
+            assertThat(newRoomList[2].timestamp).isEqualTo(dateFormatterResult)
+        }
+    }
+
     private fun TestScope.createRoomListDataSource(
         roomListService: FakeRoomListService = FakeRoomListService(),
         roomListRoomSummaryFactory: RoomListRoomSummaryFactory = aRoomListRoomSummaryFactory(),
         notificationSettingsService: FakeNotificationSettingsService = FakeNotificationSettingsService(),
         dateTimeObserver: FakeDateTimeObserver = FakeDateTimeObserver(),
         analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
+        dispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
     ) = RoomListDataSource(
         roomListService = roomListService,
         roomListRoomSummaryFactory = roomListRoomSummaryFactory,
-        coroutineDispatchers = testCoroutineDispatchers(),
+        coroutineDispatchers = dispatchers,
         notificationSettingsService = notificationSettingsService,
         sessionCoroutineScope = backgroundScope,
         dateTimeObserver = dateTimeObserver,
