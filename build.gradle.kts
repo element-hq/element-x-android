@@ -30,7 +30,8 @@ tasks.register<Delete>("clean").configure {
     delete(rootProject.layout.buildDirectory)
 }
 
-private val ktLintVersion = the<LibrariesForLibs>().versions.ktlint.get()
+private val catalog = the<LibrariesForLibs>()
+private val ktLintVersion = catalog.versions.ktlint.get()
 
 allprojects {
     // Detekt
@@ -46,7 +47,7 @@ allprojects {
         config.from(files("$rootDir/tools/detekt/detekt.yml"))
     }
     dependencies {
-        detektPlugins("io.nlopez.compose.rules:detekt:0.5.8")
+        detektPlugins(catalog.detekt.compose.rules)
         detektPlugins(project(":tests:detekt-rules"))
     }
 

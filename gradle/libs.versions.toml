@@ -72,6 +72,7 @@ android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref
 compose_compiler_plugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 # https://developer.android.com/studio/write/java8-support#library-desugaring-versions
 android_desugar = "com.android.tools:desugar_jdk_libs:2.1.5"
+detekt_compose_rules = "io.nlopez.compose.rules:detekt:0.4.28"
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 metro_gradle_plugin = { module = "dev.zacsweers.metro:gradle-plugin", version.ref = "metro" }
 kotlin_compiler = { module = "org.jetbrains.kotlin:kotlin-compiler", version.ref = "kotlin" }

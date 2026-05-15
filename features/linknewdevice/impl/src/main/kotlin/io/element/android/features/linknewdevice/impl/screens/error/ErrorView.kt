@@ -147,7 +147,7 @@ private fun DoneButton(
 }
 
 @Composable
-private fun Buttons(
+private fun ColumnScope.Buttons(
     onRetry: () -> Unit,
     onCancel: () -> Unit,
 ) {

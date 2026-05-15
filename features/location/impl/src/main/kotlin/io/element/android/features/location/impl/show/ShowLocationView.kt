@@ -50,6 +50,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 import org.maplibre.compose.camera.CameraMoveReason
 import org.maplibre.compose.camera.CameraPosition
@@ -172,7 +173,7 @@ fun ShowLocationView(
                 trackUserLocation = state.isTrackMyLocation
             )
             val markers = remember(state.locationShares) {
-                state.locationShares.map { it.toMarkerData() }
+                state.locationShares.map { it.toMarkerData() }.toImmutableList()
             }
             LocationPinMarkers(markers)
         },

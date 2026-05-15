@@ -114,7 +114,7 @@ fun QrCodeCameraView(
     Box(modifier.clipToBounds()) {
         if (LocalInspectionMode.current) {
             Box(
-                modifier = modifier
+                modifier = Modifier
                     .background(color = ElementTheme.colors.bgSubtlePrimary),
                 contentAlignment = Alignment.Center,
             ) {
