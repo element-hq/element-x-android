@@ -50,7 +50,8 @@ import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.utils.graphics.drawInLayer
 import io.element.android.libraries.ui.utils.time.isTalkbackActive
 
-private val BUBBLE_RADIUS = 12.dp
+// Alpha demo: tighter than Element's 12dp default, closer to WeChat's bubble shape.
+private val BUBBLE_RADIUS = 6.dp
 private val avatarRadius = AvatarSize.TimelineSender.dp / 2
 
 private val MIN_BUBBLE_WIDTH = 80.dp
