@@ -67,7 +67,8 @@ import io.element.android.libraries.matrix.ui.model.InviteSender
 import io.element.android.libraries.ui.strings.CommonStrings
 import timber.log.Timber
 
-internal val minHeight = 84.dp
+// Alpha demo: tighter than Element's 84dp default — matches WeChat's denser row height.
+internal val minHeight = 64.dp
 
 @Composable
 internal fun RoomSummaryRow(
@@ -280,14 +281,16 @@ private fun MessagePreviewAndIndicatorRow(
     Row(
         modifier = modifier.fillMaxWidth(),
     ) {
+        // Alpha demo: WeChat list shows the latest message as a single-line preview,
+        // not Element's two-line block. The shorter row reads as a stack of contacts
+        // rather than a stack of mini-cards.
         if (room.isTombstoned) {
             Text(
                 modifier = Modifier.weight(1f),
                 text = stringResource(R.string.screen_roomlist_tombstoned_room_description),
                 color = ElementTheme.colors.roomListRoomMessage,
                 style = ElementTheme.typography.fontBodyMdRegular,
-                minLines = 2,
-                maxLines = 2,
+                maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
             )
         } else {
@@ -307,8 +310,7 @@ private fun MessagePreviewAndIndicatorRow(
                     text = stringResource(CommonStrings.common_message_failed_to_send),
                     color = ElementTheme.colors.textCriticalPrimary,
                     style = ElementTheme.typography.fontBodyMdRegular,
-                    minLines = 2,
-                    maxLines = 2,
+                    maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
             } else {
@@ -330,8 +332,7 @@ private fun MessagePreviewAndIndicatorRow(
                     text = annotatedMessagePreview,
                     color = ElementTheme.colors.roomListRoomMessage,
                     style = ElementTheme.typography.fontBodyMdRegular,
-                    minLines = 2,
-                    maxLines = 2,
+                    maxLines = 1,
                     overflow = TextOverflow.Ellipsis,
                 )
             }
