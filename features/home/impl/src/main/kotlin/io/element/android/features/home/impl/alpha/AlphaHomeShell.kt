@@ -32,10 +32,13 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.home.impl.R
 import io.element.android.libraries.designsystem.components.list.ListItemContent
+import io.element.android.libraries.designsystem.theme.components.HorizontalDivider
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
 import io.element.android.libraries.designsystem.theme.components.Text
+import io.element.android.libraries.matrix.api.user.MatrixUser
+import io.element.android.libraries.matrix.ui.components.MatrixUserHeader
 
 /**
  * The Alpha demo replaces Element X's single-screen home with a WeChat-style four-tab
@@ -45,6 +48,7 @@ import io.element.android.libraries.designsystem.theme.components.Text
 @Composable
 internal fun AlphaHomeShell(
     onSettingsClick: () -> Unit,
+    currentUser: MatrixUser?,
     modifier: Modifier = Modifier,
     homeContent: @Composable () -> Unit,
 ) {
@@ -91,7 +95,10 @@ internal fun AlphaHomeShell(
                 AlphaTab.Discover -> AlphaComingSoonTab(
                     titleRes = R.string.screen_alpha_tab_discover,
                 )
-                AlphaTab.Me -> AlphaMeTab(onSettingsClick = onSettingsClick)
+                AlphaTab.Me -> AlphaMeTab(
+                    currentUser = currentUser,
+                    onSettingsClick = onSettingsClick,
+                )
             }
         }
     }
@@ -121,9 +128,21 @@ private fun AlphaComingSoonTab(titleRes: Int) {
 }
 
 @Composable
-private fun AlphaMeTab(onSettingsClick: () -> Unit) {
+private fun AlphaMeTab(
+    currentUser: MatrixUser?,
+    onSettingsClick: () -> Unit,
+) {
     Column(modifier = Modifier.fillMaxWidth()) {
-        Spacer(Modifier.height(24.dp))
+        Spacer(Modifier.height(16.dp))
+        if (currentUser != null) {
+            MatrixUserHeader(matrixUser = currentUser)
+        }
+        Spacer(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(16.dp),
+        )
+        HorizontalDivider()
         ListItem(
             headlineContent = { Text(stringResource(R.string.screen_alpha_me_settings)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Settings())),

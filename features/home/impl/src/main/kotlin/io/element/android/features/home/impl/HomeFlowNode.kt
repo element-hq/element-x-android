@@ -216,8 +216,14 @@ class HomeFlowNode(
                 loadingJoinedRoomJob.value = AsyncData.Loading(job)
             }
 
+            val currentUser = when {
+                state.currentUserAndNeighbors.size == 1 -> state.currentUserAndNeighbors.single()
+                state.currentUserAndNeighbors.size > 1 -> state.currentUserAndNeighbors.getOrNull(1)
+                else -> null
+            }
             AlphaHomeShell(
                 onSettingsClick = callback::navigateToSettings,
+                currentUser = currentUser,
                 modifier = modifier,
             ) {
                 HomeView(
