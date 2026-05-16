@@ -182,6 +182,7 @@ private fun HomeScaffold(
                 showAvatarIndicator = state.showAvatarIndicator,
                 areSearchResultsDisplayed = roomListState.searchState.isSearchActive,
                 onToggleSearch = { roomListState.eventSink(RoomListEvent.ToggleSearchResults) },
+                onStartChatClick = onStartChatClick,
                 onMenuActionClick = onMenuActionClick,
                 onOpenSettings = onOpenSettings,
                 onAccountSwitch = {

@@ -80,18 +80,19 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 fun HomeTopBar(
     selectedNavigationItem: HomeNavigationBarItem,
-    currentUserAndNeighbors: ImmutableList<MatrixUser>,
-    showAvatarIndicator: Boolean,
+    @Suppress("UNUSED_PARAMETER") currentUserAndNeighbors: ImmutableList<MatrixUser>,
+    @Suppress("UNUSED_PARAMETER") showAvatarIndicator: Boolean,
     areSearchResultsDisplayed: Boolean,
     onToggleSearch: () -> Unit,
-    onMenuActionClick: (RoomListMenuAction) -> Unit,
-    onOpenSettings: () -> Unit,
-    onAccountSwitch: (SessionId) -> Unit,
+    onStartChatClick: () -> Unit,
+    @Suppress("UNUSED_PARAMETER") onMenuActionClick: (RoomListMenuAction) -> Unit,
+    @Suppress("UNUSED_PARAMETER") onOpenSettings: () -> Unit,
+    @Suppress("UNUSED_PARAMETER") onAccountSwitch: (SessionId) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
-    canReportBug: Boolean,
+    @Suppress("UNUSED_PARAMETER") canReportBug: Boolean,
     displayFilters: Boolean,
     filtersState: RoomListFiltersState,
-    spaceFiltersState: SpaceFiltersState,
+    @Suppress("UNUSED_PARAMETER") spaceFiltersState: SpaceFiltersState,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier) {
@@ -106,45 +107,32 @@ fun HomeTopBar(
                 scrolledContainerColor = Color.Transparent,
             ),
             title = {
-                val displayTitle = when (selectedNavigationItem) {
-                    HomeNavigationBarItem.Chats -> {
-                        when (spaceFiltersState) {
-                            is SpaceFiltersState.Selected -> spaceFiltersState.selectedFilter.spaceRoom.displayName
-                            else -> stringResource(selectedNavigationItem.labelRes)
-                        }
-                    }
-                    HomeNavigationBarItem.Spaces -> stringResource(selectedNavigationItem.labelRes)
-                }
+                // Alpha demo: WeChat-style top bar — the title is just the app name,
+                // left-aligned. The avatar moved to the dedicated "Me" tab; the Spaces
+                // / accounts pager / overflow menu are gone. What is left is a brand
+                // strip with [search] [plus] on the right, matching WeChat's home.
                 Text(
-                    modifier = Modifier.semantics {
-                        heading()
-                    },
+                    modifier = Modifier.semantics { heading() },
                     style = ElementTheme.typography.aliasScreenTitle,
-                    text = displayTitle,
-                )
-            },
-            navigationIcon = {
-                NavigationIcon(
-                    currentUserAndNeighbors = currentUserAndNeighbors,
-                    showAvatarIndicator = showAvatarIndicator,
-                    onAccountSwitch = onAccountSwitch,
-                    onClick = onOpenSettings,
+                    text = stringResource(R.string.screen_alpha_app_title),
                 )
             },
             actions = {
                 if (selectedNavigationItem == HomeNavigationBarItem.Chats) {
-                    RoomListMenuItems(
-                        onToggleSearch = onToggleSearch,
-                        onMenuActionClick = onMenuActionClick,
-                        canReportBug = canReportBug,
-                        spaceFiltersState = spaceFiltersState,
-                    )
+                    IconButton(onClick = onToggleSearch) {
+                        Icon(
+                            imageVector = CompoundIcons.Search(),
+                            contentDescription = stringResource(CommonStrings.action_search),
+                        )
+                    }
+                    IconButton(onClick = onStartChatClick) {
+                        Icon(
+                            imageVector = CompoundIcons.Plus(),
+                            contentDescription = stringResource(CommonStrings.action_start_chat),
+                        )
+                    }
                 }
             },
-            // We want a 16dp left padding for the navigationIcon :
-            // 4dp from default TopAppBarHorizontalPadding
-            // 8dp from AccountIcon default padding (because of IconButton)
-            // 4dp extra padding using left insets
             windowInsets = WindowInsets(left = 4.dp),
         )
         if (displayFilters) {
@@ -344,6 +332,7 @@ internal fun HomeTopBarPreview() = ElementPreview {
         onOpenSettings = {},
         onAccountSwitch = {},
         onToggleSearch = {},
+        onStartChatClick = {},
         canReportBug = true,
         displayFilters = true,
         filtersState = aRoomListFiltersState(),
@@ -365,6 +354,7 @@ internal fun HomeTopBarSpaceFiltersSelectedPreview() = ElementPreview {
         onOpenSettings = {},
         onAccountSwitch = {},
         onToggleSearch = {},
+        onStartChatClick = {},
         canReportBug = true,
         displayFilters = true,
         filtersState = aRoomListFiltersState(),
@@ -386,6 +376,7 @@ internal fun HomeTopBarSpacesPreview() = ElementPreview {
         onOpenSettings = {},
         onAccountSwitch = {},
         onToggleSearch = {},
+        onStartChatClick = {},
         canReportBug = true,
         displayFilters = false,
         filtersState = aRoomListFiltersState(),
@@ -407,6 +398,7 @@ internal fun HomeTopBarWithIndicatorPreview() = ElementPreview {
         onOpenSettings = {},
         onAccountSwitch = {},
         onToggleSearch = {},
+        onStartChatClick = {},
         canReportBug = true,
         displayFilters = true,
         filtersState = aRoomListFiltersState(),
@@ -428,6 +420,7 @@ internal fun HomeTopBarMultiAccountPreview() = ElementPreview {
         onOpenSettings = {},
         onAccountSwitch = {},
         onToggleSearch = {},
+        onStartChatClick = {},
         canReportBug = true,
         displayFilters = true,
         filtersState = aRoomListFiltersState(),
