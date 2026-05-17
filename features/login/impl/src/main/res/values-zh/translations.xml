@@ -9,7 +9,7 @@
   <string name="screen_account_provider_signin_title">"你即将登录到 %s"</string>
   <string name="screen_account_provider_signup_subtitle">"这是你的对话将存在的地方，就像你使用邮件提供者来存储电子邮件那样。"</string>
   <string name="screen_account_provider_signup_title">"你即将在 %s 上创建账户"</string>
-  <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org 由 Matrix.org 基金会运营，是用于安全、去中心化的通信的公共 Matrix 网络上的大型免费服务器。"</string>
+  <string name="screen_change_account_provider_matrix_org_subtitle">"Alpha 为小圈子提供私密群聊 —— 成员邀请制，你的空间永远归你。"</string>
   <string name="screen_change_account_provider_other">"其它"</string>
   <string name="screen_change_account_provider_subtitle">"使用其它账户提供者，例如你自己的私有服务器或工作账户。"</string>
   <string name="screen_change_account_provider_title">"更改账户提供方"</string>
@@ -34,7 +34,7 @@
   <string name="screen_login_error_refresh_tokens">"此服务器使用刷新令牌。使用密码登录时不支持这些功能。"</string>
   <string name="screen_login_error_unsupported_authentication">"该服务器不支持密码登录与 OIDC 登录。请联系服务器管理员或选择另一服务器。"</string>
   <string name="screen_login_form_header">"输入详细信息"</string>
-  <string name="screen_login_subtitle">"Matrix 是一个用于安全、去中心化通信的开放网络。"</string>
+  <string name="screen_login_subtitle">"小圈子的私密群聊 —— 成员邀请制，永不丢失。"</string>
   <string name="screen_login_title">"欢迎回来！"</string>
   <string name="screen_login_title_with_homeserver">"登录到 %1$s"</string>
   <string name="screen_missing_key_backup_open_element_classic">"打开 Element Classic"</string>
@@ -101,7 +101,7 @@
   <string name="screen_qr_code_login_verify_code_title">"你的验证码"</string>
   <string name="screen_server_confirmation_change_server">"更改账户提供方"</string>
   <string name="screen_server_confirmation_message_login_element_dot_io">"专为 Element 员工提供的私人服务器。"</string>
-  <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix 是一个用于安全、去中心化通信的开放网络。"</string>
+  <string name="screen_server_confirmation_message_login_matrix_dot_org">"小圈子的私密群聊 —— 成员邀请制，永不丢失。"</string>
   <string name="screen_server_confirmation_message_register">"这是你的对话将存在的地方，就像你使用邮件提供者来存储电子邮件那样。"</string>
   <string name="screen_server_confirmation_title_login">"即将登录 %1$s"</string>
   <string name="screen_server_confirmation_title_picker_mode">"选择账户提供者"</string>

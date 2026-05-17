@@ -8,4 +8,7 @@
 <resources>
     <string name="screen_onboarding_alpha_title">"Welcome to Alpha"</string>
     <string name="screen_onboarding_alpha_message">"Stay connected with your team, anytime, anywhere."</string>
+    <string name="screen_alpha_signin_title">"Welcome to Alpha"</string>
+    <string name="screen_alpha_signin_subtitle">"Private group chats for tight circles — invite-only, never lost."</string>
+    <string name="screen_alpha_wordmark" translatable="false">"Alpha"</string>
 </resources>

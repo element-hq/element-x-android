@@ -9,7 +9,7 @@
   <string name="screen_account_provider_signin_title">"You’re about to sign in to %s"</string>
   <string name="screen_account_provider_signup_subtitle">"This is where your conversations will live — just like you would use an email provider to keep your emails."</string>
   <string name="screen_account_provider_signup_title">"You’re about to create an account on %s"</string>
-  <string name="screen_change_account_provider_matrix_org_subtitle">"Matrix.org is a large, free server on the public Matrix network for secure, decentralised communication, run by the Matrix.org Foundation."</string>
+  <string name="screen_change_account_provider_matrix_org_subtitle">"Alpha hosts private group chats for tight circles — members are invite-only and your space stays with you."</string>
   <string name="screen_change_account_provider_other">"Other"</string>
   <string name="screen_change_account_provider_subtitle">"Use a different account provider, such as your own private server or a work account."</string>
   <string name="screen_change_account_provider_title">"Change account provider"</string>
@@ -34,7 +34,7 @@
   <string name="screen_login_error_refresh_tokens">"This server is configured to use refresh tokens. These aren\'t supported when using password based login."</string>
   <string name="screen_login_error_unsupported_authentication">"The selected homeserver doesn\'t support password or OIDC login. Please contact your admin or choose another homeserver."</string>
   <string name="screen_login_form_header">"Enter your details"</string>
-  <string name="screen_login_subtitle">"Matrix is an open network for secure, decentralised communication."</string>
+  <string name="screen_login_subtitle">"Private group chats for tight circles — invite-only, never lost."</string>
   <string name="screen_login_title">"Welcome back!"</string>
   <string name="screen_login_title_with_homeserver">"Sign in to %1$s"</string>
   <string name="screen_missing_key_backup_open_element_classic">"Open Element Classic"</string>
@@ -101,7 +101,7 @@ Try signing in manually, or scan the QR code with another device."</string>
   <string name="screen_qr_code_login_verify_code_title">"Your verification code"</string>
   <string name="screen_server_confirmation_change_server">"Change account provider"</string>
   <string name="screen_server_confirmation_message_login_element_dot_io">"A private server for Element employees."</string>
-  <string name="screen_server_confirmation_message_login_matrix_dot_org">"Matrix is an open network for secure, decentralised communication."</string>
+  <string name="screen_server_confirmation_message_login_matrix_dot_org">"Private group chats for tight circles — invite-only, never lost."</string>
   <string name="screen_server_confirmation_message_register">"This is where your conversations will live — just like you would use an email provider to keep your emails."</string>
   <string name="screen_server_confirmation_title_login">"You’re about to sign in to %1$s"</string>
   <string name="screen_server_confirmation_title_picker_mode">"Choose account provider"</string>

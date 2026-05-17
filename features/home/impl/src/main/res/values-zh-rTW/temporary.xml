@@ -12,4 +12,5 @@
     <string name="screen_alpha_tab_me">"我"</string>
     <string name="screen_alpha_tab_coming_soon">"這裡還在建設中，敬請期待。"</string>
     <string name="screen_alpha_me_settings">"設定"</string>
+    <string name="screen_alpha_me_signout">"退出登入"</string>
 </resources>

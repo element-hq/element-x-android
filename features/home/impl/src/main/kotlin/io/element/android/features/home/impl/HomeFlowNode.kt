@@ -40,6 +40,7 @@ import io.element.android.features.invite.api.InviteData
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteView
 import io.element.android.features.invite.api.declineandblock.DeclineInviteAndBlockEntryPoint
 import io.element.android.features.leaveroom.api.LeaveRoomRenderer
+import io.element.android.features.logout.api.direct.DirectLogoutEvents
 import io.element.android.features.logout.api.direct.DirectLogoutView
 import io.element.android.features.reportroom.api.ReportRoomEntryPoint
 import io.element.android.features.rolesandpermissions.api.ChangeRoomMemberRolesEntryPoint
@@ -223,6 +224,11 @@ class HomeFlowNode(
             }
             AlphaHomeShell(
                 onSettingsClick = callback::navigateToSettings,
+                onSignOutClick = {
+                    // Fire the direct logout flow. DirectLogoutView is already rendered
+                    // below, so the confirmation dialog shows up once the event lands.
+                    state.directLogoutState.eventSink(DirectLogoutEvents.Logout(ignoreSdkError = false))
+                },
                 currentUser = currentUser,
                 modifier = modifier,
             ) {

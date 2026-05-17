@@ -36,6 +36,7 @@ import io.element.android.libraries.designsystem.theme.components.HorizontalDivi
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.ListItem
+import io.element.android.libraries.designsystem.theme.components.ListItemStyle
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.matrix.ui.components.MatrixUserHeader
@@ -48,6 +49,7 @@ import io.element.android.libraries.matrix.ui.components.MatrixUserHeader
 @Composable
 internal fun AlphaHomeShell(
     onSettingsClick: () -> Unit,
+    onSignOutClick: () -> Unit,
     currentUser: MatrixUser?,
     modifier: Modifier = Modifier,
     homeContent: @Composable () -> Unit,
@@ -98,6 +100,7 @@ internal fun AlphaHomeShell(
                 AlphaTab.Me -> AlphaMeTab(
                     currentUser = currentUser,
                     onSettingsClick = onSettingsClick,
+                    onSignOutClick = onSignOutClick,
                 )
             }
         }
@@ -131,6 +134,7 @@ private fun AlphaComingSoonTab(titleRes: Int) {
 private fun AlphaMeTab(
     currentUser: MatrixUser?,
     onSettingsClick: () -> Unit,
+    onSignOutClick: () -> Unit,
 ) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Spacer(Modifier.height(16.dp))
@@ -147,6 +151,14 @@ private fun AlphaMeTab(
             headlineContent = { Text(stringResource(R.string.screen_alpha_me_settings)) },
             leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Settings())),
             onClick = onSettingsClick,
+        )
+        // Sign out lives directly on the Me tab so a casual user doesn't have to dig
+        // into Settings to find Element's "Remove this device" entry.
+        ListItem(
+            headlineContent = { Text(stringResource(R.string.screen_alpha_me_signout)) },
+            leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.Close())),
+            style = ListItemStyle.Destructive,
+            onClick = onSignOutClick,
         )
     }
 }

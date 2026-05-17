@@ -12,4 +12,5 @@
     <string name="screen_alpha_tab_me">"我"</string>
     <string name="screen_alpha_tab_coming_soon">"这里还在建设中，敬请期待。"</string>
     <string name="screen_alpha_me_settings">"设置"</string>
+    <string name="screen_alpha_me_signout">"退出登录"</string>
 </resources>
