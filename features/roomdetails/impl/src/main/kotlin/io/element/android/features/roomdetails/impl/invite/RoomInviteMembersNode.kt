@@ -74,8 +74,8 @@ class RoomInviteMembersNode(
 
         AsyncActionView(
             async = state.createRoomFromDmAction,
-            onSuccess = {
-                callback.openCreatedRoom(it)
+            onSuccess = { roomId ->
+                callback.openCreatedRoom(roomId)
             },
             progressDialog = {
                 ProgressDialog(text = stringResource(CommonStrings.common_creating_room))
@@ -84,10 +84,6 @@ class RoomInviteMembersNode(
                 state.eventSink(InvitePeopleEvents.ClearError)
             }
         )
-        LaunchedEffect(state.createRoomFromDmAction.isSuccess()) {
-            val createdRoomId = state.createRoomFromDmAction.dataOrNull() ?: return@LaunchedEffect
-            callback.openCreatedRoom(createdRoomId)
-        }
 
         RoomInviteMembersView(
             state = state,

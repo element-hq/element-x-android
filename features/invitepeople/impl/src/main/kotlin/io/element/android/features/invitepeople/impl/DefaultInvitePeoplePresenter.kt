@@ -279,7 +279,9 @@ class DefaultInvitePeoplePresenter(
         createRoomFromDmAction.runUpdatingState {
             val currentUsers = currentRoom.getMembers(limit = 100).getOrNull().orEmpty()
                 .filter { it.membership.isActive() }
-            val newUserIds = currentUsers.map { it.userId } + selectedUsers.map { it.userId }
+            val invitees = (currentUsers.map { it.userId } + selectedUsers.map { it.userId })
+                .filter { it != matrixClient.sessionId }
+                .distinct()
             matrixClient.createRoom(
                 CreateRoomParameters(
                     name = null,
@@ -288,7 +290,7 @@ class DefaultInvitePeoplePresenter(
                     isDirect = false,
                     visibility = RoomVisibility.Private,
                     preset = RoomPreset.PRIVATE_CHAT,
-                    invite = newUserIds.filter { it != matrixClient.sessionId }.distinct(),
+                    invite = invitees,
                     avatar = null,
                     joinRuleOverride = JoinRule.Invite,
                     historyVisibilityOverride = RoomHistoryVisibility.Invited,

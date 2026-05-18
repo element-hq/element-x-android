@@ -213,7 +213,7 @@ fun RoomDetailsView(
             state.roomMemberDetailsState?.let { dmMemberDetails ->
                 if (state.canInvite) {
                     PreferenceCategory {
-                        InviteItem(invitePeople = invitePeople)
+                        InviteItem(onClick = invitePeople)
                     }
                 }
                 PreferenceCategory {
@@ -381,7 +381,7 @@ private fun MainActionsSection(
                 onClick = { onCall(CallIntent.VIDEO) },
             )
         }
-        if (state.canInvite) {
+        if (state.canInvite && state.roomType !is RoomDetailsType.Dm) {
             MainActionButton(
                 title = stringResource(CommonStrings.action_invite),
                 imageVector = CompoundIcons.UserAdd(),
@@ -702,12 +702,12 @@ private fun MembersItem(
 
 @Composable
 private fun InviteItem(
-    invitePeople: () -> Unit,
+    onClick: () -> Unit,
 ) {
     ListItem(
         headlineContent = { Text(stringResource(R.string.screen_room_details_invite_title)) },
         leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.UserAdd())),
-        onClick = invitePeople,
+        onClick = onClick,
     )
 }
 

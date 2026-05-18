@@ -382,9 +382,9 @@ class LoggedInFlowNode(
             }
             is NavTarget.Room -> {
                 val joinedRoomCallback = object : JoinedRoomLoadedFlowNode.Callback {
-                    override fun navigateToRoom(roomId: RoomId, serverNames: List<String>) {
+                    override fun navigateToRoom(roomId: RoomId, serverNames: List<String>, clearBackStack: Boolean) {
                         lifecycleScope.launch {
-                            attachRoom(roomIdOrAlias = roomId.toRoomIdOrAlias(), serverNames = serverNames, clearBackstack = false)
+                            attachRoom(roomIdOrAlias = roomId.toRoomIdOrAlias(), serverNames = serverNames, clearBackstack = clearBackStack)
                         }
                     }
 
