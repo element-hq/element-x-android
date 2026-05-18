@@ -14,4 +14,7 @@
     <string name="screen_alpha_me_settings">"Settings"</string>
     <string name="screen_alpha_app_title" translatable="false">"Alpha"</string>
     <string name="screen_alpha_me_signout">"Sign out"</string>
+    <string name="screen_alpha_contacts_section_dms">"Contacts"</string>
+    <string name="screen_alpha_contacts_section_groups">"Groups"</string>
+    <string name="screen_alpha_contacts_empty">"No contacts yet. Start a chat to add one."</string>
 </resources>

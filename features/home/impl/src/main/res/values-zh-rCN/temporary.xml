@@ -13,4 +13,7 @@
     <string name="screen_alpha_tab_coming_soon">"这里还在建设中，敬请期待。"</string>
     <string name="screen_alpha_me_settings">"设置"</string>
     <string name="screen_alpha_me_signout">"退出登录"</string>
+    <string name="screen_alpha_contacts_section_dms">"联系人"</string>
+    <string name="screen_alpha_contacts_section_groups">"群聊"</string>
+    <string name="screen_alpha_contacts_empty">"还没有联系人。去聊一个吧。"</string>
 </resources>

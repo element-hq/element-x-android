@@ -35,7 +35,9 @@ import io.element.android.features.home.api.HomeEntryPoint
 import io.element.android.features.home.impl.alpha.AlphaHomeShell
 import io.element.android.features.home.impl.components.RoomListMenuAction
 import io.element.android.features.home.impl.model.RoomListRoomSummary
+import io.element.android.features.home.impl.roomlist.RoomListContentState
 import io.element.android.features.home.impl.roomlist.RoomListEvent
+import kotlinx.collections.immutable.persistentListOf
 import io.element.android.features.invite.api.InviteData
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteView
 import io.element.android.features.invite.api.declineandblock.DeclineInviteAndBlockEntryPoint
@@ -222,6 +224,13 @@ class HomeFlowNode(
                 state.currentUserAndNeighbors.size > 1 -> state.currentUserAndNeighbors.getOrNull(1)
                 else -> null
             }
+            // The Contacts tab in AlphaHomeShell consumes the same summaries the chat
+            // list already builds — we just split them by isDm to render two sections.
+            // When the room list is still loading we hand it an empty list so the empty
+            // state shows ("No contacts yet, start a chat to add one.").
+            val contactSummaries = (state.roomListState.contentState as? RoomListContentState.Rooms)
+                ?.summaries
+                ?: persistentListOf()
             AlphaHomeShell(
                 onSettingsClick = callback::navigateToSettings,
                 onSignOutClick = {
@@ -229,7 +238,9 @@ class HomeFlowNode(
                     // below, so the confirmation dialog shows up once the event lands.
                     state.directLogoutState.eventSink(DirectLogoutEvents.Logout(ignoreSdkError = false))
                 },
+                onRoomClick = ::navigateToRoom,
                 currentUser = currentUser,
+                roomSummaries = contactSummaries,
                 modifier = modifier,
             ) {
                 HomeView(
