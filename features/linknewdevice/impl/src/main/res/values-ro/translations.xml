@@ -26,6 +26,7 @@
   <string name="screen_link_new_device_root_loading_qr_code">"Se încarcă codul QR…"</string>
   <string name="screen_link_new_device_root_mobile_device">"Dispozitiv mobil"</string>
   <string name="screen_link_new_device_root_title">"Ce tip de dispozitiv doriți să conectați?"</string>
+  <string name="screen_link_new_device_wrong_number_subtitle">"Încercați din nou și asigurați-vă că ați introdus corect codul de 2 cifre. Dacă numerele tot nu se potrivesc, contactați furnizorul contului."</string>
   <string name="screen_link_new_device_wrong_number_title">"Numerele nu se potrivesc"</string>
   <string name="screen_qr_code_login_connection_note_secure_state_description">"Nu a putut fi făcută o conexiune sigură la noul dispozitiv. Dispozitivele existente sunt încă în siguranță și nu trebuie să vă faceți griji cu privire la ele."</string>
   <string name="screen_qr_code_login_connection_note_secure_state_list_header">"Și acum?"</string>
@@ -39,6 +40,8 @@
   <string name="screen_qr_code_login_error_cancelled_title">"Cererea de autentificare a fost anulată"</string>
   <string name="screen_qr_code_login_error_declined_subtitle">"Autentificarea a fost refuzată pe celălalt dispozitiv."</string>
   <string name="screen_qr_code_login_error_declined_title">"Autentificarea a fost refuzată"</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_subtitle">"Nu trebuie să faceți nimic altceva."</string>
+  <string name="screen_qr_code_login_error_device_already_signed_in_title">"Celălalt dispozitiv este deja conectat"</string>
   <string name="screen_qr_code_login_error_expired_subtitle">"Autentificarea a expirat. Vă rugăm să încercați din nou."</string>
   <string name="screen_qr_code_login_error_expired_title">"Autentificarea nu a fost finalizată la timp"</string>
   <string name="screen_qr_code_login_error_linking_not_suported_subtitle">"Celălalt dispozitiv nu acceptă autentificarea la %s cu un cod QR.

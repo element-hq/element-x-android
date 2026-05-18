@@ -108,8 +108,8 @@
   <string name="screen_room_notification_settings_allow_custom">"Zezwalaj na ustawienia niestandardowe"</string>
   <string name="screen_room_notification_settings_allow_custom_footnote">"Włączenie tej opcji nadpisze ustawienie domyślne"</string>
   <string name="screen_room_notification_settings_custom_settings_title">"Powiadamiaj mnie o tym czacie przez"</string>
-  <string name="screen_room_notification_settings_default_setting_footnote">"Możesz to zmienić w swoim %1$s."</string>
-  <string name="screen_room_notification_settings_default_setting_footnote_content_link">"ustawienia globalne"</string>
+  <string name="screen_room_notification_settings_default_setting_footnote">"Możesz to zmienić w %1$s."</string>
+  <string name="screen_room_notification_settings_default_setting_footnote_content_link">"ustawieniach globalnych"</string>
   <string name="screen_room_notification_settings_default_setting_title">"Ustawienie domyślne"</string>
   <string name="screen_room_notification_settings_edit_remove_setting">"Usuń ustawienia własne"</string>
   <string name="screen_room_notification_settings_error_loading_settings">"Wystąpił błąd podczas ładowania ustawień powiadomień."</string>

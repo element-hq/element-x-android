@@ -2,4 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_invite_users_already_a_member">"Sa juba oled jututoa liige"</string>
   <string name="screen_invite_users_already_invited">"Sa juba oled kutse saanud"</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_multiple_users">"Sul pole hetkel nende kontaktidega ühtegi vestlust. Enne jätkamist kinnita neile siia jututuppa kutse saatmine."</string>
+  <string name="screen_invite_users_confirm_dialog_subtitle_one_user">"Sul pole hetkel selle kontaktiga ühtegi vestlust. Enne jätkamist kinnita talle siia jututuppa kutse saatmine."</string>
+  <string name="screen_invite_users_confirm_dialog_title_mutiple_users">"Kas kutsud uued kontaktid siia jututuppa?"</string>
+  <string name="screen_invite_users_confirm_dialog_title_one_user">"Kas kutsud uue kontakti siia jututuppa?"</string>
 </resources>
