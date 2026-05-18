@@ -23,6 +23,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
@@ -54,6 +55,8 @@ import io.element.android.libraries.matrix.ui.components.MatrixUserRow
 import io.element.android.libraries.matrix.ui.components.SelectedUsersRowList
 import io.element.android.libraries.matrix.ui.model.getAvatarData
 import io.element.android.libraries.matrix.ui.model.getBestName
+import io.element.android.libraries.testtags.TestTags
+import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.strings.simplePluralStringResource
 import kotlinx.collections.immutable.ImmutableList
@@ -298,7 +301,7 @@ private fun InvitePeopleConfirmModal(
                 text = stringResource(CommonStrings.action_remove),
                 onClick = onRemove,
                 leadingIcon = IconSource.Vector(CompoundIcons.Close()),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f).testTag(TestTags.confirmInviteUnknown),
             )
             Button(
                 text = stringResource(CommonStrings.action_invite),
