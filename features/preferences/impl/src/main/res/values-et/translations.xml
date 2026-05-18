@@ -11,7 +11,10 @@
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Peida jututubade kutsetest tunnuspildid"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Peida meedia eelvaated ajajoonel"</string>
   <string name="screen_advanced_settings_labs">"Katsed"</string>
+  <string name="screen_advanced_settings_live_location_section_description">"Vahemaa, mille pead andmete uuenduse käivitamiseks läbima."</string>
+  <string name="screen_advanced_settings_live_location_section_footer">"Veendu, et sellel rakendusel on õigus kasutada funktsionaalsust „Täpne asukoht“. Õiguste muutmiseks ava %1$s."</string>
   <string name="screen_advanced_settings_live_location_section_footer_link">"Rakenduse seadistused"</string>
+  <string name="screen_advanced_settings_live_location_section_title">"Andmete uuendused reaalajas asukoha jagamisel"</string>
   <plurals name="screen_advanced_settings_live_location_update_distance">
     <item quantity="one">"Iga %1$d meeter"</item>
     <item quantity="other">"Iga %1$d meetrit"</item>
@@ -81,6 +84,7 @@ Kui sa jätkad muutmist, siis võivad muutuda ka need peidetud eelistused."</str
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"süsteemi seadistusi"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Süsteemi teavitused on välja lülitatud"</string>
   <string name="screen_notification_settings_title">"Teavitused"</string>
+  <string name="theme_black">"Süsimust kujundus"</string>
   <string name="theme_dark">"Tume"</string>
   <string name="theme_light">"Hele"</string>
   <string name="theme_system">"Süsteem"</string>

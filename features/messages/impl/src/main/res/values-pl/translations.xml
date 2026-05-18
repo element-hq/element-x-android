@@ -32,7 +32,7 @@
   <string name="screen_report_content_hint">"Powód zgłoszenia treści"</string>
   <string name="screen_room_attachment_source_camera">"Kamera"</string>
   <string name="screen_room_attachment_source_camera_photo">"Zrób zdjęcie"</string>
-  <string name="screen_room_attachment_source_camera_video">"Nagraj film"</string>
+  <string name="screen_room_attachment_source_camera_video">"Nagraj wideo"</string>
   <string name="screen_room_attachment_source_files">"Załącznik"</string>
   <string name="screen_room_attachment_source_gallery">"Zdjęcia i filmy"</string>
   <string name="screen_room_attachment_source_location">"Udostępnij lokalizację"</string>

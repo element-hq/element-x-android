@@ -235,7 +235,7 @@ Syy: %1$s."</string>
   <string name="common_failed">"Epäonnistui"</string>
   <string name="common_favourite">"Lisää suosikkeihin"</string>
   <string name="common_favourited">"Lisätty suosikkeihin"</string>
-    <string name="common_fetching_notifications_title_android">"Synkronoidaan ilmoituksia…"</string>
+  <string name="common_fetching_notifications_title_android">"Synkronoidaan ilmoituksia…"</string>
   <string name="common_file">"Tiedosto"</string>
   <string name="common_file_deleted">"Tiedosto poistettu"</string>
   <string name="common_file_saved">"Tiedosto tallennettu"</string>

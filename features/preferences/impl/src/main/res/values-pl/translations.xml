@@ -85,6 +85,7 @@ Niektóre ustawienia mogą ulec zmianie, jeśli kontynuujesz."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"ustawienia systemowe"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Powiadomienia systemowe wyłączone"</string>
   <string name="screen_notification_settings_title">"Powiadomienia"</string>
+  <string name="theme_black">"Czarny"</string>
   <string name="theme_dark">"Ciemny"</string>
   <string name="theme_light">"Jasny"</string>
   <string name="theme_system">"System"</string>
