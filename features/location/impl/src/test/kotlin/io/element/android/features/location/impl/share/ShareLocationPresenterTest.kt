@@ -29,8 +29,6 @@ import io.element.android.features.location.impl.live.LiveLocationStore
 import io.element.android.features.location.test.FakeActiveLiveLocationShareManager
 import io.element.android.features.messages.test.FakeMessageComposerContext
 import io.element.android.libraries.dateformatter.test.FakeDurationFormatter
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -77,7 +75,6 @@ class ShareLocationPresenterTest {
     private val fakeMessageComposerContext = FakeMessageComposerContext()
     private val fakeLocationActions = FakeLocationActions()
     private val fakeBuildMeta = aBuildMeta(applicationName = "app name")
-    private val fakeFeatureFlagService = FakeFeatureFlagService()
     private val fakeMatrixClient = FakeMatrixClient(sessionId = A_USER_ID)
 
     private val durationFormatter = FakeDurationFormatter()
@@ -96,7 +93,6 @@ class ShareLocationPresenterTest {
         messageComposerContext = fakeMessageComposerContext,
         locationActions = locationActions,
         buildMeta = fakeBuildMeta,
-        featureFlagService = fakeFeatureFlagService,
         client = fakeMatrixClient,
         durationFormatter = durationFormatter,
         liveLocationShareManager = liveLocationShareManager,
@@ -658,21 +654,7 @@ class ShareLocationPresenterTest {
     }
 
     @Test
-    fun `canShareLiveLocation is false when the feature is disabled`() = runTest {
-        fakeFeatureFlagService.setFeatureEnabled(FeatureFlags.LiveLocationSharing, false)
-        val shareLocationPresenter = createShareLocationPresenter(
-            timelineMode = Timeline.Mode.Live,
-        )
-        shareLocationPresenter.test {
-            skipItems(1)
-            val state = awaitItem()
-            assertThat(state.canShareLiveLocation).isFalse()
-        }
-    }
-
-    @Test
-    fun `canShareLiveLocation is true when the feature is enabled`() = runTest {
-        fakeFeatureFlagService.setFeatureEnabled(FeatureFlags.LiveLocationSharing, true)
+    fun `canShareLiveLocation is true in live timeline`() = runTest {
         val shareLocationPresenter = createShareLocationPresenter(
             timelineMode = Timeline.Mode.Live,
         )
@@ -685,7 +667,6 @@ class ShareLocationPresenterTest {
 
     @Test
     fun `canShareLiveLocation is false in thread timeline`() = runTest {
-        fakeFeatureFlagService.setFeatureEnabled(FeatureFlags.LiveLocationSharing, true)
         val shareLocationPresenter = createShareLocationPresenter(
             timelineMode = Timeline.Mode.Thread(A_THREAD_ID),
         )
