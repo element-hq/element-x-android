@@ -446,7 +446,8 @@ class RustMatrixAuthenticationService(
         }
 
         if (baseUrlOrServerName.isBlank()) {
-            error("The QR code contains an empty base URL or server name, which is invalid")
+            Timber.e("The QR code contains an empty base URL or server name, which is invalid")
+            throw HumanQrLoginException.Unknown()
         }
 
         return rustMatrixClientFactory
