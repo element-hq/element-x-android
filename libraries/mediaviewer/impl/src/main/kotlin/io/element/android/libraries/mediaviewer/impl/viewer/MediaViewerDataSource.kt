@@ -11,12 +11,13 @@ package io.element.android.libraries.mediaviewer.impl.viewer
 import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.ProduceStateScope
 import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.produceState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.extensions.mapCatchingExceptions
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaFile
 import io.element.android.libraries.matrix.api.timeline.Timeline
@@ -36,13 +37,16 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 
 class MediaViewerDataSource(
     mode: MediaViewerMode,
+    private val coroutineScope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
     private val galleryDataSource: MediaGalleryDataSource,
     private val mediaLoader: MatrixMediaLoader,
@@ -74,13 +78,28 @@ class MediaViewerDataSource(
         localMediaStates.clear()
     }
 
+    /**
+     * Helper function to translate the [dataFlow] result to a Compose [State] that can be observed in the UI.
+     */
     @Composable
-    fun collectAsState(): State<ImmutableList<MediaViewerPageData>> {
-        return remember { dataFlow() }.collectAsState(initialData())
+    fun produceState(
+        producer: suspend ProduceStateScope<ImmutableList<MediaViewerPageData>>.(StateFlow<ImmutableList<MediaViewerPageData>>) -> Unit
+    ): State<ImmutableList<MediaViewerPageData>> {
+        return produceState(initialValue = initialData()) {
+            producer(dataFlow())
+        }
+    }
+
+    /**
+     * Find the index of the page corresponding to the given eventId, or null if not found.
+     */
+    fun findEventIndex(eventId: EventId?): Int? {
+        if (eventId == null) return null
+        return dataFlow().value.indexOfFirst { (it as? MediaViewerPageData.MediaViewerData)?.eventId == eventId }.takeIf { it >= 0 }
     }
 
     @VisibleForTesting
-    internal fun dataFlow(): Flow<ImmutableList<MediaViewerPageData>> {
+    internal fun dataFlow(): StateFlow<ImmutableList<MediaViewerPageData>> {
         return galleryDataSource.groupedMediaItemsFlow()
             .map { groupedItems ->
                 when (groupedItems) {
@@ -107,6 +126,11 @@ class MediaViewerDataSource(
                     }
                 }
             }
+            .stateIn(
+                scope = CoroutineScope(coroutineScope.coroutineContext + dispatcher),
+                started = SharingStarted.Lazily,
+                initialValue = initialData(),
+            )
     }
 
     private fun initialData(): ImmutableList<MediaViewerPageData> {

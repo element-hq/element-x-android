@@ -56,7 +56,6 @@ class MediaViewerViewTest {
         }
         eventsRecorder.assertList(
             listOf(
-                MediaViewerEvent.OnNavigateTo(0),
                 MediaViewerEvent.LoadMedia(state.listData.first() as MediaViewerPageData.MediaViewerData),
             )
         )
@@ -114,7 +113,6 @@ class MediaViewerViewTest {
         onNodeWithContentDescription(contentDescription).performClick()
         eventsRecorder.assertList(
             listOf(
-                MediaViewerEvent.OnNavigateTo(0),
                 MediaViewerEvent.LoadMedia(data),
                 expectedEvent,
             )
@@ -170,7 +168,6 @@ class MediaViewerViewTest {
         clickOn(textRes)
         eventsRecorder.assertList(
             listOf(
-                MediaViewerEvent.OnNavigateTo(0),
                 MediaViewerEvent.LoadMedia(data),
                 expectedEvent,
             )
@@ -200,7 +197,6 @@ class MediaViewerViewTest {
             .assertDoesNotExist()
         eventsRecorder.assertList(
             listOf(
-                MediaViewerEvent.OnNavigateTo(0),
                 MediaViewerEvent.LoadMedia(state.listData.first() as MediaViewerPageData.MediaViewerData),
             )
         )
@@ -223,7 +219,6 @@ class MediaViewerViewTest {
         }
         eventsRecorder.assertList(
             listOf(
-                MediaViewerEvent.OnNavigateTo(0),
                 MediaViewerEvent.LoadMedia(state.listData.first() as MediaViewerPageData.MediaViewerData),
             )
         )
@@ -244,7 +239,6 @@ class MediaViewerViewTest {
         clickOn(CommonStrings.action_retry)
         eventsRecorder.assertList(
             listOf(
-                MediaViewerEvent.OnNavigateTo(0),
                 MediaViewerEvent.LoadMedia(data),
                 MediaViewerEvent.LoadMedia(data),
             )
@@ -266,7 +260,6 @@ class MediaViewerViewTest {
         clickOn(CommonStrings.action_cancel)
         eventsRecorder.assertList(
             listOf(
-                MediaViewerEvent.OnNavigateTo(0),
                 MediaViewerEvent.LoadMedia(data),
                 MediaViewerEvent.ClearLoadingError(data)
             )

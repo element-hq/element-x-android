@@ -44,7 +44,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -178,9 +177,10 @@ fun MediaViewerView(
         val pagerState = rememberPagerState(state.currentIndex, 0f) {
             state.listData.size
         }
-        LaunchedEffect(pagerState) {
-            snapshotFlow { pagerState.currentPage }.collect { page ->
-                state.eventSink(MediaViewerEvent.OnNavigateTo(page))
+
+        LaunchedEffect(pagerState.targetPage, state.currentIndex) {
+            if (pagerState.targetPage != state.currentIndex) {
+                state.eventSink(MediaViewerEvent.OnNavigateTo(pagerState.targetPage))
             }
         }
         HorizontalPager(
