@@ -434,13 +434,23 @@ class RustMatrixAuthenticationService(
         qrCodeData: QrCodeData,
     ): Client {
         Timber.d("Creating client for QR Code login with simplified sliding sync")
+        // The 2025 versions of MSC4108 should always give us the baseUrl
+        val baseUrlOrServerName = qrCodeData.baseUrl() ?: qrCodeData.serverName()
+
+        if (baseUrlOrServerName == null) {
+            // With the 2024 version of MSC4108 we treat the absence of serverName as meaning that
+            // the other device is not signed in.
+            Timber.e("The QR code is from a device that is not yet signed in")
+            throw HumanQrLoginException.OtherDeviceNotSignedIn()
+        }
+
         return rustMatrixClientFactory
             .getBaseClientBuilder(
                 sessionPaths = sessionPaths,
                 passphrase = pendingPassphrase,
                 slidingSyncType = ClientBuilderSlidingSync.Discovered,
             )
-            .serverNameOrHomeserverUrl(qrCodeData.serverName()!!)
+            .serverNameOrHomeserverUrl(baseUrlOrServerName)
             .build()
     }
 
