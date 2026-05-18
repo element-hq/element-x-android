@@ -13,6 +13,8 @@ package io.element.android.features.roomdetails.impl
 import androidx.activity.ComponentActivity
 import androidx.compose.ui.test.AndroidComposeUiTest
 import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.onAllNodesWithText
+import androidx.compose.ui.test.onLast
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.performClick
@@ -337,6 +339,25 @@ class RoomDetailsViewTest {
                 onProfileClick = callback,
             )
             clickOn(R.string.screen_room_details_profile_row_title)
+        }
+    }
+
+    @Config(qualifiers = "h1024dp")
+    @Test
+    fun `click on invite invokes the expected callback`() = runAndroidComposeUiTest {
+        ensureCalledOnce { callback ->
+            setRoomDetailView(
+                state = aRoomDetailsState(
+                    eventSink = EventsRecorder(expectEvents = false),
+                    roomType = RoomDetailsType.Dm(
+                        aDmRoomMember(userId = UserId("@other:local.org")),
+                    ),
+                    roomMemberDetailsState = aUserProfileState(userId = A_USER_ID),
+                    canInvite = true,
+                ),
+                invitePeople = callback,
+            )
+            onAllNodesWithText(activity!!.getString(R.string.screen_room_details_invite_title)).onLast().performClick()
         }
     }
 }

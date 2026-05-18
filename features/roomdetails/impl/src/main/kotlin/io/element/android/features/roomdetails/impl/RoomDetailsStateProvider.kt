@@ -180,6 +180,7 @@ fun aDmRoomDetailsState(
     roomName = roomName,
     isPublic = false,
     isEncrypted = isEncrypted,
+    canInvite = true,
     roomType = RoomDetailsType.Dm(otherMember = aDmRoomMember(isIgnored = isDmMemberIgnored)),
     roomMemberDetailsState = aUserProfileState(
         isBlocked = AsyncData.Success(isDmMemberIgnored),
