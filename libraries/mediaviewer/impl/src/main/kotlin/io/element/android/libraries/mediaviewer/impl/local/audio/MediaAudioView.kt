@@ -88,7 +88,7 @@ fun MediaAudioView(
     modifier: Modifier = Modifier,
     isDisplayed: Boolean = true,
 ) {
-    val exoPlayer = rememberExoPlayer()
+    val exoPlayer = rememberExoPlayer(forAudioOnly = true)
     ExoPlayerMediaAudioView(
         isDisplayed = isDisplayed,
         localMediaViewState = localMediaViewState,

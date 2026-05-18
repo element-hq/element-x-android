@@ -73,7 +73,7 @@ fun MediaVideoView(
     audioFocus: AudioFocus?,
     modifier: Modifier = Modifier,
 ) {
-    val exoPlayer = rememberExoPlayer()
+    val exoPlayer = rememberExoPlayer(forAudioOnly = false)
     ExoPlayerMediaVideoView(
         isDisplayed = isDisplayed,
         localMediaViewState = localMediaViewState,
