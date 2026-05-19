@@ -114,22 +114,20 @@ class MediaViewerNode(
         }
     }
 
-    private val presenter by lazy {
-        presenterFactory.create(
-            inputs = inputs,
-            navigator = this,
-            dataSource = MediaViewerDataSource(
-                mode = inputs.mode,
-                coroutineScope = lifecycleScope,
-                dispatcher = coroutineDispatchers.computation,
-                galleryDataSource = mediaGallerySource,
-                mediaLoader = mediaLoader,
-                localMediaFactory = localMediaFactory,
-                systemClock = systemClock,
-                pagerKeysHandler = pagerKeysHandler,
-            )
+    private val presenter = presenterFactory.create(
+        inputs = inputs,
+        navigator = this,
+        dataSource = MediaViewerDataSource(
+            mode = inputs.mode,
+            coroutineScope = lifecycleScope,
+            dispatcher = coroutineDispatchers.computation,
+            galleryDataSource = mediaGallerySource,
+            mediaLoader = mediaLoader,
+            localMediaFactory = localMediaFactory,
+            systemClock = systemClock,
+            pagerKeysHandler = pagerKeysHandler,
         )
-    }
+    )
 
     @Composable
     override fun View(modifier: Modifier) {
