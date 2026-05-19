@@ -49,7 +49,18 @@ object SimplePlayerModule {
     @Provides
     fun simplePlayerProvider(
         @ApplicationContext context: Context,
-    ): SimplePlayer = DefaultSimplePlayer(ExoPlayer.Builder(context).build())
+    ): SimplePlayer {
+        val exoPlayer = ExoPlayer.Builder(context)
+            .setAudioAttributes(
+                androidx.media3.common.AudioAttributes.Builder()
+                    .setUsage(androidx.media3.common.C.USAGE_VOICE_COMMUNICATION)
+                    .setContentType(androidx.media3.common.C.AUDIO_CONTENT_TYPE_SPEECH)
+                    .build(),
+                true, // handleAudioFocus
+            )
+            .build()
+        return DefaultSimplePlayer(exoPlayer)
+    }
 }
 
 /**
