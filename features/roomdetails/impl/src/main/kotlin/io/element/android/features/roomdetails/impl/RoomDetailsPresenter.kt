@@ -17,7 +17,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.knockrequests.api.KnockRequestPermissions
 import io.element.android.features.knockrequests.api.knockRequestPermissions
@@ -59,8 +61,9 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-@Inject
+@AssistedInject
 class RoomDetailsPresenter(
+    @Assisted private val navigator: RoomDetailsNavigator,
     private val client: MatrixClient,
     private val room: JoinedRoom,
     private val notificationSettingsService: NotificationSettingsService,
@@ -74,6 +77,13 @@ class RoomDetailsPresenter(
     private val sessionPreferencesStore: SessionPreferencesStore,
     private val notificationCleaner: NotificationCleaner,
 ) : Presenter<RoomDetailsState> {
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            navigator: RoomDetailsNavigator,
+        ): RoomDetailsPresenter
+    }
+
     @Composable
     override fun present(): RoomDetailsState {
         val scope = rememberCoroutineScope()
@@ -277,6 +287,9 @@ class RoomDetailsPresenter(
         room.setUnreadFlag(isUnread = true)
             .onSuccess {
                 analyticsService.captureInteraction(name = Interaction.Name.MobileRoomListRoomContextMenuUnreadToggle)
+            }
+            .onSuccess {
+                navigator.onDone()
             }
     }
 }
