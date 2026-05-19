@@ -25,7 +25,7 @@ class ShowQrCodeStateProvider : PreviewParameterProvider<ShowQrCodeState> {
         )
 }
 
-private fun aShowQrCodeState(
+internal fun aShowQrCodeState(
     data1: AsyncData<String> = AsyncData.Success("DATA"),
     data2: AsyncData<String> = AsyncData.Uninitialized,
     dataToRender: Int = 1,
