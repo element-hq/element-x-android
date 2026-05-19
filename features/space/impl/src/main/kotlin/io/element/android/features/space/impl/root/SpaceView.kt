@@ -26,6 +26,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.input.TextFieldState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -79,6 +80,7 @@ import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.IconSource
 import io.element.android.libraries.designsystem.theme.components.OutlinedButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
+import io.element.android.libraries.designsystem.theme.components.SearchField
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
@@ -111,11 +113,13 @@ fun SpaceView(
 ) {
     var handledBack by remember { mutableStateOf(false) }
     BackHandler(enabled = !handledBack) {
-        if (state.isManageMode) {
-            state.eventSink(SpaceEvents.ExitManageMode)
-        } else {
-            handledBack = true
-            onBackClick()
+        when {
+            state.isSearchMode -> state.eventSink(SpaceEvents.ExitSearchMode)
+            state.isManageMode -> state.eventSink(SpaceEvents.ExitManageMode)
+            else -> {
+                handledBack = true
+                onBackClick()
+            }
         }
     }
 
@@ -124,7 +128,17 @@ fun SpaceView(
         topBar = {
             Box {
                 AnimatedVisibility(
-                    visible = state.isManageMode,
+                    visible = state.isSearchMode,
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ) {
+                    SearchModeTopBar(
+                        searchQuery = state.searchQuery,
+                        onCloseClick = { state.eventSink(SpaceEvents.ExitSearchMode) },
+                    )
+                }
+                AnimatedVisibility(
+                    visible = state.isManageMode && !state.isSearchMode,
                     enter = fadeIn(),
                     exit = fadeOut()
                 ) {
@@ -136,7 +150,7 @@ fun SpaceView(
                     )
                 }
                 AnimatedVisibility(
-                    visible = !state.isManageMode,
+                    visible = !state.isManageMode && !state.isSearchMode,
                     enter = fadeIn(),
                     exit = fadeOut()
                 ) {
@@ -153,6 +167,7 @@ fun SpaceView(
                         onManageRoomsClick = { state.eventSink(SpaceEvents.EnterManageMode) },
                         onAddRoomClick = onAddRoomClick,
                         onCreateRoomClick = onCreateRoomClick,
+                        onSearchClick = { state.eventSink(SpaceEvents.EnterSearchMode) },
                     )
                 }
             }
@@ -410,6 +425,7 @@ private fun SpaceViewTopBar(
     onManageRoomsClick: () -> Unit,
     onAddRoomClick: () -> Unit,
     onCreateRoomClick: () -> Unit,
+    onSearchClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     TopAppBar(
@@ -428,6 +444,12 @@ private fun SpaceViewTopBar(
             )
         },
         actions = {
+            IconButton(onClick = onSearchClick) {
+                Icon(
+                    imageVector = CompoundIcons.Search(),
+                    contentDescription = stringResource(CommonStrings.action_search),
+                )
+            }
             var showMenu by remember { mutableStateOf(false) }
             IconButton(
                 onClick = { showMenu = !showMenu }
@@ -539,6 +561,31 @@ private fun ManageModeTopBar(
                 text = stringResource(CommonStrings.action_remove),
                 onClick = onRemoveClick,
                 enabled = isRemoveButtonEnabled,
+            )
+        },
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun SearchModeTopBar(
+    searchQuery: TextFieldState,
+    onCloseClick: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    TopAppBar(
+        modifier = modifier,
+        navigationIcon = {
+            BackButton(
+                onClick = onCloseClick,
+                imageVector = CompoundIcons.Close()
+            )
+        },
+        title = {
+            SearchField(
+                state = searchQuery,
+                modifier = Modifier.fillMaxWidth(),
+                placeholder = stringResource(CommonStrings.action_search),
             )
         },
     )
