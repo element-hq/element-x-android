@@ -788,6 +788,51 @@ class MediaViewerPresenterTest {
     }
 
     @Test
+    fun `present - receiving loading items with different timestamps emits different items too`() = runTest {
+        val loadMoreLambda = lambdaRecorder<Timeline.PaginationDirection, Unit> { }
+        val mediaGalleryDataSource = FakeMediaGalleryDataSource(
+            startLambda = { },
+            loadMoreLambda = loadMoreLambda,
+        )
+        val presenter = createMediaViewerPresenter(
+            localMediaFactory = localMediaFactory,
+            mediaGalleryDataSource = mediaGalleryDataSource,
+        )
+        val anImage = aMediaItemImage(
+            mediaSourceUrl = aUrl,
+        )
+        presenter.test {
+            awaitFirstItem()
+            mediaGalleryDataSource.emitGroupedMediaItems(
+                AsyncData.Success(
+                    GroupedMediaItems(
+                        imageAndVideoItems = persistentListOf(aForwardLoadingIndicator, anImage, aBackwardLoadingIndicator),
+                        fileItems = persistentListOf(),
+                    )
+                )
+            )
+            val updatedState = awaitItem()
+
+            // Get the exact same items, but with new timestamps for the loading indicators
+            mediaGalleryDataSource.emitGroupedMediaItems(
+                AsyncData.Success(
+                    GroupedMediaItems(
+                        imageAndVideoItems = persistentListOf(
+                            aForwardLoadingIndicator.copy(timestamp = 1234L),
+                            anImage,
+                            aBackwardLoadingIndicator.copy(timestamp = 1234L),
+                        ),
+                        fileItems = persistentListOf(),
+                    )
+                )
+            )
+
+            // We should get a new list of items, which should not be equal to the previous one
+            assertThat(updatedState.listData).isNotEqualTo(awaitItem().listData)
+        }
+    }
+
+    @Test
     fun `present - view in timeline hides the bottom sheet and invokes the navigator`() = runTest {
         val onViewInTimelineClickLambda = lambdaRecorder<EventId, Unit> { }
         val navigator = FakeMediaViewerNavigator(

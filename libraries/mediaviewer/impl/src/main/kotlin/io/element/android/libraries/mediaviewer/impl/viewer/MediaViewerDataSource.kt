@@ -168,7 +168,7 @@ class MediaViewerDataSource(
                 is MediaItem.LoadingIndicator -> add(
                     MediaViewerPageData.Loading(
                         direction = mediaItem.direction,
-                        timestamp = systemClock.epochMillis(),
+                        timestamp = mediaItem.timestamp,
                         pagerKey = pagerKeysHandler.getKey(mediaItem),
                     )
                 )
