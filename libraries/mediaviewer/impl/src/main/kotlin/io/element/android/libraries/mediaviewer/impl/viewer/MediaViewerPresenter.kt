@@ -89,8 +89,9 @@ class MediaViewerPresenter(
 
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
 
-        NoMoreItemsBackwardSnackBarDisplayer(currentIndex, data)
-        NoMoreItemsForwardSnackBarDisplayer(currentIndex, data)
+        // Add both forward and backward pagination state checks to display a snackbar when there is no more items to load in either direction
+        NoMoreItemsSnackBarDisplayer(currentIndex, data, Timeline.PaginationDirection.FORWARDS)
+        NoMoreItemsSnackBarDisplayer(currentIndex, data, Timeline.PaginationDirection.BACKWARDS)
 
         val permissions by room.permissionsAsState(MediaPermissions.DEFAULT) { perms ->
             perms.mediaPermissions()
@@ -183,40 +184,26 @@ class MediaViewerPresenter(
     }
 
     @Composable
-    private fun NoMoreItemsBackwardSnackBarDisplayer(
+    private fun NoMoreItemsSnackBarDisplayer(
         currentIndex: IntState,
         data: State<ImmutableList<MediaViewerPageData>>,
+        direction: Timeline.PaginationDirection,
     ) {
         var previousIndex by remember { mutableIntStateOf(currentIndex.intValue) }
         var wasLoading: Boolean? by remember { mutableStateOf(null) }
         LaunchedEffect(currentIndex.intValue, data.value) {
+            fun isLoading(index: Int, data: List<MediaViewerPageData>, direction: Timeline.PaginationDirection): Boolean {
+                return when (direction) {
+                    Timeline.PaginationDirection.BACKWARDS -> index == data.lastIndex && data.lastOrNull() is MediaViewerPageData.Loading
+                    Timeline.PaginationDirection.FORWARDS -> index == 0 && data.firstOrNull() is MediaViewerPageData.Loading
+                }
+            }
             // Reset the effect when the user navigate to another item so we only take into account index changes caused by data changes
             if (previousIndex != currentIndex.intValue) {
                 wasLoading = null
                 previousIndex = currentIndex.intValue
             }
-            val isLoading = currentIndex.intValue == data.value.lastIndex && data.value.lastOrNull() is MediaViewerPageData.Loading
-            if (wasLoading == true && !isLoading) {
-                showNoMoreItemsSnackbar()
-            }
-            wasLoading = isLoading
-        }
-    }
-
-    @Composable
-    private fun NoMoreItemsForwardSnackBarDisplayer(
-        currentIndex: IntState,
-        data: State<ImmutableList<MediaViewerPageData>>,
-    ) {
-        var previousIndex by remember { mutableIntStateOf(currentIndex.intValue) }
-        var wasLoading: Boolean? by remember { mutableStateOf(null) }
-        LaunchedEffect(currentIndex.intValue, data.value) {
-            // Reset the effect when the user navigate to another item so we only take into account index changes caused by data changes
-            if (previousIndex != currentIndex.intValue) {
-                wasLoading = null
-                previousIndex = currentIndex.intValue
-            }
-            val isLoading = currentIndex.intValue == 0 && data.value.firstOrNull() is MediaViewerPageData.Loading
+            val isLoading = isLoading(currentIndex.intValue, data.value, direction)
             if (wasLoading == true && !isLoading) {
                 showNoMoreItemsSnackbar()
             }
