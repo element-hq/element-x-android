@@ -9,7 +9,10 @@ package io.element.android.features.linknewdevice.impl.screens.qrcode
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
@@ -35,6 +38,7 @@ class ShowQrCodePresenter(
 
     @Composable
     override fun present(): ShowQrCodeState {
+        var qrCodeRotationCounter by remember { mutableIntStateOf(MAX_QR_CODE_ROTATION) }
         val data by produceState<AsyncData<String>>(AsyncData.Success(initialData)) {
             linkNewMobileHandler.stepFlow.collect { step ->
                 when (step) {
@@ -42,9 +46,14 @@ class ShowQrCodePresenter(
                         value = AsyncData.Success(step.data)
                     }
                     is LinkMobileStep.QrRotating -> {
-                        Timber.tag(tag.value).d("Rotating QrCode")
-                        linkNewMobileHandler.rotateQrCode()
-                        value = AsyncData.Loading()
+                        if (qrCodeRotationCounter-- > 0) {
+                            Timber.tag(tag.value).d("Rotating QrCode")
+                            linkNewMobileHandler.rotateQrCode()
+                            value = AsyncData.Loading()
+                        } else {
+                            Timber.tag(tag.value).w("Max QR code rotation reached, not rotating anymore")
+                            linkNewMobileHandler.onTooManyRotation()
+                        }
                     }
                     else -> Unit
                 }
@@ -54,5 +63,9 @@ class ShowQrCodePresenter(
         return ShowQrCodeState(
             data = data,
         )
+    }
+
+    companion object {
+        const val MAX_QR_CODE_ROTATION = 10
     }
 }
