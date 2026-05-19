@@ -53,7 +53,14 @@ class RustLinkMobileHandler(
             _linkMobileStep.emit(LinkMobileStep.Done)
         } catch (e: HumanQrGrantLoginException) {
             Timber.tag(tag.value).w(e, "Error during QR login grant")
-            _linkMobileStep.emit(LinkMobileStep.Error(e.map()))
+            // Catch timeout here?
+            if (_linkMobileStep.value is LinkMobileStep.QrReady
+                && e is HumanQrGrantLoginException.NotFound) {
+                Timber.tag(tag.value).d("Emit QrRotating due to HumanQrGrantLoginException.NotFound")
+                _linkMobileStep.emit(LinkMobileStep.QrRotating)
+            } else {
+                _linkMobileStep.emit(LinkMobileStep.Error(e.map()))
+            }
         }
     }
 

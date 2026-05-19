@@ -65,4 +65,8 @@ class LinkNewMobileHandler(
             linkMobileStepFlow.emit(LinkMobileStep.Uninitialized)
         }
     }
+
+    fun rotateQrCode() {
+        createAndStartNewHandler()
+    }
 }

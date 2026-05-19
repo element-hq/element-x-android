@@ -9,6 +9,7 @@
 
 package io.element.android.features.linknewdevice.impl.screens.qrcode
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,6 +22,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.linknewdevice.impl.R
@@ -30,6 +32,7 @@ import io.element.android.libraries.designsystem.components.BigIcon
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.LocalBuildMeta
+import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.utils.annotatedTextWithBold
 import io.element.android.libraries.qrcode.QrCodeImage
 import kotlinx.collections.immutable.persistentListOf
@@ -40,7 +43,7 @@ import kotlinx.collections.immutable.persistentListOf
  */
 @Composable
 fun ShowQrCodeView(
-    data: String,
+    state: ShowQrCodeState,
     onBackClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -55,11 +58,24 @@ fun ShowQrCodeView(
             Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            QrCodeImage(
-                data = data,
-                modifier = Modifier
-                    .size(220.dp)
-            )
+            when (val str = state.data.dataOrNull()) {
+                null -> {
+                    Box(
+                        modifier = Modifier
+                            .size(220.dp),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+                else -> {
+                    QrCodeImage(
+                        data = str,
+                        modifier = Modifier
+                            .size(220.dp)
+                    )
+                }
+            }
             Spacer(modifier = Modifier.height(32.dp))
             NumberedListOrganism(
                 modifier = Modifier.fillMaxSize(),
@@ -81,9 +97,11 @@ fun ShowQrCodeView(
 
 @PreviewsDayNight
 @Composable
-internal fun ShowQrCodeViewPreview() = ElementPreview {
+internal fun ShowQrCodeViewPreview(
+    @PreviewParameter(ShowQrCodeStateProvider::class) state: ShowQrCodeState,
+) = ElementPreview {
     ShowQrCodeView(
-        data = "DATA",
+        state = state,
         onBackClick = { },
     )
 }
