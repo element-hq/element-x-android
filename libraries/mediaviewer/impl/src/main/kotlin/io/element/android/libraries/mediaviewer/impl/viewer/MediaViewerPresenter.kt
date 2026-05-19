@@ -44,7 +44,6 @@ import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import io.element.android.libraries.androidutils.R as UtilsR
 
@@ -73,18 +72,18 @@ class MediaViewerPresenter(
         val coroutineScope = rememberCoroutineScope()
         val currentIndex = remember { mutableIntStateOf(dataSource.findEventIndex(inputs.eventId) ?: 0) }
         val data = dataSource.produceState { flow ->
-            flow
-                .distinctUntilChanged(::pageDataComparator)
-                .collectLatest { new ->
-                    if (value.isEmpty() && new.isNotEmpty()) {
-                        currentIndex.intValue = dataSource.findEventIndex(inputs.eventId) ?: 0
-                    } else if (currentIndex.intValue > 0 && value.firstOrNull() is MediaViewerPageData.Loading &&
-                        new.firstOrNull() !is MediaViewerPageData.Loading) {
-                        // Restore index based on the eventId after the initial items have been loaded
-                        currentIndex.intValue = dataSource.findEventIndex(inputs.eventId) ?: 0
-                    }
-                    value = new
+            flow.collectLatest { new ->
+                val existingItem = value.getOrNull(currentIndex.intValue)
+                val newItem = new.getOrNull(currentIndex.intValue)
+                if (existingItem is MediaViewerPageData.MediaViewerData && existingItem.eventId == inputs.eventId && newItem != existingItem) {
+                    currentIndex.intValue = dataSource.findEventIndex(inputs.eventId) ?: 0
+                } else if (currentIndex.intValue > 0 && value.firstOrNull() is MediaViewerPageData.Loading &&
+                    new.firstOrNull() !is MediaViewerPageData.Loading) {
+                    // Restore index based on the eventId after the initial items have been loaded
+                    currentIndex.intValue = dataSource.findEventIndex(inputs.eventId) ?: 0
                 }
+                value = new
+            }
         }
 
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
@@ -190,6 +189,7 @@ class MediaViewerPresenter(
         direction: Timeline.PaginationDirection,
     ) {
         var previousIndex by remember { mutableIntStateOf(currentIndex.intValue) }
+        var previousDataSize by remember { mutableIntStateOf(data.value.size) }
         var wasLoading: Boolean? by remember { mutableStateOf(null) }
         LaunchedEffect(currentIndex.intValue, data.value) {
             fun isLoading(index: Int, data: List<MediaViewerPageData>, direction: Timeline.PaginationDirection): Boolean {
@@ -203,10 +203,18 @@ class MediaViewerPresenter(
                 wasLoading = null
                 previousIndex = currentIndex.intValue
             }
+            // If we were navigating backwards and the data size grew, we can discard the previous value: it means we received new items
+            if (direction == Timeline.PaginationDirection.BACKWARDS && previousDataSize < data.value.size) {
+                wasLoading = null
+            }
+
             val isLoading = isLoading(currentIndex.intValue, data.value, direction)
+
             if (wasLoading == true && !isLoading) {
                 showNoMoreItemsSnackbar()
             }
+
+            previousDataSize = data.value.size
             wasLoading = isLoading
         }
     }
@@ -278,23 +286,5 @@ class MediaViewerPresenter(
         } else {
             CommonStrings.error_unknown
         }
-    }
-
-    private fun pageDataComparator(old: List<MediaViewerPageData>, new: List<MediaViewerPageData>): Boolean {
-        if (old.size != new.size) return false
-
-        for (i in old.indices) {
-            val oldItem = old[i]
-            val newItem = new[i]
-
-            // For loading items, ignore their timestamp as they are regenerated on each load and would cause unnecessary recompositions
-            if (oldItem is MediaViewerPageData.Loading && newItem is MediaViewerPageData.Loading) {
-                return oldItem.direction == newItem.direction && oldItem.pagerKey == newItem.pagerKey
-            } else if (old != new) {
-                return false
-            }
-        }
-
-        return true
     }
 }
