@@ -19,7 +19,11 @@ import io.element.android.features.messages.impl.timeline.aTimelineItemDaySepara
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.aTimelineItemReactions
 import io.element.android.features.messages.impl.timeline.aTimelineRoomInfo
+import io.element.android.features.messages.impl.timeline.components.customreaction.CustomReactionState
+import io.element.android.features.messages.impl.timeline.components.reactionsummary.ReactionSummaryState
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.aCustomReactionState
+import io.element.android.features.messages.impl.aReactionSummaryState
 import io.element.android.features.messages.impl.timeline.model.TimelineItemGroupPosition
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemFileContent
@@ -92,6 +96,8 @@ fun aLoadedPinnedMessagesListState(
     linkState: LinkState = aLinkState(),
     timelineItems: List<TimelineItem> = emptyList(),
     actionListState: ActionListState = anActionListState(),
+    customReactionState: CustomReactionState = aCustomReactionState(),
+    reactionSummaryState: ReactionSummaryState = aReactionSummaryState(),
     aUserEventPermissions: UserEventPermissions = UserEventPermissions.DEFAULT,
     displayThreadSummaries: Boolean = false,
     eventSink: (PinnedMessagesListEvent) -> Unit = {}
@@ -101,6 +107,8 @@ fun aLoadedPinnedMessagesListState(
     linkState = linkState,
     timelineItems = timelineItems.toImmutableList(),
     actionListState = actionListState,
+    customReactionState = customReactionState,
+    reactionSummaryState = reactionSummaryState,
     userEventPermissions = aUserEventPermissions,
     displayThreadSummaries = displayThreadSummaries,
     eventSink = eventSink,
