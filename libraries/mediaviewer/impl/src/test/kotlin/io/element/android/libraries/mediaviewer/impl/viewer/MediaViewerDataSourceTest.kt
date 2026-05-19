@@ -68,7 +68,7 @@ class MediaViewerDataSourceTest {
         val sut = createMediaViewerDataSource(
             galleryDataSource = galleryDataSource,
         )
-        sut.dataFlow().test {
+        sut.dataFlow.test {
             // The flow starts with an empty result
             assertThat(awaitItem()).isEmpty()
             galleryDataSource.emitGroupedMediaItems(AsyncData.Uninitialized)
@@ -87,7 +87,7 @@ class MediaViewerDataSourceTest {
         val sut = createMediaViewerDataSource(
             galleryDataSource = galleryDataSource,
         )
-        sut.dataFlow().test {
+        sut.dataFlow.test {
             galleryDataSource.emitGroupedMediaItems(
                 AsyncData.Success(
                     aGroupedMediaItems(
@@ -107,7 +107,7 @@ class MediaViewerDataSourceTest {
         val sut = createMediaViewerDataSource(
             galleryDataSource = galleryDataSource,
         )
-        sut.dataFlow().test {
+        sut.dataFlow.test {
             skipItems(1)
             galleryDataSource.emitGroupedMediaItems(
                 AsyncData.Success(
@@ -147,7 +147,7 @@ class MediaViewerDataSourceTest {
             mode = MediaViewerMode.TimelineImagesAndVideos(timelineMode = Timeline.Mode.Media),
             galleryDataSource = galleryDataSource,
         )
-        sut.dataFlow().test {
+        sut.dataFlow.test {
             skipItems(1)
             galleryDataSource.emitGroupedMediaItems(
                 AsyncData.Success(
@@ -170,7 +170,7 @@ class MediaViewerDataSourceTest {
             mode = MediaViewerMode.TimelineFilesAndAudios(timelineMode = Timeline.Mode.Media),
             galleryDataSource = galleryDataSource,
         )
-        sut.dataFlow().test {
+        sut.dataFlow.test {
             skipItems(1)
             galleryDataSource.emitGroupedMediaItems(
                 AsyncData.Success(
@@ -192,7 +192,7 @@ class MediaViewerDataSourceTest {
         val sut = createMediaViewerDataSource(
             galleryDataSource = galleryDataSource,
         )
-        sut.dataFlow().test {
+        sut.dataFlow.test {
             skipItems(1)
             galleryDataSource.emitGroupedMediaItems(
                 AsyncData.Success(
@@ -226,7 +226,7 @@ class MediaViewerDataSourceTest {
         val sut = createMediaViewerDataSource(
             galleryDataSource = galleryDataSource,
         )
-        sut.dataFlow().test {
+        sut.dataFlow.test {
             skipItems(1)
             galleryDataSource.emitGroupedMediaItems(
                 AsyncData.Success(
@@ -251,7 +251,7 @@ class MediaViewerDataSourceTest {
             galleryDataSource = galleryDataSource,
             mediaLoader = mediaLoader,
         )
-        sut.dataFlow().test {
+        sut.dataFlow.test {
             skipItems(1)
             galleryDataSource.emitGroupedMediaItems(
                 AsyncData.Success(

@@ -46,7 +46,7 @@ import timber.log.Timber
 
 class MediaViewerDataSource(
     mode: MediaViewerMode,
-    private val coroutineScope: CoroutineScope,
+    coroutineScope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
     private val galleryDataSource: MediaGalleryDataSource,
     private val mediaLoader: MatrixMediaLoader,
@@ -86,7 +86,7 @@ class MediaViewerDataSource(
         producer: suspend ProduceStateScope<ImmutableList<MediaViewerPageData>>.(StateFlow<ImmutableList<MediaViewerPageData>>) -> Unit
     ): State<ImmutableList<MediaViewerPageData>> {
         return produceState(initialValue = initialData()) {
-            producer(dataFlow())
+            producer(dataFlow)
         }
     }
 
@@ -95,43 +95,41 @@ class MediaViewerDataSource(
      */
     fun findEventIndex(eventId: EventId?): Int? {
         if (eventId == null) return null
-        return dataFlow().value.indexOfFirst { (it as? MediaViewerPageData.MediaViewerData)?.eventId == eventId }.takeIf { it >= 0 }
+        return dataFlow.value.indexOfFirst { (it as? MediaViewerPageData.MediaViewerData)?.eventId == eventId }.takeIf { it >= 0 }
     }
 
     @VisibleForTesting
-    internal fun dataFlow(): StateFlow<ImmutableList<MediaViewerPageData>> {
-        return galleryDataSource.groupedMediaItemsFlow()
-            .map { groupedItems ->
-                when (groupedItems) {
-                    AsyncData.Uninitialized,
-                    is AsyncData.Loading -> {
-                        persistentListOf(
-                            MediaViewerPageData.Loading(
-                                direction = Timeline.PaginationDirection.BACKWARDS,
-                                timestamp = systemClock.epochMillis(),
-                                pagerKey = Long.MIN_VALUE,
-                            )
+    internal val dataFlow: StateFlow<ImmutableList<MediaViewerPageData>> = galleryDataSource.groupedMediaItemsFlow()
+        .map { groupedItems ->
+            when (groupedItems) {
+                AsyncData.Uninitialized,
+                is AsyncData.Loading -> {
+                    persistentListOf(
+                        MediaViewerPageData.Loading(
+                            direction = Timeline.PaginationDirection.BACKWARDS,
+                            timestamp = systemClock.epochMillis(),
+                            pagerKey = Long.MIN_VALUE,
                         )
-                    }
-                    is AsyncData.Failure -> {
-                        persistentListOf(
-                            MediaViewerPageData.Failure(groupedItems.error),
-                        )
-                    }
-                    is AsyncData.Success -> {
-                        withContext(dispatcher) {
-                            val mediaItems = groupedItems.data.getItems(galleryMode)
-                            buildMediaViewerPageList(mediaItems)
-                        }
+                    )
+                }
+                is AsyncData.Failure -> {
+                    persistentListOf(
+                        MediaViewerPageData.Failure(groupedItems.error),
+                    )
+                }
+                is AsyncData.Success -> {
+                    withContext(dispatcher) {
+                        val mediaItems = groupedItems.data.getItems(galleryMode)
+                        buildMediaViewerPageList(mediaItems)
                     }
                 }
             }
-            .stateIn(
-                scope = CoroutineScope(coroutineScope.coroutineContext + dispatcher),
-                started = SharingStarted.Lazily,
-                initialValue = initialData(),
-            )
-    }
+        }
+        .stateIn(
+            scope = CoroutineScope(coroutineScope.coroutineContext + dispatcher),
+            started = SharingStarted.Lazily,
+            initialValue = initialData(),
+        )
 
     private fun initialData(): ImmutableList<MediaViewerPageData> {
         val initialMediaItems =
