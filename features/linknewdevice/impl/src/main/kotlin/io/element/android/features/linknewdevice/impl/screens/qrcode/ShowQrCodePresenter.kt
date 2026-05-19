@@ -22,6 +22,9 @@ import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.log.logger.LoggerTag
 import io.element.android.libraries.matrix.api.linknewdevice.LinkMobileStep
 import io.element.android.libraries.matrix.api.logs.LoggerTags
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import timber.log.Timber
 
 private val tag = LoggerTag("ShowQrCodePresenter", LoggerTags.linkNewDevice)
@@ -36,20 +39,54 @@ class ShowQrCodePresenter(
         fun create(initialData: String): ShowQrCodePresenter
     }
 
+    private var loadingJob: Job? = null
+
     @Composable
     override fun present(): ShowQrCodeState {
         var qrCodeRotationCounter by remember { mutableIntStateOf(MAX_QR_CODE_ROTATION) }
-        val data by produceState<AsyncData<String>>(AsyncData.Success(initialData)) {
+        val state by produceState(
+            initialValue = ShowQrCodeState(
+                data1 = AsyncData.Success(initialData),
+                data2 = AsyncData.Uninitialized,
+                dataToRender = 1,
+            )
+        ) {
             linkNewMobileHandler.stepFlow.collect { step ->
+                val currentValue = value
                 when (step) {
                     is LinkMobileStep.QrReady -> {
-                        value = AsyncData.Success(step.data)
+                        loadingJob?.cancel()
+                        if (currentValue.dataToRender == 1) {
+                            value = currentValue.copy(
+                                data2 = AsyncData.Success(step.data),
+                                dataToRender = 2,
+                            )
+                        } else {
+                            value = currentValue.copy(
+                                data1 = AsyncData.Success(step.data),
+                                dataToRender = 1,
+                            )
+                        }
                     }
                     is LinkMobileStep.QrRotating -> {
                         if (qrCodeRotationCounter-- > 0) {
                             Timber.tag(tag.value).d("Rotating QrCode")
                             linkNewMobileHandler.rotateQrCode()
-                            value = AsyncData.Loading()
+                            // Ensure that outdated data is not rendered too long while rotating QR code
+                            loadingJob = launch {
+                                delay(1000)
+                                if (currentValue.dataToRender == 1) {
+                                    value = currentValue.copy(
+                                        data2 = AsyncData.Loading(),
+                                        dataToRender = 2,
+                                    )
+                                } else {
+                                    value = currentValue.copy(
+                                        data1 = AsyncData.Loading(),
+                                        dataToRender = 1,
+                                    )
+                                }
+                            }
                         } else {
                             Timber.tag(tag.value).w("Max QR code rotation reached, not rotating anymore")
                             linkNewMobileHandler.onTooManyRotation()
@@ -60,9 +97,7 @@ class ShowQrCodePresenter(
             }
         }
 
-        return ShowQrCodeState(
-            data = data,
-        )
+        return state
     }
 
     companion object {

@@ -14,14 +14,23 @@ class ShowQrCodeStateProvider : PreviewParameterProvider<ShowQrCodeState> {
     override val values: Sequence<ShowQrCodeState>
         get() = sequenceOf(
             aShowQrCodeState(),
-            ShowQrCodeState(
-                data = AsyncData.Loading(),
+            aShowQrCodeState(
+                data1 = AsyncData.Loading(),
+            ),
+            aShowQrCodeState(
+                data1 = AsyncData.Success("DATA"),
+                data2 = AsyncData.Success("DATA2"),
+                dataToRender = 2,
             ),
         )
 }
 
 private fun aShowQrCodeState(
-    data: AsyncData.Success<String> = AsyncData.Success("DATA"),
+    data1: AsyncData<String> = AsyncData.Success("DATA"),
+    data2: AsyncData<String> = AsyncData.Uninitialized,
+    dataToRender: Int = 1,
 ) = ShowQrCodeState(
-    data = data,
+    data1 = data1,
+    data2 = data2,
+    dataToRender = dataToRender,
 )

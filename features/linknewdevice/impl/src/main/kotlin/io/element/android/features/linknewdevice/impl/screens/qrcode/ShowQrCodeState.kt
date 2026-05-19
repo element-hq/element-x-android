@@ -10,5 +10,7 @@ package io.element.android.features.linknewdevice.impl.screens.qrcode
 import io.element.android.libraries.architecture.AsyncData
 
 data class ShowQrCodeState(
-    val data: AsyncData<String>,
+    val data1: AsyncData<String>,
+    val data2: AsyncData<String>,
+    val dataToRender: Int,
 )
