@@ -179,7 +179,8 @@ fun MediaViewerView(
         }
 
         LaunchedEffect(pagerState.targetPage, state.currentIndex) {
-            if (pagerState.targetPage != state.currentIndex) {
+            // Only emit an index navigation change when it's triggered by the user scrolling
+            if (pagerState.targetPage != state.currentIndex && pagerState.isScrollInProgress) {
                 state.eventSink(MediaViewerEvent.OnNavigateTo(pagerState.targetPage))
             }
         }

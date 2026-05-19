@@ -181,7 +181,9 @@ class MediaViewerDataSource(
     }
 
     suspend fun loadMore(direction: Timeline.PaginationDirection) {
-        galleryDataSource.loadMore(direction)
+        if (galleryDataSource.isReady) {
+            galleryDataSource.loadMore(direction)
+        }
     }
 
     suspend fun loadMedia(data: MediaViewerPageData.MediaViewerData) {
