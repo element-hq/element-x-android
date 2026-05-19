@@ -208,6 +208,46 @@ class VoiceMessagePresenterTest {
     }
 
     @Test
+    fun `pressing play does not cancel autoplay`() = runTest {
+        val autoplayManager = FakeVoiceMessageAutoplayManager()
+        val presenter = createVoiceMessagePresenter(
+            mediaPlayer = FakeMediaPlayer(fakeTotalDurationMs = 2_000),
+            duration = 2_000.milliseconds,
+            autoplayManager = autoplayManager,
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(VoiceMessageEvent.PlayPause)
+            skipItems(2) // skip downloading states
+            awaitItem() // playing state
+
+            assertThat(autoplayManager.cancelAutoplayCallCount).isEqualTo(0)
+        }
+    }
+
+    @Test
+    fun `pressing pause cancels autoplay`() = runTest {
+        val autoplayManager = FakeVoiceMessageAutoplayManager()
+        val presenter = createVoiceMessagePresenter(
+            mediaPlayer = FakeMediaPlayer(fakeTotalDurationMs = 2_000),
+            duration = 2_000.milliseconds,
+            autoplayManager = autoplayManager,
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(VoiceMessageEvent.PlayPause)
+            skipItems(2) // skip downloading states
+            val playingState = awaitItem()
+
+            playingState.eventSink(VoiceMessageEvent.PlayPause) // pause
+            awaitItem()
+
+            // Only the pause triggers cancelAutoplay, not the initial play
+            assertThat(autoplayManager.cancelAutoplayCallCount).isEqualTo(1)
+        }
+    }
+
+    @Test
     fun `changing playback speed cycles through available speeds`() = runTest {
         val presenter = createVoiceMessagePresenter(
             duration = 10_000.milliseconds,
@@ -241,6 +281,7 @@ fun TestScope.createVoiceMessagePresenter(
     voiceMessageMediaRepo: VoiceMessageMediaRepo = FakeVoiceMessageMediaRepo(),
     analyticsService: AnalyticsService = FakeAnalyticsService(),
     voicePlayerStore: VoicePlayerStore = InMemoryVoicePlayerStore(),
+    autoplayManager: FakeVoiceMessageAutoplayManager = FakeVoiceMessageAutoplayManager(),
     eventId: EventId? = EventId("\$anEventId"),
     filename: String = "filename doesn't really matter for a voice message",
     duration: Duration = 61_000.milliseconds,
@@ -259,6 +300,7 @@ fun TestScope.createVoiceMessagePresenter(
         filename = filename
     ),
     voicePlayerStore = voicePlayerStore,
+    autoplayManager = autoplayManager,
     eventId = eventId,
     duration = duration,
 )

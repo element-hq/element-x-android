@@ -14,6 +14,7 @@ import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.di.annotations.SessionCoroutineScope
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MediaSource
+import io.element.android.libraries.voiceplayer.api.VoiceMessageAutoplayManager
 import io.element.android.libraries.voiceplayer.api.VoiceMessagePresenterFactory
 import io.element.android.libraries.voiceplayer.api.VoiceMessageState
 import io.element.android.services.analytics.api.AnalyticsService
@@ -27,6 +28,7 @@ class DefaultVoiceMessagePresenterFactory(
     private val sessionCoroutineScope: CoroutineScope,
     private val voiceMessagePlayerFactory: VoiceMessagePlayer.Factory,
     private val voicePlayerStore: VoicePlayerStore,
+    private val autoplayManager: VoiceMessageAutoplayManager,
 ) : VoiceMessagePresenterFactory {
     override fun createVoiceMessagePresenter(
         eventId: EventId?,
@@ -47,6 +49,7 @@ class DefaultVoiceMessagePresenterFactory(
             sessionCoroutineScope = sessionCoroutineScope,
             voicePlayerStore = voicePlayerStore,
             player = player,
+            autoplayManager = autoplayManager,
             eventId = eventId,
             duration = duration,
         )
