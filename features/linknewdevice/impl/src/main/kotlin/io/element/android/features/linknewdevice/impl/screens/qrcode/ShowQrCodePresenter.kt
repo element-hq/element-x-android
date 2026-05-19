@@ -46,27 +46,16 @@ class ShowQrCodePresenter(
         var qrCodeRotationCounter by remember { mutableIntStateOf(MAX_QR_CODE_ROTATION) }
         val state by produceState(
             initialValue = ShowQrCodeState(
-                data1 = AsyncData.Success(initialData),
-                data2 = AsyncData.Uninitialized,
-                dataToRender = 1,
+                data = AsyncData.Success(initialData),
             )
         ) {
             linkNewMobileHandler.stepFlow.collect { step ->
-                val currentValue = value
                 when (step) {
                     is LinkMobileStep.QrReady -> {
                         loadingJob?.cancel()
-                        if (currentValue.dataToRender == 1) {
-                            value = currentValue.copy(
-                                data2 = AsyncData.Success(step.data),
-                                dataToRender = 2,
-                            )
-                        } else {
-                            value = currentValue.copy(
-                                data1 = AsyncData.Success(step.data),
-                                dataToRender = 1,
-                            )
-                        }
+                        value = ShowQrCodeState(
+                            data = AsyncData.Success(step.data),
+                        )
                     }
                     is LinkMobileStep.QrRotating -> {
                         if (qrCodeRotationCounter-- > 0) {
@@ -75,17 +64,9 @@ class ShowQrCodePresenter(
                             // Ensure that outdated data is not rendered too long while rotating QR code
                             loadingJob = launch {
                                 delay(1000)
-                                if (currentValue.dataToRender == 1) {
-                                    value = currentValue.copy(
-                                        data2 = AsyncData.Loading(),
-                                        dataToRender = 2,
-                                    )
-                                } else {
-                                    value = currentValue.copy(
-                                        data1 = AsyncData.Loading(),
-                                        dataToRender = 1,
-                                    )
-                                }
+                                value = ShowQrCodeState(
+                                    data = AsyncData.Loading(),
+                                )
                             }
                         } else {
                             Timber.tag(tag.value).w("Max QR code rotation reached, not rotating anymore")

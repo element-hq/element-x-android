@@ -32,9 +32,7 @@ class ShowQrCodePresenterTest {
     fun `present - initial state`() = runTest {
         createPresenter().test {
             val initialState = awaitItem()
-            assertThat(initialState.data1.dataOrNull()).isEqualTo("DATA")
-            assertThat(initialState.data2.isUninitialized()).isTrue()
-            assertThat(initialState.dataToRender).isEqualTo(1)
+            assertThat(initialState.data.dataOrNull()).isEqualTo("DATA")
         }
     }
 
@@ -61,8 +59,7 @@ class ShowQrCodePresenterTest {
             )
             runCurrent()
             val finalState = awaitItem()
-            assertThat(finalState.data2.isLoading()).isTrue()
-            assertThat(finalState.dataToRender).isEqualTo(2)
+            assertThat(finalState.data.isLoading()).isTrue()
             createLinkMobileHandlerResult.assertions().isCalledExactly(2)
         }
     }
@@ -90,9 +87,7 @@ class ShowQrCodePresenterTest {
                 LinkMobileStep.QrReady("DATA2")
             )
             val finalState = awaitItem()
-            assertThat(finalState.data1.dataOrNull()).isEqualTo("DATA")
-            assertThat(finalState.data2.dataOrNull()).isEqualTo("DATA2")
-            assertThat(finalState.dataToRender).isEqualTo(2)
+            assertThat(finalState.data.dataOrNull()).isEqualTo("DATA2")
         }
     }
 

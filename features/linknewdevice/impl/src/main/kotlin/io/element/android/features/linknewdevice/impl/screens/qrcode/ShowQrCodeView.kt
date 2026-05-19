@@ -9,9 +9,11 @@
 
 package io.element.android.features.linknewdevice.impl.screens.qrcode
 
-import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -44,6 +46,7 @@ import kotlinx.collections.immutable.persistentListOf
  * QrCode display screen:
  * https://www.figma.com/design/pDlJZGBsri47FNTXMnEdXB/Compound-Android-Templates?node-id=2027-23617
  */
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun ShowQrCodeView(
     state: ShowQrCodeState,
@@ -61,14 +64,15 @@ fun ShowQrCodeView(
             Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Box {
+            AnimatedContent(
+                targetState = state.data.dataOrNull(),
+                transitionSpec = {
+                    fadeIn().togetherWith(fadeOut())
+                }
+            ) { data ->
                 QrCodeOrLoading(
-                    isVisible = state.dataToRender == 1,
-                    data = state.data1.dataOrNull(),
-                )
-                QrCodeOrLoading(
-                    isVisible = state.dataToRender == 2,
-                    data = state.data2.dataOrNull(),
+                    modifier = modifier.size(220.dp),
+                    data = data,
                 )
             }
             Spacer(modifier = Modifier.height(32.dp))
@@ -92,31 +96,21 @@ fun ShowQrCodeView(
 
 @Composable
 private fun QrCodeOrLoading(
-    isVisible: Boolean,
     data: String?,
     modifier: Modifier = Modifier,
 ) {
-    AnimatedVisibility(
-        modifier = modifier,
-        visible = isVisible,
-        enter = fadeIn(),
-        exit = fadeOut(),
-    ) {
-        if (data == null) {
-            Box(
-                modifier = Modifier
-                    .size(220.dp),
-                contentAlignment = Alignment.Center,
-            ) {
-                CircularProgressIndicator()
-            }
-        } else {
-            QrCodeImage(
-                data = data,
-                modifier = Modifier
-                    .size(220.dp)
-            )
+    if (data == null) {
+        Box(
+            modifier = modifier,
+            contentAlignment = Alignment.Center,
+        ) {
+            CircularProgressIndicator()
         }
+    } else {
+        QrCodeImage(
+            modifier = modifier,
+            data = data,
+        )
     }
 }
 

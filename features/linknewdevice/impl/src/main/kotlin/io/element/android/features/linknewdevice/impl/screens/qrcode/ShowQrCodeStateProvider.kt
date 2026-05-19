@@ -15,22 +15,13 @@ class ShowQrCodeStateProvider : PreviewParameterProvider<ShowQrCodeState> {
         get() = sequenceOf(
             aShowQrCodeState(),
             aShowQrCodeState(
-                data1 = AsyncData.Loading(),
-            ),
-            aShowQrCodeState(
-                data1 = AsyncData.Success("DATA"),
-                data2 = AsyncData.Success("DATA2"),
-                dataToRender = 2,
+                data = AsyncData.Loading(),
             ),
         )
 }
 
 internal fun aShowQrCodeState(
-    data1: AsyncData<String> = AsyncData.Success("DATA"),
-    data2: AsyncData<String> = AsyncData.Uninitialized,
-    dataToRender: Int = 1,
+    data: AsyncData<String> = AsyncData.Success("DATA"),
 ) = ShowQrCodeState(
-    data1 = data1,
-    data2 = data2,
-    dataToRender = dataToRender,
+    data = data,
 )
