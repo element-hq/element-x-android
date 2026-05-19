@@ -52,6 +52,10 @@ class MediaViewerViewTest {
                 state = state,
                 onBackClick = callback,
             )
+
+            // Wait for enough time for the onVisibilityChanged modifier to trigger
+            mainClock.advanceTimeBy(200)
+
             pressBack()
         }
         eventsRecorder.assertList(
@@ -110,6 +114,10 @@ class MediaViewerViewTest {
                 eventSink = eventsRecorder
             ),
         )
+
+        // Wait for enough time for the onVisibilityChanged modifier to trigger
+        mainClock.advanceTimeBy(200)
+
         val contentDescription = activity!!.getString(contentDescriptionRes)
         onNodeWithContentDescription(contentDescription).performClick()
         eventsRecorder.assertList(
@@ -241,6 +249,10 @@ class MediaViewerViewTest {
                 eventSink = eventsRecorder
             ),
         )
+
+        // Wait for enough time for the onVisibilityChanged modifier to trigger
+        mainClock.advanceTimeBy(200)
+
         clickOn(CommonStrings.action_retry)
         eventsRecorder.assertList(
             listOf(
@@ -263,6 +275,10 @@ class MediaViewerViewTest {
                 eventSink = eventsRecorder
             ),
         )
+
+        // Wait for enough time for the onVisibilityChanged modifier to trigger
+        mainClock.advanceTimeBy(200)
+
         clickOn(CommonStrings.action_cancel)
         eventsRecorder.assertList(
             listOf(

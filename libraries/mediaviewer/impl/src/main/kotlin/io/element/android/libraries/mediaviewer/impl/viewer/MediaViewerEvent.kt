@@ -29,4 +29,5 @@ sealed interface MediaViewerEvent {
     data class Delete(val eventId: EventId) : MediaViewerEvent
     data class OnNavigateTo(val index: Int) : MediaViewerEvent
     data class LoadMore(val direction: Timeline.PaginationDirection) : MediaViewerEvent
+    data class CancelLoadingMedia(val data: MediaViewerPageData.MediaViewerData) : MediaViewerEvent
 }

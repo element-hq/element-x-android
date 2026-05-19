@@ -18,14 +18,14 @@ constraintlayout_compose = "1.1.1"
 lifecycle = "2.10.0"
 activity = "1.13.0"
 media3 = "1.10.0"
-camera = "1.6.0"
+camera = "1.6.1"
 work = "2.11.2"
 
 # Compose
-compose_bom = "2026.04.01"
+compose_bom = "2026.05.00"
 
 # Coroutines
-coroutines = "1.10.2"
+coroutines = "1.11.0"
 
 # Accompanist
 accompanist = "0.37.3"
@@ -35,7 +35,7 @@ test_core = "1.7.0"
 roborazzi = "1.60.0"
 
 # Jetbrain
-datetime = "0.7.1"
+datetime = "0.8.0"
 serialization_json = "1.11.0"
 
 #other
@@ -80,7 +80,7 @@ kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlin
 kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 ksp_gradle_plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:34.12.0"
+google_firebase_bom = "com.google.firebase:firebase-bom:34.13.0"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 ksp_plugin = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
@@ -111,13 +111,14 @@ androidx_media3_ui = { module = "androidx.media3:media3-ui", version.ref = "medi
 androidx_media3_transformer = { module = "androidx.media3:media3-transformer", version.ref = "media3" }
 androidx_media3_effect = { module = "androidx.media3:media3-effect", version.ref = "media3" }
 androidx_media3_common = { module = "androidx.media3:media3-common", version.ref = "media3" }
+androidx_media3_exoplayer_midi = { module = "androidx.media3:media3-exoplayer-midi", version.ref = "media3" }
 androidx_biometric = "androidx.biometric:biometric-ktx:1.4.0-alpha02"
 
 androidx_activity_activity = { module = "androidx.activity:activity", version.ref = "activity" }
 androidx_activity_compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 androidx_startup = "androidx.startup:startup-runtime:1.2.0"
 androidx_preference = "androidx.preference:preference:1.2.1"
-androidx_webkit = "androidx.webkit:webkit:1.15.0"
+androidx_webkit = "androidx.webkit:webkit:1.16.0"
 
 androidx_compose_bom = { module = "androidx.compose:compose-bom", version.ref = "compose_bom" }
 androidx_compose_material3 = { module = "androidx.compose.material3:material3", version = '1.5.0-alpha15' }
@@ -178,7 +179,7 @@ test_detekt_test = { module = "io.gitlab.arturbosch.detekt:detekt-test", version
 # https://github.com/matrix-org/matrix-rust-components-kotlin/commits/main/sdk/sdk-android/src/main/kotlin/org/matrix/rustcomponents/sdk/matrix_sdk_ffi.kt
 # All new features should not be implemented in the pull request that upgrades the version, developers should
 # only fix API breaks and may add some TODOs.
-matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.05.13"
+matrix_sdk = "org.matrix.rustcomponents:sdk-android:26.05.18"
 
 # Others
 coil = { module = "io.coil-kt.coil3:coil", version.ref = "coil" }
@@ -222,7 +223,7 @@ color_picker = "io.mhssn:colorpicker:1.0.0"
 
 # Analytics
 posthog = "com.posthog:posthog-android:3.43.0"
-sentry = "io.sentry:sentry-android:8.40.0"
+sentry = "io.sentry:sentry-android:8.41.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.33.2"
 

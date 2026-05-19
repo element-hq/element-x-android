@@ -52,6 +52,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.layout.onVisibilityChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
@@ -208,11 +209,16 @@ fun MediaViewerView(
                 }
                 is MediaViewerPageData.MediaViewerData -> {
                     var bottomPaddingInPixels by remember { mutableIntStateOf(defaultBottomPaddingInPixels) }
-                    LaunchedEffect(Unit) {
-                        state.eventSink(MediaViewerEvent.LoadMedia(dataForPage))
-                    }
                     Box(
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier
+                            .onVisibilityChanged(minDurationMs = 200L) { isVisible ->
+                                if (isVisible) {
+                                    state.eventSink(MediaViewerEvent.LoadMedia(dataForPage))
+                                } else {
+                                    state.eventSink(MediaViewerEvent.CancelLoadingMedia(dataForPage))
+                                }
+                            }
+                            .fillMaxSize()
                     ) {
                         val isDisplayed = remember(pagerState.settledPage) {
                             // This 'item provider' lambda will be called when the data source changes with an outdated `settlePage` value

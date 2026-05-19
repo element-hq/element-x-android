@@ -409,7 +409,7 @@ Powód: %1$s."</string>
   <string name="common_verify_device">"Zweryfikuj urządzenie"</string>
   <string name="common_verify_identity">"Zweryfikuj tożsamość"</string>
   <string name="common_verify_user">"Zweryfikuj użytkownika"</string>
-  <string name="common_video">"Film"</string>
+  <string name="common_video">"Wideo"</string>
   <string name="common_video_quality_high">"Wysoka jakość"</string>
   <string name="common_video_quality_high_description">"Najlepsza jakość, większy rozmiar pliku"</string>
   <string name="common_video_quality_low">"Niska jakość"</string>
