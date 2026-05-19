@@ -40,6 +40,7 @@ dependencies {
     implementation(projects.libraries.featureflag.api)
     implementation(projects.libraries.permissions.api)
     implementation(projects.libraries.preferences.api)
+    implementation(projects.libraries.push.api)
     implementation(projects.libraries.testtags)
     api(projects.features.roomdetails.api)
     api(projects.libraries.usersearch.api)

@@ -44,13 +44,17 @@ import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.powerlevels.canEditRolesAndPermissions
 import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
+import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
 import io.element.android.libraries.matrix.ui.room.roomMemberIdentityStateChange
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
+import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
@@ -67,6 +71,8 @@ class RoomDetailsPresenter(
     private val analyticsService: AnalyticsService,
     private val clipboardHelper: ClipboardHelper,
     private val appPreferencesStore: AppPreferencesStore,
+    private val sessionPreferencesStore: SessionPreferencesStore,
+    private val notificationCleaner: NotificationCleaner,
 ) : Presenter<RoomDetailsState> {
     @Composable
     override fun present(): RoomDetailsState {
@@ -79,6 +85,14 @@ class RoomDetailsPresenter(
         val roomTopic by remember { derivedStateOf { roomInfo.topic } }
         val isFavorite by remember { derivedStateOf { roomInfo.isFavorite } }
         val joinRule by remember { derivedStateOf { roomInfo.joinRule } }
+        val hasNewContent by remember {
+            derivedStateOf {
+                roomInfo.numUnreadMessages > 0 ||
+                    roomInfo.numUnreadMentions > 0 ||
+                    roomInfo.numUnreadNotifications > 0 ||
+                    roomInfo.isMarkedUnread
+            }
+        }
 
         val pinnedMessagesCount by remember { derivedStateOf { roomInfo.pinnedEventIds.size } }
 
@@ -145,6 +159,8 @@ class RoomDetailsPresenter(
                     clipboardHelper.copyPlainText(event.text)
                     snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_copied_to_clipboard))
                 }
+                is RoomDetailsEvent.MarkAsRead -> scope.markAsRead()
+                is RoomDetailsEvent.MarkAsUnread -> scope.markAsUnread()
             }
         }
 
@@ -188,6 +204,7 @@ class RoomDetailsPresenter(
             showDebugInfo = isDeveloperModeEnabled,
             roomVersion = roomInfo.roomVersion,
             roomHistoryVisibility = roomInfo.historyVisibility,
+            hasNewContent = hasNewContent,
             eventSink = ::handleEvent,
         )
     }
@@ -239,6 +256,27 @@ class RoomDetailsPresenter(
         room.setIsFavorite(isFavorite)
             .onSuccess {
                 analyticsService.captureInteraction(Interaction.Name.MobileRoomFavouriteToggle)
+            }
+    }
+
+    private fun CoroutineScope.markAsRead() = launch {
+        notificationCleaner.clearMessagesForRoom(client.sessionId, room.roomId)
+        room.setUnreadFlag(isUnread = false)
+        val receiptType = if (sessionPreferencesStore.isSendPublicReadReceiptsEnabled().first()) {
+            ReceiptType.READ
+        } else {
+            ReceiptType.READ_PRIVATE
+        }
+        room.markAsRead(receiptType)
+            .onSuccess {
+                analyticsService.captureInteraction(name = Interaction.Name.MobileRoomListRoomContextMenuUnreadToggle)
+            }
+    }
+
+    private fun CoroutineScope.markAsUnread() = launch {
+        room.setUnreadFlag(isUnread = true)
+            .onSuccess {
+                analyticsService.captureInteraction(name = Interaction.Name.MobileRoomListRoomContextMenuUnreadToggle)
             }
     }
 }
