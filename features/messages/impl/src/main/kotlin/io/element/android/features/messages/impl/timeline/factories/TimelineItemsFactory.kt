@@ -16,6 +16,7 @@ import io.element.android.features.messages.impl.timeline.factories.event.Timeli
 import io.element.android.features.messages.impl.timeline.factories.virtual.TimelineItemVirtualFactory
 import io.element.android.features.messages.impl.timeline.groups.TimelineItemGrouper
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
+import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemDaySeparatorModel
 import io.element.android.libraries.androidutils.diff.DiffCacheUpdater
 import io.element.android.libraries.androidutils.diff.MutableListDiffCache
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -96,7 +97,8 @@ class TimelineItemsFactory(
             }
         }
         val result = timelineItemGrouper.group(newTimelineItemStates).toImmutableList()
-        this._timelineItems.emit(result)
+        val filteredResult = filterEmptyDaySeparators(result).toImmutableList()
+        this._timelineItems.emit(filteredResult)
     }
 
     private suspend fun buildAndCacheItem(
@@ -112,5 +114,43 @@ class TimelineItemsFactory(
             }
         diffCache[index] = timelineItem
         return timelineItem
+    }
+
+    private fun filterEmptyDaySeparators(items: List<TimelineItem>): List<TimelineItem> {
+        val result = ArrayList<TimelineItem>()
+        var i = 0
+        while (i < items.size) {
+            val current = items[i]
+            if (isDaySeparator(current)) {
+                val hasEventsForDay = hasEventsForDaySeparator(items, i)
+                if (hasEventsForDay) {
+                    result.add(current)
+                }
+                i++
+            } else {
+                result.add(current)
+                i++
+            }
+        }
+        return result
+    }
+
+    private fun hasEventsForDaySeparator(items: List<TimelineItem>, daySeparatorIndex: Int): Boolean {
+        var j = daySeparatorIndex - 1
+        while (j >= 0) {
+            if (isEventItem(items[j])) {
+                return true
+            }
+            j--
+        }
+        return false
+    }
+
+    private fun isEventItem(item: TimelineItem): Boolean {
+        return item is TimelineItem.Event || item is TimelineItem.GroupedEvents
+    }
+
+    private fun isDaySeparator(item: TimelineItem): Boolean {
+        return item is TimelineItem.Virtual && item.model is TimelineItemDaySeparatorModel
     }
 }
