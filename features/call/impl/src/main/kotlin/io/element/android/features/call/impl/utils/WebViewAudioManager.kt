@@ -201,12 +201,9 @@ class WebViewAudioManager(
             return
         }
 
-        coroutineScope.launch {
-            proximitySensorMutex.withLock {
-                if (proximitySensorWakeLock?.isHeld == true) {
-                    proximitySensorWakeLock?.release()
-                }
-            }
+        // Since this should run when the call is no longer running, it should be OK to not use the mutex here
+        if (proximitySensorWakeLock?.isHeld == true) {
+            proximitySensorWakeLock?.release()
         }
 
         audioManager.mode = AudioManager.MODE_NORMAL
