@@ -45,6 +45,6 @@ class RandomSecretPassphraseProvider(
         SecureRandom().nextBytes(buffer)
         // Derive a key from the random secret to ensure it has the right properties for SQLCipher
         // 256 bits (32 bytes) is the required length for raw SQLCipher keys
-        return buffer.doKeyDerivation(length = 256)
+        return buffer.doKeyDerivation(bitCount = 256)
     }
 }
