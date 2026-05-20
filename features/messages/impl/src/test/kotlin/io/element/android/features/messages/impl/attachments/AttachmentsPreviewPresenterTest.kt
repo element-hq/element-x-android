@@ -17,6 +17,7 @@ import io.element.android.features.messages.impl.attachments.preview.Attachments
 import io.element.android.features.messages.impl.attachments.preview.OnDoneListener
 import io.element.android.features.messages.impl.attachments.preview.SendActionState
 import io.element.android.features.messages.impl.attachments.video.MediaOptimizationSelectorState
+import io.element.android.features.messages.impl.attachments.video.VideoCompressionPresetSelector
 import io.element.android.features.messages.impl.attachments.video.VideoUploadEstimation
 import io.element.android.features.messages.impl.fixtures.aMediaAttachment
 import io.element.android.features.messages.test.attachments.video.FakeMediaOptimizationSelectorPresenterFactory
@@ -44,6 +45,7 @@ import io.element.android.libraries.mediaupload.impl.DefaultMediaSender
 import io.element.android.libraries.mediaupload.test.FakeMediaOptimizationConfigProvider
 import io.element.android.libraries.mediaupload.test.FakeMediaPreProcessor
 import io.element.android.libraries.mediaviewer.api.aVideoMediaInfo
+import io.element.android.libraries.mediaviewer.api.anImageMediaInfo
 import io.element.android.libraries.mediaviewer.api.anApkMediaInfo
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.mediaviewer.test.viewer.aLocalMedia
@@ -555,6 +557,7 @@ class AttachmentsPreviewPresenterTest {
         // for https://github.com/element-hq/element-x-android/issues/6365
         val mediaPreProcessor = FakeMediaPreProcessor()
         val presenter = createAttachmentsPreviewPresenter(
+            localMedia = aLocalMedia(mockMediaUrl, anImageMediaInfo()),
             sendAsFile = true,
             mediaPreProcessor = mediaPreProcessor,
             // Selector views are hidden in the sendAsFile flow, which triggers the auto pre-process path.
@@ -573,6 +576,51 @@ class AttachmentsPreviewPresenterTest {
                 MediaOptimizationConfig(
                     compressImages = false,
                     videoCompressionPreset = VideoCompressionPreset.HIGH,
+                )
+            )
+        }
+    }
+
+    @Test
+    fun `present - sendAsFile video is pre-processed with best fitting preset`() = runTest {
+        val mediaPreProcessor = FakeMediaPreProcessor()
+        val presenter = createAttachmentsPreviewPresenter(
+            localMedia = aLocalMedia(mockMediaUrl, aVideoMediaInfo()),
+            sendAsFile = true,
+            mediaPreProcessor = mediaPreProcessor,
+            // Selector views are hidden in the sendAsFile flow, which triggers the auto pre-process path.
+            displayMediaQualitySelectorViews = false,
+            mediaOptimizationSelectorPresenterFactory = FakeMediaOptimizationSelectorPresenterFactory {
+                MediaOptimizationSelectorState(
+                    maxUploadSize = AsyncData.Success(250_000_000L),
+                    videoSizeEstimations = AsyncData.Success(
+                        persistentListOf(
+                            VideoUploadEstimation(VideoCompressionPreset.HIGH, sizeInBytes = 513_216_000L, canUpload = false),
+                            VideoUploadEstimation(VideoCompressionPreset.STANDARD, sizeInBytes = 228_096_000L, canUpload = true),
+                            VideoUploadEstimation(VideoCompressionPreset.LOW, sizeInBytes = 57_024_000L, canUpload = true),
+                        )
+                    ),
+                    isImageOptimizationEnabled = false,
+                    selectedVideoPreset = VideoCompressionPreset.STANDARD,
+                    displayMediaSelectorViews = false,
+                    displayVideoPresetSelectorDialog = false,
+                    eventSink = {},
+                )
+            },
+            mediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(
+                config = MediaOptimizationConfig(
+                    compressImages = true,
+                    videoCompressionPreset = VideoCompressionPreset.LOW,
+                )
+            ),
+        )
+
+        presenter.test {
+            consumeItemsUntilPredicate { mediaPreProcessor.processCallCount > 0 }
+            assertThat(mediaPreProcessor.lastMediaOptimizationConfig).isEqualTo(
+                MediaOptimizationConfig(
+                    compressImages = false,
+                    videoCompressionPreset = VideoCompressionPreset.STANDARD,
                 )
             )
         }
@@ -604,6 +652,7 @@ class AttachmentsPreviewPresenterTest {
             }
         ),
         mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
+        videoCompressionPresetSelector: VideoCompressionPresetSelector = VideoCompressionPresetSelector(),
     ): AttachmentsPreviewPresenter {
         return AttachmentsPreviewPresenter(
             attachment = aMediaAttachment(localMedia, sendAsFile = sendAsFile),
@@ -623,6 +672,7 @@ class AttachmentsPreviewPresenterTest {
             sessionCoroutineScope = this,
             dispatchers = testCoroutineDispatchers(),
             mediaOptimizationSelectorPresenterFactory = mediaOptimizationSelectorPresenterFactory,
+            videoCompressionPresetSelector = videoCompressionPresetSelector,
             timelineMode = timelineMode,
             inReplyToEventId = null,
             mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,

@@ -253,12 +253,35 @@ class DefaultMediaOptimizationSelectorPresenterTest {
         }
     }
 
+    @Test
+    fun `present - sendAsFile picks lower video preset when HIGH exceeds the upload limit`() = runTest {
+        val presenter = createDefaultMediaOptimizationSelectorPresenter(
+            maxUploadSizeProvider = MaxUploadSizeProvider { Result.success(250_000_000L) },
+            mediaExtractorFactory = FakeVideoMetadataExtractorFactory(
+                FakeVideoMetadataExtractor(
+                    sizeResult = Result.success(Size(1920, 1080)),
+                    duration = Result.success(10.minutes)
+                )
+            ),
+            sendAsFile = true,
+        )
+        presenter.test {
+            // Initial loading state, then the one with size estimations loaded.
+            skipItems(1)
+            awaitItem().run {
+                assertThat(displayMediaSelectorViews).isFalse()
+                assertThat(selectedVideoPreset).isEqualTo(VideoCompressionPreset.STANDARD)
+            }
+        }
+    }
+
     private fun createDefaultMediaOptimizationSelectorPresenter(
         localMedia: LocalMedia = aLocalMedia(mockMediaUrl, aVideoMediaInfo()),
         maxUploadSizeProvider: MaxUploadSizeProvider = MaxUploadSizeProvider { Result.success(1_000L) },
         featureFlagService: FakeFeatureFlagService = FakeFeatureFlagService(mapOf(FeatureFlags.SelectableMediaQuality.key to true)),
         mediaExtractorFactory: FakeVideoMetadataExtractorFactory = FakeVideoMetadataExtractorFactory(),
         mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
+        videoCompressionPresetSelector: VideoCompressionPresetSelector = VideoCompressionPresetSelector(),
         sendAsFile: Boolean = false,
     ): DefaultMediaOptimizationSelectorPresenter {
         return DefaultMediaOptimizationSelectorPresenter(
@@ -268,6 +291,7 @@ class DefaultMediaOptimizationSelectorPresenterTest {
             featureFlagService = featureFlagService,
             mediaExtractorFactory = mediaExtractorFactory,
             mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
+            videoCompressionPresetSelector = videoCompressionPresetSelector,
         )
     }
 }

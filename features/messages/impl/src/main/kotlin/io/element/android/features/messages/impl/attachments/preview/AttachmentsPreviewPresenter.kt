@@ -23,6 +23,8 @@ import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.video.MediaOptimizationSelectorPresenter
+import io.element.android.features.messages.impl.attachments.video.MediaOptimizationSelectorState
+import io.element.android.features.messages.impl.attachments.video.VideoCompressionPresetSelector
 import io.element.android.libraries.androidutils.file.TemporaryUriDeleter
 import io.element.android.libraries.androidutils.file.safeDelete
 import io.element.android.libraries.androidutils.hash.hash
@@ -61,6 +63,7 @@ class AttachmentsPreviewPresenter(
     private val permalinkBuilder: PermalinkBuilder,
     private val temporaryUriDeleter: TemporaryUriDeleter,
     private val mediaOptimizationSelectorPresenterFactory: MediaOptimizationSelectorPresenter.Factory,
+    private val videoCompressionPresetSelector: VideoCompressionPresetSelector,
     @SessionCoroutineScope private val sessionCoroutineScope: CoroutineScope,
     private val dispatchers: CoroutineDispatchers,
     private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
@@ -107,21 +110,19 @@ class AttachmentsPreviewPresenter(
 
         var displayFileTooLargeError by remember { mutableStateOf(false) }
 
-        LaunchedEffect(mediaOptimizationSelectorState.displayMediaSelectorViews) {
+        LaunchedEffect(
+            mediaOptimizationSelectorState.displayMediaSelectorViews,
+            mediaOptimizationSelectorState.videoSizeEstimations,
+        ) {
             // If the media optimization selector is not displayed, we can pre-process the media
             // to prepare it for sending. This is done to avoid blocking the UI thread when the
             // user clicks on the send button.
-            if (mediaOptimizationSelectorState.displayMediaSelectorViews == false) {
-                val config = if (mediaAttachment.sendAsFile) {
-                    // Send-as-file: never compress images; videos use HIGH (best available) preset.
-                    MediaOptimizationConfig(
-                        compressImages = false,
-                        videoCompressionPreset = VideoCompressionPreset.HIGH,
-                    )
-                } else {
-                    mediaOptimizationConfigProvider.get()
-                }
-                preprocessMediaJob = preProcessAttachment(
+            if (mediaOptimizationSelectorState.displayMediaSelectorViews == false && preprocessMediaJob == null) {
+                val config = getAutoPreprocessMediaOptimizationConfig(
+                    mediaAttachment = mediaAttachment,
+                    mediaOptimizationSelectorState = mediaOptimizationSelectorState,
+                ) ?: return@LaunchedEffect
+                preprocessMediaJob = coroutineScope.preProcessAttachment(
                     attachment = attachment,
                     mediaOptimizationConfig = config,
                     displayProgress = false,
@@ -242,6 +243,32 @@ class AttachmentsPreviewPresenter(
             mediaOptimizationSelectorState = mediaOptimizationSelectorState,
             displayFileTooLargeError = displayFileTooLargeError,
             eventSink = ::handleEvent,
+        )
+    }
+
+    private suspend fun getAutoPreprocessMediaOptimizationConfig(
+        mediaAttachment: Attachment.Media,
+        mediaOptimizationSelectorState: MediaOptimizationSelectorState,
+    ): MediaOptimizationConfig? {
+        if (!mediaAttachment.sendAsFile) {
+            return mediaOptimizationConfigProvider.get()
+        }
+
+        if (!mediaAttachment.localMedia.info.mimeType.isMimeTypeVideo()) {
+            return MediaOptimizationConfig(
+                compressImages = false,
+                videoCompressionPreset = VideoCompressionPreset.HIGH,
+            )
+        }
+
+        val videoCompressionPreset = videoCompressionPresetSelector.selectBestVideoPreset(
+            expectedVideoPreset = VideoCompressionPreset.HIGH,
+            videoSizeEstimations = mediaOptimizationSelectorState.videoSizeEstimations,
+        ).dataOrNull() ?: return null
+
+        return MediaOptimizationConfig(
+            compressImages = false,
+            videoCompressionPreset = videoCompressionPreset,
         )
     }
 

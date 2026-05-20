@@ -41,6 +41,7 @@ class DefaultMediaOptimizationSelectorPresenter(
     private val maxUploadSizeProvider: MaxUploadSizeProvider,
     private val featureFlagService: FeatureFlagService,
     private val mediaOptimizationConfigProvider: MediaOptimizationConfigProvider,
+    private val videoCompressionPresetSelector: VideoCompressionPresetSelector,
     mediaExtractorFactory: VideoMetadataExtractor.Factory,
 ) : MediaOptimizationSelectorPresenter {
     @ContributesBinding(SessionScope::class)
@@ -57,8 +58,8 @@ class DefaultMediaOptimizationSelectorPresenter(
     @Composable
     override fun present(): MediaOptimizationSelectorState {
         val displayMediaSelectorViews by produceState<Boolean?>(null) {
-            // When sending as a raw file, never show the optimization selector: the user
-            // explicitly opted into uploading the original.
+            // When sending as a raw file, never show the optimization selector: images skip
+            // recompression, while videos use the highest available best-fit preset.
             value = !sendAsFile && featureFlagService.isFeatureEnabled(FeatureFlags.SelectableMediaQuality)
         }
 
@@ -132,8 +133,8 @@ class DefaultMediaOptimizationSelectorPresenter(
                 // video preset that still fits the upload limit (we have no true "do not re-encode
                 // video" path in the pre-processor right now).
                 selectedImageOptimization = AsyncData.Success(false)
-                selectedVideoOptimizationPreset = findBestVideoPreset(
-                    defaultVideoPreset = VideoCompressionPreset.HIGH,
+                selectedVideoOptimizationPreset = videoCompressionPresetSelector.selectBestVideoPreset(
+                    expectedVideoPreset = VideoCompressionPreset.HIGH,
                     videoSizeEstimations = videoSizeEstimations,
                 )
                 return@LaunchedEffect
@@ -142,8 +143,8 @@ class DefaultMediaOptimizationSelectorPresenter(
             selectedImageOptimization = AsyncData.Success(mediaOptimizationConfig.compressImages)
             // Find the best video preset based on the default preset and the video size estimations
             // Since the estimation for the current preset may be way too large to upload, we check the ones that provide lower file sizes
-            selectedVideoOptimizationPreset = findBestVideoPreset(
-                defaultVideoPreset = mediaOptimizationConfig.videoCompressionPreset,
+            selectedVideoOptimizationPreset = videoCompressionPresetSelector.selectBestVideoPreset(
+                expectedVideoPreset = mediaOptimizationConfig.videoCompressionPreset,
                 videoSizeEstimations = videoSizeEstimations,
             )
         }
@@ -190,21 +191,5 @@ class DefaultMediaOptimizationSelectorPresenter(
             displayVideoPresetSelectorDialog = displayVideoPresetSelectorDialog,
             eventSink = ::handleEvent,
         )
-    }
-
-    private fun findBestVideoPreset(
-        defaultVideoPreset: VideoCompressionPreset,
-        videoSizeEstimations: AsyncData<ImmutableList<VideoUploadEstimation>>,
-    ): AsyncData<VideoCompressionPreset> {
-        val estimations = videoSizeEstimations.dataOrNull() ?: return AsyncData.Loading()
-        // This will find the best video preset that can be used to produce a video that can be uploaded
-        val bestEstimation = estimations.find { it.preset.ordinal >= defaultVideoPreset.ordinal && it.canUpload }?.preset
-        return if (bestEstimation != null) {
-            AsyncData.Success(bestEstimation)
-        } else {
-            AsyncData.Failure(
-                IllegalStateException("No suitable video preset found for default preset: $defaultVideoPreset")
-            )
-        }
     }
 }
