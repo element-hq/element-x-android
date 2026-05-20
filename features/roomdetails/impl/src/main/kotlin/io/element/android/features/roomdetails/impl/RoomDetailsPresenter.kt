@@ -287,8 +287,6 @@ class RoomDetailsPresenter(
         room.setUnreadFlag(isUnread = true)
             .onSuccess {
                 analyticsService.captureInteraction(name = Interaction.Name.MobileRoomListRoomContextMenuUnreadToggle)
-            }
-            .onSuccess {
                 navigator.onDone()
             }
     }

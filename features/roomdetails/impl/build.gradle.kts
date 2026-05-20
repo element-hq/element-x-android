@@ -70,6 +70,7 @@ dependencies {
     testImplementation(projects.libraries.mediaviewer.test)
     testImplementation(projects.libraries.permissions.test)
     testImplementation(projects.libraries.preferences.test)
+    testImplementation(projects.libraries.push.test)
     testImplementation(projects.libraries.usersearch.test)
     testImplementation(projects.libraries.featureflag.test)
     testImplementation(projects.features.call.test)
