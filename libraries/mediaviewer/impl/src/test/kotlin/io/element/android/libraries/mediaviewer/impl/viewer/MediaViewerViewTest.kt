@@ -317,8 +317,9 @@ class MediaViewerViewTest {
         // Advance time to let the states update
         mainClock.advanceTimeBy(3_000)
 
-        // `LoadMore` should be called twice, once for the first loading state, and once for the second one even though they have the same timestamp because of the intermediate error state.
-        // The third one will be ignored since it has the same timestamp as the second one and it'll be discarded by the internal `distinctUntilChanged`.
+        // `LoadMore` should be called twice, once for the first loading state, and once for the second one even though they have the same timestamp because
+        // of the intermediate error state.
+        // The third one will be ignored since it has the same timestamp as the second one and it'll be discarded by the Compose's equality diffing.
         eventsRecorder.assertList(
             listOf(
                 MediaViewerEvent.LoadMore(direction = Timeline.PaginationDirection.BACKWARDS),
