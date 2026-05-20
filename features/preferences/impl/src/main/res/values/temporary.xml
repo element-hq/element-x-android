@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2026 Element Creations Ltd.
+  ~
+  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+  ~ Please see LICENSE files in the repository root for full details.
+  -->
+<resources>
+    <string name="screen_notification_settings_sound_section_title">Sound</string>
+    <string name="screen_notification_settings_message_sound_label">Message sound</string>
+    <string name="screen_notification_settings_call_ringtone_label">Call ringtone</string>
+    <string name="screen_notification_settings_sound_element_default">Element Default</string>
+    <string name="screen_notification_settings_sound_element_fade">Element Fade</string>
+    <string name="screen_notification_settings_sound_system_default">System Default</string>
+    <string name="screen_notification_settings_sound_silent">Silent</string>
+    <string name="screen_notification_settings_sound_custom_fallback">Custom</string>
+    <string name="screen_notification_settings_sound_set_sound_error_title">Problem setting alert sound</string>
+    <string name="screen_notification_settings_sound_set_sound_error_dismiss_a11y">Dismiss alert sound error</string>
+    <string name="screen_notification_settings_message_sound_dialog_title">Message sound</string>
+    <string name="screen_notification_settings_message_sound_dialog_choose_other">Choose another sound…</string>
+    <string name="screen_notification_settings_message_sound_dialog_current_subtitle">Currently using %1$s</string>
+</resources>
