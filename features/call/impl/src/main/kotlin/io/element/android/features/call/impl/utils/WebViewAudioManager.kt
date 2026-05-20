@@ -268,8 +268,8 @@ class WebViewAudioManager(
     private fun setWebViewAndroidNativeBridge() {
         Timber.d("Adding callback in controls.onAudioPlaybackStarted")
         webView.evaluateJavascript("controls.onAudioPlaybackStarted = () => { androidNativeBridge.onTrackReady(); };", null)
-        Timber.d("Adding callback in controls.onOutputDeviceSelect")
-        webView.evaluateJavascript("controls.onOutputDeviceSelect = (id) => { androidNativeBridge.setOutputDevice(id); };", null)
+        Timber.d("Adding callback in controls.onAudioDeviceSelect")
+        webView.evaluateJavascript("controls.onAudioDeviceSelect = (id) => { androidNativeBridge.setAudioDevice(id); };", null)
     }
 
     /**
@@ -296,8 +296,8 @@ class WebViewAudioManager(
     ) {
         Timber.d("Updating available audio devices")
         val deviceList = json.encodeToString(devices)
-        webView.evaluateJavascript("controls.setAvailableOutputDevices($deviceList);", {
-            Timber.d("Audio: setAvailableOutputDevices result: $it")
+        webView.evaluateJavascript("controls.setAvailableAudioDevices($deviceList);", {
+            Timber.d("Audio: setAvailableAudioDevices result: $it")
         })
     }
 
@@ -402,7 +402,7 @@ private class AndroidWebViewAudioBridge(
     private val onAudioPlaybackStarted: () -> Unit,
 ) {
     @JavascriptInterface
-    fun setOutputDevice(id: String) {
+    fun setAudioDevice(id: String) {
         Timber.d("Audio device selected in webview, id: $id")
         onAudioDeviceSelected(id)
     }
