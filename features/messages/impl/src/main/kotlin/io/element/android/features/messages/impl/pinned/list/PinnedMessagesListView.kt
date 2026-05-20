@@ -48,6 +48,7 @@ import io.element.android.libraries.designsystem.preview.PreviewsDayNight
 import io.element.android.libraries.designsystem.theme.components.CircularProgressIndicator
 import io.element.android.libraries.designsystem.theme.components.Scaffold
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
+import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
@@ -61,6 +62,7 @@ fun PinnedMessagesListView(
     onBackClick: () -> Unit,
     onEventClick: (event: TimelineItem.Event) -> Unit,
     onUserDataClick: (MatrixUser) -> Unit,
+    onMemberClick: (UserId) -> Unit,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
     modifier: Modifier = Modifier,
@@ -82,6 +84,7 @@ fun PinnedMessagesListView(
                 state = state,
                 onEventClick = onEventClick,
                 onUserDataClick = onUserDataClick,
+                onMemberClick = onMemberClick,
                 onLinkClick = onLinkClick,
                 onLinkLongClick = onLinkLongClick,
                 onErrorDismiss = onBackClick,
@@ -112,6 +115,7 @@ private fun PinnedMessagesListContent(
     state: PinnedMessagesListState,
     onEventClick: (event: TimelineItem.Event) -> Unit,
     onUserDataClick: (MatrixUser) -> Unit,
+    onMemberClick: (UserId) -> Unit,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
     onErrorDismiss: () -> Unit,
@@ -134,6 +138,7 @@ private fun PinnedMessagesListContent(
                 onUserDataClick = onUserDataClick,
                 onLinkClick = onLinkClick,
                 onLinkLongClick = onLinkLongClick,
+                onMemberClick = onMemberClick,
             )
             PinnedMessagesListState.Loading -> {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
@@ -172,6 +177,7 @@ private fun PinnedMessagesListLoaded(
     onUserDataClick: (MatrixUser) -> Unit,
     onLinkClick: (Link) -> Unit,
     onLinkLongClick: (Link) -> Unit,
+    onMemberClick: (UserId) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     fun onActionSelected(timelineItemAction: TimelineItemAction, event: TimelineItem.Event) {
@@ -235,6 +241,9 @@ private fun PinnedMessagesListLoaded(
                 onMoreReactionsClick = {},
                 onReadReceiptClick = {},
                 onSwipeToReply = {},
+                onJoinCallClick = {},
+                onMemberClick = onMemberClick,
+                onRoomStateClick = {},
                 eventSink = { timelineItemEvent ->
                     when (timelineItemEvent) {
                         is TimelineEvent.OpenThread -> state.eventSink(PinnedMessagesListEvent.OpenThread(timelineItemEvent.threadRootEventId))
@@ -306,6 +315,7 @@ internal fun PinnedMessagesListViewPreview(@PreviewParameter(PinnedMessagesListS
             onBackClick = {},
             onEventClick = { },
             onUserDataClick = {},
+            onMemberClick = {},
             onLinkClick = {},
             onLinkLongClick = {},
         )
