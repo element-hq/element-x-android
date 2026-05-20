@@ -28,7 +28,6 @@ import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.announcement.api.Announcement
 import io.element.android.features.announcement.api.AnnouncementService
 import io.element.android.features.home.impl.datasource.RoomListDataSource
-import io.element.android.features.home.impl.filters.RoomListFilter.Rooms
 import io.element.android.features.home.impl.filters.RoomListFiltersState
 import io.element.android.features.home.impl.filters.into
 import io.element.android.features.home.impl.search.RoomListSearchEvent
@@ -50,12 +49,10 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
-import io.element.android.libraries.matrix.api.timeline.ReceiptType
+import io.element.android.libraries.matrix.api.sync.SyncService
 import io.element.android.libraries.matrix.ui.safety.rememberHideInvitesAvatar
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
-import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.push.api.battery.BatteryOptimizationState
-import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.api.watchers.AnalyticsColdStartWatcher
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
@@ -79,12 +76,13 @@ class RoomListPresenter(
     private val roomListDataSource: RoomListDataSource,
     private val filtersPresenter: Presenter<RoomListFiltersState>,
     private val searchPresenter: Presenter<RoomListSearchState>,
-    private val sessionPreferencesStore: SessionPreferencesStore,
     private val analyticsService: AnalyticsService,
     private val acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
     private val fullScreenIntentPermissionsPresenter: Presenter<FullScreenIntentPermissionsState>,
     private val batteryOptimizationPresenter: Presenter<BatteryOptimizationState>,
-    private val notificationCleaner: NotificationCleaner,
+    private val markRoomAsRead: MarkRoomAsRead,
+    private val markAllRoomsAsRead: MarkAllRoomsAsRead,
+    private val syncService: SyncService,
     private val appPreferencesStore: AppPreferencesStore,
     private val seenInvitesStore: SeenInvitesStore,
     private val announcementService: AnnouncementService,
@@ -119,6 +117,18 @@ class RoomListPresenter(
         val contextMenu = remember { mutableStateOf<RoomListState.ContextMenu>(RoomListState.ContextMenu.Hidden) }
         val declineInviteMenu = remember { mutableStateOf<RoomListState.DeclineInviteMenu>(RoomListState.DeclineInviteMenu.Hidden) }
 
+        var canMarkAllAsRead by remember { mutableStateOf(false) }
+        var isMarkingAllAsRead by remember { mutableStateOf(false) }
+        val syncState by syncService.syncState.collectAsState()
+        LaunchedEffect(Unit) {
+            canMarkAllAsRead = markAllRoomsAsRead.hasUnreadRooms()
+        }
+        LaunchedEffect(syncState) {
+            if (!isMarkingAllAsRead) {
+                canMarkAllAsRead = markAllRoomsAsRead.hasUnreadRooms()
+            }
+        }
+
         fun handleEvent(event: RoomListEvent) {
             when (event) {
                 is RoomListEvent.UpdateVisibleRange -> coroutineScope.launch {
@@ -142,6 +152,11 @@ class RoomListPresenter(
                 is RoomListEvent.SetRoomIsFavorite -> coroutineScope.setRoomIsFavorite(event.roomId, event.isFavorite)
                 is RoomListEvent.MarkAsRead -> coroutineScope.markAsRead(event.roomId)
                 is RoomListEvent.MarkAsUnread -> coroutineScope.markAsUnread(event.roomId)
+                RoomListEvent.MarkAllAsRead -> coroutineScope.markAllAsRead(
+                    isMarkingAllAsRead = { isMarkingAllAsRead },
+                    setIsMarkingAllAsRead = { isMarkingAllAsRead = it },
+                    setCanMarkAllAsRead = { canMarkAllAsRead = it },
+                )
                 is RoomListEvent.AcceptInvite -> {
                     acceptDeclineInviteState.eventSink(
                         AcceptInvite(event.roomSummary.toInviteData())
@@ -183,6 +198,8 @@ class RoomListPresenter(
             acceptDeclineInviteState = acceptDeclineInviteState,
             hideInvitesAvatars = hideInvitesAvatar,
             canReportRoom = canReportRoom,
+            canMarkAllAsRead = canMarkAllAsRead,
+            isMarkingAllAsRead = isMarkingAllAsRead,
             eventSink = ::handleEvent,
         )
     }
@@ -304,18 +321,25 @@ class RoomListPresenter(
     }
 
     private fun CoroutineScope.markAsRead(roomId: RoomId) = launch {
-        notificationCleaner.clearMessagesForRoom(client.sessionId, roomId)
-        client.getRoom(roomId)?.use { room ->
-            room.setUnreadFlag(isUnread = false)
-            val receiptType = if (sessionPreferencesStore.isSendPublicReadReceiptsEnabled().first()) {
-                ReceiptType.READ
-            } else {
-                ReceiptType.READ_PRIVATE
+        markRoomAsRead(roomId)
+            .onSuccess {
+                analyticsService.captureInteraction(name = Interaction.Name.MobileRoomListRoomContextMenuUnreadToggle)
             }
-            room.markAsRead(receiptType)
-                .onSuccess {
-                    analyticsService.captureInteraction(name = Interaction.Name.MobileRoomListRoomContextMenuUnreadToggle)
-                }
+    }
+
+    private fun CoroutineScope.markAllAsRead(
+        isMarkingAllAsRead: () -> Boolean,
+        setIsMarkingAllAsRead: (Boolean) -> Unit,
+        setCanMarkAllAsRead: (Boolean) -> Unit,
+    ) = launch {
+        if (isMarkingAllAsRead()) return@launch
+        setIsMarkingAllAsRead(true)
+        try {
+            markAllRoomsAsRead()
+                .onSuccess { setCanMarkAllAsRead(false) }
+        } finally {
+            setIsMarkingAllAsRead(false)
+            setCanMarkAllAsRead(markAllRoomsAsRead.hasUnreadRooms())
         }
     }
 

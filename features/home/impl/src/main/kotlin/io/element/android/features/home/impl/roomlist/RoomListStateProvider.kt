@@ -59,6 +59,8 @@ internal fun aRoomListState(
     acceptDeclineInviteState: AcceptDeclineInviteState = anAcceptDeclineInviteState(),
     hideInvitesAvatars: Boolean = false,
     canReportRoom: Boolean = true,
+    canMarkAllAsRead: Boolean = false,
+    isMarkingAllAsRead: Boolean = false,
     eventSink: (RoomListEvent) -> Unit = {}
 ) = RoomListState(
     contextMenu = contextMenu,
@@ -71,6 +73,8 @@ internal fun aRoomListState(
     acceptDeclineInviteState = acceptDeclineInviteState,
     hideInvitesAvatars = hideInvitesAvatars,
     canReportRoom = canReportRoom,
+    canMarkAllAsRead = canMarkAllAsRead,
+    isMarkingAllAsRead = isMarkingAllAsRead,
     eventSink = eventSink,
 )
 

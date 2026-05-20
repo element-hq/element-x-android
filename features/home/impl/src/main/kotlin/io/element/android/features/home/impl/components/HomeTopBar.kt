@@ -90,6 +90,8 @@ fun HomeTopBar(
     onAccountSwitch: (SessionId) -> Unit,
     scrollBehavior: TopAppBarScrollBehavior,
     canReportBug: Boolean,
+    canMarkAllAsRead: Boolean,
+    isMarkingAllAsRead: Boolean,
     displayFilters: Boolean,
     filtersState: RoomListFiltersState,
     spaceFiltersState: SpaceFiltersState,
@@ -138,6 +140,8 @@ fun HomeTopBar(
                         onToggleSearch = onToggleSearch,
                         onMenuActionClick = onMenuActionClick,
                         canReportBug = canReportBug,
+                        canMarkAllAsRead = canMarkAllAsRead,
+                        isMarkingAllAsRead = isMarkingAllAsRead,
                         spaceFiltersState = spaceFiltersState,
                     )
                 }
@@ -164,6 +168,8 @@ private fun RoomListMenuItems(
     onToggleSearch: () -> Unit,
     onMenuActionClick: (RoomListMenuAction) -> Unit,
     canReportBug: Boolean,
+    canMarkAllAsRead: Boolean,
+    isMarkingAllAsRead: Boolean,
     spaceFiltersState: SpaceFiltersState,
 ) {
     IconButton(
@@ -189,6 +195,22 @@ private fun RoomListMenuItems(
             expanded = showMenu,
             onDismissRequest = { showMenu = false }
         ) {
+            if (canMarkAllAsRead && !isMarkingAllAsRead) {
+                DropdownMenuItem(
+                    onClick = {
+                        showMenu = false
+                        onMenuActionClick(RoomListMenuAction.MarkAllAsRead)
+                    },
+                    text = { Text(stringResource(id = R.string.screen_roomlist_mark_all_as_read)) },
+                    leadingIcon = {
+                        Icon(
+                            imageVector = CompoundIcons.MarkAsRead(),
+                            tint = ElementTheme.colors.iconSecondary,
+                            contentDescription = null,
+                        )
+                    }
+                )
+            }
             if (RoomListConfig.SHOW_INVITE_MENU_ITEM) {
                 DropdownMenuItem(
                     onClick = {
@@ -221,6 +243,13 @@ private fun RoomListMenuItems(
                     }
                 )
             }
+        }
+    } else if (canMarkAllAsRead && !isMarkingAllAsRead) {
+        IconButton(onClick = { onMenuActionClick(RoomListMenuAction.MarkAllAsRead) }) {
+            Icon(
+                imageVector = CompoundIcons.MarkAsRead(),
+                contentDescription = stringResource(R.string.screen_roomlist_mark_all_as_read),
+            )
         }
     }
 }
@@ -355,6 +384,8 @@ internal fun HomeTopBarPreview() = ElementPreview {
         onAccountSwitch = {},
         onToggleSearch = {},
         canReportBug = true,
+        canMarkAllAsRead = false,
+        isMarkingAllAsRead = false,
         displayFilters = true,
         filtersState = aRoomListFiltersState(),
         spaceFiltersState = anUnselectedSpaceFiltersState(),
@@ -376,6 +407,8 @@ internal fun HomeTopBarSpaceFiltersSelectedPreview() = ElementPreview {
         onAccountSwitch = {},
         onToggleSearch = {},
         canReportBug = true,
+        canMarkAllAsRead = false,
+        isMarkingAllAsRead = false,
         displayFilters = true,
         filtersState = aRoomListFiltersState(),
         spaceFiltersState = aSelectedSpaceFiltersState(),
@@ -397,6 +430,8 @@ internal fun HomeTopBarSpacesPreview() = ElementPreview {
         onAccountSwitch = {},
         onToggleSearch = {},
         canReportBug = true,
+        canMarkAllAsRead = false,
+        isMarkingAllAsRead = false,
         displayFilters = false,
         filtersState = aRoomListFiltersState(),
         spaceFiltersState = anUnselectedSpaceFiltersState(),
@@ -418,6 +453,8 @@ internal fun HomeTopBarWithIndicatorPreview() = ElementPreview {
         onAccountSwitch = {},
         onToggleSearch = {},
         canReportBug = true,
+        canMarkAllAsRead = false,
+        isMarkingAllAsRead = false,
         displayFilters = true,
         filtersState = aRoomListFiltersState(),
         spaceFiltersState = anUnselectedSpaceFiltersState(),
@@ -439,6 +476,31 @@ internal fun HomeTopBarMultiAccountPreview() = ElementPreview {
         onAccountSwitch = {},
         onToggleSearch = {},
         canReportBug = true,
+        canMarkAllAsRead = false,
+        isMarkingAllAsRead = false,
+        displayFilters = true,
+        filtersState = aRoomListFiltersState(),
+        spaceFiltersState = anUnselectedSpaceFiltersState(),
+        onMenuActionClick = {},
+    )
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@PreviewsDayNight
+@Composable
+internal fun HomeTopBarReadAllUnreadPreview() = ElementPreview {
+    HomeTopBar(
+        selectedNavigationItem = HomeNavigationBarItem.Chats,
+        currentUserAndNeighbors = persistentListOf(aMatrixUser(id = "@id:domain", displayName = USER_NAME_ALICE)),
+        showAvatarIndicator = false,
+        areSearchResultsDisplayed = false,
+        scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState()),
+        onOpenSettings = {},
+        onAccountSwitch = {},
+        onToggleSearch = {},
+        canReportBug = true,
+        canMarkAllAsRead = true,
+        isMarkingAllAsRead = false,
         displayFilters = true,
         filtersState = aRoomListFiltersState(),
         spaceFiltersState = anUnselectedSpaceFiltersState(),

@@ -152,6 +152,9 @@ class HomeFlowNode(
             RoomListMenuAction.ReportBug -> {
                 callback.navigateToBugReport()
             }
+            RoomListMenuAction.MarkAllAsRead -> {
+                stateFlow.value.roomListState.eventSink(RoomListEvent.MarkAllAsRead)
+            }
         }
     }
 

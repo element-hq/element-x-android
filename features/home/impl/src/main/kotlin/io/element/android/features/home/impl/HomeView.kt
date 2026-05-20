@@ -192,6 +192,8 @@ private fun HomeScaffold(
                 filtersState = roomListState.filtersState,
                 spaceFiltersState = roomListState.spaceFiltersState,
                 canReportBug = state.canReportBug,
+                canMarkAllAsRead = roomListState.canMarkAllAsRead,
+                isMarkingAllAsRead = roomListState.isMarkingAllAsRead,
                 modifier = Modifier.hazeEffect(
                     state = hazeState,
                     style = HazeMaterials.thick(),
