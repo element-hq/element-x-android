@@ -21,6 +21,7 @@ class RoomBeginningPostProcessorTest {
             items = emptyList(),
             isDm = true,
             roomCreator = A_USER_ID,
+            isPublic = null,
             hasMoreToLoadBackwards = false,
         )
         assertThat(processedItems).isEmpty()
@@ -33,6 +34,7 @@ class RoomBeginningPostProcessorTest {
             items = listOf(messageEvent),
             isDm = true,
             roomCreator = A_USER_ID,
+            isPublic = null,
             hasMoreToLoadBackwards = false,
         )
         assertThat(processedItems).isEqualTo(listOf(messageEvent))
@@ -45,6 +47,7 @@ class RoomBeginningPostProcessorTest {
             items = listOf(messageEvent),
             isDm = true,
             roomCreator = null,
+            isPublic = null,
             hasMoreToLoadBackwards = false,
         )
         assertThat(processedItems).isEqualTo(listOf(messageEvent))
@@ -62,6 +65,7 @@ class RoomBeginningPostProcessorTest {
             items = timelineItems,
             isDm = true,
             roomCreator = A_USER_ID,
+            isPublic = null,
             hasMoreToLoadBackwards = false,
         )
         assertThat(processedItems).containsExactly(timelineStartEvent)
@@ -78,6 +82,7 @@ class RoomBeginningPostProcessorTest {
             items = timelineItems,
             isDm = true,
             roomCreator = A_USER_ID,
+            isPublic = null,
             hasMoreToLoadBackwards = false,
         )
         assertThat(processedItems).isEqualTo(timelineItems)
@@ -96,7 +101,7 @@ class RoomBeginningPostProcessorTest {
             messageEvent,
         )
         val processor = RoomBeginningPostProcessor(Timeline.Mode.Live)
-        val processedItems = processor.process(timelineItems, isDm = true, roomCreator = A_USER_ID, hasMoreToLoadBackwards = false)
+        val processedItems = processor.process(timelineItems, isDm = true, roomCreator = A_USER_ID, isPublic = null, hasMoreToLoadBackwards = false)
         assertThat(processedItems).isEqualTo(expected)
     }
 
@@ -107,7 +112,7 @@ class RoomBeginningPostProcessorTest {
             roomCreatorJoinEvent,
         )
         val processor = RoomBeginningPostProcessor(Timeline.Mode.Live)
-        val processedItems = processor.process(timelineItems, isDm = true, roomCreator = A_USER_ID, hasMoreToLoadBackwards = true)
+        val processedItems = processor.process(timelineItems, isDm = true, roomCreator = A_USER_ID, isPublic = null, hasMoreToLoadBackwards = true)
         assertThat(processedItems).isEmpty()
     }
 
@@ -117,7 +122,7 @@ class RoomBeginningPostProcessorTest {
             roomCreatorJoinEvent,
         )
         val processor = RoomBeginningPostProcessor(Timeline.Mode.Live)
-        val processedItems = processor.process(timelineItems, isDm = true, roomCreator = A_USER_ID, hasMoreToLoadBackwards = true)
+        val processedItems = processor.process(timelineItems, isDm = true, roomCreator = A_USER_ID, isPublic = null, hasMoreToLoadBackwards = true)
         assertThat(processedItems).isEmpty()
     }
 
@@ -128,7 +133,43 @@ class RoomBeginningPostProcessorTest {
             otherMemberJoinEvent,
         )
         val processor = RoomBeginningPostProcessor(Timeline.Mode.Live)
-        val processedItems = processor.process(timelineItems, isDm = true, roomCreator = A_USER_ID, hasMoreToLoadBackwards = true)
+        val processedItems = processor.process(timelineItems, isDm = true, roomCreator = A_USER_ID, isPublic = null, hasMoreToLoadBackwards = true)
         assertThat(processedItems).isEqualTo(listOf(otherMemberJoinEvent))
+    }
+
+    @Test
+    fun `processor removes all membership events in public rooms`() {
+        val timelineItems = listOf(
+            roomCreateEvent,
+            roomCreatorJoinEvent,
+            otherMemberJoinEvent,
+            messageEvent,
+            otherMemberLeaveEvent,
+            profileChangeEvent,
+            topicEvent,
+        )
+        val expected = listOf(
+            roomCreateEvent,
+            messageEvent,
+        )
+        val processor = RoomBeginningPostProcessor(Timeline.Mode.Live)
+        val processedItems = processor.process(timelineItems, isDm = false, roomCreator = A_USER_ID, isPublic = true, hasMoreToLoadBackwards = false)
+        assertThat(processedItems).isEqualTo(expected)
+    }
+
+    @Test
+    fun `processor keeps membership events in non-public rooms`() {
+        val timelineItems = listOf(
+            roomCreateEvent,
+            roomCreatorJoinEvent,
+            otherMemberJoinEvent,
+            messageEvent,
+            otherMemberLeaveEvent,
+            profileChangeEvent,
+            topicEvent,
+        )
+        val processor = RoomBeginningPostProcessor(Timeline.Mode.Live)
+        val processedItems = processor.process(timelineItems, isDm = false, roomCreator = A_USER_ID, isPublic = false, hasMoreToLoadBackwards = false)
+        assertThat(processedItems).isEqualTo(timelineItems)
     }
 }
