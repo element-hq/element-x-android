@@ -17,12 +17,12 @@ import java.security.SecureRandom
  * Provides a secure passphrase for SQLCipher by generating a random secret and storing it into an [EncryptedFile].
  * @param context Android [Context], used by [EncryptedFile] for cryptographic operations.
  * @param file Destination file where the key will be stored.
- * @param secretSize Length of the generated secret.
+ * @param secretSizeBytes Length of the generated secret.
  */
 class RandomSecretPassphraseProvider(
     private val context: Context,
     private val file: File,
-    private val secretSize: Int = 256,
+    private val secretSizeBytes: Int = 32,
 ) : PassphraseProvider {
     override fun getPassphrase(): ByteArray {
         val encryptedFile = EncryptedFile(context, file)
@@ -35,9 +35,13 @@ class RandomSecretPassphraseProvider(
         }
     }
 
+    override fun reset(): Boolean {
+        return file.delete()
+    }
+
     private fun generateSecret(): ByteArray {
-        val buffer = ByteArray(size = secretSize)
-        SecureRandom().nextBytes(buffer)
-        return buffer
+        // Generate a random secret of the specified size using a secure random generator.
+        return ByteArray(size = secretSizeBytes)
+            .also { SecureRandom().nextBytes(it) }
     }
 }
