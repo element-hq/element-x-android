@@ -28,7 +28,6 @@ import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.announcement.api.Announcement
 import io.element.android.features.announcement.api.AnnouncementService
 import io.element.android.features.home.impl.datasource.RoomListDataSource
-import io.element.android.features.home.impl.filters.RoomListFilter.Rooms
 import io.element.android.features.home.impl.filters.RoomListFiltersState
 import io.element.android.features.home.impl.filters.into
 import io.element.android.features.home.impl.search.RoomListSearchEvent
@@ -42,6 +41,7 @@ import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteE
 import io.element.android.features.invite.api.acceptdecline.AcceptDeclineInviteState
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
+import io.element.android.features.preferences.impl.tasks.MarkRoomAsRead
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
@@ -50,12 +50,9 @@ import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.encryption.RecoveryState
 import io.element.android.libraries.matrix.api.roomlist.RoomList
 import io.element.android.libraries.matrix.api.roomlist.RoomListFilter
-import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.ui.safety.rememberHideInvitesAvatar
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
-import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
 import io.element.android.libraries.push.api.battery.BatteryOptimizationState
-import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.api.watchers.AnalyticsColdStartWatcher
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
@@ -79,12 +76,11 @@ class RoomListPresenter(
     private val roomListDataSource: RoomListDataSource,
     private val filtersPresenter: Presenter<RoomListFiltersState>,
     private val searchPresenter: Presenter<RoomListSearchState>,
-    private val sessionPreferencesStore: SessionPreferencesStore,
     private val analyticsService: AnalyticsService,
     private val acceptDeclineInvitePresenter: Presenter<AcceptDeclineInviteState>,
     private val fullScreenIntentPermissionsPresenter: Presenter<FullScreenIntentPermissionsState>,
     private val batteryOptimizationPresenter: Presenter<BatteryOptimizationState>,
-    private val notificationCleaner: NotificationCleaner,
+    private val markRoomAsRead: MarkRoomAsRead,
     private val appPreferencesStore: AppPreferencesStore,
     private val seenInvitesStore: SeenInvitesStore,
     private val announcementService: AnnouncementService,
@@ -304,19 +300,10 @@ class RoomListPresenter(
     }
 
     private fun CoroutineScope.markAsRead(roomId: RoomId) = launch {
-        notificationCleaner.clearMessagesForRoom(client.sessionId, roomId)
-        client.getRoom(roomId)?.use { room ->
-            room.setUnreadFlag(isUnread = false)
-            val receiptType = if (sessionPreferencesStore.isSendPublicReadReceiptsEnabled().first()) {
-                ReceiptType.READ
-            } else {
-                ReceiptType.READ_PRIVATE
+        markRoomAsRead(roomId)
+            .onSuccess {
+                analyticsService.captureInteraction(name = Interaction.Name.MobileRoomListRoomContextMenuUnreadToggle)
             }
-            room.markAsRead(receiptType)
-                .onSuccess {
-                    analyticsService.captureInteraction(name = Interaction.Name.MobileRoomListRoomContextMenuUnreadToggle)
-                }
-        }
     }
 
     private fun CoroutineScope.markAsUnread(roomId: RoomId) = launch {

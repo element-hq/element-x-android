@@ -30,6 +30,7 @@ import io.element.android.features.invite.api.acceptdecline.anAcceptDeclineInvit
 import io.element.android.features.invite.test.InMemorySeenInvitesStore
 import io.element.android.features.leaveroom.api.LeaveRoomEvent
 import io.element.android.features.leaveroom.api.LeaveRoomState
+import io.element.android.features.preferences.impl.tasks.MarkRoomAsRead
 import io.element.android.features.rageshake.test.logs.FakeAnnouncementService
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.dateformatter.api.DateFormatter
@@ -457,11 +458,17 @@ class RoomListPresenterTest {
         val notificationCleaner = FakeNotificationCleaner(
             clearMessagesForRoomLambda = clearMessagesForRoomLambda,
         )
+        val markRoomAsRead = createTestMarkRoomAsRead(
+            client = matrixClient,
+            notificationCleaner = notificationCleaner,
+            sessionPreferencesStore = sessionPreferencesStore,
+        )
         val presenter = createRoomListPresenter(
             client = matrixClient,
             sessionPreferencesStore = sessionPreferencesStore,
             analyticsService = analyticsService,
             notificationCleaner = notificationCleaner,
+            markRoomAsRead = markRoomAsRead,
         )
         presenter.test {
             val initialState = awaitItem()
@@ -653,6 +660,24 @@ class RoomListPresenterTest {
         }
     }
 
+    private fun createTestMarkRoomAsRead(
+        client: MatrixClient,
+        notificationCleaner: NotificationCleaner,
+        sessionPreferencesStore: SessionPreferencesStore,
+    ): MarkRoomAsRead = FakeMarkRoomAsRead { roomId ->
+        notificationCleaner.clearMessagesForRoom(client.sessionId, roomId)
+        val room = client.getRoom(roomId) ?: return@FakeMarkRoomAsRead Result.failure(IllegalStateException("Room not found"))
+        room.use {
+            it.setUnreadFlag(isUnread = false)
+            val receiptType = if (sessionPreferencesStore.isSendPublicReadReceiptsEnabled().first()) {
+                ReceiptType.READ
+            } else {
+                ReceiptType.READ_PRIVATE
+            }
+            it.markAsRead(receiptType)
+        }
+    }
+
     private fun TestScope.createRoomListPresenter(
         client: MatrixClient = FakeMatrixClient(),
         leaveRoomState: LeaveRoomState = aLeaveRoomState(),
@@ -668,6 +693,7 @@ class RoomListPresenterTest {
         appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
         seenInvitesStore: SeenInvitesStore = InMemorySeenInvitesStore(),
         announcementService: AnnouncementService = FakeAnnouncementService(),
+        markRoomAsRead: MarkRoomAsRead? = null,
     ) = RoomListPresenter(
         client = client,
         leaveRoomPresenter = { leaveRoomState },
@@ -684,14 +710,17 @@ class RoomListPresenterTest {
             analyticsService = FakeAnalyticsService(),
         ),
         searchPresenter = searchPresenter,
-        sessionPreferencesStore = sessionPreferencesStore,
         filtersPresenter = filtersPresenter,
         spaceFiltersPresenter = spaceFiltersPresenter,
         analyticsService = analyticsService,
         acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
         fullScreenIntentPermissionsPresenter = { aFullScreenIntentPermissionsState() },
         batteryOptimizationPresenter = { aBatteryOptimizationState() },
-        notificationCleaner = notificationCleaner,
+        markRoomAsRead = markRoomAsRead ?: createTestMarkRoomAsRead(
+            client = client,
+            notificationCleaner = notificationCleaner,
+            sessionPreferencesStore = sessionPreferencesStore,
+        ),
         appPreferencesStore = appPreferencesStore,
         seenInvitesStore = seenInvitesStore,
         announcementService = announcementService,

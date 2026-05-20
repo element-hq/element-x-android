@@ -37,6 +37,8 @@ open class DeveloperSettingsStateProvider : PreviewParameterProvider<DeveloperSe
 fun aDeveloperSettingsState(
     appDeveloperSettingsState: AppDeveloperSettingsState = anAppDeveloperSettingsState(),
     clearCacheAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    markAllRoomsAsReadAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
+    showMarkAllRoomsAsReadConfirmation: Boolean = false,
     isEnterpriseBuild: Boolean = false,
     showColorPicker: Boolean = false,
     eventSink: (DeveloperSettingsEvents) -> Unit = {},
@@ -45,6 +47,8 @@ fun aDeveloperSettingsState(
     cacheSize = AsyncData.Success("1.2 MB"),
     databaseSizes = AsyncData.Success(persistentMapOf("state_store" to "1.2MB")),
     clearCacheAction = clearCacheAction,
+    markAllRoomsAsReadAction = markAllRoomsAsReadAction,
+    showMarkAllRoomsAsReadConfirmation = showMarkAllRoomsAsReadConfirmation,
     isEnterpriseBuild = isEnterpriseBuild,
     showColorPicker = showColorPicker,
     eventSink = eventSink,

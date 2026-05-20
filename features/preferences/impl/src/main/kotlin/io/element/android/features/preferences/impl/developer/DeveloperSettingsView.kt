@@ -10,6 +10,7 @@ package io.element.android.features.preferences.impl.developer
 
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.progressSemantics
 import androidx.compose.runtime.Composable
@@ -18,9 +19,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.preferences.impl.R
 import io.element.android.features.preferences.impl.developer.appsettings.AppDeveloperSettingsView
 import io.element.android.libraries.designsystem.components.ProgressDialog
+import io.element.android.libraries.designsystem.components.dialogs.ConfirmationDialog
 import io.element.android.libraries.designsystem.components.list.ListItemContent
 import io.element.android.libraries.designsystem.components.preferences.PreferenceCategory
 import io.element.android.libraries.designsystem.components.preferences.PreferencePage
@@ -45,6 +48,15 @@ fun DeveloperSettingsView(
     if (state.showLoader) {
         ProgressDialog()
     }
+    if (state.showMarkAllRoomsAsReadConfirmation) {
+        ConfirmationDialog(
+            title = stringResource(R.string.screen_developer_settings_mark_all_rooms_as_read_alert_title),
+            content = "",
+            submitText = stringResource(CommonStrings.action_yes),
+            onSubmitClick = { state.eventSink(DeveloperSettingsEvents.ConfirmMarkAllRoomsAsRead) },
+            onDismiss = { state.eventSink(DeveloperSettingsEvents.DismissMarkAllRoomsAsReadConfirmation) },
+        )
+    }
     BackHandler(
         enabled = !state.showLoader,
         onBack = onBackClick,
@@ -64,6 +76,7 @@ fun DeveloperSettingsView(
             onOpenShowkase = onOpenShowkase,
         )
         NotificationCategory(onPushHistoryClick)
+        MarkAllRoomsAsReadCategory(state)
 
         if (state.isEnterpriseBuild) {
             PreferenceCategory(title = "Theme") {
@@ -150,6 +163,27 @@ fun DeveloperSettingsView(
             state.eventSink(DeveloperSettingsEvents.ChangeBrandColor(it))
         },
     )
+}
+
+@Composable
+private fun MarkAllRoomsAsReadCategory(state: DeveloperSettingsState) {
+    PreferenceCategory(title = "Room list") {
+        ListItem(
+            headlineContent = {
+                Text(stringResource(R.string.screen_developer_settings_mark_all_rooms_as_read))
+            },
+            enabled = !state.showLoader,
+            onClick = {
+                state.eventSink(DeveloperSettingsEvents.ShowMarkAllRoomsAsReadConfirmation)
+            },
+        )
+        Text(
+            text = stringResource(R.string.screen_developer_settings_mark_all_rooms_as_read_footer),
+            style = ElementTheme.typography.fontBodySmRegular,
+            color = ElementTheme.colors.textSecondary,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp),
+        )
+    }
 }
 
 @Composable

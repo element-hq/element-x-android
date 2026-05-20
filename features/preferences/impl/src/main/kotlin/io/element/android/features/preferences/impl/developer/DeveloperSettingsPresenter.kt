@@ -22,6 +22,7 @@ import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.preferences.impl.developer.appsettings.AppDeveloperSettingsState
 import io.element.android.features.preferences.impl.tasks.ClearCacheUseCase
 import io.element.android.features.preferences.impl.tasks.ComputeCacheSizeUseCase
+import io.element.android.features.preferences.impl.tasks.MarkAllRoomsAsRead
 import io.element.android.features.preferences.impl.tasks.VacuumStoresUseCase
 import io.element.android.libraries.androidutils.filesize.FileSizeFormatter
 import io.element.android.libraries.architecture.AsyncAction
@@ -46,6 +47,7 @@ class DeveloperSettingsPresenter(
     private val vacuumStoresUseCase: VacuumStoresUseCase,
     private val databaseSizesUseCase: GetDatabaseSizesUseCase,
     private val fileSizeFormatter: FileSizeFormatter,
+    private val markAllRoomsAsRead: MarkAllRoomsAsRead,
 ) : Presenter<DeveloperSettingsState> {
     @Composable
     override fun present(): DeveloperSettingsState {
@@ -57,6 +59,12 @@ class DeveloperSettingsPresenter(
         }
         val clearCacheAction = remember {
             mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
+        }
+        val markAllRoomsAsReadAction = remember {
+            mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized)
+        }
+        var showMarkAllRoomsAsReadConfirmation by remember {
+            mutableStateOf(false)
         }
         var showColorPicker by remember {
             mutableStateOf(false)
@@ -88,6 +96,16 @@ class DeveloperSettingsPresenter(
                 DeveloperSettingsEvents.VacuumStores -> coroutineScope.launch {
                     vacuumStoresUseCase()
                 }
+                DeveloperSettingsEvents.ShowMarkAllRoomsAsReadConfirmation -> {
+                    showMarkAllRoomsAsReadConfirmation = true
+                }
+                DeveloperSettingsEvents.DismissMarkAllRoomsAsReadConfirmation -> {
+                    showMarkAllRoomsAsReadConfirmation = false
+                }
+                DeveloperSettingsEvents.ConfirmMarkAllRoomsAsRead -> coroutineScope.markAllRoomsAsRead(
+                    markAllRoomsAsReadAction = markAllRoomsAsReadAction,
+                    dismissConfirmation = { showMarkAllRoomsAsReadConfirmation = false },
+                )
             }
         }
 
@@ -97,6 +115,8 @@ class DeveloperSettingsPresenter(
             cacheSize = cacheSize.value,
             databaseSizes = databaseSizes.value,
             clearCacheAction = clearCacheAction.value,
+            markAllRoomsAsReadAction = markAllRoomsAsReadAction.value,
+            showMarkAllRoomsAsReadConfirmation = showMarkAllRoomsAsReadConfirmation,
             isEnterpriseBuild = enterpriseService.isEnterpriseBuild,
             showColorPicker = showColorPicker,
             eventSink = ::handleEvent,
@@ -134,5 +154,16 @@ class DeveloperSettingsPresenter(
         suspend {
             clearCacheUseCase()
         }.runCatchingUpdatingState(clearCacheAction)
+    }
+
+    private fun CoroutineScope.markAllRoomsAsRead(
+        markAllRoomsAsReadAction: MutableState<AsyncAction<Unit>>,
+        dismissConfirmation: () -> Unit,
+    ) = launch {
+        dismissConfirmation()
+        suspend {
+            markAllRoomsAsRead().getOrThrow()
+            Unit
+        }.runCatchingUpdatingState(markAllRoomsAsReadAction)
     }
 }

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?><!--
+  ~ Copyright (c) 2026 Element Creations Ltd.
+  ~
+  ~ SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
+  ~ Please see LICENSE files in the repository root for full details.
+  -->
+<resources>
+    <string name="screen_developer_settings_mark_all_rooms_as_read">Mark all rooms as read</string>
+    <string name="screen_developer_settings_mark_all_rooms_as_read_alert_title">Are you sure you want to mark all the rooms as read?</string>
+    <string name="screen_developer_settings_mark_all_rooms_as_read_footer">This will send a private read receipt and a read marker in every room you are part of. It\'s a long running operation that might get rate limited. It will run in the background but the app must be alive for it to finish.</string>
+</resources>
