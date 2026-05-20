@@ -117,7 +117,7 @@ class PollHistoryPresenterTest {
             state.eventSink(PollHistoryEvents.EndPoll(AN_EVENT_ID))
             runCurrent()
             endPollAction.verifyExecutionCount(1)
-            state.eventSink(PollHistoryEvents.SelectPollAnswer(AN_EVENT_ID, "answer"))
+            state.eventSink(PollHistoryEvents.SelectPollAnswer(AN_EVENT_ID, listOf("answer")))
             runCurrent()
             sendPollResponseAction.verifyExecutionCount(1)
             cancelAndConsumeRemainingEvents()

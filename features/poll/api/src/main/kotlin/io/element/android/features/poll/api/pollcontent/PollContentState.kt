@@ -18,6 +18,7 @@ import kotlinx.collections.immutable.ImmutableList
  * @property question the poll question.
  * @property answerItems the list of answers.
  * @property pollKind the kind of poll.
+ * @property maxSelections the maximum number of selections allowed.
  * @property isPollEditable whether the poll is editable.
  * @property isPollEnded whether the poll is ended.
  * @property isMine whether the poll has been created by me.
@@ -27,7 +28,10 @@ data class PollContentState(
     val question: String,
     val answerItems: ImmutableList<PollAnswerItem>,
     val pollKind: PollKind,
+    val maxSelections: ULong,
     val isPollEditable: Boolean,
     val isPollEnded: Boolean,
     val isMine: Boolean,
-)
+) {
+    val isMultipleSelection: Boolean get() = maxSelections > 1u
+}

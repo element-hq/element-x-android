@@ -11,11 +11,13 @@ package io.element.android.features.poll.impl.create
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.consumeWindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
@@ -25,6 +27,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -32,6 +35,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardCapitalization
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.dp
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.poll.impl.R
 import io.element.android.libraries.designsystem.components.button.BackButton
@@ -174,6 +179,18 @@ fun CreatePollView(
                 Column {
                     HorizontalDivider()
                     ListItem(
+                        headlineContent = { Text(text = stringResource(id = R.string.screen_create_poll_max_selections_headline)) },
+                        supportingContent = { Text(text = stringResource(id = R.string.screen_create_poll_max_selections_desc)) },
+                        trailingContent = ListItemContent.Custom {
+                            MaxSelectionsStepper(
+                                current = state.maxSelections,
+                                max = state.maxAllowedSelections,
+                                onDecrement = { state.eventSink(CreatePollEvent.SetMaxSelections(state.maxSelections - 1)) },
+                                onIncrement = { state.eventSink(CreatePollEvent.SetMaxSelections(state.maxSelections + 1)) },
+                            )
+                        },
+                    )
+                    ListItem(
                         headlineContent = { Text(text = stringResource(id = R.string.screen_create_poll_anonymous_headline)) },
                         supportingContent = { Text(text = stringResource(id = R.string.screen_create_poll_anonymous_desc)) },
                         trailingContent = ListItemContent.Switch(
@@ -227,6 +244,52 @@ private fun CreatePollTopAppBar(
             )
         }
     )
+}
+
+@Composable
+private fun MaxSelectionsStepper(
+    current: Int,
+    max: Int,
+    onDecrement: () -> Unit,
+    onIncrement: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        Icon(
+            imageVector = CompoundIcons.Minus(),
+            contentDescription = null,
+            modifier = Modifier
+                .clickable(enabled = current > 1) { onDecrement() }
+                .size(32.dp)
+                .padding(4.dp),
+            tint = if (current > 1) {
+                ElementTheme.colors.bgAccentRest
+            } else {
+                ElementTheme.colors.iconDisabled
+            },
+        )
+        Text(
+            text = current.toString(),
+            modifier = Modifier.padding(horizontal = 12.dp),
+            style = ElementTheme.typography.fontBodyLgRegular,
+        )
+        Icon(
+            imageVector = CompoundIcons.Plus(),
+            contentDescription = null,
+            modifier = Modifier
+                .clickable(enabled = current < max) { onIncrement() }
+                .size(32.dp)
+                .padding(4.dp),
+            tint = if (current < max) {
+                ElementTheme.colors.bgAccentRest
+            } else {
+                ElementTheme.colors.iconDisabled
+            },
+        )
+    }
 }
 
 @PreviewsDayNight
