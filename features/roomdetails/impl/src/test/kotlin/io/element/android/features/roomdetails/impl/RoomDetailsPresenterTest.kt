@@ -633,7 +633,8 @@ class RoomDetailsPresenterTest {
             assertThat(room.baseRoom.setUnreadFlagCalls).containsExactly(false)
             markAsReadResult.assertions().isCalledOnce().with(value(ReceiptType.READ))
             clearMessagesForRoomResult.assertions().isCalledOnce().with(
-                value(room.sessionId), value(room.roomId)
+                value(room.sessionId),
+                value(room.roomId),
             )
         }
     }
@@ -664,7 +665,8 @@ class RoomDetailsPresenterTest {
             assertThat(room.baseRoom.setUnreadFlagCalls).containsExactly(false)
             markAsReadResult.assertions().isCalledOnce().with(value(ReceiptType.READ_PRIVATE))
             clearMessagesForRoomResult.assertions().isCalledOnce().with(
-                value(room.sessionId), value(room.roomId)
+                value(room.sessionId),
+                value(room.roomId),
             )
         }
     }
