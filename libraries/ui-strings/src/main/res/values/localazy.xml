@@ -54,6 +54,8 @@
   <string name="a11y_start_call">"Start a call"</string>
   <string name="a11y_start_video_call">"Start a video call"</string>
   <string name="a11y_start_voice_call">"Start a voice call"</string>
+  <string name="a11y_thread_in_room">"Thread in %1$s"</string>
+  <string name="a11y_threads_in_room">"Threads in %1$s"</string>
   <string name="a11y_tombstoned_room">"Tombstoned room"</string>
   <string name="a11y_user_avatar">"User avatar"</string>
   <string name="a11y_user_menu">"User menu"</string>
