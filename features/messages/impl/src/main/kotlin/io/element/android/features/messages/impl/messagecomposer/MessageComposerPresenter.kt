@@ -571,7 +571,7 @@ class MessageComposerPresenter(
         notificationConversationService.onSendMessage(
             sessionId = room.sessionId,
             roomId = roomInfo.id,
-            roomName = roomInfo.name ?: roomInfo.id.value,
+            roomName = roomInfo.name,
             roomIsDirect = roomInfo.isDm,
             roomAvatarUrl = roomInfo.avatarUrl ?: roomMembers.getDirectRoomMember(roomInfo = roomInfo, sessionId = room.sessionId)?.avatarUrl,
         )
