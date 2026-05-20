@@ -181,20 +181,26 @@ fun MediaPlayerControllerView(
                     style = ElementTheme.typography.fontBodyXsMedium,
                 )
                 if (state.canMute) {
+                    val a11yUnmute = stringResource(CommonStrings.common_unmute)
+                    val a11yMute = stringResource(CommonStrings.common_mute)
                     IconButton(
                         onClick = onToggleMute,
+                        modifier = Modifier
+                            .semantics {
+                                stateDescription = if (state.isMuted) a11yUnmute else a11yMute
+                            },
                     ) {
                         if (state.isMuted) {
                             Icon(
                                 imageVector = CompoundIcons.VolumeOffSolid(),
                                 tint = ElementTheme.colors.iconPrimary,
-                                contentDescription = stringResource(CommonStrings.common_unmute)
+                                contentDescription = null,
                             )
                         } else {
                             Icon(
                                 imageVector = CompoundIcons.VolumeOnSolid(),
                                 tint = ElementTheme.colors.iconPrimary,
-                                contentDescription = stringResource(CommonStrings.common_mute)
+                                contentDescription = null,
                             )
                         }
                     }
