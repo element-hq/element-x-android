@@ -118,6 +118,10 @@ class AttachmentsPreviewPresenter(
             // to prepare it for sending. This is done to avoid blocking the UI thread when the
             // user clicks on the send button.
             if (mediaOptimizationSelectorState.displayMediaSelectorViews == false && preprocessMediaJob == null) {
+                if (mediaAttachment.localMedia.info.mimeType.isMimeTypeVideo() && mediaOptimizationSelectorState.videoSizeEstimations.dataOrNull() == null) {
+                    Timber.d("Waiting for video size estimations to be able to select the best video compression preset before pre-processing the media")
+                    return@LaunchedEffect
+                }
                 val config = getAutoPreprocessMediaOptimizationConfig(
                     mediaAttachment = mediaAttachment,
                     mediaOptimizationSelectorState = mediaOptimizationSelectorState,
@@ -250,26 +254,22 @@ class AttachmentsPreviewPresenter(
         mediaAttachment: Attachment.Media,
         mediaOptimizationSelectorState: MediaOptimizationSelectorState,
     ): MediaOptimizationConfig? {
-        if (!mediaAttachment.sendAsFile) {
-            return mediaOptimizationConfigProvider.get()
-        }
+        return if (mediaAttachment.sendAsFile) {
+            // If we're sending the media as a file, we can skip image compression and we should select the highest video compression preset that still fits
+            // the upload limit (if the estimations are available)
+            val videoCompressionPreset = videoCompressionPresetSelector.selectBestVideoPreset(
+                expectedVideoPreset = VideoCompressionPreset.HIGH,
+                videoSizeEstimations = mediaOptimizationSelectorState.videoSizeEstimations,
+            ).dataOrNull() ?: VideoCompressionPreset.HIGH
 
-        if (!mediaAttachment.localMedia.info.mimeType.isMimeTypeVideo()) {
-            return MediaOptimizationConfig(
+            MediaOptimizationConfig(
                 compressImages = false,
-                videoCompressionPreset = VideoCompressionPreset.HIGH,
+                videoCompressionPreset = videoCompressionPreset,
             )
+        } else {
+            // Otherwise, we just rely on the user preferences for media optimization
+            mediaOptimizationConfigProvider.get()
         }
-
-        val videoCompressionPreset = videoCompressionPresetSelector.selectBestVideoPreset(
-            expectedVideoPreset = VideoCompressionPreset.HIGH,
-            videoSizeEstimations = mediaOptimizationSelectorState.videoSizeEstimations,
-        ).dataOrNull() ?: return null
-
-        return MediaOptimizationConfig(
-            compressImages = false,
-            videoCompressionPreset = videoCompressionPreset,
-        )
     }
 
     private fun CoroutineScope.preProcessAttachment(
