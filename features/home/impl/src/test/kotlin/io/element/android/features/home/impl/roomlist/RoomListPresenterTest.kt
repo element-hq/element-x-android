@@ -457,11 +457,17 @@ class RoomListPresenterTest {
         val notificationCleaner = FakeNotificationCleaner(
             clearMessagesForRoomLambda = clearMessagesForRoomLambda,
         )
+        val markRoomAsRead = createTestMarkRoomAsRead(
+            client = matrixClient,
+            notificationCleaner = notificationCleaner,
+            sessionPreferencesStore = sessionPreferencesStore,
+        )
         val presenter = createRoomListPresenter(
             client = matrixClient,
             sessionPreferencesStore = sessionPreferencesStore,
             analyticsService = analyticsService,
             notificationCleaner = notificationCleaner,
+            markRoomAsRead = markRoomAsRead,
         )
         presenter.test {
             val initialState = awaitItem()
@@ -653,6 +659,49 @@ class RoomListPresenterTest {
         }
     }
 
+    @Test
+    fun `present - exposes canMarkAllAsRead from markAllRoomsAsRead`() = runTest {
+        val markAllRoomsAsRead = FakeMarkAllRoomsAsRead(hasUnread = true)
+        val presenter = createRoomListPresenter(markAllRoomsAsRead = markAllRoomsAsRead)
+        presenter.test {
+            val stateWithUnread = consumeItemsUntilPredicate { it.canMarkAllAsRead }.last()
+            assertThat(stateWithUnread.canMarkAllAsRead).isTrue()
+            assertThat(markAllRoomsAsRead.hasUnreadRoomsCallCount).isGreaterThan(0)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
+    fun `present - MarkAllAsRead delegates to markAllRoomsAsRead`() = runTest {
+        val markAllRoomsAsRead = FakeMarkAllRoomsAsRead(hasUnread = true)
+        val presenter = createRoomListPresenter(markAllRoomsAsRead = markAllRoomsAsRead)
+        presenter.test {
+            val stateWithUnread = consumeItemsUntilPredicate { it.canMarkAllAsRead }.last()
+            stateWithUnread.eventSink(RoomListEvent.MarkAllAsRead)
+            testScheduler.advanceUntilIdle()
+            assertThat(markAllRoomsAsRead.invokeCallCount).isEqualTo(1)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    private fun createTestMarkRoomAsRead(
+        client: MatrixClient,
+        notificationCleaner: NotificationCleaner,
+        sessionPreferencesStore: SessionPreferencesStore,
+    ): MarkRoomAsRead = FakeMarkRoomAsRead { roomId ->
+        notificationCleaner.clearMessagesForRoom(client.sessionId, roomId)
+        val room = client.getRoom(roomId) ?: return@FakeMarkRoomAsRead Result.failure(IllegalStateException("Room not found"))
+        room.use {
+            it.setUnreadFlag(isUnread = false)
+            val receiptType = if (sessionPreferencesStore.isSendPublicReadReceiptsEnabled().first()) {
+                ReceiptType.READ
+            } else {
+                ReceiptType.READ_PRIVATE
+            }
+            it.markAsRead(receiptType)
+        }
+    }
+
     private fun TestScope.createRoomListPresenter(
         client: MatrixClient = FakeMatrixClient(),
         leaveRoomState: LeaveRoomState = aLeaveRoomState(),
@@ -668,6 +717,8 @@ class RoomListPresenterTest {
         appPreferencesStore: AppPreferencesStore = InMemoryAppPreferencesStore(),
         seenInvitesStore: SeenInvitesStore = InMemorySeenInvitesStore(),
         announcementService: AnnouncementService = FakeAnnouncementService(),
+        markRoomAsRead: MarkRoomAsRead? = null,
+        markAllRoomsAsRead: MarkAllRoomsAsRead = FakeMarkAllRoomsAsRead(),
     ) = RoomListPresenter(
         client = client,
         leaveRoomPresenter = { leaveRoomState },
@@ -684,14 +735,19 @@ class RoomListPresenterTest {
             analyticsService = FakeAnalyticsService(),
         ),
         searchPresenter = searchPresenter,
-        sessionPreferencesStore = sessionPreferencesStore,
         filtersPresenter = filtersPresenter,
         spaceFiltersPresenter = spaceFiltersPresenter,
         analyticsService = analyticsService,
         acceptDeclineInvitePresenter = acceptDeclineInvitePresenter,
         fullScreenIntentPermissionsPresenter = { aFullScreenIntentPermissionsState() },
         batteryOptimizationPresenter = { aBatteryOptimizationState() },
-        notificationCleaner = notificationCleaner,
+        markRoomAsRead = markRoomAsRead ?: createTestMarkRoomAsRead(
+            client = client,
+            notificationCleaner = notificationCleaner,
+            sessionPreferencesStore = sessionPreferencesStore,
+        ),
+        markAllRoomsAsRead = markAllRoomsAsRead,
+        syncService = client.syncService,
         appPreferencesStore = appPreferencesStore,
         seenInvitesStore = seenInvitesStore,
         announcementService = announcementService,

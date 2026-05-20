@@ -13,6 +13,10 @@ import dev.zacsweers.metro.Binds
 import dev.zacsweers.metro.ContributesTo
 import io.element.android.features.home.impl.filters.RoomListFiltersPresenter
 import io.element.android.features.home.impl.filters.RoomListFiltersState
+import io.element.android.features.home.impl.roomlist.DefaultMarkAllRoomsAsRead
+import io.element.android.features.home.impl.roomlist.DefaultMarkRoomAsRead
+import io.element.android.features.home.impl.roomlist.MarkAllRoomsAsRead
+import io.element.android.features.home.impl.roomlist.MarkRoomAsRead
 import io.element.android.features.home.impl.roomlist.RoomListPresenter
 import io.element.android.features.home.impl.roomlist.RoomListState
 import io.element.android.features.home.impl.search.RoomListSearchPresenter
@@ -25,6 +29,12 @@ import io.element.android.libraries.di.SessionScope
 @ContributesTo(SessionScope::class)
 @BindingContainer
 interface RoomListModule {
+    @Binds
+    fun bindMarkRoomAsRead(impl: DefaultMarkRoomAsRead): MarkRoomAsRead
+
+    @Binds
+    fun bindMarkAllRoomsAsRead(impl: DefaultMarkAllRoomsAsRead): MarkAllRoomsAsRead
+
     @Binds
     fun bindRoomListPresenter(presenter: RoomListPresenter): Presenter<RoomListState>
 
