@@ -19,7 +19,8 @@ sealed interface Attachment : Parcelable {
     data class Media(
         val localMedia: LocalMedia,
         // When true, the media was picked through the "Files" picker and should be
-        // uploaded without any optimization (image compression / video re-encoding pass).
+        // uploaded without image recompression; videos still use the highest available
+        // / best-fit preset rather than an additional size-reduction optimization pass.
         // See https://github.com/element-hq/element-x-android/issues/6365
         val sendAsFile: Boolean = false,
     ) : Attachment
