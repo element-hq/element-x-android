@@ -14,14 +14,12 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.IntState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
@@ -45,10 +43,7 @@ import io.element.android.libraries.mediaviewer.impl.model.mediaPermissions
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import io.element.android.libraries.androidutils.R as UtilsR
 
@@ -75,12 +70,27 @@ class MediaViewerPresenter(
     @Composable
     override fun present(): MediaViewerState {
         val coroutineScope = rememberCoroutineScope()
-        val data = dataSource.collectAsState()
-        val currentIndex = remember { mutableIntStateOf(searchIndex(data.value, inputs.eventId)) }
+        val currentIndex = remember { mutableIntStateOf(dataSource.findEventIndex(inputs.eventId) ?: 0) }
+        val data = dataSource.produceState { flow ->
+            flow.collectLatest { new ->
+                val existingItem = value.getOrNull(currentIndex.intValue)
+                val newItem = new.getOrNull(currentIndex.intValue)
+                if (existingItem is MediaViewerPageData.MediaViewerData && existingItem.eventId == inputs.eventId && newItem != existingItem) {
+                    currentIndex.intValue = dataSource.findEventIndex(inputs.eventId) ?: 0
+                } else if (currentIndex.intValue > 0 && value.firstOrNull() is MediaViewerPageData.Loading &&
+                    new.firstOrNull() !is MediaViewerPageData.Loading) {
+                    // Restore index based on the eventId after the initial items have been loaded
+                    currentIndex.intValue = dataSource.findEventIndex(inputs.eventId) ?: 0
+                }
+                value = new
+            }
+        }
+
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
 
-        NoMoreItemsBackwardSnackBarDisplayer(currentIndex, data)
-        NoMoreItemsForwardSnackBarDisplayer(currentIndex, data)
+        // Add both forward and backward pagination state checks to display a snackbar when there is no more items to load in either direction
+        NoMoreItemsSnackBarDisplayer(currentIndex, data, Timeline.PaginationDirection.FORWARDS)
+        NoMoreItemsSnackBarDisplayer(currentIndex, data, Timeline.PaginationDirection.BACKWARDS)
 
         val permissions by room.permissionsAsState(MediaPermissions.DEFAULT) { perms ->
             perms.mediaPermissions()
@@ -176,52 +186,39 @@ class MediaViewerPresenter(
     }
 
     @Composable
-    private fun NoMoreItemsBackwardSnackBarDisplayer(
+    private fun NoMoreItemsSnackBarDisplayer(
         currentIndex: IntState,
         data: State<ImmutableList<MediaViewerPageData>>,
+        direction: Timeline.PaginationDirection,
     ) {
-        // With newest-first ordering, backward loading indicator is at the last index
-        val isRenderingLoadingBackward by remember {
-            derivedStateOf {
-                currentIndex.intValue == data.value.lastIndex &&
-                    data.value.size > 1 &&
-                    data.value.lastOrNull() is MediaViewerPageData.Loading
+        var previousIndex by remember { mutableIntStateOf(currentIndex.intValue) }
+        var previousDataSize by remember { mutableIntStateOf(data.value.size) }
+        var wasLoading: Boolean? by remember { mutableStateOf(null) }
+        LaunchedEffect(currentIndex.intValue, data.value) {
+            fun isLoading(index: Int, data: List<MediaViewerPageData>, direction: Timeline.PaginationDirection): Boolean {
+                return when (direction) {
+                    Timeline.PaginationDirection.BACKWARDS -> index == data.lastIndex && data.lastOrNull() is MediaViewerPageData.Loading
+                    Timeline.PaginationDirection.FORWARDS -> index == 0 && data.firstOrNull() is MediaViewerPageData.Loading
+                }
             }
-        }
-        if (isRenderingLoadingBackward) {
-            LaunchedEffect(Unit) {
-                // Observe the loading data vanishing
-                snapshotFlow { data.value.lastOrNull() is MediaViewerPageData.Loading }
-                    .distinctUntilChanged()
-                    .filter { !it }
-                    .onEach { showNoMoreItemsSnackbar() }
-                    .launchIn(this)
+            // Reset the effect when the user navigate to another item so we only take into account index changes caused by data changes
+            if (previousIndex != currentIndex.intValue) {
+                wasLoading = null
+                previousIndex = currentIndex.intValue
             }
-        }
-    }
+            // If we were navigating backwards and the data size grew, we can discard the previous value: it means we received new items
+            if (direction == Timeline.PaginationDirection.BACKWARDS && previousDataSize < data.value.size) {
+                wasLoading = null
+            }
 
-    @Composable
-    private fun NoMoreItemsForwardSnackBarDisplayer(
-        currentIndex: IntState,
-        data: State<ImmutableList<MediaViewerPageData>>,
-    ) {
-        // With newest-first ordering, forward loading indicator is at the first index
-        val isRenderingLoadingForward by remember {
-            derivedStateOf {
-                currentIndex.intValue == 0 &&
-                    data.value.size > 1 &&
-                    data.value.firstOrNull() is MediaViewerPageData.Loading
+            val isLoading = isLoading(currentIndex.intValue, data.value, direction)
+
+            if (wasLoading == true && !isLoading) {
+                showNoMoreItemsSnackbar()
             }
-        }
-        if (isRenderingLoadingForward) {
-            LaunchedEffect(Unit) {
-                // Observe the loading data vanishing
-                snapshotFlow { data.value.firstOrNull() is MediaViewerPageData.Loading }
-                    .distinctUntilChanged()
-                    .filter { !it }
-                    .onEach { showNoMoreItemsSnackbar() }
-                    .launchIn(this)
-            }
+
+            previousDataSize = data.value.size
+            wasLoading = isLoading
         }
     }
 
@@ -292,14 +289,5 @@ class MediaViewerPresenter(
         } else {
             CommonStrings.error_unknown
         }
-    }
-
-    private fun searchIndex(data: List<MediaViewerPageData>, eventId: EventId?): Int {
-        if (eventId == null) {
-            return 0
-        }
-        return data.indexOfFirst {
-            (it as? MediaViewerPageData.MediaViewerData)?.eventId == eventId
-        }.coerceAtLeast(0)
     }
 }
