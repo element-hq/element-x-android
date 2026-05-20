@@ -39,7 +39,7 @@ open class AttachmentsPreviewStateProvider : PreviewParameterProvider<Attachment
                 )
             ),
             anAttachmentsPreviewState(sendActionState = SendActionState.Sending.Processing(displayProgress = true)),
-            anAttachmentsPreviewState(sendActionState = SendActionState.Sending.ReadyToUpload(aMediaUploadInfo())),
+            anAttachmentsPreviewState(sendActionState = SendActionState.Sending.ReadyToUpload(listOf(aMediaUploadInfo()))),
             anAttachmentsPreviewState(sendActionState = SendActionState.Sending.Uploading(aMediaUploadInfo())),
             anAttachmentsPreviewState(sendActionState = SendActionState.Failure(RuntimeException("error"), aMediaUploadInfo())),
             anAttachmentsPreviewState(displayFileTooLargeError = true),
@@ -66,14 +66,44 @@ fun anAttachmentsPreviewState(
     sendActionState: SendActionState = SendActionState.Idle,
     mediaOptimizationSelectorState: MediaOptimizationSelectorState = aMediaOptimisationSelectorState(),
     displayFileTooLargeError: Boolean = false,
+    currentIndex: Int = 0,
 ) = AttachmentsPreviewState(
-    attachment = Attachment.Media(
-        localMedia = LocalMedia("file://path".toUri(), mediaInfo),
+    attachments = persistentListOf(
+        Attachment.Media(
+            localMedia = LocalMedia("file://path".toUri(), mediaInfo),
+        ),
     ),
     sendActionState = sendActionState,
     textEditorState = textEditorState,
     mediaOptimizationSelectorState = mediaOptimizationSelectorState,
     displayFileTooLargeError = displayFileTooLargeError,
+    currentIndex = currentIndex,
+    eventSink = {}
+)
+
+fun anAttachmentsPreviewGalleryState(
+    mediaInfo: MediaInfo = anImageMediaInfo(),
+    textEditorState: TextEditorState = aTextEditorStateMarkdown(),
+    sendActionState: SendActionState = SendActionState.Idle,
+    mediaOptimizationSelectorState: MediaOptimizationSelectorState = aMediaOptimisationSelectorState(),
+    currentIndex: Int = 0,
+) = AttachmentsPreviewState(
+    attachments = persistentListOf(
+        Attachment.Media(
+            localMedia = LocalMedia("file://path1".toUri(), mediaInfo),
+        ),
+        Attachment.Media(
+            localMedia = LocalMedia("file://path2".toUri(), mediaInfo),
+        ),
+        Attachment.Media(
+            localMedia = LocalMedia("file://path3".toUri(), mediaInfo),
+        ),
+    ),
+    sendActionState = sendActionState,
+    textEditorState = textEditorState,
+    mediaOptimizationSelectorState = mediaOptimizationSelectorState,
+    displayFileTooLargeError = false,
+    currentIndex = currentIndex,
     eventSink = {}
 )
 

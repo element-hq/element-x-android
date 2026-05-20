@@ -12,4 +12,5 @@ sealed interface AttachmentsPreviewEvent {
     data object SendAttachment : AttachmentsPreviewEvent
     data object CancelAndDismiss : AttachmentsPreviewEvent
     data object CancelAndClearSendState : AttachmentsPreviewEvent
+    data class SetCurrentCarouselIndex(val index: Int) : AttachmentsPreviewEvent
 }
