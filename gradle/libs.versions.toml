@@ -189,7 +189,7 @@ coil_gif = { module = "io.coil-kt.coil3:coil-gif", version.ref = "coil" }
 coil_test = { module = "io.coil-kt.coil3:coil-test", version.ref = "coil" }
 datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "datetime" }
 serialization_json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization_json" }
-kotlinx_collections_immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.4.0"
+kotlinx_collections_immutable = "org.jetbrains.kotlinx:kotlinx-collections-immutable:0.5.0-beta01"
 showkase = { module = "com.airbnb.android:showkase", version.ref = "showkase" }
 showkase_processor = { module = "com.airbnb.android:showkase-processor", version.ref = "showkase" }
 jsoup = "org.jsoup:jsoup:1.22.2"
