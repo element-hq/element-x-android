@@ -131,6 +131,9 @@ fun Project.setupKover() {
                         "io.element.android.x.di.*Impls",
                         "io.element.android.x.di.*Mirror",
                         "io.element.android.x.di.*Factory",
+                        $$"io.element.android.*$Metro*",
+                        $$"io.element.android.*$Factory*",
+                        $$"io.element.android.*$Impl*",
                     )
                     annotatedBy(
                         "androidx.compose.ui.tooling.preview.Preview",
