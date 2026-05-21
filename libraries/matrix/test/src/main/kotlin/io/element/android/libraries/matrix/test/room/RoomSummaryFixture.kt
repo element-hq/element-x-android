@@ -115,6 +115,7 @@ fun aRoomSummary(
         numUnreadMessages = numUnreadMessages,
         numUnreadNotifications = numUnreadNotifications,
         numUnreadMentions = numUnreadMentions,
+        fullyReadEventId = null,
         historyVisibility = historyVisibility,
         roomVersion = roomVersion,
         privilegedCreatorRole = privilegedCreatorRole,

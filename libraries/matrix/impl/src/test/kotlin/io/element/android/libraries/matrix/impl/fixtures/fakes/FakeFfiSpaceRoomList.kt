@@ -40,8 +40,8 @@ class FakeFfiSpaceRoomList(
         return paginationStateResult()
     }
 
-    override fun rooms(): List<SpaceRoom> {
-        return roomsResult()
+    override suspend fun rooms(): List<SpaceRoom> = simulateLongTask {
+        roomsResult()
     }
 
     override fun subscribeToPaginationStateUpdates(listener: SpaceRoomListPaginationStateListener): TaskHandle {
@@ -53,7 +53,7 @@ class FakeFfiSpaceRoomList(
         spaceRoomListPaginationStateListener?.onUpdate(state)
     }
 
-    override fun subscribeToRoomUpdate(listener: SpaceRoomListEntriesListener): TaskHandle {
+    override suspend fun subscribeToRoomUpdate(listener: SpaceRoomListEntriesListener): TaskHandle {
         spaceRoomListEntriesListener = listener
         return FakeFfiTaskHandle()
     }

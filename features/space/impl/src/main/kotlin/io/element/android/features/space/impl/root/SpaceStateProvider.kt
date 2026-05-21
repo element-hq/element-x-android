@@ -131,6 +131,7 @@ private fun aSpaceInfo(
         numUnreadMessages = 0,
         numUnreadNotifications = 0,
         numUnreadMentions = 0,
+        fullyReadEventId = null,
         heroes = persistentListOf(),
         pinnedEventIds = persistentListOf(),
         creators = persistentListOf(),

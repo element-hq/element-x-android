@@ -291,20 +291,32 @@ class TimelinePresenter(
         // without changing the list length, e.g. when [markRoomAsFullyRead] is sent while at the
         // bottom of the room.
         //
-        // Limitation: when the read marker is outside the loaded window (gaps, pagination), this
-        // returns null and the jump-to-unread button stays hidden. Proper fix needs an SDK
-        // accessor for the m.fully_read marker plus FocusedOnEvent navigation on click; gated
-        // behind FeatureFlags.JumpToUnread until that lands.
-        val readMarkerIndex = remember { mutableStateOf<Int?>(null) }
-        LaunchedEffect(timelineItems, displayJumpToUnread) {
+        // The state has three shapes:
+        //  - InWindow: the SDK has materialised a virtual ReadMarker item in the loaded window;
+        //    tapping the FAB smoothly scrolls to its index.
+        //  - OutOfWindow: the marker event is older than the loaded window, so the SDK gives us
+        //    only the event id via RoomInfo.fullyReadEventId; tapping triggers a focused-event
+        //    load via the existing TimelineEvent.FocusOnEvent path.
+        //  - Hidden: feature flag off, no marker, caught-up (marker loaded but no virtual item),
+        //    or initial load (no items yet).
+        val jumpToUnread = remember { mutableStateOf<JumpToUnreadState>(JumpToUnreadState.Hidden) }
+        LaunchedEffect(timelineItems, displayJumpToUnread, roomInfo.fullyReadEventId) {
             if (!displayJumpToUnread) {
-                readMarkerIndex.value = null
+                jumpToUnread.value = JumpToUnreadState.Hidden
                 return@LaunchedEffect
             }
             val items = timelineItems
-            readMarkerIndex.value = withContext(dispatchers.computation) {
-                items.indexOfFirst { (it as? TimelineItem.Virtual)?.model is TimelineItemReadMarkerModel }
-                    .takeIf { it >= 0 }
+            val fullyReadEventId = roomInfo.fullyReadEventId
+            jumpToUnread.value = withContext(dispatchers.computation) {
+                val markerIndex = items.indexOfFirst {
+                    (it as? TimelineItem.Virtual)?.model is TimelineItemReadMarkerModel
+                }
+                when {
+                    markerIndex >= 0 -> JumpToUnreadState.InWindow(markerIndex)
+                    fullyReadEventId != null && items.isNotEmpty() && !timelineItemIndexer.isKnown(fullyReadEventId) ->
+                        JumpToUnreadState.OutOfWindow(fullyReadEventId)
+                    else -> JumpToUnreadState.Hidden
+                }
             }
         }
 
@@ -358,7 +370,7 @@ class TimelinePresenter(
             displayThreadSummaries = displayThreadSummaries,
             displayFloatingDateBadge = displayFloatingDateBadge,
             displayJumpToUnread = displayJumpToUnread,
-            readMarkerIndex = readMarkerIndex.value,
+            jumpToUnread = jumpToUnread.value,
             eventSink = ::handleEvent,
         )
     }

@@ -70,6 +70,11 @@ data class RoomInfo(
      * notification settings.
      */
     val numUnreadMentions: Long,
+    /**
+     * Event ID of the user's `m.fully_read` marker for this room, if any.
+     * Can be set even when the event is older than the loaded timeline window.
+     */
+    val fullyReadEventId: EventId?,
     val heroes: ImmutableList<MatrixUser>,
     val pinnedEventIds: ImmutableList<EventId>,
     val creators: ImmutableList<UserId>,

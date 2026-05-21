@@ -155,6 +155,10 @@ fun TimelineView(
         state.eventSink(TimelineEvent.MarkAllAsRead)
     }
 
+    fun onFocusOnEvent(eventId: EventId) {
+        state.eventSink(TimelineEvent.FocusOnEvent(eventId))
+    }
+
     val context = LocalContext.current
     val toastMessage = stringResource(CommonStrings.common_copied_to_clipboard)
     val view = LocalView.current
@@ -240,11 +244,12 @@ fun TimelineView(
                 isLive = state.isLive,
                 focusRequestState = state.focusRequestState,
                 displayJumpToUnread = state.displayJumpToUnread,
-                readMarkerIndex = state.readMarkerIndex,
+                jumpToUnread = state.jumpToUnread,
                 onScrollFinishAt = ::onScrollFinishAt,
                 onJumpToLive = ::onJumpToLive,
                 onFocusEventRender = ::onFocusEventRender,
                 onMarkAllAsRead = ::onMarkAllAsRead,
+                onFocusOnEvent = ::onFocusOnEvent,
             )
 
             if (state.displayFloatingDateBadge && useReverseLayout) {
@@ -326,11 +331,12 @@ private fun BoxScope.TimelineScrollHelper(
     forceJumpToReadMarkerVisibility: Boolean,
     focusRequestState: FocusRequestState,
     displayJumpToUnread: Boolean,
-    readMarkerIndex: Int?,
+    jumpToUnread: JumpToUnreadState,
     onScrollFinishAt: (Int) -> Unit,
     onJumpToLive: () -> Unit,
     onFocusEventRender: () -> Unit,
     onMarkAllAsRead: () -> Unit,
+    onFocusOnEvent: (EventId) -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
     val isScrollFinished by remember { derivedStateOf { !lazyListState.isScrollInProgress } }
@@ -339,12 +345,19 @@ private fun BoxScope.TimelineScrollHelper(
             lazyListState.firstVisibleItemIndex < 3 && isLive
         }
     }
-    val isJumpToUnreadVisible by remember(readMarkerIndex, forceJumpToReadMarkerVisibility) {
+    val isJumpToUnreadVisible by remember(jumpToUnread, forceJumpToReadMarkerVisibility) {
         derivedStateOf {
             if (forceJumpToReadMarkerVisibility) return@derivedStateOf true
-            val markerIndex = readMarkerIndex ?: return@derivedStateOf false
-            val lastVisibleIndex = lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: return@derivedStateOf false
-            markerIndex > lastVisibleIndex
+            when (val jtu = jumpToUnread) {
+                JumpToUnreadState.Hidden -> false
+                // Marker is outside the loaded window — we have no on-screen anchor, so just show.
+                is JumpToUnreadState.OutOfWindow -> true
+                // Marker is in the loaded window — hide once it's scrolled into the visible range.
+                is JumpToUnreadState.InWindow -> {
+                    val lastVisibleIndex = lazyListState.layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: return@derivedStateOf false
+                    jtu.index > lastVisibleIndex
+                }
+            }
         }
     }
     val isJumpToBottomVisible = !canAutoScroll || forceJumpToBottomVisibility || !isLive
@@ -375,9 +388,12 @@ private fun BoxScope.TimelineScrollHelper(
     }
 
     fun jumpToReadMarker() {
-        val markerIndex = readMarkerIndex ?: return
-        coroutineScope.launch {
-            lazyListState.animateScrollToItemCenter(markerIndex)
+        when (val jtu = jumpToUnread) {
+            JumpToUnreadState.Hidden -> Unit
+            is JumpToUnreadState.InWindow -> coroutineScope.launch {
+                lazyListState.animateScrollToItemCenter(jtu.index)
+            }
+            is JumpToUnreadState.OutOfWindow -> onFocusOnEvent(jtu.eventId)
         }
     }
 
@@ -630,7 +646,7 @@ private fun TimelineViewWithReadMarker(
                 // Index points past the loaded items, mirroring the real-world state the FAB
                 // represents: the user has scrolled past the read marker, so it's no longer in
                 // view. The actual scroll target doesn't matter for a static preview.
-                readMarkerIndex = if (hasUnreadAbove) timelineItems.size else null,
+                jumpToUnread = if (hasUnreadAbove) JumpToUnreadState.InWindow(timelineItems.size) else JumpToUnreadState.Hidden,
                 newEventState = if (hasUnreadBelow) NewEventState.FromOther else NewEventState.None,
             ),
             timelineProtectionState = aTimelineProtectionState(),

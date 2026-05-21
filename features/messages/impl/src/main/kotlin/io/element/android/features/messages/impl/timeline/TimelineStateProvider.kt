@@ -60,7 +60,7 @@ fun aTimelineState(
     displayThreadSummaries: Boolean = false,
     displayFloatingDateBadge: Boolean = false,
     displayJumpToUnread: Boolean = false,
-    readMarkerIndex: Int? = null,
+    jumpToUnread: JumpToUnreadState = JumpToUnreadState.Hidden,
     newEventState: NewEventState = NewEventState.None,
     eventSink: (TimelineEvent) -> Unit = {},
 ): TimelineState {
@@ -83,7 +83,7 @@ fun aTimelineState(
         displayThreadSummaries = displayThreadSummaries,
         displayFloatingDateBadge = displayFloatingDateBadge,
         displayJumpToUnread = displayJumpToUnread,
-        readMarkerIndex = readMarkerIndex,
+        jumpToUnread = jumpToUnread,
         eventSink = eventSink,
     )
 }
