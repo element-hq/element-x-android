@@ -287,10 +287,15 @@ class AttachmentsPreviewPresenter(
                         edits = pendingState.edits.copy(cropRect = event.cropRect)
                     )
                 }
-                AttachmentsPreviewEvent.RotateImage -> {
+                AttachmentsPreviewEvent.RotateImageToTheLeft -> {
                     val pendingState = imageEditorState ?: return
                     imageEditorState = pendingState.copy(
-                        edits = pendingState.edits.rotateClockwise()
+                        edits = pendingState.edits.rotateAntiClockwise()
+                    )
+                }
+                AttachmentsPreviewEvent.ResetImageEdits -> {
+                    imageEditorState = imageEditorState?.copy(
+                        edits = AttachmentImageEdits()
                     )
                 }
                 AttachmentsPreviewEvent.ApplyImageEdits -> {

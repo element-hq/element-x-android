@@ -10,7 +10,7 @@ package io.element.android.features.messages.impl.attachments.preview.imageedito
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 
-private const val DEFAULT_CROP_MARGIN = 0.1f
+private const val DEFAULT_CROP_MARGIN = 0f
 private const val MIN_CROP_SIZE = 0.1f
 
 @Immutable
@@ -25,7 +25,7 @@ data class AttachmentImageEdits(
     val rotationQuarterTurns: Int = 0,
 ) {
     val normalizedRotationQuarterTurns: Int
-        get() = (rotationQuarterTurns % 4 + 4) % 4
+        get() = rotationQuarterTurns % 4
 
     val rotationDegrees: Int
         get() = normalizedRotationQuarterTurns * 90
@@ -33,8 +33,17 @@ data class AttachmentImageEdits(
     val hasChanges: Boolean
         get() = cropRect != NormalizedCropRect.default() || normalizedRotationQuarterTurns != 0
 
-    fun rotateClockwise(): AttachmentImageEdits {
-        return copy(rotationQuarterTurns = (normalizedRotationQuarterTurns + 1) % 4)
+    fun rotateAntiClockwise(): AttachmentImageEdits {
+        return copy(
+            rotationQuarterTurns = (normalizedRotationQuarterTurns + 3) % 4,
+            // Also update the crop rect to keep the same selected area
+            cropRect = NormalizedCropRect(
+                left = cropRect.top,
+                top = 1f - cropRect.right,
+                right = cropRect.bottom,
+                bottom = 1f - cropRect.left,
+            )
+        )
     }
 }
 
@@ -60,7 +69,13 @@ data class NormalizedCropRect(
     val height: Float
         get() = bottom - top
 
-    fun translate(deltaX: Float, deltaY: Float): NormalizedCropRect {
+    fun applyChange(dragTarget: CropDragTarget, deltaX: Float, deltaY: Float): NormalizedCropRect = when (dragTarget) {
+        is CropDragTarget.Move -> translate(deltaX, deltaY)
+        is CropDragTarget.Corner -> dragWithCorner(dragTarget, deltaX, deltaY)
+        is CropDragTarget.Edge -> dragWithEdge(dragTarget, deltaX, deltaY)
+    }
+
+    private fun translate(deltaX: Float, deltaY: Float): NormalizedCropRect {
         val clampedLeft = (left + deltaX).coerceIn(0f, 1f - width)
         val clampedTop = (top + deltaY).coerceIn(0f, 1f - height)
         return copy(
@@ -71,34 +86,36 @@ data class NormalizedCropRect(
         )
     }
 
-    fun resize(dragTarget: CropDragTarget, deltaX: Float, deltaY: Float): NormalizedCropRect = when (dragTarget) {
-        CropDragTarget.Move -> translate(deltaX, deltaY)
-        CropDragTarget.TopLeft -> copy(
+    private fun dragWithCorner(dragTarget: CropDragTarget.Corner, deltaX: Float, deltaY: Float) = when (dragTarget) {
+        CropDragTarget.Corner.TopLeft -> copy(
             left = (left + deltaX).coerceIn(0f, right - MIN_CROP_SIZE),
             top = (top + deltaY).coerceIn(0f, bottom - MIN_CROP_SIZE),
         )
-        CropDragTarget.Top -> copy(
-            top = (top + deltaY).coerceIn(0f, bottom - MIN_CROP_SIZE),
-        )
-        CropDragTarget.TopRight -> copy(
+        CropDragTarget.Corner.TopRight -> copy(
             right = (right + deltaX).coerceIn(left + MIN_CROP_SIZE, 1f),
             top = (top + deltaY).coerceIn(0f, bottom - MIN_CROP_SIZE),
         )
-        CropDragTarget.Right -> copy(
-            right = (right + deltaX).coerceIn(left + MIN_CROP_SIZE, 1f),
-        )
-        CropDragTarget.BottomRight -> copy(
+        CropDragTarget.Corner.BottomRight -> copy(
             right = (right + deltaX).coerceIn(left + MIN_CROP_SIZE, 1f),
             bottom = (bottom + deltaY).coerceIn(top + MIN_CROP_SIZE, 1f),
         )
-        CropDragTarget.Bottom -> copy(
-            bottom = (bottom + deltaY).coerceIn(top + MIN_CROP_SIZE, 1f),
-        )
-        CropDragTarget.BottomLeft -> copy(
+        CropDragTarget.Corner.BottomLeft -> copy(
             left = (left + deltaX).coerceIn(0f, right - MIN_CROP_SIZE),
             bottom = (bottom + deltaY).coerceIn(top + MIN_CROP_SIZE, 1f),
         )
-        CropDragTarget.Left -> copy(
+    }
+
+    private fun dragWithEdge(dragTarget: CropDragTarget.Edge, deltaX: Float, deltaY: Float) = when (dragTarget) {
+        CropDragTarget.Edge.Top -> copy(
+            top = (top + deltaY).coerceIn(0f, bottom - MIN_CROP_SIZE),
+        )
+        CropDragTarget.Edge.Right -> copy(
+            right = (right + deltaX).coerceIn(left + MIN_CROP_SIZE, 1f),
+        )
+        CropDragTarget.Edge.Bottom -> copy(
+            bottom = (bottom + deltaY).coerceIn(top + MIN_CROP_SIZE, 1f),
+        )
+        CropDragTarget.Edge.Left -> copy(
             left = (left + deltaX).coerceIn(0f, right - MIN_CROP_SIZE),
         )
     }
@@ -113,14 +130,20 @@ data class NormalizedCropRect(
     }
 }
 
-enum class CropDragTarget {
-    Move,
-    TopLeft,
-    Top,
-    TopRight,
-    Right,
-    BottomRight,
-    Bottom,
-    BottomLeft,
-    Left,
+sealed interface CropDragTarget {
+    data object Move : CropDragTarget
+
+    sealed interface Corner : CropDragTarget {
+        data object TopLeft : Corner
+        data object TopRight : Corner
+        data object BottomRight : Corner
+        data object BottomLeft : Corner
+    }
+
+    sealed interface Edge : CropDragTarget {
+        data object Top : Edge
+        data object Right : Edge
+        data object Bottom : Edge
+        data object Left : Edge
+    }
 }

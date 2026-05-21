@@ -174,12 +174,12 @@ private fun NormalizedCropRect.toPixelRect(imageWidth: Int, imageHeight: Int): P
 }
 
 private fun compressFormat(mimeType: String) = when (mimeType) {
-    "image/png" -> Bitmap.CompressFormat.PNG
+    MimeTypes.Png -> Bitmap.CompressFormat.PNG
     else -> Bitmap.CompressFormat.JPEG
 }
 
 private fun compressFileExtension(mimeType: String) = when (mimeType) {
-    "image/png" -> "png"
+    MimeTypes.Png -> "png"
     else -> "jpeg"
 }
 

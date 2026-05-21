@@ -10,20 +10,19 @@ package io.element.android.features.messages.impl.attachments.preview.imageedito
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
@@ -37,6 +36,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.drawscope.DrawScope
 import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
@@ -48,18 +48,20 @@ import androidx.compose.ui.res.pluralStringResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.heading
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
-import androidx.core.net.toUri
 import coil3.compose.AsyncImage
 import coil3.compose.AsyncImagePainter
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.R
 import io.element.android.libraries.designsystem.components.button.BackButton
-import io.element.android.libraries.designsystem.preview.ElementPreview
-import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.ElementPreviewDark
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -67,27 +69,29 @@ import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.CommonDrawables
-import io.element.android.libraries.mediaviewer.api.anImageMediaInfo
-import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 import io.element.android.libraries.ui.strings.CommonStrings
 
+/**
+ * Ref: https://www.figma.com/design/zftpgS6LjiczobJZ1GUNpt/Updates-to-Media---File-Upload?node-id=51-3539
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AttachmentImageEditorView(
     state: AttachmentImageEditorState,
     onCropRectChange: (NormalizedCropRect) -> Unit,
     onRotateClick: () -> Unit,
+    onResetClick: () -> Unit,
     onCancelClick: () -> Unit,
     onDoneClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val rotateContentDescription = stringResource(R.string.screen_media_upload_preview_rotate)
+    val rotateContentDescription = stringResource(R.string.screen_image_edition_a11y_rotate_to_the_left)
     val rotationStateDescription = pluralStringResource(
-        R.plurals.a11y_media_upload_preview_rotation_degrees,
+        R.plurals.screen_image_edition_a11y_rotation_state,
         state.edits.rotationDegrees,
         state.edits.rotationDegrees,
     )
-    val rotateButtonBackground = ElementTheme.colors.bgSubtlePrimary
+    val rotateButtonBackground = ElementTheme.colors.bgCanvasDefault
 
     Scaffold(
         modifier = modifier.fillMaxSize(),
@@ -99,7 +103,14 @@ fun AttachmentImageEditorView(
                         onClick = onCancelClick,
                     )
                 },
-                title = {},
+                title = {
+                    Text(
+                        modifier = Modifier.semantics {
+                            heading()
+                        },
+                        text = stringResource(R.string.screen_image_edition_title),
+                    )
+                },
             )
         }
     ) { paddingValues ->
@@ -118,78 +129,58 @@ fun AttachmentImageEditorView(
                     onCropRectChange = onCropRectChange,
                 )
             }
-
-            Box(
+            Row(
                 modifier = Modifier
-                    .fillMaxWidth()
-                    .height(132.dp)
-                    .background(ElementTheme.colors.bgCanvasDefault)
+                    .align(Alignment.CenterHorizontally)
+                    .widthIn(max = 360.dp)
+                    .navigationBarsPadding()
+                    .padding(start = 20.dp, top = 18.dp, end = 20.dp, bottom = 18.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically,
             ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .align(Alignment.BottomCenter)
-                        .navigationBarsPadding()
-                        .padding(start = 20.dp, top = 18.dp, end = 20.dp, bottom = 10.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically,
+                Box(
+                    modifier = Modifier.weight(1f),
+                    contentAlignment = Alignment.CenterStart,
                 ) {
-                    Box(
-                        modifier = Modifier.weight(1f),
-                        contentAlignment = Alignment.CenterStart,
-                    ) {
-                        TextButton(
-                            text = stringResource(CommonStrings.action_cancel),
-                            onClick = onCancelClick,
-                        )
-                    }
-                    Box(
-                        modifier = Modifier.weight(1f),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        IconButton(
-                            onClick = onRotateClick,
-                            modifier = Modifier
-                                .size(72.dp)
-                                .background(
-                                    color = rotateButtonBackground,
-                                    shape = CircleShape,
-                                )
-                                .clearAndSetSemantics {
-                                    contentDescription = rotateContentDescription
-                                    stateDescription = rotationStateDescription
-                                }
-                        ) {
-                            Column(
-                                modifier = Modifier.fillMaxSize(),
-                                horizontalAlignment = Alignment.CenterHorizontally,
-                                verticalArrangement = Arrangement.Center,
-                            ) {
-                                Spacer(modifier = Modifier.height(2.dp))
-                                Icon(
-                                    modifier = Modifier
-                                        .size(22.dp),
-                                    imageVector = CompoundIcons.RotateRight(),
-                                    contentDescription = null,
-                                )
-                                Spacer(modifier = Modifier.height(3.dp))
-                                Text(
-                                    text = "${state.edits.rotationDegrees}°",
-                                    style = ElementTheme.typography.fontBodyXsMedium,
-                                    color = ElementTheme.colors.textSecondary,
-                                )
+                    TextButton(
+                        text = stringResource(CommonStrings.action_reset),
+                        destructive = true,
+                        onClick = onResetClick,
+                    )
+                }
+                Box(
+                    modifier = Modifier.weight(1f),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    IconButton(
+                        onClick = onRotateClick,
+                        modifier = Modifier
+                            .background(
+                                color = rotateButtonBackground,
+                                shape = CircleShape,
+                            )
+                            .border(1.dp, ElementTheme.colors.borderInteractiveSecondary, CircleShape)
+                            .clearAndSetSemantics {
+                                contentDescription = rotateContentDescription
+                                stateDescription = rotationStateDescription
                             }
-                        }
-                    }
-                    Box(
-                        modifier = Modifier.weight(1f),
-                        contentAlignment = Alignment.CenterEnd,
                     ) {
-                        TextButton(
-                            text = stringResource(CommonStrings.action_done),
-                            onClick = onDoneClick,
+                        Icon(
+                            modifier = Modifier
+                                .size(22.dp),
+                            imageVector = CompoundIcons.RotateLeft(),
+                            contentDescription = null,
                         )
                     }
+                }
+                Box(
+                    modifier = Modifier.weight(1f),
+                    contentAlignment = Alignment.CenterEnd,
+                ) {
+                    TextButton(
+                        text = stringResource(CommonStrings.action_done),
+                        onClick = onDoneClick,
+                    )
                 }
             }
         }
@@ -207,6 +198,7 @@ private fun CropEditorCanvas(
     BoxWithConstraints(
         modifier = Modifier
             .fillMaxSize()
+            .padding(20.dp),
     ) {
         val displayedSize = remember(maxWidth, maxHeight, imageSize, rotationQuarterTurns) {
             val sourceWidth = imageSize.width.takeIf { it > 0 } ?: 1
@@ -287,9 +279,9 @@ private fun CropOverlay(
 ) {
     var dragTarget by remember { mutableStateOf<CropDragTarget?>(null) }
     val latestCropRect by rememberUpdatedState(cropRect)
-    val borderColor = ElementTheme.colors.textPrimary
-    val guideColor = ElementTheme.colors.textSecondary
-
+    val borderColor = ElementTheme.colors.iconPrimary
+    val guideColor = ElementTheme.colors.iconPrimary
+    val drawGuidelines = dragTarget == CropDragTarget.Move
     Canvas(
         modifier = Modifier
             .fillMaxSize()
@@ -313,7 +305,7 @@ private fun CropOverlay(
                     val activeTarget = dragTarget ?: return@detectDragGestures
                     change.consume()
                     onCropRectChange(
-                        latestCropRect.resize(
+                        latestCropRect.applyChange(
                             dragTarget = activeTarget,
                             deltaX = dragAmount.x / size.width.toFloat(),
                             deltaY = dragAmount.y / size.height.toFloat(),
@@ -329,80 +321,120 @@ private fun CropOverlay(
         // Hardcoded black: the crop overlay must always darken the image regardless of theme.
         // No semantic token exists for this use case in the Compound design system.
         val overlayColor = Color.Black.copy(alpha = 0.48f)
-
+        // Overlay above the crop area
         drawRect(
             color = overlayColor,
             topLeft = Offset.Zero,
             size = Size(width = size.width, height = cropTop),
         )
+        // Overlay on the left of the crop area
         drawRect(
             color = overlayColor,
             topLeft = Offset(0f, cropTop),
             size = Size(width = cropLeft, height = cropBottom - cropTop),
         )
+        // Overlay on the right of the crop area
         drawRect(
             color = overlayColor,
             topLeft = Offset(cropRight, cropTop),
             size = Size(width = size.width - cropRight, height = cropBottom - cropTop),
         )
+        // Overlay below the crop area
         drawRect(
             color = overlayColor,
             topLeft = Offset(0f, cropBottom),
             size = Size(width = size.width, height = size.height - cropBottom),
         )
-
+        // Main frame of the crop area
         drawRect(
             color = borderColor,
             topLeft = Offset(cropLeft, cropTop),
             size = Size(width = cropRight - cropLeft, height = cropBottom - cropTop),
-            style = Stroke(width = 2.dp.toPx()),
+            style = Stroke(width = 1.dp.toPx()),
         )
-
-        val thirdWidth = (cropRight - cropLeft) / 3f
-        val thirdHeight = (cropBottom - cropTop) / 3f
-        repeat(2) { index ->
-            val offsetX = cropLeft + thirdWidth * (index + 1)
-            val offsetY = cropTop + thirdHeight * (index + 1)
-            drawLine(
-                color = guideColor,
-                start = Offset(offsetX, cropTop),
-                end = Offset(offsetX, cropBottom),
-                strokeWidth = 1.dp.toPx(),
-            )
-            drawLine(
-                color = guideColor,
-                start = Offset(cropLeft, offsetY),
-                end = Offset(cropRight, offsetY),
-                strokeWidth = 1.dp.toPx(),
-            )
+        // Guide lines dividing the crop area into 9 equal parts
+        if (drawGuidelines) {
+            val thirdWidth = (cropRight - cropLeft) / 3f
+            val thirdHeight = (cropBottom - cropTop) / 3f
+            (1..2).forEach { index ->
+                val offsetX = cropLeft + thirdWidth * index
+                val offsetY = cropTop + thirdHeight * index
+                // Vertical guide line
+                drawLine(
+                    color = guideColor,
+                    start = Offset(offsetX, cropTop),
+                    end = Offset(offsetX, cropBottom),
+                    strokeWidth = 1.dp.toPx(),
+                )
+                // Horizontal guide line
+                drawLine(
+                    color = guideColor,
+                    start = Offset(cropLeft, offsetY),
+                    end = Offset(cropRight, offsetY),
+                    strokeWidth = 1.dp.toPx(),
+                )
+            }
         }
-
-        val handleLength = 16.dp.toPx()
+        // Corner handles
+        val handleLength = 18.dp.toPx()
+        val handleOffset = 2.dp.toPx()
+        // Top left corner
+        drawCornerHandle(
+            x = cropLeft - handleOffset,
+            y = cropTop - handleOffset,
+            handleLength = handleLength,
+            color = borderColor,
+            position = CropDragTarget.Corner.TopLeft,
+        )
+        // Top right corner
+        drawCornerHandle(
+            x = cropRight + handleOffset,
+            y = cropTop - handleOffset,
+            handleLength = handleLength,
+            color = borderColor,
+            position = CropDragTarget.Corner.TopRight,
+        )
+        // Bottom left corner
+        drawCornerHandle(
+            x = cropLeft - handleOffset,
+            y = cropBottom + handleOffset,
+            handleLength = handleLength,
+            color = borderColor,
+            position = CropDragTarget.Corner.BottomLeft,
+        )
+        // Bottom right corner
+        drawCornerHandle(
+            x = cropRight + handleOffset,
+            y = cropBottom + handleOffset,
+            handleLength = handleLength,
+            color = borderColor,
+            position = CropDragTarget.Corner.BottomRight,
+        )
         val handleColor = borderColor
-        drawCornerHandle(cropLeft, cropTop, handleLength, handleColor, true, true)
-        drawCornerHandle(cropRight, cropTop, handleLength, handleColor, false, true)
-        drawCornerHandle(cropLeft, cropBottom, handleLength, handleColor, true, false)
-        drawCornerHandle(cropRight, cropBottom, handleLength, handleColor, false, false)
+        // Top handle
         drawEdgeHandle(
-            center = Offset((cropLeft + cropRight) / 2f, cropTop),
+            center = Offset((cropLeft + cropRight) / 2f, cropTop - handleOffset),
             horizontal = true,
             handleLength = handleLength,
             color = handleColor,
         )
+        // Right handle
         drawEdgeHandle(
-            center = Offset(cropRight, (cropTop + cropBottom) / 2f),
+            center = Offset(cropRight + handleOffset, (cropTop + cropBottom) / 2f),
             horizontal = false,
             handleLength = handleLength,
             color = handleColor,
         )
+        // Bottom handle
         drawEdgeHandle(
-            center = Offset((cropLeft + cropRight) / 2f, cropBottom),
+            center = Offset((cropLeft + cropRight) / 2f, cropBottom + handleOffset),
             horizontal = true,
             handleLength = handleLength,
             color = handleColor,
         )
+        // Left handle
         drawEdgeHandle(
-            center = Offset(cropLeft, (cropTop + cropBottom) / 2f),
+            center = Offset(cropLeft - handleOffset, (cropTop + cropBottom) / 2f),
             horizontal = false,
             handleLength = handleLength,
             color = handleColor,
@@ -430,14 +462,14 @@ private fun detectDragTarget(
     handleTouchRadius: Float,
 ): CropDragTarget? {
     val corners = mapOf(
-        CropDragTarget.TopLeft to Offset(cropRect.left * canvasSize.width, cropRect.top * canvasSize.height),
-        CropDragTarget.Top to Offset((cropRect.left + cropRect.right) * canvasSize.width / 2f, cropRect.top * canvasSize.height),
-        CropDragTarget.TopRight to Offset(cropRect.right * canvasSize.width, cropRect.top * canvasSize.height),
-        CropDragTarget.Right to Offset(cropRect.right * canvasSize.width, (cropRect.top + cropRect.bottom) * canvasSize.height / 2f),
-        CropDragTarget.BottomRight to Offset(cropRect.right * canvasSize.width, cropRect.bottom * canvasSize.height),
-        CropDragTarget.Bottom to Offset((cropRect.left + cropRect.right) * canvasSize.width / 2f, cropRect.bottom * canvasSize.height),
-        CropDragTarget.BottomLeft to Offset(cropRect.left * canvasSize.width, cropRect.bottom * canvasSize.height),
-        CropDragTarget.Left to Offset(cropRect.left * canvasSize.width, (cropRect.top + cropRect.bottom) * canvasSize.height / 2f),
+        CropDragTarget.Corner.TopLeft to Offset(cropRect.left * canvasSize.width, cropRect.top * canvasSize.height),
+        CropDragTarget.Edge.Top to Offset((cropRect.left + cropRect.right) * canvasSize.width / 2f, cropRect.top * canvasSize.height),
+        CropDragTarget.Corner.TopRight to Offset(cropRect.right * canvasSize.width, cropRect.top * canvasSize.height),
+        CropDragTarget.Edge.Right to Offset(cropRect.right * canvasSize.width, (cropRect.top + cropRect.bottom) * canvasSize.height / 2f),
+        CropDragTarget.Corner.BottomRight to Offset(cropRect.right * canvasSize.width, cropRect.bottom * canvasSize.height),
+        CropDragTarget.Edge.Bottom to Offset((cropRect.left + cropRect.right) * canvasSize.width / 2f, cropRect.bottom * canvasSize.height),
+        CropDragTarget.Corner.BottomLeft to Offset(cropRect.left * canvasSize.width, cropRect.bottom * canvasSize.height),
+        CropDragTarget.Edge.Left to Offset(cropRect.left * canvasSize.width, (cropRect.top + cropRect.bottom) * canvasSize.height / 2f),
     )
     corners.forEach { (target, corner) ->
         if ((corner - touchPoint).getDistance() <= handleTouchRadius) {
@@ -455,31 +487,40 @@ private fun detectDragTarget(
     }
 }
 
-private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawCornerHandle(
+// x and y are the coordinates of the corner
+private fun DrawScope.drawCornerHandle(
     x: Float,
     y: Float,
     handleLength: Float,
     color: Color,
-    isLeft: Boolean,
-    isTop: Boolean,
+    position: CropDragTarget.Corner,
 ) {
-    val horizontalEndX = if (isLeft) x + handleLength else x - handleLength
-    val verticalEndY = if (isTop) y + handleLength else y - handleLength
+    val strokeWidth = 4.dp.toPx()
+    val correction = strokeWidth / 2
+    val horizontalCorrection = if (position.isLeft()) -correction else correction
+    val horizontalEndX = if (position.isLeft()) x + handleLength else x - handleLength
+    val verticalEndY = if (position.isTop()) y + handleLength else y - handleLength
+    val verticalCorrection = if (position.isTop()) -correction else correction
+    // Horizontal line
     drawLine(
         color = color,
-        start = Offset(x, y),
-        end = Offset(horizontalEndX, y),
-        strokeWidth = 3.dp.toPx(),
+        start = Offset(x + horizontalCorrection, y),
+        end = Offset(horizontalEndX + horizontalCorrection, y),
+        strokeWidth = strokeWidth,
     )
+    // Vertical line
     drawLine(
         color = color,
-        start = Offset(x, y),
-        end = Offset(x, verticalEndY),
-        strokeWidth = 3.dp.toPx(),
+        start = Offset(x, y + verticalCorrection),
+        end = Offset(x, verticalEndY + verticalCorrection),
+        strokeWidth = strokeWidth,
     )
 }
 
-private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawEdgeHandle(
+private fun CropDragTarget.Corner.isLeft() = this == CropDragTarget.Corner.TopLeft || this == CropDragTarget.Corner.BottomLeft
+private fun CropDragTarget.Corner.isTop() = this == CropDragTarget.Corner.TopLeft || this == CropDragTarget.Corner.TopRight
+
+private fun DrawScope.drawEdgeHandle(
     center: Offset,
     horizontal: Boolean,
     handleLength: Float,
@@ -499,23 +540,21 @@ private fun androidx.compose.ui.graphics.drawscope.DrawScope.drawEdgeHandle(
         color = color,
         start = start,
         end = end,
-        strokeWidth = 3.dp.toPx(),
+        strokeWidth = 4.dp.toPx(),
     )
 }
 
-@PreviewsDayNight
+// Only preview in dark, dark theme is forced on the Node.
+@Preview
 @Composable
-internal fun AttachmentImageEditorViewPreview() = ElementPreview {
+internal fun AttachmentImageEditorViewPreview(
+    @PreviewParameter(AttachmentImageEditorStateProvider::class) state: AttachmentImageEditorState,
+) = ElementPreviewDark {
     AttachmentImageEditorView(
-        state = AttachmentImageEditorState(
-            localMedia = LocalMedia(
-                uri = "file://preview-image".toUri(),
-                info = anImageMediaInfo(),
-            ),
-            edits = AttachmentImageEdits(),
-        ),
+        state = state,
         onCropRectChange = {},
         onRotateClick = {},
+        onResetClick = {},
         onCancelClick = {},
         onDoneClick = {},
     )

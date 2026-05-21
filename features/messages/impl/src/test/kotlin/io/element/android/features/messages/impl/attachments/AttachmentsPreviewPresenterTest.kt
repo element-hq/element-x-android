@@ -577,7 +577,7 @@ class AttachmentsPreviewPresenterTest {
             val editorState = awaitItem()
             assertThat(editorState.imageEditorState).isNotNull()
 
-            editorState.eventSink(AttachmentsPreviewEvent.RotateImage)
+            editorState.eventSink(AttachmentsPreviewEvent.RotateImageToTheLeft)
             val rotatedState = awaitItem()
             assertThat(rotatedState.imageEditorState?.edits?.rotationQuarterTurns).isEqualTo(1)
 
@@ -621,7 +621,7 @@ class AttachmentsPreviewPresenterTest {
 
             editorState.eventSink(AttachmentsPreviewEvent.UpdateImageCropRect(cropRect))
             val croppedState = awaitItem()
-            croppedState.eventSink(AttachmentsPreviewEvent.RotateImage)
+            croppedState.eventSink(AttachmentsPreviewEvent.RotateImageToTheLeft)
             val rotatedState = awaitItem()
             rotatedState.eventSink(AttachmentsPreviewEvent.ApplyImageEdits)
 
