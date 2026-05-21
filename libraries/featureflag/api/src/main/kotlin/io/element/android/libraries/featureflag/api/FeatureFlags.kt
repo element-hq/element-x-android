@@ -22,13 +22,6 @@ enum class FeatureFlags(
     override val isFinished: Boolean,
     override val isInLabs: Boolean = false,
 ) : Feature {
-    RoomDirectorySearch(
-        key = "feature.roomdirectorysearch",
-        title = "Room directory search",
-        description = "Allow user to search for public rooms in their homeserver",
-        defaultValue = { false },
-        isFinished = false,
-    ),
     ShowBlockedUsersDetails(
         key = "feature.showBlockedUsersDetails",
         title = "Show blocked users details",
@@ -49,17 +42,6 @@ enum class FeatureFlags(
         description = "This setting controls how end-to-end encryption (E2E) keys are shared." +
             " Enabling it will prevent the inclusion of devices that have not been explicitly verified by their owners." +
             " You'll have to stop and re-open the app manually for that setting to take effect.",
-        defaultValue = { false },
-        isFinished = false,
-    ),
-    EnableKeyShareOnInvite(
-        key = "feature.enableKeyShareOnInvite",
-        title = "Share encrypted history with new members",
-        description = "When inviting a user to an encrypted room that has history visibility set to \"shared\"," +
-            " share encrypted history with that user, and accept encrypted history when you are invited to such a room." +
-            "\nRequires an app restart to take effect." +
-            "\n\nWARNING: this feature is EXPERIMENTAL and not all security precautions are implemented." +
-            " Do not enable on production accounts.",
         defaultValue = { false },
         isFinished = false,
     ),
@@ -104,14 +86,6 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
-    SyncNotificationsWithWorkManager(
-        key = "feature.sync_notifications_with_workmanager",
-        title = "Sync notifications with WorkManager",
-        description = "Use WorkManager to schedule notification sync tasks when a push is received." +
-            " This should improve reliability and battery usage.",
-        defaultValue = { true },
-        isFinished = false,
-    ),
     QrCodeLogin(
         key = "feature.qr_code_login",
         title = "QR Code Login",
@@ -119,24 +93,10 @@ enum class FeatureFlags(
         defaultValue = { false },
         isFinished = false,
     ),
-    SignInWithClassic(
-        key = "feature.signin_with_classic",
-        title = "Sign in with Element Classic",
-        description = "Allow the application to sign in to the current Element Classic account.",
-        defaultValue = { false },
-        isFinished = false,
-    ),
     AllowBlackTheme(
         key = "feature.allow_black_theme",
-        title = "Allow black theme",
+        title = "Black theme",
         description = "Allow selecting the black appearance theme for battery saving on OLED.",
-        defaultValue = { false },
-        isFinished = false,
-    ),
-    LiveLocationSharing(
-        key = "feature.liveLocationSharing",
-        title = "Live location sharing",
-        description = "Allow sharing live location in rooms.",
         defaultValue = { false },
         isFinished = false,
     ),
@@ -166,6 +126,14 @@ enum class FeatureFlags(
         key = "feature.room_thread_list",
         title = "Add a list of threads in a room",
         description = "Add a new screen with a list of threads in a room.",
+        defaultValue = { false },
+        isFinished = false,
+    ),
+    AutomaticBackPagination(
+        key = "feature.automatic_back_pagination",
+        title = "Automatic back pagination of rooms",
+        description = "Allow the app to automatically back paginate in rooms to pre-fetch older messages in background." +
+            "\nRequires an app restart to take effect.",
         defaultValue = { false },
         isFinished = false,
     ),

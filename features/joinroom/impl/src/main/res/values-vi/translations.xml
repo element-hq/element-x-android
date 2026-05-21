@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_ban_by_message">"Bạn đã bị cấm bởi %1$s ."</string>
+  <string name="screen_join_room_ban_message">"Bạn đã bị cấm"</string>
   <string name="screen_join_room_cancel_knock_action">"Hủy yêu cầu"</string>
   <string name="screen_join_room_cancel_knock_alert_confirmation">"Có, hủy"</string>
   <string name="screen_join_room_cancel_knock_alert_description">"Bạn có chắc chắn muốn hủy yêu cầu tham gia phòng này không?"</string>

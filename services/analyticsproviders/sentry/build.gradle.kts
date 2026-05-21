@@ -50,6 +50,8 @@ setupDependencyInjection()
 
 dependencies {
     implementation(libs.sentry)
+    implementation(libs.coroutines.core)
+    implementation(libs.androidx.annotationjvm)
     implementation(projects.libraries.core)
     implementation(projects.libraries.di)
     implementation(projects.libraries.matrix.api)

@@ -14,14 +14,12 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.IntState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
-import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
@@ -45,10 +43,7 @@ import io.element.android.libraries.mediaviewer.impl.model.mediaPermissions
 import io.element.android.libraries.ui.strings.CommonStrings
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import io.element.android.libraries.androidutils.R as UtilsR
 
@@ -75,12 +70,27 @@ class MediaViewerPresenter(
     @Composable
     override fun present(): MediaViewerState {
         val coroutineScope = rememberCoroutineScope()
-        val data = dataSource.collectAsState()
-        val currentIndex = remember { mutableIntStateOf(searchIndex(data.value, inputs.eventId)) }
+        val currentIndex = remember { mutableIntStateOf(dataSource.findEventIndex(inputs.eventId) ?: 0) }
+        val data = dataSource.produceState { flow ->
+            flow.collectLatest { new ->
+                val existingItem = value.getOrNull(currentIndex.intValue)
+                val newItem = new.getOrNull(currentIndex.intValue)
+                if (existingItem is MediaViewerPageData.MediaViewerData && existingItem.eventId == inputs.eventId && newItem != existingItem) {
+                    currentIndex.intValue = dataSource.findEventIndex(inputs.eventId) ?: 0
+                } else if (currentIndex.intValue > 0 && value.firstOrNull() is MediaViewerPageData.Loading &&
+                    new.firstOrNull() !is MediaViewerPageData.Loading) {
+                    // Restore index based on the eventId after the initial items have been loaded
+                    currentIndex.intValue = dataSource.findEventIndex(inputs.eventId) ?: 0
+                }
+                value = new
+            }
+        }
+
         val snackbarMessage by snackbarDispatcher.collectSnackbarMessageAsState()
 
-        NoMoreItemsBackwardSnackBarDisplayer(currentIndex, data)
-        NoMoreItemsForwardSnackBarDisplayer(currentIndex, data)
+        // Add both forward and backward pagination state checks to display a snackbar when there is no more items to load in either direction
+        NoMoreItemsSnackBarDisplayer(currentIndex, data, Timeline.PaginationDirection.FORWARDS)
+        NoMoreItemsSnackBarDisplayer(currentIndex, data, Timeline.PaginationDirection.BACKWARDS)
 
         val permissions by room.permissionsAsState(MediaPermissions.DEFAULT) { perms ->
             perms.mediaPermissions()
@@ -88,50 +98,53 @@ class MediaViewerPresenter(
         var mediaBottomSheetState by remember { mutableStateOf<MediaBottomSheetState>(MediaBottomSheetState.Hidden) }
 
         DisposableEffect(Unit) {
-            dataSource.setup()
+            dataSource.setup(coroutineScope)
             onDispose {
                 dataSource.dispose()
             }
         }
         localMediaActions.Configure()
 
-        fun handleEvent(event: MediaViewerEvents) {
+        fun handleEvent(event: MediaViewerEvent) {
             when (event) {
-                is MediaViewerEvents.LoadMedia -> {
+                is MediaViewerEvent.LoadMedia -> {
                     coroutineScope.downloadMedia(data = event.data)
                 }
-                is MediaViewerEvents.ClearLoadingError -> {
+                is MediaViewerEvent.CancelLoadingMedia -> {
+                    dataSource.cancelLoadingMedia(event.data)
+                }
+                is MediaViewerEvent.ClearLoadingError -> {
                     dataSource.clearLoadingError(event.data)
                 }
-                is MediaViewerEvents.SaveOnDisk -> {
+                is MediaViewerEvent.SaveOnDisk -> {
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
                     coroutineScope.saveOnDisk(event.data.downloadedMedia.value)
                 }
-                is MediaViewerEvents.Share -> {
+                is MediaViewerEvent.Share -> {
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
                     coroutineScope.share(event.data.downloadedMedia.value)
                 }
-                is MediaViewerEvents.OpenWith -> {
+                is MediaViewerEvent.OpenWith -> {
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
                     coroutineScope.open(event.data.downloadedMedia.value)
                 }
-                is MediaViewerEvents.Delete -> {
+                is MediaViewerEvent.Delete -> {
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
                     coroutineScope.delete(event.eventId)
                 }
-                is MediaViewerEvents.ViewInTimeline -> {
+                is MediaViewerEvent.ViewInTimeline -> {
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
                     navigator.onViewInTimelineClick(event.eventId)
                 }
-                is MediaViewerEvents.Forward -> {
+                is MediaViewerEvent.Forward -> {
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
                     navigator.onForwardClick(
                         eventId = event.eventId,
                         fromPinnedEvents = inputs.mode.getTimelineMode() == Timeline.Mode.PinnedEvents,
                     )
                 }
-                is MediaViewerEvents.OpenInfo -> coroutineScope.launch {
-                    mediaBottomSheetState = MediaBottomSheetState.MediaDetailsBottomSheetState(
+                is MediaViewerEvent.OpenInfo -> coroutineScope.launch {
+                    mediaBottomSheetState = MediaBottomSheetState.Details(
                         eventId = event.data.eventId,
                         canDelete = when (event.data.mediaInfo.senderId) {
                             null -> false
@@ -142,20 +155,20 @@ class MediaViewerPresenter(
                         thumbnailSource = event.data.thumbnailSource,
                     )
                 }
-                is MediaViewerEvents.ConfirmDelete -> {
-                    mediaBottomSheetState = MediaBottomSheetState.MediaDeleteConfirmationState(
+                is MediaViewerEvent.ConfirmDelete -> {
+                    mediaBottomSheetState = MediaBottomSheetState.DeleteConfirmation(
                         eventId = event.eventId,
                         mediaInfo = event.data.mediaInfo,
                         thumbnailSource = event.data.thumbnailSource ?: event.data.mediaSource,
                     )
                 }
-                MediaViewerEvents.CloseBottomSheet -> {
+                MediaViewerEvent.CloseBottomSheet -> {
                     mediaBottomSheetState = MediaBottomSheetState.Hidden
                 }
-                is MediaViewerEvents.OnNavigateTo -> {
+                is MediaViewerEvent.OnNavigateTo -> {
                     currentIndex.intValue = event.index
                 }
-                is MediaViewerEvents.LoadMore -> coroutineScope.launch {
+                is MediaViewerEvent.LoadMore -> coroutineScope.launch {
                     dataSource.loadMore(event.direction)
                 }
             }
@@ -173,58 +186,39 @@ class MediaViewerPresenter(
     }
 
     @Composable
-    private fun NoMoreItemsBackwardSnackBarDisplayer(
+    private fun NoMoreItemsSnackBarDisplayer(
         currentIndex: IntState,
         data: State<ImmutableList<MediaViewerPageData>>,
+        direction: Timeline.PaginationDirection,
     ) {
-        val isRenderingLoadingBackward by remember {
-            derivedStateOf {
-                currentIndex.intValue == 0 &&
-                    data.value.size > 1 &&
-                    data.value.firstOrNull() is MediaViewerPageData.Loading &&
-                    (data.value.firstOrNull() as? MediaViewerPageData.Loading)?.direction == Timeline.PaginationDirection.BACKWARDS
-            }
-        }
-        if (isRenderingLoadingBackward) {
-            LaunchedEffect(Unit) {
-                // Observe the loading data vanishing
-                snapshotFlow {
-                    val first = data.value.firstOrNull()
-                    first is MediaViewerPageData.Loading && first.direction == Timeline.PaginationDirection.BACKWARDS
+        var previousIndex by remember { mutableIntStateOf(currentIndex.intValue) }
+        var previousDataSize by remember { mutableIntStateOf(data.value.size) }
+        var wasLoading: Boolean? by remember { mutableStateOf(null) }
+        LaunchedEffect(currentIndex.intValue, data.value) {
+            fun isLoading(index: Int, data: List<MediaViewerPageData>, direction: Timeline.PaginationDirection): Boolean {
+                return when (direction) {
+                    Timeline.PaginationDirection.BACKWARDS -> index == data.lastIndex && data.lastOrNull() is MediaViewerPageData.Loading
+                    Timeline.PaginationDirection.FORWARDS -> index == 0 && data.firstOrNull() is MediaViewerPageData.Loading
                 }
-                    .distinctUntilChanged()
-                    .filter { !it }
-                    .onEach { showNoMoreItemsSnackbar() }
-                    .launchIn(this)
             }
-        }
-    }
+            // Reset the effect when the user navigate to another item so we only take into account index changes caused by data changes
+            if (previousIndex != currentIndex.intValue) {
+                wasLoading = null
+                previousIndex = currentIndex.intValue
+            }
+            // If we were navigating backwards and the data size grew, we can discard the previous value: it means we received new items
+            if (direction == Timeline.PaginationDirection.BACKWARDS && previousDataSize < data.value.size) {
+                wasLoading = null
+            }
 
-    @Composable
-    private fun NoMoreItemsForwardSnackBarDisplayer(
-        currentIndex: IntState,
-        data: State<ImmutableList<MediaViewerPageData>>,
-    ) {
-        val isRenderingLoadingForward by remember {
-            derivedStateOf {
-                currentIndex.intValue == data.value.lastIndex &&
-                    data.value.size > 1 &&
-                    data.value.lastOrNull() is MediaViewerPageData.Loading &&
-                    (data.value.lastOrNull() as? MediaViewerPageData.Loading)?.direction == Timeline.PaginationDirection.FORWARDS
+            val isLoading = isLoading(currentIndex.intValue, data.value, direction)
+
+            if (wasLoading == true && !isLoading) {
+                showNoMoreItemsSnackbar()
             }
-        }
-        if (isRenderingLoadingForward) {
-            LaunchedEffect(Unit) {
-                // Observe the loading data vanishing
-                snapshotFlow {
-                    val last = data.value.lastOrNull()
-                    last is MediaViewerPageData.Loading && last.direction == Timeline.PaginationDirection.FORWARDS
-                }
-                    .distinctUntilChanged()
-                    .filter { !it }
-                    .onEach { showNoMoreItemsSnackbar() }
-                    .launchIn(this)
-            }
+
+            previousDataSize = data.value.size
+            wasLoading = isLoading
         }
     }
 
@@ -295,14 +289,5 @@ class MediaViewerPresenter(
         } else {
             CommonStrings.error_unknown
         }
-    }
-
-    private fun searchIndex(data: List<MediaViewerPageData>, eventId: EventId?): Int {
-        if (eventId == null) {
-            return 0
-        }
-        return data.indexOfFirst {
-            (it as? MediaViewerPageData.MediaViewerData)?.eventId == eventId
-        }.coerceAtLeast(0)
     }
 }

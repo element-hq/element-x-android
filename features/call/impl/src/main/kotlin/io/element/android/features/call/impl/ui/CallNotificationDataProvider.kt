@@ -9,6 +9,8 @@ package io.element.android.features.call.impl.ui
 
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.call.impl.notifications.CallNotificationData
+import io.element.android.libraries.designsystem.preview.ROOM_NAME
+import io.element.android.libraries.designsystem.preview.USER_NAME_BOB
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.SessionId
@@ -34,8 +36,8 @@ internal fun aCallNotificationData(
         roomId = RoomId("!1234:matrix.org"),
         eventId = EventId("\$asdadadsad:matrix.org"),
         senderId = UserId("@bob:matrix.org"),
-        roomName = "A room",
-        senderName = "Bob",
+        roomName = ROOM_NAME,
+        senderName = USER_NAME_BOB,
         avatarUrl = null,
         notificationChannelId = "incoming_call",
         timestamp = 0L,

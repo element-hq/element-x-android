@@ -78,6 +78,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemVoiceContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemImageContent
 import io.element.android.features.messages.impl.timeline.model.event.aTimelineItemTextContent
+import io.element.android.features.messages.impl.timeline.model.event.ensureActiveLiveLocation
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionEvent
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.timeline.protection.mustBeProtected
@@ -91,6 +92,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.modifiers.niceClickable
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.designsystem.swipe.SwipeableActionsState
 import io.element.android.libraries.designsystem.swipe.rememberSwipeableActionsState
 import io.element.android.libraries.designsystem.text.toPx
@@ -119,7 +121,7 @@ import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonPlurals
 import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.libraries.ui.utils.time.isTalkbackActive
+import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -677,6 +679,7 @@ private fun MessageEventBubbleContent(
                             .padding(horizontal = 8.dp, vertical = 4.dp)
                     )
                 }
+            TimestampPosition.Hidden -> Box(modifier) { content {} }
         }
     }
 
@@ -772,11 +775,17 @@ private fun MessageEventBubbleContent(
         }
     }
 
-    val timestampPosition = when (event.content) {
-        is TimelineItemImageContent -> if (event.content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
-        is TimelineItemVideoContent -> if (event.content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
-        is TimelineItemStickerContent,
-        is TimelineItemLocationContent -> TimestampPosition.Overlay
+    val timestampPosition = when (val content = event.content) {
+        is TimelineItemImageContent -> if (content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
+        is TimelineItemVideoContent -> if (content.showCaption) TimestampPosition.Aligned else TimestampPosition.Overlay
+        is TimelineItemStickerContent -> TimestampPosition.Overlay
+        is TimelineItemLocationContent -> {
+            val content = content.ensureActiveLiveLocation()
+            val shouldHide = content.mode is TimelineItemLocationContent.Mode.Live &&
+                content.mode.isActive &&
+                content.mode.isOwnUser
+            if (shouldHide) TimestampPosition.Hidden else TimestampPosition.Overlay
+        }
         is TimelineItemPollContent -> TimestampPosition.Below
         else -> TimestampPosition.Default
     }
@@ -855,7 +864,7 @@ internal fun TimelineItemEventRowWithThreadSummaryPreview() = ElementPreview {
                                     ),
                                     senderId = UserId("@user:id"),
                                     senderProfile = ProfileDetails.Ready(
-                                        displayName = "Alice",
+                                        displayName = USER_NAME_ALICE,
                                         avatarUrl = null,
                                         displayNameAmbiguous = false,
                                     ),
@@ -890,7 +899,7 @@ internal fun ThreadSummaryViewPreview() {
                     ),
                     senderId = UserId("@user:id"),
                     senderProfile = ProfileDetails.Ready(
-                        displayName = "Alice",
+                        displayName = USER_NAME_ALICE,
                         avatarUrl = null,
                         displayNameAmbiguous = true,
                     ),

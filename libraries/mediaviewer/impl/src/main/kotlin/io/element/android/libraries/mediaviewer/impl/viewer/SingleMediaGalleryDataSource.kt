@@ -20,14 +20,17 @@ import io.element.android.libraries.mediaviewer.impl.datasource.MediaGalleryData
 import io.element.android.libraries.mediaviewer.impl.model.GroupedMediaItems
 import io.element.android.libraries.mediaviewer.impl.model.MediaItem
 import kotlinx.collections.immutable.persistentListOf
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.flowOf
 
 class SingleMediaGalleryDataSource(
     private val data: GroupedMediaItems,
 ) : MediaGalleryDataSource {
-    override fun start() = Unit
+    override fun start(coroutineScope: CoroutineScope) = Unit
     override fun groupedMediaItemsFlow() = flowOf(AsyncData.Success(data))
     override fun getLastData(): AsyncData<GroupedMediaItems> = AsyncData.Success(data)
+
+    override val isReady: Boolean = true
 
     override suspend fun loadMore(direction: Timeline.PaginationDirection) = Unit
     override suspend fun deleteItem(eventId: EventId) = Unit

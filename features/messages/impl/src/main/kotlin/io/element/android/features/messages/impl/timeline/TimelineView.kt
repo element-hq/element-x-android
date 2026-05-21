@@ -77,7 +77,7 @@ import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.libraries.ui.utils.time.isTalkbackActive
+import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
@@ -103,7 +103,6 @@ fun TimelineView(
     onReactionLongClick: (emoji: String, TimelineItem.Event) -> Unit,
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
-    onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     modifier: Modifier = Modifier,
     lazyListState: LazyListState = rememberLazyListState(),
     forceJumpToBottomVisibility: Boolean = false,
@@ -187,7 +186,6 @@ fun TimelineView(
                         onMoreReactionsClick = onMoreReactionsClick,
                         onReadReceiptClick = onReadReceiptClick,
                         onSwipeToReply = onSwipeToReply,
-                        onJoinCallClick = onJoinCallClick,
                         eventSink = state.eventSink,
                     )
                 }
@@ -431,7 +429,6 @@ internal fun TimelineViewPreview(
             onReactionLongClick = { _, _ -> },
             onMoreReactionsClick = {},
             onReadReceiptClick = {},
-            onJoinCallClick = {},
             forceJumpToBottomVisibility = true,
         )
     }

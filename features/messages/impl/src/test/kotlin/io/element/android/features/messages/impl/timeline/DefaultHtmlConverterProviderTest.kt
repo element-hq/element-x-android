@@ -6,11 +6,14 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.features.messages.impl.timeline
 
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.platform.LocalInspectionMode
-import androidx.compose.ui.test.junit4.createComposeRule
+import androidx.compose.ui.test.ExperimentalTestApi
+import androidx.compose.ui.test.v2.runComposeUiTest
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.utils.FakeMentionSpanFormatter
 import io.element.android.libraries.core.extensions.runCatchingExceptions
@@ -18,15 +21,12 @@ import io.element.android.libraries.matrix.test.A_USER_ID
 import io.element.android.libraries.matrix.test.permalink.FakePermalinkParser
 import io.element.android.libraries.textcomposer.mentions.MentionSpanProvider
 import io.element.android.libraries.textcomposer.mentions.MentionSpanTheme
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 
 @RunWith(RobolectricTestRunner::class)
 class DefaultHtmlConverterProviderTest {
-    @get:Rule val composeTestRule = createComposeRule()
-
     private val provider = DefaultHtmlConverterProvider(
         mentionSpanProvider = MentionSpanProvider(
             permalinkParser = FakePermalinkParser(),
@@ -43,8 +43,8 @@ class DefaultHtmlConverterProviderTest {
     }
 
     @Test
-    fun `calling provide after calling Update first should return an HtmlConverter`() {
-        composeTestRule.setContent {
+    fun `calling provide after calling Update first should return an HtmlConverter`() = runComposeUiTest {
+        setContent {
             CompositionLocalProvider(LocalInspectionMode provides true) {
                 provider.Update()
             }

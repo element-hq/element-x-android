@@ -22,6 +22,7 @@ import io.element.android.features.messages.impl.attachments.preview.imageeditor
 import io.element.android.features.messages.impl.attachments.preview.imageeditor.EditedLocalMedia
 import io.element.android.features.messages.impl.attachments.preview.imageeditor.NormalizedCropRect
 import io.element.android.features.messages.impl.attachments.video.MediaOptimizationSelectorState
+import io.element.android.features.messages.impl.attachments.video.VideoCompressionPresetSelector
 import io.element.android.features.messages.impl.attachments.video.VideoUploadEstimation
 import io.element.android.features.messages.impl.fixtures.aMediaAttachment
 import io.element.android.features.messages.test.attachments.video.FakeMediaOptimizationSelectorPresenterFactory
@@ -556,6 +557,7 @@ class AttachmentsPreviewPresenterTest {
     }
 
     @Test
+< feat/media-resizing-before-upload
     fun `present - applying image edits updates the attachment`() = runTest {
         val editedUri = Uri.parse("file:///tmp/edited.jpeg")
         val presenter = createAttachmentsPreviewPresenter(
@@ -632,10 +634,40 @@ class AttachmentsPreviewPresenterTest {
             assertThat(reopenedState.imageEditorState?.localMedia?.uri).isEqualTo(originalLocalMedia.uri)
             assertThat(reopenedState.imageEditorState?.edits?.cropRect).isEqualTo(cropRect)
             assertThat(reopenedState.imageEditorState?.edits?.rotationDegrees).isEqualTo(90)
+=
+    fun `present - sendAsFile attachment is pre-processed without image compression`() = runTest {
+        // Even though the user has enabled "Optimize media quality" globally, picking the file
+        // through the Files picker (sendAsFile = true) must skip compression. Regression test
+        // for https://github.com/element-hq/element-x-android/issues/6365
+        val mediaPreProcessor = FakeMediaPreProcessor()
+        val presenter = createAttachmentsPreviewPresenter(
+            localMedia = aLocalMedia(mockMediaUrl, anImageMediaInfo()),
+            sendAsFile = true,
+            mediaPreProcessor = mediaPreProcessor,
+            // Selector views are hidden in the sendAsFile flow, which triggers the auto pre-process path.
+            displayMediaQualitySelectorViews = false,
+            mediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(
+                config = MediaOptimizationConfig(
+                    compressImages = true,
+                    videoCompressionPreset = VideoCompressionPreset.STANDARD,
+                )
+            ),
+        )
+
+        presenter.test {
+            consumeItemsUntilPredicate { mediaPreProcessor.processCallCount > 0 }
+            assertThat(mediaPreProcessor.lastMediaOptimizationConfig).isEqualTo(
+                MediaOptimizationConfig(
+                    compressImages = false,
+                    videoCompressionPreset = VideoCompressionPreset.HIGH,
+                )
+            )
+> feature/bma/imageEdition
         }
     }
 
     @Test
+< feat/media-resizing-before-upload
     fun `present - sending edited media keeps the edited file available until upload starts`() = runTest {
         val editedFile = createTempFile(suffix = ".jpeg").toFile().apply {
             writeText("edited-media")
@@ -747,6 +779,50 @@ class AttachmentsPreviewPresenterTest {
             initialState.eventSink(AttachmentsPreviewEvent.OpenImageEditor)
             val editorState = consumeItemsUntilPredicate { it.imageEditorState != null }.last()
             assertThat(editorState.imageEditorState).isNotNull()
+=
+    fun `present - sendAsFile video is pre-processed with best fitting preset`() = runTest {
+        val mediaPreProcessor = FakeMediaPreProcessor()
+        val presenter = createAttachmentsPreviewPresenter(
+            localMedia = aLocalMedia(mockMediaUrl, aVideoMediaInfo()),
+            sendAsFile = true,
+            mediaPreProcessor = mediaPreProcessor,
+            // Selector views are hidden in the sendAsFile flow, which triggers the auto pre-process path.
+            displayMediaQualitySelectorViews = false,
+            mediaOptimizationSelectorPresenterFactory = FakeMediaOptimizationSelectorPresenterFactory {
+                MediaOptimizationSelectorState(
+                    maxUploadSize = AsyncData.Success(250_000_000L),
+                    videoSizeEstimations = AsyncData.Success(
+                        persistentListOf(
+                            VideoUploadEstimation(VideoCompressionPreset.HIGH, sizeInBytes = 513_216_000L, canUpload = false),
+                            VideoUploadEstimation(VideoCompressionPreset.STANDARD, sizeInBytes = 228_096_000L, canUpload = true),
+                            VideoUploadEstimation(VideoCompressionPreset.LOW, sizeInBytes = 57_024_000L, canUpload = true),
+                        )
+                    ),
+                    isImageOptimizationEnabled = false,
+                    selectedVideoPreset = VideoCompressionPreset.STANDARD,
+                    displayMediaSelectorViews = false,
+                    displayVideoPresetSelectorDialog = false,
+                    eventSink = {},
+                )
+            },
+            mediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(
+                config = MediaOptimizationConfig(
+                    compressImages = true,
+                    videoCompressionPreset = VideoCompressionPreset.LOW,
+                )
+            ),
+        )
+
+        presenter.test {
+            consumeItemsUntilPredicate { mediaPreProcessor.processCallCount > 0 }
+            assertThat(mediaPreProcessor.lastMediaOptimizationConfig).isEqualTo(
+                MediaOptimizationConfig(
+                    compressImages = false,
+                    videoCompressionPreset = VideoCompressionPreset.STANDARD,
+                )
+            )
+
+          > feature/bma/imageEdition
         }
     }
 
@@ -754,6 +830,7 @@ class AttachmentsPreviewPresenterTest {
         localMedia: LocalMedia = aLocalMedia(
             uri = mockMediaUrl,
         ),
+        sendAsFile: Boolean = false,
         room: JoinedRoom = FakeJoinedRoom(),
         timelineMode: Timeline.Mode = Timeline.Mode.Live,
         permalinkBuilder: PermalinkBuilder = FakePermalinkBuilder(),
@@ -775,6 +852,7 @@ class AttachmentsPreviewPresenterTest {
             }
         ),
         mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
+< feat/media-resizing-before-upload
         attachmentImageEditor: AttachmentImageEditor = FakeAttachmentImageEditor {
             Result.success(
                 EditedLocalMedia(
@@ -783,9 +861,12 @@ class AttachmentsPreviewPresenterTest {
                 )
             )
         },
+=
+        videoCompressionPresetSelector: VideoCompressionPresetSelector = VideoCompressionPresetSelector(),
+> feature/bma/imageEdition
     ): AttachmentsPreviewPresenter {
         return AttachmentsPreviewPresenter(
-            attachment = aMediaAttachment(localMedia),
+            attachment = aMediaAttachment(localMedia, sendAsFile = sendAsFile),
             onDoneListener = onDoneListener,
             mediaSenderFactory = MediaSenderFactory { timelineMode ->
                 DefaultMediaSender(
@@ -803,6 +884,7 @@ class AttachmentsPreviewPresenterTest {
             sessionCoroutineScope = this,
             dispatchers = testCoroutineDispatchers(),
             mediaOptimizationSelectorPresenterFactory = mediaOptimizationSelectorPresenterFactory,
+            videoCompressionPresetSelector = videoCompressionPresetSelector,
             timelineMode = timelineMode,
             inReplyToEventId = null,
             mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,

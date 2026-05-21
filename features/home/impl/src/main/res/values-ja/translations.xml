@@ -38,7 +38,7 @@
   <string name="screen_roomlist_filter_low_priority_empty_state_title">"低い優先度のチャットはまだありません"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_subtitle">"フィルターを解除して他のチャットを表示できます"</string>
   <string name="screen_roomlist_filter_mixed_empty_state_title">"この選択中にチャットがありません"</string>
-  <string name="screen_roomlist_filter_people">"人"</string>
+  <string name="screen_roomlist_filter_people">"人々"</string>
   <string name="screen_roomlist_filter_people_empty_state_title">"まだダイレクトメッセージは届いていません"</string>
   <string name="screen_roomlist_filter_rooms">"ルーム"</string>
   <string name="screen_roomlist_filter_rooms_empty_state_title">"まだルームに参加していません"</string>

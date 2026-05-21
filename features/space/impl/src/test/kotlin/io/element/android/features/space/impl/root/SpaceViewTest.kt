@@ -6,14 +6,17 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.features.space.impl.root
 
 import androidx.activity.ComponentActivity
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.api.room.CurrentUserMembership
@@ -33,37 +36,33 @@ import io.element.android.tests.testutils.ensureCalledOnceWithParam
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 import io.element.android.tests.testutils.pressBack
 import io.element.android.tests.testutils.pressBackKey
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 class SpaceViewTest {
-    @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
-
     @Test
-    fun `clicking on back invokes the expected callback`() {
+    fun `clicking on back invokes the expected callback`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<SpaceEvents>(expectEvents = false)
         ensureCalledOnce {
-            rule.setSpaceView(
+            setSpaceView(
                 aSpaceState(
                     hasMoreToLoad = false,
                     eventSink = eventsRecorder,
                 ),
                 onBackClick = it,
             )
-            rule.pressBack()
+            pressBack()
         }
     }
 
     @Test
-    fun `clicking on a room name invokes the expected callback`() {
+    fun `clicking on a room name invokes the expected callback`() = runAndroidComposeUiTest {
         val aSpaceRoom = aSpaceRoom(roomId = A_ROOM_ID, displayName = A_ROOM_NAME)
         val eventsRecorder = EventsRecorder<SpaceEvents>(expectEvents = false)
         ensureCalledOnceWithParam(aSpaceRoom) {
-            rule.setSpaceView(
+            setSpaceView(
                 aSpaceState(
                     children = listOf(aSpaceRoom),
                     hasMoreToLoad = false,
@@ -71,91 +70,91 @@ class SpaceViewTest {
                 ),
                 onRoomClick = it,
             )
-            rule.onNodeWithText(A_ROOM_NAME).performClick()
+            onNodeWithText(A_ROOM_NAME).performClick()
         }
     }
 
     @Test
-    fun `clicking on Join room emits the expected Event`() {
+    fun `clicking on Join room emits the expected Event`() = runAndroidComposeUiTest {
         val aSpaceRoom = aSpaceRoom(roomId = A_ROOM_ID, state = null)
         val eventsRecorder = EventsRecorder<SpaceEvents>()
-        rule.setSpaceView(
+        setSpaceView(
             aSpaceState(
                 children = listOf(aSpaceRoom),
                 hasMoreToLoad = false,
                 eventSink = eventsRecorder,
             ),
         )
-        rule.clickOn(CommonStrings.action_join)
+        clickOn(CommonStrings.action_join)
         eventsRecorder.assertSingle(SpaceEvents.Join(aSpaceRoom))
     }
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `clicking on accept invite emits the expected Event`() {
+    fun `clicking on accept invite emits the expected Event`() = runAndroidComposeUiTest {
         val aSpaceRoom = aSpaceRoom(roomId = A_ROOM_ID, state = CurrentUserMembership.INVITED)
         val eventsRecorder = EventsRecorder<SpaceEvents>()
-        rule.setSpaceView(
+        setSpaceView(
             aSpaceState(
                 hasMoreToLoad = false,
                 children = listOf(aSpaceRoom),
                 eventSink = eventsRecorder,
             ),
         )
-        rule.clickOn(CommonStrings.action_accept)
+        clickOn(CommonStrings.action_accept)
         eventsRecorder.assertSingle(SpaceEvents.AcceptInvite(aSpaceRoom))
     }
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `clicking on decline invite emits the expected Event`() {
+    fun `clicking on decline invite emits the expected Event`() = runAndroidComposeUiTest {
         val aSpaceRoom = aSpaceRoom(roomId = A_ROOM_ID, state = CurrentUserMembership.INVITED)
         val eventsRecorder = EventsRecorder<SpaceEvents>()
-        rule.setSpaceView(
+        setSpaceView(
             aSpaceState(
                 hasMoreToLoad = false,
                 children = listOf(aSpaceRoom),
                 eventSink = eventsRecorder,
             ),
         )
-        rule.clickOn(CommonStrings.action_decline)
+        clickOn(CommonStrings.action_decline)
         eventsRecorder.assertSingle(SpaceEvents.DeclineInvite(aSpaceRoom))
     }
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `clicking on topic emits the expected Event`() {
+    fun `clicking on topic emits the expected Event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<SpaceEvents>()
-        rule.setSpaceView(
+        setSpaceView(
             aSpaceState(
                 spaceInfo = aRoomInfo(topic = A_ROOM_TOPIC),
                 hasMoreToLoad = false,
                 eventSink = eventsRecorder,
             )
         )
-        rule.onNodeWithText(A_ROOM_TOPIC).performClick()
+        onNodeWithText(A_ROOM_TOPIC).performClick()
         eventsRecorder.assertSingle(SpaceEvents.ShowTopicViewer(A_ROOM_TOPIC))
     }
 
     @Test
-    fun `clicking back in manage mode emits ExitManageMode event`() {
+    fun `clicking back in manage mode emits ExitManageMode event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<SpaceEvents>()
-        rule.setSpaceView(
+        setSpaceView(
             aSpaceState(
                 hasMoreToLoad = false,
                 isManageMode = true,
                 eventSink = eventsRecorder,
             )
         )
-        rule.pressBackKey()
+        pressBackKey()
         eventsRecorder.assertSingle(SpaceEvents.ExitManageMode)
     }
 
     @Test
-    fun `clicking on room in manage mode emits ToggleRoomSelection event`() {
+    fun `clicking on room in manage mode emits ToggleRoomSelection event`() = runAndroidComposeUiTest {
         val aSpaceRoom = aSpaceRoom(roomId = A_ROOM_ID, displayName = A_ROOM_NAME)
         val eventsRecorder = EventsRecorder<SpaceEvents>()
-        rule.setSpaceView(
+        setSpaceView(
             aSpaceState(
                 children = listOf(aSpaceRoom),
                 hasMoreToLoad = false,
@@ -163,14 +162,14 @@ class SpaceViewTest {
                 eventSink = eventsRecorder,
             )
         )
-        rule.onNodeWithText(A_ROOM_NAME).performClick()
+        onNodeWithText(A_ROOM_NAME).performClick()
         eventsRecorder.assertSingle(SpaceEvents.ToggleRoomSelection(A_ROOM_ID))
     }
 
     @Test
-    fun `clicking remove button emits RemoveSelectedRooms event`() {
+    fun `clicking remove button emits RemoveSelectedRooms event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<SpaceEvents>()
-        rule.setSpaceView(
+        setSpaceView(
             aSpaceState(
                 children = listOf(aSpaceRoom(roomId = A_ROOM_ID)),
                 hasMoreToLoad = false,
@@ -179,15 +178,15 @@ class SpaceViewTest {
                 eventSink = eventsRecorder,
             )
         )
-        rule.clickOn(CommonStrings.action_remove)
+        clickOn(CommonStrings.action_remove)
         eventsRecorder.assertSingle(SpaceEvents.RemoveSelectedRooms)
     }
 
     @Config(qualifiers = "h1024dp")
     @Test
-    fun `clicking confirm in removal dialog emits ConfirmRoomRemoval event`() {
+    fun `clicking confirm in removal dialog emits ConfirmRoomRemoval event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<SpaceEvents>()
-        rule.setSpaceView(
+        setSpaceView(
             aSpaceState(
                 children = listOf(aSpaceRoom(roomId = A_ROOM_ID)),
                 hasMoreToLoad = false,
@@ -198,14 +197,14 @@ class SpaceViewTest {
             )
         )
         // Click on the Remove button in the confirmation dialog
-        rule.clickOn(CommonStrings.action_remove, inDialog = true)
+        clickOn(CommonStrings.action_remove, inDialog = true)
         eventsRecorder.assertSingle(SpaceEvents.ConfirmRoomRemoval)
     }
 
     @Test
-    fun `clicking create room button calls the expected callback`() {
+    fun `clicking create room button calls the expected callback`() = runAndroidComposeUiTest {
         val onCreateRoomClick = lambdaRecorder<Unit> { }
-        rule.setSpaceView(
+        setSpaceView(
             aSpaceState(
                 children = emptyList(),
                 hasMoreToLoad = false,
@@ -214,14 +213,14 @@ class SpaceViewTest {
             ),
             onCreateRoomClick = onCreateRoomClick,
         )
-        rule.clickOn(CommonStrings.action_create_room)
+        clickOn(CommonStrings.action_create_room)
         onCreateRoomClick.assertions().isCalledOnce()
     }
 
     @Test
-    fun `clicking add existing room button calls the expected callback`() {
+    fun `clicking add existing room button calls the expected callback`() = runAndroidComposeUiTest {
         val onAddRoomClick = lambdaRecorder<Unit> { }
-        rule.setSpaceView(
+        setSpaceView(
             aSpaceState(
                 children = emptyList(),
                 hasMoreToLoad = false,
@@ -230,12 +229,12 @@ class SpaceViewTest {
             ),
             onAddRoomClick = onAddRoomClick,
         )
-        rule.clickOn(CommonStrings.action_add_existing_rooms)
+        clickOn(CommonStrings.action_add_existing_rooms)
         onAddRoomClick.assertions().isCalledOnce()
     }
 }
 
-private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setSpaceView(
+private fun AndroidComposeUiTest<ComponentActivity>.setSpaceView(
     state: SpaceState,
     onBackClick: () -> Unit = EnsureNeverCalled(),
     onRoomClick: (SpaceRoom) -> Unit = EnsureNeverCalledWithParam(),

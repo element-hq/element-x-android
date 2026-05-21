@@ -144,7 +144,7 @@
   <string name="action_share_link">"Bagikan tautan"</string>
   <string name="action_show">"Tampilkan"</string>
   <string name="action_sign_in_again">"Masuk lagi"</string>
-  <string name="action_signout">"Keluar dari akun"</string>
+  <string name="action_signout">"Hapus device dari akun"</string>
   <string name="action_signout_anyway">"Keluar saja"</string>
   <string name="action_skip">"Lewati"</string>
   <string name="action_start">"Mulai"</string>
@@ -185,7 +185,6 @@
   <string name="common_current_user_canceled_knock">"Permintaan dibatalkan"</string>
   <string name="common_current_user_left_room">"Keluar dari ruangan"</string>
   <string name="common_current_user_rejected_invite">"Undangan ditolak"</string>
-  <string name="common_dark">"Gelap"</string>
   <string name="common_decryption_error">"Kesalahan dekripsi"</string>
   <string name="common_description">"Deskripsi"</string>
   <string name="common_developer_options">"Opsi pengembang"</string>
@@ -222,7 +221,6 @@ Alasan: %1$s."</string>
   <string name="common_install_apk_android">"Pasang APK"</string>
   <string name="common_invite_unknown_profile">"ID Matrix ini tidak dapat ditemukan, sehingga undangan mungkin tidak diterima."</string>
   <string name="common_leaving_room">"Meninggalkan ruangan"</string>
-  <string name="common_light">"Terang"</string>
   <string name="common_line_copied_to_clipboard">"Baris disalin ke papan klip"</string>
   <string name="common_link_copied_to_clipboard">"Tautan disalin ke papan klip"</string>
   <string name="common_loading">"Memuat…"</string>
@@ -275,7 +273,6 @@ Alasan: %1$s."</string>
     <item quantity="other">"%1$d balasan"</item>
   </plurals>
   <string name="common_replying_to">"Membalas %1$s"</string>
-  <string name="common_report_a_bug">"Laporkan kutu"</string>
   <string name="common_report_a_problem">"Laporkan masalah"</string>
   <string name="common_report_submitted">"Laporan terkirim"</string>
   <string name="common_rich_text_editor">"Penyunting teks kaya"</string>
@@ -309,7 +306,6 @@ Alasan: %1$s."</string>
   <string name="common_success">"Berhasil"</string>
   <string name="common_suggestions">"Saran"</string>
   <string name="common_syncing">"Menyinkronkan"</string>
-  <string name="common_system">"Sistem"</string>
   <string name="common_text">"Teks"</string>
   <string name="common_third_party_notices">"Pemberitahuan pihak ketiga"</string>
   <string name="common_thread">"Utas"</string>

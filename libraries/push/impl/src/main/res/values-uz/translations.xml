@@ -15,6 +15,11 @@
   </plurals>
   <string name="notification_error_unified_push_unregistered_android">"UnifiedPush bildirishnoma tarqatuvchisini roʻyxatdan oʻtkazib boʻlmadi, shuning uchun siz endi bildirishnomalarni olmaysiz. Iltimos, ilovaning bildirishnoma sozlamalarini va push distribyutor holatini tekshiring."</string>
   <string name="notification_fallback_content">"Sizda yangi xabarlar bor."</string>
+  <plurals name="notification_fallback_n_content">
+    <item quantity="one">"Sizda %d ta yangi xabar bor."</item>
+    <item quantity="other">"Sizda %d ta yangi xabar bor."</item>
+  </plurals>
+  <string name="notification_incoming_audio_call">"📞 Kiruvchi qo‘ng‘iroq"</string>
   <string name="notification_incoming_call">"📹 Kiruvchi qoʻngʻiroq"</string>
   <string name="notification_inline_reply_failed">"** Yuborilmadi - iltimos, xonani oching"</string>
   <string name="notification_invitation_action_join">"Qo\'shilish"</string>

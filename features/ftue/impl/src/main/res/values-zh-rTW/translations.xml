@@ -2,8 +2,8 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_identity_confirmation_cannot_confirm">"無法確認？"</string>
   <string name="screen_identity_confirmation_create_new_recovery_key">"建立新的復原金鑰"</string>
-  <string name="screen_identity_confirmation_subtitle">"驗證這部裝置以設定安全通訊。"</string>
-  <string name="screen_identity_confirmation_title">"確認這是你本人"</string>
+  <string name="screen_identity_confirmation_subtitle">"選擇驗證方式以設定安全訊息傳遞。"</string>
+  <string name="screen_identity_confirmation_title">"確認您的數位身份"</string>
   <string name="screen_identity_confirmation_use_another_device">"使用另一部裝置"</string>
   <string name="screen_identity_confirmation_use_recovery_key">"使用復原金鑰"</string>
   <string name="screen_identity_confirmed_subtitle">"您可以安全地讀取和發送訊息了，與您聊天的人也可以信任這部裝置。"</string>

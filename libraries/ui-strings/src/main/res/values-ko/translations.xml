@@ -190,7 +190,6 @@
   <string name="common_advanced_settings">"고급 설정"</string>
   <string name="common_an_image">"이미지"</string>
   <string name="common_analytics">"통계"</string>
-  <string name="common_android_fetching_notifications_title">"알림 동기화 중…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"방을 떠남"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"세션에서 로그아웃되었습니다."</string>
   <string name="common_appearance">"외관"</string>
@@ -208,7 +207,6 @@
   <string name="common_current_user_left_room">"방 떠남"</string>
   <string name="common_current_user_left_space">"스페이스 떠남"</string>
   <string name="common_current_user_rejected_invite">"초대 거부됨"</string>
-  <string name="common_dark">"다크"</string>
   <string name="common_decryption_error">"복호화 오류"</string>
   <string name="common_description">"설명"</string>
   <string name="common_developer_options">"개발자 설정"</string>
@@ -234,6 +232,7 @@
   <string name="common_failed">"실패"</string>
   <string name="common_favourite">"즐겨찾기"</string>
   <string name="common_favourited">"즐겨찾기 됨"</string>
+  <string name="common_fetching_notifications_title_android">"알림 동기화 중…"</string>
   <string name="common_file">"파일"</string>
   <string name="common_file_deleted">"파일 삭제됨"</string>
   <string name="common_file_saved">"파일 저장됨"</string>
@@ -247,7 +246,6 @@
   <string name="common_invite_unknown_profile">"Matrix ID를 찾을 수 없기 때문에 초대가 수신되지 않을 수도 있습니다."</string>
   <string name="common_leaving_room">"방을 떠나는 중"</string>
   <string name="common_leaving_space">"스페이스 떠나는 중"</string>
-  <string name="common_light">"라이트"</string>
   <string name="common_line_copied_to_clipboard">"줄이 클립보드에 복사되었습니다."</string>
   <string name="common_link_copied_to_clipboard">"링크가 클립보드에 복사됨"</string>
   <string name="common_link_new_device">"새 기기 연결"</string>
@@ -310,7 +308,6 @@
     <item quantity="other">"%1$d 답변"</item>
   </plurals>
   <string name="common_replying_to">"%1$s님에게 답장하는 중"</string>
-  <string name="common_report_a_bug">"버그 보고"</string>
   <string name="common_report_a_problem">"문제 보고"</string>
   <string name="common_report_submitted">"보고 제출됨"</string>
   <string name="common_rich_text_editor">"리치 텍스트 편집기"</string>
@@ -361,7 +358,6 @@
   <string name="common_suggested">"공유된 스페이스"</string>
   <string name="common_suggestions">"제안"</string>
   <string name="common_syncing">"동기화 중"</string>
-  <string name="common_system">"시스템"</string>
   <string name="common_text">"글자"</string>
   <string name="common_third_party_notices">"제3자 고지"</string>
   <string name="common_thread">"스레드"</string>
@@ -460,14 +456,6 @@
   <string name="screen_create_poll_remove_accessibility_label">"%1$s 제거"</string>
   <string name="screen_create_poll_settings_section_title">"설정"</string>
   <string name="screen_media_picker_error_failed_selection">"미디어 선택에 실패했습니다. 다시 시도해 주세요."</string>
-  <string name="screen_missing_key_backup_open_element_classic">"Element Classic 열기"</string>
-  <string name="screen_missing_key_backup_step_1">"기기에서 Element Classic 앱을 열어 주세요"</string>
-  <string name="screen_missing_key_backup_step_2_android">"설정 &gt; 보안 및 개인정보 보호로 이동하세요"</string>
-  <string name="screen_missing_key_backup_step_3_android">"암호화 키 관리에서 \'암호화된 메시지 복구\'를 선택하세요"</string>
-  <string name="screen_missing_key_backup_step_4">"안내에 따라 키 저장소를 활성화해 주세요"</string>
-  <string name="screen_missing_key_backup_step_5">"%1$s(으)로 돌아가기"</string>
-  <string name="screen_missing_key_backup_title">"%1$s(으)로 진행하기 전에 키 저장소를 활성화해 주세요."</string>
-  <string name="screen_onboarding_welcome_back">"다시 오신 것을 환영합니다"</string>
   <string name="screen_pinned_timeline_empty_state_description">"메시지를 누르고 \"%1$s\" 를 선택하여 여기에 포함합니다."</string>
   <string name="screen_pinned_timeline_empty_state_headline">"중요한 메시지를 고정하여 쉽게 찾을 수 있도록 합니다"</string>
   <plurals name="screen_pinned_timeline_screen_title">

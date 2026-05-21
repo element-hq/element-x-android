@@ -12,6 +12,8 @@
   <string name="confirm_recovery_key_banner_primary_button_title">"Nhập khóa khôi phục của bạn."</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Bạn quên khóa khôi phục?”"</string>
   <string name="confirm_recovery_key_banner_title">"Dữ liệu khóa của bạn không còn đồng bộ"</string>
+  <string name="full_screen_intent_banner_message">"Để đảm bảo bạn không bỏ lỡ bất kỳ cuộc gọi quan trọng nào, vui lòng thay đổi cài đặt để cho phép thông báo toàn màn hình khi điện thoại của bạn bị khóa."</string>
+  <string name="full_screen_intent_banner_title">"Nâng cao trải nghiệm cuộc gọi của bạn"</string>
   <string name="screen_home_tab_chats">"Cuộc trò chuyện"</string>
   <string name="screen_invites_decline_chat_message">"Bạn có chắc muốn từ chối lời mời tham gia %1$s không?"</string>
   <string name="screen_invites_decline_chat_title">"Từ chối lời mời"</string>

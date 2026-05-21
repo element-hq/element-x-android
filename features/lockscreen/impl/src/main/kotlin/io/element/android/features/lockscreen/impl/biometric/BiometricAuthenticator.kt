@@ -36,13 +36,13 @@ interface BiometricAuthenticator {
     }
 
     val isActive: Boolean
-    fun setup()
+    suspend fun setup()
     suspend fun authenticate(): AuthenticationResult
 }
 
 class NoopBiometricAuthentication : BiometricAuthenticator {
     override val isActive: Boolean = false
-    override fun setup() = Unit
+    override suspend fun setup() = Unit
     override suspend fun authenticate() = BiometricAuthenticator.AuthenticationResult.Failure()
 }
 
@@ -58,7 +58,7 @@ class DefaultBiometricAuthentication(
 
     private var cryptoObject: CryptoObject? = null
 
-    override fun setup() {
+    override suspend fun setup() {
         try {
             val secretKey = ensureKey()
             val cipher = encryptionDecryptionService.createEncryptionCipher(secretKey)
@@ -86,7 +86,7 @@ class DefaultBiometricAuthentication(
     }
 
     @Throws(KeyPermanentlyInvalidatedException::class)
-    private fun ensureKey() = secretKeyRepository.getOrCreateKey(keyAlias, true).also {
+    private suspend fun ensureKey() = secretKeyRepository.getOrCreateKey(keyAlias, true).also {
         encryptionDecryptionService.createEncryptionCipher(it)
     }
 }

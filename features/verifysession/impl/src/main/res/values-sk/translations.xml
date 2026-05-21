@@ -50,5 +50,5 @@
   <string name="screen_session_verification_waiting_subtitle">"Po prijatí budete môcť pokračovať v overovaní."</string>
   <string name="screen_session_verification_waiting_to_accept_subtitle">"Ak chcete pokračovať, prijmite žiadosť o spustenie procesu overenia vo vašej druhej relácii."</string>
   <string name="screen_session_verification_waiting_to_accept_title">"Čaká sa na prijatie žiadosti"</string>
-  <string name="screen_signout_in_progress_dialog_content">"Prebieha odhlasovanie…"</string>
+  <string name="screen_signout_in_progress_dialog_content">"Odoberanie zariadenia…"</string>
 </resources>

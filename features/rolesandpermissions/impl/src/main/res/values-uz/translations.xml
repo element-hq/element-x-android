@@ -5,7 +5,7 @@
   <string name="screen_room_change_permissions_change_settings">"Sozlamalarni o‘zgartirish"</string>
   <string name="screen_room_change_permissions_delete_messages">"Xabarlarni olib tashlash"</string>
   <string name="screen_room_change_permissions_everyone">"A\'zo"</string>
-  <string name="screen_room_change_permissions_invite_people">"Odamlarni taklif qiling va qo‘shilish so‘rovlarini qabul qiling"</string>
+  <string name="screen_room_change_permissions_invite_people">"Odamlarni taklif qiling"</string>
   <string name="screen_room_change_permissions_manage_space">"Maydonni boshqarish"</string>
   <string name="screen_room_change_permissions_manage_space_rooms">"Xonalarni boshqarish"</string>
   <string name="screen_room_change_permissions_member_moderation">"A’zolarni boshqarish"</string>

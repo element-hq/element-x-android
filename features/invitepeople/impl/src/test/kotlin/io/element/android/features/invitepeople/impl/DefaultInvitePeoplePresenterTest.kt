@@ -15,9 +15,6 @@ import io.element.android.features.invitepeople.api.InvitePeopleEvents
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.theme.components.SearchBarResultState
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
-import io.element.android.libraries.featureflag.test.FakeFeatureFlagService
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.UserId
@@ -323,7 +320,7 @@ internal class DefaultInvitePeoplePresenterTest {
             val initialState = awaitItemAsDefault()
             skipItems(1)
 
-            val selectedUser = aMatrixUser()
+            val selectedUser = aMatrixUser(displayName = "John Doe")
 
             initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(selectedUser))
 
@@ -361,7 +358,7 @@ internal class DefaultInvitePeoplePresenterTest {
             val initialState = awaitItemAsDefault()
             skipItems(1)
 
-            val selectedUser = aMatrixUser()
+            val selectedUser = aMatrixUser(displayName = "John Doe")
 
             // Given a query is made
             initialState.searchQuery.setTextAndPlaceCursorAtEnd("some query")
@@ -405,10 +402,14 @@ internal class DefaultInvitePeoplePresenterTest {
         val inviteUserResult = lambdaRecorder<UserId, Result<Unit>> { userId: UserId ->
             Result.success(Unit)
         }
+        val encryptionService = FakeEncryptionService(
+            getUserIdentityResult = { _ -> Result.success(null) },
+        )
         val presenter = createDefaultInvitePeoplePresenter(
             userRepository = repository,
             inviteUserResult = inviteUserResult,
-            coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true)
+            coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
+            matrixClient = FakeMatrixClient(encryptionService = encryptionService),
         )
         presenter.test {
             val initialState = awaitItem()
@@ -451,13 +452,18 @@ internal class DefaultInvitePeoplePresenterTest {
             Result.failure(AN_EXCEPTION)
         }
         val showErrorResResult = lambdaRecorder<Int, Int, Unit> { _, _ -> }
+
+        val encryptionService = FakeEncryptionService(
+            getUserIdentityResult = { _ -> Result.success(null) },
+        )
         val presenter = createDefaultInvitePeoplePresenter(
             userRepository = repository,
             inviteUserResult = inviteUserResult,
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
             appErrorStateService = FakeAppErrorStateService(
                 showErrorResResult = showErrorResResult,
-            )
+            ),
+            matrixClient = FakeMatrixClient(encryptionService = encryptionService),
         )
         presenter.test {
             val initialState = awaitItem()
@@ -534,7 +540,7 @@ internal class DefaultInvitePeoplePresenterTest {
     }
 
     @Test
-    fun `present - suggestions are loaded from recent direct rooms`() = runTest {
+    fun `present - suggestions are loaded from recent DM rooms`() = runTest {
         val dmRoomId = RoomId("!dm_room:server.org")
         val otherUserId = UserId("@frank:server.org")
         val matrixClient = FakeMatrixClient(sessionId = A_USER_ID).apply {
@@ -548,7 +554,7 @@ internal class DefaultInvitePeoplePresenterTest {
                     roomId = dmRoomId,
                     initialRoomInfo = aRoomInfo(
                         id = dmRoomId,
-                        isDirect = true,
+                        isDm = true,
                         activeMembersCount = 2,
                         currentUserMembership = CurrentUserMembership.JOINED,
                     ),
@@ -585,7 +591,7 @@ internal class DefaultInvitePeoplePresenterTest {
                     roomId = dmRoomId,
                     initialRoomInfo = aRoomInfo(
                         id = dmRoomId,
-                        isDirect = true,
+                        isDm = true,
                         activeMembersCount = 2,
                         currentUserMembership = CurrentUserMembership.JOINED,
                     ),
@@ -632,15 +638,11 @@ internal class DefaultInvitePeoplePresenterTest {
         val encryptionService = FakeEncryptionService(
             getUserIdentityResult = getUserIdentityResult
         )
-        val featureFlagService = FakeFeatureFlagService().apply {
-            setFeatureEnabled(FeatureFlags.EnableKeyShareOnInvite, true)
-        }
 
         val presenter = createDefaultInvitePeoplePresenter(
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
             inviteUserResult = inviteUserResult,
             matrixClient = FakeMatrixClient(encryptionService = encryptionService),
-            featureFlagService = featureFlagService
         )
         presenter.test {
             val initialState = awaitItem()
@@ -703,15 +705,11 @@ internal class DefaultInvitePeoplePresenterTest {
         val encryptionService = FakeEncryptionService(
             getUserIdentityResult = getUserIdentityResult
         )
-        val featureFlagService = FakeFeatureFlagService().apply {
-            setFeatureEnabled(FeatureFlags.EnableKeyShareOnInvite, true)
-        }
 
         val presenter = createDefaultInvitePeoplePresenter(
             userRepository = repository,
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
             matrixClient = FakeMatrixClient(encryptionService = encryptionService),
-            featureFlagService = featureFlagService
         )
         presenter.test {
             val initialState = awaitItemAsDefault()
@@ -790,14 +788,10 @@ internal class DefaultInvitePeoplePresenterTest {
         val encryptionService = FakeEncryptionService(
             getUserIdentityResult = getUserIdentityResult
         )
-        val featureFlagService = FakeFeatureFlagService().apply {
-            setFeatureEnabled(FeatureFlags.EnableKeyShareOnInvite, true)
-        }
 
         val presenter = createDefaultInvitePeoplePresenter(
             coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
             matrixClient = FakeMatrixClient(encryptionService = encryptionService),
-            featureFlagService = featureFlagService
         )
         presenter.test {
             val initialState = awaitItem()
@@ -833,6 +827,54 @@ internal class DefaultInvitePeoplePresenterTest {
             (awaitLastSequentialItem() as DefaultInvitePeopleState).run {
                 assertThat(sendInvitesAction.isUninitialized()).isTrue()
                 assertThat(selectedUsers).containsExactly(alice, bob, charlie)
+            }
+        }
+    }
+
+    @Test
+    fun `present - inviting someone to a DM creates a new room`() = runTest {
+        val alice = aMatrixUser("@alice:example.com")
+
+        val matrixClient = FakeMatrixClient(
+            encryptionService = FakeEncryptionService(
+                getUserIdentityResult = lambdaRecorder { userId: UserId ->
+                    Result.success(IdentityState.Pinned)
+                }
+            )
+        )
+        val presenter = createDefaultInvitePeoplePresenter(
+            coroutineDispatchers = testCoroutineDispatchers(useUnconfinedTestDispatcher = true),
+            matrixClient = matrixClient,
+            joinedRoom = FakeJoinedRoom(
+                baseRoom = FakeBaseRoom(
+                    initialRoomInfo = aRoomInfo(isDm = true),
+                    getMembersResult = { Result.success(listOf(aRoomMember(userId = alice.userId, membership = RoomMembershipState.JOIN))) },
+                )
+            )
+        )
+        presenter.test {
+            val initialState = awaitItem()
+            skipItems(1)
+
+            // We want to add a new user to a DM
+            initialState.eventSink(DefaultInvitePeopleEvents.ToggleUser(alice))
+
+            // And we send the invites
+            initialState.eventSink(InvitePeopleEvents.SendInvites)
+
+            skipItems(1)
+
+            awaitItemAsDefault().run {
+                assertThat(canInvite).isTrue()
+                assertThat(sendInvitesAction.isUninitialized()).isTrue()
+                // Inviting to a DM should trigger the creation of a new room
+                assertThat(createRoomFromDmAction.isLoading()).isTrue()
+            }
+
+            awaitItemAsDefault().run {
+                assertThat(sendInvitesAction.isUninitialized()).isTrue()
+                // Once the room is created, the action should be successful
+                assertThat(createRoomFromDmAction.isSuccess()).isTrue()
             }
         }
     }
@@ -878,7 +920,6 @@ fun TestScope.createDefaultInvitePeoplePresenter(
     userRepository: UserRepository = FakeUserRepository(),
     coroutineDispatchers: CoroutineDispatchers = testCoroutineDispatchers(),
     appErrorStateService: AppErrorStateService = FakeAppErrorStateService(),
-    featureFlagService: FeatureFlagService = FakeFeatureFlagService(),
     matrixClient: MatrixClient = FakeMatrixClient(),
 ): DefaultInvitePeoplePresenter {
     return DefaultInvitePeoplePresenter(
@@ -888,7 +929,6 @@ fun TestScope.createDefaultInvitePeoplePresenter(
         coroutineDispatchers = coroutineDispatchers,
         sessionCoroutineScope = backgroundScope,
         appErrorStateService = appErrorStateService,
-        featureFlagService = featureFlagService,
         matrixClient = matrixClient,
     )
 }

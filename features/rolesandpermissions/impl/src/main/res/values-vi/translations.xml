@@ -29,6 +29,9 @@
   <string name="screen_room_change_role_unsaved_changes_description">"Bạn có thay đổi chưa được lưu."</string>
   <string name="screen_room_change_role_unsaved_changes_title">"Lưu thay đổi?"</string>
   <string name="screen_room_member_list_banned_empty">"Hiện không có người dùng nào bị cấm."</string>
+  <plurals name="screen_room_member_list_banned_header_title">
+    <item quantity="other">"%1$d bị cấm"</item>
+  </plurals>
   <plurals name="screen_room_member_list_header_title">
     <item quantity="other">"%1$d người"</item>
   </plurals>
@@ -38,6 +41,9 @@
   <string name="screen_room_member_list_manage_member_unban_message">"Họ có thể tham gia lại phòng này nếu được mời."</string>
   <string name="screen_room_member_list_mode_banned">"Bị cấm"</string>
   <string name="screen_room_member_list_mode_members">"Thành viên"</string>
+  <plurals name="screen_room_member_list_pending_header_title">
+    <item quantity="other">"%1$d được mời"</item>
+  </plurals>
   <string name="screen_room_member_list_role_administrator">"Quản trị viên"</string>
   <string name="screen_room_member_list_role_moderator">"Người điều hành"</string>
   <string name="screen_room_member_list_room_members_header_title">"Thành viên phòng"</string>

@@ -19,6 +19,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
+import io.element.android.features.enterprise.api.SessionEnterpriseService
 import io.element.android.features.logout.api.direct.DirectLogoutState
 import io.element.android.features.preferences.impl.utils.ShowDeveloperSettingsProvider
 import io.element.android.features.rageshake.api.RageshakeFeatureAvailability
@@ -55,6 +56,7 @@ class PreferencesRootPresenter(
     private val rageshakeFeatureAvailability: RageshakeFeatureAvailability,
     private val featureFlagService: FeatureFlagService,
     private val sessionStore: SessionStore,
+    private val sessionEnterpriseService: SessionEnterpriseService,
 ) : Presenter<PreferencesRootState> {
     @Composable
     override fun present(): PreferencesRootState {
@@ -158,6 +160,10 @@ class PreferencesRootPresenter(
     private fun CoroutineScope.initAccountManagementUrl(
         accountManagementUrl: MutableState<String?>,
     ) = launch {
-        accountManagementUrl.value = matrixClient.getAccountManagementUrl(null).getOrNull()
+        accountManagementUrl.value = matrixClient.getAccountManagementUrl(null)
+            .getOrNull()
+            ?.let {
+                sessionEnterpriseService.tweakMasUrl(it)
+            }
     }
 }

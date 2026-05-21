@@ -57,7 +57,8 @@ internal fun ReadReceiptBottomSheet(
                     sheetState.hide()
                     state.eventSink(ReadReceiptBottomSheetEvent.Dismiss)
                 }
-            }
+            },
+            scrollable = false,
         ) {
             ReadReceiptBottomSheetContent(
                 state = state,

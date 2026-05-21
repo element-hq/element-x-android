@@ -26,6 +26,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.R
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.Text
 import io.element.android.libraries.matrix.api.core.UserId
@@ -162,7 +163,7 @@ internal fun MessageShieldViewPreview() {
                     MessageShield.AuthenticityNotGuaranteed(false),
                     forwarder = UserId("@alice:example.com"),
                     forwarderProfile = ProfileDetails.Ready(
-                        displayName = "Alice",
+                        displayName = USER_NAME_ALICE,
                         displayNameAmbiguous = false,
                         avatarUrl = null,
                     ),

@@ -43,6 +43,7 @@
   <string name="screen_room_details_error_muting">"Не атрымалася адключыць гук у гэтым пакоі, паўтарыце спробу."</string>
   <string name="screen_room_details_error_unmuting">"Не ўдалося ўключыць гук у гэтым пакоі. Паўтарыце спробу."</string>
   <string name="screen_room_details_invite_people_title">"Запрасіць карыстальнікаў"</string>
+  <string name="screen_room_details_invite_title">"Запрасіць"</string>
   <string name="screen_room_details_leave_conversation_title">"Пакінуць размову"</string>
   <string name="screen_room_details_leave_room_title">"Пакінуць пакой"</string>
   <string name="screen_room_details_notification_mode_custom">"Уласныя"</string>

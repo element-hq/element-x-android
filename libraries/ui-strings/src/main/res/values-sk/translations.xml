@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="a11y_add_reaction">"Pridať reakciu: %1$s"</string>
+  <string name="a11y_address">"Adresa"</string>
   <string name="a11y_avatar">"Obrázok"</string>
   <string name="a11y_collapse_message_text_field">"Minimalizovať textové pole správy"</string>
   <string name="a11y_delete">"Vymazať"</string>
@@ -27,6 +28,7 @@
   <string name="a11y_pause">"Pozastaviť"</string>
   <string name="a11y_paused_voice_message">"Hlasová správa, dĺžka:%1$s, aktuálna pozícia: %2$s"</string>
   <string name="a11y_pin_field">"Pole PIN"</string>
+  <string name="a11y_pinned_location">"Pripnuté miesto"</string>
   <string name="a11y_play">"Prehrať"</string>
   <string name="a11y_poll">"Anketa"</string>
   <string name="a11y_poll_end">"Ukončená anketa"</string>
@@ -47,6 +49,8 @@
   <string name="a11y_session_verification_time_limited_action_required">"Vyžaduje sa časovo obmedzená akcia, na overenie máte jednu minútu"</string>
   <string name="a11y_show_password">"Zobraziť heslo"</string>
   <string name="a11y_start_call">"Začať hovor"</string>
+  <string name="a11y_start_video_call">"Začať videohovor"</string>
+  <string name="a11y_start_voice_call">"Začať hlasový hovor"</string>
   <string name="a11y_tombstoned_room">"Opustená miestnosť"</string>
   <string name="a11y_user_avatar">"Profilový obrázok"</string>
   <string name="a11y_user_menu">"Používateľské menu"</string>
@@ -157,8 +161,8 @@
   <string name="action_share_link">"Zdieľať odkaz"</string>
   <string name="action_show">"Zobraziť"</string>
   <string name="action_sign_in_again">"Prihláste sa znova"</string>
-  <string name="action_signout">"Odhlásiť sa"</string>
-  <string name="action_signout_anyway">"Napriek tomu sa odhlásiť"</string>
+  <string name="action_signout">"Odstrániť toto zariadenie"</string>
+  <string name="action_signout_anyway">"Napriek tomu odstrániť toto zariadenie"</string>
   <string name="action_skip">"Preskočiť"</string>
   <string name="action_start">"Spustiť"</string>
   <string name="action_start_chat">"Začať konverzáciu"</string>
@@ -202,7 +206,6 @@
   <string name="common_current_user_left_room">"Opustil/a miestnosť"</string>
   <string name="common_current_user_left_space">"Opustil priestor"</string>
   <string name="common_current_user_rejected_invite">"Pozvánka bola odmietnutá"</string>
-  <string name="common_dark">"Tmavý"</string>
   <string name="common_decryption_error">"Chyba dešifrovania"</string>
   <string name="common_description">"Popis"</string>
   <string name="common_developer_options">"Možnosti pre vývojárov"</string>
@@ -240,7 +243,6 @@ Dôvod: %1$s."</string>
   <string name="common_invite_unknown_profile">"Toto Matrix ID sa nedá nájsť, takže pozvánka nemusí byť prijatá."</string>
   <string name="common_leaving_room">"Opustenie miestnosti"</string>
   <string name="common_leaving_space">"Opúšťanie priestoru"</string>
-  <string name="common_light">"Svetlý"</string>
   <string name="common_line_copied_to_clipboard">"Riadok skopírovaný do schránky"</string>
   <string name="common_link_copied_to_clipboard">"Odkaz bol skopírovaný do schránky"</string>
   <string name="common_link_new_device">"Prepojiť nové zariadenie"</string>
@@ -306,7 +308,6 @@ Dôvod: %1$s."</string>
     <item quantity="other">"%1$d odpovedí"</item>
   </plurals>
   <string name="common_replying_to">"Odpoveď na %1$s"</string>
-  <string name="common_report_a_bug">"Nahlásiť chybu"</string>
   <string name="common_report_a_problem">"Nahlásiť problém"</string>
   <string name="common_report_submitted">"Nahlásenie bolo odoslané"</string>
   <string name="common_rich_text_editor">"Rozšírený textový editor"</string>
@@ -360,7 +361,6 @@ Dôvod: %1$s."</string>
   <string name="common_suggested">"Navrhované"</string>
   <string name="common_suggestions">"Návrhy"</string>
   <string name="common_syncing">"Synchronizuje sa"</string>
-  <string name="common_system">"Systém"</string>
   <string name="common_text">"Text"</string>
   <string name="common_third_party_notices">"Oznámenia tretích strán"</string>
   <string name="common_thread">"Vlákno"</string>
@@ -487,7 +487,7 @@ Naozaj chcete pokračovať?"</string>
   <string name="screen_share_open_apple_maps">"Otvoriť v Apple Maps"</string>
   <string name="screen_share_open_google_maps">"Otvoriť v Mapách Google"</string>
   <string name="screen_share_open_osm_maps">"Otvoriť v OpenStreetMap"</string>
-  <string name="screen_share_this_location_action">"Zdieľajte túto polohu"</string>
+  <string name="screen_share_this_location_action">"Zdieľajte vybranú polohu"</string>
   <string name="screen_space_list_description">"Priestory, ktoré ste vytvorili alebo ku ktorým ste sa pripojili."</string>
   <string name="screen_space_list_details">"%1$s • %2$s"</string>
   <string name="screen_space_list_empty_state_title">"Vytvorte priestory na usporiadanie miestností"</string>

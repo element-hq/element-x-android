@@ -19,7 +19,7 @@
   <string name="screen_create_new_recovery_key_list_item_3_reset_all">"«Сбросить все»"</string>
   <string name="screen_create_new_recovery_key_list_item_4">"Следуйте инструкциям, чтобы создать новый ключ восстановления"</string>
   <string name="screen_create_new_recovery_key_list_item_5">"Сохраните новый ключ восстановления в менеджере паролей или зашифрованной заметке"</string>
-  <string name="screen_create_new_recovery_key_title">"Сбросьте шифрование вашего аккаунта, используя другое устройство"</string>
+  <string name="screen_create_new_recovery_key_title">"Сбросьте шифрование Вашего аккаунта, используя другое устройство"</string>
   <string name="screen_encryption_reset_action_continue_reset">"Продолжить сброс"</string>
   <string name="screen_encryption_reset_bullet_1">"Данные вашего аккаунта, контакты, настройки и список чатов будут сохранены"</string>
   <string name="screen_encryption_reset_bullet_2">"Вы потеряете историю тех сообщений, которые хранятся только на сервере"</string>

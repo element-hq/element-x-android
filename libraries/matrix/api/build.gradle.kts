@@ -44,14 +44,12 @@ android {
 }
 
 dependencies {
-    implementation(projects.libraries.di)
-    implementation(projects.libraries.androidutils)
-    implementation(projects.libraries.core)
-    implementation(projects.services.analytics.api)
-    implementation(libs.serialization.json)
-    api(projects.libraries.sessionStorage.api)
     implementation(libs.coroutines.core)
-    api(projects.libraries.architecture)
+    implementation(libs.serialization.json)
+    implementation(projects.libraries.androidutils)
+    implementation(projects.libraries.architecture)
+    implementation(projects.libraries.sessionStorage.api)
+    implementation(projects.services.analytics.api)
 
     testCommonDependencies(libs)
     testImplementation(projects.libraries.matrix.test)

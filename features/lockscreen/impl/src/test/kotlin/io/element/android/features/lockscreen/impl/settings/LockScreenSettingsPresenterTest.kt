@@ -43,19 +43,19 @@ class LockScreenSettingsPresenterTest {
             consumeItemsUntilPredicate { state ->
                 state.showRemovePinOption
             }.last().also { state ->
-                state.eventSink(LockScreenSettingsEvents.OnRemovePin)
+                state.eventSink(LockScreenSettingsEvent.OnRemovePin)
             }
             awaitLastSequentialItem().also { state ->
                 assertThat(state.showRemovePinConfirmation).isTrue()
-                state.eventSink(LockScreenSettingsEvents.CancelRemovePin)
+                state.eventSink(LockScreenSettingsEvent.CancelRemovePin)
             }
             awaitLastSequentialItem().also { state ->
                 assertThat(state.showRemovePinConfirmation).isFalse()
-                state.eventSink(LockScreenSettingsEvents.OnRemovePin)
+                state.eventSink(LockScreenSettingsEvent.OnRemovePin)
             }
             awaitLastSequentialItem().also { state ->
                 assertThat(state.showRemovePinConfirmation).isTrue()
-                state.eventSink(LockScreenSettingsEvents.ConfirmRemovePin)
+                state.eventSink(LockScreenSettingsEvent.ConfirmRemovePin)
             }
             consumeItemsUntilPredicate {
                 it.showRemovePinOption.not()
@@ -93,7 +93,7 @@ class LockScreenSettingsPresenterTest {
         presenter.test {
             skipItems(1)
             awaitItem().also { state ->
-                state.eventSink(LockScreenSettingsEvents.ToggleBiometricAllowed)
+                state.eventSink(LockScreenSettingsEvent.ToggleBiometricAllowed)
             }
             awaitItem().also { state ->
                 assertThat(state.isBiometricEnabled).isTrue()
@@ -114,7 +114,7 @@ class LockScreenSettingsPresenterTest {
         presenter.test {
             skipItems(1)
             awaitItem().also { state ->
-                state.eventSink(LockScreenSettingsEvents.ToggleBiometricAllowed)
+                state.eventSink(LockScreenSettingsEvent.ToggleBiometricAllowed)
             }
         }
     }
@@ -137,7 +137,7 @@ class LockScreenSettingsPresenterTest {
             skipItems(1)
             awaitItem().also { state ->
                 assertThat(state.isBiometricEnabled).isTrue()
-                state.eventSink(LockScreenSettingsEvents.ToggleBiometricAllowed)
+                state.eventSink(LockScreenSettingsEvent.ToggleBiometricAllowed)
             }
             awaitItem().also { state ->
                 assertThat(state.isBiometricEnabled).isFalse()

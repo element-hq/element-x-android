@@ -47,7 +47,7 @@ import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.libraries.ui.utils.time.isTalkbackActive
+import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
 import kotlin.time.DurationUnit
 
@@ -72,7 +72,6 @@ internal fun TimelineItemRow(
     onMoreReactionsClick: (TimelineItem.Event) -> Unit,
     onReadReceiptClick: (TimelineItem.Event) -> Unit,
     onSwipeToReply: (TimelineItem.Event) -> Unit,
-    onJoinCallClick: (isAudioCall: Boolean) -> Unit,
     eventSink: (TimelineEvent.TimelineItemEvent) -> Unit,
     modifier: Modifier = Modifier,
     eventContentView: @Composable (TimelineItem.Event, Modifier, (ContentAvoidingLayoutData) -> Unit) -> Unit =
@@ -126,10 +125,10 @@ internal fun TimelineItemRow(
                     is TimelineItemRtcNotificationContent -> {
                         TimelineItemCallNotifyView(
                             modifier = Modifier.padding(start = 16.dp, end = 16.dp, top = 16.dp),
+                            timelineRoomInfo = timelineRoomInfo,
                             event = timelineItem,
-                            roomCallState = timelineRoomInfo.roomCallState,
+                            content = timelineItem.content,
                             onLongClick = onLongClick,
-                            onJoinCallClick = onJoinCallClick,
                         )
                     }
                     else -> {

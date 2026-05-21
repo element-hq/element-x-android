@@ -24,6 +24,9 @@
   <string name="screen_knock_requests_list_empty_state_description">"Khi ai đó xin vào phòng, bạn sẽ thấy yêu cầu ở đây."</string>
   <string name="screen_knock_requests_list_empty_state_title">"Không có yêu cầu tham gia nào đang chờ xử lý"</string>
   <string name="screen_knock_requests_list_initial_loading_title">"Đang tải các yêu cầu tham gia…"</string>
+  <plurals name="screen_room_multiple_knock_requests_title">
+    <item quantity="other">"%1$s + %2$d người khác muốn tham gia phòng này"</item>
+  </plurals>
   <string name="screen_room_single_knock_request_accept_button_title">"Đồng ý"</string>
   <string name="screen_room_single_knock_request_view_button_title">"Xem"</string>
 </resources>

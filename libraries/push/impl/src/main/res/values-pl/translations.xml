@@ -15,7 +15,14 @@
     <item quantity="few">"%d powiadomienia"</item>
     <item quantity="many">"%d powiadomień"</item>
   </plurals>
+  <string name="notification_error_unified_push_unregistered_android">"Nie udało się zarejestrować dystrybutora powiadomień Push, przez co nie będziesz już otrzymywać powiadomień. Sprawdź ustawienia powiadomień aplikacji i status dystrybutora powiadomień Push."</string>
   <string name="notification_fallback_content">"Masz nowe wiadomości."</string>
+  <plurals name="notification_fallback_n_content">
+    <item quantity="one">"Masz %d nową wiadomość."</item>
+    <item quantity="few">"Masz %d nowe wiadomości."</item>
+    <item quantity="many">"Masz %d nowych wiadomości."</item>
+  </plurals>
+  <string name="notification_incoming_audio_call">"📞 Połączenie przychodzące"</string>
   <string name="notification_incoming_call">"📹 Połączenie przychodzące"</string>
   <string name="notification_inline_reply_failed">"** Nie udało się wysłać - proszę otworzyć pokój"</string>
   <string name="notification_invitation_action_join">"Dołącz"</string>
@@ -41,12 +48,15 @@
   <string name="notification_room_invite_body_with_sender">"%1$s zaprosił Cię do pokoju"</string>
   <string name="notification_sender_me">"Ja"</string>
   <string name="notification_sender_mention_reply">"%1$s wspomniał lub odpowiedział"</string>
+  <string name="notification_space_invite_body">"Zaprosił Cię do dołączenia do przestrzeni"</string>
+  <string name="notification_space_invite_body_with_sender">"%1$s zaprosił Cię do dołączenia do przestrzeni"</string>
   <string name="notification_test_push_notification_content">"Wyświetlasz powiadomienie! Kliknij mnie!"</string>
+  <string name="notification_thread_in_room">"Wątek w %1$s"</string>
   <string name="notification_ticker_text_dm">"%1$s: %2$s"</string>
   <string name="notification_ticker_text_group">"%1$s: %2$s %3$s"</string>
   <plurals name="notification_unread_notified_messages">
     <item quantity="one">"%d nieprzeczytana wiadomość"</item>
-    <item quantity="few">"%d nieprzeczytane wiadomość"</item>
+    <item quantity="few">"%d nieprzeczytane wiadomości"</item>
     <item quantity="many">"%d nieprzeczytanych wiadomości"</item>
   </plurals>
   <string name="notification_unread_notified_messages_and_invitation">"%1$s i %2$s"</string>

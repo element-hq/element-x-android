@@ -28,7 +28,7 @@ import io.element.android.libraries.push.impl.notifications.FakeNotificationResu
 import io.element.android.libraries.push.impl.notifications.fixtures.aPushRequest
 import io.element.android.libraries.push.impl.notifications.model.ResolvedPushEvent
 import io.element.android.libraries.push.impl.push.SyncOnNotifiableEvent
-import io.element.android.libraries.push.test.push.FakePushHandlingWakeLock
+import io.element.android.libraries.push.test.push.FakeFetchPushForegroundServiceManager
 import io.element.android.libraries.workmanager.api.WorkManagerRequestBuilder
 import io.element.android.libraries.workmanager.api.di.MetroWorkerFactory
 import io.element.android.services.analytics.test.FakeAnalyticsService
@@ -239,7 +239,7 @@ class FetchPendingNotificationWorkerTest {
         pushHistoryService: FakePushHistoryService = FakePushHistoryService(),
         resultProcessor: FakeNotificationResultProcessor = FakeNotificationResultProcessor(),
         systemClock: FakeSystemClock = FakeSystemClock(),
-        pushHandlingWakeLock: FakePushHandlingWakeLock = FakePushHandlingWakeLock(),
+        pushHandlingWakeLock: FakeFetchPushForegroundServiceManager = FakeFetchPushForegroundServiceManager(),
     ) = FetchPendingNotificationsWorker(
         params = createWorkerParams(workDataOf("session_id" to input)),
         context = InstrumentationRegistry.getInstrumentation().context,
@@ -250,7 +250,7 @@ class FetchPendingNotificationWorkerTest {
         pushHistoryService = pushHistoryService,
         resultProcessor = resultProcessor,
         systemClock = systemClock,
-        pushHandlingWakeLock = pushHandlingWakeLock,
+        fetchPushForegroundServiceManager = pushHandlingWakeLock,
     )
 
     private fun TestScope.createWorkerParams(

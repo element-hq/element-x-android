@@ -235,7 +235,6 @@ private fun PinnedMessagesListLoaded(
                 onMoreReactionsClick = {},
                 onReadReceiptClick = {},
                 onSwipeToReply = {},
-                onJoinCallClick = {},
                 eventSink = { timelineItemEvent ->
                     when (timelineItemEvent) {
                         is TimelineEvent.OpenThread -> state.eventSink(PinnedMessagesListEvent.OpenThread(timelineItemEvent.threadRootEventId))

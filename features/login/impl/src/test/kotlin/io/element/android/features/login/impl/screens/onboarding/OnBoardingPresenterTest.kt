@@ -31,8 +31,8 @@ import io.element.android.libraries.matrix.test.A_HOMESERVER_URL_2
 import io.element.android.libraries.matrix.test.A_LOGIN_HINT
 import io.element.android.libraries.matrix.test.auth.FakeMatrixAuthenticationService
 import io.element.android.libraries.matrix.test.core.aBuildMeta
-import io.element.android.libraries.oidc.api.OidcActionFlow
-import io.element.android.libraries.oidc.test.customtab.FakeOidcActionFlow
+import io.element.android.libraries.oauth.api.OAuthActionFlow
+import io.element.android.libraries.oauth.test.customtab.FakeOAuthActionFlow
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
@@ -312,11 +312,11 @@ private fun createPresenter(
 )
 
 fun createLoginHelper(
-    oidcActionFlow: OidcActionFlow = FakeOidcActionFlow(),
+    oAuthActionFlow: OAuthActionFlow = FakeOAuthActionFlow(),
     authenticationService: MatrixAuthenticationService = FakeMatrixAuthenticationService(),
     webClientUrlForAuthenticationRetriever: WebClientUrlForAuthenticationRetriever = FakeWebClientUrlForAuthenticationRetriever(),
 ): LoginHelper = LoginHelper(
-    oidcActionFlow = oidcActionFlow,
+    oAuthActionFlow = oAuthActionFlow,
     authenticationService = authenticationService,
     webClientUrlForAuthenticationRetriever = webClientUrlForAuthenticationRetriever,
 )

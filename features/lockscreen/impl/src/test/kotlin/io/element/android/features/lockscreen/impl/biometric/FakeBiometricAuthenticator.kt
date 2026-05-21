@@ -12,6 +12,6 @@ class FakeBiometricAuthenticator(
     override val isActive: Boolean = false,
     private val authenticateLambda: suspend () -> BiometricAuthenticator.AuthenticationResult = { BiometricAuthenticator.AuthenticationResult.Success },
 ) : BiometricAuthenticator {
-    override fun setup() = Unit
+    override suspend fun setup() = Unit
     override suspend fun authenticate() = authenticateLambda()
 }

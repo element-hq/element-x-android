@@ -33,7 +33,7 @@ interface SessionVerificationService {
     /**
      * Request verification of the current session.
      */
-    suspend fun requestCurrentSessionVerification()
+    suspend fun requestDeviceVerification()
 
     /**
      * Request verification of the user with the given [userId].
@@ -56,9 +56,9 @@ interface SessionVerificationService {
     suspend fun declineVerification()
 
     /**
-     * Starts the verification of the unverified session from another device.
+     * Transition the current verification request into a SAS verification flow.
      */
-    suspend fun startVerification()
+    suspend fun startSasVerification()
 
     /**
      * Returns the verification service state to the initial step.

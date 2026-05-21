@@ -13,6 +13,7 @@ import io.element.android.features.location.api.Location
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.room.location.AssetType
 import kotlinx.collections.immutable.toImmutableList
@@ -21,6 +22,8 @@ class ShowLocationStateProvider : PreviewParameterProvider<ShowLocationState> {
     override val values: Sequence<ShowLocationState>
         get() = sequenceOf(
             aShowLocationState(),
+            aShowLocationState(isLive = true),
+            aShowLocationState(isLive = true, locationShares = emptyList()),
             aShowLocationState(
                 constraintsDialogState = LocationConstraintsDialogState.PermissionDenied,
             ),
@@ -44,8 +47,10 @@ class ShowLocationStateProvider : PreviewParameterProvider<ShowLocationState> {
 private const val APP_NAME = "ApplicationName"
 
 fun aShowLocationState(
+    isLive: Boolean = false,
     constraintsDialogState: LocationConstraintsDialogState = LocationConstraintsDialogState.None,
-    locationShares: List<LocationShareItem> = listOf(aLocationShareItem()),
+    locationShares: List<LocationShareItem> = listOf(aLocationShareItem(isLive = isLive)),
+    focusedLocation: LocationShareItem? = locationShares.firstOrNull(),
     hasLocationPermission: Boolean = false,
     isTrackMyLocation: Boolean = false,
     appName: String = APP_NAME,
@@ -54,26 +59,29 @@ fun aShowLocationState(
     return ShowLocationState(
         dialogState = constraintsDialogState,
         locationShares = locationShares.toImmutableList(),
+        focusedLocation = focusedLocation,
         hasLocationPermission = hasLocationPermission,
         isTrackMyLocation = isTrackMyLocation,
         appName = appName,
+        isLive = isLive,
         eventSink = eventSink,
     )
 }
 
 fun aLocationShareItem(
     userId: UserId = UserId("@alice:matrix.org"),
-    displayName: String = "Alice",
+    displayName: String = USER_NAME_ALICE,
     avatarData: AvatarData = AvatarData(
         id = userId.value,
         name = displayName,
         url = null,
         size = AvatarSize.UserListItem,
     ),
-    formattedTimestamp: String = "Shared 1 min ago",
-    location: Location = Location(1.23, 2.34, 4f),
     isLive: Boolean = false,
     assetType: AssetType? = null,
+    formattedTimestamp: String = "Shared 1 min ago",
+    location: Location = Location(1.23, 2.34, 4f),
+    isOwnUser: Boolean = false,
 ) = LocationShareItem(
     userId = userId,
     displayName = displayName,
@@ -82,4 +90,5 @@ fun aLocationShareItem(
     location = location,
     isLive = isLive,
     assetType = assetType,
+    isOwnUser = isOwnUser,
 )

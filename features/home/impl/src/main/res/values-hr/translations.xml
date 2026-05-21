@@ -5,9 +5,9 @@
   <string name="banner_battery_optimization_title_android">"Obavijesti ne stižu?"</string>
   <string name="banner_new_sound_message">"Vaš je signal obavijesti ažuriran – jasniji je, brži i manje ometajući."</string>
   <string name="banner_new_sound_title">"Ažurirali smo vaše zvukove"</string>
-  <string name="banner_set_up_recovery_content">"Ako ste izgubili sve postojeće uređaje, oporavite svoj kriptografski identitet i povijest poruka pomoću ključa za oporavak."</string>
-  <string name="banner_set_up_recovery_submit">"Postavljanje oporavka"</string>
-  <string name="banner_set_up_recovery_title">"Postavite oporavak kako biste zaštitili svoj račun"</string>
+  <string name="banner_set_up_recovery_content">"Vaši se razgovori automatski sigurnosno kopiraju enkripcijom od početka do kraja. Da biste vratili ovu sigurnosnu kopiju i zadržali svoj digitalni identitet kada izgubite pristup svim svojim uređajima, trebat će vam ključ za oporavak."</string>
+  <string name="banner_set_up_recovery_submit">"ključ za oporavak"</string>
+  <string name="banner_set_up_recovery_title">"Napravite sigurnosnu kopiju svojih razgovora"</string>
   <string name="confirm_recovery_key_banner_message">"Potvrdite svoj ključ za oporavak kako biste zadržali pristup pohrani ključeva i povijesti poruka."</string>
   <string name="confirm_recovery_key_banner_primary_button_title">"Unesite svoj ključ za oporavak"</string>
   <string name="confirm_recovery_key_banner_secondary_button_title">"Zaboravili ste ključ za oporavak?"</string>
@@ -50,6 +50,7 @@ Nemate nepročitanih poruka!"</string>
   <string name="screen_roomlist_mark_as_read">"Označi kao pročitano"</string>
   <string name="screen_roomlist_mark_as_unread">"Označi kao nepročitano"</string>
   <string name="screen_roomlist_tombstoned_room_description">"Ova je soba nadograđena"</string>
+  <string name="screen_roomlist_your_spaces">"Vaši prostori"</string>
   <string name="session_verification_banner_message">"Izgleda da koristite novi uređaj. Izvršite provjeru drugim uređajem da biste pristupili svojim šifriranim porukama."</string>
   <string name="session_verification_banner_title">"Potvrdi identitet"</string>
 </resources>

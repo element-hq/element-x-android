@@ -6,14 +6,17 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
+@file:OptIn(ExperimentalTestApi::class)
+
 package io.element.android.features.preferences.impl.user.editprofile
 
 import androidx.activity.ComponentActivity
-import androidx.compose.ui.test.junit4.AndroidComposeTestRule
-import androidx.compose.ui.test.junit4.createAndroidComposeRule
+import androidx.compose.ui.test.AndroidComposeUiTest
+import androidx.compose.ui.test.ExperimentalTestApi
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
+import androidx.compose.ui.test.v2.runAndroidComposeUiTest
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.matrix.ui.media.AvatarAction
@@ -23,96 +26,93 @@ import io.element.android.tests.testutils.EventsRecorder
 import io.element.android.tests.testutils.clickOn
 import io.element.android.tests.testutils.ensureCalledOnce
 import io.element.android.tests.testutils.pressBack
-import org.junit.Rule
 import org.junit.Test
-import org.junit.rules.TestRule
 import org.junit.runner.RunWith
 
 @RunWith(AndroidJUnit4::class)
 class EditUserProfileViewTest {
-    @get:Rule val rule = createAndroidComposeRule<ComponentActivity>()
-
     @Test
-    fun `clicking on back emits the expected event`() {
+    fun `clicking on back emits the expected event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<EditUserProfileEvent>()
-        rule.setEditUserProfileView(
+        setEditUserProfileView(
             aEditUserProfileState(
                 eventSink = eventsRecorder,
             ),
         )
-        rule.pressBack()
+        pressBack()
         eventsRecorder.assertSingle(EditUserProfileEvent.Exit)
     }
 
     @Test
-    fun `clicking on save from the exit confirmation dialog emits the expected event`() {
+    fun `clicking on save from the exit confirmation dialog emits the expected event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<EditUserProfileEvent>()
-        rule.setEditUserProfileView(
+        setEditUserProfileView(
             aEditUserProfileState(
                 saveAction = AsyncAction.ConfirmingCancellation,
                 eventSink = eventsRecorder,
             ),
         )
-        rule.clickOn(CommonStrings.action_save, inDialog = true)
+        clickOn(CommonStrings.action_save, inDialog = true)
         eventsRecorder.assertSingle(EditUserProfileEvent.Save)
     }
 
     @Test
-    fun `clicking on discard exit emits the expected event`() {
+    fun `clicking on discard exit emits the expected event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<EditUserProfileEvent>()
-        rule.setEditUserProfileView(
+        setEditUserProfileView(
             aEditUserProfileState(
                 saveAction = AsyncAction.ConfirmingCancellation,
                 eventSink = eventsRecorder,
             ),
         )
-        rule.clickOn(CommonStrings.action_discard)
+        clickOn(CommonStrings.action_discard)
         eventsRecorder.assertSingle(EditUserProfileEvent.Exit)
     }
 
     @Test
-    fun `clicking on save emits the expected event`() {
+    fun `clicking on save emits the expected event`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<EditUserProfileEvent>()
-        rule.setEditUserProfileView(
+        setEditUserProfileView(
             aEditUserProfileState(
                 saveButtonEnabled = true,
                 saveAction = AsyncAction.Uninitialized,
                 eventSink = eventsRecorder,
             ),
         )
-        rule.clickOn(CommonStrings.action_save)
+        clickOn(CommonStrings.action_save)
         eventsRecorder.assertSingle(EditUserProfileEvent.Save)
     }
 
     @Test
-    fun `clicking on avatar opens the bottom sheet dialog`() {
+    fun `clicking on avatar opens the bottom sheet dialog`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<EditUserProfileEvent>()
         val actions = listOf(
             AvatarAction.TakePhoto,
             AvatarAction.ChoosePhoto,
             AvatarAction.Remove,
         )
-        rule.setEditUserProfileView(
+        setEditUserProfileView(
             aEditUserProfileState(
                 saveAction = AsyncAction.Uninitialized,
                 avatarActions = actions,
                 eventSink = eventsRecorder,
             ),
         )
-        val contentDescription = rule.activity.getString(CommonStrings.a11y_avatar)
-        rule.onNodeWithContentDescription(contentDescription).performClick()
+        val resources = activity!!.resources
+        val contentDescription = resources.getString(CommonStrings.a11y_avatar)
+        onNodeWithContentDescription(contentDescription).performClick()
         // Assert that the actions are displayed
         actions.forEach { action ->
-            val text = rule.activity.getString(action.titleResId)
-            rule.onNodeWithText(text).assertExists()
+            val text = resources.getString(action.titleResId)
+            onNodeWithText(text).assertExists()
         }
     }
 
     @Test
-    fun `success invokes the expected callback`() {
+    fun `success invokes the expected callback`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<EditUserProfileEvent>(expectEvents = false)
         ensureCalledOnce { callback ->
-            rule.setEditUserProfileView(
+            setEditUserProfileView(
                 aEditUserProfileState(
                     saveAction = AsyncAction.Success(Unit),
                     eventSink = eventsRecorder,
@@ -123,7 +123,7 @@ class EditUserProfileViewTest {
     }
 }
 
-private fun <R : TestRule> AndroidComposeTestRule<R, ComponentActivity>.setEditUserProfileView(
+private fun AndroidComposeUiTest<ComponentActivity>.setEditUserProfileView(
     state: EditUserProfileState,
     onEditProfileSuccess: () -> Unit = EnsureNeverCalled(),
 ) {

@@ -57,6 +57,7 @@ import io.element.android.libraries.mediaviewer.impl.local.player.rememberExoPla
 import io.element.android.libraries.mediaviewer.impl.local.player.seekToEnsurePlaying
 import io.element.android.libraries.mediaviewer.impl.local.player.togglePlay
 import io.element.android.libraries.mediaviewer.impl.local.rememberLocalMediaViewState
+import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import kotlinx.coroutines.delay
 import me.saket.telephoto.zoomable.zoomable
 import timber.log.Timber
@@ -73,7 +74,7 @@ fun MediaVideoView(
     audioFocus: AudioFocus?,
     modifier: Modifier = Modifier,
 ) {
-    val exoPlayer = rememberExoPlayer()
+    val exoPlayer = rememberExoPlayer(forAudioOnly = false)
     ExoPlayerMediaVideoView(
         isDisplayed = isDisplayed,
         localMediaViewState = localMediaViewState,
@@ -162,12 +163,20 @@ private fun ExoPlayerMediaVideoView(
 
     var autoHideController by remember { mutableIntStateOf(0) }
 
-    LaunchedEffect(autoHideController) {
-        delay(5.seconds)
-        if (exoPlayer.isPlaying) {
+    val isTalkbackActive = isTalkbackActive()
+    LaunchedEffect(autoHideController, isTalkbackActive) {
+        if (isTalkbackActive) {
+            // Ensure that the controller is always visible when talkback is active
             mediaPlayerControllerState = mediaPlayerControllerState.copy(
-                isVisible = false,
+                isVisible = true,
             )
+        } else {
+            delay(5.seconds)
+            if (exoPlayer.isPlaying) {
+                mediaPlayerControllerState = mediaPlayerControllerState.copy(
+                    isVisible = false,
+                )
+            }
         }
     }
 

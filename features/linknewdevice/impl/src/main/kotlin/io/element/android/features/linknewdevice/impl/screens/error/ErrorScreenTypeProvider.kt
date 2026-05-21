@@ -19,5 +19,6 @@ class ErrorScreenTypeProvider : PreviewParameterProvider<ErrorScreenType> {
         ErrorScreenType.InsecureChannelDetected,
         ErrorScreenType.SlidingSyncNotAvailable,
         ErrorScreenType.UnknownError,
+        ErrorScreenType.OtherDeviceAlreadySignedIn,
     )
 }
