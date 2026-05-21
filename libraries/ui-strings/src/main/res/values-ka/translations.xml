@@ -122,7 +122,6 @@
   <string name="common_copyright">"საავტორო უფლება"</string>
   <string name="common_creating_room">"ოთახის შექმნა…"</string>
   <string name="common_current_user_left_room">"დატოვა ოთახი"</string>
-  <string name="common_dark">"მუქი"</string>
   <string name="common_decryption_error">"გაშიფვრის შეცდომა"</string>
   <string name="common_developer_options">"დეველოპერის პარამეტრები"</string>
   <string name="common_direct_chat">"პირდაპირი ჩატი"</string>
@@ -145,7 +144,6 @@
   <string name="common_install_apk_android">"დააინსტალირეთ APK"</string>
   <string name="common_invite_unknown_profile">"ეს Matrix ID ვერ მოიძებნა, ამიტომ მოწვევა შეიძლება არ იყოს მიღებული."</string>
   <string name="common_leaving_room">"ოთახის დატოვება"</string>
-  <string name="common_light">"ღია"</string>
   <string name="common_link_copied_to_clipboard">"ბმული კოპირებულია გაცვლის ბუფერში"</string>
   <string name="common_loading">"იტვირთება…"</string>
   <plurals name="common_many_members">
@@ -212,7 +210,6 @@
   <string name="common_success">"წარმატება"</string>
   <string name="common_suggestions">"შეთავაზებები"</string>
   <string name="common_syncing">"სინქრონიზაცია"</string>
-  <string name="common_system">"სისტემა"</string>
   <string name="common_text">"ტექსტი"</string>
   <string name="common_third_party_notices">"მესამე პირის შენიშვნები"</string>
   <string name="common_thread">"თემა"</string>

@@ -76,6 +76,9 @@ Jos jatkat, jotkin asetukset saattavat muuttua."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"järjestelmäsi asetuksia"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Järjestelmän ilmoitukset on poissa päältä"</string>
   <string name="screen_notification_settings_title">"Ilmoitukset"</string>
+  <string name="theme_dark">"Tumma"</string>
+  <string name="theme_light">"Vaalea"</string>
+  <string name="theme_system">"Järjestelmän oletus"</string>
   <string name="troubleshoot_notifications_entry_point_push_history_title">"Push-historia"</string>
   <string name="troubleshoot_notifications_entry_point_section">"Vianmääritys"</string>
   <string name="troubleshoot_notifications_entry_point_title">"Ilmoitusten vianmääritys"</string>

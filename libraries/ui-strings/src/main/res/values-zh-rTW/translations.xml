@@ -208,7 +208,6 @@
   <string name="common_current_user_left_room">"已離開聊天室"</string>
   <string name="common_current_user_left_space">"離開空間"</string>
   <string name="common_current_user_rejected_invite">"邀請被拒絕"</string>
-  <string name="common_dark">"深色"</string>
   <string name="common_decryption_error">"解密錯誤"</string>
   <string name="common_description">"描述"</string>
   <string name="common_developer_options">"開發者選項"</string>
@@ -248,7 +247,6 @@
   <string name="common_invite_unknown_profile">"找不到此 Matrix ID，因此可能沒有人會收到邀請。"</string>
   <string name="common_leaving_room">"正在離開聊天室"</string>
   <string name="common_leaving_space">"離開空間"</string>
-  <string name="common_light">"淺色"</string>
   <string name="common_line_copied_to_clipboard">"行已複製到剪貼簿"</string>
   <string name="common_link_copied_to_clipboard">"連結已複製到剪貼簿"</string>
   <string name="common_link_new_device">"連結新裝置"</string>
@@ -361,7 +359,6 @@
   <string name="common_suggested">"已建議"</string>
   <string name="common_suggestions">"建議"</string>
   <string name="common_syncing">"同步中"</string>
-  <string name="common_system">"系統"</string>
   <string name="common_text">"文字"</string>
   <string name="common_third_party_notices">"第三方通知"</string>
   <string name="common_thread">"討論串"</string>

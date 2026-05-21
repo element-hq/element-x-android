@@ -131,7 +131,6 @@ private fun aSpaceInfo(
         numUnreadMessages = 0,
         numUnreadNotifications = 0,
         numUnreadMentions = 0,
-        fullyReadEventId = null,
         heroes = persistentListOf(),
         pinnedEventIds = persistentListOf(),
         creators = persistentListOf(),
@@ -141,6 +140,7 @@ private fun aSpaceInfo(
         privilegedCreatorRole = false,
         isLowPriority = false,
         activeCallIntentConsensus = CallIntentConsensus.None,
+        fullyReadEventId = null,
     )
 }
 

@@ -187,7 +187,6 @@
   <string name="common_current_user_canceled_knock">"Begäran avbruten"</string>
   <string name="common_current_user_left_room">"Lämnade rummet"</string>
   <string name="common_current_user_rejected_invite">"Inbjudan avvisad"</string>
-  <string name="common_dark">"Mörkt"</string>
   <string name="common_decryption_error">"Avkrypteringsfel"</string>
   <string name="common_description">"Beskrivning"</string>
   <string name="common_developer_options">"Utvecklaralternativ"</string>
@@ -224,7 +223,6 @@ Anledning:%1$s."</string>
   <string name="common_install_apk_android">"Installera APK"</string>
   <string name="common_invite_unknown_profile">"Det här Matrix-ID:t kan inte hittas, så inbjudan kanske inte tas emot."</string>
   <string name="common_leaving_room">"Lämnar rummet"</string>
-  <string name="common_light">"Ljust"</string>
   <string name="common_line_copied_to_clipboard">"Rad kopierad till klippbordet"</string>
   <string name="common_link_copied_to_clipboard">"Länk kopierad till klippbordet"</string>
   <string name="common_loading">"Laddar …"</string>
@@ -322,7 +320,6 @@ Anledning:%1$s."</string>
   <string name="common_success">"Lyckades"</string>
   <string name="common_suggestions">"Förslag"</string>
   <string name="common_syncing">"Synkar"</string>
-  <string name="common_system">"System"</string>
   <string name="common_text">"Text"</string>
   <string name="common_third_party_notices">"Meddelanden från tredje part"</string>
   <string name="common_thread">"Tråd"</string>

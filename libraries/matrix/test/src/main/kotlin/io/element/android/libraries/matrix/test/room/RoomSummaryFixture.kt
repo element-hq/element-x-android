@@ -81,6 +81,7 @@ fun aRoomSummary(
     privilegedCreatorRole: Boolean = false,
     isLowPriority: Boolean = false,
     activeCallIntentConsensus: CallIntentConsensus = CallIntentConsensus.None,
+    fullyReadEventId: EventId? = null,
 ) = RoomSummary(
     info = RoomInfo(
         id = roomId,
@@ -115,13 +116,13 @@ fun aRoomSummary(
         numUnreadMessages = numUnreadMessages,
         numUnreadNotifications = numUnreadNotifications,
         numUnreadMentions = numUnreadMentions,
-        fullyReadEventId = null,
         historyVisibility = historyVisibility,
         roomVersion = roomVersion,
         privilegedCreatorRole = privilegedCreatorRole,
         isLowPriority = isLowPriority,
         activeCallIntentConsensus = activeCallIntentConsensus,
         isDm = false,
+        fullyReadEventId = fullyReadEventId,
     ),
     latestEvent = latestEvent,
 )

@@ -79,7 +79,6 @@ class RoomInfoMapperTest {
                     numUnreadMessages = 12uL,
                     numUnreadNotifications = 13uL,
                     numUnreadMentions = 14uL,
-                    fullyReadEventId = AN_EVENT_ID.value,
                     pinnedEventIds = listOf(AN_EVENT_ID.value),
                     roomCreators = listOf(A_USER_ID.value),
                     historyVisibility = RustRoomHistoryVisibility.Joined,
@@ -88,6 +87,7 @@ class RoomInfoMapperTest {
                     isLowPriority = true,
                     activeRoomCallConsensusIntent = RtcCallIntentConsensus.Full(RtcCallIntent.AUDIO),
                     isDm = true,
+                    fullyReadEventId = AN_EVENT_ID.value,
                 )
             )
         ).isEqualTo(
@@ -132,7 +132,6 @@ class RoomInfoMapperTest {
                 numUnreadMessages = 12L,
                 numUnreadNotifications = 13L,
                 numUnreadMentions = 14L,
-                fullyReadEventId = AN_EVENT_ID,
                 historyVisibility = RoomHistoryVisibility.Joined,
                 successorRoom = null,
                 roomVersion = "12",
@@ -140,6 +139,7 @@ class RoomInfoMapperTest {
                 isLowPriority = true,
                 activeCallIntentConsensus = CallIntentConsensus.Full(CallIntent.AUDIO),
                 isDm = true,
+                fullyReadEventId = AN_EVENT_ID,
             )
         )
     }
@@ -186,6 +186,7 @@ class RoomInfoMapperTest {
                     isLowPriority = true,
                     activeRoomCallConsensusIntent = RtcCallIntentConsensus.None,
                     isDm = false,
+                    fullyReadEventId = AN_EVENT_ID.value,
                 )
             )
         ).isEqualTo(
@@ -225,13 +226,13 @@ class RoomInfoMapperTest {
                 numUnreadMessages = 12L,
                 numUnreadNotifications = 13L,
                 numUnreadMentions = 14L,
-                fullyReadEventId = null,
                 historyVisibility = RoomHistoryVisibility.Joined,
                 roomVersion = "12",
                 privilegedCreatorRole = true,
                 isLowPriority = true,
                 activeCallIntentConsensus = CallIntentConsensus.None,
                 isDm = false,
+                fullyReadEventId = AN_EVENT_ID,
             )
         )
     }

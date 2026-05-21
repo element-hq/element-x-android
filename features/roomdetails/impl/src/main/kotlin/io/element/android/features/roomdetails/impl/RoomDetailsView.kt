@@ -8,6 +8,7 @@
 
 package io.element.android.features.roomdetails.impl
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -189,6 +190,46 @@ fun RoomDetailsView(
             }
 
             PreferenceCategory {
+                if (state.hasNewContent) {
+                    ListItem(
+                        headlineContent = {
+                            Text(
+                                text = stringResource(id = R.string.screen_roomlist_mark_as_read),
+                                style = MaterialTheme.typography.bodyLarge,
+                            )
+                        },
+                        onClick = {
+                            state.eventSink(RoomDetailsEvent.MarkAsRead)
+                        },
+                        leadingContent = ListItemContent.Icon(
+                            iconSource = IconSource.Vector(CompoundIcons.MarkAsRead())
+                        ),
+                        trailingContent = ListItemContent.Custom {
+                            Box(
+                                modifier = modifier
+                                    .size(8.dp)
+                                    .clip(CircleShape)
+                                    .background(ElementTheme.colors.iconAccentPrimary)
+                            )
+                        },
+                    )
+                } else {
+                    ListItem(
+                        headlineContent = {
+                            Text(
+                                text = stringResource(id = R.string.screen_roomlist_mark_as_unread),
+                            )
+                        },
+                        onClick = {
+                            state.eventSink(RoomDetailsEvent.MarkAsUnread)
+                        },
+                        leadingContent = ListItemContent.Icon(
+                            iconSource = IconSource.Vector(CompoundIcons.MarkAsUnread())
+                        ),
+                    )
+                }
+            }
+            PreferenceCategory {
                 if (state.roomNotificationSettings != null) {
                     NotificationItem(
                         isDefaultMode = state.roomNotificationSettings.isDefault,
@@ -208,8 +249,15 @@ fun RoomDetailsView(
                         onClick = onSecurityAndPrivacyClick
                     )
                 }
+            }
 
-                state.roomMemberDetailsState?.let { dmMemberDetails ->
+            state.roomMemberDetailsState?.let { dmMemberDetails ->
+                if (state.canInvite) {
+                    PreferenceCategory {
+                        InviteItem(onClick = invitePeople)
+                    }
+                }
+                PreferenceCategory {
                     ProfileItem(
                         verificationState = dmMemberDetails.verificationState,
                         onClick = { onProfileClick(dmMemberDetails.userId) }
@@ -374,14 +422,14 @@ private fun MainActionsSection(
                 onClick = { onCall(CallIntent.VIDEO) },
             )
         }
+        if (state.canInvite && state.roomType !is RoomDetailsType.Dm) {
+            MainActionButton(
+                title = stringResource(CommonStrings.action_invite),
+                imageVector = CompoundIcons.UserAdd(),
+                onClick = onInvitePeople,
+            )
+        }
         if (state.roomType is RoomDetailsType.Room) {
-            if (state.canInvite) {
-                MainActionButton(
-                    title = stringResource(CommonStrings.action_invite),
-                    imageVector = CompoundIcons.UserAdd(),
-                    onClick = onInvitePeople,
-                )
-            }
             // Share CTA should be hidden for DMs
             MainActionButton(
                 title = stringResource(CommonStrings.action_share),
@@ -690,6 +738,17 @@ private fun MembersItem(
             ListItemContent.Text(memberCount.toString())
         },
         onClick = openRoomMemberList,
+    )
+}
+
+@Composable
+private fun InviteItem(
+    onClick: () -> Unit,
+) {
+    ListItem(
+        headlineContent = { Text(stringResource(R.string.screen_room_details_invite_title)) },
+        leadingContent = ListItemContent.Icon(IconSource.Vector(CompoundIcons.UserAdd())),
+        onClick = onClick,
     )
 }
 

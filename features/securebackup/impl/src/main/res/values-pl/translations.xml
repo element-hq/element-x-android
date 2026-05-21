@@ -30,7 +30,7 @@
   <string name="screen_key_backup_disable_confirmation_description">"Jeśli usuniesz wszystkie swoje urządzenia, stracisz zaszyfrowaną historię wiadomości i będziesz musiał zresetować swoją tożsamość cyfrową."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Czy na pewno chcesz usunąć magazyn kluczy?"</string>
   <string name="screen_key_backup_disable_description">"Usunięcie magazynu kluczy usunie Twoją tożsamość cyfrową i klucze wiadomości z serwera, wyłączając następujące funkcje bezpieczeństwa:"</string>
-  <string name="screen_key_backup_disable_description_point_1">"Posiadał historii wiadomości szyfrowanych na nowych urządzeniach"</string>
+  <string name="screen_key_backup_disable_description_point_1">"Stracisz dostęp do zaszyfrowanej historii wiadomości na nowych urządzeniach"</string>
   <string name="screen_key_backup_disable_description_point_2">"Utracisz dostęp do wiadomości szyfrowanych, jeśli zostaniesz wszędzie wylogowany z %1$s"</string>
   <string name="screen_key_backup_disable_title">"Czy na pewno chcesz wyłączyć backup?"</string>
   <string name="screen_recovery_key_change_description">"Uzyskaj nowy klucz przywracania, jeśli straciłeś dostęp do obecnego. Po zmianie klucza przywracania stary nie będzie już działał."</string>

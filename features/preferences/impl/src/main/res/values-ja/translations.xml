@@ -83,6 +83,9 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"システム設定"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"システムで通知がオフです"</string>
   <string name="screen_notification_settings_title">"通知"</string>
+  <string name="theme_dark">"ダーク"</string>
+  <string name="theme_light">"ライト"</string>
+  <string name="theme_system">"システム"</string>
   <string name="troubleshoot_notifications_entry_point_push_history_title">"プッシュ履歴"</string>
   <string name="troubleshoot_notifications_entry_point_section">"トラブルシューティング"</string>
   <string name="troubleshoot_notifications_entry_point_title">"通知のトラブルシューティング"</string>

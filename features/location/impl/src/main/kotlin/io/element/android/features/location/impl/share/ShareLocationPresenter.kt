@@ -40,8 +40,6 @@ import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.core.extensions.flatMap
 import io.element.android.libraries.core.meta.BuildMeta
 import io.element.android.libraries.dateformatter.api.DurationFormatter
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.room.CreateTimelineParams
 import io.element.android.libraries.matrix.api.room.JoinedRoom
@@ -66,7 +64,6 @@ class ShareLocationPresenter(
     private val messageComposerContext: MessageComposerContext,
     private val locationActions: LocationActions,
     private val buildMeta: BuildMeta,
-    private val featureFlagService: FeatureFlagService,
     private val client: MatrixClient,
     private val durationFormatter: DurationFormatter,
     private val liveLocationShareManager: ActiveLiveLocationShareManager,
@@ -83,9 +80,6 @@ class ShareLocationPresenter(
     override fun present(): ShareLocationState {
         val permissionsState: PermissionsState = permissionsPresenter.present()
         var trackUserPosition: Boolean by remember { mutableStateOf(permissionsState.isAnyGranted && locationActions.isLocationEnabled()) }
-        val isLiveLocationSharingEnabled by remember {
-            featureFlagService.isFeatureEnabledFlow(FeatureFlags.LiveLocationSharing)
-        }.collectAsState(false)
         val appName by remember { derivedStateOf { buildMeta.applicationName } }
         var dialogState: ShareLocationState.Dialog by remember {
             mutableStateOf(ShareLocationState.Dialog.None)
@@ -171,7 +165,7 @@ class ShareLocationPresenter(
             dialogState = dialogState,
             trackUserLocation = trackUserPosition,
             hasLocationPermission = permissionsState.isAnyGranted,
-            canShareLiveLocation = isLiveLocationSharingEnabled && timelineMode.canShareLiveLocation(),
+            canShareLiveLocation = timelineMode.canShareLiveLocation(),
             appName = appName,
             startLiveLocationAction = startLiveLocationAction.value,
             eventSink = ::handleEvent,

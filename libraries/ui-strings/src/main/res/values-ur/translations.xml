@@ -141,7 +141,6 @@
   <string name="common_copyright">"حقوقِ طبع و نشر"</string>
   <string name="common_creating_room">"کمرہ تخلیق کررہاہے…"</string>
   <string name="common_current_user_left_room">"کمرہ چھوڑ لیا"</string>
-  <string name="common_dark">"اندھیرا"</string>
   <string name="common_decryption_error">"رمزکشائی کی خرابی"</string>
   <string name="common_developer_options">"مطور اختیارات"</string>
   <string name="common_direct_chat">"براہ راست گفتگو"</string>
@@ -168,7 +167,6 @@
   <string name="common_install_apk_android">"APK تنصیب کریں"</string>
   <string name="common_invite_unknown_profile">"یہ میٹرکس شناخت نہیں مل سکتی، تو ہو سکتا ہے کہ دعوت نامہ موصول نہ ہو۔"</string>
   <string name="common_leaving_room">"کمرہ چھوڑنا"</string>
-  <string name="common_light">"روشنی"</string>
   <string name="common_link_copied_to_clipboard">"ربط تختہ تراشہ پر نقل کردا گیا"</string>
   <string name="common_loading">"لاد رہا ہے…"</string>
   <plurals name="common_many_members">
@@ -240,7 +238,6 @@
   <string name="common_success">"کامیابی"</string>
   <string name="common_suggestions">"تجاویز"</string>
   <string name="common_syncing">"ہمسات سازی"</string>
-  <string name="common_system">"نظام"</string>
   <string name="common_text">"متن"</string>
   <string name="common_third_party_notices">"فریق ثالث کے اشعارات"</string>
   <string name="common_thread">"دھاگہ"</string>

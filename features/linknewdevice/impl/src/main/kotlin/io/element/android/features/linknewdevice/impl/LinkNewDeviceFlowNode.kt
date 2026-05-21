@@ -144,8 +144,14 @@ class LinkNewDeviceFlowNode(
                         navigateToError(linkMobileStep.errorType)
                     }
                     is LinkMobileStep.QrReady -> {
-                        // The QrCode is ready, navigate to its display
-                        backstack.push(NavTarget.MobileShowQrCode(linkMobileStep.data))
+                        // The QrCode is ready, navigate to its display, if not already there
+                        val navTarget = backstack.elements.value.last().key.navTarget
+                        if (navTarget !is NavTarget.MobileShowQrCode) {
+                            backstack.push(NavTarget.MobileShowQrCode(linkMobileStep.data))
+                        }
+                    }
+                    LinkMobileStep.QrRotating -> {
+                        // This step is handled in ShowQrCodePresenter
                     }
                     is LinkMobileStep.QrScanned -> {
                         backstack.replace(NavTarget.MobileEnterNumber)

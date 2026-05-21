@@ -52,7 +52,6 @@ internal fun aRustRoomInfo(
     numUnreadMessages: ULong = 0uL,
     numUnreadNotifications: ULong = 0uL,
     numUnreadMentions: ULong = 0uL,
-    fullyReadEventId: String? = null,
     pinnedEventIds: List<String> = listOf(),
     roomCreators: List<String>? = emptyList(),
     joinRule: JoinRule? = null,
@@ -65,6 +64,7 @@ internal fun aRustRoomInfo(
     activeRoomCallConsensusIntent: RtcCallIntentConsensus = RtcCallIntentConsensus.None,
     activeServiceMembersCount: Int = 0,
     isDm: Boolean = false,
+    fullyReadEventId: String? = null,
 ) = RoomInfo(
     id = id,
     displayName = displayName,
@@ -94,7 +94,6 @@ internal fun aRustRoomInfo(
     numUnreadMessages = numUnreadMessages,
     numUnreadNotifications = numUnreadNotifications,
     numUnreadMentions = numUnreadMentions,
-    fullyReadEventId = fullyReadEventId,
     pinnedEventIds = pinnedEventIds,
     creators = roomCreators,
     joinRule = joinRule,
@@ -107,4 +106,5 @@ internal fun aRustRoomInfo(
     activeRoomCallConsensusIntent = activeRoomCallConsensusIntent,
     activeServiceMembersCount = activeServiceMembersCount.toULong(),
     isDm = isDm,
+    fullyReadEventId = fullyReadEventId,
 )

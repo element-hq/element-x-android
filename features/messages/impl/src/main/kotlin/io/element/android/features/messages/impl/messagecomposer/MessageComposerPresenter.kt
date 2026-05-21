@@ -179,7 +179,7 @@ class MessageComposerPresenter(
             handlePickedMedia(uri, mimeType)
         }
         val filesPicker = mediaPickerProvider.registerFilePicker(AnyMimeTypes) { uri, mimeType ->
-            handlePickedMedia(uri, mimeType ?: MimeTypes.OctetStream)
+            handlePickedMedia(uri, mimeType ?: MimeTypes.OctetStream, sendAsFile = true)
         }
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker { uri ->
             handlePickedMedia(uri, MimeTypes.Jpeg)
@@ -571,7 +571,7 @@ class MessageComposerPresenter(
         notificationConversationService.onSendMessage(
             sessionId = room.sessionId,
             roomId = roomInfo.id,
-            roomName = roomInfo.name ?: roomInfo.id.value,
+            roomName = roomInfo.name,
             roomIsDirect = roomInfo.isDm,
             roomAvatarUrl = roomInfo.avatarUrl ?: roomMembers.getDirectRoomMember(roomInfo = roomInfo, sessionId = room.sessionId)?.avatarUrl,
         )
@@ -605,6 +605,7 @@ class MessageComposerPresenter(
     private fun handlePickedMedia(
         uri: Uri?,
         mimeType: String? = null,
+        sendAsFile: Boolean = false,
     ) {
         uri ?: return
         val localMedia = localMediaFactory.createFromUri(
@@ -613,7 +614,7 @@ class MessageComposerPresenter(
             name = null,
             formattedFileSize = null
         )
-        val mediaAttachment = Attachment.Media(localMedia)
+        val mediaAttachment = Attachment.Media(localMedia, sendAsFile = sendAsFile)
         val inReplyToEventId = (messageComposerContext.composerMode as? MessageComposerMode.Reply)?.eventId
         navigator.navigateToPreviewAttachments(persistentListOf(mediaAttachment), inReplyToEventId)
 

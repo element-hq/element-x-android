@@ -11,14 +11,16 @@ package io.element.android.libraries.mediaviewer.impl.viewer
 import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.ProduceStateScope
 import androidx.compose.runtime.State
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.produceState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.extensions.mapCatchingExceptions
+import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.media.MatrixMediaLoader
 import io.element.android.libraries.matrix.api.media.MediaFile
+import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.mediaviewer.api.MediaViewerEntryPoint.MediaViewerMode
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
@@ -36,13 +38,17 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.withContext
 import timber.log.Timber
+import java.util.concurrent.ConcurrentHashMap
 
 class MediaViewerDataSource(
     mode: MediaViewerMode,
+    coroutineScope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
     private val galleryDataSource: MediaGalleryDataSource,
     private val mediaLoader: MatrixMediaLoader,
@@ -51,7 +57,7 @@ class MediaViewerDataSource(
     private val pagerKeysHandler: PagerKeysHandler,
 ) {
     // List of media files that are currently being loaded
-    private val mediaFiles: MutableList<MediaFile> = mutableListOf()
+    private val mediaFiles: ConcurrentHashMap<MediaSource, MediaFile> = ConcurrentHashMap()
 
     private val galleryMode = when (mode) {
         MediaViewerMode.SingleMedia,
@@ -69,45 +75,63 @@ class MediaViewerDataSource(
 
     fun dispose() {
         Timber.d("Disposing MediaViewerDataSource, closing ${mediaFiles.size} media files")
-        mediaFiles.forEach { it.close() }
+        mediaFiles.values.forEach { it.close() }
         mediaFiles.clear()
         localMediaStates.clear()
     }
 
+    /**
+     * Helper function to translate the [dataFlow] result to a Compose [State] that can be observed in the UI.
+     */
     @Composable
-    fun collectAsState(): State<ImmutableList<MediaViewerPageData>> {
-        return remember { dataFlow() }.collectAsState(initialData())
+    fun produceState(
+        producer: suspend ProduceStateScope<ImmutableList<MediaViewerPageData>>.(StateFlow<ImmutableList<MediaViewerPageData>>) -> Unit
+    ): State<ImmutableList<MediaViewerPageData>> {
+        return produceState(initialValue = initialData()) {
+            producer(dataFlow)
+        }
+    }
+
+    /**
+     * Find the index of the page corresponding to the given eventId, or null if not found.
+     */
+    fun findEventIndex(eventId: EventId?): Int? {
+        if (eventId == null) return null
+        return dataFlow.value.indexOfFirst { (it as? MediaViewerPageData.MediaViewerData)?.eventId == eventId }.takeIf { it >= 0 }
     }
 
     @VisibleForTesting
-    internal fun dataFlow(): Flow<ImmutableList<MediaViewerPageData>> {
-        return galleryDataSource.groupedMediaItemsFlow()
-            .map { groupedItems ->
-                when (groupedItems) {
-                    AsyncData.Uninitialized,
-                    is AsyncData.Loading -> {
-                        persistentListOf(
-                            MediaViewerPageData.Loading(
-                                direction = Timeline.PaginationDirection.BACKWARDS,
-                                timestamp = systemClock.epochMillis(),
-                                pagerKey = Long.MIN_VALUE,
-                            )
+    internal val dataFlow: StateFlow<ImmutableList<MediaViewerPageData>> = galleryDataSource.groupedMediaItemsFlow()
+        .map { groupedItems ->
+            when (groupedItems) {
+                AsyncData.Uninitialized,
+                is AsyncData.Loading -> {
+                    persistentListOf(
+                        MediaViewerPageData.Loading(
+                            direction = Timeline.PaginationDirection.BACKWARDS,
+                            timestamp = systemClock.epochMillis(),
+                            pagerKey = Long.MIN_VALUE,
                         )
-                    }
-                    is AsyncData.Failure -> {
-                        persistentListOf(
-                            MediaViewerPageData.Failure(groupedItems.error),
-                        )
-                    }
-                    is AsyncData.Success -> {
-                        withContext(dispatcher) {
-                            val mediaItems = groupedItems.data.getItems(galleryMode)
-                            buildMediaViewerPageList(mediaItems)
-                        }
+                    )
+                }
+                is AsyncData.Failure -> {
+                    persistentListOf(
+                        MediaViewerPageData.Failure(groupedItems.error),
+                    )
+                }
+                is AsyncData.Success -> {
+                    withContext(dispatcher) {
+                        val mediaItems = groupedItems.data.getItems(galleryMode)
+                        buildMediaViewerPageList(mediaItems)
                     }
                 }
             }
-    }
+        }
+        .stateIn(
+            scope = CoroutineScope(coroutineScope.coroutineContext + dispatcher),
+            started = SharingStarted.Lazily,
+            initialValue = initialData(),
+        )
 
     private fun initialData(): ImmutableList<MediaViewerPageData> {
         val initialMediaItems =
@@ -146,7 +170,7 @@ class MediaViewerDataSource(
                 is MediaItem.LoadingIndicator -> add(
                     MediaViewerPageData.Loading(
                         direction = mediaItem.direction,
-                        timestamp = systemClock.epochMillis(),
+                        timestamp = mediaItem.timestamp,
                         pagerKey = pagerKeysHandler.getKey(mediaItem),
                     )
                 )
@@ -159,10 +183,18 @@ class MediaViewerDataSource(
     }
 
     suspend fun loadMore(direction: Timeline.PaginationDirection) {
-        galleryDataSource.loadMore(direction)
+        if (galleryDataSource.isReady) {
+            galleryDataSource.loadMore(direction)
+        }
     }
 
     suspend fun loadMedia(data: MediaViewerPageData.MediaViewerData) {
+        val currentState = localMediaStates[data.mediaSource.safeUrl]?.value
+        // If the media is already loading or has been loaded successfully, do nothing
+        if (currentState?.isLoading() == true || currentState?.isSuccess() == true) {
+            return
+        }
+
         Timber.d("loadMedia for ${data.eventId}")
         val localMediaState = localMediaStates.getOrPut(data.mediaSource.safeUrl) {
             mutableStateOf(AsyncData.Uninitialized)
@@ -175,7 +207,7 @@ class MediaViewerDataSource(
                 filename = data.mediaInfo.filename
             )
             .onSuccess { mediaFile ->
-                mediaFiles.add(mediaFile)
+                mediaFiles[data.mediaSource] = mediaFile
             }
             .mapCatchingExceptions { mediaFile ->
                 localMediaFactory.createFromMediaFile(
@@ -189,5 +221,13 @@ class MediaViewerDataSource(
             .onFailure {
                 localMediaState.value = AsyncData.Failure(it)
             }
+    }
+
+    fun cancelLoadingMedia(data: MediaViewerPageData.MediaViewerData) {
+        if (localMediaStates[data.mediaSource.safeUrl]?.value?.isLoading() == true) {
+            Timber.d("cancelLoadingMedia for ${data.eventId}")
+            mediaFiles.remove(data.mediaSource)?.close()
+            localMediaStates[data.mediaSource.safeUrl]?.value = AsyncData.Uninitialized
+        }
     }
 }

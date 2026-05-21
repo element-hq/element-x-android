@@ -220,7 +220,6 @@
   <string name="common_current_user_left_room">"Opuszczono pokój"</string>
   <string name="common_current_user_left_space">"Opuścił przestrzeń"</string>
   <string name="common_current_user_rejected_invite">"Odrzucono zaproszenie"</string>
-  <string name="common_dark">"Ciemny"</string>
   <string name="common_decryption_error">"Błąd deszyfrowania"</string>
   <string name="common_description">"Opis"</string>
   <string name="common_developer_options">"Opcje programisty"</string>
@@ -260,7 +259,6 @@ Powód: %1$s."</string>
   <string name="common_invite_unknown_profile">"Nie można znaleźć identyfikatora Matrix ID, zaproszenie mogło nie dotrzeć."</string>
   <string name="common_leaving_room">"Opuszczanie pokoju"</string>
   <string name="common_leaving_space">"Opuszczam przestrzeń"</string>
-  <string name="common_light">"Jasny"</string>
   <string name="common_line_copied_to_clipboard">"Wiersz skopiowany do schowka"</string>
   <string name="common_link_copied_to_clipboard">"Link został skopiowany do schowka"</string>
   <string name="common_link_new_device">"Powiąż nowe urządzenie"</string>
@@ -387,7 +385,6 @@ Powód: %1$s."</string>
   <string name="common_suggested">"Polecane"</string>
   <string name="common_suggestions">"Sugestie"</string>
   <string name="common_syncing">"Synchronizuję"</string>
-  <string name="common_system">"System"</string>
   <string name="common_text">"Tekst"</string>
   <string name="common_third_party_notices">"Informacje stron trzecich"</string>
   <string name="common_thread">"Wątek"</string>
@@ -412,7 +409,7 @@ Powód: %1$s."</string>
   <string name="common_verify_device">"Zweryfikuj urządzenie"</string>
   <string name="common_verify_identity">"Zweryfikuj tożsamość"</string>
   <string name="common_verify_user">"Zweryfikuj użytkownika"</string>
-  <string name="common_video">"Film"</string>
+  <string name="common_video">"Wideo"</string>
   <string name="common_video_quality_high">"Wysoka jakość"</string>
   <string name="common_video_quality_high_description">"Najlepsza jakość, większy rozmiar pliku"</string>
   <string name="common_video_quality_low">"Niska jakość"</string>

@@ -35,7 +35,7 @@
   <string name="screen_room_attachment_source_camera_video">"Salvesta video"</string>
   <string name="screen_room_attachment_source_files">"Manus"</string>
   <string name="screen_room_attachment_source_gallery">"Fotode ja videote galerii"</string>
-  <string name="screen_room_attachment_source_location">"Asukoht"</string>
+  <string name="screen_room_attachment_source_location">"Jaga asukohta"</string>
   <string name="screen_room_attachment_source_poll">"Küsitlus"</string>
   <string name="screen_room_attachment_text_formatting">"Tekstivorming"</string>
   <string name="screen_room_encrypted_history_banner">"Sõnumite ajalugu pole hetkel saadaval"</string>

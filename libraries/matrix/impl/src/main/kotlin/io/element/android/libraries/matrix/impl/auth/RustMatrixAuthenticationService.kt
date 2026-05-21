@@ -434,13 +434,30 @@ class RustMatrixAuthenticationService(
         qrCodeData: QrCodeData,
     ): Client {
         Timber.d("Creating client for QR Code login with simplified sliding sync")
+        // The 2025 version of MSC4108 provides baseUrl; the 2024 version has null baseUrl and uses
+        // serverName instead, which can be null or malformed. We only enforce presence/non-blankness
+        // here and rely on serverNameOrHomeserverUrl()/the Rust builder layer to validate structure.
+        val baseUrlOrServerName = qrCodeData.baseUrl() ?: qrCodeData.serverName()
+
+        if (baseUrlOrServerName == null) {
+            // With the 2024 version of MSC4108 we treat the absence of serverName as meaning that
+            // the other device is not signed in.
+            Timber.e("The QR code is from a device that is not yet signed in")
+            throw HumanQrLoginException.OtherDeviceNotSignedIn()
+        }
+
+        if (baseUrlOrServerName.isBlank()) {
+            Timber.e("The QR code contains an empty base URL or server name, which is invalid")
+            throw HumanQrLoginException.Unknown()
+        }
+
         return rustMatrixClientFactory
             .getBaseClientBuilder(
                 sessionPaths = sessionPaths,
                 passphrase = pendingPassphrase,
                 slidingSyncType = ClientBuilderSlidingSync.Discovered,
             )
-            .serverNameOrHomeserverUrl(qrCodeData.serverName()!!)
+            .serverNameOrHomeserverUrl(baseUrlOrServerName)
             .build()
     }
 

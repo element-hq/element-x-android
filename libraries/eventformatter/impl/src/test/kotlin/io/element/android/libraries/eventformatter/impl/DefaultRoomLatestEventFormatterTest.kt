@@ -74,7 +74,8 @@ class DefaultRoomLatestEventFormatterTest {
             roomMembershipContentFormatter = RoomMembershipContentFormatter(fakeMatrixClient, stringProvider),
             profileChangeContentFormatter = ProfileChangeContentFormatter(stringProvider),
             stateContentFormatter = StateContentFormatter(stringProvider),
-            permalinkParser = FakePermalinkParser(),
+            rtcNotificationContentFormatter = RtcNotificationContentFormatter(fakeMatrixClient, stringProvider),
+            permalinkParser = FakePermalinkParser()
         )
     }
 

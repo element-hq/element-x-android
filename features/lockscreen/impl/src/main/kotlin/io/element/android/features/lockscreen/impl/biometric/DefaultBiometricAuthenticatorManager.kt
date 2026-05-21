@@ -80,10 +80,7 @@ class DefaultBiometricAuthenticatorManager(
 
     private val internalCallback = object : DefaultBiometricUnlockCallback() {
         override fun onBiometricSetupError() {
-            coroutineScope.launch {
-                lockScreenStore.setIsBiometricUnlockAllowed(false)
-                secretKeyRepository.deleteKey(SECRET_KEY_ALIAS)
-            }
+            coroutineScope.launch { disable() }
         }
     }
 
@@ -118,6 +115,11 @@ class DefaultBiometricAuthenticatorManager(
             promptTitle = promptTitle,
             promptNegative = promptNegative,
         )
+    }
+
+    override suspend fun disable() {
+        lockScreenStore.setIsBiometricUnlockAllowed(false)
+        secretKeyRepository.deleteKey(SECRET_KEY_ALIAS)
     }
 
     @Composable

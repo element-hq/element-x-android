@@ -217,7 +217,6 @@
   <string name="common_current_user_left_room">"Forlod rummet"</string>
   <string name="common_current_user_left_space">"Forlod klynge"</string>
   <string name="common_current_user_rejected_invite">"Invitationen blev afvist"</string>
-  <string name="common_dark">"Mørkt tema"</string>
   <string name="common_decryption_error">"Fejl under dekryptering"</string>
   <string name="common_description">"Beskrivelse"</string>
   <string name="common_developer_options">"Indstillinger for udviklere"</string>
@@ -257,7 +256,6 @@
   <string name="common_invite_unknown_profile">"Dette Matrix-ID kan ikke findes, så invitationen modtages muligvis ikke."</string>
   <string name="common_leaving_room">"Forlader rummet"</string>
   <string name="common_leaving_space">"Forlader klynge"</string>
-  <string name="common_light">"Lyst tema"</string>
   <string name="common_line_copied_to_clipboard">"Linje kopieret til udklipsholder"</string>
   <string name="common_link_copied_to_clipboard">"Linket er kopieret til udklipsholderen"</string>
   <string name="common_link_new_device">"Forbind ny enhed"</string>
@@ -376,7 +374,6 @@
   <string name="common_suggested">"Forslag"</string>
   <string name="common_suggestions">"Forslag"</string>
   <string name="common_syncing">"Synkroniserer"</string>
-  <string name="common_system">"System"</string>
   <string name="common_text">"Tekst"</string>
   <string name="common_third_party_notices">"Tredjepartsmeddelelser"</string>
   <string name="common_thread">"Tråd"</string>

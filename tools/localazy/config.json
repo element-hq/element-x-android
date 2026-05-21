@@ -221,6 +221,7 @@
         "screen_notification_settings_mentions_only_disclaimer",
         "screen_room_change_.*",
         "screen_room_roles_.*",
+        "screen_roomlist_mark_as_.*",
         "screen\\.edit_room_address\\..*",
         "screen\\.security_and_privacy\\..*"
       ]
@@ -331,6 +332,7 @@
         "screen_blocked_users_.*",
         "full_screen_intent_banner_.*",
         "troubleshoot_notifications_entry_point_.*",
+        "theme\\..*",
         "screen\\.labs\\..*"
       ]
     },

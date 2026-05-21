@@ -7,7 +7,7 @@ android_gradle_plugin = "8.13.2"
 # When updating this, please also update the version in the file ./idea/kotlinc.xml
 kotlin = "2.3.21"
 kotlinpoet = "2.3.0"
-ksp = "2.3.7"
+ksp = "2.3.8"
 firebaseAppDistribution = "5.2.1"
 
 # AndroidX
@@ -17,15 +17,15 @@ constraintlayout = "2.2.1"
 constraintlayout_compose = "1.1.1"
 lifecycle = "2.10.0"
 activity = "1.13.0"
-media3 = "1.10.0"
-camera = "1.6.0"
+media3 = "1.10.1"
+camera = "1.6.1"
 work = "2.11.2"
 
 # Compose
-compose_bom = "2026.04.01"
+compose_bom = "2026.05.00"
 
 # Coroutines
-coroutines = "1.10.2"
+coroutines = "1.11.0"
 
 # Accompanist
 accompanist = "0.37.3"
@@ -35,7 +35,7 @@ test_core = "1.7.0"
 roborazzi = "1.60.0"
 
 # Jetbrain
-datetime = "0.7.1"
+datetime = "0.8.0"
 serialization_json = "1.11.0"
 
 #other
@@ -51,10 +51,10 @@ telephoto = "0.19.0"
 haze = "1.7.2"
 
 # Dependency analysis
-dependencyAnalysis = "3.10.0"
+dependencyAnalysis = "3.11.0"
 
 # DI
-metro = "0.13.2"
+metro = "1.1.1"
 
 # Auto service
 autoservice = "1.1.1"
@@ -80,7 +80,7 @@ kotlinpoet-ksp = { module = "com.squareup:kotlinpoet-ksp", version.ref = "kotlin
 kover_gradle_plugin = { module = "org.jetbrains.kotlinx:kover-gradle-plugin", version.ref = "kover" }
 ksp_gradle_plugin = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 # https://firebase.google.com/docs/android/setup#available-libraries
-google_firebase_bom = "com.google.firebase:firebase-bom:34.12.0"
+google_firebase_bom = "com.google.firebase:firebase-bom:34.13.0"
 firebase_appdistribution_gradle = { module = "com.google.firebase:firebase-appdistribution-gradle", version.ref = "firebaseAppDistribution" }
 autonomousapps_dependencyanalysis_plugin = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version.ref = "dependencyAnalysis" }
 ksp_plugin = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
@@ -111,13 +111,14 @@ androidx_media3_ui = { module = "androidx.media3:media3-ui", version.ref = "medi
 androidx_media3_transformer = { module = "androidx.media3:media3-transformer", version.ref = "media3" }
 androidx_media3_effect = { module = "androidx.media3:media3-effect", version.ref = "media3" }
 androidx_media3_common = { module = "androidx.media3:media3-common", version.ref = "media3" }
+androidx_media3_exoplayer_midi = { module = "androidx.media3:media3-exoplayer-midi", version.ref = "media3" }
 androidx_biometric = "androidx.biometric:biometric-ktx:1.4.0-alpha02"
 
 androidx_activity_activity = { module = "androidx.activity:activity", version.ref = "activity" }
 androidx_activity_compose = { module = "androidx.activity:activity-compose", version.ref = "activity" }
 androidx_startup = "androidx.startup:startup-runtime:1.2.0"
 androidx_preference = "androidx.preference:preference:1.2.1"
-androidx_webkit = "androidx.webkit:webkit:1.15.0"
+androidx_webkit = "androidx.webkit:webkit:1.16.0"
 
 androidx_compose_bom = { module = "androidx.compose:compose-bom", version.ref = "compose_bom" }
 androidx_compose_material3 = { module = "androidx.compose.material3:material3", version = '1.5.0-alpha15' }
@@ -200,7 +201,7 @@ matrix_richtexteditor_compose = { module = "io.element.android:wysiwyg-compose",
 sqldelight-driver-android = { module = "app.cash.sqldelight:android-driver", version.ref = "sqldelight" }
 sqldelight-driver-jvm = { module = "app.cash.sqldelight:sqlite-driver", version.ref = "sqldelight" }
 sqldelight-coroutines = { module = "app.cash.sqldelight:coroutines-extensions", version.ref = "sqldelight" }
-sqlcipher = "net.zetetic:sqlcipher-android:4.15.0"
+sqlcipher = "net.zetetic:sqlcipher-android:4.16.0"
 sqlite = "androidx.sqlite:sqlite-ktx:2.6.2"
 unifiedpush = "org.unifiedpush.android:connector:3.3.2"
 vanniktech_blurhash = "com.vanniktech:blurhash:0.3.0"
@@ -214,7 +215,7 @@ maplibre_annotation = "org.maplibre.gl:android-plugin-annotation-v9:3.0.2"
 opusencoder = "io.element.android:opusencoder:1.2.0"
 zxing_cpp = "io.github.zxing-cpp:android:3.0.2"
 google_zxing = "com.google.zxing:core:3.5.4"
-google_guava = "com.google.guava:guava:33.5.0-android"
+google_guava = "com.google.guava:guava:33.6.0-android"
 
 haze = { module = "dev.chrisbanes.haze:haze", version.ref = "haze" }
 haze_materials = { module = "dev.chrisbanes.haze:haze-materials", version.ref = "haze" }
@@ -222,7 +223,7 @@ color_picker = "io.mhssn:colorpicker:1.0.0"
 
 # Analytics
 posthog = "com.posthog:posthog-android:3.43.0"
-sentry = "io.sentry:sentry-android:8.40.0"
+sentry = "io.sentry:sentry-android:8.41.0"
 # main branch can be tested replacing the version with main-SNAPSHOT
 matrix_analytics_events = "com.github.matrix-org:matrix-analytics-events:0.33.2"
 
@@ -234,7 +235,7 @@ sigpwned_emoji4j = "com.sigpwned:emoji4j-core:16.0.0"
 metro_runtime = { module = "dev.zacsweers.metro:runtime", version.ref = "metro" }
 
 # Element Call
-element_call_embedded = "io.element.android:element-call-embedded:0.19.2"
+element_call_embedded = "io.element.android:element-call-embedded:0.19.4"
 
 # Auto services
 google_autoservice = { module = "com.google.auto.service:auto-service", version.ref = "autoservice" }
@@ -262,13 +263,13 @@ metro = { id = "dev.zacsweers.metro", version.ref = "metro" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 ktlint = "org.jlleitschuh.gradle.ktlint:14.2.0"
 dependencygraph = "com.savvasdalkitsis.module-dependency-graph:0.12"
-dependencycheck = "org.owasp.dependencycheck:12.2.1"
+dependencycheck = "org.owasp.dependencycheck:12.2.2"
 dependencyanalysis = { id = "com.autonomousapps.dependency-analysis", version.ref = "dependencyAnalysis" }
 paparazzi = "app.cash.paparazzi:2.0.0-alpha04"
 roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
 sqldelight = { id = "app.cash.sqldelight", version.ref = "sqldelight" }
 firebaseAppDistribution = { id = "com.google.firebase.appdistribution", version.ref = "firebaseAppDistribution" }
-sonarqube = "org.sonarqube:7.2.3.7755"
+sonarqube = "org.sonarqube:7.3.0.8198"
 licensee = "app.cash.licensee:1.14.1"
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 gms_google_services = { id = "com.google.gms.google-services", version = "4.4.4" }

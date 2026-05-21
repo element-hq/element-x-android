@@ -59,6 +59,7 @@ class LockScreenSettingsPresenter(
                         if (showRemovePinConfirmation) {
                             showRemovePinConfirmation = false
                             pinCodeManager.deletePinCode()
+                            biometricAuthenticatorManager.disable()
                         }
                     }
                 }

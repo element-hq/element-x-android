@@ -71,13 +71,13 @@ class RoomInfoMapper {
             numUnreadMessages = it.numUnreadMessages.toLong(),
             numUnreadMentions = it.numUnreadMentions.toLong(),
             numUnreadNotifications = it.numUnreadNotifications.toLong(),
-            fullyReadEventId = it.fullyReadEventId?.let(::EventId),
             historyVisibility = it.historyVisibility.map(),
             successorRoom = it.successorRoom?.map(),
             roomVersion = it.roomVersion,
             privilegedCreatorRole = it.privilegedCreatorsRole,
             isLowPriority = it.isLowPriority,
             activeCallIntentConsensus = it.activeRoomCallConsensusIntent.map(),
+            fullyReadEventId = it.fullyReadEventId?.let(::EventId)
         )
     }
 }

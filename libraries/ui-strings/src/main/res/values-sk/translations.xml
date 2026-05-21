@@ -206,7 +206,6 @@
   <string name="common_current_user_left_room">"Opustil/a miestnosť"</string>
   <string name="common_current_user_left_space">"Opustil priestor"</string>
   <string name="common_current_user_rejected_invite">"Pozvánka bola odmietnutá"</string>
-  <string name="common_dark">"Tmavý"</string>
   <string name="common_decryption_error">"Chyba dešifrovania"</string>
   <string name="common_description">"Popis"</string>
   <string name="common_developer_options">"Možnosti pre vývojárov"</string>
@@ -244,7 +243,6 @@ Dôvod: %1$s."</string>
   <string name="common_invite_unknown_profile">"Toto Matrix ID sa nedá nájsť, takže pozvánka nemusí byť prijatá."</string>
   <string name="common_leaving_room">"Opustenie miestnosti"</string>
   <string name="common_leaving_space">"Opúšťanie priestoru"</string>
-  <string name="common_light">"Svetlý"</string>
   <string name="common_line_copied_to_clipboard">"Riadok skopírovaný do schránky"</string>
   <string name="common_link_copied_to_clipboard">"Odkaz bol skopírovaný do schránky"</string>
   <string name="common_link_new_device">"Prepojiť nové zariadenie"</string>
@@ -363,7 +361,6 @@ Dôvod: %1$s."</string>
   <string name="common_suggested">"Navrhované"</string>
   <string name="common_suggestions">"Návrhy"</string>
   <string name="common_syncing">"Synchronizuje sa"</string>
-  <string name="common_system">"Systém"</string>
   <string name="common_text">"Text"</string>
   <string name="common_third_party_notices">"Oznámenia tretích strán"</string>
   <string name="common_thread">"Vlákno"</string>

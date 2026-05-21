@@ -170,7 +170,6 @@
   <string name="common_copyright">"Аўтарскае права"</string>
   <string name="common_creating_room">"Стварэнне пакоя…"</string>
   <string name="common_current_user_left_room">"Выйшаў з пакоя"</string>
-  <string name="common_dark">"Цёмная"</string>
   <string name="common_decryption_error">"Памылка расшыфроўкі"</string>
   <string name="common_developer_options">"Параметры распрацоўшчыка"</string>
   <string name="common_direct_chat">"Прамы чат"</string>
@@ -197,7 +196,6 @@
   <string name="common_install_apk_android">"Усталяваць APK"</string>
   <string name="common_invite_unknown_profile">"Гэты Matrix ID не знойдзены, таму запрашэнне можа быць не атрымана."</string>
   <string name="common_leaving_room">"Пакінуць пакой"</string>
-  <string name="common_light">"Светлая"</string>
   <string name="common_link_copied_to_clipboard">"Спасылка скапіравана ў буфер абмену"</string>
   <string name="common_loading">"Загрузка…"</string>
   <plurals name="common_many_members">
@@ -272,7 +270,6 @@
   <string name="common_success">"Поспех"</string>
   <string name="common_suggestions">"Прапановы"</string>
   <string name="common_syncing">"Сінхранізацыя"</string>
-  <string name="common_system">"Сістэмная"</string>
   <string name="common_text">"Тэкст"</string>
   <string name="common_third_party_notices">"Паведамленні трэціх асоб"</string>
   <string name="common_thread">"Гутарка"</string>

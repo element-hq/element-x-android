@@ -52,6 +52,7 @@ data class RoomDetailsState(
     val showDebugInfo: Boolean,
     val roomVersion: String?,
     val roomHistoryVisibility: RoomHistoryVisibility,
+    val hasNewContent: Boolean,
     val eventSink: (RoomDetailsEvent) -> Unit
 ) {
     val roomBadges = buildList {

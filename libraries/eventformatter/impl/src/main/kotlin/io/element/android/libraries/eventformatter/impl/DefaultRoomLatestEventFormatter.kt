@@ -54,6 +54,7 @@ class DefaultRoomLatestEventFormatter(
     private val roomMembershipContentFormatter: RoomMembershipContentFormatter,
     private val profileChangeContentFormatter: ProfileChangeContentFormatter,
     private val stateContentFormatter: StateContentFormatter,
+    private val rtcNotificationContentFormatter: RtcNotificationContentFormatter,
     private val permalinkParser: PermalinkParser,
 ) : RoomLatestEventFormatter {
     override fun format(
@@ -121,7 +122,7 @@ class DefaultRoomLatestEventFormatter(
                 message.prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is LegacyCallInviteContent -> sp.getString(CommonStrings.common_unsupported_call)
-            is CallNotifyContent -> sp.getString(CommonStrings.common_call_started)
+            is CallNotifyContent -> rtcNotificationContentFormatter.format(content, isDmRoom)
         }?.take(DEFAULT_SAFE_LENGTH)
     }
 

@@ -25,6 +25,11 @@ interface BiometricAuthenticatorManager {
     fun removeCallback(callback: BiometricAuthenticator.Callback)
 
     /**
+     * Disable using the biometric unlock feature and remove any data associated with it.
+     */
+    suspend fun disable()
+
+    /**
      * Remember a biometric authenticator ready for unlocking the app.
      */
     @Composable
