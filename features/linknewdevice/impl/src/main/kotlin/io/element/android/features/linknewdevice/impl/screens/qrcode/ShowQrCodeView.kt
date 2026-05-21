@@ -65,13 +65,13 @@ fun ShowQrCodeView(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             AnimatedContent(
+                modifier = Modifier.size(220.dp),
                 targetState = state.data.dataOrNull(),
                 transitionSpec = {
                     fadeIn().togetherWith(fadeOut())
                 }
             ) { data ->
                 QrCodeOrLoading(
-                    modifier = modifier.size(220.dp),
                     data = data,
                 )
             }
