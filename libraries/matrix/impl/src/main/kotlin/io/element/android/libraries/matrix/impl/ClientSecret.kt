@@ -43,6 +43,10 @@ sealed interface ClientSecret {
         }
     }
 
+    /**
+     * Format the client secret as a string that can be parsed back with [fromString].
+     * For a passphrase, this is just the passphrase value. For a raw key, this is the hex-encoded representation of the key formatted as `x'...'`.
+     */
     fun formattedAsString(): String
 
     companion object {
