@@ -55,6 +55,7 @@ import androidx.media3.ui.PlayerView
 import com.bumble.appyx.core.node.LocalNodeTargetVisibility
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.designsystem.components.media.WaveformPlaybackView
 import io.element.android.libraries.designsystem.preview.ElementPreview
@@ -82,9 +83,10 @@ import kotlinx.coroutines.delay
 fun MediaAudioView(
     localMediaViewState: LocalMediaViewState,
     bottomPaddingInPixels: Int,
-    localMedia: LocalMedia?,
+    localMedia: AsyncData<LocalMedia>,
     info: MediaInfo?,
     audioFocus: AudioFocus?,
+    loadMedia: () -> Unit,
     modifier: Modifier = Modifier,
     isDisplayed: Boolean = true,
 ) {
@@ -97,6 +99,7 @@ fun MediaAudioView(
         localMedia = localMedia,
         info = info,
         audioFocus = audioFocus,
+        loadMedia = loadMedia,
         modifier = modifier,
     )
 }
@@ -108,9 +111,10 @@ private fun ExoPlayerMediaAudioView(
     localMediaViewState: LocalMediaViewState,
     bottomPaddingInPixels: Int,
     exoPlayer: ExoPlayer,
-    localMedia: LocalMedia?,
+    localMedia: AsyncData<LocalMedia>,
     info: MediaInfo?,
     audioFocus: AudioFocus?,
+    loadMedia: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var mediaPlayerControllerState: MediaPlayerControllerState by remember {
@@ -205,17 +209,23 @@ private fun ExoPlayerMediaAudioView(
             exoPlayer.pause()
         }
     }
-    if (localMedia?.uri != null) {
-        LaunchedEffect(localMedia.uri) {
-            val mediaItem = MediaItem.fromUri(localMedia.uri)
+    var autoplay by remember { mutableStateOf(false) }
+    val localMediaData = localMedia.dataOrNull()
+    if (localMediaData?.uri != null) {
+        LaunchedEffect(localMediaData.uri) {
+            val mediaItem = MediaItem.fromUri(localMediaData.uri)
             exoPlayer.setMediaItem(mediaItem)
             exoPlayer.prepare()
+            if (autoplay) {
+                exoPlayer.play()
+            }
         }
     } else {
         LaunchedEffect(Unit) {
             exoPlayer.setMediaItems(emptyList())
         }
     }
+
     val context = LocalContext.current
     val waveform = info?.waveform
     Box(
@@ -310,7 +320,13 @@ private fun ExoPlayerMediaAudioView(
         MediaPlayerControllerView(
             state = mediaPlayerControllerState,
             onTogglePlay = {
-                exoPlayer.togglePlay()
+                if (localMedia.isUninitialized()) {
+                    loadMedia()
+                    autoplay = true
+                } else {
+                    exoPlayer.togglePlay()
+                    autoplay = false
+                }
             },
             onSeekChange = {
                 mediaPlayerControllerState = mediaPlayerControllerState.copy(
@@ -401,6 +417,7 @@ internal fun MediaAudioViewPreview(
         localMediaViewState = rememberLocalMediaViewState(),
         info = info,
         audioFocus = null,
-        localMedia = null,
+        localMedia = AsyncData.Uninitialized,
+        loadMedia = {},
     )
 }

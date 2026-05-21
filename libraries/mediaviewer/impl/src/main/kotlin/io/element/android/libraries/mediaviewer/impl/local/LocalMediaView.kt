@@ -11,6 +11,7 @@ package io.element.android.libraries.mediaviewer.impl.local
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import io.element.android.features.viewfolder.api.TextFileViewer
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.core.mimetype.MimeTypes
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeAudio
@@ -27,7 +28,7 @@ import io.element.android.libraries.mediaviewer.impl.local.video.MediaVideoView
 
 @Composable
 fun LocalMediaView(
-    localMedia: LocalMedia?,
+    localMedia: AsyncData<LocalMedia>,
     bottomPaddingInPixels: Int,
     audioFocus: AudioFocus?,
     onClick: () -> Unit,
@@ -36,13 +37,14 @@ fun LocalMediaView(
     isDisplayed: Boolean = true,
     isUserSelected: Boolean = false,
     localMediaViewState: LocalMediaViewState = rememberLocalMediaViewState(),
-    mediaInfo: MediaInfo? = localMedia?.info,
+    loadMedia: () -> Unit,
+    mediaInfo: MediaInfo? = localMedia.dataOrNull()?.info,
 ) {
     val mimeType = mediaInfo?.mimeType
     when {
         mimeType.isMimeTypeImage() -> MediaImageView(
             localMediaViewState = localMediaViewState,
-            localMedia = localMedia,
+            localMedia = localMedia.dataOrNull(),
             modifier = modifier,
             onClick = onClick,
         )
@@ -53,16 +55,17 @@ fun LocalMediaView(
             localMedia = localMedia,
             autoplay = isUserSelected,
             audioFocus = audioFocus,
+            loadMedia = loadMedia,
             modifier = modifier,
         )
         mimeType == MimeTypes.PlainText -> TextFileView(
-            localMedia = localMedia,
+            localMedia = localMedia.dataOrNull(),
             textFileViewer = textFileViewer,
             modifier = modifier,
         )
         mimeType == MimeTypes.Pdf -> MediaPdfView(
             localMediaViewState = localMediaViewState,
-            localMedia = localMedia,
+            localMedia = localMedia.dataOrNull(),
             modifier = modifier,
             onClick = onClick,
         )
@@ -70,6 +73,7 @@ fun LocalMediaView(
             isDisplayed = isDisplayed,
             localMediaViewState = localMediaViewState,
             bottomPaddingInPixels = bottomPaddingInPixels,
+            loadMedia = loadMedia,
             localMedia = localMedia,
             info = mediaInfo,
             audioFocus = audioFocus,
@@ -77,7 +81,7 @@ fun LocalMediaView(
         )
         else -> MediaFileView(
             localMediaViewState = localMediaViewState,
-            uri = localMedia?.uri,
+            uri = localMedia.dataOrNull()?.uri,
             info = mediaInfo,
             modifier = modifier,
             onClick = onClick,

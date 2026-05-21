@@ -27,6 +27,7 @@ data class MediaViewerState(
     val snackbarMessage: SnackbarMessage?,
     val canShowInfo: Boolean,
     val mediaBottomSheetState: MediaBottomSheetState,
+    val canDownloadLargeFiles: Boolean,
     val eventSink: (MediaViewerEvent) -> Unit,
 )
 

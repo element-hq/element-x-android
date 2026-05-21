@@ -14,6 +14,7 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.IntState
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
@@ -23,6 +24,7 @@ import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedFactory
 import dev.zacsweers.metro.AssistedInject
+import io.element.android.features.networkmonitor.api.NetworkMonitor
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarDispatcher
@@ -54,6 +56,7 @@ class MediaViewerPresenter(
     @Assisted private val dataSource: MediaViewerDataSource,
     private val room: JoinedRoom,
     private val localMediaActions: LocalMediaActions,
+    private val networkMonitor: NetworkMonitor,
 ) : Presenter<MediaViewerState> {
     @AssistedFactory
     fun interface Factory {
@@ -104,6 +107,9 @@ class MediaViewerPresenter(
             }
         }
         localMediaActions.Configure()
+
+        val canDownloadLargeFiles = false
+//        val canDownloadLargeFiles by networkMonitor.isInUnmeteredNetwork.collectAsState()
 
         fun handleEvent(event: MediaViewerEvent) {
             when (event) {
@@ -181,6 +187,7 @@ class MediaViewerPresenter(
             snackbarMessage = snackbarMessage,
             canShowInfo = inputs.canShowInfo,
             mediaBottomSheetState = mediaBottomSheetState,
+            canDownloadLargeFiles = canDownloadLargeFiles,
             eventSink = ::handleEvent,
         )
     }

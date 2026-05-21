@@ -41,6 +41,7 @@ import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import io.element.android.compound.theme.ElementTheme
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.audio.api.AudioFocus
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -69,9 +70,10 @@ fun MediaVideoView(
     isDisplayed: Boolean,
     localMediaViewState: LocalMediaViewState,
     bottomPaddingInPixels: Int,
-    localMedia: LocalMedia?,
+    localMedia: AsyncData<LocalMedia>,
     autoplay: Boolean,
     audioFocus: AudioFocus?,
+    loadMedia: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val exoPlayer = rememberExoPlayer(forAudioOnly = false)
@@ -83,6 +85,7 @@ fun MediaVideoView(
         localMedia = localMedia,
         autoplay = autoplay,
         audioFocus = audioFocus,
+        loadMedia = loadMedia,
         modifier = modifier,
     )
 }
@@ -94,9 +97,10 @@ private fun ExoPlayerMediaVideoView(
     localMediaViewState: LocalMediaViewState,
     bottomPaddingInPixels: Int,
     exoPlayer: ExoPlayer,
-    localMedia: LocalMedia?,
+    localMedia: AsyncData<LocalMedia>,
     autoplay: Boolean,
     audioFocus: AudioFocus?,
+    loadMedia: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     var mediaPlayerControllerState: MediaPlayerControllerState by remember {
@@ -123,6 +127,8 @@ private fun ExoPlayerMediaVideoView(
     }
 
     localMediaViewState.playableState = playableState
+
+    var derivedAutoPlay by remember(autoplay) { mutableStateOf(autoplay) }
 
     val playerListener = remember {
         object : Player.Listener {
@@ -180,9 +186,10 @@ private fun ExoPlayerMediaVideoView(
         }
     }
 
-    if (localMedia?.uri != null) {
-        LaunchedEffect(localMedia.uri) {
-            val mediaItem = MediaItem.fromUri(localMedia.uri)
+    val localMediaData = localMedia.dataOrNull()
+    if (localMediaData != null) {
+        LaunchedEffect(localMediaData.uri) {
+            val mediaItem = MediaItem.fromUri(localMediaData.uri)
             exoPlayer.setMediaItem(mediaItem)
         }
     } else {
@@ -230,8 +237,14 @@ private fun ExoPlayerMediaVideoView(
         MediaPlayerControllerView(
             state = mediaPlayerControllerState,
             onTogglePlay = {
-                autoHideController++
-                exoPlayer.togglePlay()
+                // If we don't have media data yet, we load it and set autoplay to true so it's played as soon as it arrives
+                if (localMediaData == null) {
+                    derivedAutoPlay = true
+                    loadMedia()
+                } else {
+                    autoHideController++
+                    exoPlayer.togglePlay()
+                }
             },
             onSeekChange = {
                 autoHideController++
@@ -276,7 +289,7 @@ private fun ExoPlayerMediaVideoView(
 
     ExoPlayerLifecycleHelper(
         exoPlayer = exoPlayer,
-        autoplay = autoplay,
+        autoplay = derivedAutoPlay,
         isDisplayed = isDisplayed,
         playerListener = playerListener,
         mediaPlayerControllerState = mediaPlayerControllerState,
@@ -336,8 +349,24 @@ internal fun MediaVideoViewPreview() = ElementPreview {
         modifier = Modifier.fillMaxSize(),
         bottomPaddingInPixels = 0,
         localMediaViewState = rememberLocalMediaViewState(),
-        localMedia = null,
+        localMedia = AsyncData.Uninitialized,
         audioFocus = null,
         autoplay = false,
+        loadMedia = {},
+    )
+}
+
+@PreviewsDayNight
+@Composable
+internal fun MediaVideoViewLoadingPreview() = ElementPreview {
+    MediaVideoView(
+        isDisplayed = true,
+        modifier = Modifier.fillMaxSize(),
+        bottomPaddingInPixels = 0,
+        localMediaViewState = rememberLocalMediaViewState(),
+        localMedia = AsyncData.Loading(),
+        audioFocus = null,
+        autoplay = false,
+        loadMedia = {},
     )
 }

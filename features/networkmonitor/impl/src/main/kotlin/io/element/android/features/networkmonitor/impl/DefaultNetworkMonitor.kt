@@ -48,6 +48,8 @@ class DefaultNetworkMonitor(
     override val isNetworkBlocked = MutableStateFlow(NetworkBlockedChecker(connectivityManager).isNetworkBlocked())
     override val isInAirGappedEnvironment = MutableStateFlow(false)
 
+    override val isInUnmeteredNetwork = MutableStateFlow(true)
+
     override val connectivity: StateFlow<NetworkStatus> = callbackFlow {
 
         /**
@@ -78,6 +80,8 @@ class DefaultNetworkMonitor(
                     // (according to Google), which is a common case in air-gapped environments.
                     isInAirGappedEnvironment.value = !networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
                 }
+
+                isInUnmeteredNetwork.value = networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_NOT_METERED)
             }
 
             override fun onAvailable(network: Network) {

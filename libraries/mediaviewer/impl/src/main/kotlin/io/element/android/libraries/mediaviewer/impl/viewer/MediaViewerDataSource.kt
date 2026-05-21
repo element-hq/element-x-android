@@ -38,6 +38,7 @@ import kotlinx.collections.immutable.persistentListOf
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.map
@@ -45,6 +46,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.withContext
 import timber.log.Timber
 import java.util.concurrent.ConcurrentHashMap
+import kotlin.time.Duration.Companion.seconds
 
 class MediaViewerDataSource(
     mode: MediaViewerMode,
@@ -200,6 +202,9 @@ class MediaViewerDataSource(
             mutableStateOf(AsyncData.Uninitialized)
         }
         localMediaState.value = AsyncData.Loading()
+
+        delay(2.seconds)
+
         mediaLoader
             .downloadMediaFile(
                 source = data.mediaSource,

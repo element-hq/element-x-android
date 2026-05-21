@@ -31,4 +31,9 @@ interface NetworkMonitor {
      * An air-gapped environment is an environment that is not connected to the internet, and where the app can only communicate with a limited set of servers.
      */
     val isInAirGappedEnvironment: StateFlow<Boolean>
+
+    /**
+     * A flow indicating whether the device is currently connected to an unmetered network (e.g., Wi-Fi).
+     */
+    val isInUnmeteredNetwork: StateFlow<Boolean>
 }

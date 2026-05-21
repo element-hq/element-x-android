@@ -72,6 +72,8 @@ import io.element.android.features.viewfolder.api.TextFileViewer
 import io.element.android.libraries.androidutils.text.safeLinkify
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.audio.api.AudioFocus
+import io.element.android.libraries.core.data.ByteUnit
+import io.element.android.libraries.core.data.megaBytes
 import io.element.android.libraries.core.mimetype.MimeTypes.isMimeTypeVideo
 import io.element.android.libraries.designsystem.components.async.AsyncFailure
 import io.element.android.libraries.designsystem.components.async.AsyncLoading
@@ -215,9 +217,11 @@ fun MediaViewerView(
                     Box(
                         modifier = Modifier
                             .onVisibilityChanged(minDurationMs = 200L) { isVisible ->
-                                if (isVisible) {
+                                val isLargeFile = (dataForPage.mediaInfo.fileSize ?: 0L) > 1.megaBytes.into(ByteUnit.BYTES)
+                                // Preload 'small' media when the page becomes visible or all media if we are allowed to
+                                if (isVisible && !isLargeFile || state.canDownloadLargeFiles) {
                                     state.eventSink(MediaViewerEvent.LoadMedia(dataForPage))
-                                } else {
+                                } else if (!isVisible) {
                                     state.eventSink(MediaViewerEvent.CancelLoadingMedia(dataForPage))
                                 }
                             }
@@ -379,7 +383,7 @@ private fun MediaViewerPage(
                     isDisplayed = isDisplayed,
                     bottomPaddingInPixels = bottomPaddingInPixels,
                     localMediaViewState = localMediaViewState,
-                    localMedia = downloadedMedia.dataOrNull(),
+                    localMedia = downloadedMedia,
                     mediaInfo = data.mediaInfo,
                     textFileViewer = textFileViewer,
                     onClick = {
@@ -389,7 +393,9 @@ private fun MediaViewerPage(
                     },
                     isUserSelected = isUserSelected,
                     audioFocus = audioFocus,
+                    loadMedia = { onRetry() }
                 )
+
                 if (showThumbnail) {
                     ThumbnailView(
                         mediaInfo = data.mediaInfo,
