@@ -17,7 +17,7 @@ constraintlayout = "2.2.1"
 constraintlayout_compose = "1.1.1"
 lifecycle = "2.10.0"
 activity = "1.13.0"
-media3 = "1.10.0"
+media3 = "1.10.1"
 camera = "1.6.1"
 work = "2.11.2"
 
