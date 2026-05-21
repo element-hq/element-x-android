@@ -755,6 +755,44 @@ class TimelinePresenterTest {
     }
 
     @Test
+    fun `present - jumpToUnread hides eagerly after MarkAllAsRead even before a new RoomInfo arrives`() = runTest {
+        val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
+        val timeline = FakeTimeline(
+            timelineItems = timelineItems,
+            getLatestEventIdResult = { Result.success(AN_EVENT_ID_2) },
+        )
+        val fullyReadEventId = EventId("\$older-than-loaded-window")
+        val room = FakeJoinedRoom(
+            liveTimeline = timeline,
+            baseRoom = FakeBaseRoom(
+                roomPermissions = roomPermissions(),
+                initialRoomInfo = aRoomInfo(fullyReadEventId = fullyReadEventId),
+            ),
+        )
+        val presenter = createTimelinePresenter(
+            timeline = timeline,
+            room = room,
+            featureFlagService = FakeFeatureFlagService(initialState = mapOf(FeatureFlags.JumpToUnread.key to true)),
+        )
+        presenter.test {
+            awaitFirstItem()
+            timelineItems.emit(
+                listOf(
+                    MatrixTimelineItem.Event(UniqueId("1"), anEventTimelineItem(eventId = AN_EVENT_ID, content = aMessageContent())),
+                )
+            )
+            val outOfWindow = consumeItemsUntilPredicate { it.jumpToUnread is JumpToUnreadState.OutOfWindow }.last()
+            assertThat(outOfWindow.jumpToUnread).isEqualTo(JumpToUnreadState.OutOfWindow(eventId = fullyReadEventId))
+
+            outOfWindow.eventSink(TimelineEvent.MarkAllAsRead)
+            // RoomInfo is intentionally NOT updated — eager hide must fire on the await alone.
+            val afterMark = consumeItemsUntilPredicate { it.jumpToUnread == JumpToUnreadState.Hidden }.last()
+            assertThat(afterMark.jumpToUnread).isEqualTo(JumpToUnreadState.Hidden)
+            cancelAndIgnoreRemainingEvents()
+        }
+    }
+
+    @Test
     fun `present - reaction ordering`() = runTest {
         val timelineItems = MutableStateFlow(emptyList<MatrixTimelineItem>())
         val timeline = FakeTimeline(

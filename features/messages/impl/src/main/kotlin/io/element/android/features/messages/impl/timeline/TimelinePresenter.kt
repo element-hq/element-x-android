@@ -138,6 +138,12 @@ class TimelinePresenter(
         val newEventState = remember { mutableStateOf<NewEventState>(NewEventState.None) }
         val messageShieldDialogData: MutableState<MessageShieldData?> = remember { mutableStateOf(null) }
 
+        // Forces [JumpToUnreadState.Hidden] until the next RoomInfo push. Set after a
+        // [TimelineEvent.MarkAllAsRead] await completes so the FAB hides without waiting for
+        // the SDK to push a refreshed fully-read marker; the after-await ordering means any
+        // RoomInfo update racing the mark-as-read call has already landed and can't undo this.
+        val suppressJumpToUnread = remember { mutableStateOf(false) }
+
         val resolveVerifiedUserSendFailureState = resolveVerifiedUserSendFailurePresenter.present()
         val isSendPublicReadReceiptsEnabled by remember {
             sessionPreferencesStore.isSendPublicReadReceiptsEnabled()
@@ -234,6 +240,7 @@ class TimelinePresenter(
                         null
                     } ?: return@launch
                     markAsFullyRead(room.roomId, latestEventId)
+                    suppressJumpToUnread.value = true
                 }
                 is TimelineEvent.ShowShieldDialog -> messageShieldDialogData.value = event.messageShieldData
                 is TimelineEvent.ComputeVerifiedUserSendFailure -> {
@@ -300,8 +307,13 @@ class TimelinePresenter(
         //  - Hidden: feature flag off, no marker, caught-up (marker loaded but no virtual item),
         //    or initial load (no items yet).
         val jumpToUnread = remember { mutableStateOf<JumpToUnreadState>(JumpToUnreadState.Hidden) }
-        LaunchedEffect(timelineItems, displayJumpToUnread, roomInfo.fullyReadEventId) {
-            if (!displayJumpToUnread) {
+        // The SDK is authoritative again once it pushes a new fully-read marker, so drop the
+        // post-mark-as-read suppression and let the recompute below pick up the new value.
+        LaunchedEffect(roomInfo.fullyReadEventId) {
+            suppressJumpToUnread.value = false
+        }
+        LaunchedEffect(timelineItems, displayJumpToUnread, roomInfo.fullyReadEventId, suppressJumpToUnread.value) {
+            if (!displayJumpToUnread || suppressJumpToUnread.value) {
                 jumpToUnread.value = JumpToUnreadState.Hidden
                 return@LaunchedEffect
             }
