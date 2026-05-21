@@ -55,6 +55,8 @@ import androidx.compose.ui.layout.onVisibilityChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
@@ -495,14 +497,20 @@ private fun MediaViewerTopBar(
     TopAppBar(
         title = {
             if (senderName != null && dateSent != null) {
+                val description = stringResource(
+                    CommonStrings.a11y_sent_by_sender_at_date,
+                    senderName,
+                    dateSent,
+                )
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .clearAndSetSemantics {
+                            heading()
+                            contentDescription = description
+                        },
                 ) {
                     Text(
-                        modifier = Modifier.semantics {
-                            heading()
-                        },
                         text = senderName,
                         style = ElementTheme.typography.fontBodyMdMedium,
                         color = ElementTheme.colors.textPrimary,
