@@ -14,6 +14,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.gestures.detectDragGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.geometry.Rect
 import androidx.compose.ui.geometry.Size
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.DrawScope
@@ -41,6 +43,8 @@ import androidx.compose.ui.graphics.drawscope.Stroke
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.layout.boundsInParent
+import androidx.compose.ui.layout.onPlaced
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
@@ -53,6 +57,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.IntSize
 import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
@@ -188,12 +193,14 @@ fun AttachmentImageEditorView(
 }
 
 @Composable
-private fun CropEditorCanvas(
+private fun BoxScope.CropEditorCanvas(
     state: AttachmentImageEditorState,
     onCropRectChange: (NormalizedCropRect) -> Unit,
 ) {
     var imageSize by remember(state.localMedia.uri) { mutableStateOf(IntSize.Zero) }
     val rotationQuarterTurns = state.edits.normalizedRotationQuarterTurns
+
+    var imageRect by remember { mutableStateOf(Rect.Zero) }
 
     BoxWithConstraints(
         modifier = Modifier
@@ -233,7 +240,10 @@ private fun CropEditorCanvas(
         Box(
             modifier = Modifier
                 .size(displayedWidthDp, displayedHeightDp)
-                .align(Alignment.Center),
+                .align(Alignment.Center)
+                .onPlaced {
+                    imageRect = it.boundsInParent()
+                },
             contentAlignment = Alignment.Center,
         ) {
             if (LocalInspectionMode.current) {
@@ -263,11 +273,50 @@ private fun CropEditorCanvas(
                     }
                 )
             }
+        }
 
+        val touchRadius = 56.dp
+        var dragTarget by remember { mutableStateOf<CropDragTarget?>(null) }
+        val latestCropRect by rememberUpdatedState(state.edits.cropRect)
+        val drawGuidelines = dragTarget == CropDragTarget.Move || state.forceDrawGuidelines
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .pointerInput(Unit) {
+                    detectDragGestures(
+                        onDragStart = { offset ->
+                            dragTarget = detectDragTarget(
+                                touchPoint = offset,
+                                imageOffset = imageRect.topLeft,
+                                cropRect = latestCropRect,
+                                canvasSize = Size(imageRect.width, imageRect.height),
+                                handleTouchRadius = touchRadius.toPx(),
+                            )
+                        },
+                        onDragCancel = {
+                            dragTarget = null
+                        },
+                        onDragEnd = {
+                            dragTarget = null
+                        },
+                    ) { change, dragAmount ->
+                        val activeTarget = dragTarget ?: return@detectDragGestures
+                        change.consume()
+                        onCropRectChange(
+                            latestCropRect.applyChange(
+                                dragTarget = activeTarget,
+                                deltaX = dragAmount.x / size.width.toFloat(),
+                                deltaY = dragAmount.y / size.height.toFloat(),
+                            )
+                        )
+                    }
+                },
+            contentAlignment = Alignment.Center,
+        ) {
             CropOverlay(
+                imageSize = DpSize(displayedWidthDp, displayedHeightDp),
                 cropRect = state.edits.cropRect,
-                forceDrawGuidelines = state.forceDrawGuidelines,
-                onCropRectChange = onCropRectChange,
+                drawGuidelines = drawGuidelines,
             )
         }
     }
@@ -275,46 +324,15 @@ private fun CropEditorCanvas(
 
 @Composable
 private fun CropOverlay(
+    imageSize: DpSize,
     cropRect: NormalizedCropRect,
-    forceDrawGuidelines: Boolean,
-    onCropRectChange: (NormalizedCropRect) -> Unit,
+    drawGuidelines: Boolean,
 ) {
-    var dragTarget by remember { mutableStateOf<CropDragTarget?>(null) }
-    val latestCropRect by rememberUpdatedState(cropRect)
     val borderColor = ElementTheme.colors.iconPrimary
     val guideColor = ElementTheme.colors.iconPrimary
-    val drawGuidelines = dragTarget == CropDragTarget.Move || forceDrawGuidelines
+
     Canvas(
-        modifier = Modifier
-            .fillMaxSize()
-            .pointerInput(Unit) {
-                detectDragGestures(
-                    onDragStart = { offset ->
-                        dragTarget = detectDragTarget(
-                            touchPoint = offset,
-                            cropRect = latestCropRect,
-                            canvasSize = Size(size.width.toFloat(), size.height.toFloat()),
-                            handleTouchRadius = 32.dp.toPx(),
-                        )
-                    },
-                    onDragCancel = {
-                        dragTarget = null
-                    },
-                    onDragEnd = {
-                        dragTarget = null
-                    },
-                ) { change, dragAmount ->
-                    val activeTarget = dragTarget ?: return@detectDragGestures
-                    change.consume()
-                    onCropRectChange(
-                        latestCropRect.applyChange(
-                            dragTarget = activeTarget,
-                            deltaX = dragAmount.x / size.width.toFloat(),
-                            deltaY = dragAmount.y / size.height.toFloat(),
-                        )
-                    )
-                }
-            }
+        modifier = Modifier.size(imageSize.width, imageSize.height)
     ) {
         val cropLeft = cropRect.left * size.width
         val cropTop = cropRect.top * size.height
@@ -459,6 +477,7 @@ private fun fitSize(
 
 private fun detectDragTarget(
     touchPoint: Offset,
+    imageOffset: Offset,
     cropRect: NormalizedCropRect,
     canvasSize: Size,
     handleTouchRadius: Float,
@@ -474,14 +493,14 @@ private fun detectDragTarget(
         CropDragTarget.Edge.Left to Offset(cropRect.left * canvasSize.width, (cropRect.top + cropRect.bottom) * canvasSize.height / 2f),
     )
     corners.forEach { (target, corner) ->
-        if ((corner - touchPoint).getDistance() <= handleTouchRadius) {
+        if ((corner - touchPoint + imageOffset).getDistance() <= handleTouchRadius) {
             return target
         }
     }
-    val cropLeft = cropRect.left * canvasSize.width
-    val cropTop = cropRect.top * canvasSize.height
-    val cropRight = cropRect.right * canvasSize.width
-    val cropBottom = cropRect.bottom * canvasSize.height
+    val cropLeft = imageOffset.x + cropRect.left * canvasSize.width
+    val cropTop = imageOffset.y + cropRect.top * canvasSize.height
+    val cropRight = imageOffset.x + cropRect.right * canvasSize.width
+    val cropBottom = imageOffset.y + cropRect.bottom * canvasSize.height
     return if (touchPoint.x in cropLeft..cropRight && touchPoint.y in cropTop..cropBottom) {
         CropDragTarget.Move
     } else {
