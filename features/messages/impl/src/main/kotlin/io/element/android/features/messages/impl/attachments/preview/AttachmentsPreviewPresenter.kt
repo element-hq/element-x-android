@@ -133,6 +133,7 @@ class AttachmentsPreviewPresenter(
             // If the media optimization selector is not displayed, we can pre-process the media
             // to prepare it for sending. This is done to avoid blocking the UI thread when the
             // user clicks on the send button.
+            @Suppress("ComplexCondition")
             if (mediaOptimizationSelectorState.displayMediaSelectorViews == false &&
                 preprocessMediaJob == null &&
                 imageEditorState == null &&

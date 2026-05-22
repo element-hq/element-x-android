@@ -43,19 +43,26 @@ open class AttachmentImageEditorStateProvider : PreviewParameterProvider<Attachm
             anAttachmentImageEditorState(
                 edits = AttachmentImageEdits(
                     cropRect = caterpillarCrop,
+                ),
+                forceDrawGuidelines = true,
+            ),
+            anAttachmentImageEditorState(
+                edits = AttachmentImageEdits(
+                    cropRect = caterpillarCrop,
                 ).rotateAntiClockwise(),
             ),
         )
 }
 
-private fun anAttachmentImageEditorState(
+internal fun anAttachmentImageEditorState(
     localMedia: LocalMedia = LocalMedia(
         uri = "file://preview-image".toUri(),
         info = anImageMediaInfo(),
     ),
     edits: AttachmentImageEdits = AttachmentImageEdits(),
-) =
-    AttachmentImageEditorState(
-        localMedia = localMedia,
-        edits = edits,
-    )
+    forceDrawGuidelines: Boolean = false,
+) = AttachmentImageEditorState(
+    localMedia = localMedia,
+    edits = edits,
+    forceDrawGuidelines = forceDrawGuidelines,
+)

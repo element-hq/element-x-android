@@ -266,6 +266,7 @@ private fun CropEditorCanvas(
 
             CropOverlay(
                 cropRect = state.edits.cropRect,
+                forceDrawGuidelines = state.forceDrawGuidelines,
                 onCropRectChange = onCropRectChange,
             )
         }
@@ -275,13 +276,14 @@ private fun CropEditorCanvas(
 @Composable
 private fun CropOverlay(
     cropRect: NormalizedCropRect,
+    forceDrawGuidelines: Boolean,
     onCropRectChange: (NormalizedCropRect) -> Unit,
 ) {
     var dragTarget by remember { mutableStateOf<CropDragTarget?>(null) }
     val latestCropRect by rememberUpdatedState(cropRect)
     val borderColor = ElementTheme.colors.iconPrimary
     val guideColor = ElementTheme.colors.iconPrimary
-    val drawGuidelines = dragTarget == CropDragTarget.Move
+    val drawGuidelines = dragTarget == CropDragTarget.Move || forceDrawGuidelines
     Canvas(
         modifier = Modifier
             .fillMaxSize()
@@ -352,11 +354,11 @@ private fun CropOverlay(
             size = Size(width = cropRight - cropLeft, height = cropBottom - cropTop),
             style = Stroke(width = 1.dp.toPx()),
         )
-        // Guide lines dividing the crop area into 9 equal parts
+        // Guidelines dividing the crop area into 9 equal parts
         if (drawGuidelines) {
             val thirdWidth = (cropRight - cropLeft) / 3f
             val thirdHeight = (cropBottom - cropTop) / 3f
-            (1..2).forEach { index ->
+            for (index in 1..2) {
                 val offsetX = cropLeft + thirdWidth * index
                 val offsetY = cropTop + thirdHeight * index
                 // Vertical guide line

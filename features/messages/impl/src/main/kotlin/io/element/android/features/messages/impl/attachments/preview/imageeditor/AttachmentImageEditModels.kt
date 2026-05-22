@@ -17,6 +17,8 @@ private const val MIN_CROP_SIZE = 0.1f
 data class AttachmentImageEditorState(
     val localMedia: LocalMedia,
     val edits: AttachmentImageEdits,
+    // For preview only
+    val forceDrawGuidelines: Boolean = false,
 )
 
 @Immutable
