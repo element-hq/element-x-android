@@ -35,6 +35,7 @@ import io.element.android.features.location.api.ShowLocationMode
 import io.element.android.features.messages.api.MessagesEntryPoint
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewNode
+import io.element.android.features.messages.impl.attachments.preview.OnDoneListener
 import io.element.android.features.messages.impl.pinned.DefaultPinnedEventsTimelineProvider
 import io.element.android.features.messages.impl.pinned.list.PinnedMessagesListNode
 import io.element.android.features.messages.impl.report.ReportMessageNode
@@ -92,7 +93,9 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import kotlinx.parcelize.IgnoredOnParcel
 import kotlinx.parcelize.Parcelize
 import kotlin.time.Duration.Companion.milliseconds
 
@@ -147,7 +150,14 @@ class MessagesFlowNode(
         ) : NavTarget
 
         @Parcelize
-        data class AttachmentPreview(val timelineMode: Timeline.Mode, val attachment: Attachment, val inReplyToEventId: EventId?) : NavTarget
+        data class AttachmentPreview(
+            val caption: String?,
+            val timelineMode: Timeline.Mode,
+            val attachment: Attachment,
+            val inReplyToEventId: EventId?,
+            @IgnoredOnParcel
+            val resultCallback: OnDoneListener = {},
+        ) : NavTarget
 
         @Parcelize
         data class LocationViewer(val mode: ShowLocationMode) : NavTarget
@@ -236,12 +246,19 @@ class MessagesFlowNode(
                         )
                     }
 
-                    override fun navigateToPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?) {
+                    override fun navigateToPreviewAttachments(
+                        caption: String?,
+                        attachments: ImmutableList<Attachment>,
+                        inReplyToEventId: EventId?,
+                        resultCallback: OnDoneListener,
+                    ) {
                         backstack.push(
                             NavTarget.AttachmentPreview(
+                                caption = caption,
                                 attachment = attachments.first(),
                                 timelineMode = Timeline.Mode.Live,
                                 inReplyToEventId = inReplyToEventId,
+                                resultCallback = resultCallback,
                             )
                         )
                     }
@@ -350,12 +367,17 @@ class MessagesFlowNode(
                 )
             }
             is NavTarget.AttachmentPreview -> {
+                val onDoneListener = OnDoneListener { wasSent ->
+                    backstack.pop()
+                    lifecycleScope.launch { navTarget.resultCallback(wasSent) }
+                }
                 val inputs = AttachmentsPreviewNode.Inputs(
+                    caption = navTarget.caption,
                     attachment = navTarget.attachment,
                     timelineMode = navTarget.timelineMode,
                     inReplyToEventId = navTarget.inReplyToEventId,
                 )
-                createNode<AttachmentsPreviewNode>(buildContext, listOf(inputs))
+                createNode<AttachmentsPreviewNode>(buildContext, listOf(inputs, onDoneListener))
             }
             is NavTarget.LocationViewer -> {
                 val inputs = ShowLocationEntryPoint.Inputs(navTarget.mode)
@@ -475,12 +497,19 @@ class MessagesFlowNode(
                         )
                     }
 
-                    override fun navigateToPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?) {
+                    override fun navigateToPreviewAttachments(
+                        caption: String?,
+                        attachments: ImmutableList<Attachment>,
+                        inReplyToEventId: EventId?,
+                        resultCallback: OnDoneListener,
+                    ) {
                         backstack.push(
                             NavTarget.AttachmentPreview(
+                                caption = caption,
                                 attachment = attachments.first(),
                                 timelineMode = Timeline.Mode.Thread(navTarget.threadRootId),
                                 inReplyToEventId = inReplyToEventId,
+                                resultCallback = resultCallback,
                             )
                         )
                     }

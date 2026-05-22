@@ -33,6 +33,7 @@ import io.element.android.features.knockrequests.api.banner.KnockRequestsBannerR
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionPostProcessor
 import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.attachments.preview.OnDoneListener
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerEvent
 import io.element.android.features.messages.impl.messagecomposer.MessageComposerPresenter
 import io.element.android.features.messages.impl.timeline.TimelineController
@@ -118,7 +119,12 @@ class MessagesNode(
 
     interface Callback : Plugin {
         fun handleEventClick(timelineMode: Timeline.Mode, event: TimelineItem.Event, canUseOverlay: Boolean): Boolean
-        fun navigateToPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?)
+        fun navigateToPreviewAttachments(
+            caption: String?,
+            attachments: ImmutableList<Attachment>,
+            inReplyToEventId: EventId?,
+            resultCallback: OnDoneListener,
+        )
         fun navigateToRoomMemberDetails(userId: UserId)
         fun handlePermalinkClick(data: PermalinkData)
         fun navigateToEventDebugInfo(eventId: EventId?, debugInfo: TimelineItemDebugInfo)
@@ -215,8 +221,13 @@ class MessagesNode(
         callback.navigateToEditPoll(eventId)
     }
 
-    override fun navigateToPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?) {
-        callback.navigateToPreviewAttachments(attachments, inReplyToEventId)
+    override fun navigateToPreviewAttachments(
+        caption: String?,
+        attachments: ImmutableList<Attachment>,
+        inReplyToEventId: EventId?,
+        resultCallback: OnDoneListener,
+    ) {
+        callback.navigateToPreviewAttachments(caption, attachments, inReplyToEventId, resultCallback)
     }
 
     override fun navigateToRoom(roomId: RoomId, eventId: EventId?, serverNames: List<String>) {

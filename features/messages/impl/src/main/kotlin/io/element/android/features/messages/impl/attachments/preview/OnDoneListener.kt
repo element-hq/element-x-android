@@ -8,6 +8,8 @@
 
 package io.element.android.features.messages.impl.attachments.preview
 
-fun interface OnDoneListener {
-    operator fun invoke()
+import com.bumble.appyx.core.plugin.Plugin
+
+fun interface OnDoneListener : Plugin {
+    operator fun invoke(wasSent: Boolean)
 }

@@ -55,6 +55,7 @@ import timber.log.Timber
 
 @AssistedInject
 class AttachmentsPreviewPresenter(
+    @Assisted private val caption: String?,
     @Assisted private val attachment: Attachment,
     @Assisted private val onDoneListener: OnDoneListener,
     @Assisted private val timelineMode: Timeline.Mode,
@@ -71,6 +72,7 @@ class AttachmentsPreviewPresenter(
     @AssistedFactory
     interface Factory {
         fun create(
+            caption: String?,
             attachment: Attachment,
             timelineMode: Timeline.Mode,
             onDoneListener: OnDoneListener,
@@ -88,7 +90,7 @@ class AttachmentsPreviewPresenter(
             mutableStateOf<SendActionState>(SendActionState.Idle)
         }
 
-        val markdownTextEditorState = rememberMarkdownTextEditorState(initialText = null, initialFocus = false)
+        val markdownTextEditorState = rememberMarkdownTextEditorState(initialText = caption, initialFocus = false)
         val textEditorState by rememberUpdatedState(
             TextEditorState.Markdown(markdownTextEditorState, isRoomEncrypted = null)
         )
@@ -190,7 +192,7 @@ class AttachmentsPreviewPresenter(
 
                         // If we're supposed to send the media as a background job, we can dismiss this screen already
                         if (coroutineContext.isActive) {
-                            onDoneListener()
+                            onDoneListener(wasSent = true)
                         }
 
                         // Send the media using the session coroutine scope so it doesn't matter if this screen or the chat one are closed
@@ -332,7 +334,7 @@ class AttachmentsPreviewPresenter(
         }
         // Reset the sendActionState to ensure that dialog is closed before the screen
         sendActionState.value = SendActionState.Done
-        onDoneListener()
+        onDoneListener(wasSent = false)
     }
 
     private fun cleanUp(
@@ -364,7 +366,7 @@ class AttachmentsPreviewPresenter(
             sendActionState.value = SendActionState.Done
 
             if (dismissAfterSend) {
-                onDoneListener()
+                onDoneListener(wasSent = true)
             }
         },
         onFailure = { error ->

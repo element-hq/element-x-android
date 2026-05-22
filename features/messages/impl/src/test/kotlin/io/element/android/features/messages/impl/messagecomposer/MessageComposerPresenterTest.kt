@@ -24,6 +24,7 @@ import io.element.android.features.location.test.FakeLocationService
 import io.element.android.features.messages.impl.FakeMessagesNavigator
 import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.attachments.preview.OnDoneListener
 import io.element.android.features.messages.impl.draft.ComposerDraftService
 import io.element.android.features.messages.impl.draft.FakeComposerDraftService
 import io.element.android.features.messages.impl.messagecomposer.suggestions.SuggestionsProcessor
@@ -687,7 +688,7 @@ class MessageComposerPresenterTest {
         val room = FakeJoinedRoom(
             typingNoticeResult = { Result.success(Unit) }
         )
-        val onPreviewAttachmentLambda = lambdaRecorder { _: ImmutableList<Attachment>, _: EventId? -> }
+        val onPreviewAttachmentLambda = lambdaRecorder { _: String?, _: ImmutableList<Attachment>, _: EventId?, _: OnDoneListener? -> }
         val navigator = FakeMessagesNavigator(
             onPreviewAttachmentLambda = onPreviewAttachmentLambda
         )
@@ -725,7 +726,7 @@ class MessageComposerPresenterTest {
         val room = FakeJoinedRoom(
             typingNoticeResult = { Result.success(Unit) }
         )
-        val onPreviewAttachmentLambda = lambdaRecorder { _: ImmutableList<Attachment>, _: EventId? -> }
+        val onPreviewAttachmentLambda = lambdaRecorder { _: String?, _: ImmutableList<Attachment>, _: EventId?, _: OnDoneListener? -> }
         val navigator = FakeMessagesNavigator(
             onPreviewAttachmentLambda = onPreviewAttachmentLambda
         )
@@ -778,7 +779,7 @@ class MessageComposerPresenterTest {
         val room = FakeJoinedRoom(
             typingNoticeResult = { Result.success(Unit) }
         )
-        val onPreviewAttachmentLambda = lambdaRecorder { _: ImmutableList<Attachment>, _: EventId? -> }
+        val onPreviewAttachmentLambda = lambdaRecorder { _: String?, _: ImmutableList<Attachment>, _: EventId?, _: OnDoneListener? -> }
         val navigator = FakeMessagesNavigator(
             onPreviewAttachmentLambda = onPreviewAttachmentLambda
         )
@@ -833,7 +834,7 @@ class MessageComposerPresenterTest {
             typingNoticeResult = { Result.success(Unit) }
         )
         val permissionPresenter = FakePermissionsPresenter().apply { setPermissionGranted() }
-        val onPreviewAttachmentLambda = lambdaRecorder { _: ImmutableList<Attachment>, _: EventId? -> }
+        val onPreviewAttachmentLambda = lambdaRecorder { _: String?, _: ImmutableList<Attachment>, _: EventId?, _: OnDoneListener? -> }
         val navigator = FakeMessagesNavigator(
             onPreviewAttachmentLambda = onPreviewAttachmentLambda
         )
@@ -855,7 +856,7 @@ class MessageComposerPresenterTest {
             typingNoticeResult = { Result.success(Unit) }
         )
         val permissionPresenter = FakePermissionsPresenter()
-        val onPreviewAttachmentLambda = lambdaRecorder { _: ImmutableList<Attachment>, _: EventId? -> }
+        val onPreviewAttachmentLambda = lambdaRecorder { _: String?, _: ImmutableList<Attachment>, _: EventId?, _: OnDoneListener? -> }
         val navigator = FakeMessagesNavigator(
             onPreviewAttachmentLambda = onPreviewAttachmentLambda
         )
@@ -879,7 +880,7 @@ class MessageComposerPresenterTest {
             typingNoticeResult = { Result.success(Unit) }
         )
         val permissionPresenter = FakePermissionsPresenter().apply { setPermissionGranted() }
-        val onPreviewAttachmentLambda = lambdaRecorder { _: ImmutableList<Attachment>, _: EventId? -> }
+        val onPreviewAttachmentLambda = lambdaRecorder { _: String?, _: ImmutableList<Attachment>, _: EventId?, _: OnDoneListener? -> }
         val navigator = FakeMessagesNavigator(
             onPreviewAttachmentLambda = onPreviewAttachmentLambda
         )
@@ -901,7 +902,7 @@ class MessageComposerPresenterTest {
             typingNoticeResult = { Result.success(Unit) }
         )
         val permissionPresenter = FakePermissionsPresenter()
-        val onPreviewAttachmentLambda = lambdaRecorder { _: ImmutableList<Attachment>, _: EventId? -> }
+        val onPreviewAttachmentLambda = lambdaRecorder { _: String?, _: ImmutableList<Attachment>, _: EventId?, _: OnDoneListener? -> }
         val navigator = FakeMessagesNavigator(
             onPreviewAttachmentLambda = onPreviewAttachmentLambda
         )

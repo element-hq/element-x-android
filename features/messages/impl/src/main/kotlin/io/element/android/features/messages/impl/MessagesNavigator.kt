@@ -9,6 +9,7 @@
 package io.element.android.features.messages.impl
 
 import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.attachments.preview.OnDoneListener
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.ThreadId
@@ -21,7 +22,12 @@ interface MessagesNavigator {
     fun forwardEvent(eventId: EventId)
     fun navigateToReportMessage(eventId: EventId, senderId: UserId)
     fun navigateToEditPoll(eventId: EventId)
-    fun navigateToPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?)
+    fun navigateToPreviewAttachments(
+        caption: String?,
+        attachments: ImmutableList<Attachment>,
+        inReplyToEventId: EventId?,
+        resultCallback: OnDoneListener,
+    )
     fun navigateToRoom(roomId: RoomId, eventId: EventId?, serverNames: List<String>)
     fun navigateToMember(userId: UserId)
     fun navigateToThread(threadRootId: ThreadId, focusedEventId: EventId?)

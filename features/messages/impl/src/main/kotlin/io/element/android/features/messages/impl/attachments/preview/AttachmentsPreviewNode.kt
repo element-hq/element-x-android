@@ -24,6 +24,7 @@ import io.element.android.compound.theme.ForcedDarkElementTheme
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.messages.impl.attachments.Attachment
 import io.element.android.libraries.architecture.NodeInputs
+import io.element.android.libraries.architecture.callback
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.di.RoomScope
 import io.element.android.libraries.matrix.api.core.EventId
@@ -42,18 +43,21 @@ class AttachmentsPreviewNode(
     private val enterpriseService: EnterpriseService,
 ) : Node(buildContext, plugins = plugins) {
     data class Inputs(
+        val caption: String?,
         val attachment: Attachment,
         val timelineMode: Timeline.Mode,
         val inReplyToEventId: EventId?,
     ) : NodeInputs
 
-    private val inputs: Inputs = inputs()
-
-    private val onDoneListener = OnDoneListener {
-        navigateUp()
+    interface Callback : Plugin {
+        fun onDone(wasSent: Boolean)
     }
 
+    private val inputs: Inputs = inputs()
+    private val onDoneListener = callback<OnDoneListener>()
+
     private val presenter = presenterFactory.create(
+        caption = inputs.caption,
         attachment = inputs.attachment,
         timelineMode = inputs.timelineMode,
         onDoneListener = onDoneListener,

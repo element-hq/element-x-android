@@ -9,6 +9,7 @@
 package io.element.android.features.messages.impl
 
 import io.element.android.features.messages.impl.attachments.Attachment
+import io.element.android.features.messages.impl.attachments.preview.OnDoneListener
 import io.element.android.libraries.matrix.api.core.EventId
 import io.element.android.libraries.matrix.api.core.RoomId
 import io.element.android.libraries.matrix.api.core.ThreadId
@@ -22,7 +23,12 @@ class FakeMessagesNavigator(
     private val onForwardEventClickLambda: (eventId: EventId) -> Unit = { _ -> lambdaError() },
     private val onReportContentClickLambda: (eventId: EventId, senderId: UserId) -> Unit = { _, _ -> lambdaError() },
     private val onEditPollClickLambda: (eventId: EventId) -> Unit = { _ -> lambdaError() },
-    private val onPreviewAttachmentLambda: (attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?) -> Unit = { _, _ -> lambdaError() },
+    private val onPreviewAttachmentLambda: (
+        caption: String?,
+        attachments: ImmutableList<Attachment>,
+        inReplyToEventId: EventId?,
+        callback: OnDoneListener
+    ) -> Unit = { _, _, _, _ -> lambdaError() },
     private val onNavigateToRoomLambda: (roomId: RoomId, threadId: EventId?, serverNames: List<String>) -> Unit = { _, _, _ -> lambdaError() },
     private val navigateToMemberLambda: (userId: UserId) -> Unit = { lambdaError() },
     private val navigateToDeveloperSettingsLambda: () -> Unit = { lambdaError() },
@@ -46,8 +52,13 @@ class FakeMessagesNavigator(
         onEditPollClickLambda(eventId)
     }
 
-    override fun navigateToPreviewAttachments(attachments: ImmutableList<Attachment>, inReplyToEventId: EventId?) {
-        onPreviewAttachmentLambda(attachments, inReplyToEventId)
+    override fun navigateToPreviewAttachments(
+        caption: String?,
+        attachments: ImmutableList<Attachment>,
+        inReplyToEventId: EventId?,
+        resultCallback: OnDoneListener,
+    ) {
+        onPreviewAttachmentLambda(caption, attachments, inReplyToEventId, resultCallback)
     }
 
     override fun navigateToRoom(roomId: RoomId, eventId: EventId?, serverNames: List<String>) {

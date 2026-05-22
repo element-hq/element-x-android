@@ -16,6 +16,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateListOf
@@ -58,6 +59,7 @@ import io.element.android.libraries.matrix.api.room.draft.ComposerDraft
 import io.element.android.libraries.matrix.api.room.draft.ComposerDraftType
 import io.element.android.libraries.matrix.api.room.getDirectRoomMember
 import io.element.android.libraries.matrix.api.room.powerlevels.use
+import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.TimelineException
 import io.element.android.libraries.matrix.api.timeline.item.event.toEventOrTransactionId
 import io.element.android.libraries.matrix.ui.messages.reply.InReplyToDetails
@@ -147,6 +149,9 @@ class MessageComposerPresenter(
     private val cameraPermissionPresenter = permissionsPresenterFactory.create(Manifest.permission.CAMERA)
     private var pendingEvent: MessageComposerEvent? = null
     private val suggestionSearchTrigger = MutableStateFlow<Suggestion?>(null)
+    // This is used to clear the composer after sending an attachment from the attachment source picker, since a different TextEditorState will be
+    // created when we go back to this screen so we can't just clear it in the same recomposition
+    private var hasPendingClearMessageAction by mutableStateOf(false)
 
     // Used to disable some UI related elements in tests
     @VisibleForTesting(otherwise = VisibleForTesting.PRIVATE)
@@ -168,6 +173,14 @@ class MessageComposerPresenter(
         }
         val markdownTextEditorState = rememberMarkdownTextEditorState(initialText = null, initialFocus = false)
 
+        val textEditorState = rememberUpdatedState(
+            if (showTextFormatting) {
+                TextEditorState.Rich(richTextEditorState, roomInfo.isEncrypted == true)
+            } else {
+                TextEditorState.Markdown(markdownTextEditorState, roomInfo.isEncrypted == true)
+            }
+        )
+
         val cameraPermissionState = cameraPermissionPresenter.present()
 
         val canShareLocation = remember { mutableStateOf(false) }
@@ -176,16 +189,16 @@ class MessageComposerPresenter(
         }
 
         val galleryMediaPicker = mediaPickerProvider.registerGalleryPicker { uri, mimeType ->
-            handlePickedMedia(uri, mimeType)
+            handlePickedMedia(textEditorState, uri, mimeType)
         }
         val filesPicker = mediaPickerProvider.registerFilePicker(AnyMimeTypes) { uri, mimeType ->
-            handlePickedMedia(uri, mimeType ?: MimeTypes.OctetStream, sendAsFile = true)
+            handlePickedMedia(textEditorState, uri, mimeType ?: MimeTypes.OctetStream, sendAsFile = true)
         }
         val cameraPhotoPicker = mediaPickerProvider.registerCameraPhotoPicker { uri ->
-            handlePickedMedia(uri, MimeTypes.Jpeg)
+            handlePickedMedia(textEditorState, uri, MimeTypes.Jpeg)
         }
         val cameraVideoPicker = mediaPickerProvider.registerCameraVideoPicker { uri ->
-            handlePickedMedia(uri, MimeTypes.Mp4)
+            handlePickedMedia(textEditorState, uri, MimeTypes.Mp4)
         }
         val isFullScreen = rememberSaveable {
             mutableStateOf(false)
@@ -195,6 +208,19 @@ class MessageComposerPresenter(
         val sendTypingNotifications by remember {
             sessionPreferencesStore.isSendTypingNotificationsEnabled()
         }.collectAsState(initial = true)
+
+        // If we have a pending action to clear the message, do it now and clear the saved draft so it's not restored
+        LaunchedEffect(hasPendingClearMessageAction) {
+            if (hasPendingClearMessageAction) {
+                // Reset draft so it's not restored
+                val threadId = (timelineController.mainTimelineMode() as? Timeline.Mode.Thread)?.threadRootId
+                draftService.updateDraft(roomInfo.id, threadId, null, isVolatile = false)
+
+                // Then reset the editor state
+                textEditorState.value.reset()
+                pendingEvent = null
+            }
+        }
 
         LaunchedEffect(cameraPermissionState.permissionGranted) {
             if (cameraPermissionState.permissionGranted) {
@@ -220,14 +246,6 @@ class MessageComposerPresenter(
                 }
             }
         }
-
-        val textEditorState by rememberUpdatedState(
-            if (showTextFormatting) {
-                TextEditorState.Rich(richTextEditorState, roomInfo.isEncrypted == true)
-            } else {
-                TextEditorState.Markdown(markdownTextEditorState, roomInfo.isEncrypted == true)
-            }
-        )
 
         val slashCommandAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
 
@@ -396,7 +414,7 @@ class MessageComposerPresenter(
         }
 
         return MessageComposerState(
-            textEditorState = textEditorState,
+            textEditorState = textEditorState.value,
             isFullScreen = isFullScreen.value,
             mode = messageComposerContext.composerMode,
             showAttachmentSourcePicker = showAttachmentSourcePicker,
@@ -603,6 +621,7 @@ class MessageComposerPresenter(
     }
 
     private fun handlePickedMedia(
+        textEditorState: State<TextEditorState>,
         uri: Uri?,
         mimeType: String? = null,
         sendAsFile: Boolean = false,
@@ -616,7 +635,14 @@ class MessageComposerPresenter(
         )
         val mediaAttachment = Attachment.Media(localMedia, sendAsFile = sendAsFile)
         val inReplyToEventId = (messageComposerContext.composerMode as? MessageComposerMode.Reply)?.eventId
-        navigator.navigateToPreviewAttachments(persistentListOf(mediaAttachment), inReplyToEventId)
+        val message = textEditorState.value.messageMarkdown(permalinkBuilder)
+
+        navigator.navigateToPreviewAttachments(
+            caption = message,
+            attachments = persistentListOf(mediaAttachment),
+            inReplyToEventId = inReplyToEventId,
+            resultCallback = { mediaSent -> hasPendingClearMessageAction = mediaSent },
+        )
 
         // Reset composer since the attachment will be sent in a separate flow
         messageComposerContext.composerMode = MessageComposerMode.Normal
