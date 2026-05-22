@@ -21,6 +21,7 @@ import io.element.android.features.messages.impl.attachments.preview.imageeditor
 import io.element.android.features.messages.impl.attachments.preview.imageeditor.AttachmentImageEdits
 import io.element.android.features.messages.impl.attachments.preview.imageeditor.EditedLocalMedia
 import io.element.android.features.messages.impl.attachments.preview.imageeditor.NormalizedCropRect
+import io.element.android.features.messages.impl.attachments.preview.imageeditor.assertIsSimilarTo
 import io.element.android.features.messages.impl.attachments.video.MediaOptimizationSelectorState
 import io.element.android.features.messages.impl.attachments.video.VideoCompressionPresetSelector
 import io.element.android.features.messages.impl.attachments.video.VideoUploadEstimation
@@ -579,7 +580,7 @@ class AttachmentsPreviewPresenterTest {
 
             editorState.eventSink(AttachmentsPreviewEvent.RotateImageToTheLeft)
             val rotatedState = awaitItem()
-            assertThat(rotatedState.imageEditorState?.edits?.rotationQuarterTurns).isEqualTo(1)
+            assertThat(rotatedState.imageEditorState?.edits?.rotationQuarterTurns).isEqualTo(3)
 
             rotatedState.eventSink(AttachmentsPreviewEvent.ApplyImageEdits)
             assertThat(awaitItem().isApplyingImageEdits).isTrue()
@@ -630,9 +631,16 @@ class AttachmentsPreviewPresenterTest {
 
             appliedState.eventSink(AttachmentsPreviewEvent.OpenImageEditor)
             val reopenedState = consumeItemsUntilPredicate { it.imageEditorState != null }.last()
-            assertThat(reopenedState.imageEditorState?.localMedia?.uri).isEqualTo(originalLocalMedia.uri)
-            assertThat(reopenedState.imageEditorState?.edits?.cropRect).isEqualTo(cropRect)
-            assertThat(reopenedState.imageEditorState?.edits?.rotationDegrees).isEqualTo(90)
+            assertThat(reopenedState.imageEditorState!!.localMedia.uri).isEqualTo(originalLocalMedia.uri)
+            val rotatedCropRect = NormalizedCropRect(
+                left = cropRect.top,
+                top = 1f - cropRect.right,
+                right = cropRect.bottom,
+                bottom = 1f - cropRect.left,
+            )
+            reopenedState.imageEditorState.edits.cropRect.assertIsSimilarTo(rotatedCropRect)
+            assertThat(reopenedState.imageEditorState.edits.rotationQuarterTurns).isEqualTo(3)
+            assertThat(reopenedState.imageEditorState.edits.rotationDegrees).isEqualTo(270)
         }
     }
 

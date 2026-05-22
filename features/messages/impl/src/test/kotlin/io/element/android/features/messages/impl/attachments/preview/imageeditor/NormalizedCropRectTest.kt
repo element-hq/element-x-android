@@ -25,10 +25,14 @@ class NormalizedCropRectTest {
             deltaX = 0.3f,
             deltaY = 0.1f,
         )
-        assertThat(result.left).isEqualTo(rect.left)
-        assertThat(result.right).isEqualTo(rect.right)
-        assertThat(result.bottom).isEqualTo(rect.bottom)
-        assertThat(result.top).isWithin(0.0001f).of(0.3f)
+        result.assertIsSimilarTo(
+            NormalizedCropRect(
+                left = rect.left,
+                top = 0.3f,
+                right = rect.right,
+                bottom = rect.bottom,
+            )
+        )
     }
 
     @Test
@@ -38,10 +42,14 @@ class NormalizedCropRectTest {
             deltaX = 0.1f,
             deltaY = 0.3f,
         )
-        assertThat(result.top).isEqualTo(rect.top)
-        assertThat(result.right).isEqualTo(rect.right)
-        assertThat(result.bottom).isEqualTo(rect.bottom)
-        assertThat(result.left).isWithin(0.0001f).of(0.2f)
+        result.assertIsSimilarTo(
+            NormalizedCropRect(
+                left = 0.2f,
+                top = rect.top,
+                right = rect.right,
+                bottom = rect.bottom,
+            )
+        )
     }
 
     @Test
@@ -51,10 +59,15 @@ class NormalizedCropRectTest {
             deltaX = -0.1f,
             deltaY = 0.3f,
         )
-        assertThat(result.top).isEqualTo(rect.top)
-        assertThat(result.left).isEqualTo(rect.left)
-        assertThat(result.bottom).isEqualTo(rect.bottom)
-        assertThat(result.right).isWithin(0.0001f).of(0.6f)
+        val s = assertThat(result)
+        result.assertIsSimilarTo(
+            NormalizedCropRect(
+                left = rect.left,
+                top = rect.top,
+                right = 0.6f,
+                bottom = rect.bottom,
+            )
+        )
     }
 
     @Test
@@ -64,10 +77,14 @@ class NormalizedCropRectTest {
             deltaX = -0.1f,
             deltaY = -0.3f,
         )
-        assertThat(result.top).isEqualTo(rect.top)
-        assertThat(result.left).isEqualTo(rect.left)
-        assertThat(result.right).isEqualTo(rect.right)
-        assertThat(result.bottom).isWithin(0.0001f).of(0.5f)
+        result.assertIsSimilarTo(
+            NormalizedCropRect(
+                left = rect.left,
+                top = rect.top,
+                right = rect.right,
+                bottom = 0.5f,
+            )
+        )
     }
 
     @Test
@@ -77,10 +94,14 @@ class NormalizedCropRectTest {
             deltaX = 0.1f,
             deltaY = 0.1f,
         )
-        assertThat(result.top).isWithin(0.0001f).of(0.3f)
-        assertThat(result.left).isWithin(0.0001f).of(0.2f)
-        assertThat(result.right).isEqualTo(rect.right)
-        assertThat(result.bottom).isEqualTo(rect.bottom)
+        result.assertIsSimilarTo(
+            NormalizedCropRect(
+                left = 0.2f,
+                top = 0.3f,
+                right = rect.right,
+                bottom = rect.bottom,
+            )
+        )
     }
 
     @Test
@@ -90,10 +111,14 @@ class NormalizedCropRectTest {
             deltaX = -0.1f,
             deltaY = 0.1f,
         )
-        assertThat(result.top).isWithin(0.0001f).of(0.3f)
-        assertThat(result.right).isWithin(0.0001f).of(0.6f)
-        assertThat(result.left).isEqualTo(rect.left)
-        assertThat(result.bottom).isEqualTo(rect.bottom)
+        result.assertIsSimilarTo(
+            NormalizedCropRect(
+                left = rect.left,
+                top = 0.3f,
+                right = 0.6f,
+                bottom = rect.bottom,
+            )
+        )
     }
 
     @Test
@@ -103,10 +128,14 @@ class NormalizedCropRectTest {
             deltaX = 0.1f,
             deltaY = -0.1f,
         )
-        assertThat(result.bottom).isWithin(0.0001f).of(0.7f)
-        assertThat(result.left).isWithin(0.0001f).of(0.2f)
-        assertThat(result.top).isEqualTo(rect.top)
-        assertThat(result.right).isEqualTo(rect.right)
+        result.assertIsSimilarTo(
+            NormalizedCropRect(
+                left = 0.2f,
+                top = rect.top,
+                right = rect.right,
+                bottom = 0.7f,
+            )
+        )
     }
 
     @Test
@@ -116,10 +145,14 @@ class NormalizedCropRectTest {
             deltaX = -0.1f,
             deltaY = -0.1f,
         )
-        assertThat(result.bottom).isWithin(0.0001f).of(0.7f)
-        assertThat(result.right).isWithin(0.0001f).of(0.6f)
-        assertThat(result.top).isEqualTo(rect.top)
-        assertThat(result.left).isEqualTo(rect.left)
+        result.assertIsSimilarTo(
+            NormalizedCropRect(
+                left = rect.left,
+                top = rect.top,
+                right = 0.6f,
+                bottom = 0.7f,
+            )
+        )
     }
 
     @Test
@@ -129,9 +162,20 @@ class NormalizedCropRectTest {
             deltaX = 0.6f,
             deltaY = 0.6f,
         )
-        assertThat(result.left).isWithin(0.0001f).of(0.4f)
-        assertThat(result.top).isWithin(0.0001f).of(0.4f)
-        assertThat(result.right).isWithin(0.0001f).of(1.0f)
-        assertThat(result.bottom).isWithin(0.0001f).of(1.0f)
+        result.assertIsSimilarTo(
+            NormalizedCropRect(
+                left = 0.4f,
+                top = 0.4f,
+                right = 1.0f,
+                bottom = 1.0f,
+            )
+        )
     }
+}
+
+internal fun NormalizedCropRect.assertIsSimilarTo(expectedResult: NormalizedCropRect) {
+    assertThat(left).isWithin(0.0001f).of(expectedResult.left)
+    assertThat(top).isWithin(0.0001f).of(expectedResult.top)
+    assertThat(right).isWithin(0.0001f).of(expectedResult.right)
+    assertThat(bottom).isWithin(0.0001f).of(expectedResult.bottom)
 }
