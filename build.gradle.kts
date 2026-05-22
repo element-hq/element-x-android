@@ -31,7 +31,6 @@ tasks.register<Delete>("clean").configure {
 }
 
 private val catalog = the<LibrariesForLibs>()
-private val ktLintVersion = catalog.versions.ktlint.get()
 
 allprojects {
     // Detekt
@@ -65,7 +64,7 @@ allprojects {
 
     // See https://github.com/JLLeitschuh/ktlint-gradle#configuration
     configure<org.jlleitschuh.gradle.ktlint.KtlintExtension> {
-        version = ktLintVersion
+        version = catalog.versions.ktlint.get()
         android = true
         ignoreFailures = false
         enableExperimentalRules = true
