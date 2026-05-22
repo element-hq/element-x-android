@@ -18,7 +18,7 @@ data class AttachmentImageEditorState(
     val localMedia: LocalMedia,
     val edits: AttachmentImageEdits,
     // For preview only
-    val forceDrawGuidelines: Boolean = false,
+    val forceDrawGuidelines: Boolean,
 )
 
 @Immutable
