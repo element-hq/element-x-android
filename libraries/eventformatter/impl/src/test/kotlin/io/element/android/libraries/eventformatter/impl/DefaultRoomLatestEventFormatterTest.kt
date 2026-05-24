@@ -103,7 +103,7 @@ class DefaultRoomLatestEventFormatterTest {
         val info = ImageInfo(null, null, null, null, null, null, null)
         val message = createLatestEvent(false, null, aStickerContent(body, info, aMediaSource(url = "url")))
         val result = formatter.format(message, false)
-        val expectedBody = someoneElseId.value + ": Sticker (a sticker body)"
+        val expectedBody = someoneElseId.value + ": Sticker: a sticker body"
         assertThat(result.toString()).isEqualTo(expectedBody)
     }
 
@@ -909,10 +909,10 @@ class DefaultRoomLatestEventFormatterTest {
         val pollContent = aPollContent()
 
         val mineContentEvent = createLatestEvent(sentByYou = true, senderDisplayName = "Alice", content = pollContent)
-        assertThat(formatter.format(mineContentEvent, true)).isEqualTo("Poll: Do you like polls?")
+        assertThat(formatter.format(mineContentEvent, true).toString()).isEqualTo("Poll: Do you like polls?")
 
         val contentEvent = createLatestEvent(sentByYou = false, senderDisplayName = "Bob", content = pollContent)
-        assertThat(formatter.format(contentEvent, true)).isEqualTo("Poll: Do you like polls?")
+        assertThat(formatter.format(contentEvent, true).toString()).isEqualTo("Poll: Do you like polls?")
     }
 
     @Test
