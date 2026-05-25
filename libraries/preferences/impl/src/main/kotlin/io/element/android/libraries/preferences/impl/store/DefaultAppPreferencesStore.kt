@@ -32,6 +32,7 @@ private val timelineMediaPreviewValueKey = stringPreferencesKey("timelineMediaPr
 private val liveLocationMinimumDistanceUpdateKey = intPreferencesKey("liveLocationMinimumDistanceUpdate")
 private val logLevelKey = stringPreferencesKey("logLevel")
 private val traceLogPacksKey = stringPreferencesKey("traceLogPacks")
+private val useCustomCertificatesKey = booleanPreferencesKey("useCustomCertificates")
 
 @ContributesBinding(AppScope::class)
 class DefaultAppPreferencesStore(
@@ -155,6 +156,22 @@ class DefaultAppPreferencesStore(
                 ?.mapNotNull { value -> TraceLogPack.entries.find { it.key == value } }
                 ?.toSet()
                 ?: emptySet()
+        }
+    }
+
+    override suspend fun setUseCustomCertificates(enabled: Boolean?) {
+        store.edit { prefs ->
+            if (enabled != null) {
+                prefs[useCustomCertificatesKey] = enabled
+            } else {
+                prefs.remove(useCustomCertificatesKey)
+            }
+        }
+    }
+
+    override fun getUseCustomCertificatesFlow(): Flow<Boolean?> {
+        return store.data.map { prefs ->
+            prefs[useCustomCertificatesKey]
         }
     }
 

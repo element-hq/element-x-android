@@ -65,6 +65,10 @@ class AppDeveloperSettingsPresenter(
                 .collectLatest { value = it.toImmutableList() }
         }
 
+        val useCustomCertificates by remember {
+            appPreferencesStore.getUseCustomCertificatesFlow()
+        }.collectAsState(initial = null)
+
         LaunchedEffect(Unit) {
             featureFlagService.getAvailableFeatures()
                 .forEach { feature ->
@@ -98,6 +102,9 @@ class AppDeveloperSettingsPresenter(
                     }
                     appPreferencesStore.setTracingLogPacks(currentPacks)
                 }
+                is AppDeveloperSettingsEvent.SetUseCustomCertificates -> coroutineScope.launch {
+                    appPreferencesStore.setUseCustomCertificates(if (event.enabled) true else false)
+                }
             }
         }
 
@@ -110,6 +117,7 @@ class AppDeveloperSettingsPresenter(
             ),
             tracingLogLevel = tracingLogLevel,
             tracingLogPacks = tracingLogPacks,
+            useCustomCertificates = useCustomCertificates,
             eventSink = ::handleEvent,
         )
     }

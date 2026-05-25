@@ -27,6 +27,22 @@ class DefaultUserCertificatesProvider : UserCertificatesProvider {
      * @return A list of byte arrays where each byte array is a single user-installed certificate
      *         in encoded form.
      */
+    override fun hasCertificates(): Boolean {
+        val keyStore: KeyStore = try {
+            KeyStore.getInstance("AndroidCAStore")
+        } catch (e: KeyStoreException) {
+            Timber.w(e, "Failed to get AndroidCAStore keystore")
+            return false
+        }
+        return try {
+            keyStore.load(null)
+            keyStore.aliases().toList().any { alias -> alias.startsWith("user") }
+        } catch (e: Exception) {
+            Timber.w(e, "Failed to load and get aliases AndroidCAStore keystore")
+            false
+        }
+    }
+
     override fun provides(): List<ByteArray> {
         // At least for API 34 the `AndroidCAStore` `Keystore` type contained user certificates as well.
         // I have not found this to be documented anywhere.

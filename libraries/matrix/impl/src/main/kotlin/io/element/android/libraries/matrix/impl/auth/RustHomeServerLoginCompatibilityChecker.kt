@@ -14,18 +14,27 @@ import io.element.android.libraries.core.extensions.runCatchingExceptions
 import io.element.android.libraries.matrix.api.auth.HomeServerLoginCompatibilityChecker
 import io.element.android.libraries.matrix.impl.ClientBuilderProvider
 import io.element.android.libraries.matrix.impl.certificates.UserCertificatesProvider
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import kotlinx.coroutines.flow.first
 import timber.log.Timber
 
 @ContributesBinding(AppScope::class)
 class RustHomeServerLoginCompatibilityChecker(
     private val clientBuilderProvider: ClientBuilderProvider,
     private val userCertificatesProvider: UserCertificatesProvider,
+    private val appPreferencesStore: AppPreferencesStore,
     ) : HomeServerLoginCompatibilityChecker {
     override suspend fun check(url: String): Result<Boolean> = runCatchingExceptions {
         clientBuilderProvider.provide()
             .inMemoryStore()
             .serverNameOrHomeserverUrl(url)
-            .addRootCertificates(userCertificatesProvider.provides())
+            .run {
+                if (appPreferencesStore.getUseCustomCertificatesFlow().first() == true) {
+                    addRootCertificates(userCertificatesProvider.provides())
+                } else {
+                    this
+                }
+            }
             .build()
             .use {
                 it.homeserverLoginDetails()

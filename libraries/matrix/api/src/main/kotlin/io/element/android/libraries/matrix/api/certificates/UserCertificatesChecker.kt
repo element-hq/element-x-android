@@ -5,9 +5,8 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.matrix.impl.certificates
+package io.element.android.libraries.matrix.api.certificates
 
-interface UserCertificatesProvider {
-    fun provides(): List<ByteArray>
-    fun hasCertificates(): Boolean
+interface UserCertificatesChecker {
+    suspend fun hasCertificates(): Boolean
 }

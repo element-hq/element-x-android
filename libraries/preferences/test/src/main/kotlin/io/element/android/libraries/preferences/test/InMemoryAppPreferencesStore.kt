@@ -24,6 +24,7 @@ class InMemoryAppPreferencesStore(
     liveLocationMinimumDistanceUpdate: Int = 10,
     logLevel: LogLevel = LogLevel.INFO,
     traceLockPacks: Set<TraceLogPack> = emptySet(),
+    useCustomCertificates: Boolean? = null,
 ) : AppPreferencesStore {
     private val isDeveloperModeEnabled = MutableStateFlow(isDeveloperModeEnabled)
     private val customElementCallBaseUrl = MutableStateFlow(customElementCallBaseUrl)
@@ -32,6 +33,7 @@ class InMemoryAppPreferencesStore(
     private val logLevel = MutableStateFlow(logLevel)
     private val tracingLogPacks = MutableStateFlow(traceLockPacks)
     private val hideInviteAvatars = MutableStateFlow(hideInviteAvatars)
+    private val useCustomCertificates = MutableStateFlow<Boolean?>(useCustomCertificates)
     private val timelineMediaPreviewValue = MutableStateFlow(timelineMediaPreviewValue)
 
     override suspend fun setDeveloperModeEnabled(enabled: Boolean) {
@@ -100,6 +102,14 @@ class InMemoryAppPreferencesStore(
 
     override fun getTracingLogPacksFlow(): Flow<Set<TraceLogPack>> {
         return tracingLogPacks
+    }
+
+    override suspend fun setUseCustomCertificates(enabled: Boolean?) {
+        useCustomCertificates.value = enabled
+    }
+
+    override fun getUseCustomCertificatesFlow(): Flow<Boolean?> {
+        return useCustomCertificates
     }
 
     override suspend fun reset() {

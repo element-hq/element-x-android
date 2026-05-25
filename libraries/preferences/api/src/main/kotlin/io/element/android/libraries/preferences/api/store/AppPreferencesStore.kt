@@ -41,5 +41,8 @@ interface AppPreferencesStore {
     suspend fun setTracingLogPacks(targets: Set<TraceLogPack>)
     fun getTracingLogPacksFlow(): Flow<Set<TraceLogPack>>
 
+    suspend fun setUseCustomCertificates(enabled: Boolean?)
+    fun getUseCustomCertificatesFlow(): Flow<Boolean?>
+
     suspend fun reset()
 }

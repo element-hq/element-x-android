@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="screen_user_certificates_dialog_title">Trust user CA certificates?</string>
+    <string name="screen_user_certificates_dialog_content">Your device has user-installed CA certificates. Do you want %1$s to trust them? User CA certificates can let others intercept or decrypt your secure network traffic. If you don't recognize a certificate or its owner, remove it in the device settings.</string>
+    <string name="screen_user_certificates_dialog_confirm">Trust certificates</string>
+</resources>

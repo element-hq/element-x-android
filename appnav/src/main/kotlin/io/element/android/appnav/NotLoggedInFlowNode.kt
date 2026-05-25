@@ -13,6 +13,7 @@ package io.element.android.appnav
 import android.os.Parcelable
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.lifecycle.lifecycleScope
 import coil3.SingletonImageLoader
 import coil3.annotation.DelicateCoilApi
 import com.bumble.appyx.core.lifecycle.subscribe
@@ -20,21 +21,29 @@ import com.bumble.appyx.core.modality.BuildContext
 import com.bumble.appyx.core.node.Node
 import com.bumble.appyx.core.plugin.Plugin
 import com.bumble.appyx.navmodel.backstack.BackStack
+import com.bumble.appyx.navmodel.backstack.operation.pop
+import com.bumble.appyx.navmodel.backstack.operation.push
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.Assisted
 import dev.zacsweers.metro.AssistedInject
 import io.element.android.annotations.ContributesNode
+import io.element.android.appnav.certificates.CertificateConsentNode
 import io.element.android.features.login.api.LoginEntryPoint
 import io.element.android.features.login.api.LoginParams
 import io.element.android.libraries.architecture.BackstackView
 import io.element.android.libraries.architecture.BaseFlowNode
 import io.element.android.libraries.architecture.NodeInputs
 import io.element.android.libraries.architecture.callback
+import io.element.android.libraries.architecture.createNode
 import io.element.android.libraries.architecture.inputs
 import io.element.android.libraries.designsystem.utils.ForceOrientationInMobileDevices
 import io.element.android.libraries.designsystem.utils.ScreenOrientation
+import io.element.android.libraries.matrix.api.certificates.UserCertificatesChecker
 import io.element.android.libraries.matrix.ui.media.ImageLoaderHolder
+import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import io.element.android.services.analytics.api.watchers.AnalyticsColdStartWatcher
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.launch
 import kotlinx.parcelize.Parcelize
 
 @ContributesNode(AppScope::class)
@@ -45,6 +54,8 @@ class NotLoggedInFlowNode(
     private val loginEntryPoint: LoginEntryPoint,
     private val imageLoaderHolder: ImageLoaderHolder,
     private val analyticsColdStartWatcher: AnalyticsColdStartWatcher,
+    private val userCertificatesChecker: UserCertificatesChecker,
+    private val appPreferencesStore: AppPreferencesStore,
 ) : BaseFlowNode<NotLoggedInFlowNode.NavTarget>(
     backstack = BackStack(
         initialElement = NavTarget.Root,
@@ -73,15 +84,39 @@ class NotLoggedInFlowNode(
                 SingletonImageLoader.setUnsafe(imageLoaderHolder.get())
             },
         )
+        lifecycleScope.launch {
+            val useCustomCertificates = appPreferencesStore.getUseCustomCertificatesFlow().first()
+            if (useCustomCertificates == null) {
+                if (userCertificatesChecker.hasCertificates()) {
+                    backstack.push(NavTarget.CertificateConsent)
+                } else {
+                    appPreferencesStore.setUseCustomCertificates(false)
+                }
+            }
+        }
     }
 
     sealed interface NavTarget : Parcelable {
         @Parcelize
         data object Root : NavTarget
+
+        @Parcelize
+        data object CertificateConsent : NavTarget
     }
 
     override fun resolve(navTarget: NavTarget, buildContext: BuildContext): Node {
         return when (navTarget) {
+            NavTarget.CertificateConsent -> {
+                val callback = object : CertificateConsentNode.Callback {
+                    override fun onConsentResult(accepted: Boolean) {
+                        lifecycleScope.launch {
+                            appPreferencesStore.setUseCustomCertificates(accepted)
+                        }
+                        backstack.pop()
+                    }
+                }
+                createNode<CertificateConsentNode>(buildContext, plugins = listOf(callback))
+            }
             NavTarget.Root -> {
                 val callback = object : LoginEntryPoint.Callback {
                     override fun navigateToBugReport() {

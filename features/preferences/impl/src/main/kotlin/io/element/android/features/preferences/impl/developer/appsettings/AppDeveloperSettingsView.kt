@@ -79,6 +79,15 @@ fun AppDeveloperSettingsView(
                 )
             }
         }
+        PreferenceCategory(title = "Certificates") {
+            PreferenceSwitch(
+                title = "Use user CA certificates",
+                isChecked = state.useCustomCertificates == true,
+                onCheckedChange = { enabled ->
+                    state.eventSink(AppDeveloperSettingsEvent.SetUseCustomCertificates(enabled))
+                }
+            )
+        }
         PreferenceCategory(title = "Showkase") {
             ListItem(
                 headlineContent = {

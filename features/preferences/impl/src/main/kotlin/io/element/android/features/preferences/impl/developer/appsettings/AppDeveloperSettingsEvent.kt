@@ -16,4 +16,5 @@ sealed interface AppDeveloperSettingsEvent {
     data class SetCustomElementCallBaseUrl(val baseUrl: String?) : AppDeveloperSettingsEvent
     data class SetTracingLogLevel(val logLevel: LogLevelItem) : AppDeveloperSettingsEvent
     data class ToggleTracingLogPack(val logPack: TraceLogPack, val enabled: Boolean) : AppDeveloperSettingsEvent
+    data class SetUseCustomCertificates(val enabled: Boolean) : AppDeveloperSettingsEvent
 }
