@@ -72,7 +72,6 @@ class RustMatrixClientFactory(
         sessionStore = sessionStore,
         appCoroutineScope = appCoroutineScope,
         analyticsService = analyticsService,
-        coroutineDispatchers = coroutineDispatchers
     )
 
     suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
