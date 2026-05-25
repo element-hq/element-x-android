@@ -65,10 +65,22 @@ class RustClientSessionDelegate(
 
     // This always runs on a background thread, so we *can* do blocking calls here, although we should avoid doing heavy work
     override fun saveSessionInKeychain(session: Session) {
+        Timber.tag(loggerTag.value).i("Saving new session info for user ${session.userId} after a token refresh")
         runCatchingExceptions {
             val existingData = runBlocking { sessionStore.getSession(session.userId) } ?: return
+
+            if (existingData.accessToken == session.accessToken) {
+                Timber.tag(loggerTag.value).e("Access token is the same as the one already stored, this should not happen after a token refresh!")
+                return
+            }
+
+            if (existingData.refreshToken == session.refreshToken) {
+                Timber.tag(loggerTag.value).e("Refresh token is the same as the one already stored, this should not happen after a token refresh!")
+                return
+            }
+
             val (anonymizedAccessToken, anonymizedRefreshToken) = session.anonymizedTokens()
-            Timber.tag(loggerTag.value).d(
+            Timber.tag(loggerTag.value).i(
                 "Saving new session data with token: access token '$anonymizedAccessToken' and refresh token '$anonymizedRefreshToken'. " +
                     "Was token valid: ${existingData.isTokenValid}"
             )
@@ -79,7 +91,7 @@ class RustClientSessionDelegate(
                 sessionPaths = existingData.getSessionPaths(),
             )
             runBlocking { sessionStore.updateData(newData) }
-            Timber.tag(loggerTag.value).d("Saved new session data with access token: '$anonymizedAccessToken'.")
+            Timber.tag(loggerTag.value).i("Saved new session data.")
         }.onFailure {
             Timber.tag(loggerTag.value).e(it, "Failed to save new session data.")
         }
