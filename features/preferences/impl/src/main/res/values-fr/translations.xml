@@ -80,6 +80,7 @@ Si vous continuez, il est possible que certains de vos paramètres soient modifi
   <string name="screen_notification_settings_mode_mentions">"Mentions"</string>
   <string name="screen_notification_settings_notification_section_title">"Prévenez-moi pour"</string>
   <string name="screen_notification_settings_room_mention_label">"Prévenez-moi si un message contient \"@room\""</string>
+  <string name="screen_notification_settings_sound_custom_sound_button_title">"Son personnalisé…"</string>
   <string name="screen_notification_settings_system_notifications_action_required">"Pour recevoir des notifications, veuillez modifier votre %1$s."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"paramètres du système"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Les notifications du système sont désactivées"</string>

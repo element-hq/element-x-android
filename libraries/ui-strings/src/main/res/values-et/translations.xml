@@ -9,6 +9,7 @@
     <item quantity="one">"%1$d number sisestatud"</item>
     <item quantity="other">"%1$d numbrit sisestatud"</item>
   </plurals>
+  <string name="a11y_duration">"Kestus: %1$s"</string>
   <string name="a11y_edit_avatar">"Muuda tunnuspilti"</string>
   <string name="a11y_edit_room_address_hint">"Täisaadress saab olema %1$s"</string>
   <string name="a11y_encryption_details">"Krüptimise üksikasjad"</string>
@@ -33,6 +34,7 @@
   <string name="a11y_playback_speed">"Taasesituse kiirus"</string>
   <string name="a11y_poll">"Küsitlus"</string>
   <string name="a11y_poll_end">"Lõppenud küsitlus"</string>
+  <string name="a11y_position">"Asukoht: %1$s"</string>
   <string name="a11y_qr_code">"QR-kood"</string>
   <string name="a11y_react_with">"Reageeri emotikoniga %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Reageeri mõne muu emotikoniga"</string>
@@ -48,12 +50,15 @@
   <string name="a11y_room_avatar">"Jututoa tunnuspilt"</string>
   <string name="a11y_send_files">"Saada faile"</string>
   <string name="a11y_sender_location">"Saatja asukoht"</string>
+  <string name="a11y_sent_by_sender_at_date">"%1$s saatis selle %2$s"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Palun tee see ajapiiranguga toiming, sul on aega üks minut"</string>
   <string name="a11y_settings_with_required_action">"Seaded, vajalik on tegevus"</string>
   <string name="a11y_show_password">"Näita salasõna"</string>
   <string name="a11y_start_call">"Helista"</string>
   <string name="a11y_start_video_call">"Alusta videokõnet"</string>
   <string name="a11y_start_voice_call">"Helista"</string>
+  <string name="a11y_thread_in_room">"Jutulõng „%1$s“ jututoas"</string>
+  <string name="a11y_threads_in_room">"Jutulõngad „%1$s“ jututoas"</string>
   <string name="a11y_tombstoned_room">"Lõpetatuks märgitud jututuba"</string>
   <string name="a11y_user_avatar">"Kasutaja tunnuspilt"</string>
   <string name="a11y_user_menu">"Kasutajamenüü"</string>

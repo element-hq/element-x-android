@@ -2,4 +2,5 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
   <string name="screen_share_location_live_location_disclaimer_title">"Reaaliaikainen sijaintihistoriasi tallennetaan huoneeseen ja on jäsenten nähtävissä istunnon päätyttyä."</string>
   <string name="screen_share_location_live_location_duration_picker_title">"Valitse, kuinka kauan haluat jakaa reaaliaikaisen sijaintisi."</string>
+  <string name="screen_share_location_live_location_missing_permissions">"Sinulla ei ole oikeuksia jakaa reaaliaikaista sijaintiasi tässä huoneessa"</string>
 </resources>

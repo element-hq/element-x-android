@@ -9,13 +9,16 @@
     <item quantity="one">"%1$d numero syötetty"</item>
     <item quantity="other">"%1$d numeroa syötetty"</item>
   </plurals>
+  <string name="a11y_duration">"Kesto: %1$s"</string>
   <string name="a11y_edit_avatar">"Muokkaa avataria"</string>
   <string name="a11y_edit_room_address_hint">"Täysi osoite tulee olemaan %1$s"</string>
   <string name="a11y_encryption_details">"Salauksen tiedot"</string>
   <string name="a11y_expand_message_text_field">"Laajenna viestin tekstikenttä"</string>
   <string name="a11y_hide_password">"Piilota salasana"</string>
+  <string name="a11y_info">"Tiedot"</string>
   <string name="a11y_join_call">"Liity puheluun"</string>
   <string name="a11y_jump_to_bottom">"Siirry loppuun"</string>
+  <string name="a11y_jump_to_unread">"Siirry lukemattomiin"</string>
   <string name="a11y_move_the_map_to_my_location">"Siirrä kartta sijaintiini"</string>
   <string name="a11y_notifications_mentions_only">"Vain maininnat"</string>
   <string name="a11y_notifications_muted">"Mykistetty"</string>
@@ -32,6 +35,7 @@
   <string name="a11y_playback_speed">"Toistonopeus"</string>
   <string name="a11y_poll">"Kysely"</string>
   <string name="a11y_poll_end">"Päättynyt kysely"</string>
+  <string name="a11y_position">"Sijainti: %1$s"</string>
   <string name="a11y_qr_code">"QR-koodi"</string>
   <string name="a11y_react_with">"Lisää reaktio: %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Reagoi muilla emojeilla"</string>
@@ -47,11 +51,15 @@
   <string name="a11y_room_avatar">"Huoneen avatar"</string>
   <string name="a11y_send_files">"Lähetä tiedostoja"</string>
   <string name="a11y_sender_location">"Lähettäjän sijainti"</string>
+  <string name="a11y_sent_by_sender_at_date">"Lähettänyt %1$s aikaan %2$s"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Aikarajoitettu toimenpide vaaditaan, sinulla on yksi minuutti aikaa vahvistaa"</string>
+  <string name="a11y_settings_with_required_action">"Asetukset, toimenpide vaaditaan"</string>
   <string name="a11y_show_password">"Näytä salasana"</string>
   <string name="a11y_start_call">"Aloita puhelu"</string>
   <string name="a11y_start_video_call">"Aloita videopuhelu"</string>
   <string name="a11y_start_voice_call">"Aloita äänipuhelu"</string>
+  <string name="a11y_thread_in_room">"Viestiketju huoneessa %1$s"</string>
+  <string name="a11y_threads_in_room">"Viestiketjut huoneessa %1$s"</string>
   <string name="a11y_tombstoned_room">"Haudattu huone"</string>
   <string name="a11y_user_avatar">"Käyttäjän avatar"</string>
   <string name="a11y_user_menu">"Käyttäjävalikko"</string>
@@ -69,6 +77,7 @@
   <string name="action_call">"Soita"</string>
   <string name="action_cancel">"Peruuta"</string>
   <string name="action_cancel_for_now">"Peruuta toistaiseksi"</string>
+  <string name="action_choose_file">"Valitse tiedosto"</string>
   <string name="action_choose_photo">"Valitse kuva"</string>
   <string name="action_clear">"Tyhjennä"</string>
   <string name="action_close">"Sulje"</string>
@@ -88,12 +97,15 @@
   <string name="action_deactivate_account">"Deaktivoi tili"</string>
   <string name="action_decline">"Hylkää"</string>
   <string name="action_decline_and_block">"Hylkää ja estä"</string>
+  <string name="action_delete">"Poista"</string>
+  <string name="action_delete_account">"Poista tili"</string>
   <string name="action_delete_poll">"Poista kysely"</string>
   <string name="action_deselect_all">"Poista kaikki valinnat"</string>
   <string name="action_disable">"Poista käytöstä"</string>
   <string name="action_discard">"Hylkää"</string>
   <string name="action_dismiss">"Sulje"</string>
   <string name="action_done">"Valmis"</string>
+  <string name="action_download">"Lataa"</string>
   <string name="action_edit">"Muokkaa"</string>
   <string name="action_edit_caption">"Muokkaa kuvatekstiä"</string>
   <string name="action_edit_poll">"Muokkaa kyselyä"</string>
@@ -200,7 +212,9 @@
   <string name="common_beta">"Beeta"</string>
   <string name="common_blocked_users">"Estetyt käyttäjät"</string>
   <string name="common_bubbles">"Kuplat"</string>
+  <string name="common_call_declined">"Puhelu hylätty"</string>
   <string name="common_call_started">"Puhelu alkoi"</string>
+  <string name="common_call_you_declined">"Hylkäsit puhelun"</string>
   <string name="common_chat_backup">"Keskustelujen varmuuskopiointi"</string>
   <string name="common_copied_to_clipboard">"Kopioitu leikepöydälle"</string>
   <string name="common_copyright">"Tekijänoikeudet"</string>
@@ -456,6 +470,9 @@ Haluatko varmasti jatkaa?"</string>
   <string name="error_unknown">"Anteeksi, tapahtui virhe"</string>
   <string name="invite_friends_rich_title">"🔐️ Liity seuraani %1$s -sovelluksessa"</string>
   <string name="invite_friends_text">"Hei, keskustele kanssani %1$s -sovelluksessa: %2$s"</string>
+  <string name="live_location_sharing_foreground_service_channel_title_android">"Reaaliaikaisen sijainnin jakaminen"</string>
+  <string name="live_location_sharing_foreground_service_message_android">"Sijainnin jakaminen käynnissä"</string>
+  <string name="live_location_sharing_foreground_service_title_android">"%1$s Reaaliaikainen sijainti"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Raivostunut ravistaminen ilmoittaa virheestä"</string>
   <string name="screen_bug_report_a11y_screenshot">"Näyttökuva"</string>
@@ -463,6 +480,10 @@ Haluatko varmasti jatkaa?"</string>
   <string name="screen_create_poll_options_section_title">"Vaihtoehdot"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Poista %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Asetukset"</string>
+  <plurals name="screen_image_edition_a11y_rotation_state">
+    <item quantity="one">"%1$d aste"</item>
+    <item quantity="other">"%1$d astetta"</item>
+  </plurals>
   <string name="screen_live_location_sheet_nobody_sharing">"Kukaan ei jaa sijaintiaan"</string>
   <string name="screen_live_location_sheet_sharing_live_location">"Jaetaan reaaliaikaista sijaintia"</string>
   <plurals name="screen_live_location_sheet_subtitle">

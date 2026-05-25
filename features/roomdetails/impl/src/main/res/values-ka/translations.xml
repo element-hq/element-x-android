@@ -94,4 +94,6 @@
   <string name="screen_room_roles_and_permissions_roles_header">"როლები"</string>
   <string name="screen_room_roles_and_permissions_room_details">"ოთახის დეტალები"</string>
   <string name="screen_room_roles_and_permissions_title">"როლები და ნებართვები"</string>
+  <string name="screen_roomlist_mark_as_read">"წაკითხულად მონიშვნა"</string>
+  <string name="screen_roomlist_mark_as_unread">"წაუკითხავად მონიშვნა"</string>
 </resources>

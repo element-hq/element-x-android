@@ -132,6 +132,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Roller"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Detaljer om rummet"</string>
   <string name="screen_room_roles_and_permissions_title">"Roller og tilladelser"</string>
+  <string name="screen_roomlist_mark_as_read">"Marker som læst"</string>
+  <string name="screen_roomlist_mark_as_unread">"Marker som ulæst"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Tilføj adresse"</string>
   <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Alle i autoriserede klynger kan deltage, men alle andre skal anmode om adgang."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Alle skal anmode om adgang."</string>
