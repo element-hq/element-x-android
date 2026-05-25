@@ -276,7 +276,7 @@ class AttachmentsPreviewPresenter(
                         imageEditorState = AttachmentImageEditorState(
                             localMedia = originalLocalMedia,
                             edits = appliedImageEdits,
-                            forceDrawGuidelines = false,
+                            previewDebug = false,
                         )
                     }
                 }

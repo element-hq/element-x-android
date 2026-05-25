@@ -67,6 +67,7 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.R
 import io.element.android.libraries.designsystem.components.button.BackButton
 import io.element.android.libraries.designsystem.preview.ElementPreviewDark
+import io.element.android.libraries.designsystem.text.toPx
 import io.element.android.libraries.designsystem.theme.components.Icon
 import io.element.android.libraries.designsystem.theme.components.IconButton
 import io.element.android.libraries.designsystem.theme.components.Scaffold
@@ -75,6 +76,10 @@ import io.element.android.libraries.designsystem.theme.components.TextButton
 import io.element.android.libraries.designsystem.theme.components.TopAppBar
 import io.element.android.libraries.designsystem.utils.CommonDrawables
 import io.element.android.libraries.ui.strings.CommonStrings
+import kotlin.math.min
+
+private val minHandleTouchRadius = 16.dp
+private val maxHandleTouchRadius = 56.dp
 
 /**
  * Ref: https://www.figma.com/design/zftpgS6LjiczobJZ1GUNpt/Updates-to-Media---File-Upload?node-id=51-3539
@@ -274,11 +279,20 @@ private fun BoxScope.CropEditorCanvas(
                 )
             }
         }
-
-        val touchRadius = 56.dp
+        val minHandleTouchRadiusPx = minHandleTouchRadius.toPx()
+        val maxHandleTouchRadiusPx = maxHandleTouchRadius.toPx()
+        val touchRadiusPx by rememberUpdatedState(
+            (min(
+                state.edits.cropRect.width * imageRect.width,
+                state.edits.cropRect.height * imageRect.height,
+            ) / 4f).coerceIn(
+                minHandleTouchRadiusPx,
+                maxHandleTouchRadiusPx,
+            )
+        )
         var dragTarget by remember { mutableStateOf<CropDragTarget?>(null) }
         val latestCropRect by rememberUpdatedState(state.edits.cropRect)
-        val drawGuidelines = dragTarget == CropDragTarget.Move || state.forceDrawGuidelines
+        val drawGuidelines = dragTarget == CropDragTarget.Move || state.previewDebug
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -290,7 +304,7 @@ private fun BoxScope.CropEditorCanvas(
                                 imageOffset = imageRect.topLeft,
                                 cropRect = latestCropRect,
                                 canvasSize = Size(imageRect.width, imageRect.height),
-                                handleTouchRadius = touchRadius.toPx(),
+                                handleTouchRadius = touchRadiusPx,
                             )
                         },
                         onDragCancel = {
@@ -317,6 +331,9 @@ private fun BoxScope.CropEditorCanvas(
                 imageSize = DpSize(displayedWidthDp, displayedHeightDp),
                 cropRect = state.edits.cropRect,
                 drawGuidelines = drawGuidelines,
+                previewDebug = state.previewDebug,
+                touchRadiusPx = touchRadiusPx,
+                dragTarget = dragTarget,
             )
         }
     }
@@ -327,6 +344,9 @@ private fun CropOverlay(
     imageSize: DpSize,
     cropRect: NormalizedCropRect,
     drawGuidelines: Boolean,
+    previewDebug: Boolean,
+    touchRadiusPx: Float,
+    dragTarget: CropDragTarget?,
 ) {
     val borderColor = ElementTheme.colors.iconPrimary
     val guideColor = ElementTheme.colors.iconPrimary
@@ -459,6 +479,32 @@ private fun CropOverlay(
             handleLength = handleLength,
             color = handleColor,
         )
+
+        if (previewDebug) {
+            // Draw disk around touchable area
+            listOf(
+                CropDragTarget.Edge.Top,
+                CropDragTarget.Edge.Right,
+                CropDragTarget.Edge.Bottom,
+                CropDragTarget.Edge.Left,
+                CropDragTarget.Corner.TopLeft,
+                CropDragTarget.Corner.TopRight,
+                CropDragTarget.Corner.BottomRight,
+                CropDragTarget.Corner.BottomLeft,
+                CropDragTarget.Move,
+            ).forEach { target ->
+                val color = when (target) {
+                    is CropDragTarget.Move -> Color.Red
+                    is CropDragTarget.Corner -> Color.Blue
+                    is CropDragTarget.Edge -> Color.Green
+                }.copy(alpha = if (dragTarget == target) 9f else 0.5f)
+                drawCircle(
+                    color = color,
+                    radius = touchRadiusPx,
+                    center = computeOffset(target, cropRect, Size(size.width, size.height)),
+                )
+            }
+        }
     }
 }
 
@@ -482,17 +528,20 @@ private fun detectDragTarget(
     canvasSize: Size,
     handleTouchRadius: Float,
 ): CropDragTarget? {
-    val corners = mapOf(
-        CropDragTarget.Corner.TopLeft to Offset(cropRect.left * canvasSize.width, cropRect.top * canvasSize.height),
-        CropDragTarget.Edge.Top to Offset((cropRect.left + cropRect.right) * canvasSize.width / 2f, cropRect.top * canvasSize.height),
-        CropDragTarget.Corner.TopRight to Offset(cropRect.right * canvasSize.width, cropRect.top * canvasSize.height),
-        CropDragTarget.Edge.Right to Offset(cropRect.right * canvasSize.width, (cropRect.top + cropRect.bottom) * canvasSize.height / 2f),
-        CropDragTarget.Corner.BottomRight to Offset(cropRect.right * canvasSize.width, cropRect.bottom * canvasSize.height),
-        CropDragTarget.Edge.Bottom to Offset((cropRect.left + cropRect.right) * canvasSize.width / 2f, cropRect.bottom * canvasSize.height),
-        CropDragTarget.Corner.BottomLeft to Offset(cropRect.left * canvasSize.width, cropRect.bottom * canvasSize.height),
-        CropDragTarget.Edge.Left to Offset(cropRect.left * canvasSize.width, (cropRect.top + cropRect.bottom) * canvasSize.height / 2f),
+    // Give priority on Move (extra detection of the center of crop area)
+    // to ensure that user can move a small crop, then to corners and at last to edges.
+    val handlesArea = mapOf(
+        CropDragTarget.Move to computeOffset(CropDragTarget.Move, cropRect, canvasSize),
+        CropDragTarget.Corner.TopLeft to computeOffset(CropDragTarget.Corner.TopLeft, cropRect, canvasSize),
+        CropDragTarget.Corner.TopRight to computeOffset(CropDragTarget.Corner.TopRight, cropRect, canvasSize),
+        CropDragTarget.Corner.BottomRight to computeOffset(CropDragTarget.Corner.BottomRight, cropRect, canvasSize),
+        CropDragTarget.Corner.BottomLeft to computeOffset(CropDragTarget.Corner.BottomLeft, cropRect, canvasSize),
+        CropDragTarget.Edge.Top to computeOffset(CropDragTarget.Edge.Top, cropRect, canvasSize),
+        CropDragTarget.Edge.Right to computeOffset(CropDragTarget.Edge.Right, cropRect, canvasSize),
+        CropDragTarget.Edge.Bottom to computeOffset(CropDragTarget.Edge.Bottom, cropRect, canvasSize),
+        CropDragTarget.Edge.Left to computeOffset(CropDragTarget.Edge.Left, cropRect, canvasSize),
     )
-    corners.forEach { (target, corner) ->
+    handlesArea.forEach { (target, corner) ->
         if ((corner - touchPoint + imageOffset).getDistance() <= handleTouchRadius) {
             return target
         }
@@ -506,6 +555,22 @@ private fun detectDragTarget(
     } else {
         null
     }
+}
+
+private fun computeOffset(
+    target: CropDragTarget,
+    cropRect: NormalizedCropRect,
+    canvasSize: Size,
+) = when (target) {
+    CropDragTarget.Move -> Offset((cropRect.left + cropRect.right) * canvasSize.width / 2f, (cropRect.top + cropRect.bottom) * canvasSize.height / 2f)
+    CropDragTarget.Corner.TopLeft -> Offset(cropRect.left * canvasSize.width, cropRect.top * canvasSize.height)
+    CropDragTarget.Edge.Top -> Offset((cropRect.left + cropRect.right) * canvasSize.width / 2f, cropRect.top * canvasSize.height)
+    CropDragTarget.Corner.TopRight -> Offset(cropRect.right * canvasSize.width, cropRect.top * canvasSize.height)
+    CropDragTarget.Edge.Right -> Offset(cropRect.right * canvasSize.width, (cropRect.top + cropRect.bottom) * canvasSize.height / 2f)
+    CropDragTarget.Corner.BottomRight -> Offset(cropRect.right * canvasSize.width, cropRect.bottom * canvasSize.height)
+    CropDragTarget.Edge.Bottom -> Offset((cropRect.left + cropRect.right) * canvasSize.width / 2f, cropRect.bottom * canvasSize.height)
+    CropDragTarget.Corner.BottomLeft -> Offset(cropRect.left * canvasSize.width, cropRect.bottom * canvasSize.height)
+    CropDragTarget.Edge.Left -> Offset(cropRect.left * canvasSize.width, (cropRect.top + cropRect.bottom) * canvasSize.height / 2f)
 }
 
 // x and y are the coordinates of the corner

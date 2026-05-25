@@ -7,6 +7,7 @@
 
 package io.element.android.features.messages.impl.attachments.preview.imageeditor
 
+import androidx.annotation.FloatRange
 import androidx.compose.runtime.Immutable
 import io.element.android.libraries.mediaviewer.api.local.LocalMedia
 
@@ -18,7 +19,7 @@ data class AttachmentImageEditorState(
     val localMedia: LocalMedia,
     val edits: AttachmentImageEdits,
     // For preview only
-    val forceDrawGuidelines: Boolean,
+    val previewDebug: Boolean,
 )
 
 @Immutable
@@ -51,10 +52,10 @@ data class AttachmentImageEdits(
 
 @Immutable
 data class NormalizedCropRect(
-    val left: Float,
-    val top: Float,
-    val right: Float,
-    val bottom: Float,
+    @FloatRange(from = 0.0, to = 1.0) val left: Float,
+    @FloatRange(from = 0.0, to = 1.0) val top: Float,
+    @FloatRange(from = 0.0, to = 1.0) val right: Float,
+    @FloatRange(from = 0.0, to = 1.0) val bottom: Float,
 ) {
     init {
         require(left in 0f..1f)
@@ -71,7 +72,11 @@ data class NormalizedCropRect(
     val height: Float
         get() = bottom - top
 
-    fun applyChange(dragTarget: CropDragTarget, deltaX: Float, deltaY: Float): NormalizedCropRect = when (dragTarget) {
+    fun applyChange(
+        dragTarget: CropDragTarget,
+        deltaX: Float,
+        deltaY: Float,
+    ): NormalizedCropRect = when (dragTarget) {
         is CropDragTarget.Move -> translate(deltaX, deltaY)
         is CropDragTarget.Corner -> dragWithCorner(dragTarget, deltaX, deltaY)
         is CropDragTarget.Edge -> dragWithEdge(dragTarget, deltaX, deltaY)
@@ -88,7 +93,11 @@ data class NormalizedCropRect(
         )
     }
 
-    private fun dragWithCorner(dragTarget: CropDragTarget.Corner, deltaX: Float, deltaY: Float) = when (dragTarget) {
+    private fun dragWithCorner(
+        dragTarget: CropDragTarget.Corner,
+        deltaX: Float,
+        deltaY: Float,
+    ) = when (dragTarget) {
         CropDragTarget.Corner.TopLeft -> copy(
             left = (left + deltaX).coerceIn(0f, right - MIN_CROP_SIZE),
             top = (top + deltaY).coerceIn(0f, bottom - MIN_CROP_SIZE),
@@ -107,7 +116,11 @@ data class NormalizedCropRect(
         )
     }
 
-    private fun dragWithEdge(dragTarget: CropDragTarget.Edge, deltaX: Float, deltaY: Float) = when (dragTarget) {
+    private fun dragWithEdge(
+        dragTarget: CropDragTarget.Edge,
+        deltaX: Float,
+        deltaY: Float,
+    ) = when (dragTarget) {
         CropDragTarget.Edge.Top -> copy(
             top = (top + deltaY).coerceIn(0f, bottom - MIN_CROP_SIZE),
         )

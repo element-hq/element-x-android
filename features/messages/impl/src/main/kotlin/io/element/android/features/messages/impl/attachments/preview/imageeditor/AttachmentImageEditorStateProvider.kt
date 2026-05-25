@@ -44,12 +44,36 @@ open class AttachmentImageEditorStateProvider : PreviewParameterProvider<Attachm
                 edits = AttachmentImageEdits(
                     cropRect = caterpillarCrop,
                 ),
-                forceDrawGuidelines = true,
+                previewDebug = true,
             ),
             anAttachmentImageEditorState(
                 edits = AttachmentImageEdits(
                     cropRect = caterpillarCrop,
                 ).rotateAntiClockwise(),
+            ),
+            // Small crop
+            anAttachmentImageEditorState(
+                edits = AttachmentImageEdits(
+                    cropRect = NormalizedCropRect(
+                        left = 0.3f,
+                        top = 0.6f,
+                        right = 0.4f,
+                        bottom = 0.7f,
+                    ),
+                ),
+                previewDebug = true,
+            ),
+            // Big crop
+            anAttachmentImageEditorState(
+                edits = AttachmentImageEdits(
+                    cropRect = NormalizedCropRect(
+                        left = 0.05f,
+                        top = 0.05f,
+                        right = 0.95f,
+                        bottom = 0.95f,
+                    ),
+                ),
+                previewDebug = true,
             ),
         )
 }
@@ -60,9 +84,9 @@ internal fun anAttachmentImageEditorState(
         info = anImageMediaInfo(),
     ),
     edits: AttachmentImageEdits = AttachmentImageEdits(),
-    forceDrawGuidelines: Boolean = false,
+    previewDebug: Boolean = false,
 ) = AttachmentImageEditorState(
     localMedia = localMedia,
     edits = edits,
-    forceDrawGuidelines = forceDrawGuidelines,
+    previewDebug = previewDebug,
 )
