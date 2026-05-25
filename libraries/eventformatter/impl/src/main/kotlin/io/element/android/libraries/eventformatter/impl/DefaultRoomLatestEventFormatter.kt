@@ -110,7 +110,7 @@ class DefaultRoomLatestEventFormatter(
                 stateContentFormatter.format(content, senderDisambiguatedDisplayName, isOutgoing, RenderingMode.RoomList)
             }
             is PollContent -> {
-                content.question.prefixWith(sp.getString(CommonStrings.a11y_poll))
+                content.question.prefixWith(sp.getString(CommonStrings.common_poll_summary_prefix))
                     .prefixIfNeeded(senderDisambiguatedDisplayName, isDmRoom, isOutgoing)
             }
             is FailedToParseMessageLikeContent, is FailedToParseStateContent, is UnknownContent -> {
