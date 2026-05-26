@@ -100,4 +100,6 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Rollen"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Kamergegevens"</string>
   <string name="screen_room_roles_and_permissions_title">"Rollen en rechten"</string>
+  <string name="screen_roomlist_mark_as_read">"Markeren als gelezen"</string>
+  <string name="screen_roomlist_mark_as_unread">"Markeren als ongelezen"</string>
 </resources>

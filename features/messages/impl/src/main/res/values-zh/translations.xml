@@ -26,6 +26,7 @@
   <string name="screen_media_upload_preview_item_count">"第 %1$d 个项目，共 %2$d 个"</string>
   <string name="screen_media_upload_preview_optimize_image_quality_title">"优化图像质量"</string>
   <string name="screen_media_upload_preview_processing">"处理中…"</string>
+  <string name="screen_media_upload_preview_title">"添加媒体"</string>
   <string name="screen_report_content_block_user">"屏蔽用户"</string>
   <string name="screen_report_content_block_user_hint">"请确认是否要隐藏该用户当前和未来的所有消息"</string>
   <string name="screen_report_content_explanation">"此消息将举报给服务器管理员。他们无法读取任何加密消息。"</string>
