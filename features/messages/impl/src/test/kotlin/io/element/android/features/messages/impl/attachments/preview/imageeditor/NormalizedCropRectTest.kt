@@ -59,7 +59,6 @@ class NormalizedCropRectTest {
             deltaX = -0.1f,
             deltaY = 0.3f,
         )
-        val s = assertThat(result)
         result.assertIsSimilarTo(
             NormalizedCropRect(
                 left = rect.left,
