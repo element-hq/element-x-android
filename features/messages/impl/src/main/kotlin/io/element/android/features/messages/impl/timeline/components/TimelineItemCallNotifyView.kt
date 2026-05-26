@@ -33,6 +33,8 @@ import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
 import io.element.android.features.messages.impl.timeline.aTimelineRoomInfo
+import io.element.android.features.messages.impl.timeline.components.receipt.ReadReceiptViewState
+import io.element.android.features.messages.impl.timeline.components.receipt.TimelineItemReadReceiptView
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.RtcNotificationState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRtcNotificationContent
@@ -48,46 +50,63 @@ internal fun TimelineItemCallNotifyView(
     timelineRoomInfo: TimelineRoomInfo,
     event: TimelineItem.Event,
     content: TimelineItemRtcNotificationContent,
+    renderReadReceipts: Boolean,
+    isLastOutgoingMessage: Boolean,
     onLongClick: (TimelineItem.Event) -> Unit,
+    onReadReceiptsClick: (TimelineItem.Event) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(
-        modifier = modifier
-            .fillMaxWidth()
-            .border(1.dp, ElementTheme.colors.borderInteractiveSecondary, RoundedCornerShape(8.dp))
-            .combinedClickable(
-                enabled = true,
-                onClick = {},
-                onLongClick = { onLongClick(event) },
-                onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
+    Column(modifier = modifier) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(start = 16.dp, end = 16.dp, top = 16.dp)
+                .border(1.dp, ElementTheme.colors.borderInteractiveSecondary, RoundedCornerShape(8.dp))
+                .combinedClickable(
+                    enabled = true,
+                    onClick = {},
+                    onLongClick = { onLongClick(event) },
+                    onLongClickLabel = stringResource(CommonStrings.action_open_context_menu),
+                )
+                .onKeyboardContextMenuAction { onLongClick(event) }
+                .padding(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Icon(
+                modifier = Modifier.size(20.sp.toDp()),
+                imageVector = getIcon(timelineRoomInfo, content),
+                contentDescription = null,
+                tint = ElementTheme.colors.iconSecondary,
             )
-            .onKeyboardContextMenuAction { onLongClick(event) }
-            .padding(12.dp),
-        horizontalArrangement = Arrangement.spacedBy(12.dp),
-        verticalAlignment = Alignment.CenterVertically,
-    ) {
-        Icon(
-            modifier = Modifier.size(20.sp.toDp()),
-            imageVector = getIcon(timelineRoomInfo, content),
-            contentDescription = null,
-            tint = ElementTheme.colors.iconSecondary,
-        )
 
-        Text(
-            modifier = Modifier.weight(1f),
-            text = stringResource(getTextRes(timelineRoomInfo, content)),
-            style = ElementTheme.typography.fontBodyMdRegular,
-            color = ElementTheme.colors.textSecondary,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
-        )
+            Text(
+                modifier = Modifier.weight(1f),
+                text = stringResource(getTextRes(timelineRoomInfo, content)),
+                style = ElementTheme.typography.fontBodyMdRegular,
+                color = ElementTheme.colors.textSecondary,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
 
-        Text(
-            text = event.sentTime,
-            style = ElementTheme.typography.fontBodyMdRegular,
-            color = ElementTheme.colors.textSecondary,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
+            Text(
+                text = event.sentTime,
+                style = ElementTheme.typography.fontBodyMdRegular,
+                color = ElementTheme.colors.textSecondary,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+            )
+        }
+
+        TimelineItemReadReceiptView(
+            state = ReadReceiptViewState(
+                sendState = event.localSendState,
+                isLastOutgoingMessage = isLastOutgoingMessage,
+                receipts = event.readReceiptState.receipts,
+            ),
+            renderReadReceipts = renderReadReceipts,
+            onReadReceiptsClick = { onReadReceiptsClick(event) },
+            modifier = Modifier.padding(top = 4.dp),
         )
     }
 }
@@ -138,7 +157,10 @@ internal fun TimelineItemCallNotifyViewPreview() = ElementPreview {
                         timelineRoomInfo = aTimelineRoomInfo(isDm = isDm),
                         event = aTimelineItemEvent(content = content),
                         content = content,
+                        renderReadReceipts = true,
+                        isLastOutgoingMessage = false,
                         onLongClick = {},
+                        onReadReceiptsClick = {},
                     )
                 }
             }
