@@ -117,6 +117,7 @@ fun ShareLocationView(
     }
 
     MapBottomSheetScaffold(
+        customMapStyleUrl = state.customMapStyleUrl,
         cameraState = cameraState,
         modifier = modifier,
         scaffoldState = scaffoldState,
