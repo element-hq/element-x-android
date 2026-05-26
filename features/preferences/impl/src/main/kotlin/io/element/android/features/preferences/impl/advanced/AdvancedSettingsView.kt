@@ -344,7 +344,6 @@ private fun LiveLocationUpdatesSection(
     onOpenAppPermissionsClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val updatedOnSaveValue by rememberUpdatedState(onSaveValue)
     PreferenceCategory(
         modifier = modifier,
         showTopDivider = true,
@@ -384,7 +383,7 @@ private fun LiveLocationUpdatesSection(
                     value = sliderValue.toFloat(),
                     onValueChange = { sliderValue = it.roundToInt() },
                     onValueChangeFinish = {
-                        updatedOnSaveValue(sliderValue)
+                        onSaveValue(sliderValue)
                     },
                     valueRange = valueRange,
                     colors = SliderDefaults.colors(
