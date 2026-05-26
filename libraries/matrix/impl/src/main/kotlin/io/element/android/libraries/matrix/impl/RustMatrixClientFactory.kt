@@ -131,7 +131,7 @@ class RustMatrixClientFactory(
             analyticsService = analyticsService,
             workManagerScheduler = workManagerScheduler,
         ).also {
-            Timber.tag(it.toString()).d("Creating Client with access token '$anonymizedAccessToken' and refresh token '$anonymizedRefreshToken'")
+            Timber.tag("RustMatrixClient").i("Creating Client with access token '$anonymizedAccessToken' and refresh token '$anonymizedRefreshToken'")
         }
     }
 
