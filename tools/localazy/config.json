@@ -273,6 +273,7 @@
         "screen_room_timeline.*",
         "screen\\.room_timeline.*",
         "screen_room_typing.*",
+        "screen\\.image_edition\\..*",
         "screen\\.media_upload.*"
       ]
     },
