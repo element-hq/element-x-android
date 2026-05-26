@@ -38,6 +38,7 @@ import io.element.android.libraries.matrix.impl.room.location.into
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
 import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTimelineItemMapper
+import io.element.android.libraries.matrix.impl.timeline.postprocessor.FilterEmptyDayPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.LastForwardIndicatorsPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.LoadingIndicatorsPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.RoomBeginningPostProcessor
@@ -123,6 +124,7 @@ class RustTimeline(
     private val loadingIndicatorsPostProcessor = LoadingIndicatorsPostProcessor(systemClock)
     private val lastForwardIndicatorsPostProcessor = LastForwardIndicatorsPostProcessor(mode)
     private val typingNotificationPostProcessor = TypingNotificationPostProcessor(mode)
+    private val emptyDayPostProcessor = FilterEmptyDayPostProcessor()
 
     private data class RoomTimelineInfo(
         val roomCreators: ImmutableList<UserId>,
@@ -249,6 +251,9 @@ class RustTimeline(
                         isEncrypted = isEncrypted,
                         hasMoreToLoadBackwards = backwardPaginationStatus.hasMoreToLoad,
                     )
+                }
+                .let { items ->
+                    emptyDayPostProcessor.process(items)
                 }
                 .let { items ->
                     loadingIndicatorsPostProcessor.process(
