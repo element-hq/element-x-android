@@ -72,6 +72,45 @@ class TimelineItemsFactory(
         }
     }
 
+    /**
+     * Lightweight update that only refreshes member-derived data (e.g., read receipt display names)
+     * on cached items without rebuilding the diff cache or creating new items.
+     * Skips emission if no cached items have member-dependent state.
+     */
+    suspend fun updateRoomMembers(
+        timelineItems: List<MatrixTimelineItem>,
+        roomMembers: List<RoomMember>,
+    ) = withContext(dispatchers.computation) {
+        lock.withLock {
+            var hasUpdates = false
+            val updatedStates = ArrayList<TimelineItem>()
+            for (index in diffCache.indices().reversed()) {
+                val cacheItem = diffCache.get(index)
+                if (cacheItem is TimelineItem.Event && roomMembers.isNotEmpty()) {
+                    val updatedItem = eventItemFactory.update(
+                        timelineItem = cacheItem,
+                        receivedMatrixTimelineItem = timelineItems[index] as MatrixTimelineItem.Event,
+                        roomMembers = roomMembers
+                    )
+                    diffCache[index] = updatedItem
+                    hasUpdates = true
+                    updatedStates.add(updatedItem)
+                } else if (cacheItem != null) {
+                    updatedStates.add(cacheItem)
+                } else {
+                    buildAndCacheItem(timelineItems, index, roomMembers)?.also { timelineItemState ->
+                        updatedStates.add(timelineItemState)
+                    }
+                }
+            }
+            if (hasUpdates) {
+                val result = timelineItemGrouper.group(updatedStates).toImmutableList()
+                val filteredResult = filterEmptyDaySeparators(result)
+                _timelineItems.emit(filteredResult)
+            }
+        }
+    }
+
     private suspend fun buildAndEmitTimelineItemStates(
         timelineItems: List<MatrixTimelineItem>,
         roomMembers: List<RoomMember>,

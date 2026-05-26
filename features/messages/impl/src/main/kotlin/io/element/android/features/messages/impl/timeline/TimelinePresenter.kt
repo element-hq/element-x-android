@@ -51,6 +51,7 @@ import io.element.android.libraries.matrix.api.core.asEventId
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
 import io.element.android.libraries.matrix.api.room.roomMembers
+import io.element.android.libraries.matrix.api.timeline.MatrixTimelineItem
 import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.api.timeline.Timeline
 import io.element.android.libraries.matrix.api.timeline.item.event.TimelineItemEventOrigin
@@ -254,15 +255,25 @@ class TimelinePresenter(
                 }
                 .launchIn(this)
 
+            var previousItems: List<MatrixTimelineItem>? = null
             combine(timelineController.timelineItems(), room.membersStateFlow) { items, membersState ->
-                val parent = analyticsService.getLongRunningTransaction(DisplayFirstTimelineItems)
-                val transaction = parent?.startChild("timelineItemsFactory.replaceWith", "Processing timeline items")
-                transaction?.putExtraData(AnalyticsUserData.TIMELINE_ITEM_COUNT, items.count().toString())
-                timelineItemsFactory.replaceWith(
-                    timelineItems = items,
-                    roomMembers = membersState.roomMembers().orEmpty()
-                )
-                transaction?.finish()
+                val roomMembers = membersState.roomMembers().orEmpty()
+                if (previousItems !== items) {
+                    previousItems = items
+                    val parent = analyticsService.getLongRunningTransaction(DisplayFirstTimelineItems)
+                    val transaction = parent?.startChild("timelineItemsFactory.replaceWith", "Processing timeline items")
+                    transaction?.putExtraData(AnalyticsUserData.TIMELINE_ITEM_COUNT, items.count().toString())
+                    timelineItemsFactory.replaceWith(
+                        timelineItems = items,
+                        roomMembers = roomMembers
+                    )
+                    transaction?.finish()
+                } else {
+                    timelineItemsFactory.updateRoomMembers(
+                        timelineItems = items,
+                        roomMembers = roomMembers
+                    )
+                }
                 items
             }
                 .onEach(redactedVoiceMessageManager::onEachMatrixTimelineItem)

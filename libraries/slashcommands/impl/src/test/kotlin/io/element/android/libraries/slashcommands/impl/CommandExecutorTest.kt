@@ -185,10 +185,18 @@ class CommandExecutorTest {
     }
 
     @Test
-    fun `change display name for room is not supported`() = runTest {
-        val sut = createCommandExecutor()
-        val res = sut.proceedAdmin(SlashCommand.ChangeDisplayNameForRoom(A_USER_NAME))
-        assertThat(res.isFailure).isTrue()
+    fun `change display name for room delegates to joined room`() = runTest {
+        var capturedDisplayName: String? = null
+        val joinedRoom = FakeJoinedRoom(
+            setOwnMemberDisplayNameResult = { displayName ->
+                capturedDisplayName = displayName
+                Result.success(Unit)
+            }
+        )
+        val sut = createCommandExecutor(joinedRoom = joinedRoom)
+        val res = sut.proceedAdmin(SlashCommand.ChangeDisplayNameForRoom("room nick"))
+        assertThat(res.isSuccess).isTrue()
+        assertThat(capturedDisplayName).isEqualTo("room nick")
     }
 
     @Test
