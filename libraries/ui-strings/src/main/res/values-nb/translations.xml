@@ -207,7 +207,6 @@
   <string name="common_current_user_left_room">"Forlot rommet"</string>
   <string name="common_current_user_left_space">"Forlot område"</string>
   <string name="common_current_user_rejected_invite">"Invitasjon avslått"</string>
-  <string name="common_dark">"Mørk"</string>
   <string name="common_decryption_error">"Dekrypteringsfeil"</string>
   <string name="common_description">"Beskrivelse"</string>
   <string name="common_developer_options">"Alternativer for utviklere"</string>
@@ -245,7 +244,6 @@
   <string name="common_invite_unknown_profile">"Finner ikke denne Matrix-IDen, så invitasjonen blir kanskje ikke mottatt."</string>
   <string name="common_leaving_room">"Forlater rommet"</string>
   <string name="common_leaving_space">"Forlater området"</string>
-  <string name="common_light">"Lys"</string>
   <string name="common_line_copied_to_clipboard">"Linje kopiert til utklippstavlen"</string>
   <string name="common_link_copied_to_clipboard">"Lenke kopiert til utklippstavlen"</string>
   <string name="common_link_new_device">"Koble til ny enhet"</string>
@@ -309,7 +307,6 @@
     <item quantity="other">"%1$d svar"</item>
   </plurals>
   <string name="common_replying_to">"Svar til %1$s"</string>
-  <string name="common_report_a_bug">"Rapporter en feil"</string>
   <string name="common_report_a_problem">"Rapporter et problem"</string>
   <string name="common_report_submitted">"Rapport sendt inn"</string>
   <string name="common_rich_text_editor">"Redigeringsprogram for rik tekst"</string>
@@ -361,7 +358,6 @@
   <string name="common_suggested">"Foreslått"</string>
   <string name="common_suggestions">"Forslag"</string>
   <string name="common_syncing">"Synkroniserer"</string>
-  <string name="common_system">"System"</string>
   <string name="common_text">"Tekst"</string>
   <string name="common_third_party_notices">"Varsler fra tredjeparter"</string>
   <string name="common_thread">"Tråd"</string>

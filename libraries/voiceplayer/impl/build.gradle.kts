@@ -21,6 +21,7 @@ setupDependencyInjection()
 dependencies {
     api(projects.libraries.voiceplayer.api)
 
+    implementation(projects.libraries.architecture)
     implementation(projects.libraries.audio.api)
     implementation(projects.libraries.core)
     implementation(projects.libraries.di)

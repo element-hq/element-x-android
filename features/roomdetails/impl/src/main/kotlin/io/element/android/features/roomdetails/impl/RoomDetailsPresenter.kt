@@ -17,7 +17,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import dev.zacsweers.metro.Inject
+import dev.zacsweers.metro.Assisted
+import dev.zacsweers.metro.AssistedFactory
+import dev.zacsweers.metro.AssistedInject
 import im.vector.app.features.analytics.plan.Interaction
 import io.element.android.features.knockrequests.api.KnockRequestPermissions
 import io.element.android.features.knockrequests.api.knockRequestPermissions
@@ -35,36 +37,35 @@ import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.designsystem.utils.snackbar.LocalSnackbarDispatcher
 import io.element.android.libraries.designsystem.utils.snackbar.SnackbarMessage
 import io.element.android.libraries.designsystem.utils.snackbar.collectSnackbarMessageAsState
-import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.encryption.identity.IdentityState
 import io.element.android.libraries.matrix.api.notificationsettings.NotificationSettingsService
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.RoomMember
-import io.element.android.libraries.matrix.api.room.isDm
 import io.element.android.libraries.matrix.api.room.join.JoinRule
 import io.element.android.libraries.matrix.api.room.powerlevels.canEditRolesAndPermissions
 import io.element.android.libraries.matrix.api.room.powerlevels.permissionsAsState
 import io.element.android.libraries.matrix.api.room.roomNotificationSettings
-import io.element.android.libraries.matrix.ui.room.getCurrentRoomMember
+import io.element.android.libraries.matrix.api.timeline.ReceiptType
 import io.element.android.libraries.matrix.ui.room.getDirectRoomMember
 import io.element.android.libraries.matrix.ui.room.roomMemberIdentityStateChange
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
+import io.element.android.libraries.preferences.api.store.SessionPreferencesStore
+import io.element.android.libraries.push.api.notifications.NotificationCleaner
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analyticsproviders.api.trackers.captureInteraction
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
-@Inject
+@AssistedInject
 class RoomDetailsPresenter(
+    @Assisted private val navigator: RoomDetailsNavigator,
     private val client: MatrixClient,
     private val room: JoinedRoom,
-    private val featureFlagService: FeatureFlagService,
     private val notificationSettingsService: NotificationSettingsService,
     private val roomMembersDetailsPresenterFactory: RoomMemberDetailsPresenter.Factory,
     private val leaveRoomPresenter: Presenter<LeaveRoomState>,
@@ -73,7 +74,16 @@ class RoomDetailsPresenter(
     private val analyticsService: AnalyticsService,
     private val clipboardHelper: ClipboardHelper,
     private val appPreferencesStore: AppPreferencesStore,
+    private val sessionPreferencesStore: SessionPreferencesStore,
+    private val notificationCleaner: NotificationCleaner,
 ) : Presenter<RoomDetailsState> {
+    @AssistedFactory
+    interface Factory {
+        fun create(
+            navigator: RoomDetailsNavigator,
+        ): RoomDetailsPresenter
+    }
+
     @Composable
     override fun present(): RoomDetailsState {
         val scope = rememberCoroutineScope()
@@ -85,6 +95,14 @@ class RoomDetailsPresenter(
         val roomTopic by remember { derivedStateOf { roomInfo.topic } }
         val isFavorite by remember { derivedStateOf { roomInfo.isFavorite } }
         val joinRule by remember { derivedStateOf { roomInfo.joinRule } }
+        val hasNewContent by remember {
+            derivedStateOf {
+                roomInfo.numUnreadMessages > 0 ||
+                    roomInfo.numUnreadMentions > 0 ||
+                    roomInfo.numUnreadNotifications > 0 ||
+                    roomInfo.isMarkedUnread
+            }
+        }
 
         val pinnedMessagesCount by remember { derivedStateOf { roomInfo.pinnedEventIds.size } }
 
@@ -99,9 +117,8 @@ class RoomDetailsPresenter(
         val canonicalAlias by remember { derivedStateOf { roomInfo.canonicalAlias } }
         val isEncrypted by remember { derivedStateOf { roomInfo.isEncrypted == true } }
         val dmMember by room.getDirectRoomMember(membersState)
-        val currentMember by room.getCurrentRoomMember(membersState)
         val roomMemberDetailsPresenter = roomMemberDetailsPresenter(dmMember)
-        val roomType = getRoomType(dmMember, currentMember)
+        val roomType = getRoomType(dmMember)
         val roomCallState = roomCallStatePresenter.present()
         val joinedMemberCount by remember { derivedStateOf { roomInfo.joinedMembersCount } }
 
@@ -114,14 +131,11 @@ class RoomDetailsPresenter(
             }
         }
 
-        val isKnockRequestsEnabled by remember {
-            featureFlagService.isFeatureEnabledFlow(FeatureFlags.Knock)
-        }.collectAsState(false)
         val knockRequestsCount by produceState<Int?>(null) {
             room.knockRequestsFlow.collect { value = it.size }
         }
         val canShowKnockRequests by remember {
-            derivedStateOf { isKnockRequestsEnabled && permissions.knockRequestsPermissions.hasAny && joinRule == JoinRule.Knock }
+            derivedStateOf { permissions.knockRequestsPermissions.hasAny && joinRule == JoinRule.Knock }
         }
         val canShowSecurityAndPrivacy by remember {
             derivedStateOf { !isDm && permissions.securityAndPrivacyPermissions.hasAny(isSpace = false, joinRule = joinRule) }
@@ -147,7 +161,7 @@ class RoomDetailsPresenter(
                 }
                 RoomDetailsEvent.UnmuteNotification -> {
                     scope.launch(dispatchers.io) {
-                        notificationSettingsService.unmuteRoom(room.roomId, isEncrypted, room.isOneToOne)
+                        notificationSettingsService.unmuteRoom(room.roomId, isEncrypted, room.isDm())
                     }
                 }
                 is RoomDetailsEvent.SetFavorite -> scope.setFavorite(event.isFavorite)
@@ -155,6 +169,8 @@ class RoomDetailsPresenter(
                     clipboardHelper.copyPlainText(event.text)
                     snackbarDispatcher.post(SnackbarMessage(CommonStrings.common_copied_to_clipboard))
                 }
+                is RoomDetailsEvent.MarkAsRead -> scope.markAsRead()
+                is RoomDetailsEvent.MarkAsUnread -> scope.markAsUnread()
             }
         }
 
@@ -186,7 +202,7 @@ class RoomDetailsPresenter(
             isFavorite = isFavorite,
             displayRolesAndPermissionsSettings = !isDm && permissions.canEditRolesAndPermissions,
             isPublic = joinRule == JoinRule.Public,
-            heroes = roomInfo.heroes.toImmutableList(),
+            heroes = roomInfo.heroes,
             pinnedMessagesCount = pinnedMessagesCount,
             snackbarMessage = snackbarMessage,
             canShowKnockRequests = canShowKnockRequests,
@@ -198,6 +214,7 @@ class RoomDetailsPresenter(
             showDebugInfo = isDeveloperModeEnabled,
             roomVersion = roomInfo.roomVersion,
             roomHistoryVisibility = roomInfo.historyVisibility,
+            hasNewContent = hasNewContent,
             eventSink = ::handleEvent,
         )
     }
@@ -210,15 +227,9 @@ class RoomDetailsPresenter(
     }
 
     @Composable
-    private fun getRoomType(
-        dmMember: RoomMember?,
-        currentMember: RoomMember?,
-    ): RoomDetailsType = remember(dmMember, currentMember) {
-        if (dmMember != null && currentMember != null) {
-            RoomDetailsType.Dm(
-                me = currentMember,
-                otherMember = dmMember,
-            )
+    private fun getRoomType(dmMember: RoomMember?): RoomDetailsType = remember(dmMember) {
+        if (dmMember != null) {
+            RoomDetailsType.Dm(otherMember = dmMember)
         } else {
             RoomDetailsType.Room
         }
@@ -255,6 +266,28 @@ class RoomDetailsPresenter(
         room.setIsFavorite(isFavorite)
             .onSuccess {
                 analyticsService.captureInteraction(Interaction.Name.MobileRoomFavouriteToggle)
+            }
+    }
+
+    private fun CoroutineScope.markAsRead() = launch {
+        notificationCleaner.clearMessagesForRoom(client.sessionId, room.roomId)
+        room.setUnreadFlag(isUnread = false)
+        val receiptType = if (sessionPreferencesStore.isSendPublicReadReceiptsEnabled().first()) {
+            ReceiptType.READ
+        } else {
+            ReceiptType.READ_PRIVATE
+        }
+        room.markAsRead(receiptType)
+            .onSuccess {
+                analyticsService.captureInteraction(name = Interaction.Name.MobileRoomListRoomContextMenuUnreadToggle)
+            }
+    }
+
+    private fun CoroutineScope.markAsUnread() = launch {
+        room.setUnreadFlag(isUnread = true)
+            .onSuccess {
+                analyticsService.captureInteraction(name = Interaction.Name.MobileRoomListRoomContextMenuUnreadToggle)
+                navigator.onDone()
             }
     }
 }

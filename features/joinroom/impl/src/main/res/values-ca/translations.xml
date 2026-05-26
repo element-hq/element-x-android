@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_join_room_ban_by_message">"Has estat bandejat per %1$s."</string>
+  <string name="screen_join_room_ban_message">"T\'han bandejat"</string>
+  <string name="screen_join_room_ban_reason">"Motiu: %1$s."</string>
+  <string name="screen_join_room_cancel_knock_action">"Cancel·la la sol·licitud"</string>
+  <string name="screen_join_room_cancel_knock_alert_confirmation">"Sí, cancel·la"</string>
+  <string name="screen_join_room_cancel_knock_alert_description">"Segur que vols cancel·lar la teva sol·licitud d\'unió a aquesta sala?"</string>
+  <string name="screen_join_room_cancel_knock_alert_title">"Cancel·la la sol·licitud d\'unió"</string>
+  <string name="screen_join_room_decline_and_block_alert_confirmation">"Sí, rebutja i bloqueja"</string>
+  <string name="screen_join_room_decline_and_block_alert_message">"Segur que vols rebutjar la invitació d\'unió a aquesta sala? Això també evitarà que %1$s et contacti i et convidi a sales."</string>
+  <string name="screen_join_room_decline_and_block_alert_title">"Rebutja la invitació i bloqueja"</string>
+  <string name="screen_join_room_decline_and_block_button_title">"Rebutja i bloqueja"</string>
+  <string name="screen_join_room_fail_message">"Ha fallat la unió"</string>
+  <string name="screen_join_room_fail_reason">"O t\'han de convidar per unir-te o hi pot haver restriccions d\'accés."</string>
+  <string name="screen_join_room_forget_action">"Oblida"</string>
+  <string name="screen_join_room_invite_required_message">"Per unir-te, necessites una invitació"</string>
+  <string name="screen_join_room_join_action">"Uneix-te"</string>
+  <string name="screen_join_room_join_restricted_message">"Pot ser que t\'hagin de convidar o hagis de ser membre d\'un espai per unir-t\'hi."</string>
+  <string name="screen_join_room_knock_action">"Envia sol·licitud d\'unió"</string>
+  <string name="screen_join_room_knock_message_description">"Missatge (opcional)"</string>
+  <string name="screen_join_room_knock_sent_description">"Rebràs una invitació per unir-te a la sala si la teva sol·licitud és acceptada."</string>
+  <string name="screen_join_room_knock_sent_title">"Sol·licitud d\'unió enviada"</string>
+  <string name="screen_join_room_loading_alert_message">"No s\'ha pogut mostrar la vista prèvia de la sala. Pot ser degut a problemes de xarxa o del servidor."</string>
+  <string name="screen_join_room_loading_alert_title">"No s\'ha pogut mostrar la vista prèvia de la sala"</string>
+  <string name="screen_join_room_space_not_supported_description">"%1$s encara no admet els espais. Pots accedir-hi a través del navegador web."</string>
+  <string name="screen_join_room_space_not_supported_title">"Espais encara no compatibles"</string>
+  <string name="screen_join_room_subtitle_knock">"Clic al botó següent i s\'avisarà a un administrador de sala. Podràs unir-te un cop t\'hagi aprovat."</string>
+  <string name="screen_join_room_subtitle_no_preview">"Per poder veure l\'historial de missatges has de ser un membre de la sala."</string>
+  <string name="screen_join_room_title_knock">"Vols unir-te a aquesta sala?"</string>
+  <string name="screen_join_room_title_no_preview">"Vista prèvia no disponible"</string>
+</resources>

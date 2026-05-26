@@ -26,7 +26,7 @@
   <string name="screen_encryption_reset_footer">"Obnovte svoju totožnosť iba vtedy, ak nemáte prístup k inému prihlásenému zariadeniu a stratili ste kľúč na obnovenie."</string>
   <string name="screen_encryption_reset_title">"Znovu nastavte svoju totožnosť v prípade, že ju nemôžete potvrdiť iným spôsobom"</string>
   <string name="screen_key_backup_disable_confirmation_action_turn_off">"Vypnúť"</string>
-  <string name="screen_key_backup_disable_confirmation_description">"Stratíte prístup k svojim zašifrovaným správam, ak sa odhlásite zo všetkých zariadení"</string>
+  <string name="screen_key_backup_disable_confirmation_description">"Ak odstránite všetky svoje zariadenia, stratíte svoju zašifrovanú históriu správ a budete si musieť obnoviť svoju digitálnu identitu."</string>
   <string name="screen_key_backup_disable_confirmation_title">"Ste si istí, že chcete vypnúť zálohovanie?"</string>
   <string name="screen_key_backup_disable_description">"Vypnutím zálohovania sa odstráni aktuálna záloha šifrovacích kľúčov a vypnú sa ďalšie bezpečnostné funkcie. V tomto prípade:"</string>
   <string name="screen_key_backup_disable_description_point_1">"Na nových zariadeniach nebudete mať zašifrovanú históriu správ"</string>

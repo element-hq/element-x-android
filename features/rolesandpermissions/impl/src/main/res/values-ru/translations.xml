@@ -6,6 +6,7 @@
   <string name="screen_room_change_permissions_delete_messages">"Удалять сообщения"</string>
   <string name="screen_room_change_permissions_everyone">"Участники"</string>
   <string name="screen_room_change_permissions_invite_people">"Приглашать людей"</string>
+  <string name="screen_room_change_permissions_live_location">"Поделиться текущим местоположением"</string>
   <string name="screen_room_change_permissions_manage_space">"Управление пространством"</string>
   <string name="screen_room_change_permissions_manage_space_rooms">"Управление комнатами"</string>
   <string name="screen_room_change_permissions_member_moderation">"Управлять участниками"</string>

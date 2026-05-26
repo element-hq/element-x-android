@@ -67,6 +67,7 @@ fun AvatarActionBottomSheet(
             },
             modifier = modifier,
             sheetState = sheetState,
+            scrollable = false,
         ) {
             AvatarActionBottomSheetContent(
                 actions = actions,

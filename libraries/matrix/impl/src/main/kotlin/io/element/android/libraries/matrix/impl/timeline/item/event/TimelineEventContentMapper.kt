@@ -153,7 +153,8 @@ class TimelineEventContentMapper(
                         CallIntent.AUDIO
                     } else {
                         CallIntent.VIDEO
-                    }
+                    },
+                    declinedBy = it.declinedBy.map(::UserId)
                 )
             }
         }

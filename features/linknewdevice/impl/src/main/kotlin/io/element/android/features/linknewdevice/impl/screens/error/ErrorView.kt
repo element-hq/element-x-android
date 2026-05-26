@@ -47,17 +47,26 @@ fun ErrorView(
 ) {
     val appName = LocalBuildMeta.current.applicationName
     BackHandler(onBack = onCancel)
+    val iconStyle = when (errorScreenType) {
+        ErrorScreenType.OtherDeviceAlreadySignedIn -> BigIcon.Style.SuccessSolid
+        else -> BigIcon.Style.AlertSolid
+    }
     FlowStepPage(
         modifier = modifier,
-        iconStyle = BigIcon.Style.AlertSolid,
+        iconStyle = iconStyle,
         title = titleText(errorScreenType, appName),
         subTitle = subtitleText(errorScreenType, appName),
         content = { Content(errorScreenType) },
         buttons = {
-            Buttons(
-                onRetry = onRetry,
-                onCancel = onCancel,
-            )
+            when (errorScreenType) {
+                ErrorScreenType.OtherDeviceAlreadySignedIn -> DoneButton(
+                    onDone = onCancel,
+                )
+                else -> Buttons(
+                    onRetry = onRetry,
+                    onCancel = onCancel,
+                )
+            }
         },
     )
 }
@@ -72,6 +81,7 @@ private fun titleText(errorScreenType: ErrorScreenType, appName: String) = when 
     ErrorScreenType.Mismatch2Digits -> stringResource(id = R.string.screen_link_new_device_wrong_number_title)
     ErrorScreenType.SlidingSyncNotAvailable -> stringResource(id = R.string.screen_qr_code_login_error_sliding_sync_not_supported_title, appName)
     is ErrorScreenType.UnknownError -> stringResource(CommonStrings.common_something_went_wrong)
+    ErrorScreenType.OtherDeviceAlreadySignedIn -> stringResource(R.string.screen_qr_code_login_error_device_already_signed_in_title)
 }
 
 @Composable
@@ -84,6 +94,7 @@ private fun subtitleText(errorScreenType: ErrorScreenType, appName: String) = wh
     ErrorScreenType.InsecureChannelDetected -> stringResource(id = R.string.screen_qr_code_login_connection_note_secure_state_description)
     ErrorScreenType.SlidingSyncNotAvailable -> stringResource(id = R.string.screen_qr_code_login_error_sliding_sync_not_supported_subtitle, appName)
     is ErrorScreenType.UnknownError -> stringResource(R.string.screen_qr_code_login_unknown_error_description)
+    ErrorScreenType.OtherDeviceAlreadySignedIn -> stringResource(R.string.screen_qr_code_login_error_device_already_signed_in_subtitle)
 }
 
 @Composable
@@ -122,6 +133,17 @@ private fun Content(errorScreenType: ErrorScreenType) {
         }
         else -> Unit
     }
+}
+
+@Composable
+private fun DoneButton(
+    onDone: () -> Unit,
+) {
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        text = stringResource(CommonStrings.action_done),
+        onClick = onDone,
+    )
 }
 
 @Composable

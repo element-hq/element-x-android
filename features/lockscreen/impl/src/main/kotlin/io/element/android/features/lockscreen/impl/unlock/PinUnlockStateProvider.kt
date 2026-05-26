@@ -20,7 +20,7 @@ open class PinUnlockStateProvider : PreviewParameterProvider<PinUnlockState> {
     override val values: Sequence<PinUnlockState>
         get() = sequenceOf(
             aPinUnlockState(),
-            aPinUnlockState(pinEntry = PinEntry.createEmpty(4).fillWith("12")),
+            aPinUnlockState(pinEntry = AsyncData.Success(PinEntry.createEmpty(4).fillWith("12"))),
             aPinUnlockState(showWrongPinTitle = true),
             aPinUnlockState(showSignOutPrompt = true),
             aPinUnlockState(showBiometricUnlock = false),
@@ -31,11 +31,18 @@ open class PinUnlockStateProvider : PreviewParameterProvider<PinUnlockState> {
                     BiometricUnlockError(BiometricPrompt.ERROR_LOCKOUT, "Biometric auth disabled")
                 )
             ),
+            aPinUnlockState(showSignOutPrompt = true, pinEntry = AsyncData.Failure(Exception("An error occurred"))),
+            // User enter wrong pin once, and then correct PIN. In this case, the error (with counter reset to 3) should not be displayed.
+            aPinUnlockState(
+                remainingAttempts = AsyncData.Success(2),
+                showWrongPinTitle = true,
+                isUnlocked = true,
+            ),
         )
 }
 
 fun aPinUnlockState(
-    pinEntry: PinEntry = PinEntry.createEmpty(4),
+    pinEntry: AsyncData<PinEntry> = AsyncData.Success(PinEntry.createEmpty(4)),
     remainingAttempts: AsyncData<Int> = AsyncData.Success(3),
     showWrongPinTitle: Boolean = false,
     showSignOutPrompt: Boolean = false,
@@ -44,7 +51,7 @@ fun aPinUnlockState(
     isUnlocked: Boolean = false,
     signOutAction: AsyncAction<Unit> = AsyncAction.Uninitialized,
 ) = PinUnlockState(
-    pinEntry = AsyncData.Success(pinEntry),
+    pinEntry = pinEntry,
     showWrongPinTitle = showWrongPinTitle,
     remainingAttempts = remainingAttempts,
     showSignOutPrompt = showSignOutPrompt,

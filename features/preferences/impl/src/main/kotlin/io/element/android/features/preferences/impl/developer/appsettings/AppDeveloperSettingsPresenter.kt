@@ -25,10 +25,7 @@ import io.element.android.features.rageshake.api.preferences.RageshakePreference
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.extensions.runCatchingExceptions
-import io.element.android.libraries.core.meta.BuildMeta
-import io.element.android.libraries.core.meta.BuildType
 import io.element.android.libraries.featureflag.api.FeatureFlagService
-import io.element.android.libraries.featureflag.api.FeatureFlags
 import io.element.android.libraries.featureflag.ui.model.FeatureUiModel
 import io.element.android.libraries.preferences.api.store.AppPreferencesStore
 import kotlinx.collections.immutable.ImmutableList
@@ -45,7 +42,6 @@ class AppDeveloperSettingsPresenter(
     private val featureFlagService: FeatureFlagService,
     private val rageshakePresenter: Presenter<RageshakePreferencesState>,
     private val appPreferencesStore: AppPreferencesStore,
-    private val buildMeta: BuildMeta,
 ) : Presenter<AppDeveloperSettingsState> {
     @Composable
     override fun present(): AppDeveloperSettingsState {
@@ -71,14 +67,6 @@ class AppDeveloperSettingsPresenter(
 
         LaunchedEffect(Unit) {
             featureFlagService.getAvailableFeatures()
-                .run {
-                    // Never display room directory search in release builds for Play Store
-                    if (buildMeta.flavorDescription == "GooglePlay" && buildMeta.buildType == BuildType.RELEASE) {
-                        filterNot { it.key == FeatureFlags.RoomDirectorySearch.key }
-                    } else {
-                        this
-                    }
-                }
                 .forEach { feature ->
                     enabledFeatures.add(EnabledFeature(feature, featureFlagService.isFeatureEnabled(feature)))
                 }

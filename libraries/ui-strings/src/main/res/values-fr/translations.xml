@@ -9,13 +9,16 @@
     <item quantity="one">"%1$d chiffre saisi"</item>
     <item quantity="other">"%1$d chiffres saisis"</item>
   </plurals>
+  <string name="a11y_duration">"Durée: %1$s"</string>
   <string name="a11y_edit_avatar">"Modifier l’avatar"</string>
   <string name="a11y_edit_room_address_hint">"L’adresse complète sera %1$s"</string>
   <string name="a11y_encryption_details">"Détails du chiffrement"</string>
   <string name="a11y_expand_message_text_field">"Augmenter la taille du composeur"</string>
   <string name="a11y_hide_password">"Masquer le mot de passe"</string>
+  <string name="a11y_info">"Info"</string>
   <string name="a11y_join_call">"Rejoindre l’appel"</string>
   <string name="a11y_jump_to_bottom">"Retourner à la fin de la conversation"</string>
+  <string name="a11y_jump_to_unread">"Aller aux messages non lus"</string>
   <string name="a11y_move_the_map_to_my_location">"Déplacer la carte vers ma position"</string>
   <string name="a11y_notifications_mentions_only">"Mentions uniquement"</string>
   <string name="a11y_notifications_muted">"En sourdine"</string>
@@ -32,6 +35,7 @@
   <string name="a11y_playback_speed">"Vitesse de lecture"</string>
   <string name="a11y_poll">"Sondage"</string>
   <string name="a11y_poll_end">"Sondage terminé"</string>
+  <string name="a11y_position">"Position: %1$s"</string>
   <string name="a11y_qr_code">"Code QR"</string>
   <string name="a11y_react_with">"Réagir avec %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Réagir avec d’autres émojis"</string>
@@ -47,11 +51,15 @@
   <string name="a11y_room_avatar">"Avatar du salon"</string>
   <string name="a11y_send_files">"Envoyer des fichiers"</string>
   <string name="a11y_sender_location">"Position de l’expéditeur"</string>
+  <string name="a11y_sent_by_sender_at_date">"Envoyé par %1$s à %2$s"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Action limitée dans le temps requise, vous avez une minute pour effectuer la vérification"</string>
+  <string name="a11y_settings_with_required_action">"Paramètres, action requise"</string>
   <string name="a11y_show_password">"Afficher le mot de passe"</string>
   <string name="a11y_start_call">"Démarrer un appel"</string>
   <string name="a11y_start_video_call">"Passer un appel vidéo"</string>
   <string name="a11y_start_voice_call">"Lancer un appel vocal"</string>
+  <string name="a11y_thread_in_room">"Discussion dans %1$s"</string>
+  <string name="a11y_threads_in_room">"Discussions dans %1$s"</string>
   <string name="a11y_tombstoned_room">"Salon clôturé"</string>
   <string name="a11y_user_avatar">"Avatar de l’utilisateur"</string>
   <string name="a11y_user_menu">"Menu utilisateur"</string>
@@ -69,6 +77,7 @@
   <string name="action_call">"Appel"</string>
   <string name="action_cancel">"Annuler"</string>
   <string name="action_cancel_for_now">"Annuler pour l’instant"</string>
+  <string name="action_choose_file">"Choisir un fichier"</string>
   <string name="action_choose_photo">"Choisir une photo"</string>
   <string name="action_clear">"Effacer"</string>
   <string name="action_close">"Fermer"</string>
@@ -88,12 +97,15 @@
   <string name="action_deactivate_account">"Désactiver le compte"</string>
   <string name="action_decline">"Refuser"</string>
   <string name="action_decline_and_block">"Refuser et bloquer"</string>
+  <string name="action_delete">"Supprimer"</string>
+  <string name="action_delete_account">"Supprimer le compte"</string>
   <string name="action_delete_poll">"Supprimer le sondage"</string>
   <string name="action_deselect_all">"Tout désélectionner"</string>
   <string name="action_disable">"Désactiver"</string>
   <string name="action_discard">"Annuler"</string>
   <string name="action_dismiss">"Ignorer"</string>
   <string name="action_done">"Terminé"</string>
+  <string name="action_download">"Télécharger"</string>
   <string name="action_edit">"Modifier"</string>
   <string name="action_edit_caption">"Modifier la légende"</string>
   <string name="action_edit_poll">"Modifier le sondage"</string>
@@ -193,7 +205,6 @@
   <string name="common_advanced_settings">"Paramètres avancés"</string>
   <string name="common_an_image">"une image"</string>
   <string name="common_analytics">"Statistiques d’utilisation"</string>
-  <string name="common_android_fetching_notifications_title">"Synchronisation des notifications…"</string>
   <string name="common_android_shortcuts_remove_reason_left_room">"Vous avez quitté le salon"</string>
   <string name="common_android_shortcuts_remove_reason_session_logged_out">"Vous avez été déconnecté de la session"</string>
   <string name="common_appearance">"Apparence"</string>
@@ -201,7 +212,9 @@
   <string name="common_beta">"Bêta"</string>
   <string name="common_blocked_users">"Utilisateurs bloqués"</string>
   <string name="common_bubbles">"Bulles"</string>
+  <string name="common_call_declined">"Appel rejeté"</string>
   <string name="common_call_started">"Appel démarré"</string>
+  <string name="common_call_you_declined">"Vous avez rejeté un appel"</string>
   <string name="common_chat_backup">"Sauvegarde des discussions"</string>
   <string name="common_copied_to_clipboard">"Copié dans le presse-papiers"</string>
   <string name="common_copyright">"Droits d’auteur"</string>
@@ -211,7 +224,6 @@
   <string name="common_current_user_left_room">"Vous avez quitté le salon"</string>
   <string name="common_current_user_left_space">"Vous avez quitté l’espace"</string>
   <string name="common_current_user_rejected_invite">"Invitation refusée"</string>
-  <string name="common_dark">"Sombre"</string>
   <string name="common_decryption_error">"Erreur de déchiffrement"</string>
   <string name="common_description">"Description"</string>
   <string name="common_developer_options">"Options pour les développeurs"</string>
@@ -237,6 +249,7 @@ Raison : %1$s."</string>
   <string name="common_failed">"Échec"</string>
   <string name="common_favourite">"Favori"</string>
   <string name="common_favourited">"Ajouté aux favoris"</string>
+  <string name="common_fetching_notifications_title_android">"Synchronisation des notifications…"</string>
   <string name="common_file">"Fichier"</string>
   <string name="common_file_deleted">"Fichier supprimé"</string>
   <string name="common_file_saved">"Fichier enregistré"</string>
@@ -250,7 +263,6 @@ Raison : %1$s."</string>
   <string name="common_invite_unknown_profile">"Cet identifiant Matrix est introuvable, il est donc possible que l’invitation ne soit pas reçue."</string>
   <string name="common_leaving_room">"Quitter le salon…"</string>
   <string name="common_leaving_space">"En train de quitter l’espace"</string>
-  <string name="common_light">"Clair"</string>
   <string name="common_line_copied_to_clipboard">"Ligne copiée dans le presse-papiers"</string>
   <string name="common_link_copied_to_clipboard">"Lien copié dans le presse-papiers"</string>
   <string name="common_link_new_device">"Associer un nouvel appareil"</string>
@@ -317,7 +329,6 @@ Raison : %1$s."</string>
     <item quantity="other">"%1$d réponses"</item>
   </plurals>
   <string name="common_replying_to">"En réponse à %1$s"</string>
-  <string name="common_report_a_bug">"Signaler un problème"</string>
   <string name="common_report_a_problem">"Remonter un problème"</string>
   <string name="common_report_submitted">"Rapport soumis"</string>
   <string name="common_rich_text_editor">"Éditeur de texte enrichi"</string>
@@ -371,7 +382,6 @@ Raison : %1$s."</string>
   <string name="common_suggested">"Recommandé"</string>
   <string name="common_suggestions">"Suggestions"</string>
   <string name="common_syncing">"Synchronisation"</string>
-  <string name="common_system">"Système"</string>
   <string name="common_text">"Texte"</string>
   <string name="common_third_party_notices">"Avis de tiers"</string>
   <string name="common_thread">"Fil de discussion"</string>
@@ -460,6 +470,9 @@ Raison : %1$s."</string>
   <string name="error_unknown">"Désolé, une erreur s’est produite"</string>
   <string name="invite_friends_rich_title">"🔐️ Rejoignez-moi sur %1$s"</string>
   <string name="invite_friends_text">"Salut, parle-moi sur %1$s : %2$s"</string>
+  <string name="live_location_sharing_foreground_service_channel_title_android">"Partage de position en continu"</string>
+  <string name="live_location_sharing_foreground_service_message_android">"Partage de position en cours"</string>
+  <string name="live_location_sharing_foreground_service_title_android">"%1$s position en temps réel"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Rageshake pour signaler un problème"</string>
   <string name="screen_bug_report_a11y_screenshot">"Capture d’écran"</string>
@@ -467,6 +480,10 @@ Raison : %1$s."</string>
   <string name="screen_create_poll_options_section_title">"Options"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Supprimer %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Paramètres"</string>
+  <plurals name="screen_image_edition_a11y_rotation_state">
+    <item quantity="one">"%1$d degré"</item>
+    <item quantity="other">"%1$d degrés"</item>
+  </plurals>
   <string name="screen_live_location_sheet_nobody_sharing">"Personne ne partage sa position"</string>
   <string name="screen_live_location_sheet_sharing_live_location">"Partage de la position en direct"</string>
   <plurals name="screen_live_location_sheet_subtitle">

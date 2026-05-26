@@ -21,7 +21,7 @@
   <string name="screen_create_new_recovery_key_list_item_5">"生成された回復鍵をパスワードマネージャや暗号化に対応するメモアプリに保存してください。"</string>
   <string name="screen_create_new_recovery_key_title">"他の端末を使用して暗号化をリセット"</string>
   <string name="screen_encryption_reset_action_continue_reset">"リセットを続行"</string>
-  <string name="screen_encryption_reset_bullet_1">"アカウントの情報と連絡先や設定などは残ります"</string>
+  <string name="screen_encryption_reset_bullet_1">"アカウントの情報や連絡先, 設定などは残ります"</string>
   <string name="screen_encryption_reset_bullet_2">"サーバー上にのみ存在する過去のメッセージは確認できなくなります"</string>
   <string name="screen_encryption_reset_bullet_3">"すべての端末と連絡先を再度検証する必要があります"</string>
   <string name="screen_encryption_reset_footer">"デジタルIDのリセットは、他のサインイン済みの端末と、回復鍵の両方へのアクセスを失った場合にのみ行ってください。"</string>

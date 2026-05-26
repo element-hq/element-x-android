@@ -96,7 +96,12 @@ class RoomBeginningPostProcessorTest {
             messageEvent,
         )
         val processor = RoomBeginningPostProcessor(Timeline.Mode.Live)
-        val processedItems = processor.process(timelineItems, isDm = true, roomCreator = A_USER_ID, hasMoreToLoadBackwards = false)
+        val processedItems = processor.process(
+            timelineItems,
+            isDm = true,
+            roomCreator = A_USER_ID,
+            hasMoreToLoadBackwards = false
+        )
         assertThat(processedItems).isEqualTo(expected)
     }
 
@@ -107,7 +112,12 @@ class RoomBeginningPostProcessorTest {
             roomCreatorJoinEvent,
         )
         val processor = RoomBeginningPostProcessor(Timeline.Mode.Live)
-        val processedItems = processor.process(timelineItems, isDm = true, roomCreator = A_USER_ID, hasMoreToLoadBackwards = true)
+        val processedItems = processor.process(
+            timelineItems,
+            isDm = true,
+            roomCreator = A_USER_ID,
+            hasMoreToLoadBackwards = true
+        )
         assertThat(processedItems).isEmpty()
     }
 
@@ -117,7 +127,12 @@ class RoomBeginningPostProcessorTest {
             roomCreatorJoinEvent,
         )
         val processor = RoomBeginningPostProcessor(Timeline.Mode.Live)
-        val processedItems = processor.process(timelineItems, isDm = true, roomCreator = A_USER_ID, hasMoreToLoadBackwards = true)
+        val processedItems = processor.process(
+            timelineItems,
+            isDm = true,
+            roomCreator = A_USER_ID,
+            hasMoreToLoadBackwards = true
+        )
         assertThat(processedItems).isEmpty()
     }
 
@@ -128,7 +143,12 @@ class RoomBeginningPostProcessorTest {
             otherMemberJoinEvent,
         )
         val processor = RoomBeginningPostProcessor(Timeline.Mode.Live)
-        val processedItems = processor.process(timelineItems, isDm = true, roomCreator = A_USER_ID, hasMoreToLoadBackwards = true)
+        val processedItems = processor.process(
+            timelineItems,
+            isDm = true,
+            roomCreator = A_USER_ID,
+            hasMoreToLoadBackwards = true
+        )
         assertThat(processedItems).isEqualTo(listOf(otherMemberJoinEvent))
     }
 }

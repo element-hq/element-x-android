@@ -34,12 +34,12 @@ class EditDefaultNotificationSettingNode(
     }
 
     data class Inputs(
-        val isOneToOne: Boolean
+        val isDm: Boolean
     ) : NodeInputs
 
     private val callback: Callback = callback()
     private val inputs = inputs<Inputs>()
-    private val presenter = presenterFactory.create(inputs.isOneToOne)
+    private val presenter = presenterFactory.create(inputs.isDm)
 
     @Composable
     override fun View(modifier: Modifier) {

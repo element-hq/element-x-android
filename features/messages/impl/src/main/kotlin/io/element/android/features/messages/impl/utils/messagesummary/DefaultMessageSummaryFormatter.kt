@@ -10,6 +10,7 @@ package io.element.android.features.messages.impl.utils.messagesummary
 
 import android.content.Context
 import dev.zacsweers.metro.ContributesBinding
+import io.element.android.features.messages.impl.timeline.model.event.RtcNotificationState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemAudioContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEncryptedContent
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemEventContent
@@ -56,7 +57,16 @@ class DefaultMessageSummaryFormatter(
             is TimelineItemFileContent -> context.getString(CommonStrings.common_file)
             is TimelineItemAudioContent -> context.getString(CommonStrings.common_audio)
             is TimelineItemLegacyCallInviteContent -> context.getString(CommonStrings.common_unsupported_call)
-            is TimelineItemRtcNotificationContent -> context.getString(CommonStrings.common_call_started)
+            is TimelineItemRtcNotificationContent -> when (content.state) {
+                is RtcNotificationState.Declined -> {
+                    if (content.state.byMe) {
+                        context.getString(CommonStrings.common_call_you_declined)
+                    } else {
+                        context.getString(CommonStrings.common_call_declined)
+                    }
+                }
+                RtcNotificationState.Started -> context.getString(CommonStrings.common_call_started)
+            }
         }
             // Truncate the message to a safe length to avoid crashes in Compose
             .toSafeLength()

@@ -92,6 +92,7 @@ import io.element.android.libraries.designsystem.components.avatar.AvatarType
 import io.element.android.libraries.designsystem.modifiers.niceClickable
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
+import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
 import io.element.android.libraries.designsystem.swipe.SwipeableActionsState
 import io.element.android.libraries.designsystem.swipe.rememberSwipeableActionsState
 import io.element.android.libraries.designsystem.text.toPx
@@ -120,7 +121,7 @@ import io.element.android.libraries.testtags.TestTags
 import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonPlurals
 import io.element.android.libraries.ui.strings.CommonStrings
-import io.element.android.libraries.ui.utils.time.isTalkbackActive
+import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
 import kotlinx.coroutines.launch
 import kotlin.math.abs
@@ -782,7 +783,7 @@ private fun MessageEventBubbleContent(
             val content = content.ensureActiveLiveLocation()
             val shouldHide = content.mode is TimelineItemLocationContent.Mode.Live &&
                 content.mode.isActive &&
-                content.mode.canStop
+                content.mode.isOwnUser
             if (shouldHide) TimestampPosition.Hidden else TimestampPosition.Overlay
         }
         is TimelineItemPollContent -> TimestampPosition.Below
@@ -863,7 +864,7 @@ internal fun TimelineItemEventRowWithThreadSummaryPreview() = ElementPreview {
                                     ),
                                     senderId = UserId("@user:id"),
                                     senderProfile = ProfileDetails.Ready(
-                                        displayName = "Alice",
+                                        displayName = USER_NAME_ALICE,
                                         avatarUrl = null,
                                         displayNameAmbiguous = false,
                                     ),
@@ -898,7 +899,7 @@ internal fun ThreadSummaryViewPreview() {
                     ),
                     senderId = UserId("@user:id"),
                     senderProfile = ProfileDetails.Ready(
-                        displayName = "Alice",
+                        displayName = USER_NAME_ALICE,
                         avatarUrl = null,
                         displayNameAmbiguous = true,
                     ),

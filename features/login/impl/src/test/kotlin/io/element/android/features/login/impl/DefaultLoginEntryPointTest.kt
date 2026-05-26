@@ -17,7 +17,7 @@ import io.element.android.features.login.api.LoginEntryPoint
 import io.element.android.features.login.impl.accountprovider.AccountProviderDataSource
 import io.element.android.features.login.impl.classic.FakeElementClassicConnection
 import io.element.android.features.preferences.test.FakePreferencesEntryPoint
-import io.element.android.libraries.oidc.test.customtab.FakeOidcActionFlow
+import io.element.android.libraries.oauth.test.customtab.FakeOAuthActionFlow
 import io.element.android.tests.testutils.lambda.lambdaError
 import io.element.android.tests.testutils.node.TestParentNode
 import kotlinx.coroutines.test.runTest
@@ -39,7 +39,7 @@ class DefaultLoginEntryPointTest {
                 buildContext = buildContext,
                 plugins = plugins,
                 accountProviderDataSource = AccountProviderDataSource(FakeEnterpriseService()),
-                oidcActionFlow = FakeOidcActionFlow(),
+                oAuthActionFlow = FakeOAuthActionFlow(),
                 appCoroutineScope = backgroundScope,
                 elementClassicConnection = FakeElementClassicConnection(),
                 preferencesEntryPoint = FakePreferencesEntryPoint(),

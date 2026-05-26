@@ -62,7 +62,7 @@ class DefaultEventItemFactoryTest {
     fun `create check all null cases`() {
         val factory = createEventItemFactory()
         val contents = listOf(
-            CallNotifyContent(callIntent = CallIntent.VIDEO),
+            CallNotifyContent(callIntent = CallIntent.VIDEO, emptyList()),
             FailedToParseMessageLikeContent("", ""),
             FailedToParseStateContent("", "", ""),
             LegacyCallInviteContent,
