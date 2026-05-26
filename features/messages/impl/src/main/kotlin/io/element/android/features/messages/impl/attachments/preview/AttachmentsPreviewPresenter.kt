@@ -100,7 +100,7 @@ class AttachmentsPreviewPresenter(
         var appliedImageEdits by remember { mutableStateOf(AttachmentImageEdits()) }
         var isApplyingImageEdits by remember { mutableStateOf(false) }
         var displayImageEditError by remember { mutableStateOf(false) }
-        var editedTempFile by remember { mutableStateOf<File?>(null) }
+        var editedTempFiles by remember { mutableStateOf<Map<Int, File>>(emptyMap()) }
 
         val markdownTextEditorState = rememberMarkdownTextEditorState(initialText = null, initialFocus = false)
         val textEditorState by rememberUpdatedState(
@@ -158,13 +158,21 @@ var displayFileTooLargeError by remember { mutableStateOf(false) }
 
         val maxUploadSize = mediaOptimizationSelectorState.maxUploadSize.dataOrNull()
         LaunchedEffect(maxUploadSize) {
-            val isImageFile = firstMediaAttachment.localMedia.info.isImageAttachment()
-            val isVideoFile = firstMediaAttachment.localMedia.info.mimeType.isMimeTypeVideo()
-            if (maxUploadSize != null && !(isImageFile || isVideoFile)) {
+            if (maxUploadSize != null) {
                 // If file size is not known, we're permissive and allow sending. The SDK will cancel the upload if needed.
-                val fileSize = firstMediaAttachment.localMedia.info.fileSize ?: 0L
-                if (maxUploadSize < fileSize) {
-                    displayFileTooLargeError = true
+                displayFileTooLargeError = attachments.any { attachment ->
+                    when (attachment) {
+                        is Attachment.Media -> {
+                            val isImageFile = attachment.localMedia.info.isImageAttachment()
+                            val isVideoFile = attachment.localMedia.info.mimeType.isMimeTypeVideo()
+                            if (isImageFile || isVideoFile) {
+                                false
+                            } else {
+                                val fileSize = attachment.localMedia.info.fileSize ?: 0L
+                                maxUploadSize < fileSize
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -210,8 +218,8 @@ var displayFileTooLargeError by remember { mutableStateOf(false) }
                         val caption = markdownTextEditorState.getMessageMarkdown(permalinkBuilder)
                             .takeIf { it.isNotEmpty() }
 
-                        val editedTempFileToDelete = editedTempFile
-                        editedTempFile = null
+                        val editedTempFilesToDelete = editedTempFiles
+                        editedTempFiles = emptyMap()
 
                         // Send the media using the session coroutine scope so it doesn't matter if this screen or the chat one are closed
                         sessionCoroutineScope.launch(dispatchers.io) {
@@ -224,7 +232,7 @@ var displayFileTooLargeError by remember { mutableStateOf(false) }
 
                             // Clean up the pre-processed media after it's been sent
                             mediaSender.cleanUp()
-                            editedTempFileToDelete?.safeDelete()
+                            editedTempFilesToDelete.values.forEach { it.safeDelete() }
                         }
                     }
                 }
@@ -244,7 +252,7 @@ var displayFileTooLargeError by remember { mutableStateOf(false) }
                     dismiss(
                         attachments = currentAttachments,
                         sendActionState = sendActionState,
-                        editedTempFile = editedTempFile,
+                        editedTempFiles = editedTempFiles,
                     )
                 }
                 AttachmentsPreviewEvent.CancelAndClearSendState -> {
@@ -297,8 +305,8 @@ var displayFileTooLargeError by remember { mutableStateOf(false) }
                 AttachmentsPreviewEvent.ApplyImageEdits -> {
                     val pendingState = imageEditorState ?: return
                     if (!pendingState.edits.hasChanges) {
-                        editedTempFile?.safeDelete()
-                        editedTempFile = null
+                        editedTempFiles[currentIndex]?.safeDelete()
+                        editedTempFiles = editedTempFiles - currentIndex
                         appliedImageEdits = pendingState.edits
                         currentAttachment = Attachment.Media(originalLocalMedia)
                         currentAttachments = currentAttachments.toMutableList().also {
@@ -319,8 +327,8 @@ var displayFileTooLargeError by remember { mutableStateOf(false) }
                         }
                         result.fold(
                             onSuccess = { editedMedia ->
-                                editedTempFile?.safeDelete()
-                                editedTempFile = editedMedia.file
+                                editedTempFiles[currentIndex]?.safeDelete()
+                                editedTempFiles = editedTempFiles + (currentIndex to editedMedia.file)
                                 appliedImageEdits = pendingState.edits
                                 currentAttachment = Attachment.Media(editedMedia.localMedia)
                                 currentAttachments = currentAttachments.toMutableList().also {
@@ -400,7 +408,7 @@ var displayFileTooLargeError by remember { mutableStateOf(false) }
     private fun dismiss(
         attachments: List<Attachment>,
         sendActionState: MutableState<SendActionState>,
-        editedTempFile: File? = null,
+        editedTempFiles: Map<Int, File> = emptyMap(),
     ) {
         for (attachment in attachments) {
             when (attachment) {
@@ -411,7 +419,7 @@ var displayFileTooLargeError by remember { mutableStateOf(false) }
         }
         val uploadInfos = (sendActionState.value as? SendActionState.Sending.ReadyToUpload)?.mediaInfos
         uploadInfos?.forEach { cleanUp(it) }
-        editedTempFile?.safeDelete()
+        editedTempFiles.values.forEach { it.safeDelete() }
         sendActionState.value = SendActionState.Done
         onDoneListener()
     }
