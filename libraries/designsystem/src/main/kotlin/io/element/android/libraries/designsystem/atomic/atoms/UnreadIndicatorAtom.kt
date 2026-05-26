@@ -10,9 +10,10 @@ package io.element.android.libraries.designsystem.atomic.atoms
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.defaultMinSize
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -29,6 +30,7 @@ import io.element.android.libraries.designsystem.theme.unreadIndicator
 fun UnreadIndicatorAtom(
     modifier: Modifier = Modifier,
     size: Dp = 12.dp,
+    count: Long? = null,
     color: Color = ElementTheme.colors.unreadIndicator,
     isVisible: Boolean = true,
     contentDescription: String? = null,
@@ -38,10 +40,20 @@ fun UnreadIndicatorAtom(
             .semantics {
                 contentDescription?.let { this.contentDescription = it }
             }
-            .size(size)
+            .defaultMinSize(size, size)
             .clip(CircleShape)
-            .background(if (isVisible) color else Color.Transparent)
-    )
+            .background(if (isVisible) color else Color.Transparent),
+        contentAlignment = Alignment.Center,
+    ) {
+        if (count != null && count > 1) {
+            CounterAtom(
+                count = count.toInt(),
+                containerColor = Color.Transparent,
+                contentColor = ElementTheme.colors.bgCanvasDefault,
+                textStyle = ElementTheme.typography.fontBodySmMedium,
+            )
+        }
+    }
 }
 
 @PreviewsDayNight

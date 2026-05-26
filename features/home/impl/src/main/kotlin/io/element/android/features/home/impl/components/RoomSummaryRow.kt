@@ -75,6 +75,7 @@ internal fun RoomSummaryRow(
     room: RoomListRoomSummary,
     hideInviteAvatars: Boolean,
     isInviteSeen: Boolean,
+    showUnreadCount: Boolean = false,
     onClick: (RoomListRoomSummary) -> Unit,
     eventSink: (RoomListEvent) -> Unit,
     modifier: Modifier = Modifier,
@@ -127,7 +128,7 @@ internal fun RoomSummaryRow(
                         timestamp = room.timestamp,
                         isHighlighted = room.isHighlighted
                     )
-                    MessagePreviewAndIndicatorRow(room = room)
+                    MessagePreviewAndIndicatorRow(room = room, showUnreadCount = showUnreadCount)
                 }
             }
             RoomSummaryDisplayType.KNOCKED -> {
@@ -273,6 +274,7 @@ private fun InviteSubtitle(
 @Composable
 private fun MessagePreviewAndIndicatorRow(
     room: RoomListRoomSummary,
+    showUnreadCount: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Row(
@@ -360,8 +362,18 @@ private fun MessagePreviewAndIndicatorRow(
             }
             if (room.hasNewContent) {
                 val contentDescription = stringResource(CommonStrings.a11y_notifications_new_messages)
+                val count = if (showUnreadCount) {
+                    if (room.userDefinedNotificationMode == RoomNotificationMode.MUTE) {
+                        room.numberOfUnreadMessages
+                    } else {
+                        room.numberOfUnreadNotifications
+                    }
+                } else {
+                    null
+                }
                 UnreadIndicatorAtom(
                     color = tint,
+                    count = count,
                     contentDescription = contentDescription,
                 )
             }
