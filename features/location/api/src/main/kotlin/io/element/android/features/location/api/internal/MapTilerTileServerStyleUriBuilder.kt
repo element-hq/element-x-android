@@ -34,7 +34,7 @@ internal class MapTilerTileServerStyleUriBuilder(
                 val mapId = if (darkMode) darkMapId else lightMapId
                 append("$baseUrl/$mapId/style.json")
             } else {
-                append(customMapStyleUrl.removeSuffix("/"))
+                append(customMapStyleUrl)
             }
             append("?key=$apiKey")
         }
