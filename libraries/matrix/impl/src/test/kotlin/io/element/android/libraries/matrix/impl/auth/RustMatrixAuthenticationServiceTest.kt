@@ -66,7 +66,7 @@ class RustMatrixAuthenticationServiceTest {
             coroutineDispatchers = testCoroutineDispatchers(),
             sessionStore = sessionStore,
             rustMatrixClientFactory = rustMatrixClientFactory,
-            passphraseGenerator = FakePassphraseGenerator(),
+            secretGenerator = FakeSecretGenerator(),
             oAuthConfigurationProvider = OAuthConfigurationProvider(
                 buildMeta = aBuildMeta(),
                 oAuthRedirectUrlProvider = FakeOAuthRedirectUrlProvider(),
