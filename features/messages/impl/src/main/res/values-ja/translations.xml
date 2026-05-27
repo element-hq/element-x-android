@@ -26,6 +26,7 @@
   <string name="screen_media_upload_preview_item_count">"個数 %1$d / %2$d"</string>
   <string name="screen_media_upload_preview_optimize_image_quality_title">"画像の品質を最適化"</string>
   <string name="screen_media_upload_preview_processing">"処理中…"</string>
+  <string name="screen_media_upload_preview_title">"メディアを追加"</string>
   <string name="screen_report_content_block_user">"ユーザーをブロック"</string>
   <string name="screen_report_content_block_user_hint">"このユーザーからのメッセージをすべて非表示にする場合はチェックしてください。"</string>
   <string name="screen_report_content_explanation">"このメッセージはホームサーバーの管理者に報告されます。暗号化されたメッセージを確認することはできません。"</string>

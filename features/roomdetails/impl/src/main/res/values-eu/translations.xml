@@ -100,6 +100,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Rolak"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Gelaren xehetasunak"</string>
   <string name="screen_room_roles_and_permissions_title">"Rolak eta baimenak"</string>
+  <string name="screen_roomlist_mark_as_read">"Markatu irakurritzat"</string>
+  <string name="screen_roomlist_mark_as_unread">"Markatu irakurri gabetzat"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Gehitu gelaren helbidea"</string>
   <string name="screen_security_and_privacy_enable_encryption_alert_confirm_button_title">"Bai, gaitu zifratzea"</string>
   <string name="screen_security_and_privacy_encryption_section_header">"Zifratzea"</string>

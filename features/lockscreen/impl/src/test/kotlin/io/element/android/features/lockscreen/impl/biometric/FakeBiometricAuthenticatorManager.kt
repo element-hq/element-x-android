@@ -15,6 +15,7 @@ class FakeBiometricAuthenticatorManager(
     override var isDeviceSecured: Boolean = true,
     override var hasAvailableAuthenticator: Boolean = false,
     private val createBiometricAuthenticator: () -> BiometricAuthenticator = { FakeBiometricAuthenticator() },
+    private val disableLambda: suspend () -> Unit = { },
 ) : BiometricAuthenticatorManager {
     override fun addCallback(callback: BiometricAuthenticator.Callback) {
         // no-op
@@ -36,5 +37,9 @@ class FakeBiometricAuthenticatorManager(
         return remember {
             createBiometricAuthenticator()
         }
+    }
+
+    override suspend fun disable() {
+        disableLambda()
     }
 }

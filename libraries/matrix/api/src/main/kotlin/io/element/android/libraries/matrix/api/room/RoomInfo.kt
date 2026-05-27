@@ -79,6 +79,7 @@ data class RoomInfo(
     val privilegedCreatorRole: Boolean,
     val isLowPriority: Boolean,
     val activeCallIntentConsensus: CallIntentConsensus,
+    val fullyReadEventId: EventId?,
 ) {
     val aliases: List<RoomAlias>
         get() = listOfNotNull(canonicalAlias) + alternativeAliases

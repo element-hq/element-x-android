@@ -44,7 +44,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
-import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -52,9 +51,12 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.onSizeChanged
+import androidx.compose.ui.layout.onVisibilityChanged
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.clearAndSetSemantics
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.heading
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.style.TextOverflow
@@ -178,9 +180,11 @@ fun MediaViewerView(
         val pagerState = rememberPagerState(state.currentIndex, 0f) {
             state.listData.size
         }
-        LaunchedEffect(pagerState) {
-            snapshotFlow { pagerState.currentPage }.collect { page ->
-                state.eventSink(MediaViewerEvent.OnNavigateTo(page))
+
+        LaunchedEffect(pagerState.targetPage, state.currentIndex) {
+            // Only emit an index navigation change when it's triggered by the user scrolling
+            if (pagerState.targetPage != state.currentIndex && pagerState.isScrollInProgress) {
+                state.eventSink(MediaViewerEvent.OnNavigateTo(pagerState.targetPage))
             }
         }
         HorizontalPager(
@@ -208,11 +212,16 @@ fun MediaViewerView(
                 }
                 is MediaViewerPageData.MediaViewerData -> {
                     var bottomPaddingInPixels by remember { mutableIntStateOf(defaultBottomPaddingInPixels) }
-                    LaunchedEffect(Unit) {
-                        state.eventSink(MediaViewerEvent.LoadMedia(dataForPage))
-                    }
                     Box(
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier
+                            .onVisibilityChanged(minDurationMs = 200L) { isVisible ->
+                                if (isVisible) {
+                                    state.eventSink(MediaViewerEvent.LoadMedia(dataForPage))
+                                } else {
+                                    state.eventSink(MediaViewerEvent.CancelLoadingMedia(dataForPage))
+                                }
+                            }
+                            .fillMaxSize()
                     ) {
                         val isDisplayed = remember(pagerState.settledPage) {
                             // This 'item provider' lambda will be called when the data source changes with an outdated `settlePage` value
@@ -488,14 +497,20 @@ private fun MediaViewerTopBar(
     TopAppBar(
         title = {
             if (senderName != null && dateSent != null) {
+                val description = stringResource(
+                    CommonStrings.a11y_sent_by_sender_at_date,
+                    senderName,
+                    dateSent,
+                )
                 Column(
                     modifier = Modifier
                         .fillMaxWidth()
+                        .clearAndSetSemantics {
+                            heading()
+                            contentDescription = description
+                        },
                 ) {
                     Text(
-                        modifier = Modifier.semantics {
-                            heading()
-                        },
                         text = senderName,
                         style = ElementTheme.typography.fontBodyMdMedium,
                         color = ElementTheme.colors.textPrimary,

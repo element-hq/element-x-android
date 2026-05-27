@@ -132,6 +132,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Roolit"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Huoneen tiedot"</string>
   <string name="screen_room_roles_and_permissions_title">"Roolit ja oikeudet"</string>
+  <string name="screen_roomlist_mark_as_read">"Merkitse luetuksi"</string>
+  <string name="screen_roomlist_mark_as_unread">"Merkitse lukemattomaksi"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Lisää osoite"</string>
   <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Kuka tahansa valtuutetuissa tiloissa voi liittyä, mutta kaikkien muiden on pyydettävä pääsyä."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Kaikkien on pyydettävä pääsyä."</string>

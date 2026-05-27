@@ -15,6 +15,7 @@
   <string name="a11y_encryption_details">"Сведения о шифровании"</string>
   <string name="a11y_expand_message_text_field">"Развернуть поле ввода"</string>
   <string name="a11y_hide_password">"Скрыть пароль"</string>
+  <string name="a11y_info">"Информация"</string>
   <string name="a11y_join_call">"Присоединиться к звонку"</string>
   <string name="a11y_jump_to_bottom">"Перейти вниз"</string>
   <string name="a11y_move_the_map_to_my_location">"Переместить карту к моему местоположению"</string>
@@ -50,6 +51,7 @@
   <string name="a11y_send_files">"Отправить файлы"</string>
   <string name="a11y_sender_location">"Местоположение отправителя"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Требуется действие, на которое есть ограничение по времени, у вас есть одна минута для проверки"</string>
+  <string name="a11y_settings_with_required_action">"Настройки, требуется действие"</string>
   <string name="a11y_show_password">"Показать пароль"</string>
   <string name="a11y_start_call">"Начать звонок"</string>
   <string name="a11y_start_video_call">"Начать видеозвонок"</string>
@@ -71,6 +73,7 @@
   <string name="action_call">"Позвонить"</string>
   <string name="action_cancel">"Отмена"</string>
   <string name="action_cancel_for_now">"Пока отменить"</string>
+  <string name="action_choose_file">"Выберите файл"</string>
   <string name="action_choose_photo">"Выбрать фото"</string>
   <string name="action_clear">"Очистить"</string>
   <string name="action_close">"Закрыть"</string>
@@ -90,12 +93,15 @@
   <string name="action_deactivate_account">"Отключить учётную запись"</string>
   <string name="action_decline">"Отклонить"</string>
   <string name="action_decline_and_block">"Отклонить и заблокировать"</string>
+  <string name="action_delete">"Удалить"</string>
+  <string name="action_delete_account">"Удалить аккаунт"</string>
   <string name="action_delete_poll">"Удалить опрос"</string>
   <string name="action_deselect_all">"Отменить выбор"</string>
   <string name="action_disable">"Отключить"</string>
   <string name="action_discard">"Отменить"</string>
   <string name="action_dismiss">"Закрыть"</string>
   <string name="action_done">"Готово"</string>
+  <string name="action_download">"Скачать"</string>
   <string name="action_edit">"Редактировать"</string>
   <string name="action_edit_caption">"Изменить подпись"</string>
   <string name="action_edit_poll">"Редактировать опрос"</string>
@@ -202,7 +208,9 @@
   <string name="common_beta">"Бета-версия"</string>
   <string name="common_blocked_users">"Заблокированные пользователи"</string>
   <string name="common_bubbles">"Пузыри"</string>
+  <string name="common_call_declined">"Вызов отклонен"</string>
   <string name="common_call_started">"Звонок начат"</string>
+  <string name="common_call_you_declined">"Ты отклонил звонок"</string>
   <string name="common_chat_backup">"Резервная копия чатов"</string>
   <string name="common_copied_to_clipboard">"Скопировано в буфер обмена"</string>
   <string name="common_copyright">"Авторское право"</string>
@@ -465,6 +473,9 @@
   <string name="error_unknown">"Произошла ошибка"</string>
   <string name="invite_friends_rich_title">"🔐️ Присоединяйтесь ко мне в %1$s"</string>
   <string name="invite_friends_text">"Привет, давай поболтаем в %1$s: %2$s"</string>
+  <string name="live_location_sharing_foreground_service_channel_title_android">"Отправка местонахождения в реальном времени"</string>
+  <string name="live_location_sharing_foreground_service_message_android">"Определение местоположения в процессе"</string>
+  <string name="live_location_sharing_foreground_service_title_android">"Текущее местоположение %1$s"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"Встряхните устройство, чтобы сообщить об ошибке"</string>
   <string name="screen_bug_report_a11y_screenshot">"Скриншот"</string>

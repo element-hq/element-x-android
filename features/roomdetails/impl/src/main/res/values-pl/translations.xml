@@ -108,8 +108,8 @@
   <string name="screen_room_notification_settings_allow_custom">"Zezwalaj na ustawienia niestandardowe"</string>
   <string name="screen_room_notification_settings_allow_custom_footnote">"Włączenie tej opcji nadpisze ustawienie domyślne"</string>
   <string name="screen_room_notification_settings_custom_settings_title">"Powiadamiaj mnie o tym czacie przez"</string>
-  <string name="screen_room_notification_settings_default_setting_footnote">"Możesz to zmienić w swoim %1$s."</string>
-  <string name="screen_room_notification_settings_default_setting_footnote_content_link">"ustawienia globalne"</string>
+  <string name="screen_room_notification_settings_default_setting_footnote">"Możesz to zmienić w %1$s."</string>
+  <string name="screen_room_notification_settings_default_setting_footnote_content_link">"ustawieniach globalnych"</string>
   <string name="screen_room_notification_settings_default_setting_title">"Ustawienie domyślne"</string>
   <string name="screen_room_notification_settings_edit_remove_setting">"Usuń ustawienia własne"</string>
   <string name="screen_room_notification_settings_error_loading_settings">"Wystąpił błąd podczas ładowania ustawień powiadomień."</string>
@@ -135,6 +135,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Role"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Szczegóły pokoju"</string>
   <string name="screen_room_roles_and_permissions_title">"Role i uprawnienia"</string>
+  <string name="screen_roomlist_mark_as_read">"Oznacz jako przeczytane"</string>
+  <string name="screen_roomlist_mark_as_unread">"Oznacz jako nieprzeczytane"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Dodaj adres"</string>
   <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Każdy w autoryzowanych przestrzeniach może dołączyć, ale wszyscy inni muszą poprosić o dostęp."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Każdy musi poprosić o dostęp."</string>

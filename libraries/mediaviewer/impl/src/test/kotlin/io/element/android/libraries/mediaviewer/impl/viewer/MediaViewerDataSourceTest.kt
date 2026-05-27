@@ -62,15 +62,20 @@ class MediaViewerDataSourceTest {
 
     @Test
     fun `test dataFlow uninitialized, loading and error`() = runTest {
-        val galleryDataSource = FakeMediaGalleryDataSource()
+        val galleryDataSource = FakeMediaGalleryDataSource(
+            initialData = AsyncData.Uninitialized,
+        )
         val sut = createMediaViewerDataSource(
             galleryDataSource = galleryDataSource,
         )
-        sut.dataFlow().test {
+        sut.dataFlow.test {
+            // The flow starts with an empty result
+            assertThat(awaitItem()).isEmpty()
             galleryDataSource.emitGroupedMediaItems(AsyncData.Uninitialized)
             assertThat(awaitItem().first()).isInstanceOf(MediaViewerPageData.Loading::class.java)
             galleryDataSource.emitGroupedMediaItems(AsyncData.Loading())
-            assertThat(awaitItem().first()).isInstanceOf(MediaViewerPageData.Loading::class.java)
+            // No items emitted, we were already loading data
+            ensureAllEventsConsumed()
             galleryDataSource.emitGroupedMediaItems(AsyncData.Failure(AN_EXCEPTION))
             assertThat(awaitItem().first()).isEqualTo(MediaViewerPageData.Failure(AN_EXCEPTION))
         }
@@ -82,7 +87,7 @@ class MediaViewerDataSourceTest {
         val sut = createMediaViewerDataSource(
             galleryDataSource = galleryDataSource,
         )
-        sut.dataFlow().test {
+        sut.dataFlow.test {
             galleryDataSource.emitGroupedMediaItems(
                 AsyncData.Success(
                     aGroupedMediaItems(
@@ -102,7 +107,8 @@ class MediaViewerDataSourceTest {
         val sut = createMediaViewerDataSource(
             galleryDataSource = galleryDataSource,
         )
-        sut.dataFlow().test {
+        sut.dataFlow.test {
+            skipItems(1)
             galleryDataSource.emitGroupedMediaItems(
                 AsyncData.Success(
                     aGroupedMediaItems(
@@ -141,7 +147,8 @@ class MediaViewerDataSourceTest {
             mode = MediaViewerMode.TimelineImagesAndVideos(timelineMode = Timeline.Mode.Media),
             galleryDataSource = galleryDataSource,
         )
-        sut.dataFlow().test {
+        sut.dataFlow.test {
+            skipItems(1)
             galleryDataSource.emitGroupedMediaItems(
                 AsyncData.Success(
                     aGroupedMediaItems(
@@ -163,7 +170,8 @@ class MediaViewerDataSourceTest {
             mode = MediaViewerMode.TimelineFilesAndAudios(timelineMode = Timeline.Mode.Media),
             galleryDataSource = galleryDataSource,
         )
-        sut.dataFlow().test {
+        sut.dataFlow.test {
+            skipItems(1)
             galleryDataSource.emitGroupedMediaItems(
                 AsyncData.Success(
                     aGroupedMediaItems(
@@ -184,7 +192,8 @@ class MediaViewerDataSourceTest {
         val sut = createMediaViewerDataSource(
             galleryDataSource = galleryDataSource,
         )
-        sut.dataFlow().test {
+        sut.dataFlow.test {
+            skipItems(1)
             galleryDataSource.emitGroupedMediaItems(
                 AsyncData.Success(
                     aGroupedMediaItems(
@@ -217,7 +226,8 @@ class MediaViewerDataSourceTest {
         val sut = createMediaViewerDataSource(
             galleryDataSource = galleryDataSource,
         )
-        sut.dataFlow().test {
+        sut.dataFlow.test {
+            skipItems(1)
             galleryDataSource.emitGroupedMediaItems(
                 AsyncData.Success(
                     aGroupedMediaItems(
@@ -241,7 +251,8 @@ class MediaViewerDataSourceTest {
             galleryDataSource = galleryDataSource,
             mediaLoader = mediaLoader,
         )
-        sut.dataFlow().test {
+        sut.dataFlow.test {
+            skipItems(1)
             galleryDataSource.emitGroupedMediaItems(
                 AsyncData.Success(
                     aGroupedMediaItems(
@@ -271,6 +282,7 @@ class MediaViewerDataSourceTest {
         mediaLoader: MatrixMediaLoader = FakeMatrixMediaLoader(),
         localMediaFactory: LocalMediaFactory = FakeLocalMediaFactory(mockMediaUrl),
     ) = MediaViewerDataSource(
+        coroutineScope = backgroundScope,
         mode = mode,
         dispatcher = testCoroutineDispatchers().computation,
         galleryDataSource = galleryDataSource,

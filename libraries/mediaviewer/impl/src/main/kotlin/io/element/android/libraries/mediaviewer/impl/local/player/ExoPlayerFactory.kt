@@ -8,14 +8,18 @@
 
 package io.element.android.libraries.mediaviewer.impl.local.player
 
+import androidx.annotation.OptIn
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.media3.common.util.UnstableApi
+import androidx.media3.exoplayer.DefaultRenderersFactory
 import androidx.media3.exoplayer.ExoPlayer
 
+@OptIn(UnstableApi::class)
 @Composable
-fun rememberExoPlayer(): ExoPlayer {
+fun rememberExoPlayer(forAudioOnly: Boolean): ExoPlayer {
     return if (LocalInspectionMode.current) {
         remember {
             ExoPlayerForPreview()
@@ -23,7 +27,14 @@ fun rememberExoPlayer(): ExoPlayer {
     } else {
         val context = LocalContext.current
         remember {
-            ExoPlayer.Builder(context).build()
+            if (forAudioOnly) {
+                // Required for media3-exoplayer-midi to decode MIDI samples produced by DefaultExtractorsFactory.
+                val renderersFactory = DefaultRenderersFactory(context)
+                    .setExtensionRendererMode(DefaultRenderersFactory.EXTENSION_RENDERER_MODE_ON)
+                ExoPlayer.Builder(context, renderersFactory).build()
+            } else {
+                ExoPlayer.Builder(context).build()
+            }
         }
     }
 }

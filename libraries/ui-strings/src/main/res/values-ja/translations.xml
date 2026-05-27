@@ -8,6 +8,7 @@
   <plurals name="a11y_digits_entered">
     <item quantity="other">"%1$d 桁入力済"</item>
   </plurals>
+  <string name="a11y_duration">"長さ: %1$s"</string>
   <string name="a11y_edit_avatar">"アバターを編集"</string>
   <string name="a11y_edit_room_address_hint">"完全なアドレスは %1$s になります。"</string>
   <string name="a11y_encryption_details">"暗号化の詳細"</string>
@@ -16,6 +17,7 @@
   <string name="a11y_info">"情報"</string>
   <string name="a11y_join_call">"通話に参加"</string>
   <string name="a11y_jump_to_bottom">"一番下へ"</string>
+  <string name="a11y_jump_to_unread">"未読に移動"</string>
   <string name="a11y_move_the_map_to_my_location">"現在地に移動"</string>
   <string name="a11y_notifications_mentions_only">"メンションのみ"</string>
   <string name="a11y_notifications_muted">"ミュート有効"</string>
@@ -32,6 +34,7 @@
   <string name="a11y_playback_speed">"再生速度"</string>
   <string name="a11y_poll">"投票"</string>
   <string name="a11y_poll_end">"投票終了"</string>
+  <string name="a11y_position">"位置: %1$s"</string>
   <string name="a11y_qr_code">"QRコード"</string>
   <string name="a11y_react_with">"リアクション: %1$s"</string>
   <string name="a11y_react_with_other_emojis">"他の絵文字でリアクション"</string>
@@ -46,12 +49,15 @@
   <string name="a11y_room_avatar">"ルームのアバター"</string>
   <string name="a11y_send_files">"ファイルを送信"</string>
   <string name="a11y_sender_location">"送信者の位置情報"</string>
+  <string name="a11y_sent_by_sender_at_date">"%2$s に %1$s が送信"</string>
   <string name="a11y_session_verification_time_limited_action_required">"1分以内に検証を完了してください"</string>
   <string name="a11y_settings_with_required_action">"処置が必要な設定"</string>
   <string name="a11y_show_password">"パスワードを表示"</string>
   <string name="a11y_start_call">"通話を開始"</string>
   <string name="a11y_start_video_call">"ビデオ通話を開始"</string>
   <string name="a11y_start_voice_call">"音声通話を開始"</string>
+  <string name="a11y_thread_in_room">"%1$s のスレッド"</string>
+  <string name="a11y_threads_in_room">"%1$s のスレッド"</string>
   <string name="a11y_tombstoned_room">"埋没したルーム"</string>
   <string name="a11y_user_avatar">"ユーザーのアバター"</string>
   <string name="a11y_user_menu">"ユーザーメニュー"</string>
@@ -272,7 +278,7 @@
   <string name="common_message_actions">"メッセージアクション"</string>
   <string name="common_message_failed_to_send">"メッセージの送信に失敗"</string>
   <string name="common_message_layout">"メッセージのレイアウト"</string>
-  <string name="common_message_removed">"メッセージは削除されました"</string>
+  <string name="common_message_removed">"メッセージが削除されました"</string>
   <string name="common_modern">"モダン"</string>
   <string name="common_mute">"ミュート"</string>
   <string name="common_name">"名前"</string>
@@ -455,6 +461,9 @@
   <string name="error_unknown">"申し訳ありません。エラーが発生しました。"</string>
   <string name="invite_friends_rich_title">"🔐️ %1$s に参加してください"</string>
   <string name="invite_friends_text">"%1$s で話しましょう: %2$s"</string>
+  <string name="live_location_sharing_foreground_service_channel_title_android">"ライブ位置情報共有"</string>
+  <string name="live_location_sharing_foreground_service_message_android">"位置情報を共有しています"</string>
+  <string name="live_location_sharing_foreground_service_title_android">"%1$s ライブ位置情報"</string>
   <string name="login_initial_device_name_android">"%1$s Android"</string>
   <string name="preference_rageshake">"開発者にバグを報告するには端末を振ってください。"</string>
   <string name="screen_bug_report_a11y_screenshot">"スクリーンショット"</string>
@@ -462,6 +471,11 @@
   <string name="screen_create_poll_options_section_title">"選択肢"</string>
   <string name="screen_create_poll_remove_accessibility_label">"%1$s を削除"</string>
   <string name="screen_create_poll_settings_section_title">"設定"</string>
+  <string name="screen_image_edition_a11y_rotate_to_the_left">"画像を左に回転"</string>
+  <plurals name="screen_image_edition_a11y_rotation_state">
+    <item quantity="other">"%1$d°"</item>
+  </plurals>
+  <string name="screen_image_edition_title">"写真を編集"</string>
   <string name="screen_live_location_sheet_nobody_sharing">"誰も位置情報を共有していません"</string>
   <string name="screen_live_location_sheet_sharing_live_location">"ライブ位置情報を共有しています"</string>
   <plurals name="screen_live_location_sheet_subtitle">
