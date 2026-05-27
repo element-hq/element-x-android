@@ -8,6 +8,7 @@
 
 package io.element.android.features.roomdetails.impl
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
@@ -188,6 +189,46 @@ fun RoomDetailsView(
                 )
             }
 
+            PreferenceCategory {
+                if (state.hasNewContent) {
+                    ListItem(
+                        headlineContent = {
+                            Text(
+                                text = stringResource(id = R.string.screen_roomlist_mark_as_read),
+                                style = MaterialTheme.typography.bodyLarge,
+                            )
+                        },
+                        onClick = {
+                            state.eventSink(RoomDetailsEvent.MarkAsRead)
+                        },
+                        leadingContent = ListItemContent.Icon(
+                            iconSource = IconSource.Vector(CompoundIcons.MarkAsRead())
+                        ),
+                        trailingContent = ListItemContent.Custom {
+                            Box(
+                                modifier = modifier
+                                    .size(8.dp)
+                                    .clip(CircleShape)
+                                    .background(ElementTheme.colors.iconAccentPrimary)
+                            )
+                        },
+                    )
+                } else {
+                    ListItem(
+                        headlineContent = {
+                            Text(
+                                text = stringResource(id = R.string.screen_roomlist_mark_as_unread),
+                            )
+                        },
+                        onClick = {
+                            state.eventSink(RoomDetailsEvent.MarkAsUnread)
+                        },
+                        leadingContent = ListItemContent.Icon(
+                            iconSource = IconSource.Vector(CompoundIcons.MarkAsUnread())
+                        ),
+                    )
+                }
+            }
             PreferenceCategory {
                 if (state.roomNotificationSettings != null) {
                     NotificationItem(

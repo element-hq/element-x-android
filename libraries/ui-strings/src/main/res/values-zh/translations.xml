@@ -8,6 +8,7 @@
   <plurals name="a11y_digits_entered">
     <item quantity="other">"已输入 %1$d 个数字"</item>
   </plurals>
+  <string name="a11y_duration">"持续时间：%1$s"</string>
   <string name="a11y_edit_avatar">"编辑头像"</string>
   <string name="a11y_edit_room_address_hint">"完整地址为 %1$s"</string>
   <string name="a11y_encryption_details">"加密详情"</string>
@@ -16,6 +17,7 @@
   <string name="a11y_info">"信息"</string>
   <string name="a11y_join_call">"加入通话"</string>
   <string name="a11y_jump_to_bottom">"跳转到底部"</string>
+  <string name="a11y_jump_to_unread">"跳转到未读"</string>
   <string name="a11y_move_the_map_to_my_location">"将地图移动到我的位置"</string>
   <string name="a11y_notifications_mentions_only">"仅提及"</string>
   <string name="a11y_notifications_muted">"通知已关闭"</string>
@@ -32,6 +34,7 @@
   <string name="a11y_playback_speed">"播放速度"</string>
   <string name="a11y_poll">"投票"</string>
   <string name="a11y_poll_end">"投票已结束"</string>
+  <string name="a11y_position">"位置：%1$s"</string>
   <string name="a11y_qr_code">"二维码"</string>
   <string name="a11y_react_with">"使用 %1$s 反应"</string>
   <string name="a11y_react_with_other_emojis">"使用其它 Emoji 做出反应"</string>
@@ -46,11 +49,14 @@
   <string name="a11y_room_avatar">"房间头像"</string>
   <string name="a11y_send_files">"发送文件"</string>
   <string name="a11y_sender_location">"发送方位置"</string>
+  <string name="a11y_sent_by_sender_at_date">"由 %1$s 发送于 %2$s"</string>
   <string name="a11y_session_verification_time_limited_action_required">"请求的操作有时间限制，你有 1 分钟的时间来验证"</string>
   <string name="a11y_show_password">"显示密码"</string>
   <string name="a11y_start_call">"开始通话"</string>
   <string name="a11y_start_video_call">"开始视频通话"</string>
   <string name="a11y_start_voice_call">"开始语音通话"</string>
+  <string name="a11y_thread_in_room">"位于 %1$s 中的消息列"</string>
+  <string name="a11y_threads_in_room">"位于 %1$s 中的消息列"</string>
   <string name="a11y_tombstoned_room">"已封存的房间"</string>
   <string name="a11y_user_avatar">"用户头像"</string>
   <string name="a11y_user_menu">"用户菜单"</string>
@@ -192,7 +198,7 @@
   <string name="common_acceptable_use_policy">"可接受的使用政策"</string>
   <string name="common_add_account">"添加账户"</string>
   <string name="common_add_another_account">"添加账户"</string>
-  <string name="common_adding_caption">"添加标题"</string>
+  <string name="common_adding_caption">"正在添加标题"</string>
   <string name="common_advanced_settings">"高级设置"</string>
   <string name="common_an_image">"一张图片"</string>
   <string name="common_analytics">"分析"</string>
@@ -211,7 +217,7 @@
   <string name="common_copyright">"版权"</string>
   <string name="common_creating_room">"正在创建房间…"</string>
   <string name="common_creating_space">"正在创建空间…"</string>
-  <string name="common_current_user_canceled_knock">"请求已取消"</string>
+  <string name="common_current_user_canceled_knock">"申请已取消"</string>
   <string name="common_current_user_left_room">"离开房间"</string>
   <string name="common_current_user_left_space">"离开空间"</string>
   <string name="common_current_user_rejected_invite">"邀请已拒绝"</string>
@@ -225,7 +231,7 @@
   <string name="common_downloading">"正在下载"</string>
   <string name="common_edited_suffix">"（已编辑）"</string>
   <string name="common_editing">"正在编辑"</string>
-  <string name="common_editing_caption">"编辑标题"</string>
+  <string name="common_editing_caption">"正在编辑标题"</string>
   <string name="common_emote">"* %1$s %2$s"</string>
   <string name="common_empty_file">"空文件"</string>
   <string name="common_encryption">"加密"</string>
@@ -407,10 +413,10 @@
   <string name="crypto_event_key_forwarded_unknown_profile_dialog_content">"由于你当时不在房间内，%1$s 已将消息向你共享。"</string>
   <string name="crypto_history_visible">"此房间已配置为允许新成员阅读历史。%1$s"</string>
   <string name="crypto_identity_change_pin_violation">"%1$s 的数字身份已重置。%2$s"</string>
-  <string name="crypto_identity_change_pin_violation_new">"%1$s %2$s 的数字身份已重置。%3$s"</string>
+  <string name="crypto_identity_change_pin_violation_new">"%1$s（%2$s）的数字身份已重置。%3$s"</string>
   <string name="crypto_identity_change_pin_violation_new_user_id">"(%1$s)"</string>
   <string name="crypto_identity_change_profile_pin_violation">"%1$s 的数字身份已重置。"</string>
-  <string name="crypto_identity_change_verification_violation_new">"%1$s %2$s 的数字身份已重置。%3$s"</string>
+  <string name="crypto_identity_change_verification_violation_new">"%1$s（%2$s）的数字身份已重置。%3$s"</string>
   <string name="crypto_identity_change_withdraw_verification_action">"撤回验证"</string>
   <string name="dialog_allow_access">"允许访问"</string>
   <string name="dialog_confirm_link_message">"链接 %1$s 将跳转至外部网站 %2$s
@@ -422,7 +428,7 @@
   <string name="dialog_file_too_large_to_upload_subtitle">"允许的最大文件大小为：%1$s"</string>
   <string name="dialog_file_too_large_to_upload_title">"文件太大，无法上传"</string>
   <string name="dialog_room_reported">"已举报房间"</string>
-  <string name="dialog_room_reported_and_left">"举报并离开房间"</string>
+  <string name="dialog_room_reported_and_left">"已举报并离开房间"</string>
   <string name="dialog_title_confirmation">"确认"</string>
   <string name="dialog_title_error">"错误"</string>
   <string name="dialog_title_success">"成功"</string>
@@ -463,6 +469,11 @@
   <string name="screen_create_poll_options_section_title">"选项"</string>
   <string name="screen_create_poll_remove_accessibility_label">"移除 %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"设置"</string>
+  <string name="screen_image_edition_a11y_rotate_to_the_left">"向左旋转图像"</string>
+  <plurals name="screen_image_edition_a11y_rotation_state">
+    <item quantity="other">"%1$d 度"</item>
+  </plurals>
+  <string name="screen_image_edition_title">"编辑照片"</string>
   <string name="screen_live_location_sheet_nobody_sharing">"目前无人分享其位置"</string>
   <string name="screen_live_location_sheet_sharing_live_location">"共享实时位置"</string>
   <plurals name="screen_live_location_sheet_subtitle">
@@ -517,7 +528,7 @@
   <string name="screen_timeline_item_menu_send_failure_unsigned_device">"消息未能发送，因为 %1$s 尚未验证所有设备。"</string>
   <string name="screen_timeline_item_menu_send_failure_you_unsigned_device">"消息未能发送，因为你有尚未验证的设备。"</string>
   <string name="screen_view_location_title">"位置"</string>
-  <string name="settings_version_number">"版本：%1$s (%2$s)"</string>
+  <string name="settings_version_number">"版本：%1$s（%2$s）"</string>
   <string name="test_language_identifier">"zh-Hans"</string>
   <string name="timeline_decryption_failure_historical_event_no_key_backup">"历史消息在此设备上不可用"</string>
   <string name="timeline_decryption_failure_historical_event_unverified_device">"你需要验证此设备才能访问历史消息"</string>

@@ -9,6 +9,7 @@
     <item quantity="one">"%1$d digit entered"</item>
     <item quantity="other">"%1$d digits entered"</item>
   </plurals>
+  <string name="a11y_duration">"Duration: %1$s"</string>
   <string name="a11y_edit_avatar">"Edit avatar"</string>
   <string name="a11y_edit_room_address_hint">"The full address will be %1$s"</string>
   <string name="a11y_encryption_details">"Encryption details"</string>
@@ -17,6 +18,7 @@
   <string name="a11y_info">"Info"</string>
   <string name="a11y_join_call">"Join call"</string>
   <string name="a11y_jump_to_bottom">"Jump to bottom"</string>
+  <string name="a11y_jump_to_unread">"Jump to unread"</string>
   <string name="a11y_move_the_map_to_my_location">"Move the map to my location"</string>
   <string name="a11y_notifications_mentions_only">"Mentions only"</string>
   <string name="a11y_notifications_muted">"Muted"</string>
@@ -33,6 +35,7 @@
   <string name="a11y_playback_speed">"Playback speed"</string>
   <string name="a11y_poll">"Poll"</string>
   <string name="a11y_poll_end">"Ended poll"</string>
+  <string name="a11y_position">"Position: %1$s"</string>
   <string name="a11y_qr_code">"QR Code"</string>
   <string name="a11y_react_with">"React with %1$s"</string>
   <string name="a11y_react_with_other_emojis">"React with other emojis"</string>
@@ -48,12 +51,15 @@
   <string name="a11y_room_avatar">"Room avatar"</string>
   <string name="a11y_send_files">"Send files"</string>
   <string name="a11y_sender_location">"Sender location"</string>
+  <string name="a11y_sent_by_sender_at_date">"Sent by %1$s at %2$s"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Time limited action required, you have one minute to verify"</string>
   <string name="a11y_settings_with_required_action">"Settings, action required"</string>
   <string name="a11y_show_password">"Show password"</string>
   <string name="a11y_start_call">"Start a call"</string>
   <string name="a11y_start_video_call">"Start a video call"</string>
   <string name="a11y_start_voice_call">"Start a voice call"</string>
+  <string name="a11y_thread_in_room">"Thread in %1$s"</string>
+  <string name="a11y_threads_in_room">"Threads in %1$s"</string>
   <string name="a11y_tombstoned_room">"Tombstoned room"</string>
   <string name="a11y_user_avatar">"User avatar"</string>
   <string name="a11y_user_menu">"User menu"</string>
@@ -298,6 +304,7 @@ Reason: %1$s."</string>
   <string name="common_please_wait">"Please wait…"</string>
   <string name="common_poll_end_confirmation">"Are you sure you want to end this poll?"</string>
   <string name="common_poll_summary">"Poll: %1$s"</string>
+  <string name="common_poll_summary_prefix">"Poll"</string>
   <string name="common_poll_total_votes">"Total votes: %1$s"</string>
   <string name="common_poll_undisclosed_text">"Results will show after the poll has ended"</string>
   <plurals name="common_poll_votes_count">
@@ -474,6 +481,12 @@ Are you sure you want to continue?"</string>
   <string name="screen_create_poll_options_section_title">"Options"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Remove %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Settings"</string>
+  <string name="screen_image_edition_a11y_rotate_to_the_left">"Rotate the image to the left"</string>
+  <plurals name="screen_image_edition_a11y_rotation_state">
+    <item quantity="one">"%1$d degree"</item>
+    <item quantity="other">"%1$d degrees"</item>
+  </plurals>
+  <string name="screen_image_edition_title">"Edit photo"</string>
   <string name="screen_live_location_sheet_nobody_sharing">"Nobody is sharing their location"</string>
   <string name="screen_live_location_sheet_sharing_live_location">"Sharing live location"</string>
   <plurals name="screen_live_location_sheet_subtitle">

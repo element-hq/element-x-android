@@ -129,6 +129,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"角色"</string>
   <string name="screen_room_roles_and_permissions_room_details">"房间详细信息"</string>
   <string name="screen_room_roles_and_permissions_title">"角色与权限"</string>
+  <string name="screen_roomlist_mark_as_read">"设为已读"</string>
+  <string name="screen_roomlist_mark_as_unread">"设为未读"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"添加地址"</string>
   <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"已授权空间内的任何成员都可以加入，其他人必须申请访问。"</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"所有用户均需申请访问权限。"</string>

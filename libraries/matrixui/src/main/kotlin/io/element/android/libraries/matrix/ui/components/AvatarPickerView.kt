@@ -42,6 +42,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.hideFromAccessibility
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.unit.dp
@@ -196,7 +197,10 @@ private fun BoxScope.OverlayEditButton(
             .clip(CircleShape)
             .clickable(interactionSource = interactionSource, onClick = onClick, indication = null)
             .background(ElementTheme.colors.bgCanvasDefault)
-            .border(BorderStroke(1.dp, ElementTheme.colors.borderInteractiveSecondary), shape = CircleShape),
+            .border(BorderStroke(1.dp, ElementTheme.colors.borderInteractiveSecondary), shape = CircleShape)
+            .clearAndSetSemantics {
+                hideFromAccessibility()
+            },
         contentAlignment = Alignment.Center,
     ) {
         Icon(

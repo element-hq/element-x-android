@@ -8,6 +8,7 @@
 
 package io.element.android.features.roommembermoderation.impl
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -239,6 +240,12 @@ private fun RoomMemberActionsBottomSheet(
                 modifier = Modifier
                     .padding(bottom = 24.dp)
                     .align(Alignment.CenterHorizontally)
+                    .clickable {
+                        coroutineScope.launch {
+                            onSelectAction(ModerationAction.DisplayProfile, user)
+                            bottomSheetState.hide()
+                        }
+                    }
             )
             val bestName = user.getBestName()
             Text(

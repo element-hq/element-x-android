@@ -11,6 +11,14 @@
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Piilota huoneiden avatarit kutsuista"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Piilota median esikatselu aikajanalla"</string>
   <string name="screen_advanced_settings_labs">"Labrat"</string>
+  <string name="screen_advanced_settings_live_location_section_description">"Etäisyys, joka sinun on kuljettava päivityksen käynnistämiseksi."</string>
+  <string name="screen_advanced_settings_live_location_section_footer">"Varmista, että tälle sovellukselle on valittu \"Tarkka sijainti\". Voit muuttaa lupaa kohdassa %1$s."</string>
+  <string name="screen_advanced_settings_live_location_section_footer_link">"Sovellusasetukset"</string>
+  <string name="screen_advanced_settings_live_location_section_title">"Reaaliaikaiset sijaintipäivitykset"</string>
+  <plurals name="screen_advanced_settings_live_location_update_distance">
+    <item quantity="one">"%1$d metrin välein"</item>
+    <item quantity="other">"%1$d metrin välein"</item>
+  </plurals>
   <string name="screen_advanced_settings_media_compression_description">"Lähetä valokuvia ja videoita nopeammin ja vähennä datan käyttöä."</string>
   <string name="screen_advanced_settings_media_compression_title">"Optimoi median laatu"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Moderointi ja Turvallisuus"</string>
@@ -72,10 +80,18 @@ Jos jatkat, jotkin asetukset saattavat muuttua."</string>
   <string name="screen_notification_settings_mode_mentions">"Maininnat"</string>
   <string name="screen_notification_settings_notification_section_title">"Ilmoita minulle"</string>
   <string name="screen_notification_settings_room_mention_label">"Ilmoita minulle @room-maininnoista"</string>
+  <string name="screen_notification_settings_sound_custom_sound_button_title">"Mukautettu ääni…"</string>
+  <string name="screen_notification_settings_sound_delete_sound_error_title">"Virhe tiedoston poistamisessa"</string>
+  <string name="screen_notification_settings_sound_element_default">"Elementin oletus"</string>
+  <string name="screen_notification_settings_sound_import_sound_error_title">"Virhe tiedoston tuonnissa"</string>
+  <string name="screen_notification_settings_sound_preview_sound_error_title">"Ongelma ilmoitusäänen esikatselussa"</string>
+  <string name="screen_notification_settings_sound_section_title">"Ääni"</string>
+  <string name="screen_notification_settings_sound_set_sound_error_title">"Ongelma ilmoitusäänen asettamisessa"</string>
   <string name="screen_notification_settings_system_notifications_action_required">"Jos haluat saada ilmoituksia, vaihda %1$s."</string>
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"järjestelmäsi asetuksia"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Järjestelmän ilmoitukset on poissa päältä"</string>
   <string name="screen_notification_settings_title">"Ilmoitukset"</string>
+  <string name="theme_black">"Musta"</string>
   <string name="theme_dark">"Tumma"</string>
   <string name="theme_light">"Vaalea"</string>
   <string name="theme_system">"Järjestelmän oletus"</string>

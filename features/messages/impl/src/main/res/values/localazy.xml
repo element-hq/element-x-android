@@ -16,6 +16,12 @@
   <string name="emoji_picker_category_places">"Travel &amp; Places"</string>
   <string name="emoji_picker_category_recent">"Recent emojis"</string>
   <string name="emoji_picker_category_symbols">"Symbols"</string>
+  <string name="screen_image_edition_a11y_rotate_to_the_left">"Rotate the image to the left"</string>
+  <plurals name="screen_image_edition_a11y_rotation_state">
+    <item quantity="one">"%1$d degree"</item>
+    <item quantity="other">"%1$d degrees"</item>
+  </plurals>
+  <string name="screen_image_edition_title">"Edit photo"</string>
   <string name="screen_media_upload_preview_caption_warning">"Captions might not be visible to people using older apps."</string>
   <string name="screen_media_upload_preview_change_video_quality_prompt">"Tap to change the video upload quality"</string>
   <string name="screen_media_upload_preview_error_could_not_be_uploaded">"The file could not be uploaded."</string>
@@ -26,6 +32,7 @@
   <string name="screen_media_upload_preview_item_count">"Item %1$d of %2$d"</string>
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Optimise image quality"</string>
   <string name="screen_media_upload_preview_processing">"Processing…"</string>
+  <string name="screen_media_upload_preview_title">"Add media"</string>
   <string name="screen_report_content_block_user">"Block user"</string>
   <string name="screen_report_content_block_user_hint">"Check if you want to hide all current and future messages from this user"</string>
   <string name="screen_report_content_explanation">"This message will be reported to your homeserver’s administrator. They will not be able to read any encrypted messages."</string>

@@ -37,7 +37,7 @@ class ShowQrCodeViewTest {
     ) {
         setContent {
             ShowQrCodeView(
-                data = "DATA",
+                state = aShowQrCodeState(),
                 onBackClick = onBackClick,
             )
         }

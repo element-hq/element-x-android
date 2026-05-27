@@ -132,6 +132,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Roly"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Podrobnosti o miestnosti"</string>
   <string name="screen_room_roles_and_permissions_title">"Roly a povolenia"</string>
+  <string name="screen_roomlist_mark_as_read">"Označiť ako prečítané"</string>
+  <string name="screen_roomlist_mark_as_unread">"Označiť ako neprečítané"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Pridať adresu"</string>
   <string name="screen_security_and_privacy_ask_to_join_multiple_spaces_members_option_description">"Pripojiť sa môže ktokoľvek z autorizovaných priestorov, ale všetci ostatní musia o prístup požiadať."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Všetci musia požiadať o prístup."</string>

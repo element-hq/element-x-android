@@ -10,6 +10,7 @@
     <item quantity="few">"Wprowadzono %1$d cyfry"</item>
     <item quantity="many">"Wprowadzono %1$d cyfr"</item>
   </plurals>
+  <string name="a11y_duration">"Czas trwania: %1$s"</string>
   <string name="a11y_edit_avatar">"Edytuj awatar"</string>
   <string name="a11y_edit_room_address_hint">"Podgląd pełnego adresu %1$s"</string>
   <string name="a11y_encryption_details">"Szczegóły szyfrowania"</string>
@@ -18,6 +19,7 @@
   <string name="a11y_info">"Informacje"</string>
   <string name="a11y_join_call">"Dołącz do połączenia"</string>
   <string name="a11y_jump_to_bottom">"Przejdź na dół"</string>
+  <string name="a11y_jump_to_unread">"Skocz do nieprzeczytanych"</string>
   <string name="a11y_move_the_map_to_my_location">"Przesuń mapę do mojej lokalizacji"</string>
   <string name="a11y_notifications_mentions_only">"Tylko wzmianki"</string>
   <string name="a11y_notifications_muted">"Wyciszone"</string>
@@ -34,6 +36,7 @@
   <string name="a11y_playback_speed">"Prędkość odtwarzania"</string>
   <string name="a11y_poll">"Ankieta"</string>
   <string name="a11y_poll_end">"Zakończona ankieta"</string>
+  <string name="a11y_position">"Pozycja: %1$s"</string>
   <string name="a11y_qr_code">"Kod QR"</string>
   <string name="a11y_react_with">"Zareaguj z %1$s"</string>
   <string name="a11y_react_with_other_emojis">"Zareaguj innym emoji"</string>
@@ -50,12 +53,15 @@
   <string name="a11y_room_avatar">"Awatar pokoju"</string>
   <string name="a11y_send_files">"Wyślij pliki"</string>
   <string name="a11y_sender_location">"Lokalizacja nadawcy"</string>
+  <string name="a11y_sent_by_sender_at_date">"Wysłane przez %1$s o %2$s"</string>
   <string name="a11y_session_verification_time_limited_action_required">"Wymagane jest działanie ograniczone czasowo, została jedna minuta"</string>
   <string name="a11y_settings_with_required_action">"Ustawienia, wymagane działanie"</string>
   <string name="a11y_show_password">"Pokaż hasło"</string>
   <string name="a11y_start_call">"Rozpocznij rozmowę"</string>
   <string name="a11y_start_video_call">"Rozpocznij rozmowę wideo"</string>
   <string name="a11y_start_voice_call">"Rozpocznij połączenie głosowe"</string>
+  <string name="a11y_thread_in_room">"Wątek w %1$s"</string>
+  <string name="a11y_threads_in_room">"Wątki w %1$s"</string>
   <string name="a11y_tombstoned_room">"Pokój nagrobkowy"</string>
   <string name="a11y_user_avatar">"Awatar użytkownika"</string>
   <string name="a11y_user_menu">"Menu użytkownika"</string>
@@ -483,6 +489,13 @@ Czy na pewno chcesz kontynuować?"</string>
   <string name="screen_create_poll_options_section_title">"Opcje"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Usuń %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Ustawienia"</string>
+  <string name="screen_image_edition_a11y_rotate_to_the_left">"Obróć obraz w lewo"</string>
+  <plurals name="screen_image_edition_a11y_rotation_state">
+    <item quantity="one">"%1$d stopień"</item>
+    <item quantity="few">"%1$d stopnie"</item>
+    <item quantity="many">"%1$d stopni"</item>
+  </plurals>
+  <string name="screen_image_edition_title">"Edytuj zdjęcie"</string>
   <string name="screen_live_location_sheet_nobody_sharing">"Nikt nie udostępnia swojej lokalizacji"</string>
   <string name="screen_live_location_sheet_sharing_live_location">"Udostępnianie lokalizacji na żywo"</string>
   <plurals name="screen_live_location_sheet_subtitle">
