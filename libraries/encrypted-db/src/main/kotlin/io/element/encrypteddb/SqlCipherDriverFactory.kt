@@ -14,6 +14,7 @@ import app.cash.sqldelight.db.QueryResult
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.db.SqlSchema
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
+import io.element.android.libraries.androidutils.crypto.ClientSecret
 import io.element.encrypteddb.passphrase.DatabaseSecretProvider
 import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 
@@ -43,8 +44,13 @@ class SqlCipherDriverFactory(
         context: Context,
         onUpgradeCallback: ((driver: SupportSQLiteDatabase, oldVersion: Int, newVersion: Int) -> Unit)? = null,
     ): SqlDriver {
-        val secret = databaseSecretProvider.getSecret()
-        val factory = SupportOpenHelperFactory(secret.formattedAsString().toByteArray())
+        val key = when (val secret = databaseSecretProvider.getSecret()) {
+            // For a raw key, we need the blob representation (`x'...'`) as bytes
+            is ClientSecret.RawKey -> secret.formattedAsString().toByteArray()
+            // For a passphrase, we need the bytes for the hex string representation
+            is ClientSecret.Passphrase -> secret.formattedAsString().hexToByteArray()
+        }
+        val factory = SupportOpenHelperFactory(key)
         return AndroidSqliteDriver(schema = schema, context = context, name = name, factory = factory, callback = object : AndroidSqliteDriver.Callback(
                 schema
             ) {

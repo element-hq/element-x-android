@@ -19,6 +19,7 @@ import io.element.android.libraries.push.impl.PushDatabase
 import io.element.encrypteddb.SqlCipherDriverFactory
 import io.element.encrypteddb.passphrase.RandomDatabaseSecretProvider
 import io.element.encrypteddb.utils.ReplaceDatabaseKey
+import timber.log.Timber
 
 @BindingContainer
 @ContributesTo(AppScope::class)
@@ -45,6 +46,7 @@ object PushHistoryModule {
                 name = "$name.db",
                 context = context
             ) { db, oldVersion, newVersion ->
+                Timber.d("Migrating $name database from version $oldVersion to $newVersion")
                 if (rekeyMigrationVersion in oldVersion..newVersion) {
                     ReplaceDatabaseKey(passphraseProvider).replaceKey(name, db)
                 }

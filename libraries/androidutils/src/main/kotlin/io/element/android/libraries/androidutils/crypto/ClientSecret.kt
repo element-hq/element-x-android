@@ -15,7 +15,7 @@ sealed interface ClientSecret {
      * A passphrase that can be used to derive a key for encryption/decryption.
      */
     data class Passphrase(val value: String) : ClientSecret {
-        override fun formattedAsString(): String = toString()
+        override fun formattedAsString(): String = value
     }
 
     /**

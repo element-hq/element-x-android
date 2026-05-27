@@ -18,6 +18,7 @@ import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.encrypteddb.SqlCipherDriverFactory
 import io.element.encrypteddb.passphrase.RandomDatabaseSecretProvider
 import io.element.encrypteddb.utils.ReplaceDatabaseKey
+import timber.log.Timber
 
 @BindingContainer
 @ContributesTo(AppScope::class)
@@ -44,6 +45,7 @@ object CacheStoreModule {
                 name = "$name.db",
                 context = context
             ) { db, oldVersion, newVersion ->
+                Timber.d("Migrating $name database from version $oldVersion to $newVersion")
                 if (rekeyMigrationVersion in oldVersion..newVersion) {
                     ReplaceDatabaseKey(passphraseProvider).replaceKey(name, db)
                 }
