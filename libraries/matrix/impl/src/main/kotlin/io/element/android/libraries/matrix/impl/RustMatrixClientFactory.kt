@@ -9,6 +9,7 @@
 package io.element.android.libraries.matrix.impl
 
 import dev.zacsweers.metro.Inject
+import io.element.android.libraries.androidutils.crypto.ClientSecret
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.data.ByteUnit
 import io.element.android.libraries.core.data.megaBytes

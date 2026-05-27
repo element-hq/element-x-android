@@ -7,7 +7,7 @@
 
 package io.element.android.libraries.matrix.impl.storage
 
-import io.element.android.libraries.matrix.impl.ClientSecret
+import io.element.android.libraries.androidutils.crypto.ClientSecret
 import org.matrix.rustcomponents.sdk.ClientBuilder
 
 class FakeSqliteStoreBuilder : SqliteStoreBuilder {

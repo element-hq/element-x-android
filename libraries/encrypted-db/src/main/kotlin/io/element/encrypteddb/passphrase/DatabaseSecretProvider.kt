@@ -8,12 +8,19 @@
 
 package io.element.encrypteddb.passphrase
 
+import io.element.android.libraries.androidutils.crypto.ClientSecret
+
 /**
  * An abstraction to implement secure providers for SQLCipher passphrases.
  */
-interface PassphraseProvider {
+interface DatabaseSecretProvider {
     /**
-     * Returns a passphrase for SQLCipher in [ByteArray] format.
+     * Returns a secret for SQLCipher.
      */
-    fun getPassphrase(): ByteArray
+    fun getSecret(): ClientSecret
+
+    /**
+     * Resets the passphrase, for example by deleting the persisted secret. Returns `true` if the reset was successful, `false` otherwise.
+     */
+    fun reset(): Boolean
 }

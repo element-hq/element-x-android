@@ -9,7 +9,7 @@
 package io.element.android.libraries.matrix.impl.keys
 
 import com.google.common.truth.Truth.assertThat
-import io.element.android.libraries.matrix.impl.ClientSecret
+import io.element.android.libraries.androidutils.crypto.ClientSecret
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner

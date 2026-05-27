@@ -5,9 +5,7 @@
  * Please see LICENSE files in the repository root for full details.
  */
 
-package io.element.android.libraries.matrix.impl
-
-import okio.ByteString.Companion.decodeHex
+package io.element.android.libraries.androidutils.crypto
 
 /**
  * Represents a client secret used to encrypt/decrypt data from databases, which can be either a passphrase or a raw key.
@@ -17,7 +15,7 @@ sealed interface ClientSecret {
      * A passphrase that can be used to derive a key for encryption/decryption.
      */
     data class Passphrase(val value: String) : ClientSecret {
-        override fun formattedAsString(): String = toString()
+        override fun formattedAsString(): String = value
     }
 
     /**
@@ -57,10 +55,18 @@ sealed interface ClientSecret {
             val regex = Regex("^x'([0-9a-fA-F]+)'$")
             val rawKeyMatch = regex.matchEntire(secret)
             return if (rawKeyMatch != null) {
-                RawKey(rawKeyMatch.groupValues[1].decodeHex().toByteArray())
+                RawKey(rawKeyMatch.groupValues[1].hexToByteArray())
             } else {
                 Passphrase(secret)
             }
+        }
+
+        /**
+         * Create a [ClientSecret] from raw bytes, which will be treated as a raw key.
+         */
+        fun fromRawBytes(bytes: ByteArray): ClientSecret = when (bytes.size) {
+            32 -> RawKey(bytes)
+            else -> Passphrase(bytes.toHexString())
         }
     }
 }
