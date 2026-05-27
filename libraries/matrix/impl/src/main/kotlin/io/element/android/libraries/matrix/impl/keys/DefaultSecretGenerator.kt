@@ -11,7 +11,7 @@ package io.element.android.libraries.matrix.impl.keys
 import android.util.Base64
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.matrix.impl.ClientSecret
+import io.element.android.libraries.androidutils.crypto.ClientSecret
 import java.security.SecureRandom
 
 @ContributesBinding(AppScope::class)

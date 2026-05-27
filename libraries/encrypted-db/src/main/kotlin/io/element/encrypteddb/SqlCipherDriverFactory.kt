@@ -14,15 +14,15 @@ import app.cash.sqldelight.db.QueryResult
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.db.SqlSchema
 import app.cash.sqldelight.driver.android.AndroidSqliteDriver
-import io.element.encrypteddb.passphrase.PassphraseProvider
+import io.element.encrypteddb.passphrase.DatabaseSecretProvider
 import net.zetetic.database.sqlcipher.SupportOpenHelperFactory
 
 /**
  * Creates an encrypted version of the [SqlDriver] using SQLCipher's [SupportOpenHelperFactory].
- * @param passphraseProvider Provides the passphrase needed to use the SQLite database with SQLCipher.
+ * @param databaseSecretProvider Provides the passphrase needed to use the SQLite database with SQLCipher.
  */
 class SqlCipherDriverFactory(
-    private val passphraseProvider: PassphraseProvider,
+    private val databaseSecretProvider: DatabaseSecretProvider,
 ) {
     companion object {
         init {
@@ -43,15 +43,8 @@ class SqlCipherDriverFactory(
         context: Context,
         onUpgradeCallback: ((driver: SupportSQLiteDatabase, oldVersion: Int, newVersion: Int) -> Unit)? = null,
     ): SqlDriver {
-        val passphrase = passphraseProvider.getPassphrase()
-        val factory = if (passphrase.size == 32) {
-            // Raw SQLCipher keys are 32 bytes long
-            val key = "x'${passphrase.toHexString()}'".toByteArray()
-            SupportOpenHelperFactory(key)
-        } else {
-            // Usual passphrase, which will be processed by SQLCipher's internal key derivation function
-            SupportOpenHelperFactory(passphrase)
-        }
+        val secret = databaseSecretProvider.getSecret()
+        val factory = SupportOpenHelperFactory(secret.formattedAsString().toByteArray())
         return AndroidSqliteDriver(schema = schema, context = context, name = name, factory = factory, callback = object : AndroidSqliteDriver.Callback(
                 schema
             ) {

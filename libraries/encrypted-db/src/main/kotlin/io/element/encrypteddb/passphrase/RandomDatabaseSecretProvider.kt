@@ -9,30 +9,32 @@
 package io.element.encrypteddb.passphrase
 
 import android.content.Context
+import io.element.android.libraries.androidutils.crypto.ClientSecret
 import io.element.encrypteddb.crypto.EncryptedFile
 import java.io.File
 import java.security.SecureRandom
 
 /**
- * Provides a secure passphrase for SQLCipher by generating a random secret and storing it into an [EncryptedFile].
+ * Provides a secure secret for SQLCipher by generating a random secret and storing it into an [EncryptedFile].
  * @param context Android [Context], used by [EncryptedFile] for cryptographic operations.
  * @param file Destination file where the key will be stored.
  * @param secretSizeBytes Length of the generated secret.
  */
-class RandomSecretPassphraseProvider(
+class RandomDatabaseSecretProvider(
     private val context: Context,
     private val file: File,
     private val secretSizeBytes: Int = 32,
-) : PassphraseProvider {
-    override fun getPassphrase(): ByteArray {
+) : DatabaseSecretProvider {
+    override fun getSecret(): ClientSecret {
         val encryptedFile = EncryptedFile(context, file)
-        return if (!file.exists()) {
+        val bytes = if (!file.exists()) {
             val secret = generateSecret()
             encryptedFile.openFileOutput().use { it.write(secret) }
             secret
         } else {
             encryptedFile.openFileInput().use { it.readBytes() }
         }
+        return ClientSecret.fromRawBytes(bytes)
     }
 
     override fun reset(): Boolean {

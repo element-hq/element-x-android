@@ -8,26 +8,26 @@
 package io.element.encrypteddb.utils
 
 import androidx.sqlite.db.SupportSQLiteDatabase
-import io.element.encrypteddb.passphrase.RandomSecretPassphraseProvider
+import io.element.encrypteddb.passphrase.RandomDatabaseSecretProvider
 import timber.log.Timber
 
 /**
  * A utility class to replace the encryption key of an existing SQLCipher database.
  * This is used during database migrations when we want to change the encryption key.
  *
- * @param passphraseProvider The provider for generating new passphrases.
+ * @param databaseSecretProvider The provider for generating new secrets.
  */
 class ReplaceDatabaseKey(
-    private val passphraseProvider: RandomSecretPassphraseProvider
+    private val databaseSecretProvider: RandomDatabaseSecretProvider
 ) {
     fun replaceKey(name: String, database: SupportSQLiteDatabase) {
         Timber.d("Re-keying database $name")
         // Reset the passphrase provider to generate a new passphrase
-        passphraseProvider.reset()
+        databaseSecretProvider.reset()
 
-        // Get the new passphrase and convert it to the format expected by SQLCipher
-        val newPassphrase = passphraseProvider.getPassphrase()
-        val key = "x'${newPassphrase.toHexString()}'"
+        // Get the new secret and convert it to the format expected by SQLCipher
+        val newSecret = databaseSecretProvider.getSecret()
+        val key = newSecret.formattedAsString()
 
         // Use the PRAGMA rekey command to change the encryption key of the database
         database.query("PRAGMA rekey = \"$key\";").close()
