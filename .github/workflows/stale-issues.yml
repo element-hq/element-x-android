@@ -9,6 +9,7 @@ permissions: {}
 jobs:
   stale:
     runs-on: ubuntu-latest
+    if: ${{ github.event.repository.fork != true }}
     permissions:
       issues: write
     steps:
