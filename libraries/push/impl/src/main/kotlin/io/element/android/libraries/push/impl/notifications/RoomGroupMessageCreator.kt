@@ -33,6 +33,7 @@ interface RoomGroupMessageCreator {
         threadId: ThreadId?,
         imageLoader: ImageLoader,
         existingNotification: Notification?,
+        hideContent: Boolean = false,
     ): Notification
 }
 
@@ -49,6 +50,7 @@ class DefaultRoomGroupMessageCreator(
         threadId: ThreadId?,
         imageLoader: ImageLoader,
         existingNotification: Notification?,
+        hideContent: Boolean,
     ): Notification {
         val lastKnownRoomEvent = events.last()
         val roomName = lastKnownRoomEvent.roomName ?: lastKnownRoomEvent.senderDisambiguatedDisplayName ?: "Room name (${roomId.value.take(8)}…)"
@@ -67,7 +69,7 @@ class DefaultRoomGroupMessageCreator(
         val roomIsDm = !roomIsGroup
         return notificationCreator.createMessagesListNotification(
             notificationAccountParams = notificationAccountParams,
-            RoomEventGroupInfo(
+            roomInfo = RoomEventGroupInfo(
                 sessionId = notificationAccountParams.user.userId,
                 roomId = roomId,
                 roomDisplayName = roomName,
@@ -84,6 +86,7 @@ class DefaultRoomGroupMessageCreator(
             existingNotification = existingNotification,
             imageLoader = imageLoader,
             events = events,
+            hideContent = hideContent,
         )
     }
 

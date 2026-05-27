@@ -20,6 +20,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import dev.zacsweers.metro.Inject
+import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
@@ -52,6 +53,7 @@ class NotificationSettingsPresenter(
     private val pushService: PushService,
     private val systemNotificationsEnabledProvider: SystemNotificationsEnabledProvider,
     private val fullScreenIntentPermissionsPresenter: Presenter<FullScreenIntentPermissionsState>,
+    private val lockScreenService: LockScreenService,
     @SessionCoroutineScope
     private val sessionCoroutineScope: CoroutineScope,
 ) : Presenter<NotificationSettingsState> {
@@ -66,6 +68,14 @@ class NotificationSettingsPresenter(
         val localCoroutineScope = rememberCoroutineScope()
         val appNotificationsEnabled by remember {
             userPushStore.getNotificationEnabledForDevice()
+        }.collectAsState(initial = false)
+
+        val isHideNotificationContentWhenLocked by remember {
+            userPushStore.isHideNotificationContentWhenLocked()
+        }.collectAsState(initial = true)
+
+        val isPinSetup by remember {
+            lockScreenService.isPinSetup()
         }.collectAsState(initial = false)
 
         val matrixSettings: MutableState<NotificationSettingsState.MatrixSettings> = remember {
@@ -145,6 +155,9 @@ class NotificationSettingsPresenter(
                     localCoroutineScope.setInviteForMeNotificationsEnabled(event.enabled, changeNotificationSettingAction)
                 }
                 is NotificationSettingsEvents.SetNotificationsEnabled -> sessionCoroutineScope.setNotificationsEnabled(userPushStore, event.enabled)
+                is NotificationSettingsEvents.SetHideNotificationContentWhenLocked -> localCoroutineScope.launch {
+                    userPushStore.setHideNotificationContentWhenLocked(event.enabled)
+                }
                 NotificationSettingsEvents.ClearConfigurationMismatchError -> {
                     matrixSettings.value = NotificationSettingsState.MatrixSettings.Invalid(fixFailed = false)
                 }
@@ -165,6 +178,8 @@ class NotificationSettingsPresenter(
             appSettings = NotificationSettingsState.AppSettings(
                 systemNotificationsEnabled = systemNotificationsEnabled.value,
                 appNotificationsEnabled = appNotificationsEnabled,
+                isHideNotificationContentWhenLocked = isHideNotificationContentWhenLocked,
+                isPinSetup = isPinSetup,
             ),
             changeNotificationSettingAction = changeNotificationSettingAction.value,
             currentPushDistributor = currentDistributor,

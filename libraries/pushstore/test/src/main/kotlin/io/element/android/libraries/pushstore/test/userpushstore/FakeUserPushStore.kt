@@ -18,6 +18,7 @@ class FakeUserPushStore(
     private var currentRegisteredPushKey: String? = null
     private val notificationEnabledForDevice = MutableStateFlow(true)
     private val ignoreRegistrationError = MutableStateFlow(false)
+    private val hideNotificationContentWhenLocked = MutableStateFlow(true)
     override suspend fun getPushProviderName(): String? {
         return pushProviderName
     }
@@ -44,6 +45,14 @@ class FakeUserPushStore(
 
     override fun useCompleteNotificationFormat(): Boolean {
         return true
+    }
+
+    override fun isHideNotificationContentWhenLocked(): Flow<Boolean> {
+        return hideNotificationContentWhenLocked
+    }
+
+    override suspend fun setHideNotificationContentWhenLocked(enabled: Boolean) {
+        hideNotificationContentWhenLocked.value = enabled
     }
 
     override fun ignoreRegistrationError(): Flow<Boolean> {

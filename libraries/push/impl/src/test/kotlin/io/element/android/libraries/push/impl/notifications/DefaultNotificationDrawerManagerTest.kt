@@ -13,6 +13,8 @@ import androidx.compose.ui.graphics.Color
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.enterprise.api.EnterpriseService
 import io.element.android.features.enterprise.test.FakeEnterpriseService
+import io.element.android.features.lockscreen.api.LockScreenLockState
+import io.element.android.features.lockscreen.test.FakeLockScreenService
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID
 import io.element.android.libraries.matrix.test.A_ROOM_ID_2
@@ -36,6 +38,7 @@ import io.element.android.libraries.push.impl.notifications.fixtures.aNotifiable
 import io.element.android.libraries.push.impl.notifications.fixtures.aSimpleNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.fixtures.anInviteNotifiableEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableEvent
+import io.element.android.libraries.pushstore.test.userpushstore.FakeUserPushStoreFactory
 import io.element.android.libraries.sessionstorage.api.SessionStore
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
 import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
@@ -510,6 +513,8 @@ fun TestScope.createDefaultNotificationDrawerManager(
     enterpriseService: EnterpriseService = FakeEnterpriseService(),
     sessionObserver: SessionObserver = FakeSessionObserver(),
     analyticsService: FakeAnalyticsService = FakeAnalyticsService(),
+    lockScreenService: FakeLockScreenService = FakeLockScreenService().also { it.setLockState(LockScreenLockState.Unlocked) },
+    userPushStoreFactory: FakeUserPushStoreFactory = FakeUserPushStoreFactory(),
 ): DefaultNotificationDrawerManager {
     return DefaultNotificationDrawerManager(
         notificationDisplayer = notificationDisplayer,
@@ -530,6 +535,8 @@ fun TestScope.createDefaultNotificationDrawerManager(
         matrixClientProvider = matrixClientProvider,
         imageLoaderHolder = FakeImageLoaderHolder(),
         activeNotificationsProvider = activeNotificationsProvider,
+        lockScreenService = lockScreenService,
+        userPushStoreFactory = userPushStoreFactory,
         sessionObserver = sessionObserver,
     )
 }

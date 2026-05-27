@@ -27,6 +27,7 @@ interface NotificationDataFactory {
         messages: List<NotifiableMessageEvent>,
         imageLoader: ImageLoader,
         notificationAccountParams: NotificationAccountParams,
+        hideContent: Boolean = false,
     ): List<RoomNotification>
 
     @JvmName("toNotificationInvites")
@@ -69,6 +70,7 @@ class DefaultNotificationDataFactory(
         messages: List<NotifiableMessageEvent>,
         imageLoader: ImageLoader,
         notificationAccountParams: NotificationAccountParams,
+        hideContent: Boolean,
     ): List<RoomNotification> {
         val messagesToDisplay = messages.filterNot { it.canNotBeDisplayed() }
             .groupBy { it.roomId }
@@ -82,6 +84,7 @@ class DefaultNotificationDataFactory(
                     imageLoader = imageLoader,
                     existingNotification = getExistingNotificationForMessages(notificationAccountParams.user.userId, roomId, threadId),
                     notificationAccountParams = notificationAccountParams,
+                    hideContent = hideContent,
                 )
                 RoomNotification(
                     notification = notification,

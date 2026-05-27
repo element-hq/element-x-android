@@ -21,13 +21,12 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableMess
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
 import io.element.android.tests.testutils.lambda.LambdaFourParamsRecorder
 import io.element.android.tests.testutils.lambda.LambdaOneParamRecorder
-import io.element.android.tests.testutils.lambda.LambdaThreeParamsRecorder
 import io.element.android.tests.testutils.lambda.lambdaRecorder
 
 class FakeNotificationDataFactory(
-    var messageEventToNotificationsResult: LambdaThreeParamsRecorder<
-        List<NotifiableMessageEvent>, ImageLoader, NotificationAccountParams, List<RoomNotification>
-        > = lambdaRecorder { _, _, _ -> emptyList() },
+    var messageEventToNotificationsResult: LambdaFourParamsRecorder<
+        List<NotifiableMessageEvent>, ImageLoader, NotificationAccountParams, Boolean, List<RoomNotification>
+        > = lambdaRecorder { _, _, _, _ -> emptyList() },
     var summaryToNotificationsResult: LambdaFourParamsRecorder<
         List<RoomNotification>,
         List<OneShotNotification>,
@@ -44,8 +43,9 @@ class FakeNotificationDataFactory(
         messages: List<NotifiableMessageEvent>,
         imageLoader: ImageLoader,
         notificationAccountParams: NotificationAccountParams,
+        hideContent: Boolean,
     ): List<RoomNotification> {
-        return messageEventToNotificationsResult(messages, imageLoader, notificationAccountParams)
+        return messageEventToNotificationsResult(messages, imageLoader, notificationAccountParams, hideContent)
     }
 
     @JvmName("toNotificationInvites")

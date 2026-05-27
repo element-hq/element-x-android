@@ -55,9 +55,21 @@ class FakeNotificationCreator(
         existingNotification: Notification?,
         imageLoader: ImageLoader,
         events: List<NotifiableMessageEvent>,
+        hideContent: Boolean,
     ): Notification {
         return createMessagesListNotificationResult(
-            listOf(notificationAccountParams, roomInfo, threadId, largeIcon, lastMessageTimestamp, tickerText, existingNotification, imageLoader, events)
+            listOf(
+                notificationAccountParams,
+                roomInfo,
+                threadId,
+                largeIcon,
+                lastMessageTimestamp,
+                tickerText,
+                existingNotification,
+                imageLoader,
+                events,
+                hideContent
+            )
         )
     }
 

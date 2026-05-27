@@ -29,5 +29,13 @@ interface UserPushStore {
      */
     fun useCompleteNotificationFormat(): Boolean
 
+    /**
+     * Whether to hide notification message content/author when the app is locked by a PIN code.
+     * When enabled, notifications show "You have N new messages" instead of message content.
+     * Enabled by default.
+     */
+    fun isHideNotificationContentWhenLocked(): Flow<Boolean>
+    suspend fun setHideNotificationContentWhenLocked(enabled: Boolean)
+
     suspend fun reset()
 }

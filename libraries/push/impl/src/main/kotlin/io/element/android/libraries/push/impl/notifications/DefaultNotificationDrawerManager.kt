@@ -11,6 +11,8 @@ package io.element.android.libraries.push.impl.notifications
 import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
 import dev.zacsweers.metro.SingleIn
+import io.element.android.features.lockscreen.api.LockScreenLockState
+import io.element.android.features.lockscreen.api.LockScreenService
 import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.matrix.api.MatrixClientProvider
 import io.element.android.libraries.matrix.api.core.EventId
@@ -28,6 +30,7 @@ import io.element.android.libraries.push.impl.notifications.model.NotifiableEven
 import io.element.android.libraries.push.impl.notifications.model.NotifiableMessageEvent
 import io.element.android.libraries.push.impl.notifications.model.NotifiableRingingCallEvent
 import io.element.android.libraries.push.impl.notifications.model.SimpleNotifiableEvent
+import io.element.android.libraries.pushstore.api.UserPushStoreFactory
 import io.element.android.libraries.sessionstorage.api.observer.SessionListener
 import io.element.android.libraries.sessionstorage.api.observer.SessionObserver
 import io.element.android.services.appnavstate.api.AppNavigationState
@@ -37,6 +40,7 @@ import io.element.android.services.appnavstate.api.currentRoomId
 import io.element.android.services.appnavstate.api.currentSessionId
 import io.element.android.services.appnavstate.api.currentThreadId
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 /**
@@ -55,6 +59,8 @@ class DefaultNotificationDrawerManager(
     private val matrixClientProvider: MatrixClientProvider,
     private val imageLoaderHolder: ImageLoaderHolder,
     private val activeNotificationsProvider: ActiveNotificationsProvider,
+    private val lockScreenService: LockScreenService,
+    private val userPushStoreFactory: UserPushStoreFactory,
     sessionObserver: SessionObserver,
 ) : NotificationCleaner {
     // TODO EAx add a setting per user for this
@@ -197,6 +203,8 @@ class DefaultNotificationDrawerManager(
             it.sessionId
         }
 
+        val isAppLocked = lockScreenService.lockState.value == LockScreenLockState.Locked
+
         for ((sessionId, notifiableEvents) in eventsForSessions) {
             val client = matrixClientProvider.getOrRestore(sessionId).getOrThrow()
             val imageLoader = imageLoaderHolder.get(client)
@@ -207,7 +215,29 @@ class DefaultNotificationDrawerManager(
             } else {
                 client.getUserProfile().getOrNull() ?: MatrixUser(sessionId)
             }
-            notificationRenderer.render(currentUser, useCompleteNotificationFormat, notifiableEvents, imageLoader)
+            val hideContent = isAppLocked &&
+                userPushStoreFactory.getOrCreate(sessionId).isHideNotificationContentWhenLocked().first()
+
+            if (hideContent) {
+                // When the app is locked and the user has opted to hide content,
+                // show a single fallback notification with event count instead of
+                // per-room notifications with message content/sender info.
+                clearAllMessagesEvents(sessionId)
+                val fallbackEvents = notifiableEvents.mapNotNull { it.toFallbackNotifiableEvent() }
+                notificationRenderer.render(
+                    currentUser = currentUser,
+                    useCompleteNotificationFormat = false,
+                    eventsToProcess = fallbackEvents,
+                    imageLoader = imageLoader,
+                )
+            } else {
+                notificationRenderer.render(
+                    currentUser = currentUser,
+                    useCompleteNotificationFormat = useCompleteNotificationFormat,
+                    eventsToProcess = notifiableEvents,
+                    imageLoader = imageLoader,
+                )
+            }
         }
     }
 }
@@ -237,4 +267,30 @@ private fun AppNavigationState.shouldIgnoreEvent(event: NotifiableEvent): Boolea
                     event.threadId == navigationState.currentThreadId()
             }
         }
+}
+
+/**
+ * Convert a [NotifiableEvent] into a [FallbackNotifiableEvent], stripping all content and sender info.
+ * Used when notification content should be hidden (app locked with PIN).
+ */
+private fun NotifiableEvent.toFallbackNotifiableEvent(): FallbackNotifiableEvent? {
+    val timestamp = when (this) {
+        is NotifiableMessageEvent -> timestamp
+        is InviteNotifiableEvent -> timestamp
+        is SimpleNotifiableEvent -> timestamp
+        is FallbackNotifiableEvent -> timestamp
+        is NotifiableRingingCallEvent -> return null
+    }
+    return FallbackNotifiableEvent(
+        sessionId = sessionId,
+        roomId = roomId,
+        eventId = eventId,
+        editedEventId = null,
+        description = null,
+        canBeReplaced = false,
+        isRedacted = false,
+        isUpdated = false,
+        timestamp = timestamp,
+        cause = null,
+    )
 }

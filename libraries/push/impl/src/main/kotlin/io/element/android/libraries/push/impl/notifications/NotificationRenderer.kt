@@ -46,6 +46,7 @@ class NotificationRenderer(
         useCompleteNotificationFormat: Boolean,
         eventsToProcess: List<NotifiableEvent>,
         imageLoader: ImageLoader,
+        hideContent: Boolean = false,
     ) {
         val color = enterpriseService.brandColorsFlow(currentUser.userId).first()?.toArgb()
             ?: NotificationConfig.NOTIFICATION_ACCENT_COLOR
@@ -56,7 +57,7 @@ class NotificationRenderer(
             showSessionId = numberOfAccounts > 1,
         )
         val groupedEvents = eventsToProcess.groupByType()
-        val roomNotifications = notificationDataFactory.toNotifications(groupedEvents.roomEvents, imageLoader, notificationAccountParams)
+        val roomNotifications = notificationDataFactory.toNotifications(groupedEvents.roomEvents, imageLoader, notificationAccountParams, hideContent)
         val invitationNotifications = notificationDataFactory.toNotifications(groupedEvents.invitationEvents, notificationAccountParams)
         val simpleNotifications = notificationDataFactory.toNotifications(groupedEvents.simpleEvents, notificationAccountParams)
         val fallbackNotification = notificationDataFactory.toNotification(groupedEvents.fallbackEvents, notificationAccountParams)

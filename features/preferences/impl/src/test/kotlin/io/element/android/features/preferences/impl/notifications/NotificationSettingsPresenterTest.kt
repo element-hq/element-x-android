@@ -9,6 +9,7 @@
 package io.element.android.features.preferences.impl.notifications
 
 import com.google.common.truth.Truth.assertThat
+import io.element.android.features.lockscreen.test.FakeLockScreenService
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.fullscreenintent.api.FullScreenIntentPermissionsState
 import io.element.android.libraries.fullscreenintent.api.aFullScreenIntentPermissionsState
@@ -366,6 +367,7 @@ class NotificationSettingsPresenterTest {
             pushService = pushService,
             systemNotificationsEnabledProvider = FakeSystemNotificationsEnabledProvider(),
             fullScreenIntentPermissionsPresenter = { fullScreenIntentPermissionsStateLambda() },
+            lockScreenService = FakeLockScreenService(),
             sessionCoroutineScope = backgroundScope,
         )
     }

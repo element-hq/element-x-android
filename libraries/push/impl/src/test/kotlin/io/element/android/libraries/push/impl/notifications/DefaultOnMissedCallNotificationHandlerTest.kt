@@ -29,7 +29,7 @@ class DefaultOnMissedCallNotificationHandlerTest {
     @Test
     fun `addMissedCallNotification - should add missed call notification`() = runTest {
         val dataFactory = FakeNotificationDataFactory(
-            messageEventToNotificationsResult = lambdaRecorder { _, _, _ -> emptyList() }
+            messageEventToNotificationsResult = lambdaRecorder { _, _, _, _ -> emptyList() }
         )
         // Create a fake matrix client provider that returns a fake matrix client with a fake notification service that returns a valid notification data
         val matrixClientProvider = FakeMatrixClientProvider(getClient = {
