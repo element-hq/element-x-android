@@ -14,6 +14,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.produceState
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
@@ -35,6 +36,7 @@ import io.element.android.features.location.impl.common.toDialogState
 import io.element.android.features.location.impl.live.LiveLocationStore
 import io.element.android.features.messages.api.MessageComposerContext
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.architecture.runUpdatingState
 import io.element.android.libraries.core.extensions.flatMap
@@ -86,6 +88,10 @@ class ShareLocationPresenter(
         }
         val startLiveLocationAction = remember { mutableStateOf<AsyncAction<Unit>>(AsyncAction.Uninitialized) }
         val currentUser by client.userProfile.collectAsState()
+        val customMapStyleUrl by produceState(AsyncData.Loading()) {
+            // Ignore errors
+            value = AsyncData.Success(client.getMapStyleUrl().getOrNull())
+        }
         val sendLiveLocationPermissions by room.permissionsAsState(SendLiveLocationPermissions.DEFAULT) { perms ->
             perms.sendLiveLocationPermissions()
         }
@@ -161,6 +167,7 @@ class ShareLocationPresenter(
         }
 
         return ShareLocationState(
+            customMapStyleUrl = customMapStyleUrl,
             currentUser = currentUser,
             dialogState = dialogState,
             trackUserLocation = trackUserPosition,

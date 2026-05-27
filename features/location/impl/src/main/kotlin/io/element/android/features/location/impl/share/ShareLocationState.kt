@@ -10,10 +10,12 @@ package io.element.android.features.location.impl.share
 
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.ImmutableList
 
 data class ShareLocationState(
+    val customMapStyleUrl: AsyncData<String?>,
     val currentUser: MatrixUser,
     val dialogState: Dialog,
     val trackUserLocation: Boolean,

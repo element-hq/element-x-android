@@ -100,6 +100,7 @@ fun ShowLocationView(
         }
     }
     MapBottomSheetScaffold(
+        customMapStyleUrl = state.customMapStyleUrl,
         sheetDragHandle = if (state.isSheetDraggable) {
             { BottomSheetDefaults.DragHandle() }
         } else {
