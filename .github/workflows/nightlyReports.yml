@@ -17,7 +17,7 @@ jobs:
   nightlyReports:
     name: Create kover report artifact and upload sonar result.
     runs-on: ubuntu-latest
-    if: ${{ github.event.repository.fork != true }}
+    if: ${{ github.repository == 'element-hq/element-x-android' }}
     steps:
       - name: Free Disk Space (Ubuntu)
         uses: jlumbroso/free-disk-space@54081f138730dfa15788a46383842cd2f914a1be
@@ -75,7 +75,6 @@ jobs:
   dependency-analysis:
     name: Dependency analysis
     runs-on: ubuntu-latest
-    if: ${{ github.event.repository.fork != true }}
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
         with:
