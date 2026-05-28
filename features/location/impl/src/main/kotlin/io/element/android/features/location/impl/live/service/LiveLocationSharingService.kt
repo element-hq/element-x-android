@@ -104,7 +104,7 @@ class LiveLocationSharingService : Service() {
                 ApiLocation(
                     lat = location.position.value.latitude,
                     lon = location.position.value.longitude,
-                    accuracy = location.position.accuracy?.inMeters?.toFloat() ?: 0f,
+                    accuracy = location.position.accuracy?.inMeters?.toFloat(),
                 )
             }
             .onEach(coordinator::dispatch)
