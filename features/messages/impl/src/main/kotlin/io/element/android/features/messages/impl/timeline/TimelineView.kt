@@ -16,6 +16,7 @@ import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.animation.scaleIn
 import androidx.compose.animation.scaleOut
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -87,6 +88,7 @@ import io.element.android.features.messages.impl.timeline.model.event.TimelineIt
 import io.element.android.features.messages.impl.timeline.protection.TimelineProtectionState
 import io.element.android.features.messages.impl.timeline.protection.aTimelineProtectionState
 import io.element.android.libraries.androidutils.system.copyToClipboard
+import io.element.android.libraries.designsystem.atomic.atoms.UnreadIndicatorAtom
 import io.element.android.libraries.designsystem.components.dialogs.AlertDialog
 import io.element.android.libraries.designsystem.preview.ElementPreview
 import io.element.android.libraries.designsystem.preview.PreviewsDayNight
@@ -561,28 +563,17 @@ private fun JumpToPositionButton(
                 }
             }
             val dotYOffset = if (dotAlignment == Alignment.BottomCenter) 4.dp else (-4).dp
-            TimelineUnreadIndicator(
-                isVisible = hasUnread,
-                modifier = Modifier
-                    .align(dotAlignment)
-                    .offset { IntOffset(x = 0, y = dotYOffset.roundToPx()) },
-            )
+            if (hasUnread) {
+                UnreadIndicatorAtom(
+                    modifier = Modifier
+                        .align(dotAlignment)
+                        .offset { IntOffset(x = 0, y = dotYOffset.roundToPx()) },
+                    color = ElementTheme.colors.iconSuccessPrimary,
+                    border = BorderStroke(2.dp, ElementTheme.colors.bgCanvasDefault),
+                )
+            }
         }
     }
-}
-
-@Composable
-private fun TimelineUnreadIndicator(
-    isVisible: Boolean,
-    modifier: Modifier = Modifier,
-) {
-    if (!isVisible) return
-    Box(
-        modifier = modifier
-            .size(12.dp)
-            .background(color = ElementTheme.colors.iconSuccessPrimary, shape = CircleShape)
-            .border(width = 2.dp, color = ElementTheme.colors.bgCanvasDefault, shape = CircleShape),
-    )
 }
 
 @PreviewsDayNight
