@@ -155,7 +155,9 @@ fun ShowLocationView(
                                 val position = CameraPosition(
                                     padding = sheetPaddings,
                                     target = Position(locationShare.location.lon, locationShare.location.lat),
-                                    zoom = MapDefaults.DEFAULT_ZOOM
+                                    // Force pointing to NORTH
+                                    bearing = 0.0,
+                                    zoom = cameraState.position.zoom.coerceAtLeast(MapDefaults.DEFAULT_ZOOM),
                                 )
                                 coroutineScope.launch {
                                     cameraState.animateTo(finalPosition = position)
