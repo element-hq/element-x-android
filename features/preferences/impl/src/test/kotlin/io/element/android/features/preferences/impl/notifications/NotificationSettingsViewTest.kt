@@ -50,7 +50,7 @@ class NotificationSettingsViewTest {
         eventsRecorder.assertSingle(NotificationSettingsEvents.RefreshSystemNotificationsEnabled)
     }
 
-    @Config(qualifiers = "h1024dp")
+    @Config(qualifiers = "h1280dp")
     @Test
     fun `clicking on troubleshoot notification invokes the expected callback`() = runAndroidComposeUiTest {
         val eventsRecorder = EventsRecorder<NotificationSettingsEvents>()
