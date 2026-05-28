@@ -13,19 +13,15 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.location.impl.common.MapDefaults
-import kotlinx.coroutines.flow.SharingStarted
 import org.maplibre.compose.camera.CameraState
 import org.maplibre.compose.location.DesiredAccuracy
 import org.maplibre.compose.location.LocationPuck
 import org.maplibre.compose.location.LocationPuckColors
 import org.maplibre.compose.location.LocationPuckSizes
-import org.maplibre.compose.location.LocationTrackingEffect
 import org.maplibre.compose.location.UserLocationState
 import org.maplibre.compose.location.rememberAndroidLocationProvider
 import org.maplibre.compose.location.rememberNullLocationProvider
 import org.maplibre.compose.location.rememberUserLocationState
-import org.maplibre.spatialk.units.Bearing
-import org.maplibre.spatialk.units.extensions.inDegrees
 import org.maplibre.spatialk.units.extensions.meters
 import kotlin.time.Duration.Companion.seconds
 
@@ -35,28 +31,24 @@ fun UserLocationPuck(
     locationState: UserLocationState,
     trackUserLocation: Boolean,
 ) {
+    SimpleLocationTrackingEffect(
+        locationState = locationState,
+        enabled = trackUserLocation,
+    ) { currentLocation ->
+        val target = currentLocation?.position?.value ?: cameraState.position.target
+        val newPosition = cameraState.position.copy(
+            target = target,
+            // Force pointing to NORTH
+            bearing = 0.0,
+            zoom = cameraState.position.zoom.coerceAtLeast(MapDefaults.DEFAULT_ZOOM)
+        )
+        cameraState.animateTo(newPosition)
+    }
     val location = locationState.location
     if (location != null) {
-        // Moved inside this block so it correctly tracks the updated locationState value
-        LocationTrackingEffect(
-            locationState = locationState,
-            enabled = trackUserLocation,
-        ) {
-            val newTarget = currentLocation.location?.position?.value
-            val newBearing = currentLocation.orientation?.orientation?.value?.clockwiseRotationTo(Bearing.North)?.inDegrees
-            if (newTarget != null || newBearing != null) {
-                val finalPosition = cameraState.position.copy(
-                    target = newTarget ?: cameraState.position.target,
-                    bearing = newBearing ?: cameraState.position.bearing,
-                    zoom = cameraState.position.zoom.coerceAtLeast(MapDefaults.DEFAULT_ZOOM)
-                )
-                cameraState.animateTo(finalPosition)
-            }
-        }
-
         LocationPuck(
             idPrefix = "user-location",
-            location = locationState.location,
+            location = location,
             cameraState = cameraState,
             accuracyThreshold = Float.POSITIVE_INFINITY,
             showBearingAccuracy = false,
@@ -85,7 +77,6 @@ fun rememberUserLocationState(hasLocationPermission: Boolean): UserLocationState
             updateInterval = 5.seconds,
             desiredAccuracy = DesiredAccuracy.High,
             minDistance = 5.meters,
-            sharingStarted = SharingStarted.Eagerly,
         )
     }
     return rememberUserLocationState(locationProvider)
