@@ -481,12 +481,6 @@ Are you sure you want to continue?"</string>
   <string name="screen_create_poll_options_section_title">"Options"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Remove %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Settings"</string>
-  <string name="screen_image_edition_a11y_rotate_to_the_left">"Rotate the image to the left"</string>
-  <plurals name="screen_image_edition_a11y_rotation_state">
-    <item quantity="one">"%1$d degree"</item>
-    <item quantity="other">"%1$d degrees"</item>
-  </plurals>
-  <string name="screen_image_edition_title">"Edit photo"</string>
   <string name="screen_live_location_sheet_nobody_sharing">"Nobody is sharing their location"</string>
   <string name="screen_live_location_sheet_sharing_live_location">"Sharing live location"</string>
   <plurals name="screen_live_location_sheet_subtitle">

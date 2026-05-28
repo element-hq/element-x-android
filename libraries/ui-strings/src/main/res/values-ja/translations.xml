@@ -471,11 +471,6 @@
   <string name="screen_create_poll_options_section_title">"選択肢"</string>
   <string name="screen_create_poll_remove_accessibility_label">"%1$s を削除"</string>
   <string name="screen_create_poll_settings_section_title">"設定"</string>
-  <string name="screen_image_edition_a11y_rotate_to_the_left">"画像を左に回転"</string>
-  <plurals name="screen_image_edition_a11y_rotation_state">
-    <item quantity="other">"%1$d°"</item>
-  </plurals>
-  <string name="screen_image_edition_title">"写真を編集"</string>
   <string name="screen_live_location_sheet_nobody_sharing">"誰も位置情報を共有していません"</string>
   <string name="screen_live_location_sheet_sharing_live_location">"ライブ位置情報を共有しています"</string>
   <plurals name="screen_live_location_sheet_subtitle">
