@@ -136,6 +136,8 @@ fun AttachmentsPreviewView(
                 state.eventSink(AttachmentsPreviewEvent.UpdateImageCropRect(cropRect))
             },
             onRotateClick = { state.eventSink(AttachmentsPreviewEvent.RotateImageToTheLeft) },
+            onFlipHorizontallyClick = { state.eventSink(AttachmentsPreviewEvent.FlipImageHorizontally) },
+            onFlipVerticallyClick = { state.eventSink(AttachmentsPreviewEvent.FlipImageVertically) },
             onCancelClick = ::postCloseImageEditor,
             onResetClick = ::postResetImageEditor,
             onDoneClick = ::postApplyImageEdits,
