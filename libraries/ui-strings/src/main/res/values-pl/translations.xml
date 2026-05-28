@@ -489,13 +489,6 @@ Czy na pewno chcesz kontynuować?"</string>
   <string name="screen_create_poll_options_section_title">"Opcje"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Usuń %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Ustawienia"</string>
-  <string name="screen_image_edition_a11y_rotate_to_the_left">"Obróć obraz w lewo"</string>
-  <plurals name="screen_image_edition_a11y_rotation_state">
-    <item quantity="one">"%1$d stopień"</item>
-    <item quantity="few">"%1$d stopnie"</item>
-    <item quantity="many">"%1$d stopni"</item>
-  </plurals>
-  <string name="screen_image_edition_title">"Edytuj zdjęcie"</string>
   <string name="screen_live_location_sheet_nobody_sharing">"Nikt nie udostępnia swojej lokalizacji"</string>
   <string name="screen_live_location_sheet_sharing_live_location">"Udostępnianie lokalizacji na żywo"</string>
   <plurals name="screen_live_location_sheet_subtitle">

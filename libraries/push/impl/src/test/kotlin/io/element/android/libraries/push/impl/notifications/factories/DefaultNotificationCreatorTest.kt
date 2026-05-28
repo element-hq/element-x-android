@@ -373,10 +373,12 @@ fun createNotificationChannels(
     enterpriseService: EnterpriseService = FakeEnterpriseService(),
 ): NotificationChannels {
     val context = RuntimeEnvironment.getApplication()
+    val notificationManagerCompat = NotificationManagerCompat.from(context)
     return DefaultNotificationChannels(
-        notificationManager = NotificationManagerCompat.from(context),
+        notificationManager = notificationManagerCompat,
         stringProvider = FakeStringProvider(""),
         context = context,
         enterpriseService = enterpriseService,
+        appPreferencesStore = io.element.android.libraries.preferences.test.InMemoryAppPreferencesStore(),
     )
 }

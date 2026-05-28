@@ -58,6 +58,7 @@
   <string name="screen_labs_header_title">"Feeling experimental?"</string>
   <string name="screen_labs_title">"Labs"</string>
   <string name="screen_notification_settings_additional_settings_section_title">"Additional settings"</string>
+  <string name="screen_notification_settings_call_ringtone_label">"Call ringtone"</string>
   <string name="screen_notification_settings_calls_label">"Audio and video calls"</string>
   <string name="screen_notification_settings_configuration_mismatch">"Configuration mismatch"</string>
   <string name="screen_notification_settings_configuration_mismatch_description">"We’ve simplified Notifications Settings to make options easier to find. Some custom settings you’ve chosen in the past are not shown here, but they’re still active.
@@ -76,10 +77,15 @@ If you proceed, some of your settings may change."</string>
   <string name="screen_notification_settings_invite_for_me_label">"Invitations"</string>
   <string name="screen_notification_settings_mentions_only_disclaimer">"Your homeserver does not support this option in encrypted rooms, you may not get notified in some rooms."</string>
   <string name="screen_notification_settings_mentions_section_title">"Mentions"</string>
+  <string name="screen_notification_settings_message_sound_dialog_choose_other">"Choose another sound…"</string>
+  <string name="screen_notification_settings_message_sound_dialog_current_subtitle">"Currently using %1$s"</string>
+  <string name="screen_notification_settings_message_sound_dialog_title">"Message sound"</string>
+  <string name="screen_notification_settings_message_sound_label">"Message sound"</string>
   <string name="screen_notification_settings_mode_all">"All"</string>
   <string name="screen_notification_settings_mode_mentions">"Mentions"</string>
   <string name="screen_notification_settings_notification_section_title">"Notify me for"</string>
   <string name="screen_notification_settings_room_mention_label">"Notify me on @room"</string>
+  <string name="screen_notification_settings_sound_custom_fallback">"Custom"</string>
   <string name="screen_notification_settings_sound_custom_sound_button_title">"Custom sound…"</string>
   <string name="screen_notification_settings_sound_delete_sound_error_title">"Error deleting file"</string>
   <string name="screen_notification_settings_sound_element_default">"Element Default"</string>
@@ -87,7 +93,9 @@ If you proceed, some of your settings may change."</string>
   <string name="screen_notification_settings_sound_import_sound_error_title">"Error importing file"</string>
   <string name="screen_notification_settings_sound_preview_sound_error_title">"Problem previewing alert sound"</string>
   <string name="screen_notification_settings_sound_section_title">"Sound"</string>
+  <string name="screen_notification_settings_sound_set_sound_error_dismiss_a11y">"Dismiss alert sound error"</string>
   <string name="screen_notification_settings_sound_set_sound_error_title">"Problem setting alert sound"</string>
+  <string name="screen_notification_settings_sound_silent">"Silent"</string>
   <string name="screen_notification_settings_sound_system_alert">"Alert"</string>
   <string name="screen_notification_settings_sound_system_anticipate">"Anticipate"</string>
   <string name="screen_notification_settings_sound_system_bell">"Bell"</string>
@@ -95,6 +103,7 @@ If you proceed, some of your settings may change."</string>
   <string name="screen_notification_settings_sound_system_calypso">"Calypso"</string>
   <string name="screen_notification_settings_sound_system_chime">"Chime"</string>
   <string name="screen_notification_settings_sound_system_choo_choo">"Choo Choo"</string>
+  <string name="screen_notification_settings_sound_system_default">"System Default"</string>
   <string name="screen_notification_settings_sound_system_descent">"Descent"</string>
   <string name="screen_notification_settings_sound_system_electronic">"Electronic"</string>
   <string name="screen_notification_settings_sound_system_fanfare">"Fanfare"</string>
