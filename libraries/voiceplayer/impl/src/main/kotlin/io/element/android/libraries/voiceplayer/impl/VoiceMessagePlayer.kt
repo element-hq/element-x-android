@@ -181,6 +181,9 @@ class DefaultVoiceMessagePlayer(
 
     override val state: Flow<VoiceMessagePlayer.State> = combine(mediaPlayer.state, internalState) { mediaPlayerState, internalState ->
         if (mediaPlayerState.isMyTrack) {
+            if (mediaPlayerState.isEnded && !this.internalState.value.isEnded) {
+                voiceMessageAudioManager?.stopRouting()
+            }
             this.internalState.update {
                 it.copy(
                     isReady = mediaPlayerState.isReady,

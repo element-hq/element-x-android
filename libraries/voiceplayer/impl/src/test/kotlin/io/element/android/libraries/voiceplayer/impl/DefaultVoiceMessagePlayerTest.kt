@@ -17,7 +17,6 @@ import io.element.android.libraries.matrix.api.media.MediaSource
 import io.element.android.libraries.matrix.test.AN_EVENT_ID
 import io.element.android.libraries.mediaplayer.api.MediaPlayer
 import io.element.android.libraries.mediaplayer.test.FakeMediaPlayer
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.test.TestScope
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
@@ -294,7 +293,7 @@ private fun TestScope.createDefaultVoiceMessagePlayer(
     mimeType = MimeTypes.Ogg,
     filename = "someBody.ogg",
     voiceMessageAudioManager = null,
-    sessionCoroutineScope = CoroutineScope(coroutineContext)
+    sessionCoroutineScope = backgroundScope
 )
 
 private const val MXC_URI = "mxc://matrix.org/1234567890abcdefg"

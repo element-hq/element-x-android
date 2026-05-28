@@ -1,6 +1,5 @@
 /*
- * Copyright (c) 2025 Element Creations Ltd.
- * Copyright 2023-2025 New Vector Ltd.
+ * Copyright (c) 2026 Element Creations Ltd.
  *
  * SPDX-License-Identifier: AGPL-3.0-only OR LicenseRef-Element-Commercial.
  * Please see LICENSE files in the repository root for full details.
@@ -19,13 +18,14 @@ import android.media.AudioManager
 import android.os.Build
 import android.os.PowerManager
 import androidx.core.content.getSystemService
+import dev.zacsweers.metro.AppScope
 import dev.zacsweers.metro.ContributesBinding
-import io.element.android.libraries.di.RoomScope
+import io.element.android.libraries.core.coroutine.CoroutineDispatchers
+import io.element.android.libraries.core.coroutine.childScope
+import io.element.android.libraries.di.annotations.AppCoroutineScope
 import io.element.android.libraries.di.annotations.ApplicationContext
 import io.element.android.libraries.voiceplayer.api.VoiceMessageAudioManager
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
@@ -41,9 +41,11 @@ import timber.log.Timber
  *   setCommunicationDevice() as it's for media playback only)
  * - Proximity sensor remains active even when Bluetooth is connected
  */
-@ContributesBinding(RoomScope::class)
-public class DefaultVoiceMessageAudioManager constructor(
+@ContributesBinding(AppScope::class)
+class DefaultVoiceMessageAudioManager(
     @ApplicationContext private val context: Context,
+    @AppCoroutineScope private val appCoroutineScope: CoroutineScope,
+    coroutineDispatchers: CoroutineDispatchers,
 ) : VoiceMessageAudioManager {
     private val audioManager = context.getSystemService<AudioManager>()
     private val sensorManager = context.getSystemService<SensorManager>()
@@ -63,8 +65,7 @@ public class DefaultVoiceMessageAudioManager constructor(
     private var isRoutingActive = false
     private var currentDeviceType: Int? = null
 
-    private val mainScope = MainScope()
-    private val audioDeviceCallbackScope = CoroutineScope(Dispatchers.Main)
+    private val audioDeviceCallbackScope = appCoroutineScope.childScope(coroutineDispatchers.main, "VoiceMessageAudioManager.AudioDeviceCallback")
 
     private val audioDeviceCallback = object : AudioDeviceCallback() {
         override fun onAudioDevicesAdded(addedDevices: Array<out AudioDeviceInfo>?) {
@@ -164,7 +165,7 @@ public class DefaultVoiceMessageAudioManager constructor(
         if (isRoutingActive) return
         isRoutingActive = true
 
-        mainScope.launch(Dispatchers.Main) {
+        appCoroutineScope.launch(coroutineDispatchers.main) {
             audioManager?.let { manager ->
                 val externalDevice = findCommunicationDevice()
 
@@ -250,7 +251,7 @@ public class DefaultVoiceMessageAudioManager constructor(
         if (!isRoutingActive) return
         isRoutingActive = false
 
-        mainScope.launch(Dispatchers.Main) {
+        appCoroutineScope.launch(coroutineDispatchers.main) {
             audioManager?.unregisterAudioDeviceCallback(audioDeviceCallback)
             stopProximityMonitoring()
             releaseWakeLock()
@@ -277,14 +278,14 @@ public class DefaultVoiceMessageAudioManager constructor(
                     try {
                         audioManager.setCommunicationDevice(it)
                     } catch (e: IllegalArgumentException) {
-                        Timber.e(e, "Failed to set communication device: ${deviceType}")
+                        Timber.e(e, "Failed to set communication device: $deviceType")
                         if (deviceType != AudioDeviceInfo.TYPE_BUILTIN_SPEAKER) {
                             Timber.w("Falling back to built-in speaker")
                             selectAudioDeviceInternal(AudioDeviceInfo.TYPE_BUILTIN_SPEAKER)
                         }
                     }
                 } ?: run {
-                    Timber.w("Audio device not found: ${deviceType}")
+                    Timber.w("Audio device not found: $deviceType")
                     if (deviceType != AudioDeviceInfo.TYPE_BUILTIN_SPEAKER) {
                         Timber.w("Falling back to built-in speaker")
                         selectAudioDeviceInternal(AudioDeviceInfo.TYPE_BUILTIN_SPEAKER)
@@ -300,7 +301,7 @@ public class DefaultVoiceMessageAudioManager constructor(
                         audioManager.isSpeakerphoneOn = false
                     }
                     else -> {
-                        Timber.w("Unsupported device type for Android < S: ${deviceType}")
+                        Timber.w("Unsupported device type for Android < S: $deviceType")
                     }
                 }
             }
@@ -323,7 +324,7 @@ public class DefaultVoiceMessageAudioManager constructor(
                 try {
                     audioManager.setCommunicationDevice(it)
                 } catch (e: IllegalArgumentException) {
-                    Timber.e(e, "Failed to set communication device: ${deviceType}")
+                    Timber.e(e, "Failed to set communication device: $deviceType")
                 }
             }
         } else {
@@ -336,7 +337,7 @@ public class DefaultVoiceMessageAudioManager constructor(
                     audioManager.isSpeakerphoneOn = false
                 }
                 else -> {
-                    Timber.w("Unsupported device type for Android < S: ${deviceType}")
+                    Timber.w("Unsupported device type for Android < S: $deviceType")
                 }
             }
         }
@@ -351,29 +352,25 @@ public class DefaultVoiceMessageAudioManager constructor(
             return
         }
 
-        mainScope.launch(Dispatchers.Main) {
-            sensorManager.registerListener(
-                proximityListener,
-                sensor,
-                SensorManager.SENSOR_DELAY_NORMAL
-            )
-        }
+        sensorManager.registerListener(
+            proximityListener,
+            sensor,
+            SensorManager.SENSOR_DELAY_NORMAL
+        )
     }
 
     /**
      * Stop proximity sensor monitoring.
      */
     private fun stopProximityMonitoring() {
-        mainScope.launch(Dispatchers.Main) {
-            sensorManager?.unregisterListener(proximityListener)
-        }
+        sensorManager?.unregisterListener(proximityListener)
     }
 
     /**
      * Acquire proximity sensor wake lock (turns off screen when device is held to ear).
      */
     private fun acquireWakeLock() {
-        mainScope.launch {
+        appCoroutineScope.launch {
             proximitySensorMutex.withLock {
                 if (proximitySensorWakeLock?.isHeld == false) {
                     proximitySensorWakeLock?.acquire()
@@ -386,7 +383,7 @@ public class DefaultVoiceMessageAudioManager constructor(
      * Release proximity sensor wake lock.
      */
     private fun releaseWakeLock() {
-        mainScope.launch {
+        appCoroutineScope.launch {
             proximitySensorMutex.withLock {
                 if (proximitySensorWakeLock?.isHeld == true) {
                     proximitySensorWakeLock?.release()
@@ -402,17 +399,21 @@ public class DefaultVoiceMessageAudioManager constructor(
      */
     private val proximityListener = object : SensorEventListener {
         private var originalDeviceType: Int? = null
+        private var previousIsClose: Boolean? = null
 
         override fun onSensorChanged(event: SensorEvent?) {
             if (!isRoutingActive) return
 
-            mainScope.launch {
+            appCoroutineScope.launch {
                 proximityListenerMutex.withLock {
                     if (!isRoutingActive) return@launch
 
                     event?.let {
                         val distance = it.values[0]
                         val isClose = distance < 5.0f
+
+                        if (previousIsClose == isClose) return@launch
+                        previousIsClose = isClose
 
                         if (isClose) {
                             if (originalDeviceType == null) {

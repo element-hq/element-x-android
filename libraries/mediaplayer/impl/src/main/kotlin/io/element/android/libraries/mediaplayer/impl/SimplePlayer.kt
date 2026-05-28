@@ -9,6 +9,8 @@
 package io.element.android.libraries.mediaplayer.impl
 
 import android.content.Context
+import androidx.media3.common.AudioAttributes
+import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.exoplayer.ExoPlayer
@@ -52,9 +54,9 @@ object SimplePlayerModule {
     ): SimplePlayer {
         val exoPlayer = ExoPlayer.Builder(context)
             .setAudioAttributes(
-                androidx.media3.common.AudioAttributes.Builder()
-                    .setUsage(androidx.media3.common.C.USAGE_VOICE_COMMUNICATION)
-                    .setContentType(androidx.media3.common.C.AUDIO_CONTENT_TYPE_SPEECH)
+                AudioAttributes.Builder()
+                    .setUsage(C.USAGE_VOICE_COMMUNICATION)
+                    .setContentType(C.AUDIO_CONTENT_TYPE_SPEECH)
                     .build(),
                 true, // handleAudioFocus
             )
