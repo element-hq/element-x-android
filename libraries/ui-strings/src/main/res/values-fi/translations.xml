@@ -480,10 +480,6 @@ Haluatko varmasti jatkaa?"</string>
   <string name="screen_create_poll_options_section_title">"Vaihtoehdot"</string>
   <string name="screen_create_poll_remove_accessibility_label">"Poista %1$s"</string>
   <string name="screen_create_poll_settings_section_title">"Asetukset"</string>
-  <plurals name="screen_image_edition_a11y_rotation_state">
-    <item quantity="one">"%1$d aste"</item>
-    <item quantity="other">"%1$d astetta"</item>
-  </plurals>
   <string name="screen_live_location_sheet_nobody_sharing">"Kukaan ei jaa sijaintiaan"</string>
   <string name="screen_live_location_sheet_sharing_live_location">"Jaetaan reaaliaikaista sijaintia"</string>
   <plurals name="screen_live_location_sheet_subtitle">
