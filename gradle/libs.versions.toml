@@ -61,6 +61,8 @@ autoservice = "1.1.1"
 
 # quality
 detekt = "1.23.8"
+# Stick to version < 0.5 since error detection is broken. See https://mrmans0n.github.io/compose-rules/detekt/#supported-versions-matrix
+detekt_compose_rules = "0.4.28"
 # See https://github.com/pinterest/ktlint/releases/
 ktlint = "1.8.0"
 androidx-test-ext-junit = "1.3.0"
@@ -72,6 +74,8 @@ android_gradle_plugin = { module = "com.android.tools.build:gradle", version.ref
 compose_compiler_plugin = { module = "org.jetbrains.kotlin:compose-compiler-gradle-plugin", version.ref = "kotlin" }
 # https://developer.android.com/studio/write/java8-support#library-desugaring-versions
 android_desugar = "com.android.tools:desugar_jdk_libs:2.1.5"
+# Used in build.gradle.kts
+detekt_compose_rules = { module = "io.nlopez.compose.rules:detekt", version.ref = "detekt_compose_rules" }
 kotlin_gradle_plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 metro_gradle_plugin = { module = "dev.zacsweers.metro:gradle-plugin", version.ref = "metro" }
 kotlin_compiler = { module = "org.jetbrains.kotlin:kotlin-compiler", version.ref = "kotlin" }

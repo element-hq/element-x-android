@@ -26,6 +26,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -180,6 +181,7 @@ private fun StartLiveLocationActionView(
     onActionSuccess: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val updatedOnActionSuccess by rememberUpdatedState(onActionSuccess)
     Box(modifier = modifier) {
         val asyncIndicatorState = rememberAsyncIndicatorState()
         AsyncIndicatorHost(state = asyncIndicatorState)
@@ -202,7 +204,7 @@ private fun StartLiveLocationActionView(
                 }
             }
             is AsyncAction.Success -> {
-                LaunchedEffect(action) { onActionSuccess() }
+                LaunchedEffect(action) { updatedOnActionSuccess() }
             }
             else -> Unit
         }
