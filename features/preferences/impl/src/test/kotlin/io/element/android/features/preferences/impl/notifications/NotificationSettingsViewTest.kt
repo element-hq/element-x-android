@@ -290,7 +290,7 @@ class NotificationSettingsViewTest {
                 callRingtoneDisplayName = "Pixel ringtone",
             ),
         )
-        onNodeWithText("Sounds").assertIsDisplayed()
+        onNodeWithText("Sound").assertIsDisplayed()
         onNodeWithText("Message sound").assertIsDisplayed()
         onNodeWithText("Call ringtone").assertIsDisplayed()
         onNodeWithText("Pixel notification").assertIsDisplayed()
