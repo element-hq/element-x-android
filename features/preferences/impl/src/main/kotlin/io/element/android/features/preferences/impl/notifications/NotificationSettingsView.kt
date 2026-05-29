@@ -286,7 +286,7 @@ private fun SoundsPreferenceCategory(state: NotificationSettingsState) {
             type = RingtoneManager.TYPE_NOTIFICATION,
             current = state.messageSound.sound,
             defaultUri = Settings.System.DEFAULT_NOTIFICATION_URI,
-            onSoundPicked = { sound -> state.eventSink(NotificationSettingsEvents.SetMessageSound(sound)) },
+            onSoundPick = { sound -> state.eventSink(NotificationSettingsEvents.SetMessageSound(sound)) },
         )
         // Skip the initial 0 emission so the picker doesn't auto-open on screen entry; only
         // increments fired by LaunchMessageSoundPicker should launch it.
@@ -313,7 +313,7 @@ private fun SoundsPreferenceCategory(state: NotificationSettingsState) {
             type = RingtoneManager.TYPE_RINGTONE,
             current = state.callRingtone.sound,
             defaultUri = Settings.System.DEFAULT_RINGTONE_URI,
-            onSoundPicked = { sound -> state.eventSink(NotificationSettingsEvents.SetCallRingtone(sound)) },
+            onSoundPick = { sound -> state.eventSink(NotificationSettingsEvents.SetCallRingtone(sound)) },
         )
         // Skip the initial 0 emission so the picker doesn't auto-open on screen entry; only
         // increments fired by LaunchCallRingtonePicker should launch it.
@@ -441,7 +441,7 @@ private fun rememberSoundPickerOnClick(
     type: Int,
     current: NotificationSound,
     defaultUri: Uri,
-    onSoundPicked: (NotificationSound) -> Unit,
+    onSoundPick: (NotificationSound) -> Unit,
 ): () -> Unit {
     // Paparazzi previews don't provide a LocalActivityResultRegistryOwner, which
     // rememberLauncherForActivityResult requires. Skip the launcher in inspection mode and
@@ -453,7 +453,7 @@ private fun rememberSoundPickerOnClick(
         if (result.resultCode == Activity.RESULT_OK) {
             val sound = result.data?.toPickedNotificationSound(defaultUri)
             if (sound != null) {
-                onSoundPicked(sound)
+                onSoundPick(sound)
             }
         }
     }
