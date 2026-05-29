@@ -12,9 +12,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.runtime.snapshotFlow
+import io.element.android.features.location.impl.common.UserLocationState
 import kotlinx.coroutines.flow.distinctUntilChanged
 import org.maplibre.compose.location.Location
-import org.maplibre.compose.location.UserLocationState
 import kotlin.math.abs
 
 /**
@@ -29,7 +29,6 @@ internal fun SimpleLocationTrackingEffect(
     onLocationChange: suspend (Location?) -> Unit,
 ) {
     val latestOnLocationChange by rememberUpdatedState(onLocationChange)
-
     LaunchedEffect(locationState, enabled) {
         if (!enabled) return@LaunchedEffect
         val locationStateFlow = snapshotFlow { locationState.location }

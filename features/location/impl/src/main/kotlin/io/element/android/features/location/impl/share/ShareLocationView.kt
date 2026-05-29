@@ -39,11 +39,12 @@ import io.element.android.features.location.api.Location
 import io.element.android.features.location.api.internal.centerBottomEdge
 import io.element.android.features.location.impl.R
 import io.element.android.features.location.impl.common.MapDefaults
+import io.element.android.features.location.impl.common.UserLocationState
+import io.element.android.features.location.impl.common.rememberUserLocationState
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialog
 import io.element.android.features.location.impl.common.ui.LocationFloatingActionButton
 import io.element.android.features.location.impl.common.ui.MapBottomSheetScaffold
 import io.element.android.features.location.impl.common.ui.UserLocationPuck
-import io.element.android.features.location.impl.common.ui.rememberUserLocationState
 import io.element.android.features.location.impl.share.ShareLocationEvent.StartLiveLocationShare
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.LocationPin
@@ -69,7 +70,6 @@ import kotlinx.collections.immutable.ImmutableList
 import org.maplibre.compose.camera.CameraMoveReason
 import org.maplibre.compose.camera.CameraState
 import org.maplibre.compose.camera.rememberCameraState
-import org.maplibre.compose.location.UserLocationState
 import kotlin.time.Duration
 
 @OptIn(ExperimentalMaterial3Api::class)
