@@ -31,6 +31,7 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.messages.impl.MessagesNavigator
 import io.element.android.features.messages.impl.MessagesPresenter
 import io.element.android.features.messages.impl.MessagesState
+import io.element.android.features.messages.impl.MessagesEvent
 import io.element.android.features.messages.impl.MessagesView
 import io.element.android.features.messages.impl.actionlist.ActionListPresenter
 import io.element.android.features.messages.impl.actionlist.model.TimelineItemActionPostProcessor
@@ -287,6 +288,10 @@ class ThreadedMessagesNode(
                         } == true
                     },
                     onUserDataClick = callback::navigateToRoomMemberDetails,
+                    onMemberClick = { userId ->
+                        state.eventSink(MessagesEvent.OnMemberClicked(userId))
+                    },
+                    onRoomStateClick = {},
                     onLinkClick = { url, customTab ->
                         onLinkClick(
                             activity = activity,
