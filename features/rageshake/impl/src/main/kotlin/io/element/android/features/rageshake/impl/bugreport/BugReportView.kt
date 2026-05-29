@@ -34,6 +34,7 @@ import androidx.compose.ui.unit.dp
 import coil3.compose.AsyncImage
 import coil3.request.CachePolicy
 import coil3.request.ImageRequest
+import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.rageshake.impl.R
 import io.element.android.libraries.architecture.AsyncAction
 import io.element.android.libraries.designsystem.components.async.AsyncActionView
@@ -168,6 +169,13 @@ fun BugReportView(
                     label = stringResource(id = R.string.screen_bug_report_github_issue_label),
                     placeholder = "1234",
                     supportingText = stringResource(id = R.string.screen_bug_report_github_issue_description),
+                    leadingIcon = {
+                        Text(
+                            text = "#",
+                            style = ElementTheme.typography.fontBodyLgMedium,
+                            color = ElementTheme.colors.textSecondary,
+                        )
+                    },
                     onValueChange = {
                         if (it.isEmpty()) {
                             ghIssueNumberState = ""
