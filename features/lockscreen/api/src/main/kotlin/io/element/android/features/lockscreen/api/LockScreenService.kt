@@ -14,6 +14,7 @@ import androidx.activity.ComponentActivity
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
@@ -34,6 +35,12 @@ interface LockScreenService {
      * @return true if the pin is setup, false otherwise.
      */
     fun isPinSetup(): Flow<Boolean>
+
+    /**
+     * Check if screenshots are allowed when the lock screen is enabled.
+     * @return true if screenshots are allowed, false otherwise.
+     */
+    fun isAllowScreenshotsAllowed(): Flow<Boolean>
 }
 
 /**
@@ -41,12 +48,17 @@ interface LockScreenService {
  * @param activity the activity to set the flag on.
  */
 fun LockScreenService.handleSecureFlag(activity: ComponentActivity) {
-    isPinSetup()
-        .onEach { isPinSetup ->
+    combine(
+        isPinSetup(),
+        isAllowScreenshotsAllowed()
+    ) { isPinSetup, isAllowScreenshotsAllowed ->
+        isPinSetup && !isAllowScreenshotsAllowed
+    }
+        .onEach { shouldSetSecureFlag ->
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-                activity.setRecentsScreenshotEnabled(!isPinSetup)
+                activity.setRecentsScreenshotEnabled(!shouldSetSecureFlag)
             } else {
-                if (isPinSetup) {
+                if (shouldSetSecureFlag) {
                     activity.window.setFlags(
                         WindowManager.LayoutParams.FLAG_SECURE,
                         WindowManager.LayoutParams.FLAG_SECURE

@@ -107,6 +107,10 @@ class DefaultLockScreenService(
         return pinCodeManager.hasPinCode()
     }
 
+    override fun isAllowScreenshotsAllowed(): Flow<Boolean> {
+        return lockScreenStore.isAllowScreenshotsAllowed()
+    }
+
     override fun isSetupRequired(): Flow<Boolean> {
         return isPinSetup().map { isPinSetup ->
             !isPinSetup && lockScreenConfig.isPinMandatory

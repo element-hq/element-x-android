@@ -17,6 +17,7 @@ import kotlinx.coroutines.flow.map
 
 class FakeLockScreenService : LockScreenService {
     private var isPinSetup = MutableStateFlow(false)
+    private var isAllowScreenshotsAllowed = MutableStateFlow(false)
     private val _lockState: MutableStateFlow<LockScreenLockState> = MutableStateFlow(LockScreenLockState.Locked)
     override val lockState: StateFlow<LockScreenLockState> = _lockState
 
@@ -30,6 +31,14 @@ class FakeLockScreenService : LockScreenService {
 
     override fun isPinSetup(): Flow<Boolean> {
         return isPinSetup
+    }
+
+    override fun isAllowScreenshotsAllowed(): Flow<Boolean> {
+        return isAllowScreenshotsAllowed
+    }
+
+    fun setIsAllowScreenshotsAllowed(isAllowed: Boolean) {
+        isAllowScreenshotsAllowed.value = isAllowed
     }
 
     fun setLockState(lockState: LockScreenLockState) {

@@ -30,6 +30,7 @@ class LockScreenSettingsPresenterTest {
     fun `present - remove pin option is hidden when mandatory`() = runTest {
         val presenter = createLockScreenSettingsPresenter(lockScreenConfig = aLockScreenConfig(isPinMandatory = true))
         presenter.test {
+            skipItems(1)
             awaitItem().also { state ->
                 assertThat(state.showRemovePinOption).isFalse()
             }
@@ -115,6 +116,35 @@ class LockScreenSettingsPresenterTest {
             skipItems(1)
             awaitItem().also { state ->
                 state.eventSink(LockScreenSettingsEvent.ToggleBiometricAllowed)
+            }
+        }
+    }
+
+    @Test
+    fun `present - allow screenshots is disabled by default`() = runTest {
+        val presenter = createLockScreenSettingsPresenter()
+        presenter.test {
+            skipItems(1)
+            awaitItem().also { state ->
+                assertThat(state.isAllowScreenshotsEnabled).isFalse()
+            }
+        }
+    }
+
+    @Test
+    fun `present - toggle allow screenshots`() = runTest {
+        val presenter = createLockScreenSettingsPresenter()
+        presenter.test {
+            skipItems(1)
+            awaitItem().also { state ->
+                state.eventSink(LockScreenSettingsEvent.ToggleAllowScreenshots)
+            }
+            awaitItem().also { state ->
+                assertThat(state.isAllowScreenshotsEnabled).isTrue()
+                state.eventSink(LockScreenSettingsEvent.ToggleAllowScreenshots)
+            }
+            awaitItem().also { state ->
+                assertThat(state.isAllowScreenshotsEnabled).isFalse()
             }
         }
     }

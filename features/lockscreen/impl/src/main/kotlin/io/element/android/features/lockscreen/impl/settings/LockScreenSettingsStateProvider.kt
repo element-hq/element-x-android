@@ -24,10 +24,14 @@ fun aLockScreenSettingsState(
     isBiometricEnabled: Boolean = false,
     showRemovePinConfirmation: Boolean = false,
     showToggleBiometric: Boolean = true,
+    isAllowScreenshotsEnabled: Boolean = false,
+    showAllowScreenshots: Boolean = true,
 ) = LockScreenSettingsState(
     showRemovePinOption = isLockMandatory,
     isBiometricEnabled = isBiometricEnabled,
     showRemovePinConfirmation = showRemovePinConfirmation,
     showToggleBiometric = showToggleBiometric,
+    isAllowScreenshotsEnabled = isAllowScreenshotsEnabled,
+    showAllowScreenshots = showAllowScreenshots,
     eventSink = {}
 )

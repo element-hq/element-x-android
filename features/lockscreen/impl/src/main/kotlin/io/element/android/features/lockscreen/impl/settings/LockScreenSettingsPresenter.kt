@@ -37,13 +37,17 @@ class LockScreenSettingsPresenter(
 ) : Presenter<LockScreenSettingsState> {
     @Composable
     override fun present(): LockScreenSettingsState {
-        val showRemovePinOption by produceState(initialValue = false) {
+        val hasPinCode by produceState(initialValue = false) {
             pinCodeManager.hasPinCode().collect { hasPinCode ->
-                value = !lockScreenConfig.isPinMandatory && hasPinCode
+                value = hasPinCode
             }
         }
+        val showRemovePinOption = !lockScreenConfig.isPinMandatory && hasPinCode
         val isBiometricEnabled by remember {
             lockScreenStore.isBiometricUnlockAllowed()
+        }.collectAsState(initial = false)
+        val isAllowScreenshotsEnabled by remember {
+            lockScreenStore.isAllowScreenshotsAllowed()
         }.collectAsState(initial = false)
         var showRemovePinConfirmation by remember {
             mutableStateOf(false)
@@ -76,6 +80,11 @@ class LockScreenSettingsPresenter(
                         }
                     }
                 }
+                LockScreenSettingsEvent.ToggleAllowScreenshots -> {
+                    coroutineScope.launch {
+                        lockScreenStore.setIsAllowScreenshotsAllowed(!isAllowScreenshotsEnabled)
+                    }
+                }
             }
         }
 
@@ -84,6 +93,8 @@ class LockScreenSettingsPresenter(
             isBiometricEnabled = isBiometricEnabled,
             showRemovePinConfirmation = showRemovePinConfirmation,
             showToggleBiometric = biometricAuthenticatorManager.isDeviceSecured,
+            isAllowScreenshotsEnabled = isAllowScreenshotsEnabled,
+            showAllowScreenshots = hasPinCode,
             eventSink = ::handleEvent,
         )
     }
