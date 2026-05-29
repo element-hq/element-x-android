@@ -32,9 +32,11 @@ import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.timeline.TimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.aTimelineItemEvent
+import io.element.android.features.messages.impl.timeline.aTimelineItemReadReceipts
 import io.element.android.features.messages.impl.timeline.aTimelineRoomInfo
 import io.element.android.features.messages.impl.timeline.components.receipt.ReadReceiptViewState
 import io.element.android.features.messages.impl.timeline.components.receipt.TimelineItemReadReceiptView
+import io.element.android.features.messages.impl.timeline.components.receipt.aReadReceiptData
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
 import io.element.android.features.messages.impl.timeline.model.event.RtcNotificationState
 import io.element.android.features.messages.impl.timeline.model.event.TimelineItemRtcNotificationContent
@@ -144,7 +146,10 @@ private fun getIcon(
 @PreviewsDayNight
 @Composable
 internal fun TimelineItemCallNotifyViewPreview() = ElementPreview {
-    Column(modifier = Modifier.padding(2.dp), verticalArrangement = Arrangement.spacedBy(2.dp)) {
+    val readReceiptState = aTimelineItemReadReceipts(
+        receipts = List(3) { aReadReceiptData(it) },
+    )
+    Column(modifier = Modifier.padding(bottom = 16.dp)) {
         listOf(false, true).forEach { isDm ->
             listOf(CallIntent.AUDIO, CallIntent.VIDEO).forEach { callIntent ->
                 listOf(
@@ -155,9 +160,15 @@ internal fun TimelineItemCallNotifyViewPreview() = ElementPreview {
                     val content = TimelineItemRtcNotificationContent(callIntent, state)
                     TimelineItemCallNotifyView(
                         timelineRoomInfo = aTimelineRoomInfo(isDm = isDm),
-                        event = aTimelineItemEvent(content = content),
+                        event = aTimelineItemEvent(
+                            content = content,
+                            readReceiptState = readReceiptState,
+                        ),
                         content = content,
-                        renderReadReceipts = true,
+                        // Render read receipts for the first item only
+                        renderReadReceipts = !isDm &&
+                            callIntent == CallIntent.AUDIO &&
+                            state == RtcNotificationState.Started,
                         isLastOutgoingMessage = false,
                         onLongClick = {},
                         onReadReceiptsClick = {},
