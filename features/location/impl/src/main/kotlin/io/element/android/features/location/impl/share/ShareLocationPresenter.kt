@@ -100,8 +100,8 @@ class ShareLocationPresenter(
         fun checkLocationConstraints() {
             // No need to check SendLiveLocationPermissions here
             val locationConstraints = checkLocationConstraints(permissionsState, locationActions, SendLiveLocationPermissions.GRANTED)
-            dialogState = ShareLocationState.Dialog.Constraints(locationConstraints.toDialogState())
             trackUserPosition = locationConstraints is LocationConstraintsCheck.Success
+            dialogState = ShareLocationState.Dialog.Constraints(locationConstraints.toDialogState())
         }
 
         suspend fun computeLiveLocationDialogState(): ShareLocationState.Dialog {

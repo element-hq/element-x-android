@@ -36,6 +36,8 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.onEach
 import org.maplibre.compose.location.AndroidLocationProvider
 import org.maplibre.compose.location.DesiredAccuracy
+import org.maplibre.spatialk.units.extensions.inMeters
+import org.maplibre.spatialk.units.extensions.meters
 import timber.log.Timber
 import kotlin.time.Duration.Companion.seconds
 import io.element.android.features.location.api.Location as ApiLocation
@@ -91,7 +93,7 @@ class LiveLocationSharingService : Service() {
                 val locationProvider = AndroidLocationProvider(
                     context = applicationContext,
                     updateInterval = UPDATE_INTERVAL_IN_SECOND.seconds,
-                    minDistanceMeters = minDistanceMeters.toFloat(),
+                    minDistance = minDistanceMeters.meters,
                     desiredAccuracy = DesiredAccuracy.Balanced,
                     coroutineScope = coroutineScope
                 )
@@ -100,9 +102,9 @@ class LiveLocationSharingService : Service() {
             .filterNotNull()
             .map { location ->
                 ApiLocation(
-                    lat = location.position.latitude,
-                    lon = location.position.longitude,
-                    accuracy = location.accuracy.toFloat(),
+                    lat = location.position.value.latitude,
+                    lon = location.position.value.longitude,
+                    accuracy = location.position.accuracy?.inMeters?.toFloat(),
                 )
             }
             .onEach(coordinator::dispatch)

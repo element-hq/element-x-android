@@ -225,8 +225,8 @@ private fun BottomSheetContent(
             state.eventSink(
                 ShareLocationEvent.ShareStaticLocation(
                     location = Location(
-                        lat = userLocation.position.latitude,
-                        lon = userLocation.position.longitude
+                        lat = userLocation.position.value.latitude,
+                        lon = userLocation.position.value.longitude
                     ),
                     isPinned = false
                 )
