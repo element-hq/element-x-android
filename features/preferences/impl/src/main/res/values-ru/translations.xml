@@ -11,6 +11,15 @@
   <string name="screen_advanced_settings_hide_invite_avatars_toggle_title">"Скрывать аватары в приглашениях"</string>
   <string name="screen_advanced_settings_hide_timeline_media_toggle_title">"Скрывать предпросмотр медиа в истории сообщений"</string>
   <string name="screen_advanced_settings_labs">"Лаборатория"</string>
+  <string name="screen_advanced_settings_live_location_section_description">"Расстояние, которое нужно пройти, чтобы инициировать обновление."</string>
+  <string name="screen_advanced_settings_live_location_section_footer">"Убедитесь, что для этого приложения включена функция «Точное местоположение». Чтобы изменить разрешение, перейдите на страницу %1$s."</string>
+  <string name="screen_advanced_settings_live_location_section_footer_link">"Настройки приложения"</string>
+  <string name="screen_advanced_settings_live_location_section_title">"Обновления местоположения в режиме реального времени"</string>
+  <plurals name="screen_advanced_settings_live_location_update_distance">
+    <item quantity="one">"Каждый %1$d метр"</item>
+    <item quantity="few">"Каждые %1$d метра"</item>
+    <item quantity="many">"Каждые %1$d метров"</item>
+  </plurals>
   <string name="screen_advanced_settings_media_compression_description">"Загружайте фотографии и видео быстрее и сокращайте потребление трафика"</string>
   <string name="screen_advanced_settings_media_compression_title">"Оптимизировать качество мультимедиа"</string>
   <string name="screen_advanced_settings_moderation_and_safety_section_title">"Модерация и безопасность"</string>
@@ -76,6 +85,7 @@
   <string name="screen_notification_settings_system_notifications_action_required_content_link">"системные настройки"</string>
   <string name="screen_notification_settings_system_notifications_turned_off">"Системные уведомления выключены"</string>
   <string name="screen_notification_settings_title">"Уведомления"</string>
+  <string name="theme_black">"Черный"</string>
   <string name="theme_dark">"Темная"</string>
   <string name="theme_light">"Светлое"</string>
   <string name="theme_system">"Системное"</string>

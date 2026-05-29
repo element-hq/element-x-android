@@ -26,6 +26,7 @@
   <string name="screen_media_upload_preview_item_count">"Pozycja %1$d z %2$d"</string>
   <string name="screen_media_upload_preview_optimize_image_quality_title">"Zoptymalizuj jakość obrazu"</string>
   <string name="screen_media_upload_preview_processing">"Przetwarzanie…"</string>
+  <string name="screen_media_upload_preview_title">"Dodaj media"</string>
   <string name="screen_report_content_block_user">"Zablokuj użytkownika"</string>
   <string name="screen_report_content_block_user_hint">"Sprawdź, czy chcesz ukryć wszystkie bieżące i przyszłe wiadomości od tego użytkownika."</string>
   <string name="screen_report_content_explanation">"Ta wiadomość zostanie zgłoszona do administratora Twojego serwera domowego. Nie będzie mógł on przeczytać żadnych zaszyfrowanych wiadomości."</string>

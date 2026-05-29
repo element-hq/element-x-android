@@ -18,6 +18,7 @@
   <string name="a11y_info">"Info"</string>
   <string name="a11y_join_call">"Join call"</string>
   <string name="a11y_jump_to_bottom">"Jump to bottom"</string>
+  <string name="a11y_jump_to_unread">"Jump to unread"</string>
   <string name="a11y_move_the_map_to_my_location">"Move the map to my location"</string>
   <string name="a11y_notifications_mentions_only">"Mentions only"</string>
   <string name="a11y_notifications_muted">"Muted"</string>

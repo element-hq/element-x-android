@@ -83,7 +83,8 @@ class DefaultPusherSubscriber(
             // TODO getDeviceInfoUseCase.execute().displayName().orEmpty()
             deviceDisplayName = "MyDevice",
             url = gateway,
-            defaultPayload = createDefaultPayload(pushClientSecret.getSecretForUser(userId))
+            defaultPayload = createDefaultPayload(pushClientSecret.getSecretForUser(userId)),
+            append = false,
         )
 
     /**

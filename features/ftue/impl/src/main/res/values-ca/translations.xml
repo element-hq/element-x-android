@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+  <string name="screen_identity_confirmation_cannot_confirm">"No pots confirmar-la?"</string>
+  <string name="screen_identity_confirmation_create_new_recovery_key">"Crea nova clau de recuperació"</string>
+  <string name="screen_identity_confirmation_subtitle">"Verifica aquest dispositiu per configurar missatges segurs."</string>
+  <string name="screen_identity_confirmation_title">"Confirma la teva identitat"</string>
+  <string name="screen_identity_confirmation_use_another_device">"Utilitza un altre dispositiu"</string>
+  <string name="screen_identity_confirmation_use_recovery_key">"Utilitza clau de recuperació"</string>
+  <string name="screen_identity_confirmed_subtitle">"Ara pots llegir o enviar missatges de manera segura, i qualsevol persona amb qui xategis també confiarà en aquest dispositiu."</string>
+  <string name="screen_identity_confirmed_title">"Dispositiu verificat"</string>
+  <string name="screen_identity_use_another_device">"Utilitza un altre dispositiu"</string>
+  <string name="screen_identity_waiting_on_other_device">"Esperant un altre dispositiu…"</string>
+  <string name="screen_notification_optin_subtitle">"Pots canviar la configuració més tard."</string>
+  <string name="screen_notification_optin_title">"Permet les notificacions i no perdis cap missatge"</string>
+</resources>

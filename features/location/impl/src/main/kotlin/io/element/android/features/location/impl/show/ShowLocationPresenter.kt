@@ -33,6 +33,7 @@ import io.element.android.features.location.impl.common.permissions.PermissionsP
 import io.element.android.features.location.impl.common.permissions.PermissionsState
 import io.element.android.features.location.impl.common.toDialogState
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.architecture.Presenter
 import io.element.android.libraries.core.coroutine.mapState
 import io.element.android.libraries.core.meta.BuildMeta
@@ -40,6 +41,7 @@ import io.element.android.libraries.dateformatter.api.DateFormatter
 import io.element.android.libraries.dateformatter.api.DateFormatterMode
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
+import io.element.android.libraries.matrix.api.MatrixClient
 import io.element.android.libraries.matrix.api.room.JoinedRoom
 import io.element.android.libraries.matrix.api.room.getBestName
 import io.element.android.libraries.matrix.api.room.joinedRoomMembers
@@ -58,6 +60,7 @@ class ShowLocationPresenter(
     private val buildMeta: BuildMeta,
     private val dateFormatter: DateFormatter,
     private val stringProvider: StringProvider,
+    private val client: MatrixClient,
     private val joinedRoom: JoinedRoom,
     private val liveLocationShareManager: ActiveLiveLocationShareManager,
 ) : Presenter<ShowLocationState> {
@@ -76,6 +79,11 @@ class ShowLocationPresenter(
         val appName by remember { derivedStateOf { buildMeta.applicationName } }
         var dialogState: LocationConstraintsDialogState by remember {
             mutableStateOf(LocationConstraintsDialogState.None)
+        }
+
+        val customMapStyleUrl by produceState(AsyncData.Loading()) {
+            // Ignore errors
+            value = AsyncData.Success(client.getMapStyleUrl().getOrNull())
         }
 
         LaunchedEffect(permissionsState.permissions) {
@@ -188,6 +196,7 @@ class ShowLocationPresenter(
         }
 
         return ShowLocationState(
+            customMapStyleUrl = customMapStyleUrl,
             dialogState = dialogState,
             locationShares = locationShares,
             focusedLocation = focusedLocation,

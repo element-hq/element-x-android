@@ -73,6 +73,7 @@ class FakeFfiClient(
         deviceDisplayName: String,
         profileTag: String?,
         lang: String,
+        append: Boolean,
     ) = Unit
 
     override suspend fun deletePusher(identifiers: PusherIdentifiers) = Unit
