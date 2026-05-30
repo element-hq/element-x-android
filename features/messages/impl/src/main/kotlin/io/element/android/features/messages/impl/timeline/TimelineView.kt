@@ -52,6 +52,10 @@ import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.compound.tokens.generated.CompoundIcons
 import io.element.android.features.messages.impl.crypto.sendfailure.resolve.ResolveVerifiedUserSendFailureView
+import io.element.android.features.messages.impl.selection.DragSelectAnchor
+import io.element.android.features.messages.impl.selection.DragSelectRegistry
+import io.element.android.features.messages.impl.selection.TimelineSelectionState
+import io.element.android.features.messages.impl.selection.dragToSelectMessages
 import io.element.android.features.messages.impl.timeline.components.FloatingDateBadgeOverlay
 import io.element.android.features.messages.impl.timeline.components.TimelineItemRow
 import io.element.android.features.messages.impl.timeline.components.toText
@@ -79,6 +83,7 @@ import io.element.android.libraries.testtags.testTag
 import io.element.android.libraries.ui.strings.CommonStrings
 import io.element.android.libraries.ui.utils.a11y.isTalkbackActive
 import io.element.android.wysiwyg.link.Link
+import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
@@ -108,7 +113,12 @@ fun TimelineView(
     forceJumpToBottomVisibility: Boolean = false,
     nestedScrollConnection: NestedScrollConnection = rememberNestedScrollInteropConnection(),
     floatingDateTopOffset: Dp = 0.dp,
+    selectedEventIds: ImmutableSet<EventId>? = null,
+    dragSelectEnabled: Boolean = false,
+    dragAnchor: DragSelectAnchor? = null,
+    onSelectionChange: (ImmutableSet<EventId>) -> Unit = {},
 ) {
+    val effectiveDragAnchor = dragAnchor ?: remember { DragSelectAnchor() }
     fun clearFocusRequestState() {
         state.eventSink(TimelineEvent.ClearFocusRequestState)
     }
@@ -149,6 +159,8 @@ fun TimelineView(
         state.eventSink(TimelineEvent.LoadMore(Timeline.PaginationDirection.BACKWARDS))
     }
 
+    val dragSelectRegistry = remember { DragSelectRegistry() }
+    val activeDragRegistry = if (dragSelectEnabled) dragSelectRegistry else null
     // Animate alpha when timeline is first displayed, to avoid flashes or glitching when viewing rooms
     AnimatedVisibility(visible = true, enter = fadeIn()) {
         Box(modifier) {
@@ -156,6 +168,17 @@ fun TimelineView(
                 modifier = Modifier
                     .fillMaxSize()
                     .nestedScroll(nestedScrollConnection)
+                    .dragToSelectMessages(
+                        lazyListState = lazyListState,
+                        items = state.timelineItems,
+                        currentSelection = selectedEventIds,
+                        enabled = dragSelectEnabled,
+                        maxSelection = TimelineSelectionState.MAX_SELECTION,
+                        reverseLayout = useReverseLayout,
+                        anchor = effectiveDragAnchor,
+                        registry = activeDragRegistry,
+                        onSelectionChange = onSelectionChange,
+                    )
                     .testTag(TestTags.timeline),
                 state = lazyListState,
                 reverseLayout = useReverseLayout,
@@ -187,6 +210,8 @@ fun TimelineView(
                         onReadReceiptClick = onReadReceiptClick,
                         onSwipeToReply = onSwipeToReply,
                         eventSink = state.eventSink,
+                        selectedEventIds = selectedEventIds,
+                        dragSelectRegistry = activeDragRegistry,
                     )
                 }
             }
