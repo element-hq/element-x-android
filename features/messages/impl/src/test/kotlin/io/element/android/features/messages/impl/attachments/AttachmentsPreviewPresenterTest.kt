@@ -11,11 +11,17 @@
 package io.element.android.features.messages.impl.attachments
 
 import android.net.Uri
+import androidx.core.net.toUri
 import com.google.common.truth.Truth.assertThat
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewEvent
 import io.element.android.features.messages.impl.attachments.preview.AttachmentsPreviewPresenter
 import io.element.android.features.messages.impl.attachments.preview.OnDoneListener
 import io.element.android.features.messages.impl.attachments.preview.SendActionState
+import io.element.android.features.messages.impl.attachments.preview.imageeditor.AttachmentImageEditor
+import io.element.android.features.messages.impl.attachments.preview.imageeditor.AttachmentImageEdits
+import io.element.android.features.messages.impl.attachments.preview.imageeditor.EditedLocalMedia
+import io.element.android.features.messages.impl.attachments.preview.imageeditor.NormalizedCropRect
+import io.element.android.features.messages.impl.attachments.preview.imageeditor.assertIsSimilarTo
 import io.element.android.features.messages.impl.attachments.video.MediaOptimizationSelectorState
 import io.element.android.features.messages.impl.attachments.video.VideoCompressionPresetSelector
 import io.element.android.features.messages.impl.attachments.video.VideoUploadEstimation
@@ -73,6 +79,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import java.io.File
+import kotlin.io.path.createTempFile
 
 @Suppress("LargeClass")
 @RunWith(RobolectricTestRunner::class)
@@ -551,6 +558,92 @@ class AttachmentsPreviewPresenterTest {
     }
 
     @Test
+    fun `present - applying image edits updates the attachment`() = runTest {
+        val editedUri = Uri.parse("file:///tmp/edited.jpeg")
+        val presenter = createAttachmentsPreviewPresenter(
+            displayMediaQualitySelectorViews = true,
+            attachmentImageEditor = FakeAttachmentImageEditor {
+                Result.success(
+                    EditedLocalMedia(
+                        localMedia = aLocalMedia(uri = editedUri),
+                        file = File("/tmp/edited.jpeg"),
+                    )
+                )
+            }
+        )
+
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(AttachmentsPreviewEvent.OpenImageEditor)
+            val editorState = awaitItem()
+            assertThat(editorState.imageEditorState).isNotNull()
+
+            editorState.eventSink(AttachmentsPreviewEvent.RotateImageToTheLeft)
+            val rotatedState = awaitItem()
+            assertThat(rotatedState.imageEditorState?.edits?.rotationQuarterTurns).isEqualTo(3)
+
+            rotatedState.eventSink(AttachmentsPreviewEvent.ApplyImageEdits)
+            assertThat(awaitItem().isApplyingImageEdits).isTrue()
+
+            val appliedState = awaitItem()
+            assertThat((appliedState.attachment as Attachment.Media).localMedia.uri).isEqualTo(editedUri)
+            assertThat(appliedState.imageEditorState).isNull()
+            assertThat(appliedState.isApplyingImageEdits).isFalse()
+        }
+    }
+
+    @Test
+    fun `present - reopening image editor keeps original media and previous edits`() = runTest {
+        val editedUri = Uri.parse("file:///tmp/edited.jpeg")
+        val originalLocalMedia = aLocalMedia(uri = mockMediaUrl)
+        val cropRect = NormalizedCropRect(
+            left = 0.2f,
+            top = 0.15f,
+            right = 0.85f,
+            bottom = 0.9f,
+        )
+        val presenter = createAttachmentsPreviewPresenter(
+            localMedia = originalLocalMedia,
+            displayMediaQualitySelectorViews = true,
+            attachmentImageEditor = FakeAttachmentImageEditor {
+                Result.success(
+                    EditedLocalMedia(
+                        localMedia = aLocalMedia(uri = editedUri),
+                        file = File("/tmp/edited.jpeg"),
+                    )
+                )
+            }
+        )
+
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(AttachmentsPreviewEvent.OpenImageEditor)
+            val editorState = consumeItemsUntilPredicate { it.imageEditorState != null }.last()
+
+            editorState.eventSink(AttachmentsPreviewEvent.UpdateImageCropRect(cropRect))
+            val croppedState = awaitItem()
+            croppedState.eventSink(AttachmentsPreviewEvent.RotateImageToTheLeft)
+            val rotatedState = awaitItem()
+            rotatedState.eventSink(AttachmentsPreviewEvent.ApplyImageEdits)
+
+            val appliedState = consumeItemsUntilPredicate { !it.isApplyingImageEdits && it.imageEditorState == null }.last()
+            assertThat((appliedState.attachment as Attachment.Media).localMedia.uri).isEqualTo(editedUri)
+
+            appliedState.eventSink(AttachmentsPreviewEvent.OpenImageEditor)
+            val reopenedState = consumeItemsUntilPredicate { it.imageEditorState != null }.last()
+            assertThat(reopenedState.imageEditorState!!.localMedia.uri).isEqualTo(originalLocalMedia.uri)
+            val rotatedCropRect = NormalizedCropRect(
+                left = cropRect.top,
+                top = 1f - cropRect.right,
+                right = cropRect.bottom,
+                bottom = 1f - cropRect.left,
+            )
+            reopenedState.imageEditorState.edits.cropRect.assertIsSimilarTo(rotatedCropRect)
+            assertThat(reopenedState.imageEditorState.edits.rotationQuarterTurns).isEqualTo(3)
+            assertThat(reopenedState.imageEditorState.edits.rotationDegrees).isEqualTo(270)
+        }
+    }
+
     fun `present - sendAsFile attachment is pre-processed without image compression`() = runTest {
         // Even though the user has enabled "Optimize media quality" globally, picking the file
         // through the Files picker (sendAsFile = true) must skip compression. Regression test
@@ -578,6 +671,121 @@ class AttachmentsPreviewPresenterTest {
                     videoCompressionPreset = VideoCompressionPreset.HIGH,
                 )
             )
+        }
+    }
+
+    @Test
+    fun `present - sending edited media keeps the edited file available until upload starts`() = runTest {
+        val editedFile = createTempFile(suffix = ".jpeg").toFile().apply {
+            writeText("edited-media")
+        }
+        val sendFileResult =
+            lambdaRecorder<File, FileInfo, String?, String?, EventId?, Result<FakeMediaUploadHandler>> { file, _, _, _, _ ->
+                assertThat(file.exists()).isTrue()
+                Result.success(FakeMediaUploadHandler())
+            }
+        val room = FakeJoinedRoom(
+            liveTimeline = FakeTimeline().apply {
+                sendFileLambda = sendFileResult
+            },
+        )
+        val presenter = createAttachmentsPreviewPresenter(
+            room = room,
+            displayMediaQualitySelectorViews = true,
+            onDoneListener = OnDoneListener {},
+            mediaPreProcessor = FakeMediaPreProcessor().apply {
+                givenResult(
+                    Result.success(
+                        MediaUploadInfo.AnyFile(
+                            file = editedFile,
+                            fileInfo = FileInfo(
+                                mimetype = MimeTypes.Jpeg,
+                                size = editedFile.length(),
+                                thumbnailInfo = null,
+                                thumbnailSource = null,
+                            )
+                        )
+                    )
+                )
+            },
+            attachmentImageEditor = FakeAttachmentImageEditor {
+                Result.success(
+                    EditedLocalMedia(
+                        localMedia = aLocalMedia(uri = editedFile.toUri()),
+                        file = editedFile,
+                    )
+                )
+            }
+        )
+
+        presenter.test {
+            val initialState = awaitItem()
+            initialState.eventSink(AttachmentsPreviewEvent.OpenImageEditor)
+            val editorState = consumeItemsUntilPredicate { it.imageEditorState != null }.last()
+
+            editorState.eventSink(AttachmentsPreviewEvent.ApplyImageEdits)
+            val appliedState = consumeItemsUntilPredicate { !it.isApplyingImageEdits && it.imageEditorState == null }.last()
+
+            appliedState.eventSink(AttachmentsPreviewEvent.SendAttachment)
+            consumeItemsUntilPredicate { it.sendActionState == SendActionState.Done }
+
+            sendFileResult.assertions().isCalledOnce()
+        }
+    }
+
+    @Test
+    fun `present - image with generic mime type and png extension is still editable`() = runTest {
+        val localMedia = aLocalMedia(
+            uri = mockMediaUrl,
+            mediaInfo = anImageMediaInfo().copy(
+                mimeType = MimeTypes.OctetStream,
+                filename = "Screenshot.png",
+                fileExtension = "png",
+            ),
+        )
+        val presenter = createAttachmentsPreviewPresenter(localMedia = localMedia)
+
+        presenter.test {
+            val initialState = awaitItem()
+            assertThat(initialState.canEditImage).isTrue()
+
+            initialState.eventSink(AttachmentsPreviewEvent.OpenImageEditor)
+            val editorState = consumeItemsUntilPredicate { it.imageEditorState != null }.last()
+            assertThat(editorState.imageEditorState).isNotNull()
+        }
+    }
+
+    @Test
+    fun `present - image can still be edited when editor can decode it despite generic media info`() = runTest {
+        val localMedia = aLocalMedia(
+            uri = mockMediaUrl,
+            mediaInfo = anImageMediaInfo().copy(
+                mimeType = MimeTypes.OctetStream,
+                filename = "",
+                fileExtension = "",
+            ),
+        )
+        val presenter = createAttachmentsPreviewPresenter(
+            localMedia = localMedia,
+            attachmentImageEditor = FakeAttachmentImageEditor(
+                canEditResult = true,
+            ) {
+                Result.success(
+                    EditedLocalMedia(
+                        localMedia = localMedia.copy(uri = Uri.parse("file:///tmp/decoded.jpeg")),
+                        file = File("/tmp/decoded.jpeg"),
+                    )
+                )
+            }
+        )
+
+        presenter.test {
+            val initialState = consumeItemsUntilPredicate { it.canEditImage }.last()
+            assertThat(initialState.canEditImage).isTrue()
+
+            initialState.eventSink(AttachmentsPreviewEvent.OpenImageEditor)
+            val editorState = consumeItemsUntilPredicate { it.imageEditorState != null }.last()
+            assertThat(editorState.imageEditorState).isNotNull()
         }
     }
 
@@ -652,6 +860,14 @@ class AttachmentsPreviewPresenterTest {
             }
         ),
         mediaOptimizationConfigProvider: FakeMediaOptimizationConfigProvider = FakeMediaOptimizationConfigProvider(),
+        attachmentImageEditor: AttachmentImageEditor = FakeAttachmentImageEditor {
+            Result.success(
+                EditedLocalMedia(
+                    localMedia = localMedia.copy(uri = Uri.parse("file:///tmp/default-edited.jpeg")),
+                    file = File("/tmp/default-edited.jpeg"),
+                )
+            )
+        },
         videoCompressionPresetSelector: VideoCompressionPresetSelector = VideoCompressionPresetSelector(),
     ): AttachmentsPreviewPresenter {
         return AttachmentsPreviewPresenter(
@@ -669,6 +885,7 @@ class AttachmentsPreviewPresenterTest {
             },
             permalinkBuilder = permalinkBuilder,
             temporaryUriDeleter = temporaryUriDeleter,
+            attachmentImageEditor = attachmentImageEditor,
             sessionCoroutineScope = this,
             dispatchers = testCoroutineDispatchers(),
             mediaOptimizationSelectorPresenterFactory = mediaOptimizationSelectorPresenterFactory,
@@ -677,6 +894,22 @@ class AttachmentsPreviewPresenterTest {
             inReplyToEventId = null,
             mediaOptimizationConfigProvider = mediaOptimizationConfigProvider,
         )
+    }
+
+    private class FakeAttachmentImageEditor(
+        private val canEditResult: Boolean = true,
+        private val result: () -> Result<EditedLocalMedia>,
+    ) : AttachmentImageEditor {
+        override suspend fun canEdit(localMedia: LocalMedia): Boolean {
+            return canEditResult
+        }
+
+        override suspend fun exportEdits(
+            localMedia: LocalMedia,
+            edits: AttachmentImageEdits,
+        ): Result<EditedLocalMedia> {
+            return result()
+        }
     }
 
     private val mediaUploadInfo = MediaUploadInfo.AnyFile(

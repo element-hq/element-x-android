@@ -15,6 +15,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.emptyPreferences
 import app.cash.molecule.RecompositionMode
 import app.cash.molecule.moleculeFlow
+import app.cash.turbine.ReceiveTurbine
 import app.cash.turbine.test
 import com.google.common.truth.Truth.assertThat
 import im.vector.app.features.analytics.plan.Composer
@@ -75,7 +76,10 @@ class ShareLocationPresenterTest {
     private val fakeMessageComposerContext = FakeMessageComposerContext()
     private val fakeLocationActions = FakeLocationActions()
     private val fakeBuildMeta = aBuildMeta(applicationName = "app name")
-    private val fakeMatrixClient = FakeMatrixClient(sessionId = A_USER_ID)
+    private val fakeMatrixClient = FakeMatrixClient(
+        sessionId = A_USER_ID,
+        getMapStyleUrlResult = { Result.success(null) },
+    )
 
     private val durationFormatter = FakeDurationFormatter()
 
@@ -85,6 +89,7 @@ class ShareLocationPresenterTest {
         locationActions: FakeLocationActions = fakeLocationActions,
         liveLocationShareManager: FakeActiveLiveLocationShareManager = FakeActiveLiveLocationShareManager(),
         liveLocationStore: LiveLocationStore = createLiveLocationStore(sessionId = joinedRoom.sessionId),
+        client: FakeMatrixClient = fakeMatrixClient,
     ): ShareLocationPresenter = ShareLocationPresenter(
         permissionsPresenterFactory = { fakePermissionsPresenter },
         room = joinedRoom,
@@ -93,7 +98,7 @@ class ShareLocationPresenterTest {
         messageComposerContext = fakeMessageComposerContext,
         locationActions = locationActions,
         buildMeta = fakeBuildMeta,
-        client = fakeMatrixClient,
+        client = client,
         durationFormatter = durationFormatter,
         liveLocationShareManager = liveLocationShareManager,
         liveLocationStore = liveLocationStore,
@@ -110,11 +115,28 @@ class ShareLocationPresenterTest {
 
         val shareLocationPresenter = createShareLocationPresenter()
         shareLocationPresenter.test {
-            skipItems(1)
-            val state = awaitItem()
+            val state = awaitFirstItem()
+            assertThat(state.customMapStyleUrl.isLoading()).isFalse()
             assertThat(state.trackUserLocation).isTrue()
             assertThat(state.hasLocationPermission).isTrue()
             assertThat(state.dialogState).isEqualTo(ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.None))
+        }
+    }
+
+    @Test
+    fun `present - non-null customMapStyleUrl`() = runTest {
+        val shareLocationPresenter = createShareLocationPresenter(
+            client = FakeMatrixClient(
+                sessionId = A_USER_ID,
+                getMapStyleUrlResult = { Result.success("aUrl") },
+            )
+        )
+        shareLocationPresenter.test {
+            skipItems(1)
+            val state = awaitItem()
+            assertThat(state.customMapStyleUrl.isLoading()).isTrue()
+            val finalState = awaitItem()
+            assertThat(finalState.customMapStyleUrl.dataOrNull()).isEqualTo("aUrl")
         }
     }
 
@@ -131,8 +153,7 @@ class ShareLocationPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             shareLocationPresenter.present()
         }.test {
-            skipItems(1)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             assertThat(initialState.trackUserLocation).isTrue()
             assertThat(initialState.hasLocationPermission).isTrue()
             assertThat(initialState.dialogState).isEqualTo(ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.None))
@@ -152,8 +173,7 @@ class ShareLocationPresenterTest {
         moleculeFlow(RecompositionMode.Immediate) {
             shareLocationPresenter.present()
         }.test {
-            skipItems(1)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             assertThat(initialState.trackUserLocation).isFalse()
             assertThat(initialState.hasLocationPermission).isFalse()
             assertThat(initialState.dialogState).isEqualTo(
@@ -173,8 +193,7 @@ class ShareLocationPresenterTest {
         )
 
         shareLocationPresenter.test {
-            skipItems(1)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             assertThat(initialState.trackUserLocation).isFalse()
             assertThat(initialState.hasLocationPermission).isFalse()
             assertThat(initialState.dialogState).isEqualTo(
@@ -195,8 +214,7 @@ class ShareLocationPresenterTest {
         )
 
         shareLocationPresenter.test {
-            skipItems(1)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             assertThat(initialState.trackUserLocation).isFalse()
             assertThat(initialState.hasLocationPermission).isTrue()
             assertThat(initialState.dialogState).isEqualTo(
@@ -216,8 +234,7 @@ class ShareLocationPresenterTest {
         )
 
         shareLocationPresenter.test {
-            skipItems(1)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             assertThat(initialState.trackUserLocation).isTrue()
 
             initialState.eventSink(ShareLocationEvent.StopTrackingUserLocation)
@@ -237,8 +254,7 @@ class ShareLocationPresenterTest {
         )
 
         shareLocationPresenter.test {
-            skipItems(1)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             assertThat(initialState.dialogState).isEqualTo(
                 ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.PermissionRationale)
             )
@@ -260,7 +276,7 @@ class ShareLocationPresenterTest {
         )
 
         shareLocationPresenter.test {
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             initialState.eventSink(ShareLocationEvent.RequestPermissions)
 
             // Wait for dialog to be dismissed
@@ -282,8 +298,7 @@ class ShareLocationPresenterTest {
         )
 
         shareLocationPresenter.test {
-            skipItems(1)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             initialState.eventSink(ShareLocationEvent.OpenAppSettings)
             val settingsOpenedState = awaitItem()
 
@@ -304,8 +319,7 @@ class ShareLocationPresenterTest {
         )
 
         shareLocationPresenter.test {
-            skipItems(1)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             assertThat(initialState.dialogState).isEqualTo(
                 ShareLocationState.Dialog.Constraints(LocationConstraintsDialogState.LocationServiceDisabled)
             )
@@ -337,8 +351,7 @@ class ShareLocationPresenterTest {
         )
 
         shareLocationPresenter.test {
-            skipItems(1)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             initialState.eventSink(ShareLocationEvent.InitiateLiveLocationShare)
             val durationDialogState = awaitItem()
 
@@ -358,8 +371,7 @@ class ShareLocationPresenterTest {
         )
 
         presenter.test {
-            skipItems(1)
-            val state = awaitItem()
+            val state = awaitFirstItem()
 
             state.eventSink(ShareLocationEvent.InitiateLiveLocationShare)
             val dialogState = awaitItem()
@@ -385,8 +397,7 @@ class ShareLocationPresenterTest {
         )
 
         presenter.test {
-            skipItems(1)
-            val state = awaitItem()
+            val state = awaitFirstItem()
             state.eventSink(ShareLocationEvent.InitiateLiveLocationShare)
             awaitItem()
 
@@ -413,8 +424,7 @@ class ShareLocationPresenterTest {
         )
 
         presenter.test {
-            skipItems(1)
-            val state = awaitItem()
+            val state = awaitFirstItem()
             state.eventSink(ShareLocationEvent.InitiateLiveLocationShare)
             val disclaimerState = awaitItem()
 
@@ -444,8 +454,7 @@ class ShareLocationPresenterTest {
         )
 
         presenter.test {
-            skipItems(1)
-            val state = awaitItem()
+            val state = awaitFirstItem()
 
             state.eventSink(ShareLocationEvent.InitiateLiveLocationShare)
             val durationState = awaitItem()
@@ -472,8 +481,7 @@ class ShareLocationPresenterTest {
         )
 
         presenter.test {
-            skipItems(1)
-            val state = awaitItem()
+            val state = awaitFirstItem()
 
             state.eventSink(ShareLocationEvent.InitiateLiveLocationShare)
             val dialogState = awaitItem()
@@ -504,8 +512,7 @@ class ShareLocationPresenterTest {
         )
 
         shareLocationPresenter.test {
-            skipItems(1)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
             // Dismiss initial dialog
             initialState.eventSink(ShareLocationEvent.DismissDialog)
             val dismissedState = awaitItem()
@@ -539,8 +546,7 @@ class ShareLocationPresenterTest {
         )
 
         shareLocationPresenter.test {
-            skipItems(1)
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
 
             initialState.eventSink(
                 ShareLocationEvent.ShareStaticLocation(
@@ -593,7 +599,7 @@ class ShareLocationPresenterTest {
         )
 
         shareLocationPresenter.test {
-            val initialState = awaitItem()
+            val initialState = awaitFirstItem()
 
             initialState.eventSink(
                 ShareLocationEvent.ShareStaticLocation(
@@ -641,8 +647,7 @@ class ShareLocationPresenterTest {
         )
 
         shareLocationPresenter.test {
-            skipItems(1)
-            val state = awaitItem()
+            val state = awaitFirstItem()
             state.eventSink(ShareLocationEvent.StartLiveLocationShare(duration = 1.hours))
             advanceUntilIdle()
             assert(startShareLambda).isCalledOnce().with(
@@ -659,8 +664,7 @@ class ShareLocationPresenterTest {
             timelineMode = Timeline.Mode.Live,
         )
         shareLocationPresenter.test {
-            skipItems(1)
-            val state = awaitItem()
+            val state = awaitFirstItem()
             assertThat(state.canShareLiveLocation).isTrue()
         }
     }
@@ -671,10 +675,14 @@ class ShareLocationPresenterTest {
             timelineMode = Timeline.Mode.Thread(A_THREAD_ID),
         )
         shareLocationPresenter.test {
-            skipItems(1)
-            val state = awaitItem()
+            val state = awaitFirstItem()
             assertThat(state.canShareLiveLocation).isFalse()
         }
+    }
+
+    private suspend fun <T> ReceiveTurbine<T>.awaitFirstItem(): T {
+        skipItems(2)
+        return awaitItem()
     }
 }
 

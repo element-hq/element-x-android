@@ -99,4 +99,6 @@
   <string name="screen_room_roles_and_permissions_roles_header">"کردارہا"</string>
   <string name="screen_room_roles_and_permissions_room_details">"کمرے کی تفصیلات"</string>
   <string name="screen_room_roles_and_permissions_title">"کردارہا اور اجازتیں"</string>
+  <string name="screen_roomlist_mark_as_read">"بطور مقروءہ نشانزد کریں"</string>
+  <string name="screen_roomlist_mark_as_unread">"بطور غیر مقروءہ نشانزد کریں"</string>
 </resources>

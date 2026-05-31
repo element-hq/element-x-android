@@ -16,15 +16,11 @@ import io.element.android.libraries.sessionstorage.test.InMemorySessionStore
 import io.element.android.libraries.sessionstorage.test.aSessionData
 import io.element.android.services.analytics.api.AnalyticsService
 import io.element.android.services.analytics.test.FakeAnalyticsService
-import io.element.android.tests.testutils.testCoroutineDispatchers
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.TestScope
-import kotlinx.coroutines.test.runCurrent
 import kotlinx.coroutines.test.runTest
 import org.junit.Test
 import uniffi.matrix_sdk_common.BackgroundTaskFailureReason
 
-@OptIn(ExperimentalCoroutinesApi::class)
 class RustClientSessionDelegateTest {
     @Test
     fun `saveSessionInKeychain should update the store`() = runTest {
@@ -43,7 +39,6 @@ class RustClientSessionDelegateTest {
                 refreshToken = "rt",
             )
         )
-        runCurrent()
         val result = sessionStore.getLatestSession()
         assertThat(result!!.accessToken).isEqualTo("at")
         assertThat(result.refreshToken).isEqualTo("rt")
@@ -80,5 +75,4 @@ fun TestScope.aRustClientSessionDelegate(
     sessionStore = sessionStore,
     appCoroutineScope = this,
     analyticsService = analyticsService,
-    coroutineDispatchers = testCoroutineDispatchers(),
 )

@@ -38,6 +38,8 @@ import io.element.android.libraries.matrix.impl.room.location.into
 import io.element.android.libraries.matrix.impl.timeline.item.event.EventTimelineItemMapper
 import io.element.android.libraries.matrix.impl.timeline.item.event.TimelineEventContentMapper
 import io.element.android.libraries.matrix.impl.timeline.item.virtual.VirtualTimelineItemMapper
+import io.element.android.libraries.matrix.impl.timeline.postprocessor.FilterEmptyDayPostProcessor
+import io.element.android.libraries.matrix.impl.timeline.postprocessor.FilterPublicMembershipChangesPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.LastForwardIndicatorsPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.LoadingIndicatorsPostProcessor
 import io.element.android.libraries.matrix.impl.timeline.postprocessor.RoomBeginningPostProcessor
@@ -84,7 +86,7 @@ private const val PAGINATION_SIZE = 50
 class RustTimeline(
     private val inner: InnerTimeline,
     override val mode: Timeline.Mode,
-    private val systemClock: SystemClock,
+    systemClock: SystemClock,
     private val joinedRoom: JoinedRoom,
     private val coroutineScope: CoroutineScope,
     private val dispatcher: CoroutineDispatcher,
@@ -123,6 +125,8 @@ class RustTimeline(
     private val loadingIndicatorsPostProcessor = LoadingIndicatorsPostProcessor(systemClock)
     private val lastForwardIndicatorsPostProcessor = LastForwardIndicatorsPostProcessor(mode)
     private val typingNotificationPostProcessor = TypingNotificationPostProcessor(mode)
+    private val publicMembershipChangesPostProcessor = FilterPublicMembershipChangesPostProcessor()
+    private val emptyDayPostProcessor = FilterEmptyDayPostProcessor()
 
     private data class RoomTimelineInfo(
         val roomCreators: ImmutableList<UserId>,
@@ -245,10 +249,20 @@ class RustTimeline(
                         items = items,
                         isDm = isDm,
                         roomCreator = roomCreators.firstOrNull(),
-                        joinRule = joinRule,
-                        isEncrypted = isEncrypted,
                         hasMoreToLoadBackwards = backwardPaginationStatus.hasMoreToLoad,
                     )
+                }
+                // This should be the first post processor after room beginning.
+                .let { items ->
+                    publicMembershipChangesPostProcessor.process(
+                        items = items,
+                        joinRule = joinRule,
+                        isEncrypted = isEncrypted,
+                    )
+                }
+                // After removing public membership changes, we might end up with empty days, so we need to filter them out.
+                .let { items ->
+                    emptyDayPostProcessor.process(items)
                 }
                 .let { items ->
                     loadingIndicatorsPostProcessor.process(

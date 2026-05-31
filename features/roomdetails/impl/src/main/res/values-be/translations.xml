@@ -100,4 +100,6 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Ролі"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Дэталі пакоя"</string>
   <string name="screen_room_roles_and_permissions_title">"Ролі і дазволы"</string>
+  <string name="screen_roomlist_mark_as_read">"Пазначыць як прачытанае"</string>
+  <string name="screen_roomlist_mark_as_unread">"Пазначыць як непрачытанае"</string>
 </resources>

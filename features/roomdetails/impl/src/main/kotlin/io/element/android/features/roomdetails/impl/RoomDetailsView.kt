@@ -206,7 +206,7 @@ fun RoomDetailsView(
                         ),
                         trailingContent = ListItemContent.Custom {
                             Box(
-                                modifier = modifier
+                                modifier = Modifier
                                     .size(8.dp)
                                     .clip(CircleShape)
                                     .background(ElementTheme.colors.iconAccentPrimary)

@@ -11,6 +11,7 @@ package io.element.android.features.location.impl.share
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
 import io.element.android.libraries.architecture.AsyncAction
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.matrix.api.core.UserId
 import io.element.android.libraries.matrix.api.user.MatrixUser
 import kotlinx.collections.immutable.persistentListOf
@@ -76,10 +77,14 @@ class ShareLocationStateProvider : PreviewParameterProvider<ShareLocationState> 
                 hasLocationPermission = true,
                 canShareLiveLocation = true,
             ),
+            aShareLocationState(
+                customMapStyleUrl = AsyncData.Loading(),
+            ),
         )
 }
 
 fun aShareLocationState(
+    customMapStyleUrl: AsyncData<String?> = AsyncData.Success(null),
     currentUser: MatrixUser = MatrixUser(UserId("@user:matrix.org")),
     dialogState: ShareLocationState.Dialog = ShareLocationState.Dialog.None,
     trackUserPosition: Boolean = false,
@@ -90,6 +95,7 @@ fun aShareLocationState(
     eventSink: (ShareLocationEvent) -> Unit = {},
 ): ShareLocationState {
     return ShareLocationState(
+        customMapStyleUrl = customMapStyleUrl,
         currentUser = currentUser,
         dialogState = dialogState,
         trackUserLocation = trackUserPosition,

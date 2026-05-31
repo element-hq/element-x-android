@@ -16,7 +16,6 @@ import io.element.android.features.messages.impl.timeline.factories.event.Timeli
 import io.element.android.features.messages.impl.timeline.factories.virtual.TimelineItemVirtualFactory
 import io.element.android.features.messages.impl.timeline.groups.TimelineItemGrouper
 import io.element.android.features.messages.impl.timeline.model.TimelineItem
-import io.element.android.features.messages.impl.timeline.model.virtual.TimelineItemDaySeparatorModel
 import io.element.android.libraries.androidutils.diff.DiffCacheUpdater
 import io.element.android.libraries.androidutils.diff.MutableListDiffCache
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
@@ -97,8 +96,7 @@ class TimelineItemsFactory(
             }
         }
         val result = timelineItemGrouper.group(newTimelineItemStates).toImmutableList()
-        val filteredResult = filterEmptyDaySeparators(result)
-        this._timelineItems.emit(filteredResult)
+        this._timelineItems.emit(result)
     }
 
     private suspend fun buildAndCacheItem(
@@ -115,26 +113,4 @@ class TimelineItemsFactory(
         diffCache[index] = timelineItem
         return timelineItem
     }
-}
-
-// Remove day separators for days with no events after the client-side event filtering
-internal fun filterEmptyDaySeparators(items: List<TimelineItem>): ImmutableList<TimelineItem> {
-    return buildList {
-        var hasEventBefore = false
-        for (item in items) {
-            when (item) {
-                is TimelineItem.Event, is TimelineItem.GroupedEvents -> {
-                    hasEventBefore = true
-                    add(item)
-                }
-                is TimelineItem.Virtual if item.model is TimelineItemDaySeparatorModel -> {
-                    if (hasEventBefore) {
-                        add(item)
-                    }
-                    hasEventBefore = false
-                }
-                else -> add(item)
-            }
-        }
-    }.toImmutableList()
 }

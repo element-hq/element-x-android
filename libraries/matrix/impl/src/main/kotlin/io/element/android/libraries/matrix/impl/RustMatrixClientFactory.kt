@@ -9,6 +9,7 @@
 package io.element.android.libraries.matrix.impl
 
 import dev.zacsweers.metro.Inject
+import io.element.android.libraries.androidutils.crypto.ClientSecret
 import io.element.android.libraries.core.coroutine.CoroutineDispatchers
 import io.element.android.libraries.core.data.ByteUnit
 import io.element.android.libraries.core.data.megaBytes
@@ -75,13 +76,14 @@ class RustMatrixClientFactory(
         sessionStore = sessionStore,
         appCoroutineScope = appCoroutineScope,
         analyticsService = analyticsService,
-        coroutineDispatchers = coroutineDispatchers
     )
 
     suspend fun create(sessionData: SessionData): RustMatrixClient = withContext(coroutineDispatchers.io) {
+        // This secret is called 'passphrase' for historical reasons, but it can be a raw key or an actual passphrase
+        val clientSecret = sessionData.passphrase?.let(ClientSecret::fromString)
         val client = getBaseClientBuilder(
             sessionPaths = sessionData.getSessionPaths(),
-            passphrase = sessionData.passphrase,
+            clientSecret = clientSecret,
             slidingSyncType = ClientBuilderSlidingSync.Restored,
         )
             .homeserverUrl(sessionData.homeserverUrl)
@@ -135,19 +137,19 @@ class RustMatrixClientFactory(
             analyticsService = analyticsService,
             workManagerScheduler = workManagerScheduler,
         ).also {
-            Timber.tag(it.toString()).d("Creating Client with access token '$anonymizedAccessToken' and refresh token '$anonymizedRefreshToken'")
+            Timber.tag("RustMatrixClient").i("Creating Client with access token '$anonymizedAccessToken' and refresh token '$anonymizedRefreshToken'")
         }
     }
 
     internal suspend fun getBaseClientBuilder(
         sessionPaths: SessionPaths,
-        passphrase: String?,
+        clientSecret: ClientSecret?,
         slidingSyncType: ClientBuilderSlidingSync,
     ): ClientBuilder {
         return clientBuilderProvider.provide()
             .run {
                 sqliteStoreBuilderProvider.provide(sessionPaths)
-                    .passphrase(passphrase)
+                    .secret(clientSecret)
                     .setupClientBuilder(this)
             }
             .setSessionDelegate(sessionDelegate)

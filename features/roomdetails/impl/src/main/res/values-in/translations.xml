@@ -115,6 +115,8 @@
   <string name="screen_room_roles_and_permissions_roles_header">"Peran"</string>
   <string name="screen_room_roles_and_permissions_room_details">"Detail ruangan"</string>
   <string name="screen_room_roles_and_permissions_title">"Peran dan perizinan"</string>
+  <string name="screen_roomlist_mark_as_read">"Tandai sebagai dibaca"</string>
+  <string name="screen_roomlist_mark_as_unread">"Tandai sebagai belum dibaca"</string>
   <string name="screen_security_and_privacy_add_room_address_action">"Tambahkan alamat"</string>
   <string name="screen_security_and_privacy_ask_to_join_option_description">"Meminta hak akses pada administrator atau moderator."</string>
   <string name="screen_security_and_privacy_ask_to_join_option_title">"Ijin bergabung"</string>

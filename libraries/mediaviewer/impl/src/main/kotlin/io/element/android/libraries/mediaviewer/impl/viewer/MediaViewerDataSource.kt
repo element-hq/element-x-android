@@ -13,8 +13,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.ProduceStateScope
 import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.produceState
+import androidx.compose.runtime.rememberUpdatedState
 import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.core.extensions.mapCatchingExceptions
 import io.element.android.libraries.matrix.api.core.EventId
@@ -87,8 +89,9 @@ class MediaViewerDataSource(
     fun produceState(
         producer: suspend ProduceStateScope<ImmutableList<MediaViewerPageData>>.(StateFlow<ImmutableList<MediaViewerPageData>>) -> Unit
     ): State<ImmutableList<MediaViewerPageData>> {
+        val latestProducer by rememberUpdatedState(producer)
         return produceState(initialValue = initialData()) {
-            producer(dataFlow)
+            latestProducer(dataFlow)
         }
     }
 

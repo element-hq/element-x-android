@@ -11,6 +11,7 @@ package io.element.android.features.location.impl.show
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import io.element.android.features.location.api.Location
 import io.element.android.features.location.impl.common.ui.LocationConstraintsDialogState
+import io.element.android.libraries.architecture.AsyncData
 import io.element.android.libraries.designsystem.components.avatar.AvatarData
 import io.element.android.libraries.designsystem.components.avatar.AvatarSize
 import io.element.android.libraries.designsystem.preview.USER_NAME_ALICE
@@ -41,12 +42,16 @@ class ShowLocationStateProvider : PreviewParameterProvider<ShowLocationState> {
                 hasLocationPermission = true,
                 isTrackMyLocation = true,
             ),
+            aShowLocationState(
+                customMapStyleUrl = AsyncData.Loading(),
+            ),
         )
 }
 
 private const val APP_NAME = "ApplicationName"
 
 fun aShowLocationState(
+    customMapStyleUrl: AsyncData<String?> = AsyncData.Success(null),
     isLive: Boolean = false,
     constraintsDialogState: LocationConstraintsDialogState = LocationConstraintsDialogState.None,
     locationShares: List<LocationShareItem> = listOf(aLocationShareItem(isLive = isLive)),
@@ -57,6 +62,7 @@ fun aShowLocationState(
     eventSink: (ShowLocationEvent) -> Unit = {},
 ): ShowLocationState {
     return ShowLocationState(
+        customMapStyleUrl = customMapStyleUrl,
         dialogState = constraintsDialogState,
         locationShares = locationShares.toImmutableList(),
         focusedLocation = focusedLocation,
