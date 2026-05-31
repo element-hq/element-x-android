@@ -10,10 +10,10 @@ package io.element.android.libraries.designsystem.atomic.atoms
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.defaultMinSize
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -35,24 +35,26 @@ fun UnreadIndicatorAtom(
     isVisible: Boolean = true,
     contentDescription: String? = null,
 ) {
-    Box(
-        modifier = modifier
-            .semantics {
+    when {
+        !isVisible -> Spacer(modifier = modifier.size(size))
+        count != null && count >= 1 -> CounterAtom(
+            count = count.toInt(),
+            modifier = modifier.semantics {
                 contentDescription?.let { this.contentDescription = it }
-            }
-            .defaultMinSize(size, size)
-            .clip(CircleShape)
-            .background(if (isVisible) color else Color.Transparent),
-        contentAlignment = Alignment.Center,
-    ) {
-        if (count != null && count > 1) {
-            CounterAtom(
-                count = count.toInt(),
-                containerColor = Color.Transparent,
-                contentColor = ElementTheme.colors.bgCanvasDefault,
-                textStyle = ElementTheme.typography.fontBodySmMedium,
-            )
-        }
+            },
+            containerColor = color,
+            contentColor = ElementTheme.colors.bgCanvasDefault,
+            textStyle = ElementTheme.typography.fontBodySmMedium,
+        )
+        else -> Box(
+            modifier = modifier
+                .semantics {
+                    contentDescription?.let { this.contentDescription = it }
+                }
+                .size(size)
+                .clip(CircleShape)
+                .background(color),
+        )
     }
 }
 
