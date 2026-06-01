@@ -7,23 +7,15 @@
 
 package io.element.android.features.location.impl.common.ui
 
-import android.annotation.SuppressLint
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.unit.dp
 import io.element.android.compound.theme.ElementTheme
 import io.element.android.features.location.impl.common.MapDefaults
+import io.element.android.features.location.impl.common.UserLocationState
 import org.maplibre.compose.camera.CameraState
-import org.maplibre.compose.location.DesiredAccuracy
 import org.maplibre.compose.location.LocationPuck
 import org.maplibre.compose.location.LocationPuckColors
 import org.maplibre.compose.location.LocationPuckSizes
-import org.maplibre.compose.location.UserLocationState
-import org.maplibre.compose.location.rememberAndroidLocationProvider
-import org.maplibre.compose.location.rememberNullLocationProvider
-import org.maplibre.compose.location.rememberUserLocationState
-import org.maplibre.spatialk.units.extensions.meters
-import kotlin.time.Duration.Companion.seconds
 
 @Composable
 fun UserLocationPuck(
@@ -64,20 +56,4 @@ fun UserLocationPuck(
             )
         )
     }
-}
-
-@SuppressLint("MissingPermission")
-@Composable
-fun rememberUserLocationState(hasLocationPermission: Boolean): UserLocationState {
-    val isPreview = LocalInspectionMode.current
-    val locationProvider = if (isPreview || !hasLocationPermission) {
-        rememberNullLocationProvider()
-    } else {
-        rememberAndroidLocationProvider(
-            updateInterval = 5.seconds,
-            desiredAccuracy = DesiredAccuracy.High,
-            minDistance = 5.meters,
-        )
-    }
-    return rememberUserLocationState(locationProvider)
 }
