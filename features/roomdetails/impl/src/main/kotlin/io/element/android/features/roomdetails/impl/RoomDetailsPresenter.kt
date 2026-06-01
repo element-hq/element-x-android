@@ -209,7 +209,7 @@ class RoomDetailsPresenter(
             knockRequestsCount = knockRequestsCount,
             canShowSecurityAndPrivacy = canShowSecurityAndPrivacy,
             hasMemberVerificationViolations = hasMemberVerificationViolations,
-            canReportRoom = canReportRoom,
+            canReportRoom = !isDm && canReportRoom,
             isTombstoned = roomInfo.successorRoom != null,
             showDebugInfo = isDeveloperModeEnabled,
             roomVersion = roomInfo.roomVersion,

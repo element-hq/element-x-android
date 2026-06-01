@@ -804,7 +804,8 @@ private fun OtherActionsSection(
         if (dmOtherMemberDetailsState != null) {
             BlockUserSection(dmOtherMemberDetailsState)
             BlockUserDialogs(dmOtherMemberDetailsState)
-        } else if (canReportRoom) {
+        }
+        if (canReportRoom) {
             ListItem(
                 headlineContent = {
                     Text(stringResource(CommonStrings.action_report_room))
