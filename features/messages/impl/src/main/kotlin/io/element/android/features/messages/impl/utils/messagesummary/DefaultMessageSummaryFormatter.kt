@@ -58,7 +58,7 @@ class DefaultMessageSummaryFormatter(
             is TimelineItemVideoContent -> context.getString(CommonStrings.common_video)
             is TimelineItemFileContent -> context.getString(CommonStrings.common_file)
             is TimelineItemAudioContent -> context.getString(CommonStrings.common_audio)
-            is TimelineItemGalleryContent -> context.getString(CommonStrings.common_image)
+            is TimelineItemGalleryContent -> context.getString(CommonStrings.common_gallery)
             is TimelineItemAttachmentsContent -> {
                 val count = content.attachments.size
                 val extensions = content.attachments.take(3).joinToString(", ") { it.fileExtension }

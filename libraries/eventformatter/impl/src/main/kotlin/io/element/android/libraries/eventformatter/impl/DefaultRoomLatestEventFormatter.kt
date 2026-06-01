@@ -169,7 +169,7 @@ class DefaultRoomLatestEventFormatter(
                 messageType.body
             }
             is GalleryMessageType -> {
-                messageType.body.prefixWith(sp.getString(CommonStrings.common_image))
+                messageType.body.prefixWith(sp.getString(CommonStrings.common_gallery))
             }
             is NoticeMessageType -> {
                 messageType.body
