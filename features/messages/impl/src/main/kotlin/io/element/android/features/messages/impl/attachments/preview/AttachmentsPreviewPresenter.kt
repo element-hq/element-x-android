@@ -152,8 +152,11 @@ class AttachmentsPreviewPresenter(
             }
         }
 
-        LaunchedEffect(originalLocalMedia) {
-            canEditImage = originalLocalMedia.info.canEditImage() || attachmentImageEditor.canEdit(originalLocalMedia)
+        LaunchedEffect(currentIndex) {
+            val currentMedia = (attachments.getOrNull(currentIndex) as? Attachment.Media)?.localMedia
+            if (currentMedia != null) {
+                canEditImage = currentMedia.info.canEditImage() || attachmentImageEditor.canEdit(currentMedia)
+            }
         }
 
         val maxUploadSize = mediaOptimizationSelectorState.maxUploadSize.dataOrNull()
@@ -270,13 +273,14 @@ class AttachmentsPreviewPresenter(
                     }
                 }
                 AttachmentsPreviewEvent.OpenImageEditor -> {
-                    val resolvedCanEditImage = canEditImage || originalLocalMedia.info.canEditImage()
+                    val currentLocalMedia = (attachments.getOrNull(currentIndex) as? Attachment.Media)?.localMedia ?: return
+                    val resolvedCanEditImage = canEditImage || currentLocalMedia.info.canEditImage()
                     if (resolvedCanEditImage) {
                         preprocessMediaJob?.cancel()
                         preprocessMediaJob = null
                         resetPreparedMedia(sendActionState)
                         imageEditorState = AttachmentImageEditorState(
-                            localMedia = originalLocalMedia,
+                            localMedia = currentLocalMedia,
                             edits = appliedImageEdits,
                             previewDebug = false,
                         )
@@ -308,7 +312,7 @@ class AttachmentsPreviewPresenter(
                         editedTempFiles[currentIndex]?.safeDelete()
                         editedTempFiles = editedTempFiles - currentIndex
                         appliedImageEdits = pendingState.edits
-                        currentAttachment = Attachment.Media(originalLocalMedia)
+                        currentAttachment = currentAttachments[currentIndex]
                         currentAttachments = currentAttachments.toMutableList().also {
                             it[currentIndex] = currentAttachment
                         }.toImmutableList()
@@ -321,7 +325,7 @@ class AttachmentsPreviewPresenter(
                     coroutineScope.launch {
                         val result = withContext(dispatchers.io) {
                             attachmentImageEditor.exportEdits(
-                                localMedia = originalLocalMedia,
+                                localMedia = pendingState.localMedia,
                                 edits = pendingState.edits,
                             )
                         }
